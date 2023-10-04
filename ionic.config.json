@@ -1,0 +1,7 @@
+{
+  "name": "NCD",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
