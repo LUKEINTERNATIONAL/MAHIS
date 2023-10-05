@@ -1,28 +1,40 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>Blank</ion-title>
-      </ion-toolbar>
-    </ion-header>
-
+    <Toolbar />
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
-        </ion-toolbar>
-      </ion-header>
-
       <div id="container">
-        <strong>Ready to create an app?</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-      </div>
+        <strong>Search your patient profile</strong>
+        <p>Use searchbar below to find your patient <br/>
+          profile and start the triage
+        </p>
+        <div class="centered-content">
+        <!-- Your component goes here -->
+          <ToolbarSearch />
+        </div>
+          
+      </div>  
     </ion-content>
   </ion-page>
 </template>
 
-<script setup lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+<script lang="ts">
+import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+import { defineComponent } from 'vue';
+import Toolbar from '@/components/Toolbar.vue'
+import ToolbarSearch from '@/components/ToolbarSearch.vue'
+export default defineComponent({
+  name: "Home",
+  components:{
+      IonContent,
+      IonHeader,
+      IonMenuButton,
+      IonPage,
+      IonTitle,
+      IonToolbar,
+      Toolbar,
+      ToolbarSearch
+    }
+  })
 </script>
 
 <style scoped>
@@ -52,5 +64,10 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue
 
 #container a {
   text-decoration: none;
+}
+.centered-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
