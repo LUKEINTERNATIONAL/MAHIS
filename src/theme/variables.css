@@ -4,6 +4,7 @@ http://ionicframework.com/docs/theming/ */
 /** Ionic CSS Variables **/
 :root {
 
+  --ion-background-color:#f4f4f4f4;
   /** toolbar **/
   --ion-toolbar-background: #007700;
   --ion-toolbar-color:#ffffff;

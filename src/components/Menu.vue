@@ -8,6 +8,7 @@
         <ion-content>
             <ion-list>
                 <ion-item>Home</ion-item>
+                <ion-item @click="openConsultation">Consultation</ion-item>
                 <ion-item>Profile</ion-item>
                 <ion-item>Settings</ion-item>
             </ion-list>
@@ -37,6 +38,11 @@
         IonMenu,
         IonTitle,
         IonToolbar
+    },
+    methods:{
+        openConsultation(){
+            this.$router.push('/consultationPlan');
+        }
     }
     });
 </script>
