@@ -7,10 +7,11 @@
         </ion-header>
         <ion-content>
             <ion-list>
-                <ion-item>Home</ion-item>
-                <ion-item @click="openConsultation">Consultation</ion-item>
-                <ion-item>Profile</ion-item>
-                <ion-item>Settings</ion-item>
+                <ion-item @click="navigationMenu('home')">Home</ion-item>
+                <ion-item @click="navigationMenu('consultationPlan')">Consultation</ion-item>
+                <ion-item @click="navigationMenu('report')">Reports</ion-item>
+                <ion-item @click="navigationMenu('profile')">Profile</ion-item>
+                <ion-item @click="navigationMenu('settings')">Settings</ion-item>
             </ion-list>
         </ion-content>
     </ion-menu>
@@ -24,7 +25,8 @@
             IonList,
             IonTitle, 
             IonToolbar, 
-            IonMenu 
+            IonMenu,
+            menuController 
         } from '@ionic/vue';
     import { defineComponent } from 'vue';
 
@@ -40,9 +42,11 @@
         IonToolbar
     },
     methods:{
-        openConsultation(){
-            this.$router.push('/consultationPlan');
+        navigationMenu(url: any){
+            menuController.close()
+            this.$router.push(url);
         }
+        
     }
     });
 </script>

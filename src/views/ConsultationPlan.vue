@@ -14,21 +14,26 @@
         <ion-row>
             <ion-col size="1" size-lg="1"></ion-col>
             <ion-col size="3" size-lg="3">
-            <ion-card style="max-width: 296px; background-color: #fff;">
+            <ion-card style="max-width: 300px; background-color: #fff;">
                 <div class="wizard_title"><strong > The consultation plan</strong></div>
                 <ion-card-content>
-                        
                         <div id="wizard_verticle" class="form_wizard wizard_verticle">
                         <ul class="list-unstyled wizard_steps anchor">
                     <li>
                         <a href="#step-11" class="done" isdone="1" rel="1">
-                        <span class="step_no">1 <span class="wizard_text">Vitals and other measures</span> </span>
+                        <span class="checked_step_border step_no step_done">
+                            <ion-icon :icon="checkmark" class="checked_step color_white"></ion-icon>  
+                            <span class="wizard_text">Vitals and other measures</span> 
+                        </span>
                         
                         </a>
                     </li>
                     <li>
                         <a href="#step-22" class="selected" isdone="1" rel="2">
-                        <span class="step_no">2 <span class="wizard_text">Provisional diagnosis</span> </span>
+                        <span class="checked_step_border step_no step_done">
+                            <span class="color_white">2 </span>
+                            <span class="wizard_text">Provisional diagnosis</span> 
+                        </span>
                         </a>
                     </li>
                     <li>
@@ -109,6 +114,8 @@
                     <div class="ion-padding" slot="content">Disposition</div>
                 </ion-accordion>
             </ion-accordion-group>
+            <hr style="background: rgba(0, 0, 0, 0.13);">
+            <ion-button style="--background: var(--ion-toolbar-background); font-size: var(--ion-button-font);"><b>Finish and Save</b></ion-button>
         </ion-col>
         </ion-row>
       </ion-content>
@@ -122,7 +129,7 @@
   import { defineComponent } from 'vue';
   import Toolbar from '@/components/Toolbar.vue'
   import ToolbarSearch from '@/components/ToolbarSearch.vue'
-  import { chevronBackOutline } from 'ionicons/icons';
+  import { chevronBackOutline,checkmark } from 'ionicons/icons';
   export default defineComponent({
     name: "Home",
     components:{
@@ -141,7 +148,7 @@
       IonLabel
       },
       setup() {
-      return { chevronBackOutline };
+      return { chevronBackOutline,checkmark };
     },
       methods:{
         stepIcon(step: any) {
@@ -219,7 +226,22 @@
     --color: var(--ion-color-primary-contrast);
   }
 
-
+  .checked_step{
+    font-size: 17px;
+    font-weight: 700;
+    margin-top: 1px;
+    margin-left: -8px;
+    position: absolute;
+    }
+    .checked_step_border{
+        border: 2px solid var(--ion-toolbar-background) !important;
+    }
+    .step_done{
+        background-color: var(--ion-toolbar-background);
+    }
+    .color_white{
+        color: #fff !important;
+    }
   .wizard_verticle ul.wizard_steps li a .step_no {
     width: 25px;
     height: 25px;
@@ -234,6 +256,7 @@
     color: #B4B4B4;
     z-index: 5;
 }
+
 
 .wizard_verticle ul.wizard_steps {
     display: table;
@@ -253,9 +276,9 @@
 .wizard_verticle ul.wizard_steps li a:before {
     content: "";
     position: absolute;
-    height: 70%;
+    height: 40%;
     background: #B4B4B4;
-    top: 23px;
+    top: 27px;
     width: 2px;
     z-index: 4;
     left: 49%;
@@ -299,17 +322,18 @@ a {
 .wizard_text{
     position: absolute;
     width: 14vw;
-    font-size: 18px;
+    font-size: 16px;
     text-align: left;
-    margin-left: 16px;
+    margin-left: 20px;
     display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    color: #636363;
     
 }
 .wizard_title{
-    color:#000;
+    color:#00190E;
     text-align: center;
     width: inherit;
     font-size: 18px;
@@ -334,9 +358,6 @@ a {
     font-size: 16px;
     padding: 18px;
 }
-.position_content{
-    max-width: 85vw;
-    margin: 0 auto;
-}
+
 </style>
   
