@@ -25,6 +25,7 @@ import './theme/variables.css';
 /* font variables */
 import './font/variables.css';
 import './css/style.css';
+import './svg/svg.css';
 
 const app = createApp(App)
   .use(IonicVue)

@@ -155,7 +155,7 @@
   }
   
   .search_result .selectedPatient:hover {
-    color: var(--ion-toolbar-background) !important;
+    color: var(--ion-color-primary) !important;
     font-size: 18px;
   }
   .search_result .selectedPatient {
@@ -164,13 +164,13 @@
     color: var(--ion-hover)
   }
   .search_result:hover ion-icon {
-    --ion-hover: var(--ion-toolbar-background);
+    --ion-hover: var(--ion-color-primary);
     background-color: #EBEBEB;
     border-radius: 5px;
     color: var(--ion-hover) !important;
   }
   .search_result:hover{
-    --ion-hover: var(--ion-toolbar-background);
+    --ion-hover: var(--ion-color-primary);
     background-color: #EBEBEB;
     border-radius: 5px;
     color: var(--ion-hover) !important;

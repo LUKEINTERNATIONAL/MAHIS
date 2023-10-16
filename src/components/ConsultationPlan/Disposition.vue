@@ -1,19 +1,10 @@
 <template>
-    <ion-menu side="start" content-id="main">
-        <ion-header>
-            <ion-toolbar>
-                <ion-title>Menu</ion-title>
-            </ion-toolbar>
-        </ion-header>
-        <ion-content>
-            <ion-list>
-                <ion-item @click="navigationMenu('home')">Home</ion-item>
-                <ion-item @click="navigationMenu('report')">Reports</ion-item>
-                <ion-item @click="navigationMenu('profile')">Profile</ion-item>
-                <ion-item @click="navigationMenu('settings')">Settings</ion-item>
-            </ion-list>
-        </ion-content>
-    </ion-menu>
+    <ion-row >
+       <span class="dash_box">No referals created yet</span> 
+    </ion-row>
+    <ion-row >
+       <span class="add_item"> + Add New Referal </span> 
+    </ion-row>
 </template>
   
 <script lang="ts">
@@ -28,6 +19,9 @@
             menuController 
         } from '@ionic/vue';
     import { defineComponent } from 'vue';
+    import { checkmark,pulseOutline } from 'ionicons/icons';
+    import { ref } from 'vue';
+    import { icons } from '@/utils/svg.ts';
 
     export default defineComponent({
     name: 'Menu',
@@ -38,7 +32,14 @@
         IonList,
         IonMenu,
         IonTitle,
-        IonToolbar
+        IonToolbar    },
+        data() {
+    return {
+        iconsContent: icons,
+    };
+  },
+    setup() {
+      return { checkmark,pulseOutline };
     },
     methods:{
         navigationMenu(url: any){
@@ -78,5 +79,7 @@ margin: 0;
 #container a {
 text-decoration: none;
 }
+
+
 </style>
   

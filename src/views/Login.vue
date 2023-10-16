@@ -32,7 +32,7 @@
                 @click="togglePasswordVisibility"
                 class="password-toggle"
               ></ion-icon>
-            <ion-button style="--background: var(--ion-toolbar-background); font-size: var(--ion-button-font);" @click="doLogin" class="login-button">
+            <ion-button style="--background: var(--ion-color-primary); font-size: var(--ion-button-font);" @click="doLogin" class="login-button">
               
               Login
             </ion-button>

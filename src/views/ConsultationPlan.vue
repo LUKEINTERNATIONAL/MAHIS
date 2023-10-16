@@ -19,48 +19,17 @@
                 <ion-card-content>
                         <div id="wizard_verticle" class="form_wizard wizard_verticle">
                         <ul class="list-unstyled wizard_steps anchor">
-                    <li>
+                    <li v-for="(item, index) in wizardData" :key="index" :class="item.last_step">
                         <a href="#step-11" class="done" isdone="1" rel="1">
-                        <span class="checked_step_border step_no step_done">
-                            <ion-icon :icon="checkmark" class="checked_step color_white"></ion-icon>  
-                            <span class="wizard_text">Vitals and other measures</span> 
+                        <span :class="item.class">
+                            <ion-icon v-if="item.checked" :icon="checkmark" class="checked_step"></ion-icon>  
+                            <span v-if="!item.checked" class="">{{ item.number }} </span>
+                            <span class="wizard_text">{{ item.title }}</span> 
                         </span>
                         
                         </a>
                     </li>
-                    <li>
-                        <a href="#step-22" class="selected" isdone="1" rel="2">
-                        <span class="checked_step_border step_no step_done">
-                            <span class="color_white">2 </span>
-                            <span class="wizard_text">Provisional diagnosis</span> 
-                        </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#step-33" class="disabled" isdone="0" rel="3">
-                        <span class="step_no">3 <span class="wizard_text">Investigations</span> </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#step-44" class="disabled" isdone="0" rel="4">
-                        <span class="step_no">4 <span class="wizard_text">Confirm diagnosis</span> </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#step-44" class="disabled" isdone="0" rel="5">
-                        <span class="step_no">5 <span class="wizard_text">Complications</span> </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#step-44" class="disabled" isdone="0" rel="6">
-                        <span class="step_no">6 <span class="wizard_text">Treatment</span> </span>
-                        </a>
-                    </li>
-                    <li class="last_step">
-                        <a href="#step-44" class="disabled" isdone="0" rel="7">
-                        <span class="step_no">7 <span class="wizard_text">Disposition</span> </span>
-                        </a>
-                    </li>
+                 
                 </ul>
             </div>
                    
@@ -70,52 +39,66 @@
         
         <ion-col size="7" size-lg="7">
             <span> <ion-icon :icon="chevronBackOutline"></ion-icon>  Back to all consultations</span>
-            <ion-accordion-group>
-                <ion-accordion value="first">
+            <ion-accordion-group @ionChange="accordionGroupChange($event)">
+                <ion-accordion value="1">
                     <ion-item slot="header">
                         <ion-label>Vitals and other measures</ion-label>
                     </ion-item>
-                    <div class="ion-padding" slot="content">Vitals</div>
+                    <div class="ion-padding" slot="content">
+                        <Vitals />
+                    </div>
                 </ion-accordion>
-                <ion-accordion value="second">
+                <ion-accordion value="2">
                     <ion-item slot="header">
                         <ion-label>Provisional diagnosis</ion-label>
                     </ion-item>
-                    <div class="ion-padding" slot="content">diagnosis</div>
+                    <div class="ion-padding" slot="content">
+                        <ProvisionalDiagnosis />
+                    </div>
                 </ion-accordion>
-                <ion-accordion value="third">
+                <ion-accordion value="3">
                     <ion-item slot="header">
                         <ion-label>Investigations</ion-label>
                     </ion-item>
-                    <div class="ion-padding" slot="content">Investigations</div>
+                    <div class="ion-padding" slot="content">
+                        <Investigations />
+                    </div>
                 </ion-accordion>
-                <ion-accordion value="fourth">
+                <ion-accordion value="4">
                     <ion-item slot="header">
                         <ion-label>Confirm diagnosis</ion-label>
                     </ion-item>
-                    <div class="ion-padding" slot="content">diagnosis</div>
+                    <div class="ion-padding" slot="content">
+                        <ConfirmDiagnosis />
+                    </div>
                 </ion-accordion>
-                <ion-accordion value="fifth">
+                <ion-accordion value="5">
                     <ion-item slot="header">
                         <ion-label>Complications</ion-label>
                     </ion-item>
-                    <div class="ion-padding" slot="content">Complications</div>
+                    <div class="ion-padding" slot="content">
+                        <Complications />
+                    </div>
                 </ion-accordion>
-                <ion-accordion value="sixth">
+                <ion-accordion value="6">
                     <ion-item slot="header">
                         <ion-label>Treatment plan</ion-label>
                     </ion-item>
-                    <div class="ion-padding" slot="content">Treatment</div>
+                    <div class="ion-padding" slot="content">
+                        <TreatmentPlan />
+                    </div>
                 </ion-accordion>
-                <ion-accordion value="seventh">
+                <ion-accordion value="7">
                     <ion-item slot="header">
                         <ion-label>Disposition</ion-label>
                     </ion-item>
-                    <div class="ion-padding" slot="content">Disposition</div>
+                    <div class="ion-padding" slot="content">
+                        <Disposition />
+                    </div>
                 </ion-accordion>
             </ion-accordion-group>
             <hr style="background: rgba(0, 0, 0, 0.13);">
-            <ion-button style="--background: var(--ion-toolbar-background); font-size: var(--ion-button-font);"><b>Finish and Save</b></ion-button>
+            <ion-button style="--background: var(--ion-color-primary); font-size: var(--ion-button-font);"><b>Finish and Save</b></ion-button>
         </ion-col>
         </ion-row>
       </ion-content>
@@ -125,11 +108,18 @@
   <script lang="ts">
   import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle,
      IonToolbar,IonButton, IonCard, IonCardContent, IonCardHeader,
-      IonCardSubtitle, IonCardTitle, IonAccordion, IonAccordionGroup, IonItem, IonLabel } from '@ionic/vue';
+      IonCardSubtitle, IonCardTitle, IonAccordion, IonAccordionGroup, IonItem, IonLabel,AccordionGroupCustomEvent } from '@ionic/vue';
   import { defineComponent } from 'vue';
   import Toolbar from '@/components/Toolbar.vue'
   import ToolbarSearch from '@/components/ToolbarSearch.vue'
   import { chevronBackOutline,checkmark } from 'ionicons/icons';
+  import Vitals from '@/components/ConsultationPlan/Vitals.vue'
+  import ProvisionalDiagnosis from '@/components/ConsultationPlan/ProvisionalDiagnosis.vue'
+  import Complications from '@/components/ConsultationPlan/Complications.vue'
+  import ConfirmDiagnosis from '@/components/ConsultationPlan/ConfirmDiagnosis.vue'
+  import Disposition from '@/components/ConsultationPlan/Disposition.vue'
+  import Investigations from '@/components/ConsultationPlan/Investigations.vue'
+  import TreatmentPlan from '@/components/ConsultationPlan/TreatmentPlan.vue'
   export default defineComponent({
     name: "Home",
     components:{
@@ -143,23 +133,104 @@
         ToolbarSearch,
         IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,
         IonAccordion,
-      IonAccordionGroup,
-      IonItem,
-      IonLabel
-      },
-      setup() {
-      return { chevronBackOutline,checkmark };
+        IonAccordionGroup,
+        IonItem,
+        IonLabel,
+        Vitals,
+        ProvisionalDiagnosis,
+        Complications,
+        ConfirmDiagnosis,
+        Disposition,
+        Investigations,
+        TreatmentPlan
     },
+    data(){
+        return {
+            wizardData: [
+                {
+                    'title': 'Vitals and other measures',
+                    'class': 'common_step',
+                    'checked':false,
+                    'disabled':false,
+                    'number': 1,
+                    'last_step': ''
+                },
+                {
+                    'title': 'Provisional diagnosis',
+                    'class': 'common_step',
+                    'checked':'',
+                    'icon': false,
+                    'disabled':false,
+                    'number': 2,
+                    'last_step': ''
+                },
+                {
+                    'title': 'Investigations',
+                    'class': 'common_step',
+                    'checked':'',
+                    'icon': false,
+                    'disabled':false,
+                    'number': 3,
+                    'last_step': ''
+                },
+                {
+                    'title': 'Confirm diagnosis',
+                    'class': 'common_step',
+                    'checked':'',
+                    'icon': false,
+                    'disabled':false,
+                    'number': 4,
+                    'last_step': ''
+                },
+                {
+                    'title': 'Complications',
+                    'class': 'common_step',
+                    'checked':'',
+                    'icon': false,
+                    'disabled':false,
+                    'number': 5,
+                    'last_step': ''
+                },
+                {
+                    'title': 'Treatment',
+                    'class': 'common_step',
+                    'checked':'',
+                    'icon': false,
+                    'disabled':false,
+                    'number': 6,
+                    'last_step': ''
+                },
+                {
+                    'title': 'Disposition',
+                    'class': 'common_step',
+                    'checked':'',
+                    'icon': false,
+                    'disabled':false,
+                    'number': 7,
+                    'last_step': 'last_step'
+                },
+        ],
+        };
+    },
+    setup() {
+        return { chevronBackOutline,checkmark };
+    },
+    
       methods:{
-        stepIcon(step: any) {
-      // Define icons for each step here
-      const icons = {
-        step1: "ellipse-outline",
-        step2: "ellipse-outline",
-        step3: "ellipse-outline",
-      };
-      return icons[step];
-    },
+        accordionGroupChange(ev: AccordionGroupCustomEvent){
+            
+            
+            this.wizardData.forEach(item => {
+                item.checked = false;
+                item.class = "common_step"
+                if (item.number == ev.detail.value) {
+                    // item.checked = true;
+                    item.class = 'open_step common_step';
+                }
+            });
+
+            console.log(this.wizardData)
+        }
       }
     })
   </script>
@@ -233,16 +304,16 @@
     margin-left: -8px;
     position: absolute;
     }
-    .checked_step_border{
-        border: 2px solid var(--ion-toolbar-background) !important;
+    .open_step{
+        border: 2px solid var(--ion-color-primary) !important;
+        background-color: var(--ion-color-primary);
+        color:#fff !important
     }
-    .step_done{
-        background-color: var(--ion-toolbar-background);
-    }
+    
     .color_white{
         color: #fff !important;
     }
-  .wizard_verticle ul.wizard_steps li a .step_no {
+  .wizard_verticle ul.wizard_steps li a .common_step {
     width: 25px;
     height: 25px;
     line-height: 21px;

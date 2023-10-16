@@ -1,6 +1,6 @@
 <template>
-    <ion-header :translucent="true" style="background-color: var(--ion-toolbar-background);">
-      <ion-toolbar class="position_content">
+    <ion-header :translucent="true" class="primary_color_background">
+      <ion-toolbar  class="position_content primary_color_background">
         <ion-menu-button slot="start" />
         <ion-title><b>NCD EMR</b></ion-title>
         <ion-buttons slot="end">
