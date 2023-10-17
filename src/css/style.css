@@ -29,3 +29,14 @@
     font-weight:700;
     margin-top:20px;
 }
+
+.input_item{
+    border: 1px solid #B3B3B3;
+    --border-width: 0 0 0 0;
+    border-radius: 5px;
+}
+.input_item:focus{
+    border: 1px solid var(--ion-color-primary);
+    --border-width: 0 0 0 0;
+    border-radius: 5px;
+}

@@ -218,18 +218,17 @@
     
       methods:{
         accordionGroupChange(ev: AccordionGroupCustomEvent){
-            
-            
-            this.wizardData.forEach(item => {
+            if(ev.target.className == "md accordion-group-expand-compact"){
+                this.wizardData.forEach(item => {
                 item.checked = false;
                 item.class = "common_step"
                 if (item.number == ev.detail.value) {
                     // item.checked = true;
                     item.class = 'open_step common_step';
                 }
-            });
 
-            console.log(this.wizardData)
+            });
+            }
         }
       }
     })
@@ -340,9 +339,6 @@
 .list-unstyled {
     padding-left: 0;
 }
-
-
-
 
 .wizard_verticle ul.wizard_steps li a:before {
     content: "";

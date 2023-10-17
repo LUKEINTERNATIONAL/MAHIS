@@ -8,6 +8,7 @@
         <ion-content>
             <ion-list>
                 <ion-item @click="navigationMenu('home')">Home</ion-item>
+                <ion-item @click="navigationMenu('home')">Referals</ion-item>
                 <ion-item @click="navigationMenu('report')">Reports</ion-item>
                 <ion-item @click="navigationMenu('profile')">Profile</ion-item>
                 <ion-item @click="navigationMenu('settings')">Settings</ion-item>

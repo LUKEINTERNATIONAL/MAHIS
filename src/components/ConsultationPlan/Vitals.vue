@@ -188,16 +188,7 @@ text-decoration: none;
   transform: translateY(-50%);
   color: gray; /* Adjust the color as needed */
 }
-.input_item{
-    border: 1px solid #B3B3B3;
-    --border-width: 0 0 0 0;
-    border-radius: 5px;
-}
-.input_item:focus{
-    border: 1px solid var(--ion-color-primary);
-    --border-width: 0 0 0 0;
-    border-radius: 5px;
-}
+
 .item_header{
     --border-width: 0 0 0 0;
     font-weight: 700;

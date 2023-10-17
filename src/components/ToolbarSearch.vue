@@ -1,12 +1,17 @@
 <template>
     <ion-searchbar
-      v-model="searchQuery"
       @ionInput="handleInput"
       placeholder="Search client by MRN or Diabete clinical No."
       class="searchField"
     ></ion-searchbar>
-    <ion-popover :is-open="popoverOpen" :event="event" 
-    @didDismiss="popoverOpen = false" :keyboard-close="false" :show-backdrop="false" :dismiss-on-select="true">
+    <ion-popover 
+      :is-open="popoverOpen" 
+      :event="event" 
+      @didDismiss="popoverOpen = false" 
+      :keyboard-close="false" 
+      :show-backdrop="false" 
+      :dismiss-on-select="true"
+    >
     <ion-content class="search_card">
         <ion-row class=" search_header">
           <ion-col >Diabete clinic No. </ion-col>
@@ -27,8 +32,23 @@
   </template>
   
   <script lang="ts">
-  import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle,IonIcon, IonToolbar,IonSearchbar, IonCard, IonCardContent, IonCardHeader,
-      IonCardSubtitle, IonCardTitle,IonPopover,popoverController } from '@ionic/vue';
+  import { 
+    IonContent, 
+    IonHeader, 
+    IonMenuButton, 
+    IonPage, 
+    IonTitle,
+    IonIcon, 
+    IonToolbar,
+    IonSearchbar, 
+    IonCard, 
+    IonCardContent, 
+    IonCardHeader,
+    IonCardSubtitle, 
+    IonCardTitle,
+    IonPopover,
+    popoverController 
+  } from '@ionic/vue';
   import { defineComponent } from 'vue';
   import { Patientservice } from "@/services/patient_service"
   import { checkmark } from 'ionicons/icons';
@@ -50,7 +70,6 @@
     },
     data() {
       return {
-        searchQuery: "",
         popoverOpen: false,
         event: null,
         patients: "" as any,
