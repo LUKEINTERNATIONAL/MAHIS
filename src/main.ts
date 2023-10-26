@@ -26,11 +26,14 @@ import './theme/variables.css';
 import './font/variables.css';
 import './css/style.css';
 import './svg/svg.css';
+import DataTable from 'datatables.net-vue3';
+import DataTablesCore from 'datatables.net';
+ 
 
 const app = createApp(App)
   .use(IonicVue)
   .use(router);
-  
+  DataTable.use(DataTablesCore);
 router.isReady().then(() => {
   app.mount('#app');
 });

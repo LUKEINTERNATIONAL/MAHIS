@@ -8,12 +8,12 @@
         </ion-buttons>
         <ion-buttons slot="end" class="iconFont">
             <ion-icon :icon="notificationsOutline"></ion-icon>
-            <ion-badge slot="start" class="badge">91</ion-badge>
+            <ion-badge slot="start" class="badge">9</ion-badge>
         </ion-buttons>
-        <ion-buttons slot="end" class="iconFont" id="popover-button">
+        <ion-buttons slot="end" @click="openPopover($event)" class="iconFont" id="popover-button">
             <ion-icon :icon="personCircleOutline"></ion-icon>
         </ion-buttons>
-        <ion-popover trigger="popover-button" :show-backdrop="false" :dismiss-on-select="true">
+        <ion-popover :is-open="popoverOpen" :show-backdrop="false" :dismiss-on-select="true" :event="event" @didDismiss="popoverOpen = false">
           <ion-content>
             <ion-list>
               <ion-item :button="true" :detail="false" >Profile</ion-item>
@@ -44,12 +44,22 @@
         IonIcon,
         IonPopover
       },
+      data() {
+      return {
+        popoverOpen: false,
+        event: null as any,
+      };
+    },
       setup() {
       return { notificationsOutline,personCircleOutline };
     },
     methods :{
       openLogout(){
         this.$router.push("/login");
+      },
+      openPopover(e: Event){
+        this.event = e;
+        this.popoverOpen = true;
       }
     }
     })
