@@ -1,6 +1,6 @@
 <template>
     <ion-list>
-        <ion-item>
+        <ion-item :lines="visualAT">
             <ion-toggle :checked="showVisualAcuityTest" @ionChange="toggleShowVisualAcuityTest">Visual acuity test</ion-toggle>
         </ion-item>
             <div class="sub_item_body" v-if="showVisualAcuityTest">
@@ -44,6 +44,7 @@
                     </ion-col>
                 </ion-row>
             </div>
+        <ion-item class="sub_item_body_close" v-if="showVisualAcuityTest"/>
 
         <ion-item>
             <ion-toggle>Retinopathy screening</ion-toggle>            
@@ -256,6 +257,7 @@
             "Foreign Body Sensation",
             "Pain"
             ],
+        visualAT: '',
     };
   },
     setup() {
@@ -271,6 +273,9 @@
         },
         toggleShowVisualAcuityTest() {
             this.showVisualAcuityTest = !this.showVisualAcuityTest
+            if (this.showVisualAcuityTest) {
+                this.visualAT = 'none'
+            } else {this.visualAT = ''}
         },
         leftEyeComplaintSelect(ev: any) {
             console.log('ionChange fired with value: ' + ev.detail.value);
@@ -350,5 +355,9 @@ ion-item.item_eye_ {
 /* ion-toggle {
     --track-background-checked: #006401
 } */
+ion-item.sub_item_body_close {
+        border-bottom: 2px dotted var(--ion-color-medium);
+        --inner-border-width:0;
+    }
 </style>
   
