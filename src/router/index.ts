@@ -6,6 +6,7 @@ import Login from '../views/Login.vue'
 import StartTriage from '../views/StartTriage.vue'
 import Triage from '../views/Triage.vue'
 import TriageSummary from '../views/TriageSummary.vue'
+import PatientProfile from '../views/PatientProfile.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -41,6 +42,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/triageSummary',
     name: 'TriageSummary',
     component: TriageSummary
+  },
+  {
+    path: '/patientProfile',
+    name: 'patientProfile',
+    component: PatientProfile
   }
 ]
 
