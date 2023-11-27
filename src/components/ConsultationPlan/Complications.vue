@@ -50,7 +50,7 @@
             <ion-toggle>Retinopathy screening</ion-toggle>            
         </ion-item>
 
-        <ion-item>
+        <ion-item :lines="footSC">
             <ion-toggle :checked="footChecked" @ionChange="footScreening">Foot screening</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="footChecked">
@@ -197,6 +197,8 @@
                 </ion-col>
             </ion-row>
         </div>
+        <ion-item class="sub_item_body_close" v-if="footChecked"/>
+
         <ion-item>
             <ion-toggle>CVD risk screening</ion-toggle>
         </ion-item>
@@ -258,6 +260,7 @@
             "Pain"
             ],
         visualAT: '',
+        footSC: '',
     };
   },
     setup() {
@@ -270,6 +273,9 @@
         },
         footScreening(){
             this.footChecked = !this.footChecked
+            if (this.footChecked) {
+                this.footSC = 'none'
+            } else {this.footSC = ''}
         },
         toggleShowVisualAcuityTest() {
             this.showVisualAcuityTest = !this.showVisualAcuityTest
