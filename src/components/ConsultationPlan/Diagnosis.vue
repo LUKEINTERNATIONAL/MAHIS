@@ -31,7 +31,7 @@
                 <ion-label><span v-html="iconsContent.search" class="selectedPatient"></span></ion-label>
             </ion-item>
             <ion-popover 
-                :is-open="popoverOpen" 
+                :is-open="true" 
                 :event="event" 
                 @didDismiss="popoverOpen = false" 
                 :keyboard-close="false" 

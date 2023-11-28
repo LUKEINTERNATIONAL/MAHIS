@@ -1,10 +1,37 @@
 <template>
-    <ion-row >
-       <span class="dash_box">No Diagnosis added</span> 
-    </ion-row>
-    <ion-row >
-       <span class="add_item"> + Add Diagnosis </span> 
-    </ion-row>
+    <ion-list>
+        <ion-label>Medical allergies</ion-label>
+        <ion-row>
+            <ion-item lines="none" class="medicalAl">
+                <ion-row>
+                    <div v-for="(item, index) in medicalAllergiesList" :key="index">
+                        <ion-button v-if="item.selected" @click="selectAl(item)" class="medicalAlBtn">
+                        {{ item.name }}
+                        <ion-icon slot="end" style="font-size: x-large;" :icon="closeOutline"></ion-icon>
+                    </ion-button>
+                    </div>
+                    <div>
+                        <ion-button id="click-trigger" fill="clear" class="medicalAlAddBtn">
+                            <ion-icon :icon="addOutline"></ion-icon>
+                        </ion-button>
+                        <ion-popover class="popover-al" :show-backdrop="false" trigger="click-trigger" trigger-action="click">
+                            <ion-content color="light"  class="ion-padding content-al">
+                                <ion-label>Choose the allergy:</ion-label>
+                                <ion-list class="list-al">
+                                    <div class="item-al" v-for="(item, index) in medicalAllergiesList" :key="index">
+                                        <ion-label  @click="selectAl(item)" style="display: flex; justify-content: space-between;">
+                                            {{ item.name }}
+                                            <ion-icon v-if="item.selected" class="icon-al" :icon="checkmarkOutline"></ion-icon> 
+                                        </ion-label>                                     
+                                    </div>
+                                </ion-list>
+                            </ion-content>
+                        </ion-popover>
+                    </div>
+                </ion-row>
+            </ion-item>
+        </ion-row>
+    </ion-list>
 </template>
   
 <script lang="ts">
@@ -16,10 +43,11 @@
             IonTitle, 
             IonToolbar, 
             IonMenu,
-            menuController 
+            menuController,
+            IonButton
         } from '@ionic/vue';
     import { defineComponent } from 'vue';
-    import { checkmark,pulseOutline } from 'ionicons/icons';
+    import { checkmark,pulseOutline,addOutline,closeOutline, checkmarkOutline } from 'ionicons/icons';
     import { ref } from 'vue';
     import { icons } from '@/utils/svg.ts';
 
@@ -30,23 +58,52 @@
         IonHeader,
         IonItem,
         IonList,
+        IonButton,
         IonMenu,
         IonTitle,
         IonToolbar    },
         data() {
     return {
         iconsContent: icons,
+        medicalAllergiesList: [
+            {
+                name: 'Eye too short',
+                selected: false,
+            },
+            {
+                name: 'Glibenclamide 2',
+                selected: false,
+            },
+            {
+                name: 'Gliben',
+                selected: false,
+            },
+            {
+                name:  'Metformin',
+                selected: false,
+            },
+            {
+                name: 'Short acting insulin',
+                selected: false,
+            },
+            {
+                name: 'Glibenclamide',
+                selected: false,
+            }
+          ]
     };
   },
     setup() {
-      return { checkmark,pulseOutline };
+      return { checkmark, pulseOutline, closeOutline, addOutline, checkmarkOutline };
     },
     methods:{
         navigationMenu(url: any){
             menuController.close()
             this.$router.push(url);
-        }
-        
+        },
+        selectAl(item: any) {
+            item.selected = !item.selected
+        },
     }
     });
 </script>
@@ -79,7 +136,43 @@ margin: 0;
 #container a {
 text-decoration: none;
 }
-
-
+ion-item.medicalAl {
+    --background: #fff;
+    --border-radius: 5px;
+}
+ion-button.medicalAlBtn {
+    --background: #FECDCA;
+    --color: #B42318;
+    text-transform: none;
+}
+ion-button.medicalAlAddBtn {
+    font-size: large;
+}
+ion-icon.icon-al {
+    /* margin-left: 40%; */
+    font-size: x-large;
+    margin-bottom: -5px;
+}
+.item-al {
+    cursor: pointer;
+    padding: 5px;
+    background-color: #EBEBEB;
+    margin-top: 8px;
+}
+.item-al:hover {
+  background-color: #55515148;
+  padding: 5px;
+  border-radius: 3px;
+}
+ion-popover.popover-al {
+    --background: #fff;
+}
+ion-content.content-al {
+    --background: #fff;
+}
+ion-list.list-al {
+    --background: #fff;
+    -ion-item-background: #fff;
+}
 </style>
   
