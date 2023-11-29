@@ -20,7 +20,7 @@
           <ion-col style="max-width: 70px;">Gender</ion-col>
           <ion-col style="max-width: 30px;" ></ion-col>
         </ion-row>
-        <ion-row class="search_result" v-for="(item, index) in patients" :key="index" @click="openNewPage('startTriage')">
+        <ion-row class="search_result" v-for="(item, index) in patients" :key="index" @click="openNewPage('patientProfile')">
           <ion-col >{{ patientIdentifier(item) }} </ion-col>
           <ion-col >{{ item.person.names[0].given_name+" "+item.person.names[0].family_name }}</ion-col>
           <ion-col >{{ item.person.birthdate }}</ion-col>
