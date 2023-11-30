@@ -27,7 +27,11 @@
             </ion-col>
         
             <ion-col size="7" size-lg="7">
-                <span> <ion-icon :icon="chevronBackOutline"></ion-icon>  Back to all consultations</span>
+                <div class="back_profile" @click="nav('patientProfile')">
+                    <ion-icon style="font-size: 20px;" :icon="chevronBackOutline"> </ion-icon> 
+                    <span> Back to profile</span>
+                </div>
+                
                 <ion-accordion-group @ionChange="accordionGroupChange($event)">
                     <ion-accordion value="1">
                         <ion-item slot="header">
@@ -87,7 +91,7 @@
                     </ion-accordion>
                 </ion-accordion-group>
                 <hr style="background: rgba(0, 0, 0, 0.13);">
-                <ion-button class="primary_btn">Finish and Save</ion-button>
+                <ion-button class="primary_btn" @click="nav('patientProfile')">Finish and Save</ion-button>
             </ion-col>
         </ion-row>
       </ion-content>
@@ -240,6 +244,9 @@
 
             });
             }
+        },
+        nav(url: any){
+            this.$router.push(url);
         }
       }
     })
@@ -305,6 +312,14 @@
   ion-accordion.accordion-expanded ion-item[slot='header'] {
     --background: #8A8A8A;
     --color: var(--ion-color-primary-contrast);
+  }
+  .back_profile{
+    display: flex;
+    justify-content: space-between;
+    width: 140px;
+    align-items: center;
+    font-weight: 400;
+    font-size: 14;
   }
 </style>
   

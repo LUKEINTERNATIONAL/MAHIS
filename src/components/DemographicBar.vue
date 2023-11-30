@@ -49,7 +49,7 @@
     background-color: rgb(255, 255, 255);
     margin: 0;
     border-radius: unset;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 .second_bar_list{
     list-style: none;
