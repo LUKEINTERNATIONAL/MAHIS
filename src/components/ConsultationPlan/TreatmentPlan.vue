@@ -31,6 +31,13 @@
                 </ion-row>
             </ion-item>
         </ion-row>
+        <ion-item lines="none">
+            <ion-label>List of medications</ion-label>
+        </ion-item>
+        <ion-item>
+            <ion-label style="display: contents; color: #00190E; font-weight: 400; font: inter; line-height: 14px;">Metformin Extentend</ion-label>
+            <ion-label style="margin-left: 15px; color: #636363; font-weight: 400; font: inter; line-height: 14px;">750mg / twice / daily / 30days / until 2023-09-23</ion-label>        
+        </ion-item>
     </ion-list>
 </template>
   
