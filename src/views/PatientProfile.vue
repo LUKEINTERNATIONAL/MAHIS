@@ -32,27 +32,8 @@
                           </ion-row>
                     </ion-card-content>
                 </ion-card>
-                <ion-card style="max-width: 350px; margin-bottom: 20px; background-color: #fff;">
-                    <ion-accordion-group :value="['first']">
-                        <ion-accordion value="first" style="background-color: #fff;" toggle-icon-slot="start" @click="nav('consultationPlan')">
-                            <ion-item slot="header" color="white">
-                                <ion-label class="side_title">Consultation plan</ion-label>
-                            </ion-item>
-                                <div id="wizard_verticle" class="form_wizard wizard_verticle" slot="content">
-                                    <ul class="list-unstyled wizard_steps anchor">
-                                        <li v-for="(item, index) in wizardData" :key="index" :class="item.last_step">
-                                            <a href="#step-11" class="done" isdone="1" rel="1">
-                                                <span :class="item.class">
-                                                    <ion-icon v-if="item.checked" :icon="checkmark" class="checked_step"></ion-icon>  
-                                                    <span v-if="!item.checked" class="">{{ item.number }} </span>
-                                                    <span class="wizard_text">{{ item.title }}</span> 
-                                                </span>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                        </ion-accordion>
-                    </ion-accordion-group>
+                <ion-card class="start_new_co" style="max-width: 350px; margin-bottom: 20px;" @click="nav('consultationPlan')">
+                    + Start new consultation
                 </ion-card>
                 <ion-card style="max-width: 350px; margin-bottom: 20px; background-color: #fff;">
                     <ion-accordion-group :value="['first']">
@@ -60,15 +41,38 @@
                             <ion-item slot="header" color="white">
                                 <ion-label class="side_title">Templates/Forms</ion-label>
                             </ion-item>
-                            <ion-card-content slot="content">
-                                <ul style="list-style: none; line-height: 50px;">
+                                <ul style="list-style: none;" slot="content">
                                     <li class="form_list">
-                                        <span v-html="iconsContent.today_date" ></span>
-                                        <div>AETC Form</div>
+                                        <span v-html="iconsContent.form" ></span>
+                                        <div class="form_list_content">AETC Form</div>
+                                    </li>
+                                    <li class="form_list">
+                                        <span v-html="iconsContent.inpatient" ></span>
+                                        <div class="form_list_content">Medical Inpatient</div>
+                                    </li>
+                                    <li class="form_list">
+                                        <span v-html="iconsContent.notes" ></span>
+                                        <div class="form_list_content">Surgucal Notes</div>
+                                    </li>
+                                    <li class="form_list">
+                                        <span v-html="iconsContent.gynacological" ></span>
+                                        <div class="form_list_content">Gynacological</div>
+                                    </li>
+                                    <li class="form_list">
+                                        <span v-html="iconsContent.notes" ></span>
+                                        <div class="form_list_content">SOAP</div>
+                                    </li>
+                                    <li class="form_list">
+                                        <span v-html="iconsContent.monitoring" ></span>
+                                        <div class="form_list_content">Monitoring Chart</div>
+                                    </li>
+                                    <li class="form_list">
+                                        <span v-html="iconsContent.referal" ></span>
+                                        <div class="form_list_content">Referal</div>
                                     </li>
                                 </ul>
+=                                
                                 
-                            </ion-card-content>
                         </ion-accordion>
                     </ion-accordion-group>
                 </ion-card>
@@ -868,6 +872,23 @@ ion-modal#example-modal {
 }
 .form_list{
     display: flex;
+}
+.form_list_content{
+    padding-left: 10px;
+    color: #00190E;
+    font-size: 14px;
+    font-weight: 500;
+    padding-bottom: 15px;
+}
+.start_new_co{
+    background-color: #DDEEDD ;
+    color: #006401;
+    padding: 15px;
+    border-radius:4px;
+    margin-bottom: 20px;
+    margin-left: 7px;
+    max-width: 327px;
+    font-weight: 500;
 }
 </style>
   
