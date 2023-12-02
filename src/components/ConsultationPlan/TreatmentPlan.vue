@@ -35,11 +35,79 @@
             <ion-label>List of medications</ion-label>
         </ion-item>
         <div style="margin-left: 30px; margin-bottom: 14px;">
-            <ion-item class="ionLbltp">
-                <ion-label style="display: contents; color: #00190E; font-weight: 400; font: inter; line-height: 14px;">Metformin Extentend</ion-label>
-                <ion-label style="margin-left: 15px; color: #636363; font-weight: 400; font: inter; line-height: 14px;">750mg / twice / daily / 30days / until 2023-09-23</ion-label>        
+            <ion-item @mousemove="highlightItem($event)" @mouseout="undoHighlightItem($event)" class="ionLbltp" v-for="(item, index) in selectedMedicalDrugsList" :key="index">
+                <ion-label class="drgNmTrpln" style="display: contents; color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.drugName }}</ion-label>
+                <ion-label style="min-width: 700px; margin-left: 15px; color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.dose }} / {{ item.frequency }} / daily / {{ item.duration }} / until {{ item.prescription }}</ion-label>
+                <ion-label style="cursor:pointer;"><span v-html="iconsContent.edit" class="modify_buttons"></span></ion-label>
+                <ion-label style="cursor:pointer;"><span v-html="iconsContent.delete" class="modify_buttons"></span></ion-label>      
             </ion-item>
-            <ion-button fill="clear" @click="" class="addMedicalAlBtn">
+
+            <ion-row v-if="!addItemButton" style="margin-bottom: 20px;">
+                <ion-col>
+                    <ion-item class="input_item">
+                        <ion-input  v-model="drugName"  @ionInput="searchInput" fill="outline"></ion-input>
+                        <ion-label><span v-html="iconsContent.search" class="selectedPatient"></span></ion-label>
+                    </ion-item>
+                    <ion-popover 
+                        :is-open="popoverOpen" 
+                        :event="event" 
+                        @didDismiss="popoverOpen = false" 
+                        :keyboard-close="false" 
+                        :show-backdrop="false" 
+                        :dismiss-on-select="true"
+                        style="top: 10px;left: -25px;"
+                        >
+                        <ion-content class="search_card" >
+                        
+                            <ion-row class="search_result" v-for="(item, index) in diagnosisData" :key="index" >
+                                <ion-col @click="selectedDiagnosis(item.name)">{{ item.name }} </ion-col>
+                            </ion-row>
+                        </ion-content>
+                    </ion-popover>
+                </ion-col>
+                <ion-col>
+                    <ion-item class="input_item">
+                        <ion-input placeholder="Dose" v-model="dose"  fill="outline"></ion-input>
+                        <ion-label><span  class="selectedPatient"></span></ion-label>
+                    </ion-item>
+                </ion-col>
+                <ion-col>
+                    <ion-item class="input_item">
+                        <ion-input placeholder="Frequency" v-model="frequency" fill="outline"></ion-input>
+                        <ion-label><span  class="selectedPatient"></span></ion-label>
+                    </ion-item>
+                </ion-col>
+                <ion-col>
+                    <ion-item class="input_item">
+                        <ion-input placeholder="Duration" v-model="duration"  fill="outline"></ion-input>
+                        <ion-label><span  class="selectedPatient"></span></ion-label>
+                    </ion-item>
+                </ion-col>
+                <ion-col>
+                    <ion-item class="input_item">
+                        <ion-input placeholder="Prescription" v-model="prescription" @click="onprescInput()" fill="outline"></ion-input>
+                        <ion-label><span  class="selectedPatient"></span></ion-label>
+                    </ion-item>
+                    <ion-popover 
+                        :is-open="prescPopoverOpen" 
+                        :event="prescEvent" 
+                        @didDismiss="prescPopoverOpen = false" 
+                        :keyboard-close="false" 
+                        :show-backdrop="false" 
+                        :dismiss-on-select="false"
+                        style="top: 10px;left: -25px;"
+                        >
+                        <ion-content class="search_card" >
+                            <ion-datetime ref="prescription" presentation="date"></ion-datetime>
+                        </ion-content>
+                    </ion-popover>
+                </ion-col>
+                <ion-col class="action_buttons">
+                    <span @click="saveData()">+ Save</span> 
+                </ion-col>
+            </ion-row>
+
+            <ion-button v-if="addItemButton" fill="clear" @click="addData" class="addMedicalAlBtn">
                 Add new medication
                 <ion-icon slot="start" style="font-size: x-large;" :icon="addOutline"></ion-icon>
             </ion-button>
@@ -72,7 +140,9 @@
             IonToolbar, 
             IonMenu,
             menuController,
-            IonButton
+            IonButton,
+            IonInput,
+            IonDatetime
         } from '@ionic/vue';
     import { defineComponent } from 'vue';
     import { checkmark,pulseOutline,addOutline,closeOutline, checkmarkOutline } from 'ionicons/icons';
@@ -89,10 +159,40 @@
         IonButton,
         IonMenu,
         IonTitle,
-        IonToolbar    },
+        IonToolbar,
+        IonInput,
+        IonDatetime
+      },
         data() {
     return {
         iconsContent: icons,
+        searchText: '' as any,
+        no_item: true,
+        search_item: false,
+        display_item: false,
+        addItemButton: true,
+        popoverOpen: false,
+        prescPopoverOpen: false,
+        datetime: ref(),
+        event: null,
+        prescEvent: null,
+        selectedMedicalDrugsList: [
+            {
+                drugName: 'Metformin Extentend',
+                dose: '750mg',
+                frequency: 'twice',
+                duration: '30days',
+                prescription: '2023-09-23'
+            },
+            {
+                drugName: 'Metformin Extentend',
+                dose: '750mg',
+                frequency: 'twice',
+                duration: '30days',
+                prescription: '2023-09-29'
+            }
+        ] as any,
+        diagnosisData: [] as any,
         medicalAllergiesList: [
             {
                 name: 'Eye too short',
@@ -118,7 +218,12 @@
                 name: 'Glibenclamide',
                 selected: false,
             }
-          ]
+          ],
+          drugName: '' as any,
+          dose: '' as any,
+          frequency: '' as any,
+          duration: '' as any,
+          prescription: '' as any,
     };
   },
     setup() {
@@ -132,6 +237,73 @@
         selectAl(item: any) {
             item.selected = !item.selected
         },
+        addData(){
+            // this.searchText = ""
+            // this.drugName = ""
+            // this.dose = ""
+            // this.frequency = ""
+            // this.duration = ""
+            // this.no_item = false
+            this.addItemButton = false
+            this.search_item =true
+        },
+        async saveData(){
+            console.log(this.prescription)
+            this.search_item= false
+            this.display_item= true
+            this.addItemButton =true
+
+            console.log(this.drugName)
+            console.log(this.dose)
+
+            const drugString = {
+                drugName: this.drugName,
+                dose: this.dose,
+                frequency: this.frequency,
+                duration: this.duration,
+                prescription: '2023-09-23'
+            }
+            this.selectedMedicalDrugsList.push(drugString)
+        },
+        async searchInput(text: any) {
+            const searchText = text.target.value;
+            this.openPopover(text)
+            //this.diagnosisData = await PatientDiagnosisService.getDiagnosis(searchText, 1, 10)
+        },
+        onprescInput() {
+            this.openPrescPopover('ev')
+        },
+        openPopover(e: any) {
+        this.event = e;
+        this.popoverOpen = true;
+        }, 
+        openPrescPopover(e: any) {
+            this.prescEvent = e
+            this.prescPopoverOpen = true
+        },
+        selectedDiagnosis(diagnosis: any){
+            this.searchText = diagnosis
+        },
+        highlightItem(item: any) {
+            // console.log("highlight", item.target)
+            // console.log("highlight", item.target.childNodes)
+            try {
+                const firstChild = item.target.childNodes[0];
+                firstChild.style.color = '#006401';
+            } catch (error) {
+                
+            }
+
+
+        },
+        undoHighlightItem(item: any) {
+            try {
+                const firstChild = item.target.childNodes[0];
+                firstChild.style.color = 'rgb(0, 0, 0)';
+            } catch (error) {
+                
+            }
+        }
     }
     });
 </script>
@@ -203,6 +375,11 @@ ion-icon.icon-al {
   padding: 5px;
   border-radius: 3px;
 }
+.drgNmTrpln:hover {
+    background-color: #006401 !important;
+    color: #006401 !important;
+    cursor: pointer;
+}
 ion-popover.popover-al {
     --background: #fff;
 }
@@ -225,6 +402,16 @@ ion-item.ionLbltp {
     font-size: 16px;
     font-weight: 600;
     line-height: 24px;
+}
+.modify_buttons{
+    padding-left: 20px;
+}
+.action_buttons{
+    color: var(--ion-color-primary);
+    display: flex;
+    align-items: center;
+    float: right;
+    max-width: 70px;
 }
 </style>
   
