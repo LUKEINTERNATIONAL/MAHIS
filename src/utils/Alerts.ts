@@ -101,3 +101,12 @@ export async function infoAlert(message: string, header="Information")
   ]) 
   alert.present() 
 }
+
+export async function createModal(modalComponet: any, options = {} as AlertConfirmationOtions) {
+  const modal = await modalController.create({
+                component: modalComponet,
+                backdropDismiss: false,
+                cssClass: "large-modal"
+            });
+            modal.present();
+}
