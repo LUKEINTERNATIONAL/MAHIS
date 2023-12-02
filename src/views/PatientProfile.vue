@@ -101,7 +101,7 @@
                     <div class="p_dash_header">
                         <div class="p_title">Consultation Overview</div>
                         <div class="date">
-                            <span class="diplay_space_between" id="click-trigger" >
+                            <span class="diplay_space_between" id="open-dates-trigger" >
                                 <span v-html="iconsContent.calendar" 
 
                                 style="margin-right: 15px; " ></span> 
@@ -136,7 +136,7 @@
         </ion-row>
     </div>
 
-        <ion-popover trigger="click-trigger" trigger-action="click" 
+        <ion-popover trigger="open-dates-trigger" trigger-action="click" 
         :show-backdrop="false" size="auto">
                 <ul style="list-style: none; line-height: 50px;">
                     <li>Novermber,2023</li>
