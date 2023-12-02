@@ -175,3 +175,116 @@ a {
     font-weight: 600;
     font-size: var(--ion-button-font);
 }
+
+.diplay_space_between{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .modal_title{
+    font-weight: 700;
+    font-size:24px;
+    margin-bottom: 15px;
+  }
+  .text_header_16{
+    color:#00190E;
+    font-size: 16px;
+    font-weight: 600;
+    display: flex;
+    padding-bottom: 10px;
+  }
+  .text_header_14{
+    font-weight: 400;
+    font-size: 14px;
+    padding: 6px 0px;
+    color:#00190E;
+  }
+  .modal_wrapper{
+    padding: 15px 19px;
+  }
+
+  /* vitals */
+  .vitals_overview{
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    padding-top: 10px;
+ }
+ .notes_content{
+    color:#00190E;
+    font-size:14px;
+ }
+ .notes_content li{
+    padding-bottom: 15px ;
+    line-height: 19px;
+ }
+ .v_result{
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 10px;
+  }
+  .obese{
+    background-color:#DDEEDD;
+    padding: 0.7vw;
+    border-radius: 8px;
+    padding-right: 3vw;
+    padding-left: 30px;
+    display: flex;
+    color:#016302;
+    align-items: center;
+ }
+ .bmi{
+    background-color: #E6E6E6;
+    padding: 0.7vw;
+    border-radius: 8px;
+    padding-right: 3vw;
+    padding-left: 30px;
+    display: flex;
+    color:#00190E;
+    align-items: center;
+ }
+
+ /* medications */
+ .m_name{
+    font-weight: 400;
+    color: #00190E;
+    line-height: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+ }
+ .m_name_dosage{
+    border-bottom: 1px solid #ccc;
+    border-bottom-style: dashed;
+    padding-bottom: 20px;
+ }
+ .m_btns{
+    justify-content: space-between;;
+    display: flex;
+    width: 50px;
+ }
+
+ /* investigations */
+ .laboratory{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #00190E;
+    border-bottom:solid 1px #ccc;
+    border-bottom-style: dashed;
+    line-height: 60px;
+ }
+
+ .large-modal{
+    --border-radius: 16px;
+    --width: 60vw;
+    --height:700px;
+ }
+ .content_manager{
+    justify-content: space-around;
+    display: flex;
+    margin-top: 20px;
+ }
+ .content_width{
+    max-width: 1520px;
+ }

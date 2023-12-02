@@ -124,7 +124,7 @@
   
   <style scoped>
   .searchField{
-    --border-radius:10px;
+    --border-radius:4px;
     --box-shadow: inset 0 -3em 3em #fff,
     0 0 0 2px white,
     0.3em 0.3em 1em rgba(44, 44, 44, 0.6);
