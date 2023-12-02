@@ -1,27 +1,31 @@
 <template>
     <ion-header :translucent="true" class="primary_color_background">
-      <ion-toolbar  class="position_content primary_color_background">
-        <ion-menu-button slot="start" />
-        <ion-title><b>NCD EMR</b></ion-title>
-        <ion-buttons slot="end">
-            <ToolbarSearch @search="performSearch" />
-        </ion-buttons>
-        <ion-buttons slot="end" class="iconFont">
-            <ion-icon :icon="notificationsOutline"></ion-icon>
-            <ion-badge slot="start" class="badge">9</ion-badge>
-        </ion-buttons>
-        <ion-buttons slot="end" @click="openPopover($event)" class="iconFont" id="popover-button">
-            <ion-icon :icon="personCircleOutline"></ion-icon>
-        </ion-buttons>
-        <ion-popover :is-open="popoverOpen" :show-backdrop="false" :dismiss-on-select="true" :event="event" @didDismiss="popoverOpen = false">
-          <ion-content>
-            <ion-list>
-              <ion-item :button="true" :detail="false" >Profile</ion-item>
-              <ion-item :button="true" :detail="false" @click="openLogout">Logout</ion-item>
-            </ion-list>
-          </ion-content>
-        </ion-popover>
-      </ion-toolbar>
+      <div class="content_manager" style="margin-top: unset;">
+        <ion-toolbar  class="content_width primary_color_background">
+          <ion-menu-button slot="start" />
+          <ion-title><b>NCD EMR</b></ion-title>
+          <ion-buttons slot="end" style="max-width: 500px;">
+              <ToolbarSearch @search="performSearch" />
+          </ion-buttons>
+          <div class="notifaction_person" slot="end">
+            <ion-buttons slot="end" class="iconFont">
+                <ion-icon :icon="notificationsOutline"></ion-icon>
+                <ion-badge slot="start" class="badge">9</ion-badge>
+            </ion-buttons>
+            <ion-buttons slot="end" @click="openPopover($event)" class="iconFont" id="popover-button">
+                <ion-icon :icon="personCircleOutline"></ion-icon>
+            </ion-buttons>
+          </div>
+          <ion-popover :is-open="popoverOpen" :show-backdrop="false" :dismiss-on-select="true" :event="event" @didDismiss="popoverOpen = false">
+            <ion-content>
+              <ion-list>
+                <ion-item :button="true" :detail="false" >Profile</ion-item>
+                <ion-item :button="true" :detail="false" @click="openLogout">Logout</ion-item>
+              </ion-list>
+            </ion-content>
+          </ion-popover>
+        </ion-toolbar>
+      </div>
     </ion-header>
   </template>
   
@@ -95,8 +99,6 @@
   }
   .iconFont{
     font-size: 30px;
-    margin-left: 30px;
-    margin-right: 30px;
   }
   .badge{
     position: relative;
@@ -111,6 +113,13 @@
     top: -12px;
     left: -18px;
     color: #fff;
+  }
+  .notifaction_person{
+    display: flex;
+    margin-left: 50px;
+    margin-right: 20px;
+    align-items: center;
+/* justify-content: center; */
   }
   </style>
   

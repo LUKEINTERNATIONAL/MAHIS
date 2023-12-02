@@ -1,22 +1,17 @@
 <template>
     <div class="modal_wrapper">
-        <div class="modal_title diplay_space_between">
-            <span>Disposition</span>
-            <span @click="dismiss()" style="font-weight: 300;">x</span>
-        </div>
-        <div class="dashed_bottom_border">
-            <div   div class="">
-                Facility 1
-            </div>
-            <div class="diplay_space_between" style="margin-bottom: 10px;">
-                <div>
-                    Internal / 2023-11-16 / some reason typing.
-                </div>
-                <div>
-                    <span v-html="iconsContent.tree_dot" ></span>
-                </div>
-            </div>
-        </div>
+      <div class="modal_title diplay_space_between">
+          <span>Investigations</span>
+          <span @click="dismiss()" style="font-weight: 300;">x</span>
+      </div>
+      <div class="laboratory">
+          <div>RBG (laboratory)</div>
+          <div><ion-button color="medium" > Open</ion-button></div>
+      </div>
+      <div class="laboratory">
+          <div>RBG (manual)</div>
+          <div>Result displays here</div>
+      </div>
     </div>
 </template>
   

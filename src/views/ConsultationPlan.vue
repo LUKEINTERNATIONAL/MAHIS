@@ -27,7 +27,7 @@
             </ion-col>
         
             <ion-col size="7" size-lg="7">
-                <div class="back_profile" @click="nav('patientProfile')">
+                <div class="back_profile" @click="openModal()">
                     <ion-icon style="font-size: 20px;" :icon="chevronBackOutline"> </ion-icon> 
                     <span> Back to profile</span>
                 </div>
@@ -94,6 +94,8 @@
                 <ion-button class="primary_btn" @click="nav('patientProfile')">Finish and Save</ion-button>
             </ion-col>
         </ion-row>
+
+
       </ion-content>
     </ion-page>
   </template>
@@ -116,6 +118,8 @@
     IonAccordionGroup, 
     IonItem, 
     IonLabel,
+    IonModal,
+    modalController,
     AccordionGroupCustomEvent } from '@ionic/vue';
   import { defineComponent } from 'vue';
   import Toolbar from '@/components/Toolbar.vue'
@@ -129,6 +133,10 @@
   import Disposition from '@/components/ConsultationPlan/Disposition.vue'
   import Investigations from '@/components/ConsultationPlan/Investigations.vue'
   import TreatmentPlan from '@/components/ConsultationPlan/TreatmentPlan.vue'
+  import SaveProgressModal from '@/components/SaveProgressModal.vue'
+  import { createModal } from '@/utils/Alerts'
+  import { icons } from '@/utils/svg.ts';
+  import { toastWarning, alertConfirmation } from '@/utils/Alerts';
   export default defineComponent({
     name: "Home",
     components:{
@@ -157,7 +165,8 @@
         ConfirmDiagnosis,
         Disposition,
         Investigations,
-        TreatmentPlan
+        TreatmentPlan,
+        IonModal
     },
     data(){
         return {
@@ -225,6 +234,8 @@
                     'last_step': 'last_step'
                 },
         ],
+        isOpen: false,
+        iconsContent: icons,
         };
     },
     setup() {
@@ -247,6 +258,9 @@
         },
         nav(url: any){
             this.$router.push(url);
+        },
+        openModal(){
+            createModal(SaveProgressModal)
         }
       }
     })
