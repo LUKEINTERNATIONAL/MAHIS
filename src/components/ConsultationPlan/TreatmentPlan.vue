@@ -8,7 +8,7 @@
                         <ion-button v-if="item.selected" @click="selectAl(item)" class="medicalAlBtn">
                         {{ item.name }}
                         <ion-icon slot="end" style="font-size: x-large;" :icon="closeOutline"></ion-icon>
-                    </ion-button>
+                        </ion-button>
                     </div>
                     <div>
                         <ion-button id="click-trigger" fill="clear" class="medicalAlAddBtn">
@@ -34,10 +34,31 @@
         <ion-item lines="none">
             <ion-label>List of medications</ion-label>
         </ion-item>
-        <ion-item>
-            <ion-label style="display: contents; color: #00190E; font-weight: 400; font: inter; line-height: 14px;">Metformin Extentend</ion-label>
-            <ion-label style="margin-left: 15px; color: #636363; font-weight: 400; font: inter; line-height: 14px;">750mg / twice / daily / 30days / until 2023-09-23</ion-label>        
-        </ion-item>
+        <div style="margin-left: 30px; margin-bottom: 14px;">
+            <ion-item class="ionLbltp">
+                <ion-label style="display: contents; color: #00190E; font-weight: 400; font: inter; line-height: 14px;">Metformin Extentend</ion-label>
+                <ion-label style="margin-left: 15px; color: #636363; font-weight: 400; font: inter; line-height: 14px;">750mg / twice / daily / 30days / until 2023-09-23</ion-label>        
+            </ion-item>
+            <ion-button fill="clear" @click="" class="addMedicalAlBtn">
+                Add new medication
+                <ion-icon slot="start" style="font-size: x-large;" :icon="addOutline"></ion-icon>
+            </ion-button>
+            <ion-row>
+                <ion-button class="addMedicalTpBtn">Send to pharmacy</ion-button>
+                <ion-button class="addMedicalTpBtn" style="margin-left: 4%;">Send to dispensation</ion-button>
+            </ion-row>
+        </div>
+        <div class="checkLbltp">
+            <ion-checkbox label-placement="end" style="font-size: 16px; font-weight: 600; line-height: 24px; margin: 15px; marg">Use of traditional medicine</ion-checkbox>
+        </div>
+        <div style="margin-top: 14px; margin-left: 10px;">
+            <ion-label class="tpStndCls">Non-pharmalogical therapy and other notes</ion-label>
+            <ion-item class="input_item" style="min-height: 120px; margin-top: 14px;">
+                <ion-label><span v-html="iconsContent.editPen"></span></ion-label>
+                <ion-textarea  style="min-height: 120px;" class="inputTpln" :auto-grow="true"  fill="outline"></ion-textarea >
+            </ion-item>
+
+        </div>
     </ion-list>
 </template>
   
@@ -152,6 +173,17 @@ ion-button.medicalAlBtn {
     --color: #B42318;
     text-transform: none;
 }
+ion-button.addMedicalAlBtn {
+    --color: #006401;
+    text-transform: none;
+}
+ion-button.addMedicalTpBtn {
+    --background: #DDEEDD;
+    --color: #006401;
+    text-transform: none;
+    font-weight: 600;
+    font-size: 16px;
+}
 ion-button.medicalAlAddBtn {
     font-size: large;
 }
@@ -180,6 +212,19 @@ ion-content.content-al {
 ion-list.list-al {
     --background: #fff;
     -ion-item-background: #fff;
+}
+ion-item.ionLbltp {
+        border-bottom: 2px dotted var(--ion-color-medium);
+        --inner-border-width:0;
+    }
+.checkLbltp {
+    border-bottom: 2px dotted var(--ion-color-medium);
+    --inner-border-width:0;
+}
+.tpStndCls {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
 }
 </style>
   
