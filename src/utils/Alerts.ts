@@ -1,6 +1,10 @@
 import { toastController, modalController } from "@ionic/vue";
 import ConfimationSheet from "@/components/DataViews/actionsheet/ConfirmationSheet.vue"
 import { NavBtnInterface } from "@/components/HisDynamicNavFooterInterface";
+import { warningOutline } from 'ionicons/icons';
+import { checkmarkCircleSharp } from 'ionicons/icons';
+import { alertCircleOutline } from 'ionicons/icons';
+import  { icons }  from '@/utils/svg.ts'
 
 interface AlertConfirmationOtions {
   header?: string;
@@ -8,36 +12,39 @@ interface AlertConfirmationOtions {
   cancelBtnLabel?: string;
 }
 
-async function toast(message: string, color="primary", duration=2000) {
+async function toast(message: string, color="primary", duration=2000, icon = '') {
     const toast = await toastController.create({
       message: message,
       position: "top",
       animated: true,
       duration: duration,
       color: color,
-      cssClass: 'his-md-text',
+      cssClass: 'custom-toast',
+      icon: `data:image/svg+xml;utf8,`+icon,
       keyboardClose: true,
       buttons: [
         {
-          side: 'end',
-          icon: 'close',
-          role: 'cancel'
-        }
+          text: 'X',
+          role: 'cancel',
+          handler: () => {
+            console.log('Dismiss clicked');
+          },
+        },
       ]
     });
     return toast.present();
 }
 
 export function toastWarning(message: string, duration=2000) {
-  return toast(message, 'warning', duration)
+  return toast(message, 'warning', duration, icons.warningAlert)
 }
 
 export function toastSuccess(message: string, duration=1000) {
-  return toast(message, 'success', duration)
+  return toast(message, 'success', duration, icons.successAlert)
 }
 
 export function toastDanger(message: string, duration=2000) {
-  return toast(message, 'danger', duration)
+  return toast(message, 'danger', duration, icons.dangerAlert)
 }
 
 export function createAlert(message: string, header= '' as string, btns = [] as Array<NavBtnInterface>) {

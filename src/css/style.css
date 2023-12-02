@@ -175,3 +175,13 @@ a {
     font-weight: 600;
     font-size: var(--ion-button-font);
 }
+
+ion-toast.custom-toast {
+    --start: unset;
+    --border-color: red;
+    --width:370px;
+}
+ion-toast.custom-toast::part(container) {
+    border: solid 1px;
+    border-radius: 4px;
+}

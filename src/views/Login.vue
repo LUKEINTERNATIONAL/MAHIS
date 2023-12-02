@@ -110,7 +110,7 @@
           this.$router.push("/home");
         } catch (e) {
           if (e instanceof InvalidCredentialsError ) {
-            toastWarning("Invalid username or password");
+            toastDanger("Invalid username or password");
           } else {
             toastDanger(`${e}`, 50000)
           }
