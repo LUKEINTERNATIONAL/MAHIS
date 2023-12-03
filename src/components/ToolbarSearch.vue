@@ -20,7 +20,7 @@
           <ion-col style="max-width: 70px;">Gender</ion-col>
           <ion-col style="max-width: 30px;" ></ion-col>
         </ion-row>
-        <ion-row class="search_result" v-for="(item, index) in patients" :key="index" @click="openNewPage('patientProfile')">
+        <ion-row class="search_result" v-for="(item, index) in patients" :key="index" @click="openNewPage('patientProfile',item)">
           <ion-col >{{ patientIdentifier(item) }} </ion-col>
           <ion-col >{{ item.person.names[0].given_name+" "+item.person.names[0].family_name }}</ion-col>
           <ion-col >{{ item.person.birthdate }}</ion-col>
@@ -52,6 +52,8 @@
   import { defineComponent } from 'vue';
   import { Patientservice } from "@/services/patient_service"
   import { checkmark } from 'ionicons/icons';
+  import { useDemographicsStore } from '@/stores/DemographicStore'
+  import HisDate from "@/utils/Date";
   export default defineComponent({
     name: "Home",
     components:{
@@ -103,13 +105,25 @@
       },
       patientIdentifier(item: any){
         // return item
-        if(item.patient_identifiers.length > 0)
-          return item.patient_identifiers[0].identifier
+        const ids =item.patient_identifiers.length - 1
+        if(ids >= 0)
+          return item.patient_identifiers[ids].identifier
         else
           return ""
       },
-      openNewPage(url: any){
+      openNewPage(url: any,item:any){
+        const demographicsStore = useDemographicsStore()
+        demographicsStore.setDemographics({
+          'name':item.person.names[0].given_name+" "+item.person.names[0].family_name,
+          'mrn':this.patientIdentifier(item),
+          'birthdate': HisDate.calculateAge(item.person.birthdate, HisDate.currentDate()) +'y ('+HisDate.toStandardHisDisplayFormat(item.person.birthdate)+')' ,
+          'category': '',
+          'sex': this.covertGender(item.person.gender)
+        })
         this.$router.push(url);
+      },
+      covertGender(gender: any){
+        return ['Male', 'M'].includes(gender) ? 'Male' : ['Female', 'F'].includes(gender) ? 'Female' : ''
       },
       openPopover(e: any) {
         this.event = e;
