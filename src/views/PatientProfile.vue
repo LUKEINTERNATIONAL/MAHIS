@@ -8,22 +8,22 @@
                 <ion-card style=" margin-bottom: 20px; background-color: #fff;">
                     <div class="p_name_image">
                         <div class="first_letter">
-                            G
+                            {{ demographics.name.charAt(0) }}
                         </div>
-                        <div class="p_name"> Godfrey Banda  </div>
+                        <div class="p_name"> {{ demographics.name }}  </div>
                     </div>
                     <ion-card-content>
                           <ion-row>
                               <ion-col size="4">MRN</ion-col>
-                              <ion-col >10773807-00-00</ion-col>
+                              <ion-col >{{ demographics.mrn }}</ion-col>
                           </ion-row>
                           <ion-row>
                               <ion-col size="4" >Gendar</ion-col>
-                              <ion-col >Male</ion-col>
+                              <ion-col >{{ demographics.sex }}</ion-col>
                           </ion-row>
                           <ion-row>
                               <ion-col size="4" >Age</ion-col>
-                              <ion-col >21y (08 June, 1996)</ion-col>
+                              <ion-col >{{ demographics.birthdate }}</ion-col>
                           </ion-row>
                           <ion-row>
                               <ion-col size="4">Allergies</ion-col>
@@ -194,6 +194,9 @@
   import VitalsGrid from '@/components/PatientProfileGrid/VitalsGrid.vue'
 
 
+  import { useDemographicsStore } from '@/stores/DemographicStore'
+  import { mapState } from 'pinia';
+
   import { ref } from 'vue';
   export default defineComponent({
     name: "Home",
@@ -237,6 +240,9 @@
         iconsContent: icons,
         isModalOpen: false,
         };
+    },
+    computed:{
+        ...mapState(useDemographicsStore,["demographics"]),
     },
     setup() {
         const modal = ref();

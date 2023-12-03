@@ -1,11 +1,11 @@
 <template>
    <ion-card  class="second_bar ">
         <ul class="second_bar_list position_content">
-            <li>Fullname: <b>Petros Kayange</b></li>
-            <li>MRN: <b>102323</b></li>
-            <li>Birthday: <b>20 June 1997 </b></li>
-            <li>Category: <b>Referal</b></li>
-            <li>Sex: <b>Male</b></li>
+            <li>Fullname: <b>{{ demographics.name }}</b></li>
+            <li>MRN: <b>{{ demographics.mrn }}</b></li>
+            <li>Birthday: <b>{{ demographics.birthdate }} </b></li>
+            <li>Category: <b> </b></li>
+            <li>Sex: <b>{{ demographics.sex }}</b></li>
         </ul>
     </ion-card>
 </template>
@@ -22,6 +22,8 @@
             menuController 
         } from '@ionic/vue';
     import { defineComponent } from 'vue';
+    import { useDemographicsStore } from '@/stores/DemographicStore'
+    import { mapState } from 'pinia';
 
     export default defineComponent({
     name: 'Menu',
@@ -33,6 +35,12 @@
         IonMenu,
         IonTitle,
         IonToolbar
+    },
+    data: () => ({
+
+    }),
+    computed:{
+        ...mapState(useDemographicsStore,["demographics"]),
     },
     methods:{
         navigationMenu(url: any){

@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 
 export const STANDARD_DATE_FORMAT = 'YYYY-MM-DD'
-const DISPLAY_DATE_FORMAT = 'DD/MMM/YYYY'
+const DISPLAY_DATE_FORMAT = 'DD MMM, YYYY'
 
 function calculateAge(birthdate:any, currentdate:any) {
     const birthDate = new Date(birthdate);

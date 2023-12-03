@@ -3,6 +3,8 @@ import App from './App.vue'
 import router from './router';
 
 import { IonicVue } from '@ionic/vue';
+import { createPinia } from 'pinia'
+import piniaPluginPersistedState from "pinia-plugin-persistedstate"
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/vue/css/core.css';
@@ -29,10 +31,13 @@ import './svg/svg.css';
 import DataTable from 'datatables.net-vue3';
 import DataTablesCore from 'datatables.net';
  
-
+const pinia = createPinia();
 const app = createApp(App)
   .use(IonicVue)
-  .use(router);
+  .use(router)
+  .use(pinia);
+
+  pinia.use(piniaPluginPersistedState)
   DataTable.use(DataTablesCore);
 router.isReady().then(() => {
   app.mount('#app');
