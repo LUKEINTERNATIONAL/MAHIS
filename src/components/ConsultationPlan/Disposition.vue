@@ -3,7 +3,7 @@
        <span class="dash_box">No referals created yet</span> 
     </ion-row>
     <div v-if="!showReferalInput">
-        <ion-row style="width: 900px;">
+        <ion-row style="width: 836px;">
         <ion-col>
             <ion-item class="input_item">
                 <ion-input></ion-input>
@@ -38,7 +38,18 @@
         </ion-col>
         <ion-col>
             <ion-item class="input_item">
-                <ion-input></ion-input>
+                <ion-input id="dateTrigger" placeholder="Date" v-model="referalDate"></ion-input>
+                <ion-popover
+                    @didDismiss="prescPopoverOpen = false" 
+                    show-backdrop="false" 
+                    dismiss-on-select="false"
+                    trigger="dateTrigger"
+                    trigger-action="click"
+                    >
+                    <ion-content class="search_card" >
+                        <ion-datetime ref="prescription" @ionChange="getDate($event)" presentation="date"></ion-datetime>
+                    </ion-content>
+                </ion-popover>
             </ion-item>
         </ion-col>
     </ion-row>
@@ -107,6 +118,7 @@
           ],
         showPopoverOpenForReferalType: false,
         selectectedThisReferalType: '',
+        referalDate: '',
     };
   },
     setup() {
@@ -129,6 +141,14 @@
         },
         popoverOpenForReferalTypeFn2() {
             this.showPopoverOpenForReferalType = true
+        },
+        getDate(ev: any) {
+            const inputDate = new Date(ev.detail.value)
+            const year = inputDate.getFullYear()
+            const month = inputDate.getMonth() + 1
+            const day = inputDate.getDate()
+            const formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+            this.referalDate = formattedDate
         }
     }
     });
