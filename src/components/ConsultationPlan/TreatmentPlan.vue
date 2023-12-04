@@ -35,11 +35,14 @@
             <ion-label>List of medications</ion-label>
         </ion-item>
         <div style="margin-left: 30px; margin-bottom: 14px;">
-            <ion-item @mousemove="highlightItem($event)" @mouseout="undoHighlightItem($event)" class="ionLbltp" v-for="(item, index) in selectedMedicalDrugsList" :key="index">
-                <ion-label class="drgNmTrpln" style="display: contents; color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.drugName }}</ion-label>
+            <ion-item 
+                class="ionLbltp" v-for="(item, index) in selectedMedicalDrugsList" :key="index"
+                @mousemove="highlightItem(index)" @mouseout="undoHighlightItem(index)"
+                >
+                <ion-label :id="asignLblID(index)" class="drgNmTrpln" style="display: contents; color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.drugName }}</ion-label>
                 <ion-label style="min-width: 700px; margin-left: 15px; color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.dose }} / {{ item.frequency }} / daily / {{ item.duration }} / until {{ item.prescription }}</ion-label>
-                <ion-label style="cursor:pointer;"><span v-html="iconsContent.edit" class="modify_buttons"></span></ion-label>
-                <ion-label style="cursor:pointer;"><span v-html="iconsContent.delete" class="modify_buttons"></span></ion-label>      
+                <ion-label :class="asignSpanLblID(index)" style="cursor:pointer; display: none;" @click="editItemAtIndex(index)"><span v-html="iconsContent.edit" class="modify_buttons"></span></ion-label>
+                <ion-label :class="asignSpanLblID(index)" style="cursor:pointer; display: none;" @click="removeItemAtIndex(index)"><span v-html="iconsContent.delete" class="modify_buttons"></span></ion-label>    
             </ion-item>
 
             <ion-row v-if="!addItemButton" style="margin-bottom: 20px;">
@@ -84,23 +87,20 @@
                     </ion-item>
                 </ion-col>
                 <ion-col>
-                    <ion-item class="input_item">
-                        <ion-input placeholder="Prescription" v-model="prescription" @click="onprescInput()" fill="outline"></ion-input>
-                        <ion-label><span  class="selectedPatient"></span></ion-label>
+                    <ion-item class="input_item" style="min-height: 50px !important; height: 5px;">
+                        <ion-input  id="click-trigger2" placeholder="Prescription" v-model="prescription" ></ion-input>
+                        <ion-popover
+                            @didDismiss="prescPopoverOpen = false" 
+                            show-backdrop="false" 
+                            dismiss-on-select="false"
+                            trigger="click-trigger2"
+                            trigger-action="click"
+                            >
+                            <ion-content class="search_card" >
+                                <ion-datetime ref="prescription" @ionChange="getDate($event)" presentation="date"></ion-datetime>
+                            </ion-content>
+                        </ion-popover>
                     </ion-item>
-                    <ion-popover 
-                        :is-open="prescPopoverOpen" 
-                        :event="prescEvent" 
-                        @didDismiss="prescPopoverOpen = false" 
-                        :keyboard-close="false" 
-                        :show-backdrop="false" 
-                        :dismiss-on-select="false"
-                        style="top: 10px;left: -25px;"
-                        >
-                        <ion-content class="search_card" >
-                            <ion-datetime ref="prescription" presentation="date"></ion-datetime>
-                        </ion-content>
-                    </ion-popover>
                 </ion-col>
                 <ion-col class="action_buttons">
                     <span @click="saveData()">+ Save</span> 
@@ -142,7 +142,8 @@
             menuController,
             IonButton,
             IonInput,
-            IonDatetime
+            IonDatetime,
+            IonLabel
         } from '@ionic/vue';
     import { defineComponent } from 'vue';
     import { checkmark,pulseOutline,addOutline,closeOutline, checkmarkOutline } from 'ionicons/icons';
@@ -161,7 +162,8 @@
         IonTitle,
         IonToolbar,
         IonInput,
-        IonDatetime
+        IonDatetime,
+        IonLabel
       },
         data() {
     return {
@@ -253,9 +255,6 @@
             this.display_item= true
             this.addItemButton =true
 
-            console.log(this.drugName)
-            console.log(this.dose)
-
             const drugString = {
                 drugName: this.drugName,
                 dose: this.dose,
@@ -264,14 +263,17 @@
                 prescription: '2023-09-23'
             }
             this.selectedMedicalDrugsList.push(drugString)
+
+            this.drugName = ''
+            this.dose = ''
+            this.frequency = ''
+            this.duration = ''
+            this.prescription = ''
         },
         async searchInput(text: any) {
             const searchText = text.target.value;
             this.openPopover(text)
             //this.diagnosisData = await PatientDiagnosisService.getDiagnosis(searchText, 1, 10)
-        },
-        onprescInput() {
-            this.openPrescPopover('ev')
         },
         openPopover(e: any) {
         this.event = e;
@@ -285,24 +287,57 @@
             this.searchText = diagnosis
         },
         highlightItem(item: any) {
-            // console.log("highlight", item.target)
-            // console.log("highlight", item.target.childNodes)
-            try {
-                const firstChild = item.target.childNodes[0];
-                firstChild.style.color = '#006401';
-            } catch (error) {
-                
+            const el = document.getElementById(item+'_lbl')
+            if (el) {
+                el.style.color = '#006401' 
             }
-
-
+            this.highlightActionBtns(item)
         },
         undoHighlightItem(item: any) {
-            try {
-                const firstChild = item.target.childNodes[0];
-                firstChild.style.color = 'rgb(0, 0, 0)';
-            } catch (error) {
-                
+            const el = document.getElementById(item+'_lbl')
+            if (el) {
+                el.style.color = 'rgb(0,0,0)' 
             }
+            this.undohighlightActionBtns(item)
+        },
+        highlightActionBtns(item: any) {
+            const elements = document.getElementsByClassName(item+'_spanlbl') as any
+            for (let i = 0; i < elements.length; i++) {
+                elements[i].style.display = 'block'
+            }
+        },
+        undohighlightActionBtns(item: any) {
+            const elements = document.getElementsByClassName(item+'_spanlbl') as any
+            for (let i = 0; i < elements.length; i++) {
+                elements[i].style.display = 'none'
+            }
+        },
+        asignLblID(num: any) {
+            return num + '_lbl' as string;
+        },
+        asignSpanLblID(num: any) {
+            return num + '_spanlbl' as string;
+        },
+        removeItemAtIndex(index: any) {
+            this.selectedMedicalDrugsList.splice(index, 1)
+        },
+        editItemAtIndex(index: any) {
+            const dataItem = this.selectedMedicalDrugsList[index]
+            this.selectedMedicalDrugsList.splice(index, 1)
+            this.drugName = dataItem.drugName
+            this.dose = dataItem.dose
+            this.frequency = dataItem.frequency
+            this.duration = dataItem.duration
+            this.prescription = dataItem.prescription
+            this.addItemButton = !this.addItemButton
+        },
+        getDate(ev: any) {
+            const inputDate = new Date(ev.detail.value)
+            const year = inputDate.getFullYear()
+            const month = inputDate.getMonth() + 1
+            const day = inputDate.getDate()
+            const formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+            this.prescription = formattedDate
         }
     }
     });
