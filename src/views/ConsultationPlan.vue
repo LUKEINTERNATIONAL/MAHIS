@@ -43,29 +43,21 @@
                     </ion-accordion>
                     <ion-accordion value="2">
                         <ion-item slot="header">
-                            <ion-label>Provisional diagnosis</ion-label>
-                        </ion-item>
-                        <div class="ion-padding" slot="content">
-                            <Diagnosis />
-                        </div>
-                    </ion-accordion>
-                    <ion-accordion value="3">
-                        <ion-item slot="header">
                             <ion-label>Investigations</ion-label>
                         </ion-item>
                         <div class="ion-padding" slot="content">
                             <Investigations />
                         </div>
                     </ion-accordion>
-                    <ion-accordion value="4">
+                    <ion-accordion value="3">
                         <ion-item slot="header">
-                            <ion-label>Confirm diagnosis</ion-label>
+                            <ion-label> Diagnosis</ion-label>
                         </ion-item>
                         <div class="ion-padding" slot="content">
                             <Diagnosis />
                         </div>
                     </ion-accordion>
-                    <ion-accordion value="5">
+                    <ion-accordion value="4">
                         <ion-item slot="header">
                             <ion-label>Complications</ion-label>
                         </ion-item>
@@ -73,7 +65,7 @@
                             <Complications />
                         </div>
                     </ion-accordion>
-                    <ion-accordion value="6">
+                    <ion-accordion value="5">
                         <ion-item slot="header">
                             <ion-label>Treatment plan</ion-label>
                         </ion-item>
@@ -81,7 +73,7 @@
                             <TreatmentPlan />
                         </div>
                     </ion-accordion>
-                    <ion-accordion value="7">
+                    <ion-accordion value="6">
                         <ion-item slot="header">
                             <ion-label>Disposition</ion-label>
                         </ion-item>
@@ -180,7 +172,7 @@
                     'last_step': ''
                 },
                 {
-                    'title': 'Provisional diagnosis',
+                    'title': 'Investigations',
                     'class': 'common_step',
                     'checked':'',
                     'icon': false,
@@ -189,16 +181,16 @@
                     'last_step': ''
                 },
                 {
-                    'title': 'Investigations',
+                    'title': 'Diagnosis',
                     'class': 'common_step',
                     'checked':'',
                     'icon': false,
                     'disabled':false,
                     'number': 3,
                     'last_step': ''
-                },
+                },  
                 {
-                    'title': 'Confirm diagnosis',
+                    'title': 'Complications',
                     'class': 'common_step',
                     'checked':'',
                     'icon': false,
@@ -207,7 +199,7 @@
                     'last_step': ''
                 },
                 {
-                    'title': 'Complications',
+                    'title': 'Treatment',
                     'class': 'common_step',
                     'checked':'',
                     'icon': false,
@@ -216,21 +208,12 @@
                     'last_step': ''
                 },
                 {
-                    'title': 'Treatment',
-                    'class': 'common_step',
-                    'checked':'',
-                    'icon': false,
-                    'disabled':false,
-                    'number': 6,
-                    'last_step': ''
-                },
-                {
                     'title': 'Disposition',
                     'class': 'common_step',
                     'checked':'',
                     'icon': false,
                     'disabled':false,
-                    'number': 7,
+                    'number': 6,
                     'last_step': 'last_step'
                 },
         ],
