@@ -8,7 +8,7 @@
               <div class="bp">Blood pressure</div>
           </div>
       </div>
-      <span @click="dismiss()" style="font-weight: 300;">x</span>
+      <span @click="dismiss()" style="cursor: pointer; font-weight: 300;">x</span>
     </div>
     <div>
       <ApexChart width="100%" height="390px" type="area" :options="options" :series="series" />

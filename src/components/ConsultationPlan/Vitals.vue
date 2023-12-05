@@ -9,7 +9,7 @@
                     <h5>Height*</h5>
                     <ion-item class="input_item">
                         <ion-label><span v-html="iconsContent.height" class="selectedPatient"></span></ion-label>
-                        <ion-input @ionInput="vitalsValidations()" v-model="vitalsData.height" fill="outline"></ion-input>
+                        <ion-input @ionInput="vitalsValidations()" v-model="vitals.height" fill="outline"></ion-input>
                         <ion-label>cm</ion-label>
                     </ion-item>
                 </ion-col>
@@ -17,7 +17,7 @@
                     <h5>Weight*</h5>
                     <ion-item class="input_item">
                         <ion-label><span v-html="iconsContent.weight" class="selectedPatient"></span></ion-label>
-                        <ion-input @ionInput="vitalsValidations()" v-model="vitalsData.weight" fill="outline"></ion-input>
+                        <ion-input @ionInput="vitalsValidations()" v-model="vitals.weight" fill="outline"></ion-input>
                         <ion-label>kg</ion-label>
                     </ion-item>
                 </ion-col>
@@ -42,7 +42,7 @@
                     <h5>Systolic Pressure*</h5>
                     <ion-item class="input_item">
                         <ion-label><span v-html="iconsContent.systolicPressure" class="selectedPatient"></span></ion-label>
-                        <ion-input @ionInput="vitalsValidations()" v-model="vitalsData.systolic" fill="outline"></ion-input>
+                        <ion-input @ionInput="vitalsValidations()" v-model="vitals.systolic" fill="outline"></ion-input>
                         <ion-label>mmHg</ion-label>
                     </ion-item>
                 </ion-col>
@@ -50,7 +50,7 @@
                     <h5>Diastolic pressure*</h5>
                     <ion-item class="input_item">
                         <ion-label><span v-html="iconsContent.diastolicPressure" class="selectedPatient"></span></ion-label>
-                        <ion-input @ionInput="vitalsValidations()" v-model="vitalsData.diastolic" fill="outline"></ion-input>
+                        <ion-input @ionInput="vitalsValidations()" v-model="vitals.diastolic" fill="outline"></ion-input>
                         <ion-label>mmHg</ion-label>
                     </ion-item>
                 </ion-col>
@@ -67,7 +67,7 @@
                     <h5>Temperature</h5>
                     <ion-item class="input_item">
                         <ion-label><span v-html="iconsContent.temprature" class="selectedPatient"></span></ion-label>
-                        <ion-input @ionInput="vitalsValidations()" v-model="vitalsData.temperature" fill="outline"></ion-input>
+                        <ion-input @ionInput="vitalsValidations()" v-model="vitals.temperature" fill="outline"></ion-input>
                         <ion-label>C</ion-label>
                     </ion-item>
                 </ion-col>
@@ -75,7 +75,7 @@
                     <h5>Pulse rate</h5>
                     <ion-item class="input_item">
                         <ion-label><span v-html="iconsContent.pulse" class="selectedPatient"></span></ion-label>
-                        <ion-input @ionInput="vitalsValidations()" v-model="vitalsData.pulse" fill="outline"></ion-input>
+                        <ion-input @ionInput="vitalsValidations()" v-model="vitals.pulse" fill="outline"></ion-input>
                         <ion-label>BMP</ion-label>
                     </ion-item>
                 </ion-col>
@@ -85,7 +85,7 @@
                     <h5>Respiratory rate</h5>
                     <ion-item class="input_item">
                         <ion-label><span v-html="iconsContent.respiratory" class="selectedPatient"></span></ion-label>
-                        <ion-input @ionInput="vitalsValidations()" v-model="vitalsData.respiratory" fill="outline"></ion-input>
+                        <ion-input @ionInput="vitalsValidations()" v-model="vitals.respiratory" fill="outline"></ion-input>
                         <ion-label>BMP</ion-label>
                     </ion-item>
                 </ion-col>
@@ -93,7 +93,7 @@
                     <h5>Oxygen saturation</h5>
                     <ion-item class="input_item">
                         <ion-label><span v-html="iconsContent.oxgenStaturation" class="selectedPatient"></span></ion-label>
-                        <ion-input @ionInput="vitalsValidations()" v-model="vitalsData.oxygen" fill="outline"></ion-input>
+                        <ion-input @ionInput="vitalsValidations()" v-model="vitals.oxygen" fill="outline"></ion-input>
                         <ion-label>%</ion-label>
                     </ion-item>
                 </ion-col>
@@ -122,6 +122,8 @@
     import { useDemographicsStore } from '@/stores/DemographicStore'
     import { useVitalsStore } from '@/stores/VitalsStore'
     import { mapState } from 'pinia';
+    import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
+    import { arePropertiesNotEmpty } from "@/utils/Objects";
     import HisDate from "@/utils/Date";
 
     export default defineComponent({
@@ -139,21 +141,9 @@
         data() {
     return {
         iconsContent: icons,
-        vitalsData:{
-            height:'',
-            weight:'',
-            systolic:'',
-            diastolic:'',
-            bmp:'',
-            pulse:'',
-            respiratory:'',
-            oxygen:'',
-            temperature:''
-        },
         BMI: {}
     };
   },
-
   computed:{
         ...mapState(useDemographicsStore,["demographics"]),
         ...mapState(useVitalsStore,["vitals"]),
@@ -167,22 +157,22 @@
             this.$router.push(url);
         },
         vitalsValidations(){
-            if(this.vitalsData.weight && this.vitalsData.height && this.demographics.gender && this.demographics.birthdate){
+            if(this.vitals.weight && this.vitals.height && this.demographics.gender && this.demographics.birthdate){
                 this.patientBMI()
             }else{
                 this.BMI = {}
             }
-            if(this.arePropertiesNotEmpty()){
-                this.vitalsData
+            if(arePropertiesNotEmpty(this.vitals,['height', 'weight', 'systolic', 'diastolic'])){
+                // toastWarning('Vitals tempra saved')
+                
             }
-        },
-        arePropertiesNotEmpty() {
-            return ['height', 'weight', 'systolic', 'diastolic'].every((property: any) => this.vitalsData[property] !== '');
+            const vitalsStore = useVitalsStore()
+            vitalsStore.setVitals(this.vitals)
         },
         async patientBMI(){
            this.BMI = await BMIService.getBMI(
-                parseInt(this.vitalsData.weight),
-                parseInt(this.vitalsData.height) , 
+                parseInt(this.vitals.weight),
+                parseInt(this.vitals.height) , 
                 this.demographics.gender,
                 HisDate.calculateAge(this.demographics.birthdate,HisDate.currentDate())
             )

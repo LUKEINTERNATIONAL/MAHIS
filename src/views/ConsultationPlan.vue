@@ -12,7 +12,7 @@
                         <div id="wizard_verticle" class="form_wizard wizard_verticle">
                             <ul class="list-unstyled wizard_steps anchor">
                                 <li v-for="(item, index) in wizardData" :key="index" :class="item.last_step">
-                                    <a href="#step-11" class="done" isdone="1" rel="1">
+                                    <a  class="done" isdone="1" rel="1">
                                         <span :class="item.class">
                                             <ion-icon v-if="item.checked" :icon="checkmark" class="checked_step"></ion-icon>  
                                             <span v-if="!item.checked" class="">{{ item.number }} </span>
@@ -29,7 +29,7 @@
             <ion-col size="7" size-lg="7">
                 <div class="back_profile" @click="openModal()">
                     <ion-icon style="font-size: 20px;" :icon="chevronBackOutline"> </ion-icon> 
-                    <span> Back to profile</span>
+                    <span style="cursor: pointer;"> Back to profile</span>
                 </div>
                 
                 <ion-accordion-group @ionChange="accordionGroupChange($event)">
@@ -129,6 +129,9 @@
   import { createModal } from '@/utils/Alerts'
   import { icons } from '@/utils/svg.ts';
   import { toastWarning, alertConfirmation } from '@/utils/Alerts';
+  import { arePropertiesNotEmpty } from "@/utils/Objects";
+  import { useVitalsStore } from '@/stores/VitalsStore'
+  import { mapState } from 'pinia';
   export default defineComponent({
     name: "Home",
     components:{
@@ -221,6 +224,12 @@
         iconsContent: icons,
         };
     },
+    mounted(){
+        this.markWizard()
+    },
+    computed:{
+        ...mapState(useVitalsStore,["vitals"]),
+    },
     setup() {
         return { chevronBackOutline,checkmark };
     },
@@ -232,11 +241,16 @@
                 item.checked = false;
                 item.class = "common_step"
                 if (item.number == ev.detail.value) {
-                    // item.checked = true;
                     item.class = 'open_step common_step';
                 }
-
             });
+            this.markWizard()
+            }
+        },
+        markWizard(){
+            if(arePropertiesNotEmpty(this.vitals,['height', 'weight', 'systolic', 'diastolic'])){
+                this.wizardData[0].checked = true; 
+                this.wizardData[0].class = 'open_step common_step'               
             }
         },
         nav(url: any){

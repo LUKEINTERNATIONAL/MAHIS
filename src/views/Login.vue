@@ -37,7 +37,7 @@
               Login
             </ion-button>
           <p class="signup-link">
-            Don't have an account? <a href="#">Sign Up</a>
+            For help click <a href="#">Here</a>
           </p>
         </ion-card-content>
         </ion-card>

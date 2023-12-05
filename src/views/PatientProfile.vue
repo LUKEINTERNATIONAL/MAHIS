@@ -397,6 +397,7 @@
     margin-bottom: 20px;
     margin-left: 7px;
     font-weight: 500;
+    cursor: pointer;
 }
 .allergies{
     background: #FECDCA;
