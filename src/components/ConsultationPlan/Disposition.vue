@@ -1,18 +1,27 @@
 <template>
-    <ion-row >
+    <ion-row v-if="showAreReferalsCreated">
        <span class="dash_box">No referals created yet</span> 
     </ion-row>
+    <ion-item 
+        class="ionLbltp" v-for="(item, index) in addedReferals" :key="index"
+        @mousemove="highlightItem(index)" @mouseout="undoHighlightItem(index)"
+        >
+        <ion-label :id="asignLblID(index)" class="drgNmTrpln" style="display: contents; color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.referalName }}</ion-label>
+        <ion-label style="min-width: 700px; margin-left: 15px; color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.selectedReferalType }} / {{ item.referalDate }} / daily / {{ item.addedReferalNote }}</ion-label>
+        <ion-label :class="asignSpanLblID(index)" style="cursor:pointer; display: none;" @click="editItemAtIndex(index)"><span v-html="iconsContent.edit" class="modify_buttons"></span></ion-label>
+        <ion-label :class="asignSpanLblID(index)" style="cursor:pointer; display: none;" @click="removeItemAtIndex(index)"><span v-html="iconsContent.delete" class="modify_buttons"></span></ion-label>    
+    </ion-item>
     <div v-if="!showReferalInput">
         <ion-row style="width: 836px;">
         <ion-col>
             <ion-item class="input_item">
-                <ion-input></ion-input>
+                <ion-input v-model="referalName"></ion-input>
                 <ion-label><span v-html="iconsContent.search" class="selectedPatient"></span></ion-label>
             </ion-item>
         </ion-col>
         <ion-col>
             <ion-item class="input_item">
-                <ion-input id="chooseType" placeholder="Type" v-model="selectectedThisReferalType" @click="popoverOpenForReferalTypeFn2"></ion-input>
+                <ion-input id="chooseType" placeholder="Type" v-model="selectedReferalType" @click="popoverOpenForReferalTypeFn2"></ion-input>
                 <ion-icon v-if="!showPopoverOpenForReferalType" :icon="chevronDownOutline"></ion-icon>
                 <ion-icon v-if="showPopoverOpenForReferalType" :icon="chevronUpOutline"></ion-icon>
                 <ion-popover
@@ -56,11 +65,11 @@
     <ion-row>
         <ion-col>
             <ion-item class="input_item">
-                <ion-input ></ion-input>
+                <ion-input v-model="addedReferalNote"></ion-input>
             </ion-item>
         </ion-col>
         <ion-col class="action_buttons">
-            <span @click="">+ Save</span> 
+            <span @click="saveData()">+ Save</span> 
         </ion-col>
     </ion-row>
     </div>
@@ -81,7 +90,9 @@
             menuController,
             IonLabel,
             IonInput,
-            IonPopover
+            IonPopover,
+            IonDatetime,
+            IonButton,
         } from '@ionic/vue';
     import { defineComponent } from 'vue';
     import { checkmark,pulseOutline,checkmarkOutline, chevronDownOutline,chevronUpOutline } from 'ionicons/icons';
@@ -100,7 +111,9 @@
         IonToolbar,
         IonLabel,
         IonInput,
-        IonPopover
+        IonPopover,
+        IonButton,
+        IonDatetime
        },
         data() {
     return {
@@ -116,13 +129,33 @@
                 selected: false,
             },
           ],
+        addedReferals: [
+            {
+                referalName: 'qwerty',
+                selectedReferalType: 'nnm',
+                referalDate: 'bbb',
+                addedReferalNote: 'nnn',
+            }
+        ] as any,
         showPopoverOpenForReferalType: false,
-        selectectedThisReferalType: '',
         referalDate: '',
+        selectedReferalType: '',
+        addedReferalNote: '',
+        referalName: '',
+        showAreReferalsCreated: true as boolean,
     };
   },
     setup() {
       return { checkmark,pulseOutline,checkmarkOutline,chevronDownOutline,chevronUpOutline };
+    },
+    watch: {
+        addedReferals: {
+            handler(addedReferals: Array<any>){
+                this.AreReferalsCreated()  
+            },
+            deep: true,
+            immediate: true
+        }
     },
     methods:{
         navigationMenu(url: any){
@@ -137,7 +170,7 @@
                 item.selected = false
             })
             this.refralType[index].selected = !this.refralType[index].selected
-            this.selectectedThisReferalType = this.refralType[index].name
+            this.selectedReferalType = this.refralType[index].name
         },
         popoverOpenForReferalTypeFn2() {
             this.showPopoverOpenForReferalType = true
@@ -149,7 +182,76 @@
             const day = inputDate.getDate()
             const formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
             this.referalDate = formattedDate
-        }
+        },
+        AreReferalsCreated(){
+            console.log("wedrftgtgtgtgtgtgtgtgtgtgt")
+            if (this.addedReferals.length > 0) {
+                this.showAreReferalsCreated = false
+            } else {
+                this.showAreReferalsCreated = true
+            }
+        },
+        asignLblID(num: any) {
+            console.log("asignLblID")
+            return num + '_lbl' as string;
+        },
+        asignSpanLblID(num: any) {
+            return num + '_spanlbl' as string;
+        },
+        removeItemAtIndex(index: any) {
+            this.addedReferals.splice(index, 1)
+        },
+        editItemAtIndex(index: any) {
+            const dataItem = this.addedReferals[index]
+            this.addedReferals.splice(index, 1)
+            this.referalName = dataItem.referalName
+            this.selectedReferalType = dataItem.selectedReferalType
+            this.referalDate = dataItem.referalDate
+            this.addedReferalNote = dataItem.addedReferalNote
+            this.showReferalInput = !this.showReferalInput
+        },
+        highlightItem(item: any) {
+            const el = document.getElementById(item+'_lbl')
+            if (el) {
+                el.style.color = '#006401' 
+            }
+            this.highlightActionBtns(item)
+        },
+        undoHighlightItem(item: any) {
+            const el = document.getElementById(item+'_lbl')
+            if (el) {
+                el.style.color = 'rgb(0,0,0)' 
+            }
+            this.undohighlightActionBtns(item)
+        },
+        highlightActionBtns(item: any) {
+            const elements = document.getElementsByClassName(item+'_spanlbl') as any
+            for (let i = 0; i < elements.length; i++) {
+                elements[i].style.display = 'block'
+            }
+        },
+        undohighlightActionBtns(item: any) {
+            const elements = document.getElementsByClassName(item+'_spanlbl') as any
+            for (let i = 0; i < elements.length; i++) {
+                elements[i].style.display = 'none'
+            }
+        },
+        async saveData(){
+            this.showReferalInput = true
+
+            const drugString = {
+                referalName: this.referalName,
+                selectedReferalType: this.selectedReferalType,
+                referalDate: this.referalDate,
+                addedReferalNote: this.addedReferalNote,
+            }
+            this.addedReferals.push(drugString)
+
+            this.referalName = ''
+            this.selectedReferalType = ''
+            this.referalDate = ''
+            this.addedReferalNote = ''
+        },
     }
     });
 </script>
@@ -215,6 +317,15 @@ ion-popover.popover-al {
 }
 ion-content.content-al {
     --background: #fff;
+}
+ion-item.ionLbltp {
+    border-bottom: 2px dotted var(--ion-color-medium);
+    --inner-border-width:0;
+}
+.drgNmTrpln:hover {
+    background-color: #006401 !important;
+    color: #006401 !important;
+    cursor: pointer;
 }
 </style>
   

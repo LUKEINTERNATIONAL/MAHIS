@@ -250,7 +250,6 @@
             this.search_item =true
         },
         async saveData(){
-            console.log(this.prescription)
             this.search_item= false
             this.display_item= true
             this.addItemButton =true
