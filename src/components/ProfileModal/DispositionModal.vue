@@ -2,7 +2,7 @@
     <div class="modal_wrapper">
         <div class="modal_title diplay_space_between">
             <span>Disposition</span>
-            <span @click="dismiss()" style="font-weight: 300;">x</span>
+            <span @click="dismiss()" style="cursor: pointer; font-weight: 300;">x</span>
         </div>
         <div class="dashed_bottom_border">
             <div   div class="">

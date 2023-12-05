@@ -13,6 +13,9 @@ function calculateAge(birthdate:any, currentdate:any) {
     }
     return age;
 }
+function getBirthdateAge(date: any){
+    return  calculateAge(date, currentDate()) +'y ('+toStandardHisDisplayFormat(date)+')' 
+}
 function sessionDate() {
     return sessionStorage.getItem('sessionDate') || dayjs().format(STANDARD_DATE_FORMAT)
 }
@@ -132,5 +135,6 @@ export default {
     getDay,
     add,
     subtract,
-    calculateAge
+    calculateAge,
+    getBirthdateAge
 }

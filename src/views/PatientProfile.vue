@@ -19,11 +19,11 @@
                           </ion-row>
                           <ion-row>
                               <ion-col size="4" >Gendar</ion-col>
-                              <ion-col >{{ demographics.sex }}</ion-col>
+                              <ion-col >{{ covertGender(demographics.gender) }}</ion-col>
                           </ion-row>
                           <ion-row>
                               <ion-col size="4" >Age</ion-col>
-                              <ion-col >{{ demographics.birthdate }}</ion-col>
+                              <ion-col >{{ formatBirthdate() }}</ion-col>
                           </ion-row>
                           <ion-row>
                               <ion-col size="4">Allergies</ion-col>
@@ -196,6 +196,7 @@
 
   import { useDemographicsStore } from '@/stores/DemographicStore'
   import { mapState } from 'pinia';
+  import HisDate from "@/utils/Date";
 
   import { ref } from 'vue';
   export default defineComponent({
@@ -262,6 +263,12 @@
         nav(url: any){
             this.$router.push(url);
         },
+        covertGender(gender: any){
+            return ['Male', 'M'].includes(gender) ? 'Male' : ['Female', 'F'].includes(gender) ? 'Female' : ''
+        },
+        formatBirthdate(){
+          return  HisDate.getBirthdateAge(this.demographics.birthdate) 
+        }
        
 
       }
@@ -390,6 +397,7 @@
     margin-bottom: 20px;
     margin-left: 7px;
     font-weight: 500;
+    cursor: pointer;
 }
 .allergies{
     background: #FECDCA;

@@ -1,5 +1,5 @@
 <template>
-    <div class="dashed_bottom_border" style="padding-bottom:5px" @click="openModal()">
+    <div class="dashed_bottom_border"  style="cursor: pointer;padding-bottom:5px" @click="openModal()">
         <div class="text_header_16">
             Disposition
         </div>

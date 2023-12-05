@@ -8,17 +8,17 @@
             
                 <ion-col>
                     <ion-item class="item_no_border">
-                        <span>{{ item }}</span>
+                        <span>{{ item[0] }}</span>
                     </ion-item>
                 </ion-col>
                 <ion-col>
                     <ion-item class="item_no_border">
-                        <span>{{ item }}</span>
+                        <span>{{ item[1] }}</span>
                     </ion-item>
                 </ion-col>
                 <ion-col class="action_buttons">
-                    <ion-label><span v-html="iconsContent.edit" class="modify_buttons"></span></ion-label>
-                    <ion-label><span v-html="iconsContent.delete" class="modify_buttons"></span></ion-label>
+                    <ion-label style="cursor: pointer;" ><span v-html="iconsContent.edit" class="modify_buttons"></span></ion-label>
+                    <ion-label style="cursor: pointer;" ><span v-html="iconsContent.delete" class="modify_buttons"></span></ion-label>
                 </ion-col>
             
         </ion-row>
@@ -42,24 +42,24 @@
                 <ion-content class="search_card" >
                    
                     <ion-row class="search_result" v-for="(item, index) in diagnosisData" :key="index" >
-                        <ion-col @click="selectedDiagnosis(item.name)">{{ item.name }} </ion-col>
+                        <ion-col style="cursor: pointer;" @click="selectedDiagnosis(item.name)">{{ item.name }} </ion-col>
                     </ion-row>
                 </ion-content>
             </ion-popover>
         </ion-col>
         <ion-col>
             <ion-item class="input_item">
-                <ion-input  fill="outline"></ion-input>
+                <ion-input v-model="addDiagnosis" fill="outline"></ion-input>
                 <ion-label><span  class="selectedPatient"></span></ion-label>
             </ion-item>
         </ion-col>
         <ion-col class="action_buttons">
-            <span @click="saveData()">+ Save</span> 
+            <span style="cursor: pointer;" @click="saveData()">+ Save</span> 
         </ion-col>
     </ion-row>
 
     <ion-row v-if="addItemButton">
-        <span class="add_item" @click="addData()"> + Add Diagnosis </span> 
+        <span class="add_item" style="cursor: pointer;" @click="addData()"> + Add Diagnosis </span> 
     </ion-row>
 
 </template>
@@ -103,6 +103,7 @@
         display_item: false,
         addItemButton: true,
         searchText: '' as any,
+        addDiagnosis: '' as any,
         data: [] as any,
         diagnosisData: [] as any,
         popoverOpen: false,
@@ -118,6 +119,7 @@
             this.$router.push(url);
         },
         addData(){
+            this.addDiagnosis=""
             this.searchText = ""
             this.no_item = false
             this.addItemButton = false
@@ -127,7 +129,7 @@
             this.search_item= false
             this.display_item= true
             this.addItemButton =true
-            this.data.push(this.searchText)
+            this.data.push([this.searchText,this.addDiagnosis])
         },
         async searchInput(text: any) {
             const searchText = text.target.value;

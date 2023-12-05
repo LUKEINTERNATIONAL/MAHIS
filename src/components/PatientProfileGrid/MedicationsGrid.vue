@@ -1,5 +1,5 @@
 <template>
-    <div class="" style="padding-bottom:5px" @click="openModal()">
+    <div class="" style="cursor: pointer; padding-bottom:5px" @click="openModal()">
         <div class="text_header_16">
             Medications
         </div>
