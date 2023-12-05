@@ -1,13 +1,13 @@
 <template>
-    <div class="" style="cursor: pointer; padding-bottom:5px" @click="openModal()">
-        <div class="text_header_16">
+    <div class="" style="cursor: pointer; padding-bottom:5px" >
+        <div class="text_header_16" @click="openModal()">
             Medications
         </div>
         <div class="m_name_dosage">
             <div class="m_name">
                 <div>Metformin Extended</div>
                 <div class="m_btns">
-                    <span v-html="iconsContent.refresh" ></span> 
+                    <span v-html="iconsContent.refresh" @click="openDrugRefill"></span> 
                     <span v-html="iconsContent.tree_dot" ></span> 
                 </div>
             </div>
@@ -19,7 +19,7 @@
             <div class="m_name">
                 <div>Metformin Extended</div>
                 <div class="m_btns">
-                    <span v-html="iconsContent.refresh" ></span> 
+                    <span v-html="iconsContent.refresh" @click="openDrugRefill"></span> 
                     <span v-html="iconsContent.tree_dot" ></span> 
                 </div>
             </div>
@@ -31,7 +31,7 @@
             <div class="m_name">
                 <div>Metformin Extended</div>
                 <div class="m_btns">
-                    <span v-html="iconsContent.refresh" ></span> 
+                    <span v-html="iconsContent.refresh" @click="openDrugRefill"></span> 
                     <span v-html="iconsContent.tree_dot" ></span> 
                 </div>
             </div>
@@ -59,6 +59,7 @@ import { ref } from 'vue';
 import { icons } from '@/utils/svg.ts';
 
 import MedicationsModal from '@/components/ProfileModal/MedicationsModal.vue'
+import DrugRefill from '@/components/ProfileModal/DrugRefill.vue'
 import { createModal } from '@/utils/Alerts'
 
 export default defineComponent({
@@ -79,6 +80,14 @@ return {
 methods:{
     openModal(){
         createModal(MedicationsModal)
+    },
+    async openDrugRefill(){
+        const modal = await modalController.create({
+                component: DrugRefill,
+                backdropDismiss: false,
+                cssClass: "small-modal"
+            });
+            modal.present();
     }
 }
 });
