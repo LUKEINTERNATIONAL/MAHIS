@@ -3,9 +3,9 @@
         <ul class="second_bar_list position_content">
             <li>Fullname: <b>{{ demographics.name }}</b></li>
             <li>MRN: <b>{{ demographics.mrn }}</b></li>
-            <li>Birthday: <b>{{ demographics.birthdate }} </b></li>
+            <li>Birthday: <b>{{ formatBirthdate()}} </b></li>
             <li>Category: <b> </b></li>
-            <li>Sex: <b>{{ demographics.sex }}</b></li>
+            <li>Sex: <b>{{ demographics.gender }}</b></li>
         </ul>
     </ion-card>
 </template>
@@ -24,7 +24,7 @@
     import { defineComponent } from 'vue';
     import { useDemographicsStore } from '@/stores/DemographicStore'
     import { mapState } from 'pinia';
-
+    import HisDate from "@/utils/Date";
     export default defineComponent({
     name: 'Menu',
     components:{
@@ -46,6 +46,12 @@
         navigationMenu(url: any){
             menuController.close()
             this.$router.push(url);
+        },
+        covertGender(gender: any){
+            return ['Male', 'M'].includes(gender) ? 'Male' : ['Female', 'F'].includes(gender) ? 'Female' : ''
+        },
+        formatBirthdate(){
+          return  HisDate.getBirthdateAge(this.demographics.birthdate) 
         }
         
     }

@@ -1,27 +1,87 @@
 <template>
-    <ion-row >
-       <span class="dash_box">No investigation added</span> 
+    <ion-row v-if="no_item" >
+       <span class="dash_box">No Investigations added</span> 
     </ion-row>
-    <ion-row >
-       <span class="add_item"> + Add new test </span> 
+
+    <span v-if="display_item" >
+        <ion-row class="dashed_bottom_border" v-for="(item,index) in data" :key="index">
+            
+                <ion-col>
+                    <ion-item class="item_no_border">
+                        <span>{{ item[0] }}</span>
+                    </ion-item>
+                </ion-col>
+                <ion-col>
+                    <ion-item class="item_no_border">
+                        <span>{{ item[1] }}</span>
+                    </ion-item>
+                </ion-col>
+                <ion-col class="action_buttons">
+                    <ion-label style="cursor: pointer;" ><span v-html="iconsContent.edit" class="modify_buttons"></span></ion-label>
+                    <ion-label style="cursor: pointer;" ><span v-html="iconsContent.delete" class="modify_buttons"></span></ion-label>
+                </ion-col>
+            
+        </ion-row>
+    </span>
+
+    <ion-row v-if="search_item">
+        <ion-col>
+            <ion-item class="input_item">
+                <ion-input  v-model="searchText"  @ionInput="searchInput" fill="outline"></ion-input>
+                <ion-label><span v-html="iconsContent.search" class="selectedPatient"></span></ion-label>
+            </ion-item>
+            <ion-popover 
+                :is-open="popoverOpen" 
+                :event="event" 
+                @didDismiss="popoverOpen = false" 
+                :keyboard-close="false" 
+                :show-backdrop="false" 
+                :dismiss-on-select="true"
+                style="top: 10px;left: -25px;"
+                >
+                <ion-content class="search_card" >
+                   
+                    <ion-row class="search_result" v-for="(item, index) in testData" :key="index" >
+                        <ion-col style="cursor: pointer;" @click="selectedDiagnosis(item.name)">{{ item.name }} </ion-col>
+                    </ion-row>
+                </ion-content>
+            </ion-popover>
+        </ion-col>
+        <ion-col>
+            <ion-item class="input_item">
+                <ion-input v-model="addTest" fill="outline"></ion-input>
+                <ion-label><span  class="selectedPatient"></span></ion-label>
+            </ion-item>
+        </ion-col>
+        <ion-col class="action_buttons">
+            <span style="cursor: pointer;" @click="saveData()">+ Save</span> 
+        </ion-col>
     </ion-row>
+
+    <ion-row v-if="addItemButton">
+        <span class="add_item" style="cursor: pointer;" @click="addData()"> + Add new test </span> 
+    </ion-row>
+
 </template>
   
 <script lang="ts">
     import { 
-            IonContent, 
-            IonHeader,
-            IonItem,
-            IonList,
-            IonTitle, 
-            IonToolbar, 
-            IonMenu,
-            menuController 
-        } from '@ionic/vue';
-    import { defineComponent } from 'vue';
+        IonContent, 
+        IonHeader,
+        IonItem,
+        IonList,
+        IonTitle, 
+        IonToolbar, 
+        IonMenu,
+        menuController,
+        IonInput,
+        IonPopover
+    } from '@ionic/vue';
+    import { defineComponent,ref } from 'vue';
     import { checkmark,pulseOutline } from 'ionicons/icons';
-    import { ref } from 'vue';
     import { icons } from '@/utils/svg.ts';
+    import { PatientDiagnosisService } from "@/services/patient_diagnosis_service"
+    import { OrderService } from "@/services/order_service"
 
     export default defineComponent({
     name: 'Menu',
@@ -32,10 +92,23 @@
         IonList,
         IonMenu,
         IonTitle,
-        IonToolbar    },
-        data() {
+        IonToolbar,
+        IonInput,
+        IonPopover
+    },
+    data() {
     return {
         iconsContent: icons,
+        no_item: true,
+        search_item: false,
+        display_item: false,
+        addItemButton: true,
+        searchText: '' as any,
+        addTest: '' as any,
+        data: [] as any,
+        testData: [] as any,
+        popoverOpen: false,
+        event: null,
     };
   },
     setup() {
@@ -45,8 +118,38 @@
         navigationMenu(url: any){
             menuController.close()
             this.$router.push(url);
-        }
-        
+        },
+        addData(){
+            this.addTest =""
+            this.searchText = ""
+            this.no_item = false
+            this.addItemButton = false
+            this.search_item =true
+        },
+        async saveData(){
+            this.search_item= false
+            this.display_item= true
+            this.addItemButton =true
+            this.data.push([this.searchText,this.addTest])
+        },
+        async searchInput(text: any) {
+            const searchText = text.target.value;
+            this.openPopover(text)
+            this.testData  = await OrderService.getTestTypesBySpecimen('Blood')
+            this.testData = this.filterByName(searchText)
+        },
+        filterByName(search: any) {
+        return this.testData.filter((item: any) => item.name.toLowerCase().includes(search.toLowerCase()));
+        },
+        openPopover(e: any) {
+        this.event = e;
+        this.popoverOpen = true;
+      },
+      selectedDiagnosis(diagnosis: any){
+          this.searchText = diagnosis
+      }
+      
+
     }
     });
 </script>
@@ -80,6 +183,21 @@ margin: 0;
 text-decoration: none;
 }
 
-
+.action_buttons{
+    color: var(--ion-color-primary);
+    display: flex;
+    align-items: center;
+    float: right;
+    max-width: 70px;
+}
+.modify_buttons{
+    padding-left: 20px;
+}
+.item_no_border{
+    --border-color: transparent;
+}
+.search_result{
+    padding: 10px;
+  }
 </style>
   

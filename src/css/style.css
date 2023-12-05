@@ -9,6 +9,7 @@
 .dashed_bottom_border{
     border-bottom: 1px solid #B3B3B3;
     border-bottom-style: dashed;
+    --border-color: transparent;
 }
 .solid_bottom_border{
     border-bottom: 1px solid #B3B3B3;

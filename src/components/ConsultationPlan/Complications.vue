@@ -1,6 +1,6 @@
 <template>
     <ion-list>
-        <ion-item :lines="visualAT">
+        <ion-item :lines="visualAT" class="dashed_bottom_border">
             <ion-toggle :checked="showVisualAcuityTest" @ionChange="toggleShowVisualAcuityTest">Visual acuity test</ion-toggle>
         </ion-item>
             <div class="sub_item_body" v-if="showVisualAcuityTest">
@@ -46,11 +46,11 @@
             </div>
         <ion-item class="sub_item_body_close" v-if="showVisualAcuityTest"/>
 
-        <ion-item>
+        <ion-item class="dashed_bottom_border">
             <ion-toggle>Retinopathy screening</ion-toggle>            
         </ion-item>
 
-        <ion-item :lines="footSC">
+        <ion-item :lines="footSC" class="dashed_bottom_border">
             <ion-toggle :checked="footChecked" @ionChange="footScreening">Foot screening</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="footChecked">
@@ -181,28 +181,42 @@
                     </ion-checkbox>
                 </ion-col>
             </ion-row>
-            <ion-row class="foot_content">
-                <ion-col class="first_col">Neuropathy/Monofilament Exam</ion-col>
-                <ion-col>
-                    <span class="foot_input">Negative piprics (left foot)</span>
-                    <ion-item class="input_item">
-                        <ion-input  fill="outline"></ion-input>
-                    </ion-item>
-                </ion-col>
-                <ion-col>
-                    <span class="foot_input">Negative pinprics (right foot)</span>
-                    <ion-item class="input_item">
-                        <ion-input  fill="outline"></ion-input>
-                    </ion-item>
-                </ion-col>
+            <ion-row class="foot_content" style="display: flex; border-bottom-style: none;">
+                <ion-col class="first_col" size="4.5">Neuropathy/Monofilament Exam</ion-col>
+                    <ion-col size="3.75" >
+                        <span class="foot_input">Negative piprics (left foot)</span>
+                        <ion-item class="input_item" style="margin: 10px 0px;">
+                            <ion-input fill="outline"></ion-input>
+                            <ion-label><span  class="selectedPatient"></span></ion-label>
+                        </ion-item>
+                    </ion-col>
+                    <ion-col size="3.75">
+                        <span class="foot_input">Negative pinprics (right foot)</span>
+                        <ion-item class="input_item" style="margin: 10px 0px;">
+                            <ion-input fill="outline"></ion-input>
+                            <ion-label><span  class="selectedPatient"></span></ion-label>
+                        </ion-item>
+                    </ion-col>
+                <ion-row style="width:100%; margin: 10px 0px;">
+                    <ion-col size="4.5"></ion-col>
+                    <ion-col style="width:100%; 
+                    font-weight: 700;
+                    background-color: #DDEEDD; color: #016302; padding: 20px 0px; border-radius: 8px;">
+                        <div>
+                            Referral is not required
+                        </div>
+                    </ion-col>
+                </ion-row>
+                
+                
             </ion-row>
         </div>
         <ion-item class="sub_item_body_close" v-if="footChecked"/>
 
-        <ion-item>
-            <ion-toggle>CVD risk screening</ion-toggle>
+        <ion-item class="dashed_bottom_border">
+            <ion-toggle >CVD risk screening</ion-toggle>
         </ion-item>
-        <ion-item>
+        <ion-item class="dashed_bottom_border">
             <ion-toggle>Diabetic kidney desease</ion-toggle>
         </ion-item>
 
@@ -221,6 +235,7 @@
             menuController,
             IonToggle,
             IonSelectOption,
+            IonInput,
             IonSelect,
         } from '@ionic/vue';
     import { defineComponent } from 'vue';
@@ -241,6 +256,7 @@
         IonToggle,
         IonSelect,
         IonSelectOption,
+        IonInput,
         },
         data() {
     return {
@@ -331,9 +347,16 @@ text-decoration: none;
 .foot_content{
     color:#00190E;
     text-align: center;
+    border-bottom: solid 1px #ccc;
+    border-bottom-style: dashed;
+    padding: 10px 0px;
+    font-weight: 500;
+    font-size: 14px;
 }
 .first_col{
     text-align: left;
+    font-weight: 400;
+    font-size: 14px;
 }
 .sub_item_body{
     margin-left: 45px;
@@ -346,9 +369,6 @@ text-decoration: none;
 }
 .item-content {
   background-color:#ffffff;
-}
-.input_item {
-  border: 1px solid transparent;
 }
 ion-select._item_eye {
     --background: #fff;

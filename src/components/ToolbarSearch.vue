@@ -53,7 +53,7 @@
   import { Patientservice } from "@/services/patient_service"
   import { checkmark } from 'ionicons/icons';
   import { useDemographicsStore } from '@/stores/DemographicStore'
-  import HisDate from "@/utils/Date";
+  
   export default defineComponent({
     name: "Home",
     components:{
@@ -95,7 +95,7 @@
                         'family_name': splittedArray.length >= 2 ? splittedArray[1] : '',
                         'gender': splittedArray.length >= 3 ? splittedArray[2] : '',
                         'page': '1',
-                        'per_page': '5'
+                        'per_page': '10'
                     }
         
         this.searchPatient(payload)
@@ -116,15 +116,13 @@
         demographicsStore.setDemographics({
           'name':item.person.names[0].given_name+" "+item.person.names[0].family_name,
           'mrn':this.patientIdentifier(item),
-          'birthdate': HisDate.calculateAge(item.person.birthdate, HisDate.currentDate()) +'y ('+HisDate.toStandardHisDisplayFormat(item.person.birthdate)+')' ,
+          'birthdate': item.person.birthdate ,
           'category': '',
-          'sex': this.covertGender(item.person.gender)
+          'gender': item.person.gender
         })
         this.$router.push(url);
       },
-      covertGender(gender: any){
-        return ['Male', 'M'].includes(gender) ? 'Male' : ['Female', 'F'].includes(gender) ? 'Female' : ''
-      },
+      
       openPopover(e: any) {
         this.event = e;
         this.popoverOpen = true;

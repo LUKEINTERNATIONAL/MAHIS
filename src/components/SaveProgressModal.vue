@@ -2,7 +2,7 @@
     <div class="modal_wrapper">
         <div class="modal_title diplay_space_between">
           <span></span>
-          <span @click="dismiss()" style="font-weight: 300;">x</span>
+          <span @click="dismiss()" style="cursor: pointer; font-weight: 300;">x</span>
         </div>
         <div class="center">
             <span v-html="iconsContent.triageWarning"></span>
@@ -18,7 +18,7 @@
         <div class="triage_modal_btn center">
             <div class="center_btn">
                 <ion-button class="primary_btn" @click="nav('patientProfile')">Save</ion-button>
-                <span @click="nav('patientProfile')"> Don't Save</span>
+                <span @click="nav('patientProfile')" style="cursor: pointer;"> Don't Save</span>
             </div>
         </div>
     </div>

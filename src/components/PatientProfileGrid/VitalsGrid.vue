@@ -2,14 +2,14 @@
     <div class="" style="padding-bottom:5px">
         <div class="text_header_16">
                 <span style="margin-right: 10px;">Clinical Notes</span> 
-                <span v-html="iconsContent.notes_expand" @click="openNotesModal()"></span> 
+                <span style="cursor: pointer;" v-html="iconsContent.notes_expand" @click="openNotesModal()"></span> 
         </div>
         <div class="vitals_overview">
             <div>
                 Vitals
             </div>
             <div id="vitals_dialog">
-                <span v-html="iconsContent.vitals_graph" @click="openVitalsModal()" ></span> 
+                <span style="cursor: pointer;" v-html="iconsContent.vitals_graph" @click="openVitalsModal()" ></span> 
             </div>
         </div>
         <div class="v_result">
