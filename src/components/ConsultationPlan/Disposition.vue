@@ -7,7 +7,7 @@
         @mousemove="highlightItem(index)" @mouseout="undoHighlightItem(index)"
         >
         <ion-label :id="asignLblID(index)" class="drgNmTrpln" style="display: contents; color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.referalName }}</ion-label>
-        <ion-label style="min-width: 700px; margin-left: 15px; color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.selectedReferalType }} / {{ item.referalDate }} / daily / {{ item.addedReferalNote }}</ion-label>
+        <ion-label style="min-width: 700px; margin-left: 15px; color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.selectedReferalType }} / {{ item.referalDate }} / {{ item.addedReferalNote }}</ion-label>
         <ion-label :class="asignSpanLblID(index)" style="cursor:pointer; display: none;" @click="editItemAtIndex(index)"><span v-html="iconsContent.edit" class="modify_buttons"></span></ion-label>
         <ion-label :class="asignSpanLblID(index)" style="cursor:pointer; display: none;" @click="removeItemAtIndex(index)"><span v-html="iconsContent.delete" class="modify_buttons"></span></ion-label>    
     </ion-item>
