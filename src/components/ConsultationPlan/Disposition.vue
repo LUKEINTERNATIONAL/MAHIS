@@ -333,5 +333,8 @@ ion-item.ionLbltp {
     color: #006401 !important;
     cursor: pointer;
 }
+.action_buttons:hover {
+    cursor: pointer;
+}
 </style>
   
