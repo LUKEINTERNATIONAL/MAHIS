@@ -1,6 +1,6 @@
 <template>
     <div class="modal_wrapper">
-      <div class="modal_title diplay_space_between">
+      <div class="modal_title diplay_space_between" style="margin-bottom: 30px;">
           <span>Refill medication</span>
           <span @click="dismiss()" style="cursor: pointer; font-weight: 300;">x</span>
       </div>
@@ -10,17 +10,20 @@
             <ion-label><span v-html="iconsContent.search" class="selectedPatient"></span></ion-label>
         </ion-item>
         <ion-item class="input_item drug_fill">
-                <ion-input fill="outline" v-model="drug.drug_unit"></ion-input>
+            <ion-input v-model="drug.drug_unit" fill="outline"></ion-input>
         </ion-item>
         <ion-item class="input_item drug_fill">
-                <ion-input fill="outline" v-model="drug.freq"></ion-input>
+            <ion-input v-model="drug.freq" fill="outline"></ion-input>
         </ion-item>
         <ion-item class="input_item drug_fill">
-                <ion-input fill="outline" v-model="drug.period"></ion-input>
+            <ion-input v-model="drug.period" fill="outline"></ion-input>
         </ion-item>
         <ion-item class="input_item drug_fill">
-                <ion-input fill="outline" v-model="drug.date"></ion-input>
+            <ion-input v-model="drug.date" fill="outline"></ion-input>
         </ion-item>
+        <div class="save_refill">
+            Save
+        </div>
       </ion-row>
     </div>
 </template>
@@ -91,12 +94,9 @@ ion-modal#example-modal {
 
   ion-modal#example-modal ion-icon {
     margin-right: 6px;
-
     width: 48px;
     height: 48px;
-
     padding: 4px 0;
-
     color: #aaaaaa;
   }
 
@@ -104,8 +104,19 @@ ion-modal#example-modal {
     margin-bottom: 10px;
   }
   .drug_fill{
-    margin-bottom: 10px;
+    margin-bottom: 30px;
     --border-color: transparent;
+    width: 100%;
+  }
+  .input-fill-outline.sc-ion-input-md-h {
+  --border-color: none;
+  }
+  .save_refill{
+    background-color: #DDEEDD;
+    padding: 20px 0px;
+    width: 100%;
+    text-align: center;
+    border-radius: 8px;
   }
  
 </style>

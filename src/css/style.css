@@ -300,5 +300,5 @@ ion-toast.custom-toast::part(container) {
  }
  .small-modal{
     --border-radius: 16px;
-    --width: 25vw;
+    --width: 24vw;
 }
