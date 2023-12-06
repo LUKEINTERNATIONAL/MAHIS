@@ -184,7 +184,6 @@
             this.referalDate = formattedDate
         },
         AreReferalsCreated(){
-            console.log("wedrftgtgtgtgtgtgtgtgtgtgt")
             if (this.addedReferals.length > 0) {
                 this.showAreReferalsCreated = false
             } else {
@@ -192,7 +191,6 @@
             }
         },
         asignLblID(num: any) {
-            console.log("asignLblID")
             return num + '_lbl' as string;
         },
         asignSpanLblID(num: any) {
