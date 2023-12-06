@@ -224,11 +224,16 @@
         iconsContent: icons,
         };
     },
-    mounted(){
-        this.markWizard()
-    },
     computed:{
         ...mapState(useVitalsStore,["vitals"]),
+    },
+    watch: {
+        vitals: {
+            handler(newVitals, oldVitals){
+                this.markWizard()  
+            },
+            deep: true
+        }
     },
     setup() {
         return { chevronBackOutline,checkmark };
@@ -244,13 +249,15 @@
                     item.class = 'open_step common_step';
                 }
             });
-            this.markWizard()
             }
         },
         markWizard(){
             if(arePropertiesNotEmpty(this.vitals,['height', 'weight', 'systolic', 'diastolic'])){
                 this.wizardData[0].checked = true; 
                 this.wizardData[0].class = 'open_step common_step'               
+            }else{
+                this.wizardData[0].checked = false; 
+                this.wizardData[0].class = 'open_step common_step'  
             }
         },
         nav(url: any){

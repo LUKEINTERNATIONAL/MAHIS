@@ -53,6 +53,7 @@
   import { Patientservice } from "@/services/patient_service"
   import { checkmark } from 'ionicons/icons';
   import { useDemographicsStore } from '@/stores/DemographicStore'
+  import { useVitalsStore } from '@/stores/VitalsStore'
   
   export default defineComponent({
     name: "Home",
@@ -120,6 +121,8 @@
           'category': '',
           'gender': item.person.gender
         })
+        const vitals = useVitalsStore()
+        vitals.$reset()
         this.$router.push(url);
       },
       

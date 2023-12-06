@@ -148,6 +148,17 @@
         ...mapState(useDemographicsStore,["demographics"]),
         ...mapState(useVitalsStore,["vitals"]),
     },
+    mounted(){
+        this.patientBMI() 
+    },
+    watch: {
+        vitals: {
+            handler(newVitals, oldVitals){
+                this.patientBMI() 
+            },
+            deep: true
+        }
+    },
     setup() {
       return { checkmark,pulseOutline };
     },
