@@ -298,3 +298,7 @@ ion-toast.custom-toast::part(container) {
  .content_width{
     max-width: 1520px;
  }
+ .small-modal{
+    --border-radius: 16px;
+    --width: 24vw;
+}
