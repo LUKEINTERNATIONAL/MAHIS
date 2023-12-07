@@ -2,76 +2,84 @@
     <ion-row v-if="showAreReferalsCreated">
        <span class="dash_box">No referals created yet</span> 
     </ion-row>
-    <ion-item 
+    <ion-item
         class="ionLbltp" v-for="(item, index) in addedReferals" :key="index"
         @mousemove="highlightItem(index)" @mouseout="undoHighlightItem(index)"
         >
-        <ion-label :id="asignLblID(index)" class="drgNmTrpln" style="display: contents; color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.referalName }}</ion-label>
-        <ion-label style="min-width: 700px; margin-left: 15px; color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.selectedReferalType }} / {{ item.referalDate }} / {{ item.addedReferalNote }}</ion-label>
-        <ion-label :class="asignSpanLblID(index)" style="cursor:pointer; display: none;" @click="editItemAtIndex(index)"><span v-html="iconsContent.edit" class="modify_buttons"></span></ion-label>
-        <ion-label :class="asignSpanLblID(index)" style="cursor:pointer; display: none;" @click="removeItemAtIndex(index)"><span v-html="iconsContent.delete" class="modify_buttons"></span></ion-label>    
-    </ion-item>
-    <div v-if="!showReferalInput">
-        <ion-row style="width: 836px;">
-        <ion-col>
-            <ion-item class="input_item">
-                <ion-input v-model="referalName"></ion-input>
-                <ion-label><span v-html="iconsContent.search" class="selectedPatient"></span></ion-label>
-            </ion-item>
+        <ion-col style="display: contents;">
+            <ion-label :id="asignLblID(index)" class="drgNmTrpln" style="display: contents; color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.referalName }}</ion-label>
         </ion-col>
         <ion-col>
-            <ion-item class="input_item">
-                <ion-input id="chooseType" placeholder="Type" v-model="selectedReferalType" @click="popoverOpenForReferalTypeFn2"></ion-input>
-                <ion-icon v-if="!showPopoverOpenForReferalType" :icon="chevronDownOutline"></ion-icon>
-                <ion-icon v-if="showPopoverOpenForReferalType" :icon="chevronUpOutline"></ion-icon>
-                <ion-popover
-                    class="popover-al"
-                    :show-backdrop="false"
-                    trigger="chooseType"
-                    trigger-action="click"
-                    @didDismiss="showPopoverOpenForReferalType = false"
-                    >
-                    <ion-content color="light" class="ion-padding content-al">
-                        <ion-label>Choose the type:</ion-label>
-                        <ion-list class="list-al">
-                            <div class="item-al" v-for="(item, index) in refralType" :key="index">
-                                        <ion-label  @click="selectAl(index)" style="display: flex; justify-content: space-between;">
-                                            {{ item.name }}
-                                            <ion-icon v-if="item.selected" class="icon-al" :icon="checkmarkOutline"></ion-icon> 
-                                        </ion-label>                                     
-                                    </div>
-                        </ion-list>
-                    </ion-content>
-                </ion-popover>
-            </ion-item>
-        </ion-col>
-        <ion-col>
-            <ion-item class="input_item">
-                <ion-input id="dateTrigger" placeholder="Date" v-model="referalDate"></ion-input>
-                <ion-popover
-                    @didDismiss="prescPopoverOpen = false" 
-                    show-backdrop="false" 
-                    dismiss-on-select="false"
-                    trigger="dateTrigger"
-                    trigger-action="click"
-                    >
-                    <ion-content class="search_card" >
-                        <ion-datetime ref="prescription" @ionChange="getDate($event)" presentation="date"></ion-datetime>
-                    </ion-content>
-                </ion-popover>
-            </ion-item>
-        </ion-col>
-    </ion-row>
-    <ion-row>
-        <ion-col>
-            <ion-item class="input_item">
-                <ion-input v-model="addedReferalNote"></ion-input>
-            </ion-item>
+            <ion-label style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.selectedReferalType }} / {{ item.referalDate }} / {{ item.addedReferalNote }}</ion-label>
         </ion-col>
         <ion-col class="action_buttons">
-            <span @click="saveData()">+ Save</span> 
+            <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end; flex: auto;" @click="editItemAtIndex(index)"><span v-html="iconsContent.edit" class="modify_buttons"></span></ion-label>
+            <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end; margin-left: 16px;" @click="removeItemAtIndex(index)"><span v-html="iconsContent.delete" class="modify_buttons"></span></ion-label>
         </ion-col>
-    </ion-row>
+    </ion-item>
+    <div v-if="!showReferalInput">
+                <ion-row>
+                    <ion-col>
+                        <ion-item class="input_item">
+                            <ion-input v-model="referalName"></ion-input>
+                            <ion-label><span v-html="iconsContent.search" class="selectedPatient"></span></ion-label>
+                        </ion-item>
+                    </ion-col>
+                    <ion-col>
+                        <ion-item class="input_item">
+                            <ion-input id="chooseType" placeholder="Type" v-model="selectedReferalType" @click="popoverOpenForReferalTypeFn2"></ion-input>
+                            <ion-icon v-if="!showPopoverOpenForReferalType"  :icon="chevronDownOutline"></ion-icon>
+                            <ion-icon v-if="showPopoverOpenForReferalType" :icon="chevronUpOutline"></ion-icon>
+                            <ion-popover
+                                class="popover-al"
+                                :show-backdrop="false"
+                                trigger="chooseType"
+                                trigger-action="click"
+                                @didDismiss="showPopoverOpenForReferalType = false"
+                                >
+                                <ion-content color="light" class="ion-padding content-al">
+                                    <ion-label>Choose the type:</ion-label>
+                                    <ion-list class="list-al">
+                                        <div class="item-al" v-for="(item, index) in refralType" :key="index">
+                                                    <ion-label  @click="selectAl(index)" style="display: flex; justify-content: space-between;">
+                                                        {{ item.name }}
+                                                        <ion-icon v-if="item.selected" class="icon-al" :icon="checkmarkOutline"></ion-icon> 
+                                                    </ion-label>                                     
+                                                </div>
+                                    </ion-list>
+                                </ion-content>
+                            </ion-popover>
+                        </ion-item>
+                    </ion-col>
+                    <ion-col>
+                        <ion-item class="input_item">
+                            <ion-input id="dateTrigger" placeholder="Date" v-model="referalDate"></ion-input>
+                            <ion-popover
+                                @didDismiss="prescPopoverOpen = false" 
+                                show-backdrop="false" 
+                                dismiss-on-select="false"
+                                trigger="dateTrigger"
+                                trigger-action="click"
+                                >
+                                <ion-content class="search_card" >
+                                    <ion-datetime ref="prescription" @ionChange="getDate($event)" presentation="date"></ion-datetime>
+                                </ion-content>
+                            </ion-popover>
+                        </ion-item>
+                    </ion-col>
+                    <ion-col size="2"></ion-col>
+                </ion-row>
+        <ion-row>
+                <ion-col size="10">
+                    <ion-item class="input_item">
+                        <ion-input v-model="addedReferalNote" placeholder="Some reason"></ion-input>
+                    </ion-item>
+                </ion-col>
+
+                <ion-col class="action_buttons" size="2">
+                    <span @click="saveData()">+ Save</span> 
+                </ion-col>
+        </ion-row>
     </div>
     <ion-row v-if="showReferalInput">
        <span class="add_item" @click="addReferal" style="cursor: pointer;"> + Add New Referal </span> 
@@ -191,10 +199,10 @@
             }
         },
         asignLblID(num: any) {
-            return num + '_lbl' as string;
+            return num + '_lbl2' as string;
         },
         asignSpanLblID(num: any) {
-            return num + '_spanlbl' as string;
+            return num + '_spanlbl2' as string;
         },
         removeItemAtIndex(index: any) {
             this.addedReferals.splice(index, 1)
@@ -209,27 +217,27 @@
             this.showReferalInput = !this.showReferalInput
         },
         highlightItem(item: any) {
-            const el = document.getElementById(item+'_lbl')
+            const el = document.getElementById(item+'_lbl2')
             if (el) {
                 el.style.color = '#006401' 
             }
             this.highlightActionBtns(item)
         },
         undoHighlightItem(item: any) {
-            const el = document.getElementById(item+'_lbl')
+            const el = document.getElementById(item+'_lbl2')
             if (el) {
                 el.style.color = 'rgb(0,0,0)' 
             }
             this.undohighlightActionBtns(item)
         },
         highlightActionBtns(item: any) {
-            const elements = document.getElementsByClassName(item+'_spanlbl') as any
+            const elements = document.getElementsByClassName(item+'_spanlbl2') as any
             for (let i = 0; i < elements.length; i++) {
                 elements[i].style.display = 'block'
             }
         },
         undohighlightActionBtns(item: any) {
-            const elements = document.getElementsByClassName(item+'_spanlbl') as any
+            const elements = document.getElementsByClassName(item+'_spanlbl2') as any
             for (let i = 0; i < elements.length; i++) {
                 elements[i].style.display = 'none'
             }
@@ -288,7 +296,7 @@ text-decoration: none;
     display: flex;
     align-items: center;
     float: right;
-    max-width: 210px;
+    /* max-width: 210px; */
 }
 ion-list.list-al {
     --background: #fff;
@@ -323,6 +331,9 @@ ion-item.ionLbltp {
 .drgNmTrpln:hover {
     background-color: #006401 !important;
     color: #006401 !important;
+    cursor: pointer;
+}
+.action_buttons:hover {
     cursor: pointer;
 }
 </style>

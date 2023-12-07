@@ -35,14 +35,20 @@
             <ion-label>List of medications</ion-label>
         </ion-item>
         <div style="margin-left: 30px; margin-bottom: 14px;">
-            <ion-item 
+            <ion-item
                 class="ionLbltp" v-for="(item, index) in selectedMedicalDrugsList" :key="index"
                 @mousemove="highlightItem(index)" @mouseout="undoHighlightItem(index)"
                 >
-                <ion-label :id="asignLblID(index)" class="drgNmTrpln" style="display: contents; color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.drugName }}</ion-label>
-                <ion-label style="min-width: 700px; margin-left: 15px; color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.dose }} / {{ item.frequency }} / daily / {{ item.duration }} / until {{ item.prescription }}</ion-label>
-                <ion-label :class="asignSpanLblID(index)" style="cursor:pointer; display: none;" @click="editItemAtIndex(index)"><span v-html="iconsContent.edit" class="modify_buttons"></span></ion-label>
-                <ion-label :class="asignSpanLblID(index)" style="cursor:pointer; display: none;" @click="removeItemAtIndex(index)"><span v-html="iconsContent.delete" class="modify_buttons"></span></ion-label>    
+                <ion-col style="display: contents;">
+                    <ion-label :id="asignLblID(index)" class="drgNmTrpln" style="display: contents; color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.drugName }}</ion-label>
+                </ion-col>
+                <ion-col>
+                    <ion-label style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.dose }} / {{ item.frequency }} / daily / {{ item.duration }} / until {{ item.prescription }}</ion-label>
+                </ion-col>
+                <ion-col class="action_buttons">
+                    <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end; flex: auto;" @click="editItemAtIndex(index)"><span v-html="iconsContent.edit" class="modify_buttons"></span></ion-label>
+                    <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end;" @click="removeItemAtIndex(index)"><span v-html="iconsContent.delete" class="modify_buttons"></span></ion-label>
+                </ion-col>
             </ion-item>
 
             <ion-row v-if="!addItemButton" style="margin-bottom: 20px;">
@@ -445,7 +451,9 @@ ion-item.ionLbltp {
     display: flex;
     align-items: center;
     float: right;
-    max-width: 70px;
+}
+.action_buttons:hover {
+    cursor: pointer;
 }
 </style>
   
