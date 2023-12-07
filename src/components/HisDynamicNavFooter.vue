@@ -1,18 +1,18 @@
 <template>
-  <ion-footer>
-    <ion-toolbar :color="color">
+    <ion-toolbar :color="color" class="_buttons">
       <ion-button
         v-for="(btn, index) in footerBtns" :key="index"
         :slot="btn.slot"
         v-show="btn.visible" 
         @click="btn.onClick(btn)"
         :color="btn.color"
+        :fill="btn.fill"
         :class="btn.styleClass"
         :size="btn.size">
+        <span v-html="btn.icon" ></span>
         {{btn.name}}
       </ion-button>
     </ion-toolbar>
-  </ion-footer>
 </template>
 
 <script lang="ts">
@@ -70,3 +70,9 @@ export default defineComponent({
   }
 })
 </script>
+<style>
+._buttons{
+  padding: 0px 25px;
+  text-transform: none;
+}
+</style>

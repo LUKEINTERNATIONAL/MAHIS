@@ -272,6 +272,8 @@ ion-toast.custom-toast::part(container) {
     justify-content: space-between;;
     display: flex;
     width: 50px;
+    padding-top: 5px;
+    align-items: center;
  }
 
  /* investigations */
@@ -301,4 +303,12 @@ ion-toast.custom-toast::part(container) {
  .small-modal{
     --border-radius: 16px;
     --width: 24vw;
-}
+ }
+ .delete-popover{
+    --border-radius: 16px;
+    --width: 17vw;
+    --offset-y: 15px;
+ }
+ ion-button{
+    text-transform: none;
+ }
