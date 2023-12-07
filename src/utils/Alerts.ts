@@ -1,10 +1,10 @@
-import { toastController, modalController } from "@ionic/vue";
+import { toastController, modalController, popoverController } from "@ionic/vue";
 import ConfimationSheet from "@/components/DataViews/actionsheet/ConfirmationSheet.vue"
 import { NavBtnInterface } from "@/components/HisDynamicNavFooterInterface";
 import { warningOutline } from 'ionicons/icons';
 import { checkmarkCircleSharp } from 'ionicons/icons';
 import { alertCircleOutline } from 'ionicons/icons';
-import  { icons }  from '@/utils/svg.ts'
+import  { icons }  from '@/utils/svg'
 
 interface AlertConfirmationOtions {
   header?: string;
@@ -110,3 +110,48 @@ export async function createModal(modalComponet: any, options = {} as AlertConfi
             });
             modal.present();
 }
+export  function createPopover(massege: any, e: any, btns = [] as Array<NavBtnInterface>) {
+  return  popoverController.create({
+    component: ConfimationSheet,
+    backdropDismiss: false,
+    event:e,
+    cssClass: "delete-popover",
+    showBackdrop: false,
+    side: 'bottom',
+    reference: 'event',
+    alignment: 'center',
+    componentProps: {
+      subtitle: '',
+      body: massege,
+      actionButtons: btns
+    }
+});
+}
+export async function popoverConfirmation(massege: string, e: any,options = {} as AlertConfirmationOtions) {
+    const popover = await createPopover( massege,e,[
+        {
+          name: 'Delete',
+          size: 'small',
+          slot: 'start',
+          color: 'danger',
+          icon: icons.delete,
+          visible: true,
+          role: 'Delete',
+          onClick: ({role}: any) => popoverController.dismiss(role)
+        },
+        {
+            name: 'Cancel',
+            size: 'small',
+            slot: 'end',
+            color: 'success',
+            visible: true,
+            role: 'Cancel',
+            fill: 'clear',
+            onClick: ({role}: any) => popoverController.dismiss(role)
+        }
+      ]
+    );
+    popover.present();
+    const { data } = await popover.onDidDismiss()
+    return data === 'Delete'
+  }

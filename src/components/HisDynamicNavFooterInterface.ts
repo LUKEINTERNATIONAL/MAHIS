@@ -6,6 +6,8 @@ export interface NavBtnInterface{
     visibleOnStateChange?: Function;
     color: string;
     role?: string;
+    fill?: string;
+    icon?: string;
     slot?: string;
     onClick: Function;
 }

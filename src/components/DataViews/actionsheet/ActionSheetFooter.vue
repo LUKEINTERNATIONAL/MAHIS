@@ -1,5 +1,5 @@
 <template>
-    <div :style="{padding: '10px'}">
+    <div>
       <dynamic-nav color="light" :btns="btns"> </dynamic-nav>
     </div>
 </template>
@@ -20,8 +20,10 @@ export default defineComponent({
     computed: {
         btns(): Array<NavBtnInterface> {
             return this.buttons.map((btn: any) => {
-                btn.size = 'large'
+                btn.size = btn.size || 'large'
                 btn.color = btn.color || 'primary'
+                btn.fill = btn.fill || 'solid'
+                btn.icon = btn.icon || ''
                 btn.visible = true
                 btn.styleClass = 'full-width-ion-btn'
                 if (!btn.onClick) {
