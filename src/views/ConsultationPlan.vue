@@ -227,6 +227,9 @@
     computed:{
         ...mapState(useVitalsStore,["vitals"]),
     },
+    mounted(){
+        this.markWizard() 
+    },
     watch: {
         vitals: {
             handler(newVitals, oldVitals){
