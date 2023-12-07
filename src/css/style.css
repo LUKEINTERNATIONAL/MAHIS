@@ -306,7 +306,7 @@ ion-toast.custom-toast::part(container) {
  }
  .delete-popover{
     --border-radius: 16px;
-    --width: 17vw;
+    --width: 210px;
     --offset-y: 15px;
  }
  ion-button{
