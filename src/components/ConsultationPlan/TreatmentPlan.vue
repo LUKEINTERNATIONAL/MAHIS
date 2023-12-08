@@ -54,7 +54,7 @@
             <ion-row v-if="!addItemButton" style="margin-bottom: 20px;">
                 <ion-col>
                     <ion-item class="input_item">
-                        <ion-input  v-model="drugName"  @ionInput="searchInput" fill="outline"></ion-input>
+                        <ion-input  v-model="drugName"  @ionInput="FindDrugName" fill="outline"></ion-input>
                         <ion-label><span v-html="iconsContent.search" class="selectedPatient"></span></ion-label>
                     </ion-item>
                     <ion-popover 
@@ -69,7 +69,7 @@
                         <ion-content class="search_card" >
                         
                             <ion-row class="search_result" v-for="(item, index) in diagnosisData" :key="index" >
-                                <ion-col @click="selectedDiagnosis(item.name)">{{ item.name }} </ion-col>
+                                <ion-col @click="selectedDrugName(item.name)">{{ item.name }} </ion-col>
                             </ion-row>
                         </ion-content>
                     </ion-popover>
@@ -82,9 +82,29 @@
                 </ion-col>
                 <ion-col>
                     <ion-item class="input_item">
-                        <ion-input placeholder="Frequency" v-model="frequency" fill="outline"></ion-input>
-                        <ion-label><span  class="selectedPatient"></span></ion-label>
-                    </ion-item>
+                            <ion-input id="chooseType" placeholder="Frequency" v-model="frequency" @click="popoverOpenForFrequencyFn2"></ion-input>
+                            <ion-icon v-if="!showPopoverOpenForFrequency"  :icon="chevronDownOutline"></ion-icon>
+                            <ion-icon v-if="showPopoverOpenForFrequency" :icon="chevronUpOutline"></ion-icon>
+                            <ion-popover
+                                class="popover-al"
+                                :show-backdrop="false"
+                                trigger="chooseType"
+                                trigger-action="click"
+                                @didDismiss="showPopoverOpenForFrequency = false"
+                                >
+                                <ion-content color="light" class="ion-padding content-al">
+                                    <ion-label>Choose the type:</ion-label>
+                                    <ion-list class="list-al">
+                                        <div class="item-al" v-for="(item, index) in drug_frequencies" :key="index">
+                                                    <ion-label  @click="selectFrequency(index)" style="display: flex; justify-content: space-between;">
+                                                        {{ item.label }}
+                                                        <ion-icon v-if="item.selected" class="icon-al" :icon="checkmarkOutline"></ion-icon> 
+                                                    </ion-label>                                     
+                                                </div>
+                                    </ion-list>
+                                </ion-content>
+                            </ion-popover>
+                        </ion-item>
                 </ion-col>
                 <ion-col>
                     <ion-item class="input_item">
@@ -152,9 +172,12 @@
             IonLabel
         } from '@ionic/vue';
     import { defineComponent } from 'vue';
-    import { checkmark,pulseOutline,addOutline,closeOutline, checkmarkOutline } from 'ionicons/icons';
+    import { checkmark,pulseOutline,addOutline,closeOutline, checkmarkOutline, filter, chevronDownOutline, chevronUpOutline } from 'ionicons/icons';
     import { ref } from 'vue';
     import { icons } from '@/utils/svg.ts';
+    import { DRUG_FREQUENCIES } from "@/services/drug_prescription_service";
+    import { DrugService} from "@/services/drug_service"
+    import { ConceptName } from '@/interfaces/conceptName';
 
     export default defineComponent({
     name: 'Menu',
@@ -175,6 +198,7 @@
     return {
         iconsContent: icons,
         searchText: '' as any,
+        drug_frequencies: DRUG_FREQUENCIES,
         no_item: true,
         search_item: false,
         display_item: false,
@@ -232,10 +256,11 @@
           frequency: '' as any,
           duration: '' as any,
           prescription: '' as any,
+          showPopoverOpenForFrequency: false,
     };
   },
     setup() {
-      return { checkmark, pulseOutline, closeOutline, addOutline, checkmarkOutline };
+      return { checkmark, pulseOutline, closeOutline, addOutline, checkmarkOutline, chevronDownOutline,chevronUpOutline };
     },
     methods:{
         navigationMenu(url: any){
@@ -244,6 +269,13 @@
         },
         selectAl(item: any) {
             item.selected = !item.selected
+        },
+        selectFrequency(index: any) {
+            this.drug_frequencies.forEach(item => {
+                item.selected = false
+            })
+            this.drug_frequencies[index].selected = !this.drug_frequencies[index].selected
+            this.frequency = this.drug_frequencies[index].label
         },
         addData(){
             // this.searchText = ""
@@ -275,10 +307,19 @@
             this.duration = ''
             this.prescription = ''
         },
-        async searchInput(text: any) {
+        async FindDrugName(text: any) {
             const searchText = text.target.value;
             this.openPopover(text)
-            //this.diagnosisData = await PatientDiagnosisService.getDiagnosis(searchText, 1, 10)
+            const page=1, limit=10
+            const drugs: ConceptName[] = await DrugService.getOPDDrugs({ 
+            "name": searchText, 
+            "page": page,
+            "page_size": limit,
+            })
+            drugs.map(drug => ({
+            label: drug.name, value: drug.name, other: drug
+            }))
+            this.diagnosisData = drugs
         },
         openPopover(e: any) {
         this.event = e;
@@ -288,8 +329,11 @@
             this.prescEvent = e
             this.prescPopoverOpen = true
         },
-        selectedDiagnosis(diagnosis: any){
-            this.searchText = diagnosis
+        selectedDrugName(name: any){
+            this.drugName = name
+        },
+        popoverOpenForFrequencyFn2() {
+            this.showPopoverOpenForFrequency = true
         },
         highlightItem(item: any) {
             const el = document.getElementById(item+'_lbl')
