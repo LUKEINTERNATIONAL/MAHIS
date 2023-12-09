@@ -174,18 +174,11 @@
   import { defineComponent } from 'vue';
   import { chevronBackOutline,checkmark } from 'ionicons/icons';
   import { modalController } from '@ionic/vue';
-  import { icons } from '@/utils/svg.ts'
+  import { icons } from '@/utils/svg'
 
   import Toolbar from '@/components/Toolbar.vue'
   import ToolbarSearch from '@/components/ToolbarSearch.vue'
   import DemographicBar from '@/components/DemographicBar.vue'
-  import Vitals from '@/components/ConsultationPlan/Vitals.vue'
-  import Diagnosis from '@/components/ConsultationPlan/Diagnosis.vue'
-  import Complications from '@/components/ConsultationPlan/Complications.vue'
-  import ConfirmDiagnosis from '@/components/ConsultationPlan/ConfirmDiagnosis.vue'
-  import Disposition from '@/components/ConsultationPlan/Disposition.vue'
-  import Investigations from '@/components/ConsultationPlan/Investigations.vue'
-  import TreatmentPlan from '@/components/ConsultationPlan/TreatmentPlan.vue'
 
   
   import DispositionGrid from '@/components/PatientProfileGrid/DispositionGrid.vue'
@@ -221,13 +214,6 @@
         IonAccordionGroup,
         IonItem,
         IonLabel,
-        Vitals,
-        Diagnosis,
-        Complications,
-        ConfirmDiagnosis,
-        Disposition,
-        Investigations,
-        TreatmentPlan,
         IonModal,
         DispositionGrid,
         InvestigationsGrid,
