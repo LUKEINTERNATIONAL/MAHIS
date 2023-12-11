@@ -49,11 +49,8 @@ export default {
     },
      methods: {
         handleInput(event) {
-            // You can emit an event or perform other actions when the input changes
-            //  this.$emit("input", this.inputValue);
-            //  this.$emit("input-event", this.inputValue);
             this.$emit("update:inputValue", event.target.value);
-        },
+         },
     },
 }
 </script>

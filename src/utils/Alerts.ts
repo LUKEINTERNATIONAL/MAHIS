@@ -5,7 +5,8 @@ import { warningOutline } from 'ionicons/icons';
 import { checkmarkCircleSharp } from 'ionicons/icons';
 import { alertCircleOutline } from 'ionicons/icons';
 import  { icons }  from '@/utils/svg'
-
+import SelectionPopover from "@/components/SelectionPopover.vue"
+import { ref } from 'vue';
 interface AlertConfirmationOtions {
   header?: string;
   confirmBtnLabel?: string;
@@ -154,4 +155,45 @@ export async function popoverConfirmation(massege: string, e: any,options = {} a
     popover.present();
     const { data } = await popover.onDidDismiss()
     return data === 'Delete'
+}
+  
+let globalPopover = null;
+
+export async function popoverSelection(content, e) {
+  // Check if the popover instance already exists
+  console.log(globalPopover)
+  if (globalPopover) {
+    // Update the content property of the existing popover
+    globalPopover.componentProps.content = content;
+    // Update any other properties if needed
+    console.log('globalPopoveroooooooooooo')
+  } else {
+    // Create a new popover instance
+    const newPopover = await popoverController.create({
+      component: SelectionPopover,
+      backdropDismiss: true,
+      event: e,
+      cssClass: "selection-popover",
+      showBackdrop: false,
+      side: 'bottom',
+      alignment: 'center',
+      reference: 'trigger',
+      keyboardClose: false,
+      dismissOnSelect: true,
+      componentProps: {
+        subtitle: '',
+        content: content,
+      }
+    });
+
+    // Store the reference to the new popover in the global variable
+    globalPopover = newPopover;
+    newPopover.present();
   }
+
+  // Wait for the popover to be created before accessing its properties
+  await globalPopover.$el;
+
+  const { data } = await globalPopover.onDidDismiss();
+  return data;
+}

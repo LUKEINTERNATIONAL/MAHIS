@@ -11,7 +11,7 @@
                         :unit="element[0].unit"
                         :icon ="element[0].icon"
                         :inputValue="vitals[(element[0].name)]"
-                        @update:inputValue="value => vitals[element[0].name.s] = value"
+                        @update:inputValue="value => vitals[element[0].name] = value"
                     />
                 </ion-col>
                 <ion-col>
