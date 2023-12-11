@@ -133,10 +133,12 @@
                 </ion-col>
             </ion-row>
 
-            <ion-button v-if="addItemButton" fill="clear" @click="addData" class="addMedicalAlBtn">
+            <!-- <ion-button v-if="addItemButton" fill="clear" @click="addData" class="addMedicalAlBtn">
                 Add new medication
                 <ion-icon slot="start" style="font-size: x-large;" :icon="addOutline"></ion-icon>
-            </ion-button>
+            </ion-button> -->
+            <dynamic-button :name="btnName1" :fill="btnFill" :icon="addOutline" :Fn="addData">
+            </dynamic-button>
             <ion-row>
                 <ion-button class="addMedicalTpBtn">Send to pharmacy</ion-button>
                 <ion-button class="addMedicalTpBtn" style="margin-left: 4%;">Send to dispensation</ion-button>
@@ -178,22 +180,25 @@
     import { DRUG_FREQUENCIES } from "@/services/drug_prescription_service";
     import { DrugService} from "@/services/drug_service"
     import { ConceptName } from '@/interfaces/conceptName';
+    import DynamicButton from "@/components/DynamicButton.vue"
 
     export default defineComponent({
     name: 'Menu',
     components:{
-        IonContent,
-        IonHeader,
-        IonItem,
-        IonList,
-        IonButton,
-        IonMenu,
-        IonTitle,
-        IonToolbar,
-        IonInput,
-        IonDatetime,
-        IonLabel
-      },
+    IonContent,
+    IonHeader,
+    IonItem,
+    IonList,
+    IonButton,
+    IonMenu,
+    IonTitle,
+    IonToolbar,
+    IonInput,
+    IonDatetime,
+    IonLabel,
+    DynamicButton,
+    DynamicButton
+},
         data() {
     return {
         iconsContent: icons,
@@ -257,6 +262,8 @@
           duration: '' as any,
           prescription: '' as any,
           showPopoverOpenForFrequency: false,
+          btnName1: 'Add new medication', 
+          btnFill: 'clear',
     };
   },
     setup() {
