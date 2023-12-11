@@ -11,7 +11,7 @@
                         :unit="element[0].unit"
                         :icon ="element[0].icon"
                         :inputValue="vitals[(element[0].name)]"
-                        @update:inputValue="value => vitals[element[0].name] = value"
+                        @update:inputValue="value => vitals[element[0].name] = value.target.value"
                     />
                 </ion-col>
                 <ion-col>
@@ -20,7 +20,7 @@
                         :unit="element[1].unit"
                         :icon ="element[1].icon"
                         :inputValue="vitals[element[1].name]"
-                        @update:inputValue="value => vitals[element[1].name] = value"
+                        @update:inputValue="value => vitals[element[1].name] = value.target.value"
                     />
                 </ion-col>
             </ion-row>
@@ -183,7 +183,6 @@
             this.$router.push(url);
         },
         vitalsValidations() {
-            console.log(this.vitals.height)
             if(this.vitals.weight && this.vitals.height && this.demographics.gender && this.demographics.birthdate){
                 this.patientBMI()
             }else{
