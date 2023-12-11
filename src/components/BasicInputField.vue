@@ -49,7 +49,7 @@ export default {
     },
      methods: {
         handleInput(event) {
-            this.$emit("update:inputValue", event.target.value);
+            this.$emit("update:inputValue", event);
          },
     },
 }

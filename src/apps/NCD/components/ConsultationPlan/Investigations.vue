@@ -2,7 +2,6 @@
     <DashBox :status="no_item" :content="'No Investigations added '" />
     <span v-if="display_item">
         <ion-row class="dashed_bottom_border" v-for="(item, index) in data" :key="index">
-
             <ion-col>
                 <ion-item class="item_no_border">
                     <span>{{ item[0] }}</span>
@@ -24,18 +23,18 @@
     </span>
 
     <ion-row v-if="search_item">
-        <ion-col @click="">
+        <ion-col>
            <BasicInputField 
                 :icon ="iconsContent.search"
                 :inputValue="searchText"
-                @update:inputValue="value => searchText = value"
+                @update:inputValue="searchInput"
             />
         </ion-col>
         <ion-col>
-            <ion-item class="input_item">
-                <ion-input v-model="addTest" fill="outline"></ion-input>
-                <ion-label><span class="selectedPatient"></span></ion-label>
-            </ion-item>
+            <BasicInputField 
+                :inputValue="addTest"
+                @update:inputValue="value => addTest = value.target.value"
+            />
         </ion-col>
         <ion-col class="action_buttons">
             <span style="cursor: pointer;" @click="saveData()">+ Save</span>
@@ -49,9 +48,11 @@
     <SelectionPopover 
         :testData="testData"  
         :popoverOpen="popoverOpen" 
-        @changePopoverStatus="closePopover" 
+        @closePopoover="value => popoverOpen = value" 
         :event="event" 
         :key="componetKey"
+        :title="'Choose the investigation:'"
+        @setName="value => searchText = value"
     />
 </template>
   
@@ -131,6 +132,7 @@ export default defineComponent({
             this.data.push([this.searchText, this.addTest])
         },
         async searchInput(event: any) {
+            this.searchText = event.target.value
             this.openPopover(event)
             this.testData = await OrderService.getTestTypesBySpecimen('Blood')
             this.testData = this.filterByName(this.searchText)
@@ -142,17 +144,7 @@ export default defineComponent({
             this.event = e;
             this.popoverOpen = true;
             this.componetKey++;
-        },
-        closePopover() { 
-            this.popoverOpen = false;
         }
-
-        ,
-        selectedDiagnosis(diagnosis: any) {
-            this.searchText = diagnosis
-        }
-
-
     }
 });
 </script>
