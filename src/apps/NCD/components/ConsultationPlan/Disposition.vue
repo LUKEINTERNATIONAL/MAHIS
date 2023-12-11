@@ -77,7 +77,8 @@
                 </ion-col>
 
                 <ion-col class="action_buttons" size="2">
-                    <span @click="saveData()">+ Save</span> 
+                    <!-- <span @click="saveData()"></span>  -->
+                    <DynamicButton class="action_buttons" :name="btnName2" :fill="btnFill" :Fn="saveData"/>
                 </ion-col>
         </ion-row>
     </div>
@@ -155,6 +156,7 @@
         referalName: '',
         showAreReferalsCreated: true as boolean,
         btnName1: '+ Add New Referal',
+        btnName2: '+ Save',
         btnFill: 'clear',
     };
   },
