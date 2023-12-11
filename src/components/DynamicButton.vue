@@ -1,9 +1,11 @@
 <template>
-        <ion-button
-            :fill="$props.fill"
-            @click="$props.Fn">
-            <span>{{ $props.name }}</span>
-        </ion-button>
+    <ion-button
+        :fill="$props.fill"
+        @click="$props.Fn">
+        <span>{{ $props.name }}</span>
+        <ion-icon v-if="icon" slot="start" style="font-size: x-large;" :icon="$props.icon"></ion-icon>
+
+    </ion-button>
 </template>
 
 <script lang="ts">
@@ -20,6 +22,10 @@ export default defineComponent({
         },
         fill: {
             type: String as any,
+        },
+        icon: {
+            type: String as any,
+            default:''
         },
         Fn: {
             type: Function,
