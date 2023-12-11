@@ -1,11 +1,7 @@
 import { toastController, modalController, popoverController } from "@ionic/vue";
 import ConfimationSheet from "@/components/DataViews/actionsheet/ConfirmationSheet.vue"
 import { NavBtnInterface } from "@/components/HisDynamicNavFooterInterface";
-import { warningOutline } from 'ionicons/icons';
-import { checkmarkCircleSharp } from 'ionicons/icons';
-import { alertCircleOutline } from 'ionicons/icons';
 import  { icons }  from '@/utils/svg'
-
 interface AlertConfirmationOtions {
   header?: string;
   confirmBtnLabel?: string;
@@ -154,4 +150,4 @@ export async function popoverConfirmation(massege: string, e: any,options = {} a
     popover.present();
     const { data } = await popover.onDidDismiss()
     return data === 'Delete'
-  }
+}

@@ -1,12 +1,9 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import HomePage from '../views/HomePage.vue'
-import ConsultationPlan from '../views/ConsultationPlan.vue'
 import Login from '../views/Login.vue'
-import StartTriage from '../views/StartTriage.vue'
-import Triage from '../views/Triage.vue'
-import TriageSummary from '../views/TriageSummary.vue'
 import PatientProfile from '../views/PatientProfile.vue'
+import NCD from '@/apps/NCD/config/routes'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -19,35 +16,16 @@ const routes: Array<RouteRecordRaw> = [
     component: HomePage
   },
   {
-    path: '/consultationPlan',
-    name: 'ConsultationPlan',
-    component: ConsultationPlan
-  },
-  {
     path: '/login',
     name: 'Login',
     component: Login
   },
   {
-    path: '/triage',
-    name: 'Triage',
-    component: Triage
-  },
-  {
-    path: '/startTriage',
-    name: 'StartTriage',
-    component: StartTriage
-  },
-  {
-    path: '/triageSummary',
-    name: 'TriageSummary',
-    component: TriageSummary
-  },
-  {
     path: '/patientProfile',
     name: 'patientProfile',
     component: PatientProfile
-  }
+  },
+  ...NCD
 ]
 
 const router = createRouter({

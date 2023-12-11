@@ -118,16 +118,16 @@
   import ToolbarSearch from '@/components/ToolbarSearch.vue'
   import DemographicBar from '@/components/DemographicBar.vue'
   import { chevronBackOutline,checkmark } from 'ionicons/icons';
-  import Vitals from '@/components/ConsultationPlan/Vitals.vue'
-  import Diagnosis from '@/components/ConsultationPlan/Diagnosis.vue'
-  import Complications from '@/components/ConsultationPlan/Complications.vue'
-  import ConfirmDiagnosis from '@/components/ConsultationPlan/ConfirmDiagnosis.vue'
-  import Disposition from '@/components/ConsultationPlan/Disposition.vue'
-  import Investigations from '@/components/ConsultationPlan/Investigations.vue'
-  import TreatmentPlan from '@/components/ConsultationPlan/TreatmentPlan.vue'
+  import Vitals from '@/apps/NCD/components/ConsultationPlan/Vitals.vue'
+  import Diagnosis from '@/apps/NCD/components/ConsultationPlan/Diagnosis.vue'
+  import Complications from '@/apps/NCD/components/ConsultationPlan/Complications.vue'
+  import ConfirmDiagnosis from '@/apps/NCD/components/ConsultationPlan/ConfirmDiagnosis.vue'
+  import Disposition from '@/apps/NCD/components/ConsultationPlan/Disposition.vue'
+  import Investigations from '@/apps/NCD/components/ConsultationPlan/Investigations.vue'
+  import TreatmentPlan from '@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue'
   import SaveProgressModal from '@/components/SaveProgressModal.vue'
   import { createModal } from '@/utils/Alerts'
-  import { icons } from '@/utils/svg.ts';
+  import { icons } from '@/utils/svg';
   import { toastWarning, alertConfirmation } from '@/utils/Alerts';
   import { arePropertiesNotEmpty } from "@/utils/Objects";
   import { useVitalsStore } from '@/stores/VitalsStore'
