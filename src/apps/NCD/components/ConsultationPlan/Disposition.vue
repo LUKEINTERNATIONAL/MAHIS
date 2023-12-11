@@ -82,7 +82,8 @@
         </ion-row>
     </div>
     <ion-row v-if="showReferalInput">
-       <span class="add_item" @click="addReferal" style="cursor: pointer;"> + Add New Referal </span> 
+       <!-- <span class="add_item" @click="addReferal" style="cursor: pointer;"> {{ btnName1 }} </span> -->
+       <DynamicButton class="add_item" :name="btnName1" :fill="btnFill" :Fn="addReferal"/>
     </ion-row>
 </template>
   
@@ -106,6 +107,7 @@
     import { checkmark,pulseOutline,checkmarkOutline, chevronDownOutline,chevronUpOutline } from 'ionicons/icons';
     import { ref } from 'vue';
     import { icons } from '@/utils/svg.ts';
+    import DynamicButton from "@/components/DynamicButton.vue"
 
     export default defineComponent({
     name: 'Menu',
@@ -121,7 +123,8 @@
         IonInput,
         IonPopover,
         IonButton,
-        IonDatetime
+        IonDatetime,
+        DynamicButton
        },
         data() {
     return {
@@ -151,6 +154,8 @@
         addedReferalNote: '',
         referalName: '',
         showAreReferalsCreated: true as boolean,
+        btnName1: '+ Add New Referal',
+        btnFill: 'clear',
     };
   },
     setup() {
