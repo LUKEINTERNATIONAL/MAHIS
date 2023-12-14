@@ -35,21 +35,8 @@
             <ion-label>List of medications</ion-label>
         </ion-item>
         <div style="margin-left: 30px; margin-bottom: 14px;">
-            <ion-item
-                class="ionLbltp" v-for="(item, index) in selectedMedicalDrugsList" :key="index"
-                @mousemove="highlightItem(index)" @mouseout="undoHighlightItem(index)"
-                >
-                <ion-col style="display: contents;">
-                    <ion-label :id="asignLblID(index)" class="drgNmTrpln" style="display: contents; color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.drugName }}</ion-label>
-                </ion-col>
-                <ion-col>
-                    <ion-label style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.dose }} / {{ item.frequency }} / daily / {{ item.duration }} / until {{ item.prescription }}</ion-label>
-                </ion-col>
-                <ion-col class="action_buttons">
-                    <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end; flex: auto;" @click="editItemAtIndex(index)"><span v-html="iconsContent.edit" class="modify_buttons"></span></ion-label>
-                    <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end;" @click="removeItemAtIndex(index)"><span v-html="iconsContent.delete" class="modify_buttons"></span></ion-label>
-                </ion-col>
-            </ion-item>
+
+            <dynamic-list :selectedMedicalDrugsList="selectedMedicalDrugsList" @edit-item="editItemAtIndex"/>
 
             <ion-row v-if="!addItemButton" style="margin-bottom: 20px;">
                 <ion-col>
@@ -181,6 +168,7 @@
     import { DrugService} from "@/services/drug_service"
     import { ConceptName } from '@/interfaces/conceptName';
     import DynamicButton from "@/components/DynamicButton.vue"
+    import DynamicList from '@/components/DynamicList.vue';
 
     export default defineComponent({
     name: 'Menu',
@@ -197,7 +185,7 @@
     IonDatetime,
     IonLabel,
     DynamicButton,
-    DynamicButton
+    DynamicList
 },
         data() {
     return {
@@ -342,41 +330,6 @@
         popoverOpenForFrequencyFn2() {
             this.showPopoverOpenForFrequency = true
         },
-        highlightItem(item: any) {
-            const el = document.getElementById(item+'_lbl')
-            if (el) {
-                el.style.color = '#006401' 
-            }
-            this.highlightActionBtns(item)
-        },
-        undoHighlightItem(item: any) {
-            const el = document.getElementById(item+'_lbl')
-            if (el) {
-                el.style.color = 'rgb(0,0,0)' 
-            }
-            this.undohighlightActionBtns(item)
-        },
-        highlightActionBtns(item: any) {
-            const elements = document.getElementsByClassName(item+'_spanlbl') as any
-            for (let i = 0; i < elements.length; i++) {
-                elements[i].style.display = 'block'
-            }
-        },
-        undohighlightActionBtns(item: any) {
-            const elements = document.getElementsByClassName(item+'_spanlbl') as any
-            for (let i = 0; i < elements.length; i++) {
-                elements[i].style.display = 'none'
-            }
-        },
-        asignLblID(num: any) {
-            return num + '_lbl' as string;
-        },
-        asignSpanLblID(num: any) {
-            return num + '_spanlbl' as string;
-        },
-        removeItemAtIndex(index: any) {
-            this.selectedMedicalDrugsList.splice(index, 1)
-        },
         editItemAtIndex(index: any) {
             const dataItem = this.selectedMedicalDrugsList[index]
             this.selectedMedicalDrugsList.splice(index, 1)
@@ -436,10 +389,6 @@ ion-button.medicalAlBtn {
     --color: #B42318;
     text-transform: none;
 }
-ion-button.addMedicalAlBtn {
-    --color: #006401;
-    text-transform: none;
-}
 ion-button.addMedicalTpBtn {
     --background: #DDEEDD;
     --color: #006401;
@@ -466,11 +415,6 @@ ion-icon.icon-al {
   padding: 5px;
   border-radius: 3px;
 }
-.drgNmTrpln:hover {
-    background-color: #006401 !important;
-    color: #006401 !important;
-    cursor: pointer;
-}
 ion-popover.popover-al {
     --background: #fff;
 }
@@ -481,10 +425,7 @@ ion-list.list-al {
     --background: #fff;
     -ion-item-background: #fff;
 }
-ion-item.ionLbltp {
-        border-bottom: 2px dotted var(--ion-color-medium);
-        --inner-border-width:0;
-    }
+
 .checkLbltp {
     border-bottom: 2px dotted var(--ion-color-medium);
     --inner-border-width:0;
@@ -493,9 +434,6 @@ ion-item.ionLbltp {
     font-size: 16px;
     font-weight: 600;
     line-height: 24px;
-}
-.modify_buttons{
-    padding-left: 20px;
 }
 .action_buttons{
     color: var(--ion-color-primary);
