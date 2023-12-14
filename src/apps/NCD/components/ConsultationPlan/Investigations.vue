@@ -1,30 +1,30 @@
 <template>
     <DashBox :status="no_item" :content="'No Investigations added '" />
     <span v-if="display_item">
-        <ion-row class="dashed_bottom_border" v-for="(item, index) in data" :key="index">
+        <ion-row class="dashed_bottom_border" v-for="(item, index) in investigations" :key="index">
             <ion-col>
                 <ion-item class="item_no_border">
-                    <span>{{ item[0] }}</span>
+                    <span>{{ item.test }}</span>
                 </ion-item>
             </ion-col>
             <ion-col>
                 <ion-item class="item_no_border">
-                    <span>{{ item[1] }}</span>
+                    <span>{{ item.testResult }}</span>
                 </ion-item>
             </ion-col>
             <ion-col class="action_buttons">
-                <ion-label style="cursor: pointer;"><span v-html="iconsContent.edit"
+                <ion-label style="cursor: pointer;" @click="editTest(item.test)"><span v-html="iconsContent.edit"
                         class="modify_buttons"></span></ion-label>
-                <ion-label style="cursor: pointer;"><span v-html="iconsContent.delete"
+                <ion-label style="cursor: pointer;" @click="openDeletePopover($event, item.test)"><span v-html="iconsContent.delete"
                         class="modify_buttons"></span></ion-label>
             </ion-col>
-
         </ion-row>
     </span>
 
     <ion-row v-if="search_item">
         <ion-col>
            <BasicInputField 
+                :inputHeader="'Test'"
                 :icon ="iconsContent.search"
                 :inputValue="searchText"
                 @update:inputValue="searchInput"
@@ -32,27 +32,27 @@
         </ion-col>
         <ion-col>
             <BasicInputField 
-                :inputValue="addTest"
-                @update:inputValue="value => addTest = value.target.value"
+                :inputHeader = "'Result'"
+                :inputValue="testResult"
+                @update:inputValue="value => testResult = value.target.value"
             />
         </ion-col>
-        <ion-col class="action_buttons">
-            <span style="cursor: pointer;" @click="saveData()">+ Save</span>
+        <ion-col class="action_buttons" style="top:25px">
+            <span style="cursor: pointer;" @click="savePreperations()">+ Save</span>
         </ion-col>
     </ion-row>
 
     <ion-row v-if="addItemButton">
-        <span class="add_item" style="cursor: pointer;" @click="addData()"> + Add new test </span>
+        <span class="add_item" style="cursor: pointer;" @click="displayInputFields()"> + Add new test </span>
     </ion-row>
 
     <SelectionPopover 
-        :testData="testData"  
+        :content="testData"  
         :popoverOpen="popoverOpen" 
         @closePopoover="value => popoverOpen = value" 
         :event="event" 
-        :key="componetKey"
         :title="'Choose the investigation:'"
-        @setName="value => searchText = value"
+        @setName="setTest"
     />
 </template>
   
@@ -65,18 +65,19 @@ import {
     IonTitle,
     IonToolbar,
     IonMenu,
-    menuController,
     IonInput,
     IonPopover
 } from '@ionic/vue';
 import { defineComponent, ref } from 'vue';
 import { checkmark, pulseOutline } from 'ionicons/icons';
-import { icons } from '@/utils/svg.ts';
-import { PatientDiagnosisService } from "@/services/patient_diagnosis_service"
+import { icons } from '@/utils/svg';
 import { OrderService } from "@/services/order_service"
 import DashBox from "@/components/DashBox.vue"
 import SelectionPopover from "@/components/SelectionPopover.vue"
 import BasicInputField from "@/components/BasicInputField.vue"
+import { useInvestigationStore } from '@/stores/InvestigationStore'
+import { mapState } from 'pinia';
+import { toastWarning,popoverConfirmation } from '@/utils/Alerts';
 
 export default defineComponent({
     name: 'Menu',
@@ -102,34 +103,56 @@ export default defineComponent({
             display_item: false,
             addItemButton: true,
             searchText: '' as any,
-            addTest: '' as any,
-            data: [] as any,
+            testResult: '' as any,
+            test: '' as any,
             testData: [] as any,
             popoverOpen: false,
             event: '' as any,
-            componetKey:0
         };
     },
     setup() {
         return { checkmark, pulseOutline };
     },
+    computed: {
+        ...mapState(useInvestigationStore, ["investigations"]),
+    },
+    watch:{
+        investigations: {
+            handler(){
+                this.setDashedBox()
+            },
+            deep: true
+        }
+    },
+    mounted() {
+        this.setDashedBox()
+    },
     methods: {
-        navigationMenu(url: any) {
-            menuController.close()
-            this.$router.push(url);
-        },
-        addData() {
-            this.addTest = ""
+        displayInputFields() {
+            this.testResult = ""
             this.searchText = ""
             this.no_item = false
             this.addItemButton = false
             this.search_item = true
         },
-        async saveData() {
+        async savePreperations() {
             this.search_item = false
             this.display_item = true
             this.addItemButton = true
-            this.data.push([this.searchText, this.addTest])
+            if (this.searchText == this.test) {
+                this.investigations.push({
+                    "test": this.test,
+                    "testResult": this.testResult
+                })
+                this.temporarySave(this.investigations)
+            } else {
+                toastWarning('Please selecte test from the list')
+            }
+            
+        },
+        temporarySave(investigations: any) {
+            const investigationStore = useInvestigationStore()
+            investigationStore.setInvestigations(investigations)
         },
         async searchInput(event: any) {
             this.searchText = event.target.value
@@ -143,7 +166,37 @@ export default defineComponent({
         openPopover(e: any) {
             this.event = e;
             this.popoverOpen = true;
-            this.componetKey++;
+        },
+        setTest(value: any) {
+            this.test = value
+            this.searchText = value
+        },
+        async openDeletePopover(e: Event,test: any) {
+            const deleteConfirmed = await popoverConfirmation("Do you want to delete it?", e)
+            if (deleteConfirmed) {
+                this.deleteTest(test)
+            }
+        },
+        deleteTest(test: any) {
+            this.temporarySave(this.investigations.filter((item: any) => item.test !== test))
+        },
+        editTest(test: any) {
+            const testEdit = this.investigations.filter((item: any) => item.test === test);
+            this.deleteTest(test)
+
+            this.testResult = testEdit[0].testResult
+            this.searchText = testEdit[0].test
+            this.test = testEdit[0].test
+            this.addItemButton = false
+            this.search_item = true
+        },
+        setDashedBox(){
+            if (this.investigations.length > 0) {
+                this.display_item = true
+                this.no_item = false
+            }else{
+                this.no_item = true
+            }
         }
     }
 });
