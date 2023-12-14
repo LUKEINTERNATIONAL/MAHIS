@@ -36,7 +36,7 @@
         </ion-item>
         <div style="margin-left: 30px; margin-bottom: 14px;">
 
-            <dynamic-list :selectedMedicalDrugsList="selectedMedicalDrugsList" @edit-item="editItemAtIndex"/>
+            <dynamic-list :_selectedMedicalDrugsList="selectedMedicalDrugsList" @edit-item="editItemAtIndex" :key="componentKey"/>
 
             <ion-row v-if="!addItemButton" style="margin-bottom: 20px;">
                 <ion-col>
@@ -200,17 +200,18 @@
         prescPopoverOpen: false,
         datetime: ref(),
         event: null,
+        componentKey: 0,
         prescEvent: null,
         selectedMedicalDrugsList: [
             {
-                drugName: 'Metformin Extentend',
+                drugName: 'Metformin67 Extentend',
                 dose: '750mg',
                 frequency: 'twice',
                 duration: '30days',
                 prescription: '2023-09-23'
             },
             {
-                drugName: 'Metformin Extentend',
+                drugName: 'Metformin56 Extentend',
                 dose: '750mg',
                 frequency: 'twice',
                 duration: '30days',
@@ -303,6 +304,8 @@
             this.frequency = ''
             this.duration = ''
             this.prescription = ''
+
+            this.componentKey++
         },
         async FindDrugName(text: any) {
             const searchText = text.target.value;
@@ -341,6 +344,7 @@
             this.duration = dataItem.duration
             this.prescription = dataItem.prescription
             this.addItemButton = !this.addItemButton
+            this.componentKey++
         },
         getDate(ev: any) {
             const inputDate = new Date(ev.detail.value)

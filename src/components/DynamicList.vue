@@ -34,10 +34,10 @@ export default defineComponent({
     data() {
     return {
         iconsContent: icons,
-        localMedicalDrugsList: [...this.$props.selectedMedicalDrugsList],
+        localMedicalDrugsList: [...this.$props._selectedMedicalDrugsList],
     }},
     props: {
-        selectedMedicalDrugsList: {
+        _selectedMedicalDrugsList: {
             type: Array,
             default: []
         },
