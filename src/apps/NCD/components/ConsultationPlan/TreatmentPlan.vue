@@ -127,8 +127,8 @@
             <dynamic-button  v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" :Fn="addData">
             </dynamic-button>
             <ion-row>
-                <ion-button class="addMedicalTpBtn">Send to pharmacy</ion-button>
-                <ion-button class="addMedicalTpBtn" style="margin-left: 4%;">Send to dispensation</ion-button>
+                <dynamic-button class="addMedicalTpBtn" :name="btnName2"/>
+                <dynamic-button class="addMedicalTpBtn" :name="btnName3" style="margin-left: 4%;"/>
             </ion-row>
         </div>
         <div class="checkLbltp">
@@ -250,7 +250,9 @@
           duration: '' as any,
           prescription: '' as any,
           showPopoverOpenForFrequency: false,
-          btnName1: 'Add new medication', 
+          btnName1: 'Add new medication',
+          btnName2: 'Send to pharmacy',
+          btnName3: 'Send to dispensation',
           btnFill: 'clear',
     };
   },
