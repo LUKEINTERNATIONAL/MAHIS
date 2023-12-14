@@ -137,7 +137,7 @@
                 Add new medication
                 <ion-icon slot="start" style="font-size: x-large;" :icon="addOutline"></ion-icon>
             </ion-button> -->
-            <dynamic-button :name="btnName1" :fill="btnFill" :icon="addOutline" :Fn="addData">
+            <dynamic-button  v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" :Fn="addData">
             </dynamic-button>
             <ion-row>
                 <ion-button class="addMedicalTpBtn">Send to pharmacy</ion-button>
