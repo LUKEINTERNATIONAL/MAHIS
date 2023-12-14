@@ -13,15 +13,16 @@
 
         <ion-col class="action_buttons">
             <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end; flex: auto;" @click="editItemAtIndex(index)"><span v-html="iconsContent.edit" class="modify_buttons"></span></ion-label>
-            <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end;" @click="removeItemAtIndex(index)"><span v-html="iconsContent.delete" class="modify_buttons"></span></ion-label>
+            <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end;" @click="removeItemAtIndex(index, $event)"><span v-html="iconsContent.delete" class="modify_buttons"></span></ion-label>
         </ion-col>
 
     </ion-item>
 </template>
 
 <script lang="ts">
-import { IonItem } from '@ionic/vue'
+import { IonItem, IonCol, IonLabel } from '@ionic/vue'
 import { defineComponent } from 'vue'
+import { createModal,popoverConfirmation,alertConfirmation } from '@/utils/Alerts'
 import { icons } from '@/utils/svg.ts';
 export default defineComponent({
     created() {
@@ -29,7 +30,9 @@ export default defineComponent({
     },
     components:{
         // IonContent,
-        IonItem
+        IonItem,
+        IonCol,
+        IonLabel
     },
     data() {
     return {
@@ -78,8 +81,9 @@ export default defineComponent({
         asignSpanLblID(num: any) {
             return num + '_spanlbl' as string;
         },
-        removeItemAtIndex(index: any) {
-            this.localMedicalDrugsList.splice(index, 1)
+        removeItemAtIndex(index: any, e: Event) {
+            popoverConfirmation("Do you want to delete it?",e as any)
+            // this.localMedicalDrugsList.splice(index, 1)
         },
         editItemAtIndex(index: any) {
             this.$emit('edit-item', index)
