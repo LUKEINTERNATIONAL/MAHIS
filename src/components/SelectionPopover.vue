@@ -5,7 +5,7 @@
             {{ title }}
         </div>
         <ion-content class="search_card">
-            <ion-row class="search_result" v-for="(item, index) in testData" :key="index">
+            <ion-row class="search_result" v-for="(item, index) in content" :key="index">
                 <ion-col style="cursor: pointer;" @click="setName(item.name)" >{{ item.name }} </ion-col>
                 <ion-col style="max-width: 30px;"><ion-icon :icon="checkmark" class="checkmark"></ion-icon> </ion-col>
             </ion-row>
@@ -27,7 +27,7 @@ export default defineComponent({
         };
     },
     props: {
-        testData: {
+        content: {
             type: Object,
             default: {}
         },

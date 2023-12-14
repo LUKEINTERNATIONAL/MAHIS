@@ -241,7 +241,6 @@
       methods:{
         openModal() {
             this.isModalOpen = true;
-            console.log("fdsfsdfsd")
         },
         dismiss(){
             modalController.dismiss()
