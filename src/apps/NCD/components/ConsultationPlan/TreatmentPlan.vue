@@ -36,7 +36,7 @@
         </ion-item>
         <div style="margin-left: 30px; margin-bottom: 14px;">
 
-            <dynamic-list :_selectedMedicalDrugsList="selectedMedicalDrugsList" @edit-item="editItemAtIndex" :key="componentKey"/>
+            <dynamic-list :_selectedMedicalDrugsList="selectedMedicalDrugsList" @edit-item="editItemAtIndex" @remove-item="removeItemAtIndex" :key="componentKey"/>
 
             <ion-row v-if="!addItemButton" style="margin-bottom: 20px;">
                 <ion-col>
@@ -353,6 +353,10 @@
             const day = inputDate.getDate()
             const formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
             this.prescription = formattedDate
+        },
+        removeItemAtIndex(index: any) {
+            this.selectedMedicalDrugsList.splice(index, 1)
+            this.componentKey++
         }
     }
     });

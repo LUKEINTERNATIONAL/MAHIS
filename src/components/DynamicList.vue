@@ -3,12 +3,12 @@
         class="ionLbltp" v-for="(item, index) in localMedicalDrugsList" :key="index"
         @mousemove="highlightItem(index)" @mouseout="undoHighlightItem(index)"
     >
-        <ion-col style="display: contents;">
-            <ion-label :id="asignLblID(index)" class="drgNmTrpln" style="display: contents; color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.drugName }}</ion-label>
+        <ion-col class="col-st1">
+            <ion-label :id="asignLblID(index)" class="truncate-text" style="color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.drugName }}</ion-label>
         </ion-col>
 
-        <ion-col>
-            <ion-label style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.dose }} / {{ item.frequency }} / daily / {{ item.duration }} / until {{ item.prescription }}</ion-label>
+        <ion-col class="col-st2">
+            <ion-label class="truncate-text" style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.dose }} / {{ item.frequency }} / daily / {{ item.duration }} / until {{ item.prescription }}</ion-label>
         </ion-col>
 
         <ion-col class="action_buttons">
@@ -81,9 +81,11 @@ export default defineComponent({
         asignSpanLblID(num: any) {
             return num + '_spanlbl' as string;
         },
-        removeItemAtIndex(index: any, e: Event) {
-            popoverConfirmation("Do you want to delete it?",e as any)
-            // this.localMedicalDrugsList.splice(index, 1)
+        async removeItemAtIndex(index: any, e: Event) {
+            const deleteConfirmed = await popoverConfirmation("Do you want to delete it?",e as any)
+            if (deleteConfirmed) {
+                this.$emit('remove-item', index)
+            }
         },
         editItemAtIndex(index: any) {
             this.$emit('edit-item', index)
@@ -107,5 +109,16 @@ ion-item.ionLbltp {
 }
 .modify_buttons{
     padding-left: 20px;
+}
+.truncate-text {
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+}
+.col-st1 {
+    max-width: 23%;
+}
+.col-st2 {
+    max-width: 58%;
 }
 </style>
