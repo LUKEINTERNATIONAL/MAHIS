@@ -132,13 +132,13 @@
             </ion-row>
         </div>
         <div class="checkLbltp">
-            <ion-checkbox label-placement="end" style="font-size: 16px; font-weight: 600; line-height: 24px; margin: 15px; marg">Use of traditional medicine</ion-checkbox>
+            <ion-checkbox  @ionChange="useOfTraditional" :checked="isUseOfTraditionalMedicineSelected" label-placement="end" style="font-size: 16px; font-weight: 600; line-height: 24px; margin: 15px; marg">Use of traditional medicine</ion-checkbox>
         </div>
         <div style="margin-top: 14px; margin-left: 10px;">
             <ion-label class="tpStndCls">Non-pharmalogical therapy and other notes</ion-label>
             <ion-item class="input_item" style="min-height: 120px; margin-top: 14px;">
                 <ion-label><span v-html="iconsContent.editPen"></span></ion-label>
-                <ion-textarea  style="min-height: 120px;" class="inputTpln" :auto-grow="true"  fill="outline"></ion-textarea >
+                <ion-textarea @ionInput="validateNotes" v-model="nonPharmalogicalTherapyAndOtherNotes"  style="min-height: 120px;" class="inputTpln" :auto-grow="true"  fill="outline"></ion-textarea >
             </ion-item>
 
         </div>
@@ -158,7 +158,8 @@
             IonButton,
             IonInput,
             IonDatetime,
-            IonLabel
+            IonLabel,
+            IonTextarea
         } from '@ionic/vue';
     import { defineComponent } from 'vue';
     import { checkmark,pulseOutline,addOutline,closeOutline, checkmarkOutline, filter, chevronDownOutline, chevronUpOutline } from 'ionicons/icons';
@@ -169,6 +170,8 @@
     import { ConceptName } from '@/interfaces/conceptName';
     import DynamicButton from "@/components/DynamicButton.vue"
     import DynamicList from '@/components/DynamicList.vue';
+    import { mapState } from 'pinia';
+    import { useTreatmentPlanStore } from '@/stores/TreatmentPlanStore'
 
     export default defineComponent({
     name: 'Menu',
@@ -185,7 +188,8 @@
     IonDatetime,
     IonLabel,
     DynamicButton,
-    DynamicList
+    DynamicList,
+    IonTextarea
 },
         data() {
     return {
@@ -202,49 +206,7 @@
         event: null,
         componentKey: 0,
         prescEvent: null,
-        selectedMedicalDrugsList: [
-            {
-                drugName: 'Metformin67 Extentend',
-                dose: '750mg',
-                frequency: 'twice',
-                duration: '30days',
-                prescription: '2023-09-23'
-            },
-            {
-                drugName: 'Metformin56 Extentend',
-                dose: '750mg',
-                frequency: 'twice',
-                duration: '30days',
-                prescription: '2023-09-29'
-            }
-        ] as any,
         diagnosisData: [] as any,
-        medicalAllergiesList: [
-            {
-                name: 'Eye too short',
-                selected: false,
-            },
-            {
-                name: 'Glibenclamide 2',
-                selected: false,
-            },
-            {
-                name: 'Gliben',
-                selected: false,
-            },
-            {
-                name:  'Metformin',
-                selected: false,
-            },
-            {
-                name: 'Short acting insulin',
-                selected: false,
-            },
-            {
-                name: 'Glibenclamide',
-                selected: false,
-            }
-          ],
           drugName: '' as any,
           dose: '' as any,
           frequency: '' as any,
@@ -260,6 +222,17 @@
     setup() {
       return { checkmark, pulseOutline, closeOutline, addOutline, checkmarkOutline, chevronDownOutline,chevronUpOutline };
     },
+    watch: {
+        // 
+    },
+    computed: {
+        ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList",
+                        "medicalAllergiesList",
+                        "nonPharmalogicalTherapyAndOtherNotes",
+                        "isUseOfTraditionalMedicineSelected"
+                        ]
+                    ),
+    },
     methods:{
         navigationMenu(url: any){
             menuController.close()
@@ -267,6 +240,7 @@
         },
         selectAl(item: any) {
             item.selected = !item.selected
+            this.saveStateValuesState()
         },
         selectFrequency(index: any) {
             this.drug_frequencies.forEach(item => {
@@ -306,6 +280,7 @@
             this.prescription = ''
 
             this.componentKey++
+            this.saveStateValuesState()
         },
         async FindDrugName(text: any) {
             const searchText = text.target.value;
@@ -345,6 +320,7 @@
             this.prescription = dataItem.prescription
             this.addItemButton = !this.addItemButton
             this.componentKey++
+            this.saveStateValuesState()
         },
         getDate(ev: any) {
             const inputDate = new Date(ev.detail.value)
@@ -357,6 +333,27 @@
         removeItemAtIndex(index: any) {
             this.selectedMedicalDrugsList.splice(index, 1)
             this.componentKey++
+            this.saveStateValuesState()
+        },
+        validateNotes(ev: any) {
+            const value = ev.target.value
+            this.nonPharmalogicalTherapyAndOtherNotes = value as string
+            const treatmentPlanStore = useTreatmentPlanStore()
+            treatmentPlanStore.setNonPharmalogicalTherapyAndOtherNotes(value as string)
+            this.saveStateValuesState()
+        },
+        saveStateValuesState() {
+            const treatmentPlanStore = useTreatmentPlanStore()
+            treatmentPlanStore.setSelectedMedicalDrugsList(this.selectedMedicalDrugsList)
+            treatmentPlanStore.setMedicalAllergiesList(this.medicalAllergiesList)
+            treatmentPlanStore.setIsUseOfTraditionalMedicineSelected(this.isUseOfTraditionalMedicineSelected)
+            treatmentPlanStore.setNonPharmalogicalTherapyAndOtherNotes(this.nonPharmalogicalTherapyAndOtherNotes)
+        },
+        useOfTraditional(ev: any) {
+            const checked = ev.detail.checked
+            const treatmentPlanStore = useTreatmentPlanStore()
+            treatmentPlanStore.setIsUseOfTraditionalMedicineSelected(checked as boolean)
+            this.saveStateValuesState()
         }
     }
     });
