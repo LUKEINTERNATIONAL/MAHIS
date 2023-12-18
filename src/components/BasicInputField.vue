@@ -12,6 +12,9 @@
             >
         </ion-input>
         <ion-label v-if="unit">{{ unit }}</ion-label>
+        <ion-label style="border-left: 1px solid #E6E6E6; padding-left: 10px;">
+            <span v-if="iconRight" v-html="iconRight" class=""></span>
+        </ion-label>
     </ion-item>
 </template>
 
@@ -42,6 +45,10 @@ export default {
             default: "",
         },
         inputHeader: {
+            type: String,
+            default: "",
+        },
+        iconRight: {
             type: String,
             default: "",
         },

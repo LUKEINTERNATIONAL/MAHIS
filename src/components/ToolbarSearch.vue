@@ -27,6 +27,11 @@
           <ion-col style="max-width: 70px;">{{ item.person.gender }}</ion-col>
           <ion-col style="max-width: 30px;"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
         </ion-row>
+        <ion-row>
+          <ion-col size="4">
+            <DynButton :icon="add" :name="'Add Patient'" :fill="'clear'" @click="openCheckPaitentNationalIDModal"/>
+          </ion-col>
+        </ion-row>
       </ion-content>
   </ion-popover>
   </template>
@@ -51,9 +56,12 @@
   } from '@ionic/vue';
   import { defineComponent } from 'vue';
   import { Patientservice } from "@/services/patient_service"
-  import { checkmark } from 'ionicons/icons';
+  import { checkmark, add } from 'ionicons/icons';
   import { useDemographicsStore } from '@/stores/DemographicStore'
   import { useVitalsStore } from '@/stores/VitalsStore'
+  import DynButton from '@/components/DynamicButton.vue'
+  import { createModal } from '@/utils/Alerts'
+  import CheckPatientNationalID from '@/components/CheckPatientNationalID.vue';
   
   export default defineComponent({
     name: "Home",
@@ -66,10 +74,11 @@
         IonTitle,
         IonToolbar,
         IonIcon,
-        IonPopover
+        IonPopover,
+        DynButton
       },
       setup() {
-      return { checkmark };
+      return { checkmark,add };
     },
     data() {
       return {
@@ -129,6 +138,9 @@
       openPopover(e: any) {
         this.event = e;
         this.popoverOpen = true;
+      },
+      openCheckPaitentNationalIDModal(){
+        createModal(CheckPatientNationalID,{'class':'nationalIDModal'})
       },
     onDismiss() {
       console.log('Popover dismissed');

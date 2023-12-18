@@ -1,9 +1,10 @@
 <template>
     <ion-button
         :fill="$props.fill"
+        :color="color"
         @click="$props.Fn">
         <span>{{ $props.name }}</span>
-        <ion-icon v-if="icon" slot="start" style="font-size: x-large;" :icon="$props.icon"></ion-icon>
+        <ion-icon v-if="icon" :slot="iconSlot" style="font-size: x-large;" :icon="$props.icon"></ion-icon>
 
     </ion-button>
 </template>
@@ -30,7 +31,16 @@ export default defineComponent({
         Fn: {
             type: Function,
             default: ()=>{}
+        },
+        iconSlot: {
+            type: String as any,
+            default:'start'
+        },
+        color: {
+            type: String,
+            default:'primary'
         }
+
     },
     components: {
         IonButton,
