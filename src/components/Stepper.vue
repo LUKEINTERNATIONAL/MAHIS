@@ -1,12 +1,48 @@
 <template>
-    <ion-page>
-      <Toolbar />
-      <ion-content :fullscreen="true">
-        <DemographicBar />
-        <Stepper :wizardData="wizardData" :StepperData="StepperData"/>
-      </ion-content>
-    </ion-page>
-  </template>
+    <ion-row>
+        <ion-col size="1" size-lg="1"></ion-col>
+        <ion-col size="3" size-lg="3">
+            <ion-card style="max-width: 300px; background-color: #fff;">
+                <div class="wizard_title"><strong > The consultation plan</strong></div>
+                <ion-card-content>
+                    <div id="wizard_verticle" class="form_wizard wizard_verticle">
+                        <ul class="list-unstyled wizard_steps anchor">
+                            <li v-for="(item, index) in wizardData" :key="index" :class="item.last_step">
+                                <a  class="done" isdone="1" rel="1">
+                                    <span :class="item.class">
+                                        <ion-icon v-if="item.checked" :icon="checkmark" class="checked_step"></ion-icon>  
+                                        <span v-if="!item.checked" class="">{{ item.number }} </span>
+                                        <span class="wizard_text">{{ item.title }}</span> 
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </ion-card-content>
+            </ion-card>
+        </ion-col>
+    
+        <ion-col size="7" size-lg="7">
+            <div class="back_profile" @click="openModal()">
+                <ion-icon style="font-size: 20px;" :icon="chevronBackOutline"> </ion-icon> 
+                <span style="cursor: pointer;"> Back to profile</span>
+            </div>
+            
+            <ion-accordion-group @ionChange="accordionGroupChange($event)">
+                <ion-accordion v-for="(item, index) in StepperData" :key="index"  :value="item.value">
+                    <ion-item slot="header">
+                        <ion-label>{{ item.title }}</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content">
+                        <component :is="item.componet" > </component>
+                    </div>
+                </ion-accordion>
+            </ion-accordion-group>
+            <hr style="background: rgba(0, 0, 0, 0.13);">
+            <ion-button class="primary_btn" @click="nav('patientProfile')">Finish and Save</ion-button>
+        </ion-col>
+    </ion-row>
+</template>
   
   <script lang="ts">
   import { 
@@ -29,7 +65,7 @@
     IonModal,
     modalController,
     AccordionGroupCustomEvent } from '@ionic/vue';
-  import { defineComponent } from 'vue';
+  import { defineComponent,defineAsyncComponent } from 'vue';
   import Toolbar from '@/components/Toolbar.vue'
   import ToolbarSearch from '@/components/ToolbarSearch.vue'
   import DemographicBar from '@/components/DemographicBar.vue'
@@ -46,9 +82,7 @@
   import { icons } from '@/utils/svg';
   import { toastWarning, alertConfirmation } from '@/utils/Alerts';
   import { arePropertiesNotEmpty } from "@/utils/Objects";
-  import { useVitalsStore } from '@/stores/VitalsStore'
-  import { mapState } from 'pinia';
-  import Stepper from '@/components/Stepper.vue'
+
   export default defineComponent({
     name: "Home",
     components:{
@@ -79,114 +113,22 @@
         Investigations,
         TreatmentPlan,
         IonModal,
-        Stepper
     },
     data(){
         return {
-            wizardData: [
-                {
-                    'title': 'Vitals and other measures',
-                    'class': 'common_step',
-                    'checked':false,
-                    'disabled':false,
-                    'number': 1,
-                    'last_step': ''
-                },
-                {
-                    'title': 'Investigations',
-                    'class': 'common_step',
-                    'checked':'',
-                    'icon': false,
-                    'disabled':false,
-                    'number': 2,
-                    'last_step': ''
-                },
-                {
-                    'title': 'Diagnosis',
-                    'class': 'common_step',
-                    'checked':'',
-                    'icon': false,
-                    'disabled':false,
-                    'number': 3,
-                    'last_step': ''
-                },  
-                {
-                    'title': 'Complications',
-                    'class': 'common_step',
-                    'checked':'',
-                    'icon': false,
-                    'disabled':false,
-                    'number': 4,
-                    'last_step': ''
-                },
-                {
-                    'title': 'Treatment',
-                    'class': 'common_step',
-                    'checked':'',
-                    'icon': false,
-                    'disabled':false,
-                    'number': 5,
-                    'last_step': ''
-                },
-                {
-                    'title': 'Disposition',
-                    'class': 'common_step',
-                    'checked':'',
-                    'icon': false,
-                    'disabled':false,
-                    'number': 6,
-                    'last_step': 'last_step'
-                },
-            ],
-            StepperData:[
-                {
-                    'title': 'Vitals and other measures',
-                    'componet': 'Vitals',
-                    'value': '1'
-                },
-                {
-                    'title': 'Investigations',
-                    'componet': 'Investigations',
-                    'value': '2',
-                },
-                {
-                    'title': 'Diagnosis',
-                    'componet': 'Diagnosis',
-                    'value': '3',
-                },  
-                {
-                    'title': 'Complications',
-                    'componet': 'Complications',
-                    'value': '4',
-                },
-                {
-                    'title': 'Treatment plan',
-                    'componet': 'TreatmentPlan',
-                    'value': '5',
-                },
-                {
-                    'title': 'Disposition',
-                    'componet': 'Disposition',
-                    'value': '6',
-                },
-            ],
-        isOpen: false,
-        iconsContent: icons,
+            isOpen: false,
+            iconsContent: icons,
         };
     },
-    computed:{
-        ...mapState(useVitalsStore,["vitals"]),
-    },
-    mounted(){
-        this.markWizard() 
-    },
-    watch: {
-        vitals: {
-            handler(newVitals, oldVitals){
-                this.markWizard()  
-            },
-            deep: true
-        }
+    props:{
+        wizardData: {
+            type: Array,
+            default: []
+        },
+        StepperData: {
+            type: Array,
+            default: []
+        },
     },
     setup() {
         return { chevronBackOutline,checkmark };
@@ -195,22 +137,13 @@
       methods:{
         accordionGroupChange(ev: AccordionGroupCustomEvent){
             if(ev.target.className == "md accordion-group-expand-compact"){
-                this.wizardData.forEach(item => {
+                this.wizardData.forEach((item: any) => {
                 item.checked = false;
                 item.class = "common_step"
                 if (item.number == ev.detail.value) {
                     item.class = 'open_step common_step';
                 }
             });
-            }
-        },
-        markWizard(){
-            if(arePropertiesNotEmpty(this.vitals,['height', 'weight', 'systolic', 'diastolic'])){
-                this.wizardData[0].checked = true; 
-                this.wizardData[0].class = 'open_step common_step'               
-            }else{
-                this.wizardData[0].checked = false; 
-                this.wizardData[0].class = 'open_step common_step'  
             }
         },
         nav(url: any){
