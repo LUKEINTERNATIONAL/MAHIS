@@ -62,6 +62,7 @@
   import DynButton from '@/components/DynamicButton.vue'
   import { createModal } from '@/utils/Alerts'
   import CheckPatientNationalID from '@/components/CheckPatientNationalID.vue';
+  import { resetPatientData } from '@/services/reset_data'
   
   export default defineComponent({
     name: "Home",
@@ -130,8 +131,7 @@
           'category': '',
           'gender': item.person.gender
         })
-        const vitals = useVitalsStore()
-        vitals.$reset()
+        resetPatientData()
         this.$router.push(url);
       },
       

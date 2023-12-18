@@ -35,21 +35,8 @@
             <ion-label>List of medications</ion-label>
         </ion-item>
         <div style="margin-left: 30px; margin-bottom: 14px;">
-            <ion-item
-                class="ionLbltp" v-for="(item, index) in selectedMedicalDrugsList" :key="index"
-                @mousemove="highlightItem(index)" @mouseout="undoHighlightItem(index)"
-                >
-                <ion-col style="display: contents;">
-                    <ion-label :id="asignLblID(index)" class="drgNmTrpln" style="display: contents; color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.drugName }}</ion-label>
-                </ion-col>
-                <ion-col>
-                    <ion-label style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.dose }} / {{ item.frequency }} / daily / {{ item.duration }} / until {{ item.prescription }}</ion-label>
-                </ion-col>
-                <ion-col class="action_buttons">
-                    <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end; flex: auto;" @click="editItemAtIndex(index)"><span v-html="iconsContent.edit" class="modify_buttons"></span></ion-label>
-                    <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end;" @click="removeItemAtIndex(index)"><span v-html="iconsContent.delete" class="modify_buttons"></span></ion-label>
-                </ion-col>
-            </ion-item>
+
+            <dynamic-list :_selectedMedicalDrugsList="selectedMedicalDrugsList" @edit-item="editItemAtIndex" @remove-item="removeItemAtIndex" :key="componentKey"/>
 
             <ion-row v-if="!addItemButton" style="margin-bottom: 20px;">
                 <ion-col>
@@ -140,18 +127,18 @@
             <dynamic-button  v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" :Fn="addData">
             </dynamic-button>
             <ion-row>
-                <ion-button class="addMedicalTpBtn">Send to pharmacy</ion-button>
-                <ion-button class="addMedicalTpBtn" style="margin-left: 4%;">Send to dispensation</ion-button>
+                <dynamic-button class="addMedicalTpBtn" :name="btnName2"/>
+                <dynamic-button class="addMedicalTpBtn" :name="btnName3" style="margin-left: 4%;"/>
             </ion-row>
         </div>
         <div class="checkLbltp">
-            <ion-checkbox label-placement="end" style="font-size: 16px; font-weight: 600; line-height: 24px; margin: 15px; marg">Use of traditional medicine</ion-checkbox>
+            <ion-checkbox  @ionChange="useOfTraditional" :checked="isUseOfTraditionalMedicineSelected" label-placement="end" style="font-size: 16px; font-weight: 600; line-height: 24px; margin: 15px; marg">Use of traditional medicine</ion-checkbox>
         </div>
         <div style="margin-top: 14px; margin-left: 10px;">
             <ion-label class="tpStndCls">Non-pharmalogical therapy and other notes</ion-label>
             <ion-item class="input_item" style="min-height: 120px; margin-top: 14px;">
                 <ion-label><span v-html="iconsContent.editPen"></span></ion-label>
-                <ion-textarea  style="min-height: 120px;" class="inputTpln" :auto-grow="true"  fill="outline"></ion-textarea >
+                <ion-textarea @ionInput="validateNotes" v-model="nonPharmalogicalTherapyAndOtherNotes"  style="min-height: 120px;" class="inputTpln" :auto-grow="true"  fill="outline"></ion-textarea >
             </ion-item>
 
         </div>
@@ -171,7 +158,8 @@
             IonButton,
             IonInput,
             IonDatetime,
-            IonLabel
+            IonLabel,
+            IonTextarea
         } from '@ionic/vue';
     import { defineComponent } from 'vue';
     import { checkmark,pulseOutline,addOutline,closeOutline, checkmarkOutline, filter, chevronDownOutline, chevronUpOutline } from 'ionicons/icons';
@@ -181,6 +169,9 @@
     import { DrugService} from "@/services/drug_service"
     import { ConceptName } from '@/interfaces/conceptName';
     import DynamicButton from "@/components/DynamicButton.vue"
+    import DynamicList from '@/components/DynamicList.vue';
+    import { mapState } from 'pinia';
+    import { useTreatmentPlanStore } from '@/stores/TreatmentPlanStore'
 
     export default defineComponent({
     name: 'Menu',
@@ -197,7 +188,8 @@
     IonDatetime,
     IonLabel,
     DynamicButton,
-    DynamicButton
+    DynamicList,
+    IonTextarea
 },
         data() {
     return {
@@ -212,62 +204,34 @@
         prescPopoverOpen: false,
         datetime: ref(),
         event: null,
+        componentKey: 0,
         prescEvent: null,
-        selectedMedicalDrugsList: [
-            {
-                drugName: 'Metformin Extentend',
-                dose: '750mg',
-                frequency: 'twice',
-                duration: '30days',
-                prescription: '2023-09-23'
-            },
-            {
-                drugName: 'Metformin Extentend',
-                dose: '750mg',
-                frequency: 'twice',
-                duration: '30days',
-                prescription: '2023-09-29'
-            }
-        ] as any,
         diagnosisData: [] as any,
-        medicalAllergiesList: [
-            {
-                name: 'Eye too short',
-                selected: false,
-            },
-            {
-                name: 'Glibenclamide 2',
-                selected: false,
-            },
-            {
-                name: 'Gliben',
-                selected: false,
-            },
-            {
-                name:  'Metformin',
-                selected: false,
-            },
-            {
-                name: 'Short acting insulin',
-                selected: false,
-            },
-            {
-                name: 'Glibenclamide',
-                selected: false,
-            }
-          ],
           drugName: '' as any,
           dose: '' as any,
           frequency: '' as any,
           duration: '' as any,
           prescription: '' as any,
           showPopoverOpenForFrequency: false,
-          btnName1: 'Add new medication', 
+          btnName1: 'Add new medication',
+          btnName2: 'Send to pharmacy',
+          btnName3: 'Send to dispensation',
           btnFill: 'clear',
     };
   },
     setup() {
       return { checkmark, pulseOutline, closeOutline, addOutline, checkmarkOutline, chevronDownOutline,chevronUpOutline };
+    },
+    watch: {
+        // 
+    },
+    computed: {
+        ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList",
+                        "medicalAllergiesList",
+                        "nonPharmalogicalTherapyAndOtherNotes",
+                        "isUseOfTraditionalMedicineSelected"
+                        ]
+                    ),
     },
     methods:{
         navigationMenu(url: any){
@@ -276,6 +240,7 @@
         },
         selectAl(item: any) {
             item.selected = !item.selected
+            this.saveStateValuesState()
         },
         selectFrequency(index: any) {
             this.drug_frequencies.forEach(item => {
@@ -313,6 +278,9 @@
             this.frequency = ''
             this.duration = ''
             this.prescription = ''
+
+            this.componentKey++
+            this.saveStateValuesState()
         },
         async FindDrugName(text: any) {
             const searchText = text.target.value;
@@ -342,41 +310,6 @@
         popoverOpenForFrequencyFn2() {
             this.showPopoverOpenForFrequency = true
         },
-        highlightItem(item: any) {
-            const el = document.getElementById(item+'_lbl')
-            if (el) {
-                el.style.color = '#006401' 
-            }
-            this.highlightActionBtns(item)
-        },
-        undoHighlightItem(item: any) {
-            const el = document.getElementById(item+'_lbl')
-            if (el) {
-                el.style.color = 'rgb(0,0,0)' 
-            }
-            this.undohighlightActionBtns(item)
-        },
-        highlightActionBtns(item: any) {
-            const elements = document.getElementsByClassName(item+'_spanlbl') as any
-            for (let i = 0; i < elements.length; i++) {
-                elements[i].style.display = 'block'
-            }
-        },
-        undohighlightActionBtns(item: any) {
-            const elements = document.getElementsByClassName(item+'_spanlbl') as any
-            for (let i = 0; i < elements.length; i++) {
-                elements[i].style.display = 'none'
-            }
-        },
-        asignLblID(num: any) {
-            return num + '_lbl' as string;
-        },
-        asignSpanLblID(num: any) {
-            return num + '_spanlbl' as string;
-        },
-        removeItemAtIndex(index: any) {
-            this.selectedMedicalDrugsList.splice(index, 1)
-        },
         editItemAtIndex(index: any) {
             const dataItem = this.selectedMedicalDrugsList[index]
             this.selectedMedicalDrugsList.splice(index, 1)
@@ -386,6 +319,8 @@
             this.duration = dataItem.duration
             this.prescription = dataItem.prescription
             this.addItemButton = !this.addItemButton
+            this.componentKey++
+            this.saveStateValuesState()
         },
         getDate(ev: any) {
             const inputDate = new Date(ev.detail.value)
@@ -394,6 +329,31 @@
             const day = inputDate.getDate()
             const formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
             this.prescription = formattedDate
+        },
+        removeItemAtIndex(index: any) {
+            this.selectedMedicalDrugsList.splice(index, 1)
+            this.componentKey++
+            this.saveStateValuesState()
+        },
+        validateNotes(ev: any) {
+            const value = ev.target.value
+            this.nonPharmalogicalTherapyAndOtherNotes = value as string
+            const treatmentPlanStore = useTreatmentPlanStore()
+            treatmentPlanStore.setNonPharmalogicalTherapyAndOtherNotes(value as string)
+            this.saveStateValuesState()
+        },
+        saveStateValuesState() {
+            const treatmentPlanStore = useTreatmentPlanStore()
+            treatmentPlanStore.setSelectedMedicalDrugsList(this.selectedMedicalDrugsList)
+            treatmentPlanStore.setMedicalAllergiesList(this.medicalAllergiesList)
+            treatmentPlanStore.setIsUseOfTraditionalMedicineSelected(this.isUseOfTraditionalMedicineSelected)
+            treatmentPlanStore.setNonPharmalogicalTherapyAndOtherNotes(this.nonPharmalogicalTherapyAndOtherNotes)
+        },
+        useOfTraditional(ev: any) {
+            const checked = ev.detail.checked
+            const treatmentPlanStore = useTreatmentPlanStore()
+            treatmentPlanStore.setIsUseOfTraditionalMedicineSelected(checked as boolean)
+            this.saveStateValuesState()
         }
     }
     });
@@ -436,10 +396,6 @@ ion-button.medicalAlBtn {
     --color: #B42318;
     text-transform: none;
 }
-ion-button.addMedicalAlBtn {
-    --color: #006401;
-    text-transform: none;
-}
 ion-button.addMedicalTpBtn {
     --background: #DDEEDD;
     --color: #006401;
@@ -466,11 +422,6 @@ ion-icon.icon-al {
   padding: 5px;
   border-radius: 3px;
 }
-.drgNmTrpln:hover {
-    background-color: #006401 !important;
-    color: #006401 !important;
-    cursor: pointer;
-}
 ion-popover.popover-al {
     --background: #fff;
 }
@@ -481,10 +432,7 @@ ion-list.list-al {
     --background: #fff;
     -ion-item-background: #fff;
 }
-ion-item.ionLbltp {
-        border-bottom: 2px dotted var(--ion-color-medium);
-        --inner-border-width:0;
-    }
+
 .checkLbltp {
     border-bottom: 2px dotted var(--ion-color-medium);
     --inner-border-width:0;
@@ -493,9 +441,6 @@ ion-item.ionLbltp {
     font-size: 16px;
     font-weight: 600;
     line-height: 24px;
-}
-.modify_buttons{
-    padding-left: 20px;
 }
 .action_buttons{
     color: var(--ion-color-primary);
