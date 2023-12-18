@@ -39,6 +39,7 @@
     border: 1px solid #B3B3B3;
     --border-width: 0 0 0 0;
     border-radius: 5px;
+    --background: #fff;
 }
 .input_item:focus{
     border: 1px solid var(--ion-color-primary);
@@ -313,3 +314,15 @@ ion-toast.custom-toast::part(container) {
  ion-button{
     text-transform: none;
  }
+ .nationalIDModal{
+    --width:50vw;
+    --border-radius: 16px;
+ }
+
+ ion-card{
+    background-color:#fff;
+    border-radius: 8px;
+ }
+ video{
+    border-radius: 16px;
+}

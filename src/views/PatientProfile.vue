@@ -41,6 +41,9 @@
                 <ion-card class="start_new_co" style=" margin-bottom: 20px;" @click="nav('consultationPlan')">
                     + Start new consultation
                 </ion-card>
+                <ion-card class="start_new_co" style=" margin-bottom: 20px;" @click="nav('patient')">
+                    + Start new consultation for ANC
+                </ion-card>
                 <ion-card style=" margin-bottom: 20px; background-color: #fff;">
                     <ion-accordion-group :value="['first']">
                         <ion-accordion value="first" style="background-color: #fff;" toggle-icon-slot="start">
@@ -246,6 +249,7 @@
             modalController.dismiss()
         },
         nav(url: any){
+            console.log("pppppppppp")
             this.$router.push(url);
         },
         covertGender(gender: any){

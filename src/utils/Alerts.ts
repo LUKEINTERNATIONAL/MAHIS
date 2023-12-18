@@ -98,11 +98,11 @@ export async function infoAlert(message: string, header="Information")
   alert.present() 
 }
 
-export async function createModal(modalComponet: any, options = {} as AlertConfirmationOtions) {
+export async function createModal(modalComponet: any, options = {} as any) {
   const modal = await modalController.create({
                 component: modalComponet,
                 backdropDismiss: false,
-                cssClass: "large-modal"
+                cssClass: options.class || "large-modal"
             });
             modal.present();
 }
