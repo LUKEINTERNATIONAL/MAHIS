@@ -25,16 +25,13 @@
                               <ion-col size="4" >Age</ion-col>
                               <ion-col >{{ formatBirthdate() }}</ion-col>
                           </ion-row>
-                          <ion-row>
+                          <ion-row>                              
                               <ion-col size="4">Allergies</ion-col>
                               <ion-col size="8" >
-                                <span class="allergies">Penicillin</span>
-                                <span class="allergies"> Sulfa drugs</span>
-                                <span class="allergies">Anticonvulsants</span>
-                                <span class="allergies">Aspirin</span>
-                                <span class="allergies">Ibuprofen</span>
-                                <span class="allergies">12+</span>
-                              </ion-col>
+                                <span  v-for="(item, index) in medicalAllergiesList" :key="index" >
+                                    <span class="allergies" v-if="item.selected">{{ item.name }}</span>
+                                </span>
+                              </ion-col> 
                           </ion-row>
                     </ion-card-content>
                 </ion-card>
@@ -191,6 +188,7 @@
 
 
   import { useDemographicsStore } from '@/stores/DemographicStore'
+  import { useTreatmentPlanStore } from '@/stores/TreatmentPlanStore'
   import { mapState } from 'pinia';
   import HisDate from "@/utils/Date";
 
@@ -233,6 +231,7 @@
     },
     computed:{
         ...mapState(useDemographicsStore,["demographics"]),
+        ...mapState(useTreatmentPlanStore,["medicalAllergiesList"]),
     },
     setup() {
         const modal = ref();

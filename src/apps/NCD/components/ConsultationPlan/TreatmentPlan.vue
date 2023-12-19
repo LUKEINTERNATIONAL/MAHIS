@@ -336,11 +336,9 @@
             this.saveStateValuesState()
         },
         validateNotes(ev: any) {
-            const value = ev.target.value
-            this.nonPharmalogicalTherapyAndOtherNotes = value as string
-            const treatmentPlanStore = useTreatmentPlanStore()
-            treatmentPlanStore.setNonPharmalogicalTherapyAndOtherNotes(value as string)
-            this.saveStateValuesState()
+            let value = ev.target.value
+            const textArry = []
+            this.refSetNonPharmalogicalTherapyAndOtherNotes(value)
         },
         saveStateValuesState() {
             const treatmentPlanStore = useTreatmentPlanStore()
@@ -354,7 +352,13 @@
             const treatmentPlanStore = useTreatmentPlanStore()
             treatmentPlanStore.setIsUseOfTraditionalMedicineSelected(checked as boolean)
             this.saveStateValuesState()
+        },
+        refSetNonPharmalogicalTherapyAndOtherNotes(value: string) {
+            const treatmentPlanStore = useTreatmentPlanStore()
+            treatmentPlanStore.setNonPharmalogicalTherapyAndOtherNotes(value as string)
+            this.saveStateValuesState()
         }
+        
     }
     });
 </script>
