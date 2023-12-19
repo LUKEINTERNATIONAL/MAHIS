@@ -9,6 +9,7 @@
             fill="outline" 
             :value="inputValue"
             :placeholder="placeholder"
+            :type = "inputType"
             >
         </ion-input>
         <ion-label v-if="unit">{{ unit }}</ion-label>
@@ -49,6 +50,10 @@ export default {
             default: "",
         },
         iconRight: {
+            type: String,
+            default: "",
+        },
+        inputType: {
             type: String,
             default: "",
         },
