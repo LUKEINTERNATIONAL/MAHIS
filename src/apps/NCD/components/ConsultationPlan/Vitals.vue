@@ -32,6 +32,14 @@
                     
                 </span>
             </ion-row>
+            <ion-row class="bmi" :style="'background-color:'+ BPIcolors[0]" v-if="BPIcolors && index == 1">
+                <span class="position_content bmi_results">
+                    <span v-html="BPIcolors">  </span> 
+                    <span :style="'color:'+BMI.color[1]+'; font-weight:600; margin: 0px 20px;'"> {{vitals.systolic}} /{{ vitals.diastolic }} </span> 
+                    <span :style="'color:'+BMI.color[1]+';'">  </span>
+                    
+                </span>
+            </ion-row>
         </ion-col>
     </ion-row>
 </template>
@@ -60,6 +68,7 @@
     import { arePropertiesNotEmpty } from "@/utils/Objects";
     import HisDate from "@/utils/Date";
     import BasicInputField from "@/components/BasicInputField.vue"
+    import { iconBloodPressure } from "@/utils/SvgDynamicColor"
 
     export default defineComponent({
     name: 'Menu',
@@ -78,6 +87,7 @@
     return {
         iconsContent: icons,
         BMI: {},
+        BPIcolors: '',
         inputData: [
             {
                 sectionHeader: 'Hieght and weight',
@@ -192,6 +202,24 @@
                 // toastWarning('Vitals tempra saved')
                 
             }
+            if(this.vitals.diastolic && this.vitals.systolic){
+                this.BPIcolors = ''
+                if( parseInt(this.vitals.diastolic) >= 40 && parseInt(this.vitals.diastolic) <= 60  &&  parseInt(this.vitals.systolic) >= 70 && parseInt(this.vitals.systolic) <= 90 ){
+                    this.BPIcolors =this.getBloodPressureColors(['#B9E6FE','#026AA2'])
+                }else
+                if( parseInt(this.vitals.diastolic) > 60 && parseInt(this.vitals.diastolic) <= 80  &&  parseInt(this.vitals.systolic) >= 90 && parseInt(this.vitals.systolic) < 120 ){
+                    this.BPIcolors =this.getBloodPressureColors(['#DDEEDD','#016302'])
+                }else
+                if( parseInt(this.vitals.diastolic) >= 80 && parseInt(this.vitals.diastolic) <= 90 &&  parseInt(this.vitals.systolic) >= 120 && parseInt(this.vitals.systolic) < 140 ){
+                    this.BPIcolors =this.getBloodPressureColors(['#FEDF89','#B54708'])
+                }else
+                if( parseInt(this.vitals.diastolic) >= 90 && parseInt(this.vitals.diastolic) <= 100  &&  parseInt(this.vitals.systolic) >= 140 && parseInt(this.vitals.systolic) < 190 ){
+                    this.BPIcolors =this.getBloodPressureColors(['#FECDCA','#B42318'])
+                }else{
+                    this.BPIcolors =this.getBloodPressureColors(['purple'])
+                }
+
+            }
             const vitalsStore = useVitalsStore()
             vitalsStore.setVitals(this.vitals)
         },
@@ -205,6 +233,10 @@
         },
         getBMIIcon(data: any){
             return BMIService.iconBMI(data)
+        },
+        getBloodPressureColors(color: any){
+            console.log(color)
+            return iconBloodPressure(color)
         }
         
     }
