@@ -3,7 +3,7 @@
       <Toolbar />
       <ion-content :fullscreen="true">
         <DemographicBar />
-        <Stepper :wizardData="wizardData" :StepperData="StepperData"/>
+        <Stepper :wizardData="wizardData" @updateStatus="markWizard" :StepperData="StepperData"/>
       </ion-content>
     </ion-page>
   </template>
@@ -34,17 +34,9 @@
   import ToolbarSearch from '@/components/ToolbarSearch.vue'
   import DemographicBar from '@/components/DemographicBar.vue'
   import { chevronBackOutline,checkmark } from 'ionicons/icons';
-  import Vitals from '@/apps/NCD/components/ConsultationPlan/Vitals.vue'
-  import Diagnosis from '@/apps/NCD/components/ConsultationPlan/Diagnosis.vue'
-  import Complications from '@/apps/NCD/components/ConsultationPlan/Complications.vue'
-  import ConfirmDiagnosis from '@/apps/NCD/components/ConsultationPlan/ConfirmDiagnosis.vue'
-  import Disposition from '@/apps/NCD/components/ConsultationPlan/Disposition.vue'
-  import Investigations from '@/apps/NCD/components/ConsultationPlan/Investigations.vue'
-  import TreatmentPlan from '@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue'
   import SaveProgressModal from '@/components/SaveProgressModal.vue'
   import { createModal } from '@/utils/Alerts'
   import { icons } from '@/utils/svg';
-  import { toastWarning, alertConfirmation } from '@/utils/Alerts';
   import { arePropertiesNotEmpty } from "@/utils/Objects";
   import { useVitalsStore } from '@/stores/VitalsStore'
   import { mapState } from 'pinia';
@@ -71,13 +63,6 @@
         IonAccordionGroup,
         IonItem,
         IonLabel,
-        Vitals,
-        Diagnosis,
-        Complications,
-        ConfirmDiagnosis,
-        Disposition,
-        Investigations,
-        TreatmentPlan,
         IonModal,
         Stepper
     },
@@ -210,7 +195,6 @@
                 this.wizardData[0].class = 'open_step common_step'               
             }else{
                 this.wizardData[0].checked = false; 
-                this.wizardData[0].class = 'open_step common_step'  
             }
         },
         nav(url: any){

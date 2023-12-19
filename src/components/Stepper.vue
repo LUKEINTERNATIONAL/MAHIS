@@ -63,12 +63,10 @@
     IonItem, 
     IonLabel,
     IonModal,
-    modalController,
     AccordionGroupCustomEvent } from '@ionic/vue';
-  import { defineComponent,defineAsyncComponent } from 'vue';
+  import { defineComponent } from 'vue';
   import Toolbar from '@/components/Toolbar.vue'
   import ToolbarSearch from '@/components/ToolbarSearch.vue'
-  import DemographicBar from '@/components/DemographicBar.vue'
   import { chevronBackOutline,checkmark } from 'ionicons/icons';
   import Vitals from '@/apps/NCD/components/ConsultationPlan/Vitals.vue'
   import Diagnosis from '@/apps/NCD/components/ConsultationPlan/Diagnosis.vue'
@@ -80,9 +78,6 @@
   import SaveProgressModal from '@/components/SaveProgressModal.vue'
   import { createModal } from '@/utils/Alerts'
   import { icons } from '@/utils/svg';
-  import { toastWarning, alertConfirmation } from '@/utils/Alerts';
-  import { arePropertiesNotEmpty } from "@/utils/Objects";
-
   export default defineComponent({
     name: "Home",
     components:{
@@ -94,7 +89,6 @@
         IonToolbar,
         Toolbar,
         ToolbarSearch,
-        DemographicBar,
         IonButton, 
         IonCard, 
         IonCardContent, 
@@ -136,15 +130,17 @@
     
       methods:{
         accordionGroupChange(ev: AccordionGroupCustomEvent){
+
+          this.wizardData.forEach((item: any) => {
+            item.class = "common_step"
             if(ev.target.className == "md accordion-group-expand-compact"){
-                this.wizardData.forEach((item: any) => {
                 item.checked = false;
-                item.class = "common_step"
                 if (item.number == ev.detail.value) {
                     item.class = 'open_step common_step';
-                }
-            });
+                } 
             }
+          });
+            this.$emit("updateStatus", ev);
         },
         nav(url: any){
             this.$router.push(url);
