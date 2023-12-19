@@ -138,7 +138,7 @@
             <ion-label class="tpStndCls">Non-pharmalogical therapy and other notes</ion-label>
             <ion-item class="input_item" style="min-height: 120px; margin-top: 14px;">
                 <ion-label><span v-html="iconsContent.editPen"></span></ion-label>
-                <ion-textarea @ionInput="validateNotes" @ionFocus="checkIfEmpty" v-model="nonPharmalogicalTherapyAndOtherNotes"  style="min-height: 120px;" class="inputTpln" :auto-grow="true"  fill="outline"></ion-textarea >
+                <ion-textarea @ionInput="validateNotes" v-model="nonPharmalogicalTherapyAndOtherNotes"  style="min-height: 120px;" class="inputTpln" :auto-grow="true"  fill="outline"></ion-textarea >
             </ion-item>
 
         </div>
@@ -337,60 +337,8 @@
         },
         validateNotes(ev: any) {
             let value = ev.target.value
-            //value = value.slice(1)
-
-            // console.log(value)
-
-            // console.log(value.length)
-
             const textArry = []
-
-            // for (let i = 0; i < value.length; i++) {
-            //     if (value[i] === '\n' || value[i] === '\r') {
-            //         console.log('Found enter key at index:', i);
-                    
-            //         // Extract the previous text
-            //         const previousText = value.substring(0, i);
-            //         console.log('Previous text:', previousText);
-
-            //         console.log('Found enter key');
-            //     }
-            // }
-
-            //this.refSetNonPharmalogicalTherapyAndOtherNotes(value)
-
-            //const value: string = 'This is a string with a newline\nand a carriage return\rAnother line.';
-            const extractedLines = this.processAndInsertBullet(value);
-
-            console.log('Original string after extraction:', value);
-            console.log('Extracted lines:', extractedLines);
-            let finalStr = '' as string
-            extractedLines.forEach(line => {
-                finalStr+=line + '\n'
-            })
-            //this.refSetNonPharmalogicalTherapyAndOtherNotes(finalStr)
-        },
-        processAndInsertBullet(input: string): string[] {
-            const lines: string[] = [];
-            let startIndex = 0;
-
-            for (let i = 0; i < input.length; i++) {
-                if (input[i] === '\n' || input[i] === '\r') {
-                    const line = input.substring(startIndex, i)
-                    if(line.length > 0) {
-                        const processedLine = line.startsWith('• ') ? line : '• ' + line
-                        lines.push(processedLine)
-                        startIndex = i + 1
-                    }
-                }
-            }
-            
-            const lastLine = input.substring(startIndex)
-            if(lastLine.length > 0) {
-                const processedLastLine = lastLine.startsWith('• ') ? lastLine : '• ' + lastLine;
-                lines.push(processedLastLine);
-            }
-            return lines;
+            this.refSetNonPharmalogicalTherapyAndOtherNotes(value)
         },
         saveStateValuesState() {
             const treatmentPlanStore = useTreatmentPlanStore()
@@ -404,17 +352,6 @@
             const treatmentPlanStore = useTreatmentPlanStore()
             treatmentPlanStore.setIsUseOfTraditionalMedicineSelected(checked as boolean)
             this.saveStateValuesState()
-        },
-        checkIfEmpty(ev: any) {
-            // console.log("Check")
-            // const value = ev.target.value
-
-            // if (value.length == 0) {
-            //     console.log("Empty")
-            //     this.refSetNonPharmalogicalTherapyAndOtherNotes('• ' as string)
-            // }
-            // console.log("Value: " + value)
-            // console.log(this.nonPharmalogicalTherapyAndOtherNotes)
         },
         refSetNonPharmalogicalTherapyAndOtherNotes(value: string) {
             const treatmentPlanStore = useTreatmentPlanStore()

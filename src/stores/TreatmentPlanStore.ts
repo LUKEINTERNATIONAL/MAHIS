@@ -59,6 +59,9 @@ export const useTreatmentPlanStore = defineStore('TreatmentPlanStore', {
         },
         setNonPharmalogicalTherapyAndOtherNotes(value: string) {
             this.nonPharmalogicalTherapyAndOtherNotes = value
+        },
+        getNonPharmalogicalTherapyAndOtherNotes() {
+            return this.nonPharmalogicalTherapyAndOtherNotes
         }
     },
     persist:true,
