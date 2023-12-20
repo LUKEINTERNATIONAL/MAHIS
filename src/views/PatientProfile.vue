@@ -28,7 +28,7 @@
                           <ion-row>                              
                               <ion-col size="4">Allergies</ion-col>
                               <ion-col size="8" >
-                                <span  v-for="(item, index) in medicalAllergiesList" :key="index" >
+                                <span  v-for="(item, index) in selectedMedicalAllergiesList" :key="index" >
                                     <span class="allergies" v-if="item.selected">{{ item.name }}</span>
                                 </span>
                               </ion-col> 
@@ -231,7 +231,7 @@
     },
     computed:{
         ...mapState(useDemographicsStore,["demographics"]),
-        ...mapState(useTreatmentPlanStore,["medicalAllergiesList"]),
+        ...mapState(useTreatmentPlanStore,["selectedMedicalAllergiesList"]),
     },
     setup() {
         const modal = ref();

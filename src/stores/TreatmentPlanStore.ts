@@ -18,32 +18,8 @@ export const useTreatmentPlanStore = defineStore('TreatmentPlanStore', {
             //     prescription: '2023-09-29'
             // }
         ] as any,
-        medicalAllergiesList: [
-            {
-                name: 'Eye too short',
-                selected: false,
-            },
-            {
-                name: 'Glibenclamide 2',
-                selected: false,
-            },
-            {
-                name: 'Gliben',
-                selected: false,
-            },
-            {
-                name:  'Metformin',
-                selected: false,
-            },
-            {
-                name: 'Short acting insulin',
-                selected: false,
-            },
-            {
-                name: 'Glibenclamide',
-                selected: false,
-            }
-          ] as any,
+        medicalAllergiesList: [] as any,
+        selectedMedicalAllergiesList: [] as any,
         isUseOfTraditionalMedicineSelected: false as boolean,
         nonPharmalogicalTherapyAndOtherNotes: '' as string,
     }),
@@ -62,6 +38,12 @@ export const useTreatmentPlanStore = defineStore('TreatmentPlanStore', {
         },
         getNonPharmalogicalTherapyAndOtherNotes() {
             return this.nonPharmalogicalTherapyAndOtherNotes
+        },
+        setSelectedMedicalAllergiesList(data: any) {
+            this.selectedMedicalAllergiesList.push(data)
+        },
+        getSelectedMedicalAllergiesList() {
+            return this.selectedMedicalAllergiesList
         }
     },
     persist:true,
