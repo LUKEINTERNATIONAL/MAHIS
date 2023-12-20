@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "@capacitor/cli": "^5.4.1",
+    "@types/lodash": "^4.14.202",
     "@vitejs/plugin-legacy": "^4.0.2",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vue/eslint-config-typescript": "^11.0.2",
