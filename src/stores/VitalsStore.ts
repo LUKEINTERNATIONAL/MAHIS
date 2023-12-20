@@ -12,15 +12,3 @@ export const useVitalsStore = defineStore('vitalsStore',{
     persist:true,
 
 })
-
-// {
-//     height:'',
-//     weight:'',
-//     systolic:'',
-//     diastolic:'',
-//     bmp:'',
-//     pulse:'',
-//     respiratory:'',
-//     oxygen:'',
-//     temperature:''
-// }
