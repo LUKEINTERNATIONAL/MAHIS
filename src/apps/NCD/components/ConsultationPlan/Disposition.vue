@@ -87,7 +87,7 @@ import { icons } from '@/utils/svg';
 import SelectionPopover from "@/components/SelectionPopover.vue";
 import { LocationService } from "@/services/location_service";
 import { IonDatetime, IonDatetimeButton } from '@ionic/vue';
-import DynamicList from "@/components/DynamicList.vue";
+import DynamicList from "@/components/DynamicDispositionList.vue";
 import { mapState } from 'pinia'
 import { useDispositionStore } from "@/stores/DispositionStore"
 
