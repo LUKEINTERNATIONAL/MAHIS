@@ -1,343 +1,275 @@
 <template>
-    <ion-row v-if="showAreReferalsCreated">
-       <span class="dash_box">No referals created yet</span> 
-    </ion-row>
-    <ion-item
-        class="ionLbltp" v-for="(item, index) in addedReferals" :key="index"
-        @mousemove="highlightItem(index)" @mouseout="undoHighlightItem(index)"
-        >
-        <ion-col style="display: contents;">
-            <ion-label :id="asignLblID(index)" class="drgNmTrpln" style="display: contents; color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.referalName }}</ion-label>
-        </ion-col>
-        <ion-col>
-            <ion-label style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.selectedReferalType }} / {{ item.referalDate }} / {{ item.addedReferalNote }}</ion-label>
-        </ion-col>
-        <ion-col class="action_buttons">
-            <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end; flex: auto;" @click="editItemAtIndex(index)"><span v-html="iconsContent.edit" class="modify_buttons"></span></ion-label>
-            <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end; margin-left: 16px;" @click="removeItemAtIndex(index)"><span v-html="iconsContent.delete" class="modify_buttons"></span></ion-label>
-        </ion-col>
-    </ion-item>
-    <div v-if="!showReferalInput">
-                <ion-row>
-                    <ion-col>
-                        <ion-item class="input_item">
-                            <ion-input v-model="referalName"></ion-input>
-                            <ion-label><span v-html="iconsContent.search" class="selectedPatient"></span></ion-label>
-                        </ion-item>
-                    </ion-col>
-                    <ion-col>
-                        <ion-item class="input_item">
-                            <ion-input id="chooseType" placeholder="Type" v-model="selectedReferalType" @click="popoverOpenForReferalTypeFn2"></ion-input>
-                            <ion-icon v-if="!showPopoverOpenForReferalType"  :icon="chevronDownOutline"></ion-icon>
-                            <ion-icon v-if="showPopoverOpenForReferalType" :icon="chevronUpOutline"></ion-icon>
-                            <ion-popover
-                                class="popover-al"
-                                :show-backdrop="false"
-                                trigger="chooseType"
-                                trigger-action="click"
-                                @didDismiss="showPopoverOpenForReferalType = false"
-                                >
-                                <ion-content color="light" class="ion-padding content-al">
-                                    <ion-label>Choose the type:</ion-label>
-                                    <ion-list class="list-al">
-                                        <div class="item-al" v-for="(item, index) in refralType" :key="index">
-                                                    <ion-label  @click="selectAl(index)" style="display: flex; justify-content: space-between;">
-                                                        {{ item.name }}
-                                                        <ion-icon v-if="item.selected" class="icon-al" :icon="checkmarkOutline"></ion-icon> 
-                                                    </ion-label>                                     
-                                                </div>
-                                    </ion-list>
-                                </ion-content>
-                            </ion-popover>
-                        </ion-item>
-                    </ion-col>
-                    <ion-col>
-                        <ion-item class="input_item">
-                            <ion-input id="dateTrigger" placeholder="Date" v-model="referalDate"></ion-input>
-                            <ion-popover
-                                @didDismiss="prescPopoverOpen = false" 
-                                show-backdrop="false" 
-                                dismiss-on-select="false"
-                                trigger="dateTrigger"
-                                trigger-action="click"
-                                >
-                                <ion-content class="search_card" >
-                                    <ion-datetime ref="prescription" @ionChange="getDate($event)" presentation="date"></ion-datetime>
-                                </ion-content>
-                            </ion-popover>
-                        </ion-item>
-                    </ion-col>
-                    <ion-col size="2"></ion-col>
-                </ion-row>
-        <ion-row>
-                <ion-col size="10">
-                    <ion-item class="input_item">
-                        <ion-input v-model="addedReferalNote" placeholder="Some reason"></ion-input>
-                    </ion-item>
+    <DashBox v-if="displayDashBox" :status="no_item" :content="content"></DashBox>
+
+    <DynamicList v-if="addReferral"
+        @update:removeItem="removeItem"
+        @update:editItem="editItem"
+        :displayData="dispositions"
+        />
+        
+    <div class="container" v-if="displayInputFields">
+        <div class="containerSections">
+            <ion-row class="">
+                <!-- THE THREE SELECTION OPTIONS START-->
+                <ion-col>
+                    <BasicInputField :placeholder="basicInputFieldProperties[0].placeholder"
+                        :icon="basicInputFieldProperties[0].icon" :inputValue="basicInputFieldProperties[0].searchText"
+                        @update:inputValue="startSearching" />
                 </ion-col>
 
-                <ion-col class="action_buttons" size="2">
-                    <DynamicButton class="action_buttons" :name="btnName2" :fill="btnFill" :Fn="saveData"/>
+                <ion-col>
+                    <BasicInputField :placeholder="basicInputFieldProperties[1].placeholder"
+                        :icon="basicInputFieldProperties[1].icon" :inputValue="basicInputFieldProperties[1].selection"
+                        @clicked:inputValue="showOptions" />
                 </ion-col>
-        </ion-row>
+
+                <ion-col>
+                    <BasicInputField
+                        :placeholder="basicInputFieldProperties[2].placeholder"
+                        :inputValue="basicInputFieldProperties[2].date"
+                        :icon="basicInputFieldProperties[2].icon"
+                        @update:inputValue="basicInputFieldProperties[2].date"
+                        @clicked:inputValue="openDate"
+                    />
+
+                    <ion-popover 
+                    :show-backdrop="false"
+                    :keep-contents-mounted="true"
+                    :is-open="popoverProperties.dateOpen"
+                    :event="popoverProperties.event"
+                    @didDismiss="popoverProperties.dateOpen = false"
+                    >
+                        <ion-datetime @ionChange="saveTheDate" id="datetime" presentation="date" :show-default-buttons="true"></ion-datetime>
+                    </ion-popover> 
+                </ion-col>
+
+                <!-- POPUP CODE START-->
+                <SelectionPopover
+                    :content="popoverProperties.popoverData" :keyboardClose="popoverProperties.keyboardClose"
+                    :title="popoverProperties.title" :is-open="popoverProperties.popoverOpen"
+                    :event="popoverProperties.event" @closePopoover="value => popoverProperties.popoverOpen = value"
+                    @setSelection="setSelection" />
+                <!-- THE THREE SELECTION OPTIONS && POPUP END -->
+
+            </ion-row>
+            <!-- REFERRAL REASON INPUT FIELD -->
+            <div>
+                <BasicInputField :applyStyling="true"
+                    :placeholder="basicInputFieldProperties[3].placeholder"
+                    :inputValue="basicInputFieldProperties[3].referralReason"
+                    @update:inputValue="updateReason"
+                    />
+            </div>
+        </div>
+
+        <!-- SAVE BUTTON. -->
+        <div class="saveContainer">
+            <ion-col class="action_buttons">
+                <span style="cursor: pointer;" @click="saveData">+ Save</span>
+            </ion-col>
+        </div>
+        
+        <!-- CONTAINER DIV END -->
     </div>
-    <ion-row v-if="showReferalInput">
-       <DynamicButton class="add_item" :name="btnName1" :fill="btnFill" :Fn="addReferal"/>
-    </ion-row>
-</template>
-  
-<script lang="ts">
-    import { 
-            IonContent, 
-            IonHeader,
-            IonItem,
-            IonList,
-            IonTitle, 
-            IonToolbar, 
-            IonMenu,
-            menuController,
-            IonLabel,
-            IonInput,
-            IonPopover,
-            IonDatetime,
-        } from '@ionic/vue';
-    import { defineComponent } from 'vue';
-    import { checkmark,pulseOutline,checkmarkOutline, chevronDownOutline,chevronUpOutline } from 'ionicons/icons';
-    import { ref } from 'vue';
-    import { icons } from '@/utils/svg.ts';
-    import DynamicButton from "@/components/DynamicButton.vue";
 
-    export default defineComponent({
-    name: 'Menu',
-    components:{
-        IonContent,
-        IonHeader,
-        IonItem,
-        IonList,
-        IonMenu,
-        IonTitle,
-        IonToolbar,
-        IonLabel,
-        IonInput,
-        IonPopover,
+    <ion-row>
+        <ion-col class="action_buttons">
+            <span style="cursor: pointer;" @click="addReferralFunc">+ Add new referral</span>
+        </ion-col>
+    </ion-row>
+
+</template>
+
+<script lang="ts">
+import DashBox from "@/components/DashBox.vue";
+import BasicInputField from "@/components/BasicInputField.vue";
+import { icons } from '@/utils/svg';
+import SelectionPopover from "@/components/SelectionPopover.vue";
+import { LocationService } from "@/services/location_service";
+import { IonDatetime, IonDatetimeButton } from '@ionic/vue';
+import DynamicList from "@/components/DynamicDispositionList.vue";
+import { mapState } from 'pinia'
+import { useDispositionStore } from "@/stores/DispositionStore"
+
+export default {
+    components: {
+        DashBox,
+        BasicInputField,
+        SelectionPopover,
         IonDatetime,
-        DynamicButton
-       },
-        data() {
-    return {
-        iconsContent: icons,
-        showReferalInput: true,
-        refralType: [
-            {
-                name: 'Internal',
-                selected: false,
-            },
-            {
-                name: 'External',
-                selected: false,
-            },
-          ],
-        addedReferals: [
-            {
-                referalName: 'qwerty',
-                selectedReferalType: 'nnm',
-                referalDate: 'bbb',
-                addedReferalNote: 'nnn',
-            }
-        ] as any,
-        showPopoverOpenForReferalType: false,
-        referalDate: '',
-        selectedReferalType: '',
-        addedReferalNote: '',
-        referalName: '',
-        showAreReferalsCreated: true as boolean,
-        btnName1: '+ Add New Referal',
-        btnName2: '+ Save',
-        btnFill: 'clear',
-    };
-  },
-    setup() {
-      return { checkmark,pulseOutline,checkmarkOutline,chevronDownOutline,chevronUpOutline };
+        IonDatetimeButton,
+        DynamicList
     },
-    watch: {
-        addedReferals: {
-            handler(addedReferals: Array<any>){
-                this.AreReferalsCreated()  
-            },
-            deep: true,
-            immediate: true
+    computed: {
+        ...mapState(useDispositionStore, ["dispositions"]),
+    },
+    mounted() {
+        this.addReferral = true;
+        if (this.dispositions.length > 0) {
+            this.displayDashBox = false;            
         }
     },
-    methods:{
-        navigationMenu(url: any){
-            menuController.close()
-            this.$router.push(url);
+    data() {
+        return {
+            no_item: true,
+            content: "There are no referrals to display. Add a referral below.",
+
+            displayDashBox: true,
+            displayInputFields: false,
+            addReferral: false,
+            editIndex: NaN,
+            dispositionStore: useDispositionStore(),
+
+
+// POPOVER PROPERTIES
+            popoverProperties: {
+                title: 'List of facilities',
+                popoverOpen: false,
+                dateOpen: false,
+                event: {} as Event,
+                keyboardClose: false,
+                popoverData: {} as Object,
+            },
+
+// INPUT FIELD PROPERTIES
+            basicInputFieldProperties: [
+                {
+                    name: 'search',
+                    placeholder: 'Facility Search',
+                    icon: icons.search,
+                    searchText: '' as any,
+                },
+                {
+                    name: 'referralType',
+                    placeholder: 'Referral Type',
+                    icon: icons.chevronUp,
+                    selection: '' as string,
+                },
+                {
+                    name: 'date',
+                    placeholder: 'Referral Date',
+                    icon: icons.calendar,
+                    keepContentsMounted: true,
+                    date: '',
+                },
+                {
+                    name: 'reason',
+                    placeholder: 'Referral Reason',
+                    referralReason: '',
+                },
+            ],
+
+// REFERRALS
+            refralType: [
+                {
+                    name: 'Internal',
+                    selected: false,
+                },
+                {
+                    name: 'External',
+                    selected: false,
+                },
+            ],
+        };
+    },
+    methods: {
+        openPopover(event: Event) {
+            this.popoverProperties.event = event;
+            this.popoverProperties.popoverOpen = true;
         },
-        addReferal() {
-            this.showReferalInput = !this.showReferalInput
+        async startSearching(event: any) {
+            this.popoverProperties.keyboardClose = false;
+            this.basicInputFieldProperties[0].searchText = event.target.value;
+            this.popoverProperties.title = 'Facility Search';
+            this.openPopover(event);
+            this.popoverProperties.popoverData = await LocationService.getFacilities({ name: this.basicInputFieldProperties[0].searchText })
         },
-        selectAl(index: any) {
-            this.refralType.forEach(item => {
-                item.selected = false
-            })
-            this.refralType[index].selected = !this.refralType[index].selected
-            this.selectedReferalType = this.refralType[index].name
+        showOptions(event: Event) {
+            this.popoverProperties.title = 'Referral Type';
+            this.popoverProperties.keyboardClose = true;
+            this.popoverProperties.popoverData = this.refralType;
+            this.openPopover(event);
         },
-        popoverOpenForReferalTypeFn2() {
-            this.showPopoverOpenForReferalType = true
-        },
-        getDate(ev: any) {
-            const inputDate = new Date(ev.detail.value)
-            const year = inputDate.getFullYear()
-            const month = inputDate.getMonth() + 1
-            const day = inputDate.getDate()
-            const formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
-            this.referalDate = formattedDate
-        },
-        AreReferalsCreated(){
-            if (this.addedReferals.length > 0) {
-                this.showAreReferalsCreated = false
+        setSelection(name: string) {
+            if (name !== 'Internal' && name !== 'External') {
+                this.basicInputFieldProperties[0].searchText = name;
+                this.popoverProperties.popoverOpen = false;
             } else {
-                this.showAreReferalsCreated = true
+                this.basicInputFieldProperties[1].selection = name;
+                this.popoverProperties.popoverOpen = false;
             }
         },
-        asignLblID(num: any) {
-            return num + '_lbl2' as string;
+        saveTheDate(event: any) {
+            this.basicInputFieldProperties[2].date = event.detail.value;
+            this.formatDate(this.basicInputFieldProperties[2].date);
         },
-        asignSpanLblID(num: any) {
-            return num + '_spanlbl2' as string;
+        openDate(event: any) {
+            this.popoverProperties.dateOpen = true;
+            this.popoverProperties.event = event;
         },
-        removeItemAtIndex(index: any) {
-            this.addedReferals.splice(index, 1)
+        formatDate(date: any) {
+            let theDate = new Date(date);
+            let tempDate = new Date(theDate.getFullYear()+'-'+('0' + (theDate.getMonth()+1)).slice(-2)+'-'+('0' + theDate.getDate()).slice(-2));
+            let options: Intl.DateTimeFormatOptions = { day: '2-digit', weekday: 'long', month: 'short', year: 'numeric' };            let formattedDate = tempDate.toLocaleDateString('en-US', options);
+            this.basicInputFieldProperties[2].date = formattedDate;
         },
-        editItemAtIndex(index: any) {
-            const dataItem = this.addedReferals[index]
-            this.addedReferals.splice(index, 1)
-            this.referalName = dataItem.referalName
-            this.selectedReferalType = dataItem.selectedReferalType
-            this.referalDate = dataItem.referalDate
-            this.addedReferalNote = dataItem.addedReferalNote
-            this.showReferalInput = !this.showReferalInput
+        updateReason(event: any) {
+            const reason = event.target.value;
+            this.basicInputFieldProperties[3].referralReason = reason;
         },
-        highlightItem(item: any) {
-            const el = document.getElementById(item+'_lbl2')
-            if (el) {
-                el.style.color = '#006401' 
-            }
-            this.highlightActionBtns(item)
-        },
-        undoHighlightItem(item: any) {
-            const el = document.getElementById(item+'_lbl2')
-            if (el) {
-                el.style.color = 'rgb(0,0,0)' 
-            }
-            this.undohighlightActionBtns(item)
-        },
-        highlightActionBtns(item: any) {
-            const elements = document.getElementsByClassName(item+'_spanlbl2') as any
-            for (let i = 0; i < elements.length; i++) {
-                elements[i].style.display = 'block'
-            }
-        },
-        undohighlightActionBtns(item: any) {
-            const elements = document.getElementsByClassName(item+'_spanlbl2') as any
-            for (let i = 0; i < elements.length; i++) {
-                elements[i].style.display = 'none'
-            }
-        },
-        async saveData(){
-            this.showReferalInput = true
+        saveData() {
+            const referralData = {
+                first: this.basicInputFieldProperties[0].searchText,
+                second: this.basicInputFieldProperties[1].selection,
+                third: this.basicInputFieldProperties[2].date,
+                fourth: this.basicInputFieldProperties[3].referralReason,
+            };
 
-            const drugString = {
-                referalName: this.referalName,
-                selectedReferalType: this.selectedReferalType,
-                referalDate: this.referalDate,
-                addedReferalNote: this.addedReferalNote,
-            }
-            this.addedReferals.push(drugString)
+            this.dispositionStore.addDispositionData(referralData, this.editIndex);
 
-            this.referalName = ''
-            this.selectedReferalType = ''
-            this.referalDate = ''
-            this.addedReferalNote = ''
+            this.displayInputFields = false;
+            this.addReferral = true;
+
+            this.editIndex = NaN;
+            this.cleanInputs();
         },
-    }
-    });
+        cleanInputs() {
+            this.basicInputFieldProperties[0].searchText = '';
+            this.basicInputFieldProperties[1].selection = '';
+            this.basicInputFieldProperties[2].date = '';
+            this.basicInputFieldProperties[3].referralReason = '';
+        },
+        addReferralFunc() {
+            this.displayDashBox = false;
+            this.displayInputFields = true;
+        },
+        removeItem(index: number) {
+            this.dispositions.splice(index, 1);
+        },
+        editItem(index: any) {
+            this.editIndex = parseInt(index);
+
+            this.basicInputFieldProperties[0].searchText = this.dispositions[index].first;
+            this.basicInputFieldProperties[1].selection = this.dispositions[index].second;
+            this.basicInputFieldProperties[2].date = this.dispositions[index].third;
+            this.basicInputFieldProperties[3].referralReason = this.dispositions[index].fourth;
+            
+            this.displayInputFields = true;
+        }
+    },
+};
 </script>
 
 <style scoped>
-#container {
-text-align: center;
-
-position: absolute;
-left: 0;
-right: 0;
-top: 50%;
-transform: translateY(-50%);
-}
-
-#container strong {
-font-size: 20px;
-line-height: 26px;
-}
-
-#container p {
-font-size: 16px;
-line-height: 22px;
-
-color: #8c8c8c;
-
-margin: 0;
-}
-
-#container a {
-text-decoration: none;
-}
-
-.action_buttons{
-    color: var(--ion-color-primary);
+.container {
     display: flex;
-    align-items: center;
-    float: right;
-    /* max-width: 210px; */
 }
-ion-list.list-al {
-    --background: #fff;
-    -ion-item-background: #fff;
+.saveContainer {
+    display: flex;
+    align-items: flex-end;
 }
-.item-al {
-    cursor: pointer;
-    padding: 5px;
-    background-color: #EBEBEB;
-    margin-top: 8px;
-}
-ion-icon.icon-al {
-    /* margin-left: 40%; */
-    font-size: x-large;
-    margin-bottom: -5px;
-}
-.item-al:hover {
-  background-color: #55515148;
-  padding: 5px;
-  border-radius: 3px;
-}
-ion-popover.popover-al {
-    --background: #fff;
-}
-ion-content.content-al {
-    --background: #fff;
-}
-ion-item.ionLbltp {
-    border-bottom: 2px dotted var(--ion-color-medium);
-    --inner-border-width:0;
-}
-.drgNmTrpln:hover {
-    background-color: #006401 !important;
-    color: #006401 !important;
-    cursor: pointer;
-}
-.action_buttons:hover {
-    cursor: pointer;
+
+.action_buttons {
+    margin-top: 10px;
 }
 </style>
-  
