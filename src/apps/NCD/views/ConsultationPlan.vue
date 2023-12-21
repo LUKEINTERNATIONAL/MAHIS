@@ -3,91 +3,7 @@
       <Toolbar />
       <ion-content :fullscreen="true">
         <DemographicBar />
-        <ion-row>
-            <ion-col size="1" size-lg="1"></ion-col>
-            <ion-col size="3" size-lg="3">
-                <ion-card style="max-width: 300px; background-color: #fff;">
-                    <div class="wizard_title"><strong > The consultation plan</strong></div>
-                    <ion-card-content>
-                        <div id="wizard_verticle" class="form_wizard wizard_verticle">
-                            <ul class="list-unstyled wizard_steps anchor">
-                                <li v-for="(item, index) in wizardData" :key="index" :class="item.last_step">
-                                    <a  class="done" isdone="1" rel="1">
-                                        <span :class="item.class">
-                                            <ion-icon v-if="item.checked" :icon="checkmark" class="checked_step"></ion-icon>  
-                                            <span v-if="!item.checked" class="">{{ item.number }} </span>
-                                            <span class="wizard_text">{{ item.title }}</span> 
-                                        </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </ion-card-content>
-                </ion-card>
-            </ion-col>
-        
-            <ion-col size="7" size-lg="7">
-                <div class="back_profile" @click="openModal()">
-                    <ion-icon style="font-size: 20px;" :icon="chevronBackOutline"> </ion-icon> 
-                    <span style="cursor: pointer;"> Back to profile</span>
-                </div>
-                
-                <ion-accordion-group @ionChange="accordionGroupChange($event)">
-                    <ion-accordion value="1">
-                        <ion-item slot="header">
-                            <ion-label>Vitals and other measures</ion-label>
-                        </ion-item>
-                        <div class="ion-padding" slot="content">
-                            <Vitals />
-                        </div>
-                    </ion-accordion>
-                    <ion-accordion value="2">
-                        <ion-item slot="header">
-                            <ion-label>Investigations</ion-label>
-                        </ion-item>
-                        <div class="ion-padding" slot="content">
-                            <Investigations />
-                        </div>
-                    </ion-accordion>
-                    <ion-accordion value="3">
-                        <ion-item slot="header">
-                            <ion-label> Diagnosis</ion-label>
-                        </ion-item>
-                        <div class="ion-padding" slot="content">
-                            <Diagnosis />
-                        </div>
-                    </ion-accordion>
-                    <ion-accordion value="4">
-                        <ion-item slot="header">
-                            <ion-label>Complications</ion-label>
-                        </ion-item>
-                        <div class="ion-padding" slot="content">
-                            <Complications />
-                        </div>
-                    </ion-accordion>
-                    <ion-accordion value="5">
-                        <ion-item slot="header">
-                            <ion-label>Treatment plan</ion-label>
-                        </ion-item>
-                        <div class="ion-padding" slot="content">
-                            <TreatmentPlan />
-                        </div>
-                    </ion-accordion>
-                    <ion-accordion value="6">
-                        <ion-item slot="header">
-                            <ion-label>Disposition</ion-label>
-                        </ion-item>
-                        <div class="ion-padding" slot="content">
-                            <Disposition />
-                        </div>
-                    </ion-accordion>
-                </ion-accordion-group>
-                <hr style="background: rgba(0, 0, 0, 0.13);">
-                <ion-button class="primary_btn" @click="nav('patientProfile')">Finish and Save</ion-button>
-            </ion-col>
-        </ion-row>
-
-
+        <Stepper :wizardData="wizardData" @updateStatus="markWizard" :StepperData="StepperData"/>
       </ion-content>
     </ion-page>
   </template>
@@ -118,20 +34,13 @@
   import ToolbarSearch from '@/components/ToolbarSearch.vue'
   import DemographicBar from '@/components/DemographicBar.vue'
   import { chevronBackOutline,checkmark } from 'ionicons/icons';
-  import Vitals from '@/apps/NCD/components/ConsultationPlan/Vitals.vue'
-  import Diagnosis from '@/apps/NCD/components/ConsultationPlan/Diagnosis.vue'
-  import Complications from '@/apps/NCD/components/ConsultationPlan/Complications.vue'
-  import ConfirmDiagnosis from '@/apps/NCD/components/ConsultationPlan/ConfirmDiagnosis.vue'
-  import Disposition from '@/apps/NCD/components/ConsultationPlan/Disposition.vue'
-  import Investigations from '@/apps/NCD/components/ConsultationPlan/Investigations.vue'
-  import TreatmentPlan from '@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue'
   import SaveProgressModal from '@/components/SaveProgressModal.vue'
   import { createModal } from '@/utils/Alerts'
   import { icons } from '@/utils/svg';
-  import { toastWarning, alertConfirmation } from '@/utils/Alerts';
   import { arePropertiesNotEmpty } from "@/utils/Objects";
   import { useVitalsStore } from '@/stores/VitalsStore'
   import { mapState } from 'pinia';
+  import Stepper from '@/components/Stepper.vue'
   export default defineComponent({
     name: "Home",
     components:{
@@ -154,14 +63,8 @@
         IonAccordionGroup,
         IonItem,
         IonLabel,
-        Vitals,
-        Diagnosis,
-        Complications,
-        ConfirmDiagnosis,
-        Disposition,
-        Investigations,
-        TreatmentPlan,
-        IonModal
+        IonModal,
+        Stepper
     },
     data(){
         return {
@@ -219,7 +122,39 @@
                     'number': 6,
                     'last_step': 'last_step'
                 },
-        ],
+            ],
+            StepperData:[
+                {
+                    'title': 'Vitals and other measures',
+                    'componet': 'Vitals',
+                    'value': '1'
+                },
+                {
+                    'title': 'Investigations',
+                    'componet': 'Investigations',
+                    'value': '2',
+                },
+                {
+                    'title': 'Diagnosis',
+                    'componet': 'Diagnosis',
+                    'value': '3',
+                },  
+                {
+                    'title': 'Complications',
+                    'componet': 'Complications',
+                    'value': '4',
+                },
+                {
+                    'title': 'Treatment plan',
+                    'componet': 'TreatmentPlan',
+                    'value': '5',
+                },
+                {
+                    'title': 'Disposition',
+                    'componet': 'Disposition',
+                    'value': '6',
+                },
+            ],
         isOpen: false,
         iconsContent: icons,
         };
@@ -260,7 +195,6 @@
                 this.wizardData[0].class = 'open_step common_step'               
             }else{
                 this.wizardData[0].checked = false; 
-                this.wizardData[0].class = 'open_step common_step'  
             }
         },
         nav(url: any){

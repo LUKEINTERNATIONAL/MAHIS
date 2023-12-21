@@ -9,6 +9,17 @@
             fill="outline" 
             :value="inputValue"
             :placeholder="placeholder"
+            :type = "inputType"
+            v-if="eventType=='input'"
+            >
+        </ion-input>
+        <ion-input 
+            @ionBlur="handleBlur" 
+            fill="outline" 
+            :value="inputValue"
+            :placeholder="placeholder"
+            :type = "inputType"
+            v-if="eventType=='blur'"
             >
         </ion-input>
         <ion-label v-if="unit">{{ unit }}</ion-label>
@@ -52,14 +63,26 @@ export default {
             type: String,
             default: "",
         },
+        inputType: {
+            type: String,
+            default: "",
+        },
+        eventType: {
+            type: String,
+            default: "input",
+        },
 
     },
      methods: {
         handleInput(event) {
             this.$emit("update:inputValue", event);
          },
+         handleBlur(event) {
+            this.$emit("update:inputValue", event);
+         },
     },
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

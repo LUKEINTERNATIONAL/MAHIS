@@ -1,47 +1,5 @@
 <template>
-    <ion-row  v-for="(item,index) in inputData" :key="index" class="dashed_bottom_border">
-        <ion-col class="item_header_col">
-            <span class="item_header">{{ item.sectionHeader }}</span>
-        </ion-col>
-        <ion-col>
-            <ion-row v-for="(element, index2) in item.data" :key="index2">
-                <ion-col>
-                    <BasicInputField 
-                        :inputHeader="element[0].inputHeader"
-                        :unit="element[0].unit"
-                        :icon ="element[0].icon"
-                        :inputValue="vitals[(element[0].name)]"
-                        @update:inputValue="value => vitals[element[0].name] = value.target.value"
-                    />
-                </ion-col>
-                <ion-col>
-                    <BasicInputField 
-                        :inputHeader="element[1].inputHeader"
-                        :unit="element[1].unit"
-                        :icon ="element[1].icon"
-                        :inputValue="vitals[element[1].name]"
-                        @update:inputValue="value => vitals[element[1].name] = value.target.value"
-                    />
-                </ion-col>
-            </ion-row>
-            <ion-row class="bmi" :style="'background-color:'+ BMI.color[0]" v-if="BMI.index && index == 0">
-                <span class="position_content bmi_results">
-                    <span v-html="getBMIIcon(BMI.color)"> </span> 
-                    <span :style="'color:'+BMI.color[1]+'; font-weight:600; margin: 0px 20px;'"> {{ BMI.index }}</span> 
-                    <span :style="'color:'+BMI.color[1]+';'"> {{ BMI.result }} </span>
-                    
-                </span>
-            </ion-row>
-            <ion-row class="bmi" :style="'background-color:'+ BPIcolors[0]" v-if="BPIcolors && index == 1">
-                <span class="position_content bmi_results">
-                    <span v-html="BPIcolors">  </span> 
-                    <span :style="'color:'+BMI.color[1]+'; font-weight:600; margin: 0px 20px;'"> {{vitals.systolic}} /{{ vitals.diastolic }} </span> 
-                    <span :style="'color:'+BMI.color[1]+';'">  </span>
-                    
-                </span>
-            </ion-row>
-        </ion-col>
-    </ion-row>
+    <basic-form :contentData="vitals"></basic-form>
 </template>
   
 <script lang="ts">
@@ -68,10 +26,10 @@
     import { arePropertiesNotEmpty } from "@/utils/Objects";
     import HisDate from "@/utils/Date";
     import BasicInputField from "@/components/BasicInputField.vue"
-    import { iconBloodPressure } from "@/utils/SvgDynamicColor"
+    import { VitalsService } from "@/services/vitals_service";
+    import BasicForm from '@/components/BasicForm.vue';
 
     export default defineComponent({
-    name: 'Menu',
     components:{
         IonContent,
         IonHeader,
@@ -81,88 +39,122 @@
         IonTitle,
         IonToolbar,
         IonInput,
-        BasicInputField
+        BasicInputField,
+        BasicForm
     },
     data() {
     return {
         iconsContent: icons,
         BMI: {},
         BPIcolors: '',
+        vValidations: '' as any,
         inputData: [
             {
                 sectionHeader: 'Hieght and weight',
                 data:
+                    { 
+                        colData:[
+                            [
+                                {
+                                    inputHeader: 'Height*',
+                                    unit: 'cm',
+                                    icon: icons.height,
+                                    value: '',
+                                    required: true
+                                },
+                                {
+                                    inputHeader: 'Weight*',
+                                    unit: 'kg',
+                                    icon: icons.weight,
+                                    value: '',
+                                    required: true
+                                },
+                                
+                            ],
+                        ]
+                    }
+                ,
+                alerts:
                 [
-                    [
-                        {
-                            sectionHeader: 'Hieght and weight',
-                            inputHeader: 'Height*',
-                            unit: 'cm',
-                            icon: icons.height,
-                            name: 'height'
-                        },
-                        {
-                            inputHeader: 'Weight*',
-                            unit: 'kg',
-                            icon: icons.weight,
-                            name: 'weight'
-                        }
-                    ]
-                ]   
+                    {
+                        backgroundColor: '',
+                        status: '',
+                        icon: '',
+                        textColor: '',
+                        value: '',
+                        index: ''
+                    }
+                ]    
             },
             {
                 sectionHeader: 'Blood pressure',
                 data:
-                [
-                        [
-                        {
-                            inputHeader: 'Systolic Pressure*',
-                            unit: 'mmHg',
-                            icon: icons.systolicPressure,
-                            name: 'systolic'
-                        },
-                        {
-                            inputHeader: 'Diastolic pressure*',
-                            unit: 'kg',
-                            icon: icons.diastolicPressure,
-                            name: 'diastolic'
-                        }
-                    ]
-                ]   
+                    { 
+                        colData:[
+                            [
+                                {
+                                    inputHeader: 'Systolic Pressure*',
+                                    unit: 'mmHg',
+                                    icon: icons.systolicPressure,
+                                    value: '',
+                                    required: true
+                                },
+                                {
+                                    inputHeader: 'Diastolic pressure*',
+                                    unit: 'kg',
+                                    icon: icons.diastolicPressure,
+                                    value: '',
+                                    required: true
+                                }
+                            ]
+                        ]
+                    },
+                alerts:[
+                    {
+                        backgroundColor: '',
+                        status: '',
+                        icon: '',
+                        textColor: '',
+                        value: '',
+                        index: ''
+                    }
+                ]
             },
             {
                 sectionHeader: 'Temperature and rates',
                 data:
-                [
-                    [
-                        {
-                            inputHeader: 'Temperature',
-                            unit: 'C',
-                            icon: icons.temprature,
-                            name: 'temperature'
-                        },
-                        {
-                            inputHeader: 'Pulse rate',
-                            unit: 'BMP',
-                            icon: icons.pulse,
-                            name: 'pulse'
-                        }
-                    ],
-                    [
-                        {
-                            inputHeader: 'Respiratory rate',
-                            unit: 'BMP',
-                            icon: icons.respiratory,
-                            name: 'respiratory'
-                        },
-                        {
-                            inputHeader: 'Oxygen saturation',
-                            unit: '%',
-                            icon: icons.oxgenStaturation,
-                            name: 'oxygen'
-                        }
-                    ]
-                ]   
+                    { 
+                        colData:[
+                            [
+                                {
+                                    inputHeader: 'Temperature',
+                                    unit: 'C',
+                                    icon: icons.temprature,
+                                    value: ''
+                                },
+                                {
+                                    inputHeader: 'Pulse rate',
+                                    unit: 'BMP',
+                                    icon: icons.pulse,
+                                    value: ''
+                                }
+                            ],
+                            [
+                                {
+                                    inputHeader: 'Respiratory rate',
+                                    unit: 'BMP',
+                                    icon: icons.respiratory,
+                                    value: ''
+                                },
+                                {
+                                    inputHeader: 'Oxygen saturation',
+                                    unit: '%',
+                                    icon: icons.oxgenStaturation,
+                                    value: ''
+                                }
+                            ]
+                        ]
+                    }
             }
                
         ]
@@ -171,15 +163,38 @@
   computed:{
         ...mapState(useDemographicsStore,["demographics"]),
         ...mapState(useVitalsStore,["vitals"]),
+    heightValue() {
+      return this.getInputValue(0, 0, 0);
+    },
+    weightValue() {
+      return this.getInputValue(0, 0, 1);
+    },
+    systolicValue() {
+      return this.getInputValue(1, 0, 0);
+    },
+    diastolicValue() {
+      return this.getInputValue(1, 0, 1);
+    },
+    temperatureValue() {
+      return this.getInputValue(2, 0, 0);
+    },
+    pulseValue() {
+      return this.getInputValue(2, 0, 1);
+    },
+    respiratoryValue() {
+      return this.getInputValue(2, 1, 0);
+    },
+    oxygenValue() {
+      return this.getInputValue(2, 1, 1);
+    },
     },
     mounted(){
-        this.patientBMI() 
+        this.validateColData()
     },
     watch: {
         vitals: {
             handler(newVitals, oldVitals){
-                this.patientBMI() 
-                this.vitalsValidations()
+                this.validateColData()
             },
             deep: true
         }
@@ -188,20 +203,52 @@
       return { checkmark,pulseOutline };
     },
     methods:{
+        getInputValue(sectionIndex: any, colIndex: any, inputIndex: any) {
+        return this.vitals[sectionIndex]?.data.colData[colIndex]?.[inputIndex]?.value || '';
+        },
         navigationMenu(url: any){
             menuController.close()
             this.$router.push(url);
         },
+        updateVitalsStores(){
+            const vitalsStore = useVitalsStore()
+            this.vitals.length == 0 ? vitalsStore.setVitals(this.inputData) : vitalsStore.setVitals(this.vitals)
+        },
+        validateColData() {
+            const targetedInputs = ['height', 'weight', 'systolic', 'diastolic'];
+            const validate = new VitalsService();
+            
+            this.vitals.every(section =>
+                section.data.colData.every((col: any) =>
+                !col.some((input: any) => {
+                    const validateResult = validate.validator(input)
+                    
+                    if(validateResult?.length > 0){
+                        if((input.inputHeader == 'Weight*' || input.inputHeader == 'Height*')){
+                            this.BMI = {}
+                            this.updateBMI()
+                            console.log("tttttttttttt")
+                        }else{
+                            console.log("uuuuuuuuuuuuu")
+                            this.setBMI()
+                        }
+
+
+                        toastWarning(validateResult)
+                        return true;
+                    }else{
+                        
+                    }
+                })
+                )
+            );
+            this.updateVitalsStores()
+            
+            
+        },
+
         vitalsValidations() {
-            if(this.vitals.weight && this.vitals.height && this.demographics.gender && this.demographics.birthdate){
-                this.patientBMI()
-            }else{
-                this.BMI = {}
-            }
-            if(arePropertiesNotEmpty(this.vitals,['height', 'weight', 'systolic', 'diastolic'])){
-                // toastWarning('Vitals tempra saved')
-                
-            }
+
             if(this.vitals.diastolic && this.vitals.systolic){
                 this.BPIcolors = ''
                 if( parseInt(this.vitals.diastolic) >= 40 && parseInt(this.vitals.diastolic) <= 60  &&  parseInt(this.vitals.systolic) >= 70 && parseInt(this.vitals.systolic) <= 90 ){
@@ -220,24 +267,41 @@
                 }
 
             }
-            const vitalsStore = useVitalsStore()
-            vitalsStore.setVitals(this.vitals)
         },
-        async patientBMI(){
-           this.BMI = await BMIService.getBMI(
-                parseInt(this.vitals.weight),
-                parseInt(this.vitals.height) , 
-                this.demographics.gender,
-                HisDate.calculateAge(this.demographics.birthdate,HisDate.currentDate())
-            )
+        async setBMI(){
+            if(this.demographics.gender && this.demographics.birthdate){
+                this.BMI = await BMIService.getBMI(
+                    parseInt(this.vitals[0].data.colData[0][1].value),
+                    parseInt(this.vitals[0].data.colData[0][0].value) , 
+                    this.demographics.gender,
+                    HisDate.calculateAge(this.demographics.birthdate,HisDate.currentDate())
+                )
+            }
+            this.updateBMI()
         },
-        getBMIIcon(data: any){
-            return BMIService.iconBMI(data)
+        async updateBMI(){
+            const defaultValues = {
+            icon: '',
+            backgroundColor: '',
+            textColor: '',
+            index: 0,
+            value: ''
+            };
+            const bmiColor = this.BMI?.color ?? [];
+
+            this.vitals[0].alerts[0].icon = BMIService.iconBMI(bmiColor);
+            this.vitals[0].alerts[0].backgroundColor = bmiColor[0] || '';
+            this.vitals[0].alerts[0].textColor = bmiColor[1];
+            this.vitals[0].alerts[0].index = this.BMI?.index ?? defaultValues.index;
+            this.vitals[0].alerts[0].value = this.BMI?.result ?? defaultValues.value;
+            this.updateVitalsStores()
         },
         getBloodPressureColors(color: any){
             console.log(color)
             return iconBloodPressure(color)
-        }
+        },
+        
+        
         
     }
     });
@@ -287,23 +351,7 @@ text-decoration: none;
   color: gray; /* Adjust the color as needed */
 }
 
-.item_header{
-    --border-width: 0 0 0 0;
-    font-weight: 700;
-    color:#00190E;
-}
-.bmi{
-    border-radius: 5px;
-}
-.bmi_results{
-    padding: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-.item_header_col{
-    max-width: 300px;
-}
+
 ion-col{
     padding-bottom:15px ;
 }

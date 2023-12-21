@@ -6,41 +6,10 @@
             <div class="sub_item_body" v-if="showVisualAcuityTest">
                 <ion-row>
                     <ion-col>
-                        <div style="margin: 1%;">
-                            <ion-label style="margin-left: 3%;">Left Eye</ion-label>
-                            <ion-list>
-                                <ion-item class="item_eye_">
-                                    <ion-select 
-                                        label="---"
-                                        aria-label=""
-                                        placeholder="select complaints"
-                                        :multiple="true"
-                                        @ionChange="leftEyeComplaintSelect($event)"
-                                        @ionCancel="leftEyeHandleCancel()"
-                                        @ionDismiss="leftEyeHandleDismiss()"
-                                        fill="outline"
-                                        class="_item_eye"
-                                        
-                                    >
-                                        <ion-select-option v-for="item in complaintsList" :value="item">{{ item }}</ion-select-option>
-                                    </ion-select>
-                                </ion-item>
-                            </ion-list>
-                        </div>
+                            <basic-input-field inputType="number" inputHeader="Left Eye" ></basic-input-field>
                     </ion-col>
                     <ion-col>
-                        <div style="margin: 1%;">
-                            <ion-label style="margin-left: 3%;">Right Eye</ion-label>
-                            <ion-list>
-                                <ion-item class="item_eye_">
-                                    <ion-select fill="outline" class="_item_eye" label="---" aria-label="Fruit" placeholder="select complaints" :multiple="true">
-                                        <div v-for="(item, index) in complaintsList" :key="index">
-                                            <ion-select-option :value="item">{{ item }}</ion-select-option>
-                                        </div>
-                                    </ion-select>
-                                </ion-item>
-                            </ion-list>
-                        </div>
+                        <basic-input-field inputType="number" inputHeader="Right Eye" ></basic-input-field>
                     </ion-col>
                 </ion-row>
             </div>
@@ -242,6 +211,7 @@
     import { checkmark,pulseOutline } from 'ionicons/icons';
     import { ref } from 'vue';
     import { icons } from '@/utils/svg.ts';
+    import BasicInputField from '@/components/BasicInputField.vue';
 
     export default defineComponent({
     name: 'Menu',
@@ -257,24 +227,13 @@
         IonSelect,
         IonSelectOption,
         IonInput,
+        BasicInputField,
         },
         data() {
     return {
         iconsContent: icons,
         footChecked : false,
         showVisualAcuityTest: false,
-        complaintsList: [
-            "Redness",
-            "Itching",
-            "Burning",
-            "Blurry Vision",
-            "Dryness",
-            "Tearing",
-            "Sensitivity to Light",
-            "Swelling",
-            "Foreign Body Sensation",
-            "Pain"
-            ],
         visualAT: '',
         footSC: '',
     };
@@ -298,15 +257,6 @@
             if (this.showVisualAcuityTest) {
                 this.visualAT = 'none'
             } else {this.visualAT = ''}
-        },
-        leftEyeComplaintSelect(ev: any) {
-            console.log('ionChange fired with value: ' + ev.detail.value);
-        },
-        leftEyeHandleCancel() {
-
-        },
-        leftEyeHandleDismiss() {
-
         }
     }
     });

@@ -4,7 +4,7 @@
         <ion-row>
             <ion-item lines="none" class="medicalAl">
                 <ion-row>
-                    <div v-for="(item, index) in medicalAllergiesList" :key="index">
+                    <div v-for="(item, index) in selectedMedicalAllergiesList" :key="index">
                         <ion-button v-if="item.selected" @click="selectAl(item)" class="medicalAlBtn">
                         {{ item.name }}
                         <ion-icon slot="end" style="font-size: x-large;" :icon="closeOutline"></ion-icon>
@@ -17,6 +17,7 @@
                         <ion-popover class="popover-al" :show-backdrop="false" trigger="click-trigger" trigger-action="click">
                             <ion-content color="light"  class="ion-padding content-al">
                                 <ion-label>Choose the allergy:</ion-label>
+                                <ion-input  v-model="drugName"  @ionInput="FindAllegicDrugName" fill="outline"></ion-input>
                                 <ion-list class="list-al">
                                     <div class="item-al" v-for="(item, index) in medicalAllergiesList" :key="index">
                                         <ion-label  @click="selectAl(item)" style="display: flex; justify-content: space-between;">
@@ -42,6 +43,7 @@
                 <ion-col>
                     <ion-item class="input_item">
                         <ion-input  v-model="drugName"  @ionInput="FindDrugName" fill="outline"></ion-input>
+                        <!--  -->
                         <ion-label><span v-html="iconsContent.search" class="selectedPatient"></span></ion-label>
                     </ion-item>
                     <ion-popover 
@@ -56,7 +58,7 @@
                         <ion-content class="search_card" >
                         
                             <ion-row class="search_result" v-for="(item, index) in diagnosisData" :key="index" >
-                                <ion-col @click="selectedDrugName(item.name)">{{ item.name }} </ion-col>
+                                <ion-col @click="selectedDrugName(item.name, item)">{{ item.name }} </ion-col>
                             </ion-row>
                         </ion-content>
                     </ion-popover>
@@ -229,7 +231,8 @@
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList",
                         "medicalAllergiesList",
                         "nonPharmalogicalTherapyAndOtherNotes",
-                        "isUseOfTraditionalMedicineSelected"
+                        "isUseOfTraditionalMedicineSelected",
+                        "selectedMedicalAllergiesList"
                         ]
                     ),
     },
@@ -240,6 +243,8 @@
         },
         selectAl(item: any) {
             item.selected = !item.selected
+            const treatmentPlanStore = useTreatmentPlanStore()
+            treatmentPlanStore.setSelectedMedicalAllergiesList(item)
             this.saveStateValuesState()
         },
         selectFrequency(index: any) {
@@ -291,10 +296,36 @@
             "page": page,
             "page_size": limit,
             })
+            const filter_id_array = []
+            this.selectedMedicalAllergiesList.forEach(selectedMedicalAllergy => {
+                filter_id_array.push(selectedMedicalAllergy.drug_id)
+            })
+
+            const filteredDrugs = this.filterArrayByIDs(drugs, filter_id_array);
+            
+            filteredDrugs.map(drug => ({
+            label: drug.name, value: drug.name, other: drug
+            }))
+            
+            this.diagnosisData = filteredDrugs
+        },
+        filterArrayByIDs(mainArray: [], idsToFilter: []) {
+            return mainArray.filter(item => !idsToFilter.includes(item.drug_id))
+        },
+        async FindAllegicDrugName(text: any) {
+            const searchText = text.target.value
+            const page=1, limit=10
+            const drugs: ConceptName[] = await DrugService.getOPDDrugs({ 
+            "name": searchText, 
+            "page": page,
+            "selected": false as any, 
+            "page_size": limit,
+            })
             drugs.map(drug => ({
             label: drug.name, value: drug.name, other: drug
             }))
-            this.diagnosisData = drugs
+            const treatmentPlanStore = useTreatmentPlanStore()
+            treatmentPlanStore.setMedicalAllergiesList(drugs)
         },
         openPopover(e: any) {
         this.event = e;
@@ -304,7 +335,8 @@
             this.prescEvent = e
             this.prescPopoverOpen = true
         },
-        selectedDrugName(name: any){
+        selectedDrugName(name: any, obj: any) {
+            //console.log(obj)
             this.drugName = name
         },
         popoverOpenForFrequencyFn2() {
@@ -336,11 +368,9 @@
             this.saveStateValuesState()
         },
         validateNotes(ev: any) {
-            const value = ev.target.value
-            this.nonPharmalogicalTherapyAndOtherNotes = value as string
-            const treatmentPlanStore = useTreatmentPlanStore()
-            treatmentPlanStore.setNonPharmalogicalTherapyAndOtherNotes(value as string)
-            this.saveStateValuesState()
+            let value = ev.target.value
+            const textArry = []
+            this.refSetNonPharmalogicalTherapyAndOtherNotes(value)
         },
         saveStateValuesState() {
             const treatmentPlanStore = useTreatmentPlanStore()
@@ -354,7 +384,13 @@
             const treatmentPlanStore = useTreatmentPlanStore()
             treatmentPlanStore.setIsUseOfTraditionalMedicineSelected(checked as boolean)
             this.saveStateValuesState()
+        },
+        refSetNonPharmalogicalTherapyAndOtherNotes(value: string) {
+            const treatmentPlanStore = useTreatmentPlanStore()
+            treatmentPlanStore.setNonPharmalogicalTherapyAndOtherNotes(value as string)
+            this.saveStateValuesState()
         }
+        
     }
     });
 </script>

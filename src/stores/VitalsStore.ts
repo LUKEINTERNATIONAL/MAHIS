@@ -2,17 +2,7 @@ import { defineStore } from 'pinia'
 
 export const useVitalsStore = defineStore('vitalsStore',{
     state: () => ({
-        vitals: {
-            height:'',
-            weight:'',
-            systolic:'',
-            diastolic:'',
-            bmp:'',
-            pulse:'',
-            respiratory:'',
-            oxygen:'',
-            temperature:''
-        }
+        vitals: []
     }),
     actions:{
         setVitals(data: any){
