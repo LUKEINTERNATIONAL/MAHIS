@@ -1,19 +1,18 @@
 <template>
     <ion-item
-        :displayData="displayData"
-        class="ionLbltp" v-for="(item, index) in displayData" :key="index"
-        @mousemove="highlightItem(index)" @mouseout="undoHighlightItem(index)">
-
+        class="ionLbltp" v-for="(item, index) in localMedicalDrugsList" :key="index"
+        @mousemove="highlightItem(index)" @mouseout="undoHighlightItem(index)"
+    >
         <ion-col class="col-st1">
-            <ion-label :id="asignLblID(index)" class="truncate-text" style="color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ (item as any).first }}</ion-label>
+            <ion-label :id="asignLblID(index)" class="truncate-text" style="color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.drugName }}</ion-label>
         </ion-col>
 
         <ion-col class="col-st2">
-            <ion-label class="truncate-text" style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ (item as any).first }} <span class="spaceBetween"></span> {{ (item as any).second }} <span class="spaceBetween"></span> {{ (item as any).third }} <span class="spaceBetween"></span> {{ (item as any).fourth }}</ion-label>
+            <ion-label class="truncate-text" style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.dose }} / {{ item.frequency }} / daily / {{ item.duration }} / until {{ item.prescription }}</ion-label>
         </ion-col>
 
         <ion-col class="action_buttons">
-            <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end; flex: auto;" @click="$emit('update:editItem', index)"><span v-html="iconsContent.edit" class="modify_buttons"></span></ion-label>
+            <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end; flex: auto;" @click="editItemAtIndex(index)"><span v-html="iconsContent.edit" class="modify_buttons"></span></ion-label>
             <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end;" @click="removeItemAtIndex(index, $event)"><span v-html="iconsContent.delete" class="modify_buttons"></span></ion-label>
         </ion-col>
 
@@ -21,31 +20,34 @@
 </template>
 
 <script lang="ts">
-
 import { IonItem, IonCol, IonLabel } from '@ionic/vue'
 import { defineComponent } from 'vue'
 import { createModal,popoverConfirmation,alertConfirmation } from '@/utils/Alerts'
-import { icons } from '@/utils/svg';
-
+import { icons } from '@/utils/svg.ts';
 export default defineComponent({
-
+    created() {
+       // this.$emit('onFooterInstance', this)
+    },
     components:{
+        // IonContent,
         IonItem,
         IonCol,
         IonLabel
     },
-
     data() {
     return {
         iconsContent: icons,
+        localMedicalDrugsList: [...this.$props._selectedMedicalDrugsList],
     }},
     props: {
-        displayData: {
+        _selectedMedicalDrugsList: {
             type: Array,
             default: []
         },
     },
+    watch: {
 
+    },
     methods: {
         highlightItem(item: any) {
             const el = document.getElementById(item+'_lbl')
@@ -82,9 +84,12 @@ export default defineComponent({
         async removeItemAtIndex(index: any, e: Event) {
             const deleteConfirmed = await popoverConfirmation("Do you want to delete it?",e as any)
             if (deleteConfirmed) {
-                this.$emit('update:removeItem', index)
+                this.$emit('remove-item', index)
             }
         },
+        editItemAtIndex(index: any) {
+            this.$emit('edit-item', index)
+        }
     }
 })
 </script>

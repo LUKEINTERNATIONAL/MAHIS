@@ -37,7 +37,7 @@
         </ion-item>
         <div style="margin-left: 30px; margin-bottom: 14px;">
 
-            <dynamic-list :displayData="selectedMedicalDrugsList" @update:editItem="editItemAtIndex" @removeItemAtIndex="removeItemAtIndex" :key="componentKey"/>
+            <dynamic-list :_selectedMedicalDrugsList="selectedMedicalDrugsList" @edit-item="editItemAtIndex" @remove-item="removeItemAtIndex" :key="componentKey"/>
 
             <ion-row v-if="!addItemButton" style="margin-bottom: 20px;">
                 <ion-col>
@@ -166,7 +166,7 @@
     import { defineComponent } from 'vue';
     import { checkmark,pulseOutline,addOutline,closeOutline, checkmarkOutline, filter, chevronDownOutline, chevronUpOutline } from 'ionicons/icons';
     import { ref } from 'vue';
-    import { icons } from '@/utils/svg';
+    import { icons } from '@/utils/svg.ts';
     import { DRUG_FREQUENCIES } from "@/services/drug_prescription_service";
     import { DrugService} from "@/services/drug_service"
     import { ConceptName } from '@/interfaces/conceptName';
@@ -224,7 +224,9 @@
     setup() {
       return { checkmark, pulseOutline, closeOutline, addOutline, checkmarkOutline, chevronDownOutline,chevronUpOutline };
     },
-    
+    watch: {
+        // 
+    },
     computed: {
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList",
                         "medicalAllergiesList",
@@ -234,7 +236,6 @@
                         ]
                     ),
     },
-    
     methods:{
         navigationMenu(url: any){
             menuController.close()
@@ -269,11 +270,11 @@
             this.addItemButton =true
 
             const drugString = {
-                frist: this.drugName,
-                second: this.dose,
-                third: this.frequency,
-                fourth: this.duration,
-                fith: '2023-09-23'
+                drugName: this.drugName,
+                dose: this.dose,
+                frequency: this.frequency,
+                duration: this.duration,
+                prescription: '2023-09-23'
             }
             this.selectedMedicalDrugsList.push(drugString)
 
