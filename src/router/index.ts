@@ -3,7 +3,10 @@ import { RouteRecordRaw } from 'vue-router';
 import HomePage from '../views/HomePage.vue'
 import Login from '../views/Login.vue'
 import PatientProfile from '../views/PatientProfile.vue'
+import PatientRegistration from '@/views/Registration.vue'
+
 import NCD from '@/apps/NCD/config/routes'
+import ANC from '@/apps/ANC/config/routes'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -25,7 +28,14 @@ const routes: Array<RouteRecordRaw> = [
     name: 'patientProfile',
     component: PatientProfile
   },
-  ...NCD
+  {
+    path: '/registration/:registrationType',
+    name: 'registration',
+    component: PatientRegistration,
+    props: true
+  },
+  ...NCD,
+  ...ANC
 ]
 
 const router = createRouter({

@@ -15,8 +15,18 @@
         <ion-label>
             <span v-if="icon" v-html="icon" class="selectedPatient"></span>
         </ion-label>
-
+        <ion-input 
+            @ionInput="handleInput" 
+            fill="outline" 
+            :value="inputValue"
+            :placeholder="placeholder"
+            :type = "inputType"
+            >
+        </ion-input>
         <ion-label v-if="unit">{{ unit }}</ion-label>
+        <ion-label style="border-left: 1px solid #E6E6E6; padding-left: 10px;">
+            <span v-if="iconRight" v-html="iconRight" class=""></span>
+        </ion-label>
     </ion-item>
 </template>
 
@@ -58,12 +68,23 @@ export default {
             type: String,
             default: "",
         },
+        iconRight: {
+            type: String,
+            default: "",
+        },
+        inputType: {
+            type: String,
+            default: "text",
+        },
+
+    },
+     methods: {
+        handleInput(event: any) {
+            this.$emit("update:inputValue", event);
+         },
     },
 }
 </script>
 
 <style scoped>
-.inputCSS {
-    margin: 0px 5px;
-}
 </style>

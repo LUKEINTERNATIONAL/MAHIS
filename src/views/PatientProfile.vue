@@ -25,21 +25,21 @@
                               <ion-col size="4" >Age</ion-col>
                               <ion-col >{{ formatBirthdate() }}</ion-col>
                           </ion-row>
-                          <ion-row>
+                          <ion-row>                              
                               <ion-col size="4">Allergies</ion-col>
                               <ion-col size="8" >
-                                <span class="allergies">Penicillin</span>
-                                <span class="allergies"> Sulfa drugs</span>
-                                <span class="allergies">Anticonvulsants</span>
-                                <span class="allergies">Aspirin</span>
-                                <span class="allergies">Ibuprofen</span>
-                                <span class="allergies">12+</span>
-                              </ion-col>
+                                <span  v-for="(item, index) in selectedMedicalAllergiesList" :key="index" >
+                                    <span class="allergies" v-if="item.selected">{{ item.name }}</span>
+                                </span>
+                              </ion-col> 
                           </ion-row>
                     </ion-card-content>
                 </ion-card>
                 <ion-card class="start_new_co" style=" margin-bottom: 20px;" @click="nav('consultationPlan')">
                     + Start new consultation
+                </ion-card>
+                <ion-card class="start_new_co" style=" margin-bottom: 20px;" @click="nav('patient')">
+                    + Start new consultation for ANC
                 </ion-card>
                 <ion-card style=" margin-bottom: 20px; background-color: #fff;">
                     <ion-accordion-group :value="['first']">
@@ -188,6 +188,7 @@
 
 
   import { useDemographicsStore } from '@/stores/DemographicStore'
+  import { useTreatmentPlanStore } from '@/stores/TreatmentPlanStore'
   import { mapState } from 'pinia';
   import HisDate from "@/utils/Date";
 
@@ -230,6 +231,7 @@
     },
     computed:{
         ...mapState(useDemographicsStore,["demographics"]),
+        ...mapState(useTreatmentPlanStore,["selectedMedicalAllergiesList"]),
     },
     setup() {
         const modal = ref();
@@ -246,6 +248,7 @@
             modalController.dismiss()
         },
         nav(url: any){
+            console.log("pppppppppp")
             this.$router.push(url);
         },
         covertGender(gender: any){

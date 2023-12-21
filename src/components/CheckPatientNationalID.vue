@@ -1,20 +1,23 @@
 <template>
+
     <div class="modal_wrapper">
         <div class="modal_title diplay_space_between">
-            <span>Disposition</span>
+            <span></span>
             <span @click="dismiss()" style="cursor: pointer; font-weight: 300;">x</span>
         </div>
-        <div class="dashed_bottom_border">
-            <div   div class="">
-                Facility 1
+        <div>
+            <div class="title">
+                    Does the patient have <br /> a National ID card?
             </div>
-            <div class="diplay_space_between" style="margin-bottom: 10px;">
-                <div>
-                    Internal / 2023-11-16 / some reason typing.
-                </div>
-                <div>
-                    <span v-html="iconsContent.tree_dot" ></span>
-                </div>
+            <div class="content">
+                <ion-card class="item" @click="nav('registration/scan')">
+                    <div v-html="iconsContent.scanner"></div>
+                    <div style="padding-top: 10px;">Yes, I need to scan it</div>
+                </ion-card>
+                <ion-card class="item"  @click="nav('registration/manual')" >
+                    <div v-html="iconsContent.demographics"></div>
+                    <div style="padding-top: 10px;">No, I need to enter the demographics manually</div>
+                </ion-card>
             </div>
         </div>
     </div>
@@ -57,38 +60,33 @@
     methods:{
       dismiss(){
         modalController.dismiss()
+      },
+      nav(url: any){
+        this.dismiss()
+        this.$router.push(url);
       }
     }
     });
 </script>
 
 <style scoped>
+.title{
+    text-align: center;
+    padding: 50px 0px 40px 0px;
+    font-weight: 700;
+    font-size: 24px;
+}
 
-ion-modal#example-modal {
-    --width: fit-content;
-    --min-width: 250px;
-    --height: fit-content;
-    --border-radius: 6px;
-    --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
-  }
-
-  ion-modal#example-modal h1 {
-    margin: 20px 20px 10px 20px;
-  }
-
-  ion-modal#example-modal ion-icon {
-    margin-right: 6px;
-
-    width: 48px;
-    height: 48px;
-
-    padding: 4px 0;
-
-    color: #aaaaaa;
-  }
-
-  ion-modal#example-modal .wrapper {
-    margin-bottom: 10px;
-  }
+.content{
+    display: flex;
+}
+.item{
+    padding: 90px 0px 90px 0px;
+    width: 50%;
+    margin-inline: 5px;
+    font-weight: 500;
+    font-size: 14px;
+    text-align: center;
+}
 </style>
   
