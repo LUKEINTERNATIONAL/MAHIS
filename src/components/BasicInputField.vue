@@ -1,17 +1,6 @@
 <template>
     <h5 v-if="inputHeader">{{ inputHeader }}</h5>
-    <ion-item :class="{ 'inputCSS': applyStyling }" class="input_item">
-        <ion-input 
-            :class="{ 'inputCSS': applyStyling }"
-            :id="id" 
-            :value="inputValue"
-            @click="$emit('clicked:inputValue', $event)"
-            @ionInput="$emit('update:inputValue', $event)" 
-            fill="outline" 
-            :placeholder="placeholder"
-            >
-            <slot></slot>
-        </ion-input>
+    <ion-item class="input_item">
         <ion-label>
             <span v-if="icon" v-html="icon" class="selectedPatient"></span>
         </ion-label>
@@ -40,7 +29,7 @@
     </ion-item>
 </template>
 
-<script lang="ts">
+<script>
 import { IonInput, IonItem } from "@ionic/vue";
 
 export default {
@@ -50,14 +39,6 @@ export default {
         IonItem,
     },
     props: {
-        id: {
-            type: String,
-            default: "",
-        },
-        applyStyling: {
-            type: Boolean,
-            default: false
-        },
         placeholder: {
             type: String,
             default: "",
@@ -84,7 +65,7 @@ export default {
         },
         inputType: {
             type: String,
-            default: "text",
+            default: "",
         },
         eventType: {
             type: String,
@@ -93,7 +74,7 @@ export default {
 
     },
      methods: {
-        handleInput(event: any) {
+        handleInput(event) {
             this.$emit("update:inputValue", event);
          },
          handleBlur(event) {
