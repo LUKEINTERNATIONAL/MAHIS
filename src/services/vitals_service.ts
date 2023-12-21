@@ -3,20 +3,20 @@ import { isArray } from "lodash";
 export class VitalsService {
 
   isNotEmptyandNumber(vital: any) {
-    return `${vital.value}`.match(/^-?\d+\.?\d*$/) ? null : [`Invalid entry for ${vital.label}`]
+    return `${vital.value}`.match(/^-?\d+\.?\d*$/) ? null : [`Invalid entry for ${vital.inputHeader}`]
   }
   isNotEmptyandFloat(vital: any) {
     return `${vital.value}`.match(/^\d{1,3}\.\d{1,5}$/) 
       ? null 
-      : [`Invalid entry for ${vital.label}. Don't forget to add a decimal. e.g. 56.2 ${vital.other.modifier}`]
+      : [`Invalid entry for ${vital.inputHeader}. Don't forget to add a decimal. e.g. 56.2 ${vital.unit}`]
   }
   checkMinMax(val: any, min: number, max: number) {
     const p = [];
     if (parseFloat(`${val.value}`) < min) {
-      p.push([`${val.label} entered is less than minimum ${min} ${val?.other?.modifier || ''}`])
+      p.push([`${val.inputHeader} entered is less than minimum ${min} ${val?.unit || ''}`])
     }
     if (parseFloat(`${val.value}`) > max) {
-      p.push([`${val.label} entered is greater than maximum ${max} ${val?.other?.modifier || ''}`])
+      p.push([`${val.inputHeader} entered is greater than maximum ${max} ${val?.unit || ''}`])
     }
     return p.length > 0 ? p : null;
   }
@@ -46,11 +46,11 @@ export class VitalsService {
       const value = `${vital.value}`.split('/');
       
       const bpSystolic = {
-        label: 'Systolic',
+        name: 'Systolic',
         value: value[0]
       };
       const bpDiastolic = {
-        label: 'Diastolic',
+        name: 'Diastolic',
         value: value[1]
       };
       p.push(this.checkMinMax(bpDiastolic, 30, 200))
@@ -61,7 +61,7 @@ export class VitalsService {
   validator(vital: any) {
     const values = [
       {
-        name: "Weight",
+        name: "Weight*",
         validator: (val: any) => {
           const emptyErrors = this.isNotEmptyandFloat(val);
           const minErrors = this.checkMinMax(val, 2.0, 250.0);
@@ -69,7 +69,7 @@ export class VitalsService {
         },
       },
       {
-        name: "Height",
+        name: "Height*",
         validator: (val: any) => {
           const errors = []
           errors.push(this.isNotEmptyandNumber(val))
@@ -82,20 +82,21 @@ export class VitalsService {
           return this.isValidBPReading(val)
         },
       }, {
-        name: "Temp",
+        name: "Temperature",
         validator: (val: any) => {
-          const emptyErrors = this.isNotEmptyandNumber(val);
           const minErrors = this.checkMinMax(val, 30, 42);
-          return this.mergeErrors([emptyErrors, minErrors]); 
-        },
-      }, {
-        name: "SP02",
-        validator: (val: any) => {
-          const minErrors = this.checkMinMax(val, 40, 100);
           return this.mergeErrors([minErrors]); 
         },
       }, {
-        name: "Pulse",
+        name: "Systolic Pressure*",
+        validator: (val: any) => {
+          const errors = []
+          errors.push(this.isNotEmptyandNumber(val))
+          errors.push(this.checkMinMax(val, 40, 100));
+          return this.mergeErrors(errors); 
+        },
+      }, {
+        name: "Pulse rate",
         validator: (val: any) => {
           const minErrors = this.checkMinMax(val, 50, 120);
           return this.mergeErrors([minErrors]); 
@@ -103,7 +104,7 @@ export class VitalsService {
       }
     ]
     const v = values.filter(element => {
-      return element.name === vital.label;
+      return element.name === vital.inputHeader;
     });
     if (v.length > 0) {
       return v[0].validator(vital);

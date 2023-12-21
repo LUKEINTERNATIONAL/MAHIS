@@ -46,6 +46,7 @@
     return {
         iconsContent: icons,
         BMI: {},
+        BPIcolors: '',
         vValidations: '' as any,
         inputData: [
             {
@@ -58,15 +59,15 @@
                                     inputHeader: 'Height*',
                                     unit: 'cm',
                                     icon: icons.height,
-                                    name: 'height',
-                                    value: ''
+                                    value: '',
+                                    required: true
                                 },
                                 {
                                     inputHeader: 'Weight*',
                                     unit: 'kg',
                                     icon: icons.weight,
-                                    name: 'weight',
-                                    value: ''
+                                    value: '',
+                                    required: true
                                 },
                                 
                             ],
@@ -95,15 +96,15 @@
                                     inputHeader: 'Systolic Pressure*',
                                     unit: 'mmHg',
                                     icon: icons.systolicPressure,
-                                    name: 'systolic',
-                                    value: ''
+                                    value: '',
+                                    required: true
                                 },
                                 {
                                     inputHeader: 'Diastolic pressure*',
                                     unit: 'kg',
                                     icon: icons.diastolicPressure,
-                                    name: 'diastolic',
-                                    value: ''
+                                    value: '',
+                                    required: true
                                 }
                             ]
                         ]
@@ -129,14 +130,12 @@
                                     inputHeader: 'Temperature',
                                     unit: 'C',
                                     icon: icons.temprature,
-                                    name: 'temperature',
                                     value: ''
                                 },
                                 {
                                     inputHeader: 'Pulse rate',
                                     unit: 'BMP',
                                     icon: icons.pulse,
-                                    name: 'pulse',
                                     value: ''
                                 }
                             ],
@@ -145,14 +144,12 @@
                                     inputHeader: 'Respiratory rate',
                                     unit: 'BMP',
                                     icon: icons.respiratory,
-                                    name: 'respiratory',
                                     value: ''
                                 },
                                 {
                                     inputHeader: 'Oxygen saturation',
                                     unit: '%',
                                     icon: icons.oxgenStaturation,
-                                    name: 'oxygen',
                                     value: ''
                                 }
                             ]
@@ -166,19 +163,38 @@
   computed:{
         ...mapState(useDemographicsStore,["demographics"]),
         ...mapState(useVitalsStore,["vitals"]),
+    heightValue() {
+      return this.getInputValue(0, 0, 0);
+    },
+    weightValue() {
+      return this.getInputValue(0, 0, 1);
+    },
+    systolicValue() {
+      return this.getInputValue(1, 0, 0);
+    },
+    diastolicValue() {
+      return this.getInputValue(1, 0, 1);
+    },
+    temperatureValue() {
+      return this.getInputValue(2, 0, 0);
+    },
+    pulseValue() {
+      return this.getInputValue(2, 0, 1);
+    },
+    respiratoryValue() {
+      return this.getInputValue(2, 1, 0);
+    },
+    oxygenValue() {
+      return this.getInputValue(2, 1, 1);
+    },
     },
     mounted(){
-        if(this.vitals.length == 0){
-            const vitalsStore = useVitalsStore()
-            vitalsStore.setVitals(this.inputData)
-        }
-        this.patientBMI() 
+        this.validateColData()
     },
     watch: {
         vitals: {
             handler(newVitals, oldVitals){
-                this.patientBMI() 
-                this.vitalsValidations()
+                this.validateColData()
             },
             deep: true
         }
@@ -187,57 +203,104 @@
       return { checkmark,pulseOutline };
     },
     methods:{
+        getInputValue(sectionIndex: any, colIndex: any, inputIndex: any) {
+        return this.vitals[sectionIndex]?.data.colData[colIndex]?.[inputIndex]?.value || '';
+        },
         navigationMenu(url: any){
             menuController.close()
             this.$router.push(url);
         },
-        vitalsValidations() {
-            this.vValidations = new VitalsService();
-            const test =this.vValidations.validator({'label':'Weight',other: {
-            modifier: "KG",
-            icon: "weight",
-            required: true,
-          },'value':this.vitals[0].data.colData[0][1].value
-        })
-            console.log(test)
-            if(this.vitals[0].data.colData[0][0].value 
-            && this.vitals[0].data.colData[0][1].value 
-            && this.demographics.gender && this.demographics.birthdate){
-                this.patientBMI()
-            }else{
-                this.BMI = {}
-            }
-            if(arePropertiesNotEmpty(this.vitals,['height', 'weight', 'systolic', 'diastolic'])){
-                // toastWarning('Vitals tempra saved')
-                
-            }
-           this.updateVitalsStores()
-        },
-        async patientBMI(){
-           this.BMI = await BMIService.getBMI(
-                parseInt(this.vitals[0].data.colData[0][1].value),
-                parseInt(this.vitals[0].data.colData[0][0].value) , 
-                this.demographics.gender,
-                HisDate.calculateAge(this.demographics.birthdate,HisDate.currentDate())
-            )
-            this.vitals[0].alerts[0].icon = this.getBMIIcon(this.BMI.color)
-            this.vitals[0].alerts[0].backgroundColor = this.BMI.color[0]
-            this.vitals[0].alerts[0].textColor = this.BMI.color[1]
-            this.vitals[0].alerts[0].index = this.BMI.index
-            this.vitals[0].alerts[0].value = this.BMI.result
-
-            this.updateVitalsStores()
-            
-        },
-        getBMIIcon(data: any){
-            return BMIService.iconBMI(data)
-        },
         updateVitalsStores(){
             const vitalsStore = useVitalsStore()
-            vitalsStore.setVitals(this.vitals)
-
+            this.vitals.length == 0 ? vitalsStore.setVitals(this.inputData) : vitalsStore.setVitals(this.vitals)
+        },
+        validateColData() {
+            const targetedInputs = ['height', 'weight', 'systolic', 'diastolic'];
+            const validate = new VitalsService();
             
-        }
+            this.vitals.every(section =>
+                section.data.colData.every((col: any) =>
+                !col.some((input: any) => {
+                    const validateResult = validate.validator(input)
+                    
+                    if(validateResult?.length > 0){
+                        if((input.inputHeader == 'Weight*' || input.inputHeader == 'Height*')){
+                            this.BMI = {}
+                            this.updateBMI()
+                            console.log("tttttttttttt")
+                        }else{
+                            console.log("uuuuuuuuuuuuu")
+                            this.setBMI()
+                        }
+
+
+                        toastWarning(validateResult)
+                        return true;
+                    }else{
+                        
+                    }
+                })
+                )
+            );
+            this.updateVitalsStores()
+            
+            
+        },
+
+        vitalsValidations() {
+
+            if(this.vitals.diastolic && this.vitals.systolic){
+                this.BPIcolors = ''
+                if( parseInt(this.vitals.diastolic) >= 40 && parseInt(this.vitals.diastolic) <= 60  &&  parseInt(this.vitals.systolic) >= 70 && parseInt(this.vitals.systolic) <= 90 ){
+                    this.BPIcolors =this.getBloodPressureColors(['#B9E6FE','#026AA2'])
+                }else
+                if( parseInt(this.vitals.diastolic) > 60 && parseInt(this.vitals.diastolic) <= 80  &&  parseInt(this.vitals.systolic) >= 90 && parseInt(this.vitals.systolic) < 120 ){
+                    this.BPIcolors =this.getBloodPressureColors(['#DDEEDD','#016302'])
+                }else
+                if( parseInt(this.vitals.diastolic) >= 80 && parseInt(this.vitals.diastolic) <= 90 &&  parseInt(this.vitals.systolic) >= 120 && parseInt(this.vitals.systolic) < 140 ){
+                    this.BPIcolors =this.getBloodPressureColors(['#FEDF89','#B54708'])
+                }else
+                if( parseInt(this.vitals.diastolic) >= 90 && parseInt(this.vitals.diastolic) <= 100  &&  parseInt(this.vitals.systolic) >= 140 && parseInt(this.vitals.systolic) < 190 ){
+                    this.BPIcolors =this.getBloodPressureColors(['#FECDCA','#B42318'])
+                }else{
+                    this.BPIcolors =this.getBloodPressureColors(['purple'])
+                }
+
+            }
+        },
+        async setBMI(){
+            if(this.demographics.gender && this.demographics.birthdate){
+                this.BMI = await BMIService.getBMI(
+                    parseInt(this.vitals[0].data.colData[0][1].value),
+                    parseInt(this.vitals[0].data.colData[0][0].value) , 
+                    this.demographics.gender,
+                    HisDate.calculateAge(this.demographics.birthdate,HisDate.currentDate())
+                )
+            }
+            this.updateBMI()
+        },
+        async updateBMI(){
+            const defaultValues = {
+            icon: '',
+            backgroundColor: '',
+            textColor: '',
+            index: 0,
+            value: ''
+            };
+            const bmiColor = this.BMI?.color ?? [];
+
+            this.vitals[0].alerts[0].icon = BMIService.iconBMI(bmiColor);
+            this.vitals[0].alerts[0].backgroundColor = bmiColor[0] || '';
+            this.vitals[0].alerts[0].textColor = bmiColor[1];
+            this.vitals[0].alerts[0].index = this.BMI?.index ?? defaultValues.index;
+            this.vitals[0].alerts[0].value = this.BMI?.result ?? defaultValues.value;
+            this.updateVitalsStores()
+        },
+        getBloodPressureColors(color: any){
+            console.log(color)
+            return iconBloodPressure(color)
+        },
+        
         
         
     }

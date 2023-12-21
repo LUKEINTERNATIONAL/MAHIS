@@ -11,6 +11,7 @@
                         :unit="col.unit"
                         :icon ="col.icon"
                         :inputValue="col.value"
+                        eventType="blur"
                         @update:inputValue="value => col.value = value.target.value"
                     />
                 </ion-col>
