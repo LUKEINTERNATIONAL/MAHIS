@@ -83,9 +83,6 @@ methods:{
     openNotesModal(){
         createModal(NotesModal)
     },
-    openVitalsModal(){
-        createModal(VitalsModal)
-    },
     transformClinicalNotes(): string[] {
         const treatmentPlanStore = useTreatmentPlanStore()
         const input = treatmentPlanStore.getNonPharmalogicalTherapyAndOtherNotes()
