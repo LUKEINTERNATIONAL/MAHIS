@@ -1,5 +1,5 @@
 <template>
-    <DashBox :status="no_item" :content="'No Diagnosis added'" />
+    <DashBox :status="no_item" :content="'No Diagnosis added'"/>
 
     <span v-if="display_item">
         <ion-row class="dashed_bottom_border" v-for="(item, index) in diagnosis" :key="index">
@@ -53,7 +53,7 @@
         @closePopoover="value => popoverOpen = value" 
         :event="event" 
         :title="'Choose the investigation:'"
-        @setName="setTest"
+        @setSelection="setSelection"
     />
 </template>
   
@@ -63,8 +63,8 @@
         IonHeader,
         IonItem,
         IonList,
-        IonTitle, 
-        IonToolbar, 
+        IonTitle,
+        IonToolbar,
         IonMenu,
         menuController,
         IonInput,
@@ -160,17 +160,16 @@
             const diagnosisStore = useDiagnosisStore()
             diagnosisStore.setDiagnosis(diagnosis)
         },
-        async searchInput(text: any) {
-            const searchText = text.target.value;
-            this.openPopover(text)
-            this.diagnosisData = await PatientDiagnosisService.getDiagnosis(searchText, 1, 10)
-            console.log(this.diagnosisData)
-        },
         openPopover(e: any) {
         this.event = e;
         this.popoverOpen = true;
       },
-      setTest(value: any) {
+        async searchInput(event: any) {
+            const searchText = event.target.value;
+            this.openPopover(event)
+            this.diagnosisData = await PatientDiagnosisService.getDiagnosis(searchText, 1, 10)
+        },
+        setSelection(value: any) {
             this.selectedCondition = value
             this.searchText = value
         },
