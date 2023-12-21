@@ -27,7 +27,7 @@ export class ConceptService extends Service {
         })
         return data
     }
-
+    
     static async getConceptSet(conceptName: string, filter = '') {
         const conceptId = await this.getConceptID(conceptName)
         const concepts = super.getJson('concept_set', {
