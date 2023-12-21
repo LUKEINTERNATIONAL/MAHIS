@@ -50,7 +50,8 @@ import {
       IonTitle, 
       IonToolbar, 
       IonMenu,
-      modalController 
+      IonCard,
+      IonCardContent 
   } from '@ionic/vue';
 import { defineComponent } from 'vue'
 import { checkmark,pulseOutline } from 'ionicons/icons'
@@ -72,7 +73,9 @@ components:{
   IonList,
   IonMenu,
   IonTitle,
-  IonToolbar    },
+  IonToolbar,
+  IonCard,
+  IonCardContent    },
   data() {
 return {
   iconsContent: icons,

@@ -163,17 +163,18 @@
             IonLabel,
             IonTextarea
         } from '@ionic/vue';
-    import { defineComponent } from 'vue';
-    import { checkmark,pulseOutline,addOutline,closeOutline, checkmarkOutline, filter, chevronDownOutline, chevronUpOutline } from 'ionicons/icons';
-    import { ref } from 'vue';
-    import { icons } from '@/utils/svg.ts';
-    import { DRUG_FREQUENCIES } from "@/services/drug_prescription_service";
+    import { defineComponent } from 'vue'
+    import { checkmark,pulseOutline,addOutline,closeOutline, checkmarkOutline, filter, chevronDownOutline, chevronUpOutline } from 'ionicons/icons'
+    import { ref } from 'vue'
+    import { icons } from '@/utils/svg.ts'
+    import { DRUG_FREQUENCIES } from "@/services/drug_prescription_service"
     import { DrugService} from "@/services/drug_service"
-    import { ConceptName } from '@/interfaces/conceptName';
+    import { ConceptName } from '@/interfaces/conceptName'
     import DynamicButton from "@/components/DynamicButton.vue"
-    import DynamicList from '@/components/DynamicList.vue';
+    import DynamicList from '@/components/DynamicList.vue'
     import { mapState } from 'pinia';
     import { useTreatmentPlanStore } from '@/stores/TreatmentPlanStore'
+    import { ConceptService } from "@/services/concept_service"
 
     export default defineComponent({
     name: 'Menu',
@@ -298,7 +299,9 @@
             })
             const filter_id_array = []
             this.selectedMedicalAllergiesList.forEach(selectedMedicalAllergy => {
-                filter_id_array.push(selectedMedicalAllergy.drug_id)
+                if (selectedMedicalAllergy.selected) {
+                    filter_id_array.push(selectedMedicalAllergy.concept_id)
+                }
             })
 
             const filteredDrugs = this.filterArrayByIDs(drugs, filter_id_array);
@@ -310,17 +313,18 @@
             this.diagnosisData = filteredDrugs
         },
         filterArrayByIDs(mainArray: [], idsToFilter: []) {
-            return mainArray.filter(item => !idsToFilter.includes(item.drug_id))
+            return mainArray.filter(item => !idsToFilter.includes(item.concept_id))
         },
         async FindAllegicDrugName(text: any) {
             const searchText = text.target.value
             const page=1, limit=10
-            const drugs: ConceptName[] = await DrugService.getOPDDrugs({ 
-            "name": searchText, 
-            "page": page,
-            "selected": false as any, 
-            "page_size": limit,
-            })
+            const drugs: ConceptName[] = await ConceptService.getConceptSet('OPD Medication', searchText)
+            // const drugs: ConceptName[] = await DrugService.getOPDDrugs({ 
+            // "name": searchText, 
+            // "page": page,
+            // "selected": false as any, 
+            // "page_size": limit,
+            // })
             drugs.map(drug => ({
             label: drug.name, value: drug.name, other: drug
             }))
