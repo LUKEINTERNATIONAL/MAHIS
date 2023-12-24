@@ -1,8 +1,48 @@
 import { isArray } from "lodash";
 import { AppEncounterService } from "@/services/app_encounter_service";
+import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 export class VitalsService extends AppEncounterService{
+  private appEncounterServiceInstance: AppEncounterService;
   constructor(patientID: number, providerID: number) {
     super(patientID, 6, providerID);
+    this.appEncounterServiceInstance = this;
+  }
+
+  async mapObs(vitals: any) {
+      const labelsAndValues: any[] = [];
+      // Process other vitals using Promise.all
+      const promises = await Promise.all(
+          vitals.flatMap((section: any) =>
+              section.data.colData.flat().map(async (item: any) => {
+                if(item.value){
+                  const obs = await this.appEncounterServiceInstance.buildValueNumber(item.name, item.value);
+                  labelsAndValues.push(obs);
+                }
+              })
+          )
+      );
+
+      // Process BMI
+      const bmi: any = String(vitals[0].alerts[0].index)
+      if (bmi) {
+          const bmiObs = await this.appEncounterServiceInstance.buildValueNumber('BMI',bmi);
+          labelsAndValues.push(bmiObs);
+      }
+      return labelsAndValues;
+  }
+  async onFinish(vitals: any) {
+    const encounter = await this.appEncounterServiceInstance.createEncounter();
+
+    if (!encounter) return toastWarning("Unable to create treatment encounter");
+
+    const obs: any = await this.mapObs(vitals);
+    const observations = await this.appEncounterServiceInstance.saveObservationList(obs);
+
+    if (!observations) return toastWarning("Unable to save patient observations");
+
+    toastSuccess("Observations and encounter created!");
+
+    // this.nextTask();
   }
   isNotEmptyandNumber(vital: any) {
     return `${vital.value}`.match(/^-?\d+\.?\d*$/) ? null : [`Invalid entry for ${vital.inputHeader}`]

@@ -245,9 +245,7 @@
             });
 
             this.vitals.validationStatus = !this.hasValidationErrors.includes('false');
-            if(this.vitals.validationStatus){
-                this.mapObs()
-            }
+          
             
         },
         async setBMI(){
@@ -301,45 +299,7 @@
                 return {colors:[],value:""}
             }
         },
-        async onFinish(formData: any) {
-      const encounter = await this.vitalsInstance.createEncounter();
-
-      if (!encounter) return toastWarning("Unable to create treatment encounter");
-
-      const obs = this.mapObs();
-      console.log(obs)
-      const observations = await this.vitalsInstance.saveObservationList(obs);
-
-      if (!observations) return toastWarning("Unable to save patient observations");
-
-      toastSuccess("Observations and encounter created!");
-
-      // this.nextTask();
-    },
-        async mapObs() {
-            console.log("tttttttttt")
-            const labelsAndValues: any[] = [];
-            // Process other vitals using Promise.all
-            const promises = await Promise.all(
-                this.vitals.flatMap(section =>
-                    section.data.colData.flat().map(async (item: any) => {
-                        this.setBMI()
-                        const obs = await this.vitalsInstance.buildValueNumber(item.name, item.value);
-                        labelsAndValues.push(obs);
-                    })
-                )
-            );
-
-            // Process BMI
-            if (this.BMI.index) {
-                const bmiObs = await this.vitalsInstance.buildValueNumber('BMI',String(this.BMI.index));
-                labelsAndValues.push(bmiObs);
-            }
-            console.log(labelsAndValues)
-            return labelsAndValues;
-        }
-
-    
+      
     }
     });
 

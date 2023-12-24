@@ -37,11 +37,12 @@
   import SaveProgressModal from '@/components/SaveProgressModal.vue'
   import { createModal } from '@/utils/Alerts'
   import { icons } from '@/utils/svg';
-  import { arePropertiesNotEmpty } from "@/utils/Objects";
   import { useVitalsStore } from '@/stores/VitalsStore'
+  import { useDemographicsStore } from '@/stores/DemographicStore'
   import { mapState } from 'pinia';
   import Stepper from '@/components/Stepper.vue'
-  import Vitals from '@/apps/NCD/components/ConsultationPlan/Vitals.vue'
+  import { Service } from "@/services/service";
+  import { VitalsService } from "@/services/vitals_service";
   export default defineComponent({
     name: "Home",
     components:{
@@ -161,7 +162,8 @@
         };
     },
     computed:{
-        ...mapState(useVitalsStore,["vitals"]),
+      ...mapState(useDemographicsStore,["demographics"]),
+      ...mapState(useVitalsStore,["vitals"]),
     },
     mounted(){
         this.markWizard() 
@@ -189,8 +191,10 @@
         },
         saveData(){
           if(this.vitals.validationStatus){
-            console.log('dddddddddd')
-            // this.mapObs()
+            const userID: any  = Service.getUserID()
+            const vitalsInstance = new VitalsService(this.demographics.patient_id,userID);
+            vitalsInstance.onFinish(this.vitals)
+            this.$router.push('patientProfile');
           }
         },
         openModal(){
