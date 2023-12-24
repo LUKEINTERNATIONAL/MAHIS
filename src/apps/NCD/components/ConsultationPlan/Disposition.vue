@@ -1,7 +1,10 @@
 <template>
     <DashBox v-if="displayDashBox" :status="no_item" :content="content"></DashBox>
+    <div class="validation" v-if="displayValidationMessage">
+        <div style="display: flex; justify-content:center"><span style="padding-top: 13px; color: #B42318;">{{
+            validationMessage }}</span></div>
+    </div>
 
-    
     <div class="container" v-if="displayInputFields">
         <div class="containerSections">
             <ion-row class="">
@@ -19,69 +22,53 @@
                 </ion-col>
 
                 <ion-col>
-                    <BasicInputField
-                        :placeholder="basicInputFieldProperties[2].placeholder"
-                        :inputValue="basicInputFieldProperties[2].date"
-                        :icon="basicInputFieldProperties[2].icon"
-                        @update:inputValue="basicInputFieldProperties[2].date"
-                        @clicked:inputValue="openDate"
-                        />
+                    <BasicInputField :placeholder="basicInputFieldProperties[2].placeholder"
+                        :inputValue="basicInputFieldProperties[2].date" :icon="basicInputFieldProperties[2].icon"
+                        @update:inputValue="basicInputFieldProperties[2].date" @clicked:inputValue="openDate" />
 
-                        <ion-popover 
-                        :show-backdrop="false"
-                        :keep-contents-mounted="true"
-                        :is-open="popoverProperties.dateOpen"
-                        :event="popoverProperties.event"
-                        @didDismiss="popoverProperties.dateOpen = false"
-                        >
-                        <ion-datetime @ionChange="saveTheDate" id="datetime" presentation="date" :show-default-buttons="true"></ion-datetime>
-                    </ion-popover> 
+                    <ion-popover :show-backdrop="false" :keep-contents-mounted="true" :is-open="popoverProperties.dateOpen"
+                        :event="popoverProperties.event" @didDismiss="popoverProperties.dateOpen = false">
+                        <ion-datetime @ionChange="saveTheDate" id="datetime" presentation="date"
+                            :show-default-buttons="true"></ion-datetime>
+                    </ion-popover>
                 </ion-col>
-                
+
                 <!-- POPUP CODE START-->
-                <SelectionPopover
-                :content="popoverProperties.popoverData" :keyboardClose="popoverProperties.keyboardClose"
-                :title="popoverProperties.title" :popoverOpen="popoverProperties.popoverOpen"
-                :event="popoverProperties.event" @closePopoover="value => popoverProperties.popoverOpen = value"
-                @setSelection="setSelection" />
+                <SelectionPopover :content="popoverProperties.popoverData" :keyboardClose="popoverProperties.keyboardClose"
+                    :title="popoverProperties.title" :popoverOpen="popoverProperties.popoverOpen"
+                    :event="popoverProperties.event" @closePopoover="value => popoverProperties.popoverOpen = value"
+                    @setSelection="setSelection" />
                 <!-- THE THREE SELECTION OPTIONS && POPUP END -->
-                
+
             </ion-row>
             <!-- REFERRAL REASON INPUT FIELD -->
             <div>
-                <BasicInputField :applyStyling="true"
-                :placeholder="basicInputFieldProperties[3].placeholder"
-                :inputValue="basicInputFieldProperties[3].referralReason"
-                @update:inputValue="updateReason"
-                />
+                <BasicInputField :placeholder="basicInputFieldProperties[3].placeholder"
+                    :inputValue="basicInputFieldProperties[3].referralReason" @update:inputValue="updateReason" />
             </div>
         </div>
-        
+
         <!-- SAVE BUTTON. -->
         <div class="saveContainer">
             <ion-col class="action_buttons">
                 <span style="cursor: pointer;" @click="saveData">+ Save</span>
             </ion-col>
         </div>
-        
+
         <!-- CONTAINER DIV END -->
     </div>
-    
+
     <ion-row>
         <ion-col class="action_buttons">
-            <span style="cursor: pointer;" @click="addReferralFunc">{{ !displayInputFields ? '+ Add new referral' : 'Cancel' }}</span>
+            <span style="cursor: pointer;" @click="addReferralFunc">{{ !displayInputFields ? '+ Add new referral' : 'Cancel'
+            }}</span>
         </ion-col>
     </ion-row>
 
-    <div class="dottedLine" ></div>
-    
-    <DynamicDispositionList v-if="addReferrals"
-    @update:removeItem="removeItem"
-    @update:editItem="editItem"
-    :displayData="dispositions"
-    />
-    
+    <div class="dottedLine"></div>
 
+    <DynamicDispositionList v-if="addReferrals" @update:removeItem="removeItem" @update:editItem="editItem"
+        :displayData="dispositions" />
 </template>
 
 <script lang="ts">
@@ -108,8 +95,9 @@ export default {
         ...mapState(useDispositionStore, ["dispositions"]),
     },
     mounted() {
+        this.cleanInputs();
         if (this.dispositions.length > 0) {
-            this.displayDashBox = false;            
+            this.displayDashBox = false;
             this.addReferrals = true;
         }
     },
@@ -121,11 +109,13 @@ export default {
             displayDashBox: true,
             displayInputFields: false,
             addReferrals: false,
+            displayValidationMessage: false,
             editIndex: NaN,
+            validationMessage: '' as string,
             dispositionStore: useDispositionStore(),
 
 
-// POPOVER PROPERTIES
+            // POPOVER PROPERTIES
             popoverProperties: {
                 title: 'List of facilities',
                 popoverOpen: false,
@@ -135,7 +125,7 @@ export default {
                 popoverData: {} as Object,
             },
 
-// INPUT FIELD PROPERTIES
+            // INPUT FIELD PROPERTIES
             basicInputFieldProperties: [
                 {
                     name: 'search',
@@ -163,7 +153,7 @@ export default {
                 }
             ],
 
-// REFERRALS
+            // REFERRALS
             refralType: [
                 {
                     name: 'Internal',
@@ -213,8 +203,8 @@ export default {
         },
         formatDate(date: any) {
             let theDate = new Date(date);
-            let tempDate = new Date(theDate.getFullYear()+'-'+('0' + (theDate.getMonth()+1)).slice(-2)+'-'+('0' + theDate.getDate()).slice(-2));
-            let options: Intl.DateTimeFormatOptions = { day: '2-digit', weekday: 'long', month: 'short', year: 'numeric' };            let formattedDate = tempDate.toLocaleDateString('en-US', options);
+            let tempDate = new Date(theDate.getFullYear() + '-' + ('0' + (theDate.getMonth() + 1)).slice(-2) + '-' + ('0' + theDate.getDate()).slice(-2));
+            let options: Intl.DateTimeFormatOptions = { day: '2-digit', weekday: 'long', month: 'short', year: 'numeric' }; let formattedDate = tempDate.toLocaleDateString('en-US', options);
             this.basicInputFieldProperties[2].date = formattedDate;
         },
         updateReason(event: any) {
@@ -229,8 +219,14 @@ export default {
                 reason: this.basicInputFieldProperties[3].referralReason,
             };
 
+            const inputsValid = this.validateInputs();
+            if (!inputsValid) {
+                console.log('inputs not valid')
+                return
+            }
+            this.displayValidationMessage = false;
+            
             this.dispositionStore.addDispositionData(referralData, this.editIndex);
-
             this.displayInputFields = false;
             this.addReferrals = true;
 
@@ -260,17 +256,35 @@ export default {
             this.basicInputFieldProperties[1].selection = this.dispositions[index].second;
             this.basicInputFieldProperties[2].date = this.dispositions[index].third;
             this.basicInputFieldProperties[3].referralReason = this.dispositions[index].fourth;
-            
+
             this.displayInputFields = true;
+        },
+        validateInputs() {
+            if (this.basicInputFieldProperties[0].searchText === '' || this.basicInputFieldProperties[1].selection === '' || this.basicInputFieldProperties[2].date === '' || this.basicInputFieldProperties[3].referralReason === '') {
+                this.validationMessage = 'Please make sure you have filled in all the fields below.';
+                this.displayValidationMessage = true;
+                return false;
+            } else {
+                return true;
+            }
         }
     },
 };
 </script>
 
 <style scoped>
+.validation {
+    border: 2px solid #FDA19B;
+    background-color: #FECDCA;
+    border-radius: 5px;
+    height: 3rem;
+    margin-bottom: 5px;
+}
+
 .container {
     display: flex;
 }
+
 .saveContainer {
     display: flex;
     align-items: flex-end;
@@ -279,6 +293,7 @@ export default {
 .action_buttons {
     margin-top: 10px;
 }
+
 .dottedLine {
     border-bottom: dotted 1px;
     margin-top: 10px;

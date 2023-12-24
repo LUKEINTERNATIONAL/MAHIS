@@ -13,7 +13,7 @@ export const useDispositionStore = defineStore('disposition', {
         addDispositionData(data: any, index: any) {
             
             if (isNaN(index)) {
-                this.dispositions.push(data);
+                this.dispositions.unshift(data);
             } else {
                 this.dispositions.splice(index, 1, data);
             }
