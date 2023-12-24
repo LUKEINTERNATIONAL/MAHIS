@@ -1,12 +1,7 @@
 <template>
     <DashBox v-if="displayDashBox" :status="no_item" :content="content"></DashBox>
 
-    <DynamicDispositionList v-if="addReferral"
-        @update:removeItem="removeItem"
-        @update:editItem="editItem"
-        :displayData="dispositions"
-        />
-        
+    
     <div class="container" v-if="displayInputFields">
         <div class="containerSections">
             <ion-row class="">
@@ -30,38 +25,38 @@
                         :icon="basicInputFieldProperties[2].icon"
                         @update:inputValue="basicInputFieldProperties[2].date"
                         @clicked:inputValue="openDate"
-                    />
+                        />
 
-                    <ion-popover 
-                    :show-backdrop="false"
-                    :keep-contents-mounted="true"
-                    :is-open="popoverProperties.dateOpen"
-                    :event="popoverProperties.event"
-                    @didDismiss="popoverProperties.dateOpen = false"
-                    >
+                        <ion-popover 
+                        :show-backdrop="false"
+                        :keep-contents-mounted="true"
+                        :is-open="popoverProperties.dateOpen"
+                        :event="popoverProperties.event"
+                        @didDismiss="popoverProperties.dateOpen = false"
+                        >
                         <ion-datetime @ionChange="saveTheDate" id="datetime" presentation="date" :show-default-buttons="true"></ion-datetime>
                     </ion-popover> 
                 </ion-col>
-
+                
                 <!-- POPUP CODE START-->
                 <SelectionPopover
-                    :content="popoverProperties.popoverData" :keyboardClose="popoverProperties.keyboardClose"
-                    :title="popoverProperties.title" :popoverOpen="popoverProperties.popoverOpen"
-                    :event="popoverProperties.event" @closePopoover="value => popoverProperties.popoverOpen = value"
-                    @setSelection="setSelection" />
+                :content="popoverProperties.popoverData" :keyboardClose="popoverProperties.keyboardClose"
+                :title="popoverProperties.title" :popoverOpen="popoverProperties.popoverOpen"
+                :event="popoverProperties.event" @closePopoover="value => popoverProperties.popoverOpen = value"
+                @setSelection="setSelection" />
                 <!-- THE THREE SELECTION OPTIONS && POPUP END -->
-
+                
             </ion-row>
             <!-- REFERRAL REASON INPUT FIELD -->
             <div>
                 <BasicInputField :applyStyling="true"
-                    :placeholder="basicInputFieldProperties[3].placeholder"
-                    :inputValue="basicInputFieldProperties[3].referralReason"
-                    @update:inputValue="updateReason"
-                    />
+                :placeholder="basicInputFieldProperties[3].placeholder"
+                :inputValue="basicInputFieldProperties[3].referralReason"
+                @update:inputValue="updateReason"
+                />
             </div>
         </div>
-
+        
         <!-- SAVE BUTTON. -->
         <div class="saveContainer">
             <ion-col class="action_buttons">
@@ -71,12 +66,21 @@
         
         <!-- CONTAINER DIV END -->
     </div>
-
+    
     <ion-row>
         <ion-col class="action_buttons">
-            <span style="cursor: pointer;" @click="addReferralFunc">+ Add new referral</span>
+            <span style="cursor: pointer;" @click="addReferralFunc">{{ !displayInputFields ? '+ Add new referral' : 'Cancel' }}</span>
         </ion-col>
     </ion-row>
+
+    <div class="dottedLine" ></div>
+    
+    <DynamicDispositionList v-if="addReferrals"
+    @update:removeItem="removeItem"
+    @update:editItem="editItem"
+    :displayData="dispositions"
+    />
+    
 
 </template>
 
@@ -104,9 +108,9 @@ export default {
         ...mapState(useDispositionStore, ["dispositions"]),
     },
     mounted() {
-        this.addReferral = true;
         if (this.dispositions.length > 0) {
             this.displayDashBox = false;            
+            this.addReferrals = true;
         }
     },
     data() {
@@ -116,7 +120,7 @@ export default {
 
             displayDashBox: true,
             displayInputFields: false,
-            addReferral: false,
+            addReferrals: false,
             editIndex: NaN,
             dispositionStore: useDispositionStore(),
 
@@ -150,13 +154,13 @@ export default {
                     placeholder: 'Referral Date',
                     icon: icons.calendar,
                     keepContentsMounted: true,
-                    date: '',
+                    date: '' as string,
                 },
                 {
                     name: 'reason',
                     placeholder: 'Referral Reason',
-                    referralReason: '',
-                },
+                    referralReason: '' as string,
+                }
             ],
 
 // REFERRALS
@@ -228,7 +232,7 @@ export default {
             this.dispositionStore.addDispositionData(referralData, this.editIndex);
 
             this.displayInputFields = false;
-            this.addReferral = true;
+            this.addReferrals = true;
 
             this.editIndex = NaN;
             this.cleanInputs();
@@ -240,8 +244,11 @@ export default {
             this.basicInputFieldProperties[3].referralReason = '';
         },
         addReferralFunc() {
-            this.displayDashBox = false;
-            this.displayInputFields = true;
+            if (this.displayInputFields) {
+                this.displayInputFields = false;
+            } else {
+                this.displayInputFields = true;
+            }
         },
         removeItem(index: number) {
             this.dispositions.splice(index, 1);
@@ -270,6 +277,10 @@ export default {
 }
 
 .action_buttons {
+    margin-top: 10px;
+}
+.dottedLine {
+    border-bottom: dotted 1px;
     margin-top: 10px;
 }
 </style>
