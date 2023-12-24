@@ -1,65 +1,75 @@
 <template>
-    <div class="dashed_bottom_border"  style="cursor: pointer;padding-bottom:5px" @click="openModal()">
-        <div class="text_header_16">
-            Disposition
-        </div>
+    <div class="text_header_16">
+        <div>Dispositions</div>
+    </div>
+
+    <DashBox v-if="dispositions.length == 0" :content="'No dispositions added yet.'"></DashBox>
+
+    <div class="dashed_bottom_border" style="cursor: pointer;padding-bottom:5px" @click="openModal()"
+        v-for="(disposition, index) in dispositions" :key="index">
         <div class="text_header_14">
-            Facility 1
+            <h5>{{ disposition.name }}</h5>
         </div>
         <div class="diplay_space_between">
             <div>
-                Internal / 2023-11-16 / some reason typing.
+                <div>
+                    {{ disposition.type }} / {{ disposition.date }}
+                </div>
+                <div>
+                    {{ disposition.reason }}
+                </div>
             </div>
             <div>
-                <span v-html="iconsContent.tree_dot" ></span>
+                <span v-html="iconsContent.tree_dot"></span>
             </div>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { 
-      IonContent, 
-      IonHeader,
-      IonItem,
-      IonList,
-      IonTitle, 
-      IonToolbar, 
-      IonMenu,
-      modalController 
-  } from '@ionic/vue';
+import {
+    IonContent,
+    IonHeader,
+    IonItem,
+    IonList,
+    IonTitle,
+    IonToolbar,
+    IonMenu,
+} from '@ionic/vue';
 import { defineComponent } from 'vue';
-import { checkmark,pulseOutline } from 'ionicons/icons';
-import { ref } from 'vue';
-import { icons } from '@/utils/svg.ts';
-
-import DispositionModal from '@/components/ProfileModal/DispositionModal.vue'
+import { icons } from '@/utils/svg';
+import { mapState } from 'pinia'
+import { useDispositionStore } from "@/stores/DispositionStore"
+import DashBox from '../DashBox.vue';
 import { createModal } from '@/utils/Alerts'
+import DispositionModal from '@/components/ProfileModal/DispositionModal.vue'
 
 export default defineComponent({
-name: 'Menu',
-components:{
-  IonContent,
-  IonHeader,
-  IonItem,
-  IonList,
-  IonMenu,
-  IonTitle,
-  IonToolbar    },
-  data() {
-return {
-  iconsContent: icons,
-};
-},
-methods:{
-    openModal(){
-        createModal(DispositionModal)
+    name: 'Menu',
+    computed: {
+        ...mapState(useDispositionStore, ["dispositions"]),
+    },
+    components: {
+        IonContent,
+        IonHeader,
+        IonItem,
+        IonList,
+        IonMenu,
+        IonTitle,
+        IonToolbar,
+        DashBox
+    },
+    data() {
+        return {
+            iconsContent: icons,
+        };
+    },
+    methods: {
+        openModal() {
+            createModal(DispositionModal)
+        }
     }
-}
 });
 </script>
 
-<style scoped>
-
-
-</style>
+<style scoped></style>
