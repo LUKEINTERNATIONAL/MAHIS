@@ -2,7 +2,12 @@ import { defineStore } from 'pinia'
 
 export const useDispositionStore = defineStore('disposition', {
     state: () => ({
-        dispositions: [] as any,
+        dispositions: [
+            // name:
+            // type:
+            // date:
+            // reason:
+        ] as any,
     }),
     actions:{
         addDispositionData(data: any, index: any) {
@@ -14,9 +19,6 @@ export const useDispositionStore = defineStore('disposition', {
             }
 
         },
-        getDispositionData() {
-            return this.dispositions;
-        }
     },
     persist:true,
 

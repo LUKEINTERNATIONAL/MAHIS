@@ -1,7 +1,7 @@
 <template>
     <DashBox v-if="displayDashBox" :status="no_item" :content="content"></DashBox>
 
-    <DynamicList v-if="addReferral"
+    <DynamicDispositionList v-if="addReferral"
         @update:removeItem="removeItem"
         @update:editItem="editItem"
         :displayData="dispositions"
@@ -46,7 +46,7 @@
                 <!-- POPUP CODE START-->
                 <SelectionPopover
                     :content="popoverProperties.popoverData" :keyboardClose="popoverProperties.keyboardClose"
-                    :title="popoverProperties.title" :is-open="popoverProperties.popoverOpen"
+                    :title="popoverProperties.title" :popoverOpen="popoverProperties.popoverOpen"
                     :event="popoverProperties.event" @closePopoover="value => popoverProperties.popoverOpen = value"
                     @setSelection="setSelection" />
                 <!-- THE THREE SELECTION OPTIONS && POPUP END -->
@@ -87,7 +87,7 @@ import { icons } from '@/utils/svg';
 import SelectionPopover from "@/components/SelectionPopover.vue";
 import { LocationService } from "@/services/location_service";
 import { IonDatetime, IonDatetimeButton } from '@ionic/vue';
-import DynamicList from "@/components/DynamicDispositionList.vue";
+import DynamicDispositionList from "@/components/DynamicDispositionList.vue";
 import { mapState } from 'pinia'
 import { useDispositionStore } from "@/stores/DispositionStore"
 
@@ -98,7 +98,7 @@ export default {
         SelectionPopover,
         IonDatetime,
         IonDatetimeButton,
-        DynamicList
+        DynamicDispositionList
     },
     computed: {
         ...mapState(useDispositionStore, ["dispositions"]),
@@ -219,10 +219,10 @@ export default {
         },
         saveData() {
             const referralData = {
-                first: this.basicInputFieldProperties[0].searchText,
-                second: this.basicInputFieldProperties[1].selection,
-                third: this.basicInputFieldProperties[2].date,
-                fourth: this.basicInputFieldProperties[3].referralReason,
+                name: this.basicInputFieldProperties[0].searchText,
+                type: this.basicInputFieldProperties[1].selection,
+                date: this.basicInputFieldProperties[2].date,
+                reason: this.basicInputFieldProperties[3].referralReason,
             };
 
             this.dispositionStore.addDispositionData(referralData, this.editIndex);

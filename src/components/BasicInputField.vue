@@ -10,11 +10,13 @@
             :value="inputValue"
             :placeholder="placeholder"
             :type = "inputType"
+            @click="$emit('clicked:inputValue', $event)"
             v-if="eventType=='input'"
             >
         </ion-input>
         <ion-input 
             @ionBlur="handleBlur" 
+            @click="$emit('clicked:inputValue', $event)"
             fill="outline" 
             :value="inputValue"
             :placeholder="placeholder"

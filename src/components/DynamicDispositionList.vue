@@ -5,11 +5,11 @@
         @mousemove="highlightItem(index)" @mouseout="undoHighlightItem(index)">
 
         <ion-col class="col-st1">
-            <ion-label :id="asignLblID(index)" class="truncate-text" style="color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ (item as any).first }}</ion-label>
+            <ion-label :id="asignLblID(index)" class="truncate-text" style="color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ (item as any).name }}</ion-label>
         </ion-col>
 
         <ion-col class="col-st2">
-            <ion-label class="truncate-text" style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ (item as any).first }} <span class="spaceBetween"></span> {{ (item as any).second }} <span class="spaceBetween"></span> {{ (item as any).third }} <span class="spaceBetween"></span> {{ (item as any).fourth }}</ion-label>
+            <ion-label class="truncate-text" style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ (item as any).first }} <span class="spaceBetween"></span> {{ (item as any).type }} <span class="spaceBetween"></span> {{ (item as any).date }} <span class="spaceBetween"></span> {{ (item as any).reason }}</ion-label>
         </ion-col>
 
         <ion-col class="action_buttons">
