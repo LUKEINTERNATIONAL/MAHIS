@@ -39,7 +39,7 @@
                 </ion-accordion>
             </ion-accordion-group>
             <hr style="background: rgba(0, 0, 0, 0.13);">
-            <ion-button class="primary_btn" @click="nav('patientProfile')">Finish and Save</ion-button>
+            <ion-button class="primary_btn" @click="$emit('finishBtn')">Finish and Save</ion-button>
         </ion-col>
     </ion-row>
 </template>
@@ -141,9 +141,6 @@
             }
           });
             this.$emit("updateStatus", ev);
-        },
-        nav(url: any){
-            this.$router.push(url);
         },
         openModal(){
             createModal(SaveProgressModal)

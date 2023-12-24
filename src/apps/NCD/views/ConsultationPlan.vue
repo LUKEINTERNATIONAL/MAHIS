@@ -3,7 +3,7 @@
       <Toolbar />
       <ion-content :fullscreen="true">
         <DemographicBar />
-        <Stepper :wizardData="wizardData" @updateStatus="markWizard" :StepperData="StepperData"/>
+        <Stepper :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
       </ion-content>
     </ion-page>
   </template>
@@ -41,6 +41,7 @@
   import { useVitalsStore } from '@/stores/VitalsStore'
   import { mapState } from 'pinia';
   import Stepper from '@/components/Stepper.vue'
+  import Vitals from '@/apps/NCD/components/ConsultationPlan/Vitals.vue'
   export default defineComponent({
     name: "Home",
     components:{
@@ -178,17 +179,6 @@
     },
     
       methods:{
-        accordionGroupChange(ev: AccordionGroupCustomEvent){
-            if(ev.target.className == "md accordion-group-expand-compact"){
-                this.wizardData.forEach(item => {
-                item.checked = false;
-                item.class = "common_step"
-                if (item.number == ev.detail.value) {
-                    item.class = 'open_step common_step';
-                }
-            });
-            }
-        },
         markWizard(){
             if(this.vitals.validationStatus){
                 this.wizardData[0].checked = true; 
@@ -197,8 +187,11 @@
                 this.wizardData[0].checked = false; 
             }
         },
-        nav(url: any){
-            this.$router.push(url);
+        saveData(){
+          if(this.vitals.validationStatus){
+            console.log('dddddddddd')
+            // this.mapObs()
+          }
         },
         openModal(){
             createModal(SaveProgressModal)

@@ -185,7 +185,8 @@ export class Service {
     }
 
     static getProgramName() {
-        const app = this.getActiveApp()
+        let app: any =  sessionStorage.getItem('app');
+        app = JSON.parse(app)
         
         if ('applicationName' in app) return app.applicationName
         
@@ -197,7 +198,8 @@ export class Service {
     }
 
     static getProgramID() {
-        const app = this.getActiveApp()
+        let app: any =  sessionStorage.getItem('app');
+        app = JSON.parse(app)
         
         if ('programID' in app) return app.programID
         

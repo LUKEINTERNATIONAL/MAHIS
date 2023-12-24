@@ -129,7 +129,8 @@
           'mrn':this.patientIdentifier(item),
           'birthdate': item.person.birthdate ,
           'category': '',
-          'gender': item.person.gender
+          'gender': item.person.gender,
+          'patient_id': item.patient_id
         })
         resetPatientData()
         this.$router.push(url);

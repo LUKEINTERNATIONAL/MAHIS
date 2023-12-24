@@ -248,7 +248,7 @@
             modalController.dismiss()
         },
         nav(url: any){
-            console.log("pppppppppp")
+            sessionStorage.setItem("app", JSON.stringify({'programID':14,'applicationName':'OPD'}));
             this.$router.push(url);
         },
         covertGender(gender: any){
