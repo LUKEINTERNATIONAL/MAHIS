@@ -190,7 +190,7 @@
             }
         },
         markWizard(){
-            if(arePropertiesNotEmpty(this.vitals,['height', 'weight', 'systolic', 'diastolic'])){
+            if(this.vitals.validationStatus){
                 this.wizardData[0].checked = true; 
                 this.wizardData[0].class = 'open_step common_step'               
             }else{

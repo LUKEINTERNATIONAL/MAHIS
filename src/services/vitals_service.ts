@@ -1,4 +1,3 @@
-import { AppEncounterService } from "@/services/app_encounter_service";
 import { isArray } from "lodash";
 export class VitalsService {
 
@@ -89,6 +88,14 @@ export class VitalsService {
         },
       }, {
         name: "Systolic Pressure*",
+        validator: (val: any) => {
+          const errors = []
+          errors.push(this.isNotEmptyandNumber(val))
+          errors.push(this.checkMinMax(val, 70, 190));
+          return this.mergeErrors(errors); 
+        },
+      }, {
+        name: "Diastolic pressure*",
         validator: (val: any) => {
           const errors = []
           errors.push(this.isNotEmptyandNumber(val))
