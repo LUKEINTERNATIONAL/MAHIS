@@ -3,7 +3,7 @@
       <Toolbar />
       <ion-content :fullscreen="true">
         <DemographicBar />
-        <Stepper :wizardData="wizardData" @updateStatus="markWizard" :StepperData="StepperData"/>
+        <Stepper :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
       </ion-content>
     </ion-page>
   </template>
@@ -37,10 +37,12 @@
   import SaveProgressModal from '@/components/SaveProgressModal.vue'
   import { createModal } from '@/utils/Alerts'
   import { icons } from '@/utils/svg';
-  import { arePropertiesNotEmpty } from "@/utils/Objects";
   import { useVitalsStore } from '@/stores/VitalsStore'
+  import { useDemographicsStore } from '@/stores/DemographicStore'
   import { mapState } from 'pinia';
   import Stepper from '@/components/Stepper.vue'
+  import { Service } from "@/services/service";
+  import { VitalsService } from "@/services/vitals_service";
   export default defineComponent({
     name: "Home",
     components:{
@@ -160,7 +162,8 @@
         };
     },
     computed:{
-        ...mapState(useVitalsStore,["vitals"]),
+      ...mapState(useDemographicsStore,["demographics"]),
+      ...mapState(useVitalsStore,["vitals"]),
     },
     mounted(){
         this.markWizard() 
@@ -178,27 +181,21 @@
     },
     
       methods:{
-        accordionGroupChange(ev: AccordionGroupCustomEvent){
-            if(ev.target.className == "md accordion-group-expand-compact"){
-                this.wizardData.forEach(item => {
-                item.checked = false;
-                item.class = "common_step"
-                if (item.number == ev.detail.value) {
-                    item.class = 'open_step common_step';
-                }
-            });
-            }
-        },
         markWizard(){
-            if(arePropertiesNotEmpty(this.vitals,['height', 'weight', 'systolic', 'diastolic'])){
+            if(this.vitals.validationStatus){
                 this.wizardData[0].checked = true; 
                 this.wizardData[0].class = 'open_step common_step'               
             }else{
                 this.wizardData[0].checked = false; 
             }
         },
-        nav(url: any){
-            this.$router.push(url);
+        saveData(){
+          if(this.vitals.validationStatus){
+            const userID: any  = Service.getUserID()
+            const vitalsInstance = new VitalsService(this.demographics.patient_id,userID);
+            vitalsInstance.onFinish(this.vitals)
+            this.$router.push('patientProfile');
+          }
         },
         openModal(){
             createModal(SaveProgressModal)

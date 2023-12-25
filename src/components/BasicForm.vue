@@ -12,7 +12,7 @@
                         :icon ="col.icon"
                         :inputValue="col.value"
                         eventType="blur"
-                        @update:inputValue="value => col.value = value.target.value"
+                        @update:inputValue="value =>{col.value =value.target.value; handleInput(col.value,col.inputHeader)} "
                     />
                 </ion-col>
                 <ion-col class="action_buttons" v-for="(btn, btnIndex) in item.data.btns" :key="btnIndex" >
@@ -50,8 +50,14 @@ export default defineComponent({
         contentData: {
             type: Array,
             default: []
-        }}
-    })
+        }
+    },
+    methods: {
+        handleInput(value: any, name: any) {
+            this.$emit("update:inputValue", {value, name});
+        }
+    },
+})
 
 </script>
 

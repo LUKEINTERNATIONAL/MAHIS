@@ -17,7 +17,7 @@ async function toast(message: string, color="primary", duration=2000, icon = '')
       color: color,
       cssClass: 'custom-toast',
       icon: `data:image/svg+xml;utf8,`+icon,
-      keyboardClose: true,
+      keyboardClose: false,
       buttons: [
         {
           text: 'X',
