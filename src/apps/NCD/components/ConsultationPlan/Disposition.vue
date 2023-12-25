@@ -221,11 +221,10 @@ export default {
 
             const inputsValid = this.validateInputs();
             if (!inputsValid) {
-                console.log('inputs not valid')
                 return
             }
             this.displayValidationMessage = false;
-            
+
             this.dispositionStore.addDispositionData(referralData, this.editIndex);
             this.displayInputFields = false;
             this.addReferrals = true;
@@ -242,8 +241,10 @@ export default {
         addReferralFunc() {
             if (this.displayInputFields) {
                 this.displayInputFields = false;
+                this.displayValidationMessage = false;
             } else {
                 this.displayInputFields = true;
+                this.displayValidationMessage = false;
             }
         },
         removeItem(index: number) {
