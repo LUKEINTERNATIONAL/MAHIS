@@ -39,6 +39,7 @@
   import { icons } from '@/utils/svg';
   import { useVitalsStore } from '@/stores/VitalsStore'
   import { useDemographicsStore } from '@/stores/DemographicStore'
+  import { useInvestigationStore } from '@/stores/InvestigationStore'
   import { mapState } from 'pinia';
   import Stepper from '@/components/Stepper.vue'
   import { Service } from "@/services/service";
@@ -164,13 +165,20 @@
     computed:{
       ...mapState(useDemographicsStore,["demographics"]),
       ...mapState(useVitalsStore,["vitals"]),
+      ...mapState(useInvestigationStore,["investigations"]),
     },
     mounted(){
         this.markWizard() 
     },
     watch: {
         vitals: {
-            handler(newVitals, oldVitals){
+            handler(){
+                this.markWizard()  
+            },
+            deep: true
+        },
+        investigations: {
+            handler(){
                 this.markWizard()  
             },
             deep: true
@@ -187,6 +195,12 @@
                 this.wizardData[0].class = 'open_step common_step'               
             }else{
                 this.wizardData[0].checked = false; 
+            }
+            if(this.investigations[0].db_data.length > 0){
+                this.wizardData[1].checked = true; 
+                this.wizardData[1].class = 'open_step common_step'               
+            }else{
+                this.wizardData[1].checked = false; 
             }
         },
         saveData(){

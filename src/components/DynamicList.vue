@@ -12,8 +12,8 @@
         </ion-col>
 
         <ion-col class="action_buttons">
-            <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end; flex: auto;" @click="editItemAtIndex(index)"><span v-html="iconsContent.edit" class="modify_buttons"></span></ion-label>
-            <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end;" @click="removeItemAtIndex(index, $event)"><span v-html="iconsContent.delete" class="modify_buttons"></span></ion-label>
+            <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end; flex: auto;" @click="editItemAtIndex(index)"><ion-icon   :icon="iconsContent.edit"></ion-icon></ion-label>
+            <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end;" @click="removeItemAtIndex(index, $event)"><ion-icon   :icon="iconsContent.delete"></ion-icon></ion-label>
         </ion-col>
 
     </ion-item>

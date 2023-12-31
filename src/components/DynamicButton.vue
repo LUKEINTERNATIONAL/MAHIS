@@ -2,7 +2,7 @@
     <ion-button
         :fill="$props.fill"
         :color="color"
-        @click="$props.Fn">
+        @click="$emit('clicked:btn')">
         <span>{{ $props.name }}</span>
         <ion-icon v-if="icon" :slot="iconSlot" style="font-size: x-large;" :icon="$props.icon"></ion-icon>
 
@@ -19,7 +19,7 @@ export default defineComponent({
     props: {
         name: {
             type: String,
-            default: "change button name as via prop",
+            default: "",
         },
         fill: {
             type: String as any,
@@ -27,10 +27,6 @@ export default defineComponent({
         icon: {
             type: String as any,
             default:''
-        },
-        Fn: {
-            type: Function,
-            default: ()=>{}
         },
         iconSlot: {
             type: String as any,
