@@ -9,7 +9,7 @@
         </ion-col>
 
         <ion-col class="col-st2">
-            <ion-label class="truncate-text" style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ (item as any).first }} <span class="spaceBetween"></span> {{ (item as any).type }} <span class="spaceBetween"></span> {{ (item as any).date }} <span class="spaceBetween"></span> {{ (item as any).reason }}</ion-label>
+            <ion-label class="truncate-text" style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;"><span class="spaceBetween"></span> {{ (item as any).type }} <span class="spaceBetween"></span>{{ (item as any).reason }}<span class="spaceBetween"></span>{{ (item as any).date }}</ion-label>
         </ion-col>
 
         <ion-col class="action_buttons">
@@ -88,7 +88,12 @@ export default defineComponent({
     }
 })
 </script>
-<style>
+
+<style scoped>
+.spaceBetween {
+    margin-left: 10px;
+    margin-right: 10px;
+}
 ion-item.ionLbltp {
     border-bottom: 2px dotted var(--ion-color-medium);
     --inner-border-width:0;
