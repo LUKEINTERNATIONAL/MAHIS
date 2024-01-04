@@ -1,6 +1,6 @@
 <template>
     <ion-row class="dashed_bottom_border" v-for="(item, index) in listData" :key="index">
-        <ion-col :size="10/item.length" v-for="(value, index2) in item" :key="index2">
+        <ion-col :size="10/item.display.length" v-for="(value, index2) in item.display" :key="index2">
             <ion-item class="item_no_border">
                 <span>{{ value}}</span>
             </ion-item>
@@ -10,13 +10,13 @@
                 fill="clear"
                 :icon="iconsContent.edit"
                 iconSlot="icon-only"
-                @click="$emit('clicked:edit',item)"
+                @click="$emit('clicked:edit',item.display)"
             />
             <DynamicButton
                 fill="clear"
                 iconSlot="icon-only"
                 :icon="iconsContent.delete"
-                @click="$emit('clicked:delete',[$event, item[0]])"
+                @click="$emit('clicked:delete',[$event, item.display[0]])"
             />
         </ion-col>
     </ion-row>

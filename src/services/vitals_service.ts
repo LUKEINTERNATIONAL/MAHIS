@@ -134,7 +134,7 @@ export class VitalsService extends AppEncounterService{
         validator: (val: any) => {
           const errors = []
           errors.push(this.isNotEmptyandNumber(val))
-          errors.push(this.checkMinMax(val, 70, 190));
+          errors.push(this.checkMinMax(val, 70, 250));
           return this.mergeErrors(errors); 
         },
       }, {
@@ -142,7 +142,7 @@ export class VitalsService extends AppEncounterService{
         validator: (val: any) => {
           const errors = []
           errors.push(this.isNotEmptyandNumber(val))
-          errors.push(this.checkMinMax(val, 40, 100));
+          errors.push(this.checkMinMax(val, 40, 200));
           return this.mergeErrors(errors); 
         },
       }, {

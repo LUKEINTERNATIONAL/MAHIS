@@ -40,10 +40,14 @@
   import { useVitalsStore } from '@/stores/VitalsStore'
   import { useDemographicsStore } from '@/stores/DemographicStore'
   import { useInvestigationStore } from '@/stores/InvestigationStore'
+  import { useDiagnosisStore } from '@/stores/DiagnosisStore'
   import { mapState } from 'pinia';
   import Stepper from '@/components/Stepper.vue'
   import { Service } from "@/services/service";
+  import { LabOrder } from "@/apps/NCD/services/lab_order"
   import { VitalsService } from "@/services/vitals_service";
+  import { toastWarning,popoverConfirmation, toastSuccess } from '@/utils/Alerts';
+  import { Diagnosis } from '@/apps/NCD/services/diagnosis'
   export default defineComponent({
     name: "Home",
     components:{
@@ -166,6 +170,7 @@
       ...mapState(useDemographicsStore,["demographics"]),
       ...mapState(useVitalsStore,["vitals"]),
       ...mapState(useInvestigationStore,["investigations"]),
+      ...mapState(useDiagnosisStore,["diagnosis"]),
     },
     mounted(){
         this.markWizard() 
@@ -178,6 +183,12 @@
             deep: true
         },
         investigations: {
+            handler(){
+                this.markWizard()  
+            },
+            deep: true
+        },
+        diagnosis: {
             handler(){
                 this.markWizard()  
             },
@@ -196,20 +207,50 @@
             }else{
                 this.wizardData[0].checked = false; 
             }
-            if(this.investigations[0].db_data.length > 0){
+
+            if(this.investigations[0].selectdData.length > 0){
                 this.wizardData[1].checked = true; 
                 this.wizardData[1].class = 'open_step common_step'               
             }else{
                 this.wizardData[1].checked = false; 
             }
+
+            if(this.diagnosis[0].selectdData.length > 0){
+                this.wizardData[2].checked = true; 
+                this.wizardData[2].class = 'open_step common_step'               
+            }else{
+                this.wizardData[2].checked = false; 
+            }
+        },
+        deleteDisplayData(data: any){
+          return  data.map((item: any) => {
+                delete item?.display;
+                return item?.data;
+            });
         },
         saveData(){
-          if(this.vitals.validationStatus){
-            const userID: any  = Service.getUserID()
-            const vitalsInstance = new VitalsService(this.demographics.patient_id,userID);
-            vitalsInstance.onFinish(this.vitals)
+          if(this.vitals.validationStatus && this.investigations[0].selectdData.length > 0 && this.diagnosis[0].selectdData.length > 0){
+            this.saveVitals()
+            this.saveInvestigation()
+            this.saveDiagnosis()
             this.$router.push('patientProfile');
+          }else{
+            toastWarning("Please complete all required fields")
           }
+        },
+        saveInvestigation(){
+            const investigationInstance = new LabOrder()
+            investigationInstance.postActivities(this.demographics.patient_id,this.deleteDisplayData(this.investigations[0].selectdData))
+        },
+        saveVitals(){
+          const userID: any  = Service.getUserID()
+          const vitalsInstance = new VitalsService(this.demographics.patient_id,userID);
+          vitalsInstance.onFinish(this.vitals)
+        },
+        saveDiagnosis(){
+          const userID: any  = Service.getUserID()
+          const diagnosisInstance = new Diagnosis();
+          diagnosisInstance.onSubmit(this.demographics.patient_id,userID,this.deleteDisplayData(this.diagnosis[0].selectdData))
         },
         openModal(){
             createModal(SaveProgressModal)
@@ -219,73 +260,6 @@
   </script>
   
   <style scoped>
-  #container {
-    text-align: center;
-    
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-  
-  #container strong {
-    font-size: 20px;
-    line-height: 26px;
-  }
-  
-  #container p {
-    font-size: 16px;
-    line-height: 22px;
-    
-    color: #8c8c8c;
-    
-    margin: 0;
-  }
-  
-  #container a {
-    text-decoration: none;
-  }
-  .centered-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  ion-item[slot='header']{
-    font-size: 20px;
-    padding-top:25px;
-    font-weight: 600;
-  }
 
-  ion-accordion {
-    margin: 0 auto;
-    
-  }
-
-  ion-accordion.accordion-expanding,
-  ion-accordion.accordion-expanded {
-    width: calc(100% - 32px);
-
-    margin: 16px auto;
-  } 
-
-  ion-accordion.accordion-collapsing ion-item[slot='header'],
-  ion-accordion.accordion-collapsed ion-item[slot='header'] {
-    --color: var(--ion-color-light-contrast);
-  }
-
-  ion-accordion.accordion-expanding ion-item[slot='header'],
-  ion-accordion.accordion-expanded ion-item[slot='header'] {
-    --background: #8A8A8A;
-    --color: var(--ion-color-primary-contrast);
-  }
-  .back_profile{
-    display: flex;
-    justify-content: space-between;
-    width: 140px;
-    align-items: center;
-    font-weight: 400;
-    font-size: 14;
-  }
-</style>
+  </style>
   

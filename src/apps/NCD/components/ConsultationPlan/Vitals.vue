@@ -293,17 +293,28 @@
         },
         getBloodPressureStatus(systolic: any,diastolic: any){
             if(diastolic && systolic){
-                if( (parseInt(diastolic) >= 40 && parseInt(diastolic) <= 60)  &&  (parseInt(systolic) >= 70 && parseInt(systolic) <= 90 )){
+                if( (parseInt(diastolic) >= 30 && parseInt(diastolic) <= 60)  &&  (parseInt(systolic) >= 40 && parseInt(systolic) <= 90 )){
                     return {colors:["#B9E6FE","#026AA2","#9ADBFE"],value:"Low"}
                 }else
                 if( (parseInt(diastolic) >= 60 && parseInt(diastolic) <= 80)  &&  (parseInt(systolic) >= 90 && parseInt(systolic) <= 120 )){
                     return {colors:["#DDEEDD","#016302","#BBDDBC"],value:"Normal"}
                 }else
                 if( (parseInt(diastolic) >= 80 && parseInt(diastolic) <= 90) &&  (parseInt(systolic) >= 120 && parseInt(systolic) <= 140) ){
-                    return {colors:["#FEDF89","#B54708","#FED667"],value:"Pre-high blood pressure"}
+                    let value = "Pre-high blood pressure"
+                    if( (parseInt(diastolic) >= 85 && parseInt(diastolic) <= 89) &&  (parseInt(systolic) >= 130 && parseInt(systolic) <= 139) )
+                        value = "Pre-high blood pressure (Class: Borderline)"
+                    return {colors:["#FEDF89","#B54708","#FED667"],value:value}
                 }else
-                if( (parseInt(diastolic) >= 90 && parseInt(diastolic) <= 100)  &&  (parseInt(systolic) >= 140 && parseInt(systolic) <= 190 )){
-                    return {colors:["#FECDCA","#B42318","#FDA19B"],value:"High blood pressure"}
+                if( (parseInt(diastolic) >= 90 && parseInt(diastolic) <= 109)  &&  (parseInt(systolic) >= 140 && parseInt(systolic) <= 190 )){
+                    let value = "High blood pressure"
+                    if( (parseInt(diastolic) >= 90 && parseInt(diastolic) <= 99)  &&  (parseInt(systolic) >= 140 && parseInt(systolic) <= 159 ))
+                        value = "High blood pressure (Class: Mild/ I)"
+                    if( (parseInt(diastolic) >= 100 && parseInt(diastolic) <= 109)  &&  (parseInt(systolic) >= 160 && parseInt(systolic) <= 179 ))
+                        value = "High blood pressure (Class: Moderate/ II)"
+                    return {colors:["#FECDCA","#B42318","#FDA19B"],value:value}
+                }else
+                if( (parseInt(diastolic) >= 110 && parseInt(diastolic) <= 200)  &&  (parseInt(systolic) >= 180 && parseInt(systolic) <= 250 ) ){
+                    return {colors:["#FECDCA","#B42318","#FDA19B"],value:"The patient has hypertension (Class: Severe/ III)"}
                 }else{
                     toastWarning("Invalid BP values",4000);
                     this.hasValidationErrors.push('false');

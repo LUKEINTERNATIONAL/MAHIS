@@ -1,7 +1,7 @@
 <template>
     <DashBox :status="no_item" :content="'No Investigations added '" />
     <span v-if="display_item">
-        <list :listData="investigations[0].db_data" 
+        <list :listData="investigations[0].selectdData" 
             @clicked:edit="editTest($event)"
             @clicked:delete="openDeletePopover($event)">
         </list>
@@ -98,7 +98,7 @@ export default defineComponent({
             labOrders: '' as any,
             inputData: [
             {
-                db_data: [],
+                selectdData: [],
                 isFinishBtn: false,
                 data:
                     { 
@@ -146,9 +146,6 @@ export default defineComponent({
         ...mapState(useInvestigationStore, ["investigations"]),
         inputFields(){
             return this.investigations[0].data.rowData[0].colData
-        },
-        saveBtn(){
-
         }
     },
     watch:{
@@ -160,9 +157,9 @@ export default defineComponent({
         }
     },
     async mounted() {
-        this.labOrders = await OrderService.getTestTypesBySpecimen('Blood')
         this.updateInvestigationsStores()
         this.setDashedBox()
+        this.labOrders = await OrderService.getTestTypesBySpecimen('Blood')
     },
     methods: {
         onDataChange(){
@@ -180,11 +177,32 @@ export default defineComponent({
             this.search_item = true
         },
         async validaterowData() {
-            if(this.labOrders.some((obj: any) => obj.name === this.inputFields[0].value)) {
-                this.investigations[0].db_data.push([
-                    this.selectedText,
-                    this.inputFields[1].value
-                ])
+            const test = this.labOrders.filter((obj: any) => {
+               return obj.name == this.inputFields[0].value ?  obj : false
+            })
+
+            if (!this.numericValueIsValid(this.inputFields[1].value) && this.inputFields[1].value != '') {
+                toastWarning('You must enter a modifer and numbers only. i.e =90 / >19 / < 750')
+                return false
+            }else{
+                this.buildResults()
+            }
+            if(test.length > 0) {
+
+                this.investigations[0].selectdData.push({
+                    display: [
+                        this.inputFields[0].value,
+                        this.inputFields[1].value,
+                    ],
+                    data: {
+                        
+                        "concept_id": test[0].concept_id,
+                        "name":this.inputFields[0].value,
+                        "specimen": "Blood",
+                        "reason": "Routine",
+                        "specimenConcept": 8612
+                    }
+                })
                 this.investigations[0].data.rowData[0].colData[0].value =''
                 this.investigations[0].data.rowData[0].colData[1].value =''
                 this.search_item = false
@@ -196,13 +214,28 @@ export default defineComponent({
             }
             
         },
-        temporarySave(investigations: any) {
-            const investigationStore = useInvestigationStore()
-            investigationStore.setInvestigations(investigations)
+        buildResults(){
+            const modifier = this.inputFields[1].value.charAt(0)
+            const result =  parseInt(this.inputFields[1].value.substring(1)) 
+            const  measures = {
+                "indicator": {
+                    "concept_id": 679
+                },
+                "value": result,
+                "value_modifier": modifier,
+                "value_type": "numeric"
+            }
+            console.log(measures)
+        },
+        numericValueIsValid(value: string){
+            try {
+                return value.match(/^(=|<|>)([0-9]*)$/m) ? true : false
+            }catch(e) {
+                return false
+            }
         },
         setEvent(event: Event){
             this.event = event
-
         },
         async searchInput(col: any) {
             if(col.inputHeader == 'Test'){
@@ -226,7 +259,7 @@ export default defineComponent({
             }
         },
         deleteTest(test: any) {
-            this.investigations[0].db_data = this.investigations[0].db_data.filter((item: any) => item[0] !== test);
+            this.investigations[0].selectdData = this.investigations[0].selectdData.filter((item: any) => item.display[0] !== test);
             this.updateInvestigationsStores()
         },
         editTest(test: any) {
@@ -243,7 +276,7 @@ export default defineComponent({
                 this.addItemButton = false
                 this.search_item = true
             }
-            if (this.investigations[0].db_data.length > 0) {
+            if (this.investigations[0].selectdData.length > 0) {
                 this.display_item = true
                 this.no_item = false
             }else {
