@@ -2,51 +2,29 @@
     <DashBox :status="no_item" :content="'No Diagnosis added'"/>
 
     <span v-if="display_item">
-        <ion-row class="dashed_bottom_border" v-for="(item, index) in diagnosis" :key="index">
-            <ion-col>
-                <ion-item class="item_no_border">
-                    <span>{{ item.diagnosis }}</span>
-                </ion-item>
-            </ion-col>
-            <ion-col>
-                <ion-item class="item_no_border">
-                    <span>{{ item.diagnosisStatus }}</span>
-                </ion-item>
-            </ion-col>
-            <ion-col class="action_buttons">
-                <ion-label style="cursor: pointer;" @click="editDiagnosis(item.diagnosis)"><span v-html="iconsContent.edit"
-                        class="modify_buttons"></span></ion-label>
-                <ion-label style="cursor: pointer;" @click="openDeletePopover($event, item.diagnosis)"><span v-html="iconsContent.delete"
-                        class="modify_buttons"></span></ion-label>
-            </ion-col>
-        </ion-row>
+        <list :listData="diagnosis[0].selectdData" 
+            @clicked:edit="editDiagnosis($event)"
+            @clicked:delete="openDeletePopover($event)">
+        </list>
     </span>
 
     <ion-row v-if="search_item">
-        <ion-col>
-            <BasicInputField 
-                        :inputHeader="'Diagnosis'"
-                        :icon ="iconsContent.search"
-                        :inputValue="searchText"
-                        @update:inputValue="searchInput"
-                    />
-        </ion-col>
-        <ion-col>
-            <BasicInputField 
-                :inputHeader = "'Result'"
-                :inputValue="conditionStatus"
-                @update:inputValue="value => conditionStatus = value.target.value"
-            />
-        </ion-col>
-        <ion-col class="action_buttons" style="top:25px">
-            <span style="cursor: pointer;" @click="savePreperations()">+ Save</span> 
-        </ion-col>
+        <basic-form 
+            :contentData="diagnosis" 
+            @clicked:button = "validaterowData"
+            @update:inputValue = "searchInput($event)"
+            @clicked:inputValue="setEvent($event)">
+        </basic-form>
     </ion-row>
-
-    <ion-row v-if="addItemButton">
-        <span class="add_item" style="cursor: pointer;" @click="displayInputFields()"> + Add Diagnosis </span> 
+    <ion-row v-if="addItemButton" style="margin-top:10px ;">
+        <DynamicButton
+            fill="clear"
+            :icon="iconsContent.plus"
+            iconSlot="icon-only"
+            @clicked:btn="displayInputFields()"
+            name="Add new test"
+        />
     </ion-row>
-
     <SelectionPopover 
         :content="diagnosisData"  
         :popoverOpen="popoverOpen" 
@@ -80,6 +58,10 @@
     import { useDiagnosisStore } from '@/stores/DiagnosisStore'
     import { mapState } from 'pinia';
     import { toastWarning,popoverConfirmation } from '@/utils/Alerts';
+    import List from '@/components/List.vue';
+    import BasicForm from '@/components/BasicForm.vue';
+    import DynamicButton from '@/components/DynamicButton.vue';
+    import { Service } from "@/services/service";
     export default defineComponent({
     name: 'Menu',
     components:{
@@ -94,7 +76,10 @@
         IonPopover,
         DashBox,
         SelectionPopover,
-        BasicInputField
+        BasicInputField,
+        List,
+        BasicForm,
+        DynamicButton
     },
     data() {
     return {
@@ -103,13 +88,54 @@
         search_item: false,
         display_item: false,
         addItemButton: true,
-        searchText: '' as any,
+        selectedText: '' as any,
         conditionStatus: '' as any,
         data: [] as any,
         diagnosisData: [] as any,
         popoverOpen: false,
         event: '' as any,
         selectedCondition: '' as any,
+        inputData: [
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                data:
+                    { 
+                        rowData:[
+                            {
+                                colData:[
+                                    {
+                                        inputHeader: 'Diagnosis',
+                                        icon: icons.search,
+                                        value: '',
+                                        name: 'diagnosis',
+                                        eventType: 'input',
+                                        required: true
+                                    },
+                                    {
+                                        inputHeader: 'Result',
+                                        value: '',
+                                        name: 'result',
+                                        eventType: 'blur',
+                                        required: true
+                                    },
+                                    
+                                ],
+                                btns:[
+                                    {
+                                        name: "Save",
+                                        fill: "clear",
+                                        icon: icons.plus
+                                    }
+                                ]
+                            }
+                        ],
+                        
+                    }
+                 
+            }
+               
+        ]
     };
   },
     setup() {
@@ -117,6 +143,9 @@
     },
     computed: {
         ...mapState(useDiagnosisStore, ["diagnosis"]),
+        inputFields(){
+            return this.diagnosis[0].data.rowData[0].colData
+        },
     },
     watch:{
         diagnosis: {
@@ -127,6 +156,7 @@
         }
     },
     mounted() {
+        this.updateDiagnosisStores()
         this.setDashedBox()
     },
     methods:{
@@ -136,79 +166,106 @@
         },
         displayInputFields(){
             this.conditionStatus=""
-            this.searchText = ""
+            this.selectedText = ""
             this.no_item = false
             this.addItemButton = false
             this.search_item =true
         },
-        async savePreperations(){
-            this.search_item= false
-            this.display_item= true
-            this.addItemButton =true
-            if (this.searchText == this.selectedCondition) {
-                this.diagnosis.push({
-                    "diagnosis": this.selectedCondition,
-                    "diagnosisStatus": this.conditionStatus
+        async validaterowData(){
+            const data = this.diagnosisData.filter((obj: any) => {
+               return obj.name == this.inputFields[0].value ?  obj : false
+            })
+            if(data.length > 0) {
+                this.diagnosis[0].selectdData.push({
+                    display: [
+                        this.inputFields[0].value,
+                        this.inputFields[1].value,
+                    ],
+                    data: {
+                        "concept_id": 6542, //primary diagnosis
+                        "value_coded": data[0].concept_id,
+                        "obs_datetime": Service.getSessionDate()
+                    }
                 })
-                this.temporarySave(this.diagnosis)
+                console.log(this.diagnosis[0].selectdData)
+                this.diagnosis[0].data.rowData[0].colData[0].value =''
+                this.diagnosis[0].data.rowData[0].colData[1].value =''
+                this.search_item = false
+                this.display_item = true
+                this.addItemButton = true
             } else {
-                toastWarning('Please select diagnosis from the list')
+                this.search_item = true
+                toastWarning('Please select test from the list')
             }
-            this.data.push([this.searchText,this.conditionStatus])
+        },
+        buildDiagnosis(){
+            this.diagnosis[0].finalDiagnosis.push({
+                "concept_id": 6542, //primary diagnosis
+                "value_coded": 16,
+                "obs_datetime": Service.getSessionDate()
+            })
+        },
+        setEvent(event: Event){
+            this.event = event
         },
         temporarySave(diagnosis: any) {
             const diagnosisStore = useDiagnosisStore()
             diagnosisStore.setDiagnosis(diagnosis)
         },
+        updateDiagnosisStores(){
+            const diagnosisStore = useDiagnosisStore()
+            this.diagnosis.length == 0 ? diagnosisStore.setDiagnosis(this.inputData) : diagnosisStore.setDiagnosis(this.diagnosis)
+        },
         openPopover(e: any) {
         this.event = e;
         this.popoverOpen = true;
       },
-        async searchInput(event: any) {
-            const searchText = event.target.value;
-            this.openPopover(event)
-            this.diagnosisData = await PatientDiagnosisService.getDiagnosis(searchText, 1, 10)
+        async searchInput(col: any) {
+            if(col.inputHeader == 'Diagnosis'){
+                this.popoverOpen = true;
+                this.diagnosisData = await PatientDiagnosisService.getDiagnosis(col.value, 1, 10)
+            }
         },
         setSelection(value: any) {
-            this.selectedCondition = value
-            this.searchText = value
+            this.selectedText =value
+            if(this.inputFields[0].inputHeader == 'Diagnosis'){
+                this.diagnosis[0].data.rowData[0].colData[0].value =value
+            }else{
+                this.diagnosis[0].data.rowData[0].colData[1].value =value
+            }
+            this.updateDiagnosisStores()
         },
       selectedDiagnosis(diagnosis: any){
-          this.searchText = diagnosis
+          this.selectedText = diagnosis
       },
-        editDiagnosis(diagnosis: any) {
-            const diagnosisEdit = this.diagnosis.filter((item: any) => item.diagnosis === diagnosis);
-            this.deleteDiagnosis(diagnosis)
-
-            this.selectedCondition = diagnosisEdit[0].selectedCondition
-            this.searchText = diagnosisEdit[0].diagnosis
-            this.selectedCondition = diagnosisEdit[0].diagnosis
+        editDiagnosis(test: any) {
+            this.deleteDiagnosis(test[0])
+            this.selectedText = test[0]
+            this.diagnosis[0].data.rowData[0].colData[0].value =test[0]
+            this.diagnosis[0].data.rowData[0].colData[1].value =test[1]
             this.addItemButton = false
             this.search_item = true
+            this.updateDiagnosisStores()
         },
-        async openDeletePopover(e: Event,diagnosis: any) {
-            const deleteConfirmed = await popoverConfirmation("Do you want to delete it?", e)
+        async openDeletePopover(e: any) {
+            const deleteConfirmed = await popoverConfirmation(`Do you want to delete ${e[1]} ?`, e[0])
             if (deleteConfirmed) {
-                this.deleteDiagnosis(diagnosis)
+                this.deleteDiagnosis(e[1])
             }
         },
         deleteDiagnosis(diagnosis: any) {
-            this.temporarySave(this.diagnosis.filter((item: any) => item.diagnosis !== diagnosis))
-        },
-        editTest(diagnosis: any) {
-            const diagnosisEdit = this.diagnosis.filter((item: any) => item.diagnosis === diagnosis);
-            this.deleteDiagnosis(diagnosis)
-
-            this.searchText = diagnosisEdit[0].diagnosis
-            this.selectedCondition = diagnosisEdit[0].diagnosisStatus
-            this.addItemButton = false
-            this.search_item = true
+            this.diagnosis[0].selectdData = this.diagnosis[0].selectdData.filter((item: any) => item.display[0] !== diagnosis);
+            this.updateDiagnosisStores()
         },
         setDashedBox(){
-            if (this.diagnosis.length > 0) {
+            if(this.inputFields[0].value || this.inputFields[1].value){
+                this.addItemButton = false
+                this.search_item = true
+            }
+            if (this.diagnosis[0].selectdData.length > 0) {
                 this.display_item = true
                 this.no_item = false
-            }else{
+            }else {
                 this.no_item = true
             }
         }

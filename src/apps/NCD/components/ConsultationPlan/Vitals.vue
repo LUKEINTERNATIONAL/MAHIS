@@ -1,5 +1,5 @@
 <template>
-    <basic-form :contentData="vitals" @update:inputValue="validateColData($event)"></basic-form>
+    <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form>
 </template>
   
 <script lang="ts">
@@ -54,20 +54,21 @@
         vitalsInstance: {} as any,
         inputData: [
             {
-                dbData: [],
                 isFinishBtn: false,
                 sectionHeader: 'Hieght and weight',
                 data:
-                    { 
-                        colData:[
-                            [
+                { 
+                    rowData:[
+                        {
+                            colData: [
                                 {
                                     inputHeader: 'Height*',
                                     unit: 'cm',
                                     icon: icons.height,
                                     value: '',
                                     name: 'Height',
-                                    required: true
+                                    required: true,
+                                    eventType: 'blur'
                                 },
                                 {
                                     inputHeader: 'Weight*',
@@ -75,13 +76,14 @@
                                     icon: icons.weight,
                                     value: '',
                                     name: 'Weight',
-                                    required: true
+                                    required: true,
+                                    eventType: 'blur'
                                 },
                                 
-                            ],
-                        ]
-                    }
-                ,
+                            ]
+                        }
+                    ]
+                },
                 alerts:
                 [
                     {
@@ -98,16 +100,18 @@
             {
                 sectionHeader: 'Blood pressure',
                 data:
-                    { 
-                        colData:[
-                            [
+                { 
+                    rowData:[
+                        {
+                            colData:    [
                                 {
                                     inputHeader: 'Systolic Pressure*',
                                     unit: 'mmHg',
                                     icon: icons.systolicPressure,
                                     value: '',
                                     name: 'Systolic',
-                                    required: true
+                                    required: true,
+                                    eventType: 'blur'
                                 },
                                 {
                                     inputHeader: 'Diastolic pressure*',
@@ -115,11 +119,13 @@
                                     icon: icons.diastolicPressure,
                                     value: '',
                                     name: 'Diastolic',
-                                    required: true
+                                    required: true,
+                                    eventType: 'blur'
                                 }
                             ]
-                        ]
-                    },
+                        }
+                    ]
+                },
                 alerts:[
                     {
                         backgroundColor: '',
@@ -136,39 +142,48 @@
                 sectionHeader: 'Temperature and rates',
                 data:
                     { 
-                        colData:[
-                            [
-                                {
-                                    inputHeader: 'Temperature',
-                                    unit: 'C',
-                                    icon: icons.temprature,
-                                    value: '',
-                                    name: 'Temp'
-                                },
-                                {
-                                    inputHeader: 'Pulse rate',
-                                    unit: 'BMP',
-                                    icon: icons.pulse,
-                                    value: '',
-                                    name: 'Pulse'
-                                }
-                            ],
-                            [
-                                {
-                                    inputHeader: 'Respiratory rate',
-                                    unit: 'BMP',
-                                    icon: icons.respiratory,
-                                    value: '',
-                                    name: 'Respiratory rate'
-                                },
-                                {
-                                    inputHeader: 'Oxygen saturation',
-                                    unit: '%',
-                                    icon: icons.oxgenStaturation,
-                                    value: '',
-                                    name: 'SP02'
-                                }
-                            ]
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Temperature',
+                                        unit: 'C',
+                                        icon: icons.temprature,
+                                        value: '',
+                                        name: 'Temp',
+                                        eventType: 'blur'
+                                    },
+                                    {
+                                        inputHeader: 'Pulse rate',
+                                        unit: 'BMP',
+                                        icon: icons.pulse,
+                                        value: '',
+                                        name: 'Pulse',
+                                        eventType: 'blur'
+                                    }
+                                ]
+                            },
+                            {
+                                colData:
+                                [
+                                    {
+                                        inputHeader: 'Respiratory rate',
+                                        unit: 'BMP',
+                                        icon: icons.respiratory,
+                                        value: '',
+                                        name: 'Respiratory rate',
+                                        eventType: 'blur'
+                                    },
+                                    {
+                                        inputHeader: 'Oxygen saturation',
+                                        unit: '%',
+                                        icon: icons.oxgenStaturation,
+                                        value: '',
+                                        name: 'SP02',
+                                        eventType: 'blur'
+                                    }
+                                ]
+                            }
                         ]
                     }
             }
@@ -184,7 +199,7 @@
         const userID: any  = Service.getUserID()
         this.vitalsInstance = new VitalsService(this.demographics.patient_id,userID);
         this.updateVitalsStores()
-        this.validateColData({})
+        this.validaterowData({})
     },
     watch: {
         vitals: {
@@ -199,7 +214,7 @@
     },
     methods:{
         getInputValue(sectionIndex: any, colIndex: any, inputIndex: any) {
-        return this.vitals[sectionIndex]?.data.colData[colIndex]?.[inputIndex]?.value || '';
+        return this.vitals[sectionIndex]?.data.rowData[colIndex]?.[inputIndex]?.value || '';
         },
         navigationMenu(url: any){
             menuController.close()
@@ -209,38 +224,37 @@
             const vitalsStore = useVitalsStore()
             this.vitals.length == 0 ? vitalsStore.setVitals(this.inputData) : vitalsStore.setVitals(this.vitals)
         },
-        async validateColData(inputData: any) {
+        async validaterowData(inputData: any) {
             this.hasValidationErrors = []
             
             this.vitals.forEach(section => {
-                section.data.colData.forEach((col: any) => {
-                    if (col[0].inputHeader == 'Systolic Pressure*') {
-                        const isSystolicValid = this.vitalsInstance.validator(col[0]) == null && this.vitalsInstance.validator(col[1]) == null;
-                        this.BPStatus = isSystolicValid ? this.getBloodPressureStatus(col[0].value,col[1].value) : {};
-                        this.updateBP(col[0].value,col[1].value);
-                    }
-
-                    if (col[0].inputHeader == 'Height*') {
-                        const isHeightValid = this.vitalsInstance.validator(col[0]) == null && this.vitalsInstance.validator(col[1]) == null;
-                        this.BMI = isHeightValid ? this.setBMI() : {};
-                        this.updateBMI();
-                    }
-
-                    col.some((input: any) => {
-                        const validateResult = this.vitalsInstance.validator(input);
-
-                        if (validateResult?.length > 0) {
-                            this.hasValidationErrors.push('false');
-                            if (input.inputHeader === inputData.name) {
-                                toastWarning(validateResult,4000);
-                                return true;
-                            }
-                        } else {
-                            this.hasValidationErrors.push('true');
+                section.data.rowData.forEach((col: any) => {
+                    if (col.colData[0].inputHeader == 'Systolic Pressure*') {
+                            const isSystolicValid = this.vitalsInstance.validator(col.colData[0]) == null && this.vitalsInstance.validator(col.colData[1]) == null;
+                            this.BPStatus = isSystolicValid ? this.getBloodPressureStatus(col.colData[0].value,col.colData[1].value) : {};
+                            this.updateBP(col.colData[0].value,col.colData[1].value);
                         }
 
-                        return false;
-                    });
+                        if (col.colData[0].inputHeader == 'Height*') {
+                            const isHeightValid = this.vitalsInstance.validator(col.colData[0]) == null && this.vitalsInstance.validator(col.colData[1]) == null;
+                            this.BMI = isHeightValid ? this.setBMI(col.colData[1].value,col.colData[0].value) : {};
+                            this.updateBMI();
+                        }
+                        
+                        col.colData.some((input: any) => {
+                            const validateResult = this.vitalsInstance.validator(input);
+                            if (validateResult?.length > 0) {
+                                this.hasValidationErrors.push('false');
+                                if (input.inputHeader === inputData.inputHeader) {
+                                    toastWarning(validateResult,4000);
+                                    return true;
+                                }
+                            } else {
+                                this.hasValidationErrors.push('true');
+                            }
+
+                            return false;
+                        });
                 });
             });
 
@@ -248,11 +262,11 @@
           
             
         },
-        async setBMI(){
+        async setBMI(weight: any,height: any){
             if(this.demographics.gender && this.demographics.birthdate){
                 this.BMI = await BMIService.getBMI(
-                    parseInt(this.vitals[0].data.colData[0][1].value),
-                    parseInt(this.vitals[0].data.colData[0][0].value) , 
+                    parseInt(weight),
+                    parseInt(height) , 
                     this.demographics.gender,
                     HisDate.calculateAge(this.demographics.birthdate,HisDate.currentDate())
                 )
@@ -279,17 +293,28 @@
         },
         getBloodPressureStatus(systolic: any,diastolic: any){
             if(diastolic && systolic){
-                if( (parseInt(diastolic) >= 40 && parseInt(diastolic) <= 60)  &&  (parseInt(systolic) >= 70 && parseInt(systolic) <= 90 )){
+                if( (parseInt(diastolic) >= 30 && parseInt(diastolic) <= 60)  &&  (parseInt(systolic) >= 40 && parseInt(systolic) <= 90 )){
                     return {colors:["#B9E6FE","#026AA2","#9ADBFE"],value:"Low"}
                 }else
                 if( (parseInt(diastolic) >= 60 && parseInt(diastolic) <= 80)  &&  (parseInt(systolic) >= 90 && parseInt(systolic) <= 120 )){
                     return {colors:["#DDEEDD","#016302","#BBDDBC"],value:"Normal"}
                 }else
                 if( (parseInt(diastolic) >= 80 && parseInt(diastolic) <= 90) &&  (parseInt(systolic) >= 120 && parseInt(systolic) <= 140) ){
-                    return {colors:["#FEDF89","#B54708","#FED667"],value:"Pre-high blood pressure"}
+                    let value = "Pre-high blood pressure"
+                    if( (parseInt(diastolic) >= 85 && parseInt(diastolic) <= 89) &&  (parseInt(systolic) >= 130 && parseInt(systolic) <= 139) )
+                        value = "Pre-high blood pressure (Class: Borderline)"
+                    return {colors:["#FEDF89","#B54708","#FED667"],value:value}
                 }else
-                if( (parseInt(diastolic) >= 90 && parseInt(diastolic) <= 100)  &&  (parseInt(systolic) >= 140 && parseInt(systolic) <= 190 )){
-                    return {colors:["#FECDCA","#B42318","#FDA19B"],value:"High blood pressure"}
+                if( (parseInt(diastolic) >= 90 && parseInt(diastolic) <= 109)  &&  (parseInt(systolic) >= 140 && parseInt(systolic) <= 190 )){
+                    let value = "High blood pressure"
+                    if( (parseInt(diastolic) >= 90 && parseInt(diastolic) <= 99)  &&  (parseInt(systolic) >= 140 && parseInt(systolic) <= 159 ))
+                        value = "High blood pressure (Class: Mild/ I)"
+                    if( (parseInt(diastolic) >= 100 && parseInt(diastolic) <= 109)  &&  (parseInt(systolic) >= 160 && parseInt(systolic) <= 179 ))
+                        value = "High blood pressure (Class: Moderate/ II)"
+                    return {colors:["#FECDCA","#B42318","#FDA19B"],value:value}
+                }else
+                if( (parseInt(diastolic) >= 110 && parseInt(diastolic) <= 200)  &&  (parseInt(systolic) >= 180 && parseInt(systolic) <= 250 ) ){
+                    return {colors:["#FECDCA","#B42318","#FDA19B"],value:"The patient has hypertension (Class: Severe/ III)"}
                 }else{
                     toastWarning("Invalid BP values",4000);
                     this.hasValidationErrors.push('false');

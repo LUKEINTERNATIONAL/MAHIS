@@ -1,25 +1,28 @@
 <template>
     <ion-row  v-for="(item,index) in contentData" :key="index" class="dashed_bottom_border">
-        <ion-col class="item_header_col">
+        <ion-col class="item_header_col" v-if="item['sectionHeader'] ">
             <span class="item_header">{{ item['sectionHeader'] }}</span>
         </ion-col>
         <ion-col>
-            <ion-row v-for="(element, index2) in item.data.colData" :key="index2">
-                <ion-col v-for="(col, colIndex) in element" :key="colIndex" >
+            <!-- rowData -->
+            <ion-row v-for="(element, index2) in item.data.rowData" :key="index2">
+                <ion-col v-for="(col, colIndex) in element.colData" :key="colIndex" >
                     <BasicInputField 
                         :inputHeader="col.inputHeader"
                         :unit="col.unit"
                         :icon ="col.icon"
                         :inputValue="col.value"
-                        eventType="blur"
-                        @update:inputValue="value =>{col.value =value.target.value; handleInput(col.value,col.inputHeader)} "
+                        :eventType="col.eventType"
+                        @update:inputValue="value =>{col.value =value.target.value; handleInput(col)} "
+                        @clicked:inputValue="$emit('clicked:inputValue',$event)"
                     />
                 </ion-col>
-                <ion-col class="action_buttons" v-for="(btn, btnIndex) in item.data.btns" :key="btnIndex" >
+                <ion-col size="1.7" class="btn_col" v-for="(btn, btnIndex) in element.btns" :key="btnIndex" >
                     <DynamicButton
                         :name="btn.name"
                         :fill="btn.fill"
                         :icon="btn.icon"
+                        @click="$emit('clicked:button',btn.name)"
                     />
                 </ion-col>
             </ion-row>
@@ -53,8 +56,8 @@ export default defineComponent({
         }
     },
     methods: {
-        handleInput(value: any, name: any) {
-            this.$emit("update:inputValue", {value, name});
+        handleInput(col: any) {
+            this.$emit("update:inputValue", col);
         }
     },
 })
@@ -85,6 +88,11 @@ export default defineComponent({
     align-items: center;
     max-width: 70px;
     margin-top: 48px
+}
+.btn_col{
+    display: flex;
+    align-items: end;
+    justify-content: right;
 }
 
 </style>

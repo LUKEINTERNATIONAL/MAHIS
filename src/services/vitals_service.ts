@@ -13,7 +13,7 @@ export class VitalsService extends AppEncounterService{
       // Process other vitals using Promise.all
       const promises = await Promise.all(
           vitals.flatMap((section: any) =>
-              section.data.colData.flat().map(async (item: any) => {
+              section.data.rowData.flat().map(async (item: any) => {
                 if(item.value){
                   const obs = await this.appEncounterServiceInstance.buildValueNumber(item.name, item.value);
                   labelsAndValues.push(obs);
@@ -134,7 +134,7 @@ export class VitalsService extends AppEncounterService{
         validator: (val: any) => {
           const errors = []
           errors.push(this.isNotEmptyandNumber(val))
-          errors.push(this.checkMinMax(val, 70, 190));
+          errors.push(this.checkMinMax(val, 70, 250));
           return this.mergeErrors(errors); 
         },
       }, {
@@ -142,7 +142,7 @@ export class VitalsService extends AppEncounterService{
         validator: (val: any) => {
           const errors = []
           errors.push(this.isNotEmptyandNumber(val))
-          errors.push(this.checkMinMax(val, 40, 100));
+          errors.push(this.checkMinMax(val, 40, 200));
           return this.mergeErrors(errors); 
         },
       }, {

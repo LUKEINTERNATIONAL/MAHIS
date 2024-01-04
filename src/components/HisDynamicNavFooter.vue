@@ -9,7 +9,7 @@
         :fill="btn.fill"
         :class="btn.styleClass"
         :size="btn.size">
-        <span v-html="btn.icon" ></span>
+        <ion-icon   :icon="btn.icon"></ion-icon>
         {{btn.name}}
       </ion-button>
     </ion-toolbar>
