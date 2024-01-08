@@ -38,7 +38,7 @@
                     Diagnosis           
                 </div>
                 <ion-row class="diagnosis_content" style="margin-top: 20px;">
-                    <ion-col size="4">
+                    <ion-col size="4" class="diagnosis_col">
                         <ion-checkbox label-placement="end">Type 1 DM</ion-checkbox>
                     </ion-col>
                     <ion-col>
@@ -50,7 +50,7 @@
                 </ion-row>
                 <div class="dashed_bottom_border"></div>
                 <ion-row>
-                    <ion-col size="4">
+                    <ion-col size="4" class="diagnosis_col">
                         <ion-checkbox label-placement="end">Type 2 DM</ion-checkbox>
                     </ion-col>
                     <ion-col>
@@ -62,7 +62,7 @@
                 </ion-row>
                 <div class="dashed_bottom_border"></div>
                 <ion-row>
-                    <ion-col size="4">
+                    <ion-col size="4" class="diagnosis_col">
                         <ion-checkbox label-placement="end">Hypertetion</ion-checkbox>
                     </ion-col>
                     <ion-col>
@@ -75,6 +75,77 @@
             </div>
         </ion-card>
         <br />
+        <ion-card class="registration_ion_card">
+            <div class="card_content">
+                <div class="card_hearder">
+                    Patient history & Complications          
+                </div>
+                <div>
+                    <div style="text-align: left;">HIV</div>
+                    <ion-row>
+                        <ion-col>
+                            <ion-checkbox label-placement="end" > 
+                                <span class="checkbox_header">P</span>
+                            </ion-checkbox>
+                        </ion-col>
+                        <ion-col>
+                            <ion-checkbox label-placement="end" > 
+                                <span class="checkbox_header">NR</span>
+                            </ion-checkbox>
+                        </ion-col>
+                    </ion-row>
+                    <div style="text-align: left;">
+                        <BasicInputField
+                            :icon="iconsContent.calenderPrimary"
+                            placeholder="Pick the date"
+                            inputHeader="ART Start date:"
+                        />
+                    </div>
+                    <div style="margin-top: 20px; text-align: left;">
+                        TB
+                    </div>
+                    <div class="tb_content">
+                        <ion-checkbox label-placement="end" > 
+                            <span class="checkbox_header">Smear pos</span>
+                        </ion-checkbox> <br/>
+                        <ion-checkbox label-placement="end" > 
+                            <span class="checkbox_header">Smear neg</span>
+                        </ion-checkbox> <br/>
+                        <ion-checkbox label-placement="end" > 
+                            <span class="checkbox_header">EPTB</span>
+                        </ion-checkbox> <br/>
+                        <ion-checkbox label-placement="end" > 
+                            <span class="checkbox_header">Never had TB</span>
+                        </ion-checkbox> <br/>
+                        <ion-checkbox label-placement="end" > 
+                            <span class="checkbox_header">Cardiovascular desease</span><br />
+                            <span class="small_font">eg. heart attack, ischemic heart desease, CCF</span>
+                        </ion-checkbox> <br/>
+                        <ion-checkbox label-placement="end" > 
+                            <span class="checkbox_header">Retinopathy</span>
+                        </ion-checkbox> <br/>
+                        <ion-checkbox label-placement="end" > 
+                            <span class="checkbox_header">Renal disease</span>
+                            <span>eg. elevated creatinine</span>
+                        </ion-checkbox> <br/>
+                        <ion-checkbox label-placement="end" > 
+                            <span class="checkbox_header">Stroke/TIA</span>
+                        </ion-checkbox> <br/>
+                        <ion-checkbox label-placement="end" > 
+                            <span class="checkbox_header">PVD</span>
+                            <span>eg. ulcers, gangrene</span>
+                        </ion-checkbox> <br/>
+                        <ion-checkbox label-placement="end" > 
+                            <span class="checkbox_header">Neuropathy</span>
+                        </ion-checkbox> <br/>
+                        <ion-checkbox label-placement="end" > 
+                            <span class="checkbox_header">Sexual dysfunction</span>
+                        </ion-checkbox> <br/>
+                    </div>
+                </div>
+            </div>
+        </ion-card>
+        <br/>
         <ion-card class="registration_ion_card">
             <div class="card_content">
                 <div class="card_hearder">
@@ -132,7 +203,8 @@ import {
       IonTitle, 
       IonToolbar, 
       IonMenu,
-      modalController 
+      modalController,
+      IonCheckbox
   } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { checkmark,pulseOutline } from 'ionicons/icons';
@@ -153,7 +225,8 @@ components:{
   IonMenu,
   IonTitle,
   IonToolbar,
-  BasicInputField    },
+  BasicInputField,
+  IonCheckbox    },
   data() {
 return {
   iconsContent: icons,
@@ -180,6 +253,11 @@ methods:{
 .sub_title{
     line-height: 40px;
 }
+.diagnosis_col{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .diplay_space_between{
     color: var(--text_color, #00190E);
     font-family: Inter;
@@ -203,6 +281,10 @@ ion-radio {
 .diagnosis_input{
     width: 220px;
     margin-bottom: 20px;
+}
+.tb_content{
+    text-align: left;
+    line-height: 3;
 }
 </style>
 

@@ -9,7 +9,7 @@
                     Marital status
                 </div>
                 <div class="input_fields">
-                    <div style="margin-top:20px line-height: 3;" class="check_box">
+                    <div style="margin-top:20px; line-height: 3;" class="check_box">
                         <ion-radio-group value="custom-checked" class="">
                             <ion-radio  value="single" label-placement="end">Single</ion-radio>
                             <ion-radio  value="married" label-placement="end">Married</ion-radio>
@@ -29,7 +29,7 @@
                         />
                     </div>
                 </div>
-                <div class="sub_title">
+                <div class="sub_title" style="padding: 20px;">
                     Occupation status
                 </div>
                 <div  style=" display: flex;">
