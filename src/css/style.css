@@ -326,3 +326,36 @@ ion-toast.custom-toast::part(container) {
  video{
     border-radius: 16px;
 }
+
+/* registration */
+.input_fields{
+    text-align: left;
+}
+.card_content{
+    width: 360px;
+    max-width: 0 auto ;
+}
+.card_hearder{
+    font-weight: 600;
+    color: #00190E;
+    font-size: 16px;
+}
+.sub_title{
+    font-weight: 400;
+    font-size: 14px;
+    color: #636363;
+    text-align: left;
+    display: flex;
+}
+.demographics{
+    display: block;
+    width: 570px;
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 50px ;
+}
+.registration_ion_card{
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+}

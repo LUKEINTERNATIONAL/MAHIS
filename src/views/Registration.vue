@@ -22,12 +22,10 @@
         <div v-if="registrationType == 'manual'">
             <div v-if="currentStep =='Demographics'">
                 <DemographicsRegistration  />
+                <SocialHistory />
                 <homeLocationRegistration  />
                 <CurrentLocationRegistration />   
                 <GuardianInformationRegistration />
-            </div>
-            <div v-if="currentStep =='Social history'">
-                <SocialHistory />
             </div>
             <div v-if="currentStep =='Enrollment'">
                 <Enrollment />
@@ -43,10 +41,6 @@
             <ion-breadcrumbs class="breadcrumbs">
             <ion-breadcrumb @click="setCurrentStep('Demographics')" :class="{ 'active': currentStep === 'Demographics' }">
                 <span class="breadcrumb-text">Demographics</span>
-                <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
-            </ion-breadcrumb>
-            <ion-breadcrumb @click="setCurrentStep('Social history')" :class="{ 'active': currentStep === 'Social history' }">
-                <span class="breadcrumb-text">Social history</span>
                 <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
             </ion-breadcrumb>
             <ion-breadcrumb @click="setCurrentStep('Enrollment')" :class="{ 'active': currentStep === 'Enrollment' }">

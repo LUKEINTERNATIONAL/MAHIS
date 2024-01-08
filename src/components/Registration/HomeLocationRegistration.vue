@@ -1,22 +1,24 @@
 <template>
     <div class="demographics">
-        <ion-card>
-            <div class="card_hearder">
-                Home Location
-            </div>
-            <div class="input_fields">
-                <BasicInputField
-                    :icon="iconsContent.search"
-                    inputHeader="Home district"
-                />
-                <BasicInputField
-                    :icon="iconsContent.search"
-                    inputHeader="Home traditional authority"
-                />
-                <BasicInputField
-                    inputHeader="Home village"
-                    :icon="iconsContent.search"
-                />
+        <ion-card class="registration_ion_card">
+            <div class="card_content">
+                <div class="card_hearder">
+                    Home Location
+                </div>
+                <div class="input_fields">
+                    <BasicInputField
+                        :icon="iconsContent.search"
+                        inputHeader="Home district"
+                    />
+                    <BasicInputField
+                        inputHeader="Home village"
+                        :icon="iconsContent.search"
+                    />
+                    <BasicInputField
+                        :icon="iconsContent.search"
+                        inputHeader="Home traditional authority"
+                    />
+                </div>
             </div>
         </ion-card>
     </div>
@@ -67,44 +69,7 @@ methods:{
 </script>
 
 <style scoped>
-.demographics{
-    display: block;
-    width: 40vw;
-    margin: 0 auto;
-    text-align: center;
-    margin-top: 50px ;
-}
-.demographics_title{
-    font-weight: 700;
-    font-size: 24px;
-}
-.sub_title{
-    font-weight: 400;
-    font-size: 14px;
-    color: #636363;
-    margin: 10px 0px 30px;
-    padding-top: 20px ;
-    line-height: 25px;
-}
-.card_hearder{
-    font-weight: 600;
-    color: #00190E;
-    font-size: 16px;
-    padding-top: 50px ;
-}
-.input_fields{
-    padding: 10px 100px 70px 100px;
-    text-align: left;
-}
-.gender{
-    display: flex;
-    justify-content: space-between;
-    max-width: 170px;
-    padding-top: 10px;
-}
-.gender_title{
-    margin-top: 30px;
-}
+
 
 </style>
 
