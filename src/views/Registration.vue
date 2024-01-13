@@ -22,10 +22,6 @@
         <div v-if="registrationType == 'manual'">
             <div v-if="currentStep =='Demographics'">
                 <DemographicsRegistration  />
-                <SocialHistory />
-                <homeLocationRegistration  />
-                <CurrentLocationRegistration />   
-                <GuardianInformationRegistration />
             </div>
             <div v-if="currentStep =='Enrollment'">
                 <Enrollment />
@@ -65,10 +61,6 @@
     import { icons } from '@/utils/svg';
     import DynamicButton from '@/components/DynamicButton.vue';
     import DemographicsRegistration from '@/components/Registration/DemographicsRegistration.vue';
-    import HomeLocationRegistration from '@/components/Registration/HomeLocationRegistration.vue';
-    import CurrentLocationRegistration from '@/components/Registration/CurrentLocationRegistration.vue';
-    import GuardianInformationRegistration from '@/components/Registration/GuardianInformationRegistration.vue'
-    import SocialHistory from '@/components/Registration/SocialHistory.vue';
     import Enrollment from '@/components/Registration/Enrollment.vue';
     import NextAppointment from '@/components/Registration/NextAppointment.vue';
     import ScanRegistration from '@/components/Registration/ScanRegistration.vue';
@@ -85,10 +77,6 @@
         IonTitle,
         DynamicButton,
         DemographicsRegistration,
-        HomeLocationRegistration,
-        CurrentLocationRegistration,
-        GuardianInformationRegistration,
-        SocialHistory,
         Enrollment, 
         NextAppointment,
         ScanRegistration
@@ -130,6 +118,24 @@
       }
       
     });
+
+//     {
+//   "given_name": "petros",
+//   "family_name": "kanymba",
+//   "gender": "M",
+//   "birthdate": "1984-07-15",
+//   "birthdate_estimated": true,
+//   "home_region": "Northern Region",
+//   "home_district": "Karonga",
+//   "home_traditional_authority": "Chawinga Simeon",
+//   "home_village": "kaporo",
+//   "current_region": "Southern Region",
+//   "current_district": "Chikwawa",
+//   "current_traditional_authority": "Chikwawa Boma",
+//   "current_village": "Ling'awa",
+//   "landmark": "Seventh Day",
+//   "cell_phone_number": "Unknown"
+// }
   </script>
 <style scoped>
 .breadcrumbs{

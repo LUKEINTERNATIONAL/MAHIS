@@ -1,5 +1,5 @@
 <template>
-    <h5 v-if="inputHeader">{{ inputHeader }}</h5>
+    <h6 v-if="inputHeader">{{ inputHeader }}</h6>
     <ion-item class="input_item">
         <ion-label>
             <span v-if="icon" v-html="icon" class="selectedPatient"></span>
@@ -31,10 +31,11 @@
     </ion-item>
 </template>
 
-<script>
+<script lang="ts">
 import { IonInput, IonItem } from "@ionic/vue";
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
     name: "HisFormElement",
     components: {
         IonInput,
@@ -66,8 +67,7 @@ export default {
             default: "",
         },
         inputType: {
-            type: String,
-            default: "",
+            default: "" as any,
         },
         eventType: {
             type: String,
@@ -76,15 +76,18 @@ export default {
 
     },
      methods: {
-        handleInput(event) {
+        handleInput(event: any) {
             this.$emit("update:inputValue", event);
          },
-         handleBlur(event) {
+         handleBlur(event: any) {
             this.$emit("update:inputValue", event);
          },
     },
-}
+})
 </script>
 
 <style scoped>
+h6{
+    margin-top: 0px;
+}
 </style>

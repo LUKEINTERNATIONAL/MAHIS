@@ -1,56 +1,5 @@
 <template>
-    <div class="demographics">
-        <div class="demographics_title">Demographics</div>
-        <ion-card class="registration_ion_card">
-            <div class="card_content">
-                <div class="card_hearder">
-                    Personal information
-                </div>
-                <div class="input_fields">
-                    <BasicInputField
-                        :icon="iconsContent.nationalID"
-                        inputHeader="National ID"
-                        :iconRight="iconsContent.scannerIcon"
-                        placeholder="__-__-__-__"
-                    />
-                    <BasicInputField
-                        :icon="iconsContent.fullName"
-                        inputHeader="First name*"
-                        placeholder="eg. Jeoffrey"
-                    />
-                    <BasicInputField
-                        :icon="iconsContent.fullName"
-                        inputHeader="Last name*"
-                        placeholder="eg. Banda"
-                    />
-                    <BasicInputField
-                        :icon="iconsContent.calenderPrimary"
-                        inputHeader="Middle name"
-                        placeholder="eg. Baratheon"
-                    />
-                    <BasicInputField
-                        :icon="iconsContent.calenderPrimary"
-                        inputHeader="Phone number"
-                        placeholder="+265 __-__-___"
-                    />
-                    <BasicInputField
-                        :icon="iconsContent.calenderPrimary"
-                        inputHeader="Date of birth/Estimated age*"
-                        placeholder="Pick the date"
-                    />
-                    <div style="margin-top:20px">
-                        <ion-label >
-                            <span class="gender_title"> Gender*</span>
-                        </ion-label>
-                        <ion-radio-group value="custom-checked" class="gender">
-                            <ion-radio value="custom" aria-label="Custom checkbox" label-placement="end">Male</ion-radio>
-                            <ion-radio value="custom-checked" label-placement="end" aria-label="Custom checkbox that is checked">Female</ion-radio>
-                        </ion-radio-group>
-                    </div>
-                </div>
-            </div>
-        </ion-card>
-    </div>
+    <basic-card :content="cardData"></basic-card>
 </template>
 
 <script lang="ts">
@@ -71,7 +20,9 @@ import { icons } from '@/utils/svg';
 
 import DispositionModal from '@/components/ProfileModal/DispositionModal.vue'
 import { createModal } from '@/utils/Alerts'
-import BasicInputField from '../BasicInputField.vue';
+import { useRegistrationStore } from '@/stores/RegistrationStore'
+import { mapState } from 'pinia';
+import BasicCard from '../BasicCard.vue';
 
 export default defineComponent({
 name: 'Menu',
@@ -83,15 +34,72 @@ components:{
   IonMenu,
   IonTitle,
   IonToolbar,
-  BasicInputField    },
+  BasicCard    },
   data() {
 return {
   iconsContent: icons,
+  cardData: {} as any
+  
 };
 },
+computed:{
+    ...mapState(useRegistrationStore,["personInformation"]),
+    ...mapState(useRegistrationStore,["socialHistory"]),
+    ...mapState(useRegistrationStore,["homeLocation"]),
+    ...mapState(useRegistrationStore,["currentLocation"]),
+    ...mapState(useRegistrationStore,["guardianInformation"]),
+},
+watch: {
+    personInformation: {
+        handler(){
+            this.updateRegistrationStores();
+            this.buidCards()
+        },
+        deep: true
+    }
+},
+mounted(){
+    this.updateRegistrationStores()
+    this.buidCards()
+},
 methods:{
+    buidCards(){
+        this.cardData ={
+            mainTitle:"Demographics",
+            cards:[
+                {
+                    cardTitle:"Personal information",
+                    content: this.personInformation
+                },
+                {
+                    cardTitle:"Social History",
+                    content: this.socialHistory
+                },
+                {
+                    cardTitle:"Home Location",
+                    content: this.homeLocation
+                },
+                {
+                    cardTitle:"Curent Location",
+                    content: this.currentLocation
+                },
+                {
+                    cardTitle:"Guardian information",
+                    content: this.guardianInformation
+                }
+            ]
+           } 
+    },
     openModal(){
         createModal(DispositionModal)
+    },
+    updateRegistrationStores(){
+        const registrationStore = useRegistrationStore()
+        registrationStore.setPersonalInformation(this.personInformation)
+        registrationStore.setSocialHistory(this.socialHistory)
+        registrationStore.setHomeLocation(this.homeLocation)
+        registrationStore.setCurrentLocation(this.currentLocation)
+        registrationStore.setGuardianInformation(this.guardianInformation)
     }
 }
 });
@@ -112,7 +120,6 @@ methods:{
 .gender_title{
     margin-top: 30px;
 }
-
 </style>
 
 

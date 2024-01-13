@@ -36,10 +36,13 @@
                     </ion-card-content>
                 </ion-card>
                 <ion-card class="start_new_co" style=" margin-bottom: 20px;" @click="nav('consultationPlan')">
-                    + Start new consultation
+                    + Start new NCD consultation
                 </ion-card>
                 <ion-card class="start_new_co" style=" margin-bottom: 20px;" @click="nav('patient')">
-                    + Start new consultation for ANC
+                    + Start new ANC consultation
+                </ion-card>
+                <ion-card class="start_new_co" style=" margin-bottom: 20px;" @click="nav('patient')">
+                    + Start new OPD consultation
                 </ion-card>
                 <ion-card style=" margin-bottom: 20px; background-color: #fff;">
                     <ion-accordion-group :value="['first']">

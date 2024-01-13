@@ -1,197 +1,5 @@
 <template>
-    <div class="demographics">
-        <div class="demographics_title">Enrollment</div>
-        <ion-card class="registration_ion_card">
-            <div class="card_content">
-                <div class="card_hearder">
-                    Substance use / Consumption            
-                </div>
-                <div class="" style="">
-                    <div style=" margin-bottom:30px;">
-                        <ion-label >
-                            <span class="sub_title"> Smoking</span>
-                        </ion-label>
-                        <ion-radio-group value="stopped" class="diplay_space_between">
-                            <ion-radio  value="smoking" label-placement="end">Smoking</ion-radio>
-                            <ion-radio  value="never" label-placement="end">Never</ion-radio>
-                            <ion-radio  value="stopped" label-placement="end">Stopped</ion-radio> 
-                        </ion-radio-group>
-                    </div>
-                    <div class="dashed_bottom_border"></div>
-                    <div>
-                        <ion-label class="sub_title" style="padding-top: 0px;">
-                            <span > Drinking alcohol</span>
-                        </ion-label>
-                        <ion-radio-group value="stopped" class="diplay_space_between">
-                            <ion-radio  value="drinking" label-placement="end">Drinking</ion-radio>
-                            <ion-radio  value="never" label-placement="end">Never</ion-radio>
-                            <ion-radio  value="stopped" label-placement="end">Stopped</ion-radio> 
-                        </ion-radio-group>
-                    </div>
-                </div>
-            </div>
-        </ion-card>
-        <br/>
-        <ion-card class="registration_ion_card">
-            <div class="card_content">
-                <div class="card_hearder">
-                    Diagnosis           
-                </div>
-                <ion-row class="diagnosis_content" style="margin-top: 20px;">
-                    <ion-col size="4" class="diagnosis_col">
-                        <ion-checkbox label-placement="end">Type 1 DM</ion-checkbox>
-                    </ion-col>
-                    <ion-col>
-                        <BasicInputField
-                            :icon="iconsContent.calenderPrimary"
-                            placeholder="Pick the date"
-                        />
-                    </ion-col>
-                </ion-row>
-                <div class="dashed_bottom_border"></div>
-                <ion-row>
-                    <ion-col size="4" class="diagnosis_col">
-                        <ion-checkbox label-placement="end">Type 2 DM</ion-checkbox>
-                    </ion-col>
-                    <ion-col>
-                        <BasicInputField
-                            :icon="iconsContent.calenderPrimary"
-                            placeholder="Pick the date"
-                        />
-                    </ion-col>
-                </ion-row>
-                <div class="dashed_bottom_border"></div>
-                <ion-row>
-                    <ion-col size="4" class="diagnosis_col">
-                        <ion-checkbox label-placement="end">Hypertetion</ion-checkbox>
-                    </ion-col>
-                    <ion-col>
-                        <BasicInputField
-                            :icon="iconsContent.calenderPrimary"
-                            placeholder="Pick the date"
-                        />
-                    </ion-col>
-                </ion-row>
-            </div>
-        </ion-card>
-        <br />
-        <ion-card class="registration_ion_card">
-            <div class="card_content">
-                <div class="card_hearder">
-                    Patient history & Complications          
-                </div>
-                <div>
-                    <div style="text-align: left;">HIV</div>
-                    <ion-row>
-                        <ion-col>
-                            <ion-checkbox label-placement="end" > 
-                                <span class="checkbox_header">P</span>
-                            </ion-checkbox>
-                        </ion-col>
-                        <ion-col>
-                            <ion-checkbox label-placement="end" > 
-                                <span class="checkbox_header">NR</span>
-                            </ion-checkbox>
-                        </ion-col>
-                    </ion-row>
-                    <div style="text-align: left;">
-                        <BasicInputField
-                            :icon="iconsContent.calenderPrimary"
-                            placeholder="Pick the date"
-                            inputHeader="ART Start date:"
-                        />
-                    </div>
-                    <div style="margin-top: 20px; text-align: left;">
-                        TB
-                    </div>
-                    <div class="tb_content">
-                        <ion-checkbox label-placement="end" > 
-                            <span class="checkbox_header">Smear pos</span>
-                        </ion-checkbox> <br/>
-                        <ion-checkbox label-placement="end" > 
-                            <span class="checkbox_header">Smear neg</span>
-                        </ion-checkbox> <br/>
-                        <ion-checkbox label-placement="end" > 
-                            <span class="checkbox_header">EPTB</span>
-                        </ion-checkbox> <br/>
-                        <ion-checkbox label-placement="end" > 
-                            <span class="checkbox_header">Never had TB</span>
-                        </ion-checkbox> <br/>
-                        <ion-checkbox label-placement="end" > 
-                            <span class="checkbox_header">Cardiovascular desease</span><br />
-                            <span class="small_font">eg. heart attack, ischemic heart desease, CCF</span>
-                        </ion-checkbox> <br/>
-                        <ion-checkbox label-placement="end" > 
-                            <span class="checkbox_header">Retinopathy</span>
-                        </ion-checkbox> <br/>
-                        <ion-checkbox label-placement="end" > 
-                            <span class="checkbox_header">Renal disease</span>
-                            <span>eg. elevated creatinine</span>
-                        </ion-checkbox> <br/>
-                        <ion-checkbox label-placement="end" > 
-                            <span class="checkbox_header">Stroke/TIA</span>
-                        </ion-checkbox> <br/>
-                        <ion-checkbox label-placement="end" > 
-                            <span class="checkbox_header">PVD</span>
-                            <span>eg. ulcers, gangrene</span>
-                        </ion-checkbox> <br/>
-                        <ion-checkbox label-placement="end" > 
-                            <span class="checkbox_header">Neuropathy</span>
-                        </ion-checkbox> <br/>
-                        <ion-checkbox label-placement="end" > 
-                            <span class="checkbox_header">Sexual dysfunction</span>
-                        </ion-checkbox> <br/>
-                    </div>
-                </div>
-            </div>
-        </ion-card>
-        <br/>
-        <ion-card class="registration_ion_card">
-            <div class="card_content">
-                <div class="card_hearder">
-                    Family history           
-                </div>
-                <div class="" style="">
-                    <div style="margin-bottom:30px;">
-                        <ion-label class="sub_title" >
-                            <span> Diabetes</span>
-                        </ion-label>
-                        <ion-radio-group value="unknown" class="diplay_space_between">
-                            <ion-radio  value="yes" label-placement="end">Yes</ion-radio>
-                            <ion-radio  value="no" label-placement="end">No</ion-radio>
-                            <ion-radio  value="unknown" label-placement="end">Unknown</ion-radio> 
-                        </ion-radio-group>
-                    </div>
-                    <div class="dashed_bottom_border"></div>
-                    <div>
-                        <ion-label class="sub_title" style="padding-top: 0px;">    
-                            <span > Hypertension</span>
-                        </ion-label>
-                        <ion-radio-group value="unknown" class="diplay_space_between">
-                            <ion-radio  value="yes" label-placement="end">Yes</ion-radio>
-                            <ion-radio  value="no" label-placement="end">No</ion-radio>
-                            <ion-radio  value="unknown" label-placement="end">Unknown</ion-radio> 
-                        </ion-radio-group>
-                    </div>
-                </div>
-            </div>
-        </ion-card>
-        <br/>
-        <ion-card class="registration_ion_card">
-            <div class="card_content">
-                <div class="card_hearder">
-                    NCD number           
-                </div>
-                <div class="" style="margin-top: 20px;">
-                    <BasicInputField
-                        :icon="iconsContent.fullName"
-                        placeholder="__-__-__-__"
-                        :iconRight="iconsContent.editStarts"
-                    />
-                </div>
-            </div>
-        </ion-card>
-    </div>
+    <basic-card :content="cardData"></basic-card>
 </template>
 
 <script lang="ts">
@@ -207,13 +15,15 @@ import {
       IonCheckbox
   } from '@ionic/vue';
 import { defineComponent } from 'vue';
-import { checkmark,pulseOutline } from 'ionicons/icons';
-import { ref } from 'vue';
 import { icons } from '@/utils/svg';
 
 import DispositionModal from '@/components/ProfileModal/DispositionModal.vue'
 import { createModal } from '@/utils/Alerts'
 import BasicInputField from '../BasicInputField.vue';
+import { useEnrollementStore } from '@/stores/EnrollmentStore'
+import { mapState } from 'pinia';
+import BasicForm from '@/components/BasicForm.vue';
+import BasicCard from '../BasicCard.vue';
 
 export default defineComponent({
 name: 'Menu',
@@ -226,15 +36,77 @@ components:{
   IonTitle,
   IonToolbar,
   BasicInputField,
-  IonCheckbox    },
+  IonCheckbox,
+  BasicForm,
+  BasicCard    },
   data() {
 return {
   iconsContent: icons,
+  test: '' as any,
+  cardData: {} as any
 };
 },
+computed:{
+    ...mapState(useEnrollementStore,["substance"]),
+    ...mapState(useEnrollementStore,["diagnosis"]),
+    ...mapState(useEnrollementStore,["patientHistory"]),
+    ...mapState(useEnrollementStore,["familyHistory"]),
+    ...mapState(useEnrollementStore,["NCDNumber"]),
+},
+watch: {
+    personInformation: {
+        handler(){
+            this.updateEnrollmentStores();
+            this.buidCards()
+        },
+        deep: true
+    }
+},
+mounted(){
+    this.updateEnrollmentStores()
+    this.buidCards()
+},
 methods:{
+    buidCards(){
+        this.cardData ={
+            mainTitle:"Enrollment",
+            cards:[
+                {
+                    cardTitle:"Substance use / Consumption",
+                    content: this.substance
+                },
+                {
+                    cardTitle:"Diagnosis",
+                    content: this.diagnosis
+                },
+                {
+                    cardTitle:"Patient history & Complications ",
+                    content: this.patientHistory
+                },
+                {
+                    cardTitle:"Family history",
+                    content: this.familyHistory
+                },
+                {
+                    cardTitle:"NCD number",
+                    content: this.NCDNumber
+                }
+            ]
+           } 
+    },
     openModal(){
         createModal(DispositionModal)
+    },
+    updateEnrollmentStores(){
+        const enrollmentStore = useEnrollementStore()
+        enrollmentStore.setSubstance(this.substance)
+        enrollmentStore.setDiagnosis(this.diagnosis)
+        enrollmentStore.setPatientHistory(this.patientHistory)
+        enrollmentStore.setFamilyHistory(this.familyHistory)
+        enrollmentStore.setNCDNumber(this.NCDNumber)
+    },
+    testF(data: any){
+        console.log(data);
     }
 }
 });
@@ -285,6 +157,22 @@ ion-radio {
 .tb_content{
     text-align: left;
     line-height: 3;
+}
+.small_font{
+font-family: 'Inter';
+font-style: normal;
+font-weight: 400;
+font-size: 12px;
+color: #636363;
+
+}
+.checkbox_header{
+font-family: 'Inter';
+font-style: normal;
+font-weight: 400;
+font-size: 14px;
+color: #00190E;
+
 }
 </style>
 

@@ -52,143 +52,6 @@
         vValidations: '' as any,
         hasValidationErrors: [] as any,
         vitalsInstance: {} as any,
-        inputData: [
-            {
-                isFinishBtn: false,
-                sectionHeader: 'Hieght and weight',
-                data:
-                { 
-                    rowData:[
-                        {
-                            colData: [
-                                {
-                                    inputHeader: 'Height*',
-                                    unit: 'cm',
-                                    icon: icons.height,
-                                    value: '',
-                                    name: 'Height',
-                                    required: true,
-                                    eventType: 'blur'
-                                },
-                                {
-                                    inputHeader: 'Weight*',
-                                    unit: 'kg',
-                                    icon: icons.weight,
-                                    value: '',
-                                    name: 'Weight',
-                                    required: true,
-                                    eventType: 'blur'
-                                },
-                                
-                            ]
-                        }
-                    ]
-                },
-                alerts:
-                [
-                    {
-                        backgroundColor: '',
-                        status: '',
-                        icon: '',
-                        textColor: '',
-                        value: '',
-                        name: '',
-                        index: ''
-                    }
-                ]    
-            },
-            {
-                sectionHeader: 'Blood pressure',
-                data:
-                { 
-                    rowData:[
-                        {
-                            colData:    [
-                                {
-                                    inputHeader: 'Systolic Pressure*',
-                                    unit: 'mmHg',
-                                    icon: icons.systolicPressure,
-                                    value: '',
-                                    name: 'Systolic',
-                                    required: true,
-                                    eventType: 'blur'
-                                },
-                                {
-                                    inputHeader: 'Diastolic pressure*',
-                                    unit: 'kg',
-                                    icon: icons.diastolicPressure,
-                                    value: '',
-                                    name: 'Diastolic',
-                                    required: true,
-                                    eventType: 'blur'
-                                }
-                            ]
-                        }
-                    ]
-                },
-                alerts:[
-                    {
-                        backgroundColor: '',
-                        status: '',
-                        icon: '',
-                        textColor: '',
-                        value: '',
-                        name: '',
-                        index: ''
-                    }
-                ]
-            },
-            {
-                sectionHeader: 'Temperature and rates',
-                data:
-                    { 
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'Temperature',
-                                        unit: 'C',
-                                        icon: icons.temprature,
-                                        value: '',
-                                        name: 'Temp',
-                                        eventType: 'blur'
-                                    },
-                                    {
-                                        inputHeader: 'Pulse rate',
-                                        unit: 'BMP',
-                                        icon: icons.pulse,
-                                        value: '',
-                                        name: 'Pulse',
-                                        eventType: 'blur'
-                                    }
-                                ]
-                            },
-                            {
-                                colData:
-                                [
-                                    {
-                                        inputHeader: 'Respiratory rate',
-                                        unit: 'BMP',
-                                        icon: icons.respiratory,
-                                        value: '',
-                                        name: 'Respiratory rate',
-                                        eventType: 'blur'
-                                    },
-                                    {
-                                        inputHeader: 'Oxygen saturation',
-                                        unit: '%',
-                                        icon: icons.oxgenStaturation,
-                                        value: '',
-                                        name: 'SP02',
-                                        eventType: 'blur'
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-            }
-               
-        ]
     };
   },
   computed:{
@@ -203,7 +66,7 @@
     },
     watch: {
         vitals: {
-            handler(newVitals, oldVitals){
+            handler(){
                 this.updateVitalsStores();
             },
             deep: true
@@ -213,16 +76,13 @@
       return { checkmark,pulseOutline };
     },
     methods:{
-        getInputValue(sectionIndex: any, colIndex: any, inputIndex: any) {
-        return this.vitals[sectionIndex]?.data.rowData[colIndex]?.[inputIndex]?.value || '';
-        },
         navigationMenu(url: any){
             menuController.close()
             this.$router.push(url);
         },
         updateVitalsStores(){
             const vitalsStore = useVitalsStore()
-            this.vitals.length == 0 ? vitalsStore.setVitals(this.inputData) : vitalsStore.setVitals(this.vitals)
+            vitalsStore.setVitals(this.vitals)
         },
         async validaterowData(inputData: any) {
             this.hasValidationErrors = []

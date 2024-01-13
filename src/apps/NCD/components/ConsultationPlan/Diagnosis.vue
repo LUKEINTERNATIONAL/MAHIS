@@ -95,47 +95,6 @@
         popoverOpen: false,
         event: '' as any,
         selectedCondition: '' as any,
-        inputData: [
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                data:
-                    { 
-                        rowData:[
-                            {
-                                colData:[
-                                    {
-                                        inputHeader: 'Diagnosis',
-                                        icon: icons.search,
-                                        value: '',
-                                        name: 'diagnosis',
-                                        eventType: 'input',
-                                        required: true
-                                    },
-                                    {
-                                        inputHeader: 'Result',
-                                        value: '',
-                                        name: 'result',
-                                        eventType: 'blur',
-                                        required: true
-                                    },
-                                    
-                                ],
-                                btns:[
-                                    {
-                                        name: "Save",
-                                        fill: "clear",
-                                        icon: icons.plus
-                                    }
-                                ]
-                            }
-                        ],
-                        
-                    }
-                 
-            }
-               
-        ]
     };
   },
     setup() {
@@ -214,7 +173,7 @@
         },
         updateDiagnosisStores(){
             const diagnosisStore = useDiagnosisStore()
-            this.diagnosis.length == 0 ? diagnosisStore.setDiagnosis(this.inputData) : diagnosisStore.setDiagnosis(this.diagnosis)
+            diagnosisStore.setDiagnosis(this.diagnosis)
         },
         openPopover(e: any) {
         this.event = e;
