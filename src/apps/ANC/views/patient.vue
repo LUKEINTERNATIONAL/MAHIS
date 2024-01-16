@@ -4,14 +4,14 @@ import { calendar } from 'ionicons/icons';
 <template>
       <ion-page>
         <ion-content :fullscreen="true">
-            <div>
-                Hello 
-            </div>
             <ion-card>
-                <div style="width:400px">
+                <!-- <div style="width:400px">
 
                     <BasicInputField inputHeader="Height" :icon="iconsContent.calendar" unit="cm" />
-                </div>
+                </div> -->
+                <div>
+                    <MedicalHistory/>
+                </div> 
             </ion-card>
         </ion-content>
     </ion-page>
@@ -30,6 +30,7 @@ import {
   } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import BasicInputField from '@/components/BasicInputField.vue'
+import MedicalHistory from '@/apps/ANC/profile/MedicalHistory.vue';
 import { icons } from '@/utils/svg';
 export default defineComponent({
 name: 'Menu',
@@ -41,7 +42,8 @@ components:{
   IonMenu,
   IonTitle,
   IonToolbar,
-  BasicInputField
+  BasicInputField,
+  MedicalHistory,
       },
   data() {
 return {
@@ -54,4 +56,4 @@ methods:{
 </script>
 <style scoped>
 
-</style>
+</style><link rel="stylesheet" href="style.css">
