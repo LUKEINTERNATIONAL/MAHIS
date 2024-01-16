@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 
 export const STANDARD_DATE_FORMAT = 'YYYY-MM-DD'
 const DISPLAY_DATE_FORMAT = 'DD MMM, YYYY'
+const SHORT_DATE_FORMAT = 'DD MMM'
 
 function calculateAge(birthdate:any, currentdate:any) {
     const birthDate = new Date(birthdate);
@@ -42,6 +43,12 @@ function toStandardHisTimeFormat(date: string | Date) {
 
 function toStandardHisDisplayFormat(date: string | Date): string {
     const fdate = dayjs(date).format(DISPLAY_DATE_FORMAT)
+    if (fdate.match(/invalid/i)) return ''
+    return fdate
+}
+
+function toStandardHisShortFormat(date: string | Date): string {
+    const fdate = dayjs(date).format(SHORT_DATE_FORMAT)
     if (fdate.match(/invalid/i)) return ''
     return fdate
 }
@@ -124,6 +131,7 @@ export default {
     getAgeInYears,
     toStandardHisTimeFormat,
     toStandardHisDisplayFormat,
+    toStandardHisShortFormat,
     currentDisplayDate,
     stitchDate,
     toStandardHisFormat,

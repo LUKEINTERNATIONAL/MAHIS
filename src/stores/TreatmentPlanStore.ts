@@ -1,22 +1,48 @@
 import { defineStore } from 'pinia'
+import { icons } from '@/utils/svg';
 
 export const useTreatmentPlanStore = defineStore('TreatmentPlanStore', {
     state: () => ({
         selectedMedicalDrugsList: [
-            // {
-            //     drugName: 'Metformin67 Extentend',
-            //     dose: '750mg',
-            //     frequency: 'twice',
-            //     duration: '30days',
-            //     prescription: '2023-09-23'
-            // },
-            // {
-            //     drugName: 'Metformin56 Extentend',
-            //     dose: '750mg',
-            //     frequency: 'twice',
-            //     duration: '30days',
-            //     prescription: '2023-09-29'
-            // }
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                data:
+                    { 
+                        rowData:[
+                            {
+                                colData:[
+                                    {
+                                        inputHeader: 'Test',
+                                        icon: icons.search,
+                                        value: '',
+                                        name: 'test',
+                                        eventType: 'input',
+                                        required: true
+                                    },
+                                    {
+                                        inputHeader: 'Result',
+                                        value: '',
+                                        name: 'result',
+                                        eventType: 'blur',
+                                        required: true
+                                    },
+                                    
+                                ],
+                                btns:[
+                                    {
+                                        name: "Save",
+                                        fill: "clear",
+                                        icon: icons.plus
+                                    }
+                                ]
+                            }
+                        ],
+                        
+                    }
+                 
+            }
+               
         ] as any,
         medicalAllergiesList: [] as any,
         selectedMedicalAllergiesList: [] as any,

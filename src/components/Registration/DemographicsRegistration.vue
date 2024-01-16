@@ -1,39 +1,5 @@
 <template>
-    <div class="demographics">
-        <div class="demographics_title">Demographics</div>
-        <ion-card>
-            <div class="card_hearder">
-                Personal information
-            </div>
-            <div class="input_fields">
-                <BasicInputField
-                    :icon="iconsContent.nationalID"
-                    inputHeader="National ID"
-                    :iconRight="iconsContent.scannerIcon"
-                    placeholder="__-__-__-__"
-                />
-                <BasicInputField
-                    :icon="iconsContent.fullName"
-                    inputHeader="Full name"
-                    placeholder="eg. Jeoffrey Banda"
-                />
-                <BasicInputField
-                    :icon="iconsContent.calenderPrimary"
-                    inputHeader="Date of birth"
-                    placeholder="Pick the date of birth"
-                />
-                <div style="margin-top:20px">
-                    <ion-label >
-                        <span class="gender_title"> Gender</span>
-                    </ion-label>
-                    <ion-radio-group value="custom-checked" class="gender">
-                        <ion-radio value="custom" aria-label="Custom checkbox" label-placement="end">Male</ion-radio>
-                        <ion-radio value="custom-checked" label-placement="end" aria-label="Custom checkbox that is checked">Female</ion-radio>
-                    </ion-radio-group>
-                </div>
-            </div>
-        </ion-card>
-    </div>
+    <basic-card :content="cardData"></basic-card>
 </template>
 
 <script lang="ts">
@@ -54,7 +20,9 @@ import { icons } from '@/utils/svg';
 
 import DispositionModal from '@/components/ProfileModal/DispositionModal.vue'
 import { createModal } from '@/utils/Alerts'
-import BasicInputField from '../BasicInputField.vue';
+import { useRegistrationStore } from '@/stores/RegistrationStore'
+import { mapState } from 'pinia';
+import BasicCard from '../BasicCard.vue';
 
 export default defineComponent({
 name: 'Menu',
@@ -66,50 +34,82 @@ components:{
   IonMenu,
   IonTitle,
   IonToolbar,
-  BasicInputField    },
+  BasicCard    },
   data() {
 return {
   iconsContent: icons,
+  cardData: {} as any
+  
 };
 },
+computed:{
+    ...mapState(useRegistrationStore,["personInformation"]),
+    ...mapState(useRegistrationStore,["socialHistory"]),
+    ...mapState(useRegistrationStore,["homeLocation"]),
+    ...mapState(useRegistrationStore,["currentLocation"]),
+    ...mapState(useRegistrationStore,["guardianInformation"]),
+},
+watch: {
+    personInformation: {
+        handler(){
+            this.updateRegistrationStores();
+            this.buidCards()
+        },
+        deep: true
+    }
+},
+mounted(){
+    this.updateRegistrationStores()
+    this.buidCards()
+},
 methods:{
+    buidCards(){
+        this.cardData ={
+            mainTitle:"Demographics",
+            cards:[
+                {
+                    cardTitle:"Personal information",
+                    content: this.personInformation
+                },
+                {
+                    cardTitle:"Social History",
+                    content: this.socialHistory
+                },
+                {
+                    cardTitle:"Home Location",
+                    content: this.homeLocation
+                },
+                {
+                    cardTitle:"Curent Location",
+                    content: this.currentLocation
+                },
+                {
+                    cardTitle:"Guardian information",
+                    content: this.guardianInformation
+                }
+            ]
+           } 
+    },
     openModal(){
         createModal(DispositionModal)
+    },
+    updateRegistrationStores(){
+        const registrationStore = useRegistrationStore()
+        registrationStore.setPersonalInformation(this.personInformation)
+        registrationStore.setSocialHistory(this.socialHistory)
+        registrationStore.setHomeLocation(this.homeLocation)
+        registrationStore.setCurrentLocation(this.currentLocation)
+        registrationStore.setGuardianInformation(this.guardianInformation)
     }
 }
 });
 </script>
 
 <style scoped>
-.demographics{
-    display: block;
-    width: 40vw;
-    margin: 0 auto;
-    text-align: center;
-    margin-top: 50px ;
-}
 .demographics_title{
     font-weight: 700;
     font-size: 24px;
     padding-bottom: 20px;
-}
-.sub_title{
-    font-weight: 400;
-    font-size: 14px;
-    color: #636363;
-    margin: 10px 0px 30px;
-    padding-top: 20px ;
-    line-height: 25px;
-}
-.card_hearder{
-    font-weight: 600;
-    color: #00190E;
-    font-size: 16px;
-    padding-top: 50px ;
-}
-.input_fields{
-    padding: 10px 100px 70px 100px;
-    text-align: left;
 }
 .gender{
     display: flex;
@@ -120,7 +120,6 @@ methods:{
 .gender_title{
     margin-top: 30px;
 }
-
 </style>
 
 

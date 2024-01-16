@@ -4,7 +4,8 @@
       <div class="login-container">
         <ion-card style="background-color: #fff;">
           <ion-card-content>
-          <ion-title class="login-title">NCD</ion-title>
+          <ion-img class="login_img" src="/public/mw.png" id="logo"></ion-img>
+          <ion-title class="login-title">MAHIS</ion-title>
               <ion-input 
               v-model="username"
               type="text"
@@ -49,7 +50,7 @@
 <script lang="ts">
   import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle,
      IonToolbar,IonButton, IonCard, IonCardContent, IonCardHeader,
-      IonCardSubtitle, IonCardTitle, IonAccordion, IonAccordionGroup, IonItem, IonLabel,IonInput } from '@ionic/vue';
+      IonCardSubtitle, IonCardTitle, IonAccordion, IonAccordionGroup, IonItem, IonLabel,IonInput,IonImg } from '@ionic/vue';
   import { defineComponent } from 'vue';
   import Toolbar from '@/components/Toolbar.vue'
   import ToolbarSearch from '@/components/ToolbarSearch.vue'
@@ -78,7 +79,8 @@
       IonAccordionGroup,
       IonItem,
       IonLabel,
-      IonInput
+      IonInput,
+      IonImg
     },
     data: function () {
       return {
@@ -142,7 +144,7 @@
 
 .login-title {
   font-size: 24px;
-  margin-bottom: 60px;
+  margin-bottom: 30px;
   font-weight: 700;
   margin-top: 20px;
 }
@@ -172,5 +174,9 @@
 }
 .password-toggle{
   font-size: 20px;
+}
+.login_img{
+  width: 90px;
+  margin: auto;
 }
 </style>

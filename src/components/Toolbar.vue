@@ -3,7 +3,7 @@
       <div class="content_manager" style="margin-top: unset;">
         <ion-toolbar  class="content_width primary_color_background">
           <ion-menu-button slot="start" />
-          <ion-title style="cursor: pointer;" @click="nav('/home')"><b>NCD EMR</b></ion-title>
+          <ion-title style="cursor: pointer;" @click="nav('/home')"><b>MAHIS</b></ion-title>
           <ion-buttons slot="end" style="max-width: 500px;">
               <ToolbarSearch @search="performSearch" />
           </ion-buttons>

@@ -96,47 +96,6 @@ export default defineComponent({
             popoverOpen: false,
             event: '' as any,
             labOrders: '' as any,
-            inputData: [
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                data:
-                    { 
-                        rowData:[
-                            {
-                                colData:[
-                                    {
-                                        inputHeader: 'Test',
-                                        icon: icons.search,
-                                        value: '',
-                                        name: 'test',
-                                        eventType: 'input',
-                                        required: true
-                                    },
-                                    {
-                                        inputHeader: 'Result',
-                                        value: '',
-                                        name: 'result',
-                                        eventType: 'blur',
-                                        required: true
-                                    },
-                                    
-                                ],
-                                btns:[
-                                    {
-                                        name: "Save",
-                                        fill: "clear",
-                                        icon: icons.plus
-                                    }
-                                ]
-                            }
-                        ],
-                        
-                    }
-                 
-            }
-               
-        ]
         };
     },
     setup() {
@@ -167,7 +126,7 @@ export default defineComponent({
         },
         updateInvestigationsStores(){
             const investigationsStore = useInvestigationStore()
-            this.investigations.length == 0 ? investigationsStore.setInvestigations(this.inputData) : investigationsStore.setInvestigations(this.investigations)
+            investigationsStore.setInvestigations(this.investigations)
         },
         displayInputFields() {
             this.testResult = ""

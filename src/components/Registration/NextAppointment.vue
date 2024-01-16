@@ -1,9 +1,17 @@
 <template>
     <div class="demographics">
         <div class="demographics_title">Next appointment</div>
-       
-        <ion-card>
-            <ion-datetime style="max-width: 100%;"></ion-datetime>
+        <ion-card class="registration_ion_card">
+            <ion-datetime 
+                :is-date-enabled="isWeekday" 
+                min="2022-03-01T00:00:00" 
+                max="2025-05-31T23:59:59" 
+                style="max-width: 100%;" 
+                :highlighted-dates="highlightedDates"
+                value="2023-01-21"
+                doneText="jjjj"
+                presentation="date">
+            </ion-datetime>
         </ion-card>
     </div>
 </template>
@@ -25,9 +33,9 @@ import { checkmark,pulseOutline } from 'ionicons/icons';
 import { ref } from 'vue';
 import { icons } from '@/utils/svg';
 
-import DispositionModal from '@/components/ProfileModal/DispositionModal.vue'
 import { createModal } from '@/utils/Alerts'
 import BasicInputField from '../BasicInputField.vue';
+import HisDate from "@/utils/Date";
 
 export default defineComponent({
 name: 'Menu',
@@ -46,10 +54,35 @@ return {
   iconsContent: icons,
 };
 },
+setup() {
+      const isWeekday = (dateString: string) => {
+        const date = new Date(dateString);
+        const utcDay = date.getUTCDay();
+
+        const formattedDate =HisDate.toStandardHisShortFormat(date)
+        return utcDay !== 0 &&  !["01 Jan", "25 Dec","15 Jan","3 March","1 May","6 Jul","15 Oct","25 Dec","26 Dec"].includes(formattedDate);
+      };
+      const highlightedDates = [
+        {
+          date: '2023-01-05',
+          textColor: '#800080',
+          backgroundColor: '#ffc0cb',
+        },
+        {
+          date: '2023-01-10',
+          textColor: '#09721b',
+          backgroundColor: '#c8e5d0',
+        },
+        {
+          date: '2023-01-20',
+          textColor: 'var(--ion-color-secondary-contrast)',
+          backgroundColor: 'var(--ion-color-secondary)',
+        },
+      ];
+      return { isWeekday ,highlightedDates};
+    },
 methods:{
-    openModal(){
-        createModal(DispositionModal)
-    }
+
 }
 });
 </script>
@@ -98,7 +131,10 @@ methods:{
     display: flex;
     justify-content: space-between;
 }
-
+ion-datetime::part(calendar-day) {
+    padding: 25px;
+    margin: 10px;
+  }
 </style>
 
 

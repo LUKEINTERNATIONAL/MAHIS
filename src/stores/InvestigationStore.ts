@@ -1,8 +1,50 @@
 import { defineStore } from 'pinia'
+import { icons } from '@/utils/svg';
 
 export const useInvestigationStore = defineStore('investigationStore', {
     state: () => ({
-        investigations: [] as any
+        investigations: [
+            {
+                db_data: [],
+                isFinishBtn: false,
+                selectdData: [],
+                data:
+                    { 
+                        rowData:[
+                            {
+                                colData:[
+                                    {
+                                        inputHeader: 'Test',
+                                        icon: icons.search,
+                                        value: '',
+                                        name: 'test',
+                                        eventType: 'input',
+                                        required: true
+                                    },
+                                    {
+                                        inputHeader: 'Result',
+                                        value: '',
+                                        name: 'result',
+                                        eventType: 'blur',
+                                        required: true
+                                    },
+                                    
+                                ],
+                                btns:[
+                                    {
+                                        name: "Save",
+                                        fill: "clear",
+                                        icon: icons.plus
+                                    }
+                                ]
+                            }
+                        ],
+                        
+                    }
+                 
+            }
+               
+        ]
     }),
     actions:{
         setInvestigations(data: any){
