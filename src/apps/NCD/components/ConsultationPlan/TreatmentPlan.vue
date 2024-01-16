@@ -71,9 +71,12 @@
                 </ion-col>
                 <ion-col>
                     <ion-item class="input_item">
-                            <ion-input id="chooseType" placeholder="Frequency" v-model="frequency" @click="popoverOpenForFrequencyFn2"></ion-input>
-                            <ion-icon v-if="!showPopoverOpenForFrequency"  :icon="chevronDownOutline"></ion-icon>
-                            <ion-icon v-if="showPopoverOpenForFrequency" :icon="chevronUpOutline"></ion-icon>
+                        <span class="spcls" id="chooseType" @click="popoverOpenForFrequencyFn2">
+                            <ion-input  placeholder="Frequency" v-model="frequency"></ion-input>
+                            <ion-icon v-if="!showPopoverOpenForFrequency"  :icon="chevronDownOutline"/>
+                            <ion-icon v-if="showPopoverOpenForFrequency" :icon="chevronUpOutline"/>
+                        </span>
+                            
                             <ion-popover
                                 class="popover-al"
                                 :show-backdrop="false"
@@ -126,7 +129,7 @@
                 Add new medication
                 <ion-icon slot="start" style="font-size: x-large;" :icon="addOutline"></ion-icon>
             </ion-button> -->
-            <dynamic-button  v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" :Fn="addData">
+            <dynamic-button  v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" @clicked:btn="addData">
             </dynamic-button>
             <ion-row>
                 <dynamic-button class="addMedicalTpBtn" :name="btnName2"/>
@@ -490,6 +493,10 @@ ion-list.list-al {
 }
 .action_buttons:hover {
     cursor: pointer;
+}
+.spcls {
+  display: flex;
+  align-items: center;
 }
 </style>
   
