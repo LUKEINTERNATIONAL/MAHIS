@@ -5,10 +5,6 @@ import { calendar } from 'ionicons/icons';
       <ion-page>
         <ion-content :fullscreen="true">
             <ion-card>
-                <!-- <div style="width:400px">
-
-                    <BasicInputField inputHeader="Height" :icon="iconsContent.calendar" unit="cm" />
-                </div> -->
                 <div>
                     <MedicalHistory/>
                 </div> 
