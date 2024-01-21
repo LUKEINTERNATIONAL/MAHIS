@@ -186,7 +186,7 @@
             }
         },
         setSelection(value: any) {
-            this.selectedText =value
+            this.selectedText =value.name
             if(this.inputFields[0].inputHeader == 'Diagnosis'){
                 this.diagnosis[0].data.rowData[0].colData[0].value =value
             }else{

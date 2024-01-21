@@ -7,8 +7,9 @@
             <!-- rowData -->
             <span v-if="item.data">
                 <ion-row v-for="(element, index2) in item.data.rowData" :key="index2">
-                    <ion-col v-for="(col, colIndex) in element.colData" :key="colIndex" >
+                    <ion-col v-for="(col, colIndex) in element.colData" :key="colIndex" v-show="!col.displayNone">
                         <BasicInputField 
+                            
                             :inputHeader="col.inputHeader"
                             :unit="col.unit"
                             :icon ="col.icon"
@@ -17,8 +18,16 @@
                             :inputValue="col.value"
                             :eventType="col.eventType"
                             @update:inputValue="value =>{col.value =value.target.value; handleInput(col)} "
-                            @clicked:inputValue="$emit('clicked:inputValue',$event)"
+                            @clicked:inputValue="value =>{event =value; handlePopover(col.isDatePopover); $emit('clicked:inputValue',event)}"
+                            :popOverData="col.popOverData"
+                            @setPopoverValue ="value => {col.value = value.name; col.id = value[col.idName]; handleSelected(col)}"
+                            
                         />
+                        <ion-popover :show-backdrop="false" :keep-contents-mounted="true" :is-open="openPopover"
+                            :event="event" @didDismiss="openPopover = false" v-if="col.isDatePopover">
+                            <ion-datetime @ionChange="event => col.value = formatDate(event.detail.value)" id="datetime" presentation="date"
+                                :show-default-buttons="true" ></ion-datetime>
+                        </ion-popover>
                     </ion-col>
                     <ion-col size="1.7" class="btn_col" v-for="(btn, btnIndex) in element.btns" :key="btnIndex" >
                         <DynamicButton
@@ -37,7 +46,7 @@
                 </ion-label>
                 <ion-row >
                     <ion-col>
-                        <ion-radio-group :value="item.radioBtnContent.selectedValue " class="radio_content" @ionChange="value => item.radioBtnContent.selectedValue = value.target.value" >
+                        <ion-radio-group :value="item.radioBtnContent.header.selectedValue " class="radio_content" @ionChange="value => item.radioBtnContent.header.selectedValue = value.target.value" >
                             <span v-for="(al, index3) in item.radioBtnContent?.data" :key="index3">
                                 <ion-radio :value="al.value" aria-label="Custom checkbox" label-placement="end">{{ al.name }}</ion-radio>
                             </span>
@@ -79,8 +88,13 @@
                             :inputValue="radioInput.value"
                             :eventType="radioInput.eventType"
                             @update:inputValue="value =>{radioInput.value =value.target.value; handleInput(radioInput)} "
-                            @clicked:inputValue="$emit('clicked:inputValue',$event)"
+                            @clicked:inputValue="value =>{event =value; radioInput.showDatePopover =true; handlePopover(radioInput.isDatePopover,radioInput.inputHeader); $emit('clicked:inputValue',event)}"
                         />
+                        <ion-popover :show-backdrop="false" :keep-contents-mounted="true" :is-open="radioInput.showDatePopover"
+                            :event="event" @didDismiss="radioInput.showDatePopover = false" >
+                            <ion-datetime @ionChange="event => radioInput.value = formatDate(event.detail.value)" id="datetime"
+                                presentation="date" :show-default-buttons="true"></ion-datetime>
+                        </ion-popover>
                     </ion-col>
                 </ion-row>
             </span>
@@ -102,11 +116,22 @@
 import { defineComponent } from 'vue';
 import BasicInputField from "@/components/BasicInputField.vue"
 import DynamicButton from './DynamicButton.vue';
+import { IonDatetime, IonDatetimeButton } from '@ionic/vue';
+import HisDate from "@/utils/Date";
 
 export default defineComponent({
     components:{
         BasicInputField,
-        DynamicButton
+        DynamicButton,
+        IonDatetime,
+        IonDatetimeButton
+    },
+    data() {
+        return {
+            event: '' as any,
+            openPopover: false,
+            header: '' as any
+        };
     },
     props: {
         contentData: {
@@ -116,6 +141,19 @@ export default defineComponent({
     methods: {
         handleInput(col: any) {
             this.$emit("update:inputValue", col);
+        },
+        handleSelected(col: any) {
+            this.$emit("update:selected", col);
+        },
+        handlePopover(isDatePopover: any,header: any){
+            if(isDatePopover){
+                this.openPopover = true
+                this.header=header;
+
+            }
+        },
+        formatDate(date: any){
+           return HisDate.toStandardHisDisplayFormat(date)
         }
     },
 })

@@ -184,7 +184,8 @@ export default {
             this.popoverProperties.popoverData = this.refralType;
             this.openPopover(event);
         },
-        setSelection(name: string) {
+        setSelection(selectedValue: any) {
+            const name = selectedValue.name
             if (name !== 'Internal' && name !== 'External') {
                 this.basicInputFieldProperties[0].searchText = name;
                 this.popoverProperties.popoverOpen = false;

@@ -80,7 +80,8 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             icon: icons.calenderPrimary,
                             placeholder: 'Pick the date',
                             value: '',
-                            eventType: 'input'
+                            eventType: 'input',
+                            isDatePopover: true
                         }
                     ]
                 }
@@ -107,7 +108,8 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             icon: icons.calenderPrimary,
                             placeholder: 'Pick the date',
                             value: '',
-                            eventType: 'input'
+                            showDatePopover: false,
+                            eventType: 'input',
                         }
                     ]
                 }
@@ -135,7 +137,8 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             icon: icons.calenderPrimary,
                             placeholder: 'Pick the date',
                             value: '',
-                            eventType: 'input'
+                            eventType: 'input',
+                            isDatePopover: true
                         }
                     ]
                 }
@@ -179,6 +182,7 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                                     icon: icons.calenderPrimary,
                                     value: '',
                                     eventType: 'input',
+                                    isDatePopover: true
                                 }
                                 
                             ]

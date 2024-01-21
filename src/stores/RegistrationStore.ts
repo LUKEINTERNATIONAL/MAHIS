@@ -125,7 +125,8 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                     value: '',
                                     name: 'birthdate',
                                     eventType: 'input',
-                                    required: true
+                                    required: true,
+                                    isDatePopover: true
                                 }
                                 
                             ]
@@ -153,7 +154,7 @@ export const useRegistrationStore = defineStore('registrationStore',{
                     
             }
                 
-        ],
+        ] as any,
         socialHistory: [
             {
                 selectdData: [],
@@ -241,9 +242,17 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                 colData:[
                                     {
                                         inputHeader: 'Home district',
+                                        popOver: true,
                                         icon: icons.search,
                                         value: '',
+                                        name:'homeLocation',
                                         eventType: 'input',
+                                        popOverData: {
+                                            filterData: true,
+                                            data: []
+                                        } ,
+                                        id: '',
+                                        idName: 'district_id'
                                     }
                                     
                                 ]
@@ -259,10 +268,18 @@ export const useRegistrationStore = defineStore('registrationStore',{
                         {
                             colData:[
                                 {
-                                    inputHeader: 'Home village',
+                                    inputHeader: 'Home traditional authority',
                                     icon: icons.search,
                                     value: '',
+                                    name:'homeLocation',
                                     eventType: 'input',
+                                    popOverData: {
+                                        filterData: false,
+                                        data: []
+                                    },
+                                    id: '',
+                                    idName: 'district_id',
+                                    displayNone: true
                                 }
                                 
                             ]
@@ -278,10 +295,18 @@ export const useRegistrationStore = defineStore('registrationStore',{
                         {
                             colData:[
                                 {
-                                    inputHeader: 'Home traditional authority',
+                                    inputHeader: 'Home village',
                                     icon: icons.search,
                                     value: '',
+                                    name:'homeLocation',
                                     eventType: 'input',
+                                    popOverData: {
+                                        filterData: true,
+                                        data: []
+                                    },
+                                    id: '',
+                                    idName: 'traditional_authority_id',
+                                    displayNone: true
                                 }
                                 
                             ]
@@ -306,7 +331,14 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                         inputHeader: 'Current district',
                                         icon: icons.search,
                                         value: '',
+                                        name:'currentLocation',
                                         eventType: 'input',
+                                        popOverData: {
+                                            filterData: true,
+                                            data: []
+                                        } ,
+                                        id: '',
+                                        idName: 'district_id'
                                     }
                                     
                                 ]
@@ -322,10 +354,18 @@ export const useRegistrationStore = defineStore('registrationStore',{
                         {
                             colData:[
                                 {
-                                    inputHeader: 'Current village',
+                                    inputHeader: 'Current traditional authority',
                                     icon: icons.search,
                                     value: '',
+                                    name:'currentLocation',
                                     eventType: 'input',
+                                    popOverData: {
+                                        filterData: false,
+                                        data: []
+                                    },
+                                    id: '',
+                                    idName: 'district_id',
+                                    displayNone: true
                                 }
                                 
                             ]
@@ -341,10 +381,18 @@ export const useRegistrationStore = defineStore('registrationStore',{
                         {
                             colData:[
                                 {
-                                    inputHeader: 'Current traditional authority',
+                                    inputHeader: 'Current village',
                                     icon: icons.search,
                                     value: '',
+                                    name:'currentLocation',
                                     eventType: 'input',
+                                    popOverData: {
+                                        filterData: true,
+                                        data: []
+                                    },
+                                    id: '',
+                                    idName: 'traditional_authority_id',
+                                    displayNone: true
                                 }
                                 
                             ]

@@ -272,6 +272,14 @@ export const icons = {
     </svg>
 
     `,
+    saveWhite: `
+    data:image/svg+xml;utf8,
+    <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6.5 11.6899L8.98281 15.4141C9.73365 16.5404 11.363 16.6111 12.2086 15.5541L18.5 7.68994" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+
+
+    `,
     arrowLeftWhite: `
     data:image/svg+xml;utf8,
     <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">

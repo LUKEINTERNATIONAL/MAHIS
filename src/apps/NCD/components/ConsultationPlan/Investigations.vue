@@ -203,7 +203,7 @@ export default defineComponent({
             }
         },
         setTest(value: any) {
-            this.selectedText =value
+            this.selectedText =value.name
             if(this.inputFields[0].inputHeader == 'Test'){
                 this.investigations[0].data.rowData[0].colData[0].value =value
             }else{

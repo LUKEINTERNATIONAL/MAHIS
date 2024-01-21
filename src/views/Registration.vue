@@ -48,7 +48,8 @@
                 <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
             </ion-breadcrumb>
             </ion-breadcrumbs>
-            <DynamicButton name="Next" iconSlot="end" :icon="iconsContent.arrowRightWhite" @click="nextStep" />
+            <DynamicButton v-if="currentStep =='Next appointment'" name="Save" iconSlot="end" :icon="iconsContent.saveWhite" @click="nextStep" />
+            <DynamicButton v-else name="Next" iconSlot="end" :icon="iconsContent.arrowRightWhite" @click="nextStep" />
         </div>
   </ion-footer>
   </ion-page>
@@ -58,7 +59,7 @@
     import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonBreadcrumb, IonBreadcrumbs, IonIcon } from '@ionic/vue';
     import { defineComponent } from 'vue';
     import { arrowForwardCircle } from 'ionicons/icons';
-    import { icons } from '@/utils/svg';
+    import { icons } from '@/utils/svg';    
     import DynamicButton from '@/components/DynamicButton.vue';
     import DemographicsRegistration from '@/components/Registration/DemographicsRegistration.vue';
     import Enrollment from '@/components/Registration/Enrollment.vue';
@@ -87,7 +88,7 @@
                 demographic: true,
                 currentStep: 'Demographics',
                 scanner: false,
-                steps: ['Demographics', 'Social history', 'Enrollment', 'Next appointment'],
+                steps: ['Demographics','Enrollment', 'Next appointment'],
             };
         },
         props:['registrationType'],
