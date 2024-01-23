@@ -29,17 +29,35 @@
             <span v-if="iconRight" v-html="iconRight" class=""></span>
         </ion-label>
     </ion-item>
+    <SelectionPopover 
+        :content="filteredData"  
+        :popoverOpen="popoverOpen" 
+        @closePopoover="value => popoverOpen = value" 
+        :event="event" 
+        @setSelection="$emit('setPopoverValue', $event)"
+    />
 </template>
 
 <script lang="ts">
 import { IonInput, IonItem } from "@ionic/vue";
 import { defineComponent } from 'vue';
+import SelectionPopover from "@/components/SelectionPopover.vue"
 
 export default defineComponent({
     name: "HisFormElement",
     components: {
         IonInput,
         IonItem,
+        SelectionPopover
+    },
+    data() {
+        return {
+            displayList: [] as any,
+            popoverOpen: false,
+            event: '' as any,
+            selectedText: '' as any,
+            filteredData: [] as any,
+        };
     },
     props: {
         placeholder: {
@@ -73,16 +91,32 @@ export default defineComponent({
             type: String,
             default: "input",
         },
+        popOverData:{
+            default: [] as any
+        }
 
     },
      methods: {
         handleInput(event: any) {
+            if(this.popOverData?.data) this.setEvent(event)
             this.$emit("update:inputValue", event);
          },
          handleBlur(event: any) {
             this.$emit("update:inputValue", event);
          },
-    },
+        setEvent(event: Event){
+            this.event = event
+            this.searchInput(event)
+        },
+        async searchInput(event: any) {
+            this.popoverOpen = true;
+            if(this.popOverData.filterData)
+                this.filteredData = this.popOverData.data.filter((item: any) => item.name.toLowerCase().includes(event.target.value.toLowerCase()))
+            else
+                this.filteredData = this.popOverData.data
+        }
+       
+    }
 })
 </script>
 

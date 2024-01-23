@@ -7,8 +7,8 @@
             <div class="m_name">
                 <div>Metformin Extended</div>
                 <div class="m_btns">
-                    <span v-html="iconsContent.refresh" @click="openDrugRefill"></span> 
-                    <span v-html="iconsContent.delete" @click="openDeleteModal($event)" ></span> 
+                    <ion-icon style="font-size: x-large;"  :icon="iconsContent.refresh" @click="openDrugRefill"></ion-icon>
+                    <ion-icon style="font-size: 20px;"  :icon="iconsContent.delete" @click="openDeleteModal($event)"></ion-icon>
                 </div>
             </div>
             <div class="m_dosage">
@@ -19,8 +19,8 @@
             <div class="m_name">
                 <div>Metformin Extended</div>
                 <div class="m_btns">
-                    <span v-html="iconsContent.refresh" @click="openDrugRefill"></span> 
-                    <span v-html="iconsContent.delete" @click="openDeleteModal($event)"  ></span> 
+                    <ion-icon style="font-size: x-large;"  :icon="iconsContent.refresh" @click="openDrugRefill"></ion-icon>
+                    <ion-icon style="font-size: 20px;"  :icon="iconsContent.delete" @click="openDeleteModal($event)"></ion-icon>
                 </div>
             </div>
             <div class="m_dosage">
@@ -31,8 +31,8 @@
             <div class="m_name">
                 <div>Metformin Extended 2</div>
                 <div class="m_btns">
-                    <span v-html="iconsContent.refresh" @click="openDrugRefill"></span> 
-                    <span v-html="iconsContent.delete" @click="openDeleteModal($event)"></span> 
+                    <ion-icon style="font-size: x-large;"  :icon="iconsContent.refresh" @click="openDrugRefill"></ion-icon>
+                    <ion-icon style="font-size: 20px;"  :icon="iconsContent.delete" @click="openDeleteModal($event)"></ion-icon>
                 </div>
             </div>
             <div class="m_dosage">
@@ -57,7 +57,7 @@ import {
 import { defineComponent } from 'vue';
 import { checkmark,pulseOutline } from 'ionicons/icons';
 import { ref } from 'vue';
-import { icons } from '@/utils/svg.ts';
+import { icons } from '@/utils/svg';
 
 import MedicationsModal from '@/components/ProfileModal/MedicationsModal.vue'
 import DrugRefill from '@/components/ProfileModal/DrugRefill.vue'

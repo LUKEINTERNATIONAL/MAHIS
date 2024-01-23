@@ -6,7 +6,7 @@
                 <div class="card_hearder">
                     {{ card.cardTitle }}            
                 </div>
-                <basic-form :contentData="card.content" ></basic-form>
+                <basic-form :contentData="card.content" @update:selected="$emit('update:selected',$event)" @update:inputValue="$emit('update:inputValue',$event)"></basic-form>
             </div>
         </ion-card>
     </div>
@@ -20,6 +20,7 @@ import {
 } from '@ionic/vue';
 import { defineComponent, ref } from 'vue';
 import BasicForm from '@/components/BasicForm.vue';
+
 export default defineComponent({
     name: 'Menu',
     components: {
@@ -28,19 +29,11 @@ export default defineComponent({
         IonItem,
         BasicForm
     },
-    data() {
-        return {
-        };
-    },
+    
     props: {
         content: {
             default: '' as any
         }
-            
-    },
-    methods: {
-       
-
     }
 });
 </script>
