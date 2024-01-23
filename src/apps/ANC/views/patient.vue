@@ -5,15 +5,27 @@ import { calendar } from 'ionicons/icons';
       <ion-page>
         <ion-content :fullscreen="true">
             <ion-card>
+               <!-- <div style="width:400px">
+
+                    <BasicInputField inputHeader="Height" :icon="iconsContent.calendar" unit="cm" />
+                </div> -->
                 <div>
                     <MedicalHistory/>
                 </div> 
+
+                <!-- <div>
+                    <Trial/>
+                </div>  -->
+
             </ion-card>
+
         </ion-content>
     </ion-page>
 
+
+
 </template>
-<script>
+<script lang="ts">
 import { 
       IonContent, 
       IonHeader,
@@ -27,6 +39,7 @@ import {
 import { defineComponent } from 'vue';
 import BasicInputField from '@/components/BasicInputField.vue'
 import MedicalHistory from '@/apps/ANC/profile/MedicalHistory.vue';
+// import Trial from '@/apps/ANC/profile/Trial.vue';
 import { icons } from '@/utils/svg';
 export default defineComponent({
 name: 'Menu',
@@ -40,16 +53,18 @@ components:{
   IonToolbar,
   BasicInputField,
   MedicalHistory,
-      },
+  // Trial,
+  },
   data() {
 return {
   iconsContent: icons,
+  
 };
 },
 methods:{
 }
 });
 </script>
-<style scoped>
 
-</style><link rel="stylesheet" href="style.css">
+<style scoped>
+</style>

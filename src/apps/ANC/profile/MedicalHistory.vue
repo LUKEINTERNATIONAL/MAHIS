@@ -4,72 +4,9 @@
         <ion-item :lines="pastSurgeries" class="dashed_bottom_border">
             <ion-toggle :checked ="surgeriesChecked" @ionChange="surgeries">Past Surgeries</ion-toggle>
         </ion-item>
+        
         <div class="sub_item_body" v-if="surgeriesChecked">
-            <ion-row class="surgery_content">
-                <ion-col class="first_col" >Does not know of any past surgeries</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="surgery_content">
-                <ion-col class="first_col" >Dilation and currettage</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="surgery_content">
-                <ion-col class="first_col" >Myomectomy</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="surgery_content">
-                <ion-col class="first_col" >Removal of ovarian cystst</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="surgery_content">
-                <ion-col class="first_col" >Oophorectomy</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="surgery_content">
-                <ion-col class="first_col" >Salpingectomy</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="surgery_content">
-                <ion-col class="first_col" >Cervical cone</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="general_content" style="display: flex; border-bottom-style: none;">
-            <ion-col size="3.75" >
-                <span class="surgery_input">Other sugeries</span>
-                <ion-item class="input_item" style="margin: 10px 0px;">
-                    <ion-input fill="outline"></ion-input>
-                    <ion-label><span  class="selectedPatient"></span></ion-label>
-                </ion-item>
-            </ion-col>
-            </ion-row>
+            <BasicForm :contentData="medicalHistory" />
         </div>
         <ion-item class="sub_item_body_close" v-if="surgeriesChecked"/>
     </ion-list>
@@ -80,71 +17,7 @@
             <ion-toggle :checked ="allegiesChecked" @ionChange="allegyMethod">Allegies</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="allegiesChecked">
-            <ion-row class="allegy_content">
-                <ion-col class="first_col">Does not know of any past surgeries</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="allegy_content">
-                <ion-col class="first_col">Dilation and currettage</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="allegy_content">
-                <ion-col class="first_col">Myomectomy</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="allegy_content">
-                <ion-col class="first_col">Removal of ovarian cystst</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="allegy_content">
-                <ion-col class="first_col">Oophorectomy</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="allegy_content">
-                <ion-col class="first_col">Salpingectomy</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="allegy_content">
-                <ion-col class="first_col">Cervical cone</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="general_content" style="display: flex; border-bottom-style: none;">
-            <ion-col size="3.75" >
-                <span class="allegy_input">Other allegies</span>
-                <ion-item class="input_item" style="margin: 10px 0px;">
-                    <ion-input fill="outline"></ion-input>
-                    <ion-label><span  class="selectedPatient"></span></ion-label>
-                </ion-item>
-            </ion-col>
-            </ion-row>
+            <BasicForm :contentData="allegies" />
         </div>
         <ion-item class="sub_item_body_close" v-if="allegiesChecked"/>
     </ion-list>
@@ -409,9 +282,12 @@
     IonInput,
     IonSelect
  } from "@ionic/vue";
+  import { mapState } from 'pinia';
  import {defineComponent} from 'vue';
  import {ref} from 'vue';
  import BasicInputField from "@/components/BasicInputField.vue";
+ import {useMedicalHistoryStore} from "@/apps/ANC/store/medicalHistoryStore";
+ import BasicForm from '@/components/BasicForm.vue';
 //  import {icons} from "@/utils/svg.ts"
 
 export default defineComponent({
@@ -428,7 +304,8 @@ export default defineComponent({
         IonSelect,
         IonSelectOption,
         IonInput,
-        BasicInputField
+        BasicInputField,
+        BasicForm
     },
     data(){
         return{
@@ -453,6 +330,14 @@ export default defineComponent({
             hyperKTM:""
 
         }
+    },
+    mounted(){
+        const medicalHistory =useMedicalHistoryStore()
+        const allegies = useMedicalHistoryStore()
+    },
+      computed:{
+        ...mapState(useMedicalHistoryStore,["medicalHistory"]),
+        ...mapState(useMedicalHistoryStore,["allegies"])
     },
     methods:{
         surgeries(){
