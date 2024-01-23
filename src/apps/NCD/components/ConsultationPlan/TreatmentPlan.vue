@@ -46,6 +46,10 @@
                         <!--  -->
                         <ion-label><span v-html="iconsContent.search" class="selectedPatient"></span></ion-label>
                     </ion-item>
+                    <div>
+                        <ion-label v-if="show_error_msg_for_drug_name" class="error-label">{{ drugnameErrMsg }}</ion-label>
+                    </div>
+                    
                     <ion-popover 
                         :is-open="popoverOpen" 
                         :event="event" 
@@ -212,8 +216,10 @@
         event: null,
         componentKey: 0,
         prescEvent: null,
+        drugnameErrMsg: '' as string,
         diagnosisData: [] as any,
           drugName: '' as any,
+          show_error_msg_for_drug_name: false,
           dose: '' as any,
           frequency: '' as any,
           duration: '' as any,
@@ -229,7 +235,24 @@
       return { checkmark, pulseOutline, closeOutline, addOutline, checkmarkOutline, chevronDownOutline,chevronUpOutline };
     },
     watch: {
-        // 
+        drugName: {
+            async handler(){
+                console.log("drugName", "has a chnages "+this.drugName)
+                const drugNameExists  = await this.findIfDrugNameExists()
+
+                if (!drugNameExists) {
+                    this.show_error_msg_for_drug_name = true
+                    this.drugnameErrMsg = "please select a valid drug name"
+                } else {false
+                    this.show_error_msg_for_drug_name = false
+                }
+
+
+
+                console.log("drugNameExists", this.show_error_msg_for_drug_name)
+            },
+            deep: true
+        }
     },
     computed: {
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList",
@@ -314,6 +337,41 @@
             }))
             
             this.diagnosisData = filteredDrugs
+        },
+        async FindDrugName2(text: any) {
+            
+            let search_value
+            if (text.target === undefined) {
+                search_value = text
+            } else search_value = text.target.value
+
+            const page=1, limit=10
+            const drugs: ConceptName[] = await DrugService.getOPDDrugs({ 
+            "name": search_value, 
+            "page": page,
+            "page_size": limit,
+            })
+            const filter_id_array = []
+            this.selectedMedicalAllergiesList.forEach(selectedMedicalAllergy => {
+                if (selectedMedicalAllergy.selected) {
+                    filter_id_array.push(selectedMedicalAllergy.concept_id)
+                }
+            })
+
+            const filteredDrugs = this.filterArrayByIDs(drugs, filter_id_array);
+            
+            filteredDrugs.map(drug => ({
+            label: drug.name, value: drug.name, other: drug
+            }))
+            
+            this.diagnosisData = filteredDrugs
+            return filteredDrugs
+        },
+        async findIfDrugNameExists() {
+            const filteredDrugs = await this.FindDrugName2(this.drugName)
+            if (filteredDrugs.length > 0) {
+                return true
+            } else return false
         },
         filterArrayByIDs(mainArray: [], idsToFilter: []) {
             return mainArray.filter(item => !idsToFilter.includes(item.concept_id))
@@ -438,6 +496,16 @@ ion-button.medicalAlBtn {
     --background: #FECDCA;
     --color: #B42318;
     text-transform: none;
+}
+.error-label {
+    background: #FECDCA;
+    color: #B42318;
+    text-transform: none;
+    padding: 6%;
+    border-radius: 10px;
+    margin-top: 7px;
+    display: flex;
+    text-align: center;
 }
 ion-button.addMedicalTpBtn {
     --background: #DDEEDD;
