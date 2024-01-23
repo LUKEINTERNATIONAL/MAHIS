@@ -110,6 +110,9 @@ methods:{
         }
         return lines;
     },
+    openVitalsModal(){  
+        createModal(VitalsModal)
+    }
 }
 });
 </script>

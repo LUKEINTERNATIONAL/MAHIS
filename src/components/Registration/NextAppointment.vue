@@ -8,8 +8,8 @@
                 max="2025-05-31T23:59:59" 
                 style="max-width: 100%;" 
                 :highlighted-dates="highlightedDates"
-                value="2023-01-21"
-                doneText="jjjj"
+                :value="nextAppointment"
+                @ionChange="value => calendarDate = value.target.value"
                 presentation="date">
             </ion-datetime>
         </ion-card>
@@ -29,16 +29,17 @@ import {
       IonDatetime 
   } from '@ionic/vue';
 import { defineComponent } from 'vue';
-import { checkmark,pulseOutline } from 'ionicons/icons';
+import { calendar, checkmark,pulseOutline } from 'ionicons/icons';
 import { ref } from 'vue';
 import { icons } from '@/utils/svg';
 
 import { createModal } from '@/utils/Alerts'
 import BasicInputField from '../BasicInputField.vue';
 import HisDate from "@/utils/Date";
+import { useNextAppointmentStore } from '@/stores/NextAppointmentStore'
+import { mapState } from 'pinia';
 
 export default defineComponent({
-name: 'Menu',
 components:{
   IonContent,
   IonHeader,
@@ -52,7 +53,19 @@ components:{
   data() {
 return {
   iconsContent: icons,
+  calendarDate: '' as any
 };
+},
+computed:{
+    ...mapState(useNextAppointmentStore,["nextAppointment"])
+},
+watch: {
+  calendarDate: {
+      handler(){
+          this.updateNextAppointment()  
+      },
+      deep: true
+  }
 },
 setup() {
       const isWeekday = (dateString: string) => {
@@ -68,7 +81,7 @@ setup() {
           textColor: '#800080',
           backgroundColor: '#ffc0cb',
         },
-        {
+        {    
           date: '2023-01-10',
           textColor: '#09721b',
           backgroundColor: '#c8e5d0',
@@ -82,7 +95,10 @@ setup() {
       return { isWeekday ,highlightedDates};
     },
 methods:{
-
+  updateNextAppointment(){
+      const nextAppointmentStore = useNextAppointmentStore()
+      nextAppointmentStore.setNextAppointment(this.calendarDate)
+  }
 }
 });
 </script>

@@ -18,9 +18,9 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                         icon: icons.nationalID,
                                         value: '',
                                         name: 'nationalID',
-                                        eventType: 'input',
+                                        eventType: 'blur',
                                         required: true,
-                                        placeholder: "__-__-__-__"
+                                        placeholder: "__-__-__-__",
                                     }
                                     
                                 ]
@@ -40,7 +40,7 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                     icon: icons.fullName,
                                     value: '',
                                     name: 'firstname',
-                                    eventType: 'input',
+                                    eventType: 'blur',
                                     required: true
                                 }
                                 
@@ -124,8 +124,9 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                     icon: icons.calenderPrimary,
                                     value: '',
                                     name: 'birthdate',
-                                    eventType: 'input',
-                                    required: true
+                                    eventType: 'blur',
+                                    required: true,
+                                    isDatePopover: true
                                 }
                                 
                             ]
@@ -153,7 +154,7 @@ export const useRegistrationStore = defineStore('registrationStore',{
                     
             }
                 
-        ],
+        ] as any,
         socialHistory: [
             {
                 selectdData: [],
@@ -229,7 +230,7 @@ export const useRegistrationStore = defineStore('registrationStore',{
                     
             }
                 
-        ],
+        ] as any,
         homeLocation: [
             {
                 selectdData: [],
@@ -241,9 +242,17 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                 colData:[
                                     {
                                         inputHeader: 'Home district',
+                                        popOver: true,
                                         icon: icons.search,
                                         value: '',
+                                        name:'homeLocation',
                                         eventType: 'input',
+                                        popOverData: {
+                                            filterData: true,
+                                            data: []
+                                        } ,
+                                        id: '',
+                                        idName: 'district_id'
                                     }
                                     
                                 ]
@@ -259,10 +268,18 @@ export const useRegistrationStore = defineStore('registrationStore',{
                         {
                             colData:[
                                 {
-                                    inputHeader: 'Home village',
+                                    inputHeader: 'Home traditional authority',
                                     icon: icons.search,
                                     value: '',
+                                    name:'homeLocation',
                                     eventType: 'input',
+                                    popOverData: {
+                                        filterData: false,
+                                        data: []
+                                    },
+                                    id: '',
+                                    idName: 'district_id',
+                                    displayNone: true
                                 }
                                 
                             ]
@@ -278,10 +295,18 @@ export const useRegistrationStore = defineStore('registrationStore',{
                         {
                             colData:[
                                 {
-                                    inputHeader: 'Home traditional authority',
+                                    inputHeader: 'Home village',
                                     icon: icons.search,
                                     value: '',
+                                    name:'homeLocation',
                                     eventType: 'input',
+                                    popOverData: {
+                                        filterData: true,
+                                        data: []
+                                    },
+                                    id: '',
+                                    idName: 'traditional_authority_id',
+                                    displayNone: true
                                 }
                                 
                             ]
@@ -292,7 +317,7 @@ export const useRegistrationStore = defineStore('registrationStore',{
                     
             }
                 
-        ],
+        ] as any,
         currentLocation: [
             {
                 selectdData: [],
@@ -306,7 +331,14 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                         inputHeader: 'Current district',
                                         icon: icons.search,
                                         value: '',
+                                        name:'currentLocation',
                                         eventType: 'input',
+                                        popOverData: {
+                                            filterData: true,
+                                            data: []
+                                        } ,
+                                        id: '',
+                                        idName: 'district_id'
                                     }
                                     
                                 ]
@@ -322,10 +354,18 @@ export const useRegistrationStore = defineStore('registrationStore',{
                         {
                             colData:[
                                 {
-                                    inputHeader: 'Current village',
+                                    inputHeader: 'Current traditional authority',
                                     icon: icons.search,
                                     value: '',
+                                    name:'currentLocation',
                                     eventType: 'input',
+                                    popOverData: {
+                                        filterData: false,
+                                        data: []
+                                    },
+                                    id: '',
+                                    idName: 'district_id',
+                                    displayNone: true
                                 }
                                 
                             ]
@@ -341,10 +381,18 @@ export const useRegistrationStore = defineStore('registrationStore',{
                         {
                             colData:[
                                 {
-                                    inputHeader: 'Current traditional authority',
+                                    inputHeader: 'Current village',
                                     icon: icons.search,
                                     value: '',
+                                    name:'currentLocation',
                                     eventType: 'input',
+                                    popOverData: {
+                                        filterData: true,
+                                        data: []
+                                    },
+                                    id: '',
+                                    idName: 'traditional_authority_id',
+                                    displayNone: true
                                 }
                                 
                             ]
@@ -374,7 +422,7 @@ export const useRegistrationStore = defineStore('registrationStore',{
                     
             }
                 
-        ],
+        ] as any,
         guardianInformation: [
             {
                 selectdData: [],
@@ -459,7 +507,7 @@ export const useRegistrationStore = defineStore('registrationStore',{
                     
             }
                 
-        ]
+        ] as any
     }),
     actions:{
         setPersonalInformation(data: any){

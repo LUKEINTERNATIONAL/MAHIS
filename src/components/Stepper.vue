@@ -132,12 +132,13 @@
         accordionGroupChange(ev: AccordionGroupCustomEvent){
 
           this.wizardData.forEach((item: any) => {
-            item.class = "common_step"
             if(ev.target.className == "md accordion-group-expand-compact"){
-                item.checked = false;
-                if (item.number == ev.detail.value) {
-                    item.class = 'open_step common_step';
-                } 
+              item.class = "common_step"
+              item.checked = false;
+              if (item.number == ev.detail.value) {
+                  item.class = 'open_step common_step';
+              } 
+
             }
           });
             this.$emit("updateStatus", ev);
