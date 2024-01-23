@@ -48,7 +48,7 @@
                 <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
             </ion-breadcrumb>
             </ion-breadcrumbs>
-            <DynamicButton v-if="currentStep =='Next appointment'" name="Save" iconSlot="end" :icon="iconsContent.saveWhite" @click="nextStep" />
+            <DynamicButton v-if="currentStep =='Next appointment'" name="Save" iconSlot="end" :icon="iconsContent.saveWhite" @click="saveData()" />
             <DynamicButton v-else name="Next" iconSlot="end" :icon="iconsContent.arrowRightWhite" @click="nextStep" />
         </div>
   </ion-footer>
@@ -65,6 +65,15 @@
     import Enrollment from '@/components/Registration/Enrollment.vue';
     import NextAppointment from '@/components/Registration/NextAppointment.vue';
     import ScanRegistration from '@/components/Registration/ScanRegistration.vue';
+    import { useRegistrationStore } from '@/stores/RegistrationStore'
+    import { mapState } from 'pinia';
+    import { PatientRegistrationService } from "@/services/patient_registration_service"
+    import { Patientservice } from "@/services/patient_service"
+    import { RelationsService } from "@/services/relations_service"
+    import { SocialHistoryService } from "@/services/social_history_service";
+    import { Service } from "@/services/service";
+    import { useDemographicsStore } from '@/stores/DemographicStore'
+    import { resetPatientData } from '@/services/reset_data'
   
     export default defineComponent({
       components: { 
@@ -92,51 +101,90 @@
             };
         },
         props:['registrationType'],
-
+        computed:{
+            ...mapState(useRegistrationStore,["personInformation"]),
+            ...mapState(useRegistrationStore,["socialHistory"]),
+            ...mapState(useRegistrationStore,["homeLocation"]),
+            ...mapState(useRegistrationStore,["currentLocation"]),
+            ...mapState(useRegistrationStore,["guardianInformation"])
+        },
+        setup() {
+            return { arrowForwardCircle };
+        },
+        methods:{
+            setCurrentStep(name: any){
+                this.currentStep = name
+            },
+            nav(url: any){
+                this.$router.push(url);
+            },
+            nextStep() {
+                const currentIndex = this.steps.indexOf(this.currentStep);
+                if (currentIndex < this.steps.length - 1) {
+                    this.currentStep = this.steps[currentIndex + 1];
+                }
+            },
+            previousStep() {
+                const currentIndex = this.steps.indexOf(this.currentStep);
+                if (currentIndex > 0) {
+                    this.currentStep = this.steps[currentIndex - 1];
+                }
+            },
+            async findPatient(patientID: any){
+                this.openNewPage('/patientProfile', await Patientservice.findByID(patientID))
+            },
+            saveData(){
+                this.createPatient()
+            },
+            async createPatient(){
+                if(Object.keys(this.personInformation[0].selectdData).length === 0) return
+                const registration: any = new PatientRegistrationService()
+                new Patientservice((await registration.registerPatient(this.personInformation[0].selectdData, [])))
+                const patientID = registration.getPersonID()
+                this.createGuardian(patientID)
+                this.createSocialHistory(patientID)
+                this.findPatient(patientID)
+            },
+            async createGuardian(patientID: any){
+                if(this.guardianInformation[0].selectdData?.length === 0) return
+                const guardian: any = new PatientRegistrationService()
+                await guardian.registerGuardian(this.guardianInformation[0].selectdData)
+                const guardianID = guardian.getPersonID()
+                await RelationsService.createRelation(
+                    patientID, guardianID, 13
+                )
+            },
+            async createSocialHistory(patientID: any){
+                if(this.socialHistory[0].selectdData?.length === 0) return
+                const userID: any  = Service.getUserID()
+                const socialHistory = new SocialHistoryService(patientID, userID)
+                const encounter = await socialHistory.createEncounter();
+                const obs = await socialHistory.saveObservationList(this.socialHistory[0].selectdData)
+            },
+            openNewPage(url: any,item:any){
+                const demographicsStore = useDemographicsStore()
+                demographicsStore.setDemographics({
+                'name':item.person.names[0].given_name+" "+item.person.names[0].family_name,
+                'mrn':this.patientIdentifier(item),
+                'birthdate': item.person.birthdate ,
+                'category': '',
+                'gender': item.person.gender,
+                'patient_id': item.patient_id
+                })
+                resetPatientData()
+                this.$router.push(url);
+            },
+            patientIdentifier(item: any){
+                // return item
+                const ids =item.patient_identifiers.length - 1
+                if(ids >= 0)
+                return item.patient_identifiers[ids].identifier
+                else
+                return ""
+            },
+        }
         
-      setup() {
-        return { arrowForwardCircle };
-      },
-      methods:{
-        setCurrentStep(name: any){
-            this.currentStep = name
-        },
-        nav(url: any){
-            this.$router.push(url);
-        },
-        nextStep() {
-        const currentIndex = this.steps.indexOf(this.currentStep);
-        if (currentIndex < this.steps.length - 1) {
-            this.currentStep = this.steps[currentIndex + 1];
-        }
-        },
-        previousStep() {
-        const currentIndex = this.steps.indexOf(this.currentStep);
-        if (currentIndex > 0) {
-            this.currentStep = this.steps[currentIndex - 1];
-        }
-        }
-      }
-      
-    });
-
-//     {
-//   "given_name": "petros",
-//   "family_name": "kanymba",
-//   "gender": "M",
-//   "birthdate": "1984-07-15",
-//   "birthdate_estimated": true,
-//   "home_region": "Northern Region",
-//   "home_district": "Karonga",
-//   "home_traditional_authority": "Chawinga Simeon",
-//   "home_village": "kaporo",
-//   "current_region": "Southern Region",
-//   "current_district": "Chikwawa",
-//   "current_traditional_authority": "Chikwawa Boma",
-//   "current_village": "Ling'awa",
-//   "landmark": "Seventh Day",
-//   "cell_phone_number": "Unknown"
-// }
+        });
   </script>
 <style scoped>
 .breadcrumbs{

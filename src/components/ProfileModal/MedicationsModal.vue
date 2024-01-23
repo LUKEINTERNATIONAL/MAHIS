@@ -8,8 +8,8 @@
           <div class="m_name">
               <div>Metformin Extended</div>
               <div class="m_btns">
-                  <span v-html="iconsContent.refresh" ></span> 
-                  <span v-html="iconsContent.tree_dot" ></span> 
+                    <ion-icon style="font-size: x-large;"  :icon="iconsContent.refresh" ></ion-icon>
+                    <ion-icon style="font-size: 20px;"  :icon="iconsContent.tree_dot"></ion-icon>
               </div>
           </div>
           <div class="m_dosage">
@@ -20,8 +20,8 @@
           <div class="m_name">
               <div>Metformin Extended</div>
               <div class="m_btns">
-                  <span v-html="iconsContent.refresh" ></span> 
-                  <span v-html="iconsContent.tree_dot" ></span> 
+                    <ion-icon style="font-size: x-large;"  :icon="iconsContent.refresh" ></ion-icon>
+                    <ion-icon style="font-size: 20px;"  :icon="iconsContent.tree_dot"></ion-icon> 
               </div>
           </div>
           <div class="m_dosage">
@@ -32,8 +32,8 @@
           <div class="m_name">
               <div>Metformin Extended</div>
               <div class="m_btns">
-                  <span v-html="iconsContent.refresh" ></span> 
-                  <span v-html="iconsContent.tree_dot" ></span> 
+                    <ion-icon style="font-size: x-large;"  :icon="iconsContent.refresh" ></ion-icon>
+                    <ion-icon style="font-size: 20px;"  :icon="iconsContent.tree_dot"></ion-icon> 
               </div>
           </div>
           <div class="m_dosage">

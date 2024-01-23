@@ -85,7 +85,7 @@ export default defineComponent({
     data() {
         return {
             iconsContent: icons,
-            no_item: true,
+            no_item: false,
             search_item: false,
             display_item: false,
             addItemButton: true,
@@ -205,9 +205,9 @@ export default defineComponent({
         setTest(value: any) {
             this.selectedText =value.name
             if(this.inputFields[0].inputHeader == 'Test'){
-                this.investigations[0].data.rowData[0].colData[0].value =value
+                this.investigations[0].data.rowData[0].colData[0].value =value.name
             }else{
-                this.investigations[0].data.rowData[0].colData[1].value =value
+                this.investigations[0].data.rowData[0].colData[1].value =value.name
             }
             this.updateInvestigationsStores()
         },
@@ -234,11 +234,12 @@ export default defineComponent({
             if(this.inputFields[0].value || this.inputFields[1].value){
                 this.addItemButton = false
                 this.search_item = true
+                this.no_item = false
             }
             if (this.investigations[0].selectdData.length > 0) {
                 this.display_item = true
                 this.no_item = false
-            }else {
+            }else if(!this.search_item) {
                 this.no_item = true
             }
         }

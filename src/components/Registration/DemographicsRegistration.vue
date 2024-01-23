@@ -53,6 +53,7 @@ computed:{
     ...mapState(useRegistrationStore,["guardianInformation"]),
     givenName(){ return this.getInputData(this.personInformation,1,0,0,'value')},
     familyName(){ return this.getInputData(this.personInformation,2,0,0,'value')},
+    middleName(){ return this.getInputData(this.personInformation,3,0,0,'value')},
     gender(){ return this.getRadioValue(this.personInformation,5)},
     birthdate(){ return HisDate.toStandardHisFormat(this.getInputData(this.personInformation,5,0,0,'value'))},
     birthdateEstimated(){ return this.getInputData(this.personInformation,5,0,0,'value')},
@@ -65,7 +66,29 @@ computed:{
     currentTraditionalAuthority(){ return this.getInputData(this.currentLocation,2,0,0,'value')},
     currentVillage(){ return this.getInputData(this.currentLocation,1,0,0,'value')},
     landmark(){ return this.getInputData(this.currentLocation,3,0,0,'value')},
-    phone(){ return this.getInputData(this.personInformation,4,0,0,'value')} 
+    phone(){ return this.getInputData(this.personInformation,4,0,0,'value')} ,
+    
+    maritalStatus(){ return this.getRadioValue(this.socialHistory,0)},
+    religion(){ return this.getInputData(this.socialHistory,1,0,0,'value')},
+    occupationStatus(){ return this.getRadioValue(this.socialHistory,2)},
+
+    guardianGivenName(){ return this.getInputData(this.guardianInformation,0,0,0,'value')},
+    guardianFamilyName(){ return this.getInputData(this.guardianInformation,1,0,0,'value')},
+    guardianMiddleName(){ return this.getInputData(this.guardianInformation,2,0,0,'value')},
+    // guardianGender(){ return this.getRadioValue(this.guardianInformation,5)},
+    // guardianBirthdate(){ return HisDate.toStandardHisFormat(this.getInputData(this.guardianInformation,5,0,0,'value'))},
+    // guardianBirthdateEstimated(){ return this.getInputData(this.guardianInformation,5,0,0,'value')},
+
+    // guardianHomeRegion(){ return this.getRegion(this.getInputData(this.homeLocation,0,0,0,'value'))},
+    // guardianHomeDistrict(){ return this.getInputData(this.homeLocation,0,0,0,'value')},
+    // guardianHomeTraditionalAuthority(){ return this.getInputData(this.homeLocation,2,0,0,'value')},
+    // guardianHomeVillage(){ return this.getInputData(this.homeLocation,1,0,0,'value')},
+    // guardianCurrentRegion(){ return this.getRegion(this.getInputData(this.currentLocation,0,0,0,'value'))},
+    // guardianCurrentDistrict(){ return this.getInputData(this.currentLocation,0,0,0,'value')   },
+    // guardianCurrentTraditionalAuthority(){ return this.getInputData(this.currentLocation,2,0,0,'value')},
+    // guardianCurrentVillage(){ return this.getInputData(this.currentLocation,1,0,0,'value')},
+    // guardianLandmark(){ return this.getInputData(this.currentLocation,3,0,0,'value')},
+    guardianPhone(){ return this.getInputData(this.guardianInformation,4,0,0,'value')} 
 },
 watch: {
     personInformation: {
@@ -129,6 +152,7 @@ methods:{
         if(this.validationRules()){
             this.personInformation[0].selectdData = {
                 "given_name": this.givenName,
+                "middle_name": this.middleName,
                 "family_name": this.familyName,
                 "gender": this.gender,
                 "birthdate": this.birthdate,
@@ -151,13 +175,67 @@ methods:{
             this.personInformation[0].selectdData = {}
         }
     },
+    buildGuardianInformation(){
+        if(this.guardianValidationRules()){
+        this.guardianInformation[0].selectdData = {
+            "given_name": this.guardianGivenName,
+            "middle_name": this.guardianMiddleName,
+            "family_name": this.guardianFamilyName,
+            "gender": '',
+            "birthdate": '',
+            "birthdate_estimated": '',
+
+            "home_region": '',
+            "home_district": '',
+            "home_traditional_authority": '',
+            "home_village": '',
+
+            "current_region": '',
+            "current_district": '',
+            "current_traditional_authority": '',
+            "current_village": '',
+            "landmark": '',
+
+            "cell_phone_number": this.guardianPhone
+        }}else{
+            this.guardianInformation[0].selectdData = {}
+        }
+        
+    },
+    buildSocialHistory(){
+        if(this.validatedSocialHistory())
+        this.socialHistory[0].selectdData = {
+            "marital_status": this.maritalStatus,
+            "religion": this.religion,
+            "occupation_status": this.occupationStatus
+        }
+    },
     validationRules(){
         if( Validation.required(this.gender) == null &&
             Validation.required(this.birthdate) == null &&
             Validation.isName(this.givenName) == null &&
             Validation.isName(this.familyName) == null ) 
             return true 
-        else return false
+        else {
+            return false
+        }
+    },
+    guardianValidationRules(){
+        if( Validation.isName(this.guardianGivenName) == null &&
+            Validation.isName(this.guardianFamilyName) == null ) 
+            return true 
+        else {
+            return false
+        }
+    },
+    validatedSocialHistory(){
+        if( Validation.required(this.maritalStatus) == null ||
+            Validation.required(this.religion) == null ||
+            Validation.required(this.occupationStatus) == null ) 
+            return true 
+        else {
+            return false
+        }
     },
     getRadioValue(data: any, section: any){
         return data[section].radioBtnContent.header.selectedValue

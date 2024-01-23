@@ -342,6 +342,8 @@
   .col{
     border: solid 1px #ccc ;
     padding: 20px;
+    width: 600px;
+    height: 37.4vh;
   }
   .row{
     border-radius: 4px;

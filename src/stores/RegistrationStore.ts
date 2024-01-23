@@ -18,9 +18,9 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                         icon: icons.nationalID,
                                         value: '',
                                         name: 'nationalID',
-                                        eventType: 'input',
+                                        eventType: 'blur',
                                         required: true,
-                                        placeholder: "__-__-__-__"
+                                        placeholder: "__-__-__-__",
                                     }
                                     
                                 ]
@@ -40,7 +40,7 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                     icon: icons.fullName,
                                     value: '',
                                     name: 'firstname',
-                                    eventType: 'input',
+                                    eventType: 'blur',
                                     required: true
                                 }
                                 
@@ -124,7 +124,7 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                     icon: icons.calenderPrimary,
                                     value: '',
                                     name: 'birthdate',
-                                    eventType: 'input',
+                                    eventType: 'blur',
                                     required: true,
                                     isDatePopover: true
                                 }
@@ -230,7 +230,7 @@ export const useRegistrationStore = defineStore('registrationStore',{
                     
             }
                 
-        ],
+        ] as any,
         homeLocation: [
             {
                 selectdData: [],
@@ -317,7 +317,7 @@ export const useRegistrationStore = defineStore('registrationStore',{
                     
             }
                 
-        ],
+        ] as any,
         currentLocation: [
             {
                 selectdData: [],
@@ -422,7 +422,7 @@ export const useRegistrationStore = defineStore('registrationStore',{
                     
             }
                 
-        ],
+        ] as any,
         guardianInformation: [
             {
                 selectdData: [],
@@ -507,7 +507,7 @@ export const useRegistrationStore = defineStore('registrationStore',{
                     
             }
                 
-        ]
+        ] as any
     }),
     actions:{
         setPersonalInformation(data: any){

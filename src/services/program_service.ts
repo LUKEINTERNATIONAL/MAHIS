@@ -1,5 +1,5 @@
 import { Service } from '@/services/service'
-import Modal from "@/components/ApplicationModal.vue";
+// import Modal from "@/components/ApplicationModal.vue";
 import { modalController } from "@ionic/vue";
 
 export class ProgramService extends Service {
@@ -83,16 +83,16 @@ export class ProgramService extends Service {
     static getWeightForHeightValues() {
       return super.getJson('/patient_weight_for_height_values');
     }
-    static async selectApplication() {
-      const modal = await modalController.create({
-        component: Modal,
-        cssClass: "my-custom-class",
-        backdropDismiss: false,
-        componentProps: {
-          appVersion: Service.getFullVersion()
-        },
-      });
-      modal.present()
-      return modal;
-    }
+    // static async selectApplication() {
+    //   const modal = await modalController.create({
+    //     component: Modal,
+    //     cssClass: "my-custom-class",
+    //     backdropDismiss: false,
+    //     componentProps: {
+    //       appVersion: Service.getFullVersion()
+    //     },
+    //   });
+    //   modal.present()
+    //   return modal;
+    // }
 }

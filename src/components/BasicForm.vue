@@ -18,7 +18,7 @@
                             :inputValue="col.value"
                             :eventType="col.eventType"
                             @update:inputValue="value =>{col.value =value.target.value; handleInput(col)} "
-                            @clicked:inputValue="value =>{event =value; handlePopover(col.isDatePopover); $emit('clicked:inputValue',event)}"
+                            @clicked:inputValue="value =>{event =value; handlePopover(col.isDatePopover,col.inputHeader); $emit('clicked:inputValue',event)}"
                             :popOverData="col.popOverData"
                             @setPopoverValue ="value => {col.value = value.name; col.id = value[col.idName]; handleSelected(col)}"
                             
