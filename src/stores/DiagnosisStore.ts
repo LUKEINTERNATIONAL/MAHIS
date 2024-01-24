@@ -20,19 +20,13 @@ export const useDiagnosisStore = defineStore('DiagnosisStore', {
                                         eventType: 'input',
                                         required: true
                                     },
-                                    {
-                                        inputHeader: 'Result',
-                                        value: '',
-                                        name: 'result',
-                                        eventType: 'blur',
-                                        required: true
-                                    },
                                     
                                 ],
                                 btns:[
                                     {
                                         name: "Save",
                                         fill: "clear",
+                                        btn_col_size: 3,
                                         icon: icons.plus
                                     }
                                 ]

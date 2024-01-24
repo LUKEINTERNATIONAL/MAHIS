@@ -7,7 +7,7 @@ export const useVitalsStore = defineStore('vitalsStore',{
             {
                 isFinishBtn: false,
                 sectionHeader: 'Hieght and weight',
-                classDash: 'dashed_bottom_border',
+                classDash: 'dashed_bottom_border _padding',
                 data:
                 { 
                     rowData:[
@@ -58,7 +58,7 @@ export const useVitalsStore = defineStore('vitalsStore',{
             },
             {
                 sectionHeader: 'Blood pressure',
-                classDash: 'dashed_bottom_border',
+                classDash: 'dashed_bottom_border _padding',
                 data:
                 { 
                     rowData:[
@@ -103,7 +103,6 @@ export const useVitalsStore = defineStore('vitalsStore',{
             },
             {
                 sectionHeader: 'Temperature and rates',
-                classDash: 'dashed_bottom_border',
                 data:
                     { 
                         rowData:[

@@ -32,7 +32,7 @@
                                 :show-default-buttons="true" ></ion-datetime>
                         </ion-popover>
                     </ion-col>
-                    <ion-col size="1.7" class="btn_col" v-for="(btn, btnIndex) in element.btns" :key="btnIndex" >
+                    <ion-col size="btn.btn_col_size || 1.7" class="btn_col" v-for="(btn, btnIndex) in element.btns" :key="btnIndex" >
                         <DynamicButton
                             :name="btn.name"
                             :fill="btn.fill"
@@ -184,6 +184,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
+._padding{
+  padding-bottom: 18px;
+  padding-top: 18px;
+}
 .alert_content{
     padding: 28px;
     display: flex;
