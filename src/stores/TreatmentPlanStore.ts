@@ -66,6 +66,11 @@ export const useTreatmentPlanStore = defineStore('TreatmentPlanStore', {
             return this.nonPharmalogicalTherapyAndOtherNotes
         },
         setSelectedMedicalAllergiesList(data: any) {
+            this.selectedMedicalAllergiesList.forEach((allergy: any, index: number) => {
+                if (allergy.concept_name_id == data.concept_name_id) {
+                    this.selectedMedicalAllergiesList.splice(index, 1)
+                }
+            })
             this.selectedMedicalAllergiesList.push(data)
         },
         getSelectedMedicalAllergiesList() {

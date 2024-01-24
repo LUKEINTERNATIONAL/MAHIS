@@ -14,7 +14,7 @@
                         <ion-button id="click-trigger" fill="clear" class="medicalAlAddBtn">
                             <ion-icon :icon="addOutline"></ion-icon>
                         </ion-button>
-                        <ion-popover class="popover-al" :show-backdrop="false" trigger="click-trigger" trigger-action="click">
+                        <ion-popover class="popover-al" :show-backdrop="false" trigger="click-trigger" trigger-action="click" @didPresent="dissmissDrugAddField">
                             <ion-content color="light"  class="ion-padding content-al">
                                 <ion-label>Choose the allergy:</ion-label>
                                 <ion-input  v-model="drugName"  @ionInput="FindAllegicDrugName" fill="outline"></ion-input>
@@ -58,20 +58,29 @@
                         :show-backdrop="false" 
                         :dismiss-on-select="true"
                         style="top: 10px;left: -25px;"
+                        v-if="!show_error_msg_for_drug_name"
                         >
-                        <ion-content class="search_card" >
-                        
-                            <ion-row class="search_result" v-for="(item, index) in diagnosisData" :key="index" >
+                        <ion-content color="light"  class="ion-padding content-al" >
+                            <!-- <ion-row class="search_result" v-for="(item, index) in diagnosisData" :key="index" >
                                 <ion-col @click="selectedDrugName(item.name, item)">{{ item.name }} </ion-col>
-                            </ion-row>
+                            </ion-row> -->
+                            <ion-list class="list-al">
+                                <div class="item-al" v-for="(item, index) in diagnosisData" :key="index">
+                                    {{ item.name }}
+                                    <ion-col @click="selectedDrugName(item.name, item)">{{ item.name }} </ion-col>
+                                </div>
+                            </ion-list>
                         </ion-content>
-                    </ion-popover>
+                    </ion-popover> 
                 </ion-col>
                 <ion-col>
                     <ion-item class="input_item">
                         <ion-input placeholder="Dose" v-model="dose"  fill="outline"></ion-input>
                         <ion-label><span  class="selectedPatient"></span></ion-label>
                     </ion-item>
+                    <div>
+                        <ion-label v-if="show_error_msg_for_dose" class="error-label">{{ doseErrMsg }}</ion-label>
+                    </div>
                 </ion-col>
                 <ion-col>
                     <ion-item class="input_item">
@@ -92,11 +101,11 @@
                                     <ion-label>Choose the type:</ion-label>
                                     <ion-list class="list-al">
                                         <div class="item-al" v-for="(item, index) in drug_frequencies" :key="index">
-                                                    <ion-label  @click="selectFrequency(index)" style="display: flex; justify-content: space-between;">
-                                                        {{ item.label }}
-                                                        <ion-icon v-if="item.selected" class="icon-al" :icon="checkmarkOutline"></ion-icon> 
-                                                    </ion-label>                                     
-                                                </div>
+                                            <ion-label  @click="selectFrequency(index)" style="display: flex; justify-content: space-between;">
+                                                {{ item.label }}
+                                                <ion-icon v-if="item.selected" class="icon-al" :icon="checkmarkOutline"></ion-icon> 
+                                            </ion-label>                                     
+                                        </div>
                                     </ion-list>
                                 </ion-content>
                             </ion-popover>
@@ -107,8 +116,11 @@
                         <ion-input placeholder="Duration" v-model="duration"  fill="outline"></ion-input>
                         <ion-label><span  class="selectedPatient"></span></ion-label>
                     </ion-item>
+                    <div>
+                        <ion-label v-if="show_error_msg_for_duration" class="error-label">{{ durationErrMsg }}</ion-label>
+                    </div>
                 </ion-col>
-                <ion-col>
+                <!-- <ion-col>
                     <ion-item class="input_item" style="min-height: 50px !important; height: 5px;">
                         <ion-input  id="click-trigger2" placeholder="Prescription" v-model="prescription" ></ion-input>
                         <ion-popover
@@ -123,7 +135,7 @@
                             </ion-content>
                         </ion-popover>
                     </ion-item>
-                </ion-col>
+                </ion-col> -->
                 <ion-col class="action_buttons">
                     <span @click="saveData()">+ Save</span> 
                 </ion-col>
@@ -182,6 +194,8 @@
     import { mapState } from 'pinia';
     import { useTreatmentPlanStore } from '@/stores/TreatmentPlanStore'
     import { ConceptService } from "@/services/concept_service"
+    import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts"
+    import { Service } from "@/services/service"
 
     export default defineComponent({
     name: 'Menu',
@@ -217,18 +231,22 @@
         componentKey: 0,
         prescEvent: null,
         drugnameErrMsg: '' as string,
+        show_error_msg_for_drug_name: false,
+        doseErrMsg: '' as string,
+        show_error_msg_for_dose: false,
+        durationErrMsg: '' as string,
+        show_error_msg_for_duration: false,
         diagnosisData: [] as any,
-          drugName: '' as any,
-          show_error_msg_for_drug_name: false,
-          dose: '' as any,
-          frequency: '' as any,
-          duration: '' as any,
-          prescription: '' as any,
-          showPopoverOpenForFrequency: false,
-          btnName1: 'Add new medication',
-          btnName2: 'Send to pharmacy',
-          btnName3: 'Send to dispensation',
-          btnFill: 'clear',
+        drugName: '' as any,
+        dose: '' as any,
+        frequency: '' as any,
+        duration: '' as any,
+        prescription: '' as any,
+        showPopoverOpenForFrequency: false,
+        btnName1: 'Add new medication',
+        btnName2: 'Send to pharmacy',
+        btnName3: 'Send to dispensation',
+        btnFill: 'clear',
     };
   },
     setup() {
@@ -237,19 +255,19 @@
     watch: {
         drugName: {
             async handler(){
-                console.log("drugName", "has a chnages "+this.drugName)
-                const drugNameExists  = await this.findIfDrugNameExists()
-
-                if (!drugNameExists) {
-                    this.show_error_msg_for_drug_name = true
-                    this.drugnameErrMsg = "please select a valid drug name"
-                } else {false
-                    this.show_error_msg_for_drug_name = false
-                }
-
-
-
-                console.log("drugNameExists", this.show_error_msg_for_drug_name)
+                this.validatedDrugName()
+            },
+            deep: true
+        },
+        dose: {
+            async handler(){
+                this.validateDose()
+            },
+            deep: true
+        },
+        duration: {
+            async handler(){
+                this.validateDuration()
             },
             deep: true
         }
@@ -267,6 +285,47 @@
         navigationMenu(url: any){
             menuController.close()
             this.$router.push(url);
+        },
+        async validatedDrugName() {
+            const drugNameExists  = await this.findIfDrugNameExists()
+                if (!drugNameExists) {
+                    this.drugnameErrMsg = "please select a valid drug name"
+                    this.show_error_msg_for_drug_name = true
+                } else {
+                    this.show_error_msg_for_drug_name = false
+                }
+                return this.show_error_msg_for_drug_name
+        },
+        async validateDose() {
+            const isNum = this.isNumeric(this.dose)
+            if (!isNum) {
+                this.doseErrMsg = "please enter a number"
+                this.show_error_msg_for_dose = true
+            } else {
+                this.show_error_msg_for_dose = false
+            }
+            return this.show_error_msg_for_dose
+        },
+        async validateDuration() {
+            const isNum = this.isNumeric(this.duration)
+            if (!isNum) {
+                this.durationErrMsg = "please enter a number"
+                this.show_error_msg_for_duration = true
+            } else {
+                this.show_error_msg_for_duration = false
+            }
+            return this.show_error_msg_for_duration
+        },
+        async areFieldsValid() {
+            const isDrugnameValid = await this.validatedDrugName()
+            const isDoseValid = await this.validateDose()
+            const isDurationValid = await this.validateDuration()
+
+            if (!isDrugnameValid && !isDoseValid && !isDurationValid) {
+                return true
+            } else {
+                return false
+            }
         },
         selectAl(item: any) {
             item.selected = !item.selected
@@ -292,16 +351,25 @@
             this.search_item =true
         },
         async saveData(){
-            this.search_item= false
-            this.display_item= true
-            this.addItemButton =true
+            const are_fieldsValid = await this.areFieldsValid()
+            if (!are_fieldsValid) {
+                toastWarning("Please enter correct data values",4000)
+                return
+            }
+
+            this.dissmissDrugAddField()
+            console.log("Please enter data values: ", this.duration)
+
+            const systemSessionDate = Service.getSessionDate()
+            const daysToAdd = this.duration as number
+            const generatedPrescriptionDate = this.addDaysToDate(systemSessionDate, parseInt(this.duration))
 
             const drugString = {
                 drugName: this.drugName,
                 dose: this.dose,
                 frequency: this.frequency,
                 duration: this.duration,
-                prescription: '2023-09-23'
+                prescription: generatedPrescriptionDate
             }
             this.selectedMedicalDrugsList.push(drugString)
 
@@ -370,6 +438,16 @@
         async findIfDrugNameExists() {
             const filteredDrugs = await this.FindDrugName2(this.drugName)
             if (filteredDrugs.length > 0) {
+                // if (this.drugName.length > 0) {
+                //     filteredDrugs.forEach((drug: any) => {
+                //         if (drug.name === this.drugName) {
+                //             return true
+                //         }
+                //     })
+                // }
+                if (this.drugName.length == 0) {
+                    return false
+                }
                 return true
             } else return false
         },
@@ -454,8 +532,23 @@
             const treatmentPlanStore = useTreatmentPlanStore()
             treatmentPlanStore.setNonPharmalogicalTherapyAndOtherNotes(value as string)
             this.saveStateValuesState()
-        }
-        
+        },
+        isNumeric(text: string): boolean {
+        return /^[0-9]+$/.test(text)
+        },
+        addDaysToDate(dateString: string, daysToAdd: number): string {
+            const currentDate = new Date(dateString)
+            currentDate.setDate(currentDate.getDate() + daysToAdd)
+            const year = currentDate.getFullYear()
+            const month = String(currentDate.getMonth() + 1).padStart(2, '0')
+            const day = String(currentDate.getDate()).padStart(2, '0')
+            return `${year}-${month}-${day}`
+        },
+        dissmissDrugAddField(): void{
+            this.search_item= false
+            this.display_item= true
+            this.addItemButton =true
+        }  
     }
     });
 </script>
