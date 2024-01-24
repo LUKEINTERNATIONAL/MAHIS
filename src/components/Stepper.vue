@@ -75,6 +75,8 @@
   import Disposition from '@/apps/NCD/components/ConsultationPlan/Disposition.vue'
   import Investigations from '@/apps/NCD/components/ConsultationPlan/Investigations.vue'
   import TreatmentPlan from '@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue'
+  import Medications from "@/apps/ANC/components/profile/Medications.vue";
+  import WomanBehaviour from "@/apps/ANC/components/profile/WomanBehaviour.vue";
   import SaveProgressModal from '@/components/SaveProgressModal.vue'
   import { createModal } from '@/utils/Alerts'
   import { icons } from '@/utils/svg';
@@ -107,6 +109,8 @@
         Investigations,
         TreatmentPlan,
         IonModal,
+        Medications,
+        WomanBehaviour
     },
     data(){
         return {
