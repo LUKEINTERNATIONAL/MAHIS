@@ -20,7 +20,9 @@ export const useVitalsStore = defineStore('vitalsStore',{
                                     value: '',
                                     name: 'Height',
                                     required: true,
-                                    eventType: 'blur'
+                                    eventType: 'blur',
+                                    alertsError: false,
+                                    alertsErrorMassage: ''
                                 },
                                 {
                                     inputHeader: 'Weight*',
@@ -29,7 +31,9 @@ export const useVitalsStore = defineStore('vitalsStore',{
                                     value: '',
                                     name: 'Weight',
                                     required: true,
-                                    eventType: 'blur'
+                                    eventType: 'blur',
+                                    alertsError: false,
+                                    alertsErrorMassage: ''
                                 },
                                 
                             ]
@@ -47,7 +51,10 @@ export const useVitalsStore = defineStore('vitalsStore',{
                         name: '',
                         index: ''
                     }
-                ]    
+                ],
+                previousView:{
+                    name:'vitals'
+                }   
             },
             {
                 sectionHeader: 'Blood pressure',
@@ -89,7 +96,10 @@ export const useVitalsStore = defineStore('vitalsStore',{
                         name: '',
                         index: ''
                     }
-                ]
+                ],
+                previousView:{
+                    name:'vitals'
+                }
             },
             {
                 sectionHeader: 'Temperature and rates',
@@ -139,6 +149,9 @@ export const useVitalsStore = defineStore('vitalsStore',{
                                 ]
                             }
                         ]
+                    },
+                    previousView:{
+                        name:'vitals'
                     }
             }
                

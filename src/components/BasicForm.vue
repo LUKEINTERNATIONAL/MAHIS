@@ -9,7 +9,6 @@
                 <ion-row v-for="(element, index2) in item.data.rowData" :key="index2">
                     <ion-col v-for="(col, colIndex) in element.colData" :key="colIndex" v-show="!col.displayNone">
                         <BasicInputField 
-                            
                             :inputHeader="col.inputHeader"
                             :unit="col.unit"
                             :icon ="col.icon"
@@ -23,6 +22,9 @@
                             @setPopoverValue ="value => {col.value = value.name; col.id = value[col.idName]; handleSelected(col)}"
                             
                         />
+                        <div class="alerts_error" v-if="col.alertsError">
+                            {{ col.alertsErrorMassage }}
+                        </div>
                         <ion-popover :show-backdrop="false" :keep-contents-mounted="true" :is-open="openPopover"
                             :event="event" @didDismiss="openPopover = false" v-if="col.isDatePopover">
                             <ion-datetime @ionChange="event => col.value = formatDate(event.detail.value)" id="datetime" presentation="date"
@@ -107,6 +109,18 @@
                     </span>
                 </ion-row>
             </span>
+            <ion-row v-if="item.previousView">
+                <ion-accordion-group ref="accordionGroup" class="previousView">
+                    <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
+                        <ion-item slot="header" color="light">
+                            <ion-label class="previousLabel">Previous measurements</ion-label>
+                        </ion-item>
+                        <div class="ion-padding" slot="content">
+                            <PreviousVitals v-if="item.previousView.name == 'vitals'" />
+                        </div>
+                    </ion-accordion>
+                </ion-accordion-group>
+            </ion-row>
         </ion-col>
         <span></span>
     </ion-row>
@@ -118,13 +132,16 @@ import BasicInputField from "@/components/BasicInputField.vue"
 import DynamicButton from './DynamicButton.vue';
 import { IonDatetime, IonDatetimeButton } from '@ionic/vue';
 import HisDate from "@/utils/Date";
+import { createModal } from '@/utils/Alerts'
+import PreviousVitals from '@/apps/NCD/components/ConsultationPlan/previousVitals.vue'
 
 export default defineComponent({
     components:{
         BasicInputField,
         DynamicButton,
         IonDatetime,
-        IonDatetimeButton
+        IonDatetimeButton,
+        PreviousVitals
     },
     data() {
         return {
@@ -205,5 +222,27 @@ ion-radio {
 }
 .dashed_bottom_border {
   padding-bottom: 18px;
+}
+.alerts_error{
+    background: #f5dad8;
+    margin-top: 2px;
+    color: #B42318;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    overflow:scroll;
+    padding: 5px;
+    border-radius: 3px;
+}
+.previousView{
+    width: 100%;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+.previousLabel{
+    font-weight: 600;
+    color: #000;
 }
 </style>

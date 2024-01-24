@@ -2,7 +2,7 @@
     <ion-row>
         <ion-col size="1" size-lg="1"></ion-col>
         <ion-col size="3" size-lg="3">
-            <ion-card style="max-width: 300px; background-color: #fff;">
+            <ion-card class="wizard_card">
                 <div class="wizard_title"><strong > The consultation plan</strong></div>
                 <ion-card-content>
                     <div id="wizard_verticle" class="form_wizard wizard_verticle">
@@ -22,13 +22,14 @@
             </ion-card>
         </ion-col>
     
-        <ion-col size="7" size-lg="7">
+        <ion-col size="7" size-lg="7" class="rightCol">
             <div class="back_profile" @click="openModal()">
                 <ion-icon style="font-size: 20px;" :icon="chevronBackOutline"> </ion-icon> 
                 <span style="cursor: pointer;"> Back to profile</span>
             </div>
             
-            <ion-accordion-group @ionChange="accordionGroupChange($event)">
+            <div class="accordion_group">
+              <ion-accordion-group @ionChange="accordionGroupChange($event)" >
                 <ion-accordion v-for="(item, index) in StepperData" :key="index"  :value="item.value">
                     <ion-item slot="header">
                         <ion-label>{{ item.title }}</ion-label>
@@ -38,8 +39,13 @@
                     </div>
                 </ion-accordion>
             </ion-accordion-group>
-            <hr style="background: rgba(0, 0, 0, 0.13);">
+            <div>
+              <hr style="background: rgba(0, 0, 0, 0.13);">
             <ion-button class="primary_btn" @click="$emit('finishBtn')">Finish and Save</ion-button>
+            </div>
+            </div>
+            
+           
         </ion-col>
     </ion-row>
 </template>
@@ -218,6 +224,36 @@
     align-items: center;
     font-weight: 400;
     font-size: 14;
+    position: fixed;
+    z-index: 1000;
   }
+  .wizard_card{
+    position: fixed;
+    width: 100%;
+    max-width: 300px; 
+    background-color: #fff;
+    top:150px;
+    
+  }
+  .rightCol{
+    top:100px;
+    width: 90%;
+  }
+  .accordion_group{
+    position: fixed;
+    height: 700px; 
+    width: 58%;
+    overflow-y: auto; 
+    top: 200px;
+  }
+  .accordion_group::-webkit-scrollbar {
+  display: none;
+}
+
+.accordion_group {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+  
 </style>
   

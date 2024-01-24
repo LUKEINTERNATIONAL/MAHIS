@@ -159,8 +159,8 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                     },
                     data:[
                         {
-                            name: 'P',
-                            value: 'P',
+                            name: 'R',
+                            value: 'R',
                             checked: false
                         },
                         {
