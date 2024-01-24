@@ -97,6 +97,7 @@ export default defineComponent({
 ion-item.ionLbltp {
     border-bottom: 2px dotted var(--ion-color-medium);
     --inner-border-width:0;
+    cursor: pointer;
 }
 .action_buttons{
     color: var(--ion-color-primary);
