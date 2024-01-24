@@ -170,8 +170,95 @@ const hivTestForm ={
         hivTestNotDone:{
         name:"HIV test not done",
         value: "hivTestNotDone"
+    },
+        testStockOut:{
+        name:"Test stock-out",
+        value: "testStockOut"
+    },
+        expiredTests:{
+        name:"Expired tests",
+        value: " expiredTests"
+    },
+        hivPositive:{
+        name:"HIV Positive",
+        value: "hivPositive"
+    },  
+        hivNegative1:{
+        name:"HIV Negative 1",
+        value: "hivNegative1"
+    },  
+        hivNegative2:{
+        name:"HIV Negative 2",
+        value: "hivNegative2"
+    },  
+        inconclusive:{
+        name:"Inconclusive",
+        value: "inconclusive"
+    },
+        highRiskYes:{
+        name:"Yes",
+        value: "yes"
+    },
+        highRiskNo:{
+        name:"No",
+        value: "no"
     }
 }
+
+const syphilisForm={
+
+        syphilisTestConducted:{
+        name:"Syphilis test conducted",
+        value: "syphilisTestConducted"
+    },
+
+        syphilisTestOrdered:{
+        name:"Syphilis test ordered",
+        value: "syphilisTestOrdered"
+    },
+        syphilisTestNotDone:{
+        name:"Syphilis test not done",
+        value: "syphilisTestNotDone"
+    },
+
+        rapidSyphilisTest:{
+        name:"Rapid syphilis test",
+        value: "rapidSyphilisTest"
+    },
+        offSiteLabTest:{
+        name:"Off-site lab test",
+        value: "offSiteLabTest"
+    },
+        treponemaPallidum:{
+        name:"treponema pallidum heamagglutination (TPHA)",
+        value: "treponemaPallidum"
+    },
+        testStockOut:{
+        name:"Test stock-out",
+        value: "testStockOut"
+    },  
+        expiredTests:{
+        name:"Expired tests",
+        value: "expiredTests"
+    },  
+        syphilisPositiveResults:{
+        name:"Syphilis positive",
+        value: "syphilisPositiveResults"
+    },  
+        syphilisNegativeResults:{
+        name:"Syphilis negative",
+        value: "syphilisNegativeResults"
+    },
+        syphilisPositiveDiagnosis:{
+        name:"Syphilis positive",
+        value: "syphilisPositiveDiagnosis"
+    },
+        syphilisNegativeDiagnosis:{
+        name:"Syphilis Negative",
+        value: "syphilisNegativeDiagnosis"
+    }
+}
+
 const hypertensionForm = {
 
         hypertension:{
@@ -833,10 +920,11 @@ epilespy:[
                     
         },
     ],
-    socialHistory: [
+    hivTest: [
             {
                 selectdData: [],
                 isFinishBtn: false,
+                classDash: 'dashed_bottom_border',
                 radioBtnContent:{
                     header:{
                         title: 'Select whether:',
@@ -859,6 +947,199 @@ epilespy:[
                             name: hivTestForm.hivTestNotDone.name,
                             value: hivTestForm.hivTestNotDone.value
                         }
+                    ]
+                }
+            },
+            {
+            classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                {
+                    header:{
+                        title: 'Reasons HIV test not done',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: hivTestForm.testStockOut.name,
+                            value: hivTestForm.testStockOut.value,
+                            checked: false
+                        },
+                        {
+                            name: hivTestForm.expiredTests.name,
+                            value:hivTestForm.expiredTests.value,
+                            checked:false
+                        }
+                        
+                    ],
+                }
+                    
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border',
+                radioBtnContent:{
+                    header:{
+                        title: 'Select the result of HIV test',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: hivTestForm.hivPositive.name,
+                            value: hivTestForm.hivPositive.value
+                        },
+                        {
+                            name: hivTestForm.hivNegative1.name,
+                            value: hivTestForm.hivNegative1.value,
+                        },
+                        {
+                            name:  hivTestForm.hivNegative2.name,
+                            value: hivTestForm.hivNegative2.value,
+                        },
+                        {
+                            name: hivTestForm.inconclusive.name,
+                            value: hivTestForm.inconclusive.value
+                        }
+                    ]
+                }
+            },
+                        {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border',
+                radioBtnContent:{
+                    header:{
+                        title: 'Is the woman at high risk of HIV?',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: hivTestForm.highRiskYes.name,
+                            value: hivTestForm.highRiskYes.value
+                        },
+                        {
+                            name: hivTestForm.highRiskNo.name,
+                            value: hivTestForm.highRiskNo.value,
+                        },
+                    ]
+                }
+            },
+        ],
+    syphilisTest: [
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border',
+                radioBtnContent:{
+                    header:{
+                        title: 'Select whether:',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: syphilisForm.syphilisTestConducted.name,
+                            value: syphilisForm.syphilisTestConducted.value
+                        },
+                        {
+                            name: syphilisForm.syphilisTestOrdered.name,
+                            value: syphilisForm.syphilisTestOrdered.value,
+                        },
+                        {
+                            name:  syphilisForm.syphilisTestNotDone.name,
+                            value: syphilisForm.syphilisTestNotDone.value,
+                        },
+                    ]
+                }
+            },
+            {
+            classDash: 'dashed_bottom_border',
+                radioBtnContent:
+                {
+                    header:{
+                        title: 'Select the type of syphilis test that was done',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: syphilisForm.rapidSyphilisTest.name,
+                            value: syphilisForm.rapidSyphilisTest.value,
+                            checked: false
+                        },
+                        {
+                            name: syphilisForm.offSiteLabTest.name,
+                            value: syphilisForm.offSiteLabTest.value,
+                            checked:false
+                        },
+                                                {
+                            name: syphilisForm.treponemaPallidum.name,
+                            value: syphilisForm.treponemaPallidum.value,
+                            checked:false
+                        }
+                        
+                    ],
+                }
+                    
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:{
+                    header:{
+                        title: 'Reason syphilis test not done',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: syphilisForm.testStockOut.name,
+                            value: syphilisForm.testStockOut.value
+                        },
+                        {
+                            name: syphilisForm.expiredTests.name,
+                            value: syphilisForm.expiredTests.value,
+                        },
+                    ]
+                }
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border',
+                radioBtnContent:{
+                    header:{
+                        title: 'Syphilis test result',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: syphilisForm.syphilisPositiveResults.name,
+                            value: syphilisForm.syphilisPositiveResults.value
+                        },
+                        {
+                            name: syphilisForm.syphilisNegativeResults.name,
+                            value: syphilisForm.syphilisNegativeResults.value,
+                        },
+                    ]
+                }
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border',
+                radioBtnContent:{
+                    header:{
+                        title: 'Syphilis diagnosis',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: syphilisForm.syphilisPositiveDiagnosis.name,
+                            value: syphilisForm.syphilisPositiveDiagnosis.value
+                        },
+                        {
+                            name: syphilisForm.syphilisNegativeDiagnosis.name,
+                            value: syphilisForm.syphilisNegativeDiagnosis.value,
+                        },
                     ]
                 }
             },
@@ -989,6 +1270,12 @@ epilespy:[
         },
             addEpilespy(data:any){
             this.epilespy= data
+        },
+            addhivTest(data:any){
+                this.hivTest =data
+        },
+            addSyphilisTest(data:any){
+                this.syphilisTest = data
         },
            addHypertension(data:any){
             this.hypertension= data

@@ -100,25 +100,21 @@
             <ion-toggle :checked ="hivChecked" @ionChange="hivMethod">HIV</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="hivChecked">
-            <ion-row class="hiv_content">
-                <ion-col class="first_col">Positive</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="general_content" style="display: flex; border-bottom-style: none;">
-            <ion-col size="3.75" >
-                <span class="hiv_input">Diagnosis date</span>
-                <ion-item class="input_item" style="margin: 10px 0px;">
-                    <ion-input fill="outline"></ion-input>
-                    <ion-label><span  class="selectedPatient"></span></ion-label>
-                </ion-item>
-            </ion-col>
-            </ion-row>
+            <BasicForm :contentData="hivTest" />
         </div>
         <ion-item class="sub_item_body_close" v-if="hivChecked"/>
+    </ion-list>
+
+    <!-- Syphilis Test -->
+
+    <ion-list>
+        <ion-item :lines="syphilis" class="dashed_bottom_border">
+            <ion-toggle :checked ="syphilisChecked" @ionChange="syphilisMethod">Syphilis</ion-toggle>
+        </ion-item>
+        <div class="sub_item_body" v-if="syphilisChecked">
+            <BasicForm :contentData="syphilisTest" />
+        </div>
+        <ion-item class="sub_item_body_close" v-if="syphilisChecked"/>
     </ion-list>
 
     <!-- Hypertations-Kidney-TB-MentalIlliness -->
@@ -226,6 +222,7 @@ export default defineComponent({
             heartDeseaseChecked: false,
             diabetisChecked: false,
             hivChecked: false,
+            syphilisChecked:  false,
             hyperKTMChecked: false,
 
             pastSurgeries:"",
@@ -236,6 +233,7 @@ export default defineComponent({
             heartDesease:"",
             diabetis:"",
             hiv:"",
+            syphilis:"",
             hyperKTM:""
 
         }
@@ -248,6 +246,8 @@ export default defineComponent({
         const cancer = useMedicalHistoryStore()
         const heartDesease = useMedicalHistoryStore()
         const diabetes = useMedicalHistoryStore()
+        const hivTest = useMedicalHistoryStore()
+        const syphilisTest = useMedicalHistoryStore()
     },
       computed:{
         ...mapState(useMedicalHistoryStore,["medicalHistory"]),
@@ -257,6 +257,8 @@ export default defineComponent({
         ...mapState(useMedicalHistoryStore,["cancer"]),
         ...mapState(useMedicalHistoryStore,["heartDesease"]),
         ...mapState(useMedicalHistoryStore,["diabetes"]),
+        ...mapState(useMedicalHistoryStore,["hivTest"]),
+        ...mapState(useMedicalHistoryStore,["syphilisTest"])
     },
     methods:{
         surgeries(){
@@ -306,6 +308,12 @@ export default defineComponent({
             if(this.hivChecked){
                 this.hiv="none"
             }else{this.hiv=""}
+        },
+        syphilisMethod(){
+            this.syphilisChecked =! this.syphilisChecked
+            if(this.syphilisChecked){
+                this.syphilis = 'nine'
+            }else{this.syphilis=""}
         },
         hyperKTMMethod(){
             this.hyperKTMChecked =! this.hyperKTMChecked
