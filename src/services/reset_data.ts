@@ -4,6 +4,7 @@ import { useInvestigationStore } from '@/stores/InvestigationStore'
 import { useDispositionStore } from '@/stores/DispositionStore'
 import { useMedicationsStore } from '@/stores/MedicationsStore'
 import { useTreatmentPlanStore } from '@/stores/TreatmentPlanStore'
+import { useDiagnosisStore } from '@/stores/DiagnosisStore'
 
 export function resetPatientData(){
     const vitals = useVitalsStore()
@@ -11,9 +12,11 @@ export function resetPatientData(){
     const disposition = useDispositionStore() 
     const medications = useMedicationsStore()
     const treatmentPlan = useTreatmentPlanStore()
+    const diagnosis = useDiagnosisStore()
     vitals.$reset()
     investigations.$reset()
     disposition.$reset()
     medications.$reset()
     treatmentPlan.$reset()
+    diagnosis.$reset()
 }
