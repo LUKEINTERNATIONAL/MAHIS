@@ -64,6 +64,9 @@
     margin: 0;
     border-radius: unset;
     margin-bottom: 20px;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
 }
 .second_bar_list{
     list-style: none;

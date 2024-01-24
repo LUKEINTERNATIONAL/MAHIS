@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 export const useDemographicsStore = defineStore('demographicStore',{
     state: () => ({
-        demographics: {}
+        demographics: {} as any
     }),
     actions:{
         setDemographics(data: any){

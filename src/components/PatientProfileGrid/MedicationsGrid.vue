@@ -1,7 +1,7 @@
 <template>
     <div class="" style="cursor: pointer; padding-bottom:5px" >
         <div class="text_header_16" @click="openModal()">
-            Medications
+            Medications {{ selectedMedicalDrugsList }}
         </div>
         <div class="m_name_dosage">
             <div class="m_name">
@@ -62,6 +62,8 @@ import { icons } from '@/utils/svg';
 import MedicationsModal from '@/components/ProfileModal/MedicationsModal.vue'
 import DrugRefill from '@/components/ProfileModal/DrugRefill.vue'
 import { createModal,popoverConfirmation,alertConfirmation } from '@/utils/Alerts'
+import { mapState } from 'pinia';
+import { useTreatmentPlanStore } from '@/stores/TreatmentPlanStore'
 
 export default defineComponent({
 name: 'Menu',
@@ -81,6 +83,9 @@ return {
   eventPopover:null as any,
   modalStatus: false,
 };
+},
+computed: {
+        ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList"])
 },
 methods:{
     openModal(){

@@ -3,8 +3,16 @@
         <div>Dispositions</div>
     </div>
 
-    <DashBox v-if="dispositions.length == 0" :content="'No dispositions added yet.'"></DashBox>
-
+    <div v-if="dispositions.length == 0" class="no_content">
+        <div>
+            <div class="no_content_title">
+                No disposition added today. 
+            </div> 
+            <div class="start_consultation">
+                Start new consultation
+            </div>
+        </div>
+    </div>
     <div class="dashed_bottom_border" style="cursor: pointer;padding-bottom:5px" @click="openModal()"
         v-for="(disposition, index) in dispositions" :key="index">
         <div class="text_header_14">
@@ -20,7 +28,7 @@
                 </div>
             </div>
             <div>
-                <span v-html="iconsContent.tree_dot"></span>
+                <ion-icon style="font-size: 20px;"  :icon="iconsContent.tree_dot"></ion-icon>
             </div>
         </div>
     </div>
