@@ -356,10 +356,7 @@
                 toastWarning("Please enter correct data values",4000)
                 return
             }
-
             this.dissmissDrugAddField()
-            console.log("Please enter data values: ", this.duration)
-
             const systemSessionDate = Service.getSessionDate()
             const daysToAdd = this.duration as number
             const generatedPrescriptionDate = this.addDaysToDate(systemSessionDate, parseInt(this.duration))
