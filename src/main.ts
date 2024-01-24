@@ -27,7 +27,6 @@ import './theme/variables.css';
 /* font variables */
 import './font/variables.css';
 import './css/style.css';
-import './svg/svg.css';
 import DataTable from 'datatables.net-vue3';
 import DataTablesCore from 'datatables.net';
  

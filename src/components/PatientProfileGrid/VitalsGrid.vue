@@ -1,36 +1,38 @@
 <template>
     <div class="" style="padding-bottom:5px">
         <div class="text_header_16">
-                <span style="margin-right: 10px;">Clinical Notes</span> 
-                <span style="cursor: pointer;" v-html="iconsContent.notes_expand" @click="openNotesModal()"></span> 
+            <span style="margin-right: 10px;">Clinical Notes </span> 
+            <span v-if="clinicalNotes.length > 0" style="cursor: pointer;" v-html="iconsContent.notes_expand" @click="openNotesModal()"></span> 
         </div>
-        <div class="vitals_overview">
-            <div>
-                Vitals
-            </div>
-            <div id="vitals_dialog">
-                <span style="cursor: pointer;" v-html="iconsContent.vitals_graph" @click="openVitalsModal()" ></span> 
-            </div>
-        </div>
-        <div class="v_result">
-            <div class="obese">
+        <span v-if="vitals[0].alerts[0].backgroundColor && vitals[1].data.rowData[0].colData[0].value">
+            <div class="vitals_overview">
                 <div>
-                    <span v-html="iconsContent.obese" ></span> 
+                    Vitals
                 </div>
-                <div style="margin-left:40px"> 
-                    <span style="font-weight: 700;"> 25.6</span> obese
-                </div>
-            </div>
-            <div class="bmi">
-                <div>
-                    <span v-html="iconsContent.bmi_rusults" ></span> 
-                </div>
-                <div style="margin-left:40px">
-                    110/70
+                <div id="vitals_dialog">
+                    <span style="cursor: pointer;" v-html="iconsContent.vitals_graph" @click="openVitalsModal()" ></span> 
                 </div>
             </div>
-        </div>
-        <div>
+            <div class="v_result">
+                <div class="obese" :style="'background-color:'+vitals[0].alerts[0].backgroundColor">
+                    <div>
+                        <span v-html="vitals[0].alerts[0].icon" ></span> 
+                    </div>
+                    <div :style="'margin-left:40px; color:'+vitals[0].alerts[0].textColor"> 
+                        <span style="font-weight: 700;"> {{ vitals[0].alerts[0].index }}</span> {{ vitals[0].alerts[0].value }}
+                    </div>
+                </div>
+                <div class="bmi">
+                    <div>
+                        <span v-html="iconsContent.bmi_rusults" ></span> 
+                    </div>
+                    <div style="margin-left:40px">
+                        {{ vitals[1].data.rowData[0].colData[0].value }} / {{ vitals[1].data.rowData[0].colData[1].value }}
+                    </div>
+                </div>
+            </div>
+        </span>
+        <div v-if="clinicalNotes.length > 0">
             Notes
             <ul class="notes_content">
                 <li  v-for="(item, index) in clinicalNotes" :key="index">
@@ -38,6 +40,17 @@
                 </li>
             </ul>
         </div>
+        <div class="no_content" v-if="clinicalNotes.length == 0 && !vitals[0].alerts[0].backgroundColor && !vitals[1].data.rowData[0].colData[0].value">
+            <div>
+                <div class="no_content_title">
+                    No notes added today. 
+                </div> 
+                <div class="start_consultation">
+                    Start new consultation
+                </div>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -56,13 +69,14 @@ import {
 import { defineComponent } from 'vue'
 import { checkmark,pulseOutline } from 'ionicons/icons'
 import { ref } from 'vue'
-import { icons } from '@/utils/svg.ts'
+import { icons } from '@/utils/svg'
 import { mapState } from 'pinia'
 import { useTreatmentPlanStore } from '@/stores/TreatmentPlanStore'
 
 import VitalsModal from '@/components/ProfileModal/VitalsModal.vue'
 import NotesModal from '@/components/ProfileModal/NotesModal.vue'
 import { createModal } from '@/utils/Alerts'
+import { useVitalsStore } from '@/stores/VitalsStore'
 
 export default defineComponent({
 name: 'Menu',
@@ -81,6 +95,12 @@ return {
   iconsContent: icons,
   clinicalNotes: this.transformClinicalNotes()
 };
+},
+mounted(){
+    console.log(this.vitals[1].data.rowData[0].colData[0].value)
+},
+computed:{
+    ...mapState(useVitalsStore,["vitals"]),
 },
 methods:{
     openNotesModal(){
@@ -118,6 +138,5 @@ methods:{
 </script>
 
 <style scoped>
-
 
 </style>

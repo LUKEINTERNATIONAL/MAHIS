@@ -87,8 +87,8 @@
         async validaterowData(inputData: any) {
             this.hasValidationErrors = []
             
-            this.vitals.forEach(section => {
-                section.data.rowData.forEach((col: any) => {
+            this.vitals.forEach((section,sectionIndex) => {
+                section.data.rowData.forEach((col: any,colIndex) => {
                     if (col.colData[0].inputHeader == 'Systolic Pressure*') {
                             const isSystolicValid = this.vitalsInstance.validator(col.colData[0]) == null && this.vitalsInstance.validator(col.colData[1]) == null;
                             this.BPStatus = isSystolicValid ? this.getBloodPressureStatus(col.colData[0].value,col.colData[1].value) : {};
@@ -101,16 +101,20 @@
                             this.updateBMI();
                         }
                         
-                        col.colData.some((input: any) => {
+                        col.colData.some((input: any, inputIndex: any) => {
                             const validateResult = this.vitalsInstance.validator(input);
                             if (validateResult?.length > 0) {
                                 this.hasValidationErrors.push('false');
                                 if (input.inputHeader === inputData.inputHeader) {
-                                    toastWarning(validateResult,4000);
+                                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsError = true
+                                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = validateResult.flat(Infinity)[0]
                                     return true;
                                 }
                             } else {
                                 this.hasValidationErrors.push('true');
+                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsError = false
+                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = ''
+                                    
                             }
 
                             return false;

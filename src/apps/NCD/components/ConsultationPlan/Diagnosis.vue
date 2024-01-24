@@ -134,9 +134,9 @@
             const data = this.diagnosisData.filter((obj: any) => {
                return obj.name == this.inputFields[0].value ?  obj : false
             })
-            console.log(data)
             if(data.length > 0) {
                 this.diagnosis[0].selectdData.push({
+                    actionBtn: true,
                     display: [
                         this.inputFields[0].value,
                         this.inputFields[1].value,
