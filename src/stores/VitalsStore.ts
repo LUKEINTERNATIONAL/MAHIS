@@ -7,7 +7,7 @@ export const useVitalsStore = defineStore('vitalsStore',{
             {
                 isFinishBtn: false,
                 sectionHeader: 'Hieght and weight',
-                classDash: 'dashed_bottom_border',
+                classDash: 'dashed_bottom_border _padding',
                 data:
                 { 
                     rowData:[
@@ -20,7 +20,7 @@ export const useVitalsStore = defineStore('vitalsStore',{
                                     value: '',
                                     name: 'Height',
                                     required: true,
-                                    eventType: 'blur',
+                                    eventType: 'input',
                                     alertsError: false,
                                     alertsErrorMassage: ''
                                 },
@@ -31,7 +31,7 @@ export const useVitalsStore = defineStore('vitalsStore',{
                                     value: '',
                                     name: 'Weight',
                                     required: true,
-                                    eventType: 'blur',
+                                    eventType: 'input',
                                     alertsError: false,
                                     alertsErrorMassage: ''
                                 },
@@ -58,7 +58,7 @@ export const useVitalsStore = defineStore('vitalsStore',{
             },
             {
                 sectionHeader: 'Blood pressure',
-                classDash: 'dashed_bottom_border',
+                classDash: 'dashed_bottom_border _padding',
                 data:
                 { 
                     rowData:[
@@ -71,7 +71,7 @@ export const useVitalsStore = defineStore('vitalsStore',{
                                     value: '',
                                     name: 'Systolic',
                                     required: true,
-                                    eventType: 'blur'
+                                    eventType: 'input'
                                 },
                                 {
                                     inputHeader: 'Diastolic pressure*',
@@ -80,7 +80,7 @@ export const useVitalsStore = defineStore('vitalsStore',{
                                     value: '',
                                     name: 'Diastolic',
                                     required: true,
-                                    eventType: 'blur'
+                                    eventType: 'input'
                                 }
                             ]
                         }
@@ -103,7 +103,6 @@ export const useVitalsStore = defineStore('vitalsStore',{
             },
             {
                 sectionHeader: 'Temperature and rates',
-                classDash: 'dashed_bottom_border',
                 data:
                     { 
                         rowData:[
@@ -115,7 +114,7 @@ export const useVitalsStore = defineStore('vitalsStore',{
                                         icon: icons.temprature,
                                         value: '',
                                         name: 'Temp',
-                                        eventType: 'blur'
+                                        eventType: 'input'
                                     },
                                     {
                                         inputHeader: 'Pulse rate',
@@ -123,7 +122,7 @@ export const useVitalsStore = defineStore('vitalsStore',{
                                         icon: icons.pulse,
                                         value: '',
                                         name: 'Pulse',
-                                        eventType: 'blur'
+                                        eventType: 'input'
                                     }
                                 ]
                             },
@@ -136,7 +135,7 @@ export const useVitalsStore = defineStore('vitalsStore',{
                                         icon: icons.respiratory,
                                         value: '',
                                         name: 'Respiratory rate',
-                                        eventType: 'blur'
+                                        eventType: 'input'
                                     },
                                     {
                                         inputHeader: 'Oxygen saturation',
@@ -144,7 +143,7 @@ export const useVitalsStore = defineStore('vitalsStore',{
                                         icon: icons.oxgenStaturation,
                                         value: '',
                                         name: 'SP02',
-                                        eventType: 'blur'
+                                        eventType: 'input'
                                     }
                                 ]
                             }

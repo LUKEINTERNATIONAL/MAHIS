@@ -3,47 +3,7 @@ import { icons } from '@/utils/svg';
 
 export const useTreatmentPlanStore = defineStore('TreatmentPlanStore', {
     state: () => ({
-        selectedMedicalDrugsList: [
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                data:
-                    { 
-                        rowData:[
-                            {
-                                colData:[
-                                    {
-                                        inputHeader: 'Test',
-                                        icon: icons.search,
-                                        value: '',
-                                        name: 'test',
-                                        eventType: 'input',
-                                        required: true
-                                    },
-                                    {
-                                        inputHeader: 'Result',
-                                        value: '',
-                                        name: 'result',
-                                        eventType: 'blur',
-                                        required: true
-                                    },
-                                    
-                                ],
-                                btns:[
-                                    {
-                                        name: "Save",
-                                        fill: "clear",
-                                        icon: icons.plus
-                                    }
-                                ]
-                            }
-                        ],
-                        
-                    }
-                 
-            }
-               
-        ] as any,
+        selectedMedicalDrugsList: [] as any,
         medicalAllergiesList: [] as any,
         selectedMedicalAllergiesList: [] as any,
         isUseOfTraditionalMedicineSelected: false as boolean,

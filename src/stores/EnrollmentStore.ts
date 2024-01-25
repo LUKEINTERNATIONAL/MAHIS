@@ -195,7 +195,6 @@ export const useEnrollementStore = defineStore('enrollementStore',{
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                 {
                     header:{

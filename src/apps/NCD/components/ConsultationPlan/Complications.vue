@@ -22,163 +22,12 @@
         <ion-item :lines="footSC" class="dashed_bottom_border">
             <ion-toggle :checked="footChecked" @ionChange="footScreening">Foot screening</ion-toggle>
         </ion-item>
+        
         <div class="sub_item_body" v-if="footChecked">
-            <ion-row class="foot_title">
-                <ion-col class="first_col">Physical Exam</ion-col>
-                <ion-col>Left foot</ion-col>
-                <ion-col>Right foot</ion-col>
-            </ion-row>
-            <ion-row class="foot_content">
-                <ion-col class="first_col">Previous Ulcer</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end"> 
-                        <span class="checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end"> 
-                        <span class="checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="foot_content">
-                <ion-col class="first_col">Previous Amputation</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end"> 
-                        <span class="checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end"> 
-                        <span class="checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="foot_content">
-                <ion-col class="first_col">Deformity</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end"> 
-                        <span class="checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end"> 
-                        <span class="checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="foot_content">
-                <ion-col class="first_col">Ingrown toenail</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end"> 
-                        <span class="checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end"> 
-                        <span class="checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="foot_content">
-                <ion-col class="first_col">Absent Pedal Pulses</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end"> 
-                        <span class="checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end"> 
-                        <span class="checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="foot_title">
-                <ion-col class="first_col">Foot Lesions</ion-col>
-                <ion-col>Left foot</ion-col>
-                <ion-col>Right foot</ion-col>
-            </ion-row>
-            <ion-row class="foot_content">
-                <ion-col class="first_col">Active Ulcer</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end"> 
-                        <span class="checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end"> 
-                        <span class="checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="foot_content">
-                <ion-col class="first_col">Blisters</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end"> 
-                        <span class="checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end"> 
-                        <span class="checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="foot_content">
-                <ion-col class="first_col">Calluses</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end"> 
-                        <span class="checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end"> 
-                        <span class="checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="foot_content">
-                <ion-col class="first_col">Fissure/Linear Crack</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end"> 
-                        <span class="checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end"> 
-                        <span class="checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="foot_content" style="display: flex; border-bottom-style: none;">
-                <ion-col class="first_col" size="4.5">Neuropathy/Monofilament Exam</ion-col>
-                    <ion-col size="3.75" >
-                        <span class="foot_input">Negative piprics (left foot)</span>
-                        <ion-item class="input_item" style="margin: 10px 0px;">
-                            <ion-input fill="outline"></ion-input>
-                            <ion-label><span  class="selectedPatient"></span></ion-label>
-                        </ion-item>
-                    </ion-col>
-                    <ion-col size="3.75">
-                        <span class="foot_input">Negative pinprics (right foot)</span>
-                        <ion-item class="input_item" style="margin: 10px 0px;">
-                            <ion-input fill="outline"></ion-input>
-                            <ion-label><span  class="selectedPatient"></span></ion-label>
-                        </ion-item>
-                    </ion-col>
-                <ion-row style="width:100%; margin: 10px 0px;">
-                    <ion-col size="4.5"></ion-col>
-                    <ion-col style="width:100%; 
-                    font-weight: 700;
-                    background-color: #DDEEDD; color: #016302; padding: 20px 0px; border-radius: 8px;">
-                        <div>
-                            Referral is not required
-                        </div>
-                    </ion-col>
-                </ion-row>
-                
-                
-            </ion-row>
+            <basic-form 
+                :contentData="FootScreening" >
+            </basic-form>
+          
         </div>
         <ion-item class="sub_item_body_close" v-if="footChecked"/>
 
@@ -210,8 +59,11 @@
     import { defineComponent } from 'vue';
     import { checkmark,pulseOutline } from 'ionicons/icons';
     import { ref } from 'vue';
-    import { icons } from '@/utils/svg.ts';
+    import { icons } from '@/utils/svg';
     import BasicInputField from '@/components/BasicInputField.vue';
+    import { mapState } from 'pinia';
+    import { useComplicationsStore } from '@/stores/ComplicationsStore'
+    import BasicForm from '@/components/BasicForm.vue';
 
     export default defineComponent({
     name: 'Menu',
@@ -228,6 +80,7 @@
         IonSelectOption,
         IonInput,
         BasicInputField,
+        BasicForm
         },
         data() {
     return {
@@ -238,6 +91,9 @@
         footSC: '',
     };
   },
+  computed: {
+        ...mapState(useComplicationsStore, ["FootScreening"])
+    },
     setup() {
       return { checkmark,pulseOutline };
     },

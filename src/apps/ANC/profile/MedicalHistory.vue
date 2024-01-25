@@ -12,16 +12,6 @@
     </ion-list>
 
     <!-- Allegies -->
-        <!-- <ion-list>
-        <ion-item :lines="allegies" class="dashed_bottom_border">
-            <ion-toggle :checked ="allegiesChecked" @ionChange="allegyMethod">Allegies</ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="allegiesChecked">
-            <BasicForm :contentData="allegies" />
-        </div>
-        <ion-item class="sub_item_body_close" v-if="allegiesChecked"/>
-    </ion-list> -->
-
         <ion-list>
         <ion-item :lines="allegies" class="dashed_bottom_border">
             <ion-toggle :checked ="allegiesChecked" @ionChange="allegyMethod">Allegies</ion-toggle>
@@ -241,24 +231,10 @@ export default defineComponent({
     mounted(){
         const medicalHistory =useMedicalHistoryStore()
         const allegies = useMedicalHistoryStore()
-        const exisitingChronicHealthConditions = useMedicalHistoryStore()
-        const bloodDisorder = useMedicalHistoryStore()
-        const cancer = useMedicalHistoryStore()
-        const heartDesease = useMedicalHistoryStore()
-        const diabetes = useMedicalHistoryStore()
-        const hivTest = useMedicalHistoryStore()
-        const syphilisTest = useMedicalHistoryStore()
     },
       computed:{
         ...mapState(useMedicalHistoryStore,["medicalHistory"]),
-        ...mapState(useMedicalHistoryStore,["allegies"]),
-        ...mapState(useMedicalHistoryStore,["exisitingChronicHealthConditions"]),
-        ...mapState(useMedicalHistoryStore,["bloodDisorder"]),
-        ...mapState(useMedicalHistoryStore,["cancer"]),
-        ...mapState(useMedicalHistoryStore,["heartDesease"]),
-        ...mapState(useMedicalHistoryStore,["diabetes"]),
-        ...mapState(useMedicalHistoryStore,["hivTest"]),
-        ...mapState(useMedicalHistoryStore,["syphilisTest"])
+        ...mapState(useMedicalHistoryStore,["allegies"])
     },
     methods:{
         surgeries(){
