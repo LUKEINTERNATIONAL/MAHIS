@@ -66,10 +66,6 @@
                             </ion-row> -->
                             <ion-list class="list-al">
                                 <div class="item-al" v-for="(item, index) in diagnosisData" :key="index">
-<<<<<<< HEAD
-                                    {{ item.name }}
-=======
->>>>>>> master
                                     <ion-col @click="selectedDrugName(item.name, item)">{{ item.name }} </ion-col>
                                 </div>
                             </ion-list>

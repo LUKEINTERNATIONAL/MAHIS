@@ -12,12 +12,22 @@
     </ion-list>
 
     <!-- Allegies -->
-        <ion-list>
+        <!-- <ion-list>
         <ion-item :lines="allegies" class="dashed_bottom_border">
             <ion-toggle :checked ="allegiesChecked" @ionChange="allegyMethod">Allegies</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="allegiesChecked">
             <BasicForm :contentData="allegies" />
+        </div>
+        <ion-item class="sub_item_body_close" v-if="allegiesChecked"/>
+    </ion-list> -->
+
+        <ion-list>
+        <ion-item :lines="allegies" class="dashed_bottom_border">
+            <ion-toggle :checked ="allegiesChecked" @ionChange="allegyMethod">Allegies</ion-toggle>
+        </ion-item>
+        <div class="sub_item_body" v-if="allegiesChecked">
+            <BasicForm :contentData="allegy" />
         </div>
         <ion-item class="sub_item_body_close" v-if="allegiesChecked"/>
     </ion-list>
@@ -41,7 +51,7 @@
             <ion-toggle :checked ="bloodDisorderChecked" @ionChange="bloodDisorderMethod">Blood Disorder</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="bloodDisorderChecked">
-            <BasicForm :contentData="bloodDisorder" />
+            <BasicForm :contentData="blood" />
         </div>
         <ion-item class="sub_item_body_close" v-if="bloodDisorderChecked"/>
     </ion-list>
@@ -53,7 +63,7 @@
             <ion-toggle :checked ="cancerChecked" @ionChange="cancerMethod">Cancer</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="cancerChecked">
-            <BasicForm :contentData="cancer" />
+            <BasicForm :contentData="cancerIssue" />
         </div>
         <ion-item class="sub_item_body_close" v-if="cancerChecked"/>
     </ion-list>
@@ -65,7 +75,7 @@
             <ion-toggle :checked ="heartDeseaseChecked" @ionChange="heartDeseaseMethod">Heart Desease</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="heartDeseaseChecked">
-            <BasicForm :contentData="heartDesease" />
+            <BasicForm :contentData="heartProblem" />
         </div>
         <ion-item class="sub_item_body_close" v-if="heartDeseaseChecked"/>
     </ion-list>
@@ -74,7 +84,7 @@
 
         <ion-list>
         <ion-item :lines="diabetis" class="dashed_bottom_border">
-            <ion-toggle :checked ="diabetisChecked" @ionChange="diabetisMethod">Diabetis</ion-toggle>
+            <ion-toggle :checked ="diabetisChecked" @ionChange="diabetisMethod">Diabetis/Epilespy</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="diabetisChecked">
             <BasicForm :contentData="diabetes" />
@@ -114,51 +124,20 @@
             <ion-toggle :checked ="hyperKTMChecked" @ionChange="hyperKTMMethod">Hypertations/Kidney/TB/Mental Illiness</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="hyperKTMChecked">
-            <ion-row class="hyperKTM_content">
-                <ion-col class="first_col">Hypertations</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="hyperKTM_content">
-                <ion-col class="first_col">Kidney</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="hyperKTM_content">
-                <ion-col class="first_col">TB</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="hyperKTM_content">
-                <ion-col class="first_col">Mental Illiness</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
+            <BasicForm :contentData="hKTMI" />
         </div>
         <ion-item class="sub_item_body_close" v-if="hyperKTMChecked"/>
-
-        <ion-row class="general_content" style="display: flex; border-bottom-style: none;">
-        <ion-col size="3.75" >
-            <span class="other_input">Other Site</span>
-            <ion-item class="input_item" style="margin: 10px 0px;">
-                <ion-input fill="outline"></ion-input>
-                <ion-label><span  class="selectedPatient"></span></ion-label>
-            </ion-item>
-        </ion-col>
-        </ion-row>
     </ion-list>
+
+    <!-- Other Sute -->
+     <ion-list>
+        
+        <div>
+            <BasicForm :contentData="otherSite" />
+        </div>
+        
+     </ion-list>
+
 
 </template>
 
@@ -230,11 +209,29 @@ export default defineComponent({
     },
     mounted(){
         const medicalHistory =useMedicalHistoryStore()
-        const allegies = useMedicalHistoryStore()
+        const allegy = useMedicalHistoryStore()
+        const exisitingChronicHealthConditions = useMedicalHistoryStore()
+        const blood = useMedicalHistoryStore()
+        const cancerIssue = useMedicalHistoryStore()
+        const heartProblem = useMedicalHistoryStore()
+        const diabetes = useMedicalHistoryStore()
+        const hivTest = useMedicalHistoryStore()
+        const syphilisTest = useMedicalHistoryStore()
+        const  hKTMI = useMedicalHistoryStore()
+        const  otherSite = useMedicalHistoryStore()
     },
       computed:{
         ...mapState(useMedicalHistoryStore,["medicalHistory"]),
-        ...mapState(useMedicalHistoryStore,["allegies"])
+        ...mapState(useMedicalHistoryStore,["allegy"]),
+        ...mapState(useMedicalHistoryStore,["exisitingChronicHealthConditions"]),
+        ...mapState(useMedicalHistoryStore,["blood"]),
+        ...mapState(useMedicalHistoryStore,["cancerIssue"]),
+        ...mapState(useMedicalHistoryStore,["heartProblem"]),
+        ...mapState(useMedicalHistoryStore,["diabetes"]),
+        ...mapState(useMedicalHistoryStore,["hivTest"]),
+        ...mapState(useMedicalHistoryStore,["syphilisTest"]),
+        ...mapState(useMedicalHistoryStore,["hKTMI"]),
+        ...mapState(useMedicalHistoryStore,["otherSite"]),
     },
     methods:{
         surgeries(){

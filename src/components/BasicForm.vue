@@ -146,12 +146,8 @@ export default defineComponent({
         DynamicButton,
         IonDatetime,
         IonDatetimeButton,
-<<<<<<< HEAD
-        PreviousVitals
-=======
         PreviousVitals,
         IonCheckbox
->>>>>>> master
     },
     data() {
         return {
