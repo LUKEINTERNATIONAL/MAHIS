@@ -7,7 +7,7 @@ export const useVitalsStore = defineStore('vitalsStore',{
             {
                 isFinishBtn: false,
                 sectionHeader: 'Hieght and weight',
-                classDash: 'dashed_bottom_border',
+                classDash: 'dashed_bottom_border _padding',
                 data:
                 { 
                     rowData:[
@@ -20,7 +20,9 @@ export const useVitalsStore = defineStore('vitalsStore',{
                                     value: '',
                                     name: 'Height',
                                     required: true,
-                                    eventType: 'blur'
+                                    eventType: 'blur',
+                                    alertsError: false,
+                                    alertsErrorMassage: ''
                                 },
                                 {
                                     inputHeader: 'Weight*',
@@ -29,7 +31,9 @@ export const useVitalsStore = defineStore('vitalsStore',{
                                     value: '',
                                     name: 'Weight',
                                     required: true,
-                                    eventType: 'blur'
+                                    eventType: 'blur',
+                                    alertsError: false,
+                                    alertsErrorMassage: ''
                                 },
                                 
                             ]
@@ -47,11 +51,14 @@ export const useVitalsStore = defineStore('vitalsStore',{
                         name: '',
                         index: ''
                     }
-                ]    
+                ],
+                previousView:{
+                    name:'vitals'
+                }   
             },
             {
                 sectionHeader: 'Blood pressure',
-                classDash: 'dashed_bottom_border',
+                classDash: 'dashed_bottom_border _padding',
                 data:
                 { 
                     rowData:[
@@ -89,11 +96,13 @@ export const useVitalsStore = defineStore('vitalsStore',{
                         name: '',
                         index: ''
                     }
-                ]
+                ],
+                previousView:{
+                    name:'vitals'
+                }
             },
             {
                 sectionHeader: 'Temperature and rates',
-                classDash: 'dashed_bottom_border',
                 data:
                     { 
                         rowData:[
@@ -139,6 +148,9 @@ export const useVitalsStore = defineStore('vitalsStore',{
                                 ]
                             }
                         ]
+                    },
+                    previousView:{
+                        name:'vitals'
                     }
             }
                

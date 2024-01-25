@@ -12,6 +12,16 @@
     </ion-list>
 
     <!-- Allegies -->
+        <!-- <ion-list>
+        <ion-item :lines="allegies" class="dashed_bottom_border">
+            <ion-toggle :checked ="allegiesChecked" @ionChange="allegyMethod">Allegies</ion-toggle>
+        </ion-item>
+        <div class="sub_item_body" v-if="allegiesChecked">
+            <BasicForm :contentData="allegies" />
+        </div>
+        <ion-item class="sub_item_body_close" v-if="allegiesChecked"/>
+    </ion-list> -->
+
         <ion-list>
         <ion-item :lines="allegies" class="dashed_bottom_border">
             <ion-toggle :checked ="allegiesChecked" @ionChange="allegyMethod">Allegies</ion-toggle>
@@ -29,14 +39,7 @@
             <ion-toggle :checked ="chronicalHCChecked" @ionChange="chronicalHCMethod">Existing Chronical Health Conditions</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="chronicalHCChecked">
-            <ion-row class="chronical_content">
-                <ion-col class="first_col">Does not know of any past surgeries</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
+            <BasicForm :contentData="exisitingChronicHealthConditions" />
         </div>
         <ion-item class="sub_item_body_close" v-if="chronicalHCChecked"/>
     </ion-list>
@@ -48,30 +51,7 @@
             <ion-toggle :checked ="bloodDisorderChecked" @ionChange="bloodDisorderMethod">Blood Disorder</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="bloodDisorderChecked">
-            <ion-row class="blood_content">
-                <ion-col class="first_col">Sickle cell</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="blood_content">
-                <ion-col class="first_col">Anaemia</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="blood_content">
-                <ion-col class="first_col">Thelassemia</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
+            <BasicForm :contentData="bloodDisorder" />
         </div>
         <ion-item class="sub_item_body_close" v-if="bloodDisorderChecked"/>
     </ion-list>
@@ -83,23 +63,7 @@
             <ion-toggle :checked ="cancerChecked" @ionChange="cancerMethod">Cancer</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="cancerChecked">
-            <ion-row class="cancer_content">
-                <ion-col class="first_col">gynaelogical</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="general_content" style="display: flex; border-bottom-style: none;">
-            <ion-col size="3.75" >
-                <span class="cancer_input">Other site</span>
-                <ion-item class="input_item" style="margin: 10px 0px;">
-                    <ion-input fill="outline"></ion-input>
-                    <ion-label><span  class="selectedPatient"></span></ion-label>
-                </ion-item>
-            </ion-col>
-            </ion-row>
+            <BasicForm :contentData="cancer" />
         </div>
         <ion-item class="sub_item_body_close" v-if="cancerChecked"/>
     </ion-list>
@@ -111,22 +75,7 @@
             <ion-toggle :checked ="heartDeseaseChecked" @ionChange="heartDeseaseMethod">Heart Desease</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="heartDeseaseChecked">
-            <ion-row class="heart_content">
-                <ion-col class="first_col">CCF</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="heart_content">
-                <ion-col class="first_col">RHD</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
+            <BasicForm :contentData="heartDesease" />
         </div>
         <ion-item class="sub_item_body_close" v-if="heartDeseaseChecked"/>
     </ion-list>
@@ -138,47 +87,7 @@
             <ion-toggle :checked ="diabetisChecked" @ionChange="diabetisMethod">Diabetis</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="diabetisChecked">
-            <ion-row class="diabetis_content">
-                <ion-col class="first_col">gestational diabetes</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="diabetis_content">
-                <ion-col class="first_col">pre-existing type 1</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="diabetis_content">
-                <ion-col class="first_col">pre-existing type 2</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="diabetis_content">
-                <ion-col class="first_col">Epilespy</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="general_content" style="display: flex; border-bottom-style: none;">
-            <ion-col size="3.75" >
-                <span class="cancer_input">Other diabetis</span>
-                <ion-item class="input_item" style="margin: 10px 0px;">
-                    <ion-input fill="outline"></ion-input>
-                    <ion-label><span  class="selectedPatient"></span></ion-label>
-                </ion-item>
-            </ion-col>
-            </ion-row>
+            <BasicForm :contentData="diabetes" />
         </div>
         <ion-item class="sub_item_body_close" v-if="diabetisChecked"/>
     </ion-list>
@@ -334,10 +243,20 @@ export default defineComponent({
     mounted(){
         const medicalHistory =useMedicalHistoryStore()
         const allegies = useMedicalHistoryStore()
+        const exisitingChronicHealthConditions = useMedicalHistoryStore()
+        const bloodDisorder = useMedicalHistoryStore()
+        const cancer = useMedicalHistoryStore()
+        const heartDesease = useMedicalHistoryStore()
+        const diabetes = useMedicalHistoryStore()
     },
       computed:{
         ...mapState(useMedicalHistoryStore,["medicalHistory"]),
-        ...mapState(useMedicalHistoryStore,["allegies"])
+        ...mapState(useMedicalHistoryStore,["allegies"]),
+        ...mapState(useMedicalHistoryStore,["exisitingChronicHealthConditions"]),
+        ...mapState(useMedicalHistoryStore,["bloodDisorder"]),
+        ...mapState(useMedicalHistoryStore,["cancer"]),
+        ...mapState(useMedicalHistoryStore,["heartDesease"]),
+        ...mapState(useMedicalHistoryStore,["diabetes"]),
     },
     methods:{
         surgeries(){

@@ -22,7 +22,7 @@
           </div>
         </div>
         <div>
-          <span v-html="iconsContent.tree_dot"></span>
+          <ion-icon style="font-size: 20px;"  :icon="iconsContent.tree_dot"></ion-icon>
         </div>
       </div>
     </div>

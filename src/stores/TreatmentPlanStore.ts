@@ -3,47 +3,7 @@ import { icons } from '@/utils/svg';
 
 export const useTreatmentPlanStore = defineStore('TreatmentPlanStore', {
     state: () => ({
-        selectedMedicalDrugsList: [
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                data:
-                    { 
-                        rowData:[
-                            {
-                                colData:[
-                                    {
-                                        inputHeader: 'Test',
-                                        icon: icons.search,
-                                        value: '',
-                                        name: 'test',
-                                        eventType: 'input',
-                                        required: true
-                                    },
-                                    {
-                                        inputHeader: 'Result',
-                                        value: '',
-                                        name: 'result',
-                                        eventType: 'blur',
-                                        required: true
-                                    },
-                                    
-                                ],
-                                btns:[
-                                    {
-                                        name: "Save",
-                                        fill: "clear",
-                                        icon: icons.plus
-                                    }
-                                ]
-                            }
-                        ],
-                        
-                    }
-                 
-            }
-               
-        ] as any,
+        selectedMedicalDrugsList: [] as any,
         medicalAllergiesList: [] as any,
         selectedMedicalAllergiesList: [] as any,
         isUseOfTraditionalMedicineSelected: false as boolean,
@@ -66,6 +26,11 @@ export const useTreatmentPlanStore = defineStore('TreatmentPlanStore', {
             return this.nonPharmalogicalTherapyAndOtherNotes
         },
         setSelectedMedicalAllergiesList(data: any) {
+            this.selectedMedicalAllergiesList.forEach((allergy: any, index: number) => {
+                if (allergy.concept_name_id == data.concept_name_id) {
+                    this.selectedMedicalAllergiesList.splice(index, 1)
+                }
+            })
             this.selectedMedicalAllergiesList.push(data)
         },
         getSelectedMedicalAllergiesList() {

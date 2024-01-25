@@ -149,6 +149,7 @@ export default defineComponent({
             if(test.length > 0) {
 
                 this.investigations[0].selectdData.push({
+                    actionBtn: true,
                     display: [
                         this.inputFields[0].value,
                         this.inputFields[1].value,

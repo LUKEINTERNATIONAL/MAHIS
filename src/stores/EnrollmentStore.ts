@@ -159,8 +159,8 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                     },
                     data:[
                         {
-                            name: 'P',
-                            value: 'P',
+                            name: 'R',
+                            value: 'R',
                             checked: false
                         },
                         {
@@ -195,7 +195,6 @@ export const useEnrollementStore = defineStore('enrollementStore',{
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                 {
                     header:{

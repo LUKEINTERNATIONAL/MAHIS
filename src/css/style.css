@@ -78,7 +78,7 @@
     width: 25px;
     height: 25px;
     line-height: 21px;
-    border: 2px solid #B4B4B4;
+    border: 1px solid #B4B4B4;
     border-radius: 100px;
     display: block;
     margin: 0 auto 5px;
@@ -105,10 +105,10 @@
 .wizard_verticle ul.wizard_steps li a:before {
     content: "";
     position: absolute;
-    height: 40%;
+    height: 28px;
     background: #B4B4B4;
     top: 27px;
-    width: 2px;
+    width: 1px;
     z-index: 4;
     left: 49%;
 }
@@ -136,7 +136,7 @@ a {
     height: 30px;
 }
 .wizard_verticle ul.wizard_steps li a:first-child {
-    margin-top: 12px;
+    margin-top: 27px;
 }
 
 .wizard_verticle ul.wizard_steps li a, .wizard_verticle ul.wizard_steps li:hover {
@@ -236,7 +236,6 @@ ion-toast.custom-toast::part(container) {
     padding-bottom: 10px;
   }
   .obese{
-    background-color:#DDEEDD;
     padding: 0.7vw;
     border-radius: 8px;
     padding-right: 3vw;
@@ -291,7 +290,7 @@ ion-toast.custom-toast::part(container) {
 
  .large-modal{
     --border-radius: 16px;
-    --width: 60vw;
+    --width: 35vw;
     --height:700px;
  }
  .content_manager{
@@ -361,4 +360,33 @@ ion-toast.custom-toast::part(container) {
     justify-content: center;
     padding: 40px;
     margin-bottom: 40px;
+}
+.no_content{
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    display: flex;
+    height: 250px;
+}
+.start_consultation{
+    height: 21px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 150%;
+    text-align: center;
+    text-decoration-line: underline;
+    color: #00190E;
+    cursor: pointer;
+}
+.no_content_title{
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 150%;
+    text-align: center;
+    color: #636363;
+
 }

@@ -134,12 +134,11 @@
             const data = this.diagnosisData.filter((obj: any) => {
                return obj.name == this.inputFields[0].value ?  obj : false
             })
-            console.log(data)
             if(data.length > 0) {
                 this.diagnosis[0].selectdData.push({
+                    actionBtn: true,
                     display: [
                         this.inputFields[0].value,
-                        this.inputFields[1].value,
                     ],
                     data: {
                         "concept_id": 6542, //primary diagnosis
@@ -147,9 +146,7 @@
                         "obs_datetime": Service.getSessionDate()
                     }
                 })
-                console.log(this.diagnosis[0].selectdData)
                 this.diagnosis[0].data.rowData[0].colData[0].value =''
-                this.diagnosis[0].data.rowData[0].colData[1].value =''
                 this.search_item = false
                 this.display_item = true
                 this.addItemButton = true
@@ -190,8 +187,6 @@
             this.selectedText =value.name
             if(this.inputFields[0].inputHeader == 'Diagnosis'){
                 this.diagnosis[0].data.rowData[0].colData[0].value =value.name
-            }else{
-                this.diagnosis[0].data.rowData[0].colData[1].value =value.name
             }
             this.updateDiagnosisStores()
         },
@@ -199,10 +194,9 @@
           this.selectedText = diagnosis
       },
         editDiagnosis(test: any) {
-            this.deleteDiagnosis(test[0])
+            this.deleteDiagnosis(test[0])       
             this.selectedText = test[0]
             this.diagnosis[0].data.rowData[0].colData[0].value =test[0]
-            this.diagnosis[0].data.rowData[0].colData[1].value =test[1]
             this.addItemButton = false
             this.search_item = true
             this.updateDiagnosisStores()
@@ -218,7 +212,7 @@
             this.updateDiagnosisStores()
         },
         setDashedBox(){
-            if(this.inputFields[0].value || this.inputFields[1].value){
+            if(this.inputFields[0].value){
                 this.addItemButton = false
                 this.search_item = true
                 this.no_item = false

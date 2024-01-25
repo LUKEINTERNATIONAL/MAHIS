@@ -1,42 +1,30 @@
 <template>
     <div class="" style="cursor: pointer; padding-bottom:5px" >
-        <div class="text_header_16" @click="openModal()">
+        <div  class="text_header_16" @click="openModal()">
             Medications
         </div>
-        <div class="m_name_dosage">
-            <div class="m_name">
-                <div>Metformin Extended</div>
-                <div class="m_btns">
-                    <ion-icon style="font-size: x-large;"  :icon="iconsContent.refresh" @click="openDrugRefill"></ion-icon>
-                    <ion-icon style="font-size: 20px;"  :icon="iconsContent.delete" @click="openDeleteModal($event)"></ion-icon>
+        <span  v-if="selectedMedicalDrugsList.length">
+            <div class="m_name_dosage" v-for="(item, index) in selectedMedicalDrugsList" :key="index">
+                <div class="m_name">
+                    <div>{{ item.drugName }}</div>
+                    <div class="m_btns">
+                        <ion-icon style="font-size: x-large;"  :icon="iconsContent.refresh" @click="openDrugRefill"></ion-icon>
+                        <ion-icon style="font-size: 20px;"  :icon="iconsContent.delete" @click="openDeleteModal($event)"></ion-icon>
+                    </div>
+                </div>
+                <div class="m_dosage">
+                    {{ item.frequency }} / {{item.duration}} days/ until {{ item.prescription }}
                 </div>
             </div>
-            <div class="m_dosage">
-                750mg / Twice/daily / 30days/ until 2023-09-23
-            </div>
-        </div>
-        <div class="m_name_dosage">
-            <div class="m_name">
-                <div>Metformin Extended</div>
-                <div class="m_btns">
-                    <ion-icon style="font-size: x-large;"  :icon="iconsContent.refresh" @click="openDrugRefill"></ion-icon>
-                    <ion-icon style="font-size: 20px;"  :icon="iconsContent.delete" @click="openDeleteModal($event)"></ion-icon>
+        </span>
+        <div class="no_content" v-if="!selectedMedicalDrugsList.length">
+            <div>
+                <div class="no_content_title">
+                    No medications added.  
+                </div> 
+                <div class="start_consultation">
+                    Start new consultation
                 </div>
-            </div>
-            <div class="m_dosage">
-                750mg / Twice/daily / 30days/ until 2023-09-23
-            </div>
-        </div>
-        <div class="m_name_dosage">
-            <div class="m_name">
-                <div>Metformin Extended 2</div>
-                <div class="m_btns">
-                    <ion-icon style="font-size: x-large;"  :icon="iconsContent.refresh" @click="openDrugRefill"></ion-icon>
-                    <ion-icon style="font-size: 20px;"  :icon="iconsContent.delete" @click="openDeleteModal($event)"></ion-icon>
-                </div>
-            </div>
-            <div class="m_dosage">
-                750mg / Twice/daily / 30days/ until 2023-09-23
             </div>
         </div>
     </div>
@@ -62,6 +50,8 @@ import { icons } from '@/utils/svg';
 import MedicationsModal from '@/components/ProfileModal/MedicationsModal.vue'
 import DrugRefill from '@/components/ProfileModal/DrugRefill.vue'
 import { createModal,popoverConfirmation,alertConfirmation } from '@/utils/Alerts'
+import { mapState } from 'pinia';
+import { useTreatmentPlanStore } from '@/stores/TreatmentPlanStore'
 
 export default defineComponent({
 name: 'Menu',
@@ -81,6 +71,9 @@ return {
   eventPopover:null as any,
   modalStatus: false,
 };
+},
+computed: {
+        ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList"])
 },
 methods:{
     openModal(){

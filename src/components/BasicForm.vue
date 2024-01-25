@@ -1,7 +1,7 @@
 <template>
-    <ion-row  v-for="(item,index) in contentData" :key="index" :class="contentData[0].classDash">
+    <ion-row  v-for="(item,index) in contentData" :key="index" :class="contentData[index].classDash">
         <ion-col class="item_header_col" v-if="item['sectionHeader'] ">
-            <span class="item_header">{{ item['sectionHeader'] }}</span>
+            <span class="item_header"  :style="'font-weight:'+ item.sectionHeaderFontWeight">{{ item['sectionHeader'] }}</span>
         </ion-col>
         <ion-col>
             <!-- rowData -->
@@ -9,8 +9,8 @@
                 <ion-row v-for="(element, index2) in item.data.rowData" :key="index2">
                     <ion-col v-for="(col, colIndex) in element.colData" :key="colIndex" v-show="!col.displayNone">
                         <BasicInputField 
-                            
                             :inputHeader="col.inputHeader"
+                            :sectionHeaderFontWeight = "col.sectionHeaderFontWeight"
                             :unit="col.unit"
                             :icon ="col.icon"
                             :placeholder="col.placeholder"
@@ -23,13 +23,16 @@
                             @setPopoverValue ="value => {col.value = value.name; col.id = value[col.idName]; handleSelected(col)}"
                             
                         />
+                        <div class="alerts_error" v-if="col.alertsError">
+                            {{ col.alertsErrorMassage }}
+                        </div>
                         <ion-popover :show-backdrop="false" :keep-contents-mounted="true" :is-open="openPopover"
                             :event="event" @didDismiss="openPopover = false" v-if="col.isDatePopover">
                             <ion-datetime @ionChange="event => col.value = formatDate(event.detail.value)" id="datetime" presentation="date"
                                 :show-default-buttons="true" ></ion-datetime>
                         </ion-popover>
                     </ion-col>
-                    <ion-col size="1.7" class="btn_col" v-for="(btn, btnIndex) in element.btns" :key="btnIndex" >
+                    <ion-col size="btn.btn_col_size || 1.7" class="btn_col" v-for="(btn, btnIndex) in element.btns" :key="btnIndex" >
                         <DynamicButton
                             :name="btn.name"
                             :fill="btn.fill"
@@ -68,10 +71,14 @@
                 </ion-row>
             </span>
             <span v-if="item.checkboxBtnContent">
-                <div style="margin-top: 20px;" v-if="item.checkboxBtnContent?.header">{{ item.checkboxBtnContent?.header.title }} </div>
+                <div style="" v-if="item.checkboxBtnContent?.header">{{ item.checkboxBtnContent?.header.title }} </div>
                 <ion-row class="checkbox_content">
-                    <ion-col size="4" class="checkout_col" style="" v-for="(al, index3) in item.checkboxBtnContent?.data" :key="index3">
-                        <ion-checkbox :checked="al.checked" @ionChange="value =>al.checked =value.detail.checked" label-placement="end" > 
+                    <ion-col :size="al.colSize" class="checkout_col" style="" v-for="(al, index3) in item.checkboxBtnContent?.data" :key="index3">
+                        <span v-if="al.header" class="first_col">
+                            <ion-label>{{ al.name }} </ion-label>
+                        </span>
+                        <ion-checkbox v-else :justify="al.justify || 'start'" :checked="al.checked" style="width: 100%;"
+                        @ionChange="value =>al.checked =value.detail.checked" :label-placement="al.labelPlacement || 'end'" > 
                             <span style="line-height: 1;">
                                 <p class="checkbox_header">{{ al.name }}</p>
                                 <p v-if="al.example " class="small_font">{{ al.example }}</p>
@@ -107,6 +114,18 @@
                     </span>
                 </ion-row>
             </span>
+            <ion-row v-if="item.previousView">
+                <ion-accordion-group ref="accordionGroup" class="previousView">
+                    <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
+                        <ion-item slot="header" color="light">
+                            <ion-label class="previousLabel">Previous measurements</ion-label>
+                        </ion-item>
+                        <div class="ion-padding" slot="content">
+                            <PreviousVitals v-if="item.previousView.name == 'vitals'" />
+                        </div>
+                    </ion-accordion>
+                </ion-accordion-group>
+            </ion-row>
         </ion-col>
         <span></span>
     </ion-row>
@@ -116,15 +135,19 @@
 import { defineComponent } from 'vue';
 import BasicInputField from "@/components/BasicInputField.vue"
 import DynamicButton from './DynamicButton.vue';
-import { IonDatetime, IonDatetimeButton } from '@ionic/vue';
+import { IonDatetime, IonDatetimeButton, IonCheckbox } from '@ionic/vue';
 import HisDate from "@/utils/Date";
+import { createModal } from '@/utils/Alerts'
+import PreviousVitals from '@/apps/NCD/components/ConsultationPlan/previousVitals.vue'
 
 export default defineComponent({
     components:{
         BasicInputField,
         DynamicButton,
         IonDatetime,
-        IonDatetimeButton
+        IonDatetimeButton,
+        PreviousVitals,
+        IonCheckbox
     },
     data() {
         return {
@@ -161,6 +184,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
+._padding{
+  padding-bottom: 18px;
+  padding-top: 18px;
+}
 .alert_content{
     padding: 28px;
     display: flex;
@@ -203,7 +230,33 @@ ion-radio {
     display: flex;
     align-items: center;
 }
-.dashed_bottom_border {
-  padding-bottom: 18px;
+.alerts_error{
+    background: #f5dad8;
+    margin-top: 2px;
+    color: #B42318;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    overflow:scroll;
+    padding: 5px;
+    border-radius: 3px;
+}
+.previousView{
+    width: 100%;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+.previousLabel{
+    font-weight: 600;
+    color: #000;
+}
+.first_col
+{
+  text-align: left;
+  font-weight: 400;
+  font-size: 14px;
+  color: #636363;
 }
 </style>

@@ -17,8 +17,8 @@
         <br/>
         <div class="triage_modal_btn center">
             <div class="center_btn">
-                <ion-button class="primary_btn" @click="nav('patientProfile')">Save</ion-button>
-                <span @click="nav('patientProfile')" style="cursor: pointer;"> Don't Save</span>
+                <ion-button class="primary_btn" @click="nav('patientProfile','save')">Save</ion-button>
+                <span @click="nav('patientProfile','not_save')" style="cursor: pointer;"> Don't Save</span>
             </div>
         </div>
     </div>
@@ -39,6 +39,7 @@
     import { checkmark,pulseOutline } from 'ionicons/icons';
     import { ref } from 'vue';
     import { icons } from '@/utils/svg';
+    import { resetPatientData } from '@/services/reset_data'
 
     export default defineComponent({
     name: 'Menu',
@@ -62,7 +63,8 @@
       dismiss(){
         modalController.dismiss()
       },
-      nav(url: any){
+      nav(url: any,action: any){
+        if(action =='not_save') resetPatientData()
             this.dismiss()
             this.$router.push(url);
         },

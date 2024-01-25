@@ -139,7 +139,7 @@ export async function popoverConfirmation(massege: string, e: any,options = {} a
             name: 'Cancel',
             size: 'small',
             slot: 'end',
-            color: 'success',
+            color: '',
             visible: true,
             role: 'Cancel',
             fill: 'clear',
