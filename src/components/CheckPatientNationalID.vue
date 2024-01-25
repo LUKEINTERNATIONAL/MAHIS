@@ -38,6 +38,7 @@
     import { checkmark,pulseOutline } from 'ionicons/icons';
     import { ref } from 'vue';
     import { icons } from '@/utils/svg';
+    import { resetDemographics } from '@/services/reset_data'
 
     export default defineComponent({
     name: 'Menu',
@@ -63,6 +64,7 @@
       },
       nav(url: any){
         this.dismiss()
+        resetDemographics()
         this.$router.push(url);
       }
     }
