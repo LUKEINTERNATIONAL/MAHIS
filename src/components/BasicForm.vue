@@ -262,4 +262,26 @@ ion-radio {
   font-size: 14px;
   color: #636363;
 }
+.alerts_error{
+    background: #f5dad8;
+    margin-top: 2px;
+    color: #B42318;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    overflow:scroll;
+    padding: 5px;
+    border-radius: 3px;
+}
+.previousView{
+    width: 100%;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+.previousLabel{
+    font-weight: 600;
+    color: #000;
+}
 </style>
