@@ -188,7 +188,7 @@ export class Service {
         let app: any =  sessionStorage.getItem('app');
         app = JSON.parse(app)
         
-        if ('applicationName' in app) return app.applicationName
+        // if ('applicationName' in app) return app.applicationName
         
         return '';
     }
@@ -201,9 +201,10 @@ export class Service {
         let app: any =  sessionStorage.getItem('app');
         app = JSON.parse(app)
         
-        if ('programID' in app) return app.programID
+        // if ('programID' in app) return app.programID
+
         
-        return 0;
+        return 14;
     }
 
     static getUserRoles() {

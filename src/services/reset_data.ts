@@ -27,11 +27,9 @@ export function resetPatientData(){
 }
 
 export function resetDemographics(){
-    const demographics = useDemographicsStore()
     const enrollement = useEnrollementStore()
     const nextAppointment = useNextAppointmentStore() 
     const registration = useRegistrationStore() 
-    demographics.$reset()
     enrollement.$reset()
     nextAppointment.$reset()
     registration.$reset()
