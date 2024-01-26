@@ -83,6 +83,7 @@
   import TreatmentPlan from '@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue'
   import Medications from "@/apps/ANC/components/profile/Medications.vue";
   import WomanBehaviour from "@/apps/ANC/components/profile/WomanBehaviour.vue";
+  import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue";
   import SaveProgressModal from '@/components/SaveProgressModal.vue'
   import { createModal } from '@/utils/Alerts'
   import { icons } from '@/utils/svg';
@@ -116,7 +117,8 @@
         TreatmentPlan,
         IonModal,
         Medications,
-        WomanBehaviour
+        WomanBehaviour,
+        MedicalHistory
     },
     data(){
         return {

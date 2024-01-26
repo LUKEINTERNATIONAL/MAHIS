@@ -1,66 +1,28 @@
+
 <template>
+  <!-- Daily Caffeine -->
   <ion-list>
-    <div class="sub_item_body">
-      <ion-list-header style="font-size: 18px; border-bottom: solid 1px #ccc;border-bottom-style: dashed;">Daily cafeine intake</ion-list-header>
-      <ion-row class="foot_content">
-        <ion-col class="first_col">More than 2 cups of coffee</ion-col>
-        <ion-col>
-          <ion-checkbox label-placement="end">
-            <span class="checkbox_header"></span>
-          </ion-checkbox>
-        </ion-col>
-      </ion-row>
-      <ion-row class="foot_content">
-        <ion-col class="first_col">More than 4 cups of tea</ion-col>
-        <ion-col>
-          <ion-checkbox label-placement="end">
-            <span class="checkbox_header"></span>
-          </ion-checkbox>
-        </ion-col>
-      </ion-row>
-      <ion-row class="foot_content">
-        <ion-col class="first_col">More than 12 bars of chocolate</ion-col>
-        <ion-col>
-          <ion-checkbox label-placement="end">
-            <span class="checkbox_header"></span>
-          </ion-checkbox>
-        </ion-col>
-      </ion-row>
-      <ion-row class="foot_content">
-        <ion-col class="first_col">More than one bottle/cane of soda, energy, soft drink</ion-col>
-        <ion-col>
-          <ion-checkbox label-placement="end">
-            <span class="checkbox_header"></span>
-          </ion-checkbox>
-        </ion-col>
-      </ion-row>
-      <ion-row class="foot_content">
-        <ion-col class="first_col">None of the above</ion-col>
-        <ion-col>
-          <ion-checkbox label-placement="end">
-            <span class="checkbox_header"></span>
-          </ion-checkbox>
-        </ion-col>
-      </ion-row>
-      <ion-list-header style="font-size: 18px; border-bottom: solid 1px #ccc;border-bottom-style: dashed;">Tobacco use</ion-list-header>
-      <ion-row class="foot_content">
-        <ion-col class="first_col">Recently quit tobbacco products</ion-col>
-        <ion-col>
-          <ion-checkbox label-placement="end">
-            <span class="checkbox_header"></span>
-          </ion-checkbox>
-        </ion-col>
-      </ion-row>
-      <ion-row class="foot_content">
-        <ion-col class="first_col">Exposure to second hand smoke</ion-col>
-        <ion-col>
-          <ion-checkbox label-placement="end">
-            <span class="checkbox_header"></span>
-          </ion-checkbox>
-        </ion-col>
-      </ion-row>
+    <ion-item :lines="DailyCaffeine" class="dashed_bottom_border">
+      <ion-toggle :checked ="caffeineChecked" @ionChange="caffeineMethod">Daily caffeine  intake</ion-toggle>
+    </ion-item>
+    <div class="sub_item_body" v-if="caffeineChecked">
+      <BasicForm :contentData="Caffeine" />
     </div>
+    <ion-item class="sub_item_body_close" v-if="caffeineChecked"/>
   </ion-list>
+
+  <!-- Tobbaco use -->
+  <ion-list>
+    <ion-item :lines="tobbacoUses" class="dashed_bottom_border">
+      <ion-toggle :checked ="tobbacoChecked" @ionChange="tobbacoMethod">Use of tobbaco</ion-toggle>
+    </ion-item>
+
+    <div class="sub_item_body" v-if="tobbacoChecked">
+      <BasicForm :contentData="Tobbaco" />
+    </div>
+    <ion-item class="sub_item_body_close" v-if="tobbacoChecked"/>
+  </ion-list>
+
 </template>
 
 <script lang="ts">
@@ -83,10 +45,15 @@ import { checkmark,pulseOutline } from 'ionicons/icons';
 import { ref } from 'vue';
 import { icons } from '@/utils/svg.ts';
 import BasicInputField from '@/components/BasicInputField.vue';
+import BasicForm from "@/components/BasicForm.vue";
+import {useMedicalHistoryStore} from "@/apps/ANC/store/medicalHistoryStore";
+import {mapState} from "pinia";
+import {useWomanBehaviourStore} from "@/apps/ANC/store/womanBehaviourStore";
 
 export default defineComponent({
   name: 'Menu',
   components:{
+    BasicForm,
     IonContent,
     IonHeader,
     IonItem,
@@ -103,32 +70,42 @@ export default defineComponent({
   data() {
     return {
       iconsContent: icons,
-      footChecked : false,
-      showVisualAcuityTest: false,
-      visualAT: '',
-      footSC: '',
+      caffeineChecked : false,
+      tobbacoChecked : false,
+      DailyCaffeine: '',
+      tobbacoUses: '',
     };
   },
+  // mounted(){
+  //   const caffeine =useWomanBehaviourStore()
+  //   const tobbaco =useWomanBehaviourStore()
+  // },
+  computed:{
+    ...mapState(useWomanBehaviourStore,["Caffeine"]),
+    ...mapState(useWomanBehaviourStore,["Tobbaco"]),
+  },
+
   setup() {
     return { checkmark,pulseOutline };
   },
   methods:{
+    caffeineMethod(){
+      this.caffeineChecked = !this.caffeineChecked
+      if(this.caffeineChecked){
+        this.DailyCaffeine = 'none'
+      }else{this.DailyCaffeine=""}
+    },
+    tobbacoMethod(){
+      this.tobbacoChecked = !this.tobbacoChecked
+      if(this.tobbacoChecked){
+        this.tobbacoUses = 'none'
+      }else{this.tobbacoUses ="" }
+    },
     navigationMenu(url: any){
       menuController.close()
       this.$router.push(url);
     },
-    footScreening(){
-      this.footChecked = !this.footChecked
-      if (this.footChecked) {
-        this.footSC = 'none'
-      } else {this.footSC = ''}
-    },
-    toggleShowVisualAcuityTest() {
-      this.showVisualAcuityTest = !this.showVisualAcuityTest
-      if (this.showVisualAcuityTest) {
-        this.visualAT = 'none'
-      } else {this.visualAT = ''}
-    }
+
   }
 });
 </script>

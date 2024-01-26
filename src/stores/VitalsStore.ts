@@ -8,6 +8,7 @@ export const useVitalsStore = defineStore('vitalsStore',{
                 isFinishBtn: false,
                 sectionHeader: 'Hieght and weight',
                 classDash: 'dashed_bottom_border _padding',
+
                 data:
                 { 
                     rowData:[

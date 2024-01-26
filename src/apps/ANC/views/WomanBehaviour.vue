@@ -1,17 +1,9 @@
-<template>
-  <ion-list>
-    <ion-item :lines="medication" class="dashed_bottom_border">
-      <ion-toggle :checked="medicationChecked" @ionChange="medications">Current Medications</ion-toggle>
-    </ion-item>
-    <div class="sub_item_body" v-if="medicationChecked">
-      <basic-form
-          :contentData="Medication" >
-      </basic-form>
-    </div>
-    <ion-item class="sub_item_body_close" v-if="medicationChecked"/>
-  </ion-list>
-</template>
 
+<template>
+  <BasicForm
+      :contentData="womanBehaviour"
+  />
+</template>
 <script lang="ts">
 import {
   IonContent,
@@ -30,15 +22,16 @@ import {
 import { defineComponent } from 'vue';
 import { checkmark,pulseOutline } from 'ionicons/icons';
 import { ref } from 'vue';
-import { icons } from '@/utils/svg';
+import { icons } from '@/utils/svg.ts';
 import BasicInputField from '@/components/BasicInputField.vue';
-import { mapState } from 'pinia';
-import BasicForm from '@/components/BasicForm.vue'
-import {useMedicationsStore} from "@/apps/ANC/store/MedicationsStore";
+import BasicForm from "@/components/BasicForm.vue";
+import {mapState} from "pinia";
+import {useWomanBehaviourStore} from "@/apps/ANC/store/womanBehaviourStore";
 
 export default defineComponent({
   name: 'Menu',
   components:{
+    BasicForm,
     IonContent,
     IonHeader,
     IonItem,
@@ -51,18 +44,21 @@ export default defineComponent({
     IonSelectOption,
     IonInput,
     BasicInputField,
-    BasicForm
   },
   data() {
     return {
       iconsContent: icons,
-      medicationChecked : false,
-      medication: '',
+      womanBehaviourChecked : false,
+      womanBH: '',
     };
   },
-  computed: {
-    ...mapState(useMedicationsStore, ["Medication"])
+  mounted(){
+    const womanBehaviour =useWomanBehaviourStore()
   },
+  computed:{
+    ...mapState(useWomanBehaviourStore,["womanBehaviour"]),
+  },
+
   setup() {
     return { checkmark,pulseOutline };
   },
@@ -71,11 +67,11 @@ export default defineComponent({
       menuController.close()
       this.$router.push(url);
     },
-    medications(){
-      this.medicationChecked = !this.medicationChecked
-      if (this.medicationChecked) {
-        this.medication = 'none'
-      } else {this.medication = ''}
+    footScreening(){
+      this.footChecked = !this.footChecked
+      if (this.footChecked) {
+        this.footSC = 'none'
+      } else {this.footSC = ''}
     },
   }
 });
@@ -116,11 +112,10 @@ export default defineComponent({
 .foot_content{
   color:#00190E;
   text-align: center;
-  border-bottom: solid 1px #ccc;
-  border-bottom-style: dashed;
-  padding: 10px 0px;
+  padding: 4px 0px;
   font-weight: 500;
   font-size: 14px;
+  margin-left: 25px;
 }
 .first_col{
   text-align: left;
@@ -154,4 +149,5 @@ ion-item.sub_item_body_close {
   border-bottom: 2px dotted var(--ion-color-medium);
   --inner-border-width:0;
 }
+
 </style>
