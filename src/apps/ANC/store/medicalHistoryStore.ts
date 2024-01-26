@@ -476,6 +476,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                                     value: medicalHistoryForm.otherSurgerirs.name,
                                     name: medicalHistoryForm.otherSurgerirs.value,
                                     eventType: 'input',
+                                    inputWidth: "300px",
                                     required: true
                                 }
                                 
@@ -764,6 +765,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                                     value: allegiesForm.otherAllegies.name,
                                     name: allegiesForm.otherAllegies.value,
                                     eventType: 'input',
+                                     inputWidth: "300px",
                                     required: true
                                 }
                                 
@@ -953,6 +955,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                                     value: cancerForm.otherSite.name,
                                     name: cancerForm.otherSite.value,
                                     eventType: 'input',
+                                     inputWidth: "300px",
                                     required: true
                                 }
                                 
@@ -1096,6 +1099,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                                     value: diabetesForm.otherDiabetis.name,
                                     name: diabetesForm.otherDiabetis.value,
                                     eventType: 'input',
+                                    inputWidth: "300px",
                                     required: true
                                 }
                                 
@@ -1248,6 +1252,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                                     value: hivTestForm.reasonsTestNotDone.name,
                                     name: hivTestForm.reasonsTestNotDone.value,
                                     eventType: 'input',
+                                    inputWidth: "300px",
                                     required: true
                                 }
                                 
@@ -1270,6 +1275,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                                     value: '',
                                     name: 'birthdate',
                                     eventType: 'blur',
+                                    inputWidth: "300px",
                                     required: true,
                                     isDatePopover: true
                                 }
@@ -1533,6 +1539,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                                     value: syphilisForm.syphilisTestNotDone.name,
                                     name: syphilisForm.syphilisTestNotDone.value,
                                     eventType: 'input',
+                                    inputWidth: "300px",
                                     required: true
                                 }
                                 
@@ -1555,6 +1562,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                                     name: 'birthdate',
                                     eventType: 'blur',
                                     required: true,
+                                     inputWidth: "300px",
                                     isDatePopover: true
                                 }
                                 
@@ -1712,6 +1720,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                                     value: otherSiteForm.otherSite.name,
                                     name: otherSiteForm.otherSite.value,
                                     eventType: 'input',
+                                     inputWidth: "400px",
                                     required: true
                                 }
                                 

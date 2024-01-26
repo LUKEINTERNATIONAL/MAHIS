@@ -12,15 +12,6 @@
     </ion-list>
 
     <!-- Allegies -->
-        <!-- <ion-list>
-        <ion-item :lines="allegies" class="dashed_bottom_border">
-            <ion-toggle :checked ="allegiesChecked" @ionChange="allegyMethod">Allegies</ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="allegiesChecked">
-            <BasicForm :contentData="allegies" />
-        </div>
-        <ion-item class="sub_item_body_close" v-if="allegiesChecked"/>
-    </ion-list> -->
 
         <ion-list>
         <ion-item :lines="allegies" class="dashed_bottom_border">
