@@ -1,6 +1,8 @@
+
 import Profile from '@/apps/ANC/views/Profile.vue'
 import Medications from '@/apps/ANC/components/profile/Medications.vue'
 import WomanBehaviour from "@/apps/ANC/views/WomanBehaviour.vue";
+import Medical from '@/apps/ANC/views/medical.vue';
 export default [
   {
     path: '/anc/profile',
@@ -16,6 +18,11 @@ export default [
     path: '/anc/womanBehaviour',
     name: 'WomanBehaviour',
     component: WomanBehaviour
+  },
+  {
+    path: '/medical',
+    name: 'medical',
+    component: Medical
   },
 ]
 

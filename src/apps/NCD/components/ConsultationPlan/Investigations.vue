@@ -136,12 +136,17 @@ export default defineComponent({
             this.search_item = true
         },
         async validaterowData() {
+            this.investigations[0].data.rowData[0].colData[0].alertsError = false
+            this.investigations[0].data.rowData[0].colData[0].alertsErrorMassage =''
+            this.investigations[0].data.rowData[0].colData[1].alertsError = false
+            this.investigations[0].data.rowData[0].colData[1].alertsErrorMassage =''
             const test = this.labOrders.filter((obj: any) => {
                return obj.name == this.inputFields[0].value ?  obj : false
             })
 
             if (!this.numericValueIsValid(this.inputFields[1].value) && this.inputFields[1].value != '') {
-                toastWarning('You must enter a modifer and numbers only. i.e =90 / >19 / < 750')
+                this.investigations[0].data.rowData[0].colData[1].alertsError = true
+                this.investigations[0].data.rowData[0].colData[1].alertsErrorMassage ='You must enter a modifer and numbers only. i.e =90 / >19 / < 750'
                 return false
             }else{
                 this.buildResults()
@@ -170,7 +175,8 @@ export default defineComponent({
                 this.addItemButton = true
             } else {
                 this.search_item = true
-                toastWarning('Please select test from the list')
+                this.investigations[0].data.rowData[0].colData[0].alertsError = true
+                this.investigations[0].data.rowData[0].colData[0].alertsErrorMassage = 'Please select test from the list'
             }
             
         },

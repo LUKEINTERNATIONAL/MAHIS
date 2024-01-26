@@ -19,14 +19,18 @@ export const useInvestigationStore = defineStore('investigationStore', {
                                         value: '',
                                         name: 'test',
                                         eventType: 'input',
-                                        required: true
+                                        required: true,
+                                        alertsError: false,
+                                        alertsErrorMassage: ''
                                     },
                                     {
                                         inputHeader: 'Result',
                                         value: '',
                                         name: 'result',
-                                        eventType: 'blur',
-                                        required: true
+                                        eventType: 'input',
+                                        required: true,
+                                        alertsError: false,
+                                        alertsErrorMassage: ''
                                     },
                                     
                                 ],

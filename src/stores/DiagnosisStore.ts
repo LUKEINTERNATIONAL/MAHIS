@@ -18,7 +18,9 @@ export const useDiagnosisStore = defineStore('DiagnosisStore', {
                                         value: '',
                                         name: 'diagnosis',
                                         eventType: 'input',
-                                        required: true
+                                        required: true,
+                                        alertsError: false,
+                                        alertsErrorMassage: ''
                                     },
                                     
                                 ],

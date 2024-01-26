@@ -131,6 +131,8 @@
             this.search_item =true
         },
         async validaterowData(){
+            this.diagnosis[0].data.rowData[0].colData[0].alertsError = false
+            this.diagnosis[0].data.rowData[0].colData[0].alertsErrorMassage =''
             const data = this.diagnosisData.filter((obj: any) => {
                return obj.name == this.inputFields[0].value ?  obj : false
             })
@@ -152,7 +154,8 @@
                 this.addItemButton = true
             } else {
                 this.search_item = true
-                toastWarning('Please select test from the list')
+                this.diagnosis[0].data.rowData[0].colData[0].alertsError = true
+                this.diagnosis[0].data.rowData[0].colData[0].alertsErrorMassage ='Please select test from the list'
             }
         },
         buildDiagnosis(){
