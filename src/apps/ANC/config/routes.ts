@@ -1,5 +1,6 @@
 
 import Profile from '@/apps/ANC/views/Profile.vue'
+import QuickCheck from '@/apps/ANC/views/QuickCheck.vue'
 import Medications from '@/apps/ANC/components/profile/Medications.vue'
 import WomanBehaviour from "@/apps/ANC/views/WomanBehaviour.vue";
 import Medical from '@/apps/ANC/views/medical.vue';
@@ -8,6 +9,11 @@ export default [
     path: '/anc/profile',
     name: 'Profile',
     component: Profile
+  },
+  {
+    path: '/anc/quickCheck',
+    name: 'QuickCheck',
+    component: QuickCheck
   },
   {
     path: '/anc/medications',
