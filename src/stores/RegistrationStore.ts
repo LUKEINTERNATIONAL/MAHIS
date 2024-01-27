@@ -19,6 +19,8 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                         value: '',
                                         name: 'nationalID',
                                         eventType: 'blur',
+                                        alertsError: false,
+                                        alertsErrorMassage: '',
                                         required: true,
                                         placeholder: "__-__-__-__",
                                     }
@@ -41,6 +43,8 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                     value: '',
                                     name: 'firstname',
                                     eventType: 'blur',
+                                        alertsError: false,
+                                        alertsErrorMassage: '',
                                     required: true
                                 }
                                 
@@ -62,6 +66,8 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                     value: '',
                                     name: 'lastname',
                                     eventType: 'input',
+                                        alertsError: false,
+                                        alertsErrorMassage: '',
                                     required: true
                                 }
                                 
@@ -83,6 +89,8 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                     value: '',
                                     name: 'middleName',
                                     eventType: 'input',
+                                        alertsError: false,
+                                        alertsErrorMassage: '',
                                     required: true
                                 }
                                 
@@ -104,6 +112,8 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                     value: '',
                                     name: 'phoneNumber',
                                     eventType: 'input',
+                                        alertsError: false,
+                                        alertsErrorMassage: '',
                                     required: true
                                 }
                                 
@@ -125,6 +135,8 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                     value: '',
                                     name: 'birthdate',
                                     eventType: 'blur',
+                                        alertsError: false,
+                                        alertsErrorMassage: '',
                                     required: true,
                                     isDatePopover: true
                                 }
@@ -143,7 +155,8 @@ export const useRegistrationStore = defineStore('registrationStore',{
                         data:[
                             {
                                 name: 'Male',
-                                value: 'M'
+                                value: 'M',
+                                colSize: '4',
                             },
                             {
                                 name: 'Female',
@@ -194,7 +207,9 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                     icon: icons.search,
                                     value: '',
                                     placeholder: 'eg. Christian',
-                                    eventType: 'input'
+                                    eventType: 'input',
+                                    alertsError: false,
+                                    alertsErrorMassage: '',
                                 }
                                 
                             ]
@@ -223,7 +238,9 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                 icon: icons.search,
                                 placeholder: 'Select Occupation',
                                 value: '',
-                                eventType: 'input'
+                                eventType: 'input',
+                                alertsError: false,
+                                alertsErrorMassage: '',
                             }
                         ]
                 }
@@ -245,8 +262,11 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                         popOver: true,
                                         icon: icons.search,
                                         value: '',
-                                        name:'homeLocation',
+                                        name:'homeDistrict',
+                                        setName:'homeLocation',
                                         eventType: 'input',
+                                        alertsError: false,
+                                        alertsErrorMassage: '',
                                         popOverData: {
                                             filterData: true,
                                             data: []
@@ -271,8 +291,11 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                     inputHeader: 'Home traditional authority',
                                     icon: icons.search,
                                     value: '',
-                                    name:'homeLocation',
+                                    name:'homeTraditionalAuthority',
+                                    setName:'homeLocation',
                                     eventType: 'input',
+                                    alertsError: false,
+                                    alertsErrorMassage: '',
                                     popOverData: {
                                         filterData: false,
                                         data: []
@@ -298,8 +321,11 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                     inputHeader: 'Home village',
                                     icon: icons.search,
                                     value: '',
-                                    name:'homeLocation',
+                                    name:'homeVillage',
+                                    setName:'homeLocation',
                                     eventType: 'input',
+                                    alertsError: false,
+                                    alertsErrorMassage: '',
                                     popOverData: {
                                         filterData: true,
                                         data: []
@@ -331,8 +357,11 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                         inputHeader: 'Current district',
                                         icon: icons.search,
                                         value: '',
-                                        name:'currentLocation',
+                                        name:'currentDistrict',
+                                        setName:'currentLocation',
                                         eventType: 'input',
+                                        alertsError: false,
+                                        alertsErrorMassage: '',
                                         popOverData: {
                                             filterData: true,
                                             data: []
@@ -357,8 +386,11 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                     inputHeader: 'Current traditional authority',
                                     icon: icons.search,
                                     value: '',
-                                    name:'currentLocation',
+                                    name:'currentTraditionalAuthority',
+                                    setName:'currentLocation',
                                     eventType: 'input',
+                                        alertsError: false,
+                                        alertsErrorMassage: '',
                                     popOverData: {
                                         filterData: false,
                                         data: []
@@ -384,8 +416,11 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                     inputHeader: 'Current village',
                                     icon: icons.search,
                                     value: '',
-                                    name:'currentLocation',
+                                    name:'currentVillage',
+                                    setName:'currentLocation',
                                     eventType: 'input',
+                                    alertsError: false,
+                                    alertsErrorMassage: '',
                                     popOverData: {
                                         filterData: true,
                                         data: []
@@ -410,8 +445,11 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                 {
                                     inputHeader: 'Closest landmark/Plotnumber',
                                     icon: icons.search,
+                                    name:'closestLandmark',
                                     value: '',
                                     eventType: 'input',
+                                        alertsError: false,
+                                        alertsErrorMassage: '',
                                 }
                                 
                             ]
@@ -435,8 +473,10 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                     inputHeader: 'First name*',
                                     icon: icons.fullName,
                                     value: '',
-                                    name: 'firstname',
+                                    name: 'guardianFirstname',
                                     eventType: 'input',
+                                        alertsError: false,
+                                        alertsErrorMassage: '',
                                 }
                                 
                             ]
@@ -455,8 +495,10 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                     inputHeader: 'Last name*',
                                     icon: icons.fullName,
                                     value: '',
-                                    name: 'lastname',
+                                    name: 'guardianLastname',
                                     eventType: 'input',
+                                        alertsError: false,
+                                        alertsErrorMassage: '',
                                 }
                                 
                             ]
@@ -475,8 +517,10 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                     inputHeader: 'Middle name',
                                     icon: icons.fullName,
                                     value: '',
-                                    name: 'middleName',
+                                    name: 'guardianMiddleName',
                                     eventType: 'input',
+                                        alertsError: false,
+                                        alertsErrorMassage: '',
                                 }
                                 
                             ]
@@ -492,11 +536,13 @@ export const useRegistrationStore = defineStore('registrationStore',{
                         {
                             colData:[
                                 {
-                                    inputHeader: 'Phone number eunice',
+                                    inputHeader: 'Phone number',
                                     icon: icons.phone,
                                     value: '',
-                                    name: 'phoneNumber',
+                                    name: 'guardianPhoneNumber',
                                     eventType: 'input',
+                                        alertsError: false,
+                                        alertsErrorMassage: '',
                                 }
                                 
                             ]

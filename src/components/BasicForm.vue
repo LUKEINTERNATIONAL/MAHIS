@@ -44,16 +44,20 @@
                 </ion-row>
             </span>
             <span v-if="item.radioBtnContent">
-                <br />
-                <ion-label >
-                    <span class="radio_title"> {{ item.radioBtnContent?.header.title }}</span>
-                </ion-label>
-                <ion-row >
-                    <ion-col>
-                        <ion-radio-group :value="item.radioBtnContent.header.selectedValue " class="radio_content" @ionChange="value => item.radioBtnContent.header.selectedValue = value.target.value" >
-                            <span v-for="(al, index3) in item.radioBtnContent?.data" :key="index3">
-                                <ion-radio :value="al.value" aria-label="Custom checkbox" label-placement="end">{{ al.name }}</ion-radio>
-                            </span>
+                <div style="" v-if="item.radioBtnContent?.header">{{ item.radioBtnContent?.header.title }} </div>
+                <ion-row class="checkbox_content">
+                    <ion-col :size="al.colSize" class="checkout_col" style="" v-for="(al, index3) in item.radioBtnContent?.data" :key="index3">
+                        <span v-if="al.header" class="first_col">
+                            <ion-label>{{ al.name }} </ion-label>
+                        </span>
+                        <ion-radio-group  
+                        v-else 
+                        style="width: 100%;"
+                        :value="item.radioBtnContent.header.selectedValue "
+                        @ionChange="value => item.radioBtnContent.header.selectedValue = value.target.value" > 
+                            <span style="display: flex;width: 100%;" >
+                                <ion-radio :value="al.value" :justify="al.justify || 'start'"  :label-placement="al.labelPlacement || 'end'" >{{ al.name }}</ion-radio>
+                            </span>         
                         </ion-radio-group>
                     </ion-col>
                     <ion-col  v-for="(radioInput, radioInputIndex) in item.radioBtnContent.inputFields" :key="radioInputIndex">
@@ -63,12 +67,17 @@
                             :icon ="radioInput.icon"
                             :placeholder="radioInput.placeholder"
                             :iconRight="radioInput.iconRight"
-                            :inputWidth="col.inputWidth"
+                            :inputWidth="radioInput.inputWidth"
                             :inputValue="radioInput.value"
                             :eventType="radioInput.eventType"
                             @update:inputValue="value =>{radioInput.value =value.target.value; handleInput(radioInput)} "
-                            @clicked:inputValue="$emit('clicked:inputValue',$event)"
+                            @clicked:inputValue="value =>{event =value; radioInput.showDatePopover =true; handlePopover(radioInput.isDatePopover,radioInput.inputHeader); $emit('clicked:inputValue',event)}"
                         />
+                        <ion-popover :show-backdrop="false" :keep-contents-mounted="true" :is-open="radioInput.showDatePopover"
+                            :event="event" @didDismiss="radioInput.showDatePopover = false" >
+                            <ion-datetime @ionChange="event => radioInput.value = formatDate(event.detail.value)" id="datetime"
+                                presentation="date" :show-default-buttons="true"></ion-datetime>
+                        </ion-popover>
                     </ion-col>
                 </ion-row>
             </span>
@@ -94,7 +103,7 @@
                             :icon ="radioInput.icon"
                             :placeholder="radioInput.placeholder"
                             :iconRight="radioInput.iconRight"
-                            :inputWidth="col.inputWidth"
+                            :inputWidth="radioInput.inputWidth"
                             :inputValue="radioInput.value"
                             :eventType="radioInput.eventType"
                             @update:inputValue="value =>{radioInput.value =value.target.value; handleInput(radioInput)} "
@@ -228,6 +237,7 @@ export default defineComponent({
 ion-radio {
    margin-right: 23px;
    margin-top: 20px;
+   width: 100%;
 }
 .checkout_col{
     display: flex;

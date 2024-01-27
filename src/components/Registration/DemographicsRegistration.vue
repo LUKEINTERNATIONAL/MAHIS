@@ -1,5 +1,5 @@
 <template>
-    <basic-card :content="cardData" @update:selected="handleHomeLocation" @update:inputValue="handleHomeLocation"></basic-card>
+    <basic-card :content="cardData" @update:selected="handleLocation" @update:inputValue="handleLocation"></basic-card>
 </template>
 
 <script lang="ts">
@@ -22,6 +22,7 @@ import {LocationService} from "@/services/location_service"
 import Validation from "@/validations/StandardValidations"
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import HisDate from "@/utils/Date";
+import { modifyFieldValue,getFieldValue,getRadioSelectedValue } from '@/services/data_helpers'
 
 export default defineComponent({
 name: 'Menu',
@@ -39,7 +40,7 @@ components:{
 return {
   cardData: {} as any,
   inputField: '' as any,
-  inputName: '' as any,
+  setName: '' as any,
   locationData: [] as any,
   districtList: [] as any,
   
@@ -106,6 +107,8 @@ watch: {
     },
 },
 async mounted(){
+    // modifyFieldValue(this.personInformation, 'firstname', 'New National ID Value uuuuuuuuu');
+    console.log(getRadioSelectedValue(this.personInformation, 'Gender*'))
     this.updateRegistrationStores()
     this.buidCards()
 },
@@ -151,25 +154,22 @@ methods:{
     buildPersonalInformation(){
         if(this.validationRules()){
             this.personInformation[0].selectdData = {
-                "given_name": this.givenName,
-                "middle_name": this.middleName,
-                "family_name": this.familyName,
-                "gender": this.gender,
-                "birthdate": this.birthdate,
-                "birthdate_estimated": this.birthdateEstimated,
-
-                "home_region": this.homeRegion,
-                "home_district": this.homeDistrict,
-                "home_traditional_authority": this.homeTraditionalAuthority,
-                "home_village": this.homeVillage,
-
-                "current_region": this.currentRegion,
-                "current_district": this.currentDistrict,
-                "current_traditional_authority": this.currentTraditionalAuthority,
-                "current_village": this.currentVillage,
-                "landmark": this.landmark,
-
-                "cell_phone_number": this.phone
+                "given_name": getFieldValue(this.personInformation, 'firstname'),
+                "middle_name": getFieldValue(this.personInformation, 'middleName'),
+                "family_name" : getFieldValue(this.personInformation, 'lastname'),
+                "gender" : getRadioSelectedValue(this.personInformation, 'Gender*'),
+                "birthdate" : getFieldValue(this.personInformation, 'birthdate'),
+                "birthdate_estimated" : getFieldValue(this.personInformation, 'firstname'),
+                "home_region" : getFieldValue(this.personInformation, 'homeDistrict'),
+                "home_district" : getFieldValue(this.personInformation, 'homeDistrict'),
+                "home_traditional_authority" : getFieldValue(this.personInformation, 'homeTraditionalAuthority'),
+                "home_village" : getFieldValue(this.personInformation, 'homeVillage'),
+                "current_region" : getFieldValue(this.personInformation, 'currentDistrict'),
+                "current_district" : getFieldValue(this.personInformation, 'currentDistrict'),
+                "current_traditional_authority" : getFieldValue(this.personInformation, 'currentTraditionalAuthority'),
+                "current_village" : getFieldValue(this.personInformation, 'currentVillage'),
+                "landmark" : getFieldValue(this.personInformation, 'closestLandmark'),
+                "cell_phone_number" : getFieldValue(this.personInformation, 'phoneNumber'),
             }
         }else{
             this.personInformation[0].selectdData = {}
@@ -211,6 +211,13 @@ methods:{
         }
     },
     validationRules(){
+        // [this.gender,this.birthdate,this.givenName,this.familyName].forEach(inputField => {
+        //     const status =Validation.required(inputField)
+        //     if(status != null){
+
+        //     } 
+        //      return status == null ?  true : false
+        // })
         if( Validation.required(this.gender) == null &&
             Validation.required(this.birthdate) == null &&
             Validation.isName(this.givenName) == null &&
@@ -258,14 +265,14 @@ methods:{
 },
 
 async buildDistricts() {
-        this.locationData = this.inputName === 'homeLocation' ? this.homeLocation : this.currentLocation;
+        this.locationData = this.setName === 'homeLocation' ? this.homeLocation : this.currentLocation;
         if (this.locationData[0].data.rowData[0].colData[0].popOverData?.data.length === 0) {
             for (let i of [1, 2, 3]) {
                 const districts: any = await LocationService.getDistricts(i);
                 this.districtList.push(...districts);
             }
         }
-        this.inputName === 'homeLocation'
+        this.setName === 'homeLocation'
             ? this.homeLocation[0].data.rowData[0].colData[0].popOverData.data = this.districtList
             : this.currentLocation[0].data.rowData[0].colData[0].popOverData.data = this.districtList;
 
@@ -276,7 +283,7 @@ async buildTAs() {
         this.getInputData(this.locationData, 0, 0, 0, 'id'),
         this.getInputData(this.locationData, 1, 0, 0, 'value')
     );
-    this.inputName === 'homeLocation'
+    this.setName === 'homeLocation'
         ? this.homeLocation[1].data.rowData[0].colData[0].popOverData.data = targetData
         : this.currentLocation[1].data.rowData[0].colData[0].popOverData.data = targetData;
 },
@@ -286,14 +293,14 @@ async buildVillages() {
         this.getInputData(this.locationData, 1, 0, 0, 'id'),
         this.getInputData(this.locationData, 2, 0, 0, 'value')
     );
-    this.inputName === 'homeLocation'
+    this.setName === 'homeLocation'
         ? this.homeLocation[2].data.rowData[0].colData[0].popOverData.data = targetData
         : this.currentLocation[2].data.rowData[0].colData[0].popOverData.data = targetData;
 },
 
-async handleHomeLocation(event: any) {
-    this.inputName = event.name;
-    if(this.inputName == 'homeLocation' || this.inputName == 'currentLocation' ){
+async handleLocation(event: any) {
+    this.setName = event.setName;
+    if(this.setName == 'homeLocation' || this.setName == 'currentLocation' ){
         await this.buildDistricts();
 
         await this.buildTAs();
@@ -308,11 +315,11 @@ async handleHomeLocation(event: any) {
 
 async handleDisplayNone(targetData: any, inputField: any) {
     if (await this.checkSelected(inputField) && this.locationData[inputField].data.rowData[0].colData[0].value != '') {
-        this.inputName === 'homeLocation' 
+        this.setName === 'homeLocation' 
         ? this.homeLocation[1+inputField].data.rowData[0].colData[0].displayNone = false
         :this.currentLocation[1+inputField].data.rowData[0].colData[0].displayNone =false;
     } else {
-        if(this.inputName === 'homeLocation'){
+        if(this.setName === 'homeLocation'){
             this.homeLocation[1+inputField].data.rowData[0].colData[0].value = '';
             this.homeLocation[1+inputField].data.rowData[0].colData[0].displayNone = true;
         }else{
