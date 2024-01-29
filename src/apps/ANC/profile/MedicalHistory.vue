@@ -124,7 +124,7 @@
      <ion-list>
         
         <div>
-            <BasicForm :contentData="otherSite" />
+            <BasicForm :contentData="trial" />
         </div>
         
      </ion-list>
@@ -153,6 +153,7 @@
  import BasicInputField from "@/components/BasicInputField.vue";
  import {useMedicalHistoryStore} from "@/apps/ANC/store/medicalHistoryStore";
  import BasicForm from '@/components/BasicForm.vue';
+ import {useSymptomsFollowUpStore} from "@/apps/ANC/store/symptomsFollowUpStore";
 //  import {icons} from "@/utils/svg.ts"
 
 export default defineComponent({
@@ -210,6 +211,7 @@ export default defineComponent({
         const syphilisTest = useMedicalHistoryStore()
         const  hKTMI = useMedicalHistoryStore()
         const  otherSite = useMedicalHistoryStore()
+        const  trial = useSymptomsFollowUpStore()
     },
       computed:{
         ...mapState(useMedicalHistoryStore,["medicalHistory"]),
@@ -223,6 +225,7 @@ export default defineComponent({
         ...mapState(useMedicalHistoryStore,["syphilisTest"]),
         ...mapState(useMedicalHistoryStore,["hKTMI"]),
         ...mapState(useMedicalHistoryStore,["otherSite"]),
+        ...mapState(useSymptomsFollowUpStore,["trial"])
     },
     methods:{
         surgeries(){
@@ -326,3 +329,4 @@ ion-item.sub_item_body_close {
         --inner-border-width:0;
     }
 </style>
+@/apps/ANC/store/medicalFollowUpStore

@@ -487,7 +487,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 }
                     
             },
-    ],
+    ]as any,
      allegy:[  
         {
                 selectdData: [],
@@ -776,7 +776,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 }
                     
             },
-    ],
+    ]as any,
  exisitingChronicHealthConditions:[  
         {
                 selectdData: [],
@@ -847,7 +847,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 }
                     
         },
-    ],
+    ]as any,
     blood:[  
         {
                 selectdData: [],
@@ -918,7 +918,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 }
                     
         },
-    ],
+    ]as any,
     cancerIssue:[  
         {
                 selectdData: [],
@@ -966,7 +966,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 }
                     
             },
-    ],
+    ]as any,
  heartProblem:[  
         {
                 selectdData: [],
@@ -1016,7 +1016,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 }
                     
         },
-    ],
+    ]as any,
  diabetes:[  
         {
                 selectdData: [],
@@ -1132,7 +1132,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 }
                     
         },
-    ],
+    ]as any,
          hivTest: [
             {
                 selectdData: [],
@@ -1380,7 +1380,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     ]
                 }
             },
-         ],
+         ]as any,
           syphilisTest: [
             {
                 selectdData: [],
@@ -1614,7 +1614,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     ]
                 }
             },
-        ],
+        ]as any,
       hKTMI:[  
         {
                 selectdData: [],
@@ -1708,7 +1708,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
             
                     
         },
-    ],
+    ]as any,
     otherSite:[
             {
                 data:{ 
@@ -1731,7 +1731,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 }
                     
             },
-    ]
+    ]as any,
 
     }),
     actions:{

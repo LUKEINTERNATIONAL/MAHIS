@@ -12,6 +12,9 @@ import { calendar } from 'ionicons/icons';
                 <div>
                     <MedicalHistory/>
                 </div> 
+                <!-- <div>
+                    <SymptomsFollowUp/>
+                </div>  -->
 
                 <!-- <div>
                     <Trial/>
@@ -39,6 +42,7 @@ import {
 import { defineComponent } from 'vue';
 import BasicInputField from '@/components/BasicInputField.vue'
 import MedicalHistory from '@/apps/ANC/profile/MedicalHistory.vue';
+import SymptomsFollowUp  from  '@/apps/ANC/symptomsFollowUp/SymptomsFollowUp.vue'
 // import Trial from '@/apps/ANC/profile/Trial.vue';
 import { icons } from '@/utils/svg';
 export default defineComponent({
@@ -53,6 +57,7 @@ components:{
   IonToolbar,
   BasicInputField,
   MedicalHistory,
+  SymptomsFollowUp,
   // Trial,
   },
   data() {
