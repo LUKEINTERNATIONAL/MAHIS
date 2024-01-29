@@ -46,9 +46,8 @@ import { ref } from 'vue';
 import { icons } from '@/utils/svg.ts';
 import BasicInputField from '@/components/BasicInputField.vue';
 import BasicForm from "@/components/BasicForm.vue";
-import {useMedicalHistoryStore} from "@/apps/ANC/store/medicalHistoryStore";
 import {mapState} from "pinia";
-import {useWomanBehaviourStore} from "@/apps/ANC/store/womanBehaviourStore";
+import {useWomanBehaviourStore} from "@/apps/ANC/store/profile/womanBehaviourStore";
 
 export default defineComponent({
   name: 'Menu',
@@ -76,10 +75,10 @@ export default defineComponent({
       tobbacoUses: '',
     };
   },
-  // mounted(){
-  //   const caffeine =useWomanBehaviourStore()
-  //   const tobbaco =useWomanBehaviourStore()
-  // },
+  mounted(){
+    const caffeine =useWomanBehaviourStore()
+    const tobbaco =useWomanBehaviourStore()
+  },
   computed:{
     ...mapState(useWomanBehaviourStore,["Caffeine"]),
     ...mapState(useWomanBehaviourStore,["Tobbaco"]),

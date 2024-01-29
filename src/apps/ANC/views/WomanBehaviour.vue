@@ -26,7 +26,7 @@ import { icons } from '@/utils/svg.ts';
 import BasicInputField from '@/components/BasicInputField.vue';
 import BasicForm from "@/components/BasicForm.vue";
 import {mapState} from "pinia";
-import {useWomanBehaviourStore} from "@/apps/ANC/store/womanBehaviourStore";
+import {useWomanBehaviourStore} from "@/apps/ANC/store/profile/womanBehaviourStore";
 
 export default defineComponent({
   name: 'Menu',

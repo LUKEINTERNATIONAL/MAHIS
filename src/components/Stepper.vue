@@ -84,6 +84,10 @@
   import Medications from "@/apps/ANC/components/profile/Medications.vue";
   import WomanBehaviour from "@/apps/ANC/components/profile/WomanBehaviour.vue";
   import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue";
+  import DangerSigns from "@/apps/ANC/components/quick check/DangerSigns.vue";
+  import ConfirmPregnancy from "@/apps/ANC/components/quick check/ConfirmPregnancy.vue";
+  import ReasonForVisit from "@/apps/ANC/components/quick check/ReasonForVisit.vue";
+  import SpecificHealthConcerns from "@/apps/ANC/components/quick check/SpecificHealthConcerns.vue";
   import SaveProgressModal from '@/components/SaveProgressModal.vue'
   import { createModal } from '@/utils/Alerts'
   import { icons } from '@/utils/svg';
@@ -118,7 +122,11 @@
         IonModal,
         Medications,
         WomanBehaviour,
-        MedicalHistory
+        MedicalHistory,
+        DangerSigns,
+        ReasonForVisit,
+        ConfirmPregnancy,
+        SpecificHealthConcerns,
     },
     data(){
         return {

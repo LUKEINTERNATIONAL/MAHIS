@@ -48,6 +48,7 @@ import { LabOrder } from "@/apps/NCD/services/lab_order"
 import { VitalsService } from "@/services/vitals_service";
 import { toastWarning,popoverConfirmation, toastSuccess } from '@/utils/Alerts';
 import { Diagnosis } from '@/apps/NCD/services/diagnosis'
+import {useMedicationsStore} from "@/apps/ANC/store/profile/MedicationsStore";
 export default defineComponent({
   name: "Home",
   components:{
@@ -153,7 +154,7 @@ export default defineComponent({
     };
   },
   computed:{
-    ...mapState(useDemographicsStore,["demographics"]),
+    ...mapState(useMedicationsStore,["medications"]),
     ...mapState(useVitalsStore,["vitals"]),
     ...mapState(useInvestigationStore,["investigations"]),
     ...mapState(useDiagnosisStore,["diagnosis"]),
@@ -187,21 +188,27 @@ export default defineComponent({
 
   methods:{
     markWizard(){
-      if(this.vitals.validationStatus){
+      if(this.medications.validationStatus){
         this.wizardData[0].checked = true;
         this.wizardData[0].class = 'open_step common_step'
       }else{
         this.wizardData[0].checked = false;
       }
 
-      if(this.investigations[0].selectdData.length > 0){
+      if(this.medicalHistory[0].selectdData.length > 0){
         this.wizardData[1].checked = true;
         this.wizardData[1].class = 'open_step common_step'
       }else{
         this.wizardData[1].checked = false;
       }
 
-      if(this.diagnosis[0].selectdData.length > 0){
+      if(this.womanBehaviour[0].selectdData.length > 0){
+        this.wizardData[2].checked = true;
+        this.wizardData[2].class = 'open_step common_step'
+      }else{
+        this.wizardData[2].checked = false;
+      }
+      if(this.medications[0].selectdData.length > 0){
         this.wizardData[2].checked = true;
         this.wizardData[2].class = 'open_step common_step'
       }else{

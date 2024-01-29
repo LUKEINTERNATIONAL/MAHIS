@@ -30,9 +30,9 @@ import {
   modalController,
   AccordionGroupCustomEvent } from '@ionic/vue';
 import { defineComponent } from 'vue';
-import Toolbar from '@/components/Toolbar.vue'
+import Toolbar from "@/apps/ANC/components/Toolbar.vue";
 import ToolbarSearch from '@/components/ToolbarSearch.vue'
-import DemographicBar from "@/components/DemographicBar.vue";
+import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import { chevronBackOutline,checkmark } from 'ionicons/icons';
 import SaveProgressModal from '@/components/SaveProgressModal.vue'
 import { createModal } from '@/utils/Alerts'
@@ -107,7 +107,7 @@ export default defineComponent({
           'icon': false,
           'disabled':false,
           'number': 4,
-          'last_step': ''
+          'last_step': 'last_step'
         },
       ],
       StepperData:[
