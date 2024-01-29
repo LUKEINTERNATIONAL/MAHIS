@@ -62,7 +62,7 @@ const trailForm = {
 
 }
 
-export const useSymptomsFollowUpStore = defineStore('symptomsFollowUpStore',{
+export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
     state: () => ({
         trial:[
             {

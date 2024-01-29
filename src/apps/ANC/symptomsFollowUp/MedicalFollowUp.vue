@@ -13,7 +13,7 @@
         import{IonList,IonItem} from "@ionic/vue"
         import { mapState } from 'pinia';
         import {defineComponent} from 'vue';
-        import {useSymptomsFollowUpStore} from "@/apps/ANC/store/symptomsFollowUpStore";
+        import {useMedicalFollowUpStore} from "@/apps/ANC/store/medicalFollowUpStore";
         import BasicForm from '@/components/BasicForm.vue';
          import {useMedicalHistoryStore} from "@/apps/ANC/store/medicalHistoryStore";
 
@@ -25,11 +25,11 @@
                 BasicForm,
             },
             mounted(){
-                const trial = useSymptomsFollowUpStore();
+                const trial = useMedicalFollowUpStore();
                 const otherSite = useMedicalHistoryStore()
             },
             computed:{
-                ...mapState(useSymptomsFollowUpStore,["trial"]),
+                ...mapState(useMedicalFollowUpStore,["trial"]),
                 ...mapState(useMedicalHistoryStore,["otherSite"])
             },
         })
@@ -37,4 +37,4 @@
 
 
 
-<style></style>@/apps/ANC/store/medicalFollowUpStore
+<style></style>
