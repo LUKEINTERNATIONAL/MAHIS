@@ -1,9 +1,9 @@
-import Patient from '@/apps/ANC/views/patient.vue'
+import Profile from '@/apps/ANC/views/Profile.vue'
 export default [
   {
-    path: '/patient',
-    name: 'patient',
-    component: Patient
+    path: '/profile',
+    name: 'profile',
+    component: Profile
   },
 ]
 
