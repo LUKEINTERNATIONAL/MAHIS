@@ -81,6 +81,8 @@
   import Disposition from '@/apps/NCD/components/ConsultationPlan/Disposition.vue'
   import Investigations from '@/apps/NCD/components/ConsultationPlan/Investigations.vue'
   import TreatmentPlan from '@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue'
+  import PastObstreticHistory from "@/apps/ANC/components/profile/PastObstreticHistory.vue";
+  import CurrentPregnancies from "@/apps/ANC/components/profile/CurrentPregnancies.vue";
   import Medications from "@/apps/ANC/components/profile/Medications.vue";
   import WomanBehaviour from "@/apps/ANC/components/profile/WomanBehaviour.vue";
   import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue";
@@ -120,6 +122,8 @@
         Investigations,
         TreatmentPlan,
         IonModal,
+        PastObstreticHistory,
+        CurrentPregnancies,
         Medications,
         WomanBehaviour,
         MedicalHistory,

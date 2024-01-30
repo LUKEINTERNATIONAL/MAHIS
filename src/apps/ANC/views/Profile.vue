@@ -1,3 +1,4 @@
+
 <template>
   <ion-page>
     <Toolbar />
@@ -37,18 +38,9 @@ import { chevronBackOutline,checkmark } from 'ionicons/icons';
 import SaveProgressModal from '@/components/SaveProgressModal.vue'
 import { createModal } from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
-import { useVitalsStore } from '@/stores/VitalsStore'
-import { useDemographicsStore } from '@/stores/DemographicStore'
-import { useInvestigationStore } from '@/stores/InvestigationStore'
-import { useDiagnosisStore } from '@/stores/DiagnosisStore'
 import { mapState } from 'pinia';
 import Stepper from '@/components/Stepper.vue'
-import { Service } from "@/services/service";
-import { LabOrder } from "@/apps/NCD/services/lab_order"
-import { VitalsService } from "@/services/vitals_service";
 import { toastWarning,popoverConfirmation, toastSuccess } from '@/utils/Alerts';
-import { Diagnosis } from '@/apps/NCD/services/diagnosis'
-import {useMedicationsStore} from "@/apps/ANC/store/profile/MedicationsStore";
 export default defineComponent({
   name: "Home",
   components:{
@@ -154,10 +146,8 @@ export default defineComponent({
     };
   },
   computed:{
-    ...mapState(useMedicationsStore,["medications"]),
-    ...mapState(useVitalsStore,["vitals"]),
-    ...mapState(useInvestigationStore,["investigations"]),
-    ...mapState(useDiagnosisStore,["diagnosis"]),
+
+
   },
   mounted(){
     this.markWizard()

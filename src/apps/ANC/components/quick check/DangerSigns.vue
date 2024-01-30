@@ -1,14 +1,25 @@
 <template>
   <ion-list>
-    <ion-item :lines="medication" class="dashed_bottom_border">
-      <ion-toggle :checked="medicationChecked" @ionChange="medications">Current Medications</ion-toggle>
+    <ion-item :lines="dangerSign" class="dashed_bottom_border">
+      <ion-toggle :checked="dangerSignChecked" @ionChange="dangerSigns">Danger signs</ion-toggle>
     </ion-item>
-    <div class="sub_item_body" v-if="medicationChecked">
+    <div class="sub_item_body" v-if="dangerSignChecked">
       <basic-form
-          :contentData="Medication" >
+          :contentData="DangerSigns" >
       </basic-form>
     </div>
-    <ion-item class="sub_item_body_close" v-if="medicationChecked"/>
+    <ion-item class="sub_item_body_close" v-if="dangerSignChecked"/>
+  </ion-list>
+  <ion-list>
+    <ion-item :lines="previousvisit" class="dashed_bottom_border">
+     Has the woman had any ANC visit at any facility?
+    </ion-item>
+    <div class="sub_item_body" >
+      <basic-form
+          :contentData="PreviousVisit" >
+      </basic-form>
+    </div>
+    <ion-item class="sub_item_body_close"/>
   </ion-list>
 </template>
 
@@ -34,7 +45,7 @@ import { icons } from '@/utils/svg';
 import BasicInputField from '@/components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import BasicForm from '@/components/BasicForm.vue'
-import {useMedicationsStore} from "@/apps/ANC/store/profile/MedicationsStore";
+import {useDangerSignsStore} from "@/apps/ANC/store/quickCheck/dangerSigns";
 
 export default defineComponent({
   name: 'Menu',
@@ -56,12 +67,15 @@ export default defineComponent({
   data() {
     return {
       iconsContent: icons,
-      medicationChecked : false,
-      medication: '',
+      dangerSignChecked : true,
+      dangerSign: '',
+      previousvisit: '',
+
     };
   },
   computed: {
-    ...mapState(useMedicationsStore, ["Medication"])
+    ...mapState(useDangerSignsStore, ["DangerSigns"]),
+    ...mapState(useDangerSignsStore, ["PreviousVisit"])
   },
   setup() {
     return { checkmark,pulseOutline };
@@ -71,11 +85,11 @@ export default defineComponent({
       menuController.close()
       this.$router.push(url);
     },
-    medications(){
-      this.medicationChecked = !this.medicationChecked
-      if (this.medicationChecked) {
-        this.medication = 'none'
-      } else {this.medication = ''}
+    dangerSigns(){
+      this.dangerSignChecked = !this.dangerSignChecked
+      if (this.dangerSignChecked) {
+        this.dangerSign = 'none'
+      } else {this.dangerSign = ''}
     },
   }
 });
