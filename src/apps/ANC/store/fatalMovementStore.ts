@@ -17,7 +17,7 @@ const fatalForm={
 
 export const useFatalMovementStore =  defineStore('fatalMovementStore',{
     state: ()=>({
-        fatalMovements:[
+        fatalMovement:[
              {
                 selectdData: [],
                 isFinishBtn: false,
@@ -43,6 +43,13 @@ export const useFatalMovementStore =  defineStore('fatalMovementStore',{
                     ]
                 }
             },
-        ]
-    })
+        ]as any,
+    }),
+
+    actions:{
+        addFatalMovements(data:any){
+            this.fatalMovement =  data
+        }
+    },
+    persist:true
 })        

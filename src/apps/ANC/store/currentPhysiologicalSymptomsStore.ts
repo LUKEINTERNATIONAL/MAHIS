@@ -45,7 +45,7 @@ export const useCurrentPhysiologicalSymptomsStore = defineStore('currentPhysiolo
                 checkboxBtnContent:
                 {
                     header:{
-                        title: 'Abnormal pulse rate',
+                        title: 'Current physiological symptoms',
                         selectedValue: ''
                     },
                     data:[
@@ -69,7 +69,7 @@ export const useCurrentPhysiologicalSymptomsStore = defineStore('currentPhysiolo
                 checkboxBtnContent:
                 {
                     header:{
-                        title: 'Cough lasting more than 3 weeks',
+                        title: '',
                         selectedValue: ''
                     },
                     data:[
@@ -93,7 +93,7 @@ export const useCurrentPhysiologicalSymptomsStore = defineStore('currentPhysiolo
                 checkboxBtnContent:
                 {
                     header:{
-                        title: 'Pain – Low back',
+                        title: '',
                         selectedValue: ''
                     },
                     data:[
@@ -117,7 +117,7 @@ export const useCurrentPhysiologicalSymptomsStore = defineStore('currentPhysiolo
                 checkboxBtnContent:
                 {
                     header:{
-                        title: 'Constipation',
+                        title: '',
                         selectedValue: ''
                     },
                     data:[
@@ -141,7 +141,7 @@ export const useCurrentPhysiologicalSymptomsStore = defineStore('currentPhysiolo
                 checkboxBtnContent:
                 {
                     header:{
-                        title: 'Headache',
+                        title: '',
                         selectedValue: ''
                     },
                     data:[
@@ -165,7 +165,7 @@ export const useCurrentPhysiologicalSymptomsStore = defineStore('currentPhysiolo
                 checkboxBtnContent:
                 {
                     header:{
-                        title: 'Heartburn',
+                        title: '',
                         selectedValue: ''
                     },
                     data:[
@@ -189,7 +189,7 @@ export const useCurrentPhysiologicalSymptomsStore = defineStore('currentPhysiolo
                 checkboxBtnContent:
                 {
                     header:{
-                        title: 'Pain-Leg',
+                        title: '',
                         selectedValue: ''
                     },
                     data:[
@@ -213,7 +213,7 @@ export const useCurrentPhysiologicalSymptomsStore = defineStore('currentPhysiolo
                 checkboxBtnContent:
                 {
                     header:{
-                        title: 'Pain-pelvic',
+                        title: '',
                         selectedValue: ''
                     },
                     data:[

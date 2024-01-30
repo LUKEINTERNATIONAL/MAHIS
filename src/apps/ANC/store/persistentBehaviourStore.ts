@@ -8,7 +8,7 @@ const persistentBehaviourForm={
         value:"yes"
     },
         highCaffaineIntakeNo:{
-        name:"N",
+        name:"No",
         value:"no"
     },    
     tobaccoUseYes:{

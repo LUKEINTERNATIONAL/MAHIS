@@ -33,7 +33,7 @@ const persistentForm ={
 
 export const usePersistentSymptomsStore = defineStore('persistentSymptomsStore',{
     state: ()=>({
-        persistent:[
+        persistentSymptom:[
         {
                 selectdData: [],
                 isFinishBtn: false,
@@ -41,7 +41,7 @@ export const usePersistentSymptomsStore = defineStore('persistentSymptomsStore',
                 checkboxBtnContent:
                 {
                     header:{
-                        title: 'Breathing difficulty',
+                        title: ' Select which of the following physiological symptoms persist after being reported during last contact',
                         selectedValue: ''
                     },
                     data:[
@@ -65,7 +65,7 @@ export const usePersistentSymptomsStore = defineStore('persistentSymptomsStore',
                 checkboxBtnContent:
                 {
                     header:{
-                        title: 'Leg cramps',
+                        title: '',
                         selectedValue: ''
                     },
                     data:[
@@ -89,7 +89,7 @@ export const usePersistentSymptomsStore = defineStore('persistentSymptomsStore',
                 checkboxBtnContent:
                 {
                     header:{
-                        title: 'Visual disturbance',
+                        title: '',
                         selectedValue: ''
                     },
                     data:[
@@ -113,7 +113,7 @@ export const usePersistentSymptomsStore = defineStore('persistentSymptomsStore',
                 checkboxBtnContent:
                 {
                     header:{
-                        title: 'Constipation',
+                        title: '',
                         selectedValue: ''
                     },
                     data:[
@@ -137,7 +137,7 @@ export const usePersistentSymptomsStore = defineStore('persistentSymptomsStore',
                 checkboxBtnContent:
                 {
                     header:{
-                        title: 'Headache',
+                        title: '',
                         selectedValue: ''
                     },
                     data:[
@@ -161,7 +161,7 @@ export const usePersistentSymptomsStore = defineStore('persistentSymptomsStore',
                 checkboxBtnContent:
                 {
                     header:{
-                        title: 'Heartburn',
+                        title: '',
                         selectedValue: ''
                     },
                     data:[
@@ -185,7 +185,7 @@ export const usePersistentSymptomsStore = defineStore('persistentSymptomsStore',
                 checkboxBtnContent:
                 {
                     header:{
-                        title: 'Pain-Leg',
+                        title: '',
                         selectedValue: ''
                     },
                     data:[
@@ -207,7 +207,7 @@ export const usePersistentSymptomsStore = defineStore('persistentSymptomsStore',
 
     actions:{
         addPersistent(data:any){
-            this.persistent = data
+            this.persistentSymptom = data
         }
     },
     persist:true

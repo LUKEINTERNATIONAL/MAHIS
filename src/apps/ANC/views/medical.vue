@@ -9,16 +9,19 @@ import { calendar } from 'ionicons/icons';
 
                     <BasicInputField inputHeader="Height" :icon="iconsContent.calendar" unit="cm" />
                 </div> -->
-                <div>
+                <!-- <div>
                     <MedicalHistory/>
-                </div> 
+                </div>  -->
+                <!-- <div>
+                    <MedicalFollowUp/>
+                </div> -->
                 <!-- <div>
                     <SymptomsFollowUp/>
                 </div>  -->
 
-                <!-- <div>
-                    <Trial/>
-                </div>  -->
+                <div>
+                    <FatalMovement/>
+                </div> 
 
             </ion-card>
 
@@ -42,24 +45,22 @@ import {
 import { defineComponent } from 'vue';
 import BasicInputField from '@/components/BasicInputField.vue'
 import MedicalHistory from '@/apps/ANC/profile/MedicalHistory.vue';
-import SymptomsFollowUp  from  '@/apps/ANC/symptomsFollowUp/SymptomsFollowUp.vue'
-// import Trial from '@/apps/ANC/profile/Trial.vue';
 import { icons } from '@/utils/svg';
+import FatalMovement from '../symptomsFollowUp/FatalMovement.vue';
 export default defineComponent({
 name: 'Menu',
 components:{
-  IonContent,
-  IonHeader,
-  IonItem,
-  IonList,
-  IonMenu,
-  IonTitle,
-  IonToolbar,
-  BasicInputField,
-  MedicalHistory,
-  SymptomsFollowUp,
-  // Trial,
-  },
+    IonContent,
+    IonHeader,
+    IonItem,
+    IonList,
+    IonMenu,
+    IonTitle,
+    IonToolbar,
+    BasicInputField,
+    MedicalHistory,
+    FatalMovement
+},
   data() {
 return {
   iconsContent: icons,

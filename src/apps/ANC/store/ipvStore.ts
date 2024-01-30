@@ -45,7 +45,7 @@ export const useIpvStore = defineStore('ipvStore',{
                 checkboxBtnContent:
                 {
                     header:{
-                        title: 'Ongoing stress',
+                        title: 'Presenting signs and symptoms that trigger suspicion of IPV and clinical inquiry',
                         selectedValue: ''
                     },
                     data:[
@@ -69,7 +69,7 @@ export const useIpvStore = defineStore('ipvStore',{
                 checkboxBtnContent:
                 {
                     header:{
-                        title: 'Injury to abdomen',
+                        title: '',
                         selectedValue: ''
                     },
                     data:[
@@ -93,7 +93,7 @@ export const useIpvStore = defineStore('ipvStore',{
                 checkboxBtnContent:
                 {
                     header:{
-                        title: 'Woman’s partner or husband is intrusive during consultations',
+                        title: '',
                         selectedValue: ''
                     },
                     data:[
@@ -117,7 +117,7 @@ export const useIpvStore = defineStore('ipvStore',{
                 checkboxBtnContent:
                 {
                     header:{
-                        title: 'Misuse of alcohol',
+                        title: '',
                         selectedValue: ''
                     },
                     data:[
@@ -141,7 +141,7 @@ export const useIpvStore = defineStore('ipvStore',{
                 checkboxBtnContent:
                 {
                     header:{
-                        title: 'Unspecified harmful behaviours',
+                        title: '',
                         selectedValue: ''
                     },
                     data:[
@@ -165,7 +165,7 @@ export const useIpvStore = defineStore('ipvStore',{
                 checkboxBtnContent:
                 {
                     header:{
-                        title: 'Thoughts of self-harm',
+                        title: '',
                         selectedValue: ''
                     },
                     data:[
@@ -189,7 +189,7 @@ export const useIpvStore = defineStore('ipvStore',{
                 checkboxBtnContent:
                 {
                     header:{
-                        title: 'unwanted pregnancies',
+                        title: '',
                         selectedValue: ''
                     },
                     data:[
@@ -213,7 +213,7 @@ export const useIpvStore = defineStore('ipvStore',{
                 checkboxBtnContent:
                 {
                     header:{
-                        title: 'Misuse of drugs',
+                        title: '',
                         selectedValue: ''
                     },
                     data:[
