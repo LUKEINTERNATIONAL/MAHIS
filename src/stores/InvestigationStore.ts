@@ -8,6 +8,7 @@ export const useInvestigationStore = defineStore('investigationStore', {
                 db_data: [],
                 isFinishBtn: false,
                 selectdData: [],
+                displayData: [],
                 data:
                     { 
                         rowData:[
@@ -48,7 +49,7 @@ export const useInvestigationStore = defineStore('investigationStore', {
                  
             }
                
-        ]
+        ] as any
     }),
     actions:{
         setInvestigations(data: any){

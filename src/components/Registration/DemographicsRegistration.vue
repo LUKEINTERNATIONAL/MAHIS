@@ -1,5 +1,5 @@
 <template>
-    <basic-card :content="cardData" @update:selected="handleLocation" @update:inputValue="handleLocation"></basic-card>
+    <basic-card :content="cardData" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-card>
 </template>
 
 <script lang="ts">
@@ -23,6 +23,7 @@ import Validation from "@/validations/StandardValidations"
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import HisDate from "@/utils/Date";
 import { modifyFieldValue,getFieldValue,getRadioSelectedValue } from '@/services/data_helpers'
+import { validateField } from '@/services/validation_service'
 
 export default defineComponent({
 name: 'Menu',
@@ -43,6 +44,79 @@ return {
   setName: '' as any,
   locationData: [] as any,
   districtList: [] as any,
+  religionsList: [
+        { name: 'Christianity' },
+        { name: 'Islam' },
+        { name: 'Judaism' },
+        { name: 'Hinduism' },
+        { name: 'Buddhism' },
+        { name: 'Sikhism' },
+        { name: 'Jainism' },
+        { name: 'Bahá\'í Faith' },
+        { name: 'Zoroastrianism' },
+        { name: 'Confucianism' },
+        { name: 'Taoism' },
+        { name: 'Shinto' },
+        { name: 'Baha\'i Faith' },
+        { name: 'Juche' },
+        { name: 'Rastafari' }
+    ],
+  occupationsList : [
+  { name: 'Doctor' },
+  { name: 'Teacher' },
+  { name: 'Engineer' },
+  { name: 'Software Developer' },
+  { name: 'Artist' },
+  { name: 'Chef' },
+  { name: 'Police Officer' },
+  { name: 'Firefighter' },
+  { name: 'Accountant' },
+  { name: 'Writer' },
+  { name: 'Electrician' },
+  { name: 'Carpenter' },
+  { name: 'Nurse' },
+  { name: 'Scientist' },
+  { name: 'Entrepreneur' },
+  { name: 'Librarian' },
+  { name: 'Graphic Designer' },
+  { name: 'Architect' },
+  { name: 'Pilot' },
+  { name: 'Mechanic' },
+  { name: 'Dentist' },
+  { name: 'Veterinarian' },
+  { name: 'Lawyer' },
+  { name: 'Plumber' },
+  { name: 'Psychologist' },
+  { name: 'Social Worker' },
+  { name: 'Translator' },
+  { name: 'Biologist' },
+  { name: 'Economist' },
+  { name: 'Photographer' },
+  { name: 'Actor' },
+  { name: 'Dancer' },
+  { name: 'Musician' },
+  { name: 'Fashion Designer' },
+  { name: 'Athlete' },
+  { name: 'Journalist' },
+  { name: 'Diplomat' },
+  { name: 'Geologist' },
+  { name: 'Pharmacist' },
+  { name: 'Historian' },
+  { name: 'Meteorologist' },
+  { name: 'Archaeologist' },
+  { name: 'Physicist' },
+  { name: 'Astronomer' },
+  { name: 'Real Estate Agent' },
+  { name: 'Biomedical Engineer' },
+  { name: 'Mathematician' },
+  { name: 'Speech Therapist' },
+  { name: 'Personal Trainer' },
+  { name: 'Philosopher' },
+  { name: 'Flight Attendant' },
+  { name: 'Interior Designer' },
+  { name: 'Forensic Scientist' },
+  { name: 'Marine Biologist' },
+]
   
 };
 },
@@ -52,11 +126,12 @@ computed:{
     ...mapState(useRegistrationStore,["homeLocation"]),
     ...mapState(useRegistrationStore,["currentLocation"]),
     ...mapState(useRegistrationStore,["guardianInformation"]),
-    givenName(){ return this.getInputData(this.personInformation,1,0,0,'value')},
-    familyName(){ return this.getInputData(this.personInformation,2,0,0,'value')},
+    nationalID(){ return getFieldValue(this.personInformation, 'nationalID','value')},
+    firstname(){ return getFieldValue(this.personInformation, 'firstname','value')},
+    lastname(){ return getFieldValue(this.personInformation, 'lastname','value')},
     middleName(){ return this.getInputData(this.personInformation,3,0,0,'value')},
-    gender(){ return this.getRadioValue(this.personInformation,5)},
-    birthdate(){ return HisDate.toStandardHisFormat(this.getInputData(this.personInformation,5,0,0,'value'))},
+    gender(){ return getRadioSelectedValue(this.personInformation, 'gender')},
+    birthdate(){ return HisDate.toStandardHisFormat(getFieldValue(this.personInformation, 'birthdate','value'))},
     birthdateEstimated(){ return this.getInputData(this.personInformation,5,0,0,'value')},
     homeRegion(){ return this.getRegion(this.getInputData(this.homeLocation,0,0,0,'value'))},
     homeDistrict(){ return this.getInputData(this.homeLocation,0,0,0,'value')},
@@ -67,7 +142,7 @@ computed:{
     currentTraditionalAuthority(){ return this.getInputData(this.currentLocation,2,0,0,'value')},
     currentVillage(){ return this.getInputData(this.currentLocation,1,0,0,'value')},
     landmark(){ return this.getInputData(this.currentLocation,3,0,0,'value')},
-    phone(){ return this.getInputData(this.personInformation,4,0,0,'value')} ,
+    phoneNumber(){ return getFieldValue(this.personInformation, 'phoneNumber','value')} ,
     
     maritalStatus(){ return this.getRadioValue(this.socialHistory,0)},
     religion(){ return this.getInputData(this.socialHistory,1,0,0,'value')},
@@ -94,9 +169,9 @@ computed:{
 watch: {
     personInformation: {
         handler(){
-            this.updateRegistrationStores();
+            // this.updateRegistrationStores();
             this.buildPersonalInformation()
-            this.buidCards()
+            // this.buidCards()
         },
         deep: true
     },
@@ -107,8 +182,6 @@ watch: {
     },
 },
 async mounted(){
-    // modifyFieldValue(this.personInformation, 'firstname', 'New National ID Value uuuuuuuuu');
-    console.log(getRadioSelectedValue(this.personInformation, 'Gender*'))
     this.updateRegistrationStores()
     this.buidCards()
 },
@@ -152,35 +225,32 @@ methods:{
         registrationStore.setGuardianInformation(this.guardianInformation)
     },
     buildPersonalInformation(){
-        if(this.validationRules()){
-            this.personInformation[0].selectdData = {
-                "given_name": getFieldValue(this.personInformation, 'firstname'),
-                "middle_name": getFieldValue(this.personInformation, 'middleName'),
-                "family_name" : getFieldValue(this.personInformation, 'lastname'),
-                "gender" : getRadioSelectedValue(this.personInformation, 'Gender*'),
-                "birthdate" : getFieldValue(this.personInformation, 'birthdate'),
-                "birthdate_estimated" : getFieldValue(this.personInformation, 'firstname'),
-                "home_region" : getFieldValue(this.personInformation, 'homeDistrict'),
-                "home_district" : getFieldValue(this.personInformation, 'homeDistrict'),
-                "home_traditional_authority" : getFieldValue(this.personInformation, 'homeTraditionalAuthority'),
-                "home_village" : getFieldValue(this.personInformation, 'homeVillage'),
-                "current_region" : getFieldValue(this.personInformation, 'currentDistrict'),
-                "current_district" : getFieldValue(this.personInformation, 'currentDistrict'),
-                "current_traditional_authority" : getFieldValue(this.personInformation, 'currentTraditionalAuthority'),
-                "current_village" : getFieldValue(this.personInformation, 'currentVillage'),
-                "landmark" : getFieldValue(this.personInformation, 'closestLandmark'),
-                "cell_phone_number" : getFieldValue(this.personInformation, 'phoneNumber'),
-            }
-        }else{
-            this.personInformation[0].selectdData = {}
+        this.personInformation[0].selectdData = {
+            "given_name": getFieldValue(this.personInformation, 'firstname','value'),
+            "middle_name": getFieldValue(this.personInformation, 'middleName','value'),
+            "family_name" : getFieldValue(this.personInformation, 'lastname','value'),
+            "gender" : this.gender,
+            "birthdate" : getFieldValue(this.personInformation, 'birthdate','value'),
+            "birthdate_estimated" : getFieldValue(this.personInformation, 'firstname','value'),
+            "home_region" : getFieldValue(this.personInformation, 'homeDistrict','value'),
+            "home_district" : getFieldValue(this.personInformation, 'homeDistrict','value'),
+            "home_traditional_authority" : getFieldValue(this.personInformation, 'homeTraditionalAuthority','value'),
+            "home_village" : getFieldValue(this.personInformation, 'homeVillage','value'),
+            "current_region" : getFieldValue(this.personInformation, 'currentDistrict','value'),
+            "current_district" : getFieldValue(this.personInformation, 'currentDistrict','value'),
+            "current_traditional_authority" : getFieldValue(this.personInformation, 'currentTraditionalAuthority','value'),
+            "current_village" : getFieldValue(this.personInformation, 'currentVillage','value'),
+            "landmark" : getFieldValue(this.personInformation, 'closestLandmark','value'),
+            "cell_phone_number" : getFieldValue(this.personInformation, 'phoneNumber','value'),
         }
+        
     },
     buildGuardianInformation(){
         if(this.guardianValidationRules()){
         this.guardianInformation[0].selectdData = {
-            "given_name": this.guardianGivenName,
-            "middle_name": this.guardianMiddleName,
-            "family_name": this.guardianFamilyName,
+            "given_name":  getFieldValue(this.guardianInformation, 'guardianFirstname','value'),
+            "middle_name": getFieldValue(this.guardianInformation, 'guardianMiddleName','value'),
+            "family_name": getFieldValue(this.guardianInformation, 'guardianLastname','value'),
             "gender": '',
             "birthdate": '',
             "birthdate_estimated": '',
@@ -196,7 +266,7 @@ methods:{
             "current_village": '',
             "landmark": '',
 
-            "cell_phone_number": this.guardianPhone
+            "cell_phone_number": getFieldValue(this.guardianInformation, 'guardianPhoneNumber','value')
         }}else{
             this.guardianInformation[0].selectdData = {}
         }
@@ -210,22 +280,9 @@ methods:{
             "occupation_status": this.occupationStatus
         }
     },
-    validationRules(){
-        // [this.gender,this.birthdate,this.givenName,this.familyName].forEach(inputField => {
-        //     const status =Validation.required(inputField)
-        //     if(status != null){
 
-        //     } 
-        //      return status == null ?  true : false
-        // })
-        if( Validation.required(this.gender) == null &&
-            Validation.required(this.birthdate) == null &&
-            Validation.isName(this.givenName) == null &&
-            Validation.isName(this.familyName) == null ) 
-            return true 
-        else {
-            return false
-        }
+    validationRules(event: any) {
+        return validateField(this.personInformation,event.name, this[event.name]);
     },
     guardianValidationRules(){
         if( Validation.isName(this.guardianGivenName) == null &&
@@ -298,6 +355,28 @@ async buildVillages() {
         : this.currentLocation[2].data.rowData[0].colData[0].popOverData.data = targetData;
 },
 
+async handleInputData(event: any) {
+    this.validationRules(event)
+    this.handleLocation(event)
+    this.handleReligion(event.name)
+    this.handleOccupation(event.name)
+},
+handleReligion(name: any){
+    if(name == 'religion'){
+        modifyFieldValue(this.socialHistory,name,'popOverData',{
+            filterData: true,
+            data: this.religionsList
+        })
+    }
+},
+handleOccupation(name: any){
+    if(name == 'occupation'){
+        modifyFieldValue(this.socialHistory,name,'popOverData',{
+            filterData: true,
+            data: this.occupationsList
+        })
+    }
+},
 async handleLocation(event: any) {
     this.setName = event.setName;
     if(this.setName == 'homeLocation' || this.setName == 'currentLocation' ){
@@ -312,7 +391,6 @@ async handleLocation(event: any) {
         this.handleDisplayNone(villageDisplayNone, 1);
     }
 },
-
 async handleDisplayNone(targetData: any, inputField: any) {
     if (await this.checkSelected(inputField) && this.locationData[inputField].data.rowData[0].colData[0].value != '') {
         this.setName === 'homeLocation' 

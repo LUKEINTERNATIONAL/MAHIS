@@ -19,7 +19,7 @@
                             :inputValue="col.value"
                             :eventType="col.eventType"
                             @update:inputValue="value =>{col.value =value.target.value; handleInput(col)} "
-                            @clicked:inputValue="value =>{event =value; handlePopover(col.isDatePopover,col.inputHeader); $emit('clicked:inputValue',event)}"
+                            @clicked:inputValue="value =>{event =value; handlePopover(col); $emit('clicked:inputValue',event)}"
                             :popOverData="col.popOverData"
                             @setPopoverValue ="value => {col.value = value.name; col.id = value[col.idName]; handleSelected(col)}"
                             
@@ -29,7 +29,7 @@
                         </div>
                         <ion-popover :show-backdrop="false" :keep-contents-mounted="true" :is-open="openPopover"
                             :event="event" @didDismiss="openPopover = false" v-if="col.isDatePopover">
-                            <ion-datetime @ionChange="event => col.value = formatDate(event.detail.value)" id="datetime" presentation="date"
+                            <ion-datetime @ionChange=" event => { col.value = formatDate(event.detail.value); $emit('update:inputValue', col); }" id="datetime" presentation="date"
                                 :show-default-buttons="true" ></ion-datetime>
                         </ion-popover>
                     </ion-col>
@@ -54,7 +54,7 @@
                         v-else 
                         style="width: 100%;"
                         :value="item.radioBtnContent.header.selectedValue "
-                        @ionChange="value => item.radioBtnContent.header.selectedValue = value.target.value" > 
+                        @ionChange="value => {item.radioBtnContent.header.selectedValue = value.target.value; handleInput(item.radioBtnContent.header)}" > 
                             <span style="display: flex;width: 100%;" >
                                 <ion-radio :value="al.value" :justify="al.justify || 'start'"  :label-placement="al.labelPlacement || 'end'" >{{ al.name }}</ion-radio>
                             </span>         
@@ -71,14 +71,20 @@
                             :inputValue="radioInput.value"
                             :eventType="radioInput.eventType"
                             @update:inputValue="value =>{radioInput.value =value.target.value; handleInput(radioInput)} "
-                            @clicked:inputValue="value =>{event =value; radioInput.showDatePopover =true; handlePopover(radioInput.isDatePopover,radioInput.inputHeader); $emit('clicked:inputValue',event)}"
+                            @clicked:inputValue="value =>{event =value; handlePopover(radioInput); $emit('clicked:inputValue',event)}"
                         />
-                        <ion-popover :show-backdrop="false" :keep-contents-mounted="true" :is-open="radioInput.showDatePopover"
-                            :event="event" @didDismiss="radioInput.showDatePopover = false" >
+                        <ion-popover :show-backdrop="false" :keep-contents-mounted="true" :is-open="openPopover"
+                            :event="event" @didDismiss="openPopover = false" >
                             <ion-datetime @ionChange="event => radioInput.value = formatDate(event.detail.value)" id="datetime"
                                 presentation="date" :show-default-buttons="true"></ion-datetime>
                         </ion-popover>
+                        <div class="alerts_error" v-if="radioInput.alertsError">
+                            {{ radioInput.alertsErrorMassage }}
+                        </div>
                     </ion-col>
+                    <div class="alerts_error" v-if="item.radioBtnContent?.header.alertsError">
+                            {{ item.radioBtnContent?.header.alertsErrorMassage }}
+                        </div>
                 </ion-row>
             </span>
             <span v-if="item.checkboxBtnContent">
@@ -95,25 +101,31 @@
                                 <p v-if="al.example " class="small_font">{{ al.example }}</p>
                             </span>
                         </ion-checkbox>
+                        <div class="alerts_error" v-if="al.alertsError">
+                            {{ al.alertsErrorMassage }}
+                        </div>
                     </ion-col>
-                    <ion-col  v-for="(radioInput, radioInputIndex) in item.checkboxBtnContent.inputFields" :key="radioInputIndex">
+                    <ion-col  v-for="(checkboxInput, checkboxInputIndex) in item.checkboxBtnContent.inputFields" :key="checkboxInputIndex">
                         <BasicInputField
-                            :inputHeader="radioInput.inputHeader"
-                            :unit="radioInput.unit"
-                            :icon ="radioInput.icon"
-                            :placeholder="radioInput.placeholder"
-                            :iconRight="radioInput.iconRight"
-                            :inputWidth="radioInput.inputWidth"
-                            :inputValue="radioInput.value"
-                            :eventType="radioInput.eventType"
-                            @update:inputValue="value =>{radioInput.value =value.target.value; handleInput(radioInput)} "
-                            @clicked:inputValue="value =>{event =value; radioInput.showDatePopover =true; handlePopover(radioInput.isDatePopover,radioInput.inputHeader); $emit('clicked:inputValue',event)}"
+                            :inputHeader="checkboxInput.inputHeader"
+                            :unit="checkboxInput.unit"
+                            :icon ="checkboxInput.icon"
+                            :placeholder="checkboxInput.placeholder"
+                            :iconRight="checkboxInput.iconRight"
+                            :inputWidth="checkboxInput.inputWidth"
+                            :inputValue="checkboxInput.value"
+                            :eventType="checkboxInput?.eventType || 'input'"
+                            @update:inputValue="value =>{checkboxInput.value =value.target.value; handleInput(checkboxInput)} "
+                            @clicked:inputValue="value =>{event =value; handlePopover(checkboxInput); $emit('clicked:inputValue',event)}"
                         />
-                        <ion-popover :show-backdrop="false" :keep-contents-mounted="true" :is-open="radioInput.showDatePopover"
-                            :event="event" @didDismiss="radioInput.showDatePopover = false" >
-                            <ion-datetime @ionChange="event => radioInput.value = formatDate(event.detail.value)" id="datetime"
+                        <ion-popover :show-backdrop="false" :keep-contents-mounted="true" :is-open="openPopover"
+                            :event="event" @didDismiss="openPopover = false" >
+                            <ion-datetime @ionChange="event => checkboxInput.value = formatDate(event.detail.value)" id="datetime"
                                 presentation="date" :show-default-buttons="true"></ion-datetime>
                         </ion-popover>
+                        <div class="alerts_error" v-if="checkboxInput.alertsError">
+                            {{ checkboxInput.alertsErrorMassage }}
+                        </div>
                     </ion-col>
                 </ion-row>
             </span>
@@ -180,11 +192,12 @@ export default defineComponent({
         handleSelected(col: any) {
             this.$emit("update:selected", col);
         },
-        handlePopover(isDatePopover: any,header: any){
-            if(isDatePopover){
+        handlePopover(col: any){
+            if(col.isDatePopover){
                 this.openPopover = true
-                this.header=header;
-
+                this.header=col.inputHeader;
+            }else{
+                this.openPopover = false
             }
         },
         formatDate(date: any){

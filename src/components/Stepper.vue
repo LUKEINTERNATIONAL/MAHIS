@@ -3,7 +3,7 @@
         <ion-col size="1" size-lg="1"></ion-col>
         <ion-col size="3" size-lg="3">
             <ion-card class="wizard_card">
-                <div class="wizard_title"><strong > The consultation plan</strong></div>
+                <div class="wizard_title"><strong > {{ stepperTitle }}</strong></div>
                 <ion-card-content>
                     <div id="wizard_verticle" class="form_wizard wizard_verticle">
                         <ul class="list-unstyled wizard_steps anchor">
@@ -134,6 +134,10 @@
         StepperData: {
             type: Array,
             default: []
+        },
+        stepperTitle: {
+            type: String,
+            default: ''
         },
     },
     setup() {

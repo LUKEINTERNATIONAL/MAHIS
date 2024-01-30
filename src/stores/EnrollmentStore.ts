@@ -402,6 +402,7 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                                     icon: icons.fullName,
                                     iconRight:icons.editStarts,
                                     value: '',
+                                    name:'NCDNumber',
                                     placeholder: "__-__-__-__",
                                     eventType: 'input',
                                 }

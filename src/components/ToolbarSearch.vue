@@ -106,7 +106,7 @@
                         'family_name': splittedArray.length >= 2 ? splittedArray[1] : '',
                         'gender': splittedArray.length >= 3 ? splittedArray[2] : '',
                         'page': '1',
-                        'per_page': '10'
+                        'per_page': '7'
                     }
         
         this.searchPatient(payload)
