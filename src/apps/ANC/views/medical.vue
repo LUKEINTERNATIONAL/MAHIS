@@ -9,9 +9,9 @@ import { calendar } from 'ionicons/icons';
 
                     <BasicInputField inputHeader="Height" :icon="iconsContent.calendar" unit="cm" />
                 </div> -->
-                <!-- <div>
+                <div>
                     <MedicalHistory/>
-                </div>  -->
+                </div> 
                 <!-- <div>
                     <MedicalFollowUp/>
                 </div> -->
@@ -19,9 +19,9 @@ import { calendar } from 'ionicons/icons';
                     <SymptomsFollowUp/>
                 </div>  -->
 
-                <div>
+                <!-- <div>
                     <FatalMovement/>
-                </div> 
+                </div>  -->
 
             </ion-card>
 

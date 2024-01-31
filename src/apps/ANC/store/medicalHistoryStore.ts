@@ -1147,6 +1147,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         {
                             name: hivTestForm.hivTestRequired.name,
                             value: hivTestForm.hivTestRequired.value,
+                        
                             
                         },
                     ]
