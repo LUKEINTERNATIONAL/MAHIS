@@ -68,12 +68,12 @@ import {
 IonRadio,
 IonRadioGroup,
         } from '@ionic/vue';
-import BasicForm from '@/components/BasicForm.vue';
-import { icons } from '@/utils/svg';
-import BasicInputField from '@/components/BasicInputField.vue';
+import BasicForm from '../../../../components/BasicForm.vue';
+import { icons } from '../../../../utils/svg';
+import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import { checkmark, pulseOutline } from 'ionicons/icons';
-import {useCurrentPregnanciesStore} from '../store/CurrentPreganciesStore'
+import {useCurrentPregnanciesStore} from '../../store/CurrentPreganciesStore';
 export default defineComponent({
     name: "Current",
     components:{

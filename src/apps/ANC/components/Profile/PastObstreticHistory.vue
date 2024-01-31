@@ -1,8 +1,7 @@
 <template>
   <ion-item>
     <div>
-            
-                    
+                       
                         <basic-form :contentData="prevPregnancies"></basic-form>
                        <div class="radioContainer">
                         <IonRadioGroup>
@@ -113,11 +112,11 @@ import {
 IonRadio,
 IonRadioGroup,
         } from '@ionic/vue';
-import BasicForm from '@/components/BasicForm.vue';
-import { icons } from '@/utils/svg';
-import BasicInputField from '@/components/BasicInputField.vue';
+import BasicForm from '../../../../components/BasicForm.vue';
+import { icons } from '../../../../utils/svg';
+import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
-import { useObstreticHistoryStore } from '../store/PastObstreticHistoryStore';
+import { useObstreticHistoryStore } from '../../store/PastObstreticHistoryStore';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 
 export default defineComponent({
