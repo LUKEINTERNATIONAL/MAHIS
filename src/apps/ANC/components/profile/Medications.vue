@@ -155,3 +155,4 @@ ion-item.sub_item_body_close {
   --inner-border-width:0;
 }
 </style>
+@/apps/ANC/store/symptomsFollowUpStore/MedicationsStore

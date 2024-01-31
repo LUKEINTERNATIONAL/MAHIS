@@ -1,7 +1,7 @@
 <template>
     <ion-list>   
         <div class="sub_item_body">
-            <BasicForm :contentData="fatalMovement" />
+            <BasicForm :contentData="trial" />
         </div>
         <ion-item class="sub_item_body_close"/>
     </ion-list>
@@ -12,12 +12,12 @@
 import { mapState } from 'pinia';
  import {defineComponent} from 'vue';
  import BasicInputField from "@/components/BasicInputField.vue";
- import {useFatalMovementStore} from "@/apps/ANC/store/fatalMovementStore";
+ import {useMedicalFollowUpStore} from "@/apps/ANC/store/medicalFollowUpStore";
  import BasicForm from '@/components/BasicForm.vue';
 
 
 export default defineComponent({
-    name:"Fatal Movement",
+    name:"Medical FollowUp",
     components:{
         IonItem,
         IonList,
@@ -26,10 +26,10 @@ export default defineComponent({
     },
 
     mounted(){
-        const  fatalMovement =useFatalMovementStore()
+        const trial =useMedicalFollowUpStore()
     },
       computed:{
-        ...mapState(useFatalMovementStore,["fatalMovement"]),
+        ...mapState(useMedicalFollowUpStore,["trial"]),
     },
 })
 </script>
@@ -43,3 +43,4 @@ ion-item.sub_item_body_close {
         --inner-border-width:0;
     }
 </style>
+@/apps/ANC/store/symptomsFollowUpStore/medicalFollowUpStore

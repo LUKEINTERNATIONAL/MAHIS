@@ -1,7 +1,7 @@
 <template>
     <ion-list>   
         <div class="sub_item_body">
-            <BasicForm :contentData="persistentSymptom" />
+            <BasicForm :contentData="fatalMovement" />
         </div>
         <ion-item class="sub_item_body_close"/>
     </ion-list>
@@ -12,12 +12,12 @@
 import { mapState } from 'pinia';
  import {defineComponent} from 'vue';
  import BasicInputField from "@/components/BasicInputField.vue";
- import {usePersistentSymptomsStore} from "@/apps/ANC/store/persistentSymptomsStore";
+ import {useFatalMovementStore} from "@/apps/ANC/store/fatalMovementStore";
  import BasicForm from '@/components/BasicForm.vue';
 
 
 export default defineComponent({
-    name:"Persistent Behaviour",
+    name:"Fatal Movement",
     components:{
         IonItem,
         IonList,
@@ -26,10 +26,10 @@ export default defineComponent({
     },
 
     mounted(){
-        const persistentSymptom =usePersistentSymptomsStore()
+        const  fatalMovement =useFatalMovementStore()
     },
       computed:{
-        ...mapState(usePersistentSymptomsStore,["persistentSymptom"]),
+        ...mapState(useFatalMovementStore,["fatalMovement"]),
     },
 })
 </script>
@@ -43,3 +43,4 @@ ion-item.sub_item_body_close {
         --inner-border-width:0;
     }
 </style>
+@/apps/ANC/store/symptomsFollowUpStore/fatalMovementStore

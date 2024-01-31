@@ -46,7 +46,7 @@ import { ref } from 'vue';
 import { icons } from '@/utils/svg.ts';
 import BasicInputField from '@/components/BasicInputField.vue';
 import BasicForm from "@/components/BasicForm.vue";
-import {useMedicalHistoryStore} from "@/apps/ANC/store/medicalHistoryStore";
+import {useMedicalHistoryStore} from "@/apps/ANC/store/medicalHistoryStore/medicalHistoryStore";
 import {mapState} from "pinia";
 import {useWomanBehaviourStore} from "@/apps/ANC/store/womanBehaviourStore";
 
@@ -184,3 +184,4 @@ ion-item.sub_item_body_close {
 }
 
 </style>
+@/apps/ANC/store/medicalHistoryStore/medicalHistoryStore@/apps/ANC/store/symptomsFollowUpStore/womanBehaviourStore

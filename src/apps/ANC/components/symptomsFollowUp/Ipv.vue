@@ -1,7 +1,7 @@
 <template>
     <ion-list>   
         <div class="sub_item_body">
-            <BasicForm :contentData="physiologicalSymptoms" />
+            <BasicForm :contentData="ipv" />
         </div>
         <ion-item class="sub_item_body_close"/>
     </ion-list>
@@ -12,7 +12,7 @@
 import { mapState } from 'pinia';
  import {defineComponent} from 'vue';
  import BasicInputField from "@/components/BasicInputField.vue";
- import {useCurrentPhysiologicalSymptomsStore} from "@/apps/ANC/store/currentPhysiologicalSymptomsStore";
+ import {useIpvStore} from "@/apps/ANC/store/ipvStore";
  import BasicForm from '@/components/BasicForm.vue';
 
 
@@ -26,10 +26,10 @@ export default defineComponent({
     },
 
     mounted(){
-        const physiologicalSymptoms =useCurrentPhysiologicalSymptomsStore()
+        const  ipv =useIpvStore()
     },
       computed:{
-        ...mapState(useCurrentPhysiologicalSymptomsStore,["physiologicalSymptoms"]),
+        ...mapState(useIpvStore,["ipv"]),
     },
 })
 </script>
@@ -43,3 +43,4 @@ ion-item.sub_item_body_close {
         --inner-border-width:0;
     }
 </style>
+@/apps/ANC/store/symptomsFollowUpStore/ipvStore

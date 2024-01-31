@@ -12,22 +12,13 @@
     </ion-list>
 
     <!-- Allegies -->
-        <!-- <ion-list>
-        <ion-item :lines="allegies" class="dashed_bottom_border">
-            <ion-toggle :checked ="allegiesChecked" @ionChange="allegyMethod">Allegies</ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="allegiesChecked">
-            <BasicForm :contentData="allegies" />
-        </div>
-        <ion-item class="sub_item_body_close" v-if="allegiesChecked"/>
-    </ion-list> -->
 
         <ion-list>
         <ion-item :lines="allegies" class="dashed_bottom_border">
             <ion-toggle :checked ="allegiesChecked" @ionChange="allegyMethod">Allegies</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="allegiesChecked">
-            <BasicForm :contentData="allegies" />
+            <BasicForm :contentData="allegy" />
         </div>
         <ion-item class="sub_item_body_close" v-if="allegiesChecked"/>
     </ion-list>
@@ -51,7 +42,7 @@
             <ion-toggle :checked ="bloodDisorderChecked" @ionChange="bloodDisorderMethod">Blood Disorder</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="bloodDisorderChecked">
-            <BasicForm :contentData="bloodDisorder" />
+            <BasicForm :contentData="blood" />
         </div>
         <ion-item class="sub_item_body_close" v-if="bloodDisorderChecked"/>
     </ion-list>
@@ -63,7 +54,7 @@
             <ion-toggle :checked ="cancerChecked" @ionChange="cancerMethod">Cancer</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="cancerChecked">
-            <BasicForm :contentData="cancer" />
+            <BasicForm :contentData="cancerIssue" />
         </div>
         <ion-item class="sub_item_body_close" v-if="cancerChecked"/>
     </ion-list>
@@ -75,7 +66,7 @@
             <ion-toggle :checked ="heartDeseaseChecked" @ionChange="heartDeseaseMethod">Heart Desease</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="heartDeseaseChecked">
-            <BasicForm :contentData="heartDesease" />
+            <BasicForm :contentData="heartProblem" />
         </div>
         <ion-item class="sub_item_body_close" v-if="heartDeseaseChecked"/>
     </ion-list>
@@ -195,7 +186,7 @@
  import {defineComponent} from 'vue';
  import {ref} from 'vue';
  import BasicInputField from "@/components/BasicInputField.vue";
- import {useMedicalHistoryStore} from "@/apps/ANC/store/medicalHistoryStore";
+ import {useMedicalHistoryStore} from "@/apps/ANC/store/medicalHistoryStore/medicalHistoryStore";
  import BasicForm from '@/components/BasicForm.vue';
 //  import {icons} from "@/utils/svg.ts"
 
@@ -242,20 +233,20 @@ export default defineComponent({
     },
     mounted(){
         const medicalHistory =useMedicalHistoryStore()
-        const allegies = useMedicalHistoryStore()
+        const allegy = useMedicalHistoryStore()
         const exisitingChronicHealthConditions = useMedicalHistoryStore()
-        const bloodDisorder = useMedicalHistoryStore()
-        const cancer = useMedicalHistoryStore()
-        const heartDesease = useMedicalHistoryStore()
+        const blood = useMedicalHistoryStore()
+        const cancerIssue = useMedicalHistoryStore()
+        const heartProblem = useMedicalHistoryStore()
         const diabetes = useMedicalHistoryStore()
     },
       computed:{
         ...mapState(useMedicalHistoryStore,["medicalHistory"]),
-        ...mapState(useMedicalHistoryStore,["allegies"]),
+        ...mapState(useMedicalHistoryStore,["allegy"]),
         ...mapState(useMedicalHistoryStore,["exisitingChronicHealthConditions"]),
-        ...mapState(useMedicalHistoryStore,["bloodDisorder"]),
-        ...mapState(useMedicalHistoryStore,["cancer"]),
-        ...mapState(useMedicalHistoryStore,["heartDesease"]),
+        ...mapState(useMedicalHistoryStore,["blood"]),
+        ...mapState(useMedicalHistoryStore,["cancerIssue"]),
+        ...mapState(useMedicalHistoryStore,["heartProblem"]),
         ...mapState(useMedicalHistoryStore,["diabetes"]),
     },
     methods:{
@@ -354,3 +345,4 @@ ion-item.sub_item_body_close {
         --inner-border-width:0;
     }
 </style>
+@/apps/ANC/store/medicalHistoryStore/medicalHistoryStore

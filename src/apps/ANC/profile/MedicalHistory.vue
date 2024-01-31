@@ -151,7 +151,7 @@
  import {defineComponent} from 'vue';
  import {ref} from 'vue';
  import BasicInputField from "@/components/BasicInputField.vue";
- import {useMedicalHistoryStore} from "@/apps/ANC/store/medicalHistoryStore";
+ import {useMedicalHistoryStore} from "@/apps/ANC/store/medicalHistoryStore/medicalHistoryStore";
  import BasicForm from '@/components/BasicForm.vue';
 
 //  import {icons} from "@/utils/svg.ts"
@@ -329,4 +329,4 @@ ion-item.sub_item_body_close {
         --inner-border-width:0;
     }
 </style>
-@/apps/ANC/store/medicalFollowUpStore
+@/apps/ANC/store/medicalFollowUpStore@/apps/ANC/store/medicalHistoryStore/medicalHistoryStore
