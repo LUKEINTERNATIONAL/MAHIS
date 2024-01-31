@@ -3,7 +3,7 @@ import { icons } from '@/utils/svg';
 
 export const useComplicationsStore = defineStore('complicationsStore',{
     state: () => ({
-        FootScreening:[
+        FootScreening: [
             {
                 selectdData: [],
                 checkboxBtnContent:
