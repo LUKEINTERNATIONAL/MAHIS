@@ -1144,56 +1144,33 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         selectedValue: ''
                     },
                     data:[
-                        {
+                        {  
                             name: hivTestForm.hivTestRequired.name,
                             value: hivTestForm.hivTestRequired.value,
-                        
-                            
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
-                    ]
-                }
-            },
-            {
-             classDash: 'dashed_bottom_border',
-                radioBtnContent:{
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
-                        {
+                        { 
                             name: hivTestForm.hivTestOrdered.name,
                             value: hivTestForm.hivTestOrdered.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
-                    ]
-                }
-            },
-            {
-             classDash: 'dashed_bottom_border',
-                radioBtnContent:{
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
                         {
                             name:  hivTestForm.hivTestConducted.name,
                             value: hivTestForm.hivTestConducted.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
-                    ]
-                }
-            },
-            {
-             classDash: 'dashed_bottom_border',
-                radioBtnContent:{
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
                         {
                             name: hivTestForm.hivTestNotDone.name,
-                            value: hivTestForm.hivTestNotDone.value
+                            value: hivTestForm.hivTestNotDone.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
                     ]
                 }
@@ -1299,37 +1276,25 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     data:[
                         {
                             name: hivTestForm.hivPositive.name,
-                            value: hivTestForm.hivPositive.value
+                            value: hivTestForm.hivPositive.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
-                    ]
-                }
-            },
-            {
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:{
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
+
                         {
                             name: hivTestForm.hivNegative1.name,
                             value: hivTestForm.hivNegative1.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
-                    ]
-                }
-            },
-            {
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:{
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
                         {
                             name:  hivTestForm.hivNegative2.name,
                             value: hivTestForm.hivNegative2.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
                     ]
                 }
@@ -1344,7 +1309,11 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     data:[
                         {
                             name: hivTestForm.inconclusive.name,
-                            value: hivTestForm.inconclusive.value
+                            value: hivTestForm.inconclusive.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
+
                         }
                     ]
                 }
@@ -1361,22 +1330,17 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     data:[
                         {
                             name: hivTestForm.highRiskYes.name,
-                            value: hivTestForm.highRiskYes.value
+                            value: hivTestForm.highRiskYes.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
-                    ]
-                }
-            },
-            {
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:{
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
                         {
                             name: hivTestForm.highRiskNo.name,
                             value: hivTestForm.highRiskNo.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
                     ]
                 }
@@ -1395,37 +1359,24 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     data:[
                         {
                             name: syphilisForm.syphilisTestConducted.name,
-                            value: syphilisForm.syphilisTestConducted.value
+                            value: syphilisForm.syphilisTestConducted.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
-                    ]
-                }
-            },
-            {
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:{
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
                         {
                             name: syphilisForm.syphilisTestOrdered.name,
                             value: syphilisForm.syphilisTestOrdered.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
-                    ]
-                }
-            },
-            {
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:{
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
                         {
                             name:  syphilisForm.syphilisTestNotDone.name,
                             value: syphilisForm.syphilisTestNotDone.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
                     ]
                 }
@@ -1442,44 +1393,25 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         {
                             name: syphilisForm.rapidSyphilisTest.name,
                             value: syphilisForm.rapidSyphilisTest.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between", 
                             checked: false
                         },
-                        
-                    ],
-                }
-                    
-            },
-            {
-            classDash: 'dashed_bottom_border',
-                radioBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
                         {
                             name: syphilisForm.offSiteLabTest.name,
                             value: syphilisForm.offSiteLabTest.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between", 
                             checked:false
                         },
-                        
-                    ],
-                }
-                    
-            },
-                        {
-            classDash: 'dashed_bottom_border',
-                radioBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
                         {
                             name: syphilisForm.treponemaPallidum.name,
                             value: syphilisForm.treponemaPallidum.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between", 
                             checked:false
                         }
                         
@@ -1552,6 +1484,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     
             },
             {
+                classDash: 'dashed_bottom_border',
                 data:{ 
                     rowData:[
                         {
@@ -1585,11 +1518,17 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     data:[
                         {
                             name: syphilisForm.syphilisPositiveResults.name,
-                            value: syphilisForm.syphilisPositiveResults.value
+                            value: syphilisForm.syphilisPositiveResults.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
                         {
                             name: syphilisForm.syphilisNegativeResults.name,
                             value: syphilisForm.syphilisNegativeResults.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
                     ]
                 }
@@ -1606,11 +1545,17 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     data:[
                         {
                             name: syphilisForm.syphilisPositiveDiagnosis.name,
-                            value: syphilisForm.syphilisPositiveDiagnosis.value
+                            value: syphilisForm.syphilisPositiveDiagnosis.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
                         {
                             name: syphilisForm.syphilisNegativeDiagnosis.name,
                             value: syphilisForm.syphilisNegativeDiagnosis.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
                     ]
                 }
@@ -1631,7 +1576,11 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         {
                             name: hypertensionForm.hypertension.name,
                             value: hypertensionForm.hypertension.value,
+                            labelPlacement: 'start',
+                            colSize: '4',
+                            justify: 'space-between',
                             checked: false
+                            
                         }
                         
                     ],
@@ -1654,6 +1603,9 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         {
                             name: kidneyForm.kidney.name,
                             value: kidneyForm.kidney.value,
+                            labelPlacement: 'start',
+                            colSize: '4',
+                            justify: 'space-between',
                             checked: false
                         }
                         
@@ -1677,6 +1629,9 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         {
                             name: tbForm.tb.name,
                             value: tbForm.tb.value,
+                            labelPlacement: 'start',
+                            colSize: '4',
+                            justify: 'space-between',
                             checked: false
                         }
                         
@@ -1700,6 +1655,9 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         {
                             name: mentalIllinessForm.mentalIlliness.name,
                             value: mentalIllinessForm.mentalIlliness.value,
+                            labelPlacement: 'start',
+                            colSize: '4',
+                            justify: 'space-between',
                             checked: false
                         }
                         

@@ -30,15 +30,24 @@ export const useFatalMovementStore =  defineStore('fatalMovementStore',{
                     data:[
                         {
                             name: fatalForm.normalFetalMovement.name,
-                            value: fatalForm.normalFetalMovement.value
+                            value: fatalForm.normalFetalMovement.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
                         {
                             name: fatalForm.reducedPoorFetalMovement.name,
                             value: fatalForm.reducedPoorFetalMovement.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
                         {
                             name: fatalForm.noFetalMovement.name,
                             value: fatalForm.noFetalMovement.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
                     ]
                 }

@@ -53,7 +53,7 @@ export const useIpvStore = defineStore('ipvStore',{
                             name: ipvForm.ongoingStress.name,
                             value: ipvForm.ongoingStress.value,
                             labelPlacement: 'start',
-                            colSize: '4',
+                            colSize: '7',
                             justify: 'space-between',
                             checked: false
                         }
@@ -77,7 +77,7 @@ export const useIpvStore = defineStore('ipvStore',{
                             name: ipvForm.injuryToAbdomen.name,
                             value: ipvForm.injuryToAbdomen.value,
                             labelPlacement: 'start',
-                            colSize: '4',
+                            colSize: '7',
                             justify: 'space-between',
                             checked: false
                         }
@@ -101,7 +101,7 @@ export const useIpvStore = defineStore('ipvStore',{
                             name: ipvForm.womanHusbandIntrusiveDuringConsultations.name,
                             value: ipvForm.womanHusbandIntrusiveDuringConsultations.value,
                             labelPlacement: 'start',
-                            colSize: '4',
+                            colSize: '7',
                             justify: 'space-between',
                             checked: false
                         }
@@ -125,7 +125,7 @@ export const useIpvStore = defineStore('ipvStore',{
                             name: ipvForm.misuseOfAlcohol.name,
                             value: ipvForm.misuseOfAlcohol.value,
                             labelPlacement: 'start',
-                            colSize: '4',
+                            colSize: '7',
                             justify: 'space-between',
                             checked: false
                         }
@@ -149,7 +149,7 @@ export const useIpvStore = defineStore('ipvStore',{
                             name: ipvForm.unspecifiedHarmfulBehaviours.name,
                             value: ipvForm.unspecifiedHarmfulBehaviours.value,
                             labelPlacement: 'start',
-                            colSize: '4',
+                            colSize: '7',
                             justify: 'space-between',
                             checked: false
                         }
@@ -173,7 +173,7 @@ export const useIpvStore = defineStore('ipvStore',{
                             name: ipvForm.thoughtsOfSelfHarm.name,
                             value: ipvForm.thoughtsOfSelfHarm.value,
                             labelPlacement: 'start',
-                            colSize: '4',
+                            colSize: '7',
                             justify: 'space-between',
                             checked: false
                         }
@@ -197,7 +197,7 @@ export const useIpvStore = defineStore('ipvStore',{
                             name: ipvForm.unwantedPregnancies.name,
                             value: ipvForm.unwantedPregnancies.value,
                             labelPlacement: 'start',
-                            colSize: '4',
+                            colSize: '7',
                             justify: 'space-between',
                             checked: false
                         }
@@ -221,7 +221,7 @@ export const useIpvStore = defineStore('ipvStore',{
                             name: ipvForm.misuseOfDrugs.name,
                             value: ipvForm.misuseOfDrugs.value,
                             labelPlacement: 'start',
-                            colSize: '4',
+                            colSize: '7',
                             justify: 'space-between',
                             checked: false
                         }
