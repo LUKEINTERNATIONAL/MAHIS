@@ -184,4 +184,4 @@ ion-item.sub_item_body_close {
 }
 
 </style>
-@/apps/ANC/store/medicalHistoryStore/medicalHistoryStore@/apps/ANC/store/symptomsFollowUpStore/womanBehaviourStore
+@/apps/ANC/store/medicalHistoryStore/medicalHistoryStore@/apps/ANC/store/symptomsFollowUpStore/womanBehaviourStore@/apps/ANC/store/medicalHistory/medicalHistoryStore

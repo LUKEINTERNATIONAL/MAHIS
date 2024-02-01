@@ -329,4 +329,4 @@ ion-item.sub_item_body_close {
         --inner-border-width:0;
     }
 </style>
-@/apps/ANC/store/medicalFollowUpStore@/apps/ANC/store/medicalHistoryStore/medicalHistoryStore
+@/apps/ANC/store/medicalFollowUpStore@/apps/ANC/store/medicalHistoryStore/medicalHistoryStore@/apps/ANC/store/medicalHistory/medicalHistoryStore
