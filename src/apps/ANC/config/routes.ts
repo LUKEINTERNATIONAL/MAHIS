@@ -5,6 +5,7 @@ import Medications from '@/apps/ANC/components/profile/Medications.vue'
 import WomanBehaviour from "@/apps/ANC/views/WomanBehaviour.vue";
 import Medical from '@/apps/ANC/views/medical.vue';
 import PastObstreticHistory from "@/apps/ANC/components/profile/PastObstreticHistory.vue";
+import PhysicalExam from "@/apps/ANC/views/PhysicalExam.vue";
 export default [
   {
     path: '/anc/profile',
@@ -17,23 +18,13 @@ export default [
     component: QuickCheck
   },
   {
-    path: '/anc/medications',
-    name: 'Medications',
-    component: Medications
+    path: '/anc/physicalExam',
+    name: 'PhysicalExam',
+    component: PhysicalExam
   },
   {
     path: '/anc/pastObstetricHistory',
     name: 'pastObstetricHistory',
     component: PastObstreticHistory
   },
-  {
-    path: '/anc/womanBehaviour',
-    name: 'WomanBehaviour',
-    component: WomanBehaviour
-  },
-  {
-    path: '/medical',
-    name: 'medical',
-    component: Medical
-  },
-]
+  ]

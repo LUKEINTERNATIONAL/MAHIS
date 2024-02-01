@@ -90,6 +90,11 @@
   import ConfirmPregnancy from "@/apps/ANC/components/quick check/ConfirmPregnancy.vue";
   import ReasonForVisit from "@/apps/ANC/components/quick check/ReasonForVisit.vue";
   import SpecificHealthConcerns from "@/apps/ANC/components/quick check/SpecificHealthConcerns.vue";
+  import AncVitals from "@/apps/ANC/components/physical exam/AncVitals.vue"
+  import FetalAssesment from "@/apps/ANC/components/physical exam/FetalAssesment.vue";
+  import FetalPresantation from "@/apps/ANC/components/physical exam/FetalPresantation.vue";
+  import MaternalExam from "@/apps/ANC/components/physical exam/MaternalExam.vue";
+  import PresentingSigns from "@/apps/ANC/components/physical exam/PresentingSigns.vue";
   import SaveProgressModal from '@/components/SaveProgressModal.vue'
   import { createModal } from '@/utils/Alerts'
   import { icons } from '@/utils/svg';
@@ -131,6 +136,12 @@
         ReasonForVisit,
         ConfirmPregnancy,
         SpecificHealthConcerns,
+        AncVitals,
+        FetalPresantation,
+        FetalAssesment,
+        MaternalExam,
+        PresentingSigns
+
     },
     data(){
         return {

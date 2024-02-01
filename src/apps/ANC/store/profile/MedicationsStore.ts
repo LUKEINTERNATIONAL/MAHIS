@@ -52,7 +52,6 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 labelPlacement: 'start',
                                 colSize: '2',
                                 justify: 'end',
-                                textAlign: 'left'
                             },
                             {
                                 name: 'Anti-TB',

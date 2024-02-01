@@ -3,7 +3,7 @@
     <Toolbar />
     <ion-content :fullscreen="true">
       <DemographicBar />
-      <Stepper stepperTitle="Quick check" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
+      <Stepper stepperTitle="Physical examination" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
     </ion-content>
   </ion-page>
 </template>
@@ -37,16 +37,13 @@ import { chevronBackOutline,checkmark } from 'ionicons/icons';
 import SaveProgressModal from '@/components/SaveProgressModal.vue'
 import { createModal } from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
-import { useVitalsStore } from '@/stores/VitalsStore'
-import { useDemographicsStore } from '@/stores/DemographicStore'
+import { useAncVitalsStore} from "@/apps/ANC/store/physical exam/AncVitalsStore";
 import { useInvestigationStore } from '@/stores/InvestigationStore'
 import { useDiagnosisStore } from '@/stores/DiagnosisStore'
 import { mapState } from 'pinia';
 import Stepper from '@/components/Stepper.vue'
 import { Service } from "@/services/service";
 import { toastWarning,popoverConfirmation, toastSuccess } from '@/utils/Alerts';
-import { Diagnosis } from '@/apps/NCD/services/diagnosis'
-import {useDangerSignsStore} from "@/apps/ANC/store/quickCheck/dangerSigns";
 export default defineComponent({
   name: "Home",
   components:{
@@ -76,7 +73,7 @@ export default defineComponent({
     return {
       wizardData: [
         {
-          'title': 'Danger signs',
+          'title': 'Vitals',
           'class': 'common_step',
           'checked':false,
           'disabled':false,
@@ -84,7 +81,7 @@ export default defineComponent({
           'last_step': ''
         },
         {
-          'title': 'Reason for visit',
+          'title': 'Maternal exam',
           'class': 'common_step',
           'checked':'',
           'icon': false,
@@ -93,7 +90,7 @@ export default defineComponent({
           'last_step': ''
         },
         {
-          'title': 'Confirm pregnancy',
+          'title': 'Fetal assessment',
           'class': 'common_step',
           'checked':'',
           'icon': false,
@@ -102,35 +99,49 @@ export default defineComponent({
           'last_step': ''
         },
         {
-          'title': 'Specific health concerns',
+          'title': 'Fetal presentation',
           'class': 'common_step',
           'checked':'',
           'icon': false,
           'disabled':false,
           'number': 4,
+          'last_step': ''
+        },
+        {
+          'title': 'Presenting signs for IPV',
+          'class': 'common_step',
+          'checked':'',
+          'icon': false,
+          'disabled':false,
+          'number': 5,
           'last_step': 'last_step'
         },
       ],
       StepperData:[
         {
-          'title': 'Danger signs',
-          'componet': 'DangerSigns',
+          'title': 'Vitals',
+          'componet': 'AncVitals',
           'value': '1'
         },
         {
-          'title': 'Reason for visit',
-          'componet': 'ReasonForVisit',
+          'title': 'Maternal exam',
+          'componet': 'MaternalExam',
           'value': '2',
         },
         {
-          'title': 'Confirm pregnancy',
-          'componet': 'ConfirmPregnancy',
+          'title': 'Fetal assessment',
+          'componet': 'FetalAssessment',
           'value': '3',
         },
         {
-          'title': 'Specific health concerns',
-          'componet': 'SpecificHealthConcerns',
+          'title': 'Fetal presentation',
+          'componet': 'FetalPresentation',
           'value': '4',
+        },
+        {
+          'title': 'Presenting signs or conditions for IPV ',
+          'componet': 'PresentingSignsOrConditionsForIPV',
+          'value': '5',
         },
       ],
       isOpen: false,
@@ -138,8 +149,7 @@ export default defineComponent({
     };
   },
   computed:{
-    ...mapState(useDangerSignsStore,["DangerSigns"]),
-    ...mapState(useVitalsStore,["vitals"]),
+     ...mapState(useAncVitalsStore,["vitals"]),
     ...mapState(useInvestigationStore,["investigations"]),
     ...mapState(useDiagnosisStore,["diagnosis"]),
   },

@@ -3,24 +3,24 @@
   <!-- Daily Caffeine -->
   <ion-list>
     <ion-item :lines="DailyCaffeine" class="dashed_bottom_border">
-      <ion-toggle :checked ="caffeineChecked" @ionChange="caffeineMethod">Daily caffeine  intake</ion-toggle>
+     Daily caffeine  intake
     </ion-item>
-    <div class="sub_item_body" v-if="caffeineChecked">
+    <div class="sub_item_body">
       <BasicForm :contentData="Caffeine" />
     </div>
-    <ion-item class="sub_item_body_close" v-if="caffeineChecked"/>
+    <ion-item class="sub_item_body_close"/>
   </ion-list>
 
   <!-- Tobbaco use -->
   <ion-list>
     <ion-item :lines="tobbacoUses" class="dashed_bottom_border">
-      <ion-toggle :checked ="tobbacoChecked" @ionChange="tobbacoMethod">Use of tobbaco</ion-toggle>
+     Use of tobbaco
     </ion-item>
 
-    <div class="sub_item_body" v-if="tobbacoChecked">
+    <div class="sub_item_body" >
       <BasicForm :contentData="Tobbaco" />
     </div>
-    <ion-item class="sub_item_body_close" v-if="tobbacoChecked"/>
+    <ion-item class="sub_item_body_close"/>
   </ion-list>
 
 </template>

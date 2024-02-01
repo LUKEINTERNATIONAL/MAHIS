@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg';
 
-export const useDangerSignsStore = defineStore('dangerSignsStore',{
+export const useSpecificHealthConcernsStore = defineStore('specificHealthConcernsStore',{
     state: () => ({
-        DangerSigns:[
+        HealthConcerns:[
             {
                 selectdData: [],
                 classDash: 'dashed_bottom_border',
@@ -16,8 +16,8 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
                         data:[
 
                             {
-                                name: 'Bleeding vaginally',
-                                value: 'BleedingVaginally',
+                                name: 'Abnorminal varginal discharge',
+                                value: 'AbnorminalVarginalDischarge',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '4',
@@ -39,8 +39,8 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
                         data:[
 
                             {
-                                name: 'Central cyanosis',
-                                value: 'CentralCyanosis',
+                                name: 'Change in blood pressure-up',
+                                value: 'ChangeInBloodPressure',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '4',
@@ -62,8 +62,8 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
                         data:[
 
                             {
-                                name: 'Pre-term labour',
-                                value: 'PreTermLabour',
+                                name: 'Diarrhoea',
+                                value: 'Diarrhoea',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '4',
@@ -85,8 +85,8 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
                         data:[
 
                             {
-                                name: 'Unconcious',
-                                value: 'Unconcious',
+                                name: 'Vomiting',
+                                value: 'Vomiting',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '4',
@@ -108,8 +108,8 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
                         data:[
 
                             {
-                                name: 'Fever',
-                                value: 'Fever',
+                                name: 'Viginal bleeding',
+                                value: 'Viginal bleeding',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '4',
@@ -131,8 +131,8 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
                         data:[
 
                             {
-                                name: 'Imminent delivery',
-                                value: 'BleedingDelivery',
+                                name: 'Change in blood pressure-down (hypotension)',
+                                value: ' BloodPressureChange',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '4',
@@ -154,8 +154,8 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
                         data:[
 
                             {
-                                name: 'Severe headache',
-                                value: 'SevereHeadache',
+                                name: 'constipation',
+                                value: 'Constipation',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '4',
@@ -177,8 +177,8 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
                         data:[
 
                             {
-                                name: 'Severe vomiting',
-                                value: 'SevereVomiting',
+                                name: 'Contractions',
+                                value: 'Constractions',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '4',
@@ -200,8 +200,8 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
                         data:[
 
                             {
-                                name: 'Severe abidominal pain',
-                                value: 'SevereAbidominalPain',
+                                name: 'Vaginal bleeding',
+                                value: 'VaginalBleeding',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '4',
@@ -223,8 +223,8 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
                         data:[
 
                             {
-                                name: 'Draining liqour',
-                                value: 'DrainingLiqour',
+                                name: 'IntimatePartinerViolence',
+                                value: 'IntimatePartinerViolence',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '4',
@@ -246,8 +246,8 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
                         data:[
 
                             {
-                                name: 'Respiratory problems',
-                                value: 'RespiratoryProblems',
+                                name: 'Flu symptoms',
+                                value: 'FluSymptoms',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '4',
@@ -269,8 +269,8 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
                         data:[
 
                             {
-                                name: 'Convulsion history',
-                                value: 'ConvulsioHistory',
+                                name: 'Draining Liquor',
+                                value: 'DrainingLiquor',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '4',
@@ -292,8 +292,8 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
                         data:[
 
                             {
-                                name: 'Oedema',
-                                value: 'Oedema',
+                                name: 'Headache',
+                                value: 'Headache',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '4',
@@ -315,8 +315,8 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
                         data:[
 
                             {
-                                name: 'Epigastric pain',
-                                value: 'Epigastric pain',
+                                name: 'Heartburn',
+                                value: 'heartburn',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '4',
@@ -337,8 +337,97 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
                         data:[
 
                             {
-                                name: 'No danger signs',
-                                value: 'NoDangerSigns',
+                                name: 'Frequent urination/Polyuria',
+                                value: 'FrequentUrination',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '4',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+
+                            {
+                                name: 'Injury',
+                                value: 'Injury',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '4',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+
+            {
+                selectdData: [],
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+
+                            {
+                                name: 'Jaundice',
+                                value: 'Jaundice',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '4',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+
+                            {
+                                name: 'Mental health-Depression',
+                                value: 'MentalHealth',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '4',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+
+                            {
+                                name: 'No health concerns',
+                                value: 'NoHealthConcerns',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '4',
@@ -351,43 +440,14 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
 
 
 
-        ],
 
-        PreviousVisit: [
-            {
-                radioBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                value: 'Y',
-                                name: 'Yes',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between'
 
-                            },
-                            {
-                                value: 'N',
-                                name: 'No',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between'
-
-                            }
-                        ]
-                    }
-
-            },
 
         ] as any
     }),
     actions:{
         setPersonalInformation(data: any){
-            this.DangerSigns = data
+            this.HealthConcerns = data
         }
     },
     persist:true,

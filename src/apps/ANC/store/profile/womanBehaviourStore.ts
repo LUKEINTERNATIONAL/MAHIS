@@ -102,11 +102,17 @@ export const useWomanBehaviourStore = defineStore('womanBehaviourStore', {
                             {
                                 value: 'Y',
                                 name: 'Yes',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
 
                             },
                             {
                                 value: 'N',
                                 name: 'No',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
 
                             }
                         ]
@@ -125,11 +131,17 @@ export const useWomanBehaviourStore = defineStore('womanBehaviourStore', {
                                 {
                                     value: 'Y',
                                     name: 'Yes',
+                                    labelPlacement: 'start',
+                                    colSize: '7',
+                                    justify: 'space-between'
 
                                 },
                                 {
                                     value: 'N',
                                     name: 'No',
+                                    labelPlacement: 'start',
+                                    colSize: '7',
+                                    justify: 'space-between'
 
                                 }
                             ]
