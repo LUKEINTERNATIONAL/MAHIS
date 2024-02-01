@@ -1,6 +1,6 @@
 <template>
     <h6 v-if="inputHeader">{{ inputHeader }}</h6>
-    <ion-item class="input_item">
+    <ion-item class="input_item"  :style="'width:'+inputWidth">
         <ion-label>
             <span v-if="icon" v-html="icon" class="selectedPatient"></span>
         </ion-label>
@@ -93,6 +93,9 @@ export default defineComponent({
         },
         popOverData:{
             default: [] as any
+        },
+        inputWidth:{
+            default: ''
         }
 
     },

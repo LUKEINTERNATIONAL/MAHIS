@@ -74,6 +74,10 @@
     import { Service } from "@/services/service";
     import { useDemographicsStore } from '@/stores/DemographicStore'
     import { resetPatientData } from '@/services/reset_data'
+    import { validateField } from '@/services/validation_service'
+    import { toastSuccess, toastWarning } from '@/utils/Alerts';
+    import { modifyFieldValue,getFieldValue,getRadioSelectedValue } from '@/services/data_helpers'
+    import HisDate from "@/utils/Date";
   
     export default defineComponent({
       components: { 
@@ -106,7 +110,12 @@
             ...mapState(useRegistrationStore,["socialHistory"]),
             ...mapState(useRegistrationStore,["homeLocation"]),
             ...mapState(useRegistrationStore,["currentLocation"]),
-            ...mapState(useRegistrationStore,["guardianInformation"])
+            ...mapState(useRegistrationStore,["guardianInformation"]),
+            nationalID(){ return getFieldValue(this.personInformation, 'nationalID','value')},
+            firstname(){ return getFieldValue(this.personInformation, 'firstname','value')},
+            lastname(){ return getFieldValue(this.personInformation, 'lastname','value')},
+            gender(){ return getRadioSelectedValue(this.personInformation, 'gender')},
+            birthdate(){ return HisDate.toStandardHisFormat(getFieldValue(this.personInformation, 'birthdate','value'))},
         },
         setup() {
             return { arrowForwardCircle };
@@ -136,14 +145,23 @@
             saveData(){
                 this.createPatient()
             },
+            validations(){
+                const fields = ['nationalID', 'firstname', 'lastname', 'birthdate', 'gender'];
+                return fields.every(fieldName => validateField(this.personInformation,fieldName, this[fieldName]));
+            },
             async createPatient(){
-                if(Object.keys(this.personInformation[0].selectdData).length === 0) return
-                const registration: any = new PatientRegistrationService()
-                new Patientservice((await registration.registerPatient(this.personInformation[0].selectdData, [])))
-                const patientID = registration.getPersonID()
-                this.createGuardian(patientID)
-                this.createSocialHistory(patientID)
-                this.findPatient(patientID)
+                if(this.validations()){
+                    if(Object.keys(this.personInformation[0].selectdData).length === 0) return
+                    const registration: any = new PatientRegistrationService()
+                    new Patientservice((await registration.registerPatient(this.personInformation[0].selectdData, [])))
+                    const patientID = registration.getPersonID()
+                    // this.createGuardian(patientID)
+                    // this.createSocialHistory(patientID)
+                    this.findPatient(patientID)
+                    toastSuccess('Successfuly Created Patient')
+                }else{
+                    toastWarning("Please complete all required fields")
+                }
             },
             async createGuardian(patientID: any){
                 if(this.guardianInformation[0].selectdData?.length === 0) return

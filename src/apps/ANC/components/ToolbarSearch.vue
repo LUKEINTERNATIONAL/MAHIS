@@ -1,7 +1,7 @@
 <template>
     <ion-searchbar
       @ionInput="handleInput"
-      placeholder="Search client by MRN or Diabete clinical No."
+      placeholder="Search client by name or ID"
       class="searchField"
     ></ion-searchbar>
     <ion-popover 
@@ -14,17 +14,17 @@
     >
     <ion-content class="search_card">
         <ion-row class=" search_header">
-          <ion-col >Diabete clinic No. </ion-col>
+          <ion-col >Clinic number </ion-col>
           <ion-col >Fullname</ion-col>
           <ion-col >Birthdate</ion-col>
-          <ion-col style="max-width: 70px;">Gender</ion-col>
+          <ion-col style="max-width: 70px;">Gestation Age</ion-col>
           <ion-col style="max-width: 30px;" ></ion-col>
         </ion-row>
         <ion-row class="search_result" v-for="(item, index) in patients" :key="index" @click="openNewPage('patientProfile',item)">
-          <ion-col >{{ patientIdentifier(item) }} </ion-col>
-          <ion-col >{{ item.person.names[0].given_name+" "+item.person.names[0].family_name }}</ion-col>
-          <ion-col >{{ item.person.birthdate }}</ion-col>
-          <ion-col style="max-width: 70px;">{{ item.person.gender }}</ion-col>
+          <ion-col >MW9283020</ion-col>
+          <ion-col >Licy Banda</ion-col>
+          <ion-col >20 July 1997</ion-col>
+          <ion-col style="max-width: 70px;">7 weeks</ion-col>
           <ion-col style="max-width: 30px;"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
         </ion-row>
         <ion-row>
@@ -106,7 +106,7 @@
                         'family_name': splittedArray.length >= 2 ? splittedArray[1] : '',
                         'gender': splittedArray.length >= 3 ? splittedArray[2] : '',
                         'page': '1',
-                        'per_page': '7'
+                        'per_page': '10'
                     }
         
         this.searchPatient(payload)

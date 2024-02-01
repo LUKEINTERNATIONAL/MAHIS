@@ -3,7 +3,7 @@
       <Toolbar />
       <ion-content :fullscreen="true">
         <DemographicBar />
-        <Stepper :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
+        <Stepper stepperTitle="The consultation plan" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
       </ion-content>
     </ion-page>
   </template>
@@ -222,9 +222,8 @@
                 this.wizardData[2].checked = false; 
             }
         },
-        deleteDisplayData(data: any){
+        getFormatedData(data: any){
           return  data.map((item: any) => {
-                delete item?.display;
                 return item?.data;
             });
         },
@@ -240,7 +239,7 @@
         },
         saveInvestigation(){
             const investigationInstance = new LabOrder()
-            investigationInstance.postActivities(this.demographics.patient_id,this.deleteDisplayData(this.investigations[0].selectdData))
+            investigationInstance.postActivities(this.demographics.patient_id,this.getFormatedData(this.investigations[0].selectdData))
         },
         saveVitals(){
           const userID: any  = Service.getUserID()
@@ -250,7 +249,7 @@
         saveDiagnosis(){
           const userID: any  = Service.getUserID()
           const diagnosisInstance = new Diagnosis();
-          diagnosisInstance.onSubmit(this.demographics.patient_id,userID,this.deleteDisplayData(this.diagnosis[0].selectdData))
+          diagnosisInstance.onSubmit(this.demographics.patient_id,userID,this.getFormatedData(this.diagnosis[0].selectdData))
         },
         openModal(){
             createModal(SaveProgressModal)
