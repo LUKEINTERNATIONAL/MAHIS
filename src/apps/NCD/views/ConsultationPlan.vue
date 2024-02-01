@@ -39,6 +39,7 @@
   import { icons } from '@/utils/svg';
   import { useVitalsStore } from '@/stores/VitalsStore'
   import { useDemographicsStore } from '@/stores/DemographicStore'
+  import { useGeneralStore } from '@/stores/GeneralStore'
   import { useInvestigationStore } from '@/stores/InvestigationStore'
   import { useDiagnosisStore } from '@/stores/DiagnosisStore'
   import { mapState } from 'pinia';
@@ -171,6 +172,7 @@
       ...mapState(useVitalsStore,["vitals"]),
       ...mapState(useInvestigationStore,["investigations"]),
       ...mapState(useDiagnosisStore,["diagnosis"]),
+      ...mapState(useGeneralStore,["saveProgressStatus"]),
     },
     mounted(){
         this.markWizard() 
@@ -201,6 +203,7 @@
     
       methods:{
         markWizard(){
+            this.setProgressStatus()
             if(this.vitals.validationStatus){
                 this.wizardData[0].checked = true; 
                 this.wizardData[0].class = 'open_step common_step'               
@@ -221,6 +224,10 @@
             }else{
                 this.wizardData[2].checked = false; 
             }
+        },
+        setProgressStatus(){
+            const demographicsStore = useGeneralStore()
+            demographicsStore.setSaveProgressStatus(true)
         },
         getFormatedData(data: any){
           return  data.map((item: any) => {

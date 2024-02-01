@@ -34,7 +34,7 @@ import { ref } from 'vue';
 import { icons } from '@/utils/svg';
 
 import { createModal } from '@/utils/Alerts'
-import BasicInputField from '../BasicInputField.vue';
+import BasicInputField from '../../../components/BasicInputField.vue';
 import HisDate from "@/utils/Date";
 import { useNextAppointmentStore } from '@/stores/NextAppointmentStore'
 import { mapState } from 'pinia';

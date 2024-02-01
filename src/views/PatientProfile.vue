@@ -35,14 +35,14 @@
                           </ion-row>
                     </ion-card-content>
                 </ion-card>
-                <ion-card class="start_new_co" style=" margin-bottom: 20px;" @click="nav('consultationPlan')">
-                    + Start new NCD consultation
+                <ion-card class="start_new_co" style=" margin-bottom: 20px;" @click="nav()">
+                    {{ NCDProgramActionName }}
                 </ion-card>
-                <ion-card class="start_new_co" style=" margin-bottom: 20px;" @click="nav('patient')">
-                    + Start new ANC consultation
+                <ion-card class="start_new_co" style=" margin-bottom: 20px;" >
+                    + Enroll in ANC Program
                 </ion-card>
-                <ion-card class="start_new_co" style=" margin-bottom: 20px;" @click="nav('patient')">
-                    + Start new OPD consultation
+                <ion-card class="start_new_co" style=" margin-bottom: 20px;" >
+                    + Enroll in OPD Program
                 </ion-card>
                 <ion-card style=" margin-bottom: 20px; background-color: #fff;">
                     <ion-accordion-group :value="['first']">
@@ -191,13 +191,14 @@
 
 
   import { useDemographicsStore } from '@/stores/DemographicStore'
+  import { useGeneralStore } from '@/stores/GeneralStore'
   import { useTreatmentPlanStore } from '@/stores/TreatmentPlanStore'
   import { mapState } from 'pinia';
   import HisDate from "@/utils/Date";
+  import { useEnrollementStore } from '@/stores/EnrollmentStore'
 
   import { ref } from 'vue';
   export default defineComponent({
-    name: "Home",
     components:{
         IonContent,
         IonHeader,
@@ -223,18 +224,22 @@
         InvestigationsGrid,
         MedicationsGrid,
         VitalsGrid  
-
     },
     data(){
         return {
-
-        iconsContent: icons,
-        isModalOpen: false,
+            iconsContent: icons,
+            isModalOpen: false,
+            NCDProgramActionName: '+ Enroll in NCD Program' as any
         };
     },
     computed:{
         ...mapState(useDemographicsStore,["demographics"]),
         ...mapState(useTreatmentPlanStore,["selectedMedicalAllergiesList"]),
+        ...mapState(useEnrollementStore,["NCDNumber"]),
+        ...mapState(useGeneralStore,["saveProgressStatus"]),
+    },
+    mounted() {
+        this.NCDProgramActionName = this.setProgramActionName()
     },
     setup() {
         const modal = ref();
@@ -250,8 +255,14 @@
         dismiss(){
             modalController.dismiss()
         },
-        nav(url: any){
+        nav(){
             sessionStorage.setItem("app", JSON.stringify({'programID':14,'applicationName':'OPD'}));
+            let url =''
+            if(this.NCDProgramActionName == '+ Start new NCD consultation' || this.NCDProgramActionName == '+ Continue NCD consultation')
+                url ='consultationPlan'
+            if(this.NCDProgramActionName = '+ Enroll in NCD Program')
+                url ='NCDEnrollment'
+
             this.$router.push(url);
         },
         covertGender(gender: any){
@@ -259,6 +270,14 @@
         },
         formatBirthdate(){
           return  HisDate.getBirthdateAge(this.demographics.birthdate) 
+        },
+        setProgramActionName(){
+            if(this.NCDNumber[0].data.rowData[0].colData[0].value != '')
+                return '+ Start new NCD consultation' 
+            else if(this.saveProgressStatus)
+               return "+ Continue NCD consultation"
+            else
+                return '+ Enroll in NCD Program'
         }
        
 

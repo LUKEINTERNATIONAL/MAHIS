@@ -17,7 +17,7 @@ import DispositionModal from '@/components/ProfileModal/DispositionModal.vue'
 import { createModal } from '@/utils/Alerts'
 import { useRegistrationStore } from '@/stores/RegistrationStore'
 import { mapState } from 'pinia';
-import BasicCard from '../BasicCard.vue';
+import BasicCard from '@/components/BasicCard.vue';
 import {LocationService} from "@/services/location_service"
 import Validation from "@/validations/StandardValidations"
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
@@ -189,28 +189,45 @@ methods:{
     buidCards(){
         this.cardData ={
             mainTitle:"Demographics",
-            cards:[
+            data:[
                 {
-                    cardTitle:"Personal information",
-                    content: this.personInformation
+                    cards:[
+                        {
+                            cardTitle:"Personal information",
+                            content: this.personInformation
+                        }
+                    ]
                 },
                 {
-                    cardTitle:"Social History",
-                    content: this.socialHistory
+                    cards:[
+                        {
+                            cardTitle:"Home Location",
+                            content: this.homeLocation
+                        },
+                        {
+                            cardTitle:"Curent Location",
+                            content: this.currentLocation
+                        }
+                    ]
                 },
                 {
-                    cardTitle:"Home Location",
-                    content: this.homeLocation
+                    cards:[
+                        {
+                            cardTitle:"Social History",
+                            content: this.socialHistory
+                        }
+                    ]
                 },
                 {
-                    cardTitle:"Curent Location",
-                    content: this.currentLocation
-                },
-                {
-                    cardTitle:"Guardian information",
-                    content: this.guardianInformation
+                    cards:[
+                        {
+                            cardTitle:"Guardian information",
+                            content: this.guardianInformation
+                        }
+                    ]
                 }
-            ]
+        ]
+            
            } 
     },
     openModal(){

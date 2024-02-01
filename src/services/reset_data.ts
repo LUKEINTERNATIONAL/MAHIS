@@ -10,6 +10,7 @@ import { useDemographicsStore } from '@/stores/DemographicStore'
 import { useEnrollementStore } from '@/stores/EnrollmentStore'
 import { useNextAppointmentStore } from '@/stores/NextAppointmentStore'
 import { useRegistrationStore } from '@/stores/RegistrationStore'
+import { useGeneralStore } from '@/stores/GeneralStore'
 
 export function resetPatientData(){
     const vitals = useVitalsStore()
@@ -18,12 +19,15 @@ export function resetPatientData(){
     const medications = useMedicationsStore()
     const treatmentPlan = useTreatmentPlanStore()
     const diagnosis = useDiagnosisStore()
+    const general = useGeneralStore()
+     
     vitals.$reset()
     investigations.$reset()
     disposition.$reset()
     medications.$reset()
     treatmentPlan.$reset()
     diagnosis.$reset()
+    general.$reset()
 }
 
 export function resetDemographics(){

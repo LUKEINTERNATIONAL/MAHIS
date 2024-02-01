@@ -19,11 +19,10 @@ import { icons } from '@/utils/svg';
 
 import DispositionModal from '@/components/ProfileModal/DispositionModal.vue'
 import { createModal } from '@/utils/Alerts'
-import BasicInputField from '../BasicInputField.vue';
 import { useEnrollementStore } from '@/stores/EnrollmentStore'
 import { mapState } from 'pinia';
 import BasicForm from '@/components/BasicForm.vue';
-import BasicCard from '../BasicCard.vue';
+import BasicCard from '@/components/BasicCard.vue';
 
 export default defineComponent({
 name: 'Menu',
@@ -35,7 +34,6 @@ components:{
   IonMenu,
   IonTitle,
   IonToolbar,
-  BasicInputField,
   IonCheckbox,
   BasicForm,
   BasicCard    },
@@ -70,30 +68,41 @@ methods:{
     buidCards(){
         this.cardData ={
             mainTitle:"Enrollment",
-            cards:[
-                {
-                    cardTitle:"Substance use / Consumption",
-                    content: this.substance
+            data:[
+                {cards:[
+                        {
+                            cardTitle:"Substance use / Consumption",
+                            content: this.substance
+                        },
+                        {
+                            cardTitle:"Diagnosis",
+                            content: this.diagnosis
+                        }
+                    ]
                 },
                 {
-                    cardTitle:"Diagnosis",
-                    content: this.diagnosis
+                    cards:[
+                        {
+                            cardTitle:"Patient history & Complications ",
+                            content: this.patientHistory
+                        }]
                 },
                 {
-                    cardTitle:"Patient history & Complications ",
-                    content: this.patientHistory
-                },
-                {
-                    cardTitle:"Family history",
-                    content: this.familyHistory
-                },
-                {
-                    cardTitle:"NCD number",
-                    content: this.NCDNumber
+                    cards:[
+                        {
+                            cardTitle:"Family history",
+                            content: this.familyHistory
+                        },
+                        {
+                            cardTitle:"NCD number",
+                            content: this.NCDNumber
+                        }
+                    ]
                 }
             ]
            } 
     },
+   
     openModal(){
         createModal(DispositionModal)
     },
