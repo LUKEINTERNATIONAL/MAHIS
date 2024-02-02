@@ -1,53 +1,59 @@
 <template>
-    <ion-item>
+    <ion-list>
         <div>
-           
-            <div class="radioContainer">
+          
+            
+              <ion-row>
+                <ion-col>
                         <IonRadioGroup>
                           <div class="radio">
-                          <ion-label style="font-weight: bold;">LNMP known</ion-label>
-                        <ion-radio>Yes</ion-radio>
-                        <ion-radio>No</ion-radio>
+                          <ion-label style="font-weight: bold; margin-bottom: 15px;">LNMP known</ion-label>
+                        <ion-radio style="margin-bottom: 10px;">Yes</ion-radio>
+                        <ion-radio style="margin-bottom: 10px;">No</ion-radio>
                         
                       </div>
                       </IonRadioGroup>
-                        
+                    </ion-col>
+                        <ion-col>
                       <IonRadioGroup>
                           <div class="radio">
-                          <ion-label style="font-weight: bold;">Ultrasound done</ion-label>
-                        <ion-radio>Yes</ion-radio>
-                        <ion-radio>No</ion-radio>
+                          <ion-label style="font-weight: bold; margin-bottom: 15px;">Ultrasound done</ion-label>
+                        <ion-radio style="margin-bottom: 10px;">Yes</ion-radio>
+                        <ion-radio style="margin-bottom: 10px;">No</ion-radio>
                         
                       </div>
                       </IonRadioGroup>
-            </div>
+                    </ion-col>
+                      </ion-row>
+       
+
                       <BasicForm :content-data="currentPregnancies"></BasicForm>
-                      <div class="radioContainer">
+                     
                         <IonRadioGroup>
                           <div class="radio">
-                          <ion-label style="font-weight: bold;">Source of gestation age</ion-label>
-                        <ion-radio>LMNP</ion-radio>
-                        <ion-radio>Ultrasound</ion-radio>
-                        <ion-radio>Fundal height</ion-radio>
+                          <ion-label style="font-weight: bold; margin-bottom: 15px;">Source of gestation age</ion-label>
+                        <ion-radio style="margin-bottom: 10px;">LMNP</ion-radio>
+                        <ion-radio style="margin-bottom: 10px;">Ultrasound</ion-radio>
+                        <ion-radio style="margin-bottom: 10px;">Fundal height</ion-radio>
                         
                       </div>
                       </IonRadioGroup>
-                     </div>
+                     
                      <BasicForm :content-data="deliveryDate"></BasicForm>
-                     <div class="radioContainer">
+                     
                         <IonRadioGroup>
                           <div class="radio">
-                          <ion-label style="font-weight: bold;">Tetanus dose</ion-label>
-                        <ion-radio>Fully immunised</ion-radio>
-                        <ion-radio>Under immunised</ion-radio>
-                        <ion-radio>No doses</ion-radio>
-                        <ion-radio>Unknown</ion-radio>
+                          <ion-label style="font-weight: bold; margin-bottom: 15px;">Tetanus dose</ion-label>
+                        <ion-radio style="margin-bottom: 10px;">Fully immunised</ion-radio>
+                        <ion-radio style="margin-bottom: 10px;"> Under immunised</ion-radio>
+                        <ion-radio style="margin-bottom: 10px;">No doses</ion-radio>
+                        <ion-radio style="margin-bottom: 10px;">Unknown</ion-radio>
                         
                       </div>
                       </IonRadioGroup>
-                     </div>
+                     
         </div>
-    </ion-item>
+    </ion-list>
 </template>
 
 <script lang="ts">
@@ -68,12 +74,16 @@ import {
 IonRadio,
 IonRadioGroup,
         } from '@ionic/vue';
-import BasicForm from '@/components/BasicForm.vue';
-import { icons } from '@/utils/svg';
-import BasicInputField from '@/components/BasicInputField.vue';
+import BasicForm from '../../../../components/BasicForm.vue';
+import { icons } from '../../../../utils/svg';
+import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import { checkmark, pulseOutline } from 'ionicons/icons';
+<<<<<<<< HEAD:src/apps/ANC/components/profile/CurrentPregnancies.vue
 import {useCurrentPregnanciesStore} from '../../store/profile/CurrentPreganciesStore'
+========
+import {useCurrentPregnanciesStore} from '../../store/CurrentPreganciesStore';
+>>>>>>>> origin/anc-currentPregnancies:src/apps/ANC/components/Profile/CurrentPregnancies.vue
 export default defineComponent({
     name: "Current",
     components:{
@@ -140,23 +150,8 @@ export default defineComponent({
   </script>
 
 <style scoped>
-.vitals_title{
-    border-bottom: 1px solid #B3B3B3;
-    margin-bottom: 50px ;
-}
-.input-with-icon {
-  position: relative;
-}
-.input-icon {
-  position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: gray; /* Adjust the color as needed */
-}
-ion-col{
-    padding-bottom:15px ;
-}
+
+
 .checkLbltp {
     border-bottom: 2px dotted var(--ion-color-medium);
     --inner-border-width:0;
@@ -177,17 +172,10 @@ h5{
   
     }
 
-ion-checkbox {
-  width: 100%;
+ion-radio {
+  width: 40%;
 }
-.radioContainer{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
 
-
-}
 
 .tpStndCls {
     font-size: 16px;

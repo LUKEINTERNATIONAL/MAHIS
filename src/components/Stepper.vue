@@ -81,8 +81,6 @@
   import Disposition from '@/apps/NCD/components/ConsultationPlan/Disposition.vue'
   import Investigations from '@/apps/NCD/components/ConsultationPlan/Investigations.vue'
   import TreatmentPlan from '@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue'
-  import PastObstreticHistory from "@/apps/ANC/components/profile/PastObstreticHistory.vue";
-  import CurrentPregnancies from "@/apps/ANC/components/profile/CurrentPregnancies.vue";
   import Medications from "@/apps/ANC/components/profile/Medications.vue";
   import WomanBehaviour from "@/apps/ANC/components/profile/WomanBehaviour.vue";
   import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue";
@@ -95,6 +93,11 @@
   import FetalPresantation from "@/apps/ANC/components/physical exam/FetalPresantation.vue";
   import MaternalExam from "@/apps/ANC/components/physical exam/MaternalExam.vue";
   import PresentingSigns from "@/apps/ANC/components/physical exam/PresentingSigns.vue";
+  import CurrentPregnancies from '@/apps/ANC/components/profile/CurrentPregnancies.vue';
+  import UltrasoundScan from '@/apps/ANC/components/lab_tests/UltrasoundScan.vue';
+  import UrineTest from '@/apps/ANC/components/lab_tests/UrineTest.vue';
+  import TB from '@/apps/ANC/components/lab_tests/TB.vue';
+
   import SaveProgressModal from '@/components/SaveProgressModal.vue'
   import { createModal } from '@/utils/Alerts'
   import { icons } from '@/utils/svg';
@@ -109,11 +112,11 @@
         IonToolbar,
         Toolbar,
         ToolbarSearch,
-        IonButton, 
-        IonCard, 
-        IonCardContent, 
-        IonCardHeader, 
-        IonCardSubtitle, 
+        IonButton,
+        IonCard,
+        IonCardContent,
+        IonCardHeader,
+        IonCardSubtitle,
         IonCardTitle,
         IonAccordion,
         IonAccordionGroup,
@@ -127,8 +130,6 @@
         Investigations,
         TreatmentPlan,
         IonModal,
-        PastObstreticHistory,
-        CurrentPregnancies,
         Medications,
         WomanBehaviour,
         MedicalHistory,
@@ -140,8 +141,12 @@
         FetalPresantation,
         FetalAssesment,
         MaternalExam,
-        PresentingSigns
-
+        PresentingSigns,
+        CurrentPregnancies,
+        PastObstreticHistory,
+        UltrasoundScan,
+        UrineTest,
+        TB
     },
     data(){
         return {
@@ -256,7 +261,7 @@
     width: 140px;
     align-items: center;
     font-weight: 400;
-    font-size: 14;
+    font-size: 14px;
     position: fixed;
     z-index: 1000;
   }
