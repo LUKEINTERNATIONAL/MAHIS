@@ -1,15 +1,19 @@
 <template>
-  <ion-item>
+  
+  <ion-list>
+    
     <div>
                        
                         <basic-form :contentData="prevPregnancies"></basic-form>
+                       
                        <div class="radioContainer">
+                        <ion-list>
                         <IonRadioGroup>
                           <div class="radio">
-                          <ion-label style="font-weight: bold;">Was last live birth preterm?</ion-label>
-                        <ion-radio>Yes</ion-radio>
-                        <ion-radio>No</ion-radio>
-                        <ion-radio>Don't know</ion-radio>
+                          <ion-label style="font-weight: bold; margin-bottom: 15px;">Was last live birth preterm?</ion-label>
+                        <ion-radio style="margin-bottom: 10px;">Yes</ion-radio>
+                        <ion-radio style="margin-bottom: 10px;">No</ion-radio>
+                        <ion-radio style="margin-bottom: 10px;">Don't know</ion-radio>
                       </div>
                       </IonRadioGroup>
                       
@@ -17,13 +21,15 @@
                         
                       <IonRadioGroup>
                           <div class="radio">
-                          <ion-label style="font-weight: bold;">Last live birth had congenital abnormalities?</ion-label>
-                        <ion-radio>Yes</ion-radio>
-                        <ion-radio>No</ion-radio>
-                        <ion-radio>Don't know</ion-radio>
+                          <ion-label style="font-weight: bold; margin-bottom: 15px;">Last live birth had congenital abnormalities?</ion-label>
+                        <ion-radio style="margin-bottom: 10px;">Yes</ion-radio>
+                        <ion-radio style="margin-bottom: 10px;">No</ion-radio>
+                        <ion-radio style="margin-bottom: 10px;">Don't know</ion-radio>
                       </div>
                       </IonRadioGroup>
+                        </ion-list>
                       </div>
+                    
                         <basic-form :contentData="modeOfDelivery"></basic-form>
                         
           <ion-list>
@@ -31,48 +37,48 @@
             <div class="checkboxesDisplay">
             <div>
                         <div>
-            <ion-checkbox  @ionChange="addPreEclampsia" :checked="PreEclampsia" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-top:20px;">Pre-eclampsia</ion-checkbox>
+            <ion-checkbox  @ionChange="addPreEclampsia" :checked="PreEclampsia" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-top:20px; margin-bottom: 10px;">Pre-eclampsia</ion-checkbox>
         </div>
 
         <div>
-            <ion-checkbox  @ionChange="addEclampsia" :checked="Eclampsia" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin:;">Eclampsia</ion-checkbox>
+            <ion-checkbox  @ionChange="addEclampsia" :checked="Eclampsia" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Eclampsia</ion-checkbox>
         </div>
 
         <div>
-            <ion-checkbox  @ionChange="addPuerperal" :checked="Puerperal" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin:;">Puerperal Sepsis</ion-checkbox>
+            <ion-checkbox  @ionChange="addPuerperal" :checked="Puerperal" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px;margin-bottom:10px;">Puerperal Sepsis</ion-checkbox>
         </div>
 
         <div>
-            <ion-checkbox  @ionChange="addBabyDeath" :checked="BabyDeath" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin:;">Baby died within 24hrs of birth</ion-checkbox>
+            <ion-checkbox  @ionChange="addBabyDeath" :checked="BabyDeath" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Baby died within 24hrs of birth</ion-checkbox>
         </div>
 
         <div>
-            <ion-checkbox  @ionChange="addConvulsions" :checked="Convulsions" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin:;">Convulsions</ion-checkbox>
+            <ion-checkbox  @ionChange="addConvulsions" :checked="Convulsions" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Convulsions</ion-checkbox>
         </div>
 
         <div>
-            <ion-checkbox  @ionChange="addForceps" :checked="Forceps" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin:;">Forceps</ion-checkbox>
+            <ion-checkbox  @ionChange="addForceps" :checked="Forceps" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Forceps</ion-checkbox>
         </div>
         </div>
         <div >
         <div>
-            <ion-checkbox  @ionChange="addMellitus" :checked="Mellitus" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin:;">Gestational diabetes mellitus</ion-checkbox>
+            <ion-checkbox  @ionChange="addMellitus" :checked="Mellitus" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Gestational diabetes mellitus</ion-checkbox>
         </div>
 
         <div>
-            <ion-checkbox  @ionChange="addBleeding" :checked="Bleeding" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin:;">Heavy bleeding (during or after delivery)</ion-checkbox>
+            <ion-checkbox  @ionChange="addBleeding" :checked="Bleeding" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Heavy bleeding (during or after delivery)</ion-checkbox>
         </div>
 
         <div>
-            <ion-checkbox  @ionChange="addMacrosomia" :checked="Macrosomia" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin:;">Macrosomia</ion-checkbox>
+            <ion-checkbox  @ionChange="addMacrosomia" :checked="Macrosomia" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Macrosomia</ion-checkbox>
         </div>
 
         <div>
-            <ion-checkbox  @ionChange="addPerineal" :checked="Perineal" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin:;">Perineal tear (3rd or 4th degree)</ion-checkbox>
+            <ion-checkbox  @ionChange="addPerineal" :checked="Perineal" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Perineal tear (3rd or 4th degree)</ion-checkbox>
         </div>
 
         <div>
-            <ion-checkbox  @ionChange="addAsphyxia" :checked="Asphyxia" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin:;">Asphyxia</ion-checkbox>
+            <ion-checkbox  @ionChange="addAsphyxia" :checked="Asphyxia" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Asphyxia</ion-checkbox>
         </div>
       </div>
       </div>
@@ -90,7 +96,7 @@
             </div>
           
 
-        </ion-item>
+        </ion-list>
      
 </template>
 
@@ -315,7 +321,7 @@ h5{
   
     }
 ion-radio {
-  width: 40%;
+  width: 45%;
 }
 ion-checkbox {
   width: 100%;

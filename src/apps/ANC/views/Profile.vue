@@ -3,7 +3,8 @@
   <ion-page>
     <Toolbar />
     <ion-content :fullscreen="true">
-      <Stepper :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
+      <DemographicBar/>
+      <Stepper stepperTitle="Profile-Medical History" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
     </ion-content>
   </ion-page>
 </template>
@@ -28,6 +29,7 @@ import PastObstreticHistory from '../components/Profile/PastObstreticHistory.vue
 import CurrentPregnancies from '../components/Profile/CurrentPregnancies.vue';
 import Stepper from '@/components/Stepper.vue';
 import { icons } from '@/utils/svg';
+import { chevronBackOutline, checkmark } from 'ionicons/icons';
 export default defineComponent({
 name: 'Menu',
 components:{
@@ -88,6 +90,14 @@ return {
   ],
         
 };
+},
+watch: {
+
+
+},
+setup () {
+  return {chevronBackOutline, checkmark}
+
 },
 methods:{
   markWizard(){},

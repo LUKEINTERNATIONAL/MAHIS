@@ -155,7 +155,7 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                                 {
                                     inputHeader: 'Mode of delivery',
                                     value: '',
-                                    name: 'Gravida',
+                                    name: 'MOD',
                                     required: true,
                                     eventType: 'input',
                                     alertsError: false,
@@ -164,7 +164,7 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                                 {
                                     inputHeader: 'Number of ceasarian',
                                     value: '',
-                                    name: 'Parity',
+                                    name: 'Ceasarian',
                                     required: true,
                                     eventType: 'input',
                                     alertsError: false,
@@ -179,7 +179,7 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                             {
                                 inputHeader: 'Last ceasarian section',
                                 value: '',
-                                name: 'ceasarian',
+                                name: 'LCS',
                                 required: true,
                                 eventType: 'input',
                                 alertsError: false,
