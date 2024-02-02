@@ -2,7 +2,7 @@
     <!-- Past Surgeries -->
     <ion-list>
         <ion-item :lines="pastSurgeries" class="dashed_bottom_border">
-            <ion-toggle :checked ="surgeriesChecked" @ionChange="surgeries">Past Surgeries</ion-toggle>
+            <ion-toggle :checked ="surgeriesChecked" @ionChange="surgeries" style="font-weight: bold;">Past Surgeries</ion-toggle>
         </ion-item>
         
         <div class="sub_item_body" v-if="surgeriesChecked">
@@ -186,7 +186,7 @@
  import {defineComponent} from 'vue';
  import {ref} from 'vue';
  import BasicInputField from "@/components/BasicInputField.vue";
- import {useMedicalHistoryStore} from "@/apps/ANC/store/medicalHistoryStore/medicalHistoryStore";
+ import {useMedicalHistoryStore} from "@/apps/ANC/store/medicalHistory/medicalHistoryStore";
  import BasicForm from '@/components/BasicForm.vue';
 //  import {icons} from "@/utils/svg.ts"
 
@@ -310,9 +310,8 @@ export default defineComponent({
 })
 </script>
 <style scoped>
-.surgery_content{
-    color: #636363;
-    text-align: center;
+.header{
+ font-weight: bold;
 }
 .sub_item_body{
     margin-left: 45px;

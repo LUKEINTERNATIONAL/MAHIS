@@ -9,19 +9,19 @@ import { calendar } from 'ionicons/icons';
 
                     <BasicInputField inputHeader="Height" :icon="iconsContent.calendar" unit="cm" />
                 </div> -->
-                <!-- <div>
+                <div>
                     <MedicalHistory/>
-                </div>  -->
+                </div> 
                 <!-- <div>
                     <MedicalFollowUp/>
                 </div> -->
                 <!-- <div>
                     <SymptomsFollowUp/>
                 </div>  -->
-
+<!-- 
                 <div>
                     <Ipv/>
-                </div> 
+                </div>  -->
 
             </ion-card>
 
@@ -46,7 +46,7 @@ import { defineComponent } from 'vue';
 import BasicInputField from '@/components/BasicInputField.vue'
 import MedicalHistory from '@/apps/ANC/profile/MedicalHistory.vue';
 import { icons } from '@/utils/svg';
-import Ipv from '../symptomsFollowUp/Ipv.vue';
+// import Ipv from '../symptomsFollowUp/Ipv.vue';
 export default defineComponent({
 name: 'Menu',
 components:{
@@ -59,7 +59,7 @@ components:{
     IonToolbar,
     BasicInputField,
     MedicalHistory,
-    Ipv
+    // Ipv
 },
   data() {
 return {
