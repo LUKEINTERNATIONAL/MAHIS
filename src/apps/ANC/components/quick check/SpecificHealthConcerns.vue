@@ -1,6 +1,6 @@
 <template>
   <ion-list>
-    <ion-item :lines="healthConcern" class="dashed_bottom_border">
+    <ion-item :lines="healthConcern" class="dashed_bottom_border" style="font-weight: bold">
       Specific health concerns
     </ion-item>
     <div class="sub_item_body" >

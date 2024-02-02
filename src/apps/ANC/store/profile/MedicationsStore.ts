@@ -20,16 +20,16 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'OralPrePforHIV',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '2',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
                             {
                                 name: 'Analgesic',
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '3',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
                         ]
                     }
@@ -50,16 +50,16 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '2',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
                             {
                                 name: 'Anti-TB',
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '3',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
 
                         ]
@@ -80,16 +80,16 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '2',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
                             {
                                 name: 'Antimarials',
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '3',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
 
                         ]
@@ -111,16 +111,16 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '2',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
                             {
                                 name: 'Aspirin',
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '3',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
                         ]
                     }
@@ -141,16 +141,16 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '2',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
                             {
                                 name: 'Doxylamine',
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '3',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
                         ]
                     }
@@ -170,16 +170,16 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '2',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
                             {
                                 name: 'Iron',
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '3',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
                         ]
                     }
@@ -199,16 +199,16 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '2',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
                             {
                                 name: 'Thyroid medication',
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '3',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
                         ]
                     }
@@ -228,16 +228,16 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '2',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
                             {
                                 name: 'Anti-psychotics',
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '3',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
                         ]
                     }
@@ -258,16 +258,16 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '2',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
                             {
                                 name: 'Anti-hypertensive',
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '3',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
                         ]
                     }
@@ -288,16 +288,16 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '2',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
                             {
                                 name: 'Antivirals',
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '3',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
                         ]
                     }
@@ -317,8 +317,8 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '2',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
                             {
                                 name: 'Co-trimoxazole',
@@ -326,7 +326,8 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '3',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
                         ]
                     }
@@ -346,16 +347,16 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '2',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
                             {
                                 name: 'Hemorrhoidal medication',
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '3',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
                         ]
                     }
@@ -375,16 +376,16 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '2',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
                             {
                                 name: 'Multivitamin',
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '3',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
                         ]
                     }
@@ -405,21 +406,40 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '2',
-                                justify: 'end',
-                            },
-                            {
-                                name: 'Other',
-                                value: 'value',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '3',
-                                justify: 'end',
+                                colSize: '4',
+                                justify: 'space-between',
                             },
 
                         ]
                     }
 
+            },
+            {
+                isFinishBtn: false,
+                sectionHeader: '',
+                classDash: 'dashed_bottom_border _padding',
+
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Other (specify)',
+                                        unit: '',
+                                        icon: icons.height,
+                                        value: '',
+                                        name: 'Other',
+                                        required: true,
+                                        eventType: 'input',
+                                        inputWidth: "625px",
+                                        required: true
+                                    },
+
+                                ]
+                            }
+                        ]
+                    },
             },
 
         ] as any

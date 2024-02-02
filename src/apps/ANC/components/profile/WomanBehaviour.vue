@@ -2,7 +2,7 @@
 <template>
   <!-- Daily Caffeine -->
   <ion-list>
-    <ion-item :lines="DailyCaffeine" class="dashed_bottom_border">
+    <ion-item :lines="DailyCaffeine" class="dashed_bottom_border sub_item_header">
      Daily caffeine  intake
     </ion-item>
     <div class="sub_item_body">
@@ -13,7 +13,7 @@
 
   <!-- Tobbaco use -->
   <ion-list>
-    <ion-item :lines="tobbacoUses" class="dashed_bottom_border">
+    <ion-item :lines="tobbacoUses" class="dashed_bottom_border sub_item_header">
      Use of tobbaco
     </ion-item>
 
@@ -110,6 +110,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.sub_item_header{
+  font-weight: bold;
+}
 #container {
   text-align: center;
 

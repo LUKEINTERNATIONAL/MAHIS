@@ -1,6 +1,6 @@
 <template>
   <ion-list>
-    <ion-item :lines="medication" class="dashed_bottom_border">
+    <ion-item :lines="medication" class="dashed_bottom_border sub_item_header">
       <ion-toggle :checked="medicationChecked" @ionChange="medications">Current Medications</ion-toggle>
     </ion-item>
     <div class="sub_item_body" v-if="medicationChecked">
@@ -25,7 +25,7 @@ import {
   IonToggle,
   IonSelectOption,
   IonInput,
-  IonSelect,
+  IonSelect, IonTextarea, IonLabel,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { checkmark,pulseOutline } from 'ionicons/icons';
@@ -39,6 +39,7 @@ import {useMedicationsStore} from "@/apps/ANC/store/profile/MedicationsStore";
 export default defineComponent({
   name: 'Menu',
   components:{
+    IonLabel, IonTextarea,
     IonContent,
     IonHeader,
     IonItem,
@@ -56,7 +57,7 @@ export default defineComponent({
   data() {
     return {
       iconsContent: icons,
-      medicationChecked : false,
+      medicationChecked : true,
       medication: '',
     };
   },
@@ -82,6 +83,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.sub_item_header{
+  font-weight: bold;
+}
 #container {
   text-align: center;
 

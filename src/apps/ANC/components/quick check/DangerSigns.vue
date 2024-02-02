@@ -1,6 +1,6 @@
 <template>
   <ion-list>
-    <ion-item :lines="dangerSign" class="dashed_bottom_border">
+    <ion-item :lines="dangerSign" class="dashed_bottom_border sub_item_header">
       <ion-toggle :checked="dangerSignChecked" @ionChange="dangerSigns">Danger signs</ion-toggle>
     </ion-item>
     <div class="sub_item_body" v-if="dangerSignChecked">
@@ -11,7 +11,7 @@
     <ion-item class="sub_item_body_close" v-if="dangerSignChecked"/>
   </ion-list>
   <ion-list>
-    <ion-item :lines="previousvisit" class="dashed_bottom_border">
+    <ion-item :lines="previousvisit" class="dashed_bottom_border" style="font-weight: bold">
      Has the woman had any ANC visit at any facility?
     </ion-item>
     <div class="sub_item_body" >
@@ -96,6 +96,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.sub_item_header{
+  font-weight: bold;
+}
 #container {
   text-align: center;
 

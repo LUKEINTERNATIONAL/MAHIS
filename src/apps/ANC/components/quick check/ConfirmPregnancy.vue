@@ -1,6 +1,6 @@
 <template>
   <ion-list>
-    <ion-item :lines="confirmPregnancy" class="dashed_bottom_border">
+    <ion-item :lines="confirmPregnancy" class="dashed_bottom_border" style="font-weight: bold">
       Has pregnancy been confirmed?
     </ion-item>
     <div class="sub_item_body" >
@@ -11,7 +11,7 @@
     <ion-item class="sub_item_body_close"/>
   </ion-list>
   <ion-list>
-    <ion-item :lines="plannedPregnancy" class="dashed_bottom_border">
+    <ion-item :lines="plannedPregnancy" class="dashed_bottom_border" style="font-weight: bold">
       Was pregnancy planned?
     </ion-item>
     <div class="sub_item_body" >

@@ -1,6 +1,6 @@
 <template>
   <ion-list>
-    <ion-item :lines="previousvisit" class="dashed_bottom_border">
+    <ion-item :lines="previousvisit" class="dashed_bottom_border" style="font-weight: bold">
           Reason why the woman came to the facility today?
     </ion-item>
     <div class="sub_item_body" >

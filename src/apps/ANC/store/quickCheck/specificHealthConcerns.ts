@@ -438,9 +438,33 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
 
             },
 
+            {
+                isFinishBtn: false,
+                sectionHeader: '',
+                classDash: 'dashed_bottom_border _padding',
 
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Other (specify)',
+                                        unit: '',
+                                        icon: icons.height,
+                                        value: '',
+                                        name: 'Other',
+                                        required: true,
+                                        eventType: 'input',
+                                        inputWidth: "300px",
+                                        required: true
+                                    },
 
-
+                                ]
+                            }
+                        ]
+                    },
+            },
 
 
         ] as any
