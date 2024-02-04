@@ -20,16 +20,47 @@
             <ScanRegistration />
         </div>
         <div v-if="registrationType == 'manual'">
-            <div>
-                <DemographicsRegistration  />
+            <div v-if="currentStep =='Personal Information'">
+                <PersonalInformation  />
+            </div>
+            <div v-if="currentStep =='Location'">
+                <Location />
+            </div>
+            <div v-if="currentStep =='Social History'">
+                <SocialHistory />
+            </div>
+            <div v-if="currentStep =='Guardian Information'">
+                <GuardianInformation />
             </div>
         </div>
     </ion-content>
-    <div class="footer">
-        <DynamicButton  name="Save" iconSlot="end" :icon="iconsContent.saveWhite" @click="saveData()" />
-    </div>
-    </ion-page>
-</template>
+    <ion-footer v-if="registrationType == 'manual'">
+        <div class="footer position_content">
+            <DynamicButton name="Previous" :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
+            <ion-breadcrumbs class="breadcrumbs">
+                <ion-breadcrumb @click="setCurrentStep('Personal Information')" :class="{ 'active': currentStep === 'Personal Information' }">
+                    <span class="breadcrumb-text">Personal Information</span>
+                    <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
+                </ion-breadcrumb>
+                <ion-breadcrumb @click="setCurrentStep('Location')" :class="{ 'active': currentStep === 'Location' }">
+                    <span class="breadcrumb-text">Location</span>
+                    <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
+                </ion-breadcrumb>
+                <ion-breadcrumb @click="setCurrentStep('Social History')" :class="{ 'active': currentStep === 'Social History' }">
+                    <span class="breadcrumb-text">Social History</span>
+                    <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
+                </ion-breadcrumb>
+                <ion-breadcrumb @click="setCurrentStep('Guardian Information')" :class="{ 'active': currentStep === 'Guardian Information' }">
+                    <span class="breadcrumb-text">Guardian Information</span>
+                    <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
+                </ion-breadcrumb>
+            </ion-breadcrumbs>
+            <DynamicButton v-if="currentStep =='Guardian Information'" name="Save" iconSlot="end" :icon="iconsContent.saveWhite" @click="saveData()" />
+            <DynamicButton v-else name="Next" iconSlot="end" :icon="iconsContent.arrowRightWhite" @click="nextStep" />
+        </div>
+  </ion-footer>
+  </ion-page>
+  </template>
   
   <script lang="ts">
     import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonBreadcrumb, IonBreadcrumbs, IonIcon } from '@ionic/vue';
@@ -40,7 +71,6 @@
     import PersonalInformation from '@/components/Registration/PersonalInformation.vue';
     import GuardianInformation from '@/components/Registration/GuardianInformation.vue';
     import Location from '@/components/Registration/Location.vue';
-    import DemographicsRegistration from '@/components/DemographicsRegistration.vue';
     import SocialHistory from '@/components/Registration/SocialHistory.vue';
     import ScanRegistration from '@/components/Registration/ScanRegistration.vue';
     import { useRegistrationStore } from '@/stores/RegistrationStore'
@@ -72,8 +102,7 @@
         GuardianInformation,
         Location,
         SocialHistory,
-        ScanRegistration,
-        DemographicsRegistration
+        ScanRegistration
     },
       data() {
             return {
@@ -225,9 +254,8 @@ ion-toolbar {
   .footer{
     color: #000;
     display: flex;
-    justify-content: right;
+    justify-content: space-between;
     padding: 5px 0px 5px 0px;
-    margin-right: 40px;
   }
   ion-breadcrumb ion-icon{
     margin-inline: 30px;
@@ -245,8 +273,5 @@ ion-toolbar {
 }
 .active .breadcrumb-text {
   border-bottom: 1px solid #00190E; /* Set the desired color for the underline */
-}
-ion-footer{
-    border-top: 1px solid #E6E6E6;
 }
 </style>
