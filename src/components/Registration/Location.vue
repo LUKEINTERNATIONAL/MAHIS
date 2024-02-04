@@ -195,7 +195,6 @@ async checkSelected(inputField: any) {
 .demographics_title{
     font-weight: 700;
     font-size: 24px;
-    padding-bottom: 20px;
 }
 .gender{
     display: flex;

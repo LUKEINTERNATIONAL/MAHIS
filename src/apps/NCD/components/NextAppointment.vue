@@ -114,7 +114,6 @@ methods:{
 .demographics_title{
     font-weight: 700;
     font-size: 24px;
-    padding-bottom: 20px;
 }
 .sub_title{
     font-weight: 400;

@@ -32,19 +32,21 @@
         </ion-col>
     </ion-row>
 
-    <span v-if="registrationDisplayType=='list'">
-        <ion-row class="card_row" v-for="(item, index) in content.data" :key="index">
-            <ion-col style="display: flex; justify-content: center;">
-                <ion-card class="registration_ion_card" style="width:500px">
-                    <div class="card_content">
-                        <div class="card_hearder">
-                            {{ item.cards[0].cardTitle }}            
+    <span v-if="registrationDisplayType=='list'" >
+        <span v-for="(data, index) in content.data" :key="index">
+            <ion-row class="card_row"  v-for="(item, cardIndex) in data.cards" :key="cardIndex">
+                <ion-col style="display: flex; justify-content: center;">
+                    <ion-card class="registration_ion_card" style="width:500px">
+                        <div class="card_content">
+                            <div class="card_hearder">
+                                {{ item.cardTitle }}            
+                            </div>
+                            <basic-form :contentData="item.content" @update:selected="$emit('update:selected',$event)" @update:inputValue="$emit('update:inputValue',$event)"></basic-form>
                         </div>
-                        <basic-form :contentData="item.cards[0].content" @update:selected="$emit('update:selected',$event)" @update:inputValue="$emit('update:inputValue',$event)"></basic-form>
-                    </div>
-                </ion-card>
-            </ion-col>
-        </ion-row>
+                    </ion-card>
+                </ion-col>
+            </ion-row>
+        </span>
     </span>  
 </template>
   
@@ -115,7 +117,6 @@ export default defineComponent({
 .demographics_title{
     font-weight: 700;
     font-size: 24px;
-    padding-bottom: 20px;
     text-align: left;
     padding-top: 20px ;
 }

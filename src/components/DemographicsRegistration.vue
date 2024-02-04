@@ -201,17 +201,9 @@ methods:{
                 {
                     cards:[
                         {
-                            cardTitle:"Home Location",
-                            content: this.homeLocation
-                        },
-                        {
                             cardTitle:"Curent Location",
                             content: this.currentLocation
-                        }
-                    ]
-                },
-                {
-                    cards:[
+                        },
                         {
                             cardTitle:"Social History",
                             content: this.socialHistory
@@ -220,6 +212,10 @@ methods:{
                 },
                 {
                     cards:[
+                    {
+                            cardTitle:"Home Location",
+                            content: this.homeLocation
+                        },
                         {
                             cardTitle:"Guardian information",
                             content: this.guardianInformation
@@ -440,7 +436,6 @@ async checkSelected(inputField: any) {
 .demographics_title{
     font-weight: 700;
     font-size: 24px;
-    padding-bottom: 20px;
 }
 .gender{
     display: flex;
