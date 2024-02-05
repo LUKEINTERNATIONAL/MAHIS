@@ -44,7 +44,7 @@
                 </ion-row>
             </span>
             <span v-if="item.radioBtnContent">
-                <div style="" v-if="item.radioBtnContent?.header">{{ item.radioBtnContent?.header.title }} </div>
+                <div style="font-weight: bold;" v-if="item.radioBtnContent?.header">{{ item.radioBtnContent?.header.title }} </div>
                 <ion-row class="checkbox_content">
                     <ion-col :size="al.colSize" class="checkout_col" style="" v-for="(al, index3) in item.radioBtnContent?.data" :key="index3">
                         <span v-if="al.header" class="first_col">
@@ -88,7 +88,7 @@
                 </ion-row>
             </span>
             <span v-if="item.checkboxBtnContent">
-                <div style="" v-if="item.checkboxBtnContent?.header">{{ item.checkboxBtnContent?.header.title }} </div>
+                <div style="font-weight: bold" v-if="item.checkboxBtnContent?.header">{{ item.checkboxBtnContent?.header.title }} </div>
                 <ion-row class="checkbox_content">
                     <ion-col :size="al.colSize" class="checkout_col" style="" v-for="(al, index3) in item.checkboxBtnContent?.data" :key="index3">
                         <span v-if="al.header" class="first_col">
@@ -255,6 +255,9 @@ ion-radio {
 .checkout_col{
     display: flex;
     align-items: center;
+}
+.checkout_col ion-checkbox{
+    margin-right: 150px;
 }
 .alerts_error{
     background: #f5dad8;

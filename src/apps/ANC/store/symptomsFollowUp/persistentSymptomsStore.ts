@@ -49,31 +49,15 @@ export const usePersistentSymptomsStore = defineStore('persistentSymptomsStore',
                             name: persistentForm.breadingDifficulty.name,
                             value: persistentForm.breadingDifficulty.value,
                             labelPlacement: 'start',
-                            colSize: '7',
+                            colSize: '6',
                             justify: 'space-between',
                             checked: false
-                        }
-                        
-                    ],
-                }
-                    
-        },
-        {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
+                        },
                         {
                             name: persistentForm.legCramps.name,
                             value: persistentForm.legCramps.value,
                             labelPlacement: 'start',
-                            colSize: '7',
+                            colSize: '6',
                             justify: 'space-between',
                             checked: false
                         }
@@ -97,31 +81,15 @@ export const usePersistentSymptomsStore = defineStore('persistentSymptomsStore',
                             name: persistentForm.visualDisturbance.name,
                             value: persistentForm.visualDisturbance.value,
                             labelPlacement: 'start',
-                            colSize: '7',
+                            colSize: '6',
                             justify: 'space-between',
                             checked: false
-                        }
-                        
-                    ],
-                }
-                    
-        },
-        {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
+                        },
                         {
                             name: persistentForm.constipation.name,
                             value: persistentForm.constipation.value,
                             labelPlacement: 'start',
-                            colSize: '7',
+                            colSize: '6',
                             justify: 'space-between',
                             checked: false
                         }
@@ -145,31 +113,15 @@ export const usePersistentSymptomsStore = defineStore('persistentSymptomsStore',
                             name: persistentForm.headache.name,
                             value: persistentForm.headache.value,
                             labelPlacement: 'start',
-                            colSize: '7',
+                            colSize: '6',
                             justify: 'space-between',
                             checked: false
-                        }
-                        
-                    ],
-                }
-                    
-        },
-        {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
+                        },
                         {
                             name: persistentForm.heartburn.name,
                             value: persistentForm.heartburn.value,
                             labelPlacement: 'start',
-                            colSize: '7',
+                            colSize: '6',
                             justify: 'space-between',
                             checked: false
                         }
@@ -193,7 +145,7 @@ export const usePersistentSymptomsStore = defineStore('persistentSymptomsStore',
                             name: persistentForm.painLeg.name,
                             value: persistentForm.painLeg.value,
                             labelPlacement: 'start',
-                            colSize: '7',
+                            colSize: '6',
                             justify: 'space-between',
                             checked: false
                         }

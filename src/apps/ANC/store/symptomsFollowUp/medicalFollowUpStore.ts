@@ -78,11 +78,17 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
                     data:[
                         {
                             name: trailForm.takingCalciumSuplimentsYes.name,
-                            value: trailForm.takingCalciumSuplimentsYes.value
+                            value: trailForm.takingCalciumSuplimentsYes.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
                         {
                             name: trailForm.takingCalciumSuplimentsNo.name,
-                            value: trailForm.takingCalciumSuplimentsNo.value
+                            value: trailForm.takingCalciumSuplimentsNo.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         }
                     ]
                 }
@@ -100,11 +106,17 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
                     data:[
                         {
                             name: trailForm.sideEffectsCalciumSuplimentsYes.name,
-                            value: trailForm.sideEffectsCalciumSuplimentsYes.value
+                            value: trailForm.sideEffectsCalciumSuplimentsYes.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
                         {
                             name: trailForm.sideEffectsCalciumSuplimentsNo.name,
-                            value: trailForm.sideEffectsCalciumSuplimentsNo.value
+                            value: trailForm.sideEffectsCalciumSuplimentsNo.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         }
                     ]
                 }
@@ -122,11 +134,17 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
                     data:[
                         {
                             name: trailForm.ifaTabletsYes.name,
-                            value: trailForm.ifaTabletsYes.value
+                            value: trailForm.ifaTabletsYes.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
                         {
                             name: trailForm.ifaTabletsNo.name,
-                            value: trailForm.ifaTabletsNo.value
+                            value: trailForm.ifaTabletsNo.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         }
                     ]
                 }
@@ -144,11 +162,17 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
                     data:[
                         {
                             name: trailForm.sideEfffectsifaSuplimeYes.name,
-                            value: trailForm.sideEfffectsifaSuplimeYes.value
+                            value: trailForm.sideEfffectsifaSuplimeYes.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
                         {
                             name: trailForm.sideEfffectsifaSuplimeNo.name,
-                            value: trailForm.sideEfffectsifaSuplimeNo.value
+                            value: trailForm.sideEfffectsifaSuplimeNo.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         }
                     ]
                 }
@@ -166,11 +190,17 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
                     data:[
                         {
                             name: trailForm.takingAspirinTabletsYes.name,
-                            value: trailForm.takingAspirinTabletsYes.value
+                            value: trailForm.takingAspirinTabletsYes.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
                         {
                             name: trailForm.takingAspirinTabletsNo.name,
-                            value: trailForm.takingAspirinTabletsNo.value
+                            value: trailForm.takingAspirinTabletsNo.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         }
                     ]
                 }
@@ -188,11 +218,17 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
                     data:[
                         {
                             name: trailForm.takingVitaminAsupplementsYes.name,
-                            value: trailForm.takingVitaminAsupplementsYes.value
+                            value: trailForm.takingVitaminAsupplementsYes.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
                         {
                             name: trailForm.takingVitaminAsupplementsNo.name,
-                            value: trailForm.takingVitaminAsupplementsNo.value
+                            value: trailForm.takingVitaminAsupplementsNo.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         }
                     ]
                 }
@@ -210,11 +246,17 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
                     data:[
                         {
                             name: trailForm.takingPenicillinTreatmentForSyphilisYes.name,
-                            value: trailForm.takingPenicillinTreatmentForSyphilisYes.value
+                            value: trailForm.takingPenicillinTreatmentForSyphilisYes.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
                         {
                             name: trailForm.takingPenicillinTreatmentForSyphilisNo.name,
-                            value: trailForm.takingPenicillinTreatmentForSyphilisNo.value
+                            value: trailForm.takingPenicillinTreatmentForSyphilisNo.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         }
                     ]
                 }

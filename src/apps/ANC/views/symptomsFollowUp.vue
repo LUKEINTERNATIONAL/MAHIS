@@ -3,7 +3,7 @@
       <Toolbar />
       <ion-content :fullscreen="true">
         <DemographicBar />
-        <Stepper stepperTitle="Past Medical History" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
+        <Stepper stepperTitle="Symptoms FollowUp" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
       </ion-content>
     </ion-page>
   </template>

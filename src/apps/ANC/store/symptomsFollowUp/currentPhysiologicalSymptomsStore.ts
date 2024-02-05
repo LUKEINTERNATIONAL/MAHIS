@@ -53,31 +53,15 @@ export const useCurrentPhysiologicalSymptomsStore = defineStore('currentPhysiolo
                             name: physiologicalSymptomsForm.abnormalPulseRate.name,
                             value: physiologicalSymptomsForm.abnormalPulseRate.value,
                             labelPlacement: 'start',
-                            colSize: '7',
+                            colSize: '6',
                             justify: 'space-between',
                             checked: false
-                        }
-                        
-                    ],
-                }
-                    
-        },
-        {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
-                        {
+                        },
+                                                {
                             name: physiologicalSymptomsForm.coughLasting.name,
                             value: physiologicalSymptomsForm.coughLasting.value,
                             labelPlacement: 'start',
-                            colSize: '7',
+                            colSize: '6',
                             justify: 'space-between',
                             checked: false
                         }
@@ -101,31 +85,15 @@ export const useCurrentPhysiologicalSymptomsStore = defineStore('currentPhysiolo
                             name: physiologicalSymptomsForm.painLowBack.name,
                             value: physiologicalSymptomsForm.painLowBack.value,
                             labelPlacement: 'start',
-                            colSize: '7',
+                            colSize: '6',
                             justify: 'space-between',
                             checked: false
-                        }
-                        
-                    ],
-                }
-                    
-        },
-        {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
+                        },
                         {
                             name: physiologicalSymptomsForm.constipation.name,
                             value: physiologicalSymptomsForm.constipation.value,
                             labelPlacement: 'start',
-                            colSize: '7',
+                            colSize: '6',
                             justify: 'space-between',
                             checked: false
                         }
@@ -149,31 +117,15 @@ export const useCurrentPhysiologicalSymptomsStore = defineStore('currentPhysiolo
                             name: physiologicalSymptomsForm.headache.name,
                             value: physiologicalSymptomsForm.headache.value,
                             labelPlacement: 'start',
-                            colSize: '7',
+                            colSize: '6',
                             justify: 'space-between',
                             checked: false
-                        }
-                        
-                    ],
-                }
-                    
-        },
-        {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
-                        {
+                        },
+                            {
                             name: physiologicalSymptomsForm.heartburn.name,
                             value: physiologicalSymptomsForm.heartburn.value,
                             labelPlacement: 'start',
-                            colSize: '7',
+                            colSize: '6',
                             justify: 'space-between',
                             checked: false
                         }
@@ -197,31 +149,15 @@ export const useCurrentPhysiologicalSymptomsStore = defineStore('currentPhysiolo
                             name: physiologicalSymptomsForm.painLeg.name,
                             value: physiologicalSymptomsForm.painLeg.value,
                             labelPlacement: 'start',
-                            colSize: '7',
+                            colSize: '6',
                             justify: 'space-between',
                             checked: false
-                        }
-                        
-                    ],
-                }
-                    
-        },
-        {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
+                        },
                         {
                             name: physiologicalSymptomsForm.painPelvic.name,
                             value: physiologicalSymptomsForm.painPelvic.value,
                             labelPlacement: 'start',
-                            colSize: '7',
+                            colSize: '6',
                             justify: 'space-between',
                             checked: false
                         }

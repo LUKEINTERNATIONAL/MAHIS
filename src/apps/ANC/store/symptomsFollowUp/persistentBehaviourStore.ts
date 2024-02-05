@@ -86,11 +86,17 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
                     data:[
                         {
                             name: persistentBehaviourForm.highCaffaineIntakeYes.name,
-                            value: persistentBehaviourForm.highCaffaineIntakeYes.value
+                            value: persistentBehaviourForm.highCaffaineIntakeYes.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
                         {
                             name: persistentBehaviourForm.highCaffaineIntakeNo.name,
-                            value: persistentBehaviourForm.highCaffaineIntakeNo.value
+                            value: persistentBehaviourForm.highCaffaineIntakeNo.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         }
                     ]
                 }
@@ -108,11 +114,17 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
                     data:[
                         {
                             name: persistentBehaviourForm.tobaccoUseYes.name,
-                            value: persistentBehaviourForm.tobaccoUseYes.value
+                            value: persistentBehaviourForm.tobaccoUseYes.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
                         {
                             name: persistentBehaviourForm.tobaccoUseNo.name,
-                            value: persistentBehaviourForm.tobaccoUseNo.value
+                            value: persistentBehaviourForm.tobaccoUseNo.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         }
                     ]
                 }
@@ -130,11 +142,17 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
                     data:[
                         {
                             name: persistentBehaviourForm.recentlyQuitTobaccoProductsYes.name,
-                            value: persistentBehaviourForm.recentlyQuitTobaccoProductsYes.value
+                            value: persistentBehaviourForm.recentlyQuitTobaccoProductsYes.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
                         {
                             name: persistentBehaviourForm.recentlyQuitTobaccoProductsNo.name,
-                            value: persistentBehaviourForm.recentlyQuitTobaccoProductsNo.value
+                            value: persistentBehaviourForm.recentlyQuitTobaccoProductsNo.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         }
                     ]
                 }
@@ -152,11 +170,17 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
                     data:[
                         {
                             name: persistentBehaviourForm.exposureToSecondHandSmokeYes.name,
-                            value: persistentBehaviourForm.exposureToSecondHandSmokeYes.value
+                            value: persistentBehaviourForm.exposureToSecondHandSmokeYes.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
                         {
                             name: persistentBehaviourForm.exposureToSecondHandSmokeNo.name,
-                            value: persistentBehaviourForm.exposureToSecondHandSmokeNo.value
+                            value: persistentBehaviourForm.exposureToSecondHandSmokeNo.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         }
                     ]
                 }
@@ -174,11 +198,17 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
                     data:[
                         {
                             name: persistentBehaviourForm.condomUseDuringSexYes.name,
-                            value: persistentBehaviourForm.condomUseDuringSexYes.value
+                            value: persistentBehaviourForm.condomUseDuringSexYes.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
                         {
                             name: persistentBehaviourForm.condomUseDuringSexNo.name,
-                            value: persistentBehaviourForm.condomUseDuringSexNo.value
+                            value: persistentBehaviourForm.condomUseDuringSexNo.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         }
                     ]
                 }
@@ -196,11 +226,17 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
                     data:[
                         {
                             name: persistentBehaviourForm.alcoholUseYes.name,
-                            value: persistentBehaviourForm.alcoholUseYes.value
+                            value: persistentBehaviourForm.alcoholUseYes.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
                         {
                             name: persistentBehaviourForm.alcoholUseNo.name,
-                            value: persistentBehaviourForm.alcoholUseNo.value
+                            value: persistentBehaviourForm.alcoholUseNo.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         }
                     ]
                 }
@@ -218,11 +254,17 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
                     data:[
                         {
                             name: persistentBehaviourForm.substanceUseYes.name,
-                            value: persistentBehaviourForm.substanceUseYes.value
+                            value: persistentBehaviourForm.substanceUseYes.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
                         {
                             name: persistentBehaviourForm.substanceUseNo.name,
-                            value: persistentBehaviourForm.substanceUseNo.value
+                            value: persistentBehaviourForm.substanceUseNo.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         }
                     ]
                 }
@@ -240,11 +282,17 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
                     data:[
                         {
                             name: persistentBehaviourForm.noPersistentBehaviourYes.name,
-                            value: persistentBehaviourForm.noPersistentBehaviourYes.value
+                            value: persistentBehaviourForm.noPersistentBehaviourYes.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         },
                         {
                             name: persistentBehaviourForm.noPersistentBehaviourNo.name,
-                            value: persistentBehaviourForm.noPersistentBehaviourNo.value
+                            value: persistentBehaviourForm.noPersistentBehaviourNo.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
                         }
                     ]
                 }

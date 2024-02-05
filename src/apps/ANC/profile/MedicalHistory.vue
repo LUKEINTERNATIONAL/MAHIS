@@ -2,7 +2,7 @@
     <!-- Past Surgeries -->
     <ion-list>
         <ion-item :lines="pastSurgeries" class="dashed_bottom_border">
-            <ion-toggle :checked ="surgeriesChecked" @ionChange="surgeries">Past Surgeries</ion-toggle>
+            <ion-toggle :checked ="surgeriesChecked" @ionChange="surgeries" style="font-weight: bold">Past Surgeries</ion-toggle>
         </ion-item>
         
         <div class="sub_item_body" v-if="surgeriesChecked">
@@ -15,7 +15,7 @@
 
         <ion-list>
         <ion-item :lines="allegies" class="dashed_bottom_border">
-            <ion-toggle :checked ="allegiesChecked" @ionChange="allegyMethod">Allegies</ion-toggle>
+            <ion-toggle :checked ="allegiesChecked" @ionChange="allegyMethod" style="font-weight: bold">Allergies</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="allegiesChecked">
             <BasicForm :contentData="allegy" />
@@ -27,7 +27,7 @@
 
     <ion-list>
         <ion-item :lines="chronicalHC" class="dashed_bottom_border">
-            <ion-toggle :checked ="chronicalHCChecked" @ionChange="chronicalHCMethod">Existing Chronical Health Conditions</ion-toggle>
+            <ion-toggle :checked ="chronicalHCChecked" @ionChange="chronicalHCMethod" style="font-weight: bold">Existing Chronical Health Conditions</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="chronicalHCChecked">
             <BasicForm :contentData="exisitingChronicHealthConditions" />
@@ -39,7 +39,7 @@
      
     <ion-list>
         <ion-item :lines="bloodDisorder" class="dashed_bottom_border">
-            <ion-toggle :checked ="bloodDisorderChecked" @ionChange="bloodDisorderMethod">Blood Disorder</ion-toggle>
+            <ion-toggle :checked ="bloodDisorderChecked" @ionChange="bloodDisorderMethod" style="font-weight: bold">Blood Disorder</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="bloodDisorderChecked">
             <BasicForm :contentData="blood" />
@@ -51,7 +51,7 @@
 
        <ion-list>
         <ion-item :lines="cancer" class="dashed_bottom_border">
-            <ion-toggle :checked ="cancerChecked" @ionChange="cancerMethod">Cancer</ion-toggle>
+            <ion-toggle :checked ="cancerChecked" @ionChange="cancerMethod" style="font-weight: bold">Cancer</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="cancerChecked">
             <BasicForm :contentData="cancerIssue" />
@@ -63,7 +63,7 @@
 
     <ion-list>
         <ion-item :lines="heartDesease" class="dashed_bottom_border">
-            <ion-toggle :checked ="heartDeseaseChecked" @ionChange="heartDeseaseMethod">Heart Desease</ion-toggle>
+            <ion-toggle :checked ="heartDeseaseChecked" @ionChange="heartDeseaseMethod" style="font-weight: bold">Heart Desease</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="heartDeseaseChecked">
             <BasicForm :contentData="heartProblem" />
@@ -75,7 +75,7 @@
 
         <ion-list>
         <ion-item :lines="diabetis" class="dashed_bottom_border">
-            <ion-toggle :checked ="diabetisChecked" @ionChange="diabetisMethod">Diabetis/Epilespy</ion-toggle>
+            <ion-toggle :checked ="diabetisChecked" @ionChange="diabetisMethod"  style="font-weight: bold">Diabetis/Epilespy</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="diabetisChecked">
             <BasicForm :contentData="diabetes" />
@@ -88,7 +88,7 @@
 
         <ion-list>
         <ion-item :lines="hiv" class="dashed_bottom_border">
-            <ion-toggle :checked ="hivChecked" @ionChange="hivMethod">HIV</ion-toggle>
+            <ion-toggle :checked ="hivChecked" @ionChange="hivMethod" style="font-weight: bold">HIV</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="hivChecked">
             <BasicForm :contentData="hivTest" />
@@ -100,7 +100,7 @@
 
     <ion-list>
         <ion-item :lines="syphilis" class="dashed_bottom_border">
-            <ion-toggle :checked ="syphilisChecked" @ionChange="syphilisMethod">Syphilis</ion-toggle>
+            <ion-toggle :checked ="syphilisChecked" @ionChange="syphilisMethod" style="font-weight: bold">Syphilis</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="syphilisChecked" >
             <BasicForm :contentData="syphilisTest" />
@@ -112,7 +112,7 @@
 
     <ion-list>
         <ion-item :lines="hyperKTM" class="dashed_bottom_border">
-            <ion-toggle :checked ="hyperKTMChecked" @ionChange="hyperKTMMethod">Hypertations/Kidney/TB/Mental Illiness</ion-toggle>
+            <ion-toggle :checked ="hyperKTMChecked" @ionChange="hyperKTMMethod" style="font-weight: bold">Hypertations/Kidney/TB/Mental Illiness</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="hyperKTMChecked">
             <BasicForm :contentData="hKTMI" />
@@ -175,16 +175,16 @@ export default defineComponent({
     },
     data(){
         return{
-            surgeriesChecked: false,
-            allegiesChecked: false,
-            chronicalHCChecked:false,
-            bloodDisorderChecked:false,
-            cancerChecked:false,
-            heartDeseaseChecked: false,
-            diabetisChecked: false,
-            hivChecked: false,
-            syphilisChecked:  false,
-            hyperKTMChecked: false,
+            surgeriesChecked: true,
+            allegiesChecked: true,
+            chronicalHCChecked:true,
+            bloodDisorderChecked:true,
+            cancerChecked:true,
+            heartDeseaseChecked: true,
+            diabetisChecked: true,
+            hivChecked: true,
+            syphilisChecked:  true,
+            hyperKTMChecked: true,
 
             pastSurgeries:"",
             allegies:"",
@@ -211,7 +211,6 @@ export default defineComponent({
         const syphilisTest = useMedicalHistoryStore()
         const  hKTMI = useMedicalHistoryStore()
         const  otherSite = useMedicalHistoryStore()
-        // const  trial = useSymptomsFollowUpStore()
     },
       computed:{
         ...mapState(useMedicalHistoryStore,["medicalHistory"]),
@@ -225,7 +224,6 @@ export default defineComponent({
         ...mapState(useMedicalHistoryStore,["syphilisTest"]),
         ...mapState(useMedicalHistoryStore,["hKTMI"]),
         ...mapState(useMedicalHistoryStore,["otherSite"]),
-        // ...mapState(useSymptomsFollowUpStore,["trial"])
     },
     methods:{
         surgeries(){
