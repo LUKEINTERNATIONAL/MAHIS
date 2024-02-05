@@ -18,7 +18,7 @@ import { calendar } from 'ionicons/icons';
                 <!-- <div>
                     <SymptomsFollowUp/>
                 </div>  -->
-<!-- 
+<!--      
                 <div>
                     <Ipv/>
                 </div>  -->
@@ -59,6 +59,7 @@ components:{
     IonToolbar,
     BasicInputField,
     MedicalHistory,
+    // SymptomsFollowUp
     // Ipv
 },
   data() {

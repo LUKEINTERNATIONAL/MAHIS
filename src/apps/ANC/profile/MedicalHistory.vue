@@ -102,7 +102,7 @@
         <ion-item :lines="syphilis" class="dashed_bottom_border">
             <ion-toggle :checked ="syphilisChecked" @ionChange="syphilisMethod">Syphilis</ion-toggle>
         </ion-item>
-        <div class="sub_item_body" v-if="syphilisChecked">
+        <div class="sub_item_body" v-if="syphilisChecked" >
             <BasicForm :contentData="syphilisTest" />
         </div>
         <ion-item class="sub_item_body_close" v-if="syphilisChecked"/>
