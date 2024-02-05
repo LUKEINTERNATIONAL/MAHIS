@@ -12,7 +12,7 @@
 import { mapState } from 'pinia';
  import {defineComponent} from 'vue';
  import BasicInputField from "@/components/BasicInputField.vue";
- import {useIpvStore} from "@/apps/ANC/store/ipvStore";
+ import {useIpvStore} from "@/apps/ANC/store/symptomsFollowUp/ipvStore";
  import BasicForm from '@/components/BasicForm.vue';
 
 

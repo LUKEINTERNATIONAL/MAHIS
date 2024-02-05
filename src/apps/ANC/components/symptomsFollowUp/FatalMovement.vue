@@ -12,7 +12,7 @@
 import { mapState } from 'pinia';
  import {defineComponent} from 'vue';
  import BasicInputField from "@/components/BasicInputField.vue";
- import {useFatalMovementStore} from "@/apps/ANC/store/fatalMovementStore";
+ import {useFatalMovementStore} from "@/apps/ANC/store/symptomsFollowUp/fatalMovementStore";
  import BasicForm from '@/components/BasicForm.vue';
 
 

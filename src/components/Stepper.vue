@@ -82,6 +82,13 @@
   import Investigations from '@/apps/NCD/components/ConsultationPlan/Investigations.vue'
   import TreatmentPlan from '@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue'
   import SaveProgressModal from '@/components/SaveProgressModal.vue'
+  import MedicalHistory from '@/apps/ANC/profile/MedicalHistory.vue';
+  import MedicalFollowUp from '@/apps/ANC/components/symptomsFollowUp/MedicalFollowUp.vue';
+  import PersistentBehaviour from '@/apps/ANC/components/symptomsFollowUp/PersistentBehaviour.vue';
+  import PersistentSymptoms from '@/apps/ANC/components/symptomsFollowUp/PersistentSymptoms.vue';
+  import CurrentPhysiologicalSymptoms from '@/apps/ANC/components/symptomsFollowUp/CurrentPhysiologicalSymptoms.vue';
+  import Ipv from '@/apps/ANC/components/symptomsFollowUp/Ipv.vue';
+  import FatalMovement from '@/apps/ANC/components/symptomsFollowUp/FatalMovement.vue';
   import { createModal } from '@/utils/Alerts'
   import { icons } from '@/utils/svg';
   export default defineComponent({
@@ -113,6 +120,13 @@
         Investigations,
         TreatmentPlan,
         IonModal,
+        MedicalHistory,
+        MedicalFollowUp,
+        PersistentBehaviour,
+        PersistentSymptoms,
+        CurrentPhysiologicalSymptoms,
+        Ipv,
+        FatalMovement 
     },
     data(){
         return {

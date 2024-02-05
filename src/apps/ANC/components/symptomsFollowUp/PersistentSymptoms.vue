@@ -12,7 +12,7 @@
 import { mapState } from 'pinia';
  import {defineComponent} from 'vue';
  import BasicInputField from "@/components/BasicInputField.vue";
- import {usePersistentSymptomsStore} from "@/apps/ANC/store/persistentSymptomsStore";
+ import {usePersistentSymptomsStore} from "@/apps/ANC/store/symptomsFollowUp/persistentSymptomsStore";
  import BasicForm from '@/components/BasicForm.vue';
 
 
