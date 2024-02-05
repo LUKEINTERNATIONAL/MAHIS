@@ -21,24 +21,20 @@
                       <IonRadioGroup>
                           <div class="radio">
                           <ion-label style="font-weight: bold; margin-bottom: 15px">Reason ultrasound scan not done</ion-label>
-                        <ion-radio style="margin-bottom: 10px">Machine not functioning</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Technician not available</ion-radio>
+                        <ion-radio class = "ultrasound" style="margin-bottom: 10px">Machine not functioning</ion-radio>
+                        <ion-radio class = "ultrasound" style="margin-bottom: 10px">Technician not available</ion-radio>
                       </div>
                       </IonRadioGroup>
                     </ion-col>
                     
-                      
-                    
-                    <ion-col>
-         <div style="margin-top: 14px; margin-left: 10px;">
+    </ion-row>
+    <div style="margin-top: 14px; margin-left: 10px;">
             <ion-label class="tpStndCls">Other reason ultrasound scan not done (specify)</ion-label>
             <ion-item class="input_item" style="min-height: 120px; margin-top: 14px; margin-bottom: 15px">
                 <ion-label><span v-html="iconsContent.editPen"></span></ion-label>
                 <ion-textarea v-model="otherReason"  style="min-height: 120px;" class="inputTpln" :auto-grow="true"  fill="outline"></ion-textarea>
             </ion-item>
         </div>
-        </ion-col>
-    </ion-row>
     </div>
 
     <div class="radioContainer">
@@ -157,6 +153,9 @@ ion-checkbox {
 .radioContainer{
   border-bottom: 2px dotted var(--ion-color-medium);
   
+}
+.ultrasound {
+    width: 29%;
 }
 
 
