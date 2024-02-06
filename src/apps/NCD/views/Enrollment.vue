@@ -14,18 +14,20 @@
                     </div>
                 </div>
                 <div v-if="enrollmentDisplayType=='grid'" >
-                    <ion-row class="card_row" v-if="enrollmentDisplayType=='grid'">
-                        <ion-col size="6">
-                            <SubstanceDiagnosis  />
-                            <FamilyHistoryNCDNumber  />
-                        </ion-col>
-                        <ion-col size="4">
-                            <PatientHistory  />
-                        </ion-col>
-                        <!-- <ion-col size="4">
-                            <NextAppointment  />
-                        </ion-col> -->
-                    </ion-row>
+                    <div v-if="currentStep =='Enrollment'">
+                        <ion-row class="card_row" v-if="enrollmentDisplayType=='grid'">
+                            <ion-col size="6">
+                                <PatientHistory  />
+                            </ion-col>
+                            <ion-col size="6">
+                                <SubstanceDiagnosis  />
+                                <FamilyHistoryNCDNumber  />
+                            </ion-col>
+                        </ion-row>
+                    </div>
+                    <div v-if="currentStep =='Next Appointment'">
+                        <NextAppointment />
+                    </div>
                 </div>
                 <div v-if=" enrollmentDisplayType=='list'">
                     <div v-if="currentStep =='Substance & Diagnosis'">
@@ -44,9 +46,23 @@
                     </div>
                 </div>
             </ion-content>
-            <div class="footer2" v-if="enrollmentDisplayType=='grid'">
-                <DynamicButton  name="Save" iconSlot="end" :icon="iconsContent.saveWhite" @click="saveData()" />
-            </div>
+            <ion-footer v-if="enrollmentDisplayType=='grid'" >
+                <div class="footer position_content">
+                    <DynamicButton name="Previous" :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
+                    <ion-breadcrumbs class="breadcrumbs">
+                        <ion-breadcrumb @click="setCurrentStep('Enrollment')" :class="{ 'active': currentStep === 'Enrollment' }">
+                            <span class="breadcrumb-text">Enrollment</span>
+                            <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
+                        </ion-breadcrumb>
+                        <ion-breadcrumb @click="setCurrentStep('Next Appointment')" :class="{ 'active': currentStep === 'Next Appointment' }">
+                            <span class="breadcrumb-text">Next Appointment</span>
+                            <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
+                        </ion-breadcrumb>
+                    </ion-breadcrumbs>
+                    <DynamicButton v-if="currentStep =='Next Appointment'" name="Save" iconSlot="end" :icon="iconsContent.saveWhite" @click="saveData()" />
+                    <DynamicButton v-else name="Next" iconSlot="end" :icon="iconsContent.arrowRightWhite" @click="nextStep" />
+                </div>
+            </ion-footer>
             <ion-footer v-if="enrollmentDisplayType=='list'" >
                 <div class="footer position_content">
                     <DynamicButton name="Previous" :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
@@ -206,8 +222,12 @@
         nav(url: any){
                 this.$router.push(url);
             },
-    setDisplayType(type: any){
-      console.log('kkkkkkkkkkkkk')
+        setDisplayType(type: any){
+            if(type=='grid'){
+                this.currentStep ='Enrollment'
+            }else{
+                this.currentStep ='Substance & Diagnosis'
+            }
             const demographicsStore = useConfigurationStore()
             demographicsStore.setEnrollmentDisplayType(type)
             this.setIconClass()

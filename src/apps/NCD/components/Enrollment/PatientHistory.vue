@@ -45,7 +45,8 @@ return {
 };
 },
 computed:{
-    ...mapState(useEnrollementStore,["patientHistory"])
+    ...mapState(useEnrollementStore,["patientHistory"]),
+    ...mapState(useEnrollementStore,["patientHistoryHIV"])
 },
 watch: {
     personInformation: {
@@ -68,6 +69,10 @@ methods:{
                 {
                     cardTitle:"Patient history & Complications ",
                     content: this.patientHistory
+                },
+                {
+                    cardTitle:"Patient history & Complications ",
+                    content: this.patientHistoryHIV
                 }
             ]
            } 
@@ -76,8 +81,10 @@ methods:{
         createModal(DispositionModal)
     },
     updateEnrollmentStores(){
+        console.log(this.patientHistoryHIV)
         const enrollmentStore = useEnrollementStore()
         enrollmentStore.setPatientHistory(this.patientHistory)
+        enrollmentStore.setPatientHistoryHIV(this.patientHistoryHIV)
     },
     testF(data: any){
         console.log(data);

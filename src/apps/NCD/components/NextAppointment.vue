@@ -1,7 +1,7 @@
 <template>
     <div class="demographics">
-        <ion-card class="registration_ion_card">
-          <div class="card_content">
+        <ion-card class="registration_iofn_card">
+          <div class="card_content" style="width: 600px;">
               <div class="card_hearder">
                 Next appointment
               </div>
@@ -131,6 +131,8 @@ methods:{
     font-weight: 600;
     color: #00190E;
     font-size: 16px;
+    padding-top: 30px;
+    padding-bottom: 10px;
 }
 .input_fields{
     padding: 10px 100px 70px 100px;
