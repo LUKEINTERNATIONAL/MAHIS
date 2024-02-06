@@ -412,6 +412,88 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
                 }
                     
             },
+              {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border',
+                radioBtnContent:{
+                    header:{
+                        title: 'Counselling  conducted on alcohol/substance?',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {  
+                            name: behaviourCousellingForm.cousellingOnSubstanceUseYes.name,
+                            value: behaviourCousellingForm.cousellingOnSubstanceUseYes.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
+                        },
+                        { 
+                            name: behaviourCousellingForm.cousellingOnSubstanceUseNo.name,
+                            value: behaviourCousellingForm.cousellingOnSubstanceUseNo.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
+                        },
+                    ]
+                }
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border',
+                radioBtnContent:{
+                    header:{
+                        title: 'Reason couselling on alcohol/substance was not done?',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {  
+                            name: behaviourCousellingForm.clientReferredOnSubstanceUse.name,
+                            value: behaviourCousellingForm.clientReferredOnSubstanceUse.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
+                        },
+                        { 
+                            name: behaviourCousellingForm.otherOnSubstanceUse.name,
+                            value: behaviourCousellingForm.otherOnSubstanceUse.value,
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
+                        },
+                    ]
+                }
+            },
+            {   
+                classDash: 'dashed_bottom_border',
+                data:{ 
+                    rowData:[
+                        {
+                            colData:[
+                                {
+                                    inputHeader: 'Other (specify)',
+                                    name: behaviourCousellingForm.specifyOnSubstanceUse.name,
+                                    value: behaviourCousellingForm.specifyOnSubstanceUse.value,
+                                    eventType: 'input',
+                                    inputWidth: "300px",
+                                    required: true
+                                }
+                                
+                            ]
+                        }
+                    ],
+                    
+                }
+                    
+            },
         ] as any,
-    })
+    }),
+    actions:{
+        addBehaviourInfo(data:any){
+            this.behaviourInfo = data
+        }
+    },
+    persist:true
 })

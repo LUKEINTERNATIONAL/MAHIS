@@ -24,7 +24,7 @@ export const useFatalMovementStore =  defineStore('fatalMovementStore',{
                 classDash: 'dashed_bottom_border',
                 radioBtnContent:{
                     header:{
-                        title: 'Select whether the woman has felt the baby make:',
+                        title: '',
                         selectedValue: ''
                     },
                     data:[

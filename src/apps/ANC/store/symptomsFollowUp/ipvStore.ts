@@ -45,7 +45,7 @@ export const useIpvStore = defineStore('ipvStore',{
                 checkboxBtnContent:
                 {
                     header:{
-                        title: 'Presenting signs and symptoms that trigger suspicion of IPV and clinical inquiry',
+                        title: '',
                         selectedValue: ''
                     },
                     data:[

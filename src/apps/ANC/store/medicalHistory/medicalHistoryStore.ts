@@ -1067,28 +1067,28 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             name: hivTestForm.hivTestRequired.name,
                             value: hivTestForm.hivTestRequired.value,
                             labelPlacement:'start',
-                            colSize: "4.2",
+                            colSize: "7",
                             justify:"space-between" 
                         },
                         { 
                             name: hivTestForm.hivTestOrdered.name,
                             value: hivTestForm.hivTestOrdered.value,
                             labelPlacement:'start',
-                            colSize: "4.2",
+                            colSize: "7",
                             justify:"space-between" 
                         },
                         {
                             name:  hivTestForm.hivTestConducted.name,
                             value: hivTestForm.hivTestConducted.value,
                             labelPlacement:'start',
-                            colSize: "4.2",
+                            colSize: "7",
                             justify:"space-between" 
                         },
                         {
                             name: hivTestForm.hivTestNotDone.name,
                             value: hivTestForm.hivTestNotDone.value,
                             labelPlacement:'start',
-                            colSize: "4.2",
+                            colSize: "7",
                             justify:"space-between" 
                         },
                     ]
@@ -1198,7 +1198,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             name: hivTestForm.hivPositive.name,
                             value: hivTestForm.hivPositive.value,
                             labelPlacement:'start',
-                            colSize: "4.2",
+                            colSize: "7",
                             justify:"space-between" 
                         },
 
@@ -1206,21 +1206,21 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             name: hivTestForm.hivNegative1.name,
                             value: hivTestForm.hivNegative1.value,
                             labelPlacement:'start',
-                            colSize: "4.2",
+                            colSize: "7",
                             justify:"space-between" 
                         },
                         {
                             name:  hivTestForm.hivNegative2.name,
                             value: hivTestForm.hivNegative2.value,
                             labelPlacement:'start',
-                            colSize: "4.2",
+                            colSize: "7",
                             justify:"space-between" 
                         },
                         {
                             name: hivTestForm.inconclusive.name,
                             value: hivTestForm.inconclusive.value,
                             labelPlacement:'start',
-                            colSize: "4.2",
+                            colSize: "7",
                             justify:"space-between" 
 
                         }
@@ -1270,21 +1270,21 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             name: syphilisForm.syphilisTestConducted.name,
                             value: syphilisForm.syphilisTestConducted.value,
                             labelPlacement:'start',
-                            colSize: "4.2",
+                            colSize: "7",
                             justify:"space-between" 
                         },
                         {
                             name: syphilisForm.syphilisTestOrdered.name,
                             value: syphilisForm.syphilisTestOrdered.value,
                             labelPlacement:'start',
-                            colSize: "4.2",
+                            colSize: "7",
                             justify:"space-between" 
                         },
                         {
                             name:  syphilisForm.syphilisTestNotDone.name,
                             value: syphilisForm.syphilisTestNotDone.value,
                             labelPlacement:'start',
-                            colSize: "4.2",
+                            colSize: "7",
                             justify:"space-between" 
                         },
                     ]
@@ -1303,7 +1303,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             name: syphilisForm.rapidSyphilisTest.name,
                             value: syphilisForm.rapidSyphilisTest.value,
                             labelPlacement:'start',
-                            colSize: "4.2",
+                            colSize: "7",
                             justify:"space-between", 
                             checked: false
                         },
@@ -1311,7 +1311,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             name: syphilisForm.offSiteLabTest.name,
                             value: syphilisForm.offSiteLabTest.value,
                             labelPlacement:'start',
-                            colSize: "4.2",
+                            colSize: "7",
                             justify:"space-between", 
                             checked:false
                         },
@@ -1319,7 +1319,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             name: syphilisForm.treponemaPallidum.name,
                             value: syphilisForm.treponemaPallidum.value,
                             labelPlacement:'start',
-                            colSize: "4.2",
+                            colSize: "7",
                             justify:"space-between", 
                             checked:false
                         }

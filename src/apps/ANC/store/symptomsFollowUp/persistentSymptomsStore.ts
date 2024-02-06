@@ -41,7 +41,7 @@ export const usePersistentSymptomsStore = defineStore('persistentSymptomsStore',
                 checkboxBtnContent:
                 {
                     header:{
-                        title: ' Select which of the following physiological symptoms persist after being reported during last contact',
+                        title: '',
                         selectedValue: ''
                     },
                     data:[

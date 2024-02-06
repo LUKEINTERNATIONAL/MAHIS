@@ -1,6 +1,9 @@
 <template>
     <ion-list>   
-        <div class="sub_item_body">
+        <ion-item  class="dashed_bottom_border" style="font-weight: bold;">
+             Select which of the following physiological symptoms persist after being reported during last contact
+        </ion-item>
+        <div class="sub_item_body" >
             <BasicForm :contentData="persistentSymptom" />
         </div>
         <ion-item class="sub_item_body_close"/>
