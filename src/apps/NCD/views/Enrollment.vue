@@ -16,7 +16,7 @@
                 <div v-if="enrollmentDisplayType=='grid'" >
                     <div v-if="currentStep =='Enrollment'">
                         <ion-row class="card_row" v-if="enrollmentDisplayType=='grid'">
-                            <ion-col size="6">
+                                <ion-col size="6">
                                 <PatientHistory  />
                             </ion-col>
                             <ion-col size="6">
