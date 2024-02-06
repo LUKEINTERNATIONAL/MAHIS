@@ -72,10 +72,6 @@ methods:{
                 {
                     cardTitle:"Home Location",
                     content: this.homeLocation
-                },
-                {
-                    cardTitle:"Curent Location",
-                    content: this.currentLocation
                 }
             ]
         } 

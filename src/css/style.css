@@ -353,7 +353,7 @@ ion-toast.custom-toast::part(container) {
     width: 570px;
     margin: 0 auto;
     text-align: center;
-    margin-top: 50px ;
+    margin-top: 0px ;
 }
 .registration_ion_card{
     display: flex;

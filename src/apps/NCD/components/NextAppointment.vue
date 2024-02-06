@@ -1,7 +1,10 @@
 <template>
     <div class="demographics">
-        <div class="demographics_title">Next appointment</div>
         <ion-card class="registration_ion_card">
+          <div class="card_content">
+              <div class="card_hearder">
+                Next appointment
+              </div>
             <ion-datetime 
                 :is-date-enabled="isWeekday" 
                 min="2022-03-01T00:00:00" 
@@ -12,6 +15,7 @@
                 @ionChange="value => calendarDate = value.target.value"
                 presentation="date">
             </ion-datetime>
+           </div>
         </ion-card>
     </div>
 </template>
@@ -127,7 +131,6 @@ methods:{
     font-weight: 600;
     color: #00190E;
     font-size: 16px;
-    padding-top: 50px ;
 }
 .input_fields{
     padding: 10px 100px 70px 100px;

@@ -147,51 +147,8 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                 
         ],
         patientHistory: [
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: 'HIV',
-                        selectedValue: ''
-                    },
-                    data:[
-                        {
-                            name: 'R',
-                            value: 'R',
-                            checked: false
-                        },
-                        {
-                            name: 'NR',
-                            value: 'NR',
-                            checked: false
-                        }
-                    ]
-                }
-                    
-            },
-            {
-                data:{ 
-                    rowData:[
-                        {
-                            colData:[
-                                {
-                                    inputHeader: 'ART Stat date:',
-                                    icon: icons.calenderPrimary,
-                                    value: '',
-                                    eventType: 'input',
-                                    isDatePopover: true
-                                }
-                                
-                            ]
-                        }
-                    ],
-                    
-                }
-                    
-            },
+           
+          
             {
                 selectdData: [],
                 isFinishBtn: false,
