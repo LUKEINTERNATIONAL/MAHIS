@@ -1,3 +1,4 @@
+import { radio } from "ionicons/icons";
 import { defineStore } from "pinia";
 
 const trailForm = {
@@ -72,23 +73,23 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
                 radioBtnContent:{
 
                     header:{
-                        title:'Taking Calcium Suppliments',
-                        selectedValue:''
+                        selectedValue:'',
+                        radioTitle:['Yes','No']
                     },
                     data:[
                         {
-                            name: trailForm.takingCalciumSuplimentsYes.name,
+                            name: 'Taking Calcium Suppliments',
                             value: trailForm.takingCalciumSuplimentsYes.value,
                             labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "9.7",
+                            justify:"space-between",
+                            class: 'bold',
                         },
                         {
-                            name: trailForm.takingCalciumSuplimentsNo.name,
                             value: trailForm.takingCalciumSuplimentsNo.value,
                             labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "2",
+                            justify:"end" 
                         }
                     ]
                 }
@@ -100,23 +101,22 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
                 radioBtnContent:{
 
                     header:{
-                        title:'Has side-effects from calcium supplements',
                         selectedValue:''
                     },
                     data:[
                         {
-                            name: trailForm.sideEffectsCalciumSuplimentsYes.name,
+                            name: 'Has side-effects from calcium supplements',
                             value: trailForm.sideEffectsCalciumSuplimentsYes.value,
                             labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "9.7",
+                            justify:"space-between",                            
+                            class: 'bold'
                         },
                         {
-                            name: trailForm.sideEffectsCalciumSuplimentsNo.name,
                             value: trailForm.sideEffectsCalciumSuplimentsNo.value,
                             labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "2",
+                            justify:"end" 
                         }
                     ]
                 }
