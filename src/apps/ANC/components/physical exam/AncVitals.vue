@@ -1,20 +1,93 @@
 <template>
 
-    <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form>
+  <ion-row >
+    <!--   height and weight-->
+    <ion-col  class="left_row_col_separator">
+      <ion-list>
+        <ion-item :lines="heightAndWeight" class="dashed_bottom_border" style="font-weight: bold">
+          Height and Weight
+        </ion-item>
+        <div class="sub_item_body content_container" >
+          <basic-form
+              :contentData="heightWeight">
+          </basic-form>
+        </div>
+        <ion-item class="sub_item_body_close" />
+      </ion-list>
+    </ion-col>
+    <!--  blood pressure-->
+    <ion-col class="right_row_col_separator">
+      <ion-list>
+        <ion-item :lines="bloodP" class="dashed_bottom_border" style="font-weight: bold">
+          Blood pressure
+        </ion-item>
+        <div class="sub_item_body content_container">
+          <basic-form
+              :contentData="bloodPressure" >
+          </basic-form>
+        </div>
+        <ion-item class="sub_item_body_close" />
+      </ion-list>
+
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <!--  temperature-->
+    <ion-col  class="left_row_col_separator">
+      <ion-list>
+        <ion-item :lines="temp" class="dashed_bottom_border" style="font-weight: bold">
+          Temperature
+        </ion-item>
+        <div class="sub_item_body content_container" >
+          <basic-form
+              :contentData="temperature" >
+          </basic-form>
+        </div>
+        <ion-item class="sub_item_body_close"/>
+      </ion-list>
+    </ion-col>
+    <!--  pulse-->
+    <ion-col class="right_row_col_separator">
+      <ion-list>
+        <ion-item :lines="pulseReading" class="dashed_bottom_border" style="font-weight: bold">
+          Pulse
+        </ion-item>
+        <div class="sub_item_body content_container" >
+          <basic-form
+              :contentData="pulse" >
+          </basic-form>
+        </div>
+        <ion-item class="sub_item_body_close" />
+      </ion-list>
+    </ion-col>
+  </ion-row>
+  <ion-list>
+    <ion-item :lines="respirationExam" class="dashed_bottom_border" style="font-weight: bold">
+    Respiration exam result
+    </ion-item>
+    <div class="sub_item_body content_container" >
+      <basic-form
+          :contentData="respiration" >
+      </basic-form>
+    </div>
+    <ion-item class="sub_item_body_close"/>
+  </ion-list>
+<!--    <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form>-->
 </template>
   
 <script lang="ts">
-    import { 
-            IonContent, 
-            IonHeader,
-            IonItem,
-            IonList,
-            IonTitle, 
-            IonToolbar, 
-            IonMenu,
-            menuController,
-            IonInput 
-        } from '@ionic/vue';
+import {
+  IonContent,
+  IonHeader,
+  IonItem,
+  IonList,
+  IonTitle,
+  IonToolbar,
+  IonMenu,
+  menuController,
+  IonInput, IonToggle
+} from '@ionic/vue';
     import { defineComponent } from 'vue';
     import { checkmark,pulseOutline } from 'ionicons/icons';
     import { icons } from '@/utils/svg';
@@ -33,6 +106,7 @@
 
     export default defineComponent({
     components:{
+      IonToggle,
         IonContent,
         IonHeader,
         IonItem,
@@ -49,6 +123,16 @@
         iconsContent: icons,
         BMI: {},
         BPStatus: {},
+        heightAndWeightChecked: true,
+        heightAndWeight:'',
+        respirationExamChecked: true,
+        respirationExam: '',
+        bloodPressureChecked: true,
+        bloodP: '',
+        temperatureChecked: true,
+        temp: '',
+        pulseReading:'',
+        pulseChecked: true,
         vValidations: '' as any,
         hasValidationErrors: [] as any,
         vitalsInstance: {} as any,
@@ -57,6 +141,11 @@
   computed:{
 
         ...mapState(useAncVitalsStore,["vitals"]),
+        ...mapState(useAncVitalsStore,["heightWeight"]),
+        ...mapState(useAncVitalsStore,["bloodPressure"]),
+        ...mapState(useAncVitalsStore,["respiration"]),
+        ...mapState(useAncVitalsStore,["temperature"]),
+        ...mapState(useAncVitalsStore,["pulse"]),
     },
     mounted(){
         const userID: any  = Service.getUserID()
@@ -80,6 +169,37 @@
             menuController.close()
             this.$router.push(url);
         },
+      heightAndWeightMeasurements(){
+        this.heightAndWeightChecked = !this.heightAndWeightChecked
+        if (this.heightAndWeightChecked) {
+          this.heightAndWeight = 'none'
+        } else {this.heightAndWeight = ''}
+      },
+      bloodPressureMeasurements(){
+        this.bloodPressureChecked = !this.bloodPressureChecked
+        if (this.bloodPressureChecked) {
+          this.bloodP = 'none'
+        } else {this.bloodP = ''}
+      },
+      respirationExams(){
+        this.respirationExamChecked = !this.respirationExamChecked
+        if (this.respirationExamChecked) {
+          this.respirationExam = 'none'
+        } else {this.respirationExam = ''}
+      },
+      temperatureReadings(){
+        this.temperatureChecked = !this.temperatureChecked
+        if (this.temperatureChecked) {
+          this.temp = 'none'
+        } else {this.temp = ''}
+      },
+      pulseReadings(){
+        this.pulseChecked = !this.pulseChecked
+        if (this.pulseChecked) {
+          this.pulseReading = 'none'
+        } else {this.pulseReading = ''}
+      },
+
         updateVitalsStores(){
             const vitalsStore = useVitalsStore()
             vitalsStore.setVitals(this.vitals)
@@ -195,28 +315,25 @@
 </script>
 
 <style scoped>
-.vitals_title{
-    border-bottom: 1px solid #B3B3B3;
-    margin-bottom: 50px ;
+.content_container{
+  padding-left: 10px;
 }
-.input-with-icon {
-  position: relative;
+.left_row_col_separator{
+  padding-right: 50px
 }
-.input-icon {
-  position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: gray; /* Adjust the color as needed */
+.right_row_col_separator{
+  padding-left: 50px
 }
-ion-col{
-    padding-bottom:15px ;
+.content_container_for_radio{
+  padding-left: 30px;
+  margin-right: 400px;
 }
-h5{
-    margin-top: 0px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+.separator {
+  border-top: none; /* or border: none; */
+  margin: 0;
+  padding: 0;
+  height: 0;
+  display: none;
 }
 </style>
   

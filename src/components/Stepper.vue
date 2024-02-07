@@ -94,6 +94,7 @@
   import MaternalExam from "@/apps/ANC/components/physical exam/MaternalExam.vue";
   import PresentingSigns from "@/apps/ANC/components/physical exam/PresentingSigns.vue";
   import CurrentPregnancies from '@/apps/ANC/components/profile/CurrentPregnancies.vue';
+  import PastObstreticHistory from "@/apps/ANC/components/profile/PastObstreticHistory.vue";
   import UltrasoundScan from '@/apps/ANC/components/lab_tests/UltrasoundScan.vue';
   import UrineTest from '@/apps/ANC/components/lab_tests/UrineTest.vue';
   import TB from '@/apps/ANC/components/lab_tests/TB.vue';

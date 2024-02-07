@@ -18,7 +18,7 @@ export const useWomanBehaviourStore = defineStore('womanBehaviourStore', {
                             value: 'more than 2 cups of tea',
                             checked: false,
                             labelPlacement: 'start',
-                            colSize: '5',
+                            colSize: '9',
                             justify: 'space-between'
                         },
                     ]
@@ -33,7 +33,7 @@ export const useWomanBehaviourStore = defineStore('womanBehaviourStore', {
                             value: 'more than 4 cups of tea',
                             checked: false,
                             labelPlacement: 'start',
-                            colSize: '5',
+                            colSize: '9',
                             justify: 'space-between'
                         },
                     ]
@@ -48,7 +48,7 @@ export const useWomanBehaviourStore = defineStore('womanBehaviourStore', {
                             value: 'more than 12 bars of chocolate',
                             checked: false,
                             labelPlacement: 'start',
-                            colSize: '5',
+                            colSize: '9',
                             justify: 'space-between'
                         },
                     ]
@@ -60,11 +60,11 @@ export const useWomanBehaviourStore = defineStore('womanBehaviourStore', {
                 checkboxBtnContent: {
                     data: [
                         {
-                            name: 'More than one bottle/cane of soda, energy, soft drink',
-                            value: 'more than one bottle/cane of soda, energy, soft drink',
+                            name: 'More than one bottle of soda, energy, soft drink',
+                            value: 'more than one bottle of soda, energy, soft drink',
                             checked: false,
                             labelPlacement: 'start',
-                            colSize: '5',
+                            colSize: '9',
                             justify: 'space-between'
                         },
                     ]
@@ -80,7 +80,7 @@ export const useWomanBehaviourStore = defineStore('womanBehaviourStore', {
                             value: 'none of the above',
                             checked: false,
                             labelPlacement: 'start',
-                            colSize: '5',
+                            colSize: '9',
                             justify: 'space-between'
                         },
                     ]

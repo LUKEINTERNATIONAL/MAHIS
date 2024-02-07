@@ -79,11 +79,8 @@ import { icons } from '../../../../utils/svg';
 import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import { checkmark, pulseOutline } from 'ionicons/icons';
-<<<<<<<< HEAD:src/apps/ANC/components/profile/CurrentPregnancies.vue
-import {useCurrentPregnanciesStore} from '../../store/profile/CurrentPreganciesStore'
-========
-import {useCurrentPregnanciesStore} from '../../store/CurrentPreganciesStore';
->>>>>>>> origin/anc-currentPregnancies:src/apps/ANC/components/Profile/CurrentPregnancies.vue
+import {useCurrentPregnanciesStore} from "@/apps/ANC/store/profile/CurrentPreganciesStore";
+
 export default defineComponent({
     name: "Current",
     components:{

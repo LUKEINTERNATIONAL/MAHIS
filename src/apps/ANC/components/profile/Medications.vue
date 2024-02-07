@@ -1,14 +1,14 @@
 <template>
   <ion-list>
     <ion-item :lines="medication" class="dashed_bottom_border sub_item_header">
-      <ion-toggle :checked="medicationChecked" @ionChange="medications">Current Medications</ion-toggle>
+      Current medications
     </ion-item>
-    <div class="sub_item_body" v-if="medicationChecked">
+    <div class="sub_item_body ">
       <basic-form
-          :contentData="Medication" >
+          :contentData="Medication"  >
       </basic-form>
     </div>
-    <ion-item class="sub_item_body_close" v-if="medicationChecked"/>
+    <ion-item class="sub_item_body_close"/>
   </ion-list>
 </template>
 
@@ -83,6 +83,17 @@ export default defineComponent({
 </script>
 
 <style scoped>
+basic-form>.checkout_col {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px; /* Add margin between rows */
+}
+
+.checkout_col ion-checkbox {
+  width: 100%;
+  margin-right: 10px; /* Adjust the right margin as needed */
+}
+
 .sub_item_header{
   font-weight: bold;
 }

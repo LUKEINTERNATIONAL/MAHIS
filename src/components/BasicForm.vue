@@ -256,6 +256,9 @@ ion-radio {
     display: flex;
     align-items: center;
 }
+.checkout_col ion-checkbox {
+  margin-right: 150px;
+}
 .alerts_error{
     background: #f5dad8;
     margin-top: 2px;

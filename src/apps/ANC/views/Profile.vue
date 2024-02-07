@@ -87,7 +87,7 @@ export default defineComponent({
           'last_step': ''
         },
         {
-          'title': 'Current pregnancy',
+          'title': 'Current pregnancies',
           'class': 'common_step',
           'checked':'',
           'icon': false,
@@ -117,7 +117,7 @@ export default defineComponent({
       StepperData:[
         {
           'title': 'Past obstetric history',
-          'componet': 'PastObstetricHistory',
+          'componet': 'PastObstreticHistory',
           'value': '1'
         },
         {
@@ -126,8 +126,8 @@ export default defineComponent({
           'value': '2',
         },
         {
-          'title': 'Current pregnancy',
-          'componet': 'CurrentPregnancy',
+          'title': 'Current pregnancies',
+          'componet': 'CurrentPregnancies',
           'value': '3',
         },
         {

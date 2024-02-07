@@ -3,7 +3,7 @@
     <ion-item :lines="confirmPregnancy" class="dashed_bottom_border" style="font-weight: bold">
       Has pregnancy been confirmed?
     </ion-item>
-    <div class="sub_item_body" >
+    <div class="sub_item_body"  style="padding-right: 400px">
       <basic-form
           :contentData="ConfirmPregnancy" >
       </basic-form>
@@ -14,7 +14,7 @@
     <ion-item :lines="plannedPregnancy" class="dashed_bottom_border" style="font-weight: bold">
       Was pregnancy planned?
     </ion-item>
-    <div class="sub_item_body" >
+    <div class="sub_item_body"  style="padding-right: 400px">
       <basic-form
           :contentData="PlannedPregnancy" >
       </basic-form>

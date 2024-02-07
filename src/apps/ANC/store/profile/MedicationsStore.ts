@@ -20,7 +20,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'OralPrePforHIV',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
                             {
@@ -28,7 +28,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
                         ]
@@ -50,7 +50,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
                             {
@@ -58,7 +58,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
 
@@ -80,7 +80,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
                             {
@@ -88,7 +88,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
 
@@ -111,7 +111,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
                             {
@@ -119,7 +119,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
                         ]
@@ -141,7 +141,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
                             {
@@ -149,7 +149,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
                         ]
@@ -170,7 +170,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                 colSize: '6',
                                 justify: 'space-between',
                             },
                             {
@@ -178,7 +178,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                 colSize: '6',
                                 justify: 'space-between',
                             },
                         ]
@@ -199,7 +199,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                 colSize: '6',
                                 justify: 'space-between',
                             },
                             {
@@ -207,7 +207,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                 colSize: '6',
                                 justify: 'space-between',
                             },
                         ]
@@ -228,7 +228,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                 colSize: '6',
                                 justify: 'space-between',
                             },
                             {
@@ -236,7 +236,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                 colSize: '6',
                                 justify: 'space-between',
                             },
                         ]
@@ -258,7 +258,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
                             {
@@ -266,7 +266,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                 colSize: '6',
                                 justify: 'space-between',
                             },
                         ]
@@ -288,7 +288,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
                             {
@@ -296,7 +296,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
                         ]
@@ -317,7 +317,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
                             {
@@ -325,8 +325,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '3',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
                         ]
@@ -347,7 +346,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
                             {
@@ -355,7 +354,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
                         ]
@@ -376,7 +375,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
                             {
@@ -384,7 +383,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
                         ]
@@ -406,7 +405,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
 
@@ -417,7 +416,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
             {
                 isFinishBtn: false,
                 sectionHeader: '',
-                classDash: 'dashed_bottom_border _padding',
+                classDash: '',
 
                 data:
                     {
@@ -427,12 +426,12 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                     {
                                         inputHeader: 'Other (specify)',
                                         unit: '',
-                                        icon: icons.height,
+                                        icon: icons.editPen,
                                         value: '',
                                         name: 'Other',
                                         required: true,
                                         eventType: 'input',
-                                        inputWidth: "625px",
+                                        inputWidth: "85%",
                                         required: true
                                     },
 

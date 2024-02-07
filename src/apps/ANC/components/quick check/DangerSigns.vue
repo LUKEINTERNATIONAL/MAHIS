@@ -14,9 +14,8 @@
     <ion-item :lines="previousvisit" class="dashed_bottom_border" style="font-weight: bold">
      Has the woman had any ANC visit at any facility?
     </ion-item>
-    <div class="sub_item_body" >
-      <basic-form
-          :contentData="PreviousVisit" >
+    <div class="sub_item_body" style="padding-right: 400px">
+      <basic-form :contentData="PreviousVisit" >
       </basic-form>
     </div>
     <ion-item class="sub_item_body_close"/>
@@ -75,7 +74,7 @@ export default defineComponent({
   },
   computed: {
     ...mapState(useDangerSignsStore, ["DangerSigns"]),
-    ...mapState(useDangerSignsStore, ["PreviousVisit"])
+    ...mapState(useDangerSignsStore, ["PreviousVisit"]),
   },
   setup() {
     return { checkmark,pulseOutline };
@@ -91,6 +90,8 @@ export default defineComponent({
         this.dangerSign = 'none'
       } else {this.dangerSign = ''}
     },
+
+
   }
 });
 </script>

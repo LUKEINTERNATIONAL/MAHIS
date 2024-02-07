@@ -3,7 +3,7 @@
     <ion-item :lines="previousvisit" class="dashed_bottom_border" style="font-weight: bold">
           Reason why the woman came to the facility today?
     </ion-item>
-    <div class="sub_item_body" >
+    <div class="sub_item_body"  style="padding-right: 200px">
       <basic-form
           :contentData="ReasonForVisit" >
       </basic-form>

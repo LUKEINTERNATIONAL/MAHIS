@@ -20,30 +20,15 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
                                 value: 'AbnorminalVarginalDischarge',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-
                             {
                                 name: 'Change in blood pressure-up',
                                 value: 'ChangeInBloodPressure',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
                         ]
@@ -60,42 +45,28 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
                             selectedValue: ''
                         },
                         data:[
-
                             {
                                 name: 'Diarrhoea',
                                 value: 'Diarrhoea',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-
                             {
                                 name: 'Vomiting',
                                 value: 'Vomiting',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
+
                         ]
                     }
 
             },
+
             {
                 selectdData: [],
                 classDash: 'dashed_bottom_border',
@@ -106,43 +77,29 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
                             selectedValue: ''
                         },
                         data:[
-
                             {
-                                name: 'Viginal bleeding',
-                                value: 'Viginal bleeding',
+                                name: 'Genital ulcer',
+                                value: 'GenitalUlcer',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-
                             {
-                                name: 'Change in blood pressure-down (hypotension)',
+                                name: 'Change in blood pressure-down',
                                 value: ' BloodPressureChange',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
+
+
                         ]
                     }
 
             },
-           {
+            {
                 selectdData: [],
                 classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
@@ -152,38 +109,23 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
                             selectedValue: ''
                         },
                         data:[
-
                             {
                                 name: 'constipation',
                                 value: 'Constipation',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-
                             {
                                 name: 'Contractions',
-                                value: 'Constractions',
+                                value: 'Contractions',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
+
                         ]
                     }
 
@@ -204,30 +146,15 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
                                 value: 'VaginalBleeding',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-
                             {
-                                name: 'IntimatePartinerViolence',
+                                name: 'Intimate partiner violence',
                                 value: 'IntimatePartinerViolence',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
                         ]
@@ -244,38 +171,23 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
                             selectedValue: ''
                         },
                         data:[
-
                             {
                                 name: 'Flu symptoms',
                                 value: 'FluSymptoms',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-
                             {
-                                name: 'Draining Liquor',
-                                value: 'DrainingLiquor',
+                                name: 'Painful urination',
+                                value: 'PainfulUrination',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
+
                         ]
                     }
 
@@ -290,15 +202,23 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
                             selectedValue: ''
                         },
                         data:[
-
                             {
                                 name: 'Headache',
                                 value: 'Headache',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
+                            {
+                                name: 'Heartburn',
+                                value: 'heartburn',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+
                         ]
                     }
 
@@ -313,66 +233,31 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
                             selectedValue: ''
                         },
                         data:[
-
-                            {
-                                name: 'Heartburn',
-                                value: 'heartburn',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '4',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-
                             {
                                 name: 'Frequent urination/Polyuria',
                                 value: 'FrequentUrination',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-
                             {
                                 name: 'Injury',
                                 value: 'Injury',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
+
+
                         ]
                     }
 
             },
-
             {
                 selectdData: [],
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -380,43 +265,30 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
                             selectedValue: ''
                         },
                         data:[
-
                             {
                                 name: 'Jaundice',
                                 value: 'Jaundice',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-
                             {
                                 name: 'Mental health-Depression',
                                 value: 'MentalHealth',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
+
                         ]
                     }
 
             },
             {
                 selectdData: [],
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -424,15 +296,54 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
                             selectedValue: ''
                         },
                         data:[
+                            {
+                                name: 'Genital warts',
+                                value: 'GenitalWarts',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Itchy vulva',
+                                value: 'ItchyVulva',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
 
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Painful intercourse',
+                                value: 'PainfulIntercourse',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
                             {
                                 name: 'No health concerns',
                                 value: 'NoHealthConcerns',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '4',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
+
                         ]
                     }
 
@@ -451,12 +362,12 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
                                     {
                                         inputHeader: 'Other (specify)',
                                         unit: '',
-                                        icon: icons.height,
+                                        icon: icons.editPen,
                                         value: '',
                                         name: 'Other',
                                         required: true,
                                         eventType: 'input',
-                                        inputWidth: "300px",
+                                        inputWidth: "85%",
                                         required: true
                                     },
 
