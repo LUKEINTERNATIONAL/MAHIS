@@ -1,4 +1,5 @@
 import { defineStore } from "pinia"
+import { icons } from '@/utils/svg';
 
 const physiologicalCousellingForm ={
     cousellingOnNonPharmacologicalYes:{
@@ -19,7 +20,7 @@ const physiologicalCousellingForm ={
     },
         specifyOnNonPharmacological:{
         name:"Specify On non-Pharmacological",
-        value:"specifyOnNonPharmacological"
+        value:""
     },
         cousellingOnPharmacologicalTreatmentYes:{
         name:"Yes",
@@ -39,7 +40,7 @@ const physiologicalCousellingForm ={
     },
         specifyOnPharmacologicalTreatment:{
         name:"Specify On Pharmacological Treatment",
-        value:"specifyOnPharmacologicalTreatment"
+        value:""
     },
         cousellingOnDietLifestyleYes:{
         name:"Yes",
@@ -59,7 +60,7 @@ const physiologicalCousellingForm ={
     },
         specifyOnDietLifestyle:{
         name:"Specify On Diet Life style",
-        value:"specifyOnDietLifestyle"
+        value:""
     },
         cousellingOnAntacidYes:{
         name:"Yes",
@@ -79,7 +80,7 @@ const physiologicalCousellingForm ={
     },
         specifyOnAntacid:{
         name:"Specify On Ant acid",
-        value:" specifyOnAntacid"
+        value:""
     },
         cousellingOnLegCrapsYes:{
         name:"Yes",
@@ -99,7 +100,7 @@ const physiologicalCousellingForm ={
     },
         specifyOnLegCraps:{
         name:"Specify On Leg Craps",
-        value:"specifyOnLegCraps"
+        value:""
     },
         cousellingOnUseMagnesiumCalciumOnLegCrapsYes:{
         name:"Yes",
@@ -119,7 +120,7 @@ const physiologicalCousellingForm ={
     },
         specifyOnUseMagnesiumCalciumOnLegCraps:{
         name:"Specify On Leg Craps",
-        value:"specifyOnUseMagnesiumCalciumOnLegCraps"
+        value:""
     },
 
         cousellingOnDietaryOnConstipationYes:{
@@ -140,7 +141,7 @@ const physiologicalCousellingForm ={
     },
         specifyOnDietaryOnConstipation:{
         name:"Specify On Dietary On Constipation",
-        value:"specifyOnDietaryOnConstipation"
+        value:""
     },
         cousellingOnUseOfWheatYes:{
         name:"Yes",
@@ -160,7 +161,7 @@ const physiologicalCousellingForm ={
     },
         specifyOnDietaryOnUseOfWheat:{
         name:"Specify On Use Of Wheat",
-        value:"specifyOnDietaryOnUseOfWheat"
+        value:""
     },
         cousellingOnRegularExerciseYes:{
         name:"Yes",
@@ -180,7 +181,7 @@ const physiologicalCousellingForm ={
     },
         specifyOnRegularExercise:{
         name:"Specify On Regular Exercise",
-        value:"specifyOnRegularExercise"
+        value:""
     },
         cousellingOnVaricoseVeinsandOedemaYes:{
         name:"Yes",
@@ -200,7 +201,7 @@ const physiologicalCousellingForm ={
     },
         specifyOnVaricoseVeinsandOedema:{
         name:"Specify On specify On Varicose Veinsa nd Oedema",
-        value:"specifyOnVaricoseVeinsandOedema"
+        value:""
     },
    
 }
@@ -271,10 +272,11 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                             colData:[
                                 {
                                     inputHeader: 'Other (specify)',
+                                    icon: icons.editPen,
                                     name: physiologicalCousellingForm.specifyOnNonPharmacological.name,
                                     value: physiologicalCousellingForm.specifyOnNonPharmacological.value,
                                     eventType: 'input',
-                                    inputWidth: "300px",
+                                    inputWidth: "82%",
                                     required: true
                                 }
                                 
@@ -348,10 +350,11 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                             colData:[
                                 {
                                     inputHeader: 'Other (specify)',
+                                    icon: icons.editPen,
                                     name: physiologicalCousellingForm.specifyOnPharmacologicalTreatment.name,
                                     value: physiologicalCousellingForm.specifyOnPharmacologicalTreatment.value,
                                     eventType: 'input',
-                                    inputWidth: "300px",
+                                    inputWidth: "82%",
                                     required: true
                                 }
                                 
@@ -425,10 +428,11 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                             colData:[
                                 {
                                     inputHeader: 'Other (specify)',
+                                    icon: icons.editPen,
                                     name: physiologicalCousellingForm.specifyOnDietLifestyle.name,
                                     value: physiologicalCousellingForm.specifyOnDietLifestyle.value,
                                     eventType: 'input',
-                                    inputWidth: "300px",
+                                    inputWidth: "82%",
                                     required: true
                                 }
                                 
@@ -502,10 +506,11 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                             colData:[
                                 {
                                     inputHeader: 'Other (specify)',
+                                    icon: icons.editPen,
                                     name: physiologicalCousellingForm.specifyOnAntacid.name,
                                     value: physiologicalCousellingForm.specifyOnAntacid.value,
                                     eventType: 'input',
-                                    inputWidth: "300px",
+                                    inputWidth: "82%",
                                     required: true
                                 }
                                 
@@ -579,10 +584,11 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                             colData:[
                                 {
                                     inputHeader: 'Other (specify)',
+                                    icon: icons.editPen,
                                     name: physiologicalCousellingForm.specifyOnLegCraps.name,
                                     value: physiologicalCousellingForm.specifyOnLegCraps.value,
                                     eventType: 'input',
-                                    inputWidth: "300px",
+                                    inputWidth: "82%",
                                     required: true
                                 }
                                 
@@ -656,10 +662,11 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                             colData:[
                                 {
                                     inputHeader: 'Other (specify)',
+                                    icon: icons.editPen,
                                     name: physiologicalCousellingForm.specifyOnUseMagnesiumCalciumOnLegCraps.name,
                                     value: physiologicalCousellingForm.specifyOnUseMagnesiumCalciumOnLegCraps.value,
                                     eventType: 'input',
-                                    inputWidth: "300px",
+                                    inputWidth: "82%",
                                     required: true
                                 }
                                 
@@ -733,10 +740,11 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                             colData:[
                                 {
                                     inputHeader: 'Other (specify)',
+                                    icon: icons.editPen,
                                     name: physiologicalCousellingForm.specifyOnDietaryOnConstipation.name,
                                     value: physiologicalCousellingForm.specifyOnDietaryOnConstipation.value,
                                     eventType: 'input',
-                                    inputWidth: "300px",
+                                    inputWidth: "82%",
                                     required: true
                                 }
                                 
@@ -810,10 +818,11 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                             colData:[
                                 {
                                     inputHeader: 'Other (specify)',
+                                    icon: icons.editPen,
                                     name: physiologicalCousellingForm.specifyOnDietaryOnUseOfWheat.name,
                                     value: physiologicalCousellingForm.specifyOnDietaryOnUseOfWheat.value,
                                     eventType: 'input',
-                                    inputWidth: "300px",
+                                    inputWidth: "82%",
                                     required: true
                                 }
                                 
@@ -889,10 +898,11 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                             colData:[
                                 {
                                     inputHeader: 'Other (specify)',
+                                    icon: icons.editPen,
                                     name: physiologicalCousellingForm.specifyOnRegularExercise.name,
                                     value: physiologicalCousellingForm.specifyOnRegularExercise.value,
                                     eventType: 'input',
-                                    inputWidth: "300px",
+                                    inputWidth: "82%",
                                     required: true
                                 }
                                 
@@ -968,10 +978,11 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                             colData:[
                                 {
                                     inputHeader: 'Other (specify)',
+                                    icon: icons.editPen,
                                     name: physiologicalCousellingForm.specifyOnVaricoseVeinsandOedema.name,
                                     value: physiologicalCousellingForm.specifyOnVaricoseVeinsandOedema.value,
                                     eventType: 'input',
-                                    inputWidth: "300px",
+                                    inputWidth: "82%",
                                     required: true
                                 }
                                 

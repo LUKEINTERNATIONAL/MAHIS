@@ -1,4 +1,5 @@
-import { defineStore } from "pinia"
+import { defineStore } from "pinia";
+import { icons } from '@/utils/svg';
 
 const physiologicalCousellingForm ={
     counsellingOnHealthEatingYes:{
@@ -19,7 +20,7 @@ const physiologicalCousellingForm ={
     },
         specifyOnHealthEating:{
         name:"Specify On Health Eating",
-        value:"specifyOnHealthEating"
+        value:""
     },
         counsellingOnEnergyProteinIntakeYes:{
         name:"Yes",
@@ -39,7 +40,7 @@ const physiologicalCousellingForm ={
     },
         specifyOnEnergyProteinIntake:{
         name:"Specify On Energy Protein Intake",
-        value:"specifyOnEnergyProteinIntake"
+        value:""
     },
         counsellingOnEnergyProteinDietarySupplentationYes:{
         name:"Yes",
@@ -59,7 +60,7 @@ const physiologicalCousellingForm ={
     },
         specifyOnEnergyProteinDietarySupplentation:{
         name:"Specify On Energy Protein Dietary Supplentation",
-        value:"specifyOnEnergyProteinDietarySupplentation"
+        value:""
     },
    
 }
@@ -130,10 +131,11 @@ export const useDietCounsellingStore = defineStore('dietCounsellingStore',{
                             colData:[
                                 {
                                     inputHeader: 'Other (specify)',
+                                    icon: icons.editPen,
                                     name: physiologicalCousellingForm.specifyOnHealthEating.name,
                                     value: physiologicalCousellingForm.specifyOnHealthEating.value,
                                     eventType: 'input',
-                                    inputWidth: "300px",
+                                    inputWidth: "82%",
                                     required: true
                                 }
                                 
@@ -207,10 +209,11 @@ export const useDietCounsellingStore = defineStore('dietCounsellingStore',{
                             colData:[
                                 {
                                     inputHeader: 'Other (specify)',
+                                    icon: icons.editPen,
                                     name: physiologicalCousellingForm.specifyOnEnergyProteinIntake.name,
                                     value: physiologicalCousellingForm.specifyOnEnergyProteinIntake.value,
                                     eventType: 'input',
-                                    inputWidth: "300px",
+                                    inputWidth: "82%",
                                     required: true
                                 }
                                 
@@ -284,10 +287,11 @@ export const useDietCounsellingStore = defineStore('dietCounsellingStore',{
                             colData:[
                                 {
                                     inputHeader: 'Other (specify)',
+                                    icon: icons.editPen,
                                     name: physiologicalCousellingForm.specifyOnEnergyProteinDietarySupplentation.name,
                                     value: physiologicalCousellingForm.specifyOnEnergyProteinDietarySupplentation.value,
                                     eventType: 'input',
-                                    inputWidth: "300px",
+                                    inputWidth: "82%",
                                     required: true
                                 }
                                 

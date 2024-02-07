@@ -1,4 +1,5 @@
-import { defineStore } from "pinia"
+import { defineStore } from "pinia";
+import { icons } from '@/utils/svg';
 
 const behaviourCousellingForm ={
     cousellingOnCaffeineYes:{
@@ -19,7 +20,7 @@ const behaviourCousellingForm ={
     },
     specifyOnCaffeine:{
         name:"Specify On Caffeine",
-        value:"specifyOnCaffeine"
+        value:""
     },
     cousellingOnTobaccoYes:{
         name:"Yes",
@@ -39,7 +40,7 @@ const behaviourCousellingForm ={
     },
     specifyOnTobacco:{
         name:"Specify On Tobbaco",
-        value:"specifyOnTobacco"
+        value:""
     },
         cousellingOnSecondHAndTobaccoYes:{
         name:"Yes",
@@ -59,7 +60,7 @@ const behaviourCousellingForm ={
     },
     specifyOnSecondHandTobacco:{
         name:"Specify On Second Hand  Tobacco",
-        value:"specifyOnSecondHandTobacco"
+        value:""
     },
     cousellingOnCondomUseYes:{
         name:"Yes",
@@ -79,7 +80,7 @@ const behaviourCousellingForm ={
     },
     specifyOnCondomUse:{
         name:"Specify Condom Use",
-        value:"specifyOnCondomUse"
+        value:""
     },
     cousellingOnSubstanceUseYes:{
         name:"Yes",
@@ -99,7 +100,7 @@ const behaviourCousellingForm ={
     },
         specifyOnSubstanceUse:{
         name:"Specify Substance Use",
-        value:"specifyOnSubstanceUse"
+        value:""
     },
 }
 
@@ -169,10 +170,11 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
                             colData:[
                                 {
                                     inputHeader: 'Other (specify)',
+                                    icon: icons.editPen,
                                     name: behaviourCousellingForm.specifyOnCaffeine.name,
                                     value: behaviourCousellingForm.specifyOnCaffeine.value,
                                     eventType: 'input',
-                                    inputWidth: "300px",
+                                    inputWidth: "82%",
                                     required: true
                                 }
                                 
@@ -245,10 +247,11 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
                             colData:[
                                 {
                                     inputHeader: 'Other (specify)',
+                                    icon: icons.editPen,
                                     name: behaviourCousellingForm.specifyOnTobacco.name,
                                     value: behaviourCousellingForm.specifyOnTobacco.value,
                                     eventType: 'input',
-                                    inputWidth: "300px",
+                                    inputWidth: "82%",
                                     required: true
                                 }
                                 
@@ -321,10 +324,11 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
                             colData:[
                                 {
                                     inputHeader: 'Other (specify)',
+                                    icon: icons.editPen,
                                     name: behaviourCousellingForm.specifyOnSecondHandTobacco.name,
                                     value: behaviourCousellingForm.specifyOnSecondHandTobacco.value,
                                     eventType: 'input',
-                                    inputWidth: "300px",
+                                    inputWidth: "82%",
                                     required: true
                                 }
                                 
@@ -398,10 +402,11 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
                             colData:[
                                 {
                                     inputHeader: 'Other (specify)',
+                                    icon: icons.editPen,
                                     name: behaviourCousellingForm.specifyOnCondomUse.name,
                                     value: behaviourCousellingForm.specifyOnCondomUse.value,
                                     eventType: 'input',
-                                    inputWidth: "300px",
+                                    inputWidth: "82%",
                                     required: true
                                 }
                                 
@@ -474,10 +479,11 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
                             colData:[
                                 {
                                     inputHeader: 'Other (specify)',
+                                    icon: icons.editPen,
                                     name: behaviourCousellingForm.specifyOnSubstanceUse.name,
                                     value: behaviourCousellingForm.specifyOnSubstanceUse.value,
                                     eventType: 'input',
-                                    inputWidth: "300px",
+                                    inputWidth: "82%",
                                     required: true
                                 }
                                 

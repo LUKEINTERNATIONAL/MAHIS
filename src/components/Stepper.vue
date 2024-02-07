@@ -89,6 +89,11 @@
   import CurrentPhysiologicalSymptoms from '@/apps/ANC/components/symptomsFollowUp/CurrentPhysiologicalSymptoms.vue';
   import Ipv from '@/apps/ANC/components/symptomsFollowUp/Ipv.vue';
   import FatalMovement from '@/apps/ANC/components/symptomsFollowUp/FatalMovement.vue';
+  import BehaviourCounselling from '@/apps/ANC/components/counselling/BehaviourCounselling.vue';
+  import PhysiologicalCounseling from '@/apps/ANC/components/counselling/PhysiologicalCounseling.vue';
+  import DietCounselling from '@/apps/ANC/components/counselling/DietCounselling.vue';
+  import Referral from '@/apps/ANC/components/referral/Referral.vue';
+  import AncEnd  from  '@/apps/ANC/components/ancEnd/AncEnd.vue';
   import { createModal } from '@/utils/Alerts'
   import { icons } from '@/utils/svg';
   export default defineComponent({
@@ -126,7 +131,12 @@
         PersistentSymptoms,
         CurrentPhysiologicalSymptoms,
         Ipv,
-        FatalMovement 
+        FatalMovement,
+        BehaviourCounselling,
+        PhysiologicalCounseling,
+        DietCounselling,
+        Referral,
+        AncEnd 
     },
     data(){
         return {

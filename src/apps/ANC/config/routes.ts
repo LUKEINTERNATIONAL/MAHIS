@@ -1,12 +1,8 @@
-import Medical from '@/apps/ANC/views/medical.vue';
 import pastMedicalHistory from '../views/pastMedicalHistory.vue';
 import symptomsFollowUp from '../views/symptomsFollowUp.vue';
+import counselling from '../views/counselling.vue';
+import final from '../views/final.vue';
 export default [
-  {
-    path: '/medical',
-    name: 'medical',
-    component: Medical
-  },
     {
     path: '/pastMedicalHistory',
     name: 'pastMedicalHistory',
@@ -16,6 +12,16 @@ export default [
     path: '/symptomsFollowUp',
     name: 'symptomsFollowUp',
     component: symptomsFollowUp
+  },
+  {
+    path: '/counselling',
+    name: 'counselling',
+    component: counselling
+  },
+  {
+    path: '/final',
+    name: 'final',
+    component: final
   },
 ]
 
