@@ -244,16 +244,17 @@ export const useAncEndStore = defineStore('ancEndStore',{
                             colData:[
                                 {
                                     inputHeader: 'Date',
-                                    icon: icons.editPen,
+                                    icon: icons.calenderPrimary,
                                     value: ancEndForm.dateofDelivery.name,
                                     name: ancEndForm.dateofDelivery.value,
                                     eventType: 'input',
                                     inputWidth: "82%",
-                                    required: true
+                                    required: true,
+                                    isDatePopover: true
                                 },
                                     {
                                     inputHeader: 'Time',
-                                    icon: icons.editPen,
+                                    icon: icons.time,
                                     value: ancEndForm.timeOfDelivery.name,
                                     name: ancEndForm.timeOfDelivery.value,
                                     eventType: 'input',
@@ -430,7 +431,7 @@ export const useAncEndStore = defineStore('ancEndStore',{
                                 {
                                     inputHeader: 'Death Date',
                                     icon: icons.calendar,
-                                    value: 'dateOfdeathIfKnown',
+                                    value: '',
                                     name: "Date of Death if Known",
                                     eventType: 'input',
                                     inputWidth: "82%",
@@ -439,7 +440,7 @@ export const useAncEndStore = defineStore('ancEndStore',{
                                     {
                                     inputHeader: 'Cause of Death',
                                     icon: icons.editPen,
-                                    value: "causeOfDeath",
+                                    value: "",
                                     name: 'Cause of Death',
                                     eventType: 'input',
                                     inputWidth: "82%",

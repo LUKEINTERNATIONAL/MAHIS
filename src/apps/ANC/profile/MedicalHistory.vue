@@ -135,8 +135,7 @@ export default defineComponent({
         const  hKTMI = useMedicalHistoryStore()
         const  otherSite = useMedicalHistoryStore()  
         this.handleHivResults()
-        this.handlePastSurgeries()
-
+        this.handleSyphilis()
         
         
         
@@ -147,11 +146,11 @@ export default defineComponent({
             handler(){
                 this.handleHivResults()
             },
-             deep:true
+             deep:true,
         },
-        medicalHistory:{
+        syphilisTest:{
             handler(){
-                this.handlePastSurgeries()
+                this.handleSyphilis()
             },
             deep:true
         }
@@ -172,16 +171,17 @@ export default defineComponent({
             }else{
                 modifyRadioValue(this.hivTest,'test1','displayNone',true)
             }
+            //  console.log(getRadioSelectedValue(this.hivTest,'test2')) 
+        },
+        handleSyphilis(){
+           if(getRadioSelectedValue(this.syphilisTest,'syphilisOption') == 'syphilisTestConducted'){
+              modifyRadioValue(this.syphilisTest,'syphilisDetails','displayNone',false)
+           }else{
+             modifyRadioValue(this.syphilisTest,'syphilisDetails','displayNone',true)
+           }
+        //    console.log(getRadioSelectedValue(this.syphilisTest,'syphilisOption'))
 
         },
-        handlePastSurgeries(){
-           if(getCheckboxSelectedValue(this.medicalHistory,'other')== 'otherSurguries'){
-              modifyFieldValue(this.medicalHistory,'surgery','dissplayNone',false)
-           }else{
-             modifyFieldValue(this.medicalHistory,'surgery','dissplayNone',false)
-           }
-
-        }
     }
 })
 </script>

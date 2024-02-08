@@ -1,3 +1,4 @@
+import { radio } from "ionicons/icons";
 import { defineStore } from "pinia";
 
 const trailForm = {
@@ -68,27 +69,27 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
             {
                 selectdData: [],
                 isFinishBtn:false,
-                 classDash: 'dashed_bottom_border',
+                classDash: 'dashed_bottom_border',
                 radioBtnContent:{
 
                     header:{
-                        title:'Taking Calcium Suppliments',
-                        selectedValue:''
+                        selectedValue:'',
+                        radioTitle:['Yes','No'],
                     },
                     data:[
                         {
-                            name: trailForm.takingCalciumSuplimentsYes.name,
+                            name: 'Taking Calcium Suppliments',
                             value: trailForm.takingCalciumSuplimentsYes.value,
                             labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "9.7",
+                            justify:"space-between",
+                            
                         },
                         {
-                            name: trailForm.takingCalciumSuplimentsNo.name,
                             value: trailForm.takingCalciumSuplimentsNo.value,
                             labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "2",
+                            justify:"end" 
                         }
                     ]
                 }
@@ -100,23 +101,22 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
                 radioBtnContent:{
 
                     header:{
-                        title:'Has side-effects from calcium supplements',
                         selectedValue:''
                     },
                     data:[
                         {
-                            name: trailForm.sideEffectsCalciumSuplimentsYes.name,
+                            name: 'Has side-effects from calcium supplements',
                             value: trailForm.sideEffectsCalciumSuplimentsYes.value,
                             labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "9.7",
+                            justify:"space-between",                            
+                            
                         },
                         {
-                            name: trailForm.sideEffectsCalciumSuplimentsNo.name,
                             value: trailForm.sideEffectsCalciumSuplimentsNo.value,
                             labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "2",
+                            justify:"end" 
                         }
                     ]
                 }
@@ -128,23 +128,25 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
                 radioBtnContent:{
 
                     header:{
-                        title:'Taking iron and folic acid (IFA) tablets',
-                        selectedValue:''
+                        
+                        selectedValue:'',
+                        
                     },
                     data:[
                         {
-                            name: trailForm.ifaTabletsYes.name,
+                            name: 'Taking iron and folic acid (IFA) tablets',
                             value: trailForm.ifaTabletsYes.value,
                             labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "9.7",
+                            justify:"space-between",
+                            // class: 'bold' 
                         },
                         {
-                            name: trailForm.ifaTabletsNo.name,
+    
                             value: trailForm.ifaTabletsNo.value,
                             labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "2",
+                             justify:"end" 
                         }
                     ]
                 }
@@ -156,23 +158,22 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
                 radioBtnContent:{
 
                     header:{
-                        title:'Has side-effects from iron and folic acid supplements',
                         selectedValue:''
                     },
                     data:[
                         {
-                            name: trailForm.sideEfffectsifaSuplimeYes.name,
+                            name: 'Has side-effects from iron and folic acid supplements',
                             value: trailForm.sideEfffectsifaSuplimeYes.value,
                             labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "9.7",
+                            justify:"space-between",
                         },
                         {
-                            name: trailForm.sideEfffectsifaSuplimeNo.name,
+       
                             value: trailForm.sideEfffectsifaSuplimeNo.value,
                             labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "2",
+                            justify:"end" 
                         }
                     ]
                 }
@@ -184,23 +185,22 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
                 radioBtnContent:{
 
                     header:{
-                        title:'Taking aspirin tablets',
                         selectedValue:''
                     },
                     data:[
                         {
-                            name: trailForm.takingAspirinTabletsYes.name,
+                            name: 'Taking aspirin tablets',
                             value: trailForm.takingAspirinTabletsYes.value,
                             labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "9.7",
+                            justify:"space-between", 
                         },
                         {
-                            name: trailForm.takingAspirinTabletsNo.name,
+                            
                             value: trailForm.takingAspirinTabletsNo.value,
                             labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "2",
+                            justify:"end" 
                         }
                     ]
                 }
@@ -212,23 +212,23 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
                 radioBtnContent:{
 
                     header:{
-                        title:'Taking vitamin A supplements',
                         selectedValue:''
                     },
                     data:[
                         {
-                            name: trailForm.takingVitaminAsupplementsYes.name,
+                            name: 'Taking vitamin A supplements',
                             value: trailForm.takingVitaminAsupplementsYes.value,
                             labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "9.7",
+                            justify:"space-between",
+                            
                         },
                         {
-                            name: trailForm.takingVitaminAsupplementsNo.name,
+
                             value: trailForm.takingVitaminAsupplementsNo.value,
                             labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "2",
+                            justify:"end" 
                         }
                     ]
                 }
@@ -240,23 +240,23 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
                 radioBtnContent:{
 
                     header:{
-                        title:'Taking penicillin treatment for syphilis',
                         selectedValue:''
                     },
                     data:[
                         {
-                            name: trailForm.takingPenicillinTreatmentForSyphilisYes.name,
+                            name: 'Taking penicillin treatment for syphilis',
                             value: trailForm.takingPenicillinTreatmentForSyphilisYes.value,
                             labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "9.7",
+                            justify:"space-between",
+                            
                         },
                         {
-                            name: trailForm.takingPenicillinTreatmentForSyphilisNo.name,
+                         
                             value: trailForm.takingPenicillinTreatmentForSyphilisNo.value,
                             labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "2",
+                            justify:"end" 
                         }
                     ]
                 }

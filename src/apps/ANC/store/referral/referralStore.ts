@@ -76,7 +76,8 @@ export const useReferralStore = defineStore('referralStore',{
                 radioBtnContent:{
                     header:{
                         title: 'Referral for urgent care',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'referalOption'
                     },
                     data:[
                         {  
@@ -103,7 +104,9 @@ export const useReferralStore = defineStore('referralStore',{
                 radioBtnContent:{
                     header:{
                         title: 'Reason for referral',
-                        selectedValue: ''
+                        selectedValue: '',
+                        displayNone: true,
+                        name:"referralOutcome",
                     },
                     data:[
                         {  

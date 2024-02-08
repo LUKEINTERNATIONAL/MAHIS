@@ -1,5 +1,5 @@
 <template>
-    <ion-list>   
+    <ion-list> 
         <div class="sub_item_body">
             <BasicForm :contentData="trial" />
         </div>

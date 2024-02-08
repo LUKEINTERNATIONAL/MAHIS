@@ -80,23 +80,24 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
                 radioBtnContent:{
 
                     header:{
-                        title:'High caffeine intake',
-                        selectedValue:''
+                       
+                        selectedValue:'',
+                        radioTitle:['Yes','No'],
                     },
                     data:[
                         {
-                            name: persistentBehaviourForm.highCaffaineIntakeYes.name,
+                            name: 'High caffeine intake',
                             value: persistentBehaviourForm.highCaffaineIntakeYes.value,
                             labelPlacement:'start',
-                            colSize: "7",
+                            colSize: "9.7",
                             justify:"space-between" 
                         },
                         {
-                            name: persistentBehaviourForm.highCaffaineIntakeNo.name,
+      
                             value: persistentBehaviourForm.highCaffaineIntakeNo.value,
                             labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "2",
+                            justify:"end" 
                         }
                     ]
                 }
@@ -108,23 +109,23 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
                 radioBtnContent:{
 
                     header:{
-                        title:'Tobacco use',
+                        
                         selectedValue:''
                     },
                     data:[
                         {
-                            name: persistentBehaviourForm.tobaccoUseYes.name,
+                            name: 'Tobacco use',
                             value: persistentBehaviourForm.tobaccoUseYes.value,
                             labelPlacement:'start',
-                            colSize: "7",
+                            colSize: "9.7",
                             justify:"space-between" 
                         },
                         {
-                            name: persistentBehaviourForm.tobaccoUseNo.name,
+        
                             value: persistentBehaviourForm.tobaccoUseNo.value,
                             labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "2",
+                            justify:"end" 
                         }
                     ]
                 }
@@ -136,23 +137,22 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
                 radioBtnContent:{
 
                     header:{
-                        title:'Recently quit tobacco products',
+                        
                         selectedValue:''
                     },
                     data:[
                         {
-                            name: persistentBehaviourForm.recentlyQuitTobaccoProductsYes.name,
+                            name: 'Recently quit tobacco products',
                             value: persistentBehaviourForm.recentlyQuitTobaccoProductsYes.value,
                             labelPlacement:'start',
-                            colSize: "7",
+                            colSize: "9.7",
                             justify:"space-between" 
                         },
                         {
-                            name: persistentBehaviourForm.recentlyQuitTobaccoProductsNo.name,
                             value: persistentBehaviourForm.recentlyQuitTobaccoProductsNo.value,
                             labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "2",
+                            justify:"end" 
                         }
                     ]
                 }
@@ -164,23 +164,23 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
                 radioBtnContent:{
 
                     header:{
-                        title:'Exposure to second-hand smoke',
+                        
                         selectedValue:''
                     },
                     data:[
                         {
-                            name: persistentBehaviourForm.exposureToSecondHandSmokeYes.name,
+                            name: 'Exposure to second-hand smoke',
                             value: persistentBehaviourForm.exposureToSecondHandSmokeYes.value,
                             labelPlacement:'start',
-                            colSize: "7",
+                            colSize: "9.7",
                             justify:"space-between" 
                         },
                         {
-                            name: persistentBehaviourForm.exposureToSecondHandSmokeNo.name,
+                            
                             value: persistentBehaviourForm.exposureToSecondHandSmokeNo.value,
                             labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "2",
+                            justify:"end" 
                         }
                     ]
                 }
@@ -192,23 +192,23 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
                 radioBtnContent:{
 
                     header:{
-                        title:'Condom use during sex',
+                        
                         selectedValue:''
                     },
                     data:[
                         {
-                            name: persistentBehaviourForm.condomUseDuringSexYes.name,
+                            name: 'Condom use during sex',
                             value: persistentBehaviourForm.condomUseDuringSexYes.value,
                             labelPlacement:'start',
-                            colSize: "7",
+                            colSize: "9.7",
                             justify:"space-between" 
                         },
                         {
-                            name: persistentBehaviourForm.condomUseDuringSexNo.name,
+            
                             value: persistentBehaviourForm.condomUseDuringSexNo.value,
                             labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "2",
+                            justify:"end" 
                         }
                     ]
                 }
@@ -220,23 +220,23 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
                 radioBtnContent:{
 
                     header:{
-                        title:'Alcohol use',
+                        
                         selectedValue:''
                     },
                     data:[
                         {
-                            name: persistentBehaviourForm.alcoholUseYes.name,
+                            name: 'Alcohol use',
                             value: persistentBehaviourForm.alcoholUseYes.value,
                             labelPlacement:'start',
-                            colSize: "7",
+                            colSize: "9.7",
                             justify:"space-between" 
                         },
                         {
-                            name: persistentBehaviourForm.alcoholUseNo.name,
+                            
                             value: persistentBehaviourForm.alcoholUseNo.value,
                             labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "2",
+                            justify:"end" 
                         }
                     ]
                 }
@@ -248,23 +248,23 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
                 radioBtnContent:{
 
                     header:{
-                        title:'Substance use',
+                        
                         selectedValue:''
                     },
                     data:[
                         {
-                            name: persistentBehaviourForm.substanceUseYes.name,
+                            name: 'Substance use',
                             value: persistentBehaviourForm.substanceUseYes.value,
                             labelPlacement:'start',
-                            colSize: "7",
+                            colSize: "9.7",
                             justify:"space-between" 
                         },
                         {
-                            name: persistentBehaviourForm.substanceUseNo.name,
+                           
                             value: persistentBehaviourForm.substanceUseNo.value,
                             labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "2",
+                            justify:"end" 
                         }
                     ]
                 }
@@ -276,23 +276,23 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
                 radioBtnContent:{
 
                     header:{
-                        title:'No persistent behaviours',
+                        
                         selectedValue:''
                     },
                     data:[
                         {
-                            name: persistentBehaviourForm.noPersistentBehaviourYes.name,
+                            name: 'No persistent behaviours',
                             value: persistentBehaviourForm.noPersistentBehaviourYes.value,
                             labelPlacement:'start',
-                            colSize: "7",
+                            colSize: "9.7",
                             justify:"space-between" 
                         },
                         {
-                            name: persistentBehaviourForm.noPersistentBehaviourNo.name,
+                            
                             value: persistentBehaviourForm.noPersistentBehaviourNo.value,
                             labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "2",
+                            justify:"end" 
                         }
                     ]
                 }

@@ -14,6 +14,7 @@ import { mapState } from 'pinia';
  import BasicInputField from "@/components/BasicInputField.vue";
  import {useReferralStore} from "@/apps/ANC/store/referral/referralStore";
  import BasicForm from '@/components/BasicForm.vue';
+ import { modifyRadioValue,getRadioSelectedValue}from '@/services/data_helpers'
 
 
 export default defineComponent({
@@ -27,10 +28,28 @@ export default defineComponent({
 
     mounted(){
         const  referralInfo =useReferralStore()
+        this.handleReferral()
+    },
+    watch:{
+        referralInfo:{
+            handler(){
+                this.handleReferral()
+            },
+            deep:true
+        }
     },
       computed:{
         ...mapState(useReferralStore,["referralInfo"]),
     },
+    methods:{
+        handleReferral(){
+            if(getRadioSelectedValue(this.referralInfo,'referalOption') == 'yes'){
+                modifyRadioValue(this.referralInfo,'referralOutcome','displayNone',false)
+            }else{
+                modifyRadioValue(this.referralInfo,'referralOutcome','displayNone',true)
+            }
+        }
+    }
 })
 </script>
 <style scoped>

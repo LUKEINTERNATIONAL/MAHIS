@@ -44,7 +44,14 @@
                 </ion-row>
             </span>
             <span v-if="item.radioBtnContent && !item.radioBtnContent.header.displayNone">
-                <div style="font-weight: bold;" v-if="item.radioBtnContent?.header">{{ item.radioBtnContent?.header.title }} </div>
+                <ion-row>
+                    <ion-col size="9">
+                        <div style="font-weight: bold;" v-if="item.radioBtnContent?.header">{{ item.radioBtnContent?.header.title }} </div>
+                    </ion-col>
+                    <ion-col size="2" v-if="item.radioBtnContent?.header?.radioTitle?.length > 0">{{ item.radioBtnContent?.header.radioTitle[0] }}</ion-col>
+                    <ion-col size="1" v-if="item.radioBtnContent?.header?.radioTitle?.length > 0">{{ item.radioBtnContent?.header.radioTitle[1] }}</ion-col>
+                </ion-row>
+                
                 <ion-row class="checkbox_content">
                     <ion-col :size="al.colSize" class="checkout_col" style="" v-for="(al, index3) in item.radioBtnContent?.data" :key="index3">
                         <span v-if="al.header" class="first_col">
@@ -54,8 +61,9 @@
                         v-else 
                         style="width: 100%;"
                         :value="item.radioBtnContent.header.selectedValue "
-                        @ionChange="value => {item.radioBtnContent.header.selectedValue = value.target.value; handleInput(item.radioBtnContent.header)}" > 
-                            <span style="display: flex;width: 100%;" >
+                        @ionChange="value => {item.radioBtnContent.header.selectedValue = value.target.value;
+                             handleInput(item.radioBtnContent.header)}" > 
+                            <span style="display: flex;width: 100%;" :class="al.class" >
                                 <ion-radio :value="al.value" :justify="al.justify || 'start'"  :label-placement="al.labelPlacement || 'end'" >{{ al.name }}</ion-radio>
                             </span>         
                         </ion-radio-group>

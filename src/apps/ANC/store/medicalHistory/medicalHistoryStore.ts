@@ -1099,7 +1099,8 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 radioBtnContent:{
                     header:{
                         title: '',
-                        selectedValue: ''
+                        selectedValue: '',
+                        // name:"hivOption"
                     },
                     data:[
                         {  
@@ -1139,7 +1140,9 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 {
                     header:{
                         title: 'Reasons HIV test not done:',
-                        selectedValue: ''
+                        selectedValue: '',
+                        // displayNone: true,
+                        // name:"hivOutcome",
                     },
                     data:[
                         {
@@ -1305,6 +1308,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 radioBtnContent:{
                     header:{
                         title: 'Select whether:',
+                        name:'syphilisOption',
                         selectedValue: ''
                     },
                     data:[
@@ -1337,6 +1341,8 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 radioBtnContent:
                 {
                     header:{
+                         displayNone: true,
+                        name:"syphilisDetails",
                         title: 'Select the type of syphilis test that was done',
                         selectedValue: ''
                     },
@@ -1554,9 +1560,6 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
         },
             addSyphilisTest(data:any){
                 this.syphilisTest = data
-        },
-           addHypertension(data:any){
-            this.hKTMI= data
         },
         addOtherSite(data:any){
             this.otherSite = data
