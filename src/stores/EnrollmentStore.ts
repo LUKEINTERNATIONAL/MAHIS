@@ -154,10 +154,11 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                 selectdData: [],
                 isFinishBtn: false,
                 classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
+                radioBtnContent:
                 {
                     header:{
                         title: 'HIV',
+                        name: 'HIV',
                         selectedValue: ''
                     },
                     data:[
@@ -186,9 +187,10 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                         {
                             colData:[
                                 {
-                                    inputHeader: 'ART Stat date:',
+                                    inputHeader: 'ART Start Date:',
                                     icon: icons.calenderPrimary,
                                     value: '',
+                                    name: 'ART_start_date',
                                     eventType: 'input',
                                     isDatePopover: true,
                                     displayNone: true
