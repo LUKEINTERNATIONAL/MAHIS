@@ -749,14 +749,14 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             justify: 'space-between',
                             checked: false
                         },
-                                                {
-                            name: "No chronic HealthConditions",
-                            value: "noChronicalHealthConditions",
+                        {
+                            name: bloodDisorderForm.sickleCell.name,
+                            value: bloodDisorderForm.sickleCell.value,
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
-                        }
+                        },
                         
                     ],
                 }
@@ -775,14 +775,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         selectedValue: ''
                     },
                     data:[
-                        {
-                            name: bloodDisorderForm.sickleCell.name,
-                            value: bloodDisorderForm.sickleCell.value,
-                            labelPlacement: 'start',
-                            colSize: '6',
-                            justify: 'space-between',
-                            checked: false
-                        },
+
                         {
                             name: bloodDisorderForm.anaemia.name,
                             value: bloodDisorderForm.anaemia.value,
@@ -790,7 +783,15 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
-                        }
+                        },
+                        {
+                            name: bloodDisorderForm.thalassemia.name,
+                            value:bloodDisorderForm.thalassemia.value,
+                            labelPlacement: 'start',
+                            colSize: '6',
+                            justify: 'space-between',
+                            checked: false
+                        },
                         
                     ],
                 }
@@ -806,14 +807,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         selectedValue: ''
                     },
                     data:[
-                        {
-                            name: bloodDisorderForm.thalassemia.name,
-                            value:bloodDisorderForm.thalassemia.value,
-                            labelPlacement: 'start',
-                            colSize: '6',
-                            justify: 'space-between',
-                            checked: false
-                        },
+
                         {
                             name: "No Blood  Disorder",
                             value: "noBloodDisorder",
@@ -821,26 +815,8 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
-                        }
-                        
-                    ],
-                }
-                    
-        },
-    // ]as any,
-    // cancerIssue:[  
-        {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
-                        {
+                        },
+                            {
                             name: cancerForm.gynaelogical.name,
                             value: cancerForm.gynaelogical.value,
                             labelPlacement: 'start',
@@ -848,20 +824,13 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             justify: 'space-between',
                             checked: false
                         },
-                            {
-                            name: "No cancer",
-                            value: "noCancer",
-                            labelPlacement: 'start',
-                            colSize: '6',
-                            justify: 'space-between',
-                            checked: false
-                        }
                         
                     ],
                 }
-            
                     
         },
+    // ]as any,
+    // cancerIssue:[  
             // {
             //     data:{ 
             //         rowData:[
@@ -984,6 +953,101 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         
                     ],
                 }
+                    
+        },
+        {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                {
+                    header:{
+                        title: '',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: hypertensionForm.hypertension.name,
+                            value: hypertensionForm.hypertension.value,
+                            labelPlacement: 'start',
+                            colSize: '6',
+                            justify: 'space-between',
+                            checked: false
+                            
+                        },
+                        {
+                            name: kidneyForm.kidney.name,
+                            value: kidneyForm.kidney.value,
+                            labelPlacement: 'start',
+                            colSize: '6',
+                            justify: 'space-between',
+                            checked: false
+                        }
+                        
+                    ],
+                },
+                
+            
+                    
+        }, 
+        {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                {
+                    header:{
+                        title: '',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: tbForm.tb.name,
+                            value: tbForm.tb.value,
+                            labelPlacement: 'start',
+                            colSize: '6',
+                            justify: 'space-between',
+                            checked: false
+                        },
+                        {
+                            name: mentalIllinessForm.mentalIlliness.name,
+                            value: mentalIllinessForm.mentalIlliness.value,
+                            labelPlacement: 'start',
+                            colSize: '6',
+                            justify: 'space-between',
+                            checked: false
+                        }
+                        
+                    ],
+                },
+                
+            
+                    
+        },
+                {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                {
+                    header:{
+                        title: '',
+                        selectedValue: ''
+                    },
+                    data:[
+
+                       {
+                            name: 'Other',
+                            value: 'other',
+                            labelPlacement: 'start',
+                            colSize: '6',
+                            justify: 'space-between',
+                            checked: false
+                        }
+                        
+                    ],
+                }
+            
                     
         },
         //  {
@@ -1149,6 +1213,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 radioBtnContent:{
                     header:{
                         title: 'Select the result of HIV test',
+                        name:'test2',
                         selectedValue: ''
                     },
                     data:[
@@ -1192,6 +1257,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 radioBtnContent:{
                     header:{
                         displayNone: true,
+                        name:"test1",
                         title: 'Is the woman at high risk of HIV?',
                         selectedValue: ''
                     },
@@ -1430,77 +1496,6 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 }
             },
         ]as any,
-      hKTMI:[  
-        {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
-                        {
-                            name: hypertensionForm.hypertension.name,
-                            value: hypertensionForm.hypertension.value,
-                            labelPlacement: 'start',
-                            colSize: '6',
-                            justify: 'space-between',
-                            checked: false
-                            
-                        },
-                        {
-                            name: kidneyForm.kidney.name,
-                            value: kidneyForm.kidney.value,
-                            labelPlacement: 'start',
-                            colSize: '6',
-                            justify: 'space-between',
-                            checked: false
-                        }
-                        
-                    ],
-                },
-                
-            
-                    
-        }, 
-        {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
-                        {
-                            name: tbForm.tb.name,
-                            value: tbForm.tb.value,
-                            labelPlacement: 'start',
-                            colSize: '6',
-                            justify: 'space-between',
-                            checked: false
-                        },
-                        {
-                            name: mentalIllinessForm.mentalIlliness.name,
-                            value: mentalIllinessForm.mentalIlliness.value,
-                            labelPlacement: 'start',
-                            colSize: '6',
-                            justify: 'space-between',
-                            checked: false
-                        }
-                        
-                    ],
-                },
-                
-            
-                    
-        },
-    ]as any,
     otherSite:[
             {
                 data:{ 
@@ -1536,18 +1531,6 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
         },
         addExisitingChronicHealthConditions(data:any){
             this.exisitingChronicHealthConditions= data
-        },
-        addBloodDisorders(data:any){
-            this.blood = data
-        },
-        addCancer(data:any){
-            this.cancerIssue = data
-        },
-        addheartDesease(data:any){
-            this.heartProblem =data
-        },
-        addDiabetes(data:any){
-            this.diabetes= data
         },
             addhivTest(data:any){
                 this.hivTest =data

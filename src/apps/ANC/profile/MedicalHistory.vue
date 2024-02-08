@@ -8,7 +8,7 @@
         <div class="sub_item_body">
             <BasicForm :contentData="medicalHistory" />
         </div>
-        <ion-item class="sub_item_body_close" v-if="surgeriesChecked"/>
+        <ion-item class="sub_item_body_close" />
     </ion-list>
 
     <!-- Allegies -->
@@ -63,14 +63,6 @@
 
     <!-- Hypertations-Kidney-TB-MentalIlliness -->
 
-    <ion-list>
-
-        <div class="sub_item_body">
-            <BasicForm :contentData="hKTMI" />
-        </div>
-        <ion-item class="sub_item_body_close"/>
-    </ion-list>
-
     <!-- Other Sute -->
      <ion-list>
         
@@ -104,7 +96,7 @@
  import BasicInputField from "@/components/BasicInputField.vue";
  import {useMedicalHistoryStore} from "@/apps/ANC/store/medicalHistory/medicalHistoryStore";
  import BasicForm from '@/components/BasicForm.vue';
-import { modifyFieldValue} from '@/services/data_helpers'
+import { modifyRadioValue,getRadioSelectedValue} from '@/services/data_helpers'
 
 //  import {icons} from "@/utils/svg.ts"
 
@@ -136,8 +128,21 @@ export default defineComponent({
         const hivTest = useMedicalHistoryStore()
         const syphilisTest = useMedicalHistoryStore()
         const  hKTMI = useMedicalHistoryStore()
-        const  otherSite = useMedicalHistoryStore()
-        this.medicalHistory
+        const  otherSite = useMedicalHistoryStore()  
+        this.handleHivResults()
+
+        
+        
+        
+    },
+
+    watch:{
+        hivTest:{
+            handler(){
+                this.handleHivResults()
+            },
+             deep:true
+        }
     },
       computed:{
         ...mapState(useMedicalHistoryStore,["medicalHistory"]),
@@ -145,11 +150,18 @@ export default defineComponent({
         ...mapState(useMedicalHistoryStore,["exisitingChronicHealthConditions"]),
         ...mapState(useMedicalHistoryStore,["hivTest"]),
         ...mapState(useMedicalHistoryStore,["syphilisTest"]),
-        ...mapState(useMedicalHistoryStore,["hKTMI"]),
         ...mapState(useMedicalHistoryStore,["otherSite"]),
     },
     methods:{
-        handleHivResults(name:any){}
+        handleHivResults(){
+            
+            if(getRadioSelectedValue(this.hivTest,'test2') == 'hivPositive'){
+                modifyRadioValue(this.hivTest,'test1','displayNone',false)
+            }else{
+                modifyRadioValue(this.hivTest,'test1','displayNone',true)
+            }
+
+        }
     }
 })
 </script>
