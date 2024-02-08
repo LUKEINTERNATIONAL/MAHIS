@@ -35,7 +35,7 @@
             <ion-toggle >CVD risk screening</ion-toggle>
         </ion-item>
         <ion-item class="dashed_bottom_border">
-            <ion-toggle>Diabetic kidney desease</ion-toggle>
+            <ion-toggle>Diabetic kidney disease</ion-toggle>
         </ion-item>
 
     </ion-list>

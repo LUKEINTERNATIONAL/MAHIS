@@ -105,7 +105,7 @@
                             {{ al.alertsErrorMassage }}
                         </div>
                     </ion-col>
-                    <ion-col  v-for="(checkboxInput, checkboxInputIndex) in item.checkboxBtnContent.inputFields" :key="checkboxInputIndex">
+                    <ion-col v-show="!item.checkboxBtnContent.inputFields[0].displayNone" v-for="(checkboxInput, checkboxInputIndex) in item.checkboxBtnContent.inputFields" :key="checkboxInputIndex">
                         <BasicInputField
                             :inputHeader="checkboxInput.inputHeader"
                             :unit="checkboxInput.unit"

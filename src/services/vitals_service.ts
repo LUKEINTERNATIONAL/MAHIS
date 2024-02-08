@@ -146,9 +146,9 @@ export class VitalsService extends AppEncounterService{
           return this.mergeErrors(errors); 
         },
       }, {
-        name: "Pulse rate",
+        name: "Pulse rate*",
         validator: (val: any) => {
-          const minErrors = this.checkMinMax(val, 50, 120);
+          const minErrors = this.checkMinMax(val, 60, 120);
           return this.mergeErrors([minErrors]); 
         },
       }

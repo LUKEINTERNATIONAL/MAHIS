@@ -22,7 +22,7 @@
             :icon="iconsContent.plus"
             iconSlot="icon-only"
             @clicked:btn="displayInputFields()"
-            name="Add new test"
+            name="Add new Diagnosis"
         />
     </ion-row>
     <SelectionPopover 

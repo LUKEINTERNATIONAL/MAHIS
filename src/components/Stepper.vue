@@ -78,7 +78,7 @@
   import Diagnosis from '@/apps/NCD/components/ConsultationPlan/Diagnosis.vue'
   import Complications from '@/apps/NCD/components/ConsultationPlan/Complications.vue'
   import ConfirmDiagnosis from '@/apps/NCD/components/ConsultationPlan/ConfirmDiagnosis.vue'
-  import Disposition from '@/apps/NCD/components/ConsultationPlan/Disposition.vue'
+  import Outcome from '@/apps/NCD/components/ConsultationPlan/Outcome.vue'
   import Investigations from '@/apps/NCD/components/ConsultationPlan/Investigations.vue'
   import TreatmentPlan from '@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue'
   import SaveProgressModal from '@/components/SaveProgressModal.vue'
@@ -121,7 +121,7 @@
         Diagnosis,
         Complications,
         ConfirmDiagnosis,
-        Disposition,
+        Outcome,
         Investigations,
         TreatmentPlan,
         IonModal,
