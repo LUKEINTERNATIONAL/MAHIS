@@ -96,7 +96,12 @@
  import BasicInputField from "@/components/BasicInputField.vue";
  import {useMedicalHistoryStore} from "@/apps/ANC/store/medicalHistory/medicalHistoryStore";
  import BasicForm from '@/components/BasicForm.vue';
-import { modifyRadioValue,getRadioSelectedValue} from '@/services/data_helpers'
+import { modifyRadioValue,
+    getRadioSelectedValue,
+    getCheckboxSelectedValue,
+    getFieldValue,
+    modifyFieldValue,
+    modifyCheckboxValue} from '@/services/data_helpers'
 
 //  import {icons} from "@/utils/svg.ts"
 
@@ -130,6 +135,7 @@ export default defineComponent({
         const  hKTMI = useMedicalHistoryStore()
         const  otherSite = useMedicalHistoryStore()  
         this.handleHivResults()
+        this.handlePastSurgeries()
 
         
         
@@ -142,6 +148,12 @@ export default defineComponent({
                 this.handleHivResults()
             },
              deep:true
+        },
+        medicalHistory:{
+            handler(){
+                this.handlePastSurgeries()
+            },
+            deep:true
         }
     },
       computed:{
@@ -160,6 +172,14 @@ export default defineComponent({
             }else{
                 modifyRadioValue(this.hivTest,'test1','displayNone',true)
             }
+
+        },
+        handlePastSurgeries(){
+           if(getCheckboxSelectedValue(this.medicalHistory,'other')== 'otherSurguries'){
+              modifyFieldValue(this.medicalHistory,'surgery','dissplayNone',false)
+           }else{
+             modifyFieldValue(this.medicalHistory,'surgery','dissplayNone',false)
+           }
 
         }
     }

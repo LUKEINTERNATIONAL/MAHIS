@@ -430,7 +430,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 {
                     header:{
                         title: '',
-                        selectedValue: ''
+                        selectedValue: '',
                     },
                     data:[
                        {
@@ -441,7 +441,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             justify: 'space-between',
                             checked: false
                         },
-                                                 {
+                         {
                             name: "Other Surgeries",
                             value: "otherSurguries",
                             labelPlacement: 'start',
@@ -460,6 +460,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         {
                             colData:[
                                 {
+                                    displayNone:true,
                                     inputHeader: 'Other(Specify)',
                                     icon: icons.editPen,
                                     value: medicalHistoryForm.otherSurgerirs.name,
@@ -671,8 +672,16 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     },
                     data:[
                          {
-                            name: "No surguries",
-                            value: "noSurguries",
+                            name: "No Allergies",
+                            value: "noAllergies",
+                            labelPlacement: 'start',
+                            colSize: '6',
+                            justify: 'space-between',
+                            checked: false
+                        },
+                         {
+                            name: "Other Allergies",
+                            value: "otherAllergies",
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
@@ -689,7 +698,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         {
                             colData:[
                                 {
-                                    inputHeader: 'Other Allergies',
+                                    inputHeader: 'Other(specify)',
                                     icon: icons.editPen,
                                     value: allegiesForm.otherAllegies.name,
                                     name: allegiesForm.otherAllegies.value,

@@ -87,7 +87,7 @@
                         </div>
                 </ion-row>
             </span>
-            <span v-if="item.checkboxBtnContent">
+            <span v-if="item.checkboxBtnContent && !item.checkboxBtnContent.header.displayNone">
                 <div style="font-weight: bold" v-if="item.checkboxBtnContent?.header">{{ item.checkboxBtnContent?.header.title }} </div>
                 <ion-row class="checkbox_content">
                     <ion-col :size="al.colSize" class="checkout_col" style="" v-for="(al, index3) in item.checkboxBtnContent?.data" :key="index3">
