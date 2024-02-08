@@ -1,24 +1,24 @@
 <template>
   <div class="modal_wrapper">
     <div class="modal_title diplay_space_between">
-      <span>Disposition</span>
+      <span>Outcome</span>
       <span @click="dismiss()" style="cursor: pointer; font-weight: 300;">x</span>
     </div>
 
     <DashBox v-if="dispositions.length == 0" :content="'No dispositions added yet.'"></DashBox>
 
     <div class="dashed_bottom_border" style="padding-bottom:5px"
-      v-for="(disposition, index) in dispositions" :key="index">
+      v-for="(outcome, index) in dispositions" :key="index">
       <div class="text_header_14">
-        <h4 style="margin-bottom: 0px; font-weight: bold;">{{ disposition.name }}</h4>
+        <h4 style="margin-bottom: 0px; font-weight: bold;">{{ outcome.name }}</h4>
       </div>
       <div class="diplay_space_between">
         <div>
           <div class="typeDate" style="width: 54dvw;">
-            <span>{{ disposition.type }}</span><span class="date">{{ disposition.date }}</span>
+            <span>{{ outcome.type }}</span><span class="date">{{ outcome.date }}</span>
           </div>
           <div>
-            {{ disposition.reason }}
+            {{ outcome.reason }}
           </div>
         </div>
         <div>
@@ -45,8 +45,8 @@ import { defineComponent } from 'vue';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import { icons } from '@/utils/svg';
 import { mapState } from 'pinia'
-import { useDispositionStore } from "@/stores/DispositionStore"
-import DispositionModal from '@/components/ProfileModal/DispositionModal.vue'
+import { useDispositionStore } from "@/stores/OutcomeStore"
+import DispositionModal from '@/components/ProfileModal/NotesModal.vue'
 import { createModal } from '@/utils/Alerts'
 
 export default defineComponent({
@@ -91,4 +91,4 @@ export default defineComponent({
   display: flex;
 }
 </style>
-  
+  @/stores/OutcomeStore

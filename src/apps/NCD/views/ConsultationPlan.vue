@@ -78,7 +78,7 @@
         return {
             wizardData: [
                 {
-                    'title': 'Vitals and other measures',
+                    'title': 'Vital Signs',
                     'class': 'common_step',
                     'checked':false,
                     'disabled':false,
@@ -104,7 +104,7 @@
                     'last_step': ''
                 },  
                 {
-                    'title': 'Complications',
+                    'title': 'Complications Screening',
                     'class': 'common_step',
                     'checked':'',
                     'icon': false,
@@ -122,7 +122,7 @@
                     'last_step': ''
                 },
                 {
-                    'title': 'Disposition',
+                    'title': 'Outcome',
                     'class': 'common_step',
                     'checked':'',
                     'icon': false,
@@ -133,7 +133,7 @@
             ],
             StepperData:[
                 {
-                    'title': 'Vitals and other measures',
+                    'title': 'Vital Signs',
                     'componet': 'Vitals',
                     'value': '1'
                 },
@@ -148,7 +148,7 @@
                     'value': '3',
                 },  
                 {
-                    'title': 'Complications',
+                    'title': 'Complications Screening',
                     'componet': 'Complications',
                     'value': '4',
                 },
@@ -158,8 +158,8 @@
                     'value': '5',
                 },
                 {
-                    'title': 'Disposition',
-                    'componet': 'Disposition',
+                    'title': 'Outcome',
+                    'componet': 'Outcome',
                     'value': '6',
                 },
             ],

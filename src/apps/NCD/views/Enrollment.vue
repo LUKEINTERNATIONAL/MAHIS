@@ -173,9 +173,9 @@
         return {
             iconsContent: icons,
             demographic: true,
-            currentStep: 'Substance & Diagnosis',
+            currentStep: '',
             scanner: false,
-            steps: ['Substance & Diagnosis', 'Patient History','Family History and NCDNumber','Next Appointment'],
+            steps: '' as any,
             isOpen: false,
             iconListStatus: 'active_icon',
             iconGridStatus: 'inactive_icon'
@@ -190,6 +190,7 @@
       ...mapState(useConfigurationStore,["enrollmentDisplayType"]),
     },
     mounted(){
+        this.setDisplayType(this.enrollmentDisplayType)
     },
     
     setup() {
@@ -225,8 +226,10 @@
         setDisplayType(type: any){
             if(type=='grid'){
                 this.currentStep ='Enrollment'
+                this.steps = ['Enrollment','Next Appointment']
             }else{
                 this.currentStep ='Substance & Diagnosis'
+                this.steps =['Substance & Diagnosis', 'Patient History','Family History and NCDNumber','Next Appointment']
             }
             const demographicsStore = useConfigurationStore()
             demographicsStore.setEnrollmentDisplayType(type)

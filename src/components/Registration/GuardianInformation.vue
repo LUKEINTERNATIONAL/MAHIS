@@ -13,7 +13,7 @@ import {
       IonMenu
   } from '@ionic/vue';
 import { defineComponent } from 'vue';
-import DispositionModal from '@/components/ProfileModal/DispositionModal.vue'
+import DispositionModal from '@/components/ProfileModal/OutcomeModal.vue'
 import { createModal } from '@/utils/Alerts'
 import { useRegistrationStore } from '@/stores/RegistrationStore'
 import { mapState } from 'pinia';

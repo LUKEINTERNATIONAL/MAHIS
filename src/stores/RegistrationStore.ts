@@ -130,7 +130,7 @@ export const useRegistrationStore = defineStore('registrationStore',{
                         {
                             colData:[
                                 {
-                                    inputHeader: 'Date of birth/Estimated age*',
+                                    inputHeader: 'Date of birth*',
                                     icon: icons.calenderPrimary,
                                     value: '',
                                     name: 'birthdate',
@@ -145,7 +145,34 @@ export const useRegistrationStore = defineStore('registrationStore',{
                         }
                     ],
                     
-                },
+                }
+                    
+            },
+            {
+                data:{ 
+                    rowData:[
+                        {
+                            colData:[
+                                {
+                                    inputHeader: 'Estimated age',
+                                    icon: icons.calenderPrimary,
+                                    value: '',
+                                    name: 'birthdate',
+                                    eventType: 'input',
+                                        alertsError: false,
+                                        alertsErrorMassage: '',
+                                    required: true,
+                                    isDatePopover: true
+                                }
+                                
+                            ]
+                        }
+                    ],
+                    
+                }
+                    
+            },
+            {
                 radioBtnContent:
                     {
                         header:{
@@ -168,7 +195,8 @@ export const useRegistrationStore = defineStore('registrationStore',{
                         ]
                 }
                     
-            }
+            },
+            
                 
         ] as any,
         socialHistory: [
@@ -243,36 +271,15 @@ export const useRegistrationStore = defineStore('registrationStore',{
                             {
                                 name: 'Unemployed',
                                 value: 'unemployed',
+                            },
+                            {
+                                name: 'Other',
+                                value: 'Other',
                             }
                         ]
                 }
                     
-            },
-            {
-                data:{ 
-                    rowData:[
-                        {
-                            colData:[
-                                {
-                                    icon: icons.search,
-                                    placeholder: 'Select Occupation',
-                                    value: '',
-                                    name: 'occupation',
-                                    eventType: 'input',
-                                    popOverData: {
-                                        filterData: true,
-                                        data: []
-                                    },
-                                    alertsError: false,
-                                    alertsErrorMassage: '',
-                                }
-                            ]
-                        }
-                    ],
-                    
-                }
-                    
-            },
+            }
                 
         ] as any,
         homeLocation: [

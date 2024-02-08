@@ -184,7 +184,7 @@
   import DemographicBar from '@/components/DemographicBar.vue'
 
   
-  import DispositionGrid from '@/components/PatientProfileGrid/DispositionGrid.vue'
+  import DispositionGrid from '@/components/PatientProfileGrid/OutcomeGrid.vue'
   import InvestigationsGrid from '@/components/PatientProfileGrid/InvestigationsGrid.vue'
   import MedicationsGrid from '@/components/PatientProfileGrid/MedicationsGrid.vue'
   import VitalsGrid from '@/components/PatientProfileGrid/VitalsGrid.vue'
@@ -260,7 +260,7 @@
             let url =''
             if(this.NCDProgramActionName == '+ Start new NCD consultation' || this.NCDProgramActionName == '+ Continue NCD consultation')
                 url ='consultationPlan'
-            if(this.NCDProgramActionName = '+ Enroll in NCD Program')
+            else if(this.NCDProgramActionName == '+ Enroll in NCD Program')
                 url ='NCDEnrollment'
 
             this.$router.push(url);
@@ -272,10 +272,11 @@
           return  HisDate.getBirthdateAge(this.demographics.birthdate) 
         },
         setProgramActionName(){
-            if(this.NCDNumber[0].data.rowData[0].colData[0].value != '')
+            console.log(this.NCDNumber[0].data.rowData[0].colData[0].value)
+            if(this.saveProgressStatus)
+                return "+ Continue NCD consultation"
+            else if(this.NCDNumber[0].data.rowData[0].colData[0].value != '')
                 return '+ Start new NCD consultation' 
-            else if(this.saveProgressStatus)
-               return "+ Continue NCD consultation"
             else
                 return '+ Enroll in NCD Program'
         }

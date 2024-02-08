@@ -170,6 +170,11 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             name: 'NR',
                             value: 'NR',
                             checked: false
+                        },
+                        {
+                            name: 'Unknow',
+                            value: 'Unknow',
+                            checked: false
                         }
                     ]
                 }
@@ -195,6 +200,18 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                     
                 }
                     
+            },
+            {
+                checkboxBtnContent:
+                {
+                    data:[
+                        {
+                            name: 'Use of traditional medicine',
+                            value: 'Use of traditional medicine',
+                            checked: false
+                        }
+                    ]
+                }
             },
             {
                 checkboxBtnContent:
@@ -252,6 +269,50 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                         {
                             name: 'Sexual dysfunction',
                             value: 'Sexual dysfunction',
+                            checked: false
+                        }
+                    ],
+                    inputFields:[
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: 'Pick the date',
+                            value: '',
+                            eventType: 'input',
+                            isDatePopover: true,
+                            displayNone: true
+                        }
+                    ]
+                }
+            },
+            {
+                checkboxBtnContent:
+                {
+                    data:[
+                        {
+                            name: 'Anxiety',
+                            value: 'Anxiety',
+                            checked: false
+                        }
+                    ],
+                    inputFields:[
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: 'Pick the date',
+                            value: '',
+                            eventType: 'input',
+                            isDatePopover: true,
+                            displayNone: true
+                        }
+                    ]
+                }
+            },
+            {
+                checkboxBtnContent:
+                {
+                    data:[
+                        {
+                            name: 'Depression',
+                            value: 'Depression',
                             checked: false
                         }
                     ],
@@ -371,9 +432,9 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                 {
                     data:[
                         {
-                            name: 'Cardiovascular desease',
+                            name: 'Cardiovascular disease',
                             value: 'Smear',
-                            example: 'eg. heart attack, ischemic heart desease, CCF',
+                            example: 'eg. heart attack, ischemic heart disease, CCF',
                             checked: false
                         }
                     ],

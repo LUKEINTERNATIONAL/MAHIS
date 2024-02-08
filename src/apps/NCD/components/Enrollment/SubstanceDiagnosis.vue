@@ -17,7 +17,7 @@ import {
 import { defineComponent } from 'vue';
 import { icons } from '@/utils/svg';
 
-import DispositionModal from '@/components/ProfileModal/DispositionModal.vue'
+import DispositionModal from '@/components/ProfileModal/OutcomeModal.vue'
 import { createModal } from '@/utils/Alerts'
 import { useEnrollementStore } from '@/stores/EnrollmentStore'
 import { mapState } from 'pinia';
