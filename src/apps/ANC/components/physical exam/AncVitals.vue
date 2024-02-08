@@ -32,6 +32,38 @@
     </ion-col>
   </ion-row>
 
+<!--  respiratory exam and Pre-eclampsia-->
+  <ion-row>
+    <ion-col  class="left_row_col_separator">
+      <ion-list>
+        <ion-item class="dashed_bottom_border" style="font-weight: bold">
+          Respiration exam result
+        </ion-item>
+        <div class="sub_item_body content_container" >
+          <basic-form
+              :contentData="respiration" >
+          </basic-form>
+        </div>
+        <ion-item class="sub_item_body_close"/>
+      </ion-list>
+    </ion-col>
+
+    <ion-col class="right_row_col_separator">
+      <ion-list>
+        <ion-item class="dashed_bottom_border" style="font-weight: bold">
+          Pre-eclampsia with severe features
+        </ion-item>
+        <div class="sub_item_body content_container" >
+          <basic-form
+              :contentData="preEclampsia" >
+          </basic-form>
+        </div>
+        <ion-item class="sub_item_body_close" />
+      </ion-list>
+    </ion-col>
+  </ion-row>
+
+
   <ion-row>
     <!--  temperature-->
     <ion-col  class="left_row_col_separator">
@@ -62,17 +94,6 @@
       </ion-list>
     </ion-col>
   </ion-row>
-  <ion-list>
-    <ion-item :lines="respirationExam" class="dashed_bottom_border" style="font-weight: bold">
-    Respiration exam result
-    </ion-item>
-    <div class="sub_item_body content_container" >
-      <basic-form
-          :contentData="respiration" >
-      </basic-form>
-    </div>
-    <ion-item class="sub_item_body_close"/>
-  </ion-list>
 <!--    <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form>-->
 </template>
   
@@ -146,6 +167,7 @@ import {
         ...mapState(useAncVitalsStore,["respiration"]),
         ...mapState(useAncVitalsStore,["temperature"]),
         ...mapState(useAncVitalsStore,["pulse"]),
+        ...mapState(useAncVitalsStore,["preEclampsia"]),
     },
     mounted(){
         const userID: any  = Service.getUserID()

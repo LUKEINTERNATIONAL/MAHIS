@@ -1,70 +1,15 @@
 <template>
-  <!--  Presenting signs-->
+  <!--  Fetal presentation-->
   <ion-row>
     <ion-col class=" left_row_col_separator" >
+
       <ion-list >
         <ion-item class="dashed_bottom_border" style="font-weight: bold">
-          Any signs of injury?
+          Fetal presentation
         </ion-item>
         <div class="sub_item_body content_container" >
           <basic-form
-              :contentData="signsOfInjury" >
-          </basic-form>
-        </div>
-        <ion-item class="sub_item_body_close" />
-      </ion-list>
-    </ion-col>
-    <ion-col class=" right_row_col_separator" >
-      <ion-list >
-        <ion-item class="dashed_bottom_border" style="font-weight: bold">
-          Is there traumatic injury to abdomen?
-        </ion-item>
-        <div class="sub_item_body content_container" >
-          <basic-form
-              :contentData="abdominalInjury" >
-          </basic-form>
-        </div>
-        <ion-item class="sub_item_body_close" />
-      </ion-list>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col >
-      <ion-list >
-        <ion-item class="dashed_bottom_border" style="font-weight: bold">
-          Any other signs indicative of violence?
-        </ion-item>
-        <div class="sub_item_body content_container" >
-          <basic-form
-              :contentData="violence" >
-          </basic-form>
-        </div>
-        <ion-item class="sub_item_body_close" />
-      </ion-list>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col class=" left_row_col_separator" >
-      <ion-list >
-        <ion-item class="dashed_bottom_border" style="font-weight: bold">
-          Clinical enquiry for IPV conducted?
-        </ion-item>
-        <div class="sub_item_body content_container" >
-          <basic-form
-              :contentData="clinicalEnquiry" >
-          </basic-form>
-        </div>
-        <ion-item class="sub_item_body_close" />
-      </ion-list>
-    </ion-col>
-    <ion-col class=" right_row_col_separator" >
-      <ion-list >
-        <ion-item class="dashed_bottom_border" style="font-weight: bold">
-          Has the woman subjected to any form of violence?
-        </ion-item>
-        <div class="sub_item_body content_container" >
-          <basic-form
-              :contentData="intimateViolence" >
+              :contentData="fetalPresentation" >
           </basic-form>
         </div>
         <ion-item class="sub_item_body_close" />
@@ -89,7 +34,7 @@ import {
 import { defineComponent } from 'vue';
 import { checkmark,pulseOutline } from 'ionicons/icons';
 import { icons } from '@/utils/svg';
-import {usePresentingSigns} from "@/apps/ANC/store/physical exam/PresentingSignsStore";
+import {useFetalPresentation} from "@/apps/ANC/store/physical exam/FetalPresantationStore";
 import { mapState } from 'pinia';
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { arePropertiesNotEmpty } from "@/utils/Objects";
@@ -122,11 +67,7 @@ export default defineComponent({
   },
   computed:{
 
-    ...mapState(usePresentingSigns,["signsOfInjury"]),
-    ...mapState(usePresentingSigns,["abdominalInjury"]),
-    ...mapState(usePresentingSigns,["violence"]),
-    ...mapState(usePresentingSigns,["clinicalEnquiry"]),
-    ...mapState(usePresentingSigns,["intimateViolence"]),
+    ...mapState(useFetalPresentation,["fetalPresentation"]),
   },
   mounted(){
     const userID: any  = Service.getUserID()

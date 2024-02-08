@@ -62,9 +62,9 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
         ],
         respiration: [
             {
-                isFinishBtn: false,
-                sectionHeader: '',
-                radioBtnContent:
+                selectdData: [],
+                classDash: '',
+                checkboxBtnContent:
                     {
                         header:{
                             title: '',
@@ -72,18 +72,11 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                         },
                         data:[
                             {
-                                value: 'RapidBreathing',
-                                name: 'Rapid breathing',
+                                name: 'Respiration not done',
+                                value: 'respiration not done',
+                                checked: false,
                                 labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between'
-
-                            },
-                            {
-                                value: 'Dyspnoea',
-                                name: 'Dyspnoea',
-                                labelPlacement: 'start',
-                                colSize: '7',
+                                colSize: '12',
                                 justify: 'space-between'
 
                             },
@@ -91,6 +84,220 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                     }
 
             },
+            {
+                selectdData: [],
+                classDash: '',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Normal exam',
+                                value: 'normal exam',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '12',
+                                justify: 'space-between'
+
+                            },
+                        ]
+                    }
+
+            },
+
+            {
+                selectdData: [],
+                classDash: '',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Cough',
+                                value: 'cough',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '12',
+                                justify: 'space-between'
+
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                classDash: '',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Rapid breathing',
+                                value: 'rapid breathing',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '12',
+                                justify: 'space-between'
+
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                classDash: '',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Slow breathing',
+                                value: 'slow breathing',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '12',
+                                justify: 'space-between'
+
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                classDash: '',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Wheezing',
+                                value: 'wheezing',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '12',
+                                justify: 'space-between'
+
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                classDash: '',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Rales',
+                                value: 'rales',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '12',
+                                justify: 'space-between'
+
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                classDash: '',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Respiratory distress',
+                                value: 'respiratory distress',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '12',
+                                justify: 'space-between'
+
+                            },
+                        ]
+                    }
+
+            },
+            {
+                isFinishBtn: false,
+                sectionHeader: '',
+                classDash: '',
+
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Other (specify)',
+                                        unit: '',
+                                        icon: icons.editPen,
+                                        value: '',
+                                        name: 'Other',
+                                        required: true,
+                                        eventType: 'input',
+                                        inputWidth: "100%",
+                                        required: true
+                                    },
+
+                                ],
+
+                            },
+                            {
+                                colData:
+                                    [
+                                        {
+                                            inputHeader: 'Oximetry',
+                                            unit: '',
+                                            icon:'',
+                                            value: 'This to be taken when breathing distress is selected\'',
+                                            name: 'Oximetry',
+                                            required: true,
+                                            eventType: 'input'
+                                        },
+                                        {
+                                            inputHeader: 'Respiratory rate',
+                                            unit: 'mmHg',
+                                            icon: '',
+                                            value: ' This to be taken when breathing distress is selected',
+                                            name: 'RespiratoryRate',
+                                            required: true,
+                                            eventType: 'input'
+                                        }
+                                    ]
+                            }
+                        ]
+                    },
+            },
+
         ],
         bloodPressure:[
             {
@@ -203,7 +410,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
             {
                 isFinishBtn: false,
                 sectionHeader: '',
-                classDash: 'dashed_bottom_border _padding',
+                classDash: '',
 
                 data:
                     {
@@ -218,7 +425,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                         name: 'Other',
                                         required: true,
                                         eventType: 'input',
-                                        inputWidth: "93%",
+                                        inputWidth: "100%",
                                         required: true
                                     },
 
@@ -297,6 +504,147 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
 
             }
 
+        ],
+        preEclampsia: [
+
+            {
+                selectdData: [],
+                classDash: '',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'No symptoms of severe pre-eclampsia',
+                                value: 'NoSymptomsOfEclampsia',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '12',
+                                justify: 'space-between'
+
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                classDash: '',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Severe headache',
+                                value: 'SevereHeadache',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '12',
+                                justify: 'space-between'
+
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                classDash: '',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Visual disturbance',
+                                value: 'VisualDisturbance',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '12',
+                                justify: 'space-between'
+
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                classDash: '',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Vomiting',
+                                value: 'Vomiting',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '12',
+                                justify: 'space-between'
+
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                classDash: '',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Epigastric pain',
+                                value: 'EpigastricPain',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '12',
+                                justify: 'space-between'
+
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                classDash: '',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Dizziness',
+                                value: 'Dizziness',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '12',
+                                justify: 'space-between'
+
+                            },
+                        ]
+                    }
+
+            },
         ]
     }),
     actions:{

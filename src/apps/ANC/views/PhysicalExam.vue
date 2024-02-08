@@ -140,7 +140,7 @@ export default defineComponent({
         },
         {
           'title': 'Presenting signs or conditions for IPV ',
-          'componet': 'PresentingSignsOrConditionsForIPV',
+          'componet': 'PresentingSigns',
           'value': '5',
         },
       ],
