@@ -23,6 +23,7 @@ import { useEnrollementStore } from '@/stores/EnrollmentStore'
 import { mapState } from 'pinia';
 import BasicForm from '@/components/BasicForm.vue';
 import BasicCard from '@/components/BasicCard.vue';
+import { getCheckboxSelectedValue,getRadioSelectedValue, modifyFieldValue } from '@/services/data_helpers'
 
 export default defineComponent({
 name: 'Menu',
@@ -55,11 +56,18 @@ watch: {
             this.buidCards()
         },
         deep: true
+    },
+    patientHistoryHIV: {
+        handler(){
+            this.controllFields()
+        },
+        deep: true
     }
 },
 mounted(){
     this.updateEnrollmentStores()
     this.buidCards()
+    console.log(getCheckboxSelectedValue(this.patientHistoryHIV,'PVD'))
 },
 methods:{
     buidCards(){
@@ -81,13 +89,16 @@ methods:{
         createModal(DispositionModal)
     },
     updateEnrollmentStores(){
-        console.log(this.patientHistoryHIV)
         const enrollmentStore = useEnrollementStore()
         enrollmentStore.setPatientHistory(this.patientHistory)
         enrollmentStore.setPatientHistoryHIV(this.patientHistoryHIV)
     },
-    testF(data: any){
-        console.log(data);
+    controllFields(){
+        if(getRadioSelectedValue(this.patientHistoryHIV, 'HIV') == 'R'){
+            modifyFieldValue(this.patientHistoryHIV,'ART_start_date', 'displayNone', false)
+        }else{
+            modifyFieldValue(this.patientHistoryHIV,'ART_start_date', 'displayNone', true)
+        }
     }
 }
 });
