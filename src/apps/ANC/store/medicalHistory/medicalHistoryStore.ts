@@ -440,6 +440,14 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
+                        },
+                                                 {
+                            name: "Other Surgeries",
+                            value: "otherSurguries",
+                            labelPlacement: 'start',
+                            colSize: '6',
+                            justify: 'space-between',
+                            checked: false
                         }
                         
                     ],
@@ -452,7 +460,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         {
                             colData:[
                                 {
-                                    inputHeader: 'Other surgeries',
+                                    inputHeader: 'Other(Specify)',
                                     icon: icons.editPen,
                                     value: medicalHistoryForm.otherSurgerirs.name,
                                     name: medicalHistoryForm.otherSurgerirs.value,
