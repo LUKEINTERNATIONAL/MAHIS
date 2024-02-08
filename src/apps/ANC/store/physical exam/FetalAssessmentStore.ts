@@ -69,7 +69,7 @@ export const useFetalAssessment = defineStore('fetalAssessment',{
             },
             {
                 sectionHeader: '',
-                classDash: 'dashed_bottom_border',
+                classDash: '',
                 data:
                     {
                         rowData:[
@@ -82,16 +82,38 @@ export const useFetalAssessment = defineStore('fetalAssessment',{
                                             icon: icons.systolicPressure,
                                             value: '',
                                             name: 'fetal rate',
-                                            eventType: 'input'
+                                            eventType: 'input',
+                                            inputWidth:'55%'
+
                                         },
+
+                                    ]
+                            }
+                        ]
+                    },
+
+            },
+            {
+                sectionHeader: '',
+                classDash: 'dashed_bottom_border',
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData:
+                                    [
                                         {
                                             inputHeader: 'Repeated fetal rate',
                                             unit: 'BMP',
                                             icon: icons.systolicPressure,
                                             value: '',
                                             name: 'second fetal rate',
-                                            eventType: 'input'
+                                            eventType: 'input',
+                                            inputWidth:'55%'
+
+
                                         },
+
                                     ]
                             }
                         ]
