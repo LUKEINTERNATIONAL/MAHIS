@@ -1,11 +1,11 @@
 <template>
     <!-- Past Surgeries -->
     <ion-list>
-        <ion-item :lines="pastSurgeries" class="dashed_bottom_border">
-            <ion-toggle :checked ="surgeriesChecked" @ionChange="surgeries" style="font-weight: bold">Past Surgeries</ion-toggle>
+        <ion-item class="dashed_bottom_border" style="font-weight: bold">
+            Past Surgeries
         </ion-item>
         
-        <div class="sub_item_body" v-if="surgeriesChecked">
+        <div class="sub_item_body">
             <BasicForm :contentData="medicalHistory" />
         </div>
         <ion-item class="sub_item_body_close" v-if="surgeriesChecked"/>
@@ -14,110 +14,61 @@
     <!-- Allegies -->
 
         <ion-list>
-        <ion-item :lines="allegies" class="dashed_bottom_border">
-            <ion-toggle :checked ="allegiesChecked" @ionChange="allegyMethod" style="font-weight: bold">Allergies</ion-toggle>
+        <ion-item  class="dashed_bottom_border" style="font-weight: bold">
+            Allergies
         </ion-item>
-        <div class="sub_item_body" v-if="allegiesChecked">
+        <div class="sub_item_body">
             <BasicForm :contentData="allegy" />
         </div>
-        <ion-item class="sub_item_body_close" v-if="allegiesChecked"/>
+        <ion-item class="sub_item_body_close"/>
     </ion-list>
 
     <!-- Chronical Health conditions -->
 
     <ion-list>
-        <ion-item :lines="chronicalHC" class="dashed_bottom_border">
-            <ion-toggle :checked ="chronicalHCChecked" @ionChange="chronicalHCMethod" style="font-weight: bold">Existing Chronical Health Conditions</ion-toggle>
+        <ion-item class="dashed_bottom_border" style="font-weight: bold">
+            Existing Chronic Health Conditions
         </ion-item>
-        <div class="sub_item_body" v-if="chronicalHCChecked">
+        <div class="sub_item_body">
             <BasicForm :contentData="exisitingChronicHealthConditions" />
         </div>
-        <ion-item class="sub_item_body_close" v-if="chronicalHCChecked"/>
+        <ion-item class="sub_item_body_close"/>
     </ion-list>
 
-    <!-- Blood disorder -->
-     
-    <ion-list>
-        <ion-item :lines="bloodDisorder" class="dashed_bottom_border">
-            <ion-toggle :checked ="bloodDisorderChecked" @ionChange="bloodDisorderMethod" style="font-weight: bold">Blood Disorder</ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="bloodDisorderChecked">
-            <BasicForm :contentData="blood" />
-        </div>
-        <ion-item class="sub_item_body_close" v-if="bloodDisorderChecked"/>
-    </ion-list>
-    
-   <!-- Cancer  -->
-
-       <ion-list>
-        <ion-item :lines="cancer" class="dashed_bottom_border">
-            <ion-toggle :checked ="cancerChecked" @ionChange="cancerMethod" style="font-weight: bold">Cancer</ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="cancerChecked">
-            <BasicForm :contentData="cancerIssue" />
-        </div>
-        <ion-item class="sub_item_body_close" v-if="cancerChecked"/>
-    </ion-list>
-
-    <!-- HeartDesease -->
-
-    <ion-list>
-        <ion-item :lines="heartDesease" class="dashed_bottom_border">
-            <ion-toggle :checked ="heartDeseaseChecked" @ionChange="heartDeseaseMethod" style="font-weight: bold">Heart Desease</ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="heartDeseaseChecked">
-            <BasicForm :contentData="heartProblem" />
-        </div>
-        <ion-item class="sub_item_body_close" v-if="heartDeseaseChecked"/>
-    </ion-list>
-
-    <!-- Diabetis -->
-
-        <ion-list>
-        <ion-item :lines="diabetis" class="dashed_bottom_border">
-            <ion-toggle :checked ="diabetisChecked" @ionChange="diabetisMethod"  style="font-weight: bold">Diabetis/Epilespy</ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="diabetisChecked">
-            <BasicForm :contentData="diabetes" />
-        </div>
-        <ion-item class="sub_item_body_close" v-if="diabetisChecked"/>
-    </ion-list>
 
     <!-- HIV -->
 
 
         <ion-list>
-        <ion-item :lines="hiv" class="dashed_bottom_border">
-            <ion-toggle :checked ="hivChecked" @ionChange="hivMethod" style="font-weight: bold">HIV</ion-toggle>
+        <ion-item class="dashed_bottom_border" style="font-weight: bold">
+            HIV
         </ion-item>
-        <div class="sub_item_body" v-if="hivChecked">
+        <div class="sub_item_body">
             <BasicForm :contentData="hivTest" />
         </div>
-        <ion-item class="sub_item_body_close" v-if="hivChecked"/>
+        <ion-item class="sub_item_body_close"/>
     </ion-list>
 
     <!-- Syphilis Test -->
 
     <ion-list>
-        <ion-item :lines="syphilis" class="dashed_bottom_border">
-            <ion-toggle :checked ="syphilisChecked" @ionChange="syphilisMethod" style="font-weight: bold">Syphilis</ion-toggle>
+        <ion-item  class="dashed_bottom_border" style="font-weight: bold" >
+            Syphilis
         </ion-item>
-        <div class="sub_item_body" v-if="syphilisChecked" >
+        <div class="sub_item_body">
             <BasicForm :contentData="syphilisTest" />
         </div>
-        <ion-item class="sub_item_body_close" v-if="syphilisChecked"/>
+        <ion-item class="sub_item_body_close"/>
     </ion-list>
 
     <!-- Hypertations-Kidney-TB-MentalIlliness -->
 
     <ion-list>
-        <ion-item :lines="hyperKTM" class="dashed_bottom_border">
-            <ion-toggle :checked ="hyperKTMChecked" @ionChange="hyperKTMMethod" style="font-weight: bold">Hypertations/Kidney/TB/Mental Illiness</ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="hyperKTMChecked">
+
+        <div class="sub_item_body">
             <BasicForm :contentData="hKTMI" />
         </div>
-        <ion-item class="sub_item_body_close" v-if="hyperKTMChecked"/>
+        <ion-item class="sub_item_body_close"/>
     </ion-list>
 
     <!-- Other Sute -->

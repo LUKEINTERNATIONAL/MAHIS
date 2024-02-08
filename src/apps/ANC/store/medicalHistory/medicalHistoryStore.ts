@@ -83,7 +83,7 @@ const allegiesForm ={
     },
         otherAllegies:{
         name:"",
-        value: "OtherAllegies"
+        value: "OtherAllergies"
        }
 }
 
@@ -120,8 +120,8 @@ const bloodDisorderForm = {
 const cancerForm = {
 
         gynaelogical:{
-        name:"Gynaelogical",
-        value: "gynaelogical"
+        name:"Gynaecological",
+        value: "gynaecological"
     },
         otherSite:{
         name:"",
@@ -681,7 +681,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         {
                             colData:[
                                 {
-                                    inputHeader: 'Other Allegies',
+                                    inputHeader: 'Other Allergies',
                                     icon: icons.editPen,
                                     value: allegiesForm.otherAllegies.name,
                                     name: allegiesForm.otherAllegies.value,
@@ -750,7 +750,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             checked: false
                         },
                                                 {
-                            name: "No chronical HealthConditions",
+                            name: "No chronic HealthConditions",
                             value: "noChronicalHealthConditions",
                             labelPlacement: 'start',
                             colSize: '6',
@@ -762,8 +762,8 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 }
                     
         },
-    ]as any,
-    blood:[  
+    // ]as any,
+    // blood:[  
         {
                 selectdData: [],
                 isFinishBtn: false,
@@ -827,8 +827,8 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 }
                     
         },
-    ]as any,
-    cancerIssue:[  
+    // ]as any,
+    // cancerIssue:[  
         {
                 selectdData: [],
                 isFinishBtn: false,
@@ -862,30 +862,30 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
             
                     
         },
-            {
-                data:{ 
-                    rowData:[
-                        {
-                            colData:[
-                                {
-                                    inputHeader: 'Other (specify)',
-                                    icon: icons.editPen,
-                                    value: cancerForm.otherSite.name,
-                                    name: cancerForm.otherSite.value,
-                                    eventType: 'input',
-                                     inputWidth: "82%",
-                                    required: true
-                                }
+            // {
+            //     data:{ 
+            //         rowData:[
+            //             {
+            //                 colData:[
+            //                     {
+            //                         inputHeader: 'Other (specify)',
+            //                         icon: icons.editPen,
+            //                         value: cancerForm.otherSite.name,
+            //                         name: cancerForm.otherSite.value,
+            //                         eventType: 'input',
+            //                          inputWidth: "82%",
+            //                         required: true
+            //                     }
                                 
-                            ]
-                        }
-                    ],
+            //                 ]
+            //             }
+            //         ],
                     
-                }
+            //     }
                     
-            },
-    ]as any,
- heartProblem:[  
+            // },
+//     ]as any,
+//  heartProblem:[  
         {
                 selectdData: [],
                 isFinishBtn: false,
@@ -904,23 +904,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
-                        }
-                        
-                    ],
-                },
-                
-            
-                    
-        },
-        {
-            classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
+                        },
                         {
                             name: heartDeseaseForm.rhd.name,
                             value: heartDeseaseForm.rhd.value,
@@ -931,11 +915,13 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         }
                         
                     ],
-                }
+                },
+                
+            
                     
         },
-    ]as any,
- diabetes:[  
+//     ]as any,
+//  diabetes:[  
         {
                 selectdData: [],
                 isFinishBtn: false,
@@ -943,7 +929,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 checkboxBtnContent:
                 {
                     header:{
-                        title: 'Diabetes',
+                        title: '',
                         selectedValue: ''
                     },
                     data:[
@@ -954,24 +940,8 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
-                        }
-                        
-                    ],
-                },
-                
-            
-                    
-        },
-        {
-            classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
-                        {
+                        },
+                            {
                             name: diabetesForm.preExistingType1.name,
                             value: diabetesForm.preExistingType1.value,
                             labelPlacement: 'start',
@@ -981,7 +951,9 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         }
                         
                     ],
-                }
+                },
+                
+            
                     
         },
          {
@@ -1000,44 +972,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
-                        }
-                        
-                    ],
-                }
-                    
-        },
-         {
-             classDash: 'dashed_bottom_border',
-                data:{ 
-                    rowData:[
-                        {
-                            colData:[
-                                {
-                                    inputHeader: 'Other Site',
-                                    icon: icons.editPen,
-                                    value: diabetesForm.otherDiabetis.name,
-                                    name: diabetesForm.otherDiabetis.value,
-                                    eventType: 'input',
-                                    inputWidth: "82%",
-                                    required: true
-                                }
-                                
-                            ]
-                        }
-                    ],
-                    
-                }
-                    
-            },
-                 {
-            classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: 'Epilespy',
-                        selectedValue: ''
-                    },
-                    data:[
+                        },
                         {
                             name: epilespyForm.epilespy.name,
                             value:epilespyForm.epilespy.value,
@@ -1051,6 +986,29 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 }
                     
         },
+        //  {
+        //      classDash: 'dashed_bottom_border',
+        //         data:{ 
+        //             rowData:[
+        //                 {
+        //                     colData:[
+        //                         {
+        //                             inputHeader: 'Other Site',
+        //                             icon: icons.editPen,
+        //                             value: diabetesForm.otherDiabetis.name,
+        //                             name: diabetesForm.otherDiabetis.value,
+        //                             eventType: 'input',
+        //                             inputWidth: "82%",
+        //                             required: true
+        //                         }
+                                
+        //                     ]
+        //                 }
+        //             ],
+                    
+        //         }
+                    
+        //     },
     ]as any,
          hivTest: [
             {
@@ -1491,25 +1449,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             justify: 'space-between',
                             checked: false
                             
-                        }
-                        
-                    ],
-                },
-                
-            
-                    
-        }, 
-        {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
+                        },
                         {
                             name: kidneyForm.kidney.name,
                             value: kidneyForm.kidney.value,
@@ -1543,25 +1483,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
-                        }
-                        
-                    ],
-                },
-                
-            
-                    
-        },
-        {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
+                        },
                         {
                             name: mentalIllinessForm.mentalIlliness.name,
                             value: mentalIllinessForm.mentalIlliness.value,

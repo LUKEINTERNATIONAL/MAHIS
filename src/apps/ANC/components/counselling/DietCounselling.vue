@@ -17,7 +17,7 @@ import { mapState } from 'pinia';
 
 
 export default defineComponent({
-    name:"Persistent Behaviour",
+    name:"Diet Counselling",
     components:{
         IonItem,
         IonList,
@@ -43,4 +43,3 @@ ion-item.sub_item_body_close {
         --inner-border-width:0;
     }
 </style>
-@/apps/ANC/store/symptomsFollowUpStore/ipvStore

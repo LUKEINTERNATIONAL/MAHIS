@@ -118,7 +118,7 @@ export const useAncEndStore = defineStore('ancEndStore',{
                 classDash: 'dashed_bottom_border',
                 radioBtnContent:{
                     header:{
-                        title: 'Reason for closing ANC',
+                        title: '',
                         selectedValue: ''
                     },
                     data:[

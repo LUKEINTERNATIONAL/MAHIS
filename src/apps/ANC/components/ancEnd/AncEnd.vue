@@ -1,5 +1,8 @@
 <template>
-    <ion-list>    
+    <ion-list>
+        <ion-item  class="dashed_bottom_border" style="font-weight: bold;">
+             Reason for closing ANC
+        </ion-item>      
         <div class="sub_item_body">
             <BasicForm :contentData="ancInfo" />
         </div>
