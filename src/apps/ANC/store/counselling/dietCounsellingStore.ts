@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { icons } from '@/utils/svg';
 
-export const physiologicalCousellingForm ={
+const physiologicalCousellingForm ={
     counsellingOnHealthEatingYes:{
         name:"Yes",
         value:"yes"
@@ -59,7 +59,8 @@ export const useDietCounsellingStore = defineStore('dietCounsellingStore',{
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling on health eating and keeping phyically active was not done?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        displayNone: false,
                     },
                     data:[
                         {  

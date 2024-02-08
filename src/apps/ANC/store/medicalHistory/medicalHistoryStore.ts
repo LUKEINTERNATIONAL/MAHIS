@@ -1191,6 +1191,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 classDash: 'dashed_bottom_border',
                 radioBtnContent:{
                     header:{
+                        displayNone: true,
                         title: 'Is the woman at high risk of HIV?',
                         selectedValue: ''
                     },

@@ -416,6 +416,70 @@ export const useAncEndStore = defineStore('ancEndStore',{
                 }
                     
             },
+            { 
+          
+               header:{
+                        title: 'Death',
+                        selectedValue: ''
+                    },
+                classDash: 'dashed_bottom_border',           
+                data:{ 
+                    rowData:[
+                        {
+                            colData:[
+                                {
+                                    inputHeader: 'Death Date',
+                                    icon: icons.calendar,
+                                    value: 'dateOfdeathIfKnown',
+                                    name: "Date of Death if Known",
+                                    eventType: 'input',
+                                    inputWidth: "82%",
+                                    required: true
+                                },
+                                    {
+                                    inputHeader: 'Cause of Death',
+                                    icon: icons.editPen,
+                                    value: "causeOfDeath",
+                                    name: 'Cause of Death',
+                                    eventType: 'input',
+                                    inputWidth: "82%",
+                                    required: true
+                                }
+                                
+                            ]
+                        }
+                    ],
+                    
+                }
+            
+            },
+            {
+               selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border',
+                radioBtnContent:{
+                    header:{
+                        title: 'Client record will no longer be  viewed',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: 'Yes',
+                            value: 'yes',
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
+                        },
+                        {
+                            name:  'No',
+                            value: 'no',
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
+                        },
+                    ]
+                }
+            },
             
             ]as any,            
     }),

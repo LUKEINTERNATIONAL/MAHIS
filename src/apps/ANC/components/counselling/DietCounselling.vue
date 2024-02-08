@@ -3,7 +3,6 @@
         <div class="sub_item_body">
             <BasicForm :contentData="dietCounsellingInfo"/>
         </div>
-        <ion-item class="sub_item_body_close"/>
     </ion-list>
 </template>
 
@@ -14,6 +13,7 @@ import { mapState } from 'pinia';
  import BasicInputField from "@/components/BasicInputField.vue";
  import {useDietCounsellingStore} from "@/apps/ANC/store/counselling/dietCounsellingStore";
  import BasicForm from '@/components/BasicForm.vue';
+ import { modifyFieldValue} from '@/services/data_helpers'
 
 
 export default defineComponent({
@@ -24,7 +24,19 @@ export default defineComponent({
         BasicInputField,
         BasicForm
     },
-
+        methods:{
+    handleHivResults(name: any) {
+      if (name === 'yes') {
+        const data = this.dietCounsellingInfo;
+        modifyFieldValue(data, 'selectedValue', 'displayNone', true);
+        useDietCounsellingStore().addDietCounsellingInfo(data);
+      } else {
+        const data = this.dietCounsellingInfo;
+        modifyFieldValue(data, 'selectedValue', 'displayNone', false);
+        useDietCounsellingStore().addDietCounsellingInfo(data);
+      }
+    }
+    },
     mounted(){
         const  dietCounsellingInfo =useDietCounsellingStore()
     },
@@ -43,3 +55,5 @@ ion-item.sub_item_body_close {
         --inner-border-width:0;
     }
 </style>
+
+<!-- //  <ion-item class="sub_item_body_close"/> -->

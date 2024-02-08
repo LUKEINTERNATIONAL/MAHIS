@@ -43,7 +43,7 @@
                     </ion-col>
                 </ion-row>
             </span>
-            <span v-if="item.radioBtnContent">
+            <span v-if="item.radioBtnContent && !item.radioBtnContent.header.displayNone">
                 <div style="font-weight: bold;" v-if="item.radioBtnContent?.header">{{ item.radioBtnContent?.header.title }} </div>
                 <ion-row class="checkbox_content">
                     <ion-col :size="al.colSize" class="checkout_col" style="" v-for="(al, index3) in item.radioBtnContent?.data" :key="index3">
