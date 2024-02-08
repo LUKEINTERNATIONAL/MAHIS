@@ -151,9 +151,6 @@
                 <dynamic-button class="addMedicalTpBtn" :name="btnName3" style="margin-left: 4%;"/>
             </ion-row>
         </div>
-        <div class="checkLbltp">
-            <ion-checkbox  @ionChange="useOfTraditional" :checked="isUseOfTraditionalMedicineSelected" label-placement="end" style="font-size: 16px; font-weight: 600; line-height: 24px; margin: 15px; marg">Use of traditional medicine</ion-checkbox>
-        </div>
         <div style="margin-top: 14px; margin-left: 10px;">
             <ion-label class="tpStndCls">Non-pharmalogical therapy and other notes</ion-label>
             <ion-item class="input_item" style="min-height: 120px; margin-top: 14px;">

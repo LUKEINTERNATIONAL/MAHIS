@@ -1,7 +1,10 @@
 <template>
     <div class="demographics">
-        <div class="demographics_title">Next appointment</div>
-        <ion-card class="registration_ion_card">
+        <ion-card class="registration_iofn_card">
+          <div class="card_content" style="width: 600px;">
+              <div class="card_hearder">
+                Next appointment
+              </div>
             <ion-datetime 
                 :is-date-enabled="isWeekday" 
                 min="2022-03-01T00:00:00" 
@@ -12,6 +15,7 @@
                 @ionChange="value => calendarDate = value.target.value"
                 presentation="date">
             </ion-datetime>
+           </div>
         </ion-card>
     </div>
 </template>
@@ -34,7 +38,7 @@ import { ref } from 'vue';
 import { icons } from '@/utils/svg';
 
 import { createModal } from '@/utils/Alerts'
-import BasicInputField from '../BasicInputField.vue';
+import BasicInputField from '../../../components/BasicInputField.vue';
 import HisDate from "@/utils/Date";
 import { useNextAppointmentStore } from '@/stores/NextAppointmentStore'
 import { mapState } from 'pinia';
@@ -114,7 +118,6 @@ methods:{
 .demographics_title{
     font-weight: 700;
     font-size: 24px;
-    padding-bottom: 20px;
 }
 .sub_title{
     font-weight: 400;
@@ -128,7 +131,8 @@ methods:{
     font-weight: 600;
     color: #00190E;
     font-size: 16px;
-    padding-top: 50px ;
+    padding-top: 30px;
+    padding-bottom: 10px;
 }
 .input_fields{
     padding: 10px 100px 70px 100px;

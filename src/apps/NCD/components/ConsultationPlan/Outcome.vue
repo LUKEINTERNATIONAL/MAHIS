@@ -80,7 +80,7 @@ import { LocationService } from "@/services/location_service";
 import { IonDatetime, IonDatetimeButton } from '@ionic/vue';
 import DynamicDispositionList from "@/components/DynamicDispositionList.vue";
 import { mapState } from 'pinia'
-import { useDispositionStore } from "@/stores/DispositionStore"
+import { useDispositionStore } from "@/stores/OutcomeStore"
 
 export default {
     components: {
@@ -300,4 +300,4 @@ export default {
     border-bottom: dotted 1px;
     margin-top: 10px;
 }
-</style>
+</style>@/stores/OutcomeStore

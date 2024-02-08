@@ -17,13 +17,12 @@ import {
 import { defineComponent } from 'vue';
 import { icons } from '@/utils/svg';
 
-import DispositionModal from '@/components/ProfileModal/DispositionModal.vue'
+import DispositionModal from '@/components/ProfileModal/OutcomeModal.vue'
 import { createModal } from '@/utils/Alerts'
-import BasicInputField from '../BasicInputField.vue';
 import { useEnrollementStore } from '@/stores/EnrollmentStore'
 import { mapState } from 'pinia';
 import BasicForm from '@/components/BasicForm.vue';
-import BasicCard from '../BasicCard.vue';
+import BasicCard from '@/components/BasicCard.vue';
 
 export default defineComponent({
 name: 'Menu',
@@ -35,7 +34,6 @@ components:{
   IonMenu,
   IonTitle,
   IonToolbar,
-  BasicInputField,
   IonCheckbox,
   BasicForm,
   BasicCard    },
@@ -47,11 +45,8 @@ return {
 };
 },
 computed:{
-    ...mapState(useEnrollementStore,["substance"]),
-    ...mapState(useEnrollementStore,["diagnosis"]),
     ...mapState(useEnrollementStore,["patientHistory"]),
-    ...mapState(useEnrollementStore,["familyHistory"]),
-    ...mapState(useEnrollementStore,["NCDNumber"]),
+    ...mapState(useEnrollementStore,["patientHistoryHIV"])
 },
 watch: {
     personInformation: {
@@ -72,24 +67,12 @@ methods:{
             mainTitle:"Enrollment",
             cards:[
                 {
-                    cardTitle:"Substance use / Consumption",
-                    content: this.substance
-                },
-                {
-                    cardTitle:"Diagnosis",
-                    content: this.diagnosis
-                },
-                {
                     cardTitle:"Patient history & Complications ",
                     content: this.patientHistory
                 },
                 {
-                    cardTitle:"Family history",
-                    content: this.familyHistory
-                },
-                {
-                    cardTitle:"NCD number",
-                    content: this.NCDNumber
+                    cardTitle:"Patient history & Complications ",
+                    content: this.patientHistoryHIV
                 }
             ]
            } 
@@ -98,12 +81,10 @@ methods:{
         createModal(DispositionModal)
     },
     updateEnrollmentStores(){
+        console.log(this.patientHistoryHIV)
         const enrollmentStore = useEnrollementStore()
-        enrollmentStore.setSubstance(this.substance)
-        enrollmentStore.setDiagnosis(this.diagnosis)
         enrollmentStore.setPatientHistory(this.patientHistory)
-        enrollmentStore.setFamilyHistory(this.familyHistory)
-        enrollmentStore.setNCDNumber(this.NCDNumber)
+        enrollmentStore.setPatientHistoryHIV(this.patientHistoryHIV)
     },
     testF(data: any){
         console.log(data);
