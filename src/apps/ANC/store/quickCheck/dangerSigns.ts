@@ -282,7 +282,8 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'yesPreviousVisit'
                         },
                         data:[
                             {
@@ -308,6 +309,8 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
             },
             {
                 sectionHeader: '',
+                name:'numberOfPreviousVisits',
+                displayNone: true,
                 data:
                     {
                         rowData:[

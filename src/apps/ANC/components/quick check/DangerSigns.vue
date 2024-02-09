@@ -45,6 +45,7 @@ import BasicInputField from '@/components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import BasicForm from '@/components/BasicForm.vue'
 import {useDangerSignsStore} from "@/apps/ANC/store/quickCheck/dangerSigns";
+import {modifyRadioValue, getRadioSelectedValue} from "@/services/data_helpers";
 
 export default defineComponent({
   name: 'Menu',
@@ -66,11 +67,21 @@ export default defineComponent({
   data() {
     return {
       iconsContent: icons,
-      dangerSignChecked : true,
-      dangerSign: '',
-      previousvisit: '',
+      dangerSignChecked: true,
+      dangerSign:''
 
     };
+  },
+  mounted() {
+    this.handleNumberOfVisits()
+  },
+  watch:{
+    PreviousVisit:{
+    handler(){
+      this.handleNumberOfVisits()
+    },
+    deep:true
+    }
   },
   computed: {
     ...mapState(useDangerSignsStore, ["DangerSigns"]),
@@ -84,6 +95,10 @@ export default defineComponent({
       menuController.close()
       this.$router.push(url);
     },
+    handleNumberOfVisits(){
+
+    },
+
     dangerSigns(){
       this.dangerSignChecked = !this.dangerSignChecked
       if (this.dangerSignChecked) {
