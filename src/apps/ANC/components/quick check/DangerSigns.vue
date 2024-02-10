@@ -1,25 +1,30 @@
 <template>
-  <ion-list>
-    <ion-item :lines="dangerSign" class="dashed_bottom_border sub_item_header">
-      <ion-toggle :checked="dangerSignChecked" @ionChange="dangerSigns">Danger signs</ion-toggle>
-    </ion-item>
-    <div class="sub_item_body" v-if="dangerSignChecked">
-      <basic-form
-          :contentData="DangerSigns" >
-      </basic-form>
+  <div class="container">
+    <!-- Danger signs -->
+    <ion-card v-if="currentSection === 0" class="section">
+      <ion-card-header>
+        <ion-card-title class="dashed_bottom_border sub_item_header">Danger signs</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <basic-form :contentData="DangerSigns"></basic-form>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- previous visit -->
+    <ion-card v-if="currentSection === 1" class="section">
+      <ion-card-header>
+        <ion-card-title class="dashed_bottom_border sub_item_header">Has the woman had previous ANC visits at another facility?</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <basic-form :contentData="PreviousVisit"></basic-form>
+      </ion-card-content>
+    </ion-card>s
+    <!-- Navigation Buttons -->
+    <div class="navigation-buttons">
+      <ion-button @click="goToPreviousSection" expand="block" color="medium" size="large">Previous</ion-button>
+      <ion-button @click="goToNextSection" expand="block" color="primary" size="large">Next</ion-button>
     </div>
-    <ion-item class="sub_item_body_close" v-if="dangerSignChecked"/>
-  </ion-list>
-  <ion-list>
-    <ion-item :lines="previousvisit" class="dashed_bottom_border" style="font-weight: bold">
-     Has the woman had any ANC visit at any facility?
-    </ion-item>
-    <div class="sub_item_body" style="padding-right: 400px">
-      <basic-form :contentData="PreviousVisit" >
-      </basic-form>
-    </div>
-    <ion-item class="sub_item_body_close"/>
-  </ion-list>
+  </div>
 </template>
 
 <script lang="ts">
@@ -67,8 +72,8 @@ export default defineComponent({
   data() {
     return {
       iconsContent: icons,
-      dangerSignChecked: true,
-      dangerSign:''
+      currentSection: 0, // Initialize currentSection to 0
+
 
     };
   },
@@ -98,6 +103,18 @@ export default defineComponent({
     handleNumberOfVisits(){
 
     },
+    //Method for navigating
+    goToNextSection() {
+      if (this.currentSection < 1) {
+        this.currentSection++;
+      }
+    },
+    goToPreviousSection() {
+      if (this.currentSection > 0) {
+        this.currentSection--;
+      }
+    },
+
 
     dangerSigns(){
       this.dangerSignChecked = !this.dangerSignChecked
@@ -112,79 +129,33 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.section {
+  width: 100%;
+  max-width: 1300px; /* Adjust max-width as needed */
+  margin-bottom: 20px;
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 500px; /* Adjust max-width as needed */
+}
+
+@media (max-width: 1500px) {
+  .container {
+    padding: 10px;
+  }
+}
 .sub_item_header{
   font-weight: bold;
-}
-#container {
-  text-align: center;
-
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
-}
-
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-
-  color: #8c8c8c;
-
-  margin: 0;
-}
-
-#container a {
-  text-decoration: none;
-}
-.foot_title{
-  color: #636363;
-  text-align: center;
-}
-.foot_content{
-  color:#00190E;
-  text-align: center;
-  border-bottom: solid 1px #ccc;
-  border-bottom-style: dashed;
-  padding: 10px 0px;
-  font-weight: 500;
-  font-size: 14px;
-}
-.first_col{
-  text-align: left;
-  font-weight: 400;
-  font-size: 14px;
-}
-.sub_item_body{
-  margin-left: 45px;
-}
-.foot_input{
-  width: 100%;
-  color: #636363;
-  text-align: left;
-
-}
-.item-content {
-  background-color:#ffffff;
-}
-ion-select._item_eye {
-  --background: #fff;
-
-}
-ion-item.item_eye_ {
-  --inner-border-width:0;
-  --background-hover: none;
-}
-/* ion-toggle {
-    --track-background-checked: #006401
-} */
-ion-item.sub_item_body_close {
-  border-bottom: 2px dotted var(--ion-color-medium);
-  --inner-border-width:0;
+  font-size: medium;
 }
 </style>

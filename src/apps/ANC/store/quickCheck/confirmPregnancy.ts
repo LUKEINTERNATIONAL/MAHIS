@@ -5,6 +5,7 @@ export const useConfirmPregnancyStore = defineStore('confirmPregnancyStore',{
     state: () => ({
         ConfirmPregnancy: [
             {
+                classDash: 'dashed_bottom_border',
                 radioBtnContent:
                     {
                         header:{
@@ -39,7 +40,7 @@ export const useConfirmPregnancyStore = defineStore('confirmPregnancyStore',{
                 radioBtnContent:
                     {
                         header:{
-                            title: '',
+                            title: 'Was the pregnancy planned?',
                             selectedValue: ''
                         },
                         data:[

@@ -1,89 +1,62 @@
 <template>
+  <div class="container">
+    <!-- Pallor -->
+    <ion-card v-if="currentSection === 0" class="section">
+      <ion-card-header>
+        <ion-card-title class="dashed_bottom_border sub_item_header">Is Pallor present?</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <basic-form :contentData="pallor"></basic-form>
+      </ion-card-content>
+    </ion-card>
 
-  <ion-row >
-    <!--   height and weight-->
-    <ion-col  class="left_row_col_separator">
-      <ion-list>
-        <ion-item :lines="heightAndWeight" class="dashed_bottom_border" style="font-weight: bold">
-          Is Pallor present?
-        </ion-item>
-        <div class="sub_item_body content_container" >
-          <basic-form
-              :contentData="pallor">
-          </basic-form>
-        </div>
-        <ion-item class="sub_item_body_close" />
-      </ion-list>
-    </ion-col>
-  </ion-row>
+    <!-- Breast exam Section -->
+    <ion-card v-if="currentSection === 1" class="section">
+      <ion-card-header>
+        <ion-card-title class="dashed_bottom_border sub_item_header">Breast exam result</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <basic-form :contentData="breastExam"></basic-form>
+      </ion-card-content>
+    </ion-card>
+    <!-- vaginal inspection Section -->
+    <ion-card v-if="currentSection === 2" class="section">
+      <ion-card-header>
+        <ion-card-title class="dashed_bottom_border sub_item_header"> Vaginal inspection</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <basic-form :contentData="vaginalInspection"></basic-form>
+      </ion-card-content>
+    </ion-card>
 
-  <!--  Breast exam-->
-  <ion-row>
-    <ion-col class="left_row_col_separator">
-      <ion-list>
-        <ion-item class="dashed_bottom_border" style="font-weight: bold">
-          Breast exam result
-        </ion-item>
-        <div class="sub_item_body content_container" >
-          <basic-form
-              :contentData="breastExam" >
-          </basic-form>
-        </div>
-        <ion-item class="sub_item_body_close" />
-      </ion-list>
-    </ion-col>
-  </ion-row>
-  <!--  Vulva inspection-->
-  <ion-row>
-    <ion-col class="left_row_col_separator">
-      <ion-list>
-        <ion-item class="dashed_bottom_border" style="font-weight: bold">
-          Vaginal inspection
-        </ion-item>
-        <div class="sub_item_body content_container" >
-          <basic-form
-              :contentData="vaginalInspection" >
-          </basic-form>
-        </div>
-        <ion-item class="sub_item_body_close" />
-      </ion-list>
-    </ion-col>
-  </ion-row>
-  <!--  Cervical exam-->
-  <ion-row>
-    <ion-col class="left_row_col_separator">
-      <ion-list>
-        <ion-item class="dashed_bottom_border" style="font-weight: bold">
-          Cervical exam conducted?
-        </ion-item>
-        <div class="sub_item_body content_container" >
-          <basic-form
-              :contentData="cervicalExam" >
-          </basic-form>
-        </div>
-        <ion-item class="sub_item_body_close" />
-      </ion-list>
-    </ion-col>
-  </ion-row>
-  <!--  oedema exam-->
-  <ion-row>
-    <ion-col class="left_row_col_separator">
-      <ion-list>
-        <ion-item class="dashed_bottom_border" style="font-weight: bold">
-          Oedema present?
-        </ion-item>
-        <div class="sub_item_body content_container" >
-          <basic-form
-              :contentData="oedemaPresence" >
-          </basic-form>
-        </div>
-        <ion-item class="sub_item_body_close" />
-      </ion-list>
-    </ion-col>
-  </ion-row>
+    <!-- Cervical exam -->
+    <ion-card v-if="currentSection === 3" class="section">
+      <ion-card-header>
+        <ion-card-title class="dashed_bottom_border sub_item_header">Cervical exam conducted?</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <basic-form :contentData="cervicalExam"></basic-form>
+      </ion-card-content>
+    </ion-card>
 
-  <!--    <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form>-->
+    <!-- oedema exam Section -->
+    <ion-card v-if="currentSection === 4" class="section">
+      <ion-card-header>
+        <ion-card-title class="dashed_bottom_border sub_item_header">oedema</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <basic-form :contentData="oedemaPresence"></basic-form>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Navigation Buttons -->
+    <div class="navigation-buttons">
+      <ion-button @click="goToPreviousSection" expand="block" color="medium" size="large">Previous</ion-button>
+      <ion-button @click="goToNextSection" expand="block" color="primary" size="large">Next</ion-button>
+    </div>
+  </div>
 </template>
+
 
 <script lang="ts">
 import {
@@ -127,6 +100,7 @@ export default defineComponent({
   data() {
     return {
       iconsContent: icons,
+      currentSection: 0, // Initialize currentSection to 0
       vValidations: '' as any,
       hasValidationErrors: [] as any,
     };
@@ -146,12 +120,7 @@ export default defineComponent({
     this.validaterowData({})
   },
   watch: {
-    vitals: {
-      handler(){
-        this.updateVitalsStores();
-      },
-      deep: true
-    }
+
   },
   setup() {
     return { checkmark,pulseOutline };
@@ -161,6 +130,17 @@ export default defineComponent({
       menuController.close()
       this.$router.push(url);
     },
+    //Method for navigating
+    goToNextSection() {
+      if (this.currentSection < 4) {
+        this.currentSection++;
+      }
+    },
+    goToPreviousSection() {
+      if (this.currentSection > 0) {
+        this.currentSection--;
+      }
+    },
 
   }
 });
@@ -168,24 +148,33 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.content_container{
-  padding-left: 10px;
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
 }
-.left_row_col_separator{
-  padding-right: 50px
+
+.section {
+  width: 100%;
+  max-width: 1300px; /* Adjust max-width as needed */
+  margin-bottom: 20px;
 }
-.right_row_col_separator{
-  padding-left: 50px
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 500px; /* Adjust max-width as needed */
 }
-.content_container_for_radio{
-  padding-left: 30px;
-  margin-right: 400px;
+
+@media (max-width: 1500px) {
+  .container {
+    padding: 10px;
+  }
 }
-.separator {
-  border-top: none; /* or border: none; */
-  margin: 0;
-  padding: 0;
-  height: 0;
-  display: none;
+.sub_item_header{
+  font-weight: bold;
+  font-size: medium;
 }
 </style>

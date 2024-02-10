@@ -1,79 +1,44 @@
 <template>
-  <!--  Presenting signs-->
-  <ion-row>
-    <ion-col class=" left_row_col_separator" >
-      <ion-list >
-        <ion-item class="dashed_bottom_border" style="font-weight: bold">
-          Any signs of injury?
-        </ion-item>
-        <div class="sub_item_body content_container" >
-          <basic-form
-              :contentData="signsOfInjury" >
-          </basic-form>
-        </div>
-        <ion-item class="sub_item_body_close" />
-      </ion-list>
-    </ion-col>
-    <ion-col class=" right_row_col_separator" >
-      <ion-list >
-        <ion-item class="dashed_bottom_border" style="font-weight: bold">
-          Is there traumatic injury to abdomen?
-        </ion-item>
-        <div class="sub_item_body content_container" >
-          <basic-form
-              :contentData="abdominalInjury" >
-          </basic-form>
-        </div>
-        <ion-item class="sub_item_body_close" />
-      </ion-list>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col >
-      <ion-list >
-        <ion-item class="dashed_bottom_border" style="font-weight: bold">
-          Any other signs indicative of violence?
-        </ion-item>
-        <div class="sub_item_body content_container" >
-          <basic-form
-              :contentData="violence" >
-          </basic-form>
-        </div>
-        <ion-item class="sub_item_body_close" />
-      </ion-list>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col class=" left_row_col_separator" >
-      <ion-list >
-        <ion-item class="dashed_bottom_border" style="font-weight: bold">
-          Clinical enquiry for IPV conducted?
-        </ion-item>
-        <div class="sub_item_body content_container" >
-          <basic-form
-              :contentData="clinicalEnquiry" >
-          </basic-form>
-        </div>
-        <ion-item class="sub_item_body_close" />
-      </ion-list>
-    </ion-col>
-    <ion-col class=" right_row_col_separator" >
-      <ion-list >
-        <ion-item class="dashed_bottom_border" style="font-weight: bold">
-          Has the woman subjected to any form of violence?
-        </ion-item>
-        <div class="sub_item_body content_container" >
-          <basic-form
-              :contentData="intimateViolence" >
-          </basic-form>
-        </div>
-        <ion-item class="sub_item_body_close" />
-      </ion-list>
-    </ion-col>
-  </ion-row>
+  <div class="container">
+    <!-- Signs of injury -->
+    <ion-card v-if="currentSection === 0" class="section">
+      <ion-card-header>
+        <ion-card-title class="dashed_bottom_border sub_item_header">Any signs of injury</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <basic-form :contentData="signsOfInjury"></basic-form>
+        <basic-form :contentData="abdominalInjury"></basic-form>
+      </ion-card-content>
+    </ion-card>
 
+    <!-- clinical enquirry -->
+    <ion-card v-if="currentSection === 1" class="section">
+      <ion-card-header>
+        <ion-card-title class="dashed_bottom_border sub_item_header"> Signs indicative of violence and clinical enquiry</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <basic-form :contentData="violence"></basic-form>
+        <basic-form :contentData="clinicalEnquiry"></basic-form>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- any form of violence -->
+    <ion-card v-if="currentSection === 2" class="section">
+      <ion-card-header>
+        <ion-card-title class="dashed_bottom_border sub_item_header">Has the woman subjected to any form of violence</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <basic-form :contentData="intimateViolence"></basic-form>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Navigation Buttons -->
+    <div class="navigation-buttons">
+      <ion-button @click="goToPreviousSection" expand="block" color="medium" size="large">Previous</ion-button>
+      <ion-button @click="goToNextSection" expand="block" color="primary" size="large">Next</ion-button>
+    </div>
+  </div>
 </template>
-
 <script lang="ts">
 import {
   IonContent,
@@ -116,6 +81,7 @@ export default defineComponent({
   data() {
     return {
       iconsContent: icons,
+      currentSection: 0, // Initialize currentSection to 0
       vValidations: '' as any,
       hasValidationErrors: [] as any,
     };
@@ -150,6 +116,17 @@ export default defineComponent({
       menuController.close()
       this.$router.push(url);
     },
+    //Method for navigating
+    goToNextSection() {
+      if (this.currentSection < 2) {
+        this.currentSection++;
+      }
+    },
+    goToPreviousSection() {
+      if (this.currentSection > 0) {
+        this.currentSection--;
+      }
+    },
 
   }
 });
@@ -157,24 +134,33 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.content_container{
-  padding-left: 10px;
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
 }
-.left_row_col_separator{
-  padding-right: 50px
+
+.section {
+  width: 100%;
+  max-width: 1300px; /* Adjust max-width as needed */
+  margin-bottom: 20px;
 }
-.right_row_col_separator{
-  padding-left: 50px
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 500px; /* Adjust max-width as needed */
 }
-.content_container_for_radio{
-  padding-left: 30px;
-  margin-right: 400px;
+
+@media (max-width: 1500px) {
+  .container {
+    padding: 10px;
+  }
 }
-.separator {
-  border-top: none; /* or border: none; */
-  margin: 0;
-  padding: 0;
-  height: 0;
-  display: none;
+.sub_item_header{
+  font-weight: bold;
+  font-size: medium;
 }
 </style>

@@ -46,7 +46,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                 radioBtnContent:
                     {
                         header:{
-                            title: '',
+                            title: 'Is there traumatic injury to abdomen?',
                             selectedValue: ''
                         },
                         data:[
@@ -113,7 +113,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                             {
                                 colData: [
                                     {
-                                        inputHeader: 'Specify',
+                                        inputHeader: 'Specify any other signs indicative of violence',
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
@@ -137,7 +137,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                 radioBtnContent:
                     {
                         header:{
-                            title: '',
+                            title: 'Any other clinical enquiry done?',
                             selectedValue: ''
                         },
                         data:[

@@ -1,21 +1,16 @@
 <template>
   <!--  Fetal presentation-->
-  <ion-row>
-    <ion-col class=" left_row_col_separator" >
+  <div class="container">
+    <ion-card class="section">
+      <ion-card-header>
+        <ion-card-title class="dashed_bottom_border sub_item_header">Fetal presentation results</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <basic-form :contentData="fetalPresentation"></basic-form>
+      </ion-card-content>
+    </ion-card>
+  </div>
 
-      <ion-list >
-        <ion-item class="dashed_bottom_border" style="font-weight: bold">
-          Fetal presentation
-        </ion-item>
-        <div class="sub_item_body content_container" >
-          <basic-form
-              :contentData="fetalPresentation" >
-          </basic-form>
-        </div>
-        <ion-item class="sub_item_body_close" />
-      </ion-list>
-    </ion-col>
-  </ion-row>
 
 </template>
 
@@ -98,24 +93,33 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.content_container{
-  padding-left: 10px;
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
 }
-.left_row_col_separator{
-  padding-right: 50px
+
+.section {
+  width: 100%;
+  max-width: 1300px; /* Adjust max-width as needed */
+  margin-bottom: 20px;
 }
-.right_row_col_separator{
-  padding-left: 50px
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 500px; /* Adjust max-width as needed */
 }
-.content_container_for_radio{
-  padding-left: 30px;
-  margin-right: 400px;
+
+@media (max-width: 1500px) {
+  .container {
+    padding: 10px;
+  }
 }
-.separator {
-  border-top: none; /* or border: none; */
-  margin: 0;
-  padding: 0;
-  height: 0;
-  display: none;
+.sub_item_header{
+  font-weight: bold;
+  font-size: medium;
 }
 </style>

@@ -362,12 +362,14 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'test1'
+
                         },
                         data:[
                             {
-                                name: 'Unable to record blood pressure',
-                                value: 'Unable to record blood pressure',
+                                name: 'Unable',
+                                value: 'Unable',
                                 checked: false,
                                 labelPlacement: 'start',
 
@@ -383,7 +385,8 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                     {
                         header:{
                             title: 'Reason blood pressure cannot be taken',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'test2'
                         },
                         data:[
                             {
@@ -411,6 +414,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                 isFinishBtn: false,
                 sectionHeader: '',
                 classDash: '',
+
 
                 data:
                     {
@@ -518,7 +522,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                         },
                         data:[
                             {
-                                name: 'No symptoms of severe pre-eclampsia',
+                                name: 'No severe pre-eclampsia',
                                 value: 'NoSymptomsOfEclampsia',
                                 checked: false,
                                 labelPlacement: 'start',

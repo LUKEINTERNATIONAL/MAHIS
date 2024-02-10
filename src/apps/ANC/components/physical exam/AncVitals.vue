@@ -1,102 +1,64 @@
 <template>
+  <div class="container">
+    <!-- Height and Weight Section -->
+    <ion-card v-if="currentSection === 0" class="section">
+      <ion-card-header>
+        <ion-card-title class="dashed_bottom_border sub_item_header">Height and Weight</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <basic-form :contentData="heightWeight"></basic-form>
+      </ion-card-content>
+    </ion-card>
 
-  <ion-row >
-    <!--   height and weight-->
-    <ion-col  class="left_row_col_separator">
-      <ion-list>
-        <ion-item :lines="heightAndWeight" class="dashed_bottom_border" style="font-weight: bold">
-          Height and Weight
-        </ion-item>
-        <div class="sub_item_body content_container" >
-          <basic-form
-              :contentData="heightWeight">
-          </basic-form>
-        </div>
-        <ion-item class="sub_item_body_close" />
-      </ion-list>
-    </ion-col>
-    <!--  blood pressure-->
-    <ion-col class="right_row_col_separator">
-      <ion-list>
-        <ion-item :lines="bloodP" class="dashed_bottom_border" style="font-weight: bold">
-          Blood pressure
-        </ion-item>
-        <div class="sub_item_body content_container">
-          <basic-form
-              :contentData="bloodPressure" >
-          </basic-form>
-        </div>
-        <ion-item class="sub_item_body_close" />
-      </ion-list>
+    <!-- Blood Pressure Section -->
+    <ion-card v-if="currentSection === 1" class="section">
+      <ion-card-header>
+        <ion-card-title class="dashed_bottom_border sub_item_header">Blood Pressure</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <basic-form :contentData="bloodPressure"></basic-form>
+      </ion-card-content>
+    </ion-card>
+    <!-- Pre-eclampsia Section -->
+    <ion-card v-if="currentSection === 2" class="section">
+      <ion-card-header>
+        <ion-card-title class="dashed_bottom_border sub_item_header"> Pre-eclampsia with severe symptoms</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <basic-form :contentData="preEclampsia"></basic-form>
+      </ion-card-content>
+    </ion-card>
 
-    </ion-col>
-  </ion-row>
+    <!-- Respiratory Exam -->
+    <ion-card v-if="currentSection === 3" class="section">
+      <ion-card-header>
+        <ion-card-title class="dashed_bottom_border sub_item_header">Respiration Exam</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <basic-form :contentData="respiration"></basic-form>
+      </ion-card-content>
+    </ion-card>
 
-<!--  respiratory exam and Pre-eclampsia-->
-  <ion-row>
-    <ion-col  class="left_row_col_separator">
-      <ion-list>
-        <ion-item class="dashed_bottom_border" style="font-weight: bold">
-          Respiration exam result
-        </ion-item>
-        <div class="sub_item_body content_container" >
-          <basic-form
-              :contentData="respiration" >
-          </basic-form>
-        </div>
-        <ion-item class="sub_item_body_close"/>
-      </ion-list>
-    </ion-col>
+    <!-- Temperature and Pulse Section -->
+    <ion-card v-if="currentSection === 4" class="section">
+      <ion-card-header>
+        <ion-card-title class="dashed_bottom_border sub_item_header">Temperature and Pulse</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <basic-form :contentData="temperature"></basic-form>
+        <basic-form :contentData="pulse"></basic-form>
+      </ion-card-content>
+    </ion-card>
 
-    <ion-col class="right_row_col_separator">
-      <ion-list>
-        <ion-item class="dashed_bottom_border" style="font-weight: bold">
-          Pre-eclampsia with severe features
-        </ion-item>
-        <div class="sub_item_body content_container" >
-          <basic-form
-              :contentData="preEclampsia" >
-          </basic-form>
-        </div>
-        <ion-item class="sub_item_body_close" />
-      </ion-list>
-    </ion-col>
-  </ion-row>
-
-
-  <ion-row>
-    <!--  temperature-->
-    <ion-col  class="left_row_col_separator">
-      <ion-list>
-        <ion-item :lines="temp" class="dashed_bottom_border" style="font-weight: bold">
-          Temperature
-        </ion-item>
-        <div class="sub_item_body content_container" >
-          <basic-form
-              :contentData="temperature" >
-          </basic-form>
-        </div>
-        <ion-item class="sub_item_body_close"/>
-      </ion-list>
-    </ion-col>
-    <!--  pulse-->
-    <ion-col class="right_row_col_separator">
-      <ion-list>
-        <ion-item :lines="pulseReading" class="dashed_bottom_border" style="font-weight: bold">
-          Pulse
-        </ion-item>
-        <div class="sub_item_body content_container" >
-          <basic-form
-              :contentData="pulse" >
-          </basic-form>
-        </div>
-        <ion-item class="sub_item_body_close" />
-      </ion-list>
-    </ion-col>
-  </ion-row>
-<!--    <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form>-->
+    <!-- Navigation Buttons -->
+    <div class="navigation-buttons">
+      <ion-button @click="goToPreviousSection" expand="block" color="medium" size="large">Previous</ion-button>
+      <ion-button @click="goToNextSection" expand="block" color="primary" size="large">Next</ion-button>
+    </div>
+  </div>
 </template>
-  
+
+
 <script lang="ts">
 import {
   IonContent,
@@ -124,8 +86,9 @@ import {
     import { VitalsService } from "@/services/vitals_service";
     import BasicForm from '@/components/BasicForm.vue';
     import { Service } from "@/services/service";
+    import {modifyRadioValue,modifyCheckboxValue,getRadioSelectedValue,getCheckboxSelectedValue} from "@/services/data_helpers";
 
-    export default defineComponent({
+export default defineComponent({
     components:{
       IonToggle,
         IonContent,
@@ -144,19 +107,11 @@ import {
         iconsContent: icons,
         BMI: {},
         BPStatus: {},
-        heightAndWeightChecked: true,
-        heightAndWeight:'',
-        respirationExamChecked: true,
-        respirationExam: '',
-        bloodPressureChecked: true,
-        bloodP: '',
-        temperatureChecked: true,
-        temp: '',
-        pulseReading:'',
-        pulseChecked: true,
         vValidations: '' as any,
         hasValidationErrors: [] as any,
         vitalsInstance: {} as any,
+        currentSection: 0, // Initialize currentSection to 0
+        sections: ['Height and Weight', 'Blood Pressure', 'Respiration Exam and Pre-eclampsia', 'Temperature and Pulse'],
     };
   },
   computed:{
@@ -174,6 +129,8 @@ import {
         this.vitalsInstance = new VitalsService(this.demographics.patient_id,userID);
         this.updateVitalsStores()
         this.validaterowData({})
+        const bloodPressure=useAncVitalsStore()
+        this.handleUnAbleToRecordBloodPressure()
     },
     watch: {
         vitals: {
@@ -181,6 +138,12 @@ import {
                 this.updateVitalsStores();
             },
             deep: true
+        },
+        bloodPressure:{
+            handler(){
+              this.handleUnAbleToRecordBloodPressure();
+            },
+            deep:true
         }
     },
     setup() {
@@ -191,38 +154,32 @@ import {
             menuController.close()
             this.$router.push(url);
         },
-      heightAndWeightMeasurements(){
-        this.heightAndWeightChecked = !this.heightAndWeightChecked
-        if (this.heightAndWeightChecked) {
-          this.heightAndWeight = 'none'
-        } else {this.heightAndWeight = ''}
-      },
-      bloodPressureMeasurements(){
-        this.bloodPressureChecked = !this.bloodPressureChecked
-        if (this.bloodPressureChecked) {
-          this.bloodP = 'none'
-        } else {this.bloodP = ''}
-      },
-      respirationExams(){
-        this.respirationExamChecked = !this.respirationExamChecked
-        if (this.respirationExamChecked) {
-          this.respirationExam = 'none'
-        } else {this.respirationExam = ''}
-      },
-      temperatureReadings(){
-        this.temperatureChecked = !this.temperatureChecked
-        if (this.temperatureChecked) {
-          this.temp = 'none'
-        } else {this.temp = ''}
-      },
-      pulseReadings(){
-        this.pulseChecked = !this.pulseChecked
-        if (this.pulseChecked) {
-          this.pulseReading = 'none'
-        } else {this.pulseReading = ''}
+      handleUnAbleToRecordBloodPressure() {
+        const unableToRecordBloodPressureValue = getCheckboxSelectedValue(this.bloodPressure, 'test1');
+
+        // Check if the checkbox is checked
+        if (unableToRecordBloodPressureValue == 'Unable') {
+          // Set the display of the reason radio buttons to true
+          modifyRadioValue(this.bloodPressure, 'test2', 'displayNone', false);
+        } else {
+          // Set the display of the reason radio buttons to false
+          modifyRadioValue(this.bloodPressure, 'test2', 'displayNone', true);
+        }
       },
 
-        updateVitalsStores(){
+      //Method for navigating
+      goToNextSection() {
+        if (this.currentSection < 4) {
+          this.currentSection++;
+        }
+      },
+      goToPreviousSection() {
+        if (this.currentSection > 0) {
+          this.currentSection--;
+        }
+      },
+
+      updateVitalsStores(){
             const vitalsStore = useVitalsStore()
             vitalsStore.setVitals(this.vitals)
         },
@@ -337,25 +294,34 @@ import {
 </script>
 
 <style scoped>
-.content_container{
-  padding-left: 10px;
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
 }
-.left_row_col_separator{
-  padding-right: 50px
+
+.section {
+  width: 100%;
+  max-width: 1300px; /* Adjust max-width as needed */
+  margin-bottom: 20px;
 }
-.right_row_col_separator{
-  padding-left: 50px
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 500px; /* Adjust max-width as needed */
 }
-.content_container_for_radio{
-  padding-left: 30px;
-  margin-right: 400px;
+
+@media (max-width: 1500px) {
+  .container {
+    padding: 10px;
+  }
 }
-.separator {
-  border-top: none; /* or border: none; */
-  margin: 0;
-  padding: 0;
-  height: 0;
-  display: none;
+.sub_item_header{
+  font-weight: bold;
+  font-size: medium;
 }
 </style>
   
