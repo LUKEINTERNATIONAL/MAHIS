@@ -136,6 +136,10 @@ export default defineComponent({
         const  otherSite = useMedicalHistoryStore()  
         this.handleHivResults()
         this.handleSyphilis()
+        this.handleSurgries()
+        this.handleAllergies()
+        this.handleChronicCondition()
+        this.handleHivConducted()
         
         
         
@@ -145,6 +149,7 @@ export default defineComponent({
         hivTest:{
             handler(){
                 this.handleHivResults()
+                this.handleHivConducted()
             },
              deep:true,
         },
@@ -153,7 +158,26 @@ export default defineComponent({
                 this.handleSyphilis()
             },
             deep:true
+        },
+        medicalHistory:{
+            handler(){
+                this.handleSurgries()
+            },
+            deep:true
+        },
+        allegy:{
+            handler(){
+                this.handleAllergies()
+            },
+            deep:true
+        },
+        exisitingChronicHealthConditions:{
+            handler(){
+                this.handleChronicCondition()
+            },
+            deep:true
         }
+        
     },
       computed:{
         ...mapState(useMedicalHistoryStore,["medicalHistory"]),
@@ -179,9 +203,37 @@ export default defineComponent({
            }else{
              modifyRadioValue(this.syphilisTest,'syphilisDetails','displayNone',true)
            }
-        //    console.log(getRadioSelectedValue(this.syphilisTest,'syphilisOption'))
+           //console.log(getRadioSelectedValue(this.syphilisTest,'syphilisOption'))
 
         },
+        handleSurgries(){
+            if(getCheckboxSelectedValue(this.medicalHistory,'Other') == 'otherSurguries'){
+                modifyFieldValue(this.medicalHistory,'specify','displayNone',false)
+            }else{
+                modifyFieldValue(this.medicalHistory,'specify','displayNone',true)
+            }
+
+            // console.log(getCheckboxSelectedValue(this.medicalHistory,'Other'))
+        },
+        handleAllergies(){
+            if(getCheckboxSelectedValue(this.allegy,'Other')=='otherAllergies'){
+                modifyFieldValue(this.allegy,'other',"displayNone",false)
+            }else{
+                modifyFieldValue(this.allegy,'other',"displayNone",true)
+            }
+        },
+        handleChronicCondition(){
+            if(getCheckboxSelectedValue(this.exisitingChronicHealthConditions,'Other')=='other'){
+                modifyFieldValue(this.exisitingChronicHealthConditions,'Specify',"displayNone",false)
+            }else{
+                modifyFieldValue(this.exisitingChronicHealthConditions,'Specify',"displayNone",true)
+            }
+              console.log(getCheckboxSelectedValue(this.exisitingChronicHealthConditions,'Other'))
+        },
+        handleHivConducted(){
+            if(getRadioSelectedValue(this.hivTest,''))
+        }
+      
     }
 })
 </script>

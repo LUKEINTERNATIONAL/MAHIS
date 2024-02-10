@@ -442,7 +442,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             checked: false
                         },
                          {
-                            name: "Other Surgeries",
+                            name: "Other",
                             value: "otherSurguries",
                             labelPlacement: 'start',
                             colSize: '6',
@@ -461,10 +461,10 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             colData:[
                                 {
                                     displayNone:true,
-                                    inputHeader: 'Other(Specify)',
+                                    inputHeader: 'Specify',
                                     icon: icons.editPen,
                                     value: medicalHistoryForm.otherSurgerirs.name,
-                                    name: medicalHistoryForm.otherSurgerirs.value,
+                                    name: "specify",
                                     eventType: 'input',
                                     inputWidth: "82%",
                                     required: true
@@ -680,7 +680,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             checked: false
                         },
                          {
-                            name: "Other Allergies",
+                            name: "Other",
                             value: "otherAllergies",
                             labelPlacement: 'start',
                             colSize: '6',
@@ -701,7 +701,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                                     inputHeader: 'Other(specify)',
                                     icon: icons.editPen,
                                     value: allegiesForm.otherAllegies.name,
-                                    name: allegiesForm.otherAllegies.value,
+                                    name: 'other',
                                     eventType: 'input',
                                     inputWidth: "82%",
                                     required: true
@@ -1067,29 +1067,29 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
             
                     
         },
-        //  {
-        //      classDash: 'dashed_bottom_border',
-        //         data:{ 
-        //             rowData:[
-        //                 {
-        //                     colData:[
-        //                         {
-        //                             inputHeader: 'Other Site',
-        //                             icon: icons.editPen,
-        //                             value: diabetesForm.otherDiabetis.name,
-        //                             name: diabetesForm.otherDiabetis.value,
-        //                             eventType: 'input',
-        //                             inputWidth: "82%",
-        //                             required: true
-        //                         }
+         {
+                data:{ 
+                    rowData:[
+                        {
+                            colData:[
+                                {   
+                                    displayNone:true,
+                                    inputHeader: 'Other Site',
+                                    icon: icons.editPen,
+                                    value: diabetesForm.otherDiabetis.name,
+                                    name: "Specify",
+                                    eventType: 'input',
+                                    inputWidth: "82%",
+                                    required: true
+                                }
                                 
-        //                     ]
-        //                 }
-        //             ],
+                            ]
+                        }
+                    ],
                     
-        //         }
+                }
                     
-        //     },
+            },
     ]as any,
          hivTest: [
             {
@@ -1100,7 +1100,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     header:{
                         title: '',
                         selectedValue: '',
-                        // name:"hivOption"
+                        name:"hivOption"
                     },
                     data:[
                         {  
@@ -1119,7 +1119,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         },
                         {
                             name:  hivTestForm.hivTestConducted.name,
-                            value: hivTestForm.hivTestConducted.value,
+                            value: "hivTestConducted",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 
@@ -1133,6 +1133,30 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         },
                     ]
                 }
+            },
+            {
+                classDash: 'dashed_bottom_border',
+                data:{ 
+                    rowData:[
+                        {
+                            colData:[
+                                {   
+                                    displayNone:true,
+                                    inputHeader: 'HIV test date',
+                                    icon: icons.calenderPrimary,
+                                    value: '',
+                                    name: 'birthdate',
+                                    eventType: 'blur',
+                                    inputWidth: "300px",
+                                    required: true,
+                                    isDatePopover: true
+                                }
+                                
+                            ]
+                        }
+                    ],
+                    
+                },
             },
             {
             classDash: 'dashed_bottom_border',
@@ -1153,6 +1177,14 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             justify: 'space-between',
                             checked: false
                         },
+                        {
+                            name: hivTestForm.expiredTests.name,
+                            value:hivTestForm.expiredTests.value,
+                            labelPlacement: 'start',
+                            colSize: '6',
+                            justify: 'space-between',
+                            checked:false
+                        },
                         
                     ],
                 }
@@ -1167,15 +1199,15 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         selectedValue: ''
                     },
                     data:[
+
                         {
-                            name: hivTestForm.expiredTests.name,
-                            value:hivTestForm.expiredTests.value,
+                            name: "Other",
+                            value: 'other',
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                             checked:false
                         }
-                        
                     ],
                 }
                     
@@ -1202,29 +1234,6 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     
                 }
                     
-            },
-            {
-                classDash: 'dashed_bottom_border',
-                data:{ 
-                    rowData:[
-                        {
-                            colData:[
-                                {
-                                    inputHeader: 'HIV test date',
-                                    icon: icons.calenderPrimary,
-                                    value: '',
-                                    name: 'birthdate',
-                                    eventType: 'blur',
-                                    inputWidth: "300px",
-                                    required: true,
-                                    isDatePopover: true
-                                }
-                                
-                            ]
-                        }
-                    ],
-                    
-                },
             },
             {
                 selectdData: [],
