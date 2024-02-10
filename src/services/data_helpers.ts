@@ -32,3 +32,10 @@ export function modifyCheckboxValue(data: any, checkboxName: any, newValue: any)
         if (checkbox) checkbox.checked = newValue;
     });
 }
+export function modifyCheckboxInputField(data: any, checkboxInputName: any,element: any, newValue: any) {
+    
+    data.forEach((item: any) => {
+        const checkbox = item.checkboxBtnContent?.inputFields?.find((checkboxInput: any) => checkboxInput.name === checkboxInputName);
+        if (checkbox) checkbox[element] = newValue;
+    });
+}
