@@ -1,5 +1,5 @@
 <template>
-    <basic-card :content="cardData"></basic-card>
+    <basic-card :content="cardData" @update:inputValue="handleInputData"></basic-card>
 </template>
 
 <script lang="ts">
@@ -23,6 +23,7 @@ import { useEnrollementStore } from '@/stores/EnrollmentStore'
 import { mapState } from 'pinia';
 import BasicForm from '@/components/BasicForm.vue';
 import BasicCard from '@/components/BasicCard.vue';
+import { modifyCheckboxInputField,getCheckboxSelectedValue,getRadioSelectedValue, modifyFieldValue } from '@/services/data_helpers'
 
 export default defineComponent({
 name: 'Menu',
@@ -57,6 +58,7 @@ watch: {
         deep: true
     }
 },
+
 mounted(){
     this.updateEnrollmentStores()
     this.buidCards()
@@ -87,7 +89,13 @@ methods:{
     },
     testF(data: any){
         console.log(data);
-    }
+    },
+    async handleInputData(event: any) {
+        if(event.value.detail.checked)
+            modifyCheckboxInputField(this.diagnosis,event.al.name, 'displayNone', false)
+        else
+            modifyCheckboxInputField(this.diagnosis, event.al.name,'displayNone', true)
+    },
 }
 });
 </script>
