@@ -697,7 +697,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     rowData:[
                         {
                             colData:[
-                                {
+                                {   displayNone:true,
                                     inputHeader: 'Other(specify)',
                                     icon: icons.editPen,
                                     value: allegiesForm.otherAllegies.name,
@@ -1519,30 +1519,30 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 }
             },
         ]as any,
-    otherSite:[
-            {
-                data:{ 
-                    rowData:[
-                        {
-                            colData:[
-                                {
-                                    inputHeader: 'Other (Specify)',
-                                    icon: icons.editPen,
-                                    value: otherSiteForm.otherSite.name,
-                                    name: otherSiteForm.otherSite.value,
-                                    eventType: 'input',
-                                    inputWidth: "82%",
-                                    required: true
-                                }
+    // otherSite:[
+    //         {
+    //             data:{ 
+    //                 rowData:[
+    //                     {
+    //                         colData:[
+    //                             {
+    //                                 inputHeader: 'Other (Specify)',
+    //                                 icon: icons.editPen,
+    //                                 value: otherSiteForm.otherSite.name,
+    //                                 name: otherSiteForm.otherSite.value,
+    //                                 eventType: 'input',
+    //                                 inputWidth: "82%",
+    //                                 required: true
+    //                             }
                                 
-                            ]
-                        }
-                    ],
+    //                         ]
+    //                     }
+    //                 ],
                     
-                }
+    //             }
                     
-            },
-    ]as any,
+    //         },
+    // ]as any,
 
     }),
     actions:{

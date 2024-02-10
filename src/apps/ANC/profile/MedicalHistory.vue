@@ -67,7 +67,7 @@
      <ion-list>
         
         <div>
-            <BasicForm :contentData="otherSite" />
+            <!-- <BasicForm :contentData="otherSite" /> -->
         </div>
         
      </ion-list>
@@ -161,7 +161,7 @@ export default defineComponent({
         ...mapState(useMedicalHistoryStore,["exisitingChronicHealthConditions"]),
         ...mapState(useMedicalHistoryStore,["hivTest"]),
         ...mapState(useMedicalHistoryStore,["syphilisTest"]),
-        ...mapState(useMedicalHistoryStore,["otherSite"]),
+        // ...mapState(useMedicalHistoryStore,["otherSite"]),
     },
     methods:{
         handleHivResults(){
