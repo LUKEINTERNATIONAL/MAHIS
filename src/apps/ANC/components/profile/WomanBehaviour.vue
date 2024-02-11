@@ -2,25 +2,25 @@
 <template>
   <!-- Daily Caffeine -->
   <ion-list>
-    <ion-item :lines="DailyCaffeine" class="dashed_bottom_border">
-      <ion-toggle :checked ="caffeineChecked" @ionChange="caffeineMethod">Daily caffeine  intake</ion-toggle>
+    <ion-item :lines="DailyCaffeine" class="dashed_bottom_border sub_item_header">
+     Daily caffeine  intake
     </ion-item>
-    <div class="sub_item_body" v-if="caffeineChecked">
+    <div class="sub_item_body">
       <BasicForm :contentData="Caffeine" />
     </div>
-    <ion-item class="sub_item_body_close" v-if="caffeineChecked"/>
+    <ion-item class="sub_item_body_close"/>
   </ion-list>
 
   <!-- Tobbaco use -->
   <ion-list>
-    <ion-item :lines="tobbacoUses" class="dashed_bottom_border">
-      <ion-toggle :checked ="tobbacoChecked" @ionChange="tobbacoMethod">Use of tobbaco</ion-toggle>
+    <ion-item :lines="tobbacoUses" class="dashed_bottom_border sub_item_header">
+     Use of tobbaco
     </ion-item>
 
-    <div class="sub_item_body" v-if="tobbacoChecked">
+    <div class="sub_item_body" >
       <BasicForm :contentData="Tobbaco" />
     </div>
-    <ion-item class="sub_item_body_close" v-if="tobbacoChecked"/>
+    <ion-item class="sub_item_body_close"/>
   </ion-list>
 
 </template>
@@ -46,9 +46,8 @@ import { ref } from 'vue';
 import { icons } from '@/utils/svg.ts';
 import BasicInputField from '@/components/BasicInputField.vue';
 import BasicForm from "@/components/BasicForm.vue";
-import {useMedicalHistoryStore} from "@/apps/ANC/store/medicalHistoryStore";
 import {mapState} from "pinia";
-import {useWomanBehaviourStore} from "@/apps/ANC/store/womanBehaviourStore";
+import {useWomanBehaviourStore} from "@/apps/ANC/store/profile/womanBehaviourStore";
 
 export default defineComponent({
   name: 'Menu',
@@ -76,10 +75,10 @@ export default defineComponent({
       tobbacoUses: '',
     };
   },
-  // mounted(){
-  //   const caffeine =useWomanBehaviourStore()
-  //   const tobbaco =useWomanBehaviourStore()
-  // },
+  mounted(){
+    const caffeine =useWomanBehaviourStore()
+    const tobbaco =useWomanBehaviourStore()
+  },
   computed:{
     ...mapState(useWomanBehaviourStore,["Caffeine"]),
     ...mapState(useWomanBehaviourStore,["Tobbaco"]),
@@ -111,6 +110,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.sub_item_header{
+  font-weight: bold;
+}
 #container {
   text-align: center;
 

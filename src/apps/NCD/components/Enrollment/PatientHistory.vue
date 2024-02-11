@@ -17,13 +17,13 @@ import {
 import { defineComponent } from 'vue';
 import { icons } from '@/utils/svg';
 
-import DispositionModal from '@/components/ProfileModal/DispositionModal.vue'
+import DispositionModal from '@/components/ProfileModal/OutcomeModal.vue'
 import { createModal } from '@/utils/Alerts'
-import BasicInputField from '../BasicInputField.vue';
 import { useEnrollementStore } from '@/stores/EnrollmentStore'
 import { mapState } from 'pinia';
 import BasicForm from '@/components/BasicForm.vue';
-import BasicCard from '../BasicCard.vue';
+import BasicCard from '@/components/BasicCard.vue';
+import { getCheckboxSelectedValue,getRadioSelectedValue, modifyFieldValue } from '@/services/data_helpers'
 
 export default defineComponent({
 name: 'Menu',
@@ -35,7 +35,6 @@ components:{
   IonMenu,
   IonTitle,
   IonToolbar,
-  BasicInputField,
   IonCheckbox,
   BasicForm,
   BasicCard    },
@@ -47,11 +46,8 @@ return {
 };
 },
 computed:{
-    ...mapState(useEnrollementStore,["substance"]),
-    ...mapState(useEnrollementStore,["diagnosis"]),
     ...mapState(useEnrollementStore,["patientHistory"]),
-    ...mapState(useEnrollementStore,["familyHistory"]),
-    ...mapState(useEnrollementStore,["NCDNumber"]),
+    ...mapState(useEnrollementStore,["patientHistoryHIV"])
 },
 watch: {
     personInformation: {
@@ -60,11 +56,18 @@ watch: {
             this.buidCards()
         },
         deep: true
+    },
+    patientHistoryHIV: {
+        handler(){
+            this.controllFields()
+        },
+        deep: true
     }
 },
 mounted(){
     this.updateEnrollmentStores()
     this.buidCards()
+    console.log(getCheckboxSelectedValue(this.patientHistoryHIV,'PVD'))
 },
 methods:{
     buidCards(){
@@ -72,24 +75,12 @@ methods:{
             mainTitle:"Enrollment",
             cards:[
                 {
-                    cardTitle:"Substance use / Consumption",
-                    content: this.substance
-                },
-                {
-                    cardTitle:"Diagnosis",
-                    content: this.diagnosis
-                },
-                {
                     cardTitle:"Patient history & Complications ",
                     content: this.patientHistory
                 },
                 {
-                    cardTitle:"Family history",
-                    content: this.familyHistory
-                },
-                {
-                    cardTitle:"NCD number",
-                    content: this.NCDNumber
+                    cardTitle:"Patient history & Complications ",
+                    content: this.patientHistoryHIV
                 }
             ]
            } 
@@ -99,14 +90,15 @@ methods:{
     },
     updateEnrollmentStores(){
         const enrollmentStore = useEnrollementStore()
-        enrollmentStore.setSubstance(this.substance)
-        enrollmentStore.setDiagnosis(this.diagnosis)
         enrollmentStore.setPatientHistory(this.patientHistory)
-        enrollmentStore.setFamilyHistory(this.familyHistory)
-        enrollmentStore.setNCDNumber(this.NCDNumber)
+        enrollmentStore.setPatientHistoryHIV(this.patientHistoryHIV)
     },
-    testF(data: any){
-        console.log(data);
+    controllFields(){
+        if(getRadioSelectedValue(this.patientHistoryHIV, 'HIV') == 'R'){
+            modifyFieldValue(this.patientHistoryHIV,'ART_start_date', 'displayNone', false)
+        }else{
+            modifyFieldValue(this.patientHistoryHIV,'ART_start_date', 'displayNone', true)
+        }
     }
 }
 });

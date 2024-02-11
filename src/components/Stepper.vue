@@ -78,14 +78,23 @@
   import Diagnosis from '@/apps/NCD/components/ConsultationPlan/Diagnosis.vue'
   import Complications from '@/apps/NCD/components/ConsultationPlan/Complications.vue'
   import ConfirmDiagnosis from '@/apps/NCD/components/ConsultationPlan/ConfirmDiagnosis.vue'
-  import Disposition from '@/apps/NCD/components/ConsultationPlan/Disposition.vue'
+  import Outcome from '@/apps/NCD/components/ConsultationPlan/Outcome.vue'
   import Investigations from '@/apps/NCD/components/ConsultationPlan/Investigations.vue'
   import TreatmentPlan from '@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue'
   import Medications from "@/apps/ANC/components/profile/Medications.vue";
   import WomanBehaviour from "@/apps/ANC/components/profile/WomanBehaviour.vue";
   import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue";
-  import CurrentPregnancies from '@/apps/ANC/components/Profile/CurrentPregnancies.vue';
-  import PastObstreticHistory from '@/apps/ANC/components/Profile/PastObstreticHistory.vue';
+  import DangerSigns from "@/apps/ANC/components/quick check/DangerSigns.vue";
+  import ConfirmPregnancy from "@/apps/ANC/components/quick check/ConfirmPregnancy.vue";
+  import ReasonForVisit from "@/apps/ANC/components/quick check/ReasonForVisit.vue";
+  import SpecificHealthConcerns from "@/apps/ANC/components/quick check/SpecificHealthConcerns.vue";
+  import AncVitals from "@/apps/ANC/components/physical exam/AncVitals.vue"
+  import FetalAssessment from "@/apps/ANC/components/physical exam/FetalAssessment.vue";
+  import FetalPresentation from "@/apps/ANC/components/physical exam/FetalPresentation.vue";
+  import MaternalExam from "@/apps/ANC/components/physical exam/MaternalExam.vue";
+  import PresentingSigns from "@/apps/ANC/components/physical exam/PresentingSigns.vue";
+  import CurrentPregnancies from '@/apps/ANC/components/profile/CurrentPregnancies.vue';
+  import PastObstreticHistory from "@/apps/ANC/components/profile/PastObstreticHistory.vue";
   import UltrasoundScan from '@/apps/ANC/components/lab_tests/UltrasoundScan.vue';
   import UrineTest from '@/apps/ANC/components/lab_tests/UrineTest.vue';
   import TB from '@/apps/ANC/components/lab_tests/TB.vue';
@@ -112,11 +121,11 @@
         IonToolbar,
         Toolbar,
         ToolbarSearch,
-        IonButton, 
-        IonCard, 
-        IonCardContent, 
-        IonCardHeader, 
-        IonCardSubtitle, 
+        IonButton,
+        IonCard,
+        IonCardContent,
+        IonCardHeader,
+        IonCardSubtitle,
         IonCardTitle,
         IonAccordion,
         IonAccordionGroup,
@@ -126,13 +135,22 @@
         Diagnosis,
         Complications,
         ConfirmDiagnosis,
-        Disposition,
+        Outcome,
         Investigations,
         TreatmentPlan,
         IonModal,
         Medications,
         WomanBehaviour,
         MedicalHistory,
+        DangerSigns,
+        ReasonForVisit,
+        ConfirmPregnancy,
+        SpecificHealthConcerns,
+        AncVitals,
+        FetalPresentation,
+        FetalAssessment,
+        MaternalExam,
+        PresentingSigns,
         CurrentPregnancies,
         PastObstreticHistory,
         UltrasoundScan,
@@ -259,7 +277,7 @@
     width: 140px;
     align-items: center;
     font-weight: 400;
-    font-size: 14;
+    font-size: 14px;
     position: fixed;
     z-index: 1000;
   }

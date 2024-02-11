@@ -1,10 +1,9 @@
-
 <template>
   <ion-page>
     <Toolbar />
     <ion-content :fullscreen="true">
       <DemographicBar />
-      <Stepper stepperTitle="Profile" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
+      <Stepper stepperTitle="Quick check" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
     </ion-content>
   </ion-page>
 </template>
@@ -38,9 +37,16 @@ import { chevronBackOutline,checkmark } from 'ionicons/icons';
 import SaveProgressModal from '@/components/SaveProgressModal.vue'
 import { createModal } from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
+import { useVitalsStore } from '@/stores/VitalsStore'
+import { useDemographicsStore } from '@/stores/DemographicStore'
+import { useInvestigationStore } from '@/stores/InvestigationStore'
+import { useDiagnosisStore } from '@/stores/DiagnosisStore'
 import { mapState } from 'pinia';
 import Stepper from '@/components/Stepper.vue'
+import { Service } from "@/services/service";
 import { toastWarning,popoverConfirmation, toastSuccess } from '@/utils/Alerts';
+import { Diagnosis } from '@/apps/NCD/services/diagnosis'
+import {useDangerSignsStore} from "@/apps/ANC/store/quickCheck/dangerSigns";
 export default defineComponent({
   name: "Home",
   components:{
@@ -70,7 +76,7 @@ export default defineComponent({
     return {
       wizardData: [
         {
-          'title': 'Past obstetric history',
+          'title': 'Danger signs',
           'class': 'common_step',
           'checked':false,
           'disabled':false,
@@ -78,7 +84,7 @@ export default defineComponent({
           'last_step': ''
         },
         {
-          'title': 'Medical history',
+          'title': 'Reason for visit',
           'class': 'common_step',
           'checked':'',
           'icon': false,
@@ -87,7 +93,7 @@ export default defineComponent({
           'last_step': ''
         },
         {
-          'title': 'Current pregnancies',
+          'title': 'Confirm pregnancy',
           'class': 'common_step',
           'checked':'',
           'icon': false,
@@ -96,49 +102,35 @@ export default defineComponent({
           'last_step': ''
         },
         {
-          'title': 'Medications',
+          'title': 'Specific health concerns',
           'class': 'common_step',
           'checked':'',
           'icon': false,
           'disabled':false,
           'number': 4,
-          'last_step': ''
-        },
-        {
-          'title': 'Woman behaviour',
-          'class': 'common_step',
-          'checked':'',
-          'icon': false,
-          'disabled':false,
-          'number': 5,
           'last_step': 'last_step'
         },
       ],
       StepperData:[
         {
-          'title': 'Past obstetric history',
-          'componet': 'PastObstreticHistory',
+          'title': 'Danger signs',
+          'componet': 'DangerSigns',
           'value': '1'
         },
         {
-          'title': 'Medical history',
-          'componet': 'MedicalHistory',
+          'title': 'Reason for visit',
+          'componet': 'ReasonForVisit',
           'value': '2',
         },
         {
-          'title': 'Current pregnancies',
-          'componet': 'CurrentPregnancies',
+          'title': 'Confirm pregnancy',
+          'componet': 'ConfirmPregnancy',
           'value': '3',
         },
         {
-          'title': 'Medications',
-          'componet': 'Medications',
+          'title': 'Specific health concerns',
+          'componet': 'SpecificHealthConcerns',
           'value': '4',
-        },
-        {
-          'title': 'Woman behaviour',
-          'componet': 'WomanBehaviour',
-          'value': '5',
         },
       ],
       isOpen: false,
@@ -146,14 +138,16 @@ export default defineComponent({
     };
   },
   computed:{
-
-
+    ...mapState(useDangerSignsStore,["DangerSigns"]),
+    ...mapState(useVitalsStore,["vitals"]),
+    ...mapState(useInvestigationStore,["investigations"]),
+    ...mapState(useDiagnosisStore,["diagnosis"]),
   },
   mounted(){
     this.markWizard()
   },
   watch: {
-    vitals: {
+    DangerSigns: {
       handler(){
         this.markWizard()
       },
@@ -178,32 +172,26 @@ export default defineComponent({
 
   methods:{
     markWizard(){
-      if(this.medications.validationStatus){
+      // if(this.vitals.validationStatus){
         this.wizardData[0].checked = true;
         this.wizardData[0].class = 'open_step common_step'
-      }else{
-        this.wizardData[0].checked = false;
-      }
+      // }else{
+      //   this.wizardData[0].checked = false;
+      // }
 
-      if(this.medicalHistory[0].selectdData.length > 0){
+      if(this.DangerSigns[0].selectdData.length > 0){
         this.wizardData[1].checked = true;
         this.wizardData[1].class = 'open_step common_step'
       }else{
         this.wizardData[1].checked = false;
       }
 
-      if(this.womanBehaviour[0].selectdData.length > 0){
-        this.wizardData[2].checked = true;
-        this.wizardData[2].class = 'open_step common_step'
-      }else{
-        this.wizardData[2].checked = false;
-      }
-      if(this.medications[0].selectdData.length > 0){
-        this.wizardData[2].checked = true;
-        this.wizardData[2].class = 'open_step common_step'
-      }else{
-        this.wizardData[2].checked = false;
-      }
+      // if(this.diagnosis[0].selectdData.length > 0){
+      //   this.wizardData[2].checked = true;
+      //   this.wizardData[2].class = 'open_step common_step'
+      // }else{
+      //   this.wizardData[2].checked = false;
+      // }
     },
     deleteDisplayData(data: any){
       return  data.map((item: any) => {

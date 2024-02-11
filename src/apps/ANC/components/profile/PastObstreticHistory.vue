@@ -129,7 +129,7 @@ import BasicForm from '../../../../components/BasicForm.vue';
 import { icons } from '../../../../utils/svg';
 import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
-import { useObstreticHistoryStore } from '../../store/PastObstreticHistoryStore';
+import { useObstreticHistoryStore} from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
 import { checkmark, pulseOutline } from 'ionicons/icons';
 
 export default defineComponent({

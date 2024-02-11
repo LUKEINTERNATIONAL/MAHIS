@@ -1,14 +1,14 @@
 <template>
   <ion-list>
-    <ion-item :lines="medication" class="dashed_bottom_border">
-      <ion-toggle :checked="medicationChecked" @ionChange="medications">Current Medications</ion-toggle>
+    <ion-item :lines="medication" class="dashed_bottom_border sub_item_header">
+      Current medications
     </ion-item>
-    <div class="sub_item_body" v-if="medicationChecked">
+    <div class="sub_item_body ">
       <basic-form
-          :contentData="Medication" >
+          :contentData="Medication"  >
       </basic-form>
     </div>
-    <ion-item class="sub_item_body_close" v-if="medicationChecked"/>
+    <ion-item class="sub_item_body_close"/>
   </ion-list>
 </template>
 
@@ -25,7 +25,7 @@ import {
   IonToggle,
   IonSelectOption,
   IonInput,
-  IonSelect,
+  IonSelect, IonTextarea, IonLabel,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { checkmark,pulseOutline } from 'ionicons/icons';
@@ -34,11 +34,12 @@ import { icons } from '@/utils/svg';
 import BasicInputField from '@/components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import BasicForm from '@/components/BasicForm.vue'
-import {useMedicationsStore} from "@/apps/ANC/store/MedicationsStore";
+import {useMedicationsStore} from "@/apps/ANC/store/profile/MedicationsStore";
 
 export default defineComponent({
   name: 'Menu',
   components:{
+    IonLabel, IonTextarea,
     IonContent,
     IonHeader,
     IonItem,
@@ -56,7 +57,7 @@ export default defineComponent({
   data() {
     return {
       iconsContent: icons,
-      medicationChecked : false,
+      medicationChecked : true,
       medication: '',
     };
   },
@@ -82,6 +83,20 @@ export default defineComponent({
 </script>
 
 <style scoped>
+basic-form>.checkout_col {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px; /* Add margin between rows */
+}
+
+.checkout_col ion-checkbox {
+  width: 100%;
+  margin-right: 10px; /* Adjust the right margin as needed */
+}
+
+.sub_item_header{
+  font-weight: bold;
+}
 #container {
   text-align: center;
 

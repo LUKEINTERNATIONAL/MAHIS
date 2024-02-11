@@ -122,11 +122,11 @@
 
     <!-- Other Sute -->
      <ion-list>
-
+        
         <div>
             <BasicForm :contentData="otherSite" />
         </div>
-
+        
      </ion-list>
 
 
@@ -286,7 +286,7 @@ export default defineComponent({
             }else{this.hyperKTM=""}
         }
 
-
+        
     }
 })
 </script>

@@ -43,8 +43,8 @@
                     </ion-col>
                 </ion-row>
             </span>
-            <span v-if="item.radioBtnContent">
-                <div style="" v-if="item.radioBtnContent?.header">{{ item.radioBtnContent?.header.title }} </div>
+          <span v-if="item.radioBtnContent && !item.radioBtnContent.header.displayNone">
+                <div style=" font-weight: bold" v-if="item.radioBtnContent?.header">{{ item.radioBtnContent?.header.title }} </div>
                 <ion-row class="checkbox_content">
                     <ion-col :size="al.colSize" class="checkout_col" style="" v-for="(al, index3) in item.radioBtnContent?.data" :key="index3">
                         <span v-if="al.header" class="first_col">
@@ -87,7 +87,7 @@
                         </div>
                 </ion-row>
             </span>
-            <span v-if="item.checkboxBtnContent">
+               <span v-if="item.checkboxBtnContent && !item.checkboxBtnContent.header.displayNone">
                 <div style="" v-if="item.checkboxBtnContent?.header">{{ item.checkboxBtnContent?.header.title }} </div>
                 <ion-row class="checkbox_content">
                     <ion-col :size="al.colSize" class="checkout_col" style="" v-for="(al, index3) in item.checkboxBtnContent?.data" :key="index3">
@@ -105,7 +105,7 @@
                             {{ al.alertsErrorMassage }}
                         </div>
                     </ion-col>
-                    <ion-col  v-for="(checkboxInput, checkboxInputIndex) in item.checkboxBtnContent.inputFields" :key="checkboxInputIndex">
+                    <ion-col v-show="!item.checkboxBtnContent.inputFields[0].displayNone" v-for="(checkboxInput, checkboxInputIndex) in item.checkboxBtnContent.inputFields" :key="checkboxInputIndex">
                         <BasicInputField
                             :inputHeader="checkboxInput.inputHeader"
                             :unit="checkboxInput.unit"
@@ -255,6 +255,9 @@ ion-radio {
 .checkout_col{
     display: flex;
     align-items: center;
+}
+.checkout_col ion-checkbox {
+  margin-right: 150px;
 }
 .alerts_error{
     background: #f5dad8;

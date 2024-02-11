@@ -81,7 +81,8 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             placeholder: 'Pick the date',
                             value: '',
                             eventType: 'input',
-                            isDatePopover: true
+                            isDatePopover: true,
+                            displayNone: true
                         }
                     ]
                 }
@@ -110,6 +111,7 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             value: '',
                             showDatePopover: false,
                             eventType: 'input',
+                            displayNone: true
                         }
                     ]
                 }
@@ -138,7 +140,8 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             placeholder: 'Pick the date',
                             value: '',
                             eventType: 'input',
-                            isDatePopover: true
+                            isDatePopover: true,
+                            displayNone: true
                         }
                     ]
                 }
@@ -146,15 +149,16 @@ export const useEnrollementStore = defineStore('enrollementStore',{
             }
                 
         ],
-        patientHistory: [
+        patientHistoryHIV: [
             {
                 selectdData: [],
                 isFinishBtn: false,
                 classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
+                radioBtnContent:
                 {
                     header:{
                         title: 'HIV',
+                        name: 'HIV',
                         selectedValue: ''
                     },
                     data:[
@@ -167,6 +171,11 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             name: 'NR',
                             value: 'NR',
                             checked: false
+                        },
+                        {
+                            name: 'Unknow',
+                            value: 'Unknow',
+                            checked: false
                         }
                     ]
                 }
@@ -178,11 +187,13 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                         {
                             colData:[
                                 {
-                                    inputHeader: 'ART Stat date:',
+                                    inputHeader: 'ART Start Date:',
                                     icon: icons.calenderPrimary,
                                     value: '',
+                                    name: 'ART_start_date',
                                     eventType: 'input',
-                                    isDatePopover: true
+                                    isDatePopover: true,
+                                    displayNone: true
                                 }
                                 
                             ]
@@ -192,6 +203,135 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                 }
                     
             },
+            {
+                checkboxBtnContent:
+                {
+                    data:[
+                        {
+                            name: 'Use of traditional medicine',
+                            value: 'Use of traditional medicine',
+                            checked: false
+                        }
+                    ]
+                }
+            },
+            {
+                checkboxBtnContent:
+                {
+                    header:{
+                        title: 'TB',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: 'PVD',
+                            example: 'eg. ulcers, gangrene',
+                            value: 'PVD',
+                            checked: false
+                        }
+                    ],
+                    inputFields:[
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: 'Pick the date',
+                            value: '',
+                            eventType: 'input',
+                            isDatePopover: true,
+                            displayNone: true
+                        }
+                    ]
+                }
+            },
+            {
+                checkboxBtnContent:
+                {
+                    data:[
+                        {
+                            name: 'Neuropathy',
+                            value: 'Neuropathy',
+                            checked: false
+                        }
+                    ],
+                    inputFields:[
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: 'Pick the date',
+                            value: '',
+                            eventType: 'input',
+                            isDatePopover: true,
+                            displayNone: true
+                        }
+                    ]
+                }
+            },
+            {
+                checkboxBtnContent:
+                {
+                    data:[
+                        {
+                            name: 'Sexual dysfunction',
+                            value: 'Sexual dysfunction',
+                            checked: false
+                        }
+                    ],
+                    inputFields:[
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: 'Pick the date',
+                            value: '',
+                            eventType: 'input',
+                            isDatePopover: true,
+                            displayNone: true
+                        }
+                    ]
+                }
+            },
+            {
+                checkboxBtnContent:
+                {
+                    data:[
+                        {
+                            name: 'Anxiety',
+                            value: 'Anxiety',
+                            checked: false
+                        }
+                    ],
+                    inputFields:[
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: 'Pick the date',
+                            value: '',
+                            eventType: 'input',
+                            isDatePopover: true,
+                            displayNone: true
+                        }
+                    ]
+                }
+            },
+            {
+                checkboxBtnContent:
+                {
+                    data:[
+                        {
+                            name: 'Depression',
+                            value: 'Depression',
+                            checked: false
+                        }
+                    ],
+                    inputFields:[
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: 'Pick the date',
+                            value: '',
+                            eventType: 'input',
+                            isDatePopover: true,
+                            displayNone: true
+                        }
+                    ]
+                }
+            }
+        ],
+        patientHistory: [
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -207,6 +347,16 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             value: 'Smear pos',
                             checked: false
                         }
+                    ],
+                    inputFields:[
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: 'Pick the date',
+                            value: '',
+                            eventType: 'input',
+                            isDatePopover: true,
+                            displayNone: true
+                        }
                     ]
                 }
                     
@@ -221,6 +371,16 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             checked: false
                         }
 
+                    ],
+                    inputFields:[
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: 'Pick the date',
+                            value: '',
+                            eventType: 'input',
+                            isDatePopover: true,
+                            displayNone: true
+                        }
                     ]
                 }
                     
@@ -234,6 +394,16 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             value: 'EPTB',
                             checked: false
                         }
+                    ],
+                    inputFields:[
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: 'Pick the date',
+                            value: '',
+                            eventType: 'input',
+                            isDatePopover: true,
+                            displayNone: true
+                        }
                     ]
                 }
             },
@@ -246,6 +416,16 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             value: 'Never had TB',
                             checked: false
                         }
+                    ],
+                    inputFields:[
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: 'Pick the date',
+                            value: '',
+                            eventType: 'input',
+                            isDatePopover: true,
+                            displayNone: true
+                        }
                     ]
                 }
             },
@@ -254,10 +434,20 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                 {
                     data:[
                         {
-                            name: 'Cardiovascular desease',
+                            name: 'Cardiovascular disease',
                             value: 'Smear',
-                            example: 'eg. heart attack, ischemic heart desease, CCF',
+                            example: 'eg. heart attack, ischemic heart disease, CCF',
                             checked: false
+                        }
+                    ],
+                    inputFields:[
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: 'Pick the date',
+                            value: '',
+                            eventType: 'input',
+                            isDatePopover: true,
+                            displayNone: true
                         }
                     ]
                 }
@@ -283,6 +473,16 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             value: 'Renal disease',
                             checked: false
                         }
+                    ],
+                    inputFields:[
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: 'Pick the date',
+                            value: '',
+                            eventType: 'input',
+                            isDatePopover: true,
+                            displayNone: true
+                        }
                     ]
                 }
             },
@@ -295,42 +495,15 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             value: 'Stroke/TIA',
                             checked: false
                         }
-                    ]
-                }
-            },
-            {
-                checkboxBtnContent:
-                {
-                    data:[
+                    ],
+                    inputFields:[
                         {
-                            name: 'PVD',
-                            example: 'eg. ulcers, gangrene',
-                            value: 'PVD',
-                            checked: false
-                        }
-                    ]
-                }
-            },
-            {
-                checkboxBtnContent:
-                {
-                    data:[
-                        {
-                            name: 'Neuropathy',
-                            value: 'Neuropathy',
-                            checked: false
-                        }
-                    ]
-                }
-            },
-            {
-                checkboxBtnContent:
-                {
-                    data:[
-                        {
-                            name: 'Sexual dysfunction',
-                            value: 'Sexual dysfunction',
-                            checked: false
+                            icon: icons.calenderPrimary,
+                            placeholder: 'Pick the date',
+                            value: '',
+                            eventType: 'input',
+                            isDatePopover: true,
+                            displayNone: true
                         }
                     ]
                 }
@@ -426,6 +599,9 @@ export const useEnrollementStore = defineStore('enrollementStore',{
         },
         setPatientHistory(data: any){
             this.patientHistory = data
+        },
+        setPatientHistoryHIV(data: any){
+            this.patientHistoryHIV = data
         },
         setFamilyHistory(data: any){
             this.familyHistory = data

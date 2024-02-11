@@ -39,6 +39,7 @@
   import { icons } from '@/utils/svg';
   import { useVitalsStore } from '@/stores/VitalsStore'
   import { useDemographicsStore } from '@/stores/DemographicStore'
+  import { useGeneralStore } from '@/stores/GeneralStore'
   import { useInvestigationStore } from '@/stores/InvestigationStore'
   import { useDiagnosisStore } from '@/stores/DiagnosisStore'
   import { mapState } from 'pinia';
@@ -77,7 +78,7 @@
         return {
             wizardData: [
                 {
-                    'title': 'Vitals and other measures',
+                    'title': 'Vital Signs',
                     'class': 'common_step',
                     'checked':false,
                     'disabled':false,
@@ -103,7 +104,7 @@
                     'last_step': ''
                 },  
                 {
-                    'title': 'Complications',
+                    'title': 'Complications Screening',
                     'class': 'common_step',
                     'checked':'',
                     'icon': false,
@@ -121,7 +122,7 @@
                     'last_step': ''
                 },
                 {
-                    'title': 'Disposition',
+                    'title': 'Outcome',
                     'class': 'common_step',
                     'checked':'',
                     'icon': false,
@@ -132,7 +133,7 @@
             ],
             StepperData:[
                 {
-                    'title': 'Vitals and other measures',
+                    'title': 'Vital Signs',
                     'componet': 'Vitals',
                     'value': '1'
                 },
@@ -147,7 +148,7 @@
                     'value': '3',
                 },  
                 {
-                    'title': 'Complications',
+                    'title': 'Complications Screening',
                     'componet': 'Complications',
                     'value': '4',
                 },
@@ -157,8 +158,8 @@
                     'value': '5',
                 },
                 {
-                    'title': 'Disposition',
-                    'componet': 'Disposition',
+                    'title': 'Outcome',
+                    'componet': 'Outcome',
                     'value': '6',
                 },
             ],
@@ -171,6 +172,7 @@
       ...mapState(useVitalsStore,["vitals"]),
       ...mapState(useInvestigationStore,["investigations"]),
       ...mapState(useDiagnosisStore,["diagnosis"]),
+      ...mapState(useGeneralStore,["saveProgressStatus"]),
     },
     mounted(){
         this.markWizard() 
@@ -201,6 +203,7 @@
     
       methods:{
         markWizard(){
+            this.setProgressStatus()
             if(this.vitals.validationStatus){
                 this.wizardData[0].checked = true; 
                 this.wizardData[0].class = 'open_step common_step'               
@@ -221,6 +224,10 @@
             }else{
                 this.wizardData[2].checked = false; 
             }
+        },
+        setProgressStatus(){
+            const demographicsStore = useGeneralStore()
+            demographicsStore.setSaveProgressStatus(true)
         },
         getFormatedData(data: any){
           return  data.map((item: any) => {
