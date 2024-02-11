@@ -8,7 +8,7 @@ const physiologicalCousellingForm ={
     },
         cousellingOnNonPharmacologicalNo:{
         name:"No",
-        value:"no"
+        value:"noPharmacological"
     },
         clientReferredOnNonPharmacological:{
         name:"Client was referred",
@@ -19,7 +19,7 @@ const physiologicalCousellingForm ={
         value:'otherOnNonPharmacological'
     },
         specifyOnNonPharmacological:{
-        name:"Specify On non-Pharmacological",
+        name:"SpecifyNonP",
         value:""
     },
         cousellingOnPharmacologicalTreatmentYes:{
@@ -28,7 +28,7 @@ const physiologicalCousellingForm ={
     },
         cousellingOnPharmacologicalTreatmentNo:{
         name:"No",
-        value:"no"
+        value:"noPharmacologicalTreatment"
     },
         clientReferredOnPharmacologicalTreatment:{
         name:"Client was referred",
@@ -39,7 +39,7 @@ const physiologicalCousellingForm ={
         value:'otherOnPharmacologicalTreatment'
     },
         specifyOnPharmacologicalTreatment:{
-        name:"Specify On Pharmacological Treatment",
+        name:"SpecifyPT",
         value:""
     },
         cousellingOnDietLifestyleYes:{
@@ -48,7 +48,7 @@ const physiologicalCousellingForm ={
     },
         cousellingOnDietLifestyleNo:{
         name:"no",
-        value:"no"
+        value:"noDiet"
     },
         clientReferredOnDietLifestyle:{
         name:"Client was referred",
@@ -59,7 +59,7 @@ const physiologicalCousellingForm ={
         value:'otherOnDietLifestyle'
     },
         specifyOnDietLifestyle:{
-        name:"Specify On Diet Life style",
+        name:"SpecifyL",
         value:""
     },
         cousellingOnAntacidYes:{
@@ -68,7 +68,7 @@ const physiologicalCousellingForm ={
     },
         cousellingOnAntacidNo:{
         name:"No",
-        value:"no"
+        value:"noAntacid"
     },
         clientReferredOnAntacid:{
         name:"Client was referred",
@@ -79,7 +79,7 @@ const physiologicalCousellingForm ={
         value:'otherOnAntacid'
     },
         specifyOnAntacid:{
-        name:"Specify On Ant acid",
+        name:"SpecifyAcid",
         value:""
     },
         cousellingOnLegCrapsYes:{
@@ -88,7 +88,7 @@ const physiologicalCousellingForm ={
     },
        cousellingOnLegCrapsNo:{
         name:"No",
-        value:"no"
+        value:"noLegCrap"
     },
         clientReferredOnLegCraps:{
         name:"Client was referred",
@@ -99,7 +99,7 @@ const physiologicalCousellingForm ={
         value:'otherOnLegCraps'
     },
         specifyOnLegCraps:{
-        name:"Specify On Leg Craps",
+        name:"SpecifyLC",
         value:""
     },
         cousellingOnUseMagnesiumCalciumOnLegCrapsYes:{
@@ -108,18 +108,18 @@ const physiologicalCousellingForm ={
     },
         cousellingOnUseMagnesiumCalciumOnLegCrapsNo:{
         name:"No",
-        value:"no"
+        value:"noMagnesiumCalcium"
     },
         clientReferredOnUseMagnesiumCalciumOnLegCraps:{
         name:"Client was referred",
         value:"clientReferredOnUseMagnesiumCalciumOnLegCraps"
     },
         otherOnUseMagnesiumCalciumOnLegCraps:{
-        name:'Other On Use Magnesium Calcium  On Leg Craps',
+        name:'Other',
         value:'otherOnUseMagnesiumCalciumOnLegCraps'
     },
         specifyOnUseMagnesiumCalciumOnLegCraps:{
-        name:"Specify On Leg Craps",
+        name:"SpecifyCraps",
         value:""
     },
 
@@ -129,7 +129,7 @@ const physiologicalCousellingForm ={
     },
         cousellingOnDietaryOnConstipationNo:{
         name:"No",
-        value:"no"
+        value:"noConstipation"
     },
         clientReferredOnDietaryOnConstipation:{
         name:"Client was referred",
@@ -140,7 +140,7 @@ const physiologicalCousellingForm ={
         value:'otherOnDietaryOnConstipation'
     },
         specifyOnDietaryOnConstipation:{
-        name:"Specify On Dietary On Constipation",
+        name:"SpecifyConstipation",
         value:""
     },
         cousellingOnUseOfWheatYes:{
@@ -149,7 +149,7 @@ const physiologicalCousellingForm ={
     },
         cousellingOnUseOfWheatNo:{
         name:"No",
-        value:"no"
+        value:"noWheat"
     },
         clientReferredOnUseOfWheat:{
         name:"Client was referred",
@@ -160,7 +160,7 @@ const physiologicalCousellingForm ={
         value:'otherOnUseOfWheat'
     },
         specifyOnDietaryOnUseOfWheat:{
-        name:"Specify On Use Of Wheat",
+        name:"useWheat",
         value:""
     },
         cousellingOnRegularExerciseYes:{
@@ -169,7 +169,7 @@ const physiologicalCousellingForm ={
     },
         cousellingOnRegularExerciseNo:{
         name:"No",
-        value:"no"
+        value:"noExercise"
     },
         clientReferredOnRegularExercise:{
         name:"Client was referred",
@@ -180,7 +180,7 @@ const physiologicalCousellingForm ={
         value:'otherOnRegularExercise'
     },
         specifyOnRegularExercise:{
-        name:"Specify On Regular Exercise",
+        name:"specifyExercise",
         value:""
     },
         cousellingOnVaricoseVeinsandOedemaYes:{
@@ -189,18 +189,18 @@ const physiologicalCousellingForm ={
     },
         cousellingOnVaricoseVeinsandOedemaNo:{
         name:"No",
-        value:"no"
+        value:"noOedema"
     },
         clientReferredOnVaricoseVeinsandOedema:{
         name:"Client was referred",
         value:"clientReferredOnVaricoseVeinsandOedema"
     },
         otherOnVaricoseVeinsandOedema:{
-        name:'Other On Regular Exercise',
-        value:'otherOnRegularExercise'
+        name:'other On Varicose VeinsandOedema',
+        value:'otherOnVaricoseVeinsandOedema'
     },
         specifyOnVaricoseVeinsandOedema:{
-        name:"Specify On specify On Varicose Veinsa nd Oedema",
+        name:"VeinsaOedema",
         value:""
     },
    
@@ -217,7 +217,8 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 radioBtnContent:{
                     header:{
                         title: 'Counselling conducted on non-pharmacological measures to reduce nausea and vomiting?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'nonPharmacological'
                     },
                     data:[
                         {  
@@ -244,7 +245,9 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 radioBtnContent:{
                     header:{
                         title: 'Reason counselling on non-pharmacological measures to reduce nausea and vomiting not conducted',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'reasonNonPharmacological',
+                        displayNone:'true'
                     },
                     data:[
                         {  
@@ -270,7 +273,8 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                     rowData:[
                         {
                             colData:[
-                                {
+                                {   
+                                    displayNone:true,
                                     inputHeader: 'Other (specify)',
                                     icon: icons.editPen,
                                     name: physiologicalCousellingForm.specifyOnNonPharmacological.name,
@@ -295,7 +299,8 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 radioBtnContent:{
                     header:{
                         title: 'Counselling conducted on pharmacological treatment for nausea and vomiting?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'nauseaVomiting'
                     },
                     data:[
                         {  
@@ -322,7 +327,9 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling on pharmalogical was not conducted?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'reasonNauseaVomiting',
+                        displayNone:true
                     },
                     data:[
                         {  
@@ -348,7 +355,8 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                     rowData:[
                         {
                             colData:[
-                                {
+                                { 
+                                    displaNone:true,
                                     inputHeader: 'Other (specify)',
                                     icon: icons.editPen,
                                     name: physiologicalCousellingForm.specifyOnPharmacologicalTreatment.name,
@@ -373,7 +381,8 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 radioBtnContent:{
                     header:{
                         title: 'Counselling  conducted on diet and lifestyle?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'diet'
                     },
                     data:[
                         {  
@@ -400,7 +409,9 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling on diet and lifestyle was not conducted?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'reasonDiet',
+                        displayNone:'true',
                     },
                     data:[
                         {  
@@ -426,8 +437,9 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                     rowData:[
                         {
                             colData:[
-                                {
-                                    inputHeader: 'Other (specify)',
+                                {   
+                                    displayNone:true,
+                                    inputHeader: 'Specify',
                                     icon: icons.editPen,
                                     name: physiologicalCousellingForm.specifyOnDietLifestyle.name,
                                     value: physiologicalCousellingForm.specifyOnDietLifestyle.value,
@@ -451,7 +463,8 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 radioBtnContent:{
                     header:{
                         title: 'Counselling  conducted on antacid?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'antacid'
                     },
                     data:[
                         {  
@@ -478,7 +491,9 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling on antacid was not done?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'counsellingAntacid',
+                        displayNone:true
                     },
                     data:[
                         {  
@@ -505,7 +520,7 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                         {
                             colData:[
                                 {
-                                    inputHeader: 'Other (specify)',
+                                    inputHeader: 'Specify',
                                     icon: icons.editPen,
                                     name: physiologicalCousellingForm.specifyOnAntacid.name,
                                     value: physiologicalCousellingForm.specifyOnAntacid.value,
@@ -529,7 +544,8 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 radioBtnContent:{
                     header:{
                         title: 'Counselling  conducted on symptoms of leg craps?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:"legCraps"
                     },
                     data:[
                         {  
@@ -556,7 +572,9 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling on  sysmptions for leg craps was not done?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'reasonsLegCraps',
+                        displayNone:true
                     },
                     data:[
                         {  
@@ -582,8 +600,9 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                     rowData:[
                         {
                             colData:[
-                                {
-                                    inputHeader: 'Other (specify)',
+                                {   
+                                    displayNone:'true',
+                                    inputHeader: 'Specify',
                                     icon: icons.editPen,
                                     name: physiologicalCousellingForm.specifyOnLegCraps.name,
                                     value: physiologicalCousellingForm.specifyOnLegCraps.value,
@@ -607,7 +626,8 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 radioBtnContent:{
                     header:{
                         title: 'Counselling  conducted on the use magnesium and calcium to relieve leg cramps?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:"useOfMagnesium"
                     },
                     data:[
                         {  
@@ -634,7 +654,9 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling on  use of magnesium and calcium to relieve leg cramps was not done?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'reasonOnUseofMagnesium',
+                        displayNone:true,
                     },
                     data:[
                         {  
@@ -660,8 +682,9 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                     rowData:[
                         {
                             colData:[
-                                {
-                                    inputHeader: 'Other (specify)',
+                                {   
+                                    displaNone:true,
+                                    inputHeader: 'specify',
                                     icon: icons.editPen,
                                     name: physiologicalCousellingForm.specifyOnUseMagnesiumCalciumOnLegCraps.name,
                                     value: physiologicalCousellingForm.specifyOnUseMagnesiumCalciumOnLegCraps.value,
@@ -685,7 +708,8 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 radioBtnContent:{
                     header:{
                         title: 'Counselling  conducted on dietary modifications to relieve constipation?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'constipattion'
                     },
                     data:[
                         {  
@@ -712,7 +736,9 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling on  dietary modifications to relieve constipation was not done?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'reasonConstipation',
+                        displayNone:true
                     },
                     data:[
                         {  
@@ -739,7 +765,7 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                         {
                             colData:[
                                 {
-                                    inputHeader: 'Other (specify)',
+                                    inputHeader: 'Specify',
                                     icon: icons.editPen,
                                     name: physiologicalCousellingForm.specifyOnDietaryOnConstipation.name,
                                     value: physiologicalCousellingForm.specifyOnDietaryOnConstipation.value,
@@ -763,7 +789,8 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 radioBtnContent:{
                     header:{
                         title: 'Counselling  conducted on the use of wheat?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'useWheat'
                     },
                     data:[
                         {  
@@ -790,7 +817,9 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling on  the use of wheat was not done?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'counsellingWheat',
+                        displayNone: true
                     },
                     data:[
                         {  
@@ -816,8 +845,9 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                     rowData:[
                         {
                             colData:[
-                                {
-                                    inputHeader: 'Other (specify)',
+                                {   
+                                    displayNone:true,
+                                    inputHeader: 'specify',
                                     icon: icons.editPen,
                                     name: physiologicalCousellingForm.specifyOnDietaryOnUseOfWheat.name,
                                     value: physiologicalCousellingForm.specifyOnDietaryOnUseOfWheat.value,
@@ -843,7 +873,8 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 radioBtnContent:{
                     header:{
                         title: 'Counselling  conducted on regular exercise?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'excersise'
                     },
                     data:[
                         {  
@@ -870,7 +901,8 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling on regular exercise was not done?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'counsellingExcerise'
                     },
                     data:[
                         {  
@@ -896,8 +928,9 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                     rowData:[
                         {
                             colData:[
-                                {
-                                    inputHeader: 'Other (specify)',
+                                {   
+                                    displayNone:true,
+                                    inputHeader: 'Specify',
                                     icon: icons.editPen,
                                     name: physiologicalCousellingForm.specifyOnRegularExercise.name,
                                     value: physiologicalCousellingForm.specifyOnRegularExercise.value,
@@ -923,7 +956,8 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 radioBtnContent:{
                     header:{
                         title: 'Counselling  conducted on  varicose veins and  oedema?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'oedema'
                     },
                     data:[
                         {  
@@ -950,7 +984,9 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling for varicose veins and oedema was not done?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'counsellingOedema',
+                        displayNone:true
                     },
                     data:[
                         {  
@@ -976,8 +1012,9 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                     rowData:[
                         {
                             colData:[
-                                {
-                                    inputHeader: 'Other (specify)',
+                                {   
+                                    displayNone:true,
+                                    inputHeader: 'Specify',
                                     icon: icons.editPen,
                                     name: physiologicalCousellingForm.specifyOnVaricoseVeinsandOedema.name,
                                     value: physiologicalCousellingForm.specifyOnVaricoseVeinsandOedema.value,
