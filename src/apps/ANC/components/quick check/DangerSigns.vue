@@ -79,6 +79,7 @@ export default defineComponent({
   },
   mounted() {
     this.handleNumberOfVisits()
+    this.handleDangerSigns()
   },
   watch:{
     PreviousVisit:{
@@ -86,6 +87,12 @@ export default defineComponent({
       this.handleNumberOfVisits()
     },
     deep:true
+    },
+    DangerSigns:{
+      handler(){
+        this.handleDangerSigns()
+      },
+      deep:true
     }
   },
   computed: {
@@ -99,6 +106,12 @@ export default defineComponent({
     navigationMenu(url: any){
       menuController.close()
       this.$router.push(url);
+    },
+    handleDangerSigns(){
+      if(getCheckboxSelectedValue(this.DangerSigns, 'Other')=='other'){
+        modifyFieldValue(this.DangerSigns,'Other','displayNone', false)
+      }else {modifyFieldValue(this.DangerSigns,'Other','displayNone', true)}
+      console.log(getCheckboxSelectedValue(this.DangerSigns, 'Other'))
     },
     handleNumberOfVisits(){
 

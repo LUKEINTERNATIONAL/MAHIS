@@ -241,6 +241,14 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
                                 colSize: '6',
                                 justify: 'space-between',
                             },
+                            {
+                                name: 'Other',
+                                value: 'other',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
 
                         ]
                     }
@@ -256,11 +264,11 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
                         rowData:[
                             {
                                 colData: [
-                                    {
-                                        inputHeader: 'Other (specify)',
+                                    {   displayNone:true,
+                                        inputHeader: 'Specify',
                                         unit: '',
                                         icon: icons.editPen,
-                                        value: '',
+                                        value: 'other',
                                         name: 'Other',
                                         required: true,
                                         eventType: 'input',
