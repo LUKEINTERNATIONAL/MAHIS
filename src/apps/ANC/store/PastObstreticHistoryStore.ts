@@ -200,6 +200,361 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
              
         ] as any,
 
+        Complications:[
+            {
+                selectdData: [],
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+
+                            {
+                                name: 'Pre-eclampsia',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '2',
+                                justify: 'end',
+                            },
+                            {
+                                name: 'Gestational diabetes mellitus',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '3',
+                                justify: 'end',
+                            },
+                        ]
+                    }
+
+            },
+
+            {
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Eclampsia',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '2',
+                                justify: 'end',
+                            },
+                            {
+                                name: 'Heavy bleeding (during or after delivery)',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '3',
+                                justify: 'end',
+                            },
+
+                        ]
+                    }
+
+            },
+            {
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Puerperal Sepsis',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '2',
+                                justify: 'end',
+                            },
+                            {
+                                name: 'Macrosomia',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '3',
+                                justify: 'end',
+                            },
+
+                        ]
+                    }
+
+            },
+
+            {
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Baby died within 24hrs of birth',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '2',
+                                justify: 'end',
+                            },
+                            {
+                                name: 'Perineal tear (3rd or 4th degree)',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '3',
+                                justify: 'end',
+                            },
+                        ]
+                    }
+
+            },
+
+            {
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Convulsions',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '2',
+                                justify: 'end',
+                            },
+                            {
+                                name: 'Asphyxia',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '3',
+                                justify: 'end',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Forceps',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '2',
+                                justify: 'end',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Metoclopramide',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '2',
+                                justify: 'end',
+                            },
+                            {
+                                name: 'Thyroid medication',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '3',
+                                justify: 'end',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Antiacids',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '2',
+                                justify: 'end',
+                            },
+                            {
+                                name: 'Anti-psychotics',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '3',
+                                justify: 'end',
+                            },
+                        ]
+                    }
+
+            },
+
+            {
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Anti-diabetic',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '2',
+                                justify: 'end',
+                            },
+                            {
+                                name: 'Anti-hypertensive',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '3',
+                                justify: 'end',
+                            },
+                        ]
+                    }
+
+            },
+
+            {
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Pre-eclampsia',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '2',
+                                justify: 'end',
+                            },
+                            {
+                                name: 'Eclampsia',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '3',
+                                justify: 'end',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Puerperal Sepsis',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '2',
+                                justify: 'end',
+                            },
+                            {
+                                name: 'Baby did within 24hrs of birth',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '3',
+                                justify: 'end',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Convulsions',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '2',
+                                justify: 'end',
+                            },
+                            {
+                                name: 'Forceps',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '3',
+                                justify: 'end',
+                            },
+                        ]
+                    }
+
+            },
+
+        ] as any,
+
+        
+
         PreEclampsia: false as boolean,
         Eclampsia: false as boolean,
         Puerperal: false as boolean,
@@ -230,7 +585,9 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
         setModeOfDelivery(data:any) {
             this.modeOfDelivery = data
         },
-      
+        setComplications(data:any) {
+            this.Complications = data
+        },
         setEclampsia(value: boolean){
             this.Eclampsia = value
         },

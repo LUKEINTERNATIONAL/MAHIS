@@ -1,28 +1,29 @@
 <template>
     <ion-list>
+        <div  v-show="showFirstContainer">
         <div class="radioContainer">
             <ion-row>
                 <ion-col>
                         <IonRadioGroup>
                           <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom:15px;">Select whether:</ion-label>
-                        <ion-radio style="margin-bottom: 10px">Ultrasound scan required</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Ultrasound scan ordered</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Ultrasound scan conducted</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Ultrasound scan not done</ion-radio>
+                          <ion-label style="font-weight: bold; margin-bottom:30px;">Select whether:</ion-label>
+                        <ion-radio style="margin-bottom: 10px; width:100%;">Ultrasound scan required</ion-radio>
+                        <ion-radio style="margin-bottom: 10px; width:100%;">Ultrasound scan ordered</ion-radio>
+                        <ion-radio style="margin-bottom: 10px; width:100%;">Ultrasound scan conducted</ion-radio>
+                        <ion-radio style="margin-bottom: 10px; width:100%;">Ultrasound scan not done</ion-radio>
                       </div>
                       </IonRadioGroup>
                     </ion-col>
 
-                    <ion-col> <BasicForm :content-data = "ultrasoundDate"></BasicForm> </ion-col> 
+                    <ion-col style="margin-left: 10px"> <BasicForm :content-data = "ultrasoundDate"></BasicForm> </ion-col> 
                     </ion-row> 
                     <ion-row>
                         <ion-col>
                       <IonRadioGroup>
                           <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 15px">Reason ultrasound scan not done</ion-label>
-                        <ion-radio class = "ultrasound" style="margin-bottom: 10px">Machine not functioning</ion-radio>
-                        <ion-radio class = "ultrasound" style="margin-bottom: 10px">Technician not available</ion-radio>
+                          <ion-label style="font-weight: bold; margin-bottom: 30px">Reason ultrasound scan not done</ion-label>
+                        <ion-radio class = "ultrasound" style="margin-bottom: 10px; width: 48.2%;">Machine not functioning</ion-radio>
+                        <ion-radio class = "ultrasound" style="margin-bottom: 10px; width: 48.2%;">Technician not available</ion-radio>
                       </div>
                       </IonRadioGroup>
                     </ion-col>
@@ -36,23 +37,38 @@
             </ion-item>
         </div>
     </div>
-
+    <div class="nextButton">
+        <ion-label class="tpStndCls" style="color: green">Click next to continue ultrasound</ion-label>
+        <ion-button @click="showSecondContainer = true; showFirstContainer = false">
+        Next
+      </ion-button>
+    </div>
+</div>
+    
+    <div v-show="showSecondContainer">
     <div class="radioContainer">
+        <ion-row>
+            <ion-col>
                         <IonRadioGroup>
                           <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 15px">Amniotic fluid level detected during ultrasound</ion-label>
-                        <ion-radio style="margin-bottom: 10px">Normal amniotic fluid level</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Reduced amniotic fluid level</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Increased amniotic fluid level</ion-radio>
+                          <ion-label style="font-weight: bold; margin-bottom: 30px">Amniotic fluid level detected during ultrasound</ion-label>
+                        <ion-radio style="margin-bottom: 10px;">Normal amniotic fluid level</ion-radio>
+                        <ion-radio style="margin-bottom: 10px;">Reduced amniotic fluid level</ion-radio>
+                        <ion-radio style="margin-bottom: 10px;">Increased amniotic fluid level</ion-radio>
                       </div>
                       </IonRadioGroup>
-                      </div>
+                    </ion-col>
+                    </ion-row>
 
+                      </div>
+                  
+     <ion-row>
+        <ion-col>
                       <div class="radioContainer">
                         <IonRadioGroup>
                           <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom:15px">Location of the placenta detected during the ultrasound</ion-label>
-                        <ion-radio style="margin-bottom: 10px">Praevia</ion-radio>
+                          <ion-label style="font-weight: bold; margin-bottom:30px">Location of the placenta detected during the ultrasound</ion-label>
+                        <ion-radio style=" margin-bottom: 10px;">Praevia</ion-radio>
                         <ion-radio style="margin-bottom: 10px">Low</ion-radio>
                         <ion-radio style="margin-bottom: 10px">Anterior</ion-radio>
                         <ion-radio style="margin-bottom: 10px">Posterior</ion-radio>
@@ -62,6 +78,15 @@
                       </div>
                       </IonRadioGroup>
                       </div>
+                    </ion-col>
+                    </ion-row>
+                    <div class="nextButton">
+                        <ion-label class="tpStndCls" style="color: green">Click back to go to previous ultrasound page</ion-label>
+                        <ion-button @click="showSecondContainer = false; showFirstContainer = true">
+        Back
+      </ion-button>
+                    </div>
+                </div>
        
     </ion-list>
 </template>
@@ -112,6 +137,9 @@ export default defineComponent({
         return {
             iconsContent: icons,
           labTestsInstance: {} as any,
+          showFirstContainer: true,
+          showSecondContainer: false,
+         
         }
     },
     computed:{
@@ -124,7 +152,8 @@ export default defineComponent({
     setup(){
         return { checkmark,pulseOutline };
     },
-    methods:{}
+    methods:{
+    }
 })
 </script>
 
@@ -144,9 +173,11 @@ export default defineComponent({
         padding: 10px;
   
     }
+
 ion-radio {
-  width: 60%;
+    width: 49%
 }
+
 ion-checkbox {
   width: 100%;
 }
@@ -155,9 +186,15 @@ ion-checkbox {
   
 }
 .ultrasound {
-    width: 29%;
+    width: 49%;
 }
-
+.nextButton {
+    display: flex;
+    flex-direction: column;
+}
+ion-button {
+    width: 10%;
+}
 
 
 

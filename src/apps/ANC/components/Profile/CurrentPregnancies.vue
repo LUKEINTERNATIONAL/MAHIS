@@ -32,9 +32,9 @@
                         <IonRadioGroup>
                           <div class="radio">
                           <ion-label style="font-weight: bold; margin-bottom: 15px;">Source of gestation age</ion-label>
-                        <ion-radio style="margin-bottom: 10px;">LMNP</ion-radio>
-                        <ion-radio style="margin-bottom: 10px;">Ultrasound</ion-radio>
-                        <ion-radio style="margin-bottom: 10px;">Fundal height</ion-radio>
+                        <ion-radio style="margin-bottom: 10px; width: 49%;">LMNP</ion-radio>
+                        <ion-radio style="margin-bottom: 10px; width: 49%;">Ultrasound</ion-radio>
+                        <ion-radio style="margin-bottom: 10px; width: 49%;">Fundal height</ion-radio>
                         
                       </div>
                       </IonRadioGroup>
@@ -44,10 +44,10 @@
                         <IonRadioGroup>
                           <div class="radio">
                           <ion-label style="font-weight: bold; margin-bottom: 15px;">Tetanus dose</ion-label>
-                        <ion-radio style="margin-bottom: 10px;">Fully immunised</ion-radio>
-                        <ion-radio style="margin-bottom: 10px;"> Under immunised</ion-radio>
-                        <ion-radio style="margin-bottom: 10px;">No doses</ion-radio>
-                        <ion-radio style="margin-bottom: 10px;">Unknown</ion-radio>
+                        <ion-radio style="margin-bottom: 10px; width: 49%;">Fully immunised</ion-radio>
+                        <ion-radio style="margin-bottom: 10px; width: 49%;"> Under immunised</ion-radio>
+                        <ion-radio style="margin-bottom: 10px; width: 49%;">No doses</ion-radio>
+                        <ion-radio style="margin-bottom: 10px; width: 49%;">Unknown</ion-radio>
                         
                       </div>
                       </IonRadioGroup>
@@ -168,9 +168,7 @@ h5{
   
     }
 
-ion-radio {
-  width: 40%;
-}
+
 
 
 .tpStndCls {

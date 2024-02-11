@@ -3,7 +3,7 @@
         <div class="radioContainer">
                         <IonRadioGroup>
                           <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 15px">TB screening is recommended</ion-label>
+                          <ion-label style="font-weight: bold; margin-bottom: 30px">TB screening is recommended</ion-label>
                         <ion-radio style="margin-bottom: 10px">TB screening conducted</ion-radio>
                         <ion-radio style="margin-bottom: 10px">TB screening ordered</ion-radio>
                         <ion-radio style="margin-bottom: 10px">TB screening not done</ion-radio>
@@ -14,7 +14,7 @@
                       <div class="radioContainer">
                         <IonRadioGroup>
                           <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 15px">TB screening results</ion-label>
+                          <ion-label style="font-weight: bold; margin-bottom: 30px">TB screening results</ion-label>
                         <ion-radio style="margin-bottom: 10px;">Positive for TB</ion-radio>
                         <ion-radio style="margin-bottom: 10px">Negative for TB</ion-radio>
                         <ion-radio style="margin-bottom: 10px">Inconclusive</ion-radio>
@@ -23,54 +23,58 @@
                       </IonRadioGroup>
                       </div>
                       <ion-list>
-            <ion-label style="font-weight: 600; padding-left:10px;"> Reason TB screening not done</ion-label>
-            <div class="checkboxesDisplay">
+            <ion-label style="font-weight: 600; margin-bottom: 30px;"> Reason TB screening not done</ion-label>
             <div>
-                        <div>
-            <ion-checkbox  @ionChange="addSputum" :checked="Sputum" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-top:20px; margin-bottom:10px">
-                Sputum smear not available
-            </ion-checkbox>
-        </div>
-
-        <div>
-            <ion-checkbox  @ionChange="addCulture" :checked="SputumCulture" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px;  margin-bottom:10px">
+                <ion-list>
+                    <ion-row class="dottedLine">
+                        <ion-col>
+                            <ion-checkbox  @ionChange="addSputum" :checked="Sputum" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px;">
+                              Sputum smear not available
+                            </ion-checkbox>                     
+                        </ion-col>
+                   <ion-col>
+            <ion-checkbox  @ionChange="addCulture" :checked="SputumCulture" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px;">
                 Sputum culture not available
 </ion-checkbox>
-        </div>
+           </ion-col>
+                    </ion-row>
 
-        <div>
-            <ion-checkbox  @ionChange="addGeneXpert" :checked="GeneXpert" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px;  margin-bottom:10px">
+                    <ion-row class="dottedLine">
+                        <ion-col>
+                            <ion-checkbox  @ionChange="addGeneXpert" :checked="GeneXpert" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px;  margin-bottom:10px">
                 GeneXpert machine not available
-         </ion-checkbox>
-        </div>
-
-        <div>
+         </ion-checkbox>                   
+           </ion-col>
+           <ion-col>
             <ion-checkbox  @ionChange="addXray" :checked="xRay" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px;  margin-bottom:10px">
                 X-ray machine not available
             </ion-checkbox>
-        </div>
-
-        </div>
-        <div>
-        <div>
-            <ion-checkbox  @ionChange="addTesting" :checked="sputumTesting" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px;  margin-bottom:10px">
+           </ion-col>
+                    </ion-row>
+                    <ion-row class="dottedLine">
+                        <ion-col>
+                            <ion-checkbox  @ionChange="addTesting" :checked="sputumTesting" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px;  margin-bottom:10px">
                  No sputum testing supplies available
 
-            </ion-checkbox>
-        </div>
-
-        <div>
+            </ion-checkbox>                
+           </ion-col>
+           <ion-col>
             <ion-checkbox  @ionChange="addMachine" :checked="Machine" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px;  margin-bottom:10px">
                 Machine not functioning   
        </ion-checkbox>
-        </div>
-
-        <div>
-            <ion-checkbox  @ionChange="addTechnician" :checked="Technician" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px;  margin-bottom:10px">
+           </ion-col>
+                    </ion-row>
+            
+                    <ion-row class="dottedLine">
+                        <ion-col>
+                            <ion-checkbox  @ionChange="addTechnician" :checked="Technician" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; width: 49.6%;">
                 Technician not available
-            </ion-checkbox>
-        </div>
-      </div>
+            </ion-checkbox>             
+           </ion-col>
+                    </ion-row>
+
+                    
+                </ion-list>
       </div>
       </ion-list>
       
@@ -232,7 +236,7 @@ export default defineComponent({
   
     }
 ion-radio {
-  width: 40%;
+  width: 49.2%;
 }
 ion-checkbox {
   width: 100%;
@@ -248,6 +252,12 @@ ion-checkbox {
   align-items: center;
   padding-left:10px;
   padding-right:10px;
+}
+
+.dottedLine {
+    border-bottom: 1.5px dotted var(--ion-color-medium);
+    margin-top: 10px;
+    padding:10px; 
 }
 
 </style>

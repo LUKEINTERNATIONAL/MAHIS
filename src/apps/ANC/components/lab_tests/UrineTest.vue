@@ -5,20 +5,20 @@
                     <ion-col>
                         <IonRadioGroup>
                           <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 15px">Select whether</ion-label>
-                        <ion-radio style="margin-bottom: 10px">Urine test conducted</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Urine test ordered</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Urine test not done</ion-radio>
+                          <ion-label style="font-weight: bold; margin-bottom: 30px">Select whether</ion-label>
+                        <ion-radio style="margin-bottom: 10px; width: 80%">Urine test conducted</ion-radio>
+                        <ion-radio style="margin-bottom: 10px; width: 80%">Urine test ordered</ion-radio>
+                        <ion-radio style="margin-bottom: 10px; width: 80%">Urine test not done</ion-radio>
                       </div>
                       </IonRadioGroup>
                     </ion-col>
                       <ion-col>
                       <IonRadioGroup>
                           <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 15px">Select the urine test conducted:</ion-label>
-                        <ion-radio style="margin-bottom: 10px">Midstream urine culture (recommended)</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Midstream urine Gram-staining</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Urine dipstick</ion-radio>
+                          <ion-label style="font-weight: bold; margin-bottom: 30px">Select the urine test conducted:</ion-label>
+                        <ion-radio style="margin-bottom: 10px; width: 100%">Midstream urine culture (recommended)</ion-radio>
+                        <ion-radio style="margin-bottom: 10px; width: 100%" >Midstream urine Gram-staining</ion-radio>
+                        <ion-radio style="margin-bottom: 10px; width: 100%">Urine dipstick</ion-radio>
                       </div>
                       </IonRadioGroup>
                     </ion-col>
@@ -62,7 +62,7 @@
                       <div class="radioContainer">
                         <IonRadioGroup>
                           <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 15px">Midstream urine culture result</ion-label>
+                          <ion-label style="font-weight: bold; margin-bottom: 30px">Midstream urine culture result</ion-label>
                         <ion-radio style="margin-bottom: 10px">Positive-any agent</ion-radio>
                         <ion-radio style="margin-bottom: 10px">Positive -Group B Streptococcus (GBS)</ion-radio>
                         <ion-radio style="margin-bottom: 10px">Negative</ion-radio>
@@ -75,8 +75,8 @@
                       <div class="radioContainer">
                         <IonRadioGroup>
                           <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 15px">Midstream urine Gram-staining result </ion-label>
-                        <ion-radio style="margin-bottom: 10px">Positive</ion-radio>
+                          <ion-label style="font-weight: bold; margin-bottom: 30px">Midstream urine Gram-staining result </ion-label>
+                        <ion-radio style="margin-bottom: 10px;">Positive</ion-radio>
                         <ion-radio style="margin-bottom: 10px">Negative</ion-radio>
                       </div>
                       </IonRadioGroup>
@@ -85,7 +85,7 @@
                       <div class="radioContainer">
                         <IonRadioGroup>
                           <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 15px">Dipstick test results – nitrites result</ion-label>
+                          <ion-label style="font-weight: bold; margin-bottom: 30px">Dipstick test results – nitrites result</ion-label>
                         <ion-radio style="margin-bottom: 10px">None</ion-radio>
                         <ion-radio style="margin-bottom: 10px">+</ion-radio>
                         <ion-radio style="margin-bottom: 10px">++</ion-radio>
@@ -99,7 +99,7 @@
                       <div class="radioContainer">
                         <IonRadioGroup>
                           <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 15px">Dipstick test results – leukocytes</ion-label>
+                          <ion-label style="font-weight: bold; margin-bottom: 30px">Dipstick test results – leukocytes</ion-label>
                           <ion-radio style="margin-bottom: 10px">None</ion-radio>
                         <ion-radio style="margin-bottom: 10px">+</ion-radio>
                         <ion-radio style="margin-bottom: 10px">++</ion-radio>
@@ -112,7 +112,7 @@
                       <div class="radioContainer">
                         <IonRadioGroup>
                           <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 15px">Dipstick test results – protein</ion-label>
+                          <ion-label style="font-weight: bold; margin-bottom: 30px">Dipstick test results – protein</ion-label>
                           <ion-radio style="margin-bottom: 10px">Negative</ion-radio>
                         <ion-radio style="margin-bottom: 10px">+</ion-radio>
                         <ion-radio style="margin-bottom: 10px">++</ion-radio>
@@ -125,7 +125,7 @@
                       <div class="radioContainer">
                         <IonRadioGroup>
                           <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 15px">Dipstick test results – glucose</ion-label>
+                          <ion-label style="font-weight: bold; margin-bottom: 30px">Dipstick test results – glucose</ion-label>
                           <ion-radio style="margin-bottom: 10px">Negative</ion-radio>
                         <ion-radio style="margin-bottom: 10px">+</ion-radio>
                         <ion-radio style="margin-bottom: 10px">++</ion-radio>
@@ -242,11 +242,13 @@ export default defineComponent({
   
     }
 ion-radio {
-  width: 80%;
+  width: 40%;
 }
 ion-checkbox {
-  width: 40%;
-  padding: 10px;
+  width: 82%;
+  padding: 20px;
+  border-bottom: 1.5px dotted var(--ion-color-medium);
+
 }
 .radioContainer{
   border-bottom: 2px dotted var(--ion-color-medium);

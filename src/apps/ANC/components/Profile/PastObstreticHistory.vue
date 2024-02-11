@@ -10,7 +10,7 @@
                         <ion-list>
                         <IonRadioGroup>
                           <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 15px;">Was last live birth preterm?</ion-label>
+                          <ion-label style="font-weight: bold; margin-bottom: 30px;">Was last live birth preterm?</ion-label>
                         <ion-radio style="margin-bottom: 10px;">Yes</ion-radio>
                         <ion-radio style="margin-bottom: 10px;">No</ion-radio>
                         <ion-radio style="margin-bottom: 10px;">Don't know</ion-radio>
@@ -21,7 +21,7 @@
                         
                       <IonRadioGroup>
                           <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 15px;">Last live birth had congenital abnormalities?</ion-label>
+                          <ion-label style="font-weight: bold; margin-bottom: 30px;">Last live birth had congenital abnormalities?</ion-label>
                         <ion-radio style="margin-bottom: 10px;">Yes</ion-radio>
                         <ion-radio style="margin-bottom: 10px;">No</ion-radio>
                         <ion-radio style="margin-bottom: 10px;">Don't know</ion-radio>
@@ -34,56 +34,63 @@
                         
           <ion-list>
             <ion-label style="font-weight: 600;"> Past pregnancy Complications</ion-label>
-            <div class="checkboxesDisplay">
             <div>
-                        <div>
-            <ion-checkbox  @ionChange="addPreEclampsia" :checked="PreEclampsia" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-top:20px; margin-bottom: 10px;">Pre-eclampsia</ion-checkbox>
-        </div>
+            <ion-list>
+                <ion-row class="dottedLine">
+                    <ion-col>
+                        <ion-checkbox  @ionChange="addPreEclampsia" :checked="PreEclampsia" label-placement="start"  style="font-size: 16px; font-weight: 400; line-height: 24px;  ">Pre-eclampsia</ion-checkbox>
+                    </ion-col>
+                    <ion-col>
+                                    <ion-checkbox  @ionChange="addEclampsia" :checked="Eclampsia" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; ">Eclampsia</ion-checkbox>
+                    </ion-col>
+                </ion-row>
 
-        <div>
-            <ion-checkbox  @ionChange="addEclampsia" :checked="Eclampsia" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Eclampsia</ion-checkbox>
-        </div>
+                <ion-row class="dottedLine">
+                    <ion-col>
+                        <ion-checkbox  @ionChange="addPuerperal" :checked="Puerperal" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px;">Puerperal Sepsis</ion-checkbox>
+                    </ion-col>
+                    <ion-col>
+                        <ion-checkbox  @ionChange="addBabyDeath" :checked="BabyDeath" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; ">Baby died within 24hrs of birth</ion-checkbox>
+                    </ion-col>
+                </ion-row>
 
-        <div>
-            <ion-checkbox  @ionChange="addPuerperal" :checked="Puerperal" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px;margin-bottom:10px;">Puerperal Sepsis</ion-checkbox>
-        </div>
+                <ion-row class="dottedLine">
+                    <ion-col>
+                        <ion-checkbox  @ionChange="addConvulsions" :checked="Convulsions" label-placement="start" style="font-size: 16px; justify-content: end; font-weight: 400; line-height: 24px; ">Convulsions</ion-checkbox>
+                    </ion-col>
+                    <ion-col>
+                        <ion-checkbox  @ionChange="addForceps" :checked="Forceps" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; ">Forceps</ion-checkbox>
+                    </ion-col>
+                </ion-row>
 
-        <div>
-            <ion-checkbox  @ionChange="addBabyDeath" :checked="BabyDeath" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Baby died within 24hrs of birth</ion-checkbox>
-        </div>
+                <ion-row class="dottedLine">
+                    <ion-col>
+                        <ion-checkbox  @ionChange="addMellitus" :checked="Mellitus" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px;">Gestational diabetes mellitus</ion-checkbox>
+                    </ion-col>
+                    <ion-col>
+                        <ion-checkbox  @ionChange="addBleeding" :checked="Bleeding" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px;">Heavy bleeding (during or after delivery)</ion-checkbox>
+                    </ion-col>
+                </ion-row>
 
-        <div>
-            <ion-checkbox  @ionChange="addConvulsions" :checked="Convulsions" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Convulsions</ion-checkbox>
-        </div>
+                <ion-row class="dottedLine">
+                    <ion-col>
+                        <ion-checkbox  @ionChange="addMacrosomia" :checked="Macrosomia" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; ">Macrosomia</ion-checkbox>
+                    </ion-col>
+                    <ion-col>
+                        <ion-checkbox  @ionChange="addPerineal" :checked="Perineal" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; ">Perineal tear (3rd or 4th degree)</ion-checkbox>
+                    </ion-col>
+                </ion-row>
 
-        <div>
-            <ion-checkbox  @ionChange="addForceps" :checked="Forceps" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Forceps</ion-checkbox>
-        </div>
-        </div>
-        <div >
-        <div>
-            <ion-checkbox  @ionChange="addMellitus" :checked="Mellitus" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Gestational diabetes mellitus</ion-checkbox>
-        </div>
-
-        <div>
-            <ion-checkbox  @ionChange="addBleeding" :checked="Bleeding" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Heavy bleeding (during or after delivery)</ion-checkbox>
-        </div>
-
-        <div>
-            <ion-checkbox  @ionChange="addMacrosomia" :checked="Macrosomia" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Macrosomia</ion-checkbox>
-        </div>
-
-        <div>
-            <ion-checkbox  @ionChange="addPerineal" :checked="Perineal" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Perineal tear (3rd or 4th degree)</ion-checkbox>
-        </div>
-
-        <div>
-            <ion-checkbox  @ionChange="addAsphyxia" :checked="Asphyxia" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Asphyxia</ion-checkbox>
-        </div>
+                <ion-row class="dottedLine">
+                    <ion-col>
+                        <ion-checkbox  @ionChange="addAsphyxia" :checked="Asphyxia" label-placement="start" style="font-size: 16px; font-weight: 400; width: 49.6%; line-height: 24px;">Asphyxia</ion-checkbox>
+                    </ion-col>
+                </ion-row>
+               
+            </ion-list>
       </div>
-      </div>
 
-        <div style="margin-top: 14px; margin-left: 10px;">
+        <div style="margin-top: 35px; margin-left: 10px;">
             <ion-label class="tpStndCls">Other Complications (Specify)</ion-label>
             <ion-item class="input_item" style="min-height: 120px; margin-top: 14px;">
                 <ion-label><span v-html="iconsContent.editPen"></span></ion-label>
@@ -169,7 +176,8 @@ export default defineComponent({
         ...mapState(useObstreticHistoryStore,["Macrosomia"]),
         ...mapState(useObstreticHistoryStore,["Perineal"]),
         ...mapState(useObstreticHistoryStore,["Asphyxia"]),
-        ...mapState(useObstreticHistoryStore, ["otherComplications"])
+        ...mapState(useObstreticHistoryStore, ["otherComplications"]),
+        ...mapState(useObstreticHistoryStore, ["Complications"])
 
     },
     mounted(){
@@ -179,6 +187,7 @@ export default defineComponent({
       const preterm2 = useObstreticHistoryStore()
       const ModeOfDelivery = useObstreticHistoryStore()
       const Complications = useObstreticHistoryStore()
+      
 
         
        
@@ -305,6 +314,9 @@ ion-col{
     border-bottom: 2px dotted var(--ion-color-medium);
     --inner-border-width:0;
 }
+.sub_item_body{
+  margin-left: 45px;
+}
 h5{
     margin-top: 0px;
     text-overflow: ellipsis;
@@ -321,10 +333,12 @@ h5{
   
     }
 ion-radio {
-  width: 45%;
+  width: 49%;
 }
 ion-checkbox {
   width: 100%;
+  padding: 10px;
+  padding-left: 30px;
 }
 .radioContainer{
   border-bottom: 2px dotted var(--ion-color-medium);
@@ -341,6 +355,11 @@ ion-checkbox {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+}
+
+.dottedLine {
+    border-bottom: 1.5px dotted var(--ion-color-medium);
+    margin-top: 10px;
 }
 
 
