@@ -1073,7 +1073,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         {
                             colData:[
                                 {   
-                                    displayNone:true,
+                                    // displayNone:true,
                                     inputHeader: 'Other Site',
                                     icon: icons.editPen,
                                     value: diabetesForm.otherDiabetis.name,
@@ -1126,7 +1126,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         },
                         {
                             name: hivTestForm.hivTestNotDone.name,
-                            value: hivTestForm.hivTestNotDone.value,
+                            value: "hivTestNotDone",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 
@@ -1135,7 +1135,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 }
             },
             {
-                classDash: 'dashed_bottom_border',
+               
                 data:{ 
                     rowData:[
                         {
@@ -1169,16 +1169,17 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         // name:"hivOutcome",
                     },
                     data:[
-                        {
-                            name: hivTestForm.testStockOut.name,
+                        {   
+                            
+                            name: "testStockOut",
                             value: hivTestForm.testStockOut.value,
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
                         },
-                        {
-                            name: hivTestForm.expiredTests.name,
+                        {   
+                            name: "expiredTests",
                             value:hivTestForm.expiredTests.value,
                             labelPlacement: 'start',
                             colSize: '6',
@@ -1200,7 +1201,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     },
                     data:[
 
-                        {
+                        {  
                             name: "Other",
                             value: 'other',
                             labelPlacement: 'start',

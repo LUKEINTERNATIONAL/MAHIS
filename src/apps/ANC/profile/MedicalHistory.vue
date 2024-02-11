@@ -140,6 +140,7 @@ export default defineComponent({
         this.handleAllergies()
         this.handleChronicCondition()
         this.handleHivConducted()
+        // this.handleTestNotDone()
         
         
         
@@ -150,6 +151,7 @@ export default defineComponent({
             handler(){
                 this.handleHivResults()
                 this.handleHivConducted()
+                // this.handleTestNotDone()
             },
              deep:true,
         },
@@ -195,7 +197,7 @@ export default defineComponent({
             }else{
                 modifyRadioValue(this.hivTest,'test1','displayNone',true)
             }
-            //  console.log(getRadioSelectedValue(this.hivTest,'test2')) 
+             
         },
         handleSyphilis(){
            if(getRadioSelectedValue(this.syphilisTest,'syphilisOption') == 'syphilisTestConducted'){
@@ -203,7 +205,7 @@ export default defineComponent({
            }else{
              modifyRadioValue(this.syphilisTest,'syphilisDetails','displayNone',true)
            }
-           //console.log(getRadioSelectedValue(this.syphilisTest,'syphilisOption'))
+           
 
         },
         handleSurgries(){
@@ -231,8 +233,17 @@ export default defineComponent({
               console.log(getCheckboxSelectedValue(this.exisitingChronicHealthConditions,'Other'))
         },
         handleHivConducted(){
-            if(getRadioSelectedValue(this.hivTest,''))
-        }
+            if(getRadioSelectedValue(this.hivTest,'hivOption')=='hivTestConducted'){
+                modifyFieldValue(this.hivTest,'birthdate','displayNone',false)
+            }else{
+                 modifyFieldValue(this.hivTest,'birthdate','displayNone',true)
+            }
+        },
+        // handleTestNotDone(){
+        //     if(getRadioSelectedValue(this.hivTest,'hivOption')=='hivTestNotDone'){
+        //         modifyCheckboxValue()
+        //     }
+        // }
       
     }
 })

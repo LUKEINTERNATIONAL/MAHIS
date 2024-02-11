@@ -15,11 +15,11 @@ const behaviourCousellingForm ={
         value:"clientReferredOnCaffeine"
     },
     otherOnCaffeine:{
-        name:'Other On Caffeine',
+        name:'Other',
         value:'otherOnCaffeine'
     },
     specifyOnCaffeine:{
-        name:"Specify On Caffeine",
+        name:"specifyC",
         value:""
     },
     cousellingOnTobaccoYes:{
@@ -28,7 +28,7 @@ const behaviourCousellingForm ={
     },
     cousellingOnTobaccoNo:{
         name:"No",
-        value:"no"
+        value:"noT"
     },
     clientReferredOnTobacco:{
         name:'Client was referred',
@@ -39,7 +39,7 @@ const behaviourCousellingForm ={
         value:'otherOnTobacco'
     },
     specifyOnTobacco:{
-        name:"Specify On Tobbaco",
+        name:"SpecifyT",
         value:""
     },
         cousellingOnSecondHAndTobaccoYes:{
@@ -48,18 +48,18 @@ const behaviourCousellingForm ={
     },
     cousellingOnSecondHandTobaccoNo:{
         name:"No",
-        value:"no"
+        value:"noSecondHandTobacco"
     },
     clientReferredOnSecondHandTobacco:{
         name:'Client was referred',
         value:"clientReferredOnSecondHandTobacco"
     }, 
     otherOnSecondHandTobacco:{
-        name:'otherOnSecondHandTobacco',
+        name:'otherSecondHandTobacco',
         value:'otherOnSecondHandTobacco'
     },
     specifyOnSecondHandTobacco:{
-        name:"Specify On Second Hand  Tobacco",
+        name:"SpecifyST",
         value:""
     },
     cousellingOnCondomUseYes:{
@@ -68,18 +68,18 @@ const behaviourCousellingForm ={
     },
     cousellingOnCondomUseNo:{
         name:"No",
-        value:"no"
+        value:"noCondomUse"
     },
     clientReferredOnCondomUse:{
         name:'Client was referred',
         value:"clientReferredOnCondomUse"
     }, 
     otherOnCondomUse:{
-        name:'otherOnCondomUse',
+        name:'Other',
         value:'otherOnCondomUse'
     },
     specifyOnCondomUse:{
-        name:"Specify Condom Use",
+        name:"SpecifyC",
         value:""
     },
     cousellingOnSubstanceUseYes:{
@@ -88,7 +88,7 @@ const behaviourCousellingForm ={
     },
     cousellingOnSubstanceUseNo:{
         name:"No",
-        value:"no"
+        value:"noOnSubstanceUse"
     },
      clientReferredOnSubstanceUse:{
         name:'Client was referred',
@@ -99,7 +99,7 @@ const behaviourCousellingForm ={
         value:'otherOnSubstanceUse'
     },
         specifyOnSubstanceUse:{
-        name:"Specify Substance Use",
+        name:"SpecifySU",
         value:""
     },
 }
@@ -114,6 +114,7 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
                 classDash: 'dashed_bottom_border',
                 radioBtnContent:{
                     header:{
+                        name:'caffeine',
                         title: 'Counselling  conducted on caffeine?',
                         selectedValue: ''
                     },
@@ -138,11 +139,12 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling on caffeine reduction was not conducted?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'reasons',
+                        displayNone:true,
                     },
                     data:[
                         {  
@@ -163,13 +165,14 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
                 }
             },
             {   
-                classDash: 'dashed_bottom_border',
+                
                 data:{ 
                     rowData:[
                         {
                             colData:[
-                                {
-                                    inputHeader: 'Other (specify)',
+                                {   
+                                    displayNone:true,
+                                    inputHeader: 'Specify',
                                     icon: icons.editPen,
                                     name: behaviourCousellingForm.specifyOnCaffeine.name,
                                     value: behaviourCousellingForm.specifyOnCaffeine.value,
@@ -192,7 +195,8 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
                 radioBtnContent:{
                     header:{
                         title: 'Counselling  conducted on Tobacco?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'tobacco'
                     },
                     data:[
                         {  
@@ -219,7 +223,9 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling on Tobacco cessation was not conducted?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'reasons',
+                        displayNone:true
                     },
                     data:[
                         {  
@@ -246,7 +252,8 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
                         {
                             colData:[
                                 {
-                                    inputHeader: 'Other (specify)',
+                                    displayNone:true,
+                                    inputHeader: 'Specify',
                                     icon: icons.editPen,
                                     name: behaviourCousellingForm.specifyOnTobacco.name,
                                     value: behaviourCousellingForm.specifyOnTobacco.value,
@@ -269,6 +276,7 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
                 radioBtnContent:{
                     header:{
                         title: 'Counselling  conducted on second-hand smoke?',
+                        name:'secondHandSmoke',
                         selectedValue: ''
                     },
                     data:[
@@ -296,7 +304,9 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling on second-hand smoke was not conducted?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'reasonsOnSecondHandSmoke',
+                        displayNone:true,
                     },
                     data:[
                         {  
@@ -322,7 +332,8 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
                     rowData:[
                         {
                             colData:[
-                                {
+                                {   
+                                    displayNone:true,
                                     inputHeader: 'Other (specify)',
                                     icon: icons.editPen,
                                     name: behaviourCousellingForm.specifyOnSecondHandTobacco.name,
@@ -347,6 +358,7 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
                 radioBtnContent:{
                     header:{
                         title: 'Counselling  conducted on condom use?',
+                        name:'condomUse',
                         selectedValue: ''
                     },
                     data:[
@@ -374,7 +386,9 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling on condom use was not done?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:"reasonsOnCondom",
+                        displayNone:true
                     },
                     data:[
                         {  
@@ -401,7 +415,8 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
                         {
                             colData:[
                                 {
-                                    inputHeader: 'Other (specify)',
+                                    displayNone:true,
+                                    inputHeader: 'Specify',
                                     icon: icons.editPen,
                                     name: behaviourCousellingForm.specifyOnCondomUse.name,
                                     value: behaviourCousellingForm.specifyOnCondomUse.value,
@@ -424,6 +439,7 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
                 radioBtnContent:{
                     header:{
                         title: 'Counselling  conducted on alcohol/substance?',
+                        name:'alcohol',
                         selectedValue: ''
                     },
                     data:[
@@ -451,7 +467,9 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling on alcohol/substance was not done?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'reasonsOnSubstance',
+                        displayNone:true
                     },
                     data:[
                         {  
