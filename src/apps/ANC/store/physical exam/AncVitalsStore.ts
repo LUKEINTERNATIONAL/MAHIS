@@ -76,7 +76,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 value: 'respiration not done',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
@@ -99,7 +99,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 value: 'normal exam',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
@@ -123,7 +123,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 value: 'cough',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
@@ -146,7 +146,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 value: 'rapid breathing',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
@@ -169,7 +169,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 value: 'slow breathing',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
@@ -192,7 +192,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 value: 'wheezing',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
@@ -215,7 +215,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 value: 'rales',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
@@ -238,7 +238,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 value: 'respiratory distress',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
@@ -393,7 +393,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 value: 'BPCuffNotAvailable',
                                 name: 'BP cuff (sphygmomanometer) not available',
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
@@ -401,7 +401,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 value: 'BPCuffBroken',
                                 name: 'BP cuff (sphygmomanometer) is broken',
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
@@ -526,7 +526,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 value: 'NoSymptomsOfEclampsia',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
@@ -549,7 +549,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 value: 'SevereHeadache',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
@@ -572,7 +572,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 value: 'VisualDisturbance',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
@@ -595,7 +595,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 value: 'Vomiting',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
@@ -618,7 +618,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 value: 'EpigastricPain',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
@@ -641,7 +641,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 value: 'Dizziness',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
