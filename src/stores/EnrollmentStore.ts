@@ -80,6 +80,7 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             icon: icons.calenderPrimary,
                             placeholder: 'Pick the date',
                             value: '',
+                            name: 'Type 1 DM',
                             eventType: 'input',
                             isDatePopover: true,
                             displayNone: true
@@ -109,6 +110,7 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             icon: icons.calenderPrimary,
                             placeholder: 'Pick the date',
                             value: '',
+                            name: 'Type 2 DM',
                             showDatePopover: false,
                             eventType: 'input',
                             displayNone: true
@@ -139,6 +141,7 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             icon: icons.calenderPrimary,
                             placeholder: 'Pick the date',
                             value: '',
+                            name: 'Hypertetion',
                             eventType: 'input',
                             isDatePopover: true,
                             displayNone: true
@@ -235,6 +238,7 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             icon: icons.calenderPrimary,
                             placeholder: 'Pick the date',
                             value: '',
+                            name:'PVD',
                             eventType: 'input',
                             isDatePopover: true,
                             displayNone: true
@@ -257,6 +261,7 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             icon: icons.calenderPrimary,
                             placeholder: 'Pick the date',
                             value: '',
+                            name: 'Neuropathy',
                             eventType: 'input',
                             isDatePopover: true,
                             displayNone: true
@@ -279,6 +284,7 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             icon: icons.calenderPrimary,
                             placeholder: 'Pick the date',
                             value: '',
+                            name: 'Sexual dysfunction',
                             eventType: 'input',
                             isDatePopover: true,
                             displayNone: true
@@ -301,6 +307,7 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             icon: icons.calenderPrimary,
                             placeholder: 'Pick the date',
                             value: '',
+                            name: 'Anxiety',
                             eventType: 'input',
                             isDatePopover: true,
                             displayNone: true
@@ -323,6 +330,7 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             icon: icons.calenderPrimary,
                             placeholder: 'Pick the date',
                             value: '',
+                            name: 'Depression',
                             eventType: 'input',
                             isDatePopover: true,
                             displayNone: true
@@ -353,6 +361,7 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             icon: icons.calenderPrimary,
                             placeholder: 'Pick the date',
                             value: '',
+                            name: 'Smear pos',
                             eventType: 'input',
                             isDatePopover: true,
                             displayNone: true
@@ -377,6 +386,7 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             icon: icons.calenderPrimary,
                             placeholder: 'Pick the date',
                             value: '',
+                            name: 'Smear neg',
                             eventType: 'input',
                             isDatePopover: true,
                             displayNone: true
@@ -401,6 +411,7 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             placeholder: 'Pick the date',
                             value: '',
                             eventType: 'input',
+                            name: 'EPTB',
                             isDatePopover: true,
                             displayNone: true
                         }
@@ -422,6 +433,7 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             icon: icons.calenderPrimary,
                             placeholder: 'Pick the date',
                             value: '',
+                            name: 'Never had TB',
                             eventType: 'input',
                             isDatePopover: true,
                             displayNone: true
@@ -445,6 +457,7 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             icon: icons.calenderPrimary,
                             placeholder: 'Pick the date',
                             value: '',
+                            name: 'Cardiovascular disease',
                             eventType: 'input',
                             isDatePopover: true,
                             displayNone: true
@@ -460,6 +473,17 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             name: 'Retinopathy',
                             value: 'Retinopathy',
                             checked: false
+                        }
+                    ],
+                    inputFields:[
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: 'Pick the date',
+                            value: '',
+                            name: 'Retinopathy',
+                            eventType: 'input',
+                            isDatePopover: true,
+                            displayNone: true
                         }
                     ]
                 }
@@ -479,6 +503,7 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             icon: icons.calenderPrimary,
                             placeholder: 'Pick the date',
                             value: '',
+                            name: 'Renal disease',
                             eventType: 'input',
                             isDatePopover: true,
                             displayNone: true
@@ -501,6 +526,7 @@ export const useEnrollementStore = defineStore('enrollementStore',{
                             icon: icons.calenderPrimary,
                             placeholder: 'Pick the date',
                             value: '',
+                            name: 'Stroke/TIA',
                             eventType: 'input',
                             isDatePopover: true,
                             displayNone: true
