@@ -16,7 +16,6 @@
         } from '@ionic/vue';
     import { defineComponent } from 'vue';
     import { checkmark,pulseOutline } from 'ionicons/icons';
-    import { ref } from 'vue';
     import { icons } from '@/utils/svg';
     import { iconBloodPressure } from '@/utils/SvgDynamicColor';
     import { BMIService } from "@/services/bmi_service"

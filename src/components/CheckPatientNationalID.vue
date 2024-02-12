@@ -10,13 +10,14 @@
                     Does the patient have <br /> a National ID card?
             </div>
             <div class="content">
-                <ion-card class="item" @click="nav('registration/scan')">
+                <ion-card class="item">
                     <div v-html="iconsContent.scanner"></div>
-                    <div style="padding-top: 10px;">Yes, I need to scan it</div>
-                </ion-card>
-                <ion-card class="item"  @click="nav('registration/manual')" >
-                    <div v-html="iconsContent.demographics"></div>
-                    <div style="padding-top: 10px;">No, I need to enter the demographics manually</div>
+                    <div>
+                        <ion-button style="padding-top: 10px;" @click="nav('registration/scan')" fill="solid">Yes, I need to scan it</ion-button>
+                    </div>
+                    <div>
+                        <ion-button fill="clear" @click="nav('registration/manual')"> No ID</ion-button>
+                    </div>
                 </ion-card>
             </div>
         </div>
@@ -38,6 +39,7 @@
     import { checkmark,pulseOutline } from 'ionicons/icons';
     import { ref } from 'vue';
     import { icons } from '@/utils/svg';
+    import { resetDemographics } from '@/services/reset_data'
 
     export default defineComponent({
     name: 'Menu',
@@ -63,6 +65,7 @@
       },
       nav(url: any){
         this.dismiss()
+        resetDemographics()
         this.$router.push(url);
       }
     }
@@ -79,6 +82,7 @@
 
 .content{
     display: flex;
+    justify-content: center;
 }
 .item{
     padding: 90px 0px 90px 0px;

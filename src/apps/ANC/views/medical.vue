@@ -39,7 +39,6 @@ import {
 import { defineComponent } from 'vue';
 import BasicInputField from '@/components/BasicInputField.vue'
 import MedicalHistory from '@/apps/ANC/profile/MedicalHistory.vue';
-import womanBehaviour from "@/apps/ANC/components/profile/WomanBehaviour.vue";
 // import Trial from '@/apps/ANC/profile/Trial.vue';
 import { icons } from '@/utils/svg';
 export default defineComponent({
@@ -54,7 +53,6 @@ components:{
   IonToolbar,
   BasicInputField,
   MedicalHistory,
-  womanBehaviour
   // Trial,
   },
   data() {

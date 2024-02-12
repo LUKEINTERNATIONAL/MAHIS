@@ -59,7 +59,6 @@ return {
 };
 },
 mounted(){
-    console.log(this.inputFields.length)
 },
 computed: {
     ...mapState(useInvestigationStore, ["investigations"]),
