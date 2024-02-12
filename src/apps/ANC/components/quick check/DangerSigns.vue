@@ -18,11 +18,11 @@
       <ion-card-content>
         <basic-form :contentData="PreviousVisit"></basic-form>
       </ion-card-content>
-    </ion-card>s
+    </ion-card>
     <!-- Navigation Buttons -->
     <div class="navigation-buttons">
-      <ion-button @click="goToPreviousSection" expand="block" color="medium" size="large">Previous</ion-button>
-      <ion-button @click="goToNextSection" expand="block" color="primary" size="large">Next</ion-button>
+      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
+      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
     </div>
   </div>
 </template>

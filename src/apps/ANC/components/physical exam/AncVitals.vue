@@ -298,13 +298,18 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+ 
 }
 
 .section {
   width: 100%;
   max-width: 1300px; /* Adjust max-width as needed */
   margin-bottom: 20px;
+}
+
+ion-card {
+  box-shadow:none;
+  background-color:inherit;
 }
 
 .navigation-buttons {

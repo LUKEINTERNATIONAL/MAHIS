@@ -1,140 +1,72 @@
 <template>
-<ion-list>
-    <div class="radioContainer">
-                <ion-row>       
-                    <ion-col>
-                        <IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px">Select whether</ion-label>
-                        <ion-radio style="margin-bottom: 10px; width: 80%">Urine test conducted</ion-radio>
-                        <ion-radio style="margin-bottom: 10px; width: 80%">Urine test ordered</ion-radio>
-                        <ion-radio style="margin-bottom: 10px; width: 80%">Urine test not done</ion-radio>
-                      </div>
-                      </IonRadioGroup>
-                    </ion-col>
-                      <ion-col>
-                      <IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px">Select the urine test conducted:</ion-label>
-                        <ion-radio style="margin-bottom: 10px; width: 100%">Midstream urine culture (recommended)</ion-radio>
-                        <ion-radio style="margin-bottom: 10px; width: 100%" >Midstream urine Gram-staining</ion-radio>
-                        <ion-radio style="margin-bottom: 10px; width: 100%">Urine dipstick</ion-radio>
-                      </div>
-                      </IonRadioGroup>
-                    </ion-col>
-                    </ion-row> 
+    <div class="container">
+        <ion-card v-if="currentSection === 0" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="urineTest"></basic-form>
+                <basic-form :contentData="testType"></basic-form>
+            </ion-card-content>
+    </ion-card>
 
-                    <ion-row>
-                     <ion-col>
-                        <ion-list>
-                            <ion-label style="font-weight: 600; padding: 10px;"> Reason TB screening not done</ion-label>
-                        <div>
-            <ion-checkbox  @ionChange="" :checked="stockOut" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-top:15px;">
-                Test stockout
-            </ion-checkbox>
-               </div>
+    <ion-card v-if="currentSection === 1" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Reason urine test not done</ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="reason"></basic-form>
+            </ion-card-content>
+    </ion-card>
 
-           <div>
-            <ion-checkbox  @ionChange="" :checked="expiredTest" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px;">
-                Expired tests
-            </ion-checkbox>
-            </div>
-                        </ion-list>
-                     </ion-col>
+    <ion-card v-if="currentSection === 2" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="culture"></basic-form>
+            </ion-card-content>
+    </ion-card>
 
-                     <ion-col>
-     
-        <BasicForm :content-data="testDate"></BasicForm>
-                     </ion-col>
 
-                    </ion-row>
-                    <div style="margin-top: 14px; margin-left: 10px;">
-            <ion-label class="tpStndCls">Other reason Urine test was not done (specify)</ion-label>
-            <ion-item class="input_item" style="min-height: 120px; margin-top: 14px; margin-bottom: 15px">
-                <ion-label><span v-html="iconsContent.editPen"></span></ion-label>
-                <ion-textarea v-model="otherReason"  style="min-height: 120px;" class="inputTpln" :auto-grow="true"  fill="outline"></ion-textarea>
-            </ion-item>
-        </div>
-                      </div>
-                    
-                    
-                       
-                      <div class="radioContainer">
-                        <IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px">Midstream urine culture result</ion-label>
-                        <ion-radio style="margin-bottom: 10px">Positive-any agent</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Positive -Group B Streptococcus (GBS)</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Negative</ion-radio>
-                      </div>
-                      </IonRadioGroup>
-                      </div>
-            
-                    
+    <ion-card v-if="currentSection === 3" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="gram"></basic-form>
+            </ion-card-content>
+    </ion-card>
 
-                      <div class="radioContainer">
-                        <IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px">Midstream urine Gram-staining result </ion-label>
-                        <ion-radio style="margin-bottom: 10px;">Positive</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Negative</ion-radio>
-                      </div>
-                      </IonRadioGroup>
-                      </div>
+    <ion-card v-if="currentSection === 4" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="nitrites"></basic-form>
+            </ion-card-content>
+    </ion-card>
 
-                      <div class="radioContainer">
-                        <IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px">Dipstick test results – nitrites result</ion-label>
-                        <ion-radio style="margin-bottom: 10px">None</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">+</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">++</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">+++</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">+++</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">++++</ion-radio>
-                      </div>
-                      </IonRadioGroup>
-                      </div>
+    <ion-card v-if="currentSection === 5" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="leukocytes"></basic-form>
+            </ion-card-content>
+    </ion-card>
 
-                      <div class="radioContainer">
-                        <IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px">Dipstick test results – leukocytes</ion-label>
-                          <ion-radio style="margin-bottom: 10px">None</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">+</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">++</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">+++</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">++++</ion-radio>
-                      </div>
-                      </IonRadioGroup>
-                      </div>
+    <ion-card v-if="currentSection === 6" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="protein"></basic-form>
+            </ion-card-content>
+    </ion-card>
 
-                      <div class="radioContainer">
-                        <IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px">Dipstick test results – protein</ion-label>
-                          <ion-radio style="margin-bottom: 10px">Negative</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">+</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">++</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">+++</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">++++</ion-radio>
-                      </div>
-                      </IonRadioGroup>
-                      </div>
+    <ion-card v-if="currentSection === 7" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="glucose"></basic-form>
+            </ion-card-content>
+    </ion-card>
 
-                      <div class="radioContainer">
-                        <IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px">Dipstick test results – glucose</ion-label>
-                          <ion-radio style="margin-bottom: 10px">Negative</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">+</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">++</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">+++</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">++++</ion-radio>
-                      </div>
-                      </IonRadioGroup>
-                      </div>
-</ion-list>
+        <!-- Navigation Buttons -->
+    <div class="navigation-buttons">
+      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
+      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
+    </div> 
+    
+    
+  
+    </div>
 
 </template>
 
@@ -186,13 +118,19 @@ export default defineComponent({
         return {
             iconsContent: icons,
           urineTestInstance: {} as any,
+          currentSection: 0, // Initialize currentSection to 0
         }
     },
     computed:{
-        ...mapState(useUrineTestStore, ["testDate"]),
-        ...mapState(useUrineTestStore, ["otherReason"]),
-        ...mapState(useUrineTestStore, ["stockOut"]),
-        ...mapState(useUrineTestStore, ["expiredTest"])
+        ...mapState(useUrineTestStore, ["reason"]),
+        ...mapState(useUrineTestStore, ["testType"]),
+        ...mapState(useUrineTestStore, ["urineTest"]),
+        ...mapState(useUrineTestStore, ["protein"]),
+        ...mapState(useUrineTestStore, ["nitrites"]),
+        ...mapState(useUrineTestStore, ["culture"]),
+        ...mapState(useUrineTestStore, ["gram"]),
+        ...mapState(useUrineTestStore, ["leukocytes"]),
+        ...mapState(useUrineTestStore, ["glucose"]),
 
     },
     mounted(){
@@ -202,57 +140,56 @@ export default defineComponent({
         return { checkmark,pulseOutline };
     },
     methods:{
-        saveStateValuesState() {
-            const urineTestStore = useUrineTestStore()
-            urineTestStore.setStockout(this.stockout)
-            urineTestStore.setExpired(this.expiredTest)
-            
-        },
-
-        addStockout(ev: any) {
-            const checked = ev.detail.checked
-            const urineTestStore = useUrineTestStore()
-            urineTestStore.setStockout(checked as boolean)
-            this.saveStateValuesState()
-        },
-
-        addExpiredTests(ev: any) {
-            const checked = ev.detail.checked
-            const urineTestStore = useUrineTestStore()
-            urineTestStore.setExpiredTest(checked as boolean)
-            this.saveStateValuesState()
-        },
+                //Method for navigating sections
+    goToNextSection() {
+      if (this.currentSection < 7) {
+        this.currentSection++;
+      }
+    },
+    goToPreviousSection() {
+      if (this.currentSection > 0) {
+        this.currentSection--;
+      }
+    },
     }
 })
 </script>
 
 <style scoped>
-.tpStndCls {
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 24px;
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.radio {
-        display: flex;
-        flex-direction: column;
-        /* border-bottom: 2px dotted var(--ion-color-medium); */
-        --inner-border-width:0;
-        padding: 10px;
-  
-    }
-ion-radio {
-  width: 40%;
+.section {
+  width: 100%;
+  max-width: 1300px; 
+  margin-bottom: 20px;
 }
-ion-checkbox {
-  width: 82%;
-  padding: 20px;
-  border-bottom: 1.5px dotted var(--ion-color-medium);
 
+ion-card {
+ box-shadow:none;
+  background-color:inherit;   
+  width: 100%;
+ color: black;
 }
-.radioContainer{
-  border-bottom: 2px dotted var(--ion-color-medium);
-  
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 500px; 
+}
+
+@media (max-width: 1500px) {
+  .container {
+    padding: 10px;
+  }
+}
+.sub_item_header{
+  font-weight: bold;
+  font-size: medium;
 }
 
 

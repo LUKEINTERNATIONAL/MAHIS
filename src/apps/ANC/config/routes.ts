@@ -1,30 +1,30 @@
-
-import Profile from '@/apps/ANC/views/Profile.vue'
-import QuickCheck from '@/apps/ANC/views/QuickCheck.vue'
-import Medications from '@/apps/ANC/components/profile/Medications.vue'
-import WomanBehaviour from "@/apps/ANC/views/WomanBehaviour.vue";
-import Medical from '@/apps/ANC/views/medical.vue';
-import PastObstreticHistory from "@/apps/ANC/components/profile/PastObstreticHistory.vue";
-import PhysicalExam from "@/apps/ANC/views/PhysicalExam.vue";import Treatment from '../views/Treatment.vue'
+import Profile from '../views/Profile.vue';
+import QuickCheck from '@/apps/ANC/views/QuickCheck.vue';
+import Medications from '@/apps/ANC/components/Profile/Medications.vue'
+import WomanBehaviour from "@/apps/ANC/components/Profile/WomanBehaviour.vue";
+import PastObstreticHistory from "@/apps/ANC/components/Profile/PastObstreticHistory.vue";
+import PhysicalExam from "@/apps/ANC/views/PhysicalExam.vue";
+import Treatment from '../views/Treatment.vue'
+import LabTests from '../views/LabTests.vue';
 
 export default [
   {
-    path: '/anc/profile',
-    name: 'Profile',
+    path: '/profile',
+    name: 'profile',
     component: Profile
   },
   {
-    path: '/anc/quickCheck',
+    path: '/quickCheck',
     name: 'QuickCheck',
     component: QuickCheck
   },
   {
-    path: '/anc/physicalExam',
+    path: '/physicalExam',
     name: 'PhysicalExam',
     component: PhysicalExam
   },
   {
-    path: '/anc/pastObstetricHistory',
+    path: '/pastObstetricHistory',
     name: 'pastObstetricHistory',
     component: PastObstreticHistory
   },
@@ -32,6 +32,11 @@ export default [
     path: '/treatment',
     name: 'treatment',
     component: Treatment
+  },
+  {
+    path: '/labTests',
+    name: 'labTests',
+    component: LabTests
   },
 
 
