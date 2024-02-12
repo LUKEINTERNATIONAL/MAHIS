@@ -51,8 +51,8 @@
 
     <!-- Navigation Buttons -->
     <div class="navigation-buttons">
-      <ion-button @click="goToPreviousSection" expand="block" color="medium" size="large">Previous</ion-button>
-      <ion-button @click="goToNextSection" expand="block" color="primary" size="large">Next</ion-button>
+      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
+      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
     </div>
   </div>
 </template>
@@ -82,6 +82,12 @@ import BasicInputField from "@/components/BasicInputField.vue"
 import { VitalsService } from "@/services/vitals_service";
 import BasicForm from '@/components/BasicForm.vue';
 import { Service } from "@/services/service";
+import {
+  getCheckboxSelectedValue,
+  getRadioSelectedValue,
+  modifyFieldValue,
+  modifyRadioValue
+} from "@/services/data_helpers";
 
 export default defineComponent({
   components:{
@@ -115,12 +121,42 @@ export default defineComponent({
   },
   mounted(){
     const userID: any  = Service.getUserID()
-    this.vitalsInstance = new VitalsService(this.demographics.patient_id,userID);
-    this.updateVitalsStores()
-    this.validaterowData({})
+    const breastExam=useMaternalExamStore()
+    const oedemaPresence=useMaternalExamStore()
+    const vaginalInspection=useMaternalExamStore()
+    const cervicalExam=useMaternalExamStore()
+    this.handleBreastExams()
+    this.handleVaginalInspection()
+    this.handleCervicalExam()
+    this.handleOedema()
+
   },
   watch: {
+     breastExam:{
+       handler (){
+         this.handleBreastExams();
+       },
+       deep:true
+     },
+    vaginalInspection:{
+      handler (){
+        this.handleVaginalInspection();
+      },
+      deep:true
+    },
 
+    cervicalExam:{
+       handler(){
+         this.handleCervicalExam();
+       },
+      deep:true
+    },
+    oedemaPresence:{
+      handler(){
+        this.handleOedema();
+      },
+      deep:true
+    }
   },
   setup() {
     return { checkmark,pulseOutline };
@@ -130,6 +166,27 @@ export default defineComponent({
       menuController.close()
       this.$router.push(url);
     },
+    handleBreastExams(){
+      if(getCheckboxSelectedValue(this.breastExam, 'Other breast exams')=='other breast exams'){
+        modifyFieldValue(this.breastExam,'Other','displayNone', false)
+      }   else {modifyFieldValue(this.breastExam,'Other','displayNone', true)}
+    },
+    handleVaginalInspection(){
+      if(getCheckboxSelectedValue(this.vaginalInspection, 'Other')=='other'){
+        modifyFieldValue(this.vaginalInspection,'Other','displayNone', false)
+      }   else {modifyFieldValue(this.vaginalInspection,'Other','displayNone', true)}
+    },
+    handleCervicalExam(){
+      if(getRadioSelectedValue(this.cervicalExam, 'Yes')=='yes'){
+        modifyFieldValue(this.cervicalExam,'cervical dilation','displayNone', false)
+      }   else {modifyFieldValue(this.cervicalExam,'cervical dilation','displayNone', true)}
+    },
+    handleOedema(){
+        if(getRadioSelectedValue(this.oedemaPresence, 'Yes')=='yes'){
+          modifyRadioValue(this.oedemaPresence, 'types of oedema', 'displayNone', false)
+        } else { modifyRadioValue(this.oedemaPresence, 'types of oedema', 'displayNone', true)}
+    },
+
     //Method for navigating
     goToNextSection() {
       if (this.currentSection < 4) {
@@ -152,7 +209,6 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
 }
 
 .section {
@@ -176,5 +232,9 @@ export default defineComponent({
 .sub_item_header{
   font-weight: bold;
   font-size: medium;
+}
+ion-card {
+  box-shadow:none;
+  background-color:inherit;
 }
 </style>

@@ -7,6 +7,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
             {
                 isFinishBtn: false,
                 sectionHeader: '',
+                classDash:'dashed_bottom_border',
 
                 data:
                     {
@@ -63,7 +64,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
         respiration: [
             {
                 selectdData: [],
-                classDash: '',
+                classDash:'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -86,7 +87,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash:'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -110,7 +111,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
 
             {
                 selectdData: [],
-                classDash: '',
+                classDash:'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -133,7 +134,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash:'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -156,7 +157,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash:'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -179,7 +180,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash:'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -202,7 +203,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash:'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -225,7 +226,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash:'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -248,7 +249,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash:'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -296,31 +297,31 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 ],
 
                             },
-                            // {
-                            //     colData:
-                            //         [
-                            //             {
-                            //                 displayNone:true,
-                            //                 inputHeader: 'Oximetry',
-                            //                 unit: '%',
-                            //                 icon:icons.respiratory,
-                            //                 value: '',
-                            //                 name: 'Oximetry',
-                            //                 required: true,
-                            //                 eventType: 'input'
-                            //             },
-                            //             {
-                            //                 displayNone: true,
-                            //                 inputHeader: 'Respiratory rate',
-                            //                 unit: 'bpm',
-                            //                 icon: icons.respiratory,
-                            //                 value: '',
-                            //                 name: 'RespiratoryRate',
-                            //                 required: true,
-                            //                 eventType: 'input'
-                            //             }
-                            //         ]
-                            // }
+                            {
+                                colData:
+                                    [
+                                        {
+                                            displayNone:true,
+                                            inputHeader: 'Oximetry',
+                                            unit: '%',
+                                            icon:icons.respiratory,
+                                            value: '',
+                                            name: 'Oximetry',
+                                            required: true,
+                                            eventType: 'input'
+                                        },
+                                        {
+                                            displayNone: true,
+                                            inputHeader: 'Respiratory rate',
+                                            unit: 'bpm',
+                                            icon: icons.respiratory,
+                                            value: '',
+                                            name: 'RespiratoryRate',
+                                            required: true,
+                                            eventType: 'input'
+                                        }
+                                    ]
+                            }
                         ]
                     },
             },
@@ -434,8 +435,8 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
 
                             },
                             {
-                                value: 'other',
-                                name: 'Other',
+                                value: 'otherBloodPressure',
+                                name: 'Other reason',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between'
@@ -463,7 +464,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Other',
+                                        name: 'OtherReasonForNotRecordingBloodPressure',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "100%",
@@ -516,6 +517,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
 
             {
                 sectionHeader: '',
+                classDash:'dashed_bottom_border',
                 data:
                     {
                         rowData:[
@@ -550,7 +552,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
 
             {
                 selectdData: [],
-                classDash: '',
+                classDash:'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -573,7 +575,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash:'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -596,7 +598,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash:'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -619,7 +621,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash:'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -642,7 +644,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash:'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -665,7 +667,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash:'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{

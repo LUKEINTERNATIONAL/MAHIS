@@ -8,13 +8,13 @@ export const useFetalPresentationStore = defineStore('fetalPresentationStore',{
 
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 radioBtnContent:
                     {
                         header:{
                             title: '',
                             selectedValue: '',
-                            name:'fetal presentation'
+                            name:'fetalPresentation'
                         },
                         data:[
                             {

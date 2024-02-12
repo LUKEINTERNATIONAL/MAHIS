@@ -3,7 +3,7 @@
     <!-- Signs of injury -->
     <ion-card v-if="currentSection === 0" class="section">
       <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Any signs of injury</ion-card-title>
+        <ion-card-title class="dashed_bottom_border sub_item_header">Injuries</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <basic-form :contentData="signsOfInjury"></basic-form>
@@ -14,10 +14,9 @@
     <!-- clinical enquirry -->
     <ion-card v-if="currentSection === 1" class="section">
       <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header"> Signs indicative of violence and clinical enquiry</ion-card-title>
+        <ion-card-title class="dashed_bottom_border sub_item_header"> Clinical enquiry</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="violence"></basic-form>
         <basic-form :contentData="clinicalEnquiry"></basic-form>
       </ion-card-content>
     </ion-card>
@@ -25,17 +24,18 @@
     <!-- any form of violence -->
     <ion-card v-if="currentSection === 2" class="section">
       <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Has the woman subjected to any form of violence</ion-card-title>
+        <ion-card-title class="dashed_bottom_border sub_item_header">Violence to the woman</ion-card-title>
       </ion-card-header>
       <ion-card-content>
+        <basic-form :contentData="violence"></basic-form>
         <basic-form :contentData="intimateViolence"></basic-form>
       </ion-card-content>
     </ion-card>
 
     <!-- Navigation Buttons -->
     <div class="navigation-buttons">
-      <ion-button @click="goToPreviousSection" expand="block" color="medium" size="large">Previous</ion-button>
-      <ion-button @click="goToNextSection" expand="block" color="primary" size="large">Next</ion-button>
+      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
+      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
     </div>
   </div>
 </template>
@@ -95,18 +95,10 @@ export default defineComponent({
     ...mapState(usePresentingSigns,["intimateViolence"]),
   },
   mounted(){
-    const userID: any  = Service.getUserID()
-    this.vitalsInstance = new VitalsService(this.demographics.patient_id,userID);
-    this.updateVitalsStores()
-    this.validaterowData({})
+
   },
   watch: {
-    vitals: {
-      handler(){
-        this.updateVitalsStores();
-      },
-      deep: true
-    }
+
   },
   setup() {
     return { checkmark,pulseOutline };
@@ -138,7 +130,6 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
 }
 
 .section {
@@ -162,5 +153,9 @@ export default defineComponent({
 .sub_item_header{
   font-weight: bold;
   font-size: medium;
+}
+ion-card {
+  box-shadow:none;
+  background-color:inherit;
 }
 </style>

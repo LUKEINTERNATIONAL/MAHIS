@@ -1,29 +1,32 @@
-
 <template>
-  <!-- Daily Caffeine -->
-  <ion-list>
-    <ion-item :lines="DailyCaffeine" class="dashed_bottom_border sub_item_header">
-     Daily caffeine  intake
-    </ion-item>
-    <div class="sub_item_body">
-      <BasicForm :contentData="Caffeine" />
+  <div class="container">
+    <!-- Caffeine -->
+    <ion-card v-if="currentSection === 0" class="section">
+      <ion-card-header>
+        <ion-card-title class="dashed_bottom_border sub_item_header">Daily caffeine use</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <basic-form :contentData="dailyCaffeineIntake"></basic-form>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- tobbaco -->
+    <ion-card v-if="currentSection === 1" class="section">
+      <ion-card-header>
+        <ion-card-title class="dashed_bottom_border sub_item_header">Tobacco use</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <basic-form :contentData="Tobacco"></basic-form>
+      </ion-card-content>
+    </ion-card>
+    <!-- Navigation Buttons -->
+    <div class="navigation-buttons">
+      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
+      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
     </div>
-    <ion-item class="sub_item_body_close"/>
-  </ion-list>
-
-  <!-- Tobbaco use -->
-  <ion-list>
-    <ion-item :lines="tobbacoUses" class="dashed_bottom_border sub_item_header">
-     Use of tobbaco
-    </ion-item>
-
-    <div class="sub_item_body" >
-      <BasicForm :contentData="Tobbaco" />
-    </div>
-    <ion-item class="sub_item_body_close"/>
-  </ion-list>
-
+  </div>
 </template>
+
 
 <script lang="ts">
 import {
@@ -49,6 +52,7 @@ import BasicForm from "@/components/BasicForm.vue";
 import {mapState} from "pinia";
 import {useWomanBehaviourStore} from "@/apps/ANC/store/profile/womanBehaviourStore";
 
+
 export default defineComponent({
   name: 'Menu',
   components:{
@@ -69,19 +73,17 @@ export default defineComponent({
   data() {
     return {
       iconsContent: icons,
-      caffeineChecked : false,
-      tobbacoChecked : false,
-      DailyCaffeine: '',
-      tobbacoUses: '',
+      currentSection: 0, // Initialize currentSection to 0
+
     };
   },
   mounted(){
-    const caffeine =useWomanBehaviourStore()
-    const tobbaco =useWomanBehaviourStore()
+    const dailyCaffeineIntake =useWomanBehaviourStore()
+    const Tobacco =useWomanBehaviourStore()
   },
   computed:{
-    ...mapState(useWomanBehaviourStore,["Caffeine"]),
-    ...mapState(useWomanBehaviourStore,["Tobbaco"]),
+    ...mapState(useWomanBehaviourStore,["dailyCaffeineIntake"]),
+    ...mapState(useWomanBehaviourStore,["Tobacco"]),
   },
 
   setup() {
@@ -100,6 +102,17 @@ export default defineComponent({
         this.tobbacoUses = 'none'
       }else{this.tobbacoUses ="" }
     },
+    //Method for navigating
+    goToNextSection() {
+      if (this.currentSection < 1) {
+        this.currentSection++;
+      }
+    },
+    goToPreviousSection() {
+      if (this.currentSection > 0) {
+        this.currentSection--;
+      }
+    },
     navigationMenu(url: any){
       menuController.close()
       this.$router.push(url);
@@ -110,79 +123,37 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.section {
+  width: 100%;
+  max-width: 1300px; /* Adjust max-width as needed */
+  margin-bottom: 20px;
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 500px; /* Adjust max-width as needed */
+}
+
+@media (max-width: 1500px) {
+  .container {
+    padding: 10px;
+  }
+}
 .sub_item_header{
   font-weight: bold;
+  font-size: medium;
 }
-#container {
-  text-align: center;
-
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
-}
-
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-
-  color: #8c8c8c;
-
-  margin: 0;
-}
-
-#container a {
-  text-decoration: none;
-}
-.foot_title{
-  color: #636363;
-  text-align: center;
-}
-.foot_content{
-  color:#00190E;
-  text-align: center;
-  padding: 4px 0px;
-  font-weight: 500;
-  font-size: 14px;
-  margin-left: 25px;
-}
-.first_col{
-  text-align: left;
-  font-weight: 400;
-  font-size: 14px;
-}
-.sub_item_body{
-  margin-left: 45px;
-}
-.foot_input{
-  width: 100%;
-  color: #636363;
-  text-align: left;
-
-}
-.item-content {
-  background-color:#ffffff;
-}
-ion-select._item_eye {
-  --background: #fff;
-
-}
-ion-item.item_eye_ {
-  --inner-border-width:0;
-  --background-hover: none;
-}
-/* ion-toggle {
-    --track-background-checked: #006401
-} */
-ion-item.sub_item_body_close {
-  border-bottom: 2px dotted var(--ion-color-medium);
-  --inner-border-width:0;
+ion-card {
+  box-shadow:none;
+  background-color:inherit;
 }
 
 </style>

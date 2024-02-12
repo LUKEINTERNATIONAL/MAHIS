@@ -6,7 +6,7 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
         DangerSigns:[
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -37,7 +37,7 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -68,7 +68,7 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -100,7 +100,7 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -131,7 +131,7 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -163,7 +163,7 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -194,7 +194,7 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
             },
            {
                 selectdData: [],
-                classDash: '',
+               classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -225,7 +225,7 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -286,6 +286,7 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
 
         PreviousVisit: [
             {
+                classDash: 'dashed_bottom_border',
                 radioBtnContent:
                     {
                         header:{
@@ -317,6 +318,7 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
             },
             {
                 sectionHeader: '',
+                classDash: 'dashed_bottom_border_padding',
                 data:
                     {
                         rowData:[
@@ -344,7 +346,7 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
     }),
 
     actions:{
-        setPersonalInformation(data: any){
+        addDangerSigns(data: any){
             this.DangerSigns = data
         }
     },

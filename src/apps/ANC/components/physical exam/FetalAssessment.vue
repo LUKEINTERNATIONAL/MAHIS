@@ -38,6 +38,7 @@ import BasicInputField from "@/components/BasicInputField.vue"
 import { VitalsService } from "@/services/vitals_service";
 import BasicForm from '@/components/BasicForm.vue';
 import { Service } from "@/services/service";
+import {getRadioSelectedValue, modifyFieldValue} from "@/services/data_helpers";
 
 export default defineComponent({
   components:{
@@ -65,18 +66,16 @@ export default defineComponent({
     ...mapState(useFetalAssessment,["fetalAssessment"]),
   },
   mounted(){
-    const userID: any  = Service.getUserID()
-    this.vitalsInstance = new VitalsService(this.demographics.patient_id,userID);
-    this.updateVitalsStores()
-    this.validaterowData({})
+        this.handleFetalAssessment()
   },
   watch: {
-    vitals: {
+    fetalAssessment:{
       handler(){
-        this.updateVitalsStores();
+        this.handleFetalAssessment()
       },
-      deep: true
+      deep:true
     }
+
   },
   setup() {
     return { checkmark,pulseOutline };
@@ -86,6 +85,11 @@ export default defineComponent({
       menuController.close()
       this.$router.push(url);
     },
+    handleFetalAssessment(){
+      if(getRadioSelectedValue(this.PreviousVisit, 'Yes')=='yes'){
+        modifyFieldValue(this.PreviousVisit,'number of fetuses','displayNone', false)
+      }   else {modifyFieldValue(this.PreviousVisit,'number of fetuses','displayNone', true)}
+    }
 
   }
 });
@@ -97,7 +101,6 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
 }
 
 .section {
@@ -121,5 +124,9 @@ export default defineComponent({
 .sub_item_header{
   font-weight: bold;
   font-size: medium;
+}
+ion-card {
+  box-shadow:none;
+  background-color:inherit;
 }
 </style>

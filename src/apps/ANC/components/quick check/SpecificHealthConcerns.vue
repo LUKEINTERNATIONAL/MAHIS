@@ -97,7 +97,6 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
 }
 
 .section {
@@ -121,5 +120,9 @@ export default defineComponent({
 .sub_item_header{
   font-weight: bold;
   font-size: medium;
+}
+ion-card {
+  box-shadow:none;
+  background-color:inherit;
 }
 </style>

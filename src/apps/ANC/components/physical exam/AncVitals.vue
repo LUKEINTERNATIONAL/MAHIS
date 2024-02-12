@@ -52,8 +52,8 @@
 
     <!-- Navigation Buttons -->
     <div class="navigation-buttons">
-      <ion-button @click="goToPreviousSection" expand="block" color="medium" size="large">Previous</ion-button>
-      <ion-button @click="goToNextSection" expand="block" color="primary" size="large">Next</ion-button>
+      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
+      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
     </div>
   </div>
 </template>
@@ -129,6 +129,7 @@ export default defineComponent({
         const respiration=useAncVitalsStore()
         this.handleUnAbleToRecordBloodPressure()
         this.handleRespirationExam()
+        this.handleOther()
     },
     watch: {
         vitals: {
@@ -140,7 +141,7 @@ export default defineComponent({
         bloodPressure:{
             handler(){
               this.handleUnAbleToRecordBloodPressure();
-              // this.handleOtherReasonValue();
+               this.handleOther()
             },
             deep:true
         },
@@ -167,17 +168,26 @@ export default defineComponent({
         if (unableToRecordBloodPressureValue == 'unable to record blood pressure') {
           // Set the display of the reason radio buttons to true
           modifyRadioValue(this.bloodPressure, 'reasonsBloodPressureCannotBeTaken', 'displayNone', false);
-          if(getRadioSelectedValue(this.bloodPressure, 'reasonsBloodPressureCannotBeTaken')=='other'){
-            modifyFieldValue(this.bloodPressure,'Other','displayNone', false)
-          }   else {modifyFieldValue(this.bloodPressure,'Other','displayNone', true)}
-
         } else {
           // Set the display of the reason radio buttons to false
           modifyRadioValue(this.bloodPressure, 'reasonsBloodPressureCannotBeTaken', 'displayNone', true);
         }
       },
+      handleOther() {
+        if (getRadioSelectedValue(this.bloodPressure, 'reasonsBloodPressureCannotBeTaken') == 'otherBloodPressure') {
+          modifyFieldValue(this.bloodPressure, 'OtherReasonForNotRecordingBloodPressure', 'displayNone', false)
+        } else {
+          modifyFieldValue(this.bloodPressure, 'OtherReasonForNotRecordingBloodPressure', 'displayNone', true)
+        }
+        console.log(getRadioSelectedValue(this.bloodPressure, 'reasonsBloodPressureCannotBeTaken'))
+      },
+//
+//       if(getRadioSelectedValue(this.bloodPressure, 'reasonsBloodPressureCannotBeTaken')=='other'){
+//   modifyFieldValue(this.bloodPressure,'Other','displayNone', false)
+// }   else {modifyFieldValue(this.bloodPressure,'Other','displayNone', true)}
 
-      // handleRespirationExam(){
+
+// handleRespirationExam(){
       //   const respirationExamValue = getCheckboxSelectedValue(this.respiration, 'Other respiratory exam');
       //   if(respirationExamValue=='other respiratory exam'){
       //     modifyFieldValue(this.respiration, 'Other','displayNone', false)
@@ -323,7 +333,6 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
 }
 
 .section {
@@ -347,6 +356,10 @@ export default defineComponent({
 .sub_item_header{
   font-weight: bold;
   font-size: medium;
+}
+ion-card {
+  box-shadow:none;
+  background-color:inherit;
 }
 </style>
   

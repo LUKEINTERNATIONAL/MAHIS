@@ -70,75 +70,34 @@ export default defineComponent({
     return {
       wizardData: [
         {
-          'title': 'Past obstetric history',
+          'title': 'Medications',
           'class': 'common_step',
-          'checked':false,
+          'checked':'',
+          'icon': false,
           'disabled':false,
           'number': 1,
           'last_step': ''
         },
         {
-          'title': 'Medical history',
+          'title': 'Woman behaviour',
           'class': 'common_step',
           'checked':'',
           'icon': false,
           'disabled':false,
           'number': 2,
-          'last_step': ''
-        },
-        {
-          'title': 'Current pregnancies',
-          'class': 'common_step',
-          'checked':'',
-          'icon': false,
-          'disabled':false,
-          'number': 3,
-          'last_step': ''
-        },
-        {
-          'title': 'Medications',
-          'class': 'common_step',
-          'checked':'',
-          'icon': false,
-          'disabled':false,
-          'number': 4,
-          'last_step': ''
-        },
-        {
-          'title': 'Woman behaviour',
-          'class': 'common_step',
-          'checked':'',
-          'icon': false,
-          'disabled':false,
-          'number': 5,
           'last_step': 'last_step'
         },
       ],
       StepperData:[
         {
-          'title': 'Past obstetric history',
-          'componet': 'PastObstreticHistory',
-          'value': '1'
-        },
-        {
-          'title': 'Medical history',
-          'componet': 'MedicalHistory',
-          'value': '2',
-        },
-        {
-          'title': 'Current pregnancies',
-          'componet': 'CurrentPregnancies',
-          'value': '3',
-        },
-        {
           'title': 'Medications',
           'componet': 'Medications',
-          'value': '4',
+          'value': '1',
         },
         {
           'title': 'Woman behaviour',
           'componet': 'WomanBehaviour',
-          'value': '5',
+          'value': '2',
         },
       ],
       isOpen: false,
@@ -153,24 +112,7 @@ export default defineComponent({
     this.markWizard()
   },
   watch: {
-    vitals: {
-      handler(){
-        this.markWizard()
-      },
-      deep: true
-    },
-    investigations: {
-      handler(){
-        this.markWizard()
-      },
-      deep: true
-    },
-    diagnosis: {
-      handler(){
-        this.markWizard()
-      },
-      deep: true
-    }
+
   },
   setup() {
     return { chevronBackOutline,checkmark };

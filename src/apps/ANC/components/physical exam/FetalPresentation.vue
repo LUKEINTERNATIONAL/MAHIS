@@ -3,7 +3,7 @@
   <div class="container">
     <ion-card class="section">
       <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Fetal presentation results</ion-card-title>
+        <ion-card-title class="dashed_bottom_border sub_item_header">Fetal presentation result</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <basic-form :contentData="fetalPresentation"></basic-form>
@@ -29,7 +29,7 @@ import {
 import { defineComponent } from 'vue';
 import { checkmark,pulseOutline } from 'ionicons/icons';
 import { icons } from '@/utils/svg';
-import {useFetalPresentation, useFetalPresentationStore} from "@/apps/ANC/store/physical exam/FetalPresantationStore";
+import {useFetalPresentationStore} from "@/apps/ANC/store/physical exam/FetalPresantationStore";
 import { mapState } from 'pinia';
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { arePropertiesNotEmpty } from "@/utils/Objects";
@@ -69,7 +69,7 @@ export default defineComponent({
     const userID: any  = Service.getUserID()
     const fetalPresentation=useFetalPresentationStore()
     this.handleFetalPresentation()
-    this.validaterowData({})
+
   },
   watch: {
     fetalPresentation:{
@@ -88,7 +88,7 @@ export default defineComponent({
       this.$router.push(url);
     },
     handleFetalPresentation(){
-      if(getRadioSelectedValue(this.fetalPresentation, 'fetal presentation')=='other'){
+      if(getRadioSelectedValue(this.fetalPresentation, 'fetalPresentation')=='other'){
         modifyFieldValue(this.fetalPresentation,'Other fetal presentation','displayNone', false)
       }   else {modifyFieldValue(this.fetalPresentation,'Other fetal presentation','displayNone', true)}
     },
@@ -103,7 +103,6 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
 }
 
 .section {
@@ -127,5 +126,9 @@ export default defineComponent({
 .sub_item_header{
   font-weight: bold;
   font-size: medium;
+}
+ion-card {
+  box-shadow:none;
+  background-color:inherit;
 }
 </style>

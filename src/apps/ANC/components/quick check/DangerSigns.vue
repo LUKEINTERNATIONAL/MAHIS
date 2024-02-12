@@ -21,8 +21,8 @@
     </ion-card>
     <!-- Navigation Buttons -->
     <div class="navigation-buttons">
-      <ion-button @click="goToPreviousSection" expand="block" color="medium" size="large">Previous</ion-button>
-      <ion-button @click="goToNextSection" expand="block" color="primary" size="large">Next</ion-button>
+      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
+      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
     </div>
   </div>
 </template>
@@ -137,14 +137,6 @@ export default defineComponent({
       }
     },
 
-    //
-    // dangerSigns(){
-    //   this.dangerSignChecked = !this.dangerSignChecked
-    //   if (this.dangerSignChecked) {
-    //     this.dangerSign = 'none'
-    //   } else {this.dangerSign = ''}
-    // },
-
 
   }
 });
@@ -155,7 +147,6 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
 }
 
 .section {
@@ -179,5 +170,9 @@ export default defineComponent({
 .sub_item_header{
   font-weight: bold;
   font-size: medium;
+}
+ion-card {
+  box-shadow:none;
+  background-color:inherit;
 }
 </style>

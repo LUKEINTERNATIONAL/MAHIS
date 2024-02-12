@@ -182,12 +182,12 @@ export default defineComponent({
 
   methods:{
     markWizard(){
-      if(this.vitals.validationStatus){
+      // if(this.vitals.validationStatus){
         this.wizardData[0].checked = true;
         this.wizardData[0].class = 'open_step common_step'
-      }else{
-        this.wizardData[0].checked = false;
-      }
+      // }else{
+      //   this.wizardData[0].checked = false;
+      // }
 
       if(this.DangerSigns[0].selectdData.length > 0){
         this.wizardData[1].checked = true;

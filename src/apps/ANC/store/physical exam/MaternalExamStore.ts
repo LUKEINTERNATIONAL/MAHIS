@@ -5,6 +5,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
     state: () => ({
         pallor: [
             {
+                classDash:'dashed_bottom_border',
                 radioBtnContent:
                     {
                         header:{
@@ -37,6 +38,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
             {
                 isFinishBtn: false,
                 sectionHeader: '',
+                classDash:'dashed_bottom_border',
                 radioBtnContent:
                     {
                         header:{
@@ -109,6 +111,14 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                                 justify: 'space-between'
 
                             },
+                            {
+                                value: 'Other result',
+                                name: 'Rales',
+                                labelPlacement: 'start',
+                                colSize: '12',
+                                justify: 'space-between'
+
+                            },
                         ]
                     }
 
@@ -124,7 +134,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                             {
                                 colData: [
                                     {
-                                        inputHeader: 'Other (specify)',
+                                        inputHeader: 'Specify',
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
@@ -181,6 +191,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
 
             {
                 sectionHeader: '',
+                classDash:'dashed_bottom_border',
                 data:
                     {
                         rowData:[
@@ -215,7 +226,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
 
             {
                 selectdData: [],
-                classDash: '',
+                classDash:'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -247,7 +258,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash:'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -279,7 +290,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash:'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -310,6 +321,29 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
 
             },
             {
+                selectdData: [],
+                classDash:'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Other',
+                                value: 'other',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between'
+
+                            },
+                        ]
+                    }
+
+            },
+            {
                 isFinishBtn: false,
                 sectionHeader: '',
                 classDash: '',
@@ -320,7 +354,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                             {
                                 colData: [
                                     {
-                                        inputHeader: 'Other (specify)',
+                                        inputHeader: 'Specify',
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
@@ -344,7 +378,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
 
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -376,7 +410,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -408,7 +442,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -440,7 +474,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -472,7 +506,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -489,6 +523,15 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                                 justify: 'space-between'
 
                             },
+                            {
+                                name: 'Other breast exams',
+                                value: 'other breast exams',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between'
+
+                            },
                         ]
                     }
 
@@ -496,7 +539,6 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
             {
                 isFinishBtn: false,
                 sectionHeader: '',
-                classDash: '',
 
                 data:
                     {
@@ -504,7 +546,8 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                             {
                                 colData: [
                                     {
-                                        inputHeader: 'Other (specify)',
+                                        displayNone:true,
+                                        inputHeader: 'Specify',
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
@@ -526,15 +569,17 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
         ],
         cervicalExam: [
             {
+                classDash: 'dashed_bottom_border',
                 radioBtnContent:
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'Yes'
                         },
                         data:[
                             {
-                                value: 'Y',
+                                value: 'yes',
                                 name: 'Yes',
                                 labelPlacement: 'start',
                                 colSize: '7',
@@ -542,7 +587,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
 
                             },
                             {
-                                value: 'N',
+                                value: 'no',
                                 name: 'No',
                                 labelPlacement: 'start',
                                 colSize: '7',
@@ -561,12 +606,12 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                         rowData:[
                             {
                                 colData: [
-                                    {
+                                    {   displayNone:true,
                                         inputHeader: 'Cervical dilation',
                                         unit: 'cm',
                                         icon:'',
                                         value: '',
-                                        name: '',
+                                        name: ' cervical dilation',
                                         eventType: 'input',
                                         inputWidth: '56%'
                                     },
@@ -583,7 +628,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
 
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -615,7 +660,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -647,7 +692,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -679,7 +724,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -711,7 +756,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -742,6 +787,29 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
 
             },
             {
+                selectdData: [],
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Other',
+                                value: 'other',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between'
+
+                            },
+                        ]
+                    }
+
+            },
+            {
                 isFinishBtn: false,
                 sectionHeader: '',
                 classDash: '',
@@ -752,7 +820,8 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                             {
                                 colData: [
                                     {
-                                        inputHeader: 'Other (specify)',
+                                        displayNone:true,
+                                        inputHeader: 'Specify',
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
@@ -779,12 +848,13 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                 radioBtnContent:
                     {
                         header:{
-                            title: '',
-                            selectedValue: ''
+                            title: 'Is oedema present?',
+                            selectedValue: '',
+                            name:'Yes'
                         },
                         data:[
                             {
-                                value: 'Y',
+                                value: 'yes',
                                 name: 'Yes',
                                 labelPlacement: 'start',
                                 colSize: '7',
@@ -792,7 +862,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
 
                             },
                             {
-                                value: 'N',
+                                value: 'no',
                                 name: 'No',
                                 labelPlacement: 'start',
                                 colSize: '7',
@@ -806,12 +876,14 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
             },
             {
                 selectdData: [],
-                classDash: 'dashed_bottom_border',
+                classDash: '',
                 radioBtnContent:
                     {
                         header:{
                             title: 'Select the type of Oedema the woman has?',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'types of oedema',
+                            displayNone:true,
                         },
                         data:[
                             {
@@ -832,7 +904,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                             },
                             {
                                 value: 'oedema of the hands and feet',
-                                name: 'Leg swelling',
+                                name: 'Oedema of the hands and feet',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between'
@@ -853,12 +925,14 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
             },
             {
                 selectdData: [],
-                classDash: 'dashed_bottom_border',
+                classDash: '',
                 radioBtnContent:
                     {
                         header:{
                             title: 'Severity of Oedema?',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'severity of oedema',
+                            displayNone:true
                         },
                         data:[
                             {
@@ -903,8 +977,8 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
         ],
     }),
     actions:{
-        setVitals(data: any){
-            this.vitals = data
+        setMaternalExam(data: any){
+            this.breastExam = data
         }
     },
     persist:true,
