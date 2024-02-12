@@ -72,8 +72,8 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                         },
                         data:[
                             {
-                                name: 'Respiration not done',
-                                value: 'respiration not done',
+                                name: 'Exam not done',
+                                value: 'exam not done',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '7',
@@ -247,6 +247,30 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
 
             },
             {
+                selectdData: [],
+                classDash: '',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: '',
+                            name:'OtherRespiratoryExam'
+                        },
+                        data:[
+                            {
+                                name: 'Other respiratory exam',
+                                value: 'other respiratory exam',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
+
+                            },
+                        ]
+                    }
+
+            },
+            {
                 isFinishBtn: false,
                 sectionHeader: '',
                 classDash: '',
@@ -257,7 +281,8 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                             {
                                 colData: [
                                     {
-                                        inputHeader: 'Other (specify)',
+                                        displayNone:true,
+                                        inputHeader: 'Specify',
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
@@ -271,29 +296,31 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 ],
 
                             },
-                            {
-                                colData:
-                                    [
-                                        {
-                                            inputHeader: 'Oximetry',
-                                            unit: '',
-                                            icon:'',
-                                            value: 'This to be taken when breathing distress is selected\'',
-                                            name: 'Oximetry',
-                                            required: true,
-                                            eventType: 'input'
-                                        },
-                                        {
-                                            inputHeader: 'Respiratory rate',
-                                            unit: 'mmHg',
-                                            icon: '',
-                                            value: ' This to be taken when breathing distress is selected',
-                                            name: 'RespiratoryRate',
-                                            required: true,
-                                            eventType: 'input'
-                                        }
-                                    ]
-                            }
+                            // {
+                            //     colData:
+                            //         [
+                            //             {
+                            //                 displayNone:true,
+                            //                 inputHeader: 'Oximetry',
+                            //                 unit: '%',
+                            //                 icon:icons.respiratory,
+                            //                 value: '',
+                            //                 name: 'Oximetry',
+                            //                 required: true,
+                            //                 eventType: 'input'
+                            //             },
+                            //             {
+                            //                 displayNone: true,
+                            //                 inputHeader: 'Respiratory rate',
+                            //                 unit: 'bpm',
+                            //                 icon: icons.respiratory,
+                            //                 value: '',
+                            //                 name: 'RespiratoryRate',
+                            //                 required: true,
+                            //                 eventType: 'input'
+                            //             }
+                            //         ]
+                            // }
                         ]
                     },
             },
@@ -357,19 +384,19 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
                             title: '',
                             selectedValue: '',
-                            name:'test1'
+                            name:'UnAbleToRecordBloodPressure'
 
                         },
                         data:[
                             {
-                                name: 'Unable',
-                                value: 'Unable',
+                                name: 'Unable to record blood pressure',
+                                value: 'unable to record blood pressure',
                                 checked: false,
                                 labelPlacement: 'start',
 
@@ -386,7 +413,8 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                         header:{
                             title: 'Reason blood pressure cannot be taken',
                             selectedValue: '',
-                            name:'test2'
+                            name:'reasonsBloodPressureCannotBeTaken',
+                            displayNone:true
                         },
                         data:[
                             {
@@ -400,6 +428,14 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                             {
                                 value: 'BPCuffBroken',
                                 name: 'BP cuff (sphygmomanometer) is broken',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
+
+                            },
+                            {
+                                value: 'other',
+                                name: 'Other',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between'
@@ -422,7 +458,8 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                             {
                                 colData: [
                                     {
-                                        inputHeader: 'Other (specify)',
+                                        displayNone:true,
+                                        inputHeader: 'Specify',
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',

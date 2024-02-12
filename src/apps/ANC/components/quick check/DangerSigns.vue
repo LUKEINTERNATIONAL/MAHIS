@@ -18,7 +18,7 @@
       <ion-card-content>
         <basic-form :contentData="PreviousVisit"></basic-form>
       </ion-card-content>
-    </ion-card>s
+    </ion-card>
     <!-- Navigation Buttons -->
     <div class="navigation-buttons">
       <ion-button @click="goToPreviousSection" expand="block" color="medium" size="large">Previous</ion-button>
@@ -50,7 +50,12 @@ import BasicInputField from '@/components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import BasicForm from '@/components/BasicForm.vue'
 import {useDangerSignsStore} from "@/apps/ANC/store/quickCheck/dangerSigns";
-import {modifyRadioValue, getRadioSelectedValue} from "@/services/data_helpers";
+import {
+  modifyRadioValue,
+  getRadioSelectedValue,
+  modifyFieldValue,
+  getCheckboxSelectedValue
+} from "@/services/data_helpers";
 
 export default defineComponent({
   name: 'Menu',
@@ -78,6 +83,8 @@ export default defineComponent({
     };
   },
   mounted() {
+    const DangerSigns =useDangerSignsStore()
+    const PreviousVisit =useDangerSignsStore()
     this.handleNumberOfVisits()
     this.handleDangerSigns()
   },
@@ -109,12 +116,14 @@ export default defineComponent({
     },
     handleDangerSigns(){
       if(getCheckboxSelectedValue(this.DangerSigns, 'Other')=='other'){
-        modifyFieldValue(this.DangerSigns,'Other','displayNone', false)
-      }else {modifyFieldValue(this.DangerSigns,'Other','displayNone', true)}
-      console.log(getCheckboxSelectedValue(this.DangerSigns, 'Other'))
-    },
-    handleNumberOfVisits(){
+      modifyFieldValue(this.DangerSigns,'Other','displayNone', false)
+    }   else {modifyFieldValue(this.DangerSigns,'Other','displayNone', true)}
+      },
 
+    handleNumberOfVisits(){
+      if(getRadioSelectedValue(this.PreviousVisit, 'Yes')=='yes'){
+        modifyFieldValue(this.PreviousVisit,'number of previous anc visits','displayNone', false)
+      }   else {modifyFieldValue(this.PreviousVisit,'number of previous anc visits','displayNone', true)}
     },
     //Method for navigating
     goToNextSection() {
@@ -128,13 +137,13 @@ export default defineComponent({
       }
     },
 
-
-    dangerSigns(){
-      this.dangerSignChecked = !this.dangerSignChecked
-      if (this.dangerSignChecked) {
-        this.dangerSign = 'none'
-      } else {this.dangerSign = ''}
-    },
+    //
+    // dangerSigns(){
+    //   this.dangerSignChecked = !this.dangerSignChecked
+    //   if (this.dangerSignChecked) {
+    //     this.dangerSign = 'none'
+    //   } else {this.dangerSign = ''}
+    // },
 
 
   }

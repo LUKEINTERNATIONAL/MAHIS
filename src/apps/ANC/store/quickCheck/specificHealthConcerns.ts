@@ -347,6 +347,29 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
                     }
 
             },
+            {
+                selectdData: [],
+                classDash: '',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Other',
+                                value: 'other',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+
+                        ]
+                    }
+
+            },
 
             {
                 isFinishBtn: false,
@@ -359,6 +382,7 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
                             {
                                 colData: [
                                     {
+                                        displayNone:true,
                                         inputHeader: 'Other (specify)',
                                         unit: '',
                                         icon: icons.editPen,

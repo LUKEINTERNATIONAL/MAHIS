@@ -268,7 +268,7 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
                                         inputHeader: 'Specify',
                                         unit: '',
                                         icon: icons.editPen,
-                                        value: 'other',
+                                        value: '',
                                         name: 'Other',
                                         required: true,
                                         eventType: 'input',
@@ -291,11 +291,11 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
                         header:{
                             title: '',
                             selectedValue: '',
-                            name:'yesPreviousVisit'
+                            name:'Yes'
                         },
                         data:[
                             {
-                                value: 'Y',
+                                value: 'yes',
                                 name: 'Yes',
                                 labelPlacement: 'start',
                                 colSize: '7',
@@ -303,7 +303,7 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
 
                             },
                             {
-                                value: 'N',
+                                value: 'no',
                                 name: 'No',
                                 labelPlacement: 'start',
                                 colSize: '7',
@@ -317,20 +317,20 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
             },
             {
                 sectionHeader: '',
-                name:'numberOfPreviousVisits',
                 data:
                     {
                         rowData:[
                             {
                                 colData: [
                                     {
+                                        displayNone:true,
                                         inputHeader: 'Number of previous ANC visits',
                                         unit: '',
                                         icon:'',
                                         value: '',
                                         name: 'number of previous anc visits',
                                         eventType: 'input',
-                                        inputWidth: '53%'
+                                        inputWidth: '55%'
                                     },
 
                                 ]
