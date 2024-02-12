@@ -1,95 +1,27 @@
 <template>
-    <ion-list>
-        <div class="radioContainer">
-                        <IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px">TB screening is recommended</ion-label>
-                        <ion-radio style="margin-bottom: 10px">TB screening conducted</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">TB screening ordered</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">TB screening not done</ion-radio>
-                      </div>
-                      </IonRadioGroup>
-                      </div>
+    <div class="container">
+        <ion-card v-if="currentSection === 0" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="tbTest"></basic-form>
+                <basic-form :contentData="results"></basic-form>
+            </ion-card-content>
+    </ion-card>
 
-                      <div class="radioContainer">
-                        <IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px">TB screening results</ion-label>
-                        <ion-radio style="margin-bottom: 10px;">Positive for TB</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Negative for TB</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Inconclusive</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Incomplete (symptoms only)</ion-radio>
-                      </div>
-                      </IonRadioGroup>
-                      </div>
-                      <ion-list>
-            <ion-label style="font-weight: 600; margin-bottom: 30px;"> Reason TB screening not done</ion-label>
-            <div>
-                <ion-list>
-                    <ion-row class="dottedLine">
-                        <ion-col>
-                            <ion-checkbox  @ionChange="addSputum" :checked="Sputum" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px;">
-                              Sputum smear not available
-                            </ion-checkbox>                     
-                        </ion-col>
-                   <ion-col>
-            <ion-checkbox  @ionChange="addCulture" :checked="SputumCulture" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px;">
-                Sputum culture not available
-</ion-checkbox>
-           </ion-col>
-                    </ion-row>
+        <ion-card v-if="currentSection === 1" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="reasons"></basic-form>
+            </ion-card-content>
+    </ion-card>
 
-                    <ion-row class="dottedLine">
-                        <ion-col>
-                            <ion-checkbox  @ionChange="addGeneXpert" :checked="GeneXpert" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px;  margin-bottom:10px">
-                GeneXpert machine not available
-         </ion-checkbox>                   
-           </ion-col>
-           <ion-col>
-            <ion-checkbox  @ionChange="addXray" :checked="xRay" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px;  margin-bottom:10px">
-                X-ray machine not available
-            </ion-checkbox>
-           </ion-col>
-                    </ion-row>
-                    <ion-row class="dottedLine">
-                        <ion-col>
-                            <ion-checkbox  @ionChange="addTesting" :checked="sputumTesting" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px;  margin-bottom:10px">
-                 No sputum testing supplies available
 
-            </ion-checkbox>                
-           </ion-col>
-           <ion-col>
-            <ion-checkbox  @ionChange="addMachine" :checked="Machine" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px;  margin-bottom:10px">
-                Machine not functioning   
-       </ion-checkbox>
-           </ion-col>
-                    </ion-row>
-            
-                    <ion-row class="dottedLine">
-                        <ion-col>
-                            <ion-checkbox  @ionChange="addTechnician" :checked="Technician" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; width: 49.6%;">
-                Technician not available
-            </ion-checkbox>             
-           </ion-col>
-                    </ion-row>
-
-                    
-                </ion-list>
-      </div>
-      </ion-list>
-      
-         <div style="margin-top: 14px; margin-left: 10px;">
-            <ion-label class="tpStndCls">Other reason TB screening not done (specify)</ion-label>
-            <ion-item class="input_item" style="min-height: 120px; margin-top: 14px;">
-                <ion-label><span v-html="iconsContent.editPen"></span></ion-label>
-                <ion-textarea v-model="otherReason"  style="min-height: 120px;" class="inputTpln" :auto-grow="true"  fill="outline"></ion-textarea>
-            </ion-item>
-
-        </div>
-        <BasicForm :content-data = "screeningDate"></BasicForm> 
-
-    </ion-list>
-
+        <!-- Navigation Buttons -->
+    <div class="navigation-buttons">
+      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
+      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
+    </div> 
+ </div>
 </template>
 
 <script lang="ts">
@@ -139,18 +71,14 @@ export default defineComponent({
         return {
             iconsContent: icons,
           labTestsInstance: {} as any,
+          currentSection: 0, // Initialize currentSection to 0
         }
     },
     computed:{
-        ...mapState(useTBScreeningStore, ["Sputum"]),
-        ...mapState(useTBScreeningStore, ["SputumCulture"]),
-        ...mapState(useTBScreeningStore, ["GeneXpert"]),
-        ...mapState(useTBScreeningStore, ["xRay"]),
-        ...mapState(useTBScreeningStore, ["sputumTesting"]),
-        ...mapState(useTBScreeningStore, ["Machine"]),
-        ...mapState(useTBScreeningStore, ["Technician"]),
-        ...mapState(useTBScreeningStore, ["otherReason"]),
-        ...mapState(useTBScreeningStore, ["screeningDate"])
+        ...mapState(useTBScreeningStore, ["results"]),
+        ...mapState(useTBScreeningStore, ["reasons"]),
+        ...mapState(useTBScreeningStore, ["tbTest"]),
+       
 
     },
     mounted(){
@@ -160,60 +88,17 @@ export default defineComponent({
         return { checkmark,pulseOutline };
     },
     methods:{
-        saveStateValuesState() {
-            const tbScreeningStore = useTBScreeningStore()
-            tbScreeningStore.setSputum(this.Sputum)
-            tbScreeningStore.setCulture(this.SputumCulture)
-            tbScreeningStore.setGeneXpert(this.GeneXpert)
-            tbScreeningStore.setXray(this.xRay)
-            tbScreeningStore.setTesting(this.sputumTesting)
-            tbScreeningStore.setMachine(this.Machine)
-            tbScreeningStore.setTechnician(this.Technician)
-            
-        },
-
-        addSputum(ev: any) {
-            const checked = ev.detail.checked
-            const tbScreeningStore = useTBScreeningStore()
-            tbScreeningStore.setSputum(checked as boolean)
-            this.saveStateValuesState()
-        },
-        addCulture(ev: any) {
-            const checked = ev.detail.checked
-            const tbScreeningStore = useTBScreeningStore()
-            tbScreeningStore.setCulture(checked as boolean)
-            this.saveStateValuesState()
-        },
-        addGeneXpert(ev: any) {
-            const checked = ev.detail.checked
-            const tbScreeningStore = useTBScreeningStore()
-            tbScreeningStore.setGeneXpert(checked as boolean)
-            this.saveStateValuesState()
-        },
-        addXray(ev: any) {
-            const checked = ev.detail.checked
-            const tbScreeningStore = useTBScreeningStore()
-            tbScreeningStore.setXray(checked as boolean)
-            this.saveStateValuesState()
-        },
-        addTesting(ev: any) {
-            const checked = ev.detail.checked
-            const tbScreeningStore = useTBScreeningStore()
-            tbScreeningStore.setTesting(checked as boolean)
-            this.saveStateValuesState()
-        },
-        addMachine(ev: any) {
-            const checked = ev.detail.checked
-            const tbScreeningStore = useTBScreeningStore()
-            tbScreeningStore.setMachine(checked as boolean)
-            this.saveStateValuesState()
-        },
-        addTechnician(ev: any) {
-            const checked = ev.detail.checked
-            const tbScreeningStore = useTBScreeningStore()
-            tbScreeningStore.setTechnician(checked as boolean)
-            this.saveStateValuesState()
-        },
+    //Method for navigating sections
+    goToNextSection() {
+      if (this.currentSection < 1) {
+        this.currentSection++;
+      }
+    },
+    goToPreviousSection() {
+      if (this.currentSection > 0) {
+        this.currentSection--;
+      }
+    },
     }
 })
 
@@ -221,43 +106,39 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.tpStndCls {
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 24px;
-}
-
-.radio {
-        display: flex;
-        flex-direction: column;
-        /* border-bottom: 2px dotted var(--ion-color-medium); */
-        --inner-border-width:0;
-        padding: 10px;
-  
-    }
-ion-radio {
-  width: 49.2%;
-}
-ion-checkbox {
-  width: 100%;
-}
-.radioContainer{
-  border-bottom: 2px dotted var(--ion-color-medium);
-  
-}
-.checkboxesDisplay{
+.container {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  padding-left:10px;
-  padding-right:10px;
 }
 
-.dottedLine {
-    border-bottom: 1.5px dotted var(--ion-color-medium);
-    margin-top: 10px;
-    padding:10px; 
+.section {
+  width: 100%;
+  max-width: 1300px; 
+  margin-bottom: 20px;
 }
 
+ion-card {
+ box-shadow:none;
+  background-color:inherit;   
+  width: 100%;
+ color: black;
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 500px; 
+}
+
+@media (max-width: 1500px) {
+  .container {
+    padding: 10px;
+  }
+}
+.sub_item_header{
+  font-weight: bold;
+  font-size: medium;
+}
 </style>
