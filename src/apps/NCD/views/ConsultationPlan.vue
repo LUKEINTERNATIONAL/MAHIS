@@ -45,9 +45,12 @@
   import Stepper from '@/components/Stepper.vue'
   import { Service } from "@/services/service";
   import { LabOrder } from "@/apps/NCD/services/lab_order"
-  import { VitalsService } from "@/services/vitals_service";
+  import { VitalsService } from "@/services/vitals_service"
+  import { useTreatmentPlanStore } from '@/stores/TreatmentPlanStore'
   import { toastWarning,popoverConfirmation, toastSuccess } from '@/utils/Alerts';
   import { Diagnosis } from '@/apps/NCD/services/diagnosis'
+  import { Treatment } from '@/apps/NCD/services/treatment'
+  import { isEmpty } from 'lodash'
   export default defineComponent({
     name: "Home",
     components:{
@@ -171,6 +174,7 @@
       ...mapState(useVitalsStore,["vitals"]),
       ...mapState(useInvestigationStore,["investigations"]),
       ...mapState(useDiagnosisStore,["diagnosis"]),
+      ...mapState(useTreatmentPlanStore,["selectedMedicalDrugsList","nonPharmalogicalTherapyAndOtherNotes"]),
     },
     mounted(){
         this.markWizard() 
@@ -193,6 +197,11 @@
                 this.markWizard()  
             },
             deep: true
+        },
+        selectedMedicalDrugsList: {
+            handler(){
+                this.markWizard()
+            },
         }
     },
     setup() {
@@ -221,6 +230,13 @@
             }else{
                 this.wizardData[2].checked = false; 
             }
+
+            if (this.selectedMedicalDrugsList.length > 0) {
+                this.wizardData[4].checked = true
+                this.wizardData[4].class = 'open_step common_step'  
+            } else {
+                this.wizardData[4].checked = false;  
+            }
         },
         deleteDisplayData(data: any){
           return  data.map((item: any) => {
@@ -233,6 +249,8 @@
             this.saveVitals()
             this.saveInvestigation()
             this.saveDiagnosis()
+            this.saveTreatmentPlan()
+            this.saveTreatmentPlan()
             this.$router.push('patientProfile');
           }else{
             toastWarning("Please complete all required fields")
@@ -251,6 +269,22 @@
           const userID: any  = Service.getUserID()
           const diagnosisInstance = new Diagnosis();
           diagnosisInstance.onSubmit(this.demographics.patient_id,userID,this.deleteDisplayData(this.diagnosis[0].selectdData))
+        },
+        saveTreatmentPlan() {
+            const userID: any  = Service.getUserID()
+            const patientID = this.demographics.patient_id
+            const treatmentInstance = new Treatment()
+
+            if(!isEmpty(this.nonPharmalogicalTherapyAndOtherNotes)) {
+                const treatmentNotesTxt = [
+                    {
+                        concept_id: '2688',
+                        obs_datetime: Service.getSessionDate(),
+                        value_text: this.nonPharmalogicalTherapyAndOtherNotes
+                    }
+                ]
+                treatmentInstance.onSubmitNotes(patientID, userID, treatmentNotesTxt)
+            }
         },
         openModal(){
             createModal(SaveProgressModal)

@@ -95,8 +95,6 @@ function openVitalsModal(){
 
 function transformClinicalNotes(): string[] {
     const input = treatmentPlanStore.getNonPharmalogicalTherapyAndOtherNotes()
-
-    console.log("jajajajaj: ", input)
     const lines: string[] = [];
     let startIndex = 0
 

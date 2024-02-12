@@ -64,11 +64,7 @@
 
     onMounted(() => {
         clinicalNotes.value = transformClinicalNotes()
-        console.log("jjjjjjjjjjjjjjj")
-        console.log(clinicalNotes.value)
     })
-
-
 
     function transformClinicalNotes(): string[] {
         const treatmentPlanStore = useTreatmentPlanStore()
