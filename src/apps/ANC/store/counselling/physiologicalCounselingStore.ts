@@ -15,7 +15,7 @@ const physiologicalCousellingForm ={
         value:"clientReferredOnNonPharmacological"
     },
         otherOnNonPharmacological:{
-        name:'Other On non-Pharmacological',
+        name:'Other',
         value:'otherOnNonPharmacological'
     },
         specifyOnNonPharmacological:{
@@ -35,7 +35,7 @@ const physiologicalCousellingForm ={
         value:"clientReferredOnPharmacologicalTreatment"
     },
         otherOnPharmacologicalTreatment:{
-        name:'Other On Pharmacological Treatment',
+        name:'Other',
         value:'otherOnPharmacologicalTreatment'
     },
         specifyOnPharmacologicalTreatment:{
@@ -55,7 +55,7 @@ const physiologicalCousellingForm ={
         value:"clientReferredOnDietLifestyle"
     },
         otherOnDietLifestyle:{
-        name:'Other On Diet Life style',
+        name:'Other',
         value:'otherOnDietLifestyle'
     },
         specifyOnDietLifestyle:{
@@ -75,7 +75,7 @@ const physiologicalCousellingForm ={
         value:"clientReferredOnAntacid"
     },
         otherOnAntacid:{
-        name:'Other On Ant acid',
+        name:'Other',
         value:'otherOnAntacid'
     },
         specifyOnAntacid:{
@@ -95,7 +95,7 @@ const physiologicalCousellingForm ={
         value:"clientReferredOnLegCraps"
     },
         otherOnLegCraps:{
-        name:'Other On Leg Craps',
+        name:'Other',
         value:'otherOnLegCraps'
     },
         specifyOnLegCraps:{
@@ -136,7 +136,7 @@ const physiologicalCousellingForm ={
         value:"clientReferredOnDietaryOnConstipation"
     },
         otherOnDietaryOnConstipation:{
-        name:'Other On Dietary On Constipation',
+        name:'Other',
         value:'otherOnDietaryOnConstipation'
     },
         specifyOnDietaryOnConstipation:{
@@ -156,7 +156,7 @@ const physiologicalCousellingForm ={
         value:"clientReferredOnUseOfWheat"
     },
         otherOnUseOfWheat:{
-        name:'Other On Use Of  Wheat',
+        name:'Other',
         value:'otherOnUseOfWheat'
     },
         specifyOnDietaryOnUseOfWheat:{
@@ -176,7 +176,7 @@ const physiologicalCousellingForm ={
         value:"clientReferredOnRegularExercise"
     },
         otherOnRegularExercise:{
-        name:'Other On Regular Exercise',
+        name:'Other',
         value:'otherOnRegularExercise'
     },
         specifyOnRegularExercise:{
@@ -196,7 +196,7 @@ const physiologicalCousellingForm ={
         value:"clientReferredOnVaricoseVeinsandOedema"
     },
         otherOnVaricoseVeinsandOedema:{
-        name:'other On Varicose VeinsandOedema',
+        name:'other',
         value:'otherOnVaricoseVeinsandOedema'
     },
         specifyOnVaricoseVeinsandOedema:{
@@ -241,7 +241,6 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
                 radioBtnContent:{
                     header:{
                         title: 'Reason counselling on non-pharmacological measures to reduce nausea and vomiting not conducted',
@@ -268,7 +267,6 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 }
             },
             {   
-                classDash: 'dashed_bottom_border',
                 data:{ 
                     rowData:[
                         {
@@ -323,7 +321,6 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling on pharmalogical was not conducted?',
@@ -350,7 +347,6 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 }
             },
             {   
-                classDash: 'dashed_bottom_border',
                 data:{ 
                     rowData:[
                         {
@@ -405,7 +401,6 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling on diet and lifestyle was not conducted?',
@@ -432,7 +427,6 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 }
             },
             {   
-                classDash: 'dashed_bottom_border',
                 data:{ 
                     rowData:[
                         {
@@ -487,7 +481,6 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling on antacid was not done?',
@@ -514,7 +507,6 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 }
             },
             {   
-                classDash: 'dashed_bottom_border',
                 data:{ 
                     rowData:[
                         {
@@ -568,7 +560,6 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling on  sysmptions for leg craps was not done?',
@@ -595,7 +586,6 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 }
             },
             {   
-                classDash: 'dashed_bottom_border',
                 data:{ 
                     rowData:[
                         {
@@ -650,7 +640,6 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling on  use of magnesium and calcium to relieve leg cramps was not done?',
@@ -677,7 +666,6 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 }
             },
             {   
-                classDash: 'dashed_bottom_border',
                 data:{ 
                     rowData:[
                         {
@@ -732,7 +720,6 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling on  dietary modifications to relieve constipation was not done?',
@@ -759,7 +746,6 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 }
             },
             {   
-                classDash: 'dashed_bottom_border',
                 data:{ 
                     rowData:[
                         {
@@ -813,7 +799,6 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling on  the use of wheat was not done?',
@@ -840,7 +825,6 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 }
             },
             {   
-                classDash: 'dashed_bottom_border',
                 data:{ 
                     rowData:[
                         {
@@ -897,7 +881,6 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling on regular exercise was not done?',
@@ -923,7 +906,6 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 }
             },
             {   
-                classDash: 'dashed_bottom_border',
                 data:{ 
                     rowData:[
                         {
@@ -980,7 +962,6 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling for varicose veins and oedema was not done?',
@@ -1007,7 +988,6 @@ export const usePhysiologicalCounselingStore = defineStore('physiologicalCounsel
                 }
             },
             {   
-                classDash: 'dashed_bottom_border',
                 data:{ 
                     rowData:[
                         {

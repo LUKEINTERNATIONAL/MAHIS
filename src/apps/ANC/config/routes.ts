@@ -1,7 +1,8 @@
 import pastMedicalHistory from '../views/pastMedicalHistory.vue';
 import symptomsFollowUp from '../views/symptomsFollowUp.vue';
 import counselling from '../views/counselling.vue';
-import final from '../views/final.vue';
+import referral from '../views/referral.vue';
+import ancEnd from '../views/ancEnd.vue';
 export default [
     {
     path: '/pastMedicalHistory',
@@ -19,9 +20,14 @@ export default [
     component: counselling
   },
   {
-    path: '/final',
-    name: 'final',
-    component: final
+    path: '/referral',
+    name: 'referral',
+    component: referral
+  },
+    {
+    path: '/ancEnd',
+    name: 'ancEnd',
+    component: ancEnd
   },
 ]
 

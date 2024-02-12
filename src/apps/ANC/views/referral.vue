@@ -3,7 +3,7 @@
       <Toolbar />
       <ion-content :fullscreen="true">
         <DemographicBar />
-        <Stepper stepperTitle="Refferral  And ANC-end" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
+        <Stepper stepperTitle="Refferral" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
       </ion-content>
     </ion-page>
   </template>
@@ -83,16 +83,6 @@
                     'icon': false,
                     'disabled':false,
                     'number': 1,
-                    'last_step': ''
-                    
-                },
-                {
-                    'title': 'AncEnd',
-                    'class': 'common_step',
-                    'checked':'',
-                    'icon': false,
-                    'disabled':false,
-                    'number': 2,
                     'last_step': 'last_step'
                     
                 },
@@ -103,11 +93,6 @@
                     'title': 'Referral',
                     'componet': 'Referral',
                     'value': '1',
-                },
-                {
-                    'title': 'AncEnd',
-                    'componet': 'AncEnd',
-                    'value': '2',
                 },
 
             ],

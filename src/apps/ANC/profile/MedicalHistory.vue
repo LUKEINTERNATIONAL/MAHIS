@@ -1,6 +1,6 @@
 <template>
     <!-- Past Surgeries -->
-    <ion-list>
+    <!-- <ion-list>
         <ion-item class="dashed_bottom_border" style="font-weight: bold">
             Past Surgeries
         </ion-item>
@@ -9,61 +9,71 @@
             <BasicForm :contentData="medicalHistory" />
         </div>
         <ion-item class="sub_item_body_close" />
-    </ion-list>
+    </ion-list> -->
 
-    <!-- Allegies -->
+    <div class="container">
+         <!-- Past Surgeries -->
+            <ion-card v-if="currentSection === 0" class="section">
+            <ion-card-header>
+                <ion-card-title class="dashed_bottom_border sub_item_header">Past Surgeries</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="medicalHistory"></basic-form>
+            </ion-card-content>
+            </ion-card>
 
-        <ion-list>
-        <ion-item  class="dashed_bottom_border" style="font-weight: bold">
-            Allergies
-        </ion-item>
-        <div class="sub_item_body">
-            <BasicForm :contentData="allegy" />
-        </div>
-        <ion-item class="sub_item_body_close"/>
-    </ion-list>
+         <!-- Allegies -->
+          <ion-card v-if="currentSection === 1" class="section">
+            <ion-card-header>
+                <ion-card-title class="dashed_bottom_border sub_item_header">Allergies</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="allegy"></basic-form>
+            </ion-card-content>
+            </ion-card>
 
-    <!-- Chronical Health conditions -->
+        <!-- Chronical Health conditions -->
+            <ion-card v-if="currentSection === 2" class="section">
+            <ion-card-header>
+                <ion-card-title class="dashed_bottom_border sub_item_header">Existing Chronic Health Conditions</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="exisitingChronicHealthConditions"></basic-form>
+            </ion-card-content>
+            </ion-card>
 
-    <ion-list>
-        <ion-item class="dashed_bottom_border" style="font-weight: bold">
-            Existing Chronic Health Conditions
-        </ion-item>
-        <div class="sub_item_body">
-            <BasicForm :contentData="exisitingChronicHealthConditions" />
-        </div>
-        <ion-item class="sub_item_body_close"/>
-    </ion-list>
+        <!-- HIV -->
+            <ion-card v-if="currentSection === 3" class="section">
+            <ion-card-header>
+                <ion-card-title class="dashed_bottom_border sub_item_header">HIV</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="hivTest"></basic-form>
+            </ion-card-content>
+            </ion-card>
+
+        <!-- Syphilis Test -->
+
+            <ion-card v-if="currentSection === 4" class="section">
+            <ion-card-header>
+                <ion-card-title class="dashed_bottom_border sub_item_header">Syphilis</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="syphilisTest"></basic-form>
+            </ion-card-content>
+            </ion-card>
 
 
-    <!-- HIV -->
+    <!-- Navigation Buttons -->
+    <div class="navigation-buttons">
+      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
+      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
+    </div>
+
+    </div>
 
 
-        <ion-list>
-        <ion-item class="dashed_bottom_border" style="font-weight: bold">
-            HIV
-        </ion-item>
-        <div class="sub_item_body">
-            <BasicForm :contentData="hivTest" />
-        </div>
-        <ion-item class="sub_item_body_close"/>
-    </ion-list>
 
-    <!-- Syphilis Test -->
-
-    <ion-list>
-        <ion-item  class="dashed_bottom_border" style="font-weight: bold" >
-            Syphilis
-        </ion-item>
-        <div class="sub_item_body">
-            <BasicForm :contentData="syphilisTest" />
-        </div>
-        <ion-item class="sub_item_body_close"/>
-    </ion-list>
-
-    <!-- Hypertations-Kidney-TB-MentalIlliness -->
-
-    <!-- Other Sute -->
      <ion-list>
         
         <div>
@@ -121,6 +131,11 @@ export default defineComponent({
         IonInput,
         BasicInputField,
         BasicForm
+    },
+    data(){
+        return{
+            currentSection: 0
+        }
     },
     mounted(){
         const medicalHistory =useMedicalHistoryStore()
@@ -244,16 +259,62 @@ export default defineComponent({
         //         modifyCheckboxValue()
         //     }
         // }
+
+      goToNextSection() {
+        if (this.currentSection < 4) {
+          this.currentSection++;
+        }
+      },
+      goToPreviousSection() {
+        if (this.currentSection > 0) {
+          this.currentSection--;
+        }
+      },
       
     }
 })
 </script>
 <style scoped>
-.sub_item_body{
+
+/* .sub_item_body{
     margin-left: 45px;
 }
 ion-item.sub_item_body_close {
         border-bottom: 2px dotted var(--ion-color-medium);
         --inner-border-width:0;
-    }
+    } --> */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.section {
+  width: 100%;
+  max-width: 1300px; /* Adjust max-width as needed */
+  margin-bottom: 20px;
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 500px; /* Adjust max-width as needed */
+}
+
+@media (max-width: 1500px) {
+  .container {
+    padding: 10px;
+  }
+}
+.sub_item_header{
+  font-weight: bold;
+  font-size: medium;
+}
+ion-card {
+  box-shadow:none;
+  background-color:inherit;
+}
+    
 </style>

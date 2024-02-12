@@ -51,11 +51,11 @@ const ancEndForm ={
         value:"otherOnClosingANC"
     },
     specifyOnAncClosing:{
-        name:"Specify",
+        name:"SpecifyAnC",
         value:""
     },
         dateofDelivery:{
-        name:"Date of delivery",
+        name:"DateD",
         value:"dateofDelivery"
     },
         timeOfDelivery:{
@@ -104,7 +104,7 @@ const ancEndForm ={
     },
         weight:{
         name:"Weight",
-        value:"w`eight"
+        value:"weight"
     },
    
 }
@@ -119,7 +119,8 @@ export const useAncEndStore = defineStore('ancEndStore',{
                 radioBtnContent:{
                     header:{
                         title: '',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'otherEnd'
                     },
                     data:[
                         {
@@ -214,11 +215,12 @@ export const useAncEndStore = defineStore('ancEndStore',{
                             rowData:[
                                 {
                                     colData:[
-                                        {
-                                            inputHeader: 'Other (Specify)',
+                                        {   
+                                            displayNone:true,
+                                            inputHeader: 'Specify',
                                             icon: icons.editPen,
-                                            value: ancEndForm.specifyOnAncClosing.name,
-                                            name: ancEndForm.specifyOnAncClosing.value,
+                                            value: ancEndForm.specifyOnAncClosing.value,
+                                            name: ancEndForm.specifyOnAncClosing.name,
                                             eventType: 'input',
                                             inputWidth: "82%",
                                             required: true
@@ -231,32 +233,39 @@ export const useAncEndStore = defineStore('ancEndStore',{
                         }
                     
             },
-            { 
-          
-               header:{
-                        title: 'Date of delivery',
-                        selectedValue: ''
-                    },
-                classDash: 'dashed_bottom_border',           
+            {           
                 data:{ 
                     rowData:[
                         {
                             colData:[
-                                {
-                                    inputHeader: 'Date',
-                                    icon: icons.calenderPrimary,
-                                    value: ancEndForm.dateofDelivery.name,
-                                    name: ancEndForm.dateofDelivery.value,
+                                {    
+                                    displayNone:true,
+                                    inputHeader: 'Death Date',
+                                    icon: icons.calendar,
+                                    name: "DeathDate",
                                     eventType: 'input',
                                     inputWidth: "82%",
-                                    required: true,
-                                    isDatePopover: true
+                                    required: true
                                 },
+                                
+                            ]
+                        }
+                    ],
+                    
+                }
+            
+            },
+            {            
+                data:{ 
+                    rowData:[
+                        {
+                            colData:[
                                     {
-                                    inputHeader: 'Time',
-                                    icon: icons.time,
-                                    value: ancEndForm.timeOfDelivery.name,
-                                    name: ancEndForm.timeOfDelivery.value,
+                                    
+                                    displayNone:true,
+                                    inputHeader: 'Cause of Death',
+                                    icon: icons.editPen,
+                                    name: 'DeathCause',
                                     eventType: 'input',
                                     inputWidth: "82%",
                                     required: true
@@ -270,13 +279,72 @@ export const useAncEndStore = defineStore('ancEndStore',{
             
             },
             {
+               selectdData: [],
+                isFinishBtn: false,
+                radioBtnContent:{
+                    header:{
+                        title: 'Client record will no longer be  viewed',
+                        selectedValue: '',
+                        name:'recordViewed',
+                        displayNone:true,
+                    },
+                    data:[
+                        {
+                            name: 'Yes',
+                            value: 'yes',
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
+                        },
+                        {
+                            name:  'No',
+                            value: 'no',
+                            labelPlacement:'start',
+                            colSize: "7",
+                            justify:"space-between" 
+                        },
+                    ]
+                }
+            },
+            { 
+          
+               header:{
+                        title: 'Date of delivery',
+                        selectedValue: ''
+                    },
+                          
+                data:{ 
+                    rowData:[
+                        {
+                            colData:[
+                                {   
+                                    displayNone:true,
+                                    inputHeader: 'Date',
+                                    icon: icons.calenderPrimary,
+                                    value: ancEndForm.dateofDelivery.value,
+                                    name: ancEndForm.dateofDelivery.name,
+                                    eventType: 'input',
+                                    inputWidth: "82%",
+                                    required: true,
+                                    isDatePopover: true
+                                },
+                                
+                            ]
+                        }
+                    ],
+                    
+                }
+            
+            },
+            {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
                 radioBtnContent:{
                     header:{
                         title: 'Place of delivery',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'placeDelivery',
+                        displayNone:true
                     },
                     data:[
                         {
@@ -303,16 +371,17 @@ export const useAncEndStore = defineStore('ancEndStore',{
                     ]
                 }
             },
-                {     classDash: 'dashed_bottom_border',
+                {    
                         data:{ 
                             rowData:[
                                 {
                                     colData:[
-                                        {
-                                            inputHeader: 'Other(specify)',
+                                        {   
+                                            displayNone:true,
+                                            inputHeader: 'specify',
                                             icon: icons.editPen,
-                                            value: ancEndForm.specifyOnPlaceDelivery.name,
-                                            name: ancEndForm.specifyOnPlaceDelivery.value,
+                                            value: ancEndForm.specifyOnPlaceDelivery.value,
+                                            name: ancEndForm.specifyOnPlaceDelivery.name,
                                             eventType: 'input',
                                             inputWidth: "82%",
                                             required: true
@@ -329,11 +398,13 @@ export const useAncEndStore = defineStore('ancEndStore',{
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
+                
                 radioBtnContent:{
                     header:{
-                        title: 'Preterm death',
-                        selectedValue: ''
+                        title: 'Preterm birth',
+                        selectedValue: '',
+                        name:'preterm',
+                        diplayNone:true,
                     },
                     data:[
                         {
@@ -356,11 +427,13 @@ export const useAncEndStore = defineStore('ancEndStore',{
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
+                
                 radioBtnContent:{
                     header:{
                         title: 'Mode of delivery',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'deliveryMode',
+                        displayNone:true,
                     },
                     data:[
                         {
@@ -395,16 +468,16 @@ export const useAncEndStore = defineStore('ancEndStore',{
                 }
             },
             {
-                classDash: 'dashed_bottom_border',
+                
                 data:{ 
                     rowData:[
                         {
                             colData:[
-                            {
+                            {   displayNone:true,
                                 inputHeader: 'Weight',
                                 icon: icons.weight,
-                                value: ancEndForm.weight.name,
-                                name: ancEndForm.weight.value,
+                                value: ancEndForm.weight.value,
+                                name: ancEndForm.weight.name,
                                 eventType: 'input',
                                 inputWidth: "82%",
                                 required: true
@@ -416,70 +489,6 @@ export const useAncEndStore = defineStore('ancEndStore',{
                     
                 }
                     
-            },
-            { 
-          
-               header:{
-                        title: 'Death',
-                        selectedValue: ''
-                    },
-                classDash: 'dashed_bottom_border',           
-                data:{ 
-                    rowData:[
-                        {
-                            colData:[
-                                {
-                                    inputHeader: 'Death Date',
-                                    icon: icons.calendar,
-                                    value: '',
-                                    name: "Date of Death if Known",
-                                    eventType: 'input',
-                                    inputWidth: "82%",
-                                    required: true
-                                },
-                                    {
-                                    inputHeader: 'Cause of Death',
-                                    icon: icons.editPen,
-                                    value: "",
-                                    name: 'Cause of Death',
-                                    eventType: 'input',
-                                    inputWidth: "82%",
-                                    required: true
-                                }
-                                
-                            ]
-                        }
-                    ],
-                    
-                }
-            
-            },
-            {
-               selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:{
-                    header:{
-                        title: 'Client record will no longer be  viewed',
-                        selectedValue: ''
-                    },
-                    data:[
-                        {
-                            name: 'Yes',
-                            value: 'yes',
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                        {
-                            name:  'No',
-                            value: 'no',
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                    ]
-                }
             },
             
             ]as any,            

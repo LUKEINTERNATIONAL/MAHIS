@@ -100,7 +100,6 @@ export const useReferralStore = defineStore('referralStore',{
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
                 radioBtnContent:{
                     header:{
                         title: 'Reason for referral',

@@ -28,14 +28,14 @@ const behaviourCousellingForm ={
     },
     cousellingOnTobaccoNo:{
         name:"No",
-        value:"noT"
+        value:"noOnTobacco"
     },
     clientReferredOnTobacco:{
         name:'Client was referred',
         value:"clientReferredOnTobacco"
     }, 
     otherOnTobacco:{
-        name:'otherOnTobacco',
+        name:'Other',
         value:'otherOnTobacco'
     },
     specifyOnTobacco:{
@@ -55,7 +55,7 @@ const behaviourCousellingForm ={
         value:"clientReferredOnSecondHandTobacco"
     }, 
     otherOnSecondHandTobacco:{
-        name:'otherSecondHandTobacco',
+        name:'Other',
         value:'otherOnSecondHandTobacco'
     },
     specifyOnSecondHandTobacco:{
@@ -95,7 +95,7 @@ const behaviourCousellingForm ={
         value:"clientReferredOnSubstanceUse"
     }, 
     otherOnSubstanceUse:{
-        name:'Other on substance use',
+        name:'Other',
         value:'otherOnSubstanceUse'
     },
         specifyOnSubstanceUse:{
@@ -196,7 +196,7 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
                     header:{
                         title: 'Counselling  conducted on Tobacco?',
                         selectedValue: '',
-                        name:'tobacco'
+                        name:'Counsellingtobacco'
                     },
                     data:[
                         {  
@@ -219,12 +219,12 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
+                
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling on Tobacco cessation was not conducted?',
                         selectedValue: '',
-                        name:'reasons',
+                        name:'reasonsOnTobacco',
                         displayNone:true
                     },
                     data:[
@@ -246,7 +246,7 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
                 }
             },
             {   
-                classDash: 'dashed_bottom_border',
+                
                 data:{ 
                     rowData:[
                         {
@@ -300,7 +300,7 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
+               
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling on second-hand smoke was not conducted?',
@@ -327,7 +327,7 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
                 }
             },
             {   
-                classDash: 'dashed_bottom_border',
+               
                 data:{ 
                     rowData:[
                         {
@@ -382,7 +382,7 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
+                
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling on condom use was not done?',
@@ -409,7 +409,7 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
                 }
             },
             {   
-                classDash: 'dashed_bottom_border',
+                
                 data:{ 
                     rowData:[
                         {
@@ -463,7 +463,7 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
+                
                 radioBtnContent:{
                     header:{
                         title: 'Reason couselling on alcohol/substance was not done?',
@@ -490,7 +490,7 @@ export const useBehaviourCousellingStore = defineStore('behaviourCousellingStore
                 }
             },
             {   
-                classDash: 'dashed_bottom_border',
+               
                 data:{ 
                     rowData:[
                         {

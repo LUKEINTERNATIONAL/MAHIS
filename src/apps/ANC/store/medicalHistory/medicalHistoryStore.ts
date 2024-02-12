@@ -1501,33 +1501,33 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     ]
                 }
             },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:{
-                    header:{
-                        title: 'Syphilis diagnosis',
-                        selectedValue: ''
-                    },
-                    data:[
-                        {
-                            name: syphilisForm.syphilisPositiveDiagnosis.name,
-                            value: syphilisForm.syphilisPositiveDiagnosis.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                        {
-                            name: syphilisForm.syphilisNegativeDiagnosis.name,
-                            value: syphilisForm.syphilisNegativeDiagnosis.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                    ]
-                }
-            },
+            // {
+            //     selectdData: [],
+            //     isFinishBtn: false,
+            //     classDash: 'dashed_bottom_border',
+            //     radioBtnContent:{
+            //         header:{
+            //             title: 'Syphilis diagnosis',
+            //             selectedValue: ''
+            //         },
+            //         data:[
+            //             {
+            //                 name: syphilisForm.syphilisPositiveDiagnosis.name,
+            //                 value: syphilisForm.syphilisPositiveDiagnosis.value,
+            //                 labelPlacement:'start',
+            //                 colSize: "7",
+            //                 justify:"space-between" 
+            //             },
+            //             {
+            //                 name: syphilisForm.syphilisNegativeDiagnosis.name,
+            //                 value: syphilisForm.syphilisNegativeDiagnosis.value,
+            //                 labelPlacement:'start',
+            //                 colSize: "7",
+            //                 justify:"space-between" 
+            //             },
+            //         ]
+            //     }
+            // },
         ]as any,
     // otherSite:[
     //         {
@@ -1571,9 +1571,9 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
             addSyphilisTest(data:any){
                 this.syphilisTest = data
         },
-        addOtherSite(data:any){
-            this.otherSite = data
-        }
+        // addOtherSite(data:any){
+        //     this.otherSite = data
+        // }
     },
     persist:true
 });

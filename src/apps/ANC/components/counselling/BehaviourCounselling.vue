@@ -82,14 +82,14 @@ export default defineComponent({
             }
         },
         handleTobacco(){
-            if(getRadioSelectedValue(this.behaviourInfo,'tobacco')=='noT'){
-                modifyRadioValue(this.behaviourInfo,'reasons','displayNone',false)
+            if(getRadioSelectedValue(this.behaviourInfo,'Counsellingtobacco')=='noOnTobacco'){
+                modifyRadioValue(this.behaviourInfo,'reasonsOnTobacco','displayNone',false)
             }else{
-                modifyRadioValue(this.behaviourInfo,'reasons','dispalayNone',true)
+                modifyRadioValue(this.behaviourInfo,'reasonsOnTobacco','dispalayNone',true)
             }
         },
         handleOtherTobacco(){
-            if(getRadioSelectedValue(this.behaviourInfo,'reasons')=='otherOnTobacco'){
+            if(getRadioSelectedValue(this.behaviourInfo,'reasonsOnTobacco')=='otherOnTobacco'){
                 modifyFieldValue(this.behaviourInfo,'SpecifyT','displayNone',false)
             }else{
                 modifyFieldValue(this.behaviourInfo,'SpecifyT','displayNone',true)
