@@ -33,7 +33,7 @@
   import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle,IonIcon, IonToolbar,IonSearchbar,IonPopover } from '@ionic/vue';
   import { notificationsOutline,personCircleOutline } from 'ionicons/icons';
   import { defineComponent } from 'vue';
-  import ToolbarSearch from "@/apps/ANC/components/ToolbarSearch.vue";
+  import ToolbarSearch from '@/components/ToolbarSearch.vue'
   export default defineComponent({
     name: "Home",
     components:{

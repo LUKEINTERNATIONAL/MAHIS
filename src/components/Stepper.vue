@@ -83,7 +83,6 @@
   import TreatmentPlan from '@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue'
   import Medications from "@/apps/ANC/components/profile/Medications.vue";
   import WomanBehaviour from "@/apps/ANC/components/profile/WomanBehaviour.vue";
-  import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue";
   import DangerSigns from "@/apps/ANC/components/quick check/DangerSigns.vue";
   import ConfirmPregnancy from "@/apps/ANC/components/quick check/ConfirmPregnancy.vue";
   import ReasonForVisit from "@/apps/ANC/components/quick check/ReasonForVisit.vue";
@@ -98,8 +97,19 @@
   import UltrasoundScan from '@/apps/ANC/components/lab_tests/UltrasoundScan.vue';
   import UrineTest from '@/apps/ANC/components/lab_tests/UrineTest.vue';
   import TB from '@/apps/ANC/components/lab_tests/TB.vue';
-
   import SaveProgressModal from '@/components/SaveProgressModal.vue'
+  import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue";
+  import MedicalFollowUp from '@/apps/ANC/components/symptomsFollowUp/MedicalFollowUp.vue';
+  import PersistentBehaviour from '@/apps/ANC/components/symptomsFollowUp/PersistentBehaviour.vue';
+  import PersistentSymptoms from '@/apps/ANC/components/symptomsFollowUp/PersistentSymptoms.vue';
+  import CurrentPhysiologicalSymptoms from '@/apps/ANC/components/symptomsFollowUp/CurrentPhysiologicalSymptoms.vue';
+  import Ipv from '@/apps/ANC/components/symptomsFollowUp/Ipv.vue';
+  import FatalMovement from '@/apps/ANC/components/symptomsFollowUp/FatalMovement.vue';
+  import BehaviourCounselling from '@/apps/ANC/components/counselling/BehaviourCounselling.vue';
+  import PhysiologicalCounseling from '@/apps/ANC/components/counselling/PhysiologicalCounseling.vue';
+  import DietCounselling from '@/apps/ANC/components/counselling/DietCounselling.vue';
+  import Referral from '@/apps/ANC/components/referral/Referral.vue';
+  import AncEnd  from  '@/apps/ANC/components/ancEnd/AncEnd.vue';
   import { createModal } from '@/utils/Alerts'
   import { icons } from '@/utils/svg';
   export default defineComponent({
@@ -147,7 +157,18 @@
         PastObstreticHistory,
         UltrasoundScan,
         UrineTest,
-        TB
+        TB,
+        MedicalFollowUp,
+        PersistentBehaviour,
+        PersistentSymptoms,
+        CurrentPhysiologicalSymptoms,
+        Ipv,
+        FatalMovement,
+        BehaviourCounselling,
+        PhysiologicalCounseling,
+        DietCounselling,
+        Referral,
+        AncEnd
     },
     data(){
         return {
