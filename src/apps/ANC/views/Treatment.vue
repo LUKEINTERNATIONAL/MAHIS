@@ -72,7 +72,7 @@ export default defineComponent ({
                     'last_step': ''
                 },
                 {
-                    'title': 'Medication dispersed',
+                    'title': 'Medication dispensed',
                     'class': 'common_step',
                     'checked':false,
                     'disabled':false,
