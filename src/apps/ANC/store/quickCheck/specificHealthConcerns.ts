@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg';
 
-export const useMedicationsStore = defineStore('medicationsStore',{
+export const useSpecificHealthConcernsStore = defineStore('specificHealthConcernsStore',{
     state: () => ({
-        Medication:[
+        HealthConcerns:[
             {
                 selectdData: [],
                 classDash: 'dashed_bottom_border',
@@ -16,16 +16,16 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                         data:[
 
                             {
-                                name: 'Oral PreP for HIV',
-                                value: 'OralPrePforHIV',
+                                name: 'Abnorminal varginal discharge',
+                                value: 'AbnorminalVarginalDischarge',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Analgesic',
-                                value: 'value',
+                                name: 'Change in blood pressure-up',
+                                value: 'ChangeInBloodPressure',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -35,8 +35,8 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                     }
 
             },
-
             {
+                selectdData: [],
                 classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
@@ -46,46 +46,16 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                         },
                         data:[
                             {
-                                name: 'Anti-consulsive',
-                                value: 'value',
+                                name: 'Diarrhoea',
+                                value: 'Diarrhoea',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Anti-TB',
-                                value: 'value',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-
-                        ]
-                    }
-
-            },
-            {
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Antihelmintic',
-                                value: 'value',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Antimarials',
-                                value: 'value',
+                                name: 'Vomiting',
+                                value: 'Vomiting',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -98,6 +68,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
             },
 
             {
+                selectdData: [],
                 classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
@@ -107,27 +78,29 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                         },
                         data:[
                             {
-                                name: 'Antitussive',
-                                value: 'value',
+                                name: 'Genital ulcer',
+                                value: 'GenitalUlcer',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Aspirin',
-                                value: 'value',
+                                name: 'Change in blood pressure-down',
+                                value: ' BloodPressureChange',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
                                 justify: 'space-between',
                             },
+
+
                         ]
                     }
 
             },
-
             {
+                selectdData: [],
                 classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
@@ -137,144 +110,28 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                         },
                         data:[
                             {
-                                name: 'Calcium',
-                                value: 'value',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Doxylamine',
-                                value: 'value',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Hematinic',
-                                value: 'value',
-                                checked: false,
-                                labelPlacement: 'start',
-                                 colSize: '6',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Iron',
-                                value: 'value',
-                                checked: false,
-                                labelPlacement: 'start',
-                                 colSize: '6',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Metoclopramide',
-                                value: 'value',
-                                checked: false,
-                                labelPlacement: 'start',
-                                 colSize: '6',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Thyroid medication',
-                                value: 'value',
-                                checked: false,
-                                labelPlacement: 'start',
-                                 colSize: '6',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Antiacids',
-                                value: 'value',
-                                checked: false,
-                                labelPlacement: 'start',
-                                 colSize: '6',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Anti-psychotics',
-                                value: 'value',
-                                checked: false,
-                                labelPlacement: 'start',
-                                 colSize: '6',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-
-            {
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Anti-diabetic',
-                                value: 'value',
+                                name: 'constipation',
+                                value: 'Constipation',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Anti-hypertensive',
-                                value: 'value',
+                                name: 'Contractions',
+                                value: 'Contractions',
                                 checked: false,
                                 labelPlacement: 'start',
-                                 colSize: '6',
+                                colSize: '6',
                                 justify: 'space-between',
                             },
+
                         ]
                     }
 
             },
-
             {
+                selectdData: [],
                 classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
@@ -283,17 +140,18 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                             selectedValue: ''
                         },
                         data:[
+
                             {
-                                name: 'ARVs',
-                                value: 'value',
+                                name: 'Vaginal bleeding',
+                                value: 'VaginalBleeding',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Antivirals',
-                                value: 'value',
+                                name: 'Intimate partiner violence',
+                                value: 'IntimatePartinerViolence',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -304,6 +162,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
 
             },
             {
+                selectdData: [],
                 classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
@@ -313,26 +172,91 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                         },
                         data:[
                             {
-                                name: 'Asthamatic',
-                                value: 'value',
+                                name: 'Flu symptoms',
+                                value: 'FluSymptoms',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Co-trimoxazole',
-                                value: 'value',
+                                name: 'Painful urination',
+                                value: 'PainfulUrination',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
                                 justify: 'space-between',
                             },
+
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Headache',
+                                value: 'Headache',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Heartburn',
+                                value: 'heartburn',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Frequent urination/Polyuria',
+                                value: 'FrequentUrination',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Injury',
+                                value: 'Injury',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+
+
                         ]
                     }
 
             },
             {
+                selectdData: [],
                 classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
@@ -342,26 +266,90 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                         },
                         data:[
                             {
-                                name: 'Folic acid',
-                                value: 'value',
+                                name: 'Jaundice',
+                                value: 'Jaundice',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Hemorrhoidal medication',
-                                value: 'value',
+                                name: 'Mental health-Depression',
+                                value: 'MentalHealth',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
                                 justify: 'space-between',
                             },
+
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Genital warts',
+                                value: 'GenitalWarts',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Itchy vulva',
+                                value: 'ItchyVulva',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Painful intercourse',
+                                value: 'PainfulIntercourse',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'No health concerns',
+                                value: 'NoHealthConcerns',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+
                         ]
                     }
 
             },
             {
+                selectdData: [],
                 classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
@@ -371,46 +359,8 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                         },
                         data:[
                             {
-                                name: 'Magnesium',
-                                value: 'value',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Multivitamin',
-                                value: 'value',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-
-            {
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Vitamin A',
-                                value: 'value',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Other medications',
-                                value: 'otherMedications',
+                                name: 'Other',
+                                value: 'other',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -421,10 +371,11 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                     }
 
             },
+
             {
                 isFinishBtn: false,
                 sectionHeader: '',
-                classDash: '',
+                classDash: 'dashed_bottom_border _padding',
 
                 data:
                     {
@@ -432,7 +383,8 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                             {
                                 colData: [
                                     {
-                                        inputHeader: 'Specify',
+                                        displayNone:true,
+                                        inputHeader: 'Other (specify)',
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
@@ -440,7 +392,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "85%",
-                                        required: true
+                                       
                                     },
 
                                 ]
@@ -449,11 +401,12 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                     },
             },
 
+
         ] as any
     }),
     actions:{
         setPersonalInformation(data: any){
-            this.Medication = data
+            this.HealthConcerns = data
         }
     },
     persist:true,

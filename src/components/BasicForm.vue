@@ -1,14 +1,14 @@
 <template>
-    <ion-row  v-for="(item,index) in contentData" :key="index" :class="contentData[index].classDash">
-        <ion-col class="item_header_col" v-if="item['sectionHeader'] ">
-            <span class="item_header"  :style="'font-weight:'+ item.sectionHeaderFontWeight">{{ item['sectionHeader'] }}</span>
-        </ion-col>
-        <ion-col>
-            <!-- rowData -->
-            <span v-if="item.data">
+  <ion-row  v-for="(item,index) in contentData" :key="index" :class="contentData[index].classDash">
+    <ion-col class="item_header_col" v-if="item['sectionHeader'] ">
+      <span class="item_header"  :style="'font-weight:'+ item.sectionHeaderFontWeight">{{ item['sectionHeader'] }}</span>
+    </ion-col>
+    <ion-col>
+      <!-- rowData -->
+      <span v-if="item.data">
                 <ion-row v-for="(element, index2) in item.data.rowData" :key="index2">
                     <ion-col v-for="(col, colIndex) in element.colData" :key="colIndex" v-show="!col.displayNone">
-                        <BasicInputField 
+                        <BasicInputField
                             :inputHeader="col.inputHeader"
                             :sectionHeaderFontWeight = "col.sectionHeaderFontWeight"
                             :unit="col.unit"
@@ -22,15 +22,15 @@
                             @clicked:inputValue="value =>{event =value; handlePopover(col); $emit('clicked:inputValue',event)}"
                             :popOverData="col.popOverData"
                             @setPopoverValue ="value => {col.value = value.name; col.id = value[col.idName]; handleSelected(col)}"
-                            
+
                         />
                         <div class="alerts_error" v-if="col.alertsError">
                             {{ col.alertsErrorMassage }}
                         </div>
                         <ion-popover :show-backdrop="false" :keep-contents-mounted="true" :is-open="openPopover"
-                            :event="event" @didDismiss="openPopover = false" v-if="col.isDatePopover">
+                                     :event="event" @didDismiss="openPopover = false" v-if="col.isDatePopover">
                             <ion-datetime @ionChange=" event => { col.value = formatDate(event.detail.value); $emit('update:inputValue', col); }" id="datetime" presentation="date"
-                                :show-default-buttons="true" ></ion-datetime>
+                                          :show-default-buttons="true" ></ion-datetime>
                         </ion-popover>
                     </ion-col>
                     <ion-col size="btn.btn_col_size || 1.7" class="btn_col" v-for="(btn, btnIndex) in element.btns" :key="btnIndex" >
@@ -43,7 +43,7 @@
                     </ion-col>
                 </ion-row>
             </span>
-            <span v-if="item.radioBtnContent && !item.radioBtnContent.header.displayNone">
+      <span v-if="item.radioBtnContent && !item.radioBtnContent.header.displayNone">
                 <ion-row>
                     <ion-col size="9">
                         <div style="font-weight: bold;" v-if="item.radioBtnContent?.header">{{ item.radioBtnContent?.header.title }} </div>
@@ -51,21 +51,21 @@
                     <ion-col size="2" v-if="item.radioBtnContent?.header?.radioTitle?.length > 0">{{ item.radioBtnContent?.header.radioTitle[0] }}</ion-col>
                     <ion-col size="1" v-if="item.radioBtnContent?.header?.radioTitle?.length > 0">{{ item.radioBtnContent?.header.radioTitle[1] }}</ion-col>
                 </ion-row>
-                
+
                 <ion-row class="checkbox_content">
                     <ion-col :size="al.colSize" class="checkout_col" style="" v-for="(al, index3) in item.radioBtnContent?.data" :key="index3">
                         <span v-if="al.header" class="first_col">
                             <ion-label>{{ al.name }} </ion-label>
                         </span>
-                        <ion-radio-group  
-                        v-else 
-                        style="width: 100%;"
-                        :value="item.radioBtnContent.header.selectedValue "
-                        @ionChange="value => {item.radioBtnContent.header.selectedValue = value.target.value;
-                             handleInput(item.radioBtnContent.header)}" > 
+                        <ion-radio-group
+                            v-else
+                            style="width: 100%;"
+                            :value="item.radioBtnContent.header.selectedValue "
+                            @ionChange="value => {item.radioBtnContent.header.selectedValue = value.target.value;
+                             handleInput(item.radioBtnContent.header)}" >
                             <span style="display: flex;width: 100%;" :class="al.class" >
                                 <ion-radio :value="al.value" :justify="al.justify || 'start'"  :label-placement="al.labelPlacement || 'end'" >{{ al.name }}</ion-radio>
-                            </span>         
+                            </span>
                         </ion-radio-group>
                     </ion-col>
                     <ion-col  v-for="(radioInput, radioInputIndex) in item.radioBtnContent.inputFields" :key="radioInputIndex">
@@ -82,9 +82,9 @@
                             @clicked:inputValue="value =>{event =value; handlePopover(radioInput); $emit('clicked:inputValue',event)}"
                         />
                         <ion-popover :show-backdrop="false" :keep-contents-mounted="true" :is-open="openPopover"
-                            :event="event" @didDismiss="openPopover = false" >
+                                     :event="event" @didDismiss="openPopover = false" >
                             <ion-datetime @ionChange="event => radioInput.value = formatDate(event.detail.value)" id="datetime"
-                                presentation="date" :show-default-buttons="true"></ion-datetime>
+                                          presentation="date" :show-default-buttons="true"></ion-datetime>
                         </ion-popover>
                         <div class="alerts_error" v-if="radioInput.alertsError">
                             {{ radioInput.alertsErrorMassage }}
@@ -95,7 +95,7 @@
                         </div>
                 </ion-row>
             </span>
-            <span v-if="item.checkboxBtnContent && !item.checkboxBtnContent.header.displayNone">
+      <span v-if="item.checkboxBtnContent && !item.checkboxBtnContent.header.displayNone">
                 <div style="font-weight: bold" v-if="item.checkboxBtnContent?.header">{{ item.checkboxBtnContent?.header.title }} </div>
                 <ion-row class="checkbox_content">
                     <ion-col :size="al.colSize" class="checkout_col" style="" v-for="(al, index3) in item.checkboxBtnContent?.data" :key="index3">
@@ -103,7 +103,7 @@
                             <ion-label>{{ al.name }} </ion-label>
                         </span>
                         <ion-checkbox v-else :justify="al.justify || 'start'" :checked="al.checked" style="width: 100%;"
-                        @ionChange="value =>{al.checked =value.detail.checked; $emit('update:inputValue',{al, value })}" :label-placement="al.labelPlacement || 'end'" > 
+                                      @ionChange="value =>{al.checked =value.detail.checked; $emit('update:inputValue',{al, value })}" :label-placement="al.labelPlacement || 'end'" >
                             <span style="line-height: 1;">
                                 <p class="checkbox_header">{{ al.name }}</p>
                                 <p v-if="al.example " class="small_font">{{ al.example }}</p>
@@ -127,9 +127,9 @@
                             @clicked:inputValue="value =>{event =value; handlePopover(checkboxInput); $emit('clicked:inputValue',event)}"
                         />
                         <ion-popover :show-backdrop="false" :keep-contents-mounted="true" :is-open="openPopover"
-                            :event="event" @didDismiss="openPopover = false" >
+                                     :event="event" @didDismiss="openPopover = false" >
                             <ion-datetime @ionChange="event => checkboxInput.value = formatDate(event.detail.value)" id="datetime"
-                                presentation="date" :show-default-buttons="true"></ion-datetime>
+                                          presentation="date" :show-default-buttons="true"></ion-datetime>
                         </ion-popover>
                         <div class="alerts_error" v-if="checkboxInput.alertsError">
                             {{ checkboxInput.alertsErrorMassage }}
@@ -137,30 +137,30 @@
                     </ion-col>
                 </ion-row>
             </span>
-            <span v-for="(al, index3) in item.alerts" :key="index3"  >
+      <span v-for="(al, index3) in item.alerts" :key="index3"  >
                 <ion-row v-if="al.value"  :style="'border-radius: 5px;  margin-top:10px; margin-bottom:10px;background-color:'+ al.backgroundColor">
                     <span class="position_content alert_content">
-                        <span v-html="al.icon"> </span> 
-                        <span :style="'color:'+al.textColor+'; font-weight:600; margin: 0px 20px;'"> {{ al.index }}</span> 
+                        <span v-html="al.icon"> </span>
+                        <span :style="'color:'+al.textColor+'; font-weight:600; margin: 0px 20px;'"> {{ al.index }}</span>
                         <span :style="'color:'+al.textColor+';'"> {{ al.value }} </span>
                     </span>
                 </ion-row>
             </span>
-            <ion-row v-if="item.previousView">
-                <ion-accordion-group ref="accordionGroup" class="previousView">
-                    <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
-                        <ion-item slot="header" color="light">
-                            <ion-label class="previousLabel">Previous measurements</ion-label>
-                        </ion-item>
-                        <div class="ion-padding" slot="content">
-                            <PreviousVitals v-if="item.previousView.name == 'vitals'" />
-                        </div>
-                    </ion-accordion>
-                </ion-accordion-group>
-            </ion-row>
-        </ion-col>
-        <span></span>
-    </ion-row>
+      <ion-row v-if="item.previousView">
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+          <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
+            <ion-item slot="header" color="light">
+              <ion-label class="previousLabel">Previous measurements</ion-label>
+            </ion-item>
+            <div class="ion-padding" slot="content">
+              <PreviousVitals v-if="item.previousView.name == 'vitals'" />
+            </div>
+          </ion-accordion>
+        </ion-accordion-group>
+      </ion-row>
+    </ion-col>
+    <span></span>
+  </ion-row>
 </template>
 
 <script lang="ts">
@@ -173,45 +173,45 @@ import { createModal } from '@/utils/Alerts'
 import PreviousVitals from '@/apps/NCD/components/ConsultationPlan/previousVitals.vue'
 
 export default defineComponent({
-    components:{
-        BasicInputField,
-        DynamicButton,
-        IonDatetime,
-        IonDatetimeButton,
-        PreviousVitals,
-        IonCheckbox
+  components:{
+    BasicInputField,
+    DynamicButton,
+    IonDatetime,
+    IonDatetimeButton,
+    PreviousVitals,
+    IonCheckbox
+  },
+  data() {
+    return {
+      event: '' as any,
+      openPopover: false,
+      header: '' as any
+    };
+  },
+  props: {
+    contentData: {
+      default: [] as any
+    }
+  },
+  methods: {
+    handleInput(col: any) {
+      this.$emit("update:inputValue", col);
     },
-    data() {
-        return {
-            event: '' as any,
-            openPopover: false,
-            header: '' as any
-        };
+    handleSelected(col: any) {
+      this.$emit("update:selected", col);
     },
-    props: {
-        contentData: {
-            default: [] as any
-        }
+    handlePopover(col: any){
+      if(col.isDatePopover){
+        this.openPopover = true
+        this.header=col.inputHeader;
+      }else{
+        this.openPopover = false
+      }
     },
-    methods: {
-        handleInput(col: any) {
-            this.$emit("update:inputValue", col);
-        },
-        handleSelected(col: any) {
-            this.$emit("update:selected", col);
-        },
-        handlePopover(col: any){
-            if(col.isDatePopover){
-                this.openPopover = true
-                this.header=col.inputHeader;
-            }else{
-                this.openPopover = false
-            }
-        },
-        formatDate(date: any){
-           return HisDate.toStandardHisDisplayFormat(date)
-        }
-    },
+    formatDate(date: any){
+      return HisDate.toStandardHisDisplayFormat(date)
+    }
+  },
 })
 
 </script>
@@ -222,72 +222,72 @@ export default defineComponent({
   padding-top: 18px;
 }
 .alert_content{
-    padding: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  padding: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .item_header{
-    --border-width: 0 0 0 0;
-    font-weight: 700;
-    color:#00190E;
+  --border-width: 0 0 0 0;
+  font-weight: 700;
+  color:#00190E;
 }
 
 .item_header_col{
-    max-width: 300px;
-    margin-top: 23px;
+  max-width: 300px;
+  margin-top: 23px;
 }
 .action_buttons {
-    color: var(--ion-color-primary);
-    display: flex;
-    align-items: center;
-    max-width: 70px;
-    margin-top: 48px
+  color: var(--ion-color-primary);
+  display: flex;
+  align-items: center;
+  max-width: 70px;
+  margin-top: 48px
 }
 .btn_col{
-    display: flex;
-    align-items: end;
-    justify-content: right;
+  display: flex;
+  align-items: end;
+  justify-content: right;
 }
 .radio_content{
-    padding-top: 10px;
+  padding-top: 10px;
 }
 .radio_title{
-    margin-top: 50px;
+  margin-top: 50px;
 }
 ion-radio {
-   margin-right: 23px;
-   margin-top: 20px;
-   width: 100%;
+  margin-right: 23px;
+  margin-top: 20px;
+  width: 100%;
 }
 .checkout_col{
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 .checkout_col ion-checkbox{
-    margin-right: 150px;
+  margin-right: 150px;
 }
 .alerts_error{
-    background: #f5dad8;
-    margin-top: 2px;
-    color: #B42318;
-    display: flex;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    overflow:scroll;
-    padding: 5px;
-    border-radius: 3px;
+  background: #f5dad8;
+  margin-top: 2px;
+  color: #B42318;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  overflow:scroll;
+  padding: 5px;
+  border-radius: 3px;
 }
 .previousView{
-    width: 100%;
-    border-radius: 10px;
-    margin-top: 10px;
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 10px;
 }
 .previousLabel{
-    font-weight: 600;
-    color: #000;
+  font-weight: 600;
+  color: #000;
 }
 .first_col
 {
@@ -297,25 +297,25 @@ ion-radio {
   color: #636363;
 }
 .alerts_error{
-    background: #f5dad8;
-    margin-top: 2px;
-    color: #B42318;
-    display: flex;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    overflow:scroll;
-    padding: 5px;
-    border-radius: 3px;
+  background: #f5dad8;
+  margin-top: 2px;
+  color: #B42318;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  overflow:scroll;
+  padding: 5px;
+  border-radius: 3px;
 }
 .previousView{
-    width: 100%;
-    border-radius: 10px;
-    margin-top: 10px;
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 10px;
 }
 .previousLabel{
-    font-weight: 600;
-    color: #000;
+  font-weight: 600;
+  color: #000;
 }
 </style>

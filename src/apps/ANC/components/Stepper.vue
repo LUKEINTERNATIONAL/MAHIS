@@ -24,10 +24,10 @@
     
         <ion-col size="7" size-lg="7" class="rightCol">
             <div class="back_profile" @click="openModal()">
-                <ion-icon style="font-size: 20px;" :icon="chevronBackOutline"> </ion-icon> 
+                <ion-icon style="font-size: 20px;" :icon="chevronBackOutline"> </ion-icon>
                 <span style="cursor: pointer;"> Back to profile</span>
             </div>
-            
+
             <div class="accordion_group">
               <ion-accordion-group @ionChange="accordionGroupChange($event)" >
                 <ion-accordion v-for="(item, index) in StepperData" :key="index"  :value="item.value">
@@ -41,7 +41,7 @@
             </ion-accordion-group>
             <div>
               <hr style="background: rgba(0, 0, 0, 0.13);">
-            <ion-button class="primary_btn" @click="$emit('finishBtn')">Finish and Save</ion-button>
+              <ion-button class="primary_btn" style="padding-left: 15px" @click="$emit('finishBtn')">Save and proceed</ion-button>
             </div>
             </div>
             
@@ -218,7 +218,7 @@
               item.checked = false;
               if (item.number == ev.detail.value) {
                   item.class = 'open_step common_step';
-              } 
+              }
 
             }
           });
@@ -234,7 +234,7 @@
   <style scoped>
   #container {
     text-align: center;
-    
+
     position: absolute;
     left: 0;
     right: 0;
@@ -316,9 +316,9 @@
   }
   .accordion_group{
     position: fixed;
-    height: 700px; 
+    height: 700px;
     width: 58%;
-    overflow-y: auto; 
+    overflow-y: auto;
     top: 200px;
   }
   .accordion_group::-webkit-scrollbar {
@@ -329,6 +329,6 @@
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
-  
+
 </style>
   

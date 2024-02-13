@@ -42,7 +42,7 @@
   import { useInvestigationStore } from '@/stores/InvestigationStore'
   import { useDiagnosisStore } from '@/stores/DiagnosisStore'
   import { mapState } from 'pinia';
-  import Stepper from '@/components/Stepper.vue'
+  import Stepper from "@/apps/ANC/components/Stepper.vue";
   import { Service } from "@/services/service";
   import { LabOrder } from "@/apps/NCD/services/lab_order"
   import { VitalsService } from "@/services/vitals_service";
@@ -138,6 +138,11 @@
           return  data.map((item: any) => {
                 return item?.data;
             });
+        },
+        saveData(){
+
+          this.$router.push('Treatment');
+
         },
       }
     })
