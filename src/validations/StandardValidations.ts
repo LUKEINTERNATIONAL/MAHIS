@@ -16,6 +16,20 @@ function required(value: any): null | String {
     return isEmpty(value) ? 'Value is required' : null
 }
 
+function isEstimationDate(value: any): null | String {
+    if (value && value as number > 300) {
+        return 'Age estimate is too high and exceeding hard limit of 300'
+    }
+    if (isNaN(parseInt(value.toString()))) {
+        return 'Please enter a valid number'
+    }
+    const ageEstimateRegex = /^(12[0-7]|1[01][0-9]|[1-9]?[0-9])$/
+    if(!value.toString().match(ageEstimateRegex) ){
+        return 'Not a valid age estimate'
+    }
+    return  null
+}
+
 function isFloatingPointNumber(val: any): null | string[] {
     return isPlainObject(val) && !/^[-+]?[0-9]*\.?[0-9]+$/.test(`${val?.value}`)
         ? ['Not a valid number']
@@ -91,5 +105,6 @@ export default {
     anyEmpty,
     notTheSame,
     isIPAddress,
-    isMWNationalID
+    isMWNationalID,
+    isEstimationDate
 }
