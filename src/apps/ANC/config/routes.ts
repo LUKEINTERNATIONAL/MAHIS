@@ -3,6 +3,7 @@ import symptomsFollowUp from '../views/symptomsFollowUp.vue';
 import counselling from '../views/counselling.vue';
 import referral from '../views/referral.vue';
 import ancEnd from '../views/ancEnd.vue';
+import landing from '../views/landing.vue';
 export default [
     {
     path: '/pastMedicalHistory',
@@ -28,6 +29,11 @@ export default [
     path: '/ancEnd',
     name: 'ancEnd',
     component: ancEnd
+  },
+  {
+    path: '/landing',
+    name: 'landing',
+    component: landing
   },
 ]
 

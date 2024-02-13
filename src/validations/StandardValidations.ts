@@ -79,6 +79,8 @@ function notTheSame(val: any, comparison: string): null | Array<string> {
     return val === comparison ? ['Values can not be the same'] : null;
 }
 export default {
+    validateCheckBox,
+    validateRadioBtn,
     isFloatingPointNumber,
     validateSeries,
     required,
