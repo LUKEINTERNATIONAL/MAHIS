@@ -1,15 +1,4 @@
 <template>
-    <!-- Past Surgeries -->
-    <!-- <ion-list>
-        <ion-item class="dashed_bottom_border" style="font-weight: bold">
-            Past Surgeries
-        </ion-item>
-        
-        <div class="sub_item_body">
-            <BasicForm :contentData="medicalHistory" />
-        </div>
-        <ion-item class="sub_item_body_close" />
-    </ion-list> -->
 
     <div class="container">
          <!-- Past Surgeries -->
@@ -72,15 +61,6 @@
 
     </div>
 
-
-
-     <ion-list>
-        
-        <div>
-            <!-- <BasicForm :contentData="otherSite" /> -->
-        </div>
-        
-     </ion-list>
 
 
 </template>
@@ -202,7 +182,7 @@ export default defineComponent({
         ...mapState(useMedicalHistoryStore,["exisitingChronicHealthConditions"]),
         ...mapState(useMedicalHistoryStore,["hivTest"]),
         ...mapState(useMedicalHistoryStore,["syphilisTest"]),
-        // ...mapState(useMedicalHistoryStore,["otherSite"]),
+       
     },
     methods:{
         handleHivResults(){
@@ -230,7 +210,7 @@ export default defineComponent({
                 modifyFieldValue(this.medicalHistory,'specify','displayNone',true)
             }
 
-            // console.log(getCheckboxSelectedValue(this.medicalHistory,'Other'))
+ 
         },
         handleAllergies(){
             if(getCheckboxSelectedValue(this.allegy,'Other')=='otherAllergies'){
@@ -254,11 +234,7 @@ export default defineComponent({
                  modifyFieldValue(this.hivTest,'birthdate','displayNone',true)
             }
         },
-        // handleTestNotDone(){
-        //     if(getRadioSelectedValue(this.hivTest,'hivOption')=='hivTestNotDone'){
-        //         modifyCheckboxValue()
-        //     }
-        // }
+
 
       goToNextSection() {
         if (this.currentSection < 4) {
@@ -276,13 +252,6 @@ export default defineComponent({
 </script>
 <style scoped>
 
-/* .sub_item_body{
-    margin-left: 45px;
-}
-ion-item.sub_item_body_close {
-        border-bottom: 2px dotted var(--ion-color-medium);
-        --inner-border-width:0;
-    } --> */
 
 .container {
   display: flex;

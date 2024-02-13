@@ -231,7 +231,31 @@ export default defineComponent({
     },
     saveData(){
 
-          console.log(getCheckboxSelectedValue(this.medicalHistory, 'Myomectomy'))
+      const medicalConditions = [
+        'Auto immune desease',
+        'Asthma',
+        'Diabetes',
+        'Sickle cell',
+        'Anaemia',
+        'Thalassemia',
+        'Gynaecological',
+        'CCF',
+        'RHD',
+        'Gestational diabetes',
+        'pre-existing type 1',
+        'pre-existing type 2',
+        'Epilepsy',
+        'Hypertension',
+        'Kidney',
+        'TB',
+        'Mental  illiness',
+      ];
+      for (const condition of medicalConditions) {
+        const selectedValue = getCheckboxSelectedValue(this.medicalHistory, condition);
+
+        console.log(selectedValue);
+    }
+
          // this.$router.push('symptomsFollowUp');
 
      },
