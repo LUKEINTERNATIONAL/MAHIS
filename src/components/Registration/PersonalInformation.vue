@@ -19,8 +19,11 @@ import { useRegistrationStore } from '@/stores/RegistrationStore'
 import { mapState } from 'pinia';
 import BasicCard from '../BasicCard.vue';
 import HisDate from "@/utils/Date";
-import { getFieldValue,getRadioSelectedValue } from '@/services/data_helpers'
+import { getFieldValue,getRadioSelectedValue,modifyFieldValue } from '@/services/data_helpers'
 import { validateField } from '@/services/validation_service'
+import dayjs from "dayjs"
+import { Service } from "@/services/service"
+import { calculator } from 'ionicons/icons';
 
 export default defineComponent({
 name: 'Menu',
@@ -46,6 +49,7 @@ computed:{
     ...mapState(useRegistrationStore,["personInformation"]),
     nationalID(){ return getFieldValue(this.personInformation, 'nationalID','value')},
     firstname(){ return getFieldValue(this.personInformation, 'firstname','value')},
+    estimation(){ return getFieldValue(this.personInformation, 'estimation','value')},
     lastname(){ return getFieldValue(this.personInformation, 'lastname','value')},
     middleName(){ return getFieldValue(this.personInformation, 'middleName','value')},
     gender(){ return getRadioSelectedValue(this.personInformation, 'gender')},
@@ -84,7 +88,24 @@ methods:{
 
     async handleInputData(event: any) {
         this.validationRules(event)
+        this.calculateDoB(event)
+        this.calculateAge(event)
     },
+    calculateAge(event: any){
+        if(event.name =='birthdate'){
+            modifyFieldValue(this.personInformation,'estimation','value',HisDate.getAgeInYears(event.value))
+            this.validationRules({name:'estimation'})
+        }
+    },
+    calculateDoB(event: any){
+        if(event.name == 'estimation'){
+            const year = dayjs(Service.getSessionDate())
+                .subtract(event.value as number, 'years')
+                .year()
+            modifyFieldValue(this.personInformation,'birthdate','value',HisDate.toStandardHisDisplayFormat(`${year}-06-15`))
+            return `${year}-06-15`
+        }
+    }
 }
 });
 </script>
