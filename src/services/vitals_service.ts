@@ -13,12 +13,14 @@ export class VitalsService extends AppEncounterService{
       // Process other vitals using Promise.all
       const promises = await Promise.all(
           vitals.flatMap((section: any) =>
-              section.data.rowData.flat().map(async (item: any) => {
+            section.data.rowData.flat().map(async (item: any) => {
+              item.colData.flat().map(async (item: any) => {
                 if(item.value){
                   const obs = await this.appEncounterServiceInstance.buildValueNumber(item.name, item.value);
                   labelsAndValues.push(obs);
                 }
               })
+            })
           )
       );
 
