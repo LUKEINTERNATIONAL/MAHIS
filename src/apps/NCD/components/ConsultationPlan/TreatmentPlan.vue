@@ -203,6 +203,8 @@
     const frequency = ref('')
     const duration = ref('')
     const prescription = ref('')
+    const units = ref('')
+    const drug_id = ref('')
     const showPopoverOpenForFrequency = ref(false)
     const btnName1 = 'Add new medication'
     const btnName2 = 'Send to pharmacy'
@@ -322,7 +324,9 @@
             dose: dose.value,
             frequency: frequency.value,
             duration: duration.value,
-            prescription: generatedPrescriptionDate
+            prescription: generatedPrescriptionDate,
+            drug_id: drug_id.value,
+            units: units.value
         }
         selectedMedicalDrugsList.value.push(drugString)
         drugName.value = ''
@@ -440,6 +444,8 @@
 
     function selectedDrugName(name: any, obj: any) {
         drugName.value = name
+        drug_id.value = obj.drug_id
+        units.value = obj.units
     }
 
     function popoverOpenForFrequencyFn2() {
