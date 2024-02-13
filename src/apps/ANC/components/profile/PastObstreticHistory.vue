@@ -1,103 +1,44 @@
 <template>
-  
-  <ion-list>
+    <div class="container">
+        <ion-card v-if="currentSection === 0" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="prevPregnancies"></basic-form>
+            </ion-card-content>
+    </ion-card>
+
     
-    <div>
-                       
-                        <basic-form :contentData="prevPregnancies"></basic-form>
-                       
-                       <div class="radioContainer">
-                        <ion-list>
-                        <IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 15px;">Was last live birth preterm?</ion-label>
-                        <ion-radio style="margin-bottom: 10px;">Yes</ion-radio>
-                        <ion-radio style="margin-bottom: 10px;">No</ion-radio>
-                        <ion-radio style="margin-bottom: 10px;">Don't know</ion-radio>
-                      </div>
-                      </IonRadioGroup>
-                      
-                        
-                        
-                      <IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 15px;">Last live birth had congenital abnormalities?</ion-label>
-                        <ion-radio style="margin-bottom: 10px;">Yes</ion-radio>
-                        <ion-radio style="margin-bottom: 10px;">No</ion-radio>
-                        <ion-radio style="margin-bottom: 10px;">Don't know</ion-radio>
-                      </div>
-                      </IonRadioGroup>
-                        </ion-list>
-                      </div>
-                    
-                        <basic-form :contentData="modeOfDelivery"></basic-form>
-                        
-          <ion-list>
-            <ion-label style="font-weight: 600;"> Past pregnancy Complications</ion-label>
-            <div class="checkboxesDisplay">
-            <div>
-                        <div>
-            <ion-checkbox  @ionChange="addPreEclampsia" :checked="PreEclampsia" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-top:20px; margin-bottom: 10px;">Pre-eclampsia</ion-checkbox>
-        </div>
 
-        <div>
-            <ion-checkbox  @ionChange="addEclampsia" :checked="Eclampsia" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Eclampsia</ion-checkbox>
-        </div>
+    
+        <ion-card v-if="currentSection === 1" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header> 
+            <ion-card-content>
+                <basic-form :contentData="preterm"></basic-form>
+                <basic-form :contentData="abnormalities"></basic-form>
+            </ion-card-content>
+        </ion-card>
 
-        <div>
-            <ion-checkbox  @ionChange="addPuerperal" :checked="Puerperal" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px;margin-bottom:10px;">Puerperal Sepsis</ion-checkbox>
-        </div>
+  
+   
+        <ion-card v-if="currentSection === 2" class="section">
+            <ion-card-content>
+                <basic-form :contentData="modeOfDelivery"></basic-form>
+            </ion-card-content>
+        </ion-card>
+  
 
-        <div>
-            <ion-checkbox  @ionChange="addBabyDeath" :checked="BabyDeath" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Baby died within 24hrs of birth</ion-checkbox>
-        </div>
-
-        <div>
-            <ion-checkbox  @ionChange="addConvulsions" :checked="Convulsions" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Convulsions</ion-checkbox>
-        </div>
-
-        <div>
-            <ion-checkbox  @ionChange="addForceps" :checked="Forceps" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Forceps</ion-checkbox>
-        </div>
-        </div>
-        <div >
-        <div>
-            <ion-checkbox  @ionChange="addMellitus" :checked="Mellitus" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Gestational diabetes mellitus</ion-checkbox>
-        </div>
-
-        <div>
-            <ion-checkbox  @ionChange="addBleeding" :checked="Bleeding" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Heavy bleeding (during or after delivery)</ion-checkbox>
-        </div>
-
-        <div>
-            <ion-checkbox  @ionChange="addMacrosomia" :checked="Macrosomia" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Macrosomia</ion-checkbox>
-        </div>
-
-        <div>
-            <ion-checkbox  @ionChange="addPerineal" :checked="Perineal" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Perineal tear (3rd or 4th degree)</ion-checkbox>
-        </div>
-
-        <div>
-            <ion-checkbox  @ionChange="addAsphyxia" :checked="Asphyxia" label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 24px; margin-bottom:10px;">Asphyxia</ion-checkbox>
-        </div>
-      </div>
-      </div>
-
-        <div style="margin-top: 14px; margin-left: 10px;">
-            <ion-label class="tpStndCls">Other Complications (Specify)</ion-label>
-            <ion-item class="input_item" style="min-height: 120px; margin-top: 14px;">
-                <ion-label><span v-html="iconsContent.editPen"></span></ion-label>
-                <ion-textarea v-model="otherComplications"  style="min-height: 120px;" class="inputTpln" :auto-grow="true"  fill="outline"></ion-textarea >
-            </ion-item>
-
-        </div>
-      </ion-list>
-
-            </div>
-          
-
-        </ion-list>
-     
+   
+        <ion-card v-if="currentSection === 3" class="section">
+            <ion-card-content><basic-form :contentData="Complications"></basic-form> </ion-card-content>
+        </ion-card> 
+    
+        <!-- Navigation Buttons -->
+        <div class="navigation-buttons">
+      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
+      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
+    </div>
+</div>
+                                              
 </template>
 
 <script lang="ts">
@@ -150,132 +91,35 @@ export default defineComponent({
         iconsContent: icons,
         prevPregnanciesInstance: {} as any,
         modeOfDeliveryInstance: {} as any,
+        currentSection: 0, // Initialize currentSection to 0
     };
   },
   computed:{
         ...mapState(useObstreticHistoryStore,["prevPregnancies"]),
         ...mapState(useObstreticHistoryStore,["preterm"]),
-        ...mapState(useObstreticHistoryStore,["preterm1"]),
-        ...mapState(useObstreticHistoryStore,["preterm2"]),
+        ...mapState(useObstreticHistoryStore,["abnormalities"]),
         ...mapState(useObstreticHistoryStore,["modeOfDelivery"]),
-        ...mapState(useObstreticHistoryStore,["PreEclampsia"]),
-        ...mapState(useObstreticHistoryStore,["Eclampsia"]),
-        ...mapState(useObstreticHistoryStore,["Puerperal"]),
-        ...mapState(useObstreticHistoryStore,["BabyDeath"]),
-        ...mapState(useObstreticHistoryStore,["Convulsions"]),
-        ...mapState(useObstreticHistoryStore,["Forceps"]),
-        ...mapState(useObstreticHistoryStore,["Mellitus"]),
-        ...mapState(useObstreticHistoryStore,["Bleeding"]),
-        ...mapState(useObstreticHistoryStore,["Macrosomia"]),
-        ...mapState(useObstreticHistoryStore,["Perineal"]),
-        ...mapState(useObstreticHistoryStore,["Asphyxia"]),
-        ...mapState(useObstreticHistoryStore, ["otherComplications"])
+        ...mapState(useObstreticHistoryStore, ["Complications"])
 
     },
     mounted(){
-      const prevPregnancies = useObstreticHistoryStore()
-      const preterm = useObstreticHistoryStore()
-      const preterm1 = useObstreticHistoryStore()
-      const preterm2 = useObstreticHistoryStore()
-      const ModeOfDelivery = useObstreticHistoryStore()
-      const Complications = useObstreticHistoryStore()
-
-        
-       
+      const prevPregnancies = useObstreticHistoryStore()   
     },
     setup() {
       return { checkmark,pulseOutline };
     },
     methods:{
-
-      saveStateValuesState() {
-            const obstreticHistoryStore = useObstreticHistoryStore()
-            obstreticHistoryStore.setPreEclampsia(this.PreEclampsia)
-            obstreticHistoryStore.setEclampsia(this.Eclampsia)
-            obstreticHistoryStore.setConvulsions(this.Convulsions)
-            obstreticHistoryStore.setBabyDeath(this.BabyDeath)
-            obstreticHistoryStore.setForceps(this.Forceps)
-            obstreticHistoryStore.setMellitus(this.Mellitus)
-            obstreticHistoryStore.setMacrosomia(this.Macrosomia)
-            obstreticHistoryStore.setPerineal(this.Perineal)
-            obstreticHistoryStore.setAsphyxia(this.Asphyxia)
-            obstreticHistoryStore.setBleeding(this.Bleeding)
-            obstreticHistoryStore.setPuerperal(this.Puerperal)
-            
-        },
-
-      addPreEclampsia(ev: any) {
-            const checked = ev.detail.checked
-            const obstreticHistoryStore = useObstreticHistoryStore()
-            obstreticHistoryStore.setPreEclampsia(checked as boolean)
-            this.saveStateValuesState()
-        },
-        addEclampsia(ev: any) {
-            const checked = ev.detail.checked
-            const obstreticHistoryStore = useObstreticHistoryStore()
-            obstreticHistoryStore.setEclampsia(checked as boolean)
-            this.saveStateValuesState()
-        },
-        addPuerperal(ev: any) {
-            const checked = ev.detail.checked
-            const obstreticHistoryStore = useObstreticHistoryStore()
-            obstreticHistoryStore.setPuerperal(checked as boolean)
-            this.saveStateValuesState()
-        },
-        addBabyDeath(ev: any) {
-            const checked = ev.detail.checked
-            const obstreticHistoryStore = useObstreticHistoryStore()
-            obstreticHistoryStore.setBabyDeath(checked as boolean)
-            this.saveStateValuesState()
-        },
-        addConvulsions(ev: any) {
-            const checked = ev.detail.checked
-            const obstreticHistoryStore = useObstreticHistoryStore()
-            obstreticHistoryStore.setConvulsions(checked as boolean)
-            this.saveStateValuesState()
-        },
-        addForceps(ev: any) {
-            const checked = ev.detail.checked
-            const obstreticHistoryStore = useObstreticHistoryStore()
-            obstreticHistoryStore.setForceps(checked as boolean)
-            this.saveStateValuesState()
-        },
-        addMellitus(ev: any) {
-            const checked = ev.detail.checked
-            const obstreticHistoryStore = useObstreticHistoryStore()
-            obstreticHistoryStore.setMellitus(checked as boolean)
-            this.saveStateValuesState()
-        },
-        addBleeding(ev: any) {
-            const checked = ev.detail.checked
-            const obstreticHistoryStore = useObstreticHistoryStore()
-            obstreticHistoryStore.setBleeding(checked as boolean)
-            this.saveStateValuesState()
-        },
-        addMacrosomia(ev: any) {
-            const checked = ev.detail.checked
-            const obstreticHistoryStore = useObstreticHistoryStore()
-            obstreticHistoryStore.setMacrosomia(checked as boolean)
-            this.saveStateValuesState()
-        },
-        addPerineal(ev: any) {
-            const checked = ev.detail.checked
-            const obstreticHistoryStore = useObstreticHistoryStore()
-            obstreticHistoryStore.setPerineal(checked as boolean)
-            this.saveStateValuesState()
-        },
-        addAsphyxia(ev: any) {
-            const checked = ev.detail.checked
-            const obstreticHistoryStore = useObstreticHistoryStore()
-            obstreticHistoryStore.setAsphyxia(checked as boolean)
-            this.saveStateValuesState()
-        },
-        refSetNonPharmalogicalTherapyAndOtherNotes(value: string) {
-            const obstreticHistoryStore = useObstreticHistoryStore()
-            obstreticHistoryStore.setOtherComplications(value as string)
-            this.saveStateValuesState()
-        },
-
+         //Method for navigating sections
+    goToNextSection() {
+      if (this.currentSection < 3) {
+        this.currentSection++;
+      }
+    },
+    goToPreviousSection() {
+      if (this.currentSection > 0) {
+        this.currentSection--;
+      }
+    },
 
       
     }
@@ -284,65 +128,41 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.vitals_title{
-    border-bottom: 1px solid #B3B3B3;
-    margin-bottom: 50px ;
-}
-.input-with-icon {
-  position: relative;
-}
-.input-icon {
-  position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: gray; /* Adjust the color as needed */
-}
-ion-col{
-    padding-bottom:15px ;
-}
-.checkLbltp {
-    border-bottom: 2px dotted var(--ion-color-medium);
-    --inner-border-width:0;
-}
-h5{
-    margin-top: 0px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-}
-
-.radio {
-        display: flex;
-        flex-direction: column;
-        /* border-bottom: 2px dotted var(--ion-color-medium); */
-        --inner-border-width:0;
-        padding: 10px;
-  
-    }
-ion-radio {
-  width: 45%;
-}
-ion-checkbox {
-  width: 100%;
-}
-.radioContainer{
-  border-bottom: 2px dotted var(--ion-color-medium);
-}
-
-.tpStndCls {
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 24px;
-}
-
-.checkboxesDisplay{
+.container {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
 }
 
+.section {
+  width: 100%;
+  max-width: 1300px; 
+  margin-bottom: 20px;
+}
+
+ion-card {
+ box-shadow:none;
+  background-color:inherit;   
+  width: 100%;
+  color: black;
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 500px; 
+}
+
+@media (max-width: 1500px) {
+  .container {
+    padding: 10px;
+  }
+}
+.sub_item_header{
+  font-weight: bold;
+  font-size: medium;
+}
 
 </style>
   

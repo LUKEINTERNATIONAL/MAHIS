@@ -1,59 +1,37 @@
 <template>
-    <ion-list>
-        <div>
-          
-            
-              <ion-row>
-                <ion-col>
-                        <IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 15px;">LNMP known</ion-label>
-                        <ion-radio style="margin-bottom: 10px;">Yes</ion-radio>
-                        <ion-radio style="margin-bottom: 10px;">No</ion-radio>
-                        
-                      </div>
-                      </IonRadioGroup>
-                    </ion-col>
-                        <ion-col>
-                      <IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 15px;">Ultrasound done</ion-label>
-                        <ion-radio style="margin-bottom: 10px;">Yes</ion-radio>
-                        <ion-radio style="margin-bottom: 10px;">No</ion-radio>
-                        
-                      </div>
-                      </IonRadioGroup>
-                    </ion-col>
-                      </ion-row>
-       
-
-                      <BasicForm :content-data="currentPregnancies"></BasicForm>
-                     
-                        <IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 15px;">Source of gestation age</ion-label>
-                        <ion-radio style="margin-bottom: 10px;">LMNP</ion-radio>
-                        <ion-radio style="margin-bottom: 10px;">Ultrasound</ion-radio>
-                        <ion-radio style="margin-bottom: 10px;">Fundal height</ion-radio>
-                        
-                      </div>
-                      </IonRadioGroup>
-                     
-                     <BasicForm :content-data="deliveryDate"></BasicForm>
-                     
-                        <IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 15px;">Tetanus dose</ion-label>
-                        <ion-radio style="margin-bottom: 10px;">Fully immunised</ion-radio>
-                        <ion-radio style="margin-bottom: 10px;"> Under immunised</ion-radio>
-                        <ion-radio style="margin-bottom: 10px;">No doses</ion-radio>
-                        <ion-radio style="margin-bottom: 10px;">Unknown</ion-radio>
-                        
-                      </div>
-                      </IonRadioGroup>
-                     
-        </div>
-    </ion-list>
+<div class="container">
+  <ion-card v-if="currentSection === 0" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+              <basic-form :contentData="lmnp"></basic-form>
+              <basic-form :contentData="ultrasound"></basic-form>
+            </ion-card-content>
+    </ion-card>
+    <ion-card v-if="currentSection === 1" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+              <basic-form :contentData="currentPregnancies"></basic-form>
+            </ion-card-content>
+    </ion-card>
+    <ion-card v-if="currentSection === 2" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+              <basic-form :contentData="gestation"></basic-form>
+              <basic-form :contentData="deliveryDate"></basic-form>
+            </ion-card-content>
+    </ion-card>
+    <ion-card v-if="currentSection === 3" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+              <basic-form :contentData="tetanus"></basic-form>
+            </ion-card-content>
+    </ion-card>  
+           <!-- Navigation Buttons -->
+      <div class="navigation-buttons">
+      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
+      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
+    </div> 
+</div>
 </template>
 
 <script lang="ts">
@@ -105,12 +83,18 @@ export default defineComponent({
       return {
           iconsContent: icons,
           currentPregnanciesInstance: {} as any,
+          currentSection: 0, // Initialize currentSection to 0
          
       };
     },
     computed:{
         ...mapState(useCurrentPregnanciesStore,["currentPregnancies"]),
         ...mapState(useCurrentPregnanciesStore,["deliveryDate"]),
+        ...mapState(useCurrentPregnanciesStore,["lmnp"]),
+        ...mapState(useCurrentPregnanciesStore,["gestation"]),
+        ...mapState(useCurrentPregnanciesStore,["tetanus"]),
+        ...mapState(useCurrentPregnanciesStore,["ultrasound"]),
+
        
   
       },
@@ -125,19 +109,17 @@ export default defineComponent({
         return { checkmark,pulseOutline };
       },
       methods:{
-  
-        saveStateValuesState() {
-              const obstreticHistoryStore = useCurrentPregnanciesStore()
-             
-              
-          },
-  
-        addPreEclampsia(ev: any) {
-              const checked = ev.detail.checked
-              const obstreticHistoryStore = useCurrentPregnanciesStore()
-            //   obstreticHistoryStore.setPreEclampsia(checked as boolean)
-              this.saveStateValuesState()
-          },
+          //Method for navigating sections
+    goToNextSection() {
+      if (this.currentSection < 3) {
+        this.currentSection++;
+      }
+    },
+    goToPreviousSection() {
+      if (this.currentSection > 0) {
+        this.currentSection--;
+      }
+    },
    
           },
       
@@ -147,44 +129,41 @@ export default defineComponent({
   </script>
 
 <style scoped>
-
-
-.checkLbltp {
-    border-bottom: 2px dotted var(--ion-color-medium);
-    --inner-border-width:0;
-}
-h5{
-    margin-top: 0px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-}
-
-.radio {
-        display: flex;
-        flex-direction: column;
-        /* border-bottom: 2px dotted var(--ion-color-medium); */
-        --inner-border-width:0;
-        padding: 10px;
-  
-    }
-
-ion-radio {
-  width: 40%;
-}
-
-
-.tpStndCls {
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 24px;
-}
-
-.checkboxesDisplay{
+.container {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
 }
+
+.section {
+  width: 100%;
+  max-width: 1300px; 
+  margin-bottom: 20px;
+}
+
+ion-card {
+ box-shadow:none;
+  background-color:inherit;   
+  width: 100%;
+ color: black;
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 500px; 
+}
+
+@media (max-width: 1500px) {
+  .container {
+    padding: 10px;
+  }
+}
+.sub_item_header{
+  font-weight: bold;
+  font-size: medium;
+}
+
 </style>
   

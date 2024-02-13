@@ -93,10 +93,17 @@
   import MaternalExam from "@/apps/ANC/components/physical exam/MaternalExam.vue";
   import PresentingSigns from "@/apps/ANC/components/physical exam/PresentingSigns.vue";
   import CurrentPregnancies from '@/apps/ANC/components/profile/CurrentPregnancies.vue';
-  import PastObstreticHistory from "@/apps/ANC/components/profile/PastObstreticHistory.vue";
+  import PastObstetricHistory from "@/apps/ANC/components/profile/PastObstreticHistory.vue";
   import UltrasoundScan from '@/apps/ANC/components/lab_tests/UltrasoundScan.vue';
   import UrineTest from '@/apps/ANC/components/lab_tests/UrineTest.vue';
   import TB from '@/apps/ANC/components/lab_tests/TB.vue';
+  import DiagnosisTreatment from '@/apps/ANC/components/Treatment/DiagnosisTreatment.vue'
+  import MedicationDispersed from '@/apps/ANC/components/Treatment/MedicationDispersed.vue';
+  import DiagnosisCounselling from '@/apps/ANC/components/Treatment/DiagnosisCounselling.vue';
+  import Immunization from '@/apps/ANC/components/Treatment/Immunization.vue';
+  import IntimatePartner from '@/apps/ANC/components/Treatment/IntimatePartner.vue';
+  import Deworming from '@/apps/ANC/components/Treatment/Deworming.vue';
+  import UrgentReferral from '@/apps/ANC/components/Treatment/UrgentReferral.vue';
   import SaveProgressModal from '@/components/SaveProgressModal.vue'
   import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue";
   import MedicalFollowUp from '@/apps/ANC/components/symptomsFollowUp/MedicalFollowUp.vue';
@@ -154,7 +161,7 @@
         MaternalExam,
         PresentingSigns,
         CurrentPregnancies,
-        PastObstreticHistory,
+        PastObstetricHistory,
         UltrasoundScan,
         UrineTest,
         TB,
@@ -168,7 +175,15 @@
         PhysiologicalCounseling,
         DietCounselling,
         Referral,
-        AncEnd
+        AncEnd,
+        DiagnosisTreatment,
+        MedicationDispersed,
+        DiagnosisCounselling,
+        Immunization,
+        IntimatePartner,
+        Deworming,
+        UrgentReferral
+
     },
     data(){
         return {

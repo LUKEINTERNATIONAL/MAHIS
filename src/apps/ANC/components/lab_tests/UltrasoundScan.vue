@@ -1,73 +1,25 @@
 <template>
-    <ion-list>
-        <div class="radioContainer">
-            <ion-row>
-                <ion-col>
-                        <IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom:15px;">Select whether:</ion-label>
-                        <ion-radio style="margin-bottom: 10px">Ultrasound scan required</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Ultrasound scan ordered</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Ultrasound scan conducted</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Ultrasound scan not done</ion-radio>
-                      </div>
-                      </IonRadioGroup>
-                    </ion-col>
-
-                    <ion-col> <BasicForm :content-data = "ultrasoundDate"></BasicForm> </ion-col> 
-                    </ion-row> 
-                    <ion-row>
-                        <ion-col>
-                      <IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 15px">Reason ultrasound scan not done</ion-label>
-                        <ion-radio style="margin-bottom: 10px">Machine not functioning</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Technician not available</ion-radio>
-                      </div>
-                      </IonRadioGroup>
-                    </ion-col>
-                    
-                      
-                    
-                    <ion-col>
-         <div style="margin-top: 14px; margin-left: 10px;">
-            <ion-label class="tpStndCls">Other reason ultrasound scan not done (specify)</ion-label>
-            <ion-item class="input_item" style="min-height: 120px; margin-top: 14px; margin-bottom: 15px">
-                <ion-label><span v-html="iconsContent.editPen"></span></ion-label>
-                <ion-textarea v-model="otherReason"  style="min-height: 120px;" class="inputTpln" :auto-grow="true"  fill="outline"></ion-textarea>
-            </ion-item>
-        </div>
-        </ion-col>
-    </ion-row>
+    <div class="container">
+        <ion-card v-if="currentSection === 0" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="ultrasound"></basic-form>
+             <basic-form :contentData="reason"></basic-form>
+            </ion-card-content>
+    </ion-card>
+    <ion-card v-if="currentSection === 1" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="amniotic"></basic-form>
+             <basic-form :contentData="placenta"></basic-form>
+            </ion-card-content>
+    </ion-card>
+      <!-- Navigation Buttons -->
+      <div class="navigation-buttons">
+      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
+      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
+    </div> 
     </div>
-
-    <div class="radioContainer">
-                        <IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 15px">Amniotic fluid level detected during ultrasound</ion-label>
-                        <ion-radio style="margin-bottom: 10px">Normal amniotic fluid level</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Reduced amniotic fluid level</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Increased amniotic fluid level</ion-radio>
-                      </div>
-                      </IonRadioGroup>
-                      </div>
-
-                      <div class="radioContainer">
-                        <IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom:15px">Location of the placenta detected during the ultrasound</ion-label>
-                        <ion-radio style="margin-bottom: 10px">Praevia</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Low</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Anterior</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Posterior</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Right side</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Left side</ion-radio>
-                        <ion-radio style="margin-bottom: 10px">Fundal</ion-radio>
-                      </div>
-                      </IonRadioGroup>
-                      </div>
-       
-    </ion-list>
 </template>
 
 <script lang="ts">
@@ -116,11 +68,15 @@ export default defineComponent({
         return {
             iconsContent: icons,
           labTestsInstance: {} as any,
+          currentSection: 0, 
+         
         }
     },
     computed:{
-        ...mapState(useLabTestsStore, ["ultrasoundDate"]),
-        ...mapState(useLabTestsStore, ["otherReason"])
+        ...mapState(useLabTestsStore, ["reason"]),
+        ...mapState(useLabTestsStore, ["ultrasound"]),
+        ...mapState(useLabTestsStore, ["amniotic"]),
+        ...mapState(useLabTestsStore, ["placenta"]),
     },
     mounted(){
         const labTests = useLabTestsStore()
@@ -128,37 +84,60 @@ export default defineComponent({
     setup(){
         return { checkmark,pulseOutline };
     },
-    methods:{}
+    methods:{
+               //Method for navigating sections
+    goToNextSection() {
+      if (this.currentSection < 1) {
+        this.currentSection++;
+      }
+    },
+    goToPreviousSection() {
+      if (this.currentSection > 0) {
+        this.currentSection--;
+      }
+    },
+   
+    }
 })
 </script>
 
 <style scoped>
 
-.tpStndCls {
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 24px;
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.radio {
-        display: flex;
-        flex-direction: column;
-        /* border-bottom: 2px dotted var(--ion-color-medium); */
-        --inner-border-width:0;
-        padding: 10px;
-  
-    }
-ion-radio {
-  width: 60%;
-}
-ion-checkbox {
+.section {
   width: 100%;
-}
-.radioContainer{
-  border-bottom: 2px dotted var(--ion-color-medium);
-  
+  max-width: 1300px; 
+  margin-bottom: 20px;
 }
 
+ion-card {
+ box-shadow:none;
+  background-color:inherit;   
+  width: 100%;
+ color: black;
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 500px; 
+}
+
+@media (max-width: 1500px) {
+  .container {
+    padding: 10px;
+  }
+}
+.sub_item_header{
+  font-weight: bold;
+  font-size: medium;
+}
 
 
 

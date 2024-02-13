@@ -341,6 +341,11 @@ export default defineComponent({
   margin-bottom: 20px;
 }
 
+ion-card {
+  box-shadow:none;
+  background-color:inherit;
+}
+
 .navigation-buttons {
   display: flex;
   justify-content: space-between;

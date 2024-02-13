@@ -4,7 +4,7 @@
     <Toolbar />
     <ion-content :fullscreen="true">
       <DemographicBar />
-      <Stepper stepperTitle="Profile" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
+      <Stepper stepperTitle="Profile" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()"  :StepperData="StepperData"/>
     </ion-content>
   </ion-page>
 </template>
@@ -41,6 +41,11 @@ import { icons } from '@/utils/svg';
 import { mapState } from 'pinia';
 import Stepper from '@/components/Stepper.vue'
 import { toastWarning,popoverConfirmation, toastSuccess } from '@/utils/Alerts';
+import PastObstreticHistory from '../components/profile/PastObstreticHistory.vue';
+import CurrentPregnancies from '../components/profile/CurrentPregnancies.vue';
+import Medications from '../components/profile/Medications.vue';
+import MedicalHistory from '../components/profile/MedicalHistory.vue';
+import WomanBehaviour from '../components/profile/WomanBehaviour.vue';
 export default defineComponent({
   name: "Home",
   components:{
@@ -64,7 +69,12 @@ export default defineComponent({
     IonItem,
     IonLabel,
     IonModal,
-    Stepper
+    Stepper,
+    PastObstreticHistory,
+    WomanBehaviour,
+    CurrentPregnancies,
+    Medications,
+    MedicalHistory
   },
   data(){
     return {
@@ -129,7 +139,7 @@ export default defineComponent({
         },
         {
           'title': 'Current Pregancy',
-          'componet': 'CurrentPregnancy',
+          'componet': 'CurrentPregnancies',
           'value': '3',
         },
         {
@@ -141,7 +151,7 @@ export default defineComponent({
           'title': 'Woman behaviour',
           'componet': 'WomanBehaviour',
           'value': '5',
-        },
+        }
       ],
       isOpen: false,
       iconsContent: icons,
@@ -152,10 +162,28 @@ export default defineComponent({
 
   },
   mounted(){
-    this.markWizard()
+    // this.markWizard()
   },
   watch: {
 
+    vitals: {
+    //   handler(){
+    //     this.markWizard()
+    //   },
+    //   deep: true
+    // },
+    // investigations: {
+    //   handler(){
+    //     this.markWizard()
+    //   },
+    //   deep: true
+    // },
+    // diagnosis: {
+    //   handler(){
+    //     this.markWizard()
+    //   },
+      deep: true
+    }
   },
   setup() {
     return { chevronBackOutline,checkmark };
@@ -163,33 +191,33 @@ export default defineComponent({
 
   methods:{
     markWizard(){
-      if(this.medications.validationStatus){
-        this.wizardData[0].checked = true;
-        this.wizardData[0].class = 'open_step common_step'
-      }else{
-        this.wizardData[0].checked = false;
-      }
+    //   if(this.medications.validationStatus){
+    //     this.wizardData[0].checked = true;
+    //     this.wizardData[0].class = 'open_step common_step'
+    //   }else{
+    //     this.wizardData[0].checked = false;
+    //   }
 
-      if(this.medicalHistory[0].selectdData.length > 0){
-        this.wizardData[1].checked = true;
-        this.wizardData[1].class = 'open_step common_step'
-      }else{
-        this.wizardData[1].checked = false;
-      }
+    //   if(this.medicalHistory[0].selectdData.length > 0){
+    //     this.wizardData[1].checked = true;
+    //     this.wizardData[1].class = 'open_step common_step'
+    //   }else{
+    //     this.wizardData[1].checked = false;
+    //   }
 
-      if(this.womanBehaviour[0].selectdData.length > 0){
-        this.wizardData[2].checked = true;
-        this.wizardData[2].class = 'open_step common_step'
-      }else{
-        this.wizardData[2].checked = false;
-      }
-      if(this.medications[0].selectdData.length > 0){
-        this.wizardData[2].checked = true;
-        this.wizardData[2].class = 'open_step common_step'
-      }else{
-        this.wizardData[2].checked = false;
-      }
-    },
+    //   if(this.womanBehaviour[0].selectdData.length > 0){
+    //     this.wizardData[2].checked = true;
+    //     this.wizardData[2].class = 'open_step common_step'
+    //   }else{
+    //     this.wizardData[2].checked = false;
+    //   }
+    //   if(this.medications[0].selectdData.length > 0){
+    //     this.wizardData[2].checked = true;
+    //     this.wizardData[2].class = 'open_step common_step'
+    //   }else{
+    //     this.wizardData[2].checked = false;
+    //   }
+     },
     deleteDisplayData(data: any){
       return  data.map((item: any) => {
         delete item?.display;
@@ -197,29 +225,29 @@ export default defineComponent({
       });
     },
     saveData(){
-      if(this.vitals.validationStatus && this.investigations[0].selectdData.length > 0 && this.diagnosis[0].selectdData.length > 0){
-        this.saveVitals()
-        this.saveInvestigation()
-        this.saveDiagnosis()
-        this.$router.push('patientProfile');
-      }else{
-        toastWarning("Please complete all required fields")
-      }
-    },
-    saveInvestigation(){
-      const investigationInstance = new LabOrder()
-      investigationInstance.postActivities(this.demographics.patient_id,this.deleteDisplayData(this.investigations[0].selectdData))
-    },
-    saveVitals(){
-      const userID: any  = Service.getUserID()
-      const vitalsInstance = new VitalsService(this.demographics.patient_id,userID);
-      vitalsInstance.onFinish(this.vitals)
-    },
-    saveDiagnosis(){
-      const userID: any  = Service.getUserID()
-      const diagnosisInstance = new Diagnosis();
-      diagnosisInstance.onSubmit(this.demographics.patient_id,userID,this.deleteDisplayData(this.diagnosis[0].selectdData))
-    },
+    //   if(this.vitals.validationStatus && this.investigations[0].selectdData.length > 0 && this.diagnosis[0].selectdData.length > 0){
+    //     this.saveVitals()
+    //     this.saveInvestigation()
+    //     this.saveDiagnosis()
+    //     this.$router.push('patientProfile');
+    //   }else{
+    //     toastWarning("Please complete all required fields")
+    //   }
+    // },
+    // saveInvestigation(){
+    //   const investigationInstance = new LabOrder()
+    //   investigationInstance.postActivities(this.demographics.patient_id,this.deleteDisplayData(this.investigations[0].selectdData))
+    // },
+    // saveVitals(){
+    //   const userID: any  = Service.getUserID()
+    //   const vitalsInstance = new VitalsService(this.demographics.patient_id,userID);
+    //   vitalsInstance.onFinish(this.vitals)
+    // },
+    // saveDiagnosis(){
+    //   const userID: any  = Service.getUserID()
+    //   const diagnosisInstance = new Diagnosis();
+    //   diagnosisInstance.onSubmit(this.demographics.patient_id,userID,this.deleteDisplayData(this.diagnosis[0].selectdData))
+  },
     openModal(){
       createModal(SaveProgressModal)
     }

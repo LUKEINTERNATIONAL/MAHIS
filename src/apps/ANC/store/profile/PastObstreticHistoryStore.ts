@@ -6,7 +6,7 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
         prevPregnancies: [
             {
                 isFinishBtn: false,
-                sectionHeader: 'Number of previous pregnancies',
+                sectionHeader: '',
                 classDash: 'dashed_bottom_border _padding',
                 data:
                 { 
@@ -79,6 +79,44 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
           
             },   
         ] as any,
+        abnormalities:[
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border',
+                radioBtnContent:
+                {
+                    header:{
+                        title: 'Last live birth had congenital abnormalities?',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: 'Yes',
+                            value: 'Yes',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'No',
+                            value: 'No',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'Dont know',
+                            value: 'Dont know',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                    ]
+                }
+                    
+            },
+        ],
         preterm:[
             {
                 selectdData: [],
@@ -87,55 +125,30 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                 radioBtnContent:
                 {
                     header:{
-                        title: 'Was last live birth preterm',
+                        title: 'Was last live birth preterm?',
                         selectedValue: ''
                     },
                     data:[
                         {
-                            name: 'Smoking',
-                            value: 'smoking'
+                            name: 'Yes',
+                            value: 'Yes',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
                         },
-                    ]
-                }
-                    
-            },
-        ],
-        preterm1:[
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
                         {
-                            name: '',
-                            value: 'smoking'
+                            name: 'No',
+                            value: 'No',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
                         },
-                    ]
-                }
-                    
-            },
-        ],
-        preterm2:[
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
                         {
-                            name: '',
-                            value: 'smoking'
+                            name: 'Dont know',
+                            value: 'Dont know',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
                         },
                     ]
                 }
@@ -145,7 +158,7 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
         modeOfDelivery: [
             {
                 isFinishBtn: false,
-                sectionHeader: 'Mode of delivery',
+                sectionHeader: '',
                 classDash: 'dashed_bottom_border _padding',
                 data:
                 { 
@@ -159,6 +172,7 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                                     required: true,
                                     eventType: 'input',
                                     alertsError: false,
+                                  
                                     alertsErrorMassage: ''
                                 },
                                 {
@@ -168,6 +182,7 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                                     required: true,
                                     eventType: 'input',
                                     alertsError: false,
+                                  
                                     alertsErrorMassage: ''
                                 },
                                 
@@ -200,18 +215,210 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
              
         ] as any,
 
-        PreEclampsia: false as boolean,
-        Eclampsia: false as boolean,
-        Puerperal: false as boolean,
-        BabyDeath: false as boolean,
-        Convulsions: false as boolean,
-        Forceps: false as boolean,
-        Mellitus: false as boolean,
-        Bleeding: false as boolean,
-        Macrosomia: false as boolean,
-        Perineal: false as boolean,
-        Asphyxia: false as boolean,
-        otherComplications: '' as string,
+        Complications:[
+            {
+                selectdData: [],
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+
+                            {
+                                name: 'Pre-eclampsia',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Eclampsia',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+
+            {
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Puerperal Sepsis',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Baby died within 24hrs of birth',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+
+                        ]
+                    }
+
+            },
+            {
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Convulsions',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Forceps',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+
+                        ]
+                    }
+
+            },
+
+            {
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Gestational diabetes mellitus',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Heavy bleeding ',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+
+            {
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Macrosomia',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Perineal tear (3rd or 4th degree)',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Asphyxia',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+
+            {
+                isFinishBtn: false,
+                sectionHeader: '',
+                classDash: 'dashed_bottom_border _padding',
+
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Other (specify)',
+                                        unit: '',
+                                        icon: icons.editPen,
+                                        value: '',
+                                        name: 'Other',
+                                        required: true,
+                                        eventType: 'input',
+                                        inputWidth: "85%",
+                                    },
+
+                                ]
+                            }
+                        ]
+                    },
+            },
+
+
+        ] as any, 
        
     }),
     actions:{
@@ -221,57 +428,15 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
         setPreterm(data: any){
             this.preterm = data
         },
-        setPreterm1(data: any){
-            this.preterm1 = data
-        },
-        setPreterm2(data: any){
-            this.preterm2 = data
+        setAbnormalities(data: any){
+            this.abnormalities = data
         },
         setModeOfDelivery(data:any) {
             this.modeOfDelivery = data
         },
-      
-        setEclampsia(value: boolean){
-            this.Eclampsia = value
+        setComplications(data:any) {
+            this.Complications = data
         },
-        setPreEclampsia(value: boolean){
-            this.PreEclampsia = value
-        },
-        setPuerperal (value: boolean){
-            this.Puerperal = value
-        },
-        setBabyDeath(value: boolean){
-            this.BabyDeath = value
-        },
-        setConvulsions(value: boolean){
-            this.Convulsions = value
-        },
-        setForceps(value: boolean){
-            this.Forceps = value
-        },
-        setMellitus(value: boolean){
-            this.Mellitus = value
-        },
-        setBleeding(value: boolean){
-            this.Bleeding = value
-        },
-        setMacrosomia(value: boolean){
-            this.Macrosomia = value
-        },
-        setPerineal (value: boolean){
-            this.Perineal = value
-        },
-        setAsphyxia(value: boolean){
-            this.Asphyxia = value
-        },
-        setOtherComplications(value: string) {
-            this.otherComplications = value
-        },
-        getOtherComplications() {
-            return this.otherComplications
-        },
-
-
       
     },
     persist:true,
