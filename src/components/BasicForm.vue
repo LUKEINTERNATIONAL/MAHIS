@@ -9,6 +9,7 @@
                 <ion-row v-for="(element, index2) in item.data.rowData" :key="index2">
                     <ion-col v-for="(col, colIndex) in element.colData" :key="colIndex" v-show="!col.displayNone">
                         <BasicInputField 
+                            v-if="!col.isDatePopover"
                             :inputHeader="col.inputHeader"
                             :sectionHeaderFontWeight = "col.sectionHeaderFontWeight"
                             :unit="col.unit"
@@ -24,14 +25,24 @@
                             @setPopoverValue ="value => {col.value = value.name; col.id = value[col.idName]; handleSelected(col)}"
                             
                         />
+                        <DateInputField 
+                            v-if="col.isDatePopover"
+                            :inputHeader="col.inputHeader"
+                            :sectionHeaderFontWeight = "col.sectionHeaderFontWeight"
+                            :unit="col.unit"
+                            :icon ="col.icon"
+                            :placeholder="col.placeholder"
+                            :iconRight="col.iconRight"
+                            :inputWidth="col.inputWidth"
+                            :inputValue="col.value"
+                            :eventType="col.eventType"
+                            @update:dateValue="value =>{col.value =value; handleInput(col)} "
+                           
+                        />
+
                         <div class="alerts_error" v-if="col.alertsError">
                             {{ col.alertsErrorMassage }}
                         </div>
-                        <ion-popover :show-backdrop="false" :keep-contents-mounted="true" :is-open="openPopover"
-                            :event="event" @didDismiss="openPopover = false" v-if="col.isDatePopover">
-                            <ion-datetime @ionChange=" event => { col.value = formatDate(event.detail.value); $emit('update:inputValue', col); }" id="datetime" presentation="date"
-                                :show-default-buttons="true" ></ion-datetime>
-                        </ion-popover>
                     </ion-col>
                     <ion-col size="btn.btn_col_size || 1.7" class="btn_col" v-for="(btn, btnIndex) in element.btns" :key="btnIndex" >
                         <DynamicButton
@@ -72,12 +83,9 @@
                             :eventType="radioInput.eventType"
                             @update:inputValue="value =>{radioInput.value =value.target.value; handleInput(radioInput)} "
                             @clicked:inputValue="value =>{event =value; handlePopover(radioInput); $emit('clicked:inputValue',event)}"
+                        
                         />
-                        <ion-popover :show-backdrop="false" :keep-contents-mounted="true" :is-open="openPopover"
-                            :event="event" @didDismiss="openPopover = false" >
-                            <ion-datetime @ionChange="event => radioInput.value = formatDate(event.detail.value)" id="datetime"
-                                presentation="date" :show-default-buttons="true"></ion-datetime>
-                        </ion-popover>
+                        
                         <div class="alerts_error" v-if="radioInput.alertsError">
                             {{ radioInput.alertsErrorMassage }}
                         </div>
@@ -106,23 +114,20 @@
                         </div>
                     </ion-col>
                     <ion-col v-show="!item.checkboxBtnContent.inputFields[0].displayNone" v-for="(checkboxInput, checkboxInputIndex) in item.checkboxBtnContent.inputFields" :key="checkboxInputIndex">
-                        <BasicInputField
+                        
+                        <DateInputField 
                             :inputHeader="checkboxInput.inputHeader"
+                            :sectionHeaderFontWeight = "checkboxInput.sectionHeaderFontWeight"
                             :unit="checkboxInput.unit"
                             :icon ="checkboxInput.icon"
                             :placeholder="checkboxInput.placeholder"
                             :iconRight="checkboxInput.iconRight"
                             :inputWidth="checkboxInput.inputWidth"
                             :inputValue="checkboxInput.value"
-                            :eventType="checkboxInput?.eventType || 'input'"
-                            @update:inputValue="value =>{checkboxInput.value =value.target.value; handleInput(checkboxInput)} "
-                            @clicked:inputValue="value =>{event =value; handlePopover(checkboxInput); $emit('clicked:inputValue',event)}"
+                            :eventType="checkboxInput.eventType"
+                            @update:dateValue="value =>{checkboxInput.value =value; handleInput(checkboxInput)} "
+                           
                         />
-                        <ion-popover :show-backdrop="false" :keep-contents-mounted="true" :is-open="openPopover"
-                            :event="event" @didDismiss="openPopover = false" >
-                            <ion-datetime @ionChange="event => checkboxInput.value = formatDate(event.detail.value)" id="datetime"
-                                presentation="date" :show-default-buttons="true"></ion-datetime>
-                        </ion-popover>
                         <div class="alerts_error" v-if="checkboxInput.alertsError">
                             {{ checkboxInput.alertsErrorMassage }}
                         </div>
@@ -158,6 +163,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import BasicInputField from "@/components/BasicInputField.vue"
+import DateInputField from "@/components/DateInputField.vue"
 import DynamicButton from './DynamicButton.vue';
 import { IonDatetime, IonDatetimeButton, IonCheckbox } from '@ionic/vue';
 import HisDate from "@/utils/Date";
@@ -171,13 +177,16 @@ export default defineComponent({
         IonDatetime,
         IonDatetimeButton,
         PreviousVitals,
-        IonCheckbox
+        IonCheckbox,
+        DateInputField
     },
     data() {
         return {
             event: '' as any,
             openPopover: false,
-            header: '' as any
+            header: '' as any,
+            flow: ['month', 'year', 'calendar'],
+            date: ''
         };
     },
     props: {
@@ -202,6 +211,9 @@ export default defineComponent({
         },
         formatDate(date: any){
            return HisDate.toStandardHisDisplayFormat(date)
+        },
+        test(e: any){
+            console.log(e)
         }
     },
 })
