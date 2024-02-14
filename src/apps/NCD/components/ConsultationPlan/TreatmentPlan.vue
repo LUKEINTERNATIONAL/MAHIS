@@ -11,13 +11,13 @@
                         </ion-button>
                     </div>
                     <div>
-                        <ion-button id="click-trigger" fill="clear" class="medicalAlAddBtn">
+                        <ion-button id="click-trigger" fill="clear" class="medicalAlAddBtn"  @click="setFocus">
                             <ion-icon :icon="addOutline"></ion-icon>
                         </ion-button>
                         <ion-popover class="popover-al" :show-backdrop="false" trigger="click-trigger" trigger-action="click" @didPresent="dissmissDrugAddField">
                             <ion-content color="light"  class="ion-padding content-al">
                                 <ion-label>Choose the allergy:</ion-label>
-                                <ion-input  v-model="drugName"  @ionInput="FindAllegicDrugName" fill="outline"></ion-input>
+                                <ion-input ref="input" v-model="drugName"  @ionInput="FindAllegicDrugName" fill="outline"></ion-input>
                                 <ion-list class="list-al">
                                     <div class="item-al" v-for="(item, index) in medicalAllergiesList" :key="index">
                                         <ion-label  @click="selectAl(item)" style="display: flex; justify-content: space-between;">
@@ -161,26 +161,11 @@
         </div>
     </ion-list>
 </template>
-  
-<script lang="ts">
-    import { 
-            IonContent, 
-            IonHeader,
-            IonItem,
-            IonList,
-            IonTitle, 
-            IonToolbar, 
-            IonMenu,
-            menuController,
-            IonButton,
-            IonInput,
-            IonDatetime,
-            IonLabel,
-            IonTextarea
-        } from '@ionic/vue';
-    import { defineComponent } from 'vue'
+
+<script setup lang="ts">
+    import {     IonContent, IonHeader, IonCol, IonItem, IonList, IonButton, IonMenu, IonTitle, IonToolbar, IonInput, IonDatetime, IonLabel, IonTextarea } from '@ionic/vue';
     import { checkmark,pulseOutline,addOutline,closeOutline, checkmarkOutline, filter, chevronDownOutline, chevronUpOutline } from 'ionicons/icons'
-    import { ref } from 'vue'
+    import { ref, watch, computed } from 'vue'
     import { icons } from '@/utils/svg.ts'
     import { DRUG_FREQUENCIES } from "@/services/drug_prescription_service"
     import { DrugService} from "@/services/drug_service"
@@ -193,357 +178,353 @@
     import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts"
     import { Service } from "@/services/service"
 
-    export default defineComponent({
-    name: 'Menu',
-    components:{
-    IonContent,
-    IonHeader,
-    IonItem,
-    IonList,
-    IonButton,
-    IonMenu,
-    IonTitle,
-    IonToolbar,
-    IonInput,
-    IonDatetime,
-    IonLabel,
-    DynamicButton,
-    DynamicList,
-    IonTextarea
-},
-        data() {
-    return {
-        iconsContent: icons,
-        searchText: '' as any,
-        drug_frequencies: DRUG_FREQUENCIES,
-        no_item: true,
-        search_item: false,
-        display_item: false,
-        addItemButton: true,
-        popoverOpen: false,
-        prescPopoverOpen: false,
-        datetime: ref(),
-        event: null,
-        componentKey: 0,
-        prescEvent: null,
-        drugnameErrMsg: '' as string,
-        show_error_msg_for_drug_name: false,
-        doseErrMsg: '' as string,
-        show_error_msg_for_dose: false,
-        durationErrMsg: '' as string,
-        show_error_msg_for_duration: false,
-        diagnosisData: [] as any,
-        drugName: '' as any,
-        dose: '' as any,
-        frequency: '' as any,
-        duration: '' as any,
-        prescription: '' as any,
-        showPopoverOpenForFrequency: false,
-        btnName1: 'Add new medication',
-        btnName2: 'Send to pharmacy',
-        btnName3: 'Send to dispensation',
-        btnFill: 'clear',
-    };
-  },
-    setup() {
-      return { checkmark, pulseOutline, closeOutline, addOutline, checkmarkOutline, chevronDownOutline,chevronUpOutline };
-    },
-    watch: {
-        drugName: {
-            async handler(){
-                this.validatedDrugName()
-            },
-            deep: true
-        },
-        dose: {
-            async handler(){
-                this.validateDose()
-            },
-            deep: true
-        },
-        duration: {
-            async handler(){
-                this.validateDuration()
-            },
-            deep: true
-        }
-    },
-    computed: {
-        ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList",
-                        "medicalAllergiesList",
-                        "nonPharmalogicalTherapyAndOtherNotes",
-                        "isUseOfTraditionalMedicineSelected",
-                        "selectedMedicalAllergiesList"
-                        ]
-                    ),
-    },
-    methods:{
-        navigationMenu(url: any){
-            menuController.close()
-            this.$router.push(url);
-        },
-        async validatedDrugName() {
-            const drugNameExists  = await this.findIfDrugNameExists()
-                if (!drugNameExists) {
-                    this.drugnameErrMsg = "please select a valid drug name"
-                    this.show_error_msg_for_drug_name = true
-                } else {
-                    this.show_error_msg_for_drug_name = false
-                }
-                return this.show_error_msg_for_drug_name
-        },
-        async validateDose() {
-            const isNum = this.isNumeric(this.dose)
-            if (!isNum) {
-                this.doseErrMsg = "please enter a number"
-                this.show_error_msg_for_dose = true
-            } else {
-                this.show_error_msg_for_dose = false
-            }
-            return this.show_error_msg_for_dose
-        },
-        async validateDuration() {
-            const isNum = this.isNumeric(this.duration)
-            if (!isNum) {
-                this.durationErrMsg = "please enter a number"
-                this.show_error_msg_for_duration = true
-            } else {
-                this.show_error_msg_for_duration = false
-            }
-            return this.show_error_msg_for_duration
-        },
-        async areFieldsValid() {
-            const isDrugnameValid = await this.validatedDrugName()
-            const isDoseValid = await this.validateDose()
-            const isDurationValid = await this.validateDuration()
+    const iconsContent = icons
+    const searchText = ref('')
+    const drug_frequencies = DRUG_FREQUENCIES
+    const no_item =  ref(true)
+    const search_item = ref(false)
+    const display_item = ref(false)
+    const addItemButton = ref(true)
+    const popoverOpen = ref(false)
+    const prescPopoverOpen = ref(false)
+    const datetime = ref()
+    let event: null = null
+    const componentKey = ref(0)
+    let prescEvent = null
+    const drugnameErrMsg = ref('')
+    const show_error_msg_for_drug_name = ref(false)
+    const doseErrMsg = ref('')
+    const show_error_msg_for_dose = ref(false)
+    const durationErrMsg = ref()
+    const show_error_msg_for_duration = ref(false)
+    const diagnosisData = ref([])
+    const drugName = ref('')
+    const dose = ref('')
+    const frequency = ref('')
+    const duration = ref('')
+    const prescription = ref('')
+    const units = ref('')
+    const drug_id = ref('')
+    const showPopoverOpenForFrequency = ref(false)
+    const btnName1 = 'Add new medication'
+    const btnName2 = 'Send to pharmacy'
+    const btnName3 = 'Send to dispensation'
+    const btnFill = 'clear'
+    const store = useTreatmentPlanStore()
+    const selectedMedicalDrugsList = computed(() => store.selectedMedicalDrugsList)
+    const medicalAllergiesList = computed(() => store.medicalAllergiesList)
+    const nonPharmalogicalTherapyAndOtherNotes = computed(() => store.nonPharmalogicalTherapyAndOtherNotes)
+    const selectedMedicalAllergiesList = computed(() => store.selectedMedicalAllergiesList)
+    const input = ref();
 
-            if (!isDrugnameValid && !isDoseValid && !isDurationValid) {
-                return true
+    watch(
+        () => drugName.value,
+        async (newValue) => {
+            validatedDrugName()
+        }
+    )
+
+    watch(
+        () => dose.value,
+        async (newValue) => {
+            validateDose()
+        }
+    )
+
+    watch(
+        () => duration.value,
+        async (newValue) => {
+            validateDuration()
+        }
+    )
+
+    async function validatedDrugName() {
+        const drugNameExists  = await findIfDrugNameExists()
+            if (!drugNameExists) {
+                drugnameErrMsg.value = "please select a valid drug name"
+                show_error_msg_for_drug_name.value = true
             } else {
+                show_error_msg_for_drug_name.value = false
+            }
+            return show_error_msg_for_drug_name.value
+    }
+
+    async function validateDose() {
+        const isNum = isNumeric(dose.value)
+        if (!isNum) {
+            doseErrMsg.value = "please enter a number"
+            show_error_msg_for_dose.value = true
+        } else {
+            show_error_msg_for_dose.value = false
+        }
+        return show_error_msg_for_dose.value
+    }
+    async function validateDuration() {
+        const isNum = isNumeric(duration.value)
+        if (!isNum) {
+            durationErrMsg.value = "please enter a number"
+            show_error_msg_for_duration.value = true
+        } else {
+            show_error_msg_for_duration.value = false
+        }
+        return show_error_msg_for_duration.value
+    }
+
+    async function areFieldsValid() {
+        const isDrugnameValid = await validatedDrugName()
+        const isDoseValid = await validateDose()
+        const isDurationValid = await validateDuration()
+
+        if (!isDrugnameValid && !isDoseValid && !isDurationValid) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    function selectAl(item: any) {
+        item.selected = !item.selected
+        const treatmentPlanStore = useTreatmentPlanStore()
+        treatmentPlanStore.setSelectedMedicalAllergiesList(item)
+        saveStateValuesState()
+    }
+
+    function selectFrequency(index: any) {
+        drug_frequencies.forEach(item => {
+            item.selected = false
+        })
+        drug_frequencies[index].selected = !drug_frequencies[index].selected
+        frequency.value = drug_frequencies[index].label
+    }
+
+    function addData(){
+        // searchText = ""
+        // drugName = ""
+        // dose = ""
+        // frequency = ""
+        // duration = ""
+        // no_item = false
+        addItemButton.value = false
+        search_item.value =true
+    }
+
+    async function saveData() {
+        const are_fieldsValid = await areFieldsValid()
+        if (!are_fieldsValid) {
+            toastWarning("Please enter correct data values",4000)
+            return
+        }
+        dissmissDrugAddField()
+        const systemSessionDate = Service.getSessionDate()
+        const daysToAdd = duration.value
+        const generatedPrescriptionDate = addDaysToDate(systemSessionDate, parseInt(duration.value))
+
+        const drugString = {
+            drugName: drugName.value,
+            dose: dose.value,
+            frequency: frequency.value,
+            duration: duration.value,
+            prescription: generatedPrescriptionDate,
+            drug_id: drug_id.value,
+            units: units.value
+        }
+        selectedMedicalDrugsList.value.push(drugString)
+        drugName.value = ''
+        dose.value = ''
+        frequency.value = ''
+        duration.value = ''
+        prescription.value = ''
+        componentKey.value++
+        saveStateValuesState()
+    }
+
+    async function FindDrugName(text: any) {
+        const searchText = text.target.value;
+        openPopover(text)
+        const page=1, limit=10
+        const drugs: ConceptName[] = await DrugService.getOPDDrugs({ 
+        "name": searchText, 
+        "page": page,
+        "page_size": limit,
+        })
+        const filter_id_array:any[] = []
+        selectedMedicalAllergiesList.value.forEach((selectedMedicalAllergy: any) => {
+            if (selectedMedicalAllergy.selected) {
+                filter_id_array.push(selectedMedicalAllergy.concept_id)
+            }
+        })
+
+        const filteredDrugs = filterArrayByIDs(drugs as any, filter_id_array as any);
+        
+        filteredDrugs.map((drug: any) => ({
+        label: drug.name, value: drug.name, other: drug
+        }))
+        
+        diagnosisData.value = filteredDrugs
+
+    }
+
+    async function FindDrugName2(text: any) {
+        
+        let search_value
+        if (text.target === undefined) {
+            search_value = text
+        } else search_value = text.target.value
+
+        const page=1, limit=10
+        const drugs: ConceptName[] = await DrugService.getOPDDrugs({ 
+        "name": search_value, 
+        "page": page,
+        "page_size": limit,
+        })
+        const filter_id_array:any[] = []
+        selectedMedicalAllergiesList.value.forEach((selectedMedicalAllergy: any) => {
+            if (selectedMedicalAllergy.selected) {
+                filter_id_array.push(selectedMedicalAllergy.concept_id)
+            }
+        })
+
+        const filteredDrugs = filterArrayByIDs(drugs as any, filter_id_array as any)
+        
+        
+        filteredDrugs.map((drug: any) => ({
+        label: drug.name, value: drug.name, other: drug
+        }))
+        
+        diagnosisData.value = filteredDrugs
+        return filteredDrugs
+    }
+
+    async function findIfDrugNameExists() {
+        const filteredDrugs = await FindDrugName2(drugName.value)
+        if (filteredDrugs.length > 0) {
+            // if (drugName.length > 0) {
+            //     filteredDrugs.forEach((drug: any) => {
+            //         if (drug.name === drugName) {
+            //             return true
+            //         }
+            //     })
+            // }
+            if (drugName.value.length == 0) {
                 return false
             }
-        },
-        selectAl(item: any) {
-            item.selected = !item.selected
-            const treatmentPlanStore = useTreatmentPlanStore()
-            treatmentPlanStore.setSelectedMedicalAllergiesList(item)
-            this.saveStateValuesState()
-        },
-        selectFrequency(index: any) {
-            this.drug_frequencies.forEach(item => {
-                item.selected = false
-            })
-            this.drug_frequencies[index].selected = !this.drug_frequencies[index].selected
-            this.frequency = this.drug_frequencies[index].label
-        },
-        addData(){
-            // this.searchText = ""
-            // this.drugName = ""
-            // this.dose = ""
-            // this.frequency = ""
-            // this.duration = ""
-            // this.no_item = false
-            this.addItemButton = false
-            this.search_item =true
-        },
-        async saveData(){
-            const are_fieldsValid = await this.areFieldsValid()
-            if (!are_fieldsValid) {
-                toastWarning("Please enter correct data values",4000)
-                return
-            }
-            this.dissmissDrugAddField()
-            const systemSessionDate = Service.getSessionDate()
-            const daysToAdd = this.duration as number
-            const generatedPrescriptionDate = this.addDaysToDate(systemSessionDate, parseInt(this.duration))
-
-            const drugString = {
-                drugName: this.drugName,
-                dose: this.dose,
-                frequency: this.frequency,
-                duration: this.duration,
-                prescription: generatedPrescriptionDate
-            }
-            this.selectedMedicalDrugsList.push(drugString)
-
-            this.drugName = ''
-            this.dose = ''
-            this.frequency = ''
-            this.duration = ''
-            this.prescription = ''
-
-            this.componentKey++
-            this.saveStateValuesState()
-        },
-        async FindDrugName(text: any) {
-            const searchText = text.target.value;
-            this.openPopover(text)
-            const page=1, limit=10
-            const drugs: ConceptName[] = await DrugService.getOPDDrugs({ 
-            "name": searchText, 
-            "page": page,
-            "page_size": limit,
-            })
-            const filter_id_array = []
-            this.selectedMedicalAllergiesList.forEach(selectedMedicalAllergy => {
-                if (selectedMedicalAllergy.selected) {
-                    filter_id_array.push(selectedMedicalAllergy.concept_id)
-                }
-            })
-
-            const filteredDrugs = this.filterArrayByIDs(drugs, filter_id_array);
-            
-            filteredDrugs.map(drug => ({
-            label: drug.name, value: drug.name, other: drug
-            }))
-            
-            this.diagnosisData = filteredDrugs
-        },
-        async FindDrugName2(text: any) {
-            
-            let search_value
-            if (text.target === undefined) {
-                search_value = text
-            } else search_value = text.target.value
-
-            const page=1, limit=10
-            const drugs: ConceptName[] = await DrugService.getOPDDrugs({ 
-            "name": search_value, 
-            "page": page,
-            "page_size": limit,
-            })
-            const filter_id_array = []
-            this.selectedMedicalAllergiesList.forEach(selectedMedicalAllergy => {
-                if (selectedMedicalAllergy.selected) {
-                    filter_id_array.push(selectedMedicalAllergy.concept_id)
-                }
-            })
-
-            const filteredDrugs = this.filterArrayByIDs(drugs, filter_id_array);
-            
-            filteredDrugs.map(drug => ({
-            label: drug.name, value: drug.name, other: drug
-            }))
-            
-            this.diagnosisData = filteredDrugs
-            return filteredDrugs
-        },
-        async findIfDrugNameExists() {
-            const filteredDrugs = await this.FindDrugName2(this.drugName)
-            if (filteredDrugs.length > 0) {
-                // if (this.drugName.length > 0) {
-                //     filteredDrugs.forEach((drug: any) => {
-                //         if (drug.name === this.drugName) {
-                //             return true
-                //         }
-                //     })
-                // }
-                if (this.drugName.length == 0) {
-                    return false
-                }
-                return true
-            } else return false
-        },
-        filterArrayByIDs(mainArray: [], idsToFilter: []) {
-            return mainArray.filter(item => !idsToFilter.includes(item.concept_id))
-        },
-        async FindAllegicDrugName(text: any) {
-            const searchText = text.target.value
-            const page=1, limit=10
-            const drugs: ConceptName[] = await ConceptService.getConceptSet('OPD Medication', searchText)
-            // const drugs: ConceptName[] = await DrugService.getOPDDrugs({ 
-            // "name": searchText, 
-            // "page": page,
-            // "selected": false as any, 
-            // "page_size": limit,
-            // })
-            drugs.map(drug => ({
-            label: drug.name, value: drug.name, other: drug
-            }))
-            const treatmentPlanStore = useTreatmentPlanStore()
-            treatmentPlanStore.setMedicalAllergiesList(drugs)
-        },
-        openPopover(e: any) {
-        this.event = e;
-        this.popoverOpen = true;
-        }, 
-        openPrescPopover(e: any) {
-            this.prescEvent = e
-            this.prescPopoverOpen = true
-        },
-        selectedDrugName(name: any, obj: any) {
-            //console.log(obj)
-            this.drugName = name
-        },
-        popoverOpenForFrequencyFn2() {
-            this.showPopoverOpenForFrequency = true
-        },
-        editItemAtIndex(index: any) {
-            const dataItem = this.selectedMedicalDrugsList[index]
-            this.selectedMedicalDrugsList.splice(index, 1)
-            this.drugName = dataItem.drugName
-            this.dose = dataItem.dose
-            this.frequency = dataItem.frequency
-            this.duration = dataItem.duration
-            this.prescription = dataItem.prescription
-            this.addItemButton = !this.addItemButton
-            this.componentKey++
-            this.saveStateValuesState()
-        },
-        getDate(ev: any) {
-            const inputDate = new Date(ev.detail.value)
-            const year = inputDate.getFullYear()
-            const month = inputDate.getMonth() + 1
-            const day = inputDate.getDate()
-            const formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
-            this.prescription = formattedDate
-        },
-        removeItemAtIndex(index: any) {
-            this.selectedMedicalDrugsList.splice(index, 1)
-            this.componentKey++
-            this.saveStateValuesState()
-        },
-        validateNotes(ev: any) {
-            let value = ev.target.value
-            const textArry = []
-            this.refSetNonPharmalogicalTherapyAndOtherNotes(value)
-        },
-        saveStateValuesState() {
-            const treatmentPlanStore = useTreatmentPlanStore()
-            treatmentPlanStore.setSelectedMedicalDrugsList(this.selectedMedicalDrugsList)
-            treatmentPlanStore.setMedicalAllergiesList(this.medicalAllergiesList)
-            treatmentPlanStore.setIsUseOfTraditionalMedicineSelected(this.isUseOfTraditionalMedicineSelected)
-            treatmentPlanStore.setNonPharmalogicalTherapyAndOtherNotes(this.nonPharmalogicalTherapyAndOtherNotes)
-        },
-        useOfTraditional(ev: any) {
-            const checked = ev.detail.checked
-            const treatmentPlanStore = useTreatmentPlanStore()
-            treatmentPlanStore.setIsUseOfTraditionalMedicineSelected(checked as boolean)
-            this.saveStateValuesState()
-        },
-        refSetNonPharmalogicalTherapyAndOtherNotes(value: string) {
-            const treatmentPlanStore = useTreatmentPlanStore()
-            treatmentPlanStore.setNonPharmalogicalTherapyAndOtherNotes(value as string)
-            this.saveStateValuesState()
-        },
-        isNumeric(text: string): boolean {
-        return /^[0-9]+$/.test(text)
-        },
-        addDaysToDate(dateString: string, daysToAdd: number): string {
-            const currentDate = new Date(dateString)
-            currentDate.setDate(currentDate.getDate() + daysToAdd)
-            const year = currentDate.getFullYear()
-            const month = String(currentDate.getMonth() + 1).padStart(2, '0')
-            const day = String(currentDate.getDate()).padStart(2, '0')
-            return `${year}-${month}-${day}`
-        },
-        dissmissDrugAddField(): void{
-            this.search_item= false
-            this.display_item= true
-            this.addItemButton =true
-        }  
+            return true
+        } else return false
     }
-    });
+
+    function filterArrayByIDs(mainArray: [], idsToFilter: []) {
+        return mainArray.filter((item: any) => !idsToFilter.includes(item.concept_id as never))
+    }
+    async function FindAllegicDrugName(text: any) {
+        const searchText = text.target.value
+        const page=1, limit=10
+        const drugs: ConceptName[] = await ConceptService.getConceptSet('OPD Medication', searchText)
+        // const drugs: ConceptName[] = await DrugService.getOPDDrugs({ 
+        // "name": searchText, 
+        // "page": page,
+        // "selected": false as any, 
+        // "page_size": limit,
+        // })
+        drugs.map(drug => ({
+        label: drug.name, value: drug.name, other: drug
+        }))
+        const treatmentPlanStore = useTreatmentPlanStore()
+        treatmentPlanStore.setMedicalAllergiesList(drugs)
+    }
+
+    function openPopover(e: any) {
+        event = e
+        popoverOpen.value = true
+    } 
+
+    function openPrescPopover(e: any) {
+        prescEvent = e
+        prescPopoverOpen.value = true
+    }
+
+    function selectedDrugName(name: any, obj: any) {
+        drugName.value = name
+        drug_id.value = obj.drug_id
+        units.value = obj.units
+    }
+
+    function popoverOpenForFrequencyFn2() {
+        showPopoverOpenForFrequency.value = true
+    }
+
+    function editItemAtIndex(index: any) {
+        const dataItem = selectedMedicalDrugsList.value[index]
+        selectedMedicalDrugsList.value.splice(index, 1)
+        drugName.value = dataItem.drugName
+        dose.value = dataItem.dose
+        frequency.value = dataItem.frequency
+        duration.value = dataItem.duration
+        prescription.value = dataItem.prescription
+        addItemButton.value = !addItemButton
+        componentKey.value++
+        saveStateValuesState()
+    }
+
+    function getDate(ev: any) {
+        const inputDate = new Date(ev.detail.value)
+        const year = inputDate.getFullYear()
+        const month = inputDate.getMonth() + 1
+        const day = inputDate.getDate()
+        const formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+        prescription.value = formattedDate
+    }
+
+    function removeItemAtIndex(index: any) {
+        selectedMedicalDrugsList.value.splice(index, 1)
+        componentKey.value++
+        saveStateValuesState()
+    }
+
+    function validateNotes(ev: any) {
+        let value = ev.target.value
+        const textArry = []
+        refSetNonPharmalogicalTherapyAndOtherNotes(value)
+    }
+
+    function saveStateValuesState() {
+        const treatmentPlanStore = useTreatmentPlanStore()
+        treatmentPlanStore.setSelectedMedicalDrugsList(selectedMedicalDrugsList)
+    }
+
+    function useOfTraditional(ev: any) {
+        const checked = ev.detail.checked
+        const treatmentPlanStore = useTreatmentPlanStore()
+    }
+
+    function refSetNonPharmalogicalTherapyAndOtherNotes(value: string) {
+        const treatmentPlanStore = useTreatmentPlanStore()
+        treatmentPlanStore.setNonPharmalogicalTherapyAndOtherNotes(value as string)
+    }
+
+    function isNumeric(text: string): boolean {
+    return /^[0-9]+$/.test(text)
+    }
+
+    function addDaysToDate(dateString: string, daysToAdd: number): string {
+        const currentDate = new Date(dateString)
+        currentDate.setDate(currentDate.getDate() + daysToAdd)
+        const year = currentDate.getFullYear()
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0')
+        const day = String(currentDate.getDate()).padStart(2, '0')
+        return `${year}-${month}-${day}`
+    }
+
+    function dissmissDrugAddField(): void{
+        search_item.value = false
+        display_item.value = true
+        addItemButton.value =true
+    }
+
+    function setFocus() {
+        input.value.$el.setFocus()
+    }
+
+    
 </script>
 
 <style scoped>
@@ -653,4 +634,3 @@ ion-list.list-al {
   align-items: center;
 }
 </style>
-  
