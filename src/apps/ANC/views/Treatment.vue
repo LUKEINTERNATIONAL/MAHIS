@@ -166,7 +166,11 @@ setup () {
 
 methods: {
   markWizard(){},
-  saveData(){}
+  saveData(){
+
+    this.$router.push('referral');
+
+  },
 }
 })
 

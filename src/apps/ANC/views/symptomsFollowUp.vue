@@ -3,7 +3,7 @@
       <Toolbar />
       <ion-content :fullscreen="true">
         <DemographicBar />
-        <Stepper stepperTitle="Symptoms FollowUp" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
+        <Stepper stepperTitle="Symptoms  and follow up" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
       </ion-content>
     </ion-page>
   </template>
@@ -42,7 +42,7 @@
   import { useInvestigationStore } from '@/stores/InvestigationStore'
   import { useDiagnosisStore } from '@/stores/DiagnosisStore'
   import { mapState } from 'pinia';
-  import Stepper from '@/components/Stepper.vue'
+  import Stepper from "@/apps/ANC/components/Stepper.vue";
   import { Service } from "@/services/service";
   import { LabOrder } from "@/apps/NCD/services/lab_order"
   import { VitalsService } from "@/services/vitals_service";
@@ -185,6 +185,11 @@
           return  data.map((item: any) => {
                 return item?.data;
             });
+        },
+        saveData(){
+
+          this.$router.push('PhysicalExam');
+
         },
       }
     })

@@ -39,13 +39,16 @@ import SaveProgressModal from '@/components/SaveProgressModal.vue'
 import { createModal } from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
 import { mapState } from 'pinia';
-import Stepper from '@/components/Stepper.vue'
+import Stepper from "@/apps/ANC/components/Stepper.vue";
 import { toastWarning,popoverConfirmation, toastSuccess } from '@/utils/Alerts';
 import PastObstreticHistory from '../components/profile/PastObstreticHistory.vue';
 import CurrentPregnancies from '../components/profile/CurrentPregnancies.vue';
 import Medications from '../components/profile/Medications.vue';
 import MedicalHistory from '../components/profile/MedicalHistory.vue';
 import WomanBehaviour from '../components/profile/WomanBehaviour.vue';
+import {getCheckboxSelectedValue} from "@/services/data_helpers";
+import {useMedicalHistoryStore} from "@/apps/ANC/store/profile/medicalHistoryStore";
+
 export default defineComponent({
   name: "Home",
   components:{
@@ -159,10 +162,12 @@ export default defineComponent({
   },
   computed:{
 
+    ...mapState(useMedicalHistoryStore,["medicalHistory"])
 
   },
   mounted(){
     // this.markWizard()
+
   },
   watch: {
 
@@ -225,29 +230,12 @@ export default defineComponent({
       });
     },
     saveData(){
-    //   if(this.vitals.validationStatus && this.investigations[0].selectdData.length > 0 && this.diagnosis[0].selectdData.length > 0){
-    //     this.saveVitals()
-    //     this.saveInvestigation()
-    //     this.saveDiagnosis()
-    //     this.$router.push('patientProfile');
-    //   }else{
-    //     toastWarning("Please complete all required fields")
-    //   }
-    // },
-    // saveInvestigation(){
-    //   const investigationInstance = new LabOrder()
-    //   investigationInstance.postActivities(this.demographics.patient_id,this.deleteDisplayData(this.investigations[0].selectdData))
-    // },
-    // saveVitals(){
-    //   const userID: any  = Service.getUserID()
-    //   const vitalsInstance = new VitalsService(this.demographics.patient_id,userID);
-    //   vitalsInstance.onFinish(this.vitals)
-    // },
-    // saveDiagnosis(){
-    //   const userID: any  = Service.getUserID()
-    //   const diagnosisInstance = new Diagnosis();
-    //   diagnosisInstance.onSubmit(this.demographics.patient_id,userID,this.deleteDisplayData(this.diagnosis[0].selectdData))
-  },
+
+          console.log(getCheckboxSelectedValue(this.medicalHistory, 'Myomectomy'))
+         // this.$router.push('symptomsFollowUp');
+
+     },
+
     openModal(){
       createModal(SaveProgressModal)
     }

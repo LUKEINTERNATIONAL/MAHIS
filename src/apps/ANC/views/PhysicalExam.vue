@@ -41,7 +41,7 @@ import { useAncVitalsStore} from "@/apps/ANC/store/physical exam/AncVitalsStore"
 import { useInvestigationStore } from '@/stores/InvestigationStore'
 import { useDiagnosisStore } from '@/stores/DiagnosisStore'
 import { mapState } from 'pinia';
-import Stepper from '@/components/Stepper.vue'
+import Stepper from "@/apps/ANC/components/Stepper.vue";
 import { Service } from "@/services/service";
 import { toastWarning,popoverConfirmation, toastSuccess } from '@/utils/Alerts';
 export default defineComponent({
@@ -210,28 +210,9 @@ export default defineComponent({
       });
     },
     saveData(){
-      if(this.vitals.validationStatus && this.investigations[0].selectdData.length > 0 && this.diagnosis[0].selectdData.length > 0){
-        this.saveVitals()
-        this.saveInvestigation()
-        this.saveDiagnosis()
-        this.$router.push('patientProfile');
-      }else{
-        toastWarning("Please complete all required fields")
-      }
-    },
-    saveInvestigation(){
-      const investigationInstance = new LabOrder()
-      investigationInstance.postActivities(this.demographics.patient_id,this.deleteDisplayData(this.investigations[0].selectdData))
-    },
-    saveVitals(){
-      const userID: any  = Service.getUserID()
-      const vitalsInstance = new VitalsService(this.demographics.patient_id,userID);
-      vitalsInstance.onFinish(this.vitals)
-    },
-    saveDiagnosis(){
-      const userID: any  = Service.getUserID()
-      const diagnosisInstance = new Diagnosis();
-      diagnosisInstance.onSubmit(this.demographics.patient_id,userID,this.deleteDisplayData(this.diagnosis[0].selectdData))
+
+      this.$router.push('labTests');
+
     },
     openModal(){
       createModal(SaveProgressModal)

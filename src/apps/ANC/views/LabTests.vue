@@ -4,6 +4,8 @@
     <ion-content :fullscreen="true">
         <DemographicBar/>
         <Stepper stepper-title="Lab test and imaging" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"></Stepper>
+        <!-- Show spinner when isLoading is true -->
+      <Spinner :isLoading="loading" spinnerName="crescent" />
     </ion-content>
 </ion-page>
 
@@ -19,10 +21,11 @@ import { icons } from '@/utils/svg';
 import { chevronBackOutline, checkmark } from 'ionicons/icons';
 import UrineTest from '@/apps/ANC/components/lab_tests/UrineTest.vue';
 import TB from '@/apps/ANC/components/lab_tests/TB.vue';
-import Stepper from '@/components/Stepper.vue';
+import Stepper from "@/apps/ANC/components/Stepper.vue";
+import Spinner from "@/apps/ANC/components/Spinner.vue";
 export default defineComponent({
     name:"Lab",
-    components:{ IonPage, DemographicBar, Toolbar, IonContent,UltrasoundScan,UrineTest,TB, Stepper },
+    components:{ IonPage, DemographicBar, Toolbar, IonContent,UltrasoundScan,UrineTest,TB, Stepper, Spinner },
     data(){
         return {iconsContent: icons,
   isOpen: false,
@@ -82,12 +85,17 @@ export default defineComponent({
     },
     methods:{
   markWizard(){},
-  saveData(){}
+      saveData() {
+        // Simulate saving data
+        this.loading = true; // Show the spinner while data is being saved
+        setTimeout(() => {
+          // After some time (simulating a server request), hide the spinner
+          this.loading = false;
+          // Redirect to counselling page
+          this.$router.push('counselling');
+        }, 8000); // Simulate a 2-second delay
+      },
     }
-    
-
-
-
 
 })
 
