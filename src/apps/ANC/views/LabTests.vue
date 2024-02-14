@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import DemographicBar from '@/components/DemographicBar.vue';
+import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import Toolbar from '@/components/Toolbar.vue';
 import { IonContent, IonPage } from '@ionic/vue';
 import { defineComponent } from 'vue';

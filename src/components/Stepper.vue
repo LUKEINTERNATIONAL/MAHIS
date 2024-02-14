@@ -99,12 +99,12 @@
   import UrineTest from '@/apps/ANC/components/lab_tests/UrineTest.vue';
   import TB from '@/apps/ANC/components/lab_tests/TB.vue';
   import DiagnosisTreatment from '@/apps/ANC/components/Treatment/DiagnosisTreatment.vue'
-  import MedicationDispersed from '@/apps/ANC/components/Treatment/MedicationDispersed.vue';
+  import MedicationDispensed from '@/apps/ANC/components/Treatment/MedicationDispensed.vue';
   import DiagnosisCounselling from '@/apps/ANC/components/Treatment/DiagnosisCounselling.vue';
   import Immunization from '@/apps/ANC/components/Treatment/Immunization.vue';
   import IntimatePartner from '@/apps/ANC/components/Treatment/IntimatePartner.vue';
   import Deworming from '@/apps/ANC/components/Treatment/Deworming.vue';
-  import UrgentReferral from '@/apps/ANC/components/Treatment/UrgentReferral.vue';
+
 
 
   import SaveProgressModal from '@/components/SaveProgressModal.vue'
@@ -157,12 +157,11 @@
         UrineTest,
         TB,
         DiagnosisTreatment,
-        MedicationDispersed,
+        MedicationDispensed,
         DiagnosisCounselling,
         Immunization,
         IntimatePartner,
         Deworming,
-        UrgentReferral
     },
     data(){
         return {

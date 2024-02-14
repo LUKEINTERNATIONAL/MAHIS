@@ -9,7 +9,7 @@
     </ion-card>
 
     <ion-card v-if="currentSection === 1" class="section">
-            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Reason urine test not done</ion-card-title></ion-card-header>
+            <ion-card-header> <ion-card-title class="sub_item_header">Reason urine test not done</ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="reason"></basic-form>
             </ion-card-content>

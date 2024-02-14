@@ -1,248 +1,67 @@
 <template>
-<ion-list>
-    <ion-label style="font-weight: bold; margin-bottom: 30px;">Select All Diagonises conducted with their result </ion-label>
-<ion-row class="dottedLine">
-    <ion-col>
-    <ion-checkbox label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 94px;">
-        Hypertension
-    </ion-checkbox>
-</ion-col>
-<ion-col>
-    <BasicForm :content-data = "hypertension"></BasicForm>
-</ion-col>
-</ion-row>
-<ion-row class="dottedLine">
-    <ion-col>
-    <ion-checkbox label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 94px;">
-        Pre-eclampsia
-    </ion-checkbox>
-</ion-col>
-<ion-col>
-    <BasicForm :content-data = "preEclampsia"></BasicForm>
-</ion-col>
-</ion-row>
-<ion-row class="dottedLine">
-    <ion-col>
-    <ion-checkbox label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 94px;">
-        HIV
-    </ion-checkbox>
-</ion-col>
-<ion-col>
-    <BasicForm :content-data = "hiv"></BasicForm>
-</ion-col>
-</ion-row>
-<ion-row class="dottedLine">
-    <ion-col>
-    <ion-checkbox label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 94px;">
-        Hepatitis B
-    </ion-checkbox>
-</ion-col>
-<ion-col>
-    <BasicForm :content-data = "hepatitisB"></BasicForm>
-</ion-col>
-</ion-row>
-<ion-row class="dottedLine">
-    <ion-col>
-    <ion-checkbox label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 94px;">
-        Hepatitis C
-    </ion-checkbox>
-</ion-col>
-<ion-col>
-    <BasicForm :content-data = "hepatitisC"></BasicForm>
-</ion-col>
-</ion-row>
-<ion-row class="dottedLine">
-    <ion-col>
-    <ion-checkbox label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 94px;">
-        TB screening
-    </ion-checkbox>
-</ion-col>
-<ion-col>
-    <BasicForm :content-data = "tbScreening"></BasicForm>
-</ion-col>
-</ion-row>
-<ion-row class="dottedLine">
-    <ion-col>
-    <ion-checkbox label-placement="start" style="font-size: 16px; font-weight: 400; line-height: 94px;">
-        Syphilis
-    </ion-checkbox>
-</ion-col>
-<ion-col>
-    <BasicForm :content-data = "syphilis"></BasicForm>
-</ion-col>
-</ion-row>
+    <div class="container">
+        <ion-card v-if="currentSection === 0" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="diagnoses"> </basic-form>
+            </ion-card-content>
+    </ion-card>
 
-<!-- Questions on counselling conducted -->
-<ion-row class="dottedLine">
-    <ion-col>
-<IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px; margin-top: 20px;">Has client developed severe hypertension?</ion-label>
-                        <ion-radio style="margin-bottom: 10px; width: 80%;">Yes</ion-radio>
-                        <ion-radio style="margin-bottom: 10px; width: 80%;">No</ion-radio>  
-                      </div>
-                      </IonRadioGroup>
-                    </ion-col>
-                    <ion-col>
-<IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px; margin-top: 20px;">Does the patient have pre-eclampsia with severe features?</ion-label>
-                        <ion-radio style="margin-bottom: 10px; width: 95%;">Yes</ion-radio>
-                        <ion-radio style="margin-bottom: 10px; width: 95%;">No</ion-radio>
-                      </div>
-                      </IonRadioGroup>
-                    </ion-col>
-                    </ion-row>
-<!-- Questions on counselling conducted -->
-                    <ion-row class="dottedLine">
-    <ion-col>
-<IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px; margin-top: 20px;">Counselling conducted on hypertension?</ion-label>
-                        <ion-radio style="margin-bottom: 10px; width: 80%;">Yes</ion-radio>
-                        <ion-radio style="margin-bottom: 10px; width: 80%;">No</ion-radio>  
-                      </div>
+    <ion-card v-if="currentSection === 1" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="hypertension"> </basic-form>
+                <basic-form :contentData="preEclampsia"> </basic-form>
+                <basic-form :contentData="hyper"> </basic-form>
+                <basic-form :contentData="hypertensionReason"> </basic-form>
+            </ion-card-content>
+    </ion-card>
 
-                 
+    <ion-card v-if="currentSection === 2" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="hiv"> </basic-form>
+                <basic-form :contentData="hivReason"> </basic-form>
+                <basic-form :contentData="hepatitisB"> </basic-form>
+                <basic-form :contentData="hepatitisReason"> </basic-form>
+            </ion-card-content>
+    </ion-card>
 
-                      </IonRadioGroup>
-                    <IonRadioGroup>
-                      <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px; margin-top: 20px;">Reason counselling on hypertension not provided</ion-label>
-                        <ion-radio style="margin-bottom: 10px; width: 80%;">Stockout</ion-radio>
-                        <BasicForm :content-data= "hypertensionCounselling"></BasicForm>
-                      </div>
-                    </IonRadioGroup>
-                    </ion-col>
-                    <ion-col>
-<IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px; margin-top: 20px;">Counselling on HIV positive conducted?</ion-label>
-                        <ion-radio style="margin-bottom: 10px; width: 95%;">Yes</ion-radio>
-                        <ion-radio style="margin-bottom: 10px; width: 95%;">No</ion-radio>
-                      </div>
-                      </IonRadioGroup>
+    <ion-card v-if="currentSection === 3" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="hepatitisC"> </basic-form>
+                <basic-form :contentData="syphilis"> </basic-form>
+                <basic-form :contentData="syphilisTesting"> </basic-form>
+                <basic-form :contentData="tbScreening"> </basic-form>
+            </ion-card-content>
+    </ion-card>
 
-                      <IonRadioGroup>
-                      <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px; margin-top: 20px;">Reason counselling on HIV positive not provided</ion-label>
-                        <ion-radio style="margin-bottom: 10px; width: 95%;">Stockout</ion-radio>
-                        <BasicForm :content-data= "hivCounselling"></BasicForm>
-                      </div>
-                    </IonRadioGroup>
-                    </ion-col>
-                    </ion-row>
-                    <!-- Questions on counselling conducted -->
-                    <ion-row class="dottedLine">
-    <ion-col>
-<IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px; margin-top: 20px;">Counselling conducted on hepatitis B?</ion-label>
-                        <ion-radio style="margin-bottom: 10px; width: 80%;">Yes</ion-radio>
-                        <ion-radio style="margin-bottom: 10px; width: 80%;">No</ion-radio>  
-                      </div>
+    <ion-card v-if="currentSection === 4" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>  
+                <basic-form :contentData="ASB"> </basic-form>
+                <basic-form :contentData="asbReason"> </basic-form>
+                <basic-form :contentData="GDM"> </basic-form>
+                <basic-form :contentData="diabetes"> </basic-form>
+                <basic-form :contentData="anaemia"> </basic-form>
+            </ion-card-content>
+    </ion-card>
 
-                 
+  <!-- Navigation Buttons -->
+  <div class="navigation-buttons">
+      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
+      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
+    </div> 
 
-                      </IonRadioGroup>
-                    <IonRadioGroup>
-                      <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px; margin-top: 20px;">Reason counselling on hepatitis B not provided</ion-label>
-                        <ion-radio style="margin-bottom: 10px; width: 80%;">Stockout</ion-radio>
-                        <BasicForm :content-data= "hepatitisBCounselling"></BasicForm>
-                      </div>
-                    </IonRadioGroup>
-                    </ion-col>
-                    <ion-col>
-<IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px; margin-top: 20px;">Counselling on hepatitis C conducted?</ion-label>
-                        <ion-radio style="margin-bottom: 10px; width: 95%;">Yes</ion-radio>
-                        <ion-radio style="margin-bottom: 10px; width: 95%;">No</ion-radio>
-                      </div>
-                      </IonRadioGroup>
-
-                      <IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px; margin-top: 20px;">Counselling and treatment on syphilis conducted?</ion-label>
-                        <ion-radio style="margin-bottom: 10px; width: 95%;">Yes</ion-radio>
-                        <ion-radio style="margin-bottom: 10px; width: 95%;">No</ion-radio>
-                      </div>
-                      </IonRadioGroup>
-                    </ion-col>
-                    </ion-row>
-                                        <!-- Questions on counselling conducted -->
-                                        <ion-row class="dottedLine">
-    <ion-col>
-<IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px; margin-top: 20px;">Counselling and further testing on syphilis?</ion-label>
-                        <ion-radio style="margin-bottom: 10px; width: 80%;">Yes</ion-radio>
-                        <ion-radio style="margin-bottom: 10px; width: 80%;">No</ion-radio>  
-                          </div>
-                        </IonRadioGroup>
-
-                        <IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px; margin-top: 20px;">Counselling on TB screening conducted?</ion-label>
-                        <ion-radio style="margin-bottom: 10px; width: 80%;">Yes</ion-radio>
-                        <ion-radio style="margin-bottom: 10px; width: 80%;">No</ion-radio>  
-                          </div>
-                        </IonRadioGroup>
-                    </ion-col>
-                    <ion-col>
-<IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px; margin-top: 20px;">Seven-day antibiotic regimen for asymptomatic  bacteriuria (ASB) provided?</ion-label>
-                        <ion-radio style="margin-bottom: 10px; width: 95%;">Yes</ion-radio>
-                        <ion-radio style="margin-bottom: 10px; width: 95%;">No</ion-radio>
-                      </div>
-                      </IonRadioGroup>
-
-                   
-                    <IonRadioGroup>
-                      <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px; margin-top: 20px;">Reason seven-day antibiotic regimen for asymptomatic  bacteriuria (ASB) not provided?</ion-label>
-                        <ion-radio style="margin-bottom: 10px; width: 95%;">Stockout</ion-radio>
-                        <BasicForm :content-data= "ASBcounselling"></BasicForm>
-                      </div>
-                    </IonRadioGroup>
-                    </ion-col>
-                    </ion-row>
-
-                                                         <!-- Questions on counselling conducted -->
-                                                         <ion-row class="dottedLine">
-    <ion-col>
-<IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px; margin-top: 20px;">Counselling on gestational diabetes mellitus (GDM)?</ion-label>
-                        <ion-radio style="margin-bottom: 10px; width: 80%;">Yes</ion-radio>
-                        <ion-radio style="margin-bottom: 10px; width: 80%;">No</ion-radio>  
-                          </div>
-                        </IonRadioGroup>
-
-                        <IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px; margin-top: 20px;">Counselling on diabetes mellitus conducted?</ion-label>
-                        <ion-radio style="margin-bottom: 10px; width: 80%;">Yes</ion-radio>
-                        <ion-radio style="margin-bottom: 10px; width: 80%;">No</ion-radio>  
-                          </div>
-                        </IonRadioGroup>
-                    </ion-col>
-                    <ion-col>
-<IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px; margin-top: 20px;">Counselling on anaemia conducted?</ion-label>
-                        <ion-radio style="margin-bottom: 10px; width: 95%;">Yes</ion-radio>
-                        <ion-radio style="margin-bottom: 10px; width: 95%;">No</ion-radio>
-                      </div>
-                      </IonRadioGroup>
-
-                    </ion-col>
-                    </ion-row>
+    </div>
 
 
-</ion-list>
+
+
+
+
+
 </template>
 
 <script lang="ts">
@@ -289,26 +108,44 @@ export default defineComponent ({
     },
     data() {
         return {
-
+            currentSection: 0,
         }
     },
     setup(){
         return { checkmark,pulseOutline };
     },
     computed:{
+        ...mapState(useDiagnosisStore, ["diagnoses"]),
+        ...mapState(useDiagnosisStore, ["hypertensionReason"]),
+        ...mapState(useDiagnosisStore, ["hivReason"]),
+        ...mapState(useDiagnosisStore, ["hepatitisReason"]),
+        ...mapState(useDiagnosisStore, ["asbReason"]),
         ...mapState(useDiagnosisStore, ["hypertension"]),
         ...mapState(useDiagnosisStore, ["preEclampsia"]),
+        ...mapState(useDiagnosisStore, ["hyper"]),
         ...mapState(useDiagnosisStore, ["hiv"]),
         ...mapState(useDiagnosisStore, ["hepatitisB"]),
         ...mapState(useDiagnosisStore, ["hepatitisC"]),
-        ...mapState(useDiagnosisStore, ["tbScreening"]),
         ...mapState(useDiagnosisStore, ["syphilis"]),
-        ...mapState(useDiagnosisStore, ["hypertensionCounselling"]),
-        ...mapState(useDiagnosisStore, ["hivCounselling"]),
-        ...mapState(useDiagnosisStore, ["hepatitisBCounselling"]),
-        ...mapState(useDiagnosisStore, ["ASBcounselling"]),
+        ...mapState(useDiagnosisStore, ["syphilisTesting"]),
+        ...mapState(useDiagnosisStore, ["tbScreening"]),
+        ...mapState(useDiagnosisStore, ["ASB"]),
+        ...mapState(useDiagnosisStore, ["GDM"]),
+        ...mapState(useDiagnosisStore, ["diabetes"]),
+        ...mapState(useDiagnosisStore, ["anaemia"]),
+
     },
     methods :{
+        goToNextSection() {
+      if (this.currentSection < 4) {
+        this.currentSection++;
+      }
+    },
+    goToPreviousSection() {
+      if (this.currentSection > 0) {
+        this.currentSection--;
+      }
+    },
 
     }
 
@@ -318,21 +155,39 @@ export default defineComponent ({
 </script>
 
 <style scoped>
-.dottedLine {
-    border-bottom: 1.5px dotted var(--ion-color-medium);
-    margin-top: 10px;
-    padding:10px; 
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-ion-checkbox {
-    width: 60%;
+.section {
+  width: 100%;
+  max-width: 1300px; 
+  margin-bottom: 20px;
 }
 
-.radio {
-        display: flex;
-        flex-direction: column;
-        /* border-bottom: 2px dotted var(--ion-color-medium);  */
-        --inner-border-width:0;
-        padding: 10px;
+ion-card {
+ box-shadow:none;
+  background-color:inherit;   
+  width: 100%;
+ color: black;
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 500px; 
+}
+
+@media (max-width: 1500px) {
+  .container {
+    padding: 10px;
+  }
+}
+.sub_item_header{
+  font-weight: bold;
+  font-size: medium;
 }
 </style>
