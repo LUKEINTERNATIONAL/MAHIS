@@ -177,7 +177,7 @@
       ...mapState(useVitalsStore,["vitals"]),
       ...mapState(useInvestigationStore,["investigations"]),
       ...mapState(useDiagnosisStore,["diagnosis"]),
-      ...mapState(useTreatmentPlanStore,["selectedMedicalDrugsList","nonPharmalogicalTherapyAndOtherNotes"]),
+      ...mapState(useTreatmentPlanStore,["selectedMedicalDrugsList","nonPharmalogicalTherapyAndOtherNotes","selectedMedicalAllergiesList"]),
       ...mapState(useGeneralStore,["saveProgressStatus"]),
     },
     mounted(){
@@ -283,10 +283,15 @@
             const patientID = this.demographics.patient_id
             const treatmentInstance = new Treatment()
 
+            if(!isEmpty(this.selectedMedicalAllergiesList)) {
+                const allergies = this. mapToAllergies()
+                treatmentInstance.onSubmitAllergies(patientID, userID, allergies)
+            }
+
             if (!isEmpty(this.nonPharmalogicalTherapyAndOtherNotes)) {
                 const treatmentNotesTxt = [
                     {
-                        concept_id: '2688',
+                        concept_id: 2688,
                         obs_datetime: Service.getSessionDate(),
                         value_text: this.nonPharmalogicalTherapyAndOtherNotes
                     }
@@ -296,7 +301,6 @@
 
             if (!isEmpty(this.selectedMedicalDrugsList)) {
                 const drugOrders = this.mapToOrders()
-                console.log(drugOrders)
                 const prescriptionService = new DrugPrescriptionService(patientID, userID)
                 const encounter = await prescriptionService.createEncounter()
                 if (!encounter) return toastWarning('Unable to create treatment encounter')   
@@ -309,7 +313,6 @@
             createModal(SaveProgressModal)
         },
         mapToOrders(): any[] {
-            console.log(this.selectedMedicalDrugsList)
         return this.selectedMedicalDrugsList.map((drug: any) => {
             const startDate = DrugPrescriptionService.getSessionDate()
             const frequency = DRUG_FREQUENCIES.find(f => f.label === drug.frequency) || {} as typeof DRUG_FREQUENCIES[0]
@@ -329,6 +332,15 @@
             const date = new Date(startDate)
             date.setDate(date.getDate() + parseInt(duration))
             return HisDate.toStandardHisFormat(date)
+        },
+        mapToAllergies(): any[] {
+            return this.selectedMedicalAllergiesList.map((allergy: any) => {
+                return {
+                    concept_id: 985,
+                    obs_datetime: Service.getSessionDate(),
+                    value_coded: allergy.concept_id
+                }
+            })
         },
       }
     })
