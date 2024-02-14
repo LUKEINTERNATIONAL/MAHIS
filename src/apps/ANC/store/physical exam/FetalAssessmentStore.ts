@@ -36,18 +36,20 @@ export const useFetalAssessment = defineStore('fetalAssessment',{
                         ]
                     },
             },
+
             {
                 selectdData: [],
                 classDash: '',
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Fetal heartbeat present?',
-                            selectedValue: ''
+                            title: 'Is number of fetuses known?',
+                            selectedValue: '',
+                            name:'Yes'
                         },
                         data:[
                             {
-                                value: 'Y',
+                                value: 'yes',
                                 name: 'Yes',
                                 labelPlacement: 'start',
                                 colSize: '7',
@@ -55,7 +57,64 @@ export const useFetalAssessment = defineStore('fetalAssessment',{
 
                             },
                             {
-                                value: 'No',
+                                value: 'no',
+                                name: 'No',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
+
+                            },
+                        ]
+                    }
+
+
+            },
+            {
+                sectionHeader: '',
+                classDash: 'dashed_bottom_border',
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData:
+                                    [
+                                        {
+                                            displayNone:true,
+                                            inputHeader: 'Number of fetuses',
+                                            unit: '',
+                                            icon: '',
+                                            value: '',
+                                            name: 'number of fetuses',
+                                            eventType: 'input',
+                                            inputWidth: '55%'
+                                        },
+                                    ]
+                            }
+                        ]
+                    },
+
+            },
+            {
+                selectdData: [],
+                classDash: '',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Fetal heartbeat present?',
+                            selectedValue: '',
+                            name:'Yes'
+                        },
+                        data:[
+                            {
+                                value: 'yes',
+                                name: 'Yes',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
+
+                            },
+                            {
+                                value: 'no',
                                 name: 'No',
                                 labelPlacement: 'start',
                                 colSize: '7',
@@ -77,6 +136,7 @@ export const useFetalAssessment = defineStore('fetalAssessment',{
                                 colData:
                                     [
                                         {
+                                            displayNone:true,
                                             inputHeader: 'Fetal rate',
                                             unit: 'BMP',
                                             icon: icons.systolicPressure,
@@ -103,6 +163,7 @@ export const useFetalAssessment = defineStore('fetalAssessment',{
                                 colData:
                                     [
                                         {
+                                            displayNone:true,
                                             inputHeader: 'Repeated fetal rate',
                                             unit: 'BMP',
                                             icon: icons.systolicPressure,
@@ -120,61 +181,6 @@ export const useFetalAssessment = defineStore('fetalAssessment',{
                     },
 
             },
-            {
-                selectdData: [],
-                classDash: '',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Is number of fetuses known?',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                value: 'Y',
-                                name: 'Yes',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between'
-
-                            },
-                            {
-                                value: 'No',
-                                name: 'No',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between'
-
-                            },
-                        ]
-                    }
-
-
-            },
-            {
-                sectionHeader: '',
-                classDash: 'dashed_bottom_border',
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData:
-                                    [
-                                        {
-                                            inputHeader: 'Number of fetuses',
-                                            unit: '',
-                                            icon: '',
-                                            value: '',
-                                            name: 'Number of fetuses',
-                                            eventType: 'input',
-                                            inputWidth: '55%'
-                                        },
-                                    ]
-                            }
-                        ]
-                    },
-
-            }
 
 
         ],

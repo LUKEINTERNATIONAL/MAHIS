@@ -3,7 +3,7 @@
   <div class="container">
     <ion-card class="section">
       <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Fetal presentation results</ion-card-title>
+        <ion-card-title class="dashed_bottom_border sub_item_header">Fetal presentation result</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <basic-form :contentData="fetalPresentation"></basic-form>
@@ -29,7 +29,7 @@ import {
 import { defineComponent } from 'vue';
 import { checkmark,pulseOutline } from 'ionicons/icons';
 import { icons } from '@/utils/svg';
-import {useFetalPresentation} from "@/apps/ANC/store/physical exam/FetalPresantationStore";
+import {useFetalPresentationStore} from "@/apps/ANC/store/physical exam/FetalPresantationStore";
 import { mapState } from 'pinia';
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { arePropertiesNotEmpty } from "@/utils/Objects";
@@ -38,6 +38,7 @@ import BasicInputField from "@/components/BasicInputField.vue"
 import { VitalsService } from "@/services/vitals_service";
 import BasicForm from '@/components/BasicForm.vue';
 import { Service } from "@/services/service";
+import {getRadioSelectedValue, modifyFieldValue} from "@/services/data_helpers";
 
 export default defineComponent({
   components:{
@@ -62,20 +63,20 @@ export default defineComponent({
   },
   computed:{
 
-    ...mapState(useFetalPresentation,["fetalPresentation"]),
+    ...mapState(useFetalPresentationStore,["fetalPresentation"]),
   },
   mounted(){
     const userID: any  = Service.getUserID()
-    this.vitalsInstance = new VitalsService(this.demographics.patient_id,userID);
-    this.updateVitalsStores()
-    this.validaterowData({})
+    const fetalPresentation=useFetalPresentationStore()
+    this.handleFetalPresentation()
+
   },
   watch: {
-    vitals: {
+    fetalPresentation:{
       handler(){
-        this.updateVitalsStores();
+        this.handleFetalPresentation();
       },
-      deep: true
+      deep:true
     }
   },
   setup() {
@@ -85,6 +86,11 @@ export default defineComponent({
     navigationMenu(url: any){
       menuController.close()
       this.$router.push(url);
+    },
+    handleFetalPresentation(){
+      if(getRadioSelectedValue(this.fetalPresentation, 'fetalPresentation')=='other'){
+        modifyFieldValue(this.fetalPresentation,'Other fetal presentation','displayNone', false)
+      }   else {modifyFieldValue(this.fetalPresentation,'Other fetal presentation','displayNone', true)}
     },
 
   }
@@ -97,7 +103,6 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
 }
 
 .section {
@@ -121,5 +126,9 @@ export default defineComponent({
 .sub_item_header{
   font-weight: bold;
   font-size: medium;
+}
+ion-card {
+  box-shadow:none;
+  background-color:inherit;
 }
 </style>

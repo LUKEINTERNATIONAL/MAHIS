@@ -6,6 +6,7 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
         HealthConcerns:[
             {
                 selectdData: [],
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -36,7 +37,7 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -68,7 +69,7 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
 
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -100,7 +101,7 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -131,7 +132,7 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -162,7 +163,7 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -193,7 +194,7 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -224,7 +225,7 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -256,7 +257,7 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -287,7 +288,7 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -318,7 +319,7 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
@@ -347,6 +348,29 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
                     }
 
             },
+            {
+                selectdData: [],
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Other',
+                                value: 'other',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+
+                        ]
+                    }
+
+            },
 
             {
                 isFinishBtn: false,
@@ -359,6 +383,7 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
                             {
                                 colData: [
                                     {
+                                        displayNone:true,
                                         inputHeader: 'Other (specify)',
                                         unit: '',
                                         icon: icons.editPen,

@@ -32,7 +32,7 @@ import {
 import { defineComponent } from 'vue';
 import Toolbar from "@/apps/ANC/components/Toolbar.vue";
 import ToolbarSearch from '@/components/ToolbarSearch.vue'
-import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
+import DemographicBar from "@/components/DemographicBar.vue";
 import { chevronBackOutline,checkmark } from 'ionicons/icons';
 import SaveProgressModal from '@/components/SaveProgressModal.vue'
 import { createModal } from '@/utils/Alerts'
@@ -42,7 +42,7 @@ import { useDemographicsStore } from '@/stores/DemographicStore'
 import { useInvestigationStore } from '@/stores/InvestigationStore'
 import { useDiagnosisStore } from '@/stores/DiagnosisStore'
 import { mapState } from 'pinia';
-import Stepper from '@/components/Stepper.vue'
+import Stepper from "@/apps/ANC/components/Stepper.vue";
 import { Service } from "@/services/service";
 import { toastWarning,popoverConfirmation, toastSuccess } from '@/utils/Alerts';
 import { Diagnosis } from '@/apps/NCD/services/diagnosis'
@@ -200,28 +200,9 @@ export default defineComponent({
       });
     },
     saveData(){
-      if(this.vitals.validationStatus && this.investigations[0].selectdData.length > 0 && this.diagnosis[0].selectdData.length > 0){
-        this.saveVitals()
-        this.saveInvestigation()
-        this.saveDiagnosis()
-        this.$router.push('patientProfile');
-      }else{
-        toastWarning("Please complete all required fields")
-      }
-    },
-    saveInvestigation(){
-      const investigationInstance = new LabOrder()
-      investigationInstance.postActivities(this.demographics.patient_id,this.deleteDisplayData(this.investigations[0].selectdData))
-    },
-    saveVitals(){
-      const userID: any  = Service.getUserID()
-      const vitalsInstance = new VitalsService(this.demographics.patient_id,userID);
-      vitalsInstance.onFinish(this.vitals)
-    },
-    saveDiagnosis(){
-      const userID: any  = Service.getUserID()
-      const diagnosisInstance = new Diagnosis();
-      diagnosisInstance.onSubmit(this.demographics.patient_id,userID,this.deleteDisplayData(this.diagnosis[0].selectdData))
+
+      this.$router.push('Profile');
+
     },
     openModal(){
       createModal(SaveProgressModal)

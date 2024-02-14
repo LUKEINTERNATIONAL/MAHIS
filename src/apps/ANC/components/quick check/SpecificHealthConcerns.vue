@@ -27,7 +27,7 @@ import {
   IonInput,
   IonSelect,
 } from '@ionic/vue';
-import { defineComponent } from 'vue';
+import {defineComponent, watch} from 'vue';
 import { checkmark,pulseOutline } from 'ionicons/icons';
 import { ref } from 'vue';
 import { icons } from '@/utils/svg';
@@ -35,6 +35,7 @@ import BasicInputField from '@/components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import BasicForm from '@/components/BasicForm.vue'
 import {useSpecificHealthConcernsStore} from "@/apps/ANC/store/quickCheck/specificHealthConcerns";
+import {getCheckboxSelectedValue, modifyFieldValue} from "@/services/data_helpers";
 
 export default defineComponent({
   name: 'Menu',
@@ -60,6 +61,18 @@ export default defineComponent({
 
     };
   },
+  watch:{
+    HealthConcerns:{
+      handler(){
+        this.handleHealthconcerns()
+      },
+      deep:true
+    }
+  },
+  mounted() {
+    const HealthConcerns=useSpecificHealthConcernsStore()
+    this.handleHealthconcerns()
+  },
   computed: {
     ...mapState(useSpecificHealthConcernsStore, ["HealthConcerns"])
   },
@@ -71,6 +84,10 @@ export default defineComponent({
       menuController.close()
       this.$router.push(url);
     },
+    handleHealthconcerns(){  if(getCheckboxSelectedValue(this.HealthConcerns, 'Other')=='other'){
+      modifyFieldValue(this.HealthConcerns,'Other','displayNone', false)
+    }   else {modifyFieldValue(this.HealthConcerns,'Other','displayNone', true)}
+    },
   }
 });
 </script>
@@ -80,7 +97,6 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
 }
 
 .section {
@@ -104,5 +120,9 @@ export default defineComponent({
 .sub_item_header{
   font-weight: bold;
   font-size: medium;
+}
+ion-card {
+  box-shadow:none;
+  background-color:inherit;
 }
 </style>

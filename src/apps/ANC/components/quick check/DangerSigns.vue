@@ -50,7 +50,12 @@ import BasicInputField from '@/components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import BasicForm from '@/components/BasicForm.vue'
 import {useDangerSignsStore} from "@/apps/ANC/store/quickCheck/dangerSigns";
-import {modifyRadioValue, getRadioSelectedValue} from "@/services/data_helpers";
+import {
+  modifyRadioValue,
+  getRadioSelectedValue,
+  modifyFieldValue,
+  getCheckboxSelectedValue
+} from "@/services/data_helpers";
 
 export default defineComponent({
   name: 'Menu',
@@ -78,7 +83,10 @@ export default defineComponent({
     };
   },
   mounted() {
+    const DangerSigns =useDangerSignsStore()
+    const PreviousVisit =useDangerSignsStore()
     this.handleNumberOfVisits()
+    this.handleDangerSigns()
   },
   watch:{
     PreviousVisit:{
@@ -86,6 +94,12 @@ export default defineComponent({
       this.handleNumberOfVisits()
     },
     deep:true
+    },
+    DangerSigns:{
+      handler(){
+        this.handleDangerSigns()
+      },
+      deep:true
     }
   },
   computed: {
@@ -100,8 +114,16 @@ export default defineComponent({
       menuController.close()
       this.$router.push(url);
     },
-    handleNumberOfVisits(){
+    handleDangerSigns(){
+      if(getCheckboxSelectedValue(this.DangerSigns, 'Other')=='other'){
+      modifyFieldValue(this.DangerSigns,'Other','displayNone', false)
+    }   else {modifyFieldValue(this.DangerSigns,'Other','displayNone', true)}
+      },
 
+    handleNumberOfVisits(){
+      if(getRadioSelectedValue(this.PreviousVisit, 'Yes')=='yes'){
+        modifyFieldValue(this.PreviousVisit,'number of previous anc visits','displayNone', false)
+      }   else {modifyFieldValue(this.PreviousVisit,'number of previous anc visits','displayNone', true)}
     },
     //Method for navigating
     goToNextSection() {
@@ -116,14 +138,6 @@ export default defineComponent({
     },
 
 
-    dangerSigns(){
-      this.dangerSignChecked = !this.dangerSignChecked
-      if (this.dangerSignChecked) {
-        this.dangerSign = 'none'
-      } else {this.dangerSign = ''}
-    },
-
-
   }
 });
 </script>
@@ -133,7 +147,6 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
 }
 
 .section {
@@ -157,5 +170,9 @@ export default defineComponent({
 .sub_item_header{
   font-weight: bold;
   font-size: medium;
+}
+ion-card {
+  box-shadow:none;
+  background-color:inherit;
 }
 </style>

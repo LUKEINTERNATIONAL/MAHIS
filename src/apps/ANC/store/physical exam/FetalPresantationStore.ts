@@ -1,19 +1,20 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg';
 
-export const useFetalPresentation = defineStore('fetalPresentation',{
+export const useFetalPresentationStore = defineStore('fetalPresentationStore',{
     state: () => ({
 
         fetalPresentation: [
 
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 radioBtnContent:
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'fetalPresentation'
                         },
                         data:[
                             {
@@ -48,6 +49,14 @@ export const useFetalPresentation = defineStore('fetalPresentation',{
                                 justify: 'space-between'
 
                             },
+                            {
+                                value: 'other',
+                                name: 'Other',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
+
+                            },
                         ]
                     }
 
@@ -64,12 +73,12 @@ export const useFetalPresentation = defineStore('fetalPresentation',{
                         rowData:[
                             {
                                 colData: [
-                                    {
-                                        inputHeader: 'Other (specify)',
+                                    {   displayNone:true,
+                                        inputHeader: 'specify',
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Other',
+                                        name: 'Other fetal presentation',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "55%",
@@ -85,8 +94,8 @@ export const useFetalPresentation = defineStore('fetalPresentation',{
 
     }),
     actions:{
-        setVitals(data: any){
-            this.vitals = data
+        setFetalPresentation(data: any){
+            this.fetalPresentation = data
         }
     },
     persist:true,

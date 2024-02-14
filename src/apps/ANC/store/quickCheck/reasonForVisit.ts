@@ -5,6 +5,7 @@ export const useReasonForVisitStore = defineStore('reasonForVisitStore',{
     state: () => ({
         ReasonForVisit: [
             {
+                classDash:'dashed_bottom_border',
                 radioBtnContent:
                     {
                         header:{

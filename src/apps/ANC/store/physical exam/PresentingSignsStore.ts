@@ -12,23 +12,24 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                 radioBtnContent:
                     {
                         header:{
-                            title: '',
-                            selectedValue: ''
+                            title: 'Any injury present?',
+                            selectedValue: '',
+                            name:'Yes',
                         },
                         data:[
                             {
-                                value: 'y',
+                                value: 'yes',
                                 name: 'Yes',
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
                             {
-                                value: 'N',
+                                value: 'no',
                                 name: 'No',
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
@@ -37,9 +38,6 @@ export const usePresentingSigns = defineStore('presentingSigns',{
 
 
             },
-        ],
-
-        abdominalInjury:[
             {
                 selectdData: [],
                 classDash: '',
@@ -47,22 +45,23 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                     {
                         header:{
                             title: 'Is there traumatic injury to abdomen?',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'Yes'
                         },
                         data:[
                             {
-                                value: 'y',
+                                value: 'yes',
                                 name: 'Yes',
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
                             {
-                                value: 'N',
+                                value: 'no',
                                 name: 'No',
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
@@ -82,14 +81,14 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                             {
                                 colData: [
                                     {
-                                        inputHeader: 'Other (specify)',
+                                        inputHeader: 'Specify',
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
                                         name: 'Other',
                                         required: true,
                                         eventType: 'input',
-                                        inputWidth: "100%",
+                                        inputWidth: "55%",
                                         required: true
                                     },
 
@@ -99,41 +98,12 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                     },
             },
 
-
         ],
-        violence:[
-            {
-                isFinishBtn: false,
-                sectionHeader: '',
-                classDash: '',
 
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'Specify any other signs indicative of violence',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'Other',
-                                        required: true,
-                                        eventType: 'input',
-                                        inputWidth: "100%",
-                                        required: true
-                                    },
-
-                                ]
-                            }
-                        ]
-                    },
-            },
-        ],
         clinicalEnquiry:[
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 radioBtnContent:
                     {
                         header:{
@@ -142,18 +112,18 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                         },
                         data:[
                             {
-                                value: 'y',
+                                value: 'yes',
                                 name: 'Yes',
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
                             {
-                                value: 'N',
+                                value: 'no',
                                 name: 'No',
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
@@ -176,7 +146,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                                 value: 'client referred',
                                 name: 'Client was referred',
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
@@ -184,7 +154,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                                 value: 'trained provider unavailable',
                                 name: 'Trained provider unavailable',
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
@@ -192,7 +162,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                                 value: 'private or safe space unavailable',
                                 name: 'Private or safe space unavailable',
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
@@ -200,7 +170,15 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                                 value: 'confidentiality could not be assured',
                                 name: 'Confidentiality could not be assured',
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
+                                justify: 'space-between'
+
+                            },
+                            {
+                                value: 'other',
+                                name: 'Other reason',
+                                labelPlacement: 'start',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
@@ -221,14 +199,14 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                             {
                                 colData: [
                                     {
-                                        inputHeader: 'Other (specify)',
+                                        inputHeader: 'Specify ',
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
                                         name: 'Other',
                                         required: true,
                                         eventType: 'input',
-                                        inputWidth: "100%",
+                                        inputWidth: "55%",
                                         required: true
                                     },
 
@@ -242,27 +220,28 @@ export const usePresentingSigns = defineStore('presentingSigns',{
         intimateViolence:[
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 radioBtnContent:
                     {
                         header:{
-                            title: '',
-                            selectedValue: ''
+                            title: 'Has the woman been subjected to any form of injury?',
+                            selectedValue: '',
+                            name:'Yes'
                         },
                         data:[
                             {
-                                value: 'y',
+                                value: 'yes',
                                 name: 'Yes',
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
                             {
-                                value: 'N',
+                                value: 'no',
                                 name: 'No',
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
@@ -270,6 +249,33 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                     }
 
 
+            },
+            {
+                isFinishBtn: false,
+                sectionHeader: '',
+                classDash: 'dashed_bottom_border',
+
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Specify any other signs indicative of violence',
+                                        unit: '',
+                                        icon: icons.editPen,
+                                        value: '',
+                                        name: 'Other',
+                                        required: true,
+                                        eventType: 'input',
+                                        inputWidth: "55%",
+                                        required: true
+                                    },
+
+                                ]
+                            }
+                        ]
+                    },
             },
             {
                 selectdData: [],
@@ -285,7 +291,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                                 value: 'physical violence',
                                 name: 'Physical violence',
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
@@ -293,7 +299,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                                 value: 'sexual violence',
                                 name: 'Sexual violence',
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
@@ -301,7 +307,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                                 value: 'psychological/emotional abuse',
                                 name: 'Psychological/emotional abuse',
                                 labelPlacement: 'start',
-                                colSize: '12',
+                                colSize: '7',
                                 justify: 'space-between'
 
                             },
@@ -329,7 +335,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                                         name: 'Other',
                                         required: true,
                                         eventType: 'input',
-                                        inputWidth: "100%",
+                                        inputWidth: "55%",
                                         required: true
                                     },
 

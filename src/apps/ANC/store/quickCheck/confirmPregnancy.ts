@@ -37,6 +37,7 @@ export const useConfirmPregnancyStore = defineStore('confirmPregnancyStore',{
         ],
         PlannedPregnancy: [
             {
+                classDash: 'dashed_bottom_border',
                 radioBtnContent:
                     {
                         header:{

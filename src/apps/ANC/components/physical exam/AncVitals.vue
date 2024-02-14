@@ -52,8 +52,8 @@
 
     <!-- Navigation Buttons -->
     <div class="navigation-buttons">
-      <ion-button @click="goToPreviousSection" expand="block" color="medium" size="large">Previous</ion-button>
-      <ion-button @click="goToNextSection" expand="block" color="primary" size="large">Next</ion-button>
+      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
+      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
     </div>
   </div>
 </template>
@@ -86,7 +86,13 @@ import {
     import { VitalsService } from "@/services/vitals_service";
     import BasicForm from '@/components/BasicForm.vue';
     import { Service } from "@/services/service";
-    import {modifyRadioValue,modifyCheckboxValue,getRadioSelectedValue,getCheckboxSelectedValue} from "@/services/data_helpers";
+import {
+  modifyRadioValue,
+  modifyCheckboxValue,
+  getRadioSelectedValue,
+  getCheckboxSelectedValue,
+  modifyFieldValue
+} from "@/services/data_helpers";
 
 export default defineComponent({
     components:{
@@ -105,13 +111,7 @@ export default defineComponent({
     data() {
     return {
         iconsContent: icons,
-        BMI: {},
-        BPStatus: {},
-        vValidations: '' as any,
-        hasValidationErrors: [] as any,
-        vitalsInstance: {} as any,
         currentSection: 0, // Initialize currentSection to 0
-        sections: ['Height and Weight', 'Blood Pressure', 'Respiration Exam and Pre-eclampsia', 'Temperature and Pulse'],
     };
   },
   computed:{
@@ -125,12 +125,11 @@ export default defineComponent({
         ...mapState(useAncVitalsStore,["preEclampsia"]),
     },
     mounted(){
-        const userID: any  = Service.getUserID()
-        this.vitalsInstance = new VitalsService(this.demographics.patient_id,userID);
-        this.updateVitalsStores()
-        this.validaterowData({})
         const bloodPressure=useAncVitalsStore()
+        const respiration=useAncVitalsStore()
         this.handleUnAbleToRecordBloodPressure()
+        this.handleRespirationExam()
+        this.handleOther()
     },
     watch: {
         vitals: {
@@ -142,9 +141,17 @@ export default defineComponent({
         bloodPressure:{
             handler(){
               this.handleUnAbleToRecordBloodPressure();
+               this.handleOther()
             },
             deep:true
+        },
+        respiration:{
+            handler(){
+              this.handleRespirationExam();
+            },
+          deep:true
         }
+
     },
     setup() {
       return { checkmark,pulseOutline };
@@ -155,17 +162,45 @@ export default defineComponent({
             this.$router.push(url);
         },
       handleUnAbleToRecordBloodPressure() {
-        const unableToRecordBloodPressureValue = getCheckboxSelectedValue(this.bloodPressure, 'test1');
+        const unableToRecordBloodPressureValue = getCheckboxSelectedValue(this.bloodPressure, 'Unable to record blood pressure');
 
         // Check if the checkbox is checked
-        if (unableToRecordBloodPressureValue == 'Unable') {
+        if (unableToRecordBloodPressureValue == 'unable to record blood pressure') {
           // Set the display of the reason radio buttons to true
-          modifyRadioValue(this.bloodPressure, 'test2', 'displayNone', false);
+          modifyRadioValue(this.bloodPressure, 'reasonsBloodPressureCannotBeTaken', 'displayNone', false);
         } else {
           // Set the display of the reason radio buttons to false
-          modifyRadioValue(this.bloodPressure, 'test2', 'displayNone', true);
+          modifyRadioValue(this.bloodPressure, 'reasonsBloodPressureCannotBeTaken', 'displayNone', true);
         }
       },
+      handleOther() {
+        if (getRadioSelectedValue(this.bloodPressure, 'reasonsBloodPressureCannotBeTaken') == 'otherBloodPressure') {
+          modifyFieldValue(this.bloodPressure, 'OtherReasonForNotRecordingBloodPressure', 'displayNone', false)
+        } else {
+          modifyFieldValue(this.bloodPressure, 'OtherReasonForNotRecordingBloodPressure', 'displayNone', true)
+        }
+        console.log(getRadioSelectedValue(this.bloodPressure, 'reasonsBloodPressureCannotBeTaken'))
+      },
+//
+//       if(getRadioSelectedValue(this.bloodPressure, 'reasonsBloodPressureCannotBeTaken')=='other'){
+//   modifyFieldValue(this.bloodPressure,'Other','displayNone', false)
+// }   else {modifyFieldValue(this.bloodPressure,'Other','displayNone', true)}
+
+
+// handleRespirationExam(){
+      //   const respirationExamValue = getCheckboxSelectedValue(this.respiration, 'Other respiratory exam');
+      //   if(respirationExamValue=='other respiratory exam'){
+      //     modifyFieldValue(this.respiration, 'Other','displayNone', false)
+      //   }else {modifyFieldValue(this.respiration,'Other','displayNone', true)}
+      //
+      // },
+
+      handleRespirationExam(){
+        if(getCheckboxSelectedValue(this.respiration, 'Other respiratory exam')=='other respiratory exam'){
+          modifyFieldValue(this.respiration,'Other','displayNone', false)
+        }   else {modifyFieldValue(this.respiration,'Other','displayNone', true)}
+      },
+
 
       //Method for navigating
       goToNextSection() {
@@ -298,7 +333,6 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: center;
- 
 }
 
 .section {
@@ -327,6 +361,10 @@ ion-card {
 .sub_item_header{
   font-weight: bold;
   font-size: medium;
+}
+ion-card {
+  box-shadow:none;
+  background-color:inherit;
 }
 </style>
   

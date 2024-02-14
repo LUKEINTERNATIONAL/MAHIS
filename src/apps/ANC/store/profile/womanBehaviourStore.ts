@@ -1,101 +1,130 @@
-import { defineStore } from "pinia";
-import {icons} from "@/utils/svg";
+import { defineStore } from 'pinia'
+import { icons } from '@/utils/svg';
 
-export const useWomanBehaviourStore = defineStore('womanBehaviourStore', {
+export const useWomanBehaviourStore = defineStore('womanBehaviourStore',{
     state: () => ({
-        Caffeine: [
+        dailyCaffeineIntake:[
+            {
+                selectdData: [],
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+
+                            {
+                                name: 'More than 2 cups of tea',
+                                value: 'more than 2 cups of tea',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '9',
+                                justify: 'space-between'
+                            },
+                        ]
+                    }
+
+            },
 
             {
                 classDash: 'dashed_bottom_border',
-                checkboxBtnContent: {
-                    header: {
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data: [
-                        {
-                            name: 'More than 2 cups of tea',
-                            value: 'more than 2 cups of tea',
-                            checked: false,
-                            labelPlacement: 'start',
-                            colSize: '9',
-                            justify: 'space-between'
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
                         },
-                    ]
-                }
+                        data:[
+                            {
+                                name: 'More than 4 cups of tea',
+                                value: 'more than 4 cups of tea',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '9',
+                                justify: 'space-between'
+                            },
+                        ]
+                    }
+
             },
             {
                 classDash: 'dashed_bottom_border',
-                checkboxBtnContent: {
-                    data: [
-                        {
-                            name: 'More than 4 cups of tea',
-                            value: 'more than 4 cups of tea',
-                            checked: false,
-                            labelPlacement: 'start',
-                            colSize: '9',
-                            justify: 'space-between'
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
                         },
-                    ]
-                }
+                        data:[
+                            {
+                                name: 'More than 12 bars of chocolate',
+                                value: 'more than 12 bars of chocolate',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '9',
+                                justify: 'space-between'
+                            },
+
+                        ]
+                    }
+
             },
+
             {
                 classDash: 'dashed_bottom_border',
-                checkboxBtnContent: {
-                    data: [
-                        {
-                            name: 'More than 12 bars of chocolate',
-                            value: 'more than 12 bars of chocolate',
-                            checked: false,
-                            labelPlacement: 'start',
-                            colSize: '9',
-                            justify: 'space-between'
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
                         },
-                    ]
-                }
+                        data:[
+                            {
+                                name: 'More than one bottle of soda, energy, soft drink',
+                                value: 'more than one bottle of soda, energy, soft drink',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '9',
+                                justify: 'space-between'
+                            },
+                        ]
+                    }
+
             },
+
             {
-                selected: [],
                 classDash: 'dashed_bottom_border',
-                checkboxBtnContent: {
-                    data: [
-                        {
-                            name: 'More than one bottle of soda, energy, soft drink',
-                            value: 'more than one bottle of soda, energy, soft drink',
-                            checked: false,
-                            labelPlacement: 'start',
-                            colSize: '9',
-                            justify: 'space-between'
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
                         },
-                    ]
-                }
+                        data:[
+                            {
+                                name: 'None of the above',
+                                value: 'none of the above',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '9',
+                                justify: 'space-between'
+                            },
+                        ]
+                    }
+
             },
-            {
-                selected: [],
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent: {
-                    data: [
-                        {
-                            name: 'None of the above',
-                            value: 'none of the above',
-                            checked: false,
-                            labelPlacement: 'start',
-                            colSize: '9',
-                            justify: 'space-between'
-                        },
-                    ]
-                }
-            },
+
         ],
-
-            Tobbaco: [
+        Tobacco: [
 
             {
                 classDash: 'dashed_bottom_border',
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Recently quit tobbacco products',
+                            title: 'Recently quit tobacco products',
                             selectedValue: ''
                         },
                         data:[
@@ -119,45 +148,42 @@ export const useWomanBehaviourStore = defineStore('womanBehaviourStore', {
                     }
 
             },
-                {
-                    classDash: 'dashed_bottom_border',
-                    radioBtnContent:
-                        {
-                            header:{
-                                title: 'Exposure to second hand smoke',
-                                selectedValue: ''
+            {
+                classDash: 'dashed_bottom_border',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Exposure to second hand smoke',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                value: 'Y',
+                                name: 'Yes',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
+
                             },
-                            data:[
-                                {
-                                    value: 'Y',
-                                    name: 'Yes',
-                                    labelPlacement: 'start',
-                                    colSize: '7',
-                                    justify: 'space-between'
+                            {
+                                value: 'N',
+                                name: 'No',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between'
 
-                                },
-                                {
-                                    value: 'N',
-                                    name: 'No',
-                                    labelPlacement: 'start',
-                                    colSize: '7',
-                                    justify: 'space-between'
+                            }
+                        ]
+                    }
 
-                                }
-                            ]
-                        }
-
-                }
+            }
         ] as any
     }),
-
-    actions: {
-        addCaffeine(data: any) {
-            this.Caffeine = data;
-        },
-        addTobbaco(data: any) {
-            this.Tobbaco = data;
-        },
+    actions:{
+        setPersonalInformation(data: any){
+            this.dailyCaffeineIntake = data
+        }
     },
-    persist: true
+    persist:true,
+
 });
