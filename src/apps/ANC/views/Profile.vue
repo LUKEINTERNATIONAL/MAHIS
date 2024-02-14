@@ -47,7 +47,9 @@ import Medications from '../components/profile/Medications.vue';
 import MedicalHistory from '../components/profile/MedicalHistory.vue';
 import WomanBehaviour from '../components/profile/WomanBehaviour.vue';
 import {getCheckboxSelectedValue} from "@/services/data_helpers";
-import {useMedicalHistoryStore} from "@/apps/ANC/store/profile/medicalHistoryStore";
+import { useMedicalHistoryStore } from '../store/profile/medicalHistoryStore';
+
+
 
 export default defineComponent({
   name: "Home",
@@ -162,9 +164,38 @@ export default defineComponent({
   },
   computed:{
 
-    ...mapState(useMedicalHistoryStore,["medicalHistory"])
-
+    ...mapState(useMedicalHistoryStore, ["exisitingChronicHealthConditions"]),
+  
   },
+      saveData(){
+
+      const medicalConditions = [
+        'Auto immune desease',
+        'Asthma',
+        'Diabetes',
+        'Sickle cell',
+        'Anaemia',
+        'Thalassemia',
+        'Gynaecological',
+        'CCF',
+        'RHD',
+        'Gestational diabetes',
+        'pre-existing type 1',
+        'pre-existing type 2',
+        'Epilepsy',
+        'Hypertension',
+        'Kidney',
+        'TB',
+        'Mental  illiness',
+      ];
+      for (const condition of medicalConditions) {
+        const selectedValue = getCheckboxSelectedValue(this.exisitingChronicHealthConditions, condition);
+        console.log(selectedValue);
+      }
+
+         // this.$router.push('symptomsFollowUp');
+
+     },
   mounted(){
     // this.markWizard()
 
@@ -229,37 +260,6 @@ export default defineComponent({
         return item?.data;
       });
     },
-    saveData(){
-
-      const medicalConditions = [
-        'Auto immune desease',
-        'Asthma',
-        'Diabetes',
-        'Sickle cell',
-        'Anaemia',
-        'Thalassemia',
-        'Gynaecological',
-        'CCF',
-        'RHD',
-        'Gestational diabetes',
-        'pre-existing type 1',
-        'pre-existing type 2',
-        'Epilepsy',
-        'Hypertension',
-        'Kidney',
-        'TB',
-        'Mental  illiness',
-      ];
-      for (const condition of medicalConditions) {
-        const selectedValue = getCheckboxSelectedValue(this.medicalHistory, condition);
-
-        console.log(selectedValue);
-    }
-
-         // this.$router.push('symptomsFollowUp');
-
-     },
-
     openModal(){
       createModal(SaveProgressModal)
     }
