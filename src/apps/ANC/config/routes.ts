@@ -7,8 +7,15 @@ import QuickCheck from '@/apps/ANC/views/QuickCheck.vue';
 import PhysicalExam from "@/apps/ANC/views/PhysicalExam.vue";
 import Treatment from '../views/Treatment.vue'
 import LabTests from '../views/LabTests.vue';
+import landingPage from "@/apps/ANC/views/landingPage.vue";
 
 export default [
+
+  {
+    path: '/landingPage',
+    name: 'landingPage',
+    component: landingPage
+  },
 
   {
     path: '/profile',
