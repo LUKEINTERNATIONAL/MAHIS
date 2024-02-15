@@ -9,11 +9,7 @@ export function validateField(data: any,fieldName: string, value: any) {
         'birthdate': () => Validation.required(value),
         'gender': () => Validation.required(value),
         'phoneNumber': () => Validation.isMWPhoneNumber(value),
-<<<<<<< HEAD
-
-=======
         'estimation': () => Validation.isEstimationDate(value),
->>>>>>> e57f0de82302c77f3001a5843149cc3fbbb90319
     };
     const isValid = validationRules[fieldName]?.() == null;
 

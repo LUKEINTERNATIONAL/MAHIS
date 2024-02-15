@@ -135,6 +135,7 @@ export default defineComponent({
         this.handleAllergies()
         this.handleChronicCondition()
         this.handleHivConducted()
+        this.handleOtherHiv()
         // this.handleTestNotDone()
         
         
@@ -145,7 +146,9 @@ export default defineComponent({
         hivTest:{
             handler(){
                 this.handleHivResults()
+                this.handleOtherHiv()
                 this.handleHivConducted()
+
                 // this.handleTestNotDone()
             },
              deep:true,
@@ -193,6 +196,13 @@ export default defineComponent({
                 modifyRadioValue(this.hivTest,'test1','displayNone',true)
             }
              
+        },
+        handleOtherHiv(){
+            if(getCheckboxSelectedValue(this.hivTest,'Other')=='other'){
+                modifyFieldValue(this.hivTest,'reasonsTestNotDone','displayNone',false)
+            }else{
+                modifyFieldValue(this.hivTest,'reasonsTestNotDone','displayNone',true)
+            }
         },
         handleSyphilis(){
            if(getRadioSelectedValue(this.syphilisTest,'syphilisOption') == 'syphilisTestConducted'){

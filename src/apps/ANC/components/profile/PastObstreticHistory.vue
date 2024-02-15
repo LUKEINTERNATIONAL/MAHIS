@@ -89,6 +89,7 @@ export default defineComponent({
 
   data() {
     return {
+        modeOfDelieveryRef: {},
         iconsContent: icons,
         prevPregnanciesInstance: {} as any,
         modeOfDeliveryInstance: {} as any,
@@ -103,11 +104,30 @@ export default defineComponent({
         ...mapState(useObstreticHistoryStore, ["Complications"])
 
     },
+    created() {
+        this.modeOfDelieveryRef = {...this.modeOfDelivery[0]}
+    },
     mounted(){
-      const prevPregnancies = useObstreticHistoryStore()
+     
+      this.prevPregnanciesInstance = useObstreticHistoryStore()
+      this.prevPregnanciesInstance.setModeOfDelivery([])
       this.handleOther()   
     },
     watch:{
+      prevPregnancies: {
+        handler (val) {
+          if (val && val[0].data.rowData[1].colData[1].value) {
+            const liveBirths = parseInt(val[0].data.rowData[1].colData[1].value)
+            this.prevPregnanciesInstance.setModeOfDelivery([])
+            const births = []
+            for(let i=0; i < liveBirths; ++i) {
+              births.push({...this.modeOfDelieveryRef})
+            }
+            this.prevPregnanciesInstance.setModeOfDelivery(births)
+          }
+        },
+        deep: true
+      },
       Complications:{
         handler(){
           this.handleOther() 
@@ -182,4 +202,3 @@ ion-card {
 }
 
 </style>
-  

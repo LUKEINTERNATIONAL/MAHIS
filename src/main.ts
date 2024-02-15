@@ -7,6 +7,7 @@ import { createPinia } from 'pinia'
 import piniaPluginPersistedState from "pinia-plugin-persistedstate"
 
 import VueDatePicker from '@vuepic/vue-datepicker';
+
 import '@vuepic/vue-datepicker/dist/main.css'
 
 /* Core CSS required for Ionic components to work properly */

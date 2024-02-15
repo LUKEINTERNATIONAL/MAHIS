@@ -46,17 +46,11 @@ import Medications from '../components/profile/Medications.vue';
 import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue"
 import WomanBehaviour from '../components/profile/WomanBehaviour.vue';
 import {getCheckboxSelectedValue} from "@/services/data_helpers";
-<<<<<<< HEAD
-import { useMedicalHistoryStore } from '../store/profile/medicalHistoryStore';
-
-
-=======
 import {useMedicalHistoryStore} from "@/apps/ANC/store/profile/medicalHistoryStore";
 import {useObstreticHistoryStore} from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
 import {useCurrentPregnanciesStore} from "@/apps/ANC/store/profile/CurrentPreganciesStore";
 import {useMedicationsStore} from "@/apps/ANC/store/profile/MedicationsStore";
 import {useWomanBehaviourStore} from "@/apps/ANC/store/profile/womanBehaviourStore";
->>>>>>> e57f0de82302c77f3001a5843149cc3fbbb90319
 
 function someChecked(options, errorMessage="Missing check values") {
   if (!options.filter(v => v.checkboxBtnContent).some(v => v.checkboxBtnContent.data.some(d => d.checked))) {
@@ -188,18 +182,12 @@ export default defineComponent({
     }
   },
   computed:{
-<<<<<<< HEAD
-
-    ...mapState(useMedicalHistoryStore, ["exisitingChronicHealthConditions"]),
-  
-=======
     ...mapState(useMedicalHistoryStore,["medicalHistory", "allegy", "existingChronicHealthConditions","hivTest","syphilisTest"]),
     ...mapState(useObstreticHistoryStore, ["prevPregnancies","preterm","abnormalities","modeOfDelivery","Complications"]),
     ...mapState(useCurrentPregnanciesStore, ["currentPregnancies","deliveryDate","lmnp","gestation","tetanus","ultrasound"]),
     ...mapState(useMedicationsStore,["Medication"]),
     ...mapState(useWomanBehaviourStore,["dailyCaffeineIntake","Tobacco"])
 
->>>>>>> e57f0de82302c77f3001a5843149cc3fbbb90319
   },
       saveData(){
 
@@ -294,8 +282,6 @@ export default defineComponent({
         return item?.data;
       });
     },
-<<<<<<< HEAD
-=======
     saveData(){ 
       const errors = []
       this.StepperData.forEach((stepper)=> {
@@ -318,7 +304,6 @@ export default defineComponent({
 
      },
 
->>>>>>> e57f0de82302c77f3001a5843149cc3fbbb90319
     openModal(){
       createModal(SaveProgressModal)
     }

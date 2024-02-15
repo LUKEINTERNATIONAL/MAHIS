@@ -1173,7 +1173,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     data:[
                         {   
                             
-                            name: "testStockOut",
+                            name: "Test Stock Out",
                             value: hivTestForm.testStockOut.value,
                             labelPlacement: 'start',
                             colSize: '6',
@@ -1181,7 +1181,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             checked: false
                         },
                         {   
-                            name: "expiredTests",
+                            name: "Expired Tests",
                             value:hivTestForm.expiredTests.value,
                             labelPlacement: 'start',
                             colSize: '6',
@@ -1194,7 +1194,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     
             },
             {
-             classDash: 'dashed_bottom_border',
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                 {
                     header:{
@@ -1216,13 +1216,14 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     
             },
             {   
-                classDash: 'dashed_bottom_border',
+               
                 data:{ 
                     rowData:[
                         {
                             colData:[
-                                {
-                                    inputHeader: 'Other reason test not conducted (specify)',
+                                {   
+                                    displayNone:true,
+                                    inputHeader: 'specify',
                                     icon: icons.editPen,
                                     value: hivTestForm.reasonsTestNotDone.name,
                                     name: hivTestForm.reasonsTestNotDone.value,
@@ -1285,7 +1286,6 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
                 radioBtnContent:{
                     header:{
                         displayNone: true,

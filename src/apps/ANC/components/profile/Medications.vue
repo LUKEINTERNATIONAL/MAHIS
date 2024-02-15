@@ -71,7 +71,7 @@ export default defineComponent({
   watch:{
      Medication:{
           handler(){
-        this. handleOther()
+        this.handleOther()
       },
       deep:true
      }
@@ -94,6 +94,7 @@ export default defineComponent({
       }else{
         modifyFieldValue(this.Medication,'Other','displayNone',true)
       }
+     
     },
     // medications(){
     //   this.medicationChecked = !this.medicationChecked
