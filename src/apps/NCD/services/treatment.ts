@@ -35,6 +35,7 @@ export class PreviousTreatment {
   date: string;
   demographics: any
   previousDrugPrescriptions: any[] = []
+  previousClinicalNotes: any[] = []
 
   constructor() {
       const store = useDemographicsStore()
@@ -46,47 +47,59 @@ export class PreviousTreatment {
   }
 
   async getPatientEncounters() {
-    const date = this.date
-    EncounterService.getEncounters(this.patientID, {date})
-    .then(async (encounters) => {
-      console.log(encounters)
-
-      const patientVisits = await this.getPatientVisitDates()
-      patientVisits.forEach((patientVisit: any) => {
-
-        DrugOrderService.getOrderByPatient(this.patientID, {'start_date': patientVisit.value})
-        .then((medications) => {
-          if (!isEmpty(medications)) {
-            const previousPrescriptions = medications.map((medication: any) => ({
-              label: medication.drug.name,
-              value: HisDate.toStandardHisTimeFormat(medication.order.start_date),
-              other: medication
-            }))
-  
-            this.previousDrugPrescriptions.push(
-              {
-                prescriptionDate: HisDate.toStandardHisDisplayFormat( patientVisit.value),
-                previousPrescriptions: previousPrescriptions
-              }
-              )
+    const patientVisits = await this.getPatientVisitDates()
+    patientVisits.forEach((patientVisit: any) => {
+      const date = patientVisit.value
+      EncounterService.getEncounters(this.patientID, {date})
+      .then(async (encounters) => {
+        //console.log(encounters)
+        encounters.map((encounter: Encounter,  index: number) => {
+          if ( encounter.type.name == 'NOTES') {
+            const { observations } = encounter
+            if (!isEmpty(observations)) {
+              observations.forEach((observation: any) => {
+                if (observation.concept_id == '2688') {
+                  const notes = {
+                    notes_date: HisDate.toStandardHisDisplayFormat(observation.obs_datetime),
+                    notes: observation.value_text
+                  }
+                  this.previousClinicalNotes.push(notes)
+                }
+              })
+            }
           }
-        }).catch(() => {})
 
-
+          if (encounter.type.name == 'TREATMENT') {
+            const { observations } = encounter
+            if (!isEmpty(observations)) {
+              observations.forEach((observation: any) => {
+                if (observation.concept_id = '985') {
+                  console.log(HisDate.toStandardHisDisplayFormat(observation.obs_datetime))
+                  console.log(observation)
+                }
+              })
+            }
+          }
+        })
       })
 
-      
+      DrugOrderService.getOrderByPatient(this.patientID, {'start_date': patientVisit.value})
+      .then((medications) => {
+        if (!isEmpty(medications)) {
+          const previousPrescriptions = medications.map((medication: any) => ({
+            label: medication.drug.name,
+            value: HisDate.toStandardHisTimeFormat(medication.order.start_date),
+            other: medication
+          }))
 
-      // return encounters.map((encounter: Encounter,  index: number) => {
-
-      //   console.log("INDEX: ", index)
-      //   const { observations } = encounter
-
-      //   console.log( encounter.type.name)
-      //   console.log(HisDate.toStandardHisTimeFormat(encounter.encounter_datetime))
-
-      //   console.log( observations)
-      // })
+          this.previousDrugPrescriptions.push(
+            {
+              prescriptionDate: HisDate.toStandardHisDisplayFormat( patientVisit.value),
+              previousPrescriptions: previousPrescriptions
+            }
+          )
+        }
+      }).catch(() => {})
     })
   }
 
