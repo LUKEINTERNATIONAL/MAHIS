@@ -84,7 +84,7 @@
  import {defineComponent} from 'vue';
  import {ref} from 'vue';
  import BasicInputField from "@/components/BasicInputField.vue";
- import {useMedicalHistoryStore} from "@/apps/ANC/store/medicalHistory/medicalHistoryStore";
+ import {useMedicalHistoryStore} from "@/apps/ANC/store/profile/medicalHistoryStore";
  import BasicForm from '@/components/BasicForm.vue';
 import { modifyRadioValue,
     getRadioSelectedValue,

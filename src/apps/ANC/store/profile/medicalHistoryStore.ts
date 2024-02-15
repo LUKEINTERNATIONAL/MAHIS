@@ -340,7 +340,8 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 {
                     header:{
                         title: '',
-                        selectedValue: ''
+                        selectedValue: '',
+                        
                     },
                     data:[
                         {
@@ -434,7 +435,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     },
                     data:[
                        {
-                            name: "No surgeries",
+                            name: "NoSurgery",
                             value: "noSurgeries",
                             labelPlacement: 'start',
                             colSize: '6',
@@ -487,7 +488,8 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 {
                     header:{
                         title: '',
-                        selectedValue: ''
+                        selectedValue: '',
+                        
                     },
                     data:[
                         {

@@ -5,20 +5,27 @@
             <ion-card-content>
                 <basic-form :contentData="urineTest"></basic-form>
                 <basic-form :contentData="testType"></basic-form>
+                 <basic-form :contentData="reason"></basic-form>
+                  <basic-form :contentData="culture"></basic-form>
+                   <basic-form :contentData="gram"></basic-form>
+                   <basic-form :contentData="nitrites"></basic-form>
+                   <basic-form :contentData="leukocytes"></basic-form>
+                    <basic-form :contentData="protein"></basic-form>
+                    <basic-form :contentData="glucose"></basic-form>
             </ion-card-content>
     </ion-card>
 
-    <ion-card v-if="currentSection === 1" class="section">
+    <!-- <ion-card v-if="currentSection === 1" class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Reason urine test not done</ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="reason"></basic-form>
+               
             </ion-card-content>
     </ion-card>
 
     <ion-card v-if="currentSection === 2" class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="culture"></basic-form>
+               
             </ion-card-content>
     </ion-card>
 
@@ -26,43 +33,43 @@
     <ion-card v-if="currentSection === 3" class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="gram"></basic-form>
+               
             </ion-card-content>
     </ion-card>
 
     <ion-card v-if="currentSection === 4" class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="nitrites"></basic-form>
+                
             </ion-card-content>
     </ion-card>
 
     <ion-card v-if="currentSection === 5" class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="leukocytes"></basic-form>
+                
             </ion-card-content>
     </ion-card>
 
     <ion-card v-if="currentSection === 6" class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="protein"></basic-form>
+               
             </ion-card-content>
     </ion-card>
 
     <ion-card v-if="currentSection === 7" class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="glucose"></basic-form>
+                
             </ion-card-content>
-    </ion-card>
+    </ion-card> -->
 
         <!-- Navigation Buttons -->
-    <div class="navigation-buttons">
+    <!-- <div class="navigation-buttons">
       <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
       <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
-    </div> 
+    </div>  -->
     
     
   
@@ -141,16 +148,16 @@ export default defineComponent({
     },
     methods:{
                 //Method for navigating sections
-    goToNextSection() {
-      if (this.currentSection < 7) {
-        this.currentSection++;
-      }
-    },
-    goToPreviousSection() {
-      if (this.currentSection > 0) {
-        this.currentSection--;
-      }
-    },
+    // goToNextSection() {
+    //   if (this.currentSection < 7) {
+    //     this.currentSection++;
+    //   }
+    // },
+    // goToPreviousSection() {
+    //   if (this.currentSection > 0) {
+    //     this.currentSection--;
+    //   }
+    // },
     }
 })
 </script>

@@ -385,6 +385,14 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                                 colSize: '6',
                                 justify: 'space-between',
                             },
+                            {
+                                name: 'Other',
+                                value: 'otherInfo',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
                         ]
                     }
 
@@ -400,12 +408,13 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                         rowData:[
                             {
                                 colData: [
-                                    {
-                                        inputHeader: 'Other (specify)',
+                                    {   
+                                        displayNone:true,
+                                        inputHeader: 'specify',
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Other',
+                                        name: 'otherC',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "85%",

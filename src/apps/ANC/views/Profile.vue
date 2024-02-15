@@ -44,7 +44,7 @@ import { toastWarning,popoverConfirmation, toastSuccess } from '@/utils/Alerts';
 import PastObstreticHistory from '../components/profile/PastObstreticHistory.vue';
 import CurrentPregnancies from '../components/profile/CurrentPregnancies.vue';
 import Medications from '../components/profile/Medications.vue';
-import MedicalHistory from '../components/profile/MedicalHistory.vue';
+import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue"
 import WomanBehaviour from '../components/profile/WomanBehaviour.vue';
 import {getCheckboxSelectedValue} from "@/services/data_helpers";
 import { useMedicalHistoryStore } from '../store/profile/medicalHistoryStore';

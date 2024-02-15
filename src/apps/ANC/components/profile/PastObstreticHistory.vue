@@ -65,6 +65,7 @@ import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import { useObstreticHistoryStore} from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
 import { checkmark, pulseOutline } from 'ionicons/icons';
+import { getCheckboxSelectedValue, modifyFieldValue } from '@/services/data_helpers';
 
 export default defineComponent({
   name: "History",
@@ -86,7 +87,7 @@ export default defineComponent({
     IonRadioGroup
 },
 
-        data() {
+  data() {
     return {
         iconsContent: icons,
         prevPregnanciesInstance: {} as any,
@@ -103,12 +104,28 @@ export default defineComponent({
 
     },
     mounted(){
-      const prevPregnancies = useObstreticHistoryStore()   
+      const prevPregnancies = useObstreticHistoryStore()
+      this.handleOther()   
+    },
+    watch:{
+      Complications:{
+        handler(){
+          this.handleOther() 
+        },
+        deep:true,
+      }
     },
     setup() {
       return { checkmark,pulseOutline };
     },
     methods:{
+      handleOther(){
+        if(getCheckboxSelectedValue(this.Complications,'Other')=='otherInfo'){
+          modifyFieldValue(this.Complications,'otherC','displayNone',false)
+        }else{
+          modifyFieldValue(this.Complications,'otherC','displayNone',true)
+        }
+      },
          //Method for navigating sections
     goToNextSection() {
       if (this.currentSection < 3) {
