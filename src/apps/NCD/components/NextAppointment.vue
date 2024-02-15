@@ -1,20 +1,26 @@
 <template>
     <div class="demographics">
-        <ion-card class="registration_iofn_card">
+        <ion-card class="enrollment_card">
           <div class="card_content" style="width: 600px;">
               <div class="card_hearder">
                 Next appointment
               </div>
-            <ion-datetime 
-                :is-date-enabled="isWeekday" 
-                min="2022-03-01T00:00:00" 
-                max="2025-05-31T23:59:59" 
-                style="max-width: 100%;" 
-                :highlighted-dates="highlightedDates"
-                :value="nextAppointment"
-                @ionChange="value => calendarDate = value.target.value"
-                presentation="date">
-            </ion-datetime>
+            <VueDatePicker 
+              @date-update="value => calendarDate = value"
+              v-model="date" 
+              inline 
+              auto-apply 
+              :enable-time-picker="false" 
+              >
+                <template #day="{ day, date }">
+                    <template v-if="day === tomorrow">
+                      <p> {{ day }}<sup style="color: rgb(3, 61, 21);">{{ bookedPatient }}</sup></p>
+                    </template>
+                    <template v-else>
+                      {{ day }}
+                    </template>
+                </template>
+            </VueDatePicker>
            </div>
         </ion-card>
     </div>
@@ -57,7 +63,10 @@ components:{
   data() {
 return {
   iconsContent: icons,
-  calendarDate: '' as any
+  calendarDate: '' as any,
+  date: new Date(),
+  bookedPatient: 20,
+  tomorrow: new Date().getDate() + 1,
 };
 },
 computed:{
@@ -71,33 +80,6 @@ watch: {
       deep: true
   }
 },
-setup() {
-      const isWeekday = (dateString: string) => {
-        const date = new Date(dateString);
-        const utcDay = date.getUTCDay();
-
-        const formattedDate =HisDate.toStandardHisShortFormat(date)
-        return utcDay !== 0 &&  !["01 Jan", "25 Dec","15 Jan","3 March","1 May","6 Jul","15 Oct","25 Dec","26 Dec"].includes(formattedDate);
-      };
-      const highlightedDates = [
-        {
-          date: '2023-01-05',
-          textColor: '#800080',
-          backgroundColor: '#ffc0cb',
-        },
-        {    
-          date: '2023-01-10',
-          textColor: '#09721b',
-          backgroundColor: '#c8e5d0',
-        },
-        {
-          date: '2023-01-20',
-          textColor: 'var(--ion-color-secondary-contrast)',
-          backgroundColor: 'var(--ion-color-secondary)',
-        },
-      ];
-      return { isWeekday ,highlightedDates};
-    },
 methods:{
   updateNextAppointment(){
       const nextAppointmentStore = useNextAppointmentStore()
@@ -131,8 +113,7 @@ methods:{
     font-weight: 600;
     color: #00190E;
     font-size: 16px;
-    padding-top: 30px;
-    padding-bottom: 10px;
+    padding-bottom: 20px;
 }
 .input_fields{
     padding: 10px 100px 70px 100px;
@@ -155,6 +136,12 @@ ion-datetime::part(calendar-day) {
     padding: 25px;
     margin: 10px;
   }
+  .dp__flex_display {
+  display: inherit;
+}
+.enrollment_card{
+  padding: 20px;
+}
 </style>
 
 
