@@ -48,6 +48,10 @@ import MedicalHistory from '../components/profile/MedicalHistory.vue';
 import WomanBehaviour from '../components/profile/WomanBehaviour.vue';
 import {getCheckboxSelectedValue} from "@/services/data_helpers";
 import {useMedicalHistoryStore} from "@/apps/ANC/store/profile/medicalHistoryStore";
+import {useObstreticHistoryStore} from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
+import {useCurrentPregnanciesStore} from "@/apps/ANC/store/profile/CurrentPreganciesStore";
+import {useMedicationsStore} from "@/apps/ANC/store/profile/MedicationsStore";
+import {useWomanBehaviourStore} from "@/apps/ANC/store/profile/womanBehaviourStore";
 
 export default defineComponent({
   name: "Home",
@@ -133,12 +137,30 @@ export default defineComponent({
         {
           'title': 'Past Obstetric History',
           'componet': 'PastObstetricHistory',
-          'value': '1',
+          'value': '1'
         },
         {
           'title': 'Past Medical history',
           'componet': 'MedicalHistory',
           'value': '2',
+          validation: {
+            medicalHistory: (v: any) => {
+              console.log(v, "medication history")
+            }, 
+             allegy: (v: any) => {
+              console.log(v, "allergy")
+            }, 
+             existingChronicHealthConditions: (v: any) => {
+                console.log(v, "chronic")
+            }, 
+             hivTest: (v: any) => {
+                console.log(v, "hiv test")
+            }, 
+             syphilisTest: (v: any) => {
+                console.log(v, "syphilis")
+            }, 
+            
+          }
         },
         {
           'title': 'Current Pregancy',
@@ -161,8 +183,11 @@ export default defineComponent({
     };
   },
   computed:{
-
-    ...mapState(useMedicalHistoryStore,["medicalHistory"])
+    ...mapState(useMedicalHistoryStore,["medicalHistory", "allegy", "existingChronicHealthConditions","hivTest","syphilisTest"]),
+    ...mapState(useObstreticHistoryStore, ["prevPregnancies","preterm","abnormalities","modeOfDelivery","Complications"]),
+    ...mapState(useCurrentPregnanciesStore, ["currentPregnancies","deliveryDate","lmnp","gestation","tetanus","ultrasound"]),
+    ...mapState(useMedicationsStore,["Medication"]),
+    ...mapState(useWomanBehaviourStore,["dailyCaffeineIntake","Tobacco"])
 
   },
   mounted(){
@@ -229,10 +254,22 @@ export default defineComponent({
         return item?.data;
       });
     },
-    saveData(){
-
-          console.log(getCheckboxSelectedValue(this.medicalHistory, 'Myomectomy'))
-         // this.$router.push('symptomsFollowUp');
+    saveData(){ 
+      const errors = []
+      this.StepperData.forEach((stepper)=> {
+        if (!stepper.validation) return
+        Object.keys(stepper.validation).forEach((validationName) => {
+          if (typeof stepper.validation[validationName] === 'function') {
+            const state = stepper.validation[validationName](this[validationName])
+            if (state) errors.push(state)
+          } 
+        })
+      })
+      console.log(errors)
+        // console.log(this.medicalHistory, "Medical history")
+        // console.log(this.currentPregnancies, "Current")
+        //   console.log(getCheckboxSelectedValue(this.medicalHistory, 'Myomectomy'))
+        //  this.$router.push('symptomsFollowUp');
 
      },
 

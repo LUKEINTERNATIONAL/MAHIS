@@ -3,7 +3,7 @@
       <div class="content_manager" style="margin-top: unset;">
         <ion-toolbar  class="content_width primary_color_background">
           <ion-menu-button slot="start" />
-          <ion-title style="cursor: pointer;" @click="nav('/home')"><b>MAHIS-MNH</b></ion-title>
+          <ion-title style="cursor: pointer;" @click="nav('/home')"><b>MaHIS-MNH</b></ion-title>
           <ion-buttons slot="end" style="max-width: 500px;">
               <ToolbarSearch @search="performSearch" />
           </ion-buttons>
@@ -33,7 +33,7 @@
   import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle,IonIcon, IonToolbar,IonSearchbar,IonPopover } from '@ionic/vue';
   import { notificationsOutline,personCircleOutline } from 'ionicons/icons';
   import { defineComponent } from 'vue';
-  import ToolbarSearch from '@/components/ToolbarSearch.vue'
+  import ToolbarSearch from "@/apps/ANC/components/ToolbarSearch.vue";
   export default defineComponent({
     name: "Home",
     components:{
