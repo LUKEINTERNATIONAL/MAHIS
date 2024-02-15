@@ -15,8 +15,13 @@
             </ion-card-content>
     </ion-card>
 
+<<<<<<< HEAD
     <!-- <ion-card v-if="currentSection === 1" class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Reason urine test not done</ion-card-title></ion-card-header>
+=======
+    <ion-card v-if="currentSection === 1" class="section">
+            <ion-card-header> <ion-card-title class="sub_item_header">Reason urine test not done</ion-card-title></ion-card-header>
+>>>>>>> e57f0de82302c77f3001a5843149cc3fbbb90319
             <ion-card-content>
                
             </ion-card-content>

@@ -1,39 +1,39 @@
 <template>
-    <div class="container">
-        <ion-card v-if="currentSection === 0" class="section">
+  <div class="container">
+    <ion-card v-if="currentSection === 0" class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-                  <basic-form :contentData="ttDoses"></basic-form>
-                  <basic-form :contentData="tt1"></basic-form>
-                  <basic-form :contentData="tt2"></basic-form>
+              <basic-form :contentData="iron"></basic-form>
+              <basic-form :contentData="ironDosage"></basic-form>
+              <basic-form :contentData="folicAcid"></basic-form>
+              <basic-form :contentData="folicAcidReason"></basic-form>
             </ion-card-content>
     </ion-card>
 
     <ion-card v-if="currentSection === 1" class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="tt4"></basic-form>
-                <basic-form :contentData="tt5"></basic-form>
-                <basic-form :contentData="ttReason"></basic-form>
+              <basic-form :contentData="vitaminA"></basic-form>
+              <basic-form :contentData="vitaminADosage"></basic-form>
+              <basic-form :contentData="vitaminAReason"></basic-form>
             </ion-card-content>
     </ion-card>
 
     <ion-card v-if="currentSection === 2" class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="HepB1"></basic-form>
-                <basic-form :contentData="HepB2"></basic-form>
-                <basic-form :contentData="HepB3"></basic-form>
-                <basic-form :contentData="hepBReason"></basic-form>
+              <basic-form :contentData="calcium"></basic-form>
+              <basic-form :contentData="calciumReason"></basic-form>
             </ion-card-content>
     </ion-card>
 
-        <!-- Navigation Buttons -->
+          <!-- Navigation Buttons -->
     <div class="navigation-buttons">
       <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
       <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
     </div> 
-    </div>
+
+  </div>
 </template>
 
 <script lang="ts">
@@ -58,12 +58,12 @@ import { mapState } from 'pinia';
 import BasicForm from '../../../../components/BasicForm.vue';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import { icons } from '../../../../utils/svg'; 
-import { useImmunizationStore } from '../../store/immunizationStore';
+import { useMedicationDispensedStore } from '../../store/medicationDispensed';
 
 
 
 export default defineComponent ({
-    name: "Immunization",
+    name: "medicationDispensed",
     components: {
         IonContent, 
             IonHeader,
@@ -83,30 +83,26 @@ export default defineComponent ({
     },
     data() {
         return {
-            currentSection: 0, // Initialize currentSection to 0
-
+          currentSection: 0, // Initialize currentSection to 0
         }
     },
     setup(){
         return { checkmark,pulseOutline };
     },
     computed:{
-        ...mapState(useImmunizationStore, ["ttDoses"]),
-        ...mapState(useImmunizationStore, ["tt1"]),
-        ...mapState(useImmunizationStore, ["tt2"]),
-        ...mapState(useImmunizationStore, ["tt3"]),
-        ...mapState(useImmunizationStore, ["tt4"]),
-        ...mapState(useImmunizationStore, ["tt5"]),
-        ...mapState(useImmunizationStore, ["ttReason"]),
-        ...mapState(useImmunizationStore, ["HepB1"]),
-        ...mapState(useImmunizationStore, ["HepB2"]),
-        ...mapState(useImmunizationStore, ["HepB3"]),
-        ...mapState(useImmunizationStore, ["hepBReason"]),
-   
+        ...mapState(useMedicationDispensedStore, ["iron"]),
+        ...mapState(useMedicationDispensedStore, ["ironDosage"]),
+        ...mapState(useMedicationDispensedStore, ["folicAcid"]),
+        ...mapState(useMedicationDispensedStore, ["folicAcidReason"]),
+        ...mapState(useMedicationDispensedStore, ["vitaminA"]),
+        ...mapState(useMedicationDispensedStore, ["vitaminADosage"]),
+        ...mapState(useMedicationDispensedStore, ["vitaminAReason"]),
+        ...mapState(useMedicationDispensedStore, ["calcium"]),
+        ...mapState(useMedicationDispensedStore, ["calciumReason"]),
 
     },
     methods :{
-    //Method for navigating sections
+       //Method for navigating sections
     goToNextSection() {
       if (this.currentSection < 2) {
         this.currentSection++;
@@ -128,7 +124,6 @@ export default defineComponent ({
 
 
 <style scoped>
-
 .container {
   display: flex;
   flex-direction: column;

@@ -54,21 +54,11 @@
     </div>
 </template>
 
-<script lang="ts">
-import { 
-      IonContent, 
-      IonHeader,
-      IonItem,
-      IonList,
-      IonTitle, 
-      IonToolbar, 
-      IonMenu,
-      IonCard,
-      IonCardContent 
-  } from '@ionic/vue';
+<script setup lang="ts">
+import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, IonCard, IonCardContent } from '@ionic/vue';
 import { defineComponent } from 'vue'
 import { checkmark,pulseOutline } from 'ionicons/icons'
-import { ref } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { icons } from '@/utils/svg'
 import { mapState } from 'pinia'
 import { useTreatmentPlanStore } from '@/stores/TreatmentPlanStore'
@@ -78,63 +68,55 @@ import NotesModal from '@/components/ProfileModal/NotesModal.vue'
 import { createModal } from '@/utils/Alerts'
 import { useVitalsStore } from '@/stores/VitalsStore'
 
-export default defineComponent({
-name: 'Menu',
-components:{
-  IonContent,
-  IonHeader,
-  IonItem,
-  IonList,
-  IonMenu,
-  IonTitle,
-  IonToolbar,
-  IonCard,
-  IonCardContent    },
-  data() {
-return {
-  iconsContent: icons,
-  clinicalNotes: this.transformClinicalNotes()
-};
-},
-mounted(){
-    console.log(this.vitals[1].data.rowData[0].colData[0].value)
-},
-computed:{
-    ...mapState(useVitalsStore,["vitals"]),
-},
-methods:{
-    openNotesModal(){
-        createModal(NotesModal)
-    },
-    transformClinicalNotes(): string[] {
-        const treatmentPlanStore = useTreatmentPlanStore()
-        const input = treatmentPlanStore.getNonPharmalogicalTherapyAndOtherNotes()
-        const lines: string[] = [];
-        let startIndex = 0
+const store = useVitalsStore()
 
-        for (let i = 0; i < input.length; i++) {
-            if (input[i] === '\n' || input[i] === '\r') {
-                const line = input.substring(startIndex, i)
-                if(line.length > 0) {
-                    //const processedLine = line.startsWith('• ') ? line : '• ' + line
-                    lines.push(line)
-                    startIndex = i + 1
-                }
+const iconsContent = icons
+const clinicalNotes = ref([]) as any
+const treatmentPlanStore = useTreatmentPlanStore()
+
+const vitals = computed(() => store.vitals)
+
+
+onMounted(() => {
+    clinicalNotes.value = transformClinicalNotes()
+})
+
+watch(treatmentPlanStore, () => {
+    clinicalNotes.value = transformClinicalNotes()
+});
+
+function openNotesModal(){
+    createModal(NotesModal)
+}
+
+function openVitalsModal(){  
+    createModal(VitalsModal)
+}
+
+function transformClinicalNotes(): string[] {
+    const input = treatmentPlanStore.getNonPharmalogicalTherapyAndOtherNotes()
+    const lines: string[] = [];
+    let startIndex = 0
+
+    for (let i = 0; i < input.length; i++) {
+        if (input[i] === '\n' || input[i] === '\r') {
+            const line = input.substring(startIndex, i)
+            if(line.length > 0) {
+                //const processedLine = line.startsWith('• ') ? line : '• ' + line
+                lines.push(line)
+                startIndex = i + 1
             }
         }
-        
-        const lastLine = input.substring(startIndex)
-        if(lastLine.length > 0) {
-            //const processedLastLine = lastLine.startsWith('• ') ? lastLine : '• ' + lastLine;
-            lines.push(lastLine);
-        }
-        return lines;
-    },
-    openVitalsModal(){  
-        createModal(VitalsModal)
     }
+    
+    const lastLine = input.substring(startIndex)
+    if(lastLine.length > 0) {
+        //const processedLastLine = lastLine.startsWith('• ') ? lastLine : '• ' + lastLine;
+        lines.push(lastLine);
+    }
+    return lines;
 }
-});
+
 </script>
 
 <style scoped>

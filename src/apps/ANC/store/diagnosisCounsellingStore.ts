@@ -3,113 +3,801 @@ import { icons } from "@/utils/svg";
 
 export const useDiagnosisCounsellingStore = defineStore ('diagnosisCounsellingStore', {
     state: () => ({
-        dailyAspirin:[{
-            data:{
-                rowData: [{
-                    colData: [{
+        preEclampsia:[
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                {
+                    header:{
+                        title: 'Pre-eclampsia risk',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: 'Yes',
+                            value: 'y',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'No',
+                            value: 'n',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                    ]
+                }
+                    
+            },
+        ],
+
+        preEclampsiaCounselling:[
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                {
+                    header:{
+                        title: 'Pre-eclampsia counselling provided?',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: 'Yes',
+                            value: 'y',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'No',
+                            value: 'n',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                    ]
+                }
+                    
+            },
+        ],
+
+        aspirin:[
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: '',
+                radioBtnContent:
+                {
+                    header:{
+                        title: 'Aspirin provided?',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: 'Yes',
+                            value: 'y',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'No',
+                            value: 'n',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                    ]
+                }
+                    
+            },
+            {
+                isFinishBtn: false,
+                sectionHeader: '',
+                classDash: 'dashed_bottom_border _padding',
+
+                data:{
+                    rowData: [{
+                        colData: [{
                         
                             inputHeader: 'Amount of daily aspirin provided until delivery',
                             value: '',
-                            name: 'dailyAspirin',
+                            name: 'amount',
                             required: true,
                             eventType: 'input',
                             alertsError: false,
                             alertsErrorMassage: ''
+                    },
+                  ]
                     }]
-                }]
-               } 
-                    
-        }] as any,
-        aspirin:[{
-            data:{
-                rowData: [{
-                    colData: [{
-                        
-                            inputHeader: 'Reason aspirin not prescribed',
-                            value: '',
-                            name: 'aspirin',
-                            required: true,
-                            icon: icons.editPen,
-                            eventType: 'input',
-                            alertsError: false,
-                            alertsErrorMassage: ''
-                    }]
-                }]
-               } 
-                    
-        }] as any,
+                   } 
+            },
+        ],
 
-        PrEP:[{
-            data:{
-                rowData: [{
-                    colData: [{
-                        
-                            inputHeader: 'Reason PrEP for HIV prevention not provided',
-                            value: '',
-                            name: 'PrEP',
-                            required: true,
-                            icon: icons.editPen,
-                            eventType: 'input',
-                            alertsError: false,
-                            alertsErrorMassage: ''
-                    }]
-                }]
-               } 
+        aspirinReason:[
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                 sectionHeader: '',
+                classDash: '',
+                radioBtnContent:
+                {
+                    header:{
+                        title: 'Reason aspirin not prescribed',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: 'Side effects',
+                            value: 'side effects',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'Stock-out',
+                            value: 'stock-out',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'Gestational less than 13 weeks',
+                            value: 'gestational',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'Allergy to medication',
+                            value: 'referred',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'Other',
+                            value: 'other',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                    ]
+                }
                     
-        }] as any,
+            },
+            {
+                isFinishBtn: false,
+                sectionHeader: '',
+                classDash: 'dashed_bottom_border _padding',
 
-        dailyPrEP:[{
-            data:{
-                rowData: [{
-                    colData: [{
-                        
-                            inputHeader: 'Amount of PrEP provided',
-                            value: '',
-                            name: 'dailyPrEP',
-                            required: true,
-                            eventType: 'input',
-                            alertsError: false,
-                            alertsErrorMassage: ''
-                    }]
-                }]
-               } 
-                    
-        }] as any,
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Other (specify)',
+                                        unit: '',
+                                        icon: icons.editPen,
+                                        value: '',
+                                        name: 'Other',
+                                        required: true,
+                                        eventType: 'input',
+                                        inputWidth: "85%",
+                                    },
 
-        birthPlace:[{
-            data:{
-                rowData: [{
-                    colData: [{
+                                ]
+                            }
+                        ]
+                    },
+            },
+        ] as any,
+
+        gdm:[
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                {
+                    header:{
+                        title: 'Risk of gestational mellitus (GDM)',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: 'Yes',
+                            value: 'y',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'No',
+                            value: 'n',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                    ]
+                }
+                    
+            },
+        ],
+
+        gdmCounselling:[
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                {
+                    header:{
+                        title: 'Gestational diabetes mellitus (GDM) risk counselling conducted?',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: 'Yes',
+                            value: 'y',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'No',
+                            value: 'n',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                    ]
+                }
+                    
+            },
+        ],
+
+        hivRisk:[
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                {
+                    header:{
+                        title: 'Counselling conducted on HIV risk?',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: 'Yes',
+                            value: 'y',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'No',
+                            value: 'n',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                    ]
+                }
+                    
+            },
+        ],
+
+        prEp:[
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: '',
+                radioBtnContent:
+                {
+                    header:{
+                        title: 'PrEp for HIV prevention provided?',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: 'Yes',
+                            value: 'y',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'No',
+                            value: 'n',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                    ]
+                }
+                    
+            },
+            {
+                isFinishBtn: false,
+                sectionHeader: '',
+                classDash: 'dashed_bottom_border _padding',
+
+                data:{
+                    rowData: [{
+                        colData: [{
                         
-                            inputHeader: 'Other (Specify)',
+                            inputHeader: 'Amount of PrEp provided',
                             value: '',
-                            name: 'birthPlace',
+                            name: 'iron',
                             required: true,
-                            icon: icons.editPen,
                             eventType: 'input',
                             alertsError: false,
                             alertsErrorMassage: ''
+                    },
+                  ]
                     }]
-                }]
-               } 
+                   } 
+            },
+        ],
+
+        prEpReason:[
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                 sectionHeader: '',
+                classDash: '',
+                radioBtnContent:
+                {
+                    header:{
+                        title: 'Reason PrEp for HIV prevention was not provided',
+                        selectedValue: ''
+                    },
+                    data:[
+                      
+                        {
+                            name: 'Client was referred',
+                            value: 'referred',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'Stock-out',
+                            value: 'stockout',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'Client refused',
+                            value: 'refused',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'Other',
+                            value: 'other',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                    ]
+                }
                     
-        }] as any,
+            },
+            {
+                isFinishBtn: false,
+                sectionHeader: '',
+                classDash: 'dashed_bottom_border _padding',
+
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Other (specify)',
+                                        unit: '',
+                                        icon: icons.editPen,
+                                        value: '',
+                                        name: 'Other',
+                                        required: true,
+                                        eventType: 'input',
+                                        inputWidth: "85%",
+                                    },
+
+                                ]
+                            }
+                        ]
+                    },
+            },
+        ] as any,
+
+        seekingCare:[
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                {
+                    header:{
+                        title: 'Counselling conducted on seeking care?',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: 'Yes',
+                            value: 'y',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'No',
+                            value: 'n',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                    ]
+                }
+                    
+            },
+        ],
+
+
+        dangerSigns:[
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                {
+                    header:{
+                        title: 'Counsel to immediately go to hospital if severe danger signs are present',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: 'Yes',
+                            value: 'y',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'No',
+                            value: 'n',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                    ]
+                }
+                    
+            },
+        ],
+
+        ancContact:[
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                {
+                    header:{
+                        title: 'Counseling on ANC contact schedule?',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: 'Yes',
+                            value: 'y',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'No',
+                            value: 'n',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                    ]
+                }
+                    
+            },
+        ],
+
+        birth:[
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                {
+                    header:{
+                        title: 'Counselling conducted on birth?',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: 'Yes',
+                            value: 'y',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'No',
+                            value: 'n',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                    ]
+                }
+                    
+            },
+        ],
+        modeOfTransport:[
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                {
+                    header:{
+                        title: 'Counselling conducted on mode of transport?',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: 'Yes',
+                            value: 'y',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'No',
+                            value: 'n',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                    ]
+                }
+                    
+            },
+        ],
+        intrapartum:[
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                {
+                    header:{
+                        title: 'Counselling conducted on intrapartum?',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: 'Yes',
+                            value: 'y',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'No',
+                            value: 'n',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                    ]
+                }
+                    
+            },
+        ],
+        birthPlace:[
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                 sectionHeader: '',
+                classDash: '',
+                radioBtnContent:
+                {
+                    header:{
+                        title: 'Planned birth place',
+                        selectedValue: ''
+                    },
+                    data:[
+                      
+                        {
+                            name: 'Facility',
+                            value: 'facility',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'Facility (elective ceasarian section)',
+                            value: 'stockout',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'Other',
+                            value: 'other',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                    ]
+                }
+                    
+            },
+            {
+                isFinishBtn: false,
+                sectionHeader: '',
+                classDash: 'dashed_bottom_border _padding',
+
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Other (specify)',
+                                        unit: '',
+                                        icon: icons.editPen,
+                                        value: '',
+                                        name: 'Other',
+                                        required: true,
+                                        eventType: 'input',
+                                        inputWidth: "85%",
+                                    },
+
+                                ]
+                            }
+                        ]
+                    },
+            },
+        ] as any,
+
+        postpartum:[
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                {
+                    header:{
+                        title: 'Counselling conducted on postpartum family planning?',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: 'Yes',
+                            value: 'y',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'No',
+                            value: 'n',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                    ]
+                }
+                    
+            },
+        ],
+
+        breastFeeding:[
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                {
+                    header:{
+                        title: 'Counselling conducted on breast feeding?',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: 'Yes',
+                            value: 'y',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'No',
+                            value: 'n',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                    ]
+                }
+                    
+            },
+        ],
     }),
     actions:{
-        setDailyAspirin(data:any){
-            this.dailyAspirin = data
+        setPreEclampsia(data:any){
+            this.preEclampsia = data
+        },
+        setPreEclampsiaCounselling(data:any){
+            this.preEclampsiaCounselling = data
         },
         setAspirin(data:any){
             this.aspirin = data
         },
-        setPrEP(data:any){
-            this.PrEP = data
+        setAspirinReason(data:any){
+            this.aspirinReason = data
         },
-        setDailyPrEP(data:any){
-            this.dailyPrEP = data
+        setGDM(data:any){
+            this.gdm = data
+        },
+        setGDMCOunselling(data:any){
+            this.gdmCounselling = data
+        },
+        setHIVRisk(data:any){
+            this.hivRisk = data
+        },
+        setPrEp(data:any){
+            this.prEp = data
+        },
+        setPrEpReason(data:any){
+            this.prEpReason = data
+        },
+        setSeekingCare(data:any){
+            this.seekingCare = data
+        },
+        setDangerSigns(data:any){
+            this.dangerSigns = data
+        },
+        setANCContact(data:any){
+            this.ancContact = data
+        },
+        setBirth(data:any){
+            this.birth = data
+        },
+        setModeOfTransport(data:any){
+            this.modeOfTransport = data
+        },
+        setIntrapartum(data:any){
+            this.intrapartum = data
         },
         setBirthPlace(data:any){
             this.birthPlace = data
+        },
+        setPostpartum(data:any){
+            this.postpartum = data
+        },
+        setBreastFeeding(data:any){
+            this.breastFeeding = data
         },
     },
     persist:true

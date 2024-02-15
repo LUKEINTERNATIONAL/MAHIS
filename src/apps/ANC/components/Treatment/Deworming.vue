@@ -1,61 +1,29 @@
 <template>
-    <ion-list>
-            <!-- Question on preventive treatment -->
-<ion-row class="dottedLine">
-    <ion-col>
-<IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px; ">Was preventive antihelminthic treatment provided?</ion-label>
-                        <ion-radio style="margin-bottom: 10px; width: 95%;">Yes</ion-radio>
-                        <ion-radio style="margin-bottom: 10px; width: 95%">No</ion-radio>
-                      </div>
-                      </IonRadioGroup>
+    <div class="container">
+        <ion-card v-if="currentSection === 0" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="treatment"></basic-form>
+                <basic-form :contentData="treatmentType"></basic-form>
+                <basic-form :contentData="treatmentReason"></basic-form>
+            </ion-card-content>
+    </ion-card>
 
-                      <IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px; ">Reason no preventative treatment provided</ion-label>
-                        <ion-radio style="margin-bottom: 20px; width: 95%;">Client was referred</ion-radio>
-                        <ion-radio style="margin-bottom: 20px; width: 95%;">Other</ion-radio>
-                        <BasicForm :content-data="preventativeTreatment"></BasicForm>
-                      </div>
-                      </IonRadioGroup>
-                    </ion-col>
-                    <ion-col>
-<IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px; ">Preventive antihelminthic treatment provided </ion-label>
-                        <ion-radio style="margin-bottom: 10px; width: 100%;">Single-dose albendazole 400 mg</ion-radio>
-                        <ion-radio style="margin-bottom: 10px; width: 100%;">Single-dose mebendazole 500 mg</ion-radio>  
-                        <ion-radio style="margin-bottom: 10px; width: 100%;">No preventative treatment provided</ion-radio> 
-                      </div>
-                      </IonRadioGroup>
-                    </ion-col>
-                    </ion-row>
+    <ion-card v-if="currentSection === 1" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="malaria"></basic-form>
+                <basic-form :contentData="malariaReason"></basic-form>
+            </ion-card-content>
+    </ion-card>
 
-                    <!-- Question on Malaria -->
-<ion-row class="dottedLine">
-    <ion-col>
-<IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px; ">Counselling on malaria prevention?</ion-label>
-                        <ion-radio style="margin-bottom: 10px; width: 95%;">Yes</ion-radio>
-                        <ion-radio style="margin-bottom: 10px; width: 95%">No</ion-radio>
-                      </div>
-                    </IonRadioGroup>
-                    </ion-col>
-                    <ion-col>
-                        <IonRadioGroup>
-                          <div class="radio">
-                          <ion-label style="font-weight: bold; margin-bottom: 30px; ">Reason counselling on malaria prevention was not conducted </ion-label>
-                        <ion-radio style="margin-bottom: 20px; width: 95%;">Client was referred</ion-radio>
-                        <ion-radio style="margin-bottom: 20px; width: 95%;">Other</ion-radio>
-                        <BasicForm :content-data="malaria"></BasicForm>
-                      </div>
-                      </IonRadioGroup>
-                    </ion-col>
-                    </ion-row>
-    
-    </ion-list>
+     <!-- Navigation Buttons -->
+     <div class="navigation-buttons">
+      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
+      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
+    </div> 
+
+    </div>
 </template>
 
 <script lang="ts">
@@ -105,12 +73,16 @@ export default defineComponent({
           data() {
       return {
           iconsContent: icons,
+          currentSection: 0,
          
       };
     },
     computed:{
-         ...mapState(useDewormingStore,["preventativeTreatment"]),
+         ...mapState(useDewormingStore,["treatment"]),
+         ...mapState(useDewormingStore,["treatmentType"]),
+         ...mapState(useDewormingStore,["treatmentReason"]),
          ...mapState(useDewormingStore,["malaria"]),
+         ...mapState(useDewormingStore,["malariaReason"]),
       },
       mounted(){
          
@@ -119,25 +91,55 @@ export default defineComponent({
         return { checkmark,pulseOutline };
       },
       methods:{
-   
+        goToNextSection() {
+      if (this.currentSection < 1) {
+        this.currentSection++;
+      }
+    },
+    goToPreviousSection() {
+      if (this.currentSection > 0) {
+        this.currentSection--;
+      }
+    },
           },
       });
 
 </script>
 
 <style scoped>
-.dottedLine {
-    border-bottom: 1.5px dotted var(--ion-color-medium);
-    margin-top: 10px;
-    padding:10px; 
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.radio {
-        display: flex;
-        flex-direction: column;
-        /* border-bottom: 2px dotted var(--ion-color-medium);  */
-        --inner-border-width:0;
-        padding: 10px;
-        margin-bottom:10px;
+.section {
+  width: 100%;
+  max-width: 1300px; 
+  margin-bottom: 20px;
+}
+
+ion-card {
+ box-shadow:none;
+  background-color:inherit;   
+  width: 100%;
+ color: black;
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 500px; 
+}
+
+@media (max-width: 1500px) {
+  .container {
+    padding: 10px;
+  }
+}
+.sub_item_header{
+  font-weight: bold;
+  font-size: medium;
 }
 </style>
