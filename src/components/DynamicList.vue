@@ -11,7 +11,7 @@
             <ion-label class="truncate-text" style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.dose }} / {{ item.frequency }} / daily / {{ item.duration }} / until {{ item.prescription }}</ion-label>
         </ion-col>
 
-        <ion-col class="action_buttons">
+        <ion-col v-if="showActionButtons" class="action_buttons">
             <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end; flex: auto;" @click="editItemAtIndex(index)"><ion-icon   :icon="iconsContent.edit"></ion-icon></ion-label>
             <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end;" @click="removeItemAtIndex(index, $event)"><ion-icon   :icon="iconsContent.delete"></ion-icon></ion-label>
         </ion-col>
@@ -38,12 +38,17 @@ export default defineComponent({
     return {
         iconsContent: icons,
         localMedicalDrugsList: [...this.$props._selectedMedicalDrugsList],
+        showActionButtons: this.show_actions_buttons,
     }},
     props: {
         _selectedMedicalDrugsList: {
             type: Array,
             default: []
         },
+        show_actions_buttons: {
+            type: Boolean,
+            default: true
+        }
     },
     watch: {
 

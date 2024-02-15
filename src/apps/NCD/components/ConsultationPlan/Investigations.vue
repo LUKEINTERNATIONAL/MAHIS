@@ -118,7 +118,7 @@ export default defineComponent({
     async mounted() {
         this.updateInvestigationsStores()
         this.setDashedBox()
-        console.log(await OrderService.getTestTypes())
+        // console.log(await OrderService.getTestTypes())
         this.labOrders = await OrderService.getTestTypesBySpecimen('Blood')
     },
     methods: {

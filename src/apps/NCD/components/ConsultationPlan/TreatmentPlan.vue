@@ -140,16 +140,33 @@
                 </ion-col>
             </ion-row>
 
-            <!-- <ion-button v-if="addItemButton" fill="clear" @click="addData" class="addMedicalAlBtn">
-                Add new medication
-                <ion-icon slot="start" style="font-size: x-large;" :icon="addOutline"></ion-icon>
-            </ion-button> -->
-            <dynamic-button  v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" @clicked:btn="addData">
-            </dynamic-button>
+            <dynamic-button  v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" @clicked:btn="addData"/>
             <ion-row>
                 <dynamic-button class="addMedicalTpBtn" :name="btnName2"/>
                 <dynamic-button class="addMedicalTpBtn" :name="btnName3" style="margin-left: 4%;"/>
             </ion-row>
+
+            <div style="margin-top: 14px;">
+                <ion-accordion-group ref="accordionGroup" class="previousView">
+                    <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
+                        <ion-item slot="header" color="light">
+                            <ion-label class="previousLabel">Previous medications</ion-label>
+                        </ion-item>
+                        <div class="ion-padding" slot="content">
+                            <dynamic-list :_selectedMedicalDrugsList="selectedMedicalDrugsList" :show_actions_buttons="false" :key="componentKey"/>
+
+                            <ion-accordion-group @ionChange="accordionGroupChange">
+                                <ion-accordion value="second" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
+                                    <ion-item slot="header" color="light">
+                                        <ion-label class="" color="primary">{{ showMoreMedicationsMsg }}</ion-label>
+                                    </ion-item>
+                                </ion-accordion>
+                            </ion-accordion-group>
+
+                        </div>
+                    </ion-accordion>
+                </ion-accordion-group>
+            </div>
         </div>
         <div style="margin-top: 14px; margin-left: 10px;">
             <ion-label class="tpStndCls">Non-pharmalogical therapy and other notes</ion-label>
@@ -157,15 +174,26 @@
                 <ion-label><span v-html="iconsContent.editPen"></span></ion-label>
                 <ion-textarea @ionInput="validateNotes" v-model="nonPharmalogicalTherapyAndOtherNotes"  style="min-height: 120px;" class="inputTpln" :auto-grow="true"  fill="outline"></ion-textarea >
             </ion-item>
-
+        </div>
+        <div style="margin-top: 14px; margin-left: 10px;">
+            <ion-accordion-group ref="accordionGroup" class="previousView">
+                <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="previousLabel">Previous visits</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content">
+                        <!-- <PreviousVitals v-if="item.previousView.name == 'vitals'" /> -->
+                    </div>
+                </ion-accordion>
+            </ion-accordion-group>
         </div>
     </ion-list>
 </template>
 
 <script setup lang="ts">
-    import {     IonContent, IonHeader, IonCol, IonItem, IonList, IonButton, IonMenu, IonTitle, IonToolbar, IonInput, IonDatetime, IonLabel, IonTextarea } from '@ionic/vue';
+    import {     IonContent, IonHeader, IonCol, IonItem, IonList, IonButton, IonMenu, IonTitle, IonToolbar, IonInput, IonDatetime, IonLabel, IonTextarea, IonAccordion, IonAccordionGroup, AccordionGroupCustomEvent } from '@ionic/vue';
     import { checkmark,pulseOutline,addOutline,closeOutline, checkmarkOutline, filter, chevronDownOutline, chevronUpOutline } from 'ionicons/icons'
-    import { ref, watch, computed } from 'vue'
+    import { ref, watch, computed, onMounted } from 'vue'
     import { icons } from '@/utils/svg.ts'
     import { DRUG_FREQUENCIES } from "@/services/drug_prescription_service"
     import { DrugService} from "@/services/drug_service"
@@ -177,6 +205,7 @@
     import { ConceptService } from "@/services/concept_service"
     import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts"
     import { Service } from "@/services/service"
+    import { PreviousTreatment } from '@/apps/NCD/services/treatment'
 
     const iconsContent = icons
     const searchText = ref('')
@@ -210,12 +239,21 @@
     const btnName2 = 'Send to pharmacy'
     const btnName3 = 'Send to dispensation'
     const btnFill = 'clear'
+    const showMoreMedicationsMsg = ref("Show more 5 medications")
+    const showMoreMedicationsBtnPressed = ref(false)
     const store = useTreatmentPlanStore()
     const selectedMedicalDrugsList = computed(() => store.selectedMedicalDrugsList)
     const medicalAllergiesList = computed(() => store.medicalAllergiesList)
     const nonPharmalogicalTherapyAndOtherNotes = computed(() => store.nonPharmalogicalTherapyAndOtherNotes)
     const selectedMedicalAllergiesList = computed(() => store.selectedMedicalAllergiesList)
-    const input = ref();
+    const input = ref()
+    const PreviuosSelectedMedicalDrugsList_FirstItem = ref()
+    const values = ['first', 'second', 'third']
+
+    onMounted(() => {
+        const previousTreatment = new PreviousTreatment()
+        previousTreatment.getPatientEncounters()
+    })
 
     watch(
         () => drugName.value,
@@ -524,6 +562,26 @@
         input.value.$el.setFocus()
     }
 
+    function showMoreMedications() {
+        showMoreMedicationsBtnPressed.value = !showMoreMedicationsBtnPressed.value 
+    }
+
+    function accordionGroupChange(ev: AccordionGroupCustomEvent)  {
+        const collapsedItems = values.filter((value) => value !== ev.detail.value);
+        const selectedValue = ev.detail.value;
+        // console.log(
+        //     `Expanded: ${selectedValue === undefined ? 'None' : ev.detail.value} | Collapsed: ${collapsedItems.join(', ')}`
+        // )
+        if (selectedValue !== undefined) {
+            if (selectedValue == 'second') {
+                console.log(selectedValue)
+            }
+        } else { // its a hack
+            console.log("ehehehehehe")
+        }
+        
+    }
+
     
 </script>
 
@@ -632,5 +690,14 @@ ion-list.list-al {
 .spcls {
   display: flex;
   align-items: center;
+}
+.previousView{
+    width: 100%;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+.previousLabel{
+    font-weight: 600;
+    color: #000;
 }
 </style>
