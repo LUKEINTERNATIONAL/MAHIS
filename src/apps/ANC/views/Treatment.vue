@@ -32,7 +32,7 @@ import DiagnosisCounselling from '@/apps/ANC/components/Treatment/DiagnosisCouns
 import Immunization from '@/apps/ANC/components/Treatment/Immunization.vue'
 import IntimatePartner from '@/apps/ANC/components/Treatment/IntimatePartner.vue';
 import Deworming from '@/apps/ANC/components/Treatment/Deworming.vue';
-import UrgentReferral from '@/apps/ANC/components/Treatment/UrgentReferral.vue';
+
 
 
 export default defineComponent ({
@@ -56,7 +56,6 @@ export default defineComponent ({
   Immunization,
   IntimatePartner,
   Deworming,
-  UrgentReferral,
    },
    data(){
     return {
