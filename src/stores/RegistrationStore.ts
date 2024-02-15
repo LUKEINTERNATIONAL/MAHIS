@@ -157,12 +157,11 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                     inputHeader: 'Estimated age',
                                     icon: icons.calenderPrimary,
                                     value: '',
-                                    name: 'birthdate',
+                                    name: 'estimation',
                                     eventType: 'input',
                                         alertsError: false,
                                         alertsErrorMassage: '',
-                                    required: true,
-                                    isDatePopover: true
+                                    required: true
                                 }
                                 
                             ]

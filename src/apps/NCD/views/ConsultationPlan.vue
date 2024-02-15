@@ -46,9 +46,14 @@
   import Stepper from '@/components/Stepper.vue'
   import { Service } from "@/services/service";
   import { LabOrder } from "@/apps/NCD/services/lab_order"
-  import { VitalsService } from "@/services/vitals_service";
+  import { VitalsService } from "@/services/vitals_service"
+  import { useTreatmentPlanStore } from '@/stores/TreatmentPlanStore'
   import { toastWarning,popoverConfirmation, toastSuccess } from '@/utils/Alerts';
   import { Diagnosis } from '@/apps/NCD/services/diagnosis'
+  import { Treatment } from '@/apps/NCD/services/treatment'
+  import { isEmpty } from 'lodash'
+  import { DRUG_FREQUENCIES, DrugPrescriptionService } from '../../../services/drug_prescription_service';
+  import HisDate from "@/utils/Date"
   export default defineComponent({
     name: "Home",
     components:{
@@ -172,6 +177,7 @@
       ...mapState(useVitalsStore,["vitals"]),
       ...mapState(useInvestigationStore,["investigations"]),
       ...mapState(useDiagnosisStore,["diagnosis"]),
+      ...mapState(useTreatmentPlanStore,["selectedMedicalDrugsList","nonPharmalogicalTherapyAndOtherNotes","selectedMedicalAllergiesList"]),
       ...mapState(useGeneralStore,["saveProgressStatus"]),
     },
     mounted(){
@@ -195,6 +201,11 @@
                 this.markWizard()  
             },
             deep: true
+        },
+        selectedMedicalDrugsList: {
+            handler(){
+                this.markWizard()
+            },
         }
     },
     setup() {
@@ -224,6 +235,13 @@
             }else{
                 this.wizardData[2].checked = false; 
             }
+
+            if (this.selectedMedicalDrugsList.length > 0) {
+                this.wizardData[4].checked = true
+                this.wizardData[4].class = 'open_step common_step'  
+            } else {
+                this.wizardData[4].checked = false;  
+            }
         },
         setProgressStatus(){
             const demographicsStore = useGeneralStore()
@@ -239,9 +257,11 @@
             this.saveVitals()
             this.saveInvestigation()
             this.saveDiagnosis()
+            this.saveTreatmentPlan()
             this.$router.push('patientProfile');
           }else{
             toastWarning("Please complete all required fields")
+            this.saveTreatmentPlan()
           }
         },
         saveInvestigation(){
@@ -258,9 +278,70 @@
           const diagnosisInstance = new Diagnosis();
           diagnosisInstance.onSubmit(this.demographics.patient_id,userID,this.getFormatedData(this.diagnosis[0].selectdData))
         },
+        async saveTreatmentPlan() {
+            const userID: any  = Service.getUserID()
+            const patientID = this.demographics.patient_id
+            const treatmentInstance = new Treatment()
+
+            if(!isEmpty(this.selectedMedicalAllergiesList)) {
+                const allergies = this. mapToAllergies()
+                treatmentInstance.onSubmitAllergies(patientID, userID, allergies)
+            }
+
+            if (!isEmpty(this.nonPharmalogicalTherapyAndOtherNotes)) {
+                const treatmentNotesTxt = [
+                    {
+                        concept_id: 2688,
+                        obs_datetime: Service.getSessionDate(),
+                        value_text: this.nonPharmalogicalTherapyAndOtherNotes
+                    }
+                ]
+                treatmentInstance.onSubmitNotes(patientID, userID, treatmentNotesTxt)
+            }
+
+            if (!isEmpty(this.selectedMedicalDrugsList)) {
+                const drugOrders = this.mapToOrders()
+                const prescriptionService = new DrugPrescriptionService(patientID, userID)
+                const encounter = await prescriptionService.createEncounter()
+                if (!encounter) return toastWarning('Unable to create treatment encounter')   
+                const drugOrder = await prescriptionService.createDrugOrder(drugOrders);
+                if(!drugOrder) return toastWarning('Unable to create drug orders!')
+                toastSuccess('Drug order has been created')
+            }
+        },
         openModal(){
             createModal(SaveProgressModal)
-        }
+        },
+        mapToOrders(): any[] {
+        return this.selectedMedicalDrugsList.map((drug: any) => {
+            const startDate = DrugPrescriptionService.getSessionDate()
+            const frequency = DRUG_FREQUENCIES.find(f => f.label === drug.frequency) || {} as typeof DRUG_FREQUENCIES[0]
+            return {
+            'drug_inventory_id': drug.drug_id,
+            'equivalent_daily_dose': drug.dose=='Unknown'?0 : drug.dose * frequency?.value || 0,
+            'start_date': startDate,
+            'auto_expire_date': this.calculateExpireDate(startDate, drug.duration), 
+            'units': drug.units,
+            'instructions': `${drug.drugName}: ${drug.dose} ${drug.units} ${frequency?.code || ''} for ${drug.duration} days`,
+            'dose': drug.dose,
+            'frequency': frequency?.code || '',
+            }
+        })
+        },
+        calculateExpireDate(startDate: string | Date, duration: any ) {
+            const date = new Date(startDate)
+            date.setDate(date.getDate() + parseInt(duration))
+            return HisDate.toStandardHisFormat(date)
+        },
+        mapToAllergies(): any[] {
+            return this.selectedMedicalAllergiesList.map((allergy: any) => {
+                return {
+                    concept_id: 985,
+                    obs_datetime: Service.getSessionDate(),
+                    value_coded: allergy.concept_id
+                }
+            })
+        },
       }
     })
   </script>

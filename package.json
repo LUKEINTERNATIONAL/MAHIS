@@ -20,6 +20,7 @@
     "@capacitor/status-bar": "5.0.6",
     "@ionic/vue": "^7.6.1",
     "@ionic/vue-router": "^7.6.1",
+    "@vuepic/vue-datepicker": "^8.1.0",
     "apexcharts": "^3.44.0",
     "datatables.net-select": "^1.7.0",
     "datatables.net-vue3": "^2.1.3",

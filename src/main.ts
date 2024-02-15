@@ -6,6 +6,9 @@ import { IonicVue } from '@ionic/vue';
 import { createPinia } from 'pinia'
 import piniaPluginPersistedState from "pinia-plugin-persistedstate"
 
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/vue/css/core.css';
 
@@ -36,6 +39,7 @@ const app = createApp(App)
   .use(router)
   .use(pinia);
 
+  app.component('VueDatePicker', VueDatePicker);
   pinia.use(piniaPluginPersistedState)
   DataTable.use(DataTablesCore);
 router.isReady().then(() => {

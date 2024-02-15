@@ -101,15 +101,18 @@ methods:{
         }
     },
     async handleInputData(event: any) {
-        if(event.value.detail.checked)
-            modifyCheckboxInputField(this.patientHistoryHIV,event.al.name, 'displayNone', false)
-        else
-            modifyCheckboxInputField(this.patientHistoryHIV, event.al.name,'displayNone', true)
+        console.log(event.al)
+        if(event.al){
+            if(event.value.detail.checked)
+                modifyCheckboxInputField(this.patientHistoryHIV,event.al.name, 'displayNone', false)
+            else
+                modifyCheckboxInputField(this.patientHistoryHIV, event.al.name,'displayNone', true)
 
-        if(event.value.detail.checked)
-            modifyCheckboxInputField(this.patientHistory,event.al.name, 'displayNone', false)
-        else
-            modifyCheckboxInputField(this.patientHistory, event.al.name,'displayNone', true)
+            if(event.value.detail.checked)
+                modifyCheckboxInputField(this.patientHistory,event.al.name, 'displayNone', false)
+            else
+                modifyCheckboxInputField(this.patientHistory, event.al.name,'displayNone', true)
+        }
     },
 }
 });

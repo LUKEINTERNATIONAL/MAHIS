@@ -1,4 +1,3 @@
-
 <template>
   <ion-page>
     <Toolbar />
@@ -48,7 +47,16 @@ import MedicalHistory from '../components/profile/MedicalHistory.vue';
 import WomanBehaviour from '../components/profile/WomanBehaviour.vue';
 import {getCheckboxSelectedValue} from "@/services/data_helpers";
 import {useMedicalHistoryStore} from "@/apps/ANC/store/profile/medicalHistoryStore";
+import {useObstreticHistoryStore} from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
+import {useCurrentPregnanciesStore} from "@/apps/ANC/store/profile/CurrentPreganciesStore";
+import {useMedicationsStore} from "@/apps/ANC/store/profile/MedicationsStore";
+import {useWomanBehaviourStore} from "@/apps/ANC/store/profile/womanBehaviourStore";
 
+function someChecked(options, errorMessage="Missing check values") {
+  if (!options.filter(v => v.checkboxBtnContent).some(v => v.checkboxBtnContent.data.some(d => d.checked))) {
+    return errorMessage
+  }
+}
 export default defineComponent({
   name: "Home",
   components:{
@@ -133,12 +141,20 @@ export default defineComponent({
         {
           'title': 'Past Obstetric History',
           'componet': 'PastObstetricHistory',
-          'value': '1',
+          'value': '1'
         },
         {
           'title': 'Past Medical history',
           'componet': 'MedicalHistory',
           'value': '2',
+          validation: {
+            medicalHistory: (data) => someChecked(data, "Medical history is required"), 
+            allegy: (data) => someChecked(data, "Allergy is required"), 
+            //existingChronicHealthConditions: (data)=>someChecked(data, "Existing chronic conditions is required"),
+            hivTest: (data)=>someChecked(data, "HIV test required"),
+            syphilisTest: (data)=>someChecked(data, "Syphilis test is required")
+            
+          }
         },
         {
           'title': 'Current Pregancy',
@@ -160,9 +176,17 @@ export default defineComponent({
       iconsContent: icons,
     };
   },
+  watch: {
+    medicalHistory(change) {
+      console.log(change)
+    }
+  },
   computed:{
-
-    ...mapState(useMedicalHistoryStore,["medicalHistory"])
+    ...mapState(useMedicalHistoryStore,["medicalHistory", "allegy", "existingChronicHealthConditions","hivTest","syphilisTest"]),
+    ...mapState(useObstreticHistoryStore, ["prevPregnancies","preterm","abnormalities","modeOfDelivery","Complications"]),
+    ...mapState(useCurrentPregnanciesStore, ["currentPregnancies","deliveryDate","lmnp","gestation","tetanus","ultrasound"]),
+    ...mapState(useMedicationsStore,["Medication"]),
+    ...mapState(useWomanBehaviourStore,["dailyCaffeineIntake","Tobacco"])
 
   },
   mounted(){
@@ -229,10 +253,25 @@ export default defineComponent({
         return item?.data;
       });
     },
-    saveData(){
-
-          console.log(getCheckboxSelectedValue(this.medicalHistory, 'Myomectomy'))
-         // this.$router.push('symptomsFollowUp');
+    saveData(){ 
+      const errors = []
+      this.StepperData.forEach((stepper)=> {
+        if (!stepper.validation) return
+        Object.keys(stepper.validation).forEach((validationName) => {
+          if (typeof stepper.validation[validationName] === 'function') {
+            const state = stepper.validation[validationName](this[validationName])
+            if (state) errors.push(state)
+          } 
+        })
+      })
+      if (errors.length) {
+        return alert(errors.join(','))
+      }
+      console.log(errors)
+        // console.log(this.medicalHistory, "Medical history")
+        // console.log(this.currentPregnancies, "Current")
+        //   console.log(getCheckboxSelectedValue(this.medicalHistory, 'Myomectomy'))
+        //  this.$router.push('symptomsFollowUp');
 
      },
 

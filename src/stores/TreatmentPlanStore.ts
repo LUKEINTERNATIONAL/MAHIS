@@ -6,7 +6,6 @@ export const useTreatmentPlanStore = defineStore('TreatmentPlanStore', {
         selectedMedicalDrugsList: [] as any,
         medicalAllergiesList: [] as any,
         selectedMedicalAllergiesList: [] as any,
-        isUseOfTraditionalMedicineSelected: false as boolean,
         nonPharmalogicalTherapyAndOtherNotes: '' as string,
     }),
     actions:{
@@ -15,9 +14,6 @@ export const useTreatmentPlanStore = defineStore('TreatmentPlanStore', {
         },
         setMedicalAllergiesList(data: any) {
             this.medicalAllergiesList = data
-        },
-        setIsUseOfTraditionalMedicineSelected(value: boolean) {
-            this.isUseOfTraditionalMedicineSelected = value
         },
         setNonPharmalogicalTherapyAndOtherNotes(value: string) {
             this.nonPharmalogicalTherapyAndOtherNotes = value

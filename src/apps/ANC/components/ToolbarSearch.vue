@@ -14,7 +14,7 @@
     >
     <ion-content class="search_card">
         <ion-row class=" search_header">
-          <ion-col >MNH clinic No. </ion-col>
+          <ion-col >MNH no.</ion-col>
           <ion-col >Fullname</ion-col>
           <ion-col >Birthdate</ion-col>
           <ion-col style="max-width: 70px;">Gestation Age</ion-col>
