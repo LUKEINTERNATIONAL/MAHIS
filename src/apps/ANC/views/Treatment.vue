@@ -1,6 +1,6 @@
 <template>
     <ion-page>
-    <Toolbar />
+    <Toolbar/>
     <ion-content :fullscreen="true">
       <DemographicBar/>
       <Stepper stepperTitle="Treatment & Prevention" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
@@ -20,12 +20,12 @@ import {
       IonMenu,
   } from '@ionic/vue';
 import Toolbar from '@/components/Toolbar.vue'
-import DemographicBar from '@/components/DemographicBar.vue';
+import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import { defineComponent } from 'vue';
 import BasicInputField from '@/components/BasicInputField.vue';
 import Stepper from '@/components/Stepper.vue';
 import DiagnosisTreatment from '../components/Treatment/DiagnosisTreatment.vue';
-import MedicationDispersed from '@/apps/ANC/components/Treatment/MedicationDispersed.vue'
+import MedicationDispensed from '@/apps/ANC/components/Treatment/MedicationDispensed.vue'
 import { icons } from '@/utils/svg';
 import { chevronBackOutline, checkmark } from 'ionicons/icons';
 import DiagnosisCounselling from '@/apps/ANC/components/Treatment/DiagnosisCounselling.vue'
@@ -51,7 +51,7 @@ export default defineComponent ({
   BasicInputField,
   Stepper,
   DiagnosisTreatment,
-  MedicationDispersed,
+  MedicationDispensed,
   DiagnosisCounselling,
   Immunization,
   IntimatePartner,
@@ -109,16 +109,9 @@ export default defineComponent ({
                     'checked':false,
                     'disabled':false,
                     'number':6,
-                    'last_step': ''
-                },      
-                {
-                    'title': 'Urgent referral',
-                    'class': 'common_step',
-                    'checked':false,
-                    'disabled':false,
-                    'number':7,
                     'last_step': 'last_step'
-                },  
+                },      
+  
               ],
   StepperData: [
                {
@@ -127,8 +120,8 @@ export default defineComponent ({
                     'value': '1'
                 },
                 {
-                    'title': 'Medication dispersed',
-                    'componet': 'MedicationDispersed',
+                    'title': 'Medication dispensed',
+                    'componet': 'MedicationDispensed',
                     'value': '2'
                 },
                 {
@@ -150,11 +143,6 @@ export default defineComponent ({
                     'title': 'Deworming and malaria prophylaxis',
                     'componet': 'Deworming',
                     'value': '6'
-                },
-                {
-                    'title': 'Urgent referral',
-                    'componet': 'UrgentReferral',
-                    'value': '7'
                 },
   ],
 

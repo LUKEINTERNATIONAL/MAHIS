@@ -98,11 +98,14 @@
   import UrineTest from '@/apps/ANC/components/lab_tests/UrineTest.vue';
   import TB from '@/apps/ANC/components/lab_tests/TB.vue';
   import DiagnosisTreatment from '@/apps/ANC/components/Treatment/DiagnosisTreatment.vue'
-  import MedicationDispersed from '@/apps/ANC/components/Treatment/MedicationDispersed.vue';
+  import MedicationDispensed from '@/apps/ANC/components/Treatment/MedicationDispensed.vue';
   import DiagnosisCounselling from '@/apps/ANC/components/Treatment/DiagnosisCounselling.vue';
   import Immunization from '@/apps/ANC/components/Treatment/Immunization.vue';
   import IntimatePartner from '@/apps/ANC/components/Treatment/IntimatePartner.vue';
   import Deworming from '@/apps/ANC/components/Treatment/Deworming.vue';
+
+
+
   import UrgentReferral from '@/apps/ANC/components/Treatment/UrgentReferral.vue';
   import SaveProgressModal from '@/components/SaveProgressModal.vue'
   import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue";
@@ -161,7 +164,7 @@
         MaternalExam,
         PresentingSigns,
         CurrentPregnancies,
-        PastObstetricHistory,
+        PastObstreticHistory,
         UltrasoundScan,
         UrineTest,
         TB,
@@ -177,7 +180,7 @@
         Referral,
         AncEnd,
         DiagnosisTreatment,
-        MedicationDispersed,
+        MedicationDispensed,
         DiagnosisCounselling,
         Immunization,
         IntimatePartner,
