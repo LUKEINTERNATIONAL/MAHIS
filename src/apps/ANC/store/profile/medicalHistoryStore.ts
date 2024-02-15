@@ -1557,6 +1557,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
     }),
     actions:{
          addMedicalHistory(data:any){
+            console.log("sonmething changedS", data)
             this.medicalHistory = data
          },
         addAllegy(data:any){

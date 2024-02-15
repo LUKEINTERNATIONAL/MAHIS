@@ -1,78 +1,140 @@
 <template>
   <ion-page>
-    <Toolbar/>
+    <Toolbar />
+
     <ion-content :fullscreen="true">
       <DemographicBar />
-      <ion-row class="ion-justify-content-center">
-<!--        <ion-col v-for="(card, index) in cards" :key="index" size="6" size-sm="6" size-md="4" size-lg="3">-->
-<!--          <ion-card class="custom-card">-->
-<!--            <ion-card-header class="custom-card-header">-->
-<!--              <ion-card-title>{{ card.title }}</ion-card-title>-->
-<!--            </ion-card-header>-->
-<!--            <ion-card-content class="custom-card-content">-->
-<!--              <a :href="card.link" class="custom-link">Go to {{ card.title }}</a>-->
-<!--            </ion-card-content>-->
-<!--          </ion-card>-->
-<!--        </ion-col>-->
-      </ion-row>
+      <div class="ion-padding">
+        <p>Add custom styles and compose with other elements.</p>
+
+        <h1 class="ion-text-center">What are you interested in?</h1>
+        <p class="ion-text-center">Pick whatever catches your eye. You can always fine-tune things later.</p>
+
+        <ion-row>
+          <ion-col size="3">
+            <div class="checkbox-content" :style="{ backgroundImage: 'url(https://images.pexels.com/photos/220911/pexels-photo-220911.jpeg?auto=compress&cs=tinysrgb)' }">
+              <ion-label class="checkbox-title">Profile</ion-label>
+              <ion-checkbox class="checkbox-item" value="profile" checked></ion-checkbox>
+            </div>
+          </ion-col>
+          <ion-col size="3">
+            <div class="checkbox-content">
+              <ion-label class="checkbox-title">Quick Check</ion-label>
+              <ion-checkbox class="checkbox-item" value="quickCheck"></ion-checkbox>
+            </div>
+          </ion-col>
+          <ion-col size="3">
+            <div class="checkbox-content">
+              <ion-label class="checkbox-title">Symptoms and follow Up</ion-label>
+              <ion-checkbox class="checkbox-item" value="symptoms"></ion-checkbox>
+            </div>
+          </ion-col>
+          <ion-col size="3">
+            <div class="checkbox-content">
+              <ion-label class="checkbox-title">Physical exam</ion-label>
+              <ion-checkbox class="checkbox-item" checked value="exam"></ion-checkbox>
+            </div>
+          </ion-col>
+        </ion-row>
+      </div>
     </ion-content>
+
+    <!-- Sidebar -->
+      <ion-list lines="full" class="sidebar" slot="start">>
+        <ion-item @click="navigateTo('Dashboard')">
+          <ion-icon slot="start" name="apps-outline"></ion-icon>
+          Dashboard
+        </ion-item>
+        <ion-item @click="navigateTo('ANC clients')">
+          <ion-icon slot="start" name="person-circle-outline"></ion-icon>
+          ANC clients
+        </ion-item>
+        <ion-item @click="navigateTo('Referral')">
+          <ion-icon slot="start" name="arrow-forward-outline"></ion-icon>
+          Referral
+        </ion-item>
+      </ion-list>
+
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonRow, IonCol,IonPage } from '@ionic/vue';
+import { IonPage, IonIcon, IonLabel, IonCheckbox, IonContent, IonToolbar, IonHeader, IonRow, IonCol, IonList, IonItem } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import Toolbar from "@/apps/ANC/components/Toolbar.vue";
 
 export default defineComponent({
-  components: {DemographicBar, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonRow, IonCol, IonPage, Toolbar },
-  data() {
-    return {
-      cards: [
-        { title: 'Quick Check', link: '', imageUrl: '' },
-        { title: 'Dashboard', link: '', imageUrl: '' },
-        { title: 'Profile', link: '', imageUrl: '' },
-        { title: 'Symptoms Follow Up', link: '', imageUrl: '' },
-        { title: 'Lab Test', link: '', imageUrl: '' },
-        { title: 'Physical Exam', link: '', imageUrl: '' },
-        { title: 'Counseling', link: '', imageUrl: '' },
-        { title: 'Treatment', link: '', imageUrl: '' },
-        { title: 'Referral', link: '', imageUrl: '' },
-        { title: 'Anc End', link: '', imageUrl: '' },
-      ],
-    };
-  },
+  components: { DemographicBar, IonPage, IonIcon, IonLabel, IonCheckbox, IonContent, IonToolbar, IonHeader, IonRow, IonCol, Toolbar, IonList, IonItem },
+  methods: {
+    navigateTo(page: string) {
+      // Define your navigation logic here
+      console.log('Navigating to', page);
+    }
+  }
 });
 </script>
+
 <style scoped>
-.custom-card {
-  width: 200px;
-  height: 150px;
-  margin: 2px;
-  background-color: #f0f0f0;
+.checkbox-content {
+  background-size: cover;
+  background-blend-mode: overlay;
   border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  height: 100%;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
 }
 
-.custom-card-header {
-  background-color: #336699;
-  color: white;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-}
-
-.custom-card-content {
-  padding: 10px;
-}
-
-.custom-link {
-  color: #336699;
-  text-decoration: none;
+.checkbox-title {
+  color: var(--ion-color-light);
   font-weight: bold;
+  font-size: 20px;
+  margin: 8px;
 }
 
-.custom-link:hover {
-  text-decoration: underline;
+.checkbox-item {
+  --background: transparent;
+  --border-color: var(--ion-color-light);
+  --size: 32px;
+  margin: 8px;
+}
+
+.sidebar {
+  width: 20%;
+  background-color: #f0f0f0;
+  padding: 200px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 999;
+  overflow-y: auto;
+  margin-right: 90%;
+}
+
+.sidebar ion-list {
+  margin-top: 20px;
+}
+
+.sidebar ion-item {
+  cursor: pointer;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.sidebar ion-item:hover {
+  background-color: #e0e0e0;
+}
+
+.sidebar ion-icon {
+  margin-right: 8px;
+}
+
+.sidebar p {
+  margin-bottom: 20px;
+  font-weight: bold;
 }
 </style>

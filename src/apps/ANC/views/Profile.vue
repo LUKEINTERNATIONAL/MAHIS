@@ -52,6 +52,11 @@ import {useCurrentPregnanciesStore} from "@/apps/ANC/store/profile/CurrentPregan
 import {useMedicationsStore} from "@/apps/ANC/store/profile/MedicationsStore";
 import {useWomanBehaviourStore} from "@/apps/ANC/store/profile/womanBehaviourStore";
 
+function someChecked(options, errorMessage="Missing check values") {
+  if (!options.filter(v => v.checkboxBtnContent).some(v => v.checkboxBtnContent.data.some(d => d.checked))) {
+    return errorMessage
+  }
+}
 export default defineComponent({
   name: "Home",
   components:{
@@ -143,21 +148,11 @@ export default defineComponent({
           'componet': 'MedicalHistory',
           'value': '2',
           validation: {
-            medicalHistory: (v: any) => {
-              console.log(v, "medication history")
-            }, 
-             allegy: (v: any) => {
-              console.log(v, "allergy")
-            }, 
-             existingChronicHealthConditions: (v: any) => {
-                console.log(v, "chronic")
-            }, 
-             hivTest: (v: any) => {
-                console.log(v, "hiv test")
-            }, 
-             syphilisTest: (v: any) => {
-                console.log(v, "syphilis")
-            }, 
+            medicalHistory: (data) => someChecked(data, "Medical history is required"), 
+            allegy: (data) => someChecked(data, "Allergy is required"), 
+            //existingChronicHealthConditions: (data)=>someChecked(data, "Existing chronic conditions is required"),
+            hivTest: (data)=>someChecked(data, "HIV test required"),
+            syphilisTest: (data)=>someChecked(data, "Syphilis test is required")
             
           }
         },
@@ -180,6 +175,11 @@ export default defineComponent({
       isOpen: false,
       iconsContent: icons,
     };
+  },
+  watch: {
+    medicalHistory(change) {
+      console.log(change)
+    }
   },
   computed:{
     ...mapState(useMedicalHistoryStore,["medicalHistory", "allegy", "existingChronicHealthConditions","hivTest","syphilisTest"]),
@@ -264,6 +264,9 @@ export default defineComponent({
           } 
         })
       })
+      if (errors.length) {
+        return alert(errors.join(','))
+      }
       console.log(errors)
         // console.log(this.medicalHistory, "Medical history")
         // console.log(this.currentPregnancies, "Current")
