@@ -43,58 +43,31 @@
     </div>
 </template>
   
-<script lang="ts">
-    import { 
-            IonContent, 
-            IonHeader,
-            IonItem,
-            IonList,
-            IonTitle, 
-            IonToolbar, 
-            IonMenu,
-            modalController,
-            IonCard,
-            IonCardContent
-            
-        } from '@ionic/vue';
+<script setup lang="ts">
+    import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController,IonCard, IonCardContent } from '@ionic/vue';
     import { defineComponent } from 'vue'
-    import { checkmark,pulseOutline } from 'ionicons/icons'
-    import { ref } from 'vue'
+   
+    import { ref, computed, onMounted } from 'vue'
     import { icons } from '@/utils/svg'
     import { mapState } from 'pinia'
     import { useTreatmentPlanStore } from '@/stores/TreatmentPlanStore'
     import { useVitalsStore } from '@/stores/VitalsStore'
 
-    export default defineComponent({
-    name: 'Menu',
-    components:{
-        IonContent,
-        IonHeader,
-        IonItem,
-        IonList,
-        IonMenu,
-        IonTitle,
-        IonToolbar,
-        IonCard,
-        IonCardContent   },
-        data() {
-    return {
-        iconsContent: icons,
-        clinicalNotes: this.transformClinicalNotes()
-    };
-  },
-  computed:{
-    ...mapState(useVitalsStore,["vitals"]),
-},
-    setup() {
-      return { checkmark,pulseOutline };
-    },
-    methods:{
-      dismiss(){
+    const iconsContent = icons
+    const clinicalNotes = ref()
+    const store = useVitalsStore()
+    const vitals = computed(() => store.vitals)
+
+    function dismiss(){
         modalController.dismiss()
-      },
-      transformClinicalNotes(): string[] {
-            const treatmentPlanStore = useTreatmentPlanStore()
+    }
+
+    onMounted(() => {
+        clinicalNotes.value = transformClinicalNotes()
+    })
+
+    function transformClinicalNotes(): string[] {
+        const treatmentPlanStore = useTreatmentPlanStore()
             const input = treatmentPlanStore.getNonPharmalogicalTherapyAndOtherNotes()
             const lines: string[] = [];
             let startIndex = 0
@@ -116,9 +89,7 @@
                 lines.push(lastLine);
             }
             return lines;
-        },
     }
-    });
 </script>
 
 <style scoped>
