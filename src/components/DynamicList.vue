@@ -23,7 +23,7 @@
 import { IonItem, IonCol, IonLabel } from '@ionic/vue'
 import { defineComponent } from 'vue'
 import { createModal,popoverConfirmation,alertConfirmation } from '@/utils/Alerts'
-import { icons } from '@/utils/svg.ts';
+import { icons } from '@/utils/svg';
 export default defineComponent({
     created() {
        // this.$emit('onFooterInstance', this)
@@ -37,7 +37,7 @@ export default defineComponent({
     data() {
     return {
         iconsContent: icons,
-        localMedicalDrugsList: [...this.$props._selectedMedicalDrugsList],
+        localMedicalDrugsList: [...this.$props._selectedMedicalDrugsList] as any,
     }},
     props: {
         _selectedMedicalDrugsList: {

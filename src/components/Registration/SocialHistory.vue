@@ -157,7 +157,7 @@ methods:{
     },
 
     validationRules(event: any) {
-        return validateField(this.socialHistory,event.name, this[event.name]);
+        return validateField(this.socialHistory,event.name, (this as any)[event.name]);
     },
     validatedSocialHistory(){
         if( Validation.required(this.maritalStatus) == null ||
