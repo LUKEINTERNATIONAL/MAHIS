@@ -53,7 +53,7 @@ export class PreviousTreatment {
       EncounterService.getEncounters(this.patientID, {date})
       .then(async (encounters) => {
         //console.log(encounters)
-        encounters.map((encounter: Encounter,  index: number) => {
+        encounters.map(async (encounter: Encounter,  index: number) => {
           if ( encounter.type.name == 'NOTES') {
             const { observations } = encounter
             if (!isEmpty(observations)) {
@@ -78,6 +78,27 @@ export class PreviousTreatment {
                   console.log(observation)
                 }
               })
+
+              for(const _index in observations) {
+                let concept = '<UNKNOWN CONCEPT>'
+                const obs =  observations[_index]
+                try {
+                    if (obs?.concept?.concept_names) {
+                        concept = obs.concept.concept_names[0].name
+                    } else {
+                        concept = await ConceptService.getConceptName(obs.concept_id)
+                    }
+                } catch (e) {
+                    console.error(obs, e)
+                }
+                const value = await ObservationService.resolvePrimaryValue(obs)
+                const time = HisDate.toStandardHisTimeFormat(obs.date_created)
+
+                console.log({value})
+                console.log({time})
+                console.log({concept})
+                //data.push([concept, value, time])
+            }
             }
           }
         })
