@@ -8,9 +8,15 @@ import PhysicalExam from "@/apps/ANC/views/PhysicalExam.vue";
 import Treatment from '../views/Treatment.vue'
 import LabTests from '../views/LabTests.vue';
 import landingPage from "@/apps/ANC/views/landingPage.vue";
+import PreviousVisits from "@/apps/ANC/views/PreviousVisits.vue";
 
 export default [
 
+  {
+    path: '/previousVisits',
+    name: 'previousVisits',
+    component: PreviousVisits
+  },
   {
     path: '/landingPage',
     name: 'landingPage',

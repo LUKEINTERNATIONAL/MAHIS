@@ -3,20 +3,20 @@
   <div style="padding-top: 1px">
     <DemographicBar/>
   </div>
-    <ion-split-pane content-id="main">
-      <SideBar :menu="menu" />
-      <div class="ion-page" id="main" style="top:130px">
-        <ion-content>
-          <ion-grid>
-            <ion-row>
-              <ion-col size="12" size-md="12" offset-md="0" style="padding-left: 200px;padding-right: 200px">
-                <Visits/>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-content>
-      </div>
-    </ion-split-pane>
+  <ion-split-pane content-id="main">
+    <SideBar :menu="menu" />
+    <div class="ion-page" id="main" style="top:130px">
+      <ion-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12" size-md="12" offset-md="0" style="padding-left: 200px;padding-right: 200px">
+              <PreviousVisits/>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-content>
+    </div>
+  </ion-split-pane>
 </template>
 
 <script>
@@ -26,9 +26,12 @@ import SideBar from "@/apps/ANC/components/SideBar.vue";
 import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import Toolbar from "@/apps/ANC/components/Toolbar.vue";
 import Visits from "@/apps/ANC/components/Visits.vue";
+import PreviousVisits from "@/apps/ANC/components/PreviousVisits.vue";
 
 export default defineComponent({
-  components: {Visits, IonPage, IonIcon, IonLabel, IonContent, IonToolbar, IonHeader, IonRow, IonCol, IonList, IonMenuButton, SideBar, DemographicBar, Toolbar },
+  components: {
+    PreviousVisits,
+    Visits, IonPage, IonIcon, IonLabel, IonContent, IonToolbar, IonHeader, IonRow, IonCol, IonList, IonMenuButton, SideBar, DemographicBar, Toolbar },
 
 });
 </script>
