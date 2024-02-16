@@ -104,7 +104,7 @@ methods:{
     },
 
     validationRules(event: any) {
-        return validateField(this.guardianInformation,event.name, this[event.name]);
+        return validateField(this.guardianInformation,event.name, (this as any)[event.name]);
     },
     guardianValidationRules(){
         if( Validation.isName(this.guardianGivenName) == null &&

@@ -46,8 +46,8 @@
     data() {
     return {
         iconsContent: icons,
-        BMI: {},
-        BPStatus: {},
+        BMI: {} as any,
+        BPStatus: {} as any,
         vValidations: '' as any,
         hasValidationErrors: [] as any,
         vitalsInstance: {} as any,
@@ -86,8 +86,8 @@
         async validaterowData(inputData: any) {
             this.hasValidationErrors = []
             
-            this.vitals.forEach((section,sectionIndex) => {
-                section.data.rowData.forEach((col: any,colIndex) => {
+            this.vitals.forEach((section: any,sectionIndex: any) => {
+                section.data.rowData.forEach((col: any,colIndex: any) => {
                     if (col.colData[0].inputHeader == 'Systolic Pressure*') {
                             const isSystolicValid = this.vitalsInstance.validator(col.colData[0]) == null && this.vitalsInstance.validator(col.colData[1]) == null;
                             this.BPStatus = isSystolicValid ? this.getBloodPressureStatus(col.colData[0].value,col.colData[1].value) : {};

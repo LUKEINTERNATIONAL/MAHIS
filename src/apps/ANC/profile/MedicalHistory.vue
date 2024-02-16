@@ -194,16 +194,16 @@ export default defineComponent({
             syphilisChecked:  false,
             hyperKTMChecked: false,
 
-            pastSurgeries:"",
-            allegies:"",
-            chronicalHC:"",
-            bloodDisorder:"",
-            cancer:"",
-            heartDesease:"",
-            diabetis:"",
-            hiv:"",
-            syphilis:"",
-            hyperKTM:""
+            pastSurgeries:"" as any,
+            allegies:"" as any,
+            chronicalHC:"" as any,
+            bloodDisorder:"" as any,
+            cancer:"" as any,
+            heartDesease:"" as any,
+            diabetis:"" as any,
+            hiv:"" as any,
+            syphilis:"" as any,
+            hyperKTM:"" as any
 
         }
     },

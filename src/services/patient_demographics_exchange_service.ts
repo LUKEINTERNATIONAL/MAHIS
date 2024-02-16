@@ -3,7 +3,7 @@ import { isEmpty } from 'lodash';
 import { PatientPrintoutService } from './patient_printout_service';
 import HisDate from "@/utils/Date"
 import { Patientservice } from './patient_service';
-import GLOBAL_PROP from '@/apps/GLOBAL_APP/global_prop';
+// import GLOBAL_PROP from '@/apps/GLOBAL_APP/global_prop';
 
 export interface DDESearchDemographics {
     given_name: string;
@@ -30,9 +30,9 @@ export class PatientDemographicsExchangeService extends Service {
         this.patientID = patientID
     }
 
-    async loadDDEStatus() {
-        this.enabled = await GLOBAL_PROP.ddeEnabled()
-    }
+    // async loadDDEStatus() {
+    //     this.enabled = await GLOBAL_PROP.ddeEnabled()
+    // }
 
     isEnabled() {
         return this.enabled

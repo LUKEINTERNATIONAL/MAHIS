@@ -85,7 +85,7 @@ methods:{
         registrationStore.setCurrentLocation(this.currentLocation)
     },
     validationRules(event: any) {
-        return validateField(this.homeLocation,event.name, this[event.name]);
+        return validateField(this.homeLocation,event.name, (this as any)[event.name]);
     },
     getRadioValue(data: any, section: any){
         return data[section].radioBtnContent.header.selectedValue

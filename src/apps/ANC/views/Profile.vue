@@ -187,7 +187,7 @@ export default defineComponent({
 
   methods:{
     markWizard(){
-      if(this.vitals.validationStatus){
+      if(this.vitals[0].validationStatus){
         this.wizardData[0].checked = true;
         this.wizardData[0].class = 'open_step common_step'
       }else{
@@ -215,7 +215,7 @@ export default defineComponent({
       });
     },
     saveData(){
-      if(this.vitals.validationStatus && this.investigations[0].selectdData.length > 0 && this.diagnosis[0].selectdData.length > 0){
+      if(this.vitals[0].validationStatus && this.investigations[0].selectdData.length > 0 && this.diagnosis[0].selectdData.length > 0){
         this.saveVitals()
         this.saveInvestigation()
         this.saveDiagnosis()

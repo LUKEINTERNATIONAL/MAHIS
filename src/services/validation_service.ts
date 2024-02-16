@@ -2,7 +2,7 @@ import { modifyFieldValue,modifyRadioValue } from '@/services/data_helpers'
 import Validation from "@/validations/StandardValidations"
 
 export function validateField(data: any,fieldName: string, value: any) {
-    const validationRules = {
+    const validationRules: any = {
         'nationalID': () => Validation.isMWNationalID(value),
         'firstname': () => Validation.isName(value),
         'lastname': () => Validation.isName(value),

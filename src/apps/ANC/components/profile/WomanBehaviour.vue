@@ -43,7 +43,7 @@ import {
 import { defineComponent } from 'vue';
 import { checkmark,pulseOutline } from 'ionicons/icons';
 import { ref } from 'vue';
-import { icons } from '@/utils/svg.ts';
+import { icons } from '@/utils/svg';
 import BasicInputField from '@/components/BasicInputField.vue';
 import BasicForm from "@/components/BasicForm.vue";
 import {useMedicalHistoryStore} from "@/apps/ANC/store/medicalHistoryStore";
@@ -72,8 +72,8 @@ export default defineComponent({
       iconsContent: icons,
       caffeineChecked : false,
       tobbacoChecked : false,
-      DailyCaffeine: '',
-      tobbacoUses: '',
+      DailyCaffeine: '' as any,
+      tobbacoUses: '' as any,
     };
   },
   // mounted(){

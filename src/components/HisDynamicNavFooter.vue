@@ -22,7 +22,7 @@ import { NavBtnInterface } from './HisDynamicNavFooterInterface'
 export default defineComponent({
   name: "HisNavFooter",
   data: () => ({
-    footerBtns: [] as Array<NavBtnInterface>
+    footerBtns: [] as any
   }),
   created() {
     this.$emit('onFooterInstance', this)

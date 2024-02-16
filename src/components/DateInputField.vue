@@ -1,7 +1,7 @@
 <template>
     <h6 v-if="inputHeader">{{ inputHeader }}</h6>
     <VueDatePicker  
-        @date-update="event => {$emit('update:dateValue', formatDate(event)); }"
+        @date-update="$emit('update:dateValue', formatDate($event));"
         auto-apply 
         :flow="flow"  
         vertical

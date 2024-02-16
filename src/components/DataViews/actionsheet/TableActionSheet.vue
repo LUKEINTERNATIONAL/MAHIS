@@ -1,18 +1,18 @@
 <template>
     <action-header :title="title" :subtitle="subtitle" :color="color"> </action-header>
         <ion-content>
-            <his-table :columns="columns" :rowColors="rowColors" :rows="rows"/>
+            <!-- <his-table :columns="columns" :rowColors="rowColors" :rows="rows"/> -->
         </ion-content>
     <action-footer :buttons="actionButtons"> </action-footer>
 </template>
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import HisTable from "@/components/DataViews/HisBasicTable.vue"
+// import HisTable from "@/components/DataViews/HisBasicTable.vue"
 import ActionSheetMixin from "@/components/DataViews/actionsheet/ActionSheetMixin.vue"
 
 export default defineComponent({
     mixins: [ActionSheetMixin],
-    components: { HisTable },
+    // components: { HisTable },
     props: {
         rowColors: {
             type: Object as PropType<Array<{indexes: number[];class: string}>>
