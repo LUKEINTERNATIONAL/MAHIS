@@ -115,17 +115,22 @@ export default defineComponent({
     },
     watch:{
       prevPregnancies: {
-        handler (val) {
-          if (val && val[0].data.rowData[1].colData[1].value) {
-            const liveBirths = parseInt(val[0].data.rowData[1].colData[1].value)
-            this.prevPregnanciesInstance.setModeOfDelivery([])
-            const births = []
-            for(let i=0; i < liveBirths; ++i) {
-              births.push({...this.modeOfDelieveryRef})
+        
+          handler(val) {
+            if (val && val[0].data.rowData[1].colData[1].value) {
+              const liveBirths = parseInt(val[0].data.rowData[1].colData[1].value)
+              this.prevPregnanciesInstance.setModeOfDelivery([])
+
+              const births = []
+              for (let i = 0; i < liveBirths; ++i) {
+                // a deep copy of the template object for each text field
+                births.push(JSON.parse(JSON.stringify(this.modeOfDelieveryRef)))
+              }
+
+              this.prevPregnanciesInstance.setModeOfDelivery(births)
             }
-            this.prevPregnanciesInstance.setModeOfDelivery(births)
-          }
-        },
+          },
+
         deep: true
       },
       Complications:{

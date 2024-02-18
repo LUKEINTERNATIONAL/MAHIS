@@ -87,6 +87,12 @@ import BasicForm from '../../../../components/BasicForm.vue';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import { icons } from '../../../../utils/svg'; 
 import {useDiagnosisStore} from '../../store/diagnosisStore';
+import { modifyRadioValue,
+    getRadioSelectedValue,
+    getCheckboxSelectedValue,
+    getFieldValue,
+    modifyFieldValue,
+    modifyCheckboxValue} from '@/services/data_helpers'
 export default defineComponent ({
     name: "diagnosisTreatment",
     components: {
@@ -135,6 +141,42 @@ export default defineComponent ({
         ...mapState(useDiagnosisStore, ["anaemia"]),
 
     },
+    mounted(){
+      this.handleHyperOther()
+      this. handledeHiv()
+      this.handleCounselHiv()
+      this.handleHperB()
+      this.handleasbReason()
+      this.handleOtherasb()
+    },
+    watch:{
+      hypertensionReason:{
+        handler(){
+          this.handleHyperOther()
+        },
+        deep:true
+      },
+      hiv:{
+        handler(){
+          this. handledeHiv()
+          this.handleCounselHiv()
+        },deep:true
+      },
+      hepatitisReason:{
+        handler(){
+          this.handleHperB()
+        },
+        deep:true
+      },
+      asbReason:{
+        handler(){
+          this.handleasbReason()
+          this.handleOtherasb()
+        },
+        deep:true
+      }
+
+    },
     methods :{
         goToNextSection() {
       if (this.currentSection < 4) {
@@ -144,6 +186,48 @@ export default defineComponent ({
     goToPreviousSection() {
       if (this.currentSection > 0) {
         this.currentSection--;
+      }
+    },
+    handleHyperOther(){
+      if(getRadioSelectedValue(this.hypertensionReason,'hypReasons')=='other'){
+        modifyFieldValue(this.hypertensionReason,'hypertensionCounselling','displayNone',false)
+      }else{
+        modifyFieldValue(this.hypertensionReason,'hypertensionCounselling','displayNone',true)
+      }
+    },
+    handledeHiv(){
+      if(getRadioSelectedValue(this.hiv,'hiv')=='other'){
+        modifyFieldValue(this.hiv,'hivCounselling','displayNone',false)
+      }else{
+         modifyFieldValue(this.hiv,'hivCounselling','displayNone',true)
+      }
+    },
+    handleCounselHiv(){
+      if(getRadioSelectedValue(this.hiv,'cousellHiv')=='no'){
+        modifyRadioValue(this.hiv,'hiv','displaNone',false)
+      }else{
+        modifyRadioValue(this.hiv,'hiv','displaNone',true)
+      }
+    },
+    handleHperB(){
+      if(getRadioSelectedValue(this.hepatitisReason,'hepatitisB')=='other'){
+        modifyFieldValue(this.hepatitisReason,'hypertensionCounselling','displayNone',false)
+      }else{
+         modifyFieldValue(this.hepatitisReason,'hypertensionCounselling','displayNone',true)
+      }
+    },
+    handleasbReason(){
+      if(getRadioSelectedValue(this.asbReason,'SevenDay')=='no'){
+        modifyRadioValue(this.asbReason,'SevenDayReason','displayNone',false)
+      }else{
+        modifyRadioValue(this.asbReason,'SevenDayReason','displayNone',true)
+      }
+    },
+    handleOtherasb(){
+      if(getRadioSelectedValue(this.asbReason,'SevenDayReason')=='other'){
+        modifyFieldValue(this.asbReason,'hypertensionCounselling','displayNone',false)
+      }else{
+        modifyFieldValue(this.asbReason,'hypertensionCounselling','displayNone',true)
       }
     },
 

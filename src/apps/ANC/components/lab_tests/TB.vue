@@ -47,7 +47,13 @@ import { mapState } from 'pinia';
 import BasicForm from '@/components/BasicForm.vue';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import { icons } from '../../../../utils/svg'; 
-import {useTBScreeningStore} from '../../store/TBScreeningStore'
+import {useTBScreeningStore} from '../../store/TBScreeningStore';
+import { modifyRadioValue,
+    getRadioSelectedValue,
+    getCheckboxSelectedValue,
+    getFieldValue,
+    modifyFieldValue,
+    modifyCheckboxValue} from '@/services/data_helpers'
 
 export default defineComponent({
     name:"TB screening",
@@ -75,7 +81,7 @@ export default defineComponent({
         }
     },
     computed:{
-        ...mapState(useTBScreeningStore, ["results"]),
+        // ...mapState(useTBScreeningStore, ["results"]),
         ...mapState(useTBScreeningStore, ["reasons"]),
         ...mapState(useTBScreeningStore, ["tbTest"]),
        
@@ -83,6 +89,24 @@ export default defineComponent({
     },
     mounted(){
         const tbScreening = useTBScreeningStore()
+        this.handleResults()
+        this.handleDate()
+        this.handleOther()
+    },
+    watch:{
+      tbTest:{
+        handler(){
+          this.handleResults()
+          this.handleDate()
+        },
+        deep:true
+      },
+      reasons:{
+        handler(){
+          this.handleOther()
+        },
+        deep:true
+      }
     },
     setup(){
         return { checkmark,pulseOutline };
@@ -97,6 +121,29 @@ export default defineComponent({
     goToPreviousSection() {
       if (this.currentSection > 0) {
         this.currentSection--;
+      }
+    },
+
+    handleResults(){
+      if(getRadioSelectedValue(this.tbTest,'tbConducted')=='conducted'){
+        modifyRadioValue(this.tbTest,'results','displayNone',false)
+      }else{
+        modifyRadioValue(this.tbTest,'results','displayNone',true)
+      }
+      console.log(getRadioSelectedValue(this.tbTest,'tbConducted'))
+    },
+    handleDate(){
+      if(getRadioSelectedValue(this.tbTest,'tbConducted')=='conducted'){
+        modifyFieldValue(this.tbTest,'UTD','displayNone',false)
+      }else{
+        modifyFieldValue(this.tbTest,'UTD','displayNone',true)
+      }
+    },
+    handleOther(){
+      if(getCheckboxSelectedValue(this.reasons,'Other')=='other'){
+        modifyFieldValue(this.reasons,'Other','displayNone',false)
+      }else{
+        modifyFieldValue(this.reasons,'Other','displayNone',true)
       }
     },
     }

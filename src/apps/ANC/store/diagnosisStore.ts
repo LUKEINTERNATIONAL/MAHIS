@@ -12,7 +12,8 @@ export const useDiagnosisStore = defineStore('diagnosisStore',{
                 {
                     header:{
                         title: 'Reason counselling on hypertension not provided',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'hypReasons'
                     },
                     data:[
                         {
@@ -41,8 +42,9 @@ export const useDiagnosisStore = defineStore('diagnosisStore',{
                 data:{
                     rowData: [{
                         colData: [{
-                            
-                                inputHeader: 'Other (Specify)',
+
+                                 displayNone:true,
+                                inputHeader: 'specify',
                                 value: '',
                                 name: 'hypertensionCounselling',
                                 icon: icons.editPen,
@@ -59,57 +61,7 @@ export const useDiagnosisStore = defineStore('diagnosisStore',{
 
 
         hivReason:[
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: '',
-                radioBtnContent:
-                {
-                    header:{
-                        title: 'Reason counselling on HIV not provided',
-                        selectedValue: ''
-                    },
-                    data:[
-                        {
-                            name: 'Stockout',
-                            value: 'required',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
-                        },
-                        {
-                            name: 'Other',
-                            value: 'other',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
-                        },
-                    ]
-                }
-                    
-            },
-            {
-                isFinishBtn: false,
-                sectionHeader: '',
-                classDash: 'dashed_bottom_border _padding',
 
-                data:{
-                    rowData: [{
-                        colData: [{
-                            
-                                inputHeader: 'Other (Specify)',
-                                value: '',
-                                name: 'hivCounselling',
-                                icon: icons.editPen,
-                                required: true,
-                                eventType: 'input',
-                                inputWidth: "85%",
-                                alertsError: false,
-                                alertsErrorMassage: ''
-                        }]
-                    }]
-                   } 
-            },
         ],
 
         hepatitisReason:[
@@ -121,7 +73,8 @@ export const useDiagnosisStore = defineStore('diagnosisStore',{
                 {
                     header:{
                         title: 'Reason counselling on Hepatitis B not provided',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'hepatitisB'
                     },
                     data:[
                         {
@@ -150,8 +103,9 @@ export const useDiagnosisStore = defineStore('diagnosisStore',{
                 data:{
                     rowData: [{
                         colData: [{
-                            
-                                inputHeader: 'Other (Specify)',
+
+                                displayNone:true,
+                                inputHeader: 'specify',
                                 value: '',
                                 name: 'hypertensionCounselling',
                                 icon: icons.editPen,
@@ -170,12 +124,44 @@ export const useDiagnosisStore = defineStore('diagnosisStore',{
             {
                 selectdData: [],
                 isFinishBtn: false,
+                classDash: 'dashed_bottom_border',
+                radioBtnContent:
+                {
+                    header:{
+                        title: 'Seven-day antibiotic regemen for asymptomatic bacteriuria (ASB) provided?',
+                        selectedValue: '',
+                        name:'SevenDay'
+                    },
+                    data:[
+                        {
+                            name: 'Yes',
+                            value: 'Yes',
+                            labelPlacement: 'start',
+                            colSize: '9',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'No',
+                            value: 'no',
+                            labelPlacement: 'start',
+                            colSize: '9',
+                            justify: 'space-between',
+                        },
+                    ]
+                }
+                    
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
                 classDash: '',
                 radioBtnContent:
                 {
                     header:{
                         title: 'Reason seven-day antibiotic regimen for asymptomatic bacteriuria (ASB) not provided',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'SevenDayReason',
+                        displayNone:true,
                     },
                     data:[
                         {
@@ -204,8 +190,9 @@ export const useDiagnosisStore = defineStore('diagnosisStore',{
                 data:{
                     rowData: [{
                         colData: [{
-                            
-                                inputHeader: 'Other (Specify)',
+                                
+                                displaNone:true,
+                                inputHeader: 'specify',
                                 value: '',
                                 name: 'hypertensionCounselling',
                                 icon: icons.editPen,
@@ -420,7 +407,8 @@ export const useDiagnosisStore = defineStore('diagnosisStore',{
                 {
                     header:{
                         title: 'Counselling on HIV positive conducted?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'cousellHiv'
                     },
                     data:[
                         {
@@ -432,7 +420,7 @@ export const useDiagnosisStore = defineStore('diagnosisStore',{
                         },
                         {
                             name: 'No',
-                            value: 'No',
+                            value: 'no',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
@@ -440,6 +428,60 @@ export const useDiagnosisStore = defineStore('diagnosisStore',{
                     ]
                 }
                     
+            },
+              {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: '',
+                radioBtnContent:
+                {
+                    header:{
+                        title: 'Reason counselling on HIV not provided',
+                        selectedValue: '',
+                        name:'hiv',
+                        displayNone:true,
+                    },
+                    data:[
+                        {
+                            name: 'Stockout',
+                            value: 'required',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'Other',
+                            value: 'other',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                    ]
+                }
+                    
+            },
+            {
+                isFinishBtn: false,
+                sectionHeader: '',
+                classDash: 'dashed_bottom_border _padding',
+
+                data:{
+                    rowData: [{
+                        colData: [{
+
+                                displaNone:true,
+                                inputHeader: 'specify',
+                                value: '',
+                                name: 'hivCounselling',
+                                icon: icons.editPen,
+                                required: true,
+                                eventType: 'input',
+                                inputWidth: "85%",
+                                alertsError: false,
+                                alertsErrorMassage: ''
+                        }]
+                    }]
+                   } 
             },
         ] as any,
 
@@ -605,35 +647,7 @@ export const useDiagnosisStore = defineStore('diagnosisStore',{
 
 
         ASB:[
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:
-                {
-                    header:{
-                        title: 'Seven-day antibiotic regemen for asymptomatic bacteriuria (ASB) provided?',
-                        selectedValue: ''
-                    },
-                    data:[
-                        {
-                            name: 'Yes',
-                            value: 'Yes',
-                            labelPlacement: 'start',
-                            colSize: '9',
-                            justify: 'space-between',
-                        },
-                        {
-                            name: 'No',
-                            value: 'No',
-                            labelPlacement: 'start',
-                            colSize: '9',
-                            justify: 'space-between',
-                        },
-                    ]
-                }
-                    
-            },
+
         ] as any,
 
         GDM:[

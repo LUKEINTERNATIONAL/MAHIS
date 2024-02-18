@@ -59,6 +59,7 @@ import BasicForm from '../../../../components/BasicForm.vue';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import { icons } from '../../../../utils/svg'; 
 import { useMedicationDispensedStore } from '../../store/medicationDispensed';
+import { getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from '@/services/data_helpers';
 
 
 
@@ -101,6 +102,34 @@ export default defineComponent ({
         ...mapState(useMedicationDispensedStore, ["calciumReason"]),
 
     },
+    mounted(){
+      this.handleIron()
+      this.handleTypeIron()
+      this.handleAcid()
+      this.handleFolicIron()
+      
+    },
+    watch:{
+      iron:{
+        handler(){
+          this.handleIron()
+          this.handleTypeIron()
+        },
+        deep:true
+      },
+      folicAcid:{
+        handler(){
+          this.handleAcid()
+        },
+        deep:true
+      },
+      folicAcidReason:{
+        handler(){
+          this.handleFolicIron()
+        },
+        deep:true
+      }
+    },
     methods :{
        //Method for navigating sections
     goToNextSection() {
@@ -111,6 +140,34 @@ export default defineComponent ({
     goToPreviousSection() {
       if (this.currentSection > 0) {
         this.currentSection--;
+      }
+    },
+    handleIron(){
+      if(getRadioSelectedValue(this.iron,'ironInfo')=='yes'){
+        modifyFieldValue(this.iron,'ironNum','displayNone',false)
+      }else{
+        modifyFieldValue(this.iron,'ironNum','displayNone',true)
+      }
+    },
+    handleTypeIron(){
+      if(getRadioSelectedValue(this.iron,'ironInfo')=='yes'){
+        modifyRadioValue(this.iron,'ironType','displayNone',false)
+      }else{
+        modifyRadioValue(this.iron,'ironType','displayNone',true)
+      }
+    },
+    handleAcid(){
+      if(getRadioSelectedValue(this.folicAcid,'folicAcidInfo')=='yes'){
+        modifyFieldValue(this.folicAcid,'iron','displayNone',false)
+      }else{
+         modifyFieldValue(this.folicAcid,'iron','displayNone',true)
+      }
+    },
+    handleFolicIron(){
+      if(getRadioSelectedValue(this.folicAcidReason,'reasonIrobFolic')=='other'){
+        modifyFieldValue(this.folicAcidReason,'Other','displayNone',false)
+      }else{
+         modifyFieldValue(this.folicAcidReason,'Other','displayNone',true)
       }
     },
 

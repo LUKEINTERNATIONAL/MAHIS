@@ -13,19 +13,20 @@ export const useMedicationDispensedStore = defineStore ('medicationDispensed', {
                 {
                     header:{
                         title: 'Iron prescribed?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'ironInfo'
                     },
                     data:[
                         {
                             name: 'Yes',
-                            value: 'y',
+                            value: 'yes',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'No',
-                            value: 'n',
+                            value: 'no',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
@@ -42,10 +43,12 @@ export const useMedicationDispensedStore = defineStore ('medicationDispensed', {
                 data:{
                     rowData: [{
                         colData: [{
-                        
+                            
+                            displayNone:true,
                             inputHeader: 'Amount of Iron prescribed',
                             value: '',
-                            name: 'iron',
+                            icon: icons.editPen,
+                            name: 'ironNum',
                             required: true,
                             eventType: 'input',
                             alertsError: false,
@@ -55,9 +58,9 @@ export const useMedicationDispensedStore = defineStore ('medicationDispensed', {
                     }]
                    } 
             },
-        ],
+        // ],
 
-        ironDosage:[
+        // ironDosage:[
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -66,7 +69,9 @@ export const useMedicationDispensedStore = defineStore ('medicationDispensed', {
                 {
                     header:{
                         title: 'Type of Iron supplement dosage provided',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'ironType',
+                        displayNone:true
                     },
                     data:[
                         {
@@ -99,19 +104,20 @@ export const useMedicationDispensedStore = defineStore ('medicationDispensed', {
                 {
                     header:{
                         title: 'Daily dose of folic acid prescribed?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'folicAcidInfo'
                     },
                     data:[
                         {
                             name: 'Yes',
-                            value: 'y',
+                            value: 'yes',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'No',
-                            value: 'n',
+                            value: 'no',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
@@ -128,9 +134,11 @@ export const useMedicationDispensedStore = defineStore ('medicationDispensed', {
                 data:{
                     rowData: [{
                         colData: [{
-                        
+                            
+                            displayNone:true,
                             inputHeader: 'Amount of Folic acid prescribed',
                             value: '',
+                            icon: icons.editPen,
                             name: 'iron',
                             required: true,
                             eventType: 'input',
@@ -153,7 +161,8 @@ export const useMedicationDispensedStore = defineStore ('medicationDispensed', {
                 {
                     header:{
                         title: 'Reason Iron and folic acid not prescribed',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'reasonIrobFolic'
                     },
                     data:[
                         {
@@ -191,8 +200,9 @@ export const useMedicationDispensedStore = defineStore ('medicationDispensed', {
                         rowData:[
                             {
                                 colData: [
-                                    {
-                                        inputHeader: 'Other (specify)',
+                                    {   
+                                        displayNone:true,
+                                        inputHeader: 'specify',
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
