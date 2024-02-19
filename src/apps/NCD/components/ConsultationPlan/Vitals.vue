@@ -1,6 +1,5 @@
 <template>
     <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form>
-
     <ion-row>
         <ion-accordion-group ref="accordionGroup" class="previousView">
             <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
