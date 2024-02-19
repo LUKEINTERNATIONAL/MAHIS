@@ -102,7 +102,7 @@
                         <span v-if="al.header" class="first_col">
                             <ion-label>{{ al.name }} </ion-label>
                         </span>
-                        <ion-checkbox v-else :justify="al.justify || 'start'" :checked="al.checked" style="width: 100%;"
+                        <ion-checkbox v-else :justify="al.justify || 'start'" :checked="al.checked" style="width: 100%;" :disabled="al.disableStatus" 
                         @ionChange="value =>{al.checked =value.detail.checked; $emit('update:inputValue',{al, value })}" :label-placement="al.labelPlacement || 'end'" > 
                             <span style="line-height: 1;">
                                 <p class="checkbox_header">{{ al.name }}</p>

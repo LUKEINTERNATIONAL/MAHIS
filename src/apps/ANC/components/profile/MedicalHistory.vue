@@ -92,6 +92,7 @@ import { modifyRadioValue,
     getFieldValue,
     modifyFieldValue,
     modifyCheckboxValue,
+    // modifyCheckboxHeaderValue,
     modifyCheckboxInputField} from '@/services/data_helpers'
 
 //  import {icons} from "@/utils/svg.ts"
@@ -137,9 +138,10 @@ export default defineComponent({
         this.handleChronicCondition()
         this.handleHivConducted()
         this.handleOtherHiv()
-        this. handleReasonNotDone()
+        // this. handleReasonNotDone()
         this. handleSyphlisdate()
         // this.handleTestNotDone()
+        this.handleDisable()
     
     },
 
@@ -149,7 +151,7 @@ export default defineComponent({
                 this.handleHivResults()
                 this.handleOtherHiv()
                 this.handleHivConducted()
-                this. handleReasonNotDone()
+                // this. handleReasonNotDone()
             },
              deep:true,
         },
@@ -163,6 +165,7 @@ export default defineComponent({
         medicalHistory:{
             handler(){
                 this.handleSurgries()
+                this.handleDisable()
                 
             },
             deep:true
@@ -190,8 +193,7 @@ export default defineComponent({
        
     },
     methods:{
-        handleHivResults(){
-            
+        handleHivResults(){        
             if(getRadioSelectedValue(this.hivTest,'test2') == 'hivPositive'){
                 modifyRadioValue(this.hivTest,'test1','displayNone',false)
             }else{
@@ -246,20 +248,29 @@ export default defineComponent({
                  modifyFieldValue(this.hivTest,'birthdate','displayNone',true)
             }
         },
-        handleReasonNotDone(){
-            if(getRadioSelectedValue(this.hivTest,'hivOption')=='hivTestNotDone'){
-                modifyCheckboxInputField(this.hivTest,'reasonNotDone','displayNone',false)
-            }else{
-                modifyCheckboxInputField(this.hivTest,'reasonNotDone','displayNone',true)
-            }
-            console.log(getRadioSelectedValue(this.hivTest,'hivOption'))
-        },
+
+        // handleReasonNotDone(){
+        //     if(getRadioSelectedValue(this.hivTest,'hivOption')=='hivTestNotDone'){
+        //         modifyCheckboxHeaderValue(this.hivTest,'reasonNotDone','displayNone',false)
+        //     }else{
+        //         modifyCheckboxHeaderValue(this.hivTest,'reasonNotDone','displayNone',true)
+        //     }
+        //     console.log(getRadioSelectedValue(this.hivTest,'hivOption'))
+        // },
         handleSyphlisdate(){
             if(getRadioSelectedValue(this.syphilisTest,'syphilisOption')=='syphilisTestConducted'){
                 modifyFieldValue(this.syphilisTest,'syphilisDate','displayNone',false)
             }else{
                 modifyFieldValue(this.syphilisTest,'syphilisDate','displayNone',true)
             }
+        },
+        handleDisable(){
+            if(getCheckboxSelectedValue(this.medicalHistory,'NoSurgery')=='noSurgeries'){
+                modifyCheckboxInputField(this.medicalHistory,'OtherS','disableStatus',true)
+            }else{
+                 modifyCheckboxInputField(this.medicalHistory,'OtherS','disableStatus',false)
+            }
+            console.log(getCheckboxSelectedValue(this.medicalHistory,'NoSurgery'))
         },
 
 
