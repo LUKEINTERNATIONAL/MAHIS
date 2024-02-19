@@ -201,7 +201,7 @@ export default defineComponent({
     },
     saveData(){
 
-      this.$router.push('Profile');
+      this.$router.push('symptomsFollowUp');
 
     },
     openModal(){

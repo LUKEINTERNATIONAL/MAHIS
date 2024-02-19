@@ -7,50 +7,22 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
             {
                 isFinishBtn: false,
                 sectionHeader: '',
-                classDash: 'dashed_bottom_border _padding',
+                classDash: '',
                 data:
                 { 
                     rowData:[
-                        {
-                            colData: [
-                                {
-                                    inputHeader: 'LNMP',
-                                    value: '',
-                                    name: 'LNMP',
-                                    required: true,
-                                    eventType: 'input',
-                                    alertsError: false,
-                                    alertsErrorMassage: '',
-                                    isDatePopover: true,
-                                    icon: icons.calenderPrimary,
-                                    placeholder: 'Pick the date',
-                                },
-                                {
-                                    inputHeader: 'Ultrasound scan date',
-                                    value: '',
-                                    name: 'ultrasound',
-                                    required: true,
-                                    eventType: 'input',
-                                    alertsError: false,
-                                    alertsErrorMassage: '',
-                                    isDatePopover: true,
-                                    icon: icons.calenderPrimary,
-                                    placeholder: 'Pick the date',
-                                },
-                                
-                            ],
-                            
-                        },
+
                          {
                         colData: [
                             {
-                                inputHeader: 'Gestation age',
+                                inputHeader: 'Fundal height',
                                 value: '',
                                 name: 'gestation',
                                 required: true,
                                 eventType: 'input',
                                 alertsError: false,
                                 alertsErrorMassage: '',
+                                inputWidth:'55%'
                                 
                             },
                             
@@ -64,42 +36,11 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
           
              
         ] as any,
-       deliveryDate :[{
-        isFinishBtn: false,
-        classDash: 'dashed_bottom_border _padding',
-        data:
-        { 
-            rowData:[
-                {
-                    colData: [
-                        {
-                            inputHeader: 'Expected Delivery Date',
-                            value: '',
-                            name: 'EDD',
-                            required: true,
-                            eventType: 'input',
-                            alertsError: false,
-                            alertsErrorMassage: '',
-                            isDatePopover: true,
-                            icon: icons.calenderPrimary,
-                            placeholder: 'Pick the date',
-                        },
-                        
-                    ],
-                    
-                },
-           
-
-            ],
-        
-        },
-                
-    }],
     lmnp:[
         {
             selectdData: [],
             isFinishBtn: false,
-            classDash: 'dashed_bottom_border',
+            classDash: '',
             radioBtnContent:
             {
                 header:{
@@ -125,12 +66,44 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
             }
                 
         },
+        {
+            isFinishBtn: false,
+            classDash: 'dashed_bottom_border _padding',
+            data:
+                {
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                    inputHeader: 'LNMP date*',
+                                    value: '',
+                                    name: 'EDD',
+                                    required: true,
+                                    eventType: 'input',
+                                    alertsError: false,
+                                    alertsErrorMassage: '',
+                                    isDatePopover: true,
+                                    icon: icons.calenderPrimary,
+                                    placeholder: 'Pick the date',
+                                    inputWidth:'55%'
+                                },
+
+                            ],
+
+                        },
+
+
+                    ],
+
+                },
+        }
+
     ],
     ultrasound:[
         {
             selectdData: [],
             isFinishBtn: false,
-            classDash: 'dashed_bottom_border',
+            classDash: '',
             radioBtnContent:
             {
                 header:{
@@ -156,44 +129,38 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
             }
                 
         },
-    ],
-    gestation:[
         {
-            selectdData: [],
             isFinishBtn: false,
             classDash: '',
-            radioBtnContent:
-            {
-                header:{
-                    title: 'Source of gestation age',
-                    selectedValue: ''
+            data:
+                {
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                    inputHeader: 'Delivery date determined by ultrasound*',
+                                    value: '',
+                                    name: 'ultrasound delivery date',
+                                    required: true,
+                                    eventType: 'input',
+                                    alertsError: false,
+                                    alertsErrorMassage: '',
+                                    isDatePopover: true,
+                                    icon: icons.calenderPrimary,
+                                    placeholder: 'Pick the date',
+                                    inputWidth:'55%'
+                                },
+
+                            ],
+
+                        },
+
+
+                    ],
+
                 },
-                data:[
-                    {
-                        name: 'LNMP',
-                        value: 'Yes',
-                        labelPlacement: 'start',
-                        colSize: '7',
-                        justify: 'space-between',
-                    },
-                    {
-                        name: 'Ultrasound',
-                        value: 'No',
-                        labelPlacement: 'start',
-                        colSize: '7',
-                        justify: 'space-between',
-                    },
-                    {
-                        name: 'Fundal height',
-                        value: 'No',
-                        labelPlacement: 'start',
-                        colSize: '7',
-                        justify: 'space-between',
-                    },
-                ]
-            }
-                
-        },
+        }
+
     ],
     tetanus:[
         {

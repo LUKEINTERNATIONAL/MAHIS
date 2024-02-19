@@ -2,7 +2,7 @@
 
     <div class="container">
          <!-- Past Surgeries -->
-            <ion-card v-if="currentSection === 0" class="section">
+            <ion-card class="section">
             <ion-card-header>
                 <ion-card-title class="dashed_bottom_border sub_item_header">Past Surgeries</ion-card-title>
             </ion-card-header>
@@ -12,7 +12,7 @@
             </ion-card>
 
          <!-- Allegies -->
-          <ion-card v-if="currentSection === 1" class="section">
+          <ion-card  class="section">
             <ion-card-header>
                 <ion-card-title class="dashed_bottom_border sub_item_header">Allergies</ion-card-title>
             </ion-card-header>
@@ -22,7 +22,7 @@
             </ion-card>
 
         <!-- Chronical Health conditions -->
-            <ion-card v-if="currentSection === 2" class="section">
+            <ion-card class="section">
             <ion-card-header>
                 <ion-card-title class="dashed_bottom_border sub_item_header">Existing Chronic Health Conditions</ion-card-title>
             </ion-card-header>
@@ -32,7 +32,7 @@
             </ion-card>
 
         <!-- HIV -->
-            <ion-card v-if="currentSection === 3" class="section">
+            <ion-card  class="section">
             <ion-card-header>
                 <ion-card-title class="dashed_bottom_border sub_item_header">HIV</ion-card-title>
             </ion-card-header>
@@ -43,7 +43,7 @@
 
         <!-- Syphilis Test -->
 
-            <ion-card v-if="currentSection === 4" class="section">
+            <ion-card class="section">
             <ion-card-header>
                 <ion-card-title class="dashed_bottom_border sub_item_header">Syphilis</ion-card-title>
             </ion-card-header>
@@ -53,11 +53,10 @@
             </ion-card>
 
 
-    <!-- Navigation Buttons -->
-    <div class="navigation-buttons">
-      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
-      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
-    </div>
+<!--    &lt;!&ndash; Navigation Buttons &ndash;&gt;-->
+<!--    <div class="navigation-buttons">-->
+<!--      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Save</ion-button>-->
+<!--    </div>-->
 
     </div>
 

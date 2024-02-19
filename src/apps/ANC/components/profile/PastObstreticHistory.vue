@@ -1,42 +1,32 @@
 <template>
     <div class="container">
-        <ion-card v-if="currentSection === 0" class="section">
-            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+        <ion-card class="section">
+            <ion-card-header> <ion-card-title class="sub_item_header">History on previous pregnancies</ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="prevPregnancies"></basic-form>
             </ion-card-content>
-    </ion-card>
+        </ion-card>
+        <ion-card  style="margin-left: 20px">
+<!--          <ion-card-title class="sub_item_header">Specify mode of delivery for each child based on number live births provided</ion-card-title>-->
+          <ion-card-content>
+            <basic-form :contentData="modeOfDelivery"></basic-form>
+          </ion-card-content>
+        </ion-card>
 
-    
-
-    
-        <ion-card v-if="currentSection === 1" class="section">
-            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header> 
+        <ion-card class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="preterm"></basic-form>
-                <basic-form :contentData="abnormalities"></basic-form>
             </ion-card-content>
         </ion-card>
-
-  
-   
-        <ion-card v-if="currentSection === 2" class="section">
-            <ion-card-content>
-                <basic-form :contentData="modeOfDelivery"></basic-form>
-            </ion-card-content>
-        </ion-card>
-  
-
-   
-        <ion-card v-if="currentSection === 3" class="section">
-            <ion-card-content><basic-form :contentData="Complications"></basic-form> </ion-card-content>
-        </ion-card> 
+      <ion-card class="section">
+        <ion-card-header> <ion-card-title class="sub_item_header">Does the woman have any complications due to past pregnancies?</ion-card-title></ion-card-header>
+        <ion-card-content>
+          <basic-form :contentData="Complications"></basic-form>
+        </ion-card-content>
+      </ion-card>
     
-        <!-- Navigation Buttons -->
-        <div class="navigation-buttons">
-      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
-      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
-    </div>
+
 </div>
                                               
 </template>
@@ -117,8 +107,8 @@ export default defineComponent({
       prevPregnancies: {
         
           handler(val) {
-            if (val && val[0].data.rowData[1].colData[1].value) {
-              const liveBirths = parseInt(val[0].data.rowData[1].colData[1].value)
+            if (val && val[0].data.rowData[2].colData[0].value) {
+              const liveBirths = parseInt(val[0].data.rowData[2].colData[0].value)
               this.prevPregnanciesInstance.setModeOfDelivery([])
 
               const births = []
@@ -203,7 +193,7 @@ ion-card {
 }
 .sub_item_header{
   font-weight: bold;
-  font-size: medium;
+  font-size: 14px;
 }
 
 </style>

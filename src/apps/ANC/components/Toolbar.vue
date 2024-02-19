@@ -39,7 +39,7 @@
     components:{
         IonContent,
         IonHeader,
-        IonMenuButton,
+        // IonMenuButton,
         IonSearchbar,
         IonPage,
         IonTitle,

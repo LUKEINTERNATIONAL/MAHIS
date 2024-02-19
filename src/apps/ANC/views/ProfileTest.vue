@@ -3,7 +3,7 @@
     <Toolbar />
     <ion-content :fullscreen="true">
       <DemographicBar />
-      <Stepper stepperTitle="Profile" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()"  :StepperData="StepperData"/>
+      <StepperTest stepperTitle="Profile Test" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()"  :StepperData="StepperData"/>
     </ion-content>
   </ion-page>
 </template>
@@ -38,12 +38,12 @@ import SaveProgressModal from '@/components/SaveProgressModal.vue'
 import { createModal } from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
 import { mapState } from 'pinia';
-import Stepper from "@/apps/ANC/components/Stepper.vue";
+import StepperTest from "@/apps/ANC/components/StepperTest.vue";
 import { toastWarning,popoverConfirmation, toastSuccess } from '@/utils/Alerts';
 import PastObstreticHistory from '../components/profile/PastObstreticHistory.vue';
 import CurrentPregnancies from '../components/profile/CurrentPregnancies.vue';
 import Medications from '../components/profile/Medications.vue';
-import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue"
+import MedicalHistory from '../components/profile/MedicalHistory.vue';
 import WomanBehaviour from '../components/profile/WomanBehaviour.vue';
 import {getCheckboxSelectedValue} from "@/services/data_helpers";
 import {useMedicalHistoryStore} from "@/apps/ANC/store/profile/medicalHistoryStore";
@@ -80,7 +80,7 @@ export default defineComponent({
     IonItem,
     IonLabel,
     IonModal,
-    Stepper,
+    StepperTest,
     PastObstreticHistory,
     WomanBehaviour,
     CurrentPregnancies,
@@ -157,7 +157,7 @@ export default defineComponent({
           }
         },
         {
-          'title': 'Current Pregnancy',
+          'title': 'Current Pregancy',
           'componet': 'CurrentPregnancies',
           'value': '3',
         },
@@ -189,35 +189,6 @@ export default defineComponent({
     ...mapState(useWomanBehaviourStore,["dailyCaffeineIntake","Tobacco"])
 
   },
-      saveData(){
-
-      const medicalConditions = [
-        'Auto immune desease',
-        'Asthma',
-        'Diabetes',
-        'Sickle cell',
-        'Anaemia',
-        'Thalassemia',
-        'Gynaecological',
-        'CCF',
-        'RHD',
-        'Gestational diabetes',
-        'pre-existing type 1',
-        'pre-existing type 2',
-        'Epilepsy',
-        'Hypertension',
-        'Kidney',
-        'TB',
-        'Mental  illiness',
-      ];
-      for (const condition of medicalConditions) {
-        const selectedValue = getCheckboxSelectedValue(this.exisitingChronicHealthConditions, condition);
-        console.log(selectedValue);
-      }
-
-         // this.$router.push('symptomsFollowUp');
-
-     },
   mounted(){
     // this.markWizard()
 

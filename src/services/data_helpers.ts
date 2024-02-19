@@ -36,7 +36,7 @@ export function modifyCheckboxValue(data: any, checkboxName: any,element:any, ne
 //     data.forEach((item: any) => {
 //         item.checkboxBtnContent?.header[element]=newValue
         
-//     });
+//     })
 // }
 export function modifyCheckboxInputField(data: any, checkboxInputName: any,element: any, newValue: any) {
     

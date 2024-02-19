@@ -155,7 +155,7 @@ methods: {
   markWizard(){},
   saveData(){
 
-    this.$router.push('referral');
+    this.$router.push('counselling');
 
   },
 }

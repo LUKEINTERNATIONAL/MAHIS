@@ -1,7 +1,9 @@
 <template>
   <Toolbar/>
-  <DemographicBar/>
-  <SideBar />
+  <div style="padding-top: 1px">
+    <DemographicBar/>
+  </div>
+    <SideBar />
 </template>
 
 <script>

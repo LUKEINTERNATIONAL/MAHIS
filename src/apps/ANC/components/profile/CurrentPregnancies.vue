@@ -1,36 +1,29 @@
 <template>
 <div class="container">
-  <ion-card v-if="currentSection === 0" class="section">
+  <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
               <basic-form :contentData="lmnp"></basic-form>
               <basic-form :contentData="ultrasound"></basic-form>
             </ion-card-content>
     </ion-card>
-    <ion-card v-if="currentSection === 1" class="section">
+    <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
               <basic-form :contentData="currentPregnancies"></basic-form>
             </ion-card-content>
     </ion-card>
-    <ion-card v-if="currentSection === 2" class="section">
-            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
-            <ion-card-content>
-              <basic-form :contentData="gestation"></basic-form>
-              <basic-form :contentData="deliveryDate"></basic-form>
-            </ion-card-content>
-    </ion-card>
-    <ion-card v-if="currentSection === 3" class="section">
+    <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
               <basic-form :contentData="tetanus"></basic-form>
             </ion-card-content>
     </ion-card>  
-           <!-- Navigation Buttons -->
-      <div class="navigation-buttons">
-      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
-      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
-    </div> 
+<!--           &lt;!&ndash; Navigation Buttons &ndash;&gt;-->
+<!--      <div class="navigation-buttons">-->
+<!--      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>-->
+<!--      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>-->
+<!--    </div> -->
 </div>
 </template>
 
