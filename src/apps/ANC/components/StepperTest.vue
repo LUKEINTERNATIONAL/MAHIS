@@ -1,28 +1,28 @@
 <template>
     <ion-row>
         <ion-col size="1" size-lg="1"></ion-col>
-        <ion-col size="3" size-lg="3">
-            <ion-card class="wizard_card">
-                <div class="wizard_title"><strong > {{ stepperTitle }}</strong></div>
-                <ion-card-content>
-                    <div id="wizard_verticle" class="form_wizard wizard_verticle">
-                        <ul class="list-unstyled wizard_steps anchor">
-                            <li v-for="(item, index) in wizardData" :key="index" :class="item.last_step">
-                                <a  class="done" isdone="1" rel="1">
-                                    <span :class="item.class">
-                                        <ion-icon v-if="item.checked" :icon="checkmark" class="checked_step"></ion-icon>  
-                                        <span v-if="!item.checked" class="">{{ item.number }} </span>
-                                        <span class="wizard_text">{{ item.title }}</span> 
-                                    </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </ion-card-content>
-            </ion-card>
-        </ion-col>
+<!--        <ion-col size="3" size-lg="3">-->
+<!--            <ion-card class="wizard_card">-->
+<!--                <div class="wizard_title"><strong > {{ stepperTitle }}</strong></div>-->
+<!--                <ion-card-content>-->
+<!--                    <div id="wizard_verticle" class="form_wizard wizard_verticle">-->
+<!--                        <ul class="list-unstyled wizard_steps anchor">-->
+<!--                            <li v-for="(item, index) in wizardData" :key="index" :class="item.last_step">-->
+<!--                                <a  class="done" isdone="1" rel="1">-->
+<!--                                    <span :class="item.class">-->
+<!--                                        <ion-icon v-if="item.checked" :icon="checkmark" class="checked_step"></ion-icon>  -->
+<!--                                        <span v-if="!item.checked" class="">{{ item.number }} </span>-->
+<!--                                        <span class="wizard_text">{{ item.title }}</span> -->
+<!--                                    </span>-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+<!--                </ion-card-content>-->
+<!--            </ion-card>-->
+<!--        </ion-col>-->
     
-        <ion-col size="7" size-lg="7" class="rightCol">
+        <ion-col size="7" size-lg="4" class="rightCol">
             <div class="back_profile" @click="openModal()">
                 <ion-icon style="font-size: 20px;" :icon="chevronBackOutline"> </ion-icon>
                 <span style="cursor: pointer;"> Back to dashboard</span>
@@ -44,9 +44,15 @@
               <ion-button class="primary_btn" style="padding-left: 15px" @click="$emit('finishBtn')">Save and proceed</ion-button>
             </div>
             </div>
-            
            
         </ion-col>
+      <ion-col size="7" class="leftCol">
+        <div class="accordion centered-content">
+          <div class="ion-padding" slot="content">
+            <component > </component>
+          </div>
+        </div>
+      </ion-col>
     </ion-row>
 </template>
   
@@ -313,8 +319,8 @@
   }
   .accordion_group{
     position: fixed;
-    height: 700px;
-    width: 58%;
+    height: 900px;
+    width: 30%;
     overflow-y: auto;
     top: 200px;
   }

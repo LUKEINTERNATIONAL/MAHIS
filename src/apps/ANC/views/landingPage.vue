@@ -1,22 +1,30 @@
 <template>
-  <Toolbar/>
-  <div style="padding-top: 1px">
-    <DemographicBar/>
-  </div>
-    <ion-split-pane content-id="main">
-      <SideBar :menu="menu" />
-      <div class="ion-page" id="main" style="top:130px">
-        <ion-content>
-          <ion-grid>
-            <ion-row>
-              <ion-col size="12" size-md="12" offset-md="0" style="padding-left: 200px;padding-right: 200px">
-                <Visits/>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-content>
-      </div>
-    </ion-split-pane>
+<Toolbar/>
+  <DemographicBar/>
+  <SideBar :menu="menu" />
+<!--  <ion-content :fullscreen="true">-->
+<!--    <ion-header collapse="condense">-->
+<!--      <ion-toolbar>-->
+<!--        <ion-title size="large">{{ $route.params.id }}</ion-title>-->
+<!--      </ion-toolbar>-->
+<!--    </ion-header>-->
+
+<!--    <div id="container">-->
+<!--      <strong class="capitalize">{{ $route.params.id }}</strong>-->
+<!--      <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>-->
+<!--    </div>-->
+<!--  </ion-content>-->
+<!--      <div class="ion-page" id="main" style="top:130px">-->
+<!--        <ion-content>-->
+<!--          <ion-grid>-->
+<!--            <ion-row>-->
+<!--              <ion-col size="12" size-md="12" offset-md="0" style="padding-left: 200px;padding-right: 200px">-->
+<!--                <Visits/>-->
+<!--              </ion-col>-->
+<!--            </ion-row>-->
+<!--          </ion-grid>-->
+<!--        </ion-content>-->
+<!--      </div>-->
 </template>
 
 <script>

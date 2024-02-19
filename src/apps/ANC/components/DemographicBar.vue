@@ -5,21 +5,21 @@
             <li>MRN: <b>{{ demographics.mrn }}</b></li>
             <li>Birthday: <b>{{ formatBirthdate()}} </b></li>
             <li>Category: <b> ANC</b></li>
-            <li>Gestation Age: <b>5 Weeks</b></li>
+<!--            <li>Gestation Age: <b>5 Weeks</b></li>-->
         </ul>
     </ion-card>
 </template>
-  
+
 <script lang="ts">
-    import { 
-            IonContent, 
+    import {
+            IonContent,
             IonHeader,
             IonItem,
             IonList,
-            IonTitle, 
-            IonToolbar, 
+            IonTitle,
+            IonToolbar,
             IonMenu,
-            menuController 
+            menuController
         } from '@ionic/vue';
     import { defineComponent } from 'vue';
     import { useDemographicsStore } from '@/stores/DemographicStore'
@@ -51,9 +51,9 @@
             return ['Male', 'M'].includes(gender) ? 'Male' : ['Female', 'F'].includes(gender) ? 'Female' : ''
         },
         formatBirthdate(){
-          return  HisDate.getBirthdateAge(this.demographics.birthdate) 
+          return  HisDate.getBirthdateAge(this.demographics.birthdate)
         }
-        
+
     }
     });
 </script>
@@ -76,4 +76,3 @@
     padding: 18px;
 }
 </style>
-  

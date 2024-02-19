@@ -9,16 +9,34 @@ import Treatment from '../views/Treatment.vue'
 import LabTests from '../views/LabTests.vue';
 import landingPage from "@/apps/ANC/views/landingPage.vue";
 import PreviousVisits from "@/apps/ANC/views/PreviousVisits.vue";
+import Enrollment from "@/apps/ANC/views/Enrollment.vue";
+import Dashboard from "@/apps/ANC/views/Dashboard.vue";
+import ProfileTest from "@/apps/ANC/views/ProfileTest.vue";
 
 export default [
+  {
+    path: '/profileTest',
+    name: 'ProfileTest',
+    component: ProfileTest
+  },
+  {
+    path: '/ANCEnrollment',
+    name: 'ANCEnrollment',
+    component: Enrollment
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: Dashboard
+  },
 
   {
-    path: '/previousVisits',
+    path: '/previous-visits',
     name: 'previousVisits',
     component: PreviousVisits
   },
   {
-    path: '/landingPage',
+    path: '/new-contact',
     name: 'landingPage',
     component: landingPage
   },
@@ -70,6 +88,10 @@ export default [
     name: 'labTests',
     component: LabTests
   },
+  {
+    path: '/:id',
+    component: () => import('../views/Dashboard.vue')
+  }
 
 
 ]

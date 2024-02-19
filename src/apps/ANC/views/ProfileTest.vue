@@ -3,7 +3,7 @@
     <Toolbar />
     <ion-content :fullscreen="true">
       <DemographicBar />
-      <Stepper stepperTitle="Profile" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()"  :StepperData="StepperData"/>
+      <StepperTest stepperTitle="Profile Test" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()"  :StepperData="StepperData"/>
     </ion-content>
   </ion-page>
 </template>
@@ -38,7 +38,7 @@ import SaveProgressModal from '@/components/SaveProgressModal.vue'
 import { createModal } from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
 import { mapState } from 'pinia';
-import Stepper from "@/apps/ANC/components/Stepper.vue";
+import StepperTest from "@/apps/ANC/components/StepperTest.vue";
 import { toastWarning,popoverConfirmation, toastSuccess } from '@/utils/Alerts';
 import PastObstreticHistory from '../components/profile/PastObstreticHistory.vue';
 import CurrentPregnancies from '../components/profile/CurrentPregnancies.vue';
@@ -80,7 +80,7 @@ export default defineComponent({
     IonItem,
     IonLabel,
     IonModal,
-    Stepper,
+    StepperTest,
     PastObstreticHistory,
     WomanBehaviour,
     CurrentPregnancies,

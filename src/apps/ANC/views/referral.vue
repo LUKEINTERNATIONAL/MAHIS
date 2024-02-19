@@ -1,124 +1,45 @@
 <template>
-    <ion-page>
-      <Toolbar />
-      <ion-content :fullscreen="true">
-        <DemographicBar />
-        <Stepper stepperTitle="Refferral" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
-      </ion-content>
-    </ion-page>
-  </template>
-  
-  <script lang="ts">
-  import { 
-    IonContent, 
-    IonHeader, 
-    IonMenuButton, 
-    IonPage, 
-    IonTitle,
-    IonToolbar,
-    IonButton, 
-    IonCard, 
-    IonCardContent, 
-    IonCardHeader,
-    IonCardSubtitle, 
-    IonCardTitle, 
-    IonAccordion, 
-    IonAccordionGroup, 
-    IonItem, 
-    IonLabel,
-    IonModal,
-    modalController,
-    AccordionGroupCustomEvent } from '@ionic/vue';
-  import { defineComponent } from 'vue';
-  import Toolbar from '@/components/Toolbar.vue'
-  import ToolbarSearch from '@/components/ToolbarSearch.vue'
-  import DemographicBar from '@/components/DemographicBar.vue'
-  import { chevronBackOutline,checkmark } from 'ionicons/icons';
-  import SaveProgressModal from '@/components/SaveProgressModal.vue'
-  import { createModal } from '@/utils/Alerts'
-  import { icons } from '@/utils/svg';
-  import { useVitalsStore } from '@/stores/VitalsStore'
-  import { useDemographicsStore } from '@/stores/DemographicStore'
-  import { useInvestigationStore } from '@/stores/InvestigationStore'
-  import { useDiagnosisStore } from '@/stores/DiagnosisStore'
-  import { mapState } from 'pinia';
-  import Stepper from "@/apps/ANC/components/Stepper.vue";
-  import { Service } from "@/services/service";
-  import { LabOrder } from "@/apps/NCD/services/lab_order"
-  import { VitalsService } from "@/services/vitals_service";
-  import { toastWarning,popoverConfirmation, toastSuccess } from '@/utils/Alerts';
-  import { Diagnosis } from '@/apps/NCD/services/diagnosis'
-  export default defineComponent({
-    name: "Home",
-    components:{
-        IonContent,
-        IonHeader,
-        IonMenuButton,
-        IonPage,
-        IonTitle,
-        IonToolbar,
-        Toolbar,
-        ToolbarSearch,
-        DemographicBar,
-        IonButton, 
-        IonCard, 
-        IonCardContent, 
-        IonCardHeader, 
-        IonCardSubtitle, 
-        IonCardTitle,
-        IonAccordion,
-        IonAccordionGroup,
-        IonItem,
-        IonLabel,
-        IonModal,
-        Stepper
-    },
-    data(){
-        return {
-            wizardData: [
-                {
-                    'title': 'Referral',
-                    'class': 'common_step',
-                    'checked':'',
-                    'icon': false,
-                    'disabled':false,
-                    'number': 1,
-                    'last_step': 'last_step'
-                    
-                },
-                
-            ],
-            StepperData:[
-                {
-                    'title': 'Referral',
-                    'componet': 'Referral',
-                    'value': '1',
-                },
+  <Toolbar/>
+  <DemographicBar/>
+  <SideBar />
+</template>
 
-            ],
-        isOpen: false,
-        iconsContent: icons,
-        };
-    },
-    mounted(){
-        this.markWizard() 
-    },
-    setup() {
-        return { chevronBackOutline,checkmark };
-    },
-    
-      methods:{
-        markWizard(){  },
-        getFormatedData(data: any){
-          return  data.map((item: any) => {
-                return item?.data;
-            });
-        },
-      }
-    })
-  </script>
-  
-  <style scoped>
+<script>
+import { IonPage, IonIcon, IonLabel, IonContent, IonToolbar, IonHeader, IonRow, IonCol, IonList, IonMenuButton } from '@ionic/vue';
+import { defineComponent } from 'vue';
+import SideBar from "@/apps/ANC/components/SideBar.vue";
+import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
+import Toolbar from "@/apps/ANC/components/Toolbar.vue";
+import Dashboard from "@/apps/ANC/components/Dashboard.vue";
 
-  </style>
-  
+export default defineComponent({
+  components: {Dashboard, IonPage, IonIcon, IonLabel, IonContent, IonToolbar, IonHeader, IonRow, IonCol, IonList, IonMenuButton, SideBar, DemographicBar, Toolbar },
+
+});
+</script>
+
+<style scoped>
+ion-menu {
+  --width: 250px;
+}
+ion-toolbar {
+  --ion-padding: 10px;
+}
+
+ion-split-pane {
+  --side-width: 150px;
+}
+
+[v-cloak] {
+  display: none;
+}
+
+ion-item {
+  --inner-padding-start: 0px;
+  --color-hover: red;
+}
+
+ion-item.submenu {
+  height: 0px;
+}
+</style>
