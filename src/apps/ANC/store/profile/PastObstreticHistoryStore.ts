@@ -69,6 +69,14 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                             alertsError: false,
                             alertsErrorMassage: ''
                         },
+                        {
+                            inputHeader: 'LNMP',
+                            value: '',
+                            name: 'Stillbirths',
+                            required: true,
+                            eventType: 'input',
+                            icon:icons.calenderPrimary
+                        },
                         
                     ]
                 },

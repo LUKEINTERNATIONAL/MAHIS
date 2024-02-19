@@ -341,6 +341,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     header:{
                         title: '',
                         selectedValue: '',
+                       
                         
                     },
                     data:[
@@ -435,7 +436,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     },
                     data:[
                        {
-                            name: "NoSurgery",
+                            name: "No Surgery",
                             value: "noSurgeries",
                             labelPlacement: 'start',
                             colSize: '6',
@@ -449,7 +450,15 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
-                        }
+                        },
+                        // {
+                        //     name: "Other",
+                        //     value: "otherSurguries",
+                        //     labelPlacement: 'start',
+                        //     colSize: '6',
+                        //     justify: 'space-between',
+                        //     checked: false
+                        // }
                         
                     ],
                 }
@@ -1168,11 +1177,10 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         title: 'Reasons HIV test not done:',
                         selectedValue: '',
                         // displayNone: true,
-                        // name:"hivOutcome",
+                        // name:'reasonNotDone'
                     },
                     data:[
-                        {   
-                            
+                        {    
                             name: "Test Stock Out",
                             value: hivTestForm.testStockOut.value,
                             labelPlacement: 'start',
@@ -1188,21 +1196,6 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             justify: 'space-between',
                             checked:false
                         },
-                        
-                    ],
-                }
-                    
-            },
-            {
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
-
                         {  
                             name: "Other",
                             value: 'other',
@@ -1211,6 +1204,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             justify: 'space-between',
                             checked:false
                         }
+                        
                     ],
                 }
                     
@@ -1349,7 +1343,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 }
             },
             {
-            classDash: 'dashed_bottom_border',
+            
                 radioBtnContent:
                 {
                     header:{
@@ -1387,6 +1381,29 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     ],
                 }
                     
+            },
+            {
+                
+                data:{ 
+                    rowData:[
+                        {
+                            colData:[
+                                {   displayNone:true,
+                                    inputHeader: 'Syphilis test date',
+                                    icon: icons.calenderPrimary,
+                                    value: '',
+                                    name: 'syphilisDate',
+                                    eventType: 'blur',
+                                    required: true,
+                                     inputWidth: "300px",
+                                    isDatePopover: true
+                                }
+                                
+                            ]
+                        }
+                    ],
+                    
+                },
             },
             {
                 selectdData: [],
@@ -1453,29 +1470,29 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 }
                     
             },
-            {
-                classDash: 'dashed_bottom_border',
-                data:{ 
-                    rowData:[
-                        {
-                            colData:[
-                                {
-                                    inputHeader: 'Syphilis test date',
-                                    icon: icons.calenderPrimary,
-                                    value: '',
-                                    name: 'birthdate',
-                                    eventType: 'blur',
-                                    required: true,
-                                     inputWidth: "300px",
-                                    isDatePopover: true
-                                }
+            // {
+            //     classDash: 'dashed_bottom_border',
+            //     data:{ 
+            //         rowData:[
+            //             {
+            //                 colData:[
+            //                     {
+            //                         inputHeader: 'Syphilis test date',
+            //                         icon: icons.calenderPrimary,
+            //                         value: '',
+            //                         name: 'birthdate',
+            //                         eventType: 'blur',
+            //                         required: true,
+            //                          inputWidth: "300px",
+            //                         isDatePopover: true
+            //                     }
                                 
-                            ]
-                        }
-                    ],
+            //                 ]
+            //             }
+            //         ],
                     
-                },
-            },
+            //     },
+            // },
             {
                 selectdData: [],
                 isFinishBtn: false,

@@ -4,7 +4,7 @@
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
               <basic-form :contentData="iron"></basic-form>
-              <basic-form :contentData="ironDosage"></basic-form>
+              <!-- <basic-form :contentData="ironDosage"></basic-form> -->
               <basic-form :contentData="folicAcid"></basic-form>
               <basic-form :contentData="folicAcidReason"></basic-form>
             </ion-card-content>
@@ -14,8 +14,8 @@
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
               <basic-form :contentData="vitaminA"></basic-form>
-              <basic-form :contentData="vitaminADosage"></basic-form>
-              <basic-form :contentData="vitaminAReason"></basic-form>
+              <!-- <basic-form :contentData="vitaminADosage"></basic-form>
+              <basic-form :contentData="vitaminAReason"></basic-form> -->
             </ion-card-content>
     </ion-card>
 
@@ -92,12 +92,12 @@ export default defineComponent ({
     },
     computed:{
         ...mapState(useMedicationDispensedStore, ["iron"]),
-        ...mapState(useMedicationDispensedStore, ["ironDosage"]),
+        // ...mapState(useMedicationDispensedStore, ["ironDosage"]),
         ...mapState(useMedicationDispensedStore, ["folicAcid"]),
         ...mapState(useMedicationDispensedStore, ["folicAcidReason"]),
         ...mapState(useMedicationDispensedStore, ["vitaminA"]),
-        ...mapState(useMedicationDispensedStore, ["vitaminADosage"]),
-        ...mapState(useMedicationDispensedStore, ["vitaminAReason"]),
+        // ...mapState(useMedicationDispensedStore, ["vitaminADosage"]),
+        // ...mapState(useMedicationDispensedStore, ["vitaminAReason"]),
         ...mapState(useMedicationDispensedStore, ["calcium"]),
         ...mapState(useMedicationDispensedStore, ["calciumReason"]),
 

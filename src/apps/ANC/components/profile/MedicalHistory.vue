@@ -91,7 +91,8 @@ import { modifyRadioValue,
     getCheckboxSelectedValue,
     getFieldValue,
     modifyFieldValue,
-    modifyCheckboxValue} from '@/services/data_helpers'
+    modifyCheckboxValue,
+    modifyCheckboxInputField} from '@/services/data_helpers'
 
 //  import {icons} from "@/utils/svg.ts"
 
@@ -136,10 +137,10 @@ export default defineComponent({
         this.handleChronicCondition()
         this.handleHivConducted()
         this.handleOtherHiv()
+        this. handleReasonNotDone()
+        this. handleSyphlisdate()
         // this.handleTestNotDone()
-        
-        
-        
+    
     },
 
     watch:{
@@ -148,20 +149,21 @@ export default defineComponent({
                 this.handleHivResults()
                 this.handleOtherHiv()
                 this.handleHivConducted()
-
-                // this.handleTestNotDone()
+                this. handleReasonNotDone()
             },
              deep:true,
         },
         syphilisTest:{
             handler(){
                 this.handleSyphilis()
+                this. handleSyphlisdate()
             },
             deep:true
         },
         medicalHistory:{
             handler(){
                 this.handleSurgries()
+                
             },
             deep:true
         },
@@ -242,6 +244,21 @@ export default defineComponent({
                 modifyFieldValue(this.hivTest,'birthdate','displayNone',false)
             }else{
                  modifyFieldValue(this.hivTest,'birthdate','displayNone',true)
+            }
+        },
+        handleReasonNotDone(){
+            if(getRadioSelectedValue(this.hivTest,'hivOption')=='hivTestNotDone'){
+                modifyCheckboxInputField(this.hivTest,'reasonNotDone','displayNone',false)
+            }else{
+                modifyCheckboxInputField(this.hivTest,'reasonNotDone','displayNone',true)
+            }
+            console.log(getRadioSelectedValue(this.hivTest,'hivOption'))
+        },
+        handleSyphlisdate(){
+            if(getRadioSelectedValue(this.syphilisTest,'syphilisOption')=='syphilisTestConducted'){
+                modifyFieldValue(this.syphilisTest,'syphilisDate','displayNone',false)
+            }else{
+                modifyFieldValue(this.syphilisTest,'syphilisDate','displayNone',true)
             }
         },
 
