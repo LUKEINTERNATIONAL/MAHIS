@@ -107,6 +107,10 @@ export default defineComponent ({
       this.handleTypeIron()
       this.handleAcid()
       this.handleFolicIron()
+      this.handleCalcium()
+      this.handleVitaminA()
+      this.handleVitaminNo()
+      this.handleVitaminOther()
       
     },
     watch:{
@@ -126,6 +130,20 @@ export default defineComponent ({
       folicAcidReason:{
         handler(){
           this.handleFolicIron()
+        },
+        deep:true
+      },
+      calcium:{
+        handler(){
+          this.handleCalcium()
+        },
+        deep:true
+      },
+      vitaminA:{
+        handler(){
+           this.handleVitaminA()
+           this.handleVitaminNo()
+           this.handleVitaminOther()
         },
         deep:true
       }
@@ -170,6 +188,35 @@ export default defineComponent ({
          modifyFieldValue(this.folicAcidReason,'Other','displayNone',true)
       }
     },
+    handleCalcium(){
+      if(getRadioSelectedValue(this.calcium,'calciumInfo')=='yes'){
+        modifyFieldValue(this.calcium,'calciumField','displayNone',false)
+      }else{
+        modifyFieldValue(this.calcium,'calciumField','displayNone',true)
+      }
+    },
+    handleVitaminA(){
+      if(getRadioSelectedValue(this.vitaminA,'vitaminInfo')=='yes'){
+        modifyRadioValue(this.vitaminA,'typeVitamin','displayNone',false)
+      }else{
+        modifyRadioValue(this.vitaminA,'typeVitamin','displayNone',true)
+      }
+      
+    },
+    handleVitaminNo(){
+      if(getRadioSelectedValue(this.vitaminA,'vitaminInfo')=='no'){
+        modifyRadioValue(this.vitaminA,'vitaminReason','displayNone',false)
+      }else{
+        modifyRadioValue(this.vitaminA,'vitaminReason','displayNone',true)
+      }
+    },
+    handleVitaminOther(){
+      if(getRadioSelectedValue(this.vitaminA,'vitaminReason')=='other'){
+        modifyFieldValue(this.vitaminA,'Other','displayNone',false)
+      }else{
+        modifyFieldValue(this.vitaminA,'Other','displayNone',true)
+      }
+    }
 
     }
 

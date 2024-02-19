@@ -228,7 +228,8 @@ export const useMedicationDispensedStore = defineStore ('medicationDispensed', {
                 {
                     header:{
                         title: 'Vitamin A prescribed?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'vitaminInfo'
                     },
                     data:[
                         {
@@ -250,9 +251,9 @@ export const useMedicationDispensedStore = defineStore ('medicationDispensed', {
                     
             },
             
-        ],
+        // ],
 
-        vitaminADosage:[
+        // vitaminADosage:[
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -261,7 +262,9 @@ export const useMedicationDispensedStore = defineStore ('medicationDispensed', {
                 {
                     header:{
                         title: 'Type of Vitamin A dosage provided',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'typeVitamin',
+                        displayNone:true
                     },
                     data:[
                         {
@@ -283,9 +286,9 @@ export const useMedicationDispensedStore = defineStore ('medicationDispensed', {
                     
             },
             
-        ],
+        // ],
 
-        vitaminAReason:[
+        // vitaminAReason:[
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -295,7 +298,9 @@ export const useMedicationDispensedStore = defineStore ('medicationDispensed', {
                 {
                     header:{
                         title: 'Reason vitamin A not prescribed',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'vitaminReason',
+                        displayNone:true
                     },
                     data:[
                         {
@@ -333,7 +338,8 @@ export const useMedicationDispensedStore = defineStore ('medicationDispensed', {
                         rowData:[
                             {
                                 colData: [
-                                    {
+                                    {   
+                                        displayNone:true,
                                         inputHeader: 'Other (specify)',
                                         unit: '',
                                         icon: icons.editPen,
@@ -361,12 +367,13 @@ export const useMedicationDispensedStore = defineStore ('medicationDispensed', {
                 {
                     header:{
                         title: 'Daily calcium prescribed?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'calciumInfo'
                     },
                     data:[
                         {
                             name: 'Yes',
-                            value: 'y',
+                            value: 'yes',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
@@ -390,10 +397,11 @@ export const useMedicationDispensedStore = defineStore ('medicationDispensed', {
                 data:{
                     rowData: [{
                         colData: [{
-                        
+
+                            displayNone:true,
                             inputHeader: 'Amount of daily calcium supplements',
                             value: '',
-                            name: 'calcium',
+                            name: 'calciumField',
                             required: true,
                             eventType: 'input',
                             alertsError: false,
