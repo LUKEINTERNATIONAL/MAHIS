@@ -109,6 +109,7 @@
     mounted() {
         this.updateDiagnosisStores()
         this.setDashedBox()
+        // const primaryDiagnosis: any[] = await AppEncounterService.getAllValueCoded(this.patientID, 'Primary diagnosis')
     },
     methods:{
         displayInputFields(){

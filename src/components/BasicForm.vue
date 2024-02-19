@@ -142,18 +142,6 @@
                     </span>
                 </ion-row>
             </span>
-            <ion-row v-if="item.previousView">
-                <ion-accordion-group ref="accordionGroup" class="previousView">
-                    <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
-                        <ion-item slot="header" color="light">
-                            <ion-label class="previousLabel">Previous measurements</ion-label>
-                        </ion-item>
-                        <div class="ion-padding" slot="content">
-                            <PreviousVitals v-if="item.previousView.name == 'vitals'" />
-                        </div>
-                    </ion-accordion>
-                </ion-accordion-group>
-            </ion-row>
         </ion-col>
         <span></span>
     </ion-row>
@@ -167,7 +155,7 @@ import DynamicButton from './DynamicButton.vue';
 import { IonDatetime, IonDatetimeButton, IonCheckbox } from '@ionic/vue';
 import HisDate from "@/utils/Date";
 import { createModal } from '@/utils/Alerts'
-import PreviousVitals from '@/apps/NCD/components/ConsultationPlan/previousVitals.vue'
+
 import { modifyCheckboxInputField,
     getCheckboxSelectedValue,
     getRadioSelectedValue,
@@ -180,7 +168,6 @@ export default defineComponent({
         DynamicButton,
         IonDatetime,
         IonDatetimeButton,
-        PreviousVitals,
         IonCheckbox,
         DateInputField
     },
@@ -312,15 +299,7 @@ ion-radio {
     padding: 5px;
     border-radius: 3px;
 }
-.previousView{
-    width: 100%;
-    border-radius: 10px;
-    margin-top: 10px;
-}
-.previousLabel{
-    font-weight: 600;
-    color: #000;
-}
+
 .first_col
 {
   text-align: left;
@@ -341,13 +320,5 @@ ion-radio {
     padding: 5px;
     border-radius: 3px;
 }
-.previousView{
-    width: 100%;
-    border-radius: 10px;
-    margin-top: 10px;
-}
-.previousLabel{
-    font-weight: 600;
-    color: #000;
-}
+
 </style>

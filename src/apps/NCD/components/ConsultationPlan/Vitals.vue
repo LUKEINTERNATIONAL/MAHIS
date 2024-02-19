@@ -1,5 +1,18 @@
 <template>
     <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form>
+
+    <ion-row>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Previous measurements</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <PreviousVitals />
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+    </ion-row>
 </template>
   
 <script lang="ts">
@@ -29,6 +42,7 @@
     import { VitalsService } from "@/services/vitals_service";
     import BasicForm from '@/components/BasicForm.vue';
     import { Service } from "@/services/service";
+    import PreviousVitals from '@/apps/NCD/components/ConsultationPlan/previousVitals.vue'
 
     export default defineComponent({
     components:{
@@ -41,7 +55,8 @@
         IonToolbar,
         IonInput,
         BasicInputField,
-        BasicForm
+        BasicForm,
+        PreviousVitals
     },
     data() {
     return {
@@ -57,7 +72,7 @@
         ...mapState(useDemographicsStore,["demographics"]),
         ...mapState(useVitalsStore,["vitals"]),
     },
-    mounted(){
+   mounted(){
         const userID: any  = Service.getUserID()
         this.vitalsInstance = new VitalsService(this.demographics.patient_id,userID);
         this.updateVitalsStores()
@@ -216,6 +231,15 @@ h5{
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+}
+.previousView{
+    width: 100%;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+.previousLabel{
+    font-weight: 600;
+    color: #000;
 }
 </style>
   
