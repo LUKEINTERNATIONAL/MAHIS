@@ -313,7 +313,7 @@
   }
   .accordion_group{
     position: fixed;
-    height: 700px;
+    height: 800px;
     width: 58%;
     overflow-y: auto;
     top: 200px;

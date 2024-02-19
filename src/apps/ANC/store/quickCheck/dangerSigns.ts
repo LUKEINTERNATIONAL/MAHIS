@@ -273,7 +273,7 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "85%",
-                                        required: true
+                                       
                                     },
 
                                 ]

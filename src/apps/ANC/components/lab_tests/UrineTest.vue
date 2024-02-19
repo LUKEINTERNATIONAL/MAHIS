@@ -4,21 +4,28 @@
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="urineTest"></basic-form>
-                <basic-form :contentData="testType"></basic-form>
+                <!-- <basic-form :contentData="testType"></basic-form> -->
+                 <basic-form :contentData="reason"></basic-form>
+                  <basic-form :contentData="culture"></basic-form>
+                   <basic-form :contentData="gram"></basic-form>
+                   <basic-form :contentData="nitrites"></basic-form>
+                   <basic-form :contentData="leukocytes"></basic-form>
+                    <basic-form :contentData="protein"></basic-form>
+                    <basic-form :contentData="glucose"></basic-form>
             </ion-card-content>
     </ion-card>
 
-    <ion-card v-if="currentSection === 1" class="section">
-            <ion-card-header> <ion-card-title class="sub_item_header">Reason urine test not done</ion-card-title></ion-card-header>
+    <!-- <ion-card v-if="currentSection === 1" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Reason urine test not done</ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="reason"></basic-form>
+               
             </ion-card-content>
     </ion-card>
 
     <ion-card v-if="currentSection === 2" class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="culture"></basic-form>
+               
             </ion-card-content>
     </ion-card>
 
@@ -26,43 +33,43 @@
     <ion-card v-if="currentSection === 3" class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="gram"></basic-form>
+               
             </ion-card-content>
     </ion-card>
 
     <ion-card v-if="currentSection === 4" class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="nitrites"></basic-form>
+                
             </ion-card-content>
     </ion-card>
 
     <ion-card v-if="currentSection === 5" class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="leukocytes"></basic-form>
+                
             </ion-card-content>
     </ion-card>
 
     <ion-card v-if="currentSection === 6" class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="protein"></basic-form>
+               
             </ion-card-content>
     </ion-card>
 
     <ion-card v-if="currentSection === 7" class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="glucose"></basic-form>
+                
             </ion-card-content>
-    </ion-card>
+    </ion-card> -->
 
         <!-- Navigation Buttons -->
-    <div class="navigation-buttons">
+    <!-- <div class="navigation-buttons">
       <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
       <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
-    </div> 
+    </div>  -->
     
     
   
@@ -94,6 +101,13 @@ import { mapState } from 'pinia';
 import BasicForm from '@/components/BasicForm.vue';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import { icons } from '../../../../utils/svg'; 
+import { modifyRadioValue,
+    getRadioSelectedValue,
+    getCheckboxSelectedValue,
+    getFieldValue,
+    modifyFieldValue,
+    modifyCheckboxInputField,
+    modifyCheckboxValue} from '@/services/data_helpers'
 
 export default defineComponent({
     name:"UrineTest",
@@ -122,8 +136,8 @@ export default defineComponent({
         }
     },
     computed:{
-        ...mapState(useUrineTestStore, ["reason"]),
-        ...mapState(useUrineTestStore, ["testType"]),
+        // ...mapState(useUrineTestStore, ["reason"]),
+        // ...mapState(useUrineTestStore, ["testType"]),
         ...mapState(useUrineTestStore, ["urineTest"]),
         ...mapState(useUrineTestStore, ["protein"]),
         ...mapState(useUrineTestStore, ["nitrites"]),
@@ -135,23 +149,57 @@ export default defineComponent({
     },
     mounted(){
         const urineTests = useUrineTestStore()
+        this.handleTest()
+        this. handleDate()
+        this.handleTestNotDone()
+        this.handleOtherNotDone()
+    },
+    watch:{
+      urineTest:{
+        handler(){
+          this.handleTest()
+          this. handleDate()
+          this.handleTestNotDone()
+          this.handleOtherNotDone()
+        },
+        deep:true
+      }
     },
     setup(){
         return { checkmark,pulseOutline };
     },
     methods:{
-                //Method for navigating sections
-    goToNextSection() {
-      if (this.currentSection < 7) {
-        this.currentSection++;
-      }
-    },
-    goToPreviousSection() {
-      if (this.currentSection > 0) {
-        this.currentSection--;
-      }
-    },
+      handleTest(){
+        if(getRadioSelectedValue(this.urineTest,'urineInfo')=='conducted'){
+          modifyRadioValue(this.urineTest,'conductedInfo','displayNone',false)
+        }else{
+          modifyRadioValue(this.urineTest,'conductedInfo','displayNone',true)
+        }
+
+      },
+      handleDate(){
+        if(getRadioSelectedValue(this.urineTest,'urineInfo')=='conducted'){
+          modifyFieldValue(this.urineTest,'UTD','displayNone',false)
+        }else{
+           modifyFieldValue(this.urineTest,'UTD','displayNone',true)
+        }
+      },
+      handleTestNotDone(){
+        if(getRadioSelectedValue(this.urineTest,'urineInfo')=='notDone'){
+          modifyCheckboxInputField(this.urineTest,'','displayNone',false)
+        }else{
+          modifyCheckboxInputField(this.urineTest,'','displayNone',true)
+        }
+      },
+      handleOtherNotDone(){
+        if(getCheckboxSelectedValue(this.urineTest,'Other')=='other'){
+          modifyFieldValue(this.urineTest,'Other','displayNone',false)
+        }else{
+           modifyFieldValue(this.urineTest,'Other','displayNone',true)
+        }
+      },
     }
+    
 })
 </script>
 
@@ -195,3 +243,5 @@ ion-card {
 
 
 </style>
+
+

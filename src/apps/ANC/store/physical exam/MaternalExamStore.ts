@@ -142,7 +142,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "100%",
-                                        required: true
+                                        
                                     },
 
                                 ],
@@ -362,7 +362,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "90%",
-                                        required: true
+                                       
                                     },
 
                                 ],
@@ -555,7 +555,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "90%",
-                                        required: true
+                                        
                                     },
 
                                 ],
@@ -829,7 +829,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "90%",
-                                        required: true
+                                       
                                     },
 
                                 ],

@@ -7,7 +7,7 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
             {
                 isFinishBtn: false,
                 sectionHeader: '',
-                classDash: 'dashed_bottom_border _padding',
+                classDash: '',
                 data:
                 { 
                     rowData:[
@@ -46,6 +46,20 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                                 alertsError: false,
                                 alertsErrorMassage: ''
                             },
+                                {
+                                    inputHeader: 'Stillbirths',
+                                    value: '',
+                                    name: 'Stillbirths',
+                                    required: true,
+                                    eventType: 'input',
+                                    alertsError: false,
+                                    alertsErrorMassage: ''
+                                },
+                            
+                        ]
+                    },
+                    {
+                        colData: [
                             {
                                 inputHeader: 'Live births',
                                 value: '',
@@ -55,20 +69,7 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                                 alertsError: false,
                                 alertsErrorMassage: ''
                             },
-                            
-                        ]
-                    },
-                    {
-                        colData: [
-                        {
-                            inputHeader: 'Stillbirths',
-                            value: '',
-                            name: 'Stillbirths',
-                            required: true,
-                            eventType: 'input',
-                            alertsError: false,
-                            alertsErrorMassage: ''
-                        },
+
                         
                     ]
                 },
@@ -130,24 +131,24 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                     },
                     data:[
                         {
-                            name: 'Yes',
-                            value: 'Yes',
+                            name: 'Last live birth was preterm\n',
+                            value: 'notPreterm',
                             labelPlacement: 'start',
-                            colSize: '7',
+                            colSize: '9',
                             justify: 'space-between',
                         },
                         {
-                            name: 'No',
-                            value: 'No',
+                            name: 'Last live birth was not preterm/ Last live birth was full term\n',
+                            value: 'fullTerm',
                             labelPlacement: 'start',
-                            colSize: '7',
+                            colSize: '9',
                             justify: 'space-between',
                         },
                         {
-                            name: 'Dont know',
-                            value: 'Dont know',
+                            name: 'Last live birth had congenital abnormabilities\n',
+                            value: 'congetalAbnormalities',
                             labelPlacement: 'start',
-                            colSize: '7',
+                            colSize: '9',
                             justify: 'space-between',
                         },
                     ]
@@ -156,12 +157,71 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
             },
         ],
         modeOfDelivery: [
+
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Specify mode of delivery',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Cesarean section',
+                                value: 'cesarean',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Vacuum',
+                                value: 'cesarean',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Breach',
+                                value: 'breach',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'SDV',
+                                value: 'sdv',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                inputHeader: 'Last cesarean section',
+                value: '',
+                name: 'LCS',
+                required: true,
+                eventType: 'input',
+                alertsError: false,
+                alertsErrorMassage: '',
+                isDatePopover: true,
+                icon: icons.calenderPrimary,
+                placeholder: 'Pick the date',
+            },
+
+
+
             {
                 isFinishBtn: false,
                 sectionHeader: '',
-                classDash: 'dashed_bottom_border _padding',
+                classDash: '',
                 data:
-                { 
+                {
                     rowData:[
                         {
                             colData: [
@@ -172,7 +232,7 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                                     required: true,
                                     eventType: 'input',
                                     alertsError: false,
-                                  
+
                                     alertsErrorMassage: ''
                                 },
                                 {
@@ -182,12 +242,12 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                                     required: true,
                                     eventType: 'input',
                                     alertsError: false,
-                                  
+
                                     alertsErrorMassage: ''
                                 },
-                                
+
                             ],
-                            
+
                         },
                          {
                         colData: [
@@ -203,19 +263,50 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                                 icon: icons.calenderPrimary,
                                 placeholder: 'Pick the date',
                             },
-                            
+
                         ],}
-                   
+
 
                     ],
-                
+
                 },
             },
-          
+
              
         ] as any,
 
         Complications:[
+            {
+                selectdData: [],
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+
+                            {
+                                name: 'No complications',
+                                value: 'no complications',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Does not know',
+                                value: 'does not know',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
             {
                 selectdData: [],
                 classDash: 'dashed_bottom_border',
@@ -385,6 +476,14 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                                 colSize: '6',
                                 justify: 'space-between',
                             },
+                            {
+                                name: 'Other',
+                                value: 'otherInfo',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
                         ]
                     }
 
@@ -400,12 +499,13 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                         rowData:[
                             {
                                 colData: [
-                                    {
-                                        inputHeader: 'Other (specify)',
+                                    {   
+                                        displayNone:true,
+                                        inputHeader: 'specify',
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Other',
+                                        name: 'otherC',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "85%",

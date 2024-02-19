@@ -12,7 +12,8 @@ export const useTBScreeningStore = defineStore('TBScreeningStore',{
                 {
                     header:{
                         title: 'Select whether:',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'tbConducted'
                     },
                     data:[
                         {
@@ -39,10 +40,10 @@ export const useTBScreeningStore = defineStore('TBScreeningStore',{
                     ]
                 }
                     
-            }
-        ] as any,
+            },
+        // ] as any,
  
-        results:[
+        // results:[
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -51,7 +52,9 @@ export const useTBScreeningStore = defineStore('TBScreeningStore',{
                 {
                     header:{
                         title: 'TB screening results:',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'results',
+                        displayNone:true,
                     },
                     data:[
                         {
@@ -93,7 +96,8 @@ export const useTBScreeningStore = defineStore('TBScreeningStore',{
                     rowData:[
                         {
                             colData: [
-                                {
+                                {   
+                                    dsiplayNone:true,
                                     inputHeader: 'TB screening date',
                                     value: '',
                                     name: 'UTD',
@@ -228,6 +232,14 @@ export const useTBScreeningStore = defineStore('TBScreeningStore',{
                                 colSize: '6',
                                 justify: 'space-between',
                             },
+                            {
+                                name: 'Other',
+                                value: 'other',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
                         ]
                     }
 
@@ -242,8 +254,9 @@ export const useTBScreeningStore = defineStore('TBScreeningStore',{
                         rowData:[
                             {
                                 colData: [
-                                    {
-                                        inputHeader: 'Other (specify)',
+                                    {   
+                                        displayNone:true,
+                                        inputHeader: 'specify',
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
@@ -270,9 +283,9 @@ export const useTBScreeningStore = defineStore('TBScreeningStore',{
         setReasons(data: any){
             this.reasons = data
         },
-        setResults(data: any){
-            this.results = data
-        },
+        // setResults(data: any){
+        //     this.results = data
+        // },
     },
     persist:true,
 

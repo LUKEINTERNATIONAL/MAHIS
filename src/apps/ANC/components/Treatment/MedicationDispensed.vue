@@ -59,6 +59,7 @@ import BasicForm from '../../../../components/BasicForm.vue';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import { icons } from '../../../../utils/svg'; 
 import { useMedicationDispensedStore } from '../../store/medicationDispensed';
+import { getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from '@/services/data_helpers';
 
 
 
@@ -101,6 +102,52 @@ export default defineComponent ({
         ...mapState(useMedicationDispensedStore, ["calciumReason"]),
 
     },
+    mounted(){
+      this.handleIron()
+      this.handleTypeIron()
+      this.handleAcid()
+      this.handleFolicIron()
+      this.handleCalcium()
+      this.handleVitaminA()
+      this.handleVitaminNo()
+      this.handleVitaminOther()
+      
+    },
+    watch:{
+      iron:{
+        handler(){
+          this.handleIron()
+          this.handleTypeIron()
+        },
+        deep:true
+      },
+      folicAcid:{
+        handler(){
+          this.handleAcid()
+        },
+        deep:true
+      },
+      folicAcidReason:{
+        handler(){
+          this.handleFolicIron()
+        },
+        deep:true
+      },
+      calcium:{
+        handler(){
+          this.handleCalcium()
+        },
+        deep:true
+      },
+      vitaminA:{
+        handler(){
+           this.handleVitaminA()
+           this.handleVitaminNo()
+           this.handleVitaminOther()
+        },
+        deep:true
+      }
+    },
     methods :{
        //Method for navigating sections
     goToNextSection() {
@@ -113,6 +160,63 @@ export default defineComponent ({
         this.currentSection--;
       }
     },
+    handleIron(){
+      if(getRadioSelectedValue(this.iron,'ironInfo')=='yes'){
+        modifyFieldValue(this.iron,'ironNum','displayNone',false)
+      }else{
+        modifyFieldValue(this.iron,'ironNum','displayNone',true)
+      }
+    },
+    handleTypeIron(){
+      if(getRadioSelectedValue(this.iron,'ironInfo')=='yes'){
+        modifyRadioValue(this.iron,'ironType','displayNone',false)
+      }else{
+        modifyRadioValue(this.iron,'ironType','displayNone',true)
+      }
+    },
+    handleAcid(){
+      if(getRadioSelectedValue(this.folicAcid,'folicAcidInfo')=='yes'){
+        modifyFieldValue(this.folicAcid,'iron','displayNone',false)
+      }else{
+         modifyFieldValue(this.folicAcid,'iron','displayNone',true)
+      }
+    },
+    handleFolicIron(){
+      if(getRadioSelectedValue(this.folicAcidReason,'reasonIrobFolic')=='other'){
+        modifyFieldValue(this.folicAcidReason,'Other','displayNone',false)
+      }else{
+         modifyFieldValue(this.folicAcidReason,'Other','displayNone',true)
+      }
+    },
+    handleCalcium(){
+      if(getRadioSelectedValue(this.calcium,'calciumInfo')=='yes'){
+        modifyFieldValue(this.calcium,'calciumField','displayNone',false)
+      }else{
+        modifyFieldValue(this.calcium,'calciumField','displayNone',true)
+      }
+    },
+    handleVitaminA(){
+      if(getRadioSelectedValue(this.vitaminA,'vitaminInfo')=='yes'){
+        modifyRadioValue(this.vitaminA,'typeVitamin','displayNone',false)
+      }else{
+        modifyRadioValue(this.vitaminA,'typeVitamin','displayNone',true)
+      }
+      
+    },
+    handleVitaminNo(){
+      if(getRadioSelectedValue(this.vitaminA,'vitaminInfo')=='no'){
+        modifyRadioValue(this.vitaminA,'vitaminReason','displayNone',false)
+      }else{
+        modifyRadioValue(this.vitaminA,'vitaminReason','displayNone',true)
+      }
+    },
+    handleVitaminOther(){
+      if(getRadioSelectedValue(this.vitaminA,'vitaminReason')=='other'){
+        modifyFieldValue(this.vitaminA,'Other','displayNone',false)
+      }else{
+        modifyFieldValue(this.vitaminA,'Other','displayNone',true)
+      }
+    }
 
     }
 

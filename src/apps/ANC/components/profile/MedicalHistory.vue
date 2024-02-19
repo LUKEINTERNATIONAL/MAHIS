@@ -1,19 +1,8 @@
 <template>
-    <!-- Past Surgeries -->
-    <!-- <ion-list>
-        <ion-item class="dashed_bottom_border" style="font-weight: bold">
-            Past Surgeries
-        </ion-item>
-        
-        <div class="sub_item_body">
-            <BasicForm :contentData="medicalHistory" />
-        </div>
-        <ion-item class="sub_item_body_close" />
-    </ion-list> -->
 
     <div class="container">
          <!-- Past Surgeries -->
-            <ion-card v-if="currentSection === 0" class="section">
+            <ion-card class="section">
             <ion-card-header>
                 <ion-card-title class="dashed_bottom_border sub_item_header">Past Surgeries</ion-card-title>
             </ion-card-header>
@@ -23,7 +12,7 @@
             </ion-card>
 
          <!-- Allegies -->
-          <ion-card v-if="currentSection === 1" class="section">
+          <ion-card  class="section">
             <ion-card-header>
                 <ion-card-title class="dashed_bottom_border sub_item_header">Allergies</ion-card-title>
             </ion-card-header>
@@ -33,7 +22,7 @@
             </ion-card>
 
         <!-- Chronical Health conditions -->
-            <ion-card v-if="currentSection === 2" class="section">
+            <ion-card class="section">
             <ion-card-header>
                 <ion-card-title class="dashed_bottom_border sub_item_header">Existing Chronic Health Conditions</ion-card-title>
             </ion-card-header>
@@ -43,7 +32,7 @@
             </ion-card>
 
         <!-- HIV -->
-            <ion-card v-if="currentSection === 3" class="section">
+            <ion-card  class="section">
             <ion-card-header>
                 <ion-card-title class="dashed_bottom_border sub_item_header">HIV</ion-card-title>
             </ion-card-header>
@@ -54,7 +43,7 @@
 
         <!-- Syphilis Test -->
 
-            <ion-card v-if="currentSection === 4" class="section">
+            <ion-card class="section">
             <ion-card-header>
                 <ion-card-title class="dashed_bottom_border sub_item_header">Syphilis</ion-card-title>
             </ion-card-header>
@@ -64,23 +53,13 @@
             </ion-card>
 
 
-    <!-- Navigation Buttons -->
-    <div class="navigation-buttons">
-      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
-      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
-    </div>
+<!--    &lt;!&ndash; Navigation Buttons &ndash;&gt;-->
+<!--    <div class="navigation-buttons">-->
+<!--      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Save</ion-button>-->
+<!--    </div>-->
 
     </div>
 
-
-
-     <ion-list>
-        
-        <div>
-            <!-- <BasicForm :contentData="otherSite" /> -->
-        </div>
-        
-     </ion-list>
 
 
 </template>
@@ -104,7 +83,7 @@
  import {defineComponent} from 'vue';
  import {ref} from 'vue';
  import BasicInputField from "@/components/BasicInputField.vue";
- import {useMedicalHistoryStore} from "@/apps/ANC/store/medicalHistory/medicalHistoryStore";
+ import {useMedicalHistoryStore} from "@/apps/ANC/store/profile/medicalHistoryStore";
  import BasicForm from '@/components/BasicForm.vue';
 import { modifyRadioValue,
     getRadioSelectedValue,
@@ -155,6 +134,7 @@ export default defineComponent({
         this.handleAllergies()
         this.handleChronicCondition()
         this.handleHivConducted()
+        this.handleOtherHiv()
         // this.handleTestNotDone()
         
         
@@ -165,7 +145,9 @@ export default defineComponent({
         hivTest:{
             handler(){
                 this.handleHivResults()
+                this.handleOtherHiv()
                 this.handleHivConducted()
+
                 // this.handleTestNotDone()
             },
              deep:true,
@@ -202,7 +184,7 @@ export default defineComponent({
         ...mapState(useMedicalHistoryStore,["exisitingChronicHealthConditions"]),
         ...mapState(useMedicalHistoryStore,["hivTest"]),
         ...mapState(useMedicalHistoryStore,["syphilisTest"]),
-        // ...mapState(useMedicalHistoryStore,["otherSite"]),
+       
     },
     methods:{
         handleHivResults(){
@@ -213,6 +195,13 @@ export default defineComponent({
                 modifyRadioValue(this.hivTest,'test1','displayNone',true)
             }
              
+        },
+        handleOtherHiv(){
+            if(getCheckboxSelectedValue(this.hivTest,'Other')=='other'){
+                modifyFieldValue(this.hivTest,'reasonsTestNotDone','displayNone',false)
+            }else{
+                modifyFieldValue(this.hivTest,'reasonsTestNotDone','displayNone',true)
+            }
         },
         handleSyphilis(){
            if(getRadioSelectedValue(this.syphilisTest,'syphilisOption') == 'syphilisTestConducted'){
@@ -230,7 +219,7 @@ export default defineComponent({
                 modifyFieldValue(this.medicalHistory,'specify','displayNone',true)
             }
 
-            // console.log(getCheckboxSelectedValue(this.medicalHistory,'Other'))
+ 
         },
         handleAllergies(){
             if(getCheckboxSelectedValue(this.allegy,'Other')=='otherAllergies'){
@@ -254,11 +243,7 @@ export default defineComponent({
                  modifyFieldValue(this.hivTest,'birthdate','displayNone',true)
             }
         },
-        // handleTestNotDone(){
-        //     if(getRadioSelectedValue(this.hivTest,'hivOption')=='hivTestNotDone'){
-        //         modifyCheckboxValue()
-        //     }
-        // }
+
 
       goToNextSection() {
         if (this.currentSection < 4) {
@@ -276,13 +261,6 @@ export default defineComponent({
 </script>
 <style scoped>
 
-/* .sub_item_body{
-    margin-left: 45px;
-}
-ion-item.sub_item_body_close {
-        border-bottom: 2px dotted var(--ion-color-medium);
-        --inner-border-width:0;
-    } --> */
 
 .container {
   display: flex;

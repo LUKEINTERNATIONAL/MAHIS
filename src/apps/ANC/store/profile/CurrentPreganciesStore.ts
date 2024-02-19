@@ -64,7 +64,8 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
           
              
         ] as any,
-       deliveryDate :[{
+       deliveryDate :[
+           {
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
         data:
@@ -99,7 +100,7 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
         {
             selectdData: [],
             isFinishBtn: false,
-            classDash: 'dashed_bottom_border',
+            classDash: '',
             radioBtnContent:
             {
                 header:{
@@ -125,6 +126,38 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
             }
                 
         },
+        {
+            isFinishBtn: false,
+            classDash: 'dashed_bottom_border _padding',
+            data:
+                {
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                    inputHeader: 'LNMP date*',
+                                    value: '',
+                                    name: 'EDD',
+                                    required: true,
+                                    eventType: 'input',
+                                    alertsError: false,
+                                    alertsErrorMassage: '',
+                                    isDatePopover: true,
+                                    icon: icons.calenderPrimary,
+                                    placeholder: 'Pick the date',
+                                    colSize:'55%'
+                                },
+
+                            ],
+
+                        },
+
+
+                    ],
+
+                },
+        }
+
     ],
     ultrasound:[
         {

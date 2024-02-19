@@ -43,7 +43,7 @@ import { toastWarning,popoverConfirmation, toastSuccess } from '@/utils/Alerts';
 import PastObstreticHistory from '../components/profile/PastObstreticHistory.vue';
 import CurrentPregnancies from '../components/profile/CurrentPregnancies.vue';
 import Medications from '../components/profile/Medications.vue';
-import MedicalHistory from '../components/profile/MedicalHistory.vue';
+import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue"
 import WomanBehaviour from '../components/profile/WomanBehaviour.vue';
 import {getCheckboxSelectedValue} from "@/services/data_helpers";
 import {useMedicalHistoryStore} from "@/apps/ANC/store/profile/medicalHistoryStore";
@@ -157,7 +157,7 @@ export default defineComponent({
           }
         },
         {
-          'title': 'Current Pregancy',
+          'title': 'Current Pregnancy',
           'componet': 'CurrentPregnancies',
           'value': '3',
         },
@@ -189,6 +189,35 @@ export default defineComponent({
     ...mapState(useWomanBehaviourStore,["dailyCaffeineIntake","Tobacco"])
 
   },
+      saveData(){
+
+      const medicalConditions = [
+        'Auto immune desease',
+        'Asthma',
+        'Diabetes',
+        'Sickle cell',
+        'Anaemia',
+        'Thalassemia',
+        'Gynaecological',
+        'CCF',
+        'RHD',
+        'Gestational diabetes',
+        'pre-existing type 1',
+        'pre-existing type 2',
+        'Epilepsy',
+        'Hypertension',
+        'Kidney',
+        'TB',
+        'Mental  illiness',
+      ];
+      for (const condition of medicalConditions) {
+        const selectedValue = getCheckboxSelectedValue(this.exisitingChronicHealthConditions, condition);
+        console.log(selectedValue);
+      }
+
+         // this.$router.push('symptomsFollowUp');
+
+     },
   mounted(){
     // this.markWizard()
 

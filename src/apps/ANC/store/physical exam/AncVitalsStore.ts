@@ -291,7 +291,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "100%",
-                                        required: true
+                                       
                                     },
 
                                 ],
@@ -468,7 +468,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "100%",
-                                        required: true
+                                        
                                     },
 
                                 ]
@@ -692,7 +692,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
     }),
     actions:{
         setVitals(data: any){
-            this.vitals = data
+            this.bloodPressure = data
         }
     },
     persist:true,

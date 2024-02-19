@@ -409,7 +409,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Other medications',
+                                name: 'Other',
                                 value: 'otherMedications',
                                 checked: false,
                                 labelPlacement: 'start',
@@ -431,7 +431,8 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                         rowData:[
                             {
                                 colData: [
-                                    {
+                                    {   
+                                        displayNone: true,
                                         inputHeader: 'Specify',
                                         unit: '',
                                         icon: icons.editPen,
@@ -440,7 +441,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "85%",
-                                        required: true
+                                        
                                     },
 
                                 ]

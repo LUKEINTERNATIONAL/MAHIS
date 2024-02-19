@@ -1,42 +1,32 @@
 <template>
     <div class="container">
-        <ion-card v-if="currentSection === 0" class="section">
-            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+        <ion-card class="section">
+            <ion-card-header> <ion-card-title class="sub_item_header">History on previous pregnancies</ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="prevPregnancies"></basic-form>
             </ion-card-content>
-    </ion-card>
+        </ion-card>
+        <ion-card  style="margin-left: 20px">
+<!--          <ion-card-title class="sub_item_header">Specify mode of delivery for each child based on number live births provided</ion-card-title>-->
+          <ion-card-content>
+            <basic-form :contentData="modeOfDelivery"></basic-form>
+          </ion-card-content>
+        </ion-card>
 
-    
-
-    
-        <ion-card v-if="currentSection === 1" class="section">
-            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header> 
+        <ion-card class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="preterm"></basic-form>
-                <basic-form :contentData="abnormalities"></basic-form>
             </ion-card-content>
         </ion-card>
-
-  
-   
-        <ion-card v-if="currentSection === 2" class="section">
-            <ion-card-content>
-                <basic-form :contentData="modeOfDelivery"></basic-form>
-            </ion-card-content>
-        </ion-card>
-  
-
-   
-        <ion-card v-if="currentSection === 3" class="section">
-            <ion-card-content><basic-form :contentData="Complications"></basic-form> </ion-card-content>
-        </ion-card> 
+      <ion-card class="section">
+        <ion-card-header> <ion-card-title class="sub_item_header">Does the woman have any complications due to past pregnancies?</ion-card-title></ion-card-header>
+        <ion-card-content>
+          <basic-form :contentData="Complications"></basic-form>
+        </ion-card-content>
+      </ion-card>
     
-        <!-- Navigation Buttons -->
-        <div class="navigation-buttons">
-      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
-      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
-    </div>
+
 </div>
                                               
 </template>
@@ -65,6 +55,7 @@ import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import { useObstreticHistoryStore} from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
 import { checkmark, pulseOutline } from 'ionicons/icons';
+import { getCheckboxSelectedValue, modifyFieldValue } from '@/services/data_helpers';
 
 export default defineComponent({
   name: "History",
@@ -86,8 +77,9 @@ export default defineComponent({
     IonRadioGroup
 },
 
-        data() {
+  data() {
     return {
+        modeOfDelieveryRef: {},
         iconsContent: icons,
         prevPregnanciesInstance: {} as any,
         modeOfDeliveryInstance: {} as any,
@@ -102,13 +94,53 @@ export default defineComponent({
         ...mapState(useObstreticHistoryStore, ["Complications"])
 
     },
+    created() {
+        this.modeOfDelieveryRef = {...this.modeOfDelivery[0]}
+    },
     mounted(){
-      const prevPregnancies = useObstreticHistoryStore()   
+     
+      this.prevPregnanciesInstance = useObstreticHistoryStore()
+      this.prevPregnanciesInstance.setModeOfDelivery([])
+      this.handleOther()   
+    },
+    watch:{
+      prevPregnancies: {
+        
+          handler(val) {
+            if (val && val[0].data.rowData[2].colData[0].value) {
+              const liveBirths = parseInt(val[0].data.rowData[2].colData[0].value)
+              this.prevPregnanciesInstance.setModeOfDelivery([])
+
+              const births = []
+              for (let i = 0; i < liveBirths; ++i) {
+                // a deep copy of the template object for each text field
+                births.push(JSON.parse(JSON.stringify(this.modeOfDelieveryRef)))
+              }
+
+              this.prevPregnanciesInstance.setModeOfDelivery(births)
+            }
+          },
+
+        deep: true
+      },
+      Complications:{
+        handler(){
+          this.handleOther() 
+        },
+        deep:true,
+      }
     },
     setup() {
       return { checkmark,pulseOutline };
     },
     methods:{
+      handleOther(){
+        if(getCheckboxSelectedValue(this.Complications,'Other')=='otherInfo'){
+          modifyFieldValue(this.Complications,'otherC','displayNone',false)
+        }else{
+          modifyFieldValue(this.Complications,'otherC','displayNone',true)
+        }
+      },
          //Method for navigating sections
     goToNextSection() {
       if (this.currentSection < 3) {
@@ -161,8 +193,7 @@ ion-card {
 }
 .sub_item_header{
   font-weight: bold;
-  font-size: medium;
+  font-size: 14px;
 }
 
 </style>
-  
