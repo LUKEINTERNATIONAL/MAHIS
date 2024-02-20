@@ -152,8 +152,29 @@
                         <ion-item slot="header" color="light">
                             <ion-label class="previousLabel">Previous medications</ion-label>
                         </ion-item>
-                        <div class="ion-padding" slot="content">
-                            <dynamic-list :_selectedMedicalDrugsList="selectedMedicalDrugsList" :show_actions_buttons="false" :key="componentKey"/>
+                        <div class="ion-padding" slot="content" :key="componentKey">
+
+                            <div class="ionLbltp" v-for="(item, index) in PreviuosSelectedMedicalDrugsList" :key="index">
+                                <div v-if="index == 0">
+                                    <div>
+                                        <ion-label class="previousLabelDate">{{ item.prescriptionDate }}</ion-label>
+                                    </div>
+
+                                    <div class="previousSecDrgs">
+                                        <dynamic-list :_selectedMedicalDrugsList="item.previousPrescriptions" :show_actions_buttons="false" :key="componentKey"/>
+                                    </div>
+                                </div>
+
+                                <div v-if="itemWasExpanded && index > 0">
+                                    <div>
+                                        <ion-label class="previousLabelDate">{{ item.prescriptionDate }}</ion-label>
+                                    </div>
+
+                                    <div class="previousSecDrgs">
+                                        <dynamic-list :_selectedMedicalDrugsList="item.previousPrescriptions" :show_actions_buttons="false" :key="componentKey"/>
+                                    </div>
+                                </div>
+                            </div>
 
                             <ion-accordion-group @ionChange="accordionGroupChange">
                                 <ion-accordion value="second" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
@@ -193,8 +214,8 @@
 <script setup lang="ts">
     import {     IonContent, IonHeader, IonCol, IonItem, IonList, IonButton, IonMenu, IonTitle, IonToolbar, IonInput, IonDatetime, IonLabel, IonTextarea, IonAccordion, IonAccordionGroup, AccordionGroupCustomEvent } from '@ionic/vue';
     import { checkmark,pulseOutline,addOutline,closeOutline, checkmarkOutline, filter, chevronDownOutline, chevronUpOutline } from 'ionicons/icons'
-    import { ref, watch, computed, onMounted } from 'vue'
-    import { icons } from '@/utils/svg.ts'
+    import { ref, watch, computed, onMounted, onUpdated } from 'vue'
+    import { icons } from '@/utils/svg'
     import { DRUG_FREQUENCIES } from "@/services/drug_prescription_service"
     import { DrugService} from "@/services/drug_service"
     import { ConceptName } from '@/interfaces/conceptName'
@@ -239,20 +260,21 @@
     const btnName2 = 'Send to pharmacy'
     const btnName3 = 'Send to dispensation'
     const btnFill = 'clear'
-    const showMoreMedicationsMsg = ref("Show more 5 medications")
-    const showMoreMedicationsBtnPressed = ref(false)
+    const showMoreMedicationsMsg = ref("Show more medications")
     const store = useTreatmentPlanStore()
     const selectedMedicalDrugsList = computed(() => store.selectedMedicalDrugsList)
     const medicalAllergiesList = computed(() => store.medicalAllergiesList)
     const nonPharmalogicalTherapyAndOtherNotes = computed(() => store.nonPharmalogicalTherapyAndOtherNotes)
     const selectedMedicalAllergiesList = computed(() => store.selectedMedicalAllergiesList)
     const input = ref()
-    const PreviuosSelectedMedicalDrugsList_FirstItem = ref()
     const values = ['first', 'second', 'third']
+    const PreviuosSelectedMedicalDrugsList = ref()
+    const itemWasExpanded = ref(false)
 
-    onMounted(() => {
+    onMounted(async () => {
         const previousTreatment = new PreviousTreatment()
-        previousTreatment.getPatientEncounters()
+        const { previousDrugPrescriptions, previousClinicalNotes, previousDrugAllergies } = await previousTreatment.getPatientEncounters()
+        PreviuosSelectedMedicalDrugsList.value = previousDrugPrescriptions as any
     })
 
     watch(
@@ -336,14 +358,8 @@
     }
 
     function addData(){
-        // searchText = ""
-        // drugName = ""
-        // dose = ""
-        // frequency = ""
-        // duration = ""
-        // no_item = false
         addItemButton.value = false
-        search_item.value =true
+        search_item.value = true
     }
 
     async function saveData() {
@@ -529,11 +545,6 @@
         treatmentPlanStore.setSelectedMedicalDrugsList(selectedMedicalDrugsList)
     }
 
-    function useOfTraditional(ev: any) {
-        const checked = ev.detail.checked
-        const treatmentPlanStore = useTreatmentPlanStore()
-    }
-
     function refSetNonPharmalogicalTherapyAndOtherNotes(value: string) {
         const treatmentPlanStore = useTreatmentPlanStore()
         treatmentPlanStore.setNonPharmalogicalTherapyAndOtherNotes(value as string)
@@ -562,10 +573,6 @@
         input.value.$el.setFocus()
     }
 
-    function showMoreMedications() {
-        showMoreMedicationsBtnPressed.value = !showMoreMedicationsBtnPressed.value 
-    }
-
     function accordionGroupChange(ev: AccordionGroupCustomEvent)  {
         const collapsedItems = values.filter((value) => value !== ev.detail.value);
         const selectedValue = ev.detail.value;
@@ -574,14 +581,13 @@
         // )
         if (selectedValue !== undefined) {
             if (selectedValue == 'second') {
-                console.log(selectedValue)
+                itemWasExpanded.value = !itemWasExpanded.value
             }
         } else { // its a hack
-            console.log("ehehehehehe")
+            itemWasExpanded.value = !itemWasExpanded.value
         }
-        
+ 
     }
-
     
 </script>
 
@@ -678,7 +684,7 @@ ion-list.list-al {
     font-weight: 600;
     line-height: 24px;
 }
-.action_buttons{
+.action_buttons {
     color: var(--ion-color-primary);
     display: flex;
     align-items: center;
@@ -691,13 +697,21 @@ ion-list.list-al {
   display: flex;
   align-items: center;
 }
-.previousView{
+.previousView {
     width: 100%;
     border-radius: 10px;
     margin-top: 10px;
 }
-.previousLabel{
+.previousLabel {
     font-weight: 600;
     color: #000;
+}
+.previousLabelDate{
+    font-weight: 600;
+    color: #000;
+    margin: 2%;
+}
+.previousSecDrgs {
+    margin: 2%;
 }
 </style>

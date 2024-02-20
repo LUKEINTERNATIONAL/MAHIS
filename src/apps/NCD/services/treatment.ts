@@ -12,6 +12,7 @@ import { Patientservice } from "@/services/patient_service"
 import { ProgramService } from "@/services/program_service"
 import { DrugOrderService } from "@/services/drug_order_service"
 import HisDate from "@/utils/Date"
+import { getFrequencyLabelOrCheckCode } from '@/services/drug_prescription_service'
 
 export class Treatment {
     async onSubmitNotes(patientID: any,providerID: any, treatmentNotesData: any){
@@ -54,7 +55,6 @@ export class PreviousTreatment {
       const date = patientVisit.value
       EncounterService.getEncounters(this.patientID, {date})
       .then(async (encounters) => {
-        //console.log(encounters)
         encounters.map(async (encounter: Encounter,  index: number) => {
           if ( encounter.type.name == 'NOTES') {
             const { observations } = encounter
@@ -90,7 +90,7 @@ export class PreviousTreatment {
                 const time = HisDate.toStandardHisDisplayFormat(obs.date_created)
 
                 if (concept == 'Allergic') {
-                  if ( isEmpty(this.previousDrugAllergies.hasOwnProperty(time))) {
+                  if (isEmpty(this.previousDrugAllergies.hasOwnProperty(time))) {
                       this.previousDrugAllergies[time] = []
                   }
                   this.previousDrugAllergies[time].push({ date: time, value })
@@ -105,8 +105,12 @@ export class PreviousTreatment {
       .then((medications) => {
         if (!isEmpty(medications)) {
           const previousPrescriptions = medications.map((medication: any) => ({
-            label: medication.drug.name,
+            drugName: medication.drug.name,
             value: HisDate.toStandardHisTimeFormat(medication.order.start_date),
+            dose: medication.dose,
+            frequency: getFrequencyLabelOrCheckCode(medication.frequency),
+            prescription: HisDate.toStandardHisFormat(medication.order.auto_expire_date),
+            duration: extractNumberBeforeDays(medication.order.instructions),
             other: medication
           }))
 
@@ -119,6 +123,12 @@ export class PreviousTreatment {
         }
       }).catch(() => {})
     })
+
+    return {
+      previousDrugPrescriptions: this.previousDrugPrescriptions,
+      previousClinicalNotes: this.previousClinicalNotes,
+      previousDrugAllergies: this.previousDrugAllergies,
+    }
   }
 
   async getPatientVisitDates() {
@@ -131,4 +141,13 @@ export class PreviousTreatment {
               }
           }))
   }
+}
+
+function extractNumberBeforeDays(text: string): number | null {
+  const regex = /(\d+)\s+days/i
+  const match = text.match(regex)
+  if (match && match.length > 1) {
+      return parseInt(match[1])
+  }
+  return null
 }
