@@ -231,14 +231,5 @@ h5{
     white-space: nowrap;
     overflow: hidden;
 }
-.previousView{
-    width: 100%;
-    border-radius: 10px;
-    margin-top: 10px;
-}
-.previousLabel{
-    font-weight: 600;
-    color: #000;
-}
 </style>
   

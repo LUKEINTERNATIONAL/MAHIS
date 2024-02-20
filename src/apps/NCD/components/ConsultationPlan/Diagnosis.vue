@@ -25,6 +25,18 @@
             name="Add new Diagnosis"
         />
     </ion-row>
+    <ion-row>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Previous measurements</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <previousDiagnosis />
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+    </ion-row>
 </template>
   
 <script lang="ts">
@@ -54,6 +66,8 @@
     import BasicForm from '@/components/BasicForm.vue';
     import DynamicButton from '@/components/DynamicButton.vue';
     import { Service } from "@/services/service";
+    import previousDiagnosis from '@/apps/NCD/components/ConsultationPlan/previousDiagnosis.vue'
+    
     export default defineComponent({
     name: 'Menu',
     components:{
@@ -71,7 +85,8 @@
         BasicInputField,
         List,
         BasicForm,
-        DynamicButton
+        DynamicButton,
+        previousDiagnosis
     },
     data() {
     return {
@@ -109,7 +124,6 @@
     mounted() {
         this.updateDiagnosisStores()
         this.setDashedBox()
-        // const primaryDiagnosis: any[] = await AppEncounterService.getAllValueCoded(this.patientID, 'Primary diagnosis')
     },
     methods:{
         displayInputFields(){
