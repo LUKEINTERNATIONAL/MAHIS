@@ -25,6 +25,18 @@
             name="Add new test"
         />
     </ion-row>
+    <ion-row>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Previous measurements</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <previousInvestigations />
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+    </ion-row>
 </template>
   
 <script lang="ts">
@@ -52,6 +64,7 @@ import { toastWarning,popoverConfirmation } from '@/utils/Alerts';
 import BasicForm from '@/components/BasicForm.vue';
 import List from '@/components/List.vue';
 import DynamicButton from '@/components/DynamicButton.vue';
+import previousInvestigations from '@/apps/NCD/components/ConsultationPlan/previousInvestigations.vue'
 import { modifyCheckboxInputField,
     getCheckboxSelectedValue,
     getRadioSelectedValue,
@@ -77,6 +90,7 @@ export default defineComponent({
         BasicForm,
         List,
         DynamicButton,
+        previousInvestigations
         
     },
     data() {
