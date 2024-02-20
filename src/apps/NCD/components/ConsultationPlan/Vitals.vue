@@ -1,5 +1,17 @@
 <template>
     <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form>
+    <ion-row>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Previous measurements</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <PreviousVitals />
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+    </ion-row>
 </template>
   
 <script lang="ts">
@@ -29,6 +41,7 @@
     import { VitalsService } from "@/services/vitals_service";
     import BasicForm from '@/components/BasicForm.vue';
     import { Service } from "@/services/service";
+    import PreviousVitals from '@/apps/NCD/components/ConsultationPlan/previousVitals.vue'
 
     export default defineComponent({
     components:{
@@ -41,13 +54,14 @@
         IonToolbar,
         IonInput,
         BasicInputField,
-        BasicForm
+        BasicForm,
+        PreviousVitals
     },
     data() {
     return {
         iconsContent: icons,
-        BMI: {},
-        BPStatus: {},
+        BMI: {} as any,
+        BPStatus: {} as any,
         vValidations: '' as any,
         hasValidationErrors: [] as any,
         vitalsInstance: {} as any,
@@ -57,7 +71,7 @@
         ...mapState(useDemographicsStore,["demographics"]),
         ...mapState(useVitalsStore,["vitals"]),
     },
-    mounted(){
+   mounted(){
         const userID: any  = Service.getUserID()
         this.vitalsInstance = new VitalsService(this.demographics.patient_id,userID);
         this.updateVitalsStores()
@@ -86,8 +100,8 @@
         async validaterowData(inputData: any) {
             this.hasValidationErrors = []
             
-            this.vitals.forEach((section,sectionIndex) => {
-                section.data.rowData.forEach((col: any,colIndex) => {
+            this.vitals.forEach((section: any,sectionIndex: any) => {
+                section.data.rowData.forEach((col: any,colIndex: any) => {
                     if (col.colData[0].inputHeader == 'Systolic Pressure*') {
                             const isSystolicValid = this.vitalsInstance.validator(col.colData[0]) == null && this.vitalsInstance.validator(col.colData[1]) == null;
                             this.BPStatus = isSystolicValid ? this.getBloodPressureStatus(col.colData[0].value,col.colData[1].value) : {};

@@ -6,6 +6,7 @@ export const useVitalsStore = defineStore('vitalsStore',{
         vitals: [
             {
                 isFinishBtn: false,
+                validationStatus: '',
                 sectionHeader: 'Hieght and weight',
                 classDash: 'dashed_bottom_border _padding',
 
@@ -155,7 +156,7 @@ export const useVitalsStore = defineStore('vitalsStore',{
                     }
             }
                
-        ]
+        ] as any
     }),
     actions:{
         setVitals(data: any){

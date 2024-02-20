@@ -87,8 +87,8 @@
         iconsContent: icons,
         footChecked : false,
         showVisualAcuityTest: false,
-        visualAT: '',
-        footSC: '',
+        visualAT: '' as any,
+        footSC: '' as any,
     };
   },
   computed: {
