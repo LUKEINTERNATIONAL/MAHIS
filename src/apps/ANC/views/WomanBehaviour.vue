@@ -22,7 +22,7 @@ import {
 import { defineComponent } from 'vue';
 import { checkmark,pulseOutline } from 'ionicons/icons';
 import { ref } from 'vue';
-import { icons } from '@/utils/svg.ts';
+import { icons } from '@/utils/svg';
 import BasicInputField from '@/components/BasicInputField.vue';
 import BasicForm from "@/components/BasicForm.vue";
 import {mapState} from "pinia";
@@ -68,10 +68,10 @@ export default defineComponent({
       this.$router.push(url);
     },
     footScreening(){
-      this.footChecked = !this.footChecked
-      if (this.footChecked) {
-        this.footSC = 'none'
-      } else {this.footSC = ''}
+      // this.footChecked = !this.footChecked
+      // if (this.footChecked) {
+      //   this.footSC = 'none'
+      // } else {this.footSC = ''}
     },
   }
 });

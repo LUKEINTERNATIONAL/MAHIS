@@ -3,6 +3,7 @@ import {icons} from "@/utils/svg";
 
 export const useWomanBehaviourStore = defineStore('womanBehaviourStore', {
     state: () => ({
+        womanBehaviour:{},
         Caffeine: [
 
             {

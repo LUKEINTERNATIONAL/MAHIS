@@ -226,7 +226,7 @@
     const show_error_msg_for_dose = ref(false)
     const durationErrMsg = ref()
     const show_error_msg_for_duration = ref(false)
-    const diagnosisData = ref([])
+    const diagnosisData = ref([] as any)
     const drugName = ref('')
     const dose = ref('')
     const frequency = ref('')

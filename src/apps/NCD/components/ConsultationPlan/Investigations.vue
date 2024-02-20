@@ -10,9 +10,9 @@
     <span v-if="search_item">
         <basic-form 
             :contentData="investigations" 
-            @clicked:button = "validaterowData"
-            @update:inputValue = "searchInput($event)"
-            @clicked:inputValue="setEvent($event)">
+            @update:selected="handleInputData" 
+            @update:inputValue="handleInputData"
+            @clicked:button="addNewRow">
         </basic-form>
     </span>
 
@@ -25,15 +25,18 @@
             name="Add new test"
         />
     </ion-row>
-
-    <SelectionPopover 
-        :content="testData"  
-        :popoverOpen="popoverOpen" 
-        @closePopoover="value => popoverOpen = value" 
-        :event="event" 
-        :title="'Choose the investigation:'"
-        @setSelection="setTest"
-    />
+    <ion-row>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Previous measurements</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <previousInvestigations />
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+    </ion-row>
 </template>
   
 <script lang="ts">
@@ -49,7 +52,7 @@ import {
     IonPopover
 } from '@ionic/vue';
 import { defineComponent, ref } from 'vue';
-import { checkmark, pulseOutline } from 'ionicons/icons';
+import { build, checkmark, pulseOutline } from 'ionicons/icons';
 import { icons } from '@/utils/svg';
 import { OrderService } from "@/services/order_service"
 import DashBox from "@/components/DashBox.vue"
@@ -61,6 +64,13 @@ import { toastWarning,popoverConfirmation } from '@/utils/Alerts';
 import BasicForm from '@/components/BasicForm.vue';
 import List from '@/components/List.vue';
 import DynamicButton from '@/components/DynamicButton.vue';
+import previousInvestigations from '@/apps/NCD/components/ConsultationPlan/previousInvestigations.vue'
+import { modifyCheckboxInputField,
+    getCheckboxSelectedValue,
+    getRadioSelectedValue,
+    getFieldValue,
+    modifyRadioValue,
+    modifyFieldValue } from '@/services/data_helpers'
 
 export default defineComponent({
     name: 'Menu',
@@ -80,6 +90,7 @@ export default defineComponent({
         BasicForm,
         List,
         DynamicButton,
+        previousInvestigations
         
     },
     data() {
@@ -118,13 +129,9 @@ export default defineComponent({
     async mounted() {
         this.updateInvestigationsStores()
         this.setDashedBox()
-        // console.log(await OrderService.getTestTypes())
         this.labOrders = await OrderService.getTestTypesBySpecimen('Blood')
     },
     methods: {
-        onDataChange(){
-            console.log(this.inputFields)
-        },
         updateInvestigationsStores(){
             const investigationsStore = useInvestigationStore()
             investigationsStore.setInvestigations(this.investigations)
@@ -141,9 +148,7 @@ export default defineComponent({
             this.investigations[0].data.rowData[0].colData[0].alertsErrorMassage =''
             this.investigations[0].data.rowData[0].colData[1].alertsError = false
             this.investigations[0].data.rowData[0].colData[1].alertsErrorMassage =''
-            const test = this.labOrders.filter((obj: any) => {
-               return obj.name == this.inputFields[0].value ?  obj : false
-            })
+             this.test = await this.filterTest(this.inputFields[0].value) 
 
             if (!this.numericValueIsValid(this.inputFields[1].value) && this.inputFields[1].value != '') {
                 this.investigations[0].data.rowData[0].colData[1].alertsError = true
@@ -152,34 +157,54 @@ export default defineComponent({
             }else{
                 this.buildResults()
             }
-            if(test.length > 0) {
+            if (this.test.length > 0){
+                if(this.test[0]?.name == this.inputFields[0].value) {
+                    
+                    return true
+                }  else {
+                this.search_item = true
+                this.investigations[0].data.rowData[0].colData[0].alertsError = true
+                this.investigations[0].data.rowData[0].colData[0].alertsErrorMassage = 'Please select test from the list'
+                return false
+            }
 
-                this.investigations[0].selectdData.push({
-                    actionBtn: true,
-                    display: [
-                        this.inputFields[0].value,
-                        this.inputFields[1].value,
-                    ],
-                    data: {
-                        
-                        "concept_id": test[0].concept_id,
-                        "name":this.inputFields[0].value,
-                        "specimen": "Blood",
-                        "reason": "Routine",
-                        "specimenConcept": 8612
-                    }
-                })
+            }
+            else {
+                this.search_item = true
+                this.investigations[0].data.rowData[0].colData[0].alertsError = true
+                this.investigations[0].data.rowData[0].colData[0].alertsErrorMassage = 'Not Found'
+                return false
+            }
+            
+        },
+        async addNewRow(){
+            if(await this.validaterowData()){
+                this.buildTest()
                 this.investigations[0].data.rowData[0].colData[0].value =''
                 this.investigations[0].data.rowData[0].colData[1].value =''
                 this.search_item = false
                 this.display_item = true
                 this.addItemButton = true
-            } else {
-                this.search_item = true
-                this.investigations[0].data.rowData[0].colData[0].alertsError = true
-                this.investigations[0].data.rowData[0].colData[0].alertsErrorMassage = 'Please select test from the list'
             }
-            
+            this.investigations[0].data.rowData[0].colData[0].value = ''
+            this.investigations[0].data.rowData[0].colData[0].popOverData.data = []
+        },
+        buildTest(){
+            this.investigations[0].selectdData.push({
+                actionBtn: true,
+                display: [
+                    this.inputFields[0].value,
+                    this.inputFields[1].value,
+                ],
+                data: {
+                    
+                    "concept_id": this.test[0].concept_id,
+                    "name":this.inputFields[0].value,
+                    "specimen": "Blood",
+                    "reason": "Routine",
+                    "specimenConcept": 8612
+                }
+            })
         },
         buildResults(){
             const modifier = this.inputFields[1].value.charAt(0)
@@ -192,7 +217,6 @@ export default defineComponent({
                 "value_modifier": modifier,
                 "value_type": "numeric"
             }
-            console.log(measures)
         },
         numericValueIsValid(value: string){
             try {
@@ -201,14 +225,16 @@ export default defineComponent({
                 return false
             }
         },
-        setEvent(event: Event){
-            this.event = event
-        },
-        async searchInput(col: any) {
+        async handleInputData(col: any) {
             if(col.inputHeader == 'Test'){
                 this.popoverOpen = true;
-                this.testData = this.labOrders.filter((item: any) => item.name.toLowerCase().includes(col.value.toLowerCase()))
+                this.testData = await this.filterTest(col.value)
+                this.investigations[0].data.rowData[0].colData[0].popOverData.data = this.testData
+                this.validaterowData()
             }
+        },
+        async filterTest(name: any){
+           return await this.labOrders.filter((item: any) => item.name.toLowerCase().includes(name.toLowerCase()))
         },
         setTest(value: any) {
             this.selectedText =value.name

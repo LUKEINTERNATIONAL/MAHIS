@@ -19,10 +19,17 @@ export const useInvestigationStore = defineStore('investigationStore', {
                                         icon: icons.search,
                                         value: '',
                                         name: 'test',
+                                        popOver: true,
                                         eventType: 'input',
                                         required: true,
                                         alertsError: false,
-                                        alertsErrorMassage: ''
+                                        alertsErrorMassage: '',
+                                        popOverData: {
+                                            filterData: false,
+                                            data: []
+                                        } ,
+                                        id: '',
+                                        idName: 'test_id'
                                     },
                                     {
                                         inputHeader: 'Result',

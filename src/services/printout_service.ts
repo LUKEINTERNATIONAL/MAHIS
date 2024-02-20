@@ -3,11 +3,11 @@ import { toastWarning } from "@/utils/Alerts";
 import { EventChannels } from "@/utils/EventBus";
 import EventBus from "@/utils/EventBus";
 import { BluetoothSerial } from "@awesome-cordova-plugins/bluetooth-serial";
-import { optionsActionSheet } from '@/utils/ActionSheets';
+// import { optionsActionSheet } from '@/utils/ActionSheets';
 import dayjs from 'dayjs';
 import { isEmpty } from 'lodash';
 import { PrinterDevice, LabelPrinter } from "@/plugins/LabelPrinter";
-import nprogress from "nprogress";
+// import nprogress from "nprogress";
 
 
 export class PrintoutService extends Service {
@@ -102,10 +102,10 @@ export class PrintoutService extends Service {
     }
 
     async getAllPrinters () {
-        nprogress.start()
+        // nprogress.start()
         const uPrinters = await this.getUsbPrinters();
         const bPrinters = await this.getBluetoothPrinters()
-        nprogress.done()
+        // nprogress.done()
         return [...uPrinters, ...bPrinters]
     }
 
@@ -120,24 +120,24 @@ export class PrintoutService extends Service {
         if(printers.every(p => p.deviceID === "webPrinter")) {
             defualtPrinter = printers[0];
         }
-        if(isEmpty(defualtPrinter)){
-            const option = await optionsActionSheet(
-                "Select Printer",
-                "Please, select default printer",
-                printers.map(p => p.name || p.deviceID),
-                [
-                    { name: 'Cancel', slot:'start', color: 'danger' },
-                    { name: 'Continue', slot: 'end', role: 'action' }
-                ]
-            )
+        // if(isEmpty(defualtPrinter)){
+            // const option = await optionsActionSheet(
+            //     "Select Printer",
+            //     "Please, select default printer",
+            //     printers.map(p => p.name || p.deviceID),
+            //     [
+            //         { name: 'Cancel', slot:'start', color: 'danger' },
+            //         { name: 'Continue', slot: 'end', role: 'action' }
+            //     ]
+            // )
     
-            if(option.action === 'Cancel') return
+        //     if(option.action === 'Cancel') return
     
-            defualtPrinter = printers.find(p => {
-                return p.name === option.selection || 
-                    p.deviceID === option.selection
-            }) as PrinterDevice
-        }
+        //     defualtPrinter = printers.find(p => {
+        //         return p.name === option.selection || 
+        //             p.deviceID === option.selection
+        //     }) as PrinterDevice
+        // }
         
         if(defualtPrinter) this.setDefaultPrinter(defualtPrinter)
 

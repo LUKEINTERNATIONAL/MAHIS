@@ -57,7 +57,7 @@ export default defineComponent({
     return {
       iconsContent: icons,
       medicationChecked : false,
-      medication: '',
+      medication: '' as any,
     };
   },
   computed: {

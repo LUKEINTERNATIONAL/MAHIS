@@ -228,15 +228,15 @@ export default defineComponent({
             hivChecked: false,
             hyperKTMChecked: false,
 
-            pastSurgeries:"",
-            allegies:"",
-            chronicalHC:"",
-            bloodDisorder:"",
-            cancer:"",
-            heartDesease:"",
-            diabetis:"",
-            hiv:"",
-            hyperKTM:""
+            pastSurgeries:"" as any,
+            allegies:"" as any,
+            chronicalHC:"" as any,
+            bloodDisorder:"" as any,
+            cancer:"" as any,
+            heartDesease:"" as any,
+            diabetis:"" as any,
+            hiv:"" as any,
+            hyperKTM:"" as any
 
         }
     },
@@ -251,11 +251,11 @@ export default defineComponent({
     },
       computed:{
         ...mapState(useMedicalHistoryStore,["medicalHistory"]),
-        ...mapState(useMedicalHistoryStore,["allegies"]),
+        // ...mapState(useMedicalHistoryStore,["allegies"]),
         ...mapState(useMedicalHistoryStore,["exisitingChronicHealthConditions"]),
-        ...mapState(useMedicalHistoryStore,["bloodDisorder"]),
-        ...mapState(useMedicalHistoryStore,["cancer"]),
-        ...mapState(useMedicalHistoryStore,["heartDesease"]),
+        // ...mapState(useMedicalHistoryStore,["bloodDisorder"]),
+        // ...mapState(useMedicalHistoryStore,["cancer"]),
+        // ...mapState(useMedicalHistoryStore,["heartDesease"]),
         ...mapState(useMedicalHistoryStore,["diabetes"]),
     },
     methods:{

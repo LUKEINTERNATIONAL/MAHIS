@@ -197,8 +197,8 @@
                 this.createPatient()
             },
             validations(){
-                const fields = ['nationalID', 'firstname', 'lastname', 'birthdate', 'gender'];
-                return fields.every(fieldName => validateField(this.personInformation,fieldName, this[fieldName]));
+                const fields: any = ['nationalID', 'firstname', 'lastname', 'birthdate', 'gender'];
+                return fields.every((fieldName: string) => validateField(this.personInformation, fieldName, (this as any)[fieldName]));
             },
             async createPatient(){
                 if(this.validations()){

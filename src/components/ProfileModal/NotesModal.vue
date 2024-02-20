@@ -10,7 +10,7 @@
                     Vitals
                 </div>
                 <div id="vitals_dialog">
-                    <span style="cursor: pointer;" v-html="iconsContent.vitals_graph" @click="openVitalsModal()" ></span> 
+                    <span style="cursor: pointer;" v-html="iconsContent.vitals_graph" ></span> 
                 </div>
             </div>
             <div class="v_result">
