@@ -451,7 +451,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         },
                          {
                             name: "OtherS",
-                            disableStatus: false,
+                            disableStatus:false,
                             value: "otherSurguries",
                             labelPlacement: 'start',
                             colSize: '6',
@@ -1356,7 +1356,8 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     header:{
                         title: 'Select whether:',
                         name:'syphilisOption',
-                        selectedValue: ''
+                        selectedValue: '',
+                        
                     },
                     data:[
                         {
@@ -1426,11 +1427,12 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
               {
                   selectdData: [],
                   isFinishBtn: false,
-                  classDash: 'dashed_bottom_border',
                   radioBtnContent:{
                       header:{
                           title: 'Syphilis test result',
-                          selectedValue: ''
+                          selectedValue: '',
+                          name:'syphlisResults',
+                          displayNone:true
                       },
                       data:[
                           {
@@ -1451,16 +1453,16 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                   }
               },
               {
-                  classDash: 'dashed_bottom_border',
                   data:{
                       rowData:[
                           {
                               colData:[
-                                  {
+                                  {   
+                                      displayNone:true,
                                       inputHeader: 'Syphilis test date',
                                       icon: icons.calenderPrimary,
                                       value: '',
-                                      name: 'birthdate',
+                                      name: 'syphilisDate',
                                       eventType: 'blur',
                                       required: true,
                                       inputWidth: "55%",
