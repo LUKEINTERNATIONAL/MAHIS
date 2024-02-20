@@ -51,6 +51,7 @@ import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import {useCurrentPregnanciesStore} from "@/apps/ANC/store/profile/CurrentPreganciesStore";
+import { getFieldValue } from '@/services/data_helpers';
 
 export default defineComponent({
     name: "Current",
@@ -77,6 +78,11 @@ export default defineComponent({
           iconsContent: icons,
           currentPregnanciesInstance: {} as any,
           currentSection: 0, // Initialize currentSection to 0
+
+          // lastMenstrualPeriod: null,
+          // expectedDate: null,
+
+          //lnmpDate: null,
          
       };
     },
@@ -113,11 +119,21 @@ export default defineComponent({
         this.currentSection--;
       }
     },
+    eddCalculation(){
+      //   const edd = new Date(lmpDate.getTime() + 280 * 24 * 60 * 60 * 1000);
+      // // Update the EDD value in the store
+      // this.expectedDate = edd.toISOString().split('T')[0];
+
+        // if (this.lnmpDate) {
+        // const eddDate = new Date(this.lnmpDate.getTime() + 280 * 24 * 60 * 60 * 1000);
+        // return eddDate.toDateString();
+      }
+    }
    
-          },
+      },
       
 
-      });
+      );
   
   </script>
 

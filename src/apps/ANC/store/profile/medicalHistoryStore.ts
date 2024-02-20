@@ -268,8 +268,8 @@ const syphilisForm={
     },
 
     other:{
-        name:"Other reason syphilis test not done",
-        value: "Other"
+        name:"Other",
+        value: "other"
     },
     syphilisPositiveResults:{
         name:"Syphilis positive",
@@ -292,8 +292,8 @@ const syphilisForm={
         value: "testDate"
     },
         reasonsTestNotDone:{
-        name:"",
-        value: "reasonsTestNotDone"
+        name:"Reason",
+        value: ""
     }
 }
 
@@ -449,23 +449,15 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             justify: 'space-between',
                             checked: false
                         },
-                         {
-                            name: "OtherS",
-                            disableStatus:false,
+                        {
+                            name: "Other",
                             value: "otherSurguries",
+                            disableStatus:false,
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
-                        },
-                        // {
-                        //     name: "Other",
-                        //     value: "otherSurguries",
-                        //     labelPlacement: 'start',
-                        //     colSize: '6',
-                        //     justify: 'space-between',
-                        //     checked: false
-                        // }
+                        }
                         
                     ],
                 }
@@ -1177,7 +1169,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 },
             },
             {
-            classDash: 'dashed_bottom_border',
+           
                 checkboxBtnContent:
                 {
                     header:{
@@ -1202,14 +1194,14 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     
             },
              {
-                 classDash: 'dashed_bottom_border',
+        
                  checkboxBtnContent:
                      {
                          header:{
                              title: '',
                              selectedValue: '',
-                             // displayNone: true,
-                             // name:"hivOutcome",
+                             displayNone: true,
+                             name:"hivOutcome",
                          },
                          data:[
                              {
@@ -1220,36 +1212,21 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                                  justify: 'space-between',
                                  checked:false
                              },
+                            {  
+
+                                name: "Other",
+                                value: 'other',
+                                labelPlacement: 'start',
+                                colSize: '9',
+                                justify: 'space-between',
+                                checked:false
+                            }
 
 
                          ],
                      }
 
              },
-            {
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
-
-                        {  
-
-                            name: "Other",
-                            value: 'other',
-                            labelPlacement: 'start',
-                            colSize: '9',
-                            justify: 'space-between',
-                            checked:false
-                        }
-                        
-                    ],
-                }
-
-            },
             {   
                
                 data:{ 
@@ -1505,7 +1482,9 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                 checkboxBtnContent:{
                     header:{
                         title: 'Reason syphilis test not done',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'notDone',
+                        displayNone:true,
                     },
                     data:[
                         {
@@ -1517,17 +1496,6 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             justify: 'space-between'
                             
                         },
-                    ]
-                }
-            },
-            {
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:{
-                    header:{
-                        title: '',
-                        selectedValue: ''
-                    },
-                    data:[
 
                         {
                             name: syphilisForm.expiredTests.name,
@@ -1537,40 +1505,29 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             colSize: '9',
                             justify: 'space-between'
                         },
-                    ]
-                }
-            },
-              {
-                  classDash: 'dashed_bottom_border',
-                  checkboxBtnContent:{
-                      header:{
-                          title: '',
-                          selectedValue: ''
-                      },
-                      data:[
-
-                          {
-                              name: syphilisForm.other.name,
-                              value: syphilisForm.other.value,
+                         {
+                              name: "Other",
+                              value: 'other',
                               checked: false,
                               labelPlacement: 'start',
                               colSize: '9',
                               justify: 'space-between'
                           },
-                      ]
-                  }
-              },
+                    ]
+                }
+            },
             {
-                classDash: 'dashed_bottom_border',
+                
                 data:{ 
                     rowData:[
                         {
                             colData:[
-                                {
-                                    inputHeader: 'Specify other reasons syphilis was not done',
+                                {   
+                                    displayNone:true,
+                                    inputHeader: 'specify',
                                     icon: icons.editPen,
-                                    value: syphilisForm.reasonsTestNotDone.name,
-                                    name: syphilisForm.reasonsTestNotDone.value,
+                                    value: syphilisForm.reasonsTestNotDone.value,
+                                    name: 'Reason',
                                     eventType: 'input',
                                     inputWidth: "55%",
                                     required: true
@@ -1682,5 +1639,5 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
         //     this.otherSite = data
         // }
     },
-    persist:true
+    // persist:true
 });

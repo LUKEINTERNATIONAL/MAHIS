@@ -9,7 +9,7 @@
         <ion-card  style="margin-left: 20px">
 <!--          <ion-card-title class="sub_item_header">Specify mode of delivery for each child based on number live births provided</ion-card-title>-->
           <ion-card-content>
-            <basic-form :contentData="modeOfDelivery"></basic-form>
+            <basic-form :contentData="modeOfDelivery" @update:inputValue="handleAlert"></basic-form>
           </ion-card-content>
         </ion-card>
 
@@ -55,7 +55,7 @@ import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import { useObstreticHistoryStore} from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
 import { checkmark, pulseOutline } from 'ionicons/icons';
-import { getCheckboxSelectedValue, modifyFieldValue } from '@/services/data_helpers';
+import { dynamicValue, getCheckboxSelectedValue, getRadioSelectedValue, modifyDynamicFieldValue, modifyFieldValue } from '@/services/data_helpers';
 
 export default defineComponent({
   name: "History",
@@ -95,13 +95,14 @@ export default defineComponent({
 
     },
     created() {
-        this.modeOfDelieveryRef = {...this.modeOfDelivery[0]}
+        this.modeOfDelieveryRef = {...this.modeOfDelivery[0],...this.modeOfDelivery[1]}
     },
     mounted(){
      
       this.prevPregnanciesInstance = useObstreticHistoryStore()
       this.prevPregnanciesInstance.setModeOfDelivery([])
-      this.handleOther()   
+      this.handleOther()
+      this.handleDynamic()   
     },
     watch:{
       prevPregnancies: {
@@ -114,8 +115,12 @@ export default defineComponent({
               const births = []
               for (let i = 0; i < liveBirths; ++i) {
                 // a deep copy of the template object for each text field
-                births.push(JSON.parse(JSON.stringify(this.modeOfDelieveryRef)))
+                const x = JSON.parse(JSON.stringify({...this.modeOfDelieveryRef, id: i}))
+                x.radioBtnContent.header.id=i
+                x.data.id=i
+                births.push(x)
               }
+              console.log(births)
 
               this.prevPregnanciesInstance.setModeOfDelivery(births)
             }
@@ -123,6 +128,12 @@ export default defineComponent({
 
         deep: true
       },
+      // modeOfDelivery:{
+      //   handler(){
+      //     this.handleDynamic() 
+      //   },
+        // deep:true,
+      // },
       Complications:{
         handler(){
           this.handleOther() 
@@ -140,6 +151,22 @@ export default defineComponent({
         }else{
           modifyFieldValue(this.Complications,'otherC','displayNone',true)
         }
+      },
+      handleDynamic(){
+        if(getRadioSelectedValue(this.modeOfDelivery,'cesareanSec')=='cesarean'){
+          modifyFieldValue(this.modeOfDelivery,'Specify','displayNone',false)
+        }else{
+          modifyFieldValue(this.modeOfDelivery,'Specify','displayNone',true)
+         }
+         
+      },
+      handleAlert(e:any){
+        if(dynamicValue(this.modeOfDelivery,'cesareanSec',e.id)=='cesarean'){
+          modifyDynamicFieldValue(e.id,this.modeOfDelivery,'Specify','displayNone',false)
+        }else{
+          modifyDynamicFieldValue(e.id,this.modeOfDelivery,'Specify','displayNone',true)
+         }
+         console.log(dynamicValue(this.modeOfDelivery,'cesareanSec',e.id),e.id)
       },
          //Method for navigating sections
     goToNextSection() {

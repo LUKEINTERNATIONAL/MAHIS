@@ -17,6 +17,7 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                                     inputHeader: 'Gravida',
                                     value: '',
                                     name: 'Gravida',
+                                    icon: icons.editPen,
                                     required: true,
                                     eventType: 'input',
                                     alertsError: false,
@@ -26,6 +27,7 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                                     inputHeader: 'Parity',
                                     value: '',
                                     name: 'Parity',
+                                    icon: icons.editPen,
                                     required: true,
                                     eventType: 'input',
                                     alertsError: false,
@@ -40,6 +42,7 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                             {
                                 inputHeader: 'Abortions/Miscarriages',
                                 value: '',
+                                icon: icons.editPen,
                                 name: 'abortions',
                                 required: true,
                                 eventType: 'input',
@@ -51,6 +54,7 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                                     value: '',
                                     name: 'Stillbirths',
                                     required: true,
+                                    icon: icons.editPen,
                                     eventType: 'input',
                                     alertsError: false,
                                     alertsErrorMassage: ''
@@ -65,6 +69,7 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                                 value: '',
                                 name: 'Live births',
                                 required: true,
+                                icon: icons.editPen,
                                 eventType: 'input',
                                 alertsError: false,
                                 alertsErrorMassage: ''
@@ -116,6 +121,29 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                 }
                     
             },
+            // {
+            //     data:{ 
+            //         rowData:[
+            //             {
+            //                 colData:[
+            //                     {
+            //                         // displayNone:true,
+            //                         inputHeader: 'Specify',
+            //                         icon: icons.editPen,
+            //                         value: "",
+            //                         name: "specify",
+            //                         eventType: 'input',
+            //                         inputWidth: "82%",
+            //                         required: true
+            //                     }
+                                
+            //                 ]
+            //             }
+            //         ],
+                    
+            //     }
+                    
+            // },
         ],
         preterm:[
             {
@@ -165,7 +193,8 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                     {
                         header:{
                             title: 'Specify mode of delivery',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'cesareanSec',
                         },
                         data:[
                             {
@@ -177,7 +206,7 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                             },
                             {
                                 name: 'Vacuum',
-                                value: 'cesarean',
+                                value: 'vacuum',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
@@ -201,77 +230,28 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
 
             },
             {
-                inputHeader: 'Last cesarean section',
-                value: '',
-                name: 'LCS',
-                required: true,
-                eventType: 'input',
-                alertsError: false,
-                alertsErrorMassage: '',
-                isDatePopover: true,
-                icon: icons.calenderPrimary,
-                placeholder: 'Pick the date',
-            },
-
-
-
-            {
-                isFinishBtn: false,
-                sectionHeader: '',
-                classDash: '',
-                data:
-                {
+                data:{ 
                     rowData:[
                         {
-                            colData: [
+                            colData:[
                                 {
-                                    inputHeader: 'Mode of delivery',
+                                    displayNone:true,
+                                    inputHeader: 'specify',
+                                    icon: icons.editPen,
                                     value: '',
-                                    name: 'MOD',
-                                    required: true,
+                                    name: "Specify",
                                     eventType: 'input',
-                                    alertsError: false,
-
-                                    alertsErrorMassage: ''
-                                },
-                                {
-                                    inputHeader: 'Number of ceasarian',
-                                    value: '',
-                                    name: 'Ceasarian',
-                                    required: true,
-                                    eventType: 'input',
-                                    alertsError: false,
-
-                                    alertsErrorMassage: ''
-                                },
-
-                            ],
-
-                        },
-                         {
-                        colData: [
-                            {
-                                inputHeader: 'Last ceasarian section',
-                                value: '',
-                                name: 'LCS',
-                                required: true,
-                                eventType: 'input',
-                                alertsError: false,
-                                alertsErrorMassage: '',
-                                isDatePopover: true,
-                                icon: icons.calenderPrimary,
-                                placeholder: 'Pick the date',
-                            },
-
-                        ],}
-
-
+                                    inputWidth: "82%",
+                                    required: true
+                                }
+                                
+                            ]
+                        }
                     ],
-
-                },
-            },
-
-             
+                    
+                }
+                    
+            },         
         ] as any,
 
         Complications:[
@@ -538,6 +518,6 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
         },
       
     },
-    persist:true,
+    // persist:true,
 
 })

@@ -13,8 +13,10 @@ import Enrollment from "@/apps/ANC/views/Enrollment.vue";
 import Dashboard from "@/apps/ANC/views/Dashboard.vue";
 import ProfileTest from "@/apps/ANC/views/ProfileTest.vue";
 
+
+
 export default [
-  {
+    {
     path: '/profileTest',
     name: 'ProfileTest',
     component: ProfileTest
