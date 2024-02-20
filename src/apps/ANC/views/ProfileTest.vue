@@ -1,287 +1,70 @@
 <template>
-  <ion-page>
-    <Toolbar />
-    <ion-content :fullscreen="true">
-      <DemographicBar />
-      <StepperTest stepperTitle="Profile Test" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()"  :StepperData="StepperData"/>
-    </ion-content>
-  </ion-page>
+  <ion-accordion-group @ionAccordionDidOpen="onAccordionOpen">
+    <ion-accordion :value="accordions[0].value">
+      <ion-item slot="header" color="light">
+        <ion-label>{{ accordions[0].label }}</ion-label>
+      </ion-item>
+      <div class="ion-padding" slot="content">{{ accordions[0].content }}</div>
+    </ion-accordion>
+    <ion-accordion :value="accordions[1].value" v-show="!isFirstAccordionExpanded">
+      <ion-item slot="header" color="light">
+        <ion-label>{{ accordions[1].label }}</ion-label>
+      </ion-item>
+      <div class="ion-padding" slot="content">{{ accordions[1].content }}</div>
+    </ion-accordion>
+    <ion-accordion :value="accordions[2].value" v-show="!isFirstAccordionExpanded">
+      <ion-item slot="header" color="light">
+        <ion-label>{{ accordions[2].label }}</ion-label>
+      </ion-item>
+      <div class="ion-padding" slot="content">{{ accordions[2].content }}</div>
+    </ion-accordion>
+  </ion-accordion-group>
 </template>
 
 <script lang="ts">
-import {
-  IonContent,
-  IonHeader,
-  IonMenuButton,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  IonButton,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
-  IonAccordion,
-  IonAccordionGroup,
-  IonItem,
-  IonLabel,
-  IonModal,
-  modalController,
-  AccordionGroupCustomEvent } from '@ionic/vue';
-import { defineComponent } from 'vue';
-import Toolbar from "@/apps/ANC/components/Toolbar.vue";
-import ToolbarSearch from "@/apps/ANC/components/ToolbarSearch.vue";
-import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
-import { chevronBackOutline,checkmark } from 'ionicons/icons';
-import SaveProgressModal from '@/components/SaveProgressModal.vue'
-import { createModal } from '@/utils/Alerts'
-import { icons } from '@/utils/svg';
-import { mapState } from 'pinia';
-import StepperTest from "@/apps/ANC/components/StepperTest.vue";
-import { toastWarning,popoverConfirmation, toastSuccess } from '@/utils/Alerts';
-import PastObstreticHistory from '../components/profile/PastObstreticHistory.vue';
-import CurrentPregnancies from '../components/profile/CurrentPregnancies.vue';
-import Medications from '../components/profile/Medications.vue';
-import MedicalHistory from '../components/profile/MedicalHistory.vue';
-import WomanBehaviour from '../components/profile/WomanBehaviour.vue';
-import {getCheckboxSelectedValue} from "@/services/data_helpers";
-import {useMedicalHistoryStore} from "@/apps/ANC/store/profile/medicalHistoryStore";
-import {useObstreticHistoryStore} from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
-import {useCurrentPregnanciesStore} from "@/apps/ANC/store/profile/CurrentPreganciesStore";
-import {useMedicationsStore} from "@/apps/ANC/store/profile/MedicationsStore";
-import {useWomanBehaviourStore} from "@/apps/ANC/store/profile/womanBehaviourStore";
+import { IonAccordion, IonAccordionGroup, IonItem, IonLabel, AccordionGroupCustomEvent } from '@ionic/vue';
+import { defineComponent, ref } from 'vue';
 
-function someChecked(options, errorMessage="Missing check values") {
-  if (!options.filter(v => v.checkboxBtnContent).some(v => v.checkboxBtnContent.data.some(d => d.checked))) {
-    return errorMessage
-  }
+interface Accordion {
+  value: string;
+  label: string;
+  content: string;
 }
+
 export default defineComponent({
-  name: "Home",
-  components:{
-    IonContent,
-    IonHeader,
-    IonMenuButton,
-    IonPage,
-    IonTitle,
-    IonToolbar,
-    Toolbar,
-    ToolbarSearch,
-    DemographicBar,
-    IonButton,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardSubtitle,
-    IonCardTitle,
+  components: {
     IonAccordion,
     IonAccordionGroup,
     IonItem,
     IonLabel,
-    IonModal,
-    StepperTest,
-    PastObstreticHistory,
-    WomanBehaviour,
-    CurrentPregnancies,
-    Medications,
-    MedicalHistory
-  },
-  data(){
-    return {
-      wizardData: [
-        {
-          'title': 'Past Obstetric History',
-          'class': 'common_step',
-          'checked':'',
-          'icon': false,
-          'disabled':false,
-          'number': 1,
-          'last_step': ''
-        },
-        {
-          'title': 'Medical History',
-          'class': 'common_step',
-          'checked':'',
-          'icon': false,
-          'disabled':false,
-          'number': 2,
-          'last_step': ''
-        },
-        {
-          'title': 'Current Pregnancy',
-          'class': 'common_step',
-          'checked':'',
-          'icon': false,
-          'disabled':false,
-          'number': 3,
-          'last_step': ''
-        },
-        {
-          'title': 'Medications',
-          'class': 'common_step',
-          'checked':'',
-          'icon': false,
-          'disabled':false,
-          'number': 4,
-          'last_step': ''
-        },
-
-        {
-          'title': 'Woman behaviour',
-          'class': 'common_step',
-          'checked':'',
-          'icon': false,
-          'disabled':false,
-          'number': 5,
-          'last_step': 'last_step'
-        },
-      ],
-      StepperData:[
-        {
-          'title': 'Past Obstetric History',
-          'componet': 'PastObstetricHistory',
-          'value': '1'
-        },
-        {
-          'title': 'Past Medical history',
-          'componet': 'MedicalHistory',
-          'value': '2',
-          validation: {
-            medicalHistory: (data) => someChecked(data, "Medical history is required"), 
-            allegy: (data) => someChecked(data, "Allergy is required"), 
-            //existingChronicHealthConditions: (data)=>someChecked(data, "Existing chronic conditions is required"),
-            hivTest: (data)=>someChecked(data, "HIV test required"),
-            syphilisTest: (data)=>someChecked(data, "Syphilis test is required")
-            
-          }
-        },
-        {
-          'title': 'Current Pregancy',
-          'componet': 'CurrentPregnancies',
-          'value': '3',
-        },
-        {
-          'title': 'Medications',
-          'componet': 'Medications',
-          'value': '4',
-        },
-        {
-          'title': 'Woman behaviour',
-          'componet': 'WomanBehaviour',
-          'value': '5',
-        }
-      ],
-      isOpen: false,
-      iconsContent: icons,
-    };
-  },
-  watch: {
-    medicalHistory(change) {
-      console.log(change)
-    }
-  },
-  computed:{
-    ...mapState(useMedicalHistoryStore,["medicalHistory", "allegy", "existingChronicHealthConditions","hivTest","syphilisTest"]),
-    ...mapState(useObstreticHistoryStore, ["prevPregnancies","preterm","abnormalities","modeOfDelivery","Complications"]),
-    ...mapState(useCurrentPregnanciesStore, ["currentPregnancies","deliveryDate","lmnp","gestation","tetanus","ultrasound"]),
-    ...mapState(useMedicationsStore,["Medication"]),
-    ...mapState(useWomanBehaviourStore,["dailyCaffeineIntake","Tobacco"])
-
-  },
-  mounted(){
-    // this.markWizard()
-
-  },
-  watch: {
-
-    vitals: {
-    //   handler(){
-    //     this.markWizard()
-    //   },
-    //   deep: true
-    // },
-    // investigations: {
-    //   handler(){
-    //     this.markWizard()
-    //   },
-    //   deep: true
-    // },
-    // diagnosis: {
-    //   handler(){
-    //     this.markWizard()
-    //   },
-      deep: true
-    }
   },
   setup() {
-    return { chevronBackOutline,checkmark };
-  },
+    const isFirstAccordionExpanded = ref(false);
 
-  methods:{
-    markWizard(){
-    //   if(this.medications.validationStatus){
-    //     this.wizardData[0].checked = true;
-    //     this.wizardData[0].class = 'open_step common_step'
-    //   }else{
-    //     this.wizardData[0].checked = false;
-    //   }
+    const accordions: Accordion[] = [
+      { value: 'first', label: 'First Accordion', content: 'First Content' },
+      { value: 'second', label: 'Second Accordion', content: 'Second Content' },
+      { value: 'third', label: 'Third Accordion', content: 'Third Content' }
+    ];
 
-    //   if(this.medicalHistory[0].selectdData.length > 0){
-    //     this.wizardData[1].checked = true;
-    //     this.wizardData[1].class = 'open_step common_step'
-    //   }else{
-    //     this.wizardData[1].checked = false;
-    //   }
-
-    //   if(this.womanBehaviour[0].selectdData.length > 0){
-    //     this.wizardData[2].checked = true;
-    //     this.wizardData[2].class = 'open_step common_step'
-    //   }else{
-    //     this.wizardData[2].checked = false;
-    //   }
-    //   if(this.medications[0].selectdData.length > 0){
-    //     this.wizardData[2].checked = true;
-    //     this.wizardData[2].class = 'open_step common_step'
-    //   }else{
-    //     this.wizardData[2].checked = false;
-    //   }
-     },
-    deleteDisplayData(data: any){
-      return  data.map((item: any) => {
-        delete item?.display;
-        return item?.data;
-      });
-    },
-    saveData(){ 
-      const errors = []
-      this.StepperData.forEach((stepper)=> {
-        if (!stepper.validation) return
-        Object.keys(stepper.validation).forEach((validationName) => {
-          if (typeof stepper.validation[validationName] === 'function') {
-            const state = stepper.validation[validationName](this[validationName])
-            if (state) errors.push(state)
-          }
-        })
-      })
-      if (errors.length) {
-        return alert(errors.join(','))
+    const onAccordionOpen = (event: CustomEvent<AccordionGroupCustomEvent>) => {
+      if (event.detail.accordion === 'first') {
+        isFirstAccordionExpanded.value = true;
       }
-      console.log(errors)
-        // console.log(this.medicalHistory, "Medical history")
-        // console.log(this.currentPregnancies, "Current")
-        //   console.log(getCheckboxSelectedValue(this.medicalHistory, 'Myomectomy'))
-        //  this.$router.push('symptomsFollowUp');
+    };
 
-     },
-
-    openModal(){
-      createModal(SaveProgressModal)
-    }
-  }
-})
+    return {
+      isFirstAccordionExpanded,
+      accordions,
+      onAccordionOpen,
+    };
+  },
+});
 </script>
 
 <style scoped>
-
+ion-accordion[value="second"],
+ion-accordion[value="third"] {
+  display: none;
+}
 </style>
