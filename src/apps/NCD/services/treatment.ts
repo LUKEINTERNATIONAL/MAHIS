@@ -36,6 +36,7 @@ export class PreviousTreatment {
   demographics: any
   previousDrugPrescriptions: any[] = []
   previousClinicalNotes: any[] = []
+  previousDrugAllergies: any
 
   constructor() {
       const store = useDemographicsStore()
@@ -44,6 +45,7 @@ export class PreviousTreatment {
       this.date = ObservationService.getSessionDate()
       this.providerID = Service.getUserID() as number
       this.programID = ObservationService.getProgramID()
+      this.previousDrugAllergies = {}
   }
 
   async getPatientEncounters() {
@@ -72,13 +74,6 @@ export class PreviousTreatment {
           if (encounter.type.name == 'TREATMENT') {
             const { observations } = encounter
             if (!isEmpty(observations)) {
-              observations.forEach((observation: any) => {
-                if (observation.concept_id = '985') {
-                  console.log(HisDate.toStandardHisDisplayFormat(observation.obs_datetime))
-                  console.log(observation)
-                }
-              })
-
               for(const _index in observations) {
                 let concept = '<UNKNOWN CONCEPT>'
                 const obs =  observations[_index]
@@ -92,12 +87,14 @@ export class PreviousTreatment {
                     console.error(obs, e)
                 }
                 const value = await ObservationService.resolvePrimaryValue(obs)
-                const time = HisDate.toStandardHisTimeFormat(obs.date_created)
+                const time = HisDate.toStandardHisDisplayFormat(obs.date_created)
 
-                console.log({value})
-                console.log({time})
-                console.log({concept})
-                //data.push([concept, value, time])
+                if (concept == 'Allergic') {
+                  if ( isEmpty(this.previousDrugAllergies.hasOwnProperty(time))) {
+                      this.previousDrugAllergies[time] = []
+                  }
+                  this.previousDrugAllergies[time].push({ date: time, value })
+                }
             }
             }
           }
