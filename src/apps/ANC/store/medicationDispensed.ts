@@ -490,9 +490,9 @@ export const useMedicationDispensedStore = defineStore ('medicationDispensed', {
         setIron(data:any) {
             this.iron = data
         },
-        setIronDosage(data:any) {
-            this.ironDosage = data
-        },
+        // setIronDosage(data:any) {
+        //     this.ironDosage = data
+        // },
         setFolicAcid(data:any) {
             this.folicAcid = data
         },
@@ -502,12 +502,12 @@ export const useMedicationDispensedStore = defineStore ('medicationDispensed', {
         setVitaminA(data:any) {
             this.vitaminA = data
         },
-        setVitaminADosage(data:any) {
-            this.vitaminADosage = data
-        },
-        setVitaminAReason(data:any) {
-            this.vitaminAReason = data
-        },
+        // setVitaminADosage(data:any) {
+        //     this.vitaminADosage = data
+        // },
+        // setVitaminAReason(data:any) {
+        //     this.vitaminAReason = data
+        // },
         setCalcium(data:any) {
             this.calcium = data
         },

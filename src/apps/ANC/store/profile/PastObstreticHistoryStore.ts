@@ -70,9 +70,8 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                                 alertsErrorMassage: ''
                             },
 
-                        
-                    ]
-                },
+                        ]
+                    },
 
                     ],
                     

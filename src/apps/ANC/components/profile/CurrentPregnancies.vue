@@ -13,13 +13,6 @@
               <basic-form :contentData="currentPregnancies"></basic-form>
             </ion-card-content>
     </ion-card>
-    <ion-card class="section">
-            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
-            <ion-card-content>
-              <basic-form :contentData="gestation"></basic-form>
-              <basic-form :contentData="deliveryDate"></basic-form>
-            </ion-card-content>
-    </ion-card>
     <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
