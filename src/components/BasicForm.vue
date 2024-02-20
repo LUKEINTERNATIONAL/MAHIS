@@ -94,15 +94,19 @@
                         </div>
                 </ion-row>
             </span>
-            <span v-if="item.checkboxBtnContent">
+            <span v-if="item.checkboxBtnContent && !item.checkboxBtnContent?.header.displayNone">
                 <div style="" v-if="item.checkboxBtnContent?.header">{{ item.checkboxBtnContent?.header.title }} </div>
                 <ion-row class="checkbox_content">
-                    <ion-col :size="al.colSize" class="checkout_col" style="" v-for="(al, index3) in item.checkboxBtnContent?.data" :key="index3">
+                    <ion-col :size="al.colSize" class="checkout_col" style="" 
+                        v-for="(al, index3) in item.checkboxBtnContent?.data" :key="index3"
+                        v-show="!al.displayNone">
                         <span v-if="al.header" class="first_col">
                             <ion-label>{{ al.name }} </ion-label>
                         </span>
                         <ion-checkbox v-else :justify="al.justify || 'start'" :checked="al.checked" style="width: 100%;"
-                        @ionChange="value =>{al.checked =value.detail.checked; $emit('update:inputValue',{al, value })}" :label-placement="al.labelPlacement || 'end'" > 
+                            :disabled="al.disabled"
+                            @ionChange="value =>{al.checked =value.detail.checked; $emit('update:inputValue',{al, value })}"
+                            :label-placement="al.labelPlacement || 'end'" > 
                             <span style="line-height: 1;">
                                 <p class="checkbox_header">{{ al.name }}</p>
                                 <p v-if="al.example " class="small_font">{{ al.example }}</p>
