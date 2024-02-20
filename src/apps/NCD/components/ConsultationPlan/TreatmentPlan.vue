@@ -147,13 +147,12 @@
             </ion-row>
 
             <div style="margin-top: 14px;">
-                <ion-accordion-group ref="accordionGroup" class="previousView">
+                <ion-accordion-group ref="accordionGroup" class="previousView" @ionChange="accordionGroupChangeFn1">
                     <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
                         <ion-item slot="header" color="light">
                             <ion-label class="previousLabel">Previous medications</ion-label>
                         </ion-item>
-                        <div class="ion-padding" slot="content" :key="componentKey">
-
+                        <div class="ion-padding" slot="content">
                             <div class="ionLbltp" v-for="(item, index) in PreviuosSelectedMedicalDrugsList" :key="index">
                                 <div v-if="index == 0">
                                     <div>
@@ -298,6 +297,11 @@
         }
     )
 
+    function addData(){
+        addItemButton.value = !addItemButton.value
+        search_item.value = true
+    }
+
     async function validatedDrugName() {
         const drugNameExists  = await findIfDrugNameExists()
             if (!drugNameExists) {
@@ -355,11 +359,6 @@
         })
         drug_frequencies[index].selected = !drug_frequencies[index].selected
         frequency.value = drug_frequencies[index].label
-    }
-
-    function addData(){
-        addItemButton.value = false
-        search_item.value = true
     }
 
     async function saveData() {
@@ -571,6 +570,11 @@
 
     function setFocus() {
         input.value.$el.setFocus()
+    }
+
+    function accordionGroupChangeFn1(ev: AccordionGroupCustomEvent)  {
+        addItemButton.value = !addItemButton.value
+        addItemButton.value = !addItemButton.value
     }
 
     function accordionGroupChange(ev: AccordionGroupCustomEvent)  {
