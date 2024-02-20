@@ -52,7 +52,9 @@
     IonCardSubtitle, 
     IonCardTitle,
     IonPopover,
-    popoverController 
+    popoverController,
+    IonRow, 
+    IonCol 
   } from '@ionic/vue';
   import { defineComponent } from 'vue';
   import { Patientservice } from "@/services/patient_service"
@@ -79,7 +81,9 @@
         IonToolbar,
         IonIcon,
         IonPopover,
-        DynButton
+        DynButton,
+        IonRow, 
+        IonCol 
       },
       setup() {
       return { checkmark,add };

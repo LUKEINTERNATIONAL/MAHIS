@@ -172,7 +172,10 @@
     IonAccordionGroup, 
     IonItem, 
     IonLabel,
-    IonModal
+    IonModal,
+    IonRow, 
+    IonCol,
+    IonGrid
      } from '@ionic/vue';
   import { defineComponent } from 'vue';
   import { chevronBackOutline,checkmark } from 'ionicons/icons';
@@ -223,7 +226,10 @@
         DispositionGrid,
         InvestigationsGrid,
         MedicationsGrid,
-        VitalsGrid  
+        VitalsGrid,
+        IonRow, 
+        IonCol,
+        IonGrid
     },
     data(){
         return {
