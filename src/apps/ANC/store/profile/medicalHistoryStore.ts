@@ -438,10 +438,11 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     header:{
                         title: '',
                         selectedValue: '',
+                        name:'trydis'
                     },
                     data:[
                        {
-                            name: "No Surgery",
+                            name: "NoSurgery",
                             value: "noSurgeries",
                             labelPlacement: 'start',
                             colSize: '6',
@@ -449,7 +450,8 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             checked: false
                         },
                          {
-                            name: "Other",
+                            name: "OtherS",
+                            disableStatus: false,
                             value: "otherSurguries",
                             labelPlacement: 'start',
                             colSize: '6',
@@ -1181,8 +1183,8 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     header:{
                         title: 'Reasons HIV test not done:',
                         selectedValue: '',
-                        // displayNone: true,
-                        // name:'reasonNotDone'
+                        displayNone: true,
+                        name:'reasonNotDone'
                     },
                     data:[
                         {    

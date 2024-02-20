@@ -26,12 +26,18 @@ export function modifyRadioValue(data: any, radioBtnName: any, element: any, new
     if (itemIndex !== -1)  data[itemIndex].radioBtnContent.header[element] = newValue;
 }
 
-export function modifyCheckboxValue(data: any, checkboxName: any, newValue: any) {
+export function modifyCheckboxValue(data: any, checkboxName: any,element:any, newValue: any) {
     data.forEach((item: any) => {
         const checkbox = item.checkboxBtnContent?.data.find((checkbox: any) => checkbox.name === checkboxName);
-        if (checkbox) checkbox.checked = newValue;
+        if (checkbox) checkbox[element] = newValue;
     });
 }
+// export function modifyCheckboxHeaderValue(data: any, checkboxName: any,element:any, newValue: any) {
+//     data.forEach((item: any) => {
+//         item.checkboxBtnContent?.header[element]=newValue
+        
+//     })
+// }
 export function modifyCheckboxInputField(data: any, checkboxInputName: any,element: any, newValue: any) {
     
     data.forEach((item: any) => {
