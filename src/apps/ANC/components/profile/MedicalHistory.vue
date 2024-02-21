@@ -1,178 +1,66 @@
 <template>
-    <!-- Past Surgeries -->
-    <ion-list>
-        <ion-item :lines="pastSurgeries" class="dashed_bottom_border">
-            <ion-toggle :checked ="surgeriesChecked" @ionChange="surgeries">Past Surgeries</ion-toggle>
-        </ion-item>
-        
-        <div class="sub_item_body" v-if="surgeriesChecked">
-            <BasicForm :contentData="medicalHistory" />
-        </div>
-        <ion-item class="sub_item_body_close" v-if="surgeriesChecked"/>
-    </ion-list>
 
-    <!-- Allegies -->
-        <!-- <ion-list>
-        <ion-item :lines="allegies" class="dashed_bottom_border">
-            <ion-toggle :checked ="allegiesChecked" @ionChange="allegyMethod">Allegies</ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="allegiesChecked">
-            <BasicForm :contentData="allegies" />
-        </div>
-        <ion-item class="sub_item_body_close" v-if="allegiesChecked"/>
-    </ion-list> -->
+    <div class="container">
+         <!-- Past Surgeries -->
+            <ion-card class="section">
+            <ion-card-header>
+                <ion-card-title class="dashed_bottom_border sub_item_header">Past Surgeries</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="medicalHistory"></basic-form>
+            </ion-card-content>
+            </ion-card>
 
-        <ion-list>
-        <ion-item :lines="allegies" class="dashed_bottom_border">
-            <ion-toggle :checked ="allegiesChecked" @ionChange="allegyMethod">Allegies</ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="allegiesChecked">
-            <BasicForm :contentData="allegies" />
-        </div>
-        <ion-item class="sub_item_body_close" v-if="allegiesChecked"/>
-    </ion-list>
+         <!-- Allegies -->
+          <ion-card  class="section">
+            <ion-card-header>
+                <ion-card-title class="dashed_bottom_border sub_item_header">Allergies</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="allegy"></basic-form>
+            </ion-card-content>
+            </ion-card>
 
-    <!-- Chronical Health conditions -->
+        <!-- Chronical Health conditions -->
+            <ion-card class="section">
+            <ion-card-header>
+                <ion-card-title class="dashed_bottom_border sub_item_header">Existing Chronic Health Conditions</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="exisitingChronicHealthConditions"></basic-form>
+            </ion-card-content>
+            </ion-card>
 
-    <ion-list>
-        <ion-item :lines="chronicalHC" class="dashed_bottom_border">
-            <ion-toggle :checked ="chronicalHCChecked" @ionChange="chronicalHCMethod">Existing Chronical Health Conditions</ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="chronicalHCChecked">
-            <BasicForm :contentData="exisitingChronicHealthConditions" />
-        </div>
-        <ion-item class="sub_item_body_close" v-if="chronicalHCChecked"/>
-    </ion-list>
+        <!-- HIV -->
+            <ion-card  class="section">
+            <ion-card-header>
+                <ion-card-title class="dashed_bottom_border sub_item_header">HIV</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="hivTest"></basic-form>
+            </ion-card-content>
+            </ion-card>
 
-    <!-- Blood disorder -->
-     
-    <ion-list>
-        <ion-item :lines="bloodDisorder" class="dashed_bottom_border">
-            <ion-toggle :checked ="bloodDisorderChecked" @ionChange="bloodDisorderMethod">Blood Disorder</ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="bloodDisorderChecked">
-            <BasicForm :contentData="bloodDisorder" />
-        </div>
-        <ion-item class="sub_item_body_close" v-if="bloodDisorderChecked"/>
-    </ion-list>
-    
-   <!-- Cancer  -->
+        <!-- Syphilis Test -->
 
-       <ion-list>
-        <ion-item :lines="cancer" class="dashed_bottom_border">
-            <ion-toggle :checked ="cancerChecked" @ionChange="cancerMethod">Cancer</ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="cancerChecked">
-            <BasicForm :contentData="cancer" />
-        </div>
-        <ion-item class="sub_item_body_close" v-if="cancerChecked"/>
-    </ion-list>
-
-    <!-- HeartDesease -->
-
-    <ion-list>
-        <ion-item :lines="heartDesease" class="dashed_bottom_border">
-            <ion-toggle :checked ="heartDeseaseChecked" @ionChange="heartDeseaseMethod">Heart Desease</ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="heartDeseaseChecked">
-            <BasicForm :contentData="heartDesease" />
-        </div>
-        <ion-item class="sub_item_body_close" v-if="heartDeseaseChecked"/>
-    </ion-list>
-
-    <!-- Diabetis -->
-
-        <ion-list>
-        <ion-item :lines="diabetis" class="dashed_bottom_border">
-            <ion-toggle :checked ="diabetisChecked" @ionChange="diabetisMethod">Diabetis</ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="diabetisChecked">
-            <BasicForm :contentData="diabetes" />
-        </div>
-        <ion-item class="sub_item_body_close" v-if="diabetisChecked"/>
-    </ion-list>
-
-    <!-- HIV -->
+            <ion-card class="section">
+            <ion-card-header>
+                <ion-card-title class="dashed_bottom_border sub_item_header">Syphilis</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="syphilisTest"></basic-form>
+            </ion-card-content>
+            </ion-card>
 
 
-        <ion-list>
-        <ion-item :lines="hiv" class="dashed_bottom_border">
-            <ion-toggle :checked ="hivChecked" @ionChange="hivMethod">HIV</ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="hivChecked">
-            <ion-row class="hiv_content">
-                <ion-col class="first_col">Positive</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="general_content" style="display: flex; border-bottom-style: none;">
-            <ion-col size="3.75" >
-                <span class="hiv_input">Diagnosis date</span>
-                <ion-item class="input_item" style="margin: 10px 0px;">
-                    <ion-input fill="outline"></ion-input>
-                    <ion-label><span  class="selectedPatient"></span></ion-label>
-                </ion-item>
-            </ion-col>
-            </ion-row>
-        </div>
-        <ion-item class="sub_item_body_close" v-if="hivChecked"/>
-    </ion-list>
+<!--    &lt;!&ndash; Navigation Buttons &ndash;&gt;-->
+<!--    <div class="navigation-buttons">-->
+<!--      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Save</ion-button>-->
+<!--    </div>-->
 
-    <!-- Hypertations-Kidney-TB-MentalIlliness -->
+    </div>
 
-    <ion-list>
-        <ion-item :lines="hyperKTM" class="dashed_bottom_border">
-            <ion-toggle :checked ="hyperKTMChecked" @ionChange="hyperKTMMethod">Hypertations/Kidney/TB/Mental Illiness</ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="hyperKTMChecked">
-            <ion-row class="hyperKTM_content">
-                <ion-col class="first_col">Hypertations</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="hyperKTM_content">
-                <ion-col class="first_col">Kidney</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="hyperKTM_content">
-                <ion-col class="first_col">TB</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-            <ion-row class="hyperKTM_content">
-                <ion-col class="first_col">Mental Illiness</ion-col>
-                <ion-col>
-                    <ion-checkbox label-placement="end">
-                        <span class = "checkbox_header"></span>
-                    </ion-checkbox>
-                </ion-col>
-            </ion-row>
-        </div>
-        <ion-item class="sub_item_body_close" v-if="hyperKTMChecked"/>
 
-        <ion-row class="general_content" style="display: flex; border-bottom-style: none;">
-        <ion-col size="3.75" >
-            <span class="other_input">Other Site</span>
-            <ion-item class="input_item" style="margin: 10px 0px;">
-                <ion-input fill="outline"></ion-input>
-                <ion-label><span  class="selectedPatient"></span></ion-label>
-            </ion-item>
-        </ion-col>
-        </ion-row>
-    </ion-list>
 
 </template>
 
@@ -191,12 +79,21 @@
     IonInput,
     IonSelect
  } from "@ionic/vue";
-  import { mapState } from 'pinia';
+ import { mapState } from 'pinia';
  import {defineComponent} from 'vue';
  import {ref} from 'vue';
  import BasicInputField from "@/components/BasicInputField.vue";
- import {useMedicalHistoryStore} from "@/apps/ANC/store/medicalHistoryStore";
+ import {useMedicalHistoryStore} from "@/apps/ANC/store/profile/medicalHistoryStore";
  import BasicForm from '@/components/BasicForm.vue';
+import { modifyRadioValue,
+    getRadioSelectedValue,
+    getCheckboxSelectedValue,
+    getFieldValue,
+    modifyFieldValue,
+    modifyCheckboxValue,
+    // modifyCheckboxHeaderValue,
+    modifyCheckboxInputField} from '@/services/data_helpers'
+
 //  import {icons} from "@/utils/svg.ts"
 
 export default defineComponent({
@@ -218,139 +115,212 @@ export default defineComponent({
     },
     data(){
         return{
-            surgeriesChecked: false,
-            allegiesChecked: false,
-            chronicalHCChecked:false,
-            bloodDisorderChecked:false,
-            cancerChecked:false,
-            heartDeseaseChecked: false,
-            diabetisChecked: false,
-            hivChecked: false,
-            hyperKTMChecked: false,
-
-            pastSurgeries:"" as any,
-            allegies:"" as any,
-            chronicalHC:"" as any,
-            bloodDisorder:"" as any,
-            cancer:"" as any,
-            heartDesease:"" as any,
-            diabetis:"" as any,
-            hiv:"" as any,
-            hyperKTM:"" as any
-
+            currentSection: 0
         }
     },
     mounted(){
         const medicalHistory =useMedicalHistoryStore()
-        const allegies = useMedicalHistoryStore()
+        const allegy = useMedicalHistoryStore()
         const exisitingChronicHealthConditions = useMedicalHistoryStore()
-        const bloodDisorder = useMedicalHistoryStore()
-        const cancer = useMedicalHistoryStore()
-        const heartDesease = useMedicalHistoryStore()
+        const blood = useMedicalHistoryStore()
+        const cancerIssue = useMedicalHistoryStore()
+        const heartProblem = useMedicalHistoryStore()
         const diabetes = useMedicalHistoryStore()
+        const hivTest = useMedicalHistoryStore()
+        const syphilisTest = useMedicalHistoryStore()
+        const  hKTMI = useMedicalHistoryStore()
+        const  otherSite = useMedicalHistoryStore()  
+        this.handleHivResults()
+        this.handleSyphilis()
+        this.handleSurgries()
+        this.handleAllergies()
+        this.handleChronicCondition()
+        this.handleHivConducted()
+        this.handleOtherHiv()
+        // this. handleReasonNotDone()
+        this. handleSyphlisdate()
+        // this.handleTestNotDone()
+        this.handleDisable()
+    
+    },
+
+    watch:{
+        hivTest:{
+            handler(){
+                this.handleHivResults()
+                this.handleOtherHiv()
+                this.handleHivConducted()
+                // this. handleReasonNotDone()
+            },
+             deep:true,
+        },
+        syphilisTest:{
+            handler(){
+                this.handleSyphilis()
+                this. handleSyphlisdate()
+            },
+            deep:true
+        },
+        medicalHistory:{
+            handler(){
+                this.handleSurgries()
+                this.handleDisable()
+                
+            },
+            deep:true
+        },
+        allegy:{
+            handler(){
+                this.handleAllergies()
+            },
+            deep:true
+        },
+        exisitingChronicHealthConditions:{
+            handler(){
+                this.handleChronicCondition()
+            },
+            deep:true
+        }
+        
     },
       computed:{
         ...mapState(useMedicalHistoryStore,["medicalHistory"]),
-        // ...mapState(useMedicalHistoryStore,["allegies"]),
+        ...mapState(useMedicalHistoryStore,["allegy"]),
         ...mapState(useMedicalHistoryStore,["exisitingChronicHealthConditions"]),
-        // ...mapState(useMedicalHistoryStore,["bloodDisorder"]),
-        // ...mapState(useMedicalHistoryStore,["cancer"]),
-        // ...mapState(useMedicalHistoryStore,["heartDesease"]),
-        ...mapState(useMedicalHistoryStore,["diabetes"]),
+        ...mapState(useMedicalHistoryStore,["hivTest"]),
+        ...mapState(useMedicalHistoryStore,["syphilisTest"]),
+       
     },
     methods:{
-        surgeries(){
-            this.surgeriesChecked = !this.surgeriesChecked
-             if(this.surgeriesChecked){
-                this.pastSurgeries = 'none'
-             }else{this.pastSurgeries=""}
+        handleHivResults(){        
+            if(getRadioSelectedValue(this.hivTest,'test2') == 'hivPositive'){
+                modifyRadioValue(this.hivTest,'test1','displayNone',false)
+            }else{
+                modifyRadioValue(this.hivTest,'test1','displayNone',true)
+            }
+             
         },
-        allegyMethod(){
-            this.allegiesChecked = !this.allegiesChecked
-            if(this.allegiesChecked){
-                this.allegies = 'none'
-            }else{this.allegies ="" }
+        handleOtherHiv(){
+            if(getCheckboxSelectedValue(this.hivTest,'Other')=='other'){
+                modifyFieldValue(this.hivTest,'reasonsTestNotDone','displayNone',false)
+            }else{
+                modifyFieldValue(this.hivTest,'reasonsTestNotDone','displayNone',true)
+            }
         },
-        chronicalHCMethod(){
-            this.chronicalHCChecked = !this.chronicalHCChecked
-            if(this.chronicalHCChecked){
-                this.chronicalHC = 'none'
-            }else{this.chronicalHC=""}
-        },
-        bloodDisorderMethod(){
-            this.bloodDisorderChecked =!this.bloodDisorderChecked
-            if(this.bloodDisorderChecked){
-                this.bloodDisorder = 'none'
-            }else{this.bloodDisorder=""}
-        },
-        cancerMethod(){
-            this.cancerChecked =! this.cancerChecked
-            if(this.cancerChecked){
-                this.cancer='none'
-            }else{this.cancer=""}
-        },
-        heartDeseaseMethod(){
-            this.heartDeseaseChecked =! this.heartDeseaseChecked
-            if(this.heartDeseaseChecked){
-                this.heartDesease = 'none'
-            }else{this.heartDesease=""}
-        },
-        diabetisMethod(){
-            this.diabetisChecked =! this.diabetisChecked
-            if(this.diabetisChecked){
-                this.diabetis = 'none'
-            }else {this.diabetis=""}
-        },
-        hivMethod(){
-            this.hivChecked =! this.hivChecked
-            if(this.hivChecked){
-                this.hiv="none"
-            }else{this.hiv=""}
-        },
-        hyperKTMMethod(){
-            this.hyperKTMChecked =! this.hyperKTMChecked
-            if(this.hyperKTMChecked){
-                this.hyperKTM ="none"
-            }else{this.hyperKTM=""}
-        }
+        handleSyphilis(){
+           if(getRadioSelectedValue(this.syphilisTest,'syphilisOption') == 'syphilisTestConducted'){
+              modifyRadioValue(this.syphilisTest,'syphilisDetails','displayNone',false)
+           }else{
+             modifyRadioValue(this.syphilisTest,'syphilisDetails','displayNone',true)
+           }
+           
 
-        
+        },
+        handleSurgries(){
+            if(getCheckboxSelectedValue(this.medicalHistory,'Other') == 'otherSurguries'){
+                modifyFieldValue(this.medicalHistory,'specify','displayNone',false)
+            }else{
+                modifyFieldValue(this.medicalHistory,'specify','displayNone',true)
+            }
+
+ 
+        },
+        handleAllergies(){
+            if(getCheckboxSelectedValue(this.allegy,'Other')=='otherAllergies'){
+                modifyFieldValue(this.allegy,'other',"displayNone",false)
+            }else{
+                modifyFieldValue(this.allegy,'other',"displayNone",true)
+            }
+        },
+        handleChronicCondition(){
+            if(getCheckboxSelectedValue(this.exisitingChronicHealthConditions,'Other')=='other'){
+                modifyFieldValue(this.exisitingChronicHealthConditions,'Specify',"displayNone",false)
+            }else{
+                modifyFieldValue(this.exisitingChronicHealthConditions,'Specify',"displayNone",true)
+            }
+              console.log(getCheckboxSelectedValue(this.exisitingChronicHealthConditions,'Other'))
+        },
+        handleHivConducted(){
+            if(getRadioSelectedValue(this.hivTest,'hivOption')=='hivTestConducted'){
+                modifyFieldValue(this.hivTest,'birthdate','displayNone',false)
+            }else{
+                 modifyFieldValue(this.hivTest,'birthdate','displayNone',true)
+            }
+        },
+
+        // handleReasonNotDone(){
+        //     if(getRadioSelectedValue(this.hivTest,'hivOption')=='hivTestNotDone'){
+        //         modifyCheckboxHeaderValue(this.hivTest,'reasonNotDone','displayNone',false)
+        //     }else{
+        //         modifyCheckboxHeaderValue(this.hivTest,'reasonNotDone','displayNone',true)
+        //     }
+        //     console.log(getRadioSelectedValue(this.hivTest,'hivOption'))
+        // },
+        handleSyphlisdate(){
+            if(getRadioSelectedValue(this.syphilisTest,'syphilisOption')=='syphilisTestConducted'){
+                modifyFieldValue(this.syphilisTest,'syphilisDate','displayNone',false)
+            }else{
+                modifyFieldValue(this.syphilisTest,'syphilisDate','displayNone',true)
+            }
+        },
+        handleDisable(){
+            if(getCheckboxSelectedValue(this.medicalHistory,'NoSurgery')=='noSurgeries'){
+                modifyCheckboxInputField(this.medicalHistory,'OtherS','disableStatus',true)
+            }else{
+                 modifyCheckboxInputField(this.medicalHistory,'OtherS','disableStatus',false)
+            }
+            console.log(getCheckboxSelectedValue(this.medicalHistory,'NoSurgery'))
+        },
+
+
+      goToNextSection() {
+        if (this.currentSection < 4) {
+          this.currentSection++;
+        }
+      },
+      goToPreviousSection() {
+        if (this.currentSection > 0) {
+          this.currentSection--;
+        }
+      },
+      
     }
 })
 </script>
 <style scoped>
-.surgery_content{
-    color: #636363;
-    text-align: center;
-}
-.sub_item_body{
-    margin-left: 45px;
-}
-.surgery_content,.general_content,.allegy_content,.chronical_content,.blood_content,.cancer_content,.heart_content,.diabetis_content,.hiv_content,.hyperKTM_content{
-    color:#00190E;
-    text-align: center;
-    border-bottom: solid 1px #ccc;
-    border-bottom-style: dashed;
-    padding: 10px 0px;
-    font-weight: 500;
-    font-size: 14px;
-}
-.first_col{
-    text-align: left;
-    font-weight: 400;
-    font-size: 14px;
-}
-.surgery_input,.allegy_input,.cancer_input,.hiv_input,.other_input{
-    width: 100%;
-    color: #636363;
-    text-align: left;
 
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.general_content{
-    text-align: left;
+
+.section {
+  width: 100%;
+  max-width: 1300px; /* Adjust max-width as needed */
+  margin-bottom: 20px;
 }
-ion-item.sub_item_body_close {
-        border-bottom: 2px dotted var(--ion-color-medium);
-        --inner-border-width:0;
-    }
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 500px; /* Adjust max-width as needed */
+}
+
+@media (max-width: 1500px) {
+  .container {
+    padding: 10px;
+  }
+}
+.sub_item_header{
+  font-weight: bold;
+  font-size: medium;
+}
+ion-card {
+  box-shadow:none;
+  background-color:inherit;
+}
+    
 </style>

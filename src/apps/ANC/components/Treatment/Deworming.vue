@@ -1,0 +1,145 @@
+<template>
+    <div class="container">
+        <ion-card v-if="currentSection === 0" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="treatment"></basic-form>
+                <basic-form :contentData="treatmentType"></basic-form>
+                <basic-form :contentData="treatmentReason"></basic-form>
+            </ion-card-content>
+    </ion-card>
+
+    <ion-card v-if="currentSection === 1" class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="malaria"></basic-form>
+                <basic-form :contentData="malariaReason"></basic-form>
+            </ion-card-content>
+    </ion-card>
+
+     <!-- Navigation Buttons -->
+     <div class="navigation-buttons">
+      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
+      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
+    </div> 
+
+    </div>
+</template>
+
+<script lang="ts">
+import {defineComponent} from 'vue';
+import { 
+            IonContent, 
+            IonHeader,
+            IonItem,
+            IonList,
+            IonTitle, 
+            IonToolbar, 
+            IonMenu,
+            menuController,
+            IonToggle,
+            IonSelectOption,
+            IonInput,
+            IonSelect,
+IonRadio,
+IonRadioGroup,
+        } from '@ionic/vue';
+import BasicForm from '../../../../components/BasicForm.vue';
+import { icons } from '../../../../utils/svg';
+import BasicInputField from '../../../../components/BasicInputField.vue';
+import { mapState } from 'pinia';
+import { checkmark, pulseOutline } from 'ionicons/icons';
+import {useDewormingStore} from '../../store/dewormingStore';
+export default defineComponent({
+    name: "Counselling",
+    components:{
+      IonContent,
+      IonHeader,
+      IonItem,
+      IonList,
+      IonMenu,
+      IonTitle,
+      IonToolbar,
+      IonToggle,
+      IonSelect,
+      IonSelectOption,
+      IonInput,
+      BasicInputField,
+      BasicForm,
+      IonRadio,
+      IonRadioGroup
+  },
+  
+          data() {
+      return {
+          iconsContent: icons,
+          currentSection: 0,
+         
+      };
+    },
+    computed:{
+         ...mapState(useDewormingStore,["treatment"]),
+         ...mapState(useDewormingStore,["treatmentType"]),
+         ...mapState(useDewormingStore,["treatmentReason"]),
+         ...mapState(useDewormingStore,["malaria"]),
+         ...mapState(useDewormingStore,["malariaReason"]),
+      },
+      mounted(){
+         
+      },
+      setup() {
+        return { checkmark,pulseOutline };
+      },
+      methods:{
+        goToNextSection() {
+      if (this.currentSection < 1) {
+        this.currentSection++;
+      }
+    },
+    goToPreviousSection() {
+      if (this.currentSection > 0) {
+        this.currentSection--;
+      }
+    },
+          },
+      });
+
+</script>
+
+<style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.section {
+  width: 100%;
+  max-width: 1300px; 
+  margin-bottom: 20px;
+}
+
+ion-card {
+ box-shadow:none;
+  background-color:inherit;   
+  width: 100%;
+ color: black;
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 500px; 
+}
+
+@media (max-width: 1500px) {
+  .container {
+    padding: 10px;
+  }
+}
+.sub_item_header{
+  font-weight: bold;
+  font-size: medium;
+}
+</style>

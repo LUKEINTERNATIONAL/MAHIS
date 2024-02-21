@@ -3,7 +3,7 @@
     <Toolbar />
     <ion-content :fullscreen="true">
       <DemographicBar />
-      <Stepper :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
+      <Stepper stepperTitle="Profile" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()"  :StepperData="StepperData"/>
     </ion-content>
   </ion-page>
 </template>
@@ -31,23 +31,32 @@ import {
   AccordionGroupCustomEvent } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import Toolbar from "@/apps/ANC/components/Toolbar.vue";
-import ToolbarSearch from '@/components/ToolbarSearch.vue'
+import ToolbarSearch from "@/apps/ANC/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import { chevronBackOutline,checkmark } from 'ionicons/icons';
 import SaveProgressModal from '@/components/SaveProgressModal.vue'
 import { createModal } from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
-import { useVitalsStore } from '@/stores/VitalsStore'
-import { useDemographicsStore } from '@/stores/DemographicStore'
-import { useInvestigationStore } from '@/stores/InvestigationStore'
-import { useDiagnosisStore } from '@/stores/DiagnosisStore'
 import { mapState } from 'pinia';
-import Stepper from '@/components/Stepper.vue'
-import { Service } from "@/services/service";
-import { LabOrder } from "@/apps/NCD/services/lab_order"
-import { VitalsService } from "@/services/vitals_service";
+import Stepper from "@/apps/ANC/components/Stepper.vue";
 import { toastWarning,popoverConfirmation, toastSuccess } from '@/utils/Alerts';
-import { Diagnosis } from '@/apps/NCD/services/diagnosis'
+import PastObstreticHistory from '../components/profile/PastObstreticHistory.vue';
+import CurrentPregnancies from '../components/profile/CurrentPregnancies.vue';
+import Medications from '../components/profile/Medications.vue';
+import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue"
+import WomanBehaviour from '../components/profile/WomanBehaviour.vue';
+import {getCheckboxSelectedValue} from "@/services/data_helpers";
+import {useMedicalHistoryStore} from "@/apps/ANC/store/profile/medicalHistoryStore";
+import {useObstreticHistoryStore} from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
+import {useCurrentPregnanciesStore} from "@/apps/ANC/store/profile/CurrentPreganciesStore";
+import {useMedicationsStore} from "@/apps/ANC/store/profile/MedicationsStore";
+import {useWomanBehaviourStore} from "@/apps/ANC/store/profile/womanBehaviourStore";
+
+function someChecked(options, errorMessage="Missing check values") {
+  if (!options.filter(v => v.checkboxBtnContent).some(v => v.checkboxBtnContent.data.some(d => d.checked))) {
+    return errorMessage
+  }
+}
 export default defineComponent({
   name: "Home",
   components:{
@@ -71,21 +80,27 @@ export default defineComponent({
     IonItem,
     IonLabel,
     IonModal,
-    Stepper
+    Stepper,
+    PastObstreticHistory,
+    WomanBehaviour,
+    CurrentPregnancies,
+    Medications,
+    MedicalHistory
   },
   data(){
     return {
       wizardData: [
         {
-          'title': 'Past obstetric history',
+          'title': 'Past Obstetric History',
           'class': 'common_step',
-          'checked':false,
+          'checked':'',
+          'icon': false,
           'disabled':false,
           'number': 1,
           'last_step': ''
         },
         {
-          'title': 'Medical history',
+          'title': 'Medical History',
           'class': 'common_step',
           'checked':'',
           'icon': false,
@@ -94,7 +109,7 @@ export default defineComponent({
           'last_step': ''
         },
         {
-          'title': 'Current pregnancy',
+          'title': 'Current Pregnancy',
           'class': 'common_step',
           'checked':'',
           'icon': false,
@@ -111,6 +126,7 @@ export default defineComponent({
           'number': 4,
           'last_step': ''
         },
+
         {
           'title': 'Woman behaviour',
           'class': 'common_step',
@@ -123,18 +139,26 @@ export default defineComponent({
       ],
       StepperData:[
         {
-          'title': 'Past obstetric history',
+          'title': 'Past Obstetric History',
           'componet': 'PastObstetricHistory',
           'value': '1'
         },
         {
-          'title': 'Medical history',
+          'title': 'Past Medical history',
           'componet': 'MedicalHistory',
           'value': '2',
+          validation: {
+            medicalHistory: (data) => someChecked(data, "Medical history is required"), 
+            allegy: (data) => someChecked(data, "Allergy is required"), 
+            //existingChronicHealthConditions: (data)=>someChecked(data, "Existing chronic conditions is required"),
+            hivTest: (data)=>someChecked(data, "HIV test required"),
+            syphilisTest: (data)=>someChecked(data, "Syphilis test is required")
+            
+          }
         },
         {
-          'title': 'Current pregnancy',
-          'componet': 'CurrentPregnancy',
+          'title': 'Current Pregnancy',
+          'componet': 'CurrentPregnancies',
           'value': '3',
         },
         {
@@ -146,38 +170,76 @@ export default defineComponent({
           'title': 'Woman behaviour',
           'componet': 'WomanBehaviour',
           'value': '5',
-        },
+        }
       ],
       isOpen: false,
       iconsContent: icons,
     };
   },
-  computed:{
-    ...mapState(useDemographicsStore,["demographics"]),
-    ...mapState(useVitalsStore,["vitals"]),
-    ...mapState(useInvestigationStore,["investigations"]),
-    ...mapState(useDiagnosisStore,["diagnosis"]),
+  watch: {
+    medicalHistory(change) {
+      console.log(change)
+    }
   },
+  computed:{
+    ...mapState(useMedicalHistoryStore,["medicalHistory", "allegy", "existingChronicHealthConditions","hivTest","syphilisTest"]),
+    ...mapState(useObstreticHistoryStore, ["prevPregnancies","preterm","abnormalities","modeOfDelivery","Complications"]),
+    ...mapState(useCurrentPregnanciesStore, ["currentPregnancies","deliveryDate","lmnp","gestation","tetanus","ultrasound"]),
+    ...mapState(useMedicationsStore,["Medication"]),
+    ...mapState(useWomanBehaviourStore,["dailyCaffeineIntake","Tobacco"])
+
+  },
+      saveData(){
+
+      const medicalConditions = [
+        'Auto immune desease',
+        'Asthma',
+        'Diabetes',
+        'Sickle cell',
+        'Anaemia',
+        'Thalassemia',
+        'Gynaecological',
+        'CCF',
+        'RHD',
+        'Gestational diabetes',
+        'pre-existing type 1',
+        'pre-existing type 2',
+        'Epilepsy',
+        'Hypertension',
+        'Kidney',
+        'TB',
+        'Mental  illiness',
+      ];
+      for (const condition of medicalConditions) {
+        const selectedValue = getCheckboxSelectedValue(this.exisitingChronicHealthConditions, condition);
+        console.log(selectedValue);
+      }
+
+         // this.$router.push('symptomsFollowUp');
+
+     },
   mounted(){
-    this.markWizard()
+    // this.markWizard()
+
   },
   watch: {
+
     vitals: {
-      handler(){
-        this.markWizard()
-      },
-      deep: true
-    },
-    investigations: {
-      handler(){
-        this.markWizard()
-      },
-      deep: true
-    },
-    diagnosis: {
-      handler(){
-        this.markWizard()
-      },
+    //   handler(){
+    //     this.markWizard()
+    //   },
+    //   deep: true
+    // },
+    // investigations: {
+    //   handler(){
+    //     this.markWizard()
+    //   },
+    //   deep: true
+    // },
+    // diagnosis: {
+    //   handler(){
+    //     this.markWizard()
+    //   },
       deep: true
     }
   },
@@ -187,57 +249,61 @@ export default defineComponent({
 
   methods:{
     markWizard(){
-      if(this.vitals[0].validationStatus){
-        this.wizardData[0].checked = true;
-        this.wizardData[0].class = 'open_step common_step'
-      }else{
-        this.wizardData[0].checked = false;
-      }
+    //   if(this.medications.validationStatus){
+    //     this.wizardData[0].checked = true;
+    //     this.wizardData[0].class = 'open_step common_step'
+    //   }else{
+    //     this.wizardData[0].checked = false;
+    //   }
 
-      if(this.investigations[0].selectdData.length > 0){
-        this.wizardData[1].checked = true;
-        this.wizardData[1].class = 'open_step common_step'
-      }else{
-        this.wizardData[1].checked = false;
-      }
+    //   if(this.medicalHistory[0].selectdData.length > 0){
+    //     this.wizardData[1].checked = true;
+    //     this.wizardData[1].class = 'open_step common_step'
+    //   }else{
+    //     this.wizardData[1].checked = false;
+    //   }
 
-      if(this.diagnosis[0].selectdData.length > 0){
-        this.wizardData[2].checked = true;
-        this.wizardData[2].class = 'open_step common_step'
-      }else{
-        this.wizardData[2].checked = false;
-      }
-    },
+    //   if(this.womanBehaviour[0].selectdData.length > 0){
+    //     this.wizardData[2].checked = true;
+    //     this.wizardData[2].class = 'open_step common_step'
+    //   }else{
+    //     this.wizardData[2].checked = false;
+    //   }
+    //   if(this.medications[0].selectdData.length > 0){
+    //     this.wizardData[2].checked = true;
+    //     this.wizardData[2].class = 'open_step common_step'
+    //   }else{
+    //     this.wizardData[2].checked = false;
+    //   }
+     },
     deleteDisplayData(data: any){
       return  data.map((item: any) => {
         delete item?.display;
         return item?.data;
       });
     },
-    saveData(){
-      if(this.vitals[0].validationStatus && this.investigations[0].selectdData.length > 0 && this.diagnosis[0].selectdData.length > 0){
-        this.saveVitals()
-        this.saveInvestigation()
-        this.saveDiagnosis()
-        this.$router.push('patientProfile');
-      }else{
-        toastWarning("Please complete all required fields")
+    saveData(){ 
+      const errors = []
+      this.StepperData.forEach((stepper)=> {
+        if (!stepper.validation) return
+        Object.keys(stepper.validation).forEach((validationName) => {
+          if (typeof stepper.validation[validationName] === 'function') {
+            const state = stepper.validation[validationName](this[validationName])
+            if (state) errors.push(state)
+          }
+        })
+      })
+      if (errors.length) {
+        return alert(errors.join(','))
       }
-    },
-    saveInvestigation(){
-      const investigationInstance = new LabOrder()
-      investigationInstance.postActivities(this.demographics.patient_id,this.deleteDisplayData(this.investigations[0].selectdData))
-    },
-    saveVitals(){
-      const userID: any  = Service.getUserID()
-      const vitalsInstance = new VitalsService(this.demographics.patient_id,userID);
-      vitalsInstance.onFinish(this.vitals)
-    },
-    saveDiagnosis(){
-      const userID: any  = Service.getUserID()
-      const diagnosisInstance = new Diagnosis();
-      diagnosisInstance.onSubmit(this.demographics.patient_id,userID,this.deleteDisplayData(this.diagnosis[0].selectdData))
-    },
+      console.log(errors)
+        // console.log(this.medicalHistory, "Medical history")
+        // console.log(this.currentPregnancies, "Current")
+        //   console.log(getCheckboxSelectedValue(this.medicalHistory, 'Myomectomy'))
+        //  this.$router.push('symptomsFollowUp');
+
+     },
+
     openModal(){
       createModal(SaveProgressModal)
     }
