@@ -143,7 +143,7 @@
             } else {
                 this.search_item = true
                 this.diagnosis[0].data.rowData[0].colData[0].alertsError = true
-                this.diagnosis[0].data.rowData[0].colData[0].alertsErrorMassage ='Please select test from the list'
+                this.diagnosis[0].data.rowData[0].colData[0].alertsErrorMassage ='Please select diagnosis from the list'
                 return false
             }
         },
