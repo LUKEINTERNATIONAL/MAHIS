@@ -51,32 +51,31 @@ export class PreviousTreatment {
 
   async getPatientEncounters() {
     const patientVisits = await this.getPatientVisitDates()
-    patientVisits.forEach((patientVisit: any) => {
-      const date = patientVisit.value
-      EncounterService.getEncounters(this.patientID, {date})
-      .then(async (encounters) => {
-        encounters.map(async (encounter: Encounter,  index: number) => {
-          if ( encounter.type.name == 'NOTES') {
+    const encounterPromises = patientVisits.map(async (patientVisit) => {
+    const date = patientVisit.value
+    const encounters = await EncounterService.getEncounters(this.patientID, { date })
+    await Promise.all(encounters.map(async (encounter: any) => {
+        if (encounter.type.name == 'NOTES') {
             const { observations } = encounter
             if (!isEmpty(observations)) {
-              observations.forEach((observation: any) => {
-                if (observation.concept_id == '2688') {
-                  const notes = {
-                    notes_date: HisDate.toStandardHisDisplayFormat(observation.obs_datetime),
-                    notes: observation.value_text
-                  }
-                  this.previousClinicalNotes.push(notes)
-                }
-              })
+                observations.forEach((observation: any) => {
+                    if (observation.concept_id == '2688') {
+                        const notes = {
+                            notes_date: HisDate.toStandardHisDisplayFormat(observation.obs_datetime),
+                            notes: observation.value_text
+                        }
+                        this.previousClinicalNotes.push(notes)
+                    }
+                })
             }
-          }
+        }
 
-          if (encounter.type.name == 'TREATMENT') {
-            const { observations } = encounter
-            if (!isEmpty(observations)) {
-              for(const _index in observations) {
+    if (encounter.type.name == 'TREATMENT') {
+        const { observations } = encounter
+        if (!isEmpty(observations)) {
+            for (const _index in observations) {
                 let concept = '<UNKNOWN CONCEPT>'
-                const obs =  observations[_index]
+                const obs = observations[_index]
                 try {
                     if (obs?.concept?.concept_names) {
                         concept = obs.concept.concept_names[0].name
@@ -90,46 +89,50 @@ export class PreviousTreatment {
                 const time = HisDate.toStandardHisDisplayFormat(obs.date_created)
 
                 if (concept == 'Allergic') {
-                  if (isEmpty(this.previousDrugAllergies.hasOwnProperty(time))) {
-                      this.previousDrugAllergies[time] = []
-                  }
-                  this.previousDrugAllergies[time].push({ date: time, value })
+                    if (isEmpty(this.previousDrugAllergies.hasOwnProperty(time))) {
+                        this.previousDrugAllergies[time] = []
+                    }
+                    this.previousDrugAllergies[time].push({ date: time, value })
                 }
             }
-            }
-          }
-        })
-      })
+        }
+    }
+  }))
+  })
 
-      DrugOrderService.getOrderByPatient(this.patientID, {'start_date': patientVisit.value})
-      .then((medications) => {
-        if (!isEmpty(medications)) {
+  await Promise.all(encounterPromises)
+
+  const medicationPromises = patientVisits.map(async (patientVisit) => {
+      const medications = await DrugOrderService.getOrderByPatient(this.patientID, { 'start_date': patientVisit.value })
+      if (!isEmpty(medications)) {
           const previousPrescriptions = medications.map((medication: any) => ({
-            drugName: medication.drug.name,
-            value: HisDate.toStandardHisTimeFormat(medication.order.start_date),
-            dose: medication.dose,
-            frequency: getFrequencyLabelOrCheckCode(medication.frequency),
-            prescription: HisDate.toStandardHisFormat(medication.order.auto_expire_date),
-            duration: extractNumberBeforeDays(medication.order.instructions),
-            other: medication
+              drugName: medication.drug.name,
+              value: HisDate.toStandardHisTimeFormat(medication.order.start_date),
+              dose: medication.dose,
+              frequency: getFrequencyLabelOrCheckCode(medication.frequency),
+              prescription: HisDate.toStandardHisFormat(medication.order.auto_expire_date),
+              duration: extractNumberBeforeDays(medication.order.instructions),
+              other: medication
           }))
 
           this.previousDrugPrescriptions.push(
-            {
-              prescriptionDate: HisDate.toStandardHisDisplayFormat( patientVisit.value),
-              previousPrescriptions: previousPrescriptions
-            }
+              {
+                  prescriptionDate: HisDate.toStandardHisDisplayFormat(patientVisit.value),
+                  previousPrescriptions: previousPrescriptions
+              }
           )
-        }
-      }).catch(() => {})
-    })
+      }
+  })
 
-    return {
+  await Promise.all(medicationPromises)
+
+  return {
       previousDrugPrescriptions: this.previousDrugPrescriptions,
       previousClinicalNotes: this.previousClinicalNotes,
       previousDrugAllergies: this.previousDrugAllergies,
-    }
   }
+}
+
 
   async getPatientVisitDates() {
       return (await Patientservice.getPatientVisits(this.patientID, false))

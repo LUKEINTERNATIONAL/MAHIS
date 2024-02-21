@@ -140,10 +140,10 @@
                 </ion-col>
             </ion-row>
 
-            <dynamic-button  v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" @clicked:btn="addData"/>
+            <dynamic-button  v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" @clicked:btn="addData"></dynamic-button>
             <ion-row>
-                <dynamic-button class="addMedicalTpBtn" :name="btnName2"/>
-                <dynamic-button class="addMedicalTpBtn" :name="btnName3" style="margin-left: 4%;"/>
+                <dynamic-button class="addMedicalTpBtn" :name="btnName2"></dynamic-button>
+                <dynamic-button class="addMedicalTpBtn" :name="btnName3" style="margin-left: 4%;"></dynamic-button>
             </ion-row>
 
             <div style="margin-top: 14px;">
@@ -573,8 +573,6 @@
     }
 
     function accordionGroupChangeFn1(ev: AccordionGroupCustomEvent)  {
-        addItemButton.value = !addItemButton.value
-        addItemButton.value = !addItemButton.value
     }
 
     function accordionGroupChange(ev: AccordionGroupCustomEvent)  {
