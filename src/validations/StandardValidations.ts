@@ -59,8 +59,19 @@ function isName(value: any): null | string {
 }
 
 function isNumber(val: any): null | Array<string> {
-    return isNaN(parseInt(val.value)) ? ['Value must be a number'] : null
+    return isNaN(parseInt(val.value)) ? 'Value must be a number' : null
 }
+function isWholeNumber(val: any): null | string {
+    // Regular expression to match only whole numbers
+    const numberRegex = /^[0-9]+$/;
+
+    if (!val || !val.match(numberRegex)) {
+        return 'Value must be a whole number';
+    }
+
+    return null;
+}
+
 
 function hasLengthRangeOf(val: any, min: number, max: number): null | Array<string> {
     const len = val ? val.label.length : 0
@@ -92,6 +103,19 @@ function anyEmpty(val: any): null | Array<string> {
 function notTheSame(val: any, comparison: string): null | Array<string> {
     return val === comparison ? ['Values can not be the same'] : null;
 }
+function checkMinMax(val: any, min: number, max: number) {
+    let errorMessage = '';
+    const parsedValue = parseFloat(val);
+
+    if (parsedValue < min) {
+        errorMessage = `Value entered (${val}) is less than the minimum value (${min}).`;
+    } else if (parsedValue > max) {
+        errorMessage = `Value entered (${val}) is greater than the maximum value (${max}).`;
+    }
+
+    return errorMessage ? errorMessage : null;
+}
+
 export default {
     isFloatingPointNumber,
     validateSeries,
@@ -105,6 +129,8 @@ export default {
     anyEmpty,
     notTheSame,
     isIPAddress,
+    isWholeNumber,
     isMWNationalID,
-    isEstimationDate
+    isEstimationDate,
+    checkMinMax
 }

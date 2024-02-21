@@ -23,29 +23,22 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                                     alertsErrorMassage: ''
                                 },
                                 {
-                                    inputHeader: 'Parity',
+                                    inputHeader: 'Abortions/Miscarriages',
                                     value: '',
-                                    name: 'Parity',
+                                    name: 'Abortions/Miscarriages',
                                     required: true,
                                     eventType: 'input',
                                     alertsError: false,
                                     alertsErrorMassage: ''
                                 },
+
                                 
                             ],
                             
                         },
                         {
                             colData: [
-                            {
-                                inputHeader: 'Abortions/Miscarriages',
-                                value: '',
-                                name: 'abortions',
-                                required: true,
-                                eventType: 'input',
-                                alertsError: false,
-                                alertsErrorMassage: ''
-                            },
+
                                 {
                                     inputHeader: 'Stillbirths',
                                     value: '',
@@ -69,6 +62,15 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                                 alertsError: false,
                                 alertsErrorMassage: ''
                             },
+                            {
+                                inputHeader: 'Parity',
+                                value: '',
+                                name: 'Parity',
+                                required: true,
+                                eventType: 'input',
+                                alertsError: false,
+                                alertsErrorMassage: ''
+                            },
 
                         ]
                     },
@@ -79,44 +81,7 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
           
             },   
         ] as any,
-        abnormalities:[
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:
-                {
-                    header:{
-                        title: 'Last live birth had congenital abnormalities?',
-                        selectedValue: ''
-                    },
-                    data:[
-                        {
-                            name: 'Yes',
-                            value: 'Yes',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
-                        },
-                        {
-                            name: 'No',
-                            value: 'No',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
-                        },
-                        {
-                            name: 'Dont know',
-                            value: 'Dont know',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
-                        },
-                    ]
-                }
-                    
-            },
-        ],
+
         preterm:[
             {
                 selectdData: [],
@@ -144,7 +109,7 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                             justify: 'space-between',
                         },
                         {
-                            name: 'Last live birth had congenital abnormabilities\n',
+                            name: 'Last live birth had congenital abnormalities\n',
                             value: 'congetalAbnormalities',
                             labelPlacement: 'start',
                             colSize: '9',
@@ -177,7 +142,7 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                             },
                             {
                                 name: 'Vacuum',
-                                value: 'cesarean',
+                                value: 'vacuum',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
