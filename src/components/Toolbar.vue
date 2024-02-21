@@ -5,7 +5,7 @@
           <ion-menu-button slot="start" />
           <ion-title style="cursor: pointer;" @click="nav('/home')"><b>MAHIS</b></ion-title>
           <ion-buttons slot="end" style="max-width: 500px;">
-              <ToolbarSearch @search="performSearch" />
+              <ToolbarSearch />
           </ion-buttons>
           <div class="notifaction_person" slot="end">
             <ion-buttons style="cursor: pointer;" slot="end" class="iconFont">

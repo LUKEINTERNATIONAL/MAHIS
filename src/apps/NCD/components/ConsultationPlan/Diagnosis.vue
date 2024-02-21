@@ -11,9 +11,9 @@
     <ion-row v-if="search_item">
         <basic-form 
             :contentData="diagnosis" 
-            @clicked:button = "validaterowData"
-            @update:inputValue = "searchInput($event)"
-            @clicked:inputValue="setEvent($event)">
+            @update:selected="handleInputData" 
+            @update:inputValue="handleInputData"
+            @clicked:button="addNewRow">
         </basic-form>
     </ion-row>
     <ion-row v-if="addItemButton" style="margin-top:10px ;">
@@ -25,14 +25,18 @@
             name="Add new Diagnosis"
         />
     </ion-row>
-    <SelectionPopover 
-        :content="diagnosisData"  
-        :popoverOpen="popoverOpen" 
-        @closePopoover="value => popoverOpen = value" 
-        :event="event" 
-        :title="'Choose the investigation:'"
-        @setSelection="setSelection"
-    />
+    <ion-row>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Previous measurements</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <previousDiagnosis />
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+    </ion-row>
 </template>
   
 <script lang="ts">
@@ -62,6 +66,8 @@
     import BasicForm from '@/components/BasicForm.vue';
     import DynamicButton from '@/components/DynamicButton.vue';
     import { Service } from "@/services/service";
+    import previousDiagnosis from '@/apps/NCD/components/ConsultationPlan/previousDiagnosis.vue'
+    
     export default defineComponent({
     name: 'Menu',
     components:{
@@ -79,7 +85,8 @@
         BasicInputField,
         List,
         BasicForm,
-        DynamicButton
+        DynamicButton,
+        previousDiagnosis
     },
     data() {
     return {
@@ -119,10 +126,6 @@
         this.setDashedBox()
     },
     methods:{
-        navigationMenu(url: any){
-            menuController.close()
-            this.$router.push(url);
-        },
         displayInputFields(){
             this.conditionStatus=""
             this.selectedText = ""
@@ -133,44 +136,41 @@
         async validaterowData(){
             this.diagnosis[0].data.rowData[0].colData[0].alertsError = false
             this.diagnosis[0].data.rowData[0].colData[0].alertsErrorMassage =''
-            const data = this.diagnosisData.filter((obj: any) => {
-               return obj.name == this.inputFields[0].value ?  obj : false
-            })
-            if(data.length > 0) {
-                this.diagnosis[0].selectdData.push({
-                    actionBtn: true,
-                    display: [
-                        this.inputFields[0].value,
-                    ],
-                    data: {
-                        "concept_id": 6542, //primary diagnosis
-                        "value_coded": data[0].concept_id,
-                        "obs_datetime": Service.getSessionDate()
-                    }
-                })
-                this.diagnosis[0].data.rowData[0].colData[0].value =''
-                this.search_item = false
-                this.display_item = true
-                this.addItemButton = true
+
+            this.diagnosisData = await this.getDiagnosis(this.inputFields[0].value)
+            if(this.inputFields[0].value == this.diagnosisData[0]?.name) {
+                return true
             } else {
                 this.search_item = true
                 this.diagnosis[0].data.rowData[0].colData[0].alertsError = true
-                this.diagnosis[0].data.rowData[0].colData[0].alertsErrorMassage ='Please select test from the list'
+                this.diagnosis[0].data.rowData[0].colData[0].alertsErrorMassage ='Please select diagnosis from the list'
+                return false
             }
         },
+        async addNewRow(){
+            if(await this.validaterowData()){
+                this.diagnosis[0].data.rowData[0].colData[0].value = this.inputFields[0].value
+                this.search_item = false
+                this.display_item = true
+                this.addItemButton = true
+                this.buildDiagnosis()
+            }
+            this.diagnosis[0].data.rowData[0].colData[0].value = ''
+            this.diagnosis[0].data.rowData[0].colData[0].popOverData.data = []
+
+        },
         buildDiagnosis(){
-            this.diagnosis[0].finalDiagnosis.push({
-                "concept_id": 6542, //primary diagnosis
-                "value_coded": 16,
-                "obs_datetime": Service.getSessionDate()
+            this.diagnosis[0].selectdData.push({
+                actionBtn: true,
+                display: [
+                    this.inputFields[0].value,
+                ],
+                data: {
+                    "concept_id": 6542, //primary diagnosis
+                    "value_coded": this.diagnosisData[0].concept_id,
+                    "obs_datetime": Service.getSessionDate()
+                }
             })
-        },
-        setEvent(event: Event){
-            this.event = event
-        },
-        temporarySave(diagnosis: any) {
-            const diagnosisStore = useDiagnosisStore()
-            diagnosisStore.setDiagnosis(diagnosis)
         },
         updateDiagnosisStores(){
             const diagnosisStore = useDiagnosisStore()
@@ -180,22 +180,17 @@
         this.event = e;
         this.popoverOpen = true;
       },
-        async searchInput(col: any) {
+        async handleInputData(col: any) {
             if(col.inputHeader == 'Diagnosis'){
-                this.popoverOpen = true;
-                this.diagnosisData = await PatientDiagnosisService.getDiagnosis(col.value, 1, 10)
+                this.diagnosisData = await this.getDiagnosis(col.value)
+                this.diagnosis[0].data.rowData[0].colData[0].popOverData.data = this.diagnosisData
+                this.validaterowData()
             }
+            
         },
-        setSelection(value: any) {
-            this.selectedText =value.name
-            if(this.inputFields[0].inputHeader == 'Diagnosis'){
-                this.diagnosis[0].data.rowData[0].colData[0].value =value.name
-            }
-            this.updateDiagnosisStores()
+        async getDiagnosis(value: any){
+            return await PatientDiagnosisService.getDiagnosis(value, 1, 5)
         },
-      selectedDiagnosis(diagnosis: any){
-          this.selectedText = diagnosis
-      },
         editDiagnosis(test: any) {
             this.deleteDiagnosis(test[0])       
             this.selectedText = test[0]

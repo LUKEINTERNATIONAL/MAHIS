@@ -6,13 +6,13 @@
                 Next appointment
               </div>
             <VueDatePicker 
-              @date-update="value => calendarDate = value"
+              @date-update="handleDateUpdate"
               v-model="date" 
               inline 
               auto-apply 
               :enable-time-picker="false" 
               >
-                <template #day="{ day, date }">
+                <template #day="{ day }">
                     <template v-if="day === tomorrow">
                       <p> {{ day }}<sup style="color: rgb(3, 61, 21);">{{ bookedPatient }}</sup></p>
                     </template>
@@ -84,6 +84,9 @@ methods:{
   updateNextAppointment(){
       const nextAppointmentStore = useNextAppointmentStore()
       nextAppointmentStore.setNextAppointment(this.calendarDate)
+  }, 
+  handleDateUpdate(value: any) {
+      this.calendarDate = value;
   }
 }
 });

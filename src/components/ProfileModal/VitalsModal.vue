@@ -30,7 +30,7 @@
     import { defineComponent } from 'vue';
     import { checkmark,pulseOutline } from 'ionicons/icons';
     import { ref } from 'vue';
-    import { icons } from '@/utils/svg.ts';
+    import { icons } from '@/utils/svg';
     import ApexChart from "vue3-apexcharts";
 
     export default defineComponent({

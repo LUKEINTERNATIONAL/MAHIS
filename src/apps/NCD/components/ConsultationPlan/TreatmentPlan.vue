@@ -166,7 +166,7 @@
     import {     IonContent, IonHeader, IonCol, IonItem, IonList, IonButton, IonMenu, IonTitle, IonToolbar, IonInput, IonDatetime, IonLabel, IonTextarea } from '@ionic/vue';
     import { checkmark,pulseOutline,addOutline,closeOutline, checkmarkOutline, filter, chevronDownOutline, chevronUpOutline } from 'ionicons/icons'
     import { ref, watch, computed } from 'vue'
-    import { icons } from '@/utils/svg.ts'
+    import { icons } from '@/utils/svg'
     import { DRUG_FREQUENCIES } from "@/services/drug_prescription_service"
     import { DrugService} from "@/services/drug_service"
     import { ConceptName } from '@/interfaces/conceptName'
@@ -197,7 +197,7 @@
     const show_error_msg_for_dose = ref(false)
     const durationErrMsg = ref()
     const show_error_msg_for_duration = ref(false)
-    const diagnosisData = ref([])
+    const diagnosisData = ref([] as any)
     const drugName = ref('')
     const dose = ref('')
     const frequency = ref('')

@@ -193,12 +193,10 @@
     },
     props:{
         wizardData: {
-            type: Array,
-            default: []
+            default: [] as any
         },
         StepperData: {
-            type: Array,
-            default: []
+            default: [] as any
         },
         stepperTitle: {
             type: String,

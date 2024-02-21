@@ -42,7 +42,7 @@
     import { defineComponent } from 'vue';
     import { checkmark,pulseOutline } from 'ionicons/icons';
     import { ref } from 'vue';
-    import { icons } from '@/utils/svg.ts';
+    import { icons } from '@/utils/svg';
 
     export default defineComponent({
     name: 'Menu',
