@@ -269,7 +269,7 @@ export default defineComponent({
             }
         },
         handleDisable(){
-            if(getCheckboxSelectedValue(this.medicalHistory,'Other')=='otherSurguries'){
+            if(getCheckboxSelectedValue(this.medicalHistory,'trydis')=='otherSurguries'){
                 modifyCheckboxHeader(this.medicalHistory,'OtherS','disableStatus',true)
             }else{
                  modifyCheckboxHeader(this.medicalHistory,'OtherS','disableStatus',false)

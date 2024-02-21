@@ -6,9 +6,9 @@
                 <basic-form :contentData="prevPregnancies"></basic-form>
             </ion-card-content>
         </ion-card>
+
         <ion-card  style="margin-left: 20px">
-<!--          <ion-card-title class="sub_item_header">Specify mode of delivery for each child based on number live births provided</ion-card-title>-->
-          <ion-card-content>
+        <ion-card-content>
             <basic-form :contentData="modeOfDelivery" @update:inputValue="handleAlert"></basic-form>
           </ion-card-content>
         </ion-card>
@@ -83,7 +83,7 @@ export default defineComponent({
         iconsContent: icons,
         prevPregnanciesInstance: {} as any,
         modeOfDeliveryInstance: {} as any,
-        currentSection: 0, // Initialize currentSection to 0
+        currentSection: 0, 
     };
   },
   computed:{
@@ -114,13 +114,12 @@ export default defineComponent({
 
               const births = []
               for (let i = 0; i < liveBirths; ++i) {
-                // a deep copy of the template object for each text field
                 const x = JSON.parse(JSON.stringify({...this.modeOfDelieveryRef, id: i}))
+                x.radioBtnContent.header.title = `Specify mode of delivery (Child ${i + 1})`;
                 x.radioBtnContent.header.id=i
                 x.data.id=i
                 births.push(x)
               }
-              console.log(births)
 
               this.prevPregnanciesInstance.setModeOfDelivery(births)
             }
