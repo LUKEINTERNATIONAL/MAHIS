@@ -267,8 +267,8 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                         data:[
 
                             {
-                                name: 'No complications',
-                                value: 'no complications',
+                                name: 'Asphyxia',
+                                value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -397,7 +397,7 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Heavy bleeding ',
+                                name: 'Heavy bleeding',
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
@@ -448,8 +448,8 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                         },
                         data:[
                             {
-                                name: 'Asphyxia',
-                                value: 'value',
+                                name: 'None',
+                                value: 'none',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',

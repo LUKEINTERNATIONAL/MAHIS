@@ -33,7 +33,7 @@ export function dynamicValue(data: any, radioBtnName: any, id:any) {
 }
 export function getCheckboxSelectedValue(data: any, checkboxName: any) {
     const checkboxContent = data.find((item: any) => item.checkboxBtnContent?.data?.some((checkbox: any) => checkbox.name === checkboxName));
-    return checkboxContent?.checkboxBtnContent?.data.find((checkbox: any) => checkbox.name === checkboxName && checkbox.checked)?.value;
+    return checkboxContent?.checkboxBtnContent?.data.find((checkbox: any) => checkbox.name === checkboxName && checkbox.checked);
 }
 
 export function modifyRadioValue(data: any, radioBtnName: any, element: any, newValue: any) {

@@ -55,7 +55,7 @@ import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import { useObstreticHistoryStore} from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
 import { checkmark, pulseOutline } from 'ionicons/icons';
-import { dynamicValue, getCheckboxSelectedValue, getRadioSelectedValue, modifyDynamicFieldValue, modifyFieldValue } from '@/services/data_helpers';
+import { dynamicValue, getCheckboxSelectedValue, getRadioSelectedValue, modifyCheckboxValue, modifyDynamicFieldValue, modifyFieldValue } from '@/services/data_helpers';
 
 export default defineComponent({
   name: "History",
@@ -127,12 +127,6 @@ export default defineComponent({
 
         deep: true
       },
-      // modeOfDelivery:{
-      //   handler(){
-      //     this.handleDynamic() 
-      //   },
-        // deep:true,
-      // },
       Complications:{
         handler(){
           this.handleOther() 
@@ -145,11 +139,31 @@ export default defineComponent({
     },
     methods:{
       handleOther(){
-        if(getCheckboxSelectedValue(this.Complications,'Other')=='otherInfo'){
+         
+        if(getCheckboxSelectedValue(this.Complications,'Other')?.value =='otherInfo'){
+          
           modifyFieldValue(this.Complications,'otherC','displayNone',false)
         }else{
           modifyFieldValue(this.Complications,'otherC','displayNone',true)
         }
+         const checkBoxes=['Asphyxia','Does not know','Pre-eclampsia',
+                           'Eclampsia','Puerperal Sepsis',
+                           'Baby died within 24hrs of birth',
+                           'Convulsions','Forceps','Gestational diabetes mellitus',
+                           'Heavy bleeding','Macrosomia',
+                           'Perineal tear (3rd or 4th degree)','Other',]
+
+      if (getCheckboxSelectedValue(this.Complications, 'None')?.checked) {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.Complications, checkbox, 'checked', false);
+            modifyCheckboxValue(this.Complications, checkbox, 'disabled', true);
+        });
+        } else {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.Complications, checkbox, 'disabled', false);
+        });
+    }
+       
       },
       handleDynamic(){
         if(getRadioSelectedValue(this.modeOfDelivery,'cesareanSec')=='cesarean'){

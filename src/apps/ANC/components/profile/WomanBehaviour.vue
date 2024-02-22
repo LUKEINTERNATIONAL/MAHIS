@@ -51,6 +51,7 @@ import BasicInputField from '@/components/BasicInputField.vue';
 import BasicForm from "@/components/BasicForm.vue";
 import {mapState} from "pinia";
 import {useWomanBehaviourStore} from "@/apps/ANC/store/profile/womanBehaviourStore";
+import { getCheckboxSelectedValue, modifyCheckboxValue } from '@/services/data_helpers';
 
 
 export default defineComponent({
@@ -80,6 +81,16 @@ export default defineComponent({
   mounted(){
     const dailyCaffeineIntake =useWomanBehaviourStore()
     const Tobacco =useWomanBehaviourStore()
+    this. handleNone()
+  },
+  watch:{
+    dailyCaffeineIntake:{
+      handler(){
+        this. handleNone()
+      },
+      deep:true
+    },
+    
   },
   computed:{
     ...mapState(useWomanBehaviourStore,["dailyCaffeineIntake"]),
@@ -90,17 +101,22 @@ export default defineComponent({
     return { checkmark,pulseOutline };
   },
   methods:{
-    caffeineMethod(){
-      this.caffeineChecked = !this.caffeineChecked
-      if(this.caffeineChecked){
-        this.DailyCaffeine = 'none'
-      }else{this.DailyCaffeine=""}
-    },
-    tobbacoMethod(){
-      this.tobbacoChecked = !this.tobbacoChecked
-      if(this.tobbacoChecked){
-        this.tobbacoUses = 'none'
-      }else{this.tobbacoUses ="" }
+    handleNone(){
+      const checkBoxes=['More than 2 cups of coffee',
+                        'More than 4 cups of tea',
+                        'More than 12 bars of chocolate',
+                        'More than one bottle of soda, energy, soft drink']
+                        
+     if (getCheckboxSelectedValue(this.dailyCaffeineIntake, 'None')?.checked) {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.dailyCaffeineIntake, checkbox, 'checked', false);
+            modifyCheckboxValue(this.dailyCaffeineIntake, checkbox, 'disabled', true);
+        });
+        } else {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.dailyCaffeineIntake, checkbox, 'disabled', false);
+        });
+    }
     },
     //Method for navigating
     goToNextSection() {
