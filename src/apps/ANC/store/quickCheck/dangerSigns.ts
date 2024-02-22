@@ -225,7 +225,7 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
             },
             {
                 selectdData: [],
-                classDash: 'dashed_bottom_border',
+                classDash: '',
                 checkboxBtnContent:
                     {
                         header:{

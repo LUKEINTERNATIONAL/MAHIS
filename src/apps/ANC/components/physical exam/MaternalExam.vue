@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <!-- Pallor -->
-    <ion-card v-if="currentSection === 0" class="section">
+    <ion-card class="section">
       <ion-card-header>
         <ion-card-title class="dashed_bottom_border sub_item_header">Is Pallor present?</ion-card-title>
       </ion-card-header>
@@ -11,7 +11,7 @@
     </ion-card>
 
     <!-- Breast exam Section -->
-    <ion-card v-if="currentSection === 1" class="section">
+    <ion-card class="section">
       <ion-card-header>
         <ion-card-title class="dashed_bottom_border sub_item_header">Breast exam result</ion-card-title>
       </ion-card-header>
@@ -20,7 +20,7 @@
       </ion-card-content>
     </ion-card>
     <!-- vaginal inspection Section -->
-    <ion-card v-if="currentSection === 2" class="section">
+    <ion-card class="section">
       <ion-card-header>
         <ion-card-title class="dashed_bottom_border sub_item_header"> Vaginal inspection</ion-card-title>
       </ion-card-header>
@@ -30,7 +30,7 @@
     </ion-card>
 
     <!-- Cervical exam -->
-    <ion-card v-if="currentSection === 3" class="section">
+    <ion-card  class="section">
       <ion-card-header>
         <ion-card-title class="dashed_bottom_border sub_item_header">Cervical exam conducted?</ion-card-title>
       </ion-card-header>
@@ -40,7 +40,7 @@
     </ion-card>
 
     <!-- oedema exam Section -->
-    <ion-card v-if="currentSection === 4" class="section">
+    <ion-card  class="section">
       <ion-card-header>
         <ion-card-title class="dashed_bottom_border sub_item_header">oedema</ion-card-title>
       </ion-card-header>
@@ -49,11 +49,6 @@
       </ion-card-content>
     </ion-card>
 
-    <!-- Navigation Buttons -->
-    <div class="navigation-buttons">
-      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
-      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
-    </div>
   </div>
 </template>
 

@@ -14,65 +14,6 @@
                     <basic-form :contentData="glucose"></basic-form>
             </ion-card-content>
     </ion-card>
-
-    <!-- <ion-card v-if="currentSection === 1" class="section">
-            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Reason urine test not done</ion-card-title></ion-card-header>
-            <ion-card-content>
-               
-            </ion-card-content>
-    </ion-card>
-
-    <ion-card v-if="currentSection === 2" class="section">
-            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
-            <ion-card-content>
-               
-            </ion-card-content>
-    </ion-card>
-
-
-    <ion-card v-if="currentSection === 3" class="section">
-            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
-            <ion-card-content>
-               
-            </ion-card-content>
-    </ion-card>
-
-    <ion-card v-if="currentSection === 4" class="section">
-            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
-            <ion-card-content>
-                
-            </ion-card-content>
-    </ion-card>
-
-    <ion-card v-if="currentSection === 5" class="section">
-            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
-            <ion-card-content>
-                
-            </ion-card-content>
-    </ion-card>
-
-    <ion-card v-if="currentSection === 6" class="section">
-            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
-            <ion-card-content>
-               
-            </ion-card-content>
-    </ion-card>
-
-    <ion-card v-if="currentSection === 7" class="section">
-            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
-            <ion-card-content>
-                
-            </ion-card-content>
-    </ion-card> -->
-
-        <!-- Navigation Buttons -->
-    <!-- <div class="navigation-buttons">
-      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
-      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
-    </div>  -->
-    
-    
-  
     </div>
 
 </template>

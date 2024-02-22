@@ -3,7 +3,7 @@
     <Toolbar />
     <ion-content :fullscreen="true">
       <DemographicBar />
-      <Stepper stepperTitle="Profile" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()"  :StepperData="StepperData"/>
+      <Stepper stepperTitle="Profile" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" @update:inputValue="validateProfileData($event)"  :StepperData="StepperData"/>
     </ion-content>
   </ion-page>
 </template>
@@ -52,9 +52,9 @@ import {useCurrentPregnanciesStore} from "@/apps/ANC/store/profile/CurrentPregan
 import {useMedicationsStore} from "@/apps/ANC/store/profile/MedicationsStore";
 import {useWomanBehaviourStore} from "@/apps/ANC/store/profile/womanBehaviourStore";
 
-function someChecked(options, errorMessage="Missing check values") {
+function someChecked(options, errorMassage) {
   if (!options.filter(v => v.checkboxBtnContent).some(v => v.checkboxBtnContent.data.some(d => d.checked))) {
-    return errorMessage
+    return errorMassage
   }
 }
 export default defineComponent({
@@ -282,6 +282,24 @@ export default defineComponent({
         return item?.data;
       });
     },
+    validateProfileData() {
+      // Iterate through each section of medical history
+      this.medicalHistory.forEach(section => {
+        // Check if at least one checkbox is checked for each section
+        const errorMessage = !section.checkboxBtnContent.data.some(item => item.checked) ? "Please select at least one option" : '';
+
+        // Update error messages for checkboxes
+        section.checkboxBtnContent.data.forEach(item => {
+          // Modify error message and error state for each checkbox
+          const alertsError = !!errorMessage;
+          const alertsErrorMessage = errorMessage || '';
+
+          // Modify the field values accordingly
+          modifyFieldValue(item, 'alertsError', alertsError);
+          modifyFieldValue(item, 'alertsErrorMessage', alertsErrorMessage);
+        })
+      })
+    },
     saveData(){ 
       const errors = []
       this.StepperData.forEach((stepper)=> {
@@ -296,11 +314,6 @@ export default defineComponent({
       if (errors.length) {
         return alert(errors.join(','))
       }
-      console.log(errors)
-        // console.log(this.medicalHistory, "Medical history")
-        // console.log(this.currentPregnancies, "Current")
-        //   console.log(getCheckboxSelectedValue(this.medicalHistory, 'Myomectomy'))
-        //  this.$router.push('symptomsFollowUp');
 
      },
 

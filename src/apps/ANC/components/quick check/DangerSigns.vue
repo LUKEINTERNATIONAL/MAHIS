@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <!-- Danger signs -->
-    <ion-card v-if="currentSection === 0" class="section">
+    <ion-card  class="section">
       <ion-card-header>
         <ion-card-title class="dashed_bottom_border sub_item_header">Danger signs</ion-card-title>
       </ion-card-header>
@@ -11,7 +11,7 @@
     </ion-card>
 
     <!-- previous visit -->
-    <ion-card v-if="currentSection === 1" class="section">
+    <ion-card  class="section">
       <ion-card-header>
         <ion-card-title class="dashed_bottom_border sub_item_header">Has the woman had previous ANC visits at another facility?</ion-card-title>
       </ion-card-header>
@@ -19,11 +19,7 @@
         <basic-form :contentData="PreviousVisit"></basic-form>
       </ion-card-content>
     </ion-card>
-    <!-- Navigation Buttons -->
-    <div class="navigation-buttons">
-      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
-      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
-    </div>
+
   </div>
 </template>
 

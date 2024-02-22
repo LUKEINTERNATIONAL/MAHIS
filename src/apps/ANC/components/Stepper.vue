@@ -74,7 +74,6 @@
   import Toolbar from '@/components/Toolbar.vue'
   import ToolbarSearch from '@/components/ToolbarSearch.vue'
   import { chevronBackOutline,checkmark } from 'ionicons/icons';
-  import Vitals from '@/apps/NCD/components/ConsultationPlan/Vitals.vue'
   import Diagnosis from '@/apps/NCD/components/ConsultationPlan/Diagnosis.vue'
   import Complications from '@/apps/NCD/components/ConsultationPlan/Complications.vue'
   import ConfirmDiagnosis from '@/apps/NCD/components/ConsultationPlan/ConfirmDiagnosis.vue'
@@ -116,6 +115,7 @@
   import DietCounselling from '@/apps/ANC/components/counselling/DietCounselling.vue';
   import Referral from '@/apps/ANC/components/referral/Referral.vue';
   import AncEnd  from  '@/apps/ANC/components/ancEnd/AncEnd.vue';
+  import Vitals from '@/apps/ANC/components/physical exam/Vitals.vue'
   import { createModal } from '@/utils/Alerts'
   import { icons } from '@/utils/svg';
   export default defineComponent({

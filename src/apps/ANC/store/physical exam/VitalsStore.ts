@@ -1,66 +1,218 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg';
 
-export const useAncVitalsStore = defineStore('ancVitalsStore',{
+export const useVitalsStore = defineStore('vitalsStore',{
     state: () => ({
-        heightWeight: [
+        vitals: [
             {
                 isFinishBtn: false,
-                sectionHeader: '',
-                classDash:'dashed_bottom_border',
+                validationStatus: '',
+                sectionHeader: 'Height and weight',
+                classDash: 'dashed_bottom_border _padding',
 
                 data:
-                    {
+                { 
+                    rowData:[
+                        {
+                            colData: [
+                                {
+                                    inputHeader: 'Height*',
+                                    unit: 'cm',
+                                    icon: icons.height,
+                                    value: '',
+                                    name: 'Height',
+                                    required: true,
+                                    eventType: 'input',
+                                    alertsError: false,
+                                    alertsErrorMassage: ''
+                                },
+                                {
+                                    inputHeader: 'Weight*',
+                                    unit: 'kg',
+                                    icon: icons.weight,
+                                    value: '',
+                                    name: 'Weight',
+                                    required: true,
+                                    eventType: 'input',
+                                    alertsError: false,
+                                    alertsErrorMassage: ''
+                                },
 
+                            ],
+
+                        },
+                        {
+                            colData: [
+
+                                {
+                                    inputHeader: 'Pre-gestation weight',
+                                    unit: 'kg',
+                                    icon: icons.weight,
+                                    value: '',
+                                    name: 'PreWeight',
+                                    required: true,
+                                    eventType: 'input',
+                                    alertsError: false,
+                                    alertsErrorMassage: ''
+                                },
+
+                            ],
+
+                        }
+                    ]
+                },
+                alerts:
+                [
+                    {
+                        backgroundColor: '',
+                        status: '',
+                        icon: '',
+                        textColor: '',
+                        value: '',
+                        name: '',
+                        index: ''
+                    }
+                ],
+                previousView:{
+                    name:'vitals'
+                }   
+            },
+            {
+                sectionHeader: 'Blood pressure',
+                classDash: 'dashed_bottom_border _padding',
+                data:
+                { 
+                    rowData:[
+                        {
+                            colData:    [
+                                {
+                                    inputHeader: 'Systolic Pressure*',
+                                    unit: 'mmHg',
+                                    icon: icons.systolicPressure,
+                                    value: '',
+                                    name: 'Systolic',
+                                    required: true,
+                                    eventType: 'input'
+                                },
+                                {
+                                    inputHeader: 'Diastolic pressure*',
+                                    unit: 'mmHg',
+                                    icon: icons.diastolicPressure,
+                                    value: '',
+                                    name: 'Diastolic',
+                                    required: true,
+                                    eventType: 'input'
+                                }
+                            ]
+                        },
+                        {
+                            colData:    [
+                                {
+                                    inputHeader: 'Repeated systolic pressure',
+                                    unit: 'mmHg',
+                                    icon: icons.systolicPressure,
+                                    value: '',
+                                    name: 'repeatedSystolic',
+                                    required: true,
+                                    eventType: 'input'
+                                },
+                                {
+                                    inputHeader: 'Repeated diastolic pressure',
+                                    unit: 'mmHg',
+                                    icon: icons.diastolicPressure,
+                                    value: '',
+                                    name: 'repeatedDiastolic',
+                                    required: true,
+                                    eventType: 'input'
+                                }
+                            ]
+                        }
+                    ]
+                },
+                alerts:[
+                    {
+                        backgroundColor: '',
+                        status: '',
+                        icon: '',
+                        textColor: '',
+                        value: '',
+                        name: '',
+                        index: ''
+                    }
+                ],
+                previousView:{
+                    name:'vitals'
+                }
+            },
+            {
+                sectionHeader: 'Temperature and Purse',
+                classDash: 'dashed_bottom_border _padding',
+
+                data:
+                    { 
                         rowData:[
                             {
                                 colData: [
                                     {
-                                        inputHeader: 'Height*',
-                                        unit: 'cm',
-                                        icon: icons.height,
+                                        inputHeader: 'Temperature',
+                                        unit: 'C',
+                                        icon: icons.temprature,
                                         value: '',
-                                        name: 'Height',
-                                        required: true,
-                                        eventType: 'input',
-                                        alertsError: false,
-                                        alertsErrorMassage: ''
-                                    },
-                                ],
-                            },
-                            {
-
-                                colData: [
-
-                                    {
-                                        inputHeader: 'Pre-gestaion weight',
-                                        unit: 'kg',
-                                        icon: icons.weight,
-                                        value: '',
-                                        name: 'PregestationWeight',
-                                        required: true,
-                                        eventType: 'input',
-                                        alertsError: false,
-                                        alertsErrorMassage: ''
+                                        name: 'Temp',
+                                        eventType: 'input'
                                     },
                                     {
-                                        inputHeader: 'Current weight*',
-                                        unit: 'kg',
-                                        icon: icons.weight,
+                                        inputHeader: 'Pulse rate',
+                                        unit: 'BMP',
+                                        icon: icons.pulse,
                                         value: '',
-                                        name: 'CurrentWeight',
-                                        required: true,
-                                        eventType: 'input',
-                                        alertsError: false,
-                                        alertsErrorMassage: ''
-                                    },
-
+                                        name: 'Pulse',
+                                        eventType: 'input'
+                                    }
                                 ]
-                            }
+                            },
+
                         ]
                     },
+                    previousView:{
+                        name:'vitals'
+                    }
             },
-        ],
+            {
+                sectionHeader: 'Oximetry and Respiratory rate',
+                classDash: 'dashed_bottom_border _padding',
+
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Oxygen saturation',
+                                        unit: '%',
+                                        icon: icons.oxgenStaturation,
+                                        value: '',
+                                        name: 'SP02',
+                                        eventType: 'input'
+                                    },
+                                    {
+                                        inputHeader: 'Respiratory rate',
+                                        unit: 'BMP',
+                                        icon: icons.respiratory,
+                                        value: '',
+                                        name: 'Respiratory rate',
+                                        eventType: 'input'
+                                    },
+                                ]
+                            },
+                        ]
+                    },
+                previousView:{
+                    name:'vitals'
+                }
+            }
+               
+        ] as any,
         respiration: [
             {
                 selectdData: [],
@@ -238,7 +390,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "100%",
-                                       
+
                                     },
 
                                 ],
@@ -272,227 +424,6 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                         ]
                     },
             },
-
-        ],
-        bloodPressure:[
-            {
-                sectionHeader: '',
-
-
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'Systolic Pressure*',
-                                        unit: 'mmHg',
-                                        icon: icons.systolicPressure,
-                                        value: '',
-                                        name: 'Systolic',
-                                        required: true,
-                                        eventType: 'input'
-                                    },
-                                    {
-                                        inputHeader: 'Diastolic pressure*',
-                                        unit: 'mmHg',
-                                        icon: icons.diastolicPressure,
-                                        value: '',
-                                        name: 'Diastolic',
-                                        required: true,
-                                        eventType: 'input'
-                                    }
-                                ]
-                            },
-                            {
-                                colData:
-                                    [
-                                        {
-                                            inputHeader: 'Repeated systolic Pressure*',
-                                            unit: 'mmHg',
-                                            icon: icons.systolicPressure,
-                                            value: '',
-                                            name: 'RepeatedSystolic',
-                                            required: true,
-                                            eventType: 'input'
-                                        },
-                                        {
-                                            inputHeader: 'Repeated diastolic pressure*',
-                                            unit: 'mmHg',
-                                            icon: icons.diastolicPressure,
-                                            value: '',
-                                            name: 'RepeatedDiastolic',
-                                            required: true,
-                                            eventType: 'input'
-                                        }
-                                    ]
-                            }
-                        ]
-                    },
-            },
-            {
-                selectdData: [],
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: '',
-                            name:'UnAbleToRecordBloodPressure'
-
-                        },
-                        data:[
-                            {
-                                name: 'Unable to record blood pressure',
-                                value: 'unable to record blood pressure',
-                                checked: false,
-                                labelPlacement: 'start',
-
-                            },
-                        ]
-                    }
-
-            },
-            {
-                isFinishBtn: false,
-                sectionHeader: '',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Reason blood pressure cannot be taken',
-                            selectedValue: '',
-                            name:'reasonsBloodPressureCannotBeTaken',
-                            displayNone:true
-                        },
-                        data:[
-                            {
-                                value: 'BPCuffNotAvailable',
-                                name: 'BP cuff (sphygmomanometer) not available',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between'
-
-                            },
-                            {
-                                value: 'BPCuffBroken',
-                                name: 'BP cuff (sphygmomanometer) is broken',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between'
-
-                            },
-                            // {
-                            //     value: 'otherBloodPressure',
-                            //     name: 'Other reason',
-                            //     labelPlacement: 'start',
-                            //     colSize: '7',
-                            //     justify: 'space-between'
-                            //
-                            // },
-
-                        ]
-                    }
-
-            },
-            {
-                isFinishBtn: false,
-                sectionHeader: '',
-                classDash: '',
-
-
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        displayNone:true,
-                                        inputHeader: 'Specify',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'OtherReasonForNotRecordingBloodPressure',
-                                        required: true,
-                                        eventType: 'input',
-                                        inputWidth: "100%",
-                                        
-                                    },
-
-                                ]
-                            }
-                        ]
-                    },
-            },
-
-
-
-        ],
-        temperature: [
-
-            {
-                sectionHeader: '',
-                data:
-                    { 
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'First temperature',
-                                        unit: 'C',
-                                        icon: icons.temprature,
-                                        value: '',
-                                        name: 'FirstTemp',
-                                        eventType: 'input'
-                                    },
-                                    {
-                                        inputHeader: 'Second Temperature',
-                                        unit: 'C',
-                                        icon: icons.temprature,
-                                        value: '',
-                                        name: 'SecondTemp',
-                                        eventType: 'input'
-                                    }
-                                ]
-                            },
-                        ]
-                    },
-
-            }
-               
-        ],
-        pulse: [
-
-            {
-                sectionHeader: '',
-                classDash:'dashed_bottom_border',
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData:
-                                    [
-                                        {
-                                            inputHeader: 'Pulse rate',
-                                            unit: 'BMP',
-                                            icon: icons.respiratory,
-                                            value: '',
-                                            name: 'FirstRespiratory',
-                                            eventType: 'input'
-                                        },
-                                        {
-                                            inputHeader: 'Second pulse rate',
-                                            unit: 'BMP',
-                                            icon: icons.respiratory,
-                                            value: '',
-                                            name: 'SecondRespiratory',
-                                            eventType: 'input'
-                                        },
-                                    ]
-                            }
-                        ]
-                    },
-
-            }
 
         ],
         preEclampsia: [
@@ -621,11 +552,8 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
         ]
     }),
     actions:{
-        setBloodPressure(data: any){
-            this.bloodPressure = data
-        },
-        setHeightWeight(data: any){
-            this.heightWeight = data
+        setVitals(data: any){
+            this.vitals = data
         }
     },
     persist:true,

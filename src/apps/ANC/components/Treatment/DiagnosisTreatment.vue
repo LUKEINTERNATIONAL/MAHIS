@@ -1,13 +1,13 @@
 <template>
     <div class="container">
-        <ion-card v-if="currentSection === 0" class="section">
+        <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="diagnoses"> </basic-form>
             </ion-card-content>
     </ion-card>
 
-    <ion-card v-if="currentSection === 1" class="section">
+    <ion-card class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="hypertension"> </basic-form>
@@ -17,7 +17,7 @@
             </ion-card-content>
     </ion-card>
 
-    <ion-card v-if="currentSection === 2" class="section">
+    <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="hiv"> </basic-form>
@@ -27,7 +27,7 @@
             </ion-card-content>
     </ion-card>
 
-    <ion-card v-if="currentSection === 3" class="section">
+    <ion-card class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="hepatitisC"> </basic-form>
@@ -37,7 +37,7 @@
             </ion-card-content>
     </ion-card>
 
-    <ion-card v-if="currentSection === 4" class="section">
+    <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>  
                 <basic-form :contentData="ASB"> </basic-form>
@@ -47,12 +47,6 @@
                 <basic-form :contentData="anaemia"> </basic-form>
             </ion-card-content>
     </ion-card>
-
-  <!-- Navigation Buttons -->
-  <div class="navigation-buttons">
-      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
-      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
-    </div> 
 
     </div>
 

@@ -120,7 +120,7 @@ export default defineComponent({
       StepperData:[
         {
           'title': 'Vitals',
-          'componet': 'AncVitals',
+          'componet': 'vitals',
           'value': '1'
         },
         {
