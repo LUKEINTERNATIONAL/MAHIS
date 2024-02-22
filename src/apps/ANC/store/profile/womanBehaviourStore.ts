@@ -104,8 +104,8 @@ export const useWomanBehaviourStore = defineStore('womanBehaviourStore',{
                         },
                         data:[
                             {
-                                name: 'None of the above',
-                                value: 'none of the above',
+                                name: 'None',
+                                value: 'none',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '9',

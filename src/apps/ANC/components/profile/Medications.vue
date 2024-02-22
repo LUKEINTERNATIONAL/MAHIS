@@ -89,19 +89,32 @@ export default defineComponent({
       this.$router.push(url);
     },
     handleOther(){
-      if(getCheckboxSelectedValue(this.Medication,'Other')=='otherMedications'){
+      if(getCheckboxSelectedValue(this.Medication,'Other')?.value =='otherMedications'){
         modifyFieldValue(this.Medication,'Other','displayNone',false)
       }else{
         modifyFieldValue(this.Medication,'Other','displayNone',true)
       }
+      const checkBoxes=['Oral PreP for HIV','Analgesic','Anti-consulsive',
+                        'Anti-TB','Antihelmintic','Antimarials','Antitussive',
+                        'Aspirin','Calcium','Doxylamine','Hematinic','Iron',
+                        'Metoclopramide','Thyroid medication','Antiacids',
+                        'Anti-psychotics','Anti-diabetic','Anti-hypertensive',
+                        'ARVs','Antivirals','Asthamatic','Co-trimoxazole',
+                        'Folic acid','Hemorrhoidal medication','Magnesium',
+                        'Multivitamin','Vitamin A','Other',]
+
+     if (getCheckboxSelectedValue(this.Medication, 'None')?.checked) {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.Medication, checkbox, 'checked', false);
+            modifyCheckboxValue(this.Medication, checkbox, 'disabled', true);
+        });
+        } else {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.Medication, checkbox, 'disabled', false);
+        });
+    }
      
     },
-    // medications(){
-    //   this.medicationChecked = !this.medicationChecked
-    //   if (this.medicationChecked) {
-    //     this.medication = 'none'
-    //   } else {this.medication = ''}
-    // },
   }
 });
 </script>

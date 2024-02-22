@@ -35,7 +35,7 @@
                             :inputWidth="col.inputWidth"
                             :inputValue="col.value"
                             :eventType="col.eventType"
-                            @update:dateValue="handleInput(contentData, col, $event,'updateInput')"
+                            @update:dateValue="handleInput(contentData, col, $event,'updateDate')"
                            
                         />
 
@@ -53,8 +53,8 @@
                     </ion-col>
                 </ion-row>
             </span>
-            <span v-if="item.radioBtnContent">
-                <div style="" v-if="item.radioBtnContent?.header">{{ item.radioBtnContent?.header.title }} </div>
+            <span v-if="item.radioBtnContent && !item.radioBtnContent.header.displayNone">
+                <div style="font-weight: bold;" v-if="item.radioBtnContent?.header">{{ item.radioBtnContent?.header.title }} </div>
                 <ion-row class="checkbox_content">
                     <ion-col :size="al.colSize" class="checkout_col" style="" v-for="(al, index3) in item.radioBtnContent?.data" :key="index3">
                         <span v-if="al.header" class="first_col">
@@ -64,7 +64,7 @@
                         v-else 
                         style="width: 100%;"
                         :value="item.radioBtnContent.header.selectedValue "
-                        @ionChange="handleInput(contentData, al, $event,'updateRadioBtnContent')" > 
+                        @ionChange="handleInput(contentData, item.radioBtnContent.header, $event,'updateRadioBtnContent')" > 
                             <span style="display: flex;width: 100%;" >
                                 <ion-radio :value="al.value" :justify="al.justify || 'start'"  :label-placement="al.labelPlacement || 'end'" >{{ al.name }}</ion-radio>
                             </span>         
@@ -128,7 +128,7 @@
                             :inputWidth="checkboxInput.inputWidth"
                             :inputValue="checkboxInput.value"
                             :eventType="checkboxInput.eventType"
-                            @update:dateValue="handleInput(contentData, checkboxInput, $event,'checkboxInput') "
+                            @update:dateValue="handleInput(contentData, checkboxInput, $event,'updateDate') "
                            
                         />
                         <div class="alerts_error" v-if="checkboxInput.alertsError">
@@ -197,6 +197,11 @@ export default defineComponent({
                 this.$emit("update:inputValue", col);
             }
 
+            if(inputType == 'updateDate'){
+                modifyFieldValue(data,col.name,'value',event) ; 
+                this.$emit("update:inputValue", col);
+            }
+
             if(inputType == 'clickedInput'){
                 this.handlePopover(col)
                 this.$emit("clicked:inputValue", event)
@@ -210,7 +215,7 @@ export default defineComponent({
             }
 
             if(inputType == 'updateRadioBtnContent'){
-                this.$emit("update:inputValue", col.header);
+                this.$emit("update:inputValue", col);
                 modifyRadioValue(data,col.name,'selectedValue',event.target.value)
             }
 

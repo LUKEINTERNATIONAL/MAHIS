@@ -6,10 +6,10 @@
                 <basic-form :contentData="prevPregnancies" @update:inputValue="validaterowData($event)"></basic-form>
             </ion-card-content>
         </ion-card>
+
         <ion-card  style="margin-left: 20px">
-<!--          <ion-card-title class="sub_item_header">Specify mode of delivery for each child based on number live births provided</ion-card-title>-->
-          <ion-card-content>
-            <basic-form :contentData="modeOfDelivery"></basic-form>
+        <ion-card-content>
+            <basic-form :contentData="modeOfDelivery" @update:inputValue="handleAlert"></basic-form>
           </ion-card-content>
         </ion-card>
 
@@ -55,9 +55,8 @@ import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import { useObstreticHistoryStore} from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
 import { checkmark, pulseOutline } from 'ionicons/icons';
-import { getCheckboxSelectedValue, modifyFieldValue } from '@/services/data_helpers';
-import { Service } from "@/services/service";
-import StandardValidations from "@/validations/StandardValidations";
+import { dynamicValue, getCheckboxSelectedValue, getRadioSelectedValue, modifyCheckboxValue, modifyDynamicFieldValue, modifyFieldValue } from '@/services/data_helpers';
+
 export default defineComponent({
   name: "History",
   components:{
@@ -86,7 +85,7 @@ export default defineComponent({
         hasValidationErrors: [] as any,
         prevPregnanciesInstance: {} as any,
         modeOfDeliveryInstance: {} as any,
-        currentSection: 0, // Initialize currentSection to 0
+        currentSection: 0, 
     };
   },
   computed:{
@@ -98,12 +97,13 @@ export default defineComponent({
 
     },
     created() {
-        this.modeOfDelieveryRef = {...this.modeOfDelivery[0]}
+        this.modeOfDelieveryRef = {...this.modeOfDelivery[0],...this.modeOfDelivery[1]}
     },
     mounted(){
       this.prevPregnanciesInstance = useObstreticHistoryStore()
       this.prevPregnanciesInstance.setModeOfDelivery([])
       this.handleOther()
+      this.handleDynamic()   
     },
     watch:{
       prevPregnancies: {
@@ -115,8 +115,11 @@ export default defineComponent({
 
               const births = []
               for (let i = 0; i < liveBirths; ++i) {
-                // a deep copy of the template object for each text field
-                births.push(JSON.parse(JSON.stringify(this.modeOfDelieveryRef)))
+                const x = JSON.parse(JSON.stringify({...this.modeOfDelieveryRef, id: i}))
+                x.radioBtnContent.header.title = `Specify mode of delivery (Child ${i + 1})`;
+                x.radioBtnContent.header.id=i
+                x.data.id=i
+                births.push(x)
               }
 
               this.prevPregnanciesInstance.setModeOfDelivery(births)
@@ -137,11 +140,47 @@ export default defineComponent({
     },
     methods:{
       handleOther(){
-        if(getCheckboxSelectedValue(this.Complications,'Other')=='otherInfo'){
+         
+        if(getCheckboxSelectedValue(this.Complications,'Other')?.value =='otherInfo'){
+          
           modifyFieldValue(this.Complications,'otherC','displayNone',false)
         }else{
           modifyFieldValue(this.Complications,'otherC','displayNone',true)
         }
+         const checkBoxes=['Asphyxia','Does not know','Pre-eclampsia',
+                           'Eclampsia','Puerperal Sepsis',
+                           'Baby died within 24hrs of birth',
+                           'Convulsions','Forceps','Gestational diabetes mellitus',
+                           'Heavy bleeding','Macrosomia',
+                           'Perineal tear (3rd or 4th degree)','Other',]
+
+      if (getCheckboxSelectedValue(this.Complications, 'None')?.checked) {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.Complications, checkbox, 'checked', false);
+            modifyCheckboxValue(this.Complications, checkbox, 'disabled', true);
+        });
+        } else {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.Complications, checkbox, 'disabled', false);
+        });
+    }
+       
+      },
+      handleDynamic(){
+        if(getRadioSelectedValue(this.modeOfDelivery,'cesareanSec')=='cesarean'){
+          modifyFieldValue(this.modeOfDelivery,'Specify','displayNone',false)
+        }else{
+          modifyFieldValue(this.modeOfDelivery,'Specify','displayNone',true)
+         }
+         
+      },
+      handleAlert(e:any){
+        if(dynamicValue(this.modeOfDelivery,'cesareanSec',e.id)=='cesarean'){
+          modifyDynamicFieldValue(e.id,this.modeOfDelivery,'Specify','displayNone',false)
+        }else{
+          modifyDynamicFieldValue(e.id,this.modeOfDelivery,'Specify','displayNone',true)
+         }
+         console.log(dynamicValue(this.modeOfDelivery,'cesareanSec',e.id),e.id)
       },
       // Validations
       validaterowData(ev: any) {

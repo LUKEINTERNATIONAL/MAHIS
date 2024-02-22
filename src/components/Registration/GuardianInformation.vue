@@ -108,8 +108,11 @@ methods:{
     },
     guardianValidationRules(){
         if( Validation.isName(this.guardianGivenName) == null &&
-            Validation.isName(this.guardianFamilyName) == null ) 
-            return true 
+            Validation.isName(this.guardianFamilyName) == null ) {
+                console.log("kkk")
+                return true 
+
+            }
         else {
             return false
         }

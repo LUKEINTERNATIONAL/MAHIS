@@ -431,12 +431,12 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
         setUltrasound(data: any){
             this.ultrasound = data
         },
-        setGestation(data: any){
-            this.gestation = data
-        },
-        setDeliveryDate(data: any){
-            this.deliveryDate = data
-        },
+        // setGestation(data: any){
+        //     this.gestation = data
+        // },
+        // setDeliveryDate(data: any){
+        //     this.deliveryDate = data
+        // },
 
 
       
