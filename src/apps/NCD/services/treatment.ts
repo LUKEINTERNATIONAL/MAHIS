@@ -86,9 +86,8 @@ export class PreviousTreatment {
                 }
                 const value = await ObservationService.resolvePrimaryValue(obs)
                 const time = HisDate.toStandardHisDisplayFormat(obs.date_created)
-
                 if (concept == 'Allergic') {
-                    if (isEmpty(this.previousDrugAllergies.hasOwnProperty(time))) {
+                    if (!this.previousDrugAllergies.hasOwnProperty(time)) {
                         this.previousDrugAllergies[time] = []
                     }
                     this.previousDrugAllergies[time].push({ date: time, value })
@@ -161,4 +160,8 @@ function sortObjectByDateDescending(obj: { [key: string]: any }) {
         sortedObj[key] = obj[key]
     })
     return sortedObj;
+}
+
+function reverseObjectKeys(obj: any) {
+    return Object.fromEntries(Object.entries(obj).reverse());
 }

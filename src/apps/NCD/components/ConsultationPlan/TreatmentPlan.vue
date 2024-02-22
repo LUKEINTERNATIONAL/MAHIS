@@ -32,6 +32,57 @@
                 </ion-row>
             </ion-item>
         </ion-row>
+
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+                <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="previousLabel">Previous visits allergies</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content">
+                        <div class="ionLbltp" v-for="(item, index) in FirstPreviousAllegies" :key="index">
+                            <div v-if="index == 1">
+                                <div>
+                                    <ion-label class="previousLabelDate">{{ removeOuterArray(item).date }}</ion-label>
+                                </div>
+                                <div v-for="(item1, index1) in item" :key="index1">
+                                <div class="previousSecDrgs">
+                                    <ion-list>
+                                        <ion-label class="notes_p">{{ item1.value }} </ion-label>
+                                    </ion-list>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+    
+                        <ion-accordion-group @ionChange="accordionGroupChangeForNotes">
+                            <ion-accordion value="third" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
+                                <ion-item slot="header" color="light">
+                                    <ion-label class="" color="primary">{{ showMoreAllergyMsg }}</ion-label>
+                                </ion-item>
+                                <div class="ion-padding" slot="content">
+                                    <div class="ionLbltp" v-for="(item, index) in RestOfPreviousAllegies" :key="index">
+                                        <div>
+                                            <ion-label class="previousLabelDate">{{ item[0] }}</ion-label>
+                                        </div>
+                                        <div v-for="(item1, index1) in removeOuterArray(item)" :key="index1">
+                                            <!-- <div>
+                                                <ion-label class="previousLabelDate">{{ item1.date }}</ion-label>
+                                            </div> -->
+                                            <div class="previousSecDrgs">
+                                                <ion-list>
+                                                    <ion-label class="notes_p">{{ item1.value }} </ion-label>
+                                                </ion-list>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ion-accordion>
+                        </ion-accordion-group>
+                    </div>
+                </ion-accordion>
+            </ion-accordion-group>
+
+
         <ion-item lines="none">
             <ion-label>List of medications</ion-label>
         </ion-item>
@@ -220,7 +271,7 @@
                             </div>
                         </div>
     
-                        <ion-accordion-group>
+                        <ion-accordion-group @ionChange="accordionGroupChangeForNotes">
                             <ion-accordion value="third" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
                                 <ion-item slot="header" color="light">
                                     <ion-label class="" color="primary">{{ showMoreNotesMsg }}</ion-label>
@@ -311,14 +362,20 @@
     const itemWasExpanded = ref(false)
     const itemNotesWasExpanded = ref(false)
     const showMoreNotesMsg = ref("Show more notes")
+    const showMoreAllergyMsg = ref("Show more allergies")
+    const FirstPreviousAllegies = ref()
+    const RestOfPreviousAllegies = ref()
 
     onMounted(async () => {
         const previousTreatment = new PreviousTreatment()
         const { previousDrugPrescriptions, previousClinicalNotes, previousDrugAllergies } = await previousTreatment.getPatientEncounters()
         PreviuosSelectedMedicalDrugsList.value = previousDrugPrescriptions
         FirstPreviousNotes.value =  Object.entries(previousClinicalNotes)[0]
-        const [, ...restEntries] = Object.entries(previousClinicalNotes);
+        const [, ...restEntries] = Object.entries(previousClinicalNotes)
         RestOfPreviousNotes.value = restEntries
+        FirstPreviousAllegies.value = Object.entries(previousDrugAllergies)[0]
+        const [, ...restEntriesAllegies] = Object.entries(previousDrugAllergies)
+        RestOfPreviousAllegies.value = restEntriesAllegies
     })
 
     watch(
@@ -637,6 +694,24 @@
         }
  
     }
+
+        function accordionGroupChangeForNotes(ev: AccordionGroupCustomEvent) {
+        const collapsedItems = values.filter((value) => value !== ev.detail.value);
+        const selectedValue = ev.detail.value;
+        // console.log(
+        //     `Expanded: ${selectedValue === undefined ? 'None' : ev.detail.value} | Collapsed: ${collapsedItems.join(', ')}`
+        // )
+        if (selectedValue !== undefined) {
+            if (selectedValue == 'third') {
+                showMoreNotesMsg.value = "Show less notes"
+                itemNotesWasExpanded.value = !itemWasExpanded.value
+            }
+        } else { 
+            showMoreNotesMsg.value = "Show more notes"
+            itemNotesWasExpanded.value = !itemWasExpanded.value
+        }
+    }
+    
 
     function removeOuterArray(arr: any) {
         return arr[1];
