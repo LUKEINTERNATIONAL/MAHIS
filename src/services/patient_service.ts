@@ -98,8 +98,8 @@ export class Patientservice extends Service {
         })
     }
 
-    updateMWNationalId(newId: string) {
-        return PatientIdentifierService.create(this.getID(), 28, newId)
+    public static updateMWNationalId(newId: string, patientID: any) {
+        return PatientIdentifierService.create(patientID, 28, newId)
     }
 
     isMale() {

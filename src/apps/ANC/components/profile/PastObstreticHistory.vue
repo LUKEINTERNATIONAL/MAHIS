@@ -3,7 +3,7 @@
         <ion-card class="section">
             <ion-card-header> <ion-card-title class="sub_item_header">History on previous pregnancies</ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="prevPregnancies"></basic-form>
+                <basic-form :contentData="prevPregnancies" @update:inputValue="validaterowData($event)"></basic-form>
             </ion-card-content>
         </ion-card>
 
@@ -81,6 +81,8 @@ export default defineComponent({
     return {
         modeOfDelieveryRef: {},
         iconsContent: icons,
+        vValidations: '' as any,
+        hasValidationErrors: [] as any,
         prevPregnanciesInstance: {} as any,
         modeOfDeliveryInstance: {} as any,
         currentSection: 0, 
@@ -98,7 +100,6 @@ export default defineComponent({
         this.modeOfDelieveryRef = {...this.modeOfDelivery[0],...this.modeOfDelivery[1]}
     },
     mounted(){
-     
       this.prevPregnanciesInstance = useObstreticHistoryStore()
       this.prevPregnanciesInstance.setModeOfDelivery([])
       this.handleOther()
@@ -181,7 +182,74 @@ export default defineComponent({
          }
          console.log(dynamicValue(this.modeOfDelivery,'cesareanSec',e.id),e.id)
       },
-         //Method for navigating sections
+      // Validations
+      validaterowData(ev: any) {
+        // Finding corresponding fields
+        const gravidaField = this.prevPregnancies.find((field: any) => field.data.rowData[0].colData[0].name === "Gravida");
+        const abortionsField = this.prevPregnancies.find((field: any) => field.data.rowData[0].colData[1].name === "Abortions/Miscarriages");
+
+        // Check if the event corresponds to the "Gravida" field
+        if (gravidaField && ev.name === gravidaField.data.rowData[0].colData[0].name) {
+          let errorMessage = '';
+
+          // Apply required validation
+          if (StandardValidations.required(ev.value) != null) {
+            errorMessage = StandardValidations.required(ev.value);
+          }
+
+          // Apply isNumber validation only if no required error
+          if (!errorMessage && StandardValidations.isWholeNumber(ev.value) != null) {
+            errorMessage = StandardValidations.isNumber(ev.value);
+          }
+
+          // Apply checkMinMax validation only if no required or isNumber error
+          if (!errorMessage && StandardValidations.checkMinMax(ev.value, 1, 15) != null) {
+            errorMessage = StandardValidations.checkMinMax(ev.value, 1, 15);
+          }
+
+          // Update the UI based on validation results
+          modifyFieldValue(this.prevPregnancies, gravidaField.data.rowData[0].colData[0].name, 'alertsError', !!errorMessage);
+          // Update the error message in the UI
+          modifyFieldValue(this.prevPregnancies, gravidaField.data.rowData[0].colData[0].name, 'alertsErrorMassage', errorMessage || '');
+        }
+
+        // Check if the event corresponds to the "Abortions/Miscarriages" field
+        if (abortionsField && ev.name === abortionsField.data.rowData[0].colData[1].name) {
+          let errorMessage = '';
+
+          // Apply required validation
+          if (StandardValidations.required(ev.value) != null) {
+            errorMessage = StandardValidations.required(ev.value);
+          }
+
+          // Apply isNumber validation only if no required error
+          if (!errorMessage && StandardValidations.isWholeNumber(ev.value) != null) {
+            errorMessage = StandardValidations.isWholeNumber(ev.value);
+          }
+
+          // Apply checkMinMax validation only if no required or isNumber error
+          if (!errorMessage && StandardValidations.checkMinMax(ev.value, 0, 15) != null) {
+            errorMessage = StandardValidations.checkMinMax(ev.value, 0, 15);
+          }
+
+          // Additional validation: Ensure abortions value is less than or equal to gravida and >= 0
+          const gravidaValue = gravidaField.data.rowData[0].colData[0].value;
+          if (!errorMessage && (parseInt(ev.value) > parseInt(gravidaValue) || parseInt(ev.value) < 0)) {
+            errorMessage = "Abortions/Miscarriages should be less than or equal to Gravida and greater than or equal to 0.";
+          }
+
+          // Update the UI based on validation results
+          modifyFieldValue(this.prevPregnancies, abortionsField.data.rowData[0].colData[1].name, 'alertsError', !!errorMessage);
+          // Update the error message in the UI
+          modifyFieldValue(this.prevPregnancies, abortionsField.data.rowData[0].colData[1].name, 'alertsErrorMassage', errorMessage || '');
+        }
+      },
+
+
+
+
+
+      //Method for navigating sections
     goToNextSection() {
       if (this.currentSection < 3) {
         this.currentSection++;

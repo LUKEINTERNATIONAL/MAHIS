@@ -207,6 +207,215 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
             }
                 
         },
+        {
+            isFinishBtn: false,
+            sectionHeader: 'TTV 1 immunisation',
+            classDash: '',
+
+            data:{
+                rowData: [{
+                    colData: [
+                        {
+
+                        inputHeader: 'TTV 1 Date of Immunisation',
+                        value: '',
+                        name: 'tt1Date',
+                        isDatePopover: true,
+                        icon: icons.calenderPrimary,
+                        placeholder: 'Pick the date',
+                        required: true,
+                        eventType: 'input',
+                        inputWidth: '175px',
+                        alertsError: false,
+                        alertsErrorMassage: ''
+                    },
+                    ],
+                }]
+            },
+
+
+        },
+        {
+            isFinishBtn: false,
+            sectionHeader: 'TTV 2 immunisation',
+            classDash: '',
+
+            data:{
+                rowData: [{
+                    colData: [
+                        {
+
+                            inputHeader: 'TTV 2 Date of Immunisation',
+                            value: '',
+                            name: 'tt2Date',
+                            isDatePopover: true,
+                            icon: icons.calenderPrimary,
+                            placeholder: 'Pick the date',
+                            required: true,
+                            eventType: 'input',
+                            inputWidth: '175px',
+                            alertsError: false,
+                            alertsErrorMassage: ''
+                        },
+                    ],
+                }]
+            },
+
+        },
+        {
+            isFinishBtn: false,
+            sectionHeader: 'TTV 3 immunisation',
+            classDash: '',
+
+            data:{
+                rowData: [{
+                    colData: [
+                        {
+
+                            inputHeader: 'TTV 3 Date of Immunisation',
+                            value: '',
+                            name: 'tt3Date',
+                            isDatePopover: true,
+                            icon: icons.calenderPrimary,
+                            placeholder: 'Pick the date',
+                            required: true,
+                            eventType: 'input',
+                            inputWidth: '175px',
+                            alertsError: false,
+                            alertsErrorMassage: ''
+                        },
+                    ],
+                }]
+            },
+
+        },
+        {
+            isFinishBtn: false,
+            sectionHeader: 'TTV 4 immunisation',
+            classDash: '',
+
+            data:{
+                rowData: [{
+                    colData: [
+                        {
+
+                            inputHeader: 'TTV 4 Date of Immunisation',
+                            value: '',
+                            name: 'tt4Date',
+                            isDatePopover: true,
+                            icon: icons.calenderPrimary,
+                            placeholder: 'Pick the date',
+                            required: true,
+                            eventType: 'input',
+                            inputWidth: '175px',
+                            alertsError: false,
+                            alertsErrorMassage: ''
+                        },
+                    ],
+                }]
+            },
+
+        },
+        {
+            isFinishBtn: false,
+            sectionHeader: 'TTV 5 immunisation',
+            classDash: 'dashed_bottom_border _padding',
+
+            data:{
+                rowData: [{
+                    colData: [
+                        {
+
+                            inputHeader: 'TTV 5 Date of Immunisation',
+                            value: '',
+                            name: 'tt5Date',
+                            isDatePopover: true,
+                            icon: icons.calenderPrimary,
+                            placeholder: 'Pick the date',
+                            required: true,
+                            eventType: 'input',
+                            inputWidth: '175px',
+                            alertsError: false,
+                            alertsErrorMassage: ''
+                        },
+                    ],
+                }]
+            },
+
+        },
+
+        {
+            selectdData: [],
+            isFinishBtn: false,
+            classDash: '',
+            radioBtnContent:
+                {
+                    header:{
+                        title: 'Reason Tetanus toxoid (TT) was not conducted',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: 'Stockout',
+                            value: 'stockout',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'Client is ill',
+                            value: 'client',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'Client refused',
+                            value: 'client',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'Allergy to vaccinate',
+                            value: 'allergy',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'Other',
+                            value: 'other',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                    ]
+                }
+
+        },
+        {
+            isFinishBtn: false,
+            sectionHeader: '',
+            classDash: 'dashed_bottom_border _padding',
+
+            data:{
+                rowData: [{
+                    colData: [{
+
+                        inputHeader: 'Specify',
+                        value: '',
+                        name: 'other',
+                        icon: icons.editPen,
+                        required: true,
+                        eventType: 'input',
+                        inputWidth: "55%",
+                        alertsError: false,
+                        alertsErrorMassage: ''
+                    }]
+                }]
+            }
+        },
     ],
     }),
     actions:{

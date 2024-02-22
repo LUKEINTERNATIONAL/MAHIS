@@ -1257,7 +1257,8 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                     header:{
                         title: 'Select the result of HIV test',
                         name:'test2',
-                        selectedValue: ''
+                        selectedValue: '',
+                        displayNone:true,
                     },
                     data:[
                         {

@@ -137,10 +137,9 @@ export default defineComponent({
         this.handleAllergies()
         this.handleChronicCondition()
         this.handleHivConducted()
+        this. handleHivConductedOptin()
         this.handleOtherHiv()
-        // this. handleReasonNotDone()
         this. handleSyphlisdate()
-        // this.handleTestNotDone()
         this.handleDisable()
         this. handleSyphilisNotDone()
         this.handleSpecifySyphilis()
@@ -155,7 +154,8 @@ export default defineComponent({
                 this.handleOtherHiv()
                 this.handleHivConducted()
                 this.handleTestNotDone()
-                // this. handleReasonNotDone()
+                this. handleHivConductedOptin()
+
             },
              deep:true,
         },
@@ -204,6 +204,15 @@ export default defineComponent({
                 modifyRadioValue(this.hivTest,'test1','displayNone',false)
             }else{
                 modifyRadioValue(this.hivTest,'test1','displayNone',true)
+            }
+             
+        },
+
+        handleHivConductedOptin(){        
+            if(getRadioSelectedValue(this.hivTest,'hivOption') == 'hivTestConducted'){
+                modifyRadioValue(this.hivTest,'test2','displayNone',false)
+            }else{
+                modifyRadioValue(this.hivTest,'test2','displayNone',true)
             }
              
         },

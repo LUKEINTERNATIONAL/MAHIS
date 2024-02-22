@@ -23,16 +23,6 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                                     alertsError: false,
                                     alertsErrorMassage: ''
                                 },
-                                {
-                                    inputHeader: 'Parity',
-                                    value: '',
-                                    name: 'Parity',
-                                    icon: icons.editPen,
-                                    required: true,
-                                    eventType: 'input',
-                                    alertsError: false,
-                                    alertsErrorMassage: ''
-                                },
                                 
                             ],
                             
@@ -70,6 +60,15 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                                 name: 'Live births',
                                 required: true,
                                 icon: icons.editPen,
+                                eventType: 'input',
+                                alertsError: false,
+                                alertsErrorMassage: ''
+                            },
+                            {
+                                inputHeader: 'Parity',
+                                value: '',
+                                name: 'Parity',
+                                required: true,
                                 eventType: 'input',
                                 alertsError: false,
                                 alertsErrorMassage: ''
@@ -172,7 +171,7 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                             justify: 'space-between',
                         },
                         {
-                            name: 'Last live birth had congenital abnormabilities\n',
+                            name: 'Last live birth had congenital abnormalities\n',
                             value: 'congetalAbnormalities',
                             labelPlacement: 'start',
                             colSize: '9',
