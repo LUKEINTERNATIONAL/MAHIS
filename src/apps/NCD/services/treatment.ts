@@ -1,10 +1,8 @@
 import { NotesService } from '@/services/notes_service'
 import { DrugAllergyService } from '@/services/drug_allargy_service'
 import { isEmpty } from 'lodash'
-import { previousDay } from 'date-fns'
 import { EncounterService } from '@/services/encounter_service'
 import { ObservationService, ObsValue } from '@/services/observation_service'
-import { Encounter } from '@/interfaces/encounter'
 import { ConceptService } from '@/services/concept_service'
 import { Service } from '@/services/service'
 import { useDemographicsStore } from '@/stores/DemographicStore'
@@ -36,7 +34,7 @@ export class PreviousTreatment {
   date: string;
   demographics: any
   previousDrugPrescriptions: any[] = []
-  previousClinicalNotes: any[] = []
+  previousClinicalNotes: any
   previousDrugAllergies: any
 
   constructor() {
@@ -46,6 +44,7 @@ export class PreviousTreatment {
       this.date = ObservationService.getSessionDate()
       this.providerID = Service.getUserID() as number
       this.programID = ObservationService.getProgramID()
+      this.previousClinicalNotes = {}
       this.previousDrugAllergies = {}
   }
 
@@ -60,11 +59,11 @@ export class PreviousTreatment {
             if (!isEmpty(observations)) {
                 observations.forEach((observation: any) => {
                     if (observation.concept_id == '2688') {
-                        const notes = {
-                            notes_date: HisDate.toStandardHisDisplayFormat(observation.obs_datetime),
-                            notes: observation.value_text
+                        const date = HisDate.toStandardHisDisplayFormat(observation.obs_datetime)
+                        if(isEmpty(this.previousClinicalNotes.hasOwnProperty(date))) {
+                          this.previousClinicalNotes[date] = []
                         }
-                        this.previousClinicalNotes.push(notes)
+                        this.previousClinicalNotes[date].push({date, notes: observation.value_text})
                     }
                 })
             }
@@ -153,4 +152,13 @@ function extractNumberBeforeDays(text: string): number | null {
       return parseInt(match[1])
   }
   return null
+}
+
+function sortObjectByDateDescending(obj: { [key: string]: any }) {
+    const sortedKeys = Object.keys(obj).sort((a: string, b: string) => new Date(b).getTime() - new Date(a).getTime())
+    const sortedObj: { [key: string]: any } = {}
+    sortedKeys.forEach((key: string) => {
+        sortedObj[key] = obj[key]
+    })
+    return sortedObj;
 }
