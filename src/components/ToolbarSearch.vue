@@ -132,7 +132,7 @@
             this.patients.push(...ncdData)
           }
 
-          if(Validation.isMWNationalID(scanned)){
+          if(Validation.isMWNationalID(scanned) == null){
             const nationalID = await Patientservice.findByOtherID(28,scanned)
             if(nationalID.length > 0){
               this.patients.push(...nationalID)

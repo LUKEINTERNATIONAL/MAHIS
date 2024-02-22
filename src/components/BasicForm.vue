@@ -35,7 +35,7 @@
                             :inputWidth="col.inputWidth"
                             :inputValue="col.value"
                             :eventType="col.eventType"
-                            @update:dateValue="handleInput(contentData, col, $event,'updateInput')"
+                            @update:dateValue="handleInput(contentData, col, $event,'updateDate')"
                            
                         />
 
@@ -64,7 +64,7 @@
                         v-else 
                         style="width: 100%;"
                         :value="item.radioBtnContent.header.selectedValue "
-                        @ionChange="handleInput(contentData, al, $event,'updateRadioBtnContent')" > 
+                        @ionChange="handleInput(contentData, item.radioBtnContent.header, $event,'updateRadioBtnContent')" > 
                             <span style="display: flex;width: 100%;" >
                                 <ion-radio :value="al.value" :justify="al.justify || 'start'"  :label-placement="al.labelPlacement || 'end'" >{{ al.name }}</ion-radio>
                             </span>         
@@ -128,7 +128,7 @@
                             :inputWidth="checkboxInput.inputWidth"
                             :inputValue="checkboxInput.value"
                             :eventType="checkboxInput.eventType"
-                            @update:dateValue="handleInput(contentData, checkboxInput, $event,'checkboxInput') "
+                            @update:dateValue="handleInput(contentData, checkboxInput, $event,'updateDate') "
                            
                         />
                         <div class="alerts_error" v-if="checkboxInput.alertsError">
@@ -197,6 +197,11 @@ export default defineComponent({
                 this.$emit("update:inputValue", col);
             }
 
+            if(inputType == 'updateDate'){
+                modifyFieldValue(data,col.name,'value',event) ; 
+                this.$emit("update:inputValue", col);
+            }
+
             if(inputType == 'clickedInput'){
                 this.handlePopover(col)
                 this.$emit("clicked:inputValue", event)
@@ -210,7 +215,7 @@ export default defineComponent({
             }
 
             if(inputType == 'updateRadioBtnContent'){
-                this.$emit("update:inputValue", col.header);
+                this.$emit("update:inputValue", col);
                 modifyRadioValue(data,col.name,'selectedValue',event.target.value)
             }
 
