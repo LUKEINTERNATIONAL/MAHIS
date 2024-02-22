@@ -54,8 +54,8 @@
                             </div>
                         </div>
     
-                        <ion-accordion-group @ionChange="accordionGroupChangeForNotes">
-                            <ion-accordion value="third" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
+                        <ion-accordion-group @ionChange="accordionGroupChangeForAllergies">
+                            <ion-accordion value="fith" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
                                 <ion-item slot="header" color="light">
                                     <ion-label class="" color="primary">{{ showMoreAllergyMsg }}</ion-label>
                                 </ion-item>
@@ -361,6 +361,7 @@
     const RestOfPreviousNotes = ref()
     const itemWasExpanded = ref(false)
     const itemNotesWasExpanded = ref(false)
+    const itemAllegiesWasExpanded = ref(false)
     const showMoreNotesMsg = ref("Show more notes")
     const showMoreAllergyMsg = ref("Show more allergies")
     const FirstPreviousAllegies = ref()
@@ -695,12 +696,9 @@
  
     }
 
-        function accordionGroupChangeForNotes(ev: AccordionGroupCustomEvent) {
+    function accordionGroupChangeForNotes(ev: AccordionGroupCustomEvent) {
         const collapsedItems = values.filter((value) => value !== ev.detail.value);
-        const selectedValue = ev.detail.value;
-        // console.log(
-        //     `Expanded: ${selectedValue === undefined ? 'None' : ev.detail.value} | Collapsed: ${collapsedItems.join(', ')}`
-        // )
+        const selectedValue = ev.detail.value
         if (selectedValue !== undefined) {
             if (selectedValue == 'third') {
                 showMoreNotesMsg.value = "Show less notes"
@@ -709,6 +707,20 @@
         } else { 
             showMoreNotesMsg.value = "Show more notes"
             itemNotesWasExpanded.value = !itemWasExpanded.value
+        }
+    }
+
+    function accordionGroupChangeForAllergies(ev: AccordionGroupCustomEvent) {
+        const collapsedItems = values.filter((value) => value !== ev.detail.value);
+        const selectedValue = ev.detail.value
+        if (selectedValue !== undefined) {
+            if (selectedValue == 'fith') {
+                showMoreAllergyMsg.value = "Show less allegies"
+                itemAllegiesWasExpanded.value = !itemWasExpanded.value
+            }
+        } else { 
+            showMoreAllergyMsg.value = "Show more allegies"
+            itemAllegiesWasExpanded.value = !itemWasExpanded.value
         }
     }
     
