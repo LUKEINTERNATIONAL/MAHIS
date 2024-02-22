@@ -3,7 +3,7 @@
         <ion-card class="section">
             <ion-card-header> <ion-card-title class="sub_item_header">History on previous pregnancies</ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="prevPregnancies" @update:inputValue="validaterowData($event)"></basic-form>
+                <basic-form :contentData="prevPregnancies"></basic-form>
             </ion-card-content>
         </ion-card>
 
@@ -109,9 +109,11 @@ export default defineComponent({
       prevPregnancies: {
         
           handler(val) {
-            if (val && val[0].data.rowData[2].colData[0].value) {
-              const liveBirths = parseInt(val[0].data.rowData[2].colData[0].value)
+            if (val && val[2].data.rowData[0].colData[0].value) {
+              const liveBirths = parseInt(val[2].data.rowData[0].colData[0].value)
               this.prevPregnanciesInstance.setModeOfDelivery([])
+
+             
 
               const births = []
               for (let i = 0; i < liveBirths; ++i) {
@@ -127,6 +129,12 @@ export default defineComponent({
           },
 
         deep: true
+      },
+      modeOfDelivery:{
+        handler(){
+           this.handleDynamic()  
+        },
+        deep:true
       },
       Complications:{
         handler(){
@@ -167,11 +175,14 @@ export default defineComponent({
        
       },
       handleDynamic(){
+        
         if(getRadioSelectedValue(this.modeOfDelivery,'cesareanSec')=='cesarean'){
           modifyFieldValue(this.modeOfDelivery,'Specify','displayNone',false)
         }else{
           modifyFieldValue(this.modeOfDelivery,'Specify','displayNone',true)
          }
+
+         
          
       },
       handleAlert(e:any){
@@ -180,70 +191,70 @@ export default defineComponent({
         }else{
           modifyDynamicFieldValue(e.id,this.modeOfDelivery,'Specify','displayNone',true)
          }
-         console.log(dynamicValue(this.modeOfDelivery,'cesareanSec',e.id),e.id)
+        
       },
-      // Validations
-      validaterowData(ev: any) {
-        // Finding corresponding fields
-        const gravidaField = this.prevPregnancies.find((field: any) => field.data.rowData[0].colData[0].name === "Gravida");
-        const abortionsField = this.prevPregnancies.find((field: any) => field.data.rowData[0].colData[1].name === "Abortions/Miscarriages");
+      // // Validations
+      // validaterowData(ev: any) {
+      //   // Finding corresponding fields
+      //   const gravidaField = this.prevPregnancies.find((field: any) => field.data.rowData[0].colData[0].name === "Gravida");
+      //   const abortionsField = this.prevPregnancies.find((field: any) => field.data.rowData[0].colData[1].name === "Abortions/Miscarriages");
 
-        // Check if the event corresponds to the "Gravida" field
-        if (gravidaField && ev.name === gravidaField.data.rowData[0].colData[0].name) {
-          let errorMessage = '';
+      //   // Check if the event corresponds to the "Gravida" field
+      //   if (gravidaField && ev.name === gravidaField.data.rowData[0].colData[0].name) {
+      //     let errorMessage = '';
 
-          // Apply required validation
-          if (StandardValidations.required(ev.value) != null) {
-            errorMessage = StandardValidations.required(ev.value);
-          }
+      //     // Apply required validation
+      //     if (StandardValidations.required(ev.value) != null) {
+      //       errorMessage = StandardValidations.required(ev.value);
+      //     }
 
-          // Apply isNumber validation only if no required error
-          if (!errorMessage && StandardValidations.isWholeNumber(ev.value) != null) {
-            errorMessage = StandardValidations.isNumber(ev.value);
-          }
+      //     // Apply isNumber validation only if no required error
+      //     if (!errorMessage && StandardValidations.isWholeNumber(ev.value) != null) {
+      //       errorMessage = StandardValidations.isNumber(ev.value);
+      //     }
 
-          // Apply checkMinMax validation only if no required or isNumber error
-          if (!errorMessage && StandardValidations.checkMinMax(ev.value, 1, 15) != null) {
-            errorMessage = StandardValidations.checkMinMax(ev.value, 1, 15);
-          }
+      //     // Apply checkMinMax validation only if no required or isNumber error
+      //     if (!errorMessage && StandardValidations.checkMinMax(ev.value, 1, 15) != null) {
+      //       errorMessage = StandardValidations.checkMinMax(ev.value, 1, 15);
+      //     }
 
-          // Update the UI based on validation results
-          modifyFieldValue(this.prevPregnancies, gravidaField.data.rowData[0].colData[0].name, 'alertsError', !!errorMessage);
-          // Update the error message in the UI
-          modifyFieldValue(this.prevPregnancies, gravidaField.data.rowData[0].colData[0].name, 'alertsErrorMassage', errorMessage || '');
-        }
+      //     // Update the UI based on validation results
+      //     modifyFieldValue(this.prevPregnancies, gravidaField.data.rowData[0].colData[0].name, 'alertsError', !!errorMessage);
+      //     // Update the error message in the UI
+      //     modifyFieldValue(this.prevPregnancies, gravidaField.data.rowData[0].colData[0].name, 'alertsErrorMassage', errorMessage || '');
+      //   }
 
-        // Check if the event corresponds to the "Abortions/Miscarriages" field
-        if (abortionsField && ev.name === abortionsField.data.rowData[0].colData[1].name) {
-          let errorMessage = '';
+      //   // Check if the event corresponds to the "Abortions/Miscarriages" field
+      //   if (abortionsField && ev.name === abortionsField.data.rowData[0].colData[1].name) {
+      //     let errorMessage = '';
 
-          // Apply required validation
-          if (StandardValidations.required(ev.value) != null) {
-            errorMessage = StandardValidations.required(ev.value);
-          }
+      //     // Apply required validation
+      //     if (StandardValidations.required(ev.value) != null) {
+      //       errorMessage = StandardValidations.required(ev.value);
+      //     }
 
-          // Apply isNumber validation only if no required error
-          if (!errorMessage && StandardValidations.isWholeNumber(ev.value) != null) {
-            errorMessage = StandardValidations.isWholeNumber(ev.value);
-          }
+      //     // Apply isNumber validation only if no required error
+      //     if (!errorMessage && StandardValidations.isWholeNumber(ev.value) != null) {
+      //       errorMessage = StandardValidations.isWholeNumber(ev.value);
+      //     }
 
-          // Apply checkMinMax validation only if no required or isNumber error
-          if (!errorMessage && StandardValidations.checkMinMax(ev.value, 0, 15) != null) {
-            errorMessage = StandardValidations.checkMinMax(ev.value, 0, 15);
-          }
+      //     // Apply checkMinMax validation only if no required or isNumber error
+      //     if (!errorMessage && StandardValidations.checkMinMax(ev.value, 0, 15) != null) {
+      //       errorMessage = StandardValidations.checkMinMax(ev.value, 0, 15);
+      //     }
 
-          // Additional validation: Ensure abortions value is less than or equal to gravida and >= 0
-          const gravidaValue = gravidaField.data.rowData[0].colData[0].value;
-          if (!errorMessage && (parseInt(ev.value) > parseInt(gravidaValue) || parseInt(ev.value) < 0)) {
-            errorMessage = "Abortions/Miscarriages should be less than or equal to Gravida and greater than or equal to 0.";
-          }
+      //     // Additional validation: Ensure abortions value is less than or equal to gravida and >= 0
+      //     const gravidaValue = gravidaField.data.rowData[0].colData[0].value;
+      //     if (!errorMessage && (parseInt(ev.value) > parseInt(gravidaValue) || parseInt(ev.value) < 0)) {
+      //       errorMessage = "Abortions/Miscarriages should be less than or equal to Gravida and greater than or equal to 0.";
+      //     }
 
-          // Update the UI based on validation results
-          modifyFieldValue(this.prevPregnancies, abortionsField.data.rowData[0].colData[1].name, 'alertsError', !!errorMessage);
-          // Update the error message in the UI
-          modifyFieldValue(this.prevPregnancies, abortionsField.data.rowData[0].colData[1].name, 'alertsErrorMassage', errorMessage || '');
-        }
-      },
+      //     // Update the UI based on validation results
+      //     modifyFieldValue(this.prevPregnancies, abortionsField.data.rowData[0].colData[1].name, 'alertsError', !!errorMessage);
+      //     // Update the error message in the UI
+      //     modifyFieldValue(this.prevPregnancies, abortionsField.data.rowData[0].colData[1].name, 'alertsErrorMassage', errorMessage || '');
+      //   }
+      // },
 
 
 
