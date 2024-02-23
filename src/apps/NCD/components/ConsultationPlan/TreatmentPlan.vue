@@ -32,6 +32,57 @@
                 </ion-row>
             </ion-item>
         </ion-row>
+
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+                <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="previousLabel">Previous visits allergies</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content">
+                        <div class="ionLbltp" v-for="(item, index) in FirstPreviousAllegies" :key="index">
+                            <div v-if="index == 1">
+                                <div>
+                                    <ion-label class="previousLabelDate">{{ removeOuterArray(item).date }}</ion-label>
+                                </div>
+                                <div v-for="(item1, index1) in item" :key="index1">
+                                <div class="previousSecDrgs">
+                                    <ion-list>
+                                        <ion-label class="notes_p">{{ item1.value }} </ion-label>
+                                    </ion-list>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+    
+                        <ion-accordion-group @ionChange="accordionGroupChangeForAllergies">
+                            <ion-accordion value="fith" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
+                                <ion-item slot="header" color="light">
+                                    <ion-label class="" color="primary">{{ showMoreAllergyMsg }}</ion-label>
+                                </ion-item>
+                                <div class="ion-padding" slot="content">
+                                    <div class="ionLbltp" v-for="(item, index) in RestOfPreviousAllegies" :key="index">
+                                        <div>
+                                            <ion-label class="previousLabelDate">{{ item[0] }}</ion-label>
+                                        </div>
+                                        <div v-for="(item1, index1) in removeOuterArray(item)" :key="index1">
+                                            <!-- <div>
+                                                <ion-label class="previousLabelDate">{{ item1.date }}</ion-label>
+                                            </div> -->
+                                            <div class="previousSecDrgs">
+                                                <ion-list>
+                                                    <ion-label class="notes_p">{{ item1.value }} </ion-label>
+                                                </ion-list>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ion-accordion>
+                        </ion-accordion-group>
+                    </div>
+                </ion-accordion>
+            </ion-accordion-group>
+
+
         <ion-item lines="none">
             <ion-label>List of medications</ion-label>
         </ion-item>
@@ -140,16 +191,56 @@
                 </ion-col>
             </ion-row>
 
-            <!-- <ion-button v-if="addItemButton" fill="clear" @click="addData" class="addMedicalAlBtn">
-                Add new medication
-                <ion-icon slot="start" style="font-size: x-large;" :icon="addOutline"></ion-icon>
-            </ion-button> -->
-            <dynamic-button  v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" @clicked:btn="addData">
-            </dynamic-button>
+            <dynamic-button  v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" @clicked:btn="addData"></dynamic-button>
             <ion-row>
-                <dynamic-button class="addMedicalTpBtn" :name="btnName2"/>
-                <dynamic-button class="addMedicalTpBtn" :name="btnName3" style="margin-left: 4%;"/>
+                <dynamic-button class="addMedicalTpBtn" :name="btnName2"></dynamic-button>
+                <dynamic-button class="addMedicalTpBtn" :name="btnName3" style="margin-left: 4%;"></dynamic-button>
             </ion-row>
+
+            <div style="margin-top: 14px;">
+                <ion-accordion-group ref="accordionGroup" class="previousView" @ionChange="accordionGroupChangeFn1">
+                    <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
+                        <ion-item slot="header" color="light">
+                            <ion-label class="previousLabel">Previous medications</ion-label>
+                        </ion-item>
+                        <div class="ion-padding" slot="content">
+                            <div class="ionLbltp" v-for="(item, index) in PreviuosSelectedMedicalDrugsList" :key="index">
+                                <div v-if="index == 0">
+                                    <div>
+                                        <ion-label class="previousLabelDate">{{ item.prescriptionDate }}</ion-label>
+                                    </div>
+
+                                    <div class="previousSecDrgs">
+                                        <dynamic-list :_selectedMedicalDrugsList="item.previousPrescriptions" :show_actions_buttons="false" :key="componentKey"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <ion-accordion-group @ionChange="accordionGroupChange">
+                                <ion-accordion value="second" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
+                                    <ion-item slot="header" color="light">
+                                        <ion-label class="" color="primary">{{ showMoreMedicationsMsg }}</ion-label>
+                                    </ion-item>
+                                    <div class="ion-padding" slot="content">
+                                        <div class="ionLbltp" v-for="(item, index) in PreviuosSelectedMedicalDrugsList" :key="index">
+                                            <div v-if="itemWasExpanded && index > 0">
+                                                <div>
+                                                    <ion-label class="previousLabelDate">{{ item.prescriptionDate }}</ion-label>
+                                                </div>
+
+                                                <div class="previousSecDrgs">
+                                                    <dynamic-list :_selectedMedicalDrugsList="item.previousPrescriptions" :show_actions_buttons="false" :key="componentKey"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ion-accordion>
+                            </ion-accordion-group>
+
+                        </div>
+                    </ion-accordion>
+                </ion-accordion-group>
+            </div>
         </div>
         <div style="margin-top: 14px; margin-left: 10px;">
             <ion-label class="tpStndCls">Non-pharmalogical therapy and other notes</ion-label>
@@ -157,15 +248,61 @@
                 <ion-label><span v-html="iconsContent.editPen"></span></ion-label>
                 <ion-textarea @ionInput="validateNotes" v-model="nonPharmalogicalTherapyAndOtherNotes"  style="min-height: 120px;" class="inputTpln" :auto-grow="true"  fill="outline"></ion-textarea >
             </ion-item>
-
+        </div>
+        <div style="margin-top: 14px; margin-left: 10px;">
+            <ion-accordion-group ref="accordionGroup" class="previousView">
+                <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
+                    <ion-item slot="header" color="light">
+                        <ion-label class="previousLabel">Previous visits notes</ion-label>
+                    </ion-item>
+                    <div class="ion-padding" slot="content">
+                        <div class="ionLbltp" v-for="(item, index) in FirstPreviousNotes" :key="index">
+                            <div v-if="index == 1">
+                                <div v-for="(item1, index1) in item" :key="index1">
+                                <div>
+                                    <ion-label class="previousLabelDate">{{ item1.date }}</ion-label>
+                                </div>
+                                <div class="previousSecDrgs">
+                                    <ion-list>
+                                        <ion-label class="notes_p">{{ item1.notes }} </ion-label>
+                                    </ion-list>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+    
+                        <ion-accordion-group @ionChange="accordionGroupChangeForNotes">
+                            <ion-accordion value="third" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
+                                <ion-item slot="header" color="light">
+                                    <ion-label class="" color="primary">{{ showMoreNotesMsg }}</ion-label>
+                                </ion-item>
+                                <div class="ion-padding" slot="content">
+                                    <div class="ionLbltp" v-for="(item, index) in RestOfPreviousNotes" :key="index">
+                                        <div v-for="(item1, index1) in removeOuterArray(item)" :key="index1">
+                                            <div>
+                                                <ion-label class="previousLabelDate">{{ item1.date }}</ion-label>
+                                            </div>
+                                            <div class="previousSecDrgs">
+                                                <ion-list>
+                                                    <ion-label class="notes_p">{{ item1.notes }} </ion-label>
+                                                </ion-list>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ion-accordion>
+                        </ion-accordion-group>
+                    </div>
+                </ion-accordion>
+            </ion-accordion-group>
         </div>
     </ion-list>
 </template>
 
 <script setup lang="ts">
-    import {     IonContent, IonHeader, IonCol, IonItem, IonList, IonButton, IonMenu, IonTitle, IonToolbar, IonInput, IonDatetime, IonLabel, IonTextarea } from '@ionic/vue';
-    import { checkmark,pulseOutline,addOutline,closeOutline, checkmarkOutline, filter, chevronDownOutline, chevronUpOutline } from 'ionicons/icons'
-    import { ref, watch, computed } from 'vue'
+    import {     IonContent, IonHeader, IonCol, IonItem, IonList, IonButton, IonMenu, IonTitle, IonToolbar, IonInput, IonDatetime, IonLabel, IonTextarea, IonAccordion, IonAccordionGroup, AccordionGroupCustomEvent } from '@ionic/vue';
+    import { checkmark,pulseOutline,addOutline,closeOutline, checkmarkOutline, filter, chevronDownOutline, chevronUpOutline, codeSlashOutline } from 'ionicons/icons'
+    import { ref, watch, computed, onMounted, onUpdated } from 'vue'
     import { icons } from '@/utils/svg'
     import { DRUG_FREQUENCIES } from "@/services/drug_prescription_service"
     import { DrugService} from "@/services/drug_service"
@@ -177,6 +314,7 @@
     import { ConceptService } from "@/services/concept_service"
     import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts"
     import { Service } from "@/services/service"
+    import { PreviousTreatment } from '@/apps/NCD/services/treatment'
 
     const iconsContent = icons
     const searchText = ref('')
@@ -210,12 +348,36 @@
     const btnName2 = 'Send to pharmacy'
     const btnName3 = 'Send to dispensation'
     const btnFill = 'clear'
+    const showMoreMedicationsMsg = ref("Show more medications")
     const store = useTreatmentPlanStore()
     const selectedMedicalDrugsList = computed(() => store.selectedMedicalDrugsList)
     const medicalAllergiesList = computed(() => store.medicalAllergiesList)
     const nonPharmalogicalTherapyAndOtherNotes = computed(() => store.nonPharmalogicalTherapyAndOtherNotes)
     const selectedMedicalAllergiesList = computed(() => store.selectedMedicalAllergiesList)
-    const input = ref();
+    const input = ref()
+    const values = ['first', 'second', 'third']
+    const PreviuosSelectedMedicalDrugsList = ref()
+    const FirstPreviousNotes = ref()
+    const RestOfPreviousNotes = ref()
+    const itemWasExpanded = ref(false)
+    const itemNotesWasExpanded = ref(false)
+    const itemAllegiesWasExpanded = ref(false)
+    const showMoreNotesMsg = ref("Show more notes")
+    const showMoreAllergyMsg = ref("Show more allergies")
+    const FirstPreviousAllegies = ref()
+    const RestOfPreviousAllegies = ref()
+
+    onMounted(async () => {
+        const previousTreatment = new PreviousTreatment()
+        const { previousDrugPrescriptions, previousClinicalNotes, previousDrugAllergies } = await previousTreatment.getPatientEncounters()
+        PreviuosSelectedMedicalDrugsList.value = previousDrugPrescriptions
+        FirstPreviousNotes.value =  Object.entries(previousClinicalNotes)[0]
+        const [, ...restEntries] = Object.entries(previousClinicalNotes)
+        RestOfPreviousNotes.value = restEntries
+        FirstPreviousAllegies.value = Object.entries(previousDrugAllergies)[0]
+        const [, ...restEntriesAllegies] = Object.entries(previousDrugAllergies)
+        RestOfPreviousAllegies.value = restEntriesAllegies
+    })
 
     watch(
         () => drugName.value,
@@ -237,6 +399,11 @@
             validateDuration()
         }
     )
+
+    function addData(){
+        addItemButton.value = !addItemButton.value
+        search_item.value = true
+    }
 
     async function validatedDrugName() {
         const drugNameExists  = await findIfDrugNameExists()
@@ -295,17 +462,6 @@
         })
         drug_frequencies[index].selected = !drug_frequencies[index].selected
         frequency.value = drug_frequencies[index].label
-    }
-
-    function addData(){
-        // searchText = ""
-        // drugName = ""
-        // dose = ""
-        // frequency = ""
-        // duration = ""
-        // no_item = false
-        addItemButton.value = false
-        search_item.value =true
     }
 
     async function saveData() {
@@ -491,11 +647,6 @@
         treatmentPlanStore.setSelectedMedicalDrugsList(selectedMedicalDrugsList)
     }
 
-    function useOfTraditional(ev: any) {
-        const checked = ev.detail.checked
-        const treatmentPlanStore = useTreatmentPlanStore()
-    }
-
     function refSetNonPharmalogicalTherapyAndOtherNotes(value: string) {
         const treatmentPlanStore = useTreatmentPlanStore()
         treatmentPlanStore.setNonPharmalogicalTherapyAndOtherNotes(value as string)
@@ -524,7 +675,59 @@
         input.value.$el.setFocus()
     }
 
+    function accordionGroupChangeFn1(ev: AccordionGroupCustomEvent)  {
+    }
+
+    function accordionGroupChange(ev: AccordionGroupCustomEvent)  {
+        const collapsedItems = values.filter((value) => value !== ev.detail.value);
+        const selectedValue = ev.detail.value;
+        // console.log(
+        //     `Expanded: ${selectedValue === undefined ? 'None' : ev.detail.value} | Collapsed: ${collapsedItems.join(', ')}`
+        // )
+        if (selectedValue !== undefined) {
+            if (selectedValue == 'second') {
+                showMoreMedicationsMsg.value = "Show less medications"
+                itemWasExpanded.value = !itemWasExpanded.value
+            }
+        } else { // its a hack
+            showMoreMedicationsMsg.value = "Show more medications"
+            itemWasExpanded.value = !itemWasExpanded.value
+        }
+ 
+    }
+
+    function accordionGroupChangeForNotes(ev: AccordionGroupCustomEvent) {
+        const collapsedItems = values.filter((value) => value !== ev.detail.value);
+        const selectedValue = ev.detail.value
+        if (selectedValue !== undefined) {
+            if (selectedValue == 'third') {
+                showMoreNotesMsg.value = "Show less notes"
+                itemNotesWasExpanded.value = !itemWasExpanded.value
+            }
+        } else { 
+            showMoreNotesMsg.value = "Show more notes"
+            itemNotesWasExpanded.value = !itemWasExpanded.value
+        }
+    }
+
+    function accordionGroupChangeForAllergies(ev: AccordionGroupCustomEvent) {
+        const collapsedItems = values.filter((value) => value !== ev.detail.value);
+        const selectedValue = ev.detail.value
+        if (selectedValue !== undefined) {
+            if (selectedValue == 'fith') {
+                showMoreAllergyMsg.value = "Show less allegies"
+                itemAllegiesWasExpanded.value = !itemWasExpanded.value
+            }
+        } else { 
+            showMoreAllergyMsg.value = "Show more allegies"
+            itemAllegiesWasExpanded.value = !itemWasExpanded.value
+        }
+    }
     
+
+    function removeOuterArray(arr: any) {
+        return arr[1];
+    }
 </script>
 
 <style scoped>
@@ -620,7 +823,7 @@ ion-list.list-al {
     font-weight: 600;
     line-height: 24px;
 }
-.action_buttons{
+.action_buttons {
     color: var(--ion-color-primary);
     display: flex;
     align-items: center;
@@ -632,5 +835,25 @@ ion-list.list-al {
 .spcls {
   display: flex;
   align-items: center;
+}
+.previousView {
+    width: 100%;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+.previousLabel {
+    font-weight: 600;
+    color: #000;
+}
+.previousLabelDate{
+    font-weight: 600;
+    color: #000;
+    margin: 2%;
+}
+.previousSecDrgs {
+    margin: 2%;
+}
+.notes_p{
+    margin: 4%;
 }
 </style>
