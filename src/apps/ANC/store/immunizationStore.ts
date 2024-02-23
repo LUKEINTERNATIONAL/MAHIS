@@ -76,19 +76,20 @@ export const useImmunizationStore = defineStore ('immunizationStore', {
                 {
                     header:{
                         title: 'Hepatitis B-1',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'b1'
                     },
                     data:[
                         {
                             name: 'Yes',
-                            value: 'y',
+                            value: 'yes',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'No',
-                            value: 'n',
+                            value: 'no',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
@@ -105,7 +106,8 @@ export const useImmunizationStore = defineStore ('immunizationStore', {
                 data:{
                     rowData: [{
                         colData: [{
-                            
+
+                                displayNone:true,
                                 inputHeader: 'Hep B-1 Date',
                                 value: '',
                                 name: 'hep1Date',
@@ -131,19 +133,20 @@ export const useImmunizationStore = defineStore ('immunizationStore', {
                 {
                     header:{
                         title: 'Hepatitis B-2',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'b2'
                     },
                     data:[
                         {
                             name: 'Yes',
-                            value: 'y',
+                            value: 'yes',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'No',
-                            value: 'n',
+                            value: 'no',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
@@ -160,7 +163,8 @@ export const useImmunizationStore = defineStore ('immunizationStore', {
                 data:{
                     rowData: [{
                         colData: [{
-                            
+                                 
+                                 displayNone:true,
                                 inputHeader: 'Hep B-2 Date',
                                 value: '',
                                 name: 'hep2Date',
@@ -187,19 +191,20 @@ export const useImmunizationStore = defineStore ('immunizationStore', {
                 {
                     header:{
                         title: 'Hepatitis B-3',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'b3'
                     },
                     data:[
                         {
                             name: 'Yes',
-                            value: 'y',
+                            value: 'yes',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'No',
-                            value: 'n',
+                            value: 'no',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
@@ -216,10 +221,11 @@ export const useImmunizationStore = defineStore ('immunizationStore', {
                 data:{
                     rowData: [{
                         colData: [{
-                            
+                                 
+                                displayNone:true,
                                 inputHeader: 'Hep B-3 Date',
                                 value: '',
-                                name: 'hep2Date',
+                                name: 'hep3Date',
                                 isDatePopover: true,
                                 icon: icons.calenderPrimary,
                                 placeholder: 'Pick the date',
@@ -243,7 +249,8 @@ export const useImmunizationStore = defineStore ('immunizationStore', {
                 {
                     header:{
                         title: 'Reason Hepatitis B vaccination not conducted',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'HepatitisB'
                     },
                     data:[
                         {
@@ -293,10 +300,11 @@ export const useImmunizationStore = defineStore ('immunizationStore', {
                 data:{
                     rowData: [{
                         colData: [{
-                            
-                                inputHeader: 'Other (Specify)',
+                                 
+                                displayNone:true,
+                                inputHeader: 'specify',
                                 value: '',
-                                name: 'other',
+                                name: 'Specify',
                                 icon: icons.editPen,
                                 required: true,
                                 eventType: 'input',

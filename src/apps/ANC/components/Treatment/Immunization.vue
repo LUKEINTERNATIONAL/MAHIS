@@ -35,6 +35,7 @@ import BasicForm from '../../../../components/BasicForm.vue';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import { icons } from '../../../../utils/svg'; 
 import { useImmunizationStore } from '../../store/immunizationStore';
+import { getRadioSelectedValue, modifyFieldValue } from '@/services/data_helpers';
 
 
 
@@ -68,12 +69,12 @@ export default defineComponent ({
     },
     computed:{
         ...mapState(useImmunizationStore, ["ttDoses"]),
-        ...mapState(useImmunizationStore, ["tt1"]),
-        ...mapState(useImmunizationStore, ["tt2"]),
-        ...mapState(useImmunizationStore, ["tt3"]),
-        ...mapState(useImmunizationStore, ["tt4"]),
-        ...mapState(useImmunizationStore, ["tt5"]),
-        ...mapState(useImmunizationStore, ["ttReason"]),
+        // ...mapState(useImmunizationStore, ["tt1"]),
+        // ...mapState(useImmunizationStore, ["tt2"]),
+        // ...mapState(useImmunizationStore, ["tt3"]),
+        // ...mapState(useImmunizationStore, ["tt4"]),
+        // ...mapState(useImmunizationStore, ["tt5"]),
+        // ...mapState(useImmunizationStore, ["ttReason"]),
         ...mapState(useImmunizationStore, ["HepB1"]),
         ...mapState(useImmunizationStore, ["HepB2"]),
         ...mapState(useImmunizationStore, ["HepB3"]),
@@ -81,7 +82,72 @@ export default defineComponent ({
    
 
     },
+    mounted(){
+      this.handleB1()
+      this.handleB2()
+       this.handleB3()
+       this.handelHepreason()
+    },
+    watch:{
+      HepB1:{
+        handler(){
+          this.handleB1()
+        },deep:true
+      },
+      HepB2:{
+        handler(){
+           this.handleB2()
+        },deep:true
+      },
+      HepB3:{
+        handler(){
+           this.handleB3()
+        },deep:true
+      },
+      hepBReason:{
+        handler(){
+          this.handelHepreason()
+        },deep:true
+      }
+    },
+
     methods :{
+      handleB1(){
+        if(getRadioSelectedValue(this.HepB1,'b1')=='yes'){
+          modifyFieldValue(this.HepB1,'hep1Date','displayNone',false)
+        }else{
+          modifyFieldValue(this.HepB1,'hep1Date','displayNone',true)
+        }
+      },
+      handleB2(){
+        if(getRadioSelectedValue(this.HepB2,'b2')=='yes'){
+          modifyFieldValue(this.HepB2,'hep2Date','displayNone',false)
+        }else{
+          modifyFieldValue(this.HepB2,'hep2Date','displayNone',true)
+        }
+      },
+      handleB3(){
+        if(getRadioSelectedValue(this.HepB3,'b3')=='yes'){
+          modifyFieldValue(this.HepB3,'hep3Date','displayNone',false)
+        }else{
+          modifyFieldValue(this.HepB3,'hep3Date','displayNone',true)
+        }
+      },
+      handelHepreason(){
+        if(getRadioSelectedValue(this.hepBReason,'HepatitisB')=='other'){
+          modifyFieldValue(this.hepBReason,'Specify','displayNone',false)
+        }else{
+           modifyFieldValue(this.hepBReason,'Specify','displayNone',true)
+        }
+      },
+      // handleB3(){
+      //   if(getRadioSelectedValue(this.HepB3,'b3')=='yes'){
+      //     modifyFieldValue(this.HepB3,'hep3Date','displayNone',false)
+      //   }else{
+      //     modifyFieldValue(this.HepB3,'hep3Date','displayNone',true)
+      //   }
+      //   console.log(getRadioSelectedValue(this.HepB3,'b3'))
+      // },
     //Method for navigating sections
     goToNextSection() {
       if (this.currentSection < 2) {

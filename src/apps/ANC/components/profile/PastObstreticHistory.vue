@@ -180,9 +180,7 @@ export default defineComponent({
           modifyFieldValue(this.modeOfDelivery,'Specify','displayNone',false)
         }else{
           modifyFieldValue(this.modeOfDelivery,'Specify','displayNone',true)
-         }
-
-         
+         } 
          
       },
       handleAlert(e:any){
@@ -194,62 +192,6 @@ export default defineComponent({
          console.log(dynamicValue(this.modeOfDelivery,'cesareanSec',e.id),e.id)
       },
       // Validations
-      validaterowData(ev: any) {
-        const gravidaField = this.prevPregnancies.find((field: any) => field.data.rowData[0].colData[0].name === "Gravida");
-        const abortionsField = this.prevPregnancies.find((field: any) => field.data.rowData[0].colData[1].name === "Abortions/Miscarriages");
-        const stillBirthsField = this.prevPregnancies.find((field: any) => field.data.rowData[1].colData[0].name === "Stillbirths");
-
-        if (gravidaField && ev.name === gravidaField.data.rowData[0].colData[0].name) {
-          let errorMessage = '';
-
-          if (StandardValidations.required(ev.value) != null) {
-            errorMessage = StandardValidations.required(ev.value);
-          } else if (StandardValidations.isWholeNumber(ev.value) != null) {
-            errorMessage = StandardValidations.isWholeNumber(ev.value);
-          } else if (StandardValidations.checkMinMax(ev.value, 1, 15) != null) {
-            errorMessage = StandardValidations.checkMinMax(ev.value, 1, 15);
-          }
-
-          modifyFieldValue(this.prevPregnancies, gravidaField.data.rowData[0].colData[0].name, 'alertsError', !!errorMessage);
-          modifyFieldValue(this.prevPregnancies, gravidaField.data.rowData[0].colData[0].name, 'alertsErrorMassage', errorMessage || '');
-        }
-
-        if (abortionsField && ev.name === abortionsField.data.rowData[0].colData[1].name) {
-          let errorMessage = '';
-
-          if (StandardValidations.required(ev.value) != null) {
-            errorMessage = StandardValidations.required(ev.value);
-          } else if (StandardValidations.isWholeNumber(ev.value) != null) {
-            errorMessage = StandardValidations.isWholeNumber(ev.value);
-          } else if (StandardValidations.checkMinMax(ev.value, 0, 15) != null) {
-            errorMessage = StandardValidations.checkMinMax(ev.value, 0, 15);
-          } else {
-            const gravidaValue = gravidaField.data.rowData[0].colData[0].value;
-            if (parseInt(ev.value) > parseInt(gravidaValue) || parseInt(ev.value) < 0) {
-              errorMessage = "Abortions/Miscarriages should be less than or equal to Gravida and greater than or equal to 0.";
-            }
-          }
-
-          modifyFieldValue(this.prevPregnancies, abortionsField.data.rowData[0].colData[1].name, 'alertsError', !!errorMessage);
-          modifyFieldValue(this.prevPregnancies, abortionsField.data.rowData[0].colData[1].name, 'alertsErrorMassage', errorMessage || '');
-        }
-
-        if (stillBirthsField && ev.name === stillBirthsField.data.rowData[1].colData[0].name) {
-          let errorMessage = '';
-
-          if (StandardValidations.required(ev.value) != null) {
-            errorMessage = StandardValidations.required(ev.value);
-          } else if (StandardValidations.isWholeNumber(ev.value) != null) {
-            errorMessage = StandardValidations.isWholeNumber(ev.value);
-          } else if (StandardValidations.checkMinMax(ev.value, 0, 15) != null) {
-            errorMessage = StandardValidations.checkMinMax(ev.value, 0, 15);
-          }
-
-          modifyFieldValue(this.prevPregnancies, stillBirthsField.data.rowData[1].colData[0].name, 'alertsError', !!errorMessage);
-          modifyFieldValue(this.prevPregnancies, stillBirthsField.data.rowData[1].colData[0].name, 'alertsErrorMassage', errorMessage || '');
-        }
-      },
-        
       },
     });
 

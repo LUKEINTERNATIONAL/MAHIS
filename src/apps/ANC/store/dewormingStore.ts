@@ -12,19 +12,20 @@ export const useDewormingStore = defineStore ('dewormingStore', {
                 {
                     header:{
                         title: 'Was preventative antihelminthic treatment provided?', 
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'preventive'
                     },
                     data:[
                         {
                             name: 'Yes',
-                            value: 'y',
+                            value: 'yes',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'No',
-                            value: 'n',
+                            value: 'no',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
@@ -33,9 +34,9 @@ export const useDewormingStore = defineStore ('dewormingStore', {
                 }
                     
             },
-        ],
+        // ],
 
-        treatmentType:[
+        // treatmentType:[
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -44,7 +45,9 @@ export const useDewormingStore = defineStore ('dewormingStore', {
                 {
                     header:{
                         title: 'Preventative antihelminthic treatment provided', 
-                        selectedValue: ''
+                        selectedValue: '',
+                        mame:'treatInfo',
+                        displayNone:true
                     },
                     data:[
                         {
@@ -65,9 +68,9 @@ export const useDewormingStore = defineStore ('dewormingStore', {
                 }
                     
             },
-        ],
+        // ],
 
-        treatmentReason:[
+        // treatmentReason:[
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -76,7 +79,9 @@ export const useDewormingStore = defineStore ('dewormingStore', {
                 {
                     header:{
                         title: 'Reason no preventative treatment provided',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'reason',
+                        displayNone:true
                     },
                     data:[
                         {
@@ -105,10 +110,11 @@ export const useDewormingStore = defineStore ('dewormingStore', {
                 data:{
                     rowData: [{
                         colData: [{
-                            
-                                inputHeader: 'Other (Specify)',
+                                 
+                                displayNone:true,
+                                inputHeader: 'specify',
                                 value: '',
-                                name: 'other',
+                                name: 'Specify',
                                 icon: icons.editPen,
                                 required: true,
                                 eventType: 'input',

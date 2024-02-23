@@ -49,6 +49,7 @@
     import BasicForm from '@/components/BasicForm.vue';
     import { Service } from "@/services/service";
     import PreviousVitals from '@/apps/NCD/components/ConsultationPlan/previousVitals.vue'
+import { getCheckboxSelectedValue, modifyFieldValue } from '@/services/data_helpers';
 
     export default defineComponent({
     components:{
@@ -85,6 +86,7 @@
         this.vitalsInstance = new VitalsService(this.demographics.patient_id,userID);
         this.updateVitalsStores()
         this.validaterowData({})
+        this. handleOtherVitals()
     },
     watch: {
         vitals: {
@@ -92,6 +94,12 @@
                 this.updateVitalsStores();
             },
             deep: true
+        },
+        respiration:{
+            handler(){
+                this. handleOtherVitals()
+            },
+            deep:true
         }
     },
     setup() {
@@ -209,6 +217,14 @@
             }else{
                 return {colors:[],value:""}
             }
+        },
+        handleOtherVitals(){
+           if (getCheckboxSelectedValue(this.respiration,'Other')?.value =='otherRespiratoryExam'){
+             modifyFieldValue(this.respiration,'OtherS','displayNone',false)
+           }else{
+            modifyFieldValue(this.respiration,'OtherS','displayNone',true)
+           }
+           console.log(getCheckboxSelectedValue(this.respiration,'Other'))
         },
       
     }

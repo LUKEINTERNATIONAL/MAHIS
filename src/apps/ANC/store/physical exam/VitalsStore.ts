@@ -354,12 +354,12 @@ export const useVitalsStore = defineStore('vitalsStore',{
                         header:{
                             title: '',
                             selectedValue: '',
-                            name:'OtherRespiratoryExam'
+                            
                         },
                         data:[
                             {
-                                name: 'Other respiratory exam',
-                                value: 'other respiratory exam',
+                                name: 'Other',
+                                value: 'otherRespiratoryExam',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -386,7 +386,7 @@ export const useVitalsStore = defineStore('vitalsStore',{
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Other',
+                                        name: 'OtherS',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "100%",
@@ -397,29 +397,29 @@ export const useVitalsStore = defineStore('vitalsStore',{
 
                             },
                             {
-                                colData:
-                                    [
-                                        {
-                                            displayNone:true,
-                                            inputHeader: 'Oximetry',
-                                            unit: '%',
-                                            icon:icons.respiratory,
-                                            value: '',
-                                            name: 'Oximetry',
-                                            required: true,
-                                            eventType: 'input'
-                                        },
-                                        {
-                                            displayNone: true,
-                                            inputHeader: 'Respiratory rate',
-                                            unit: 'bpm',
-                                            icon: icons.respiratory,
-                                            value: '',
-                                            name: 'RespiratoryRate',
-                                            required: true,
-                                            eventType: 'input'
-                                        }
-                                    ]
+                            //     colData:
+                            //         [
+                            //             {
+                            //                 displayNone:true,
+                            //                 inputHeader: 'Oximetry',
+                            //                 unit: '%',
+                            //                 icon:icons.respiratory,
+                            //                 value: '',
+                            //                 name: 'Oximetry',
+                            //                 required: true,
+                            //                 eventType: 'input'
+                            //             },
+                            //             {
+                            //                 displayNone: true,
+                            //                 inputHeader: 'Respiratory rate',
+                            //                 unit: 'bpm',
+                            //                 icon: icons.respiratory,
+                            //                 value: '',
+                            //                 name: 'RespiratoryRate',
+                            //                 required: true,
+                            //                 eventType: 'input'
+                            //             }
+                            //         ]
                             }
                         ]
                     },
