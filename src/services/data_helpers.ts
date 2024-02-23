@@ -7,6 +7,7 @@ export function modifyFieldValue(data: any, fieldName: any, element: any, newVal
     }
 }
 export function modifyDynamicFieldValue(id:any,data: any, fieldName: any, element: any, newValue: any) {
+
     for (const item of data) {
         console.log(item.data.rowData[0].colData[0].name,item.data)
         if(item.data.id === id && item.data.rowData[0].colData[0].name===fieldName){

@@ -1,17 +1,5 @@
 <template>
     <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form>
-<!--    <ion-row>-->
-<!--        <ion-accordion-group ref="accordionGroup" class="previousView">-->
-<!--            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">-->
-<!--                <ion-item slot="header" color="light" class="dashed_bottom_border">-->
-<!--                    <ion-label class="previousLabel">Previous measurements</ion-label>-->
-<!--                </ion-item>-->
-<!--                <div class="ion-padding" slot="content">-->
-<!--                    <PreviousVitals />-->
-<!--                </div>-->
-<!--            </ion-accordion>-->
-<!--        </ion-accordion-group>-->
-<!--    </ion-row>-->
   <!-- Respiratory Exam -->
   <ion-card class="section">
     <ion-card-header>

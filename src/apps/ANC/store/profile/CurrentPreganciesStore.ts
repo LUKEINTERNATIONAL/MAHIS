@@ -45,7 +45,10 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
             {
                 header:{
                     title: 'LNMP Known?',
-                    selectedValue: ''
+                    selectedValue: '',
+                    name:'LMNP',
+                    alertsError: false,
+                    alertsErrorMassage: '',
                 },
                 data:[
                     {
@@ -77,13 +80,13 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
                                 {
                                     inputHeader: 'LNMP date*',
                                     value: '',
-                                    name: 'EDD',
+                                    name: 'lmnpEDD',
                                     required: true,
                                     eventType: 'input',
                                     alertsError: false,
                                     alertsErrorMassage: '',
-                                    isDatePopover: true,
-                                    icon: icons.calenderPrimary,
+                                    // isDatePopover: true,
+                                    // icon: icons.calenderPrimary,
                                     placeholder: 'Pick the date',
                                     inputWidth:'55%'
                                 },
@@ -431,12 +434,12 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
         setUltrasound(data: any){
             this.ultrasound = data
         },
-        setGestation(data: any){
-            this.gestation = data
-        },
-        setDeliveryDate(data: any){
-            this.deliveryDate = data
-        },
+        // setGestation(data: any){
+        //     this.gestation = data
+        // },
+        // setDeliveryDate(data: any){
+        //     this.deliveryDate = data
+        // },
 
 
       

@@ -3,7 +3,7 @@
   <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-              <basic-form :contentData="lmnp"></basic-form>
+              <basic-form :contentData="lmnp" @update:selected="handleInputData" @update:inputValue="handleInputData">></basic-form>
               <basic-form :contentData="ultrasound"></basic-form>
             </ion-card-content>
     </ion-card>
@@ -18,12 +18,7 @@
             <ion-card-content>
               <basic-form :contentData="tetanus"></basic-form>
             </ion-card-content>
-    </ion-card>  
-<!--           &lt;!&ndash; Navigation Buttons &ndash;&gt;-->
-<!--      <div class="navigation-buttons">-->
-<!--      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>-->
-<!--      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>-->
-<!--    </div> -->
+    </ion-card>
 </div>
 </template>
 
@@ -51,10 +46,16 @@ import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import {useCurrentPregnanciesStore} from "@/apps/ANC/store/profile/CurrentPreganciesStore";
+import {getCheckboxSelectedValue, getFieldValue, getRadioSelectedValue} from '@/services/data_helpers';
+import BasicCard from "@/components/BasicCard.vue";
+import {validateField} from "@/services/ANC/validation_service";
+import HisDate from "@/utils/Date";
+
 
 export default defineComponent({
     name: "Current",
     components:{
+      BasicCard,
       IonContent,
       IonHeader,
       IonItem,
@@ -76,7 +77,9 @@ export default defineComponent({
       return {
           iconsContent: icons,
           currentPregnanciesInstance: {} as any,
-          currentSection: 0, // Initialize currentSection to 0
+        inputField: '' as any,
+        setName: '' as any,
+          currentSection: 0,
          
       };
     },
@@ -87,7 +90,8 @@ export default defineComponent({
         ...mapState(useCurrentPregnanciesStore,["gestation"]),
         ...mapState(useCurrentPregnanciesStore,["tetanus"]),
         ...mapState(useCurrentPregnanciesStore,["ultrasound"]),
-
+          LMNP(){ return getRadioSelectedValue(this.lmnp, 'LMNP')},
+          lmnpEED(){ return getFieldValue(this.lmnp, 'lmnpEED','value')}
        
   
       },
@@ -101,8 +105,30 @@ export default defineComponent({
       setup() {
         return { checkmark,pulseOutline };
       },
+      watch:{
+       lmnp:{
+         handler( event){
+           this.handleInputData(event)
+           // console.log(this.handleInputData(event))
+         },
+         deep:true
+
+       }
+      },
       methods:{
-          //Method for navigating sections
+        validationRules(event: any) {
+          return validateField(this.lmnp,event.name, (this as any)[event.name]);
+        },
+        async handleInputData(event: any) {
+          this.validationRules(event)
+          // this.calculateEDDFromLNMP(event)
+        },
+        // calculateEDDFromLNMP(lnmpDate: Date) {
+        //   const eddDate = HisDate.addDays(lnmpDate, 280);
+        //   return eddDate;
+        // },
+
+        //Method for navigating sections
     goToNextSection() {
       if (this.currentSection < 3) {
         this.currentSection++;
@@ -113,11 +139,21 @@ export default defineComponent({
         this.currentSection--;
       }
     },
+    eddCalculation(){
+      //   const edd = new Date(lmpDate.getTime() + 280 * 24 * 60 * 60 * 1000);
+      // // Update the EDD value in the store
+      // this.expectedDate = edd.toISOString().split('T')[0];
+
+        // if (this.lnmpDate) {
+        // const eddDate = new Date(this.lnmpDate.getTime() + 280 * 24 * 60 * 60 * 1000);
+        // return eddDate.toDateString();
+      }
+    }
    
-          },
+      },
       
 
-      });
+      );
   
   </script>
 

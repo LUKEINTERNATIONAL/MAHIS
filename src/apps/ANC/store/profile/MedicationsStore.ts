@@ -422,6 +422,28 @@ export const useMedicationsStore = defineStore('medicationsStore',{
 
             },
             {
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'None',
+                                value: 'none',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+
+                        ]
+                    }
+
+            },
+            {
                 isFinishBtn: false,
                 sectionHeader: '',
                 classDash: '',

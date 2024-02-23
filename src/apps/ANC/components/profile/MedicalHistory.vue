@@ -92,7 +92,8 @@ import { modifyRadioValue,
     modifyFieldValue,
     modifyCheckboxValue,
     // modifyCheckboxHeaderValue,
-    modifyCheckboxInputField} from '@/services/data_helpers'
+    modifyCheckboxInputField,
+    modifyCheckboxHeader} from '@/services/data_helpers'
 
 //  import {icons} from "@/utils/svg.ts"
 
@@ -136,11 +137,13 @@ export default defineComponent({
         this.handleAllergies()
         this.handleChronicCondition()
         this.handleHivConducted()
+        this. handleHivConductedOptin()
         this.handleOtherHiv()
-        // this. handleReasonNotDone()
         this. handleSyphlisdate()
-        // this.handleTestNotDone()
         this.handleDisable()
+        this. handleSyphilisNotDone()
+        this.handleSpecifySyphilis()
+        this.handleTestNotDone()
     
     },
 
@@ -150,7 +153,9 @@ export default defineComponent({
                 this.handleHivResults()
                 this.handleOtherHiv()
                 this.handleHivConducted()
-                // this. handleReasonNotDone()
+                this.handleTestNotDone()
+                this. handleHivConductedOptin()
+
             },
              deep:true,
         },
@@ -158,6 +163,8 @@ export default defineComponent({
             handler(){
                 this.handleSyphilis()
                 this. handleSyphlisdate()
+                this. handleSyphilisNotDone()
+                this.handleSpecifySyphilis()
             },
             deep:true
         },
@@ -200,6 +207,15 @@ export default defineComponent({
             }
              
         },
+
+        handleHivConductedOptin(){        
+            if(getRadioSelectedValue(this.hivTest,'hivOption') == 'hivTestConducted'){
+                modifyRadioValue(this.hivTest,'test2','displayNone',false)
+            }else{
+                modifyRadioValue(this.hivTest,'test2','displayNone',true)
+            }
+             
+        },
         handleOtherHiv(){
             if(getCheckboxSelectedValue(this.hivTest,'Other')=='other'){
                 modifyFieldValue(this.hivTest,'reasonsTestNotDone','displayNone',false)
@@ -217,45 +233,86 @@ export default defineComponent({
 
         },
         handleSurgries(){
-            if(getCheckboxSelectedValue(this.medicalHistory,'Other') == 'otherSurguries'){
+            if(getCheckboxSelectedValue(this.medicalHistory,'Other')?.value == 'otherSurguries'){
                 modifyFieldValue(this.medicalHistory,'specify','displayNone',false)
             }else{
                 modifyFieldValue(this.medicalHistory,'specify','displayNone',true)
             }
+            const checkBoxes=["Dilation and currettage","Myomectomy","Removal of ovarian cystst",
+                              "Oophorectomy","Salpingectomy","Cervical cone", "Other",]
+
+               if (getCheckboxSelectedValue(this.medicalHistory, 'None')?.checked) {
+                checkBoxes.forEach((checkbox) => {
+                    modifyCheckboxValue(this.medicalHistory, checkbox, 'checked', false);
+                    modifyCheckboxValue(this.medicalHistory, checkbox, 'disabled', true);
+                });
+                } else {
+                checkBoxes.forEach((checkbox) => {
+                    modifyCheckboxValue(this.medicalHistory, checkbox, 'disabled', false);
+                });
+                }
 
  
         },
+
         handleAllergies(){
-            if(getCheckboxSelectedValue(this.allegy,'Other')=='otherAllergies'){
+            if(getCheckboxSelectedValue(this.allegy,'Other')?.value =='otherAllergies'){
                 modifyFieldValue(this.allegy,'other',"displayNone",false)
             }else{
                 modifyFieldValue(this.allegy,'other',"displayNone",true)
-            }
+            }        
+            const checkBoxes = ['Other','PrEP(TDF)','Albendazole','Aluminium-hydroxide',
+                                 'Calcium','Chamomile','Folic-acid','Ginger','Fish',
+                                'Iron','sulfadoxine-pyrimethamine','Mebendazole','Penicillin'];
+
+                if (getCheckboxSelectedValue(this.allegy, 'None')?.checked) {
+                checkBoxes.forEach((checkbox) => {
+                    modifyCheckboxValue(this.allegy, checkbox, 'checked', false);
+                    modifyCheckboxValue(this.allegy, checkbox, 'disabled', true);
+                });
+                } else {
+                checkBoxes.forEach((checkbox) => {
+                    modifyCheckboxValue(this.allegy, checkbox, 'disabled', false);
+                });
+                }
+
         },
         handleChronicCondition(){
-            if(getCheckboxSelectedValue(this.exisitingChronicHealthConditions,'Other')=='other'){
+            if(getCheckboxSelectedValue(this.exisitingChronicHealthConditions,'Other')?.value =='other'){
                 modifyFieldValue(this.exisitingChronicHealthConditions,'Specify',"displayNone",false)
             }else{
                 modifyFieldValue(this.exisitingChronicHealthConditions,'Specify',"displayNone",true)
             }
-              console.log(getCheckboxSelectedValue(this.exisitingChronicHealthConditions,'Other'))
+            const checkBoxes=["Auto immune desease","Asthma","Sickle cell","Anemia",
+                             "Thalassemia","Gynaecological","CCF","RHD","Gestational diabetes",
+                             "pre-existing type 1","pre-existing type 2","Epilespy","Hypertension","Kidney","TB","Mental  illiness","Other"]
+
+                if (getCheckboxSelectedValue(this.exisitingChronicHealthConditions, 'None')?.checked) {
+                checkBoxes.forEach((checkbox) => {
+                    modifyCheckboxValue(this.exisitingChronicHealthConditions, checkbox, 'checked', false);
+                    modifyCheckboxValue(this.exisitingChronicHealthConditions, checkbox, 'disabled', true);
+                });
+                } else {
+                checkBoxes.forEach((checkbox) => {
+                    modifyCheckboxValue(this.exisitingChronicHealthConditions, checkbox, 'disabled', false);
+                });
+                }
+              
         },
         handleHivConducted(){
             if(getRadioSelectedValue(this.hivTest,'hivOption')=='hivTestConducted'){
-                modifyFieldValue(this.hivTest,'birthdate','displayNone',false)
+                modifyFieldValue(this.hivTest,'testDate','displayNone',false)
             }else{
-                 modifyFieldValue(this.hivTest,'birthdate','displayNone',true)
+                 modifyFieldValue(this.hivTest,'testDate','displayNone',true)
             }
         },
-
-        // handleReasonNotDone(){
-        //     if(getRadioSelectedValue(this.hivTest,'hivOption')=='hivTestNotDone'){
-        //         modifyCheckboxHeaderValue(this.hivTest,'reasonNotDone','displayNone',false)
-        //     }else{
-        //         modifyCheckboxHeaderValue(this.hivTest,'reasonNotDone','displayNone',true)
-        //     }
-        //     console.log(getRadioSelectedValue(this.hivTest,'hivOption'))
-        // },
+        handleTestNotDone(){
+            if(getRadioSelectedValue(this.hivTest,'hivOption')=='hivTestNotDone'){
+                modifyCheckboxHeader(this.hivTest,'hivOutcome','displayNone',false)
+            }else{
+                 modifyCheckboxHeader(this.hivTest,'hivOutcome','displayNone',true)
+            }
+        },
         handleSyphlisdate(){
             if(getRadioSelectedValue(this.syphilisTest,'syphilisOption')=='syphilisTestConducted'){
                 modifyFieldValue(this.syphilisTest,'syphilisDate','displayNone',false)
@@ -264,12 +321,27 @@ export default defineComponent({
             }
         },
         handleDisable(){
-            if(getCheckboxSelectedValue(this.medicalHistory,'NoSurgery')=='noSurgeries'){
-                modifyCheckboxInputField(this.medicalHistory,'OtherS','disableStatus',true)
+            if(getCheckboxSelectedValue(this.medicalHistory,'NoSurgery') =='otherSurguries'){
+                modifyCheckboxHeader(this.medicalHistory,'Other','disabled',true)
             }else{
-                 modifyCheckboxInputField(this.medicalHistory,'OtherS','disableStatus',false)
+                 modifyCheckboxHeader(this.medicalHistory,'Other','disabled',false)
             }
             console.log(getCheckboxSelectedValue(this.medicalHistory,'NoSurgery'))
+        },
+        handleSyphilisNotDone(){
+            if(getRadioSelectedValue(this.syphilisTest,'syphilisOption')=='syphilisTestNotDone'){
+                modifyCheckboxHeader(this.syphilisTest,'notDone','displayNone',false)
+            }else{
+                modifyCheckboxHeader(this.syphilisTest,'notDone','displayNone',true)
+            }
+        },
+        handleSpecifySyphilis(){
+            if(getCheckboxSelectedValue(this.syphilisTest,'Other')=='other'){
+                modifyFieldValue(this.syphilisTest,'Reason','displayNone',false)
+            }else{
+                 modifyFieldValue(this.syphilisTest,'Reason','displayNone',true)
+            }
+            console.log(getCheckboxSelectedValue(this.syphilisTest,'notDone'))
         },
 
 

@@ -120,6 +120,7 @@
     import { modifyFieldValue,getFieldValue,getRadioSelectedValue } from '@/services/data_helpers'
     import HisDate from "@/utils/Date";
     import { useConfigurationStore } from '@/stores/ConfigurationStore'
+    import { isEmpty }  from "lodash"
   
     export default defineComponent({
       components: { 
@@ -196,33 +197,62 @@
             saveData(){
                 this.createPatient()
             },
-            validations(){
+            async validations(){
+                if(this.nationalID != ''){
+                   if(await this.mwIdExists(this.nationalID)) {
+                        toastWarning("The national ID is already assigned to another person")
+                        return false;
+                   }
+                }
                 const fields: any = ['nationalID', 'firstname', 'lastname', 'birthdate', 'gender'];
                 return fields.every((fieldName: string) => validateField(this.personInformation, fieldName, (this as any)[fieldName]));
             },
             async createPatient(){
-                if(this.validations()){
-                    this.buildPersonalInformation()
-                    if(Object.keys(this.personInformation[0].selectdData).length === 0) return
-                    const registration: any = new PatientRegistrationService()
-                    new Patientservice((await registration.registerPatient(this.personInformation[0].selectdData, [])))
-                    const patientID = registration.getPersonID()
-                    // this.createGuardian(patientID)
+                if(await this.validations()){
+                    // this.buildPersonalInformation()
+                    // if(Object.keys(this.personInformation[0].selectdData).length === 0) return
+                    // const registration: any = new PatientRegistrationService()
+                    // new Patientservice((await registration.registerPatient(this.personInformation[0].selectdData, [])))
+                    // const patientID = registration.getPersonID()
+                    // this.creatNationID(patientID)
+                    this.createGuardian('patientID')
                     // this.createSocialHistory(patientID)
-                    this.findPatient(patientID)
+                    // this.findPatient(patientID)
                     toastSuccess('Successfuly Created Patient')
                 }else{
+                    if(!await this.mwIdExists(this.nationalID))
                     toastWarning("Please complete all required fields")
                 }
             },
+            async creatNationID(patientID: any){
+                if(this.validatedNationalID())
+                    await Patientservice.updateMWNationalId(this.nationalID,patientID);
+            },
+            async mwIdExists(nid: string) {
+                if (!nid) return false
+                const people = await Patientservice.findByOtherID(28, nid)
+                if(people.length > 0) 
+                    return true
+                else
+                    return false
+            },
+            validatedNationalID(){
+                if(this.nationalID != '' &&
+                !getFieldValue(this.personInformation, 'nationalID','alertsError')){
+                    return true
+                }else
+                return false
+            },
             async createGuardian(patientID: any){
-                if(this.guardianInformation[0].selectdData?.length === 0) return
-                const guardian: any = new PatientRegistrationService()
-                await guardian.registerGuardian(this.guardianInformation[0].selectdData)
-                const guardianID = guardian.getPersonID()
-                await RelationsService.createRelation(
-                    patientID, guardianID, 13
-                )
+                console.log(this.guardianInformation)
+                if(!isEmpty(this.guardianInformation[0].selectdData)) return
+                // const guardian: any = new PatientRegistrationService()
+                // await guardian.registerGuardian(this.guardianInformation[0].selectdData)
+                // const guardianID = guardian.getPersonID()
+                // await RelationsService.createRelation(
+                //     patientID, guardianID, 13
+                // )
+                console.log('not empty')
             },
             async createSocialHistory(patientID: any){
                 if(this.socialHistory[0].selectdData?.length === 0) return
@@ -253,27 +283,27 @@
                 return ""
             },
             buildPersonalInformation(){
-            this.personInformation[0].selectdData = {
-            "given_name": getFieldValue(this.personInformation, 'firstname','value'),
-            "middle_name": getFieldValue(this.personInformation, 'middleName','value'),
-            "family_name" : getFieldValue(this.personInformation, 'lastname','value'),
-            "gender" : this.gender,
-            "birthdate" : getFieldValue(this.personInformation, 'birthdate','value'),
-            "birthdate_estimated" : getFieldValue(this.personInformation, 'firstname','value'),
-            "home_region" : getFieldValue(this.personInformation, 'homeDistrict','value'),
-            "home_district" : getFieldValue(this.personInformation, 'homeDistrict','value'),
-            "home_traditional_authority" : getFieldValue(this.personInformation, 'homeTraditionalAuthority','value'),
-            "home_village" : getFieldValue(this.personInformation, 'homeVillage','value'),
-            "current_region" : getFieldValue(this.personInformation, 'currentDistrict','value'),
-            "current_district" : getFieldValue(this.personInformation, 'currentDistrict','value'),
-            "current_traditional_authority" : getFieldValue(this.personInformation, 'currentTraditionalAuthority','value'),
-            "current_village" : getFieldValue(this.personInformation, 'currentVillage','value'),
-            "landmark" : getFieldValue(this.personInformation, 'closestLandmark','value'),
-            "cell_phone_number" : getFieldValue(this.personInformation, 'phoneNumber','value'),
-        }
+                this.personInformation[0].selectdData = {
+                "given_name": getFieldValue(this.personInformation, 'firstname','value'),
+                "middle_name": getFieldValue(this.personInformation, 'middleName','value'),
+                "family_name" : getFieldValue(this.personInformation, 'lastname','value'),
+                "gender" : this.gender,
+                "birthdate" : getFieldValue(this.personInformation, 'birthdate','value'),
+                "birthdate_estimated" : getFieldValue(this.personInformation, 'firstname','value'),
+                "home_region" : getFieldValue(this.personInformation, 'homeDistrict','value'),
+                "home_district" : getFieldValue(this.personInformation, 'homeDistrict','value'),
+                "home_traditional_authority" : getFieldValue(this.personInformation, 'homeTraditionalAuthority','value'),
+                "home_village" : getFieldValue(this.personInformation, 'homeVillage','value'),
+                "current_region" : getFieldValue(this.personInformation, 'currentDistrict','value'),
+                "current_district" : getFieldValue(this.personInformation, 'currentDistrict','value'),
+                "current_traditional_authority" : getFieldValue(this.personInformation, 'currentTraditionalAuthority','value'),
+                "current_village" : getFieldValue(this.personInformation, 'currentVillage','value'),
+                "landmark" : getFieldValue(this.personInformation, 'closestLandmark','value'),
+                "cell_phone_number" : getFieldValue(this.personInformation, 'phoneNumber','value'),
+            }
         
-    },
-    setDisplayType(type: any){
+        },
+        setDisplayType(type: any){
             const demographicsStore = useConfigurationStore()
             demographicsStore.setRegistrationDisplayType(type)
             this.setIconClass()
