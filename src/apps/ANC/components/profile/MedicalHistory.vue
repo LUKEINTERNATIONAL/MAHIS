@@ -217,7 +217,7 @@ export default defineComponent({
              
         },
         handleOtherHiv(){
-            if(getCheckboxSelectedValue(this.hivTest,'Other')=='other'){
+            if(getCheckboxSelectedValue(this.hivTest,'Other')?.value =='other'){
                 modifyFieldValue(this.hivTest,'reasonsTestNotDone','displayNone',false)
             }else{
                 modifyFieldValue(this.hivTest,'reasonsTestNotDone','displayNone',true)
@@ -326,10 +326,10 @@ export default defineComponent({
             }else{
                  modifyCheckboxHeader(this.medicalHistory,'Other','disabled',false)
             }
-            console.log(getCheckboxSelectedValue(this.medicalHistory,'NoSurgery'))
+         
         },
         handleSyphilisNotDone(){
-            if(getRadioSelectedValue(this.syphilisTest,'syphilisOption')=='syphilisTestNotDone'){
+            if(getRadioSelectedValue(this.syphilisTest,'syphilisOption')?.value =='syphilisTestNotDone'){
                 modifyCheckboxHeader(this.syphilisTest,'notDone','displayNone',false)
             }else{
                 modifyCheckboxHeader(this.syphilisTest,'notDone','displayNone',true)
