@@ -35,7 +35,7 @@ import BasicInputField from '@/components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import BasicForm from '@/components/BasicForm.vue'
 import {useSpecificHealthConcernsStore} from "@/apps/ANC/store/quickCheck/specificHealthConcerns";
-import {getCheckboxSelectedValue, modifyFieldValue} from "@/services/data_helpers";
+import {getCheckboxSelectedValue, modifyCheckboxValue, modifyFieldValue} from "@/services/data_helpers";
 
 export default defineComponent({
   name: 'Menu',
@@ -84,9 +84,26 @@ export default defineComponent({
       menuController.close()
       this.$router.push(url);
     },
-    handleHealthconcerns(){  if(getCheckboxSelectedValue(this.HealthConcerns, 'Other')=='other'){
+    handleHealthconcerns(){  if(getCheckboxSelectedValue(this.HealthConcerns, 'Other')?.value =='other'){
       modifyFieldValue(this.HealthConcerns,'Other','displayNone', false)
     }   else {modifyFieldValue(this.HealthConcerns,'Other','displayNone', true)}
+
+
+      const checkBoxes=['Abnorminal varginal discharge','Change in blood pressure-up','Diarrhoea','Vomiting','Genital ulcer',
+                        'Change in blood pressure-down','constipation', 'Contractions','Vaginal bleeding','Intimate partiner violence',
+                          'Flu symptoms','Painful urination','Itchy vulva','Headache','Heartburn','Frequent urination/Polyuria','Injury','Jaundice','Mental health-Depression',
+                        'Genital warts','Painful intercourse','Other']
+      if (getCheckboxSelectedValue(this.HealthConcerns, 'No health concerns')?.checked) {
+        checkBoxes.forEach((checkbox) => {
+          modifyCheckboxValue(this.HealthConcerns, checkbox, 'checked', false);
+          modifyCheckboxValue(this.HealthConcerns, checkbox, 'disabled', true);
+        });
+      } else {
+        checkBoxes.forEach((checkbox) => {
+          modifyCheckboxValue(this.HealthConcerns, checkbox, 'disabled', false);
+        });
+      }
+
     },
   }
 });

@@ -646,7 +646,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
 
                             },
                             {
-                                name: 'Normal viginal exam result',
+                                name: 'Normal vaginal exam result',
                                 value: 'NormalBreastExamResult',
                                 checked: false,
                                 labelPlacement: 'start',
@@ -932,7 +932,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                             title: 'Severity of Oedema?',
                             selectedValue: '',
                             name:'severity of oedema',
-                            displayNone:true
+
                         },
                         data:[
                             {

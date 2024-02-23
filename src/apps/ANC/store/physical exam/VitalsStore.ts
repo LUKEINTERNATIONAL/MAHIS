@@ -347,19 +347,17 @@ export const useVitalsStore = defineStore('vitalsStore',{
             },
 
             {
-                selectdData: [],
                 classDash:'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
                             title: '',
                             selectedValue: '',
-                            name:'OtherRespiratoryExam'
                         },
                         data:[
                             {
-                                name: 'Other respiratory exam',
-                                value: 'other respiratory exam',
+                                name: 'Other',
+                                value: 'otherRespiratoryExam',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -386,7 +384,7 @@ export const useVitalsStore = defineStore('vitalsStore',{
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Other',
+                                        name: 'OtherRespiration',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "100%",
@@ -556,6 +554,6 @@ export const useVitalsStore = defineStore('vitalsStore',{
             this.vitals = data
         }
     },
-    persist:true,
+    // persist:true,
 
 })

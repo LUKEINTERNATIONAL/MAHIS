@@ -49,6 +49,7 @@
     import BasicForm from '@/components/BasicForm.vue';
     import { Service } from "@/services/service";
     import PreviousVitals from '@/apps/NCD/components/ConsultationPlan/previousVitals.vue'
+    import {getCheckboxSelectedValue, modifyCheckboxValue, modifyFieldValue} from "@/services/data_helpers";
 
     export default defineComponent({
     components:{
@@ -85,6 +86,7 @@
         this.vitalsInstance = new VitalsService(this.demographics.patient_id,userID);
         this.updateVitalsStores()
         this.validaterowData({})
+        this.handleOtherAndNoRespirationDone()
     },
     watch: {
         vitals: {
@@ -92,7 +94,19 @@
                 this.updateVitalsStores();
             },
             deep: true
-        }
+        },
+      respiration:{
+            handler(){
+              this.handleOtherAndNoRespirationDone()
+            },
+        deep:true
+      },
+      preEclampsia:{
+          handler(){
+            this.handlePreEclampsia()
+          },
+        deep:true
+      }
     },
     setup() {
       return { checkmark,pulseOutline };
@@ -210,6 +224,46 @@
                 return {colors:[],value:""}
             }
         },
+
+      handleOtherAndNoRespirationDone(){
+
+        // if(getCheckboxSelectedValue(this.respiration,'Other')?.value =='otherRespiratoryExam'){
+        //
+        //   modifyFieldValue(this.respiration,'OtherRespiration','displayNone',false)
+        // }else{
+        //   modifyFieldValue(this.respiration,'OtherRespiration','displayNone',true)
+        // }
+        // console.log(getCheckboxSelectedValue(this.respiration,'Other')?.value =='otherRespiratoryExam')
+        const checkBoxes=['Normal exam', 'Cough',' Rapid breathing','Slow breathing','Rapid breathing', 'Wheezing',
+                          'Rales','Respiratory distress', 'Other']
+
+        if (getCheckboxSelectedValue(this.respiration, 'Exam not done')?.checked) {
+          checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.respiration, checkbox, 'checked', false);
+            modifyCheckboxValue(this.respiration, checkbox, 'disabled', true);
+          });
+        } else {
+          checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.respiration, checkbox, 'disabled', false);
+          });
+        }
+
+      },
+      handlePreEclampsia(){
+        const checkBoxes=['Severe headache', 'Visual disturbance','Vomiting','Epigastric pain', 'Dizziness']
+
+        if (getCheckboxSelectedValue(this.preEclampsia, 'No severe pre-eclampsia')?.checked) {
+          checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.preEclampsia, checkbox, 'checked', false);
+            modifyCheckboxValue(this.preEclampsia, checkbox, 'disabled', true);
+          });
+        } else {
+          checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.preEclampsia, checkbox, 'disabled', false);
+          });
+        }
+
+      }
       
     }
     });

@@ -79,7 +79,7 @@ import BasicForm from '@/components/BasicForm.vue';
 import { Service } from "@/services/service";
 import {
   getCheckboxSelectedValue,
-  getRadioSelectedValue,
+  getRadioSelectedValue, modifyCheckboxValue,
   modifyFieldValue,
   modifyRadioValue
 } from "@/services/data_helpers";
@@ -165,11 +165,37 @@ export default defineComponent({
       if(getCheckboxSelectedValue(this.breastExam, 'Other breast exams')=='other breast exams'){
         modifyFieldValue(this.breastExam,'Other','displayNone', false)
       }   else {modifyFieldValue(this.breastExam,'Other','displayNone', true)}
+
+      const checkBoxes=['Normal breast exam result', 'Bleeding', 'Nodule','Discharge', 'Flushing','Local pain','Increased temperature', 'Epigastric pain', 'Other breast exams']
+
+      if (getCheckboxSelectedValue(this.breastExam, 'No breast exam conducted')?.checked) {
+        checkBoxes.forEach((checkbox) => {
+          modifyCheckboxValue(this.breastExam, checkbox, 'checked', false);
+          modifyCheckboxValue(this.breastExam, checkbox, 'disabled', true);
+        });
+      } else {
+        checkBoxes.forEach((checkbox) => {
+          modifyCheckboxValue(this.breastExam, checkbox, 'disabled', false);
+        });
+      }
     },
     handleVaginalInspection(){
       if(getCheckboxSelectedValue(this.vaginalInspection, 'Other')=='other'){
         modifyFieldValue(this.vaginalInspection,'Other','displayNone', false)
       }   else {modifyFieldValue(this.vaginalInspection,'Other','displayNone', true)}
+
+      const checkBoxes=['Normal vaginal exam result', 'Evidence of amniotic fluid', 'Genital pain','Abnormal discharge', 'Papules','Ulcers','Ulcers','Warts','Vesicles','Bleeding','Other']
+
+      if (getCheckboxSelectedValue(this.vaginalInspection, 'No vaginal exam done')?.checked) {
+        checkBoxes.forEach((checkbox) => {
+          modifyCheckboxValue(this.vaginalInspection, checkbox, 'checked', false);
+          modifyCheckboxValue(this.vaginalInspection, checkbox, 'disabled', true);
+        });
+      } else {
+        checkBoxes.forEach((checkbox) => {
+          modifyCheckboxValue(this.vaginalInspection, checkbox, 'disabled', false);
+        });
+      }
     },
     handleCervicalExam(){
       if(getRadioSelectedValue(this.cervicalExam, 'Yes')=='yes'){

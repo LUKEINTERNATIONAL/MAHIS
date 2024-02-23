@@ -56,7 +56,7 @@ export default [
 
   {
     path: '/physicalExam',
-    name: 'PhysicalExam',
+    name: 'physicalExam',
     component: PhysicalExam
   },
   {
