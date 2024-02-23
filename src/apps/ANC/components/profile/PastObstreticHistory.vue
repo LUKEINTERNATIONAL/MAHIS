@@ -3,7 +3,7 @@
         <ion-card class="section">
             <ion-card-header> <ion-card-title class="sub_item_header">History on previous pregnancies</ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="prevPregnancies" @update:inputValue="validaterowData($event)"></basic-form>
+                <basic-form :contentData="prevPregnancies"></basic-form>
             </ion-card-content>
         </ion-card>
 
@@ -109,9 +109,11 @@ export default defineComponent({
       prevPregnancies: {
         
           handler(val) {
-            if (val && val[0].data.rowData[2].colData[0].value) {
-              const liveBirths = parseInt(val[0].data.rowData[2].colData[0].value)
+            if (val && val[2].data.rowData[0].colData[0].value) {
+              const liveBirths = parseInt(val[2].data.rowData[0].colData[0].value)
               this.prevPregnanciesInstance.setModeOfDelivery([])
+
+             
 
               const births = []
               for (let i = 0; i < liveBirths; ++i) {
@@ -127,6 +129,12 @@ export default defineComponent({
           },
 
         deep: true
+      },
+      modeOfDelivery:{
+        handler(){
+           this.handleDynamic()  
+        },
+        deep:true
       },
       Complications:{
         handler(){
@@ -167,11 +175,14 @@ export default defineComponent({
        
       },
       handleDynamic(){
+        
         if(getRadioSelectedValue(this.modeOfDelivery,'cesareanSec')=='cesarean'){
           modifyFieldValue(this.modeOfDelivery,'Specify','displayNone',false)
         }else{
           modifyFieldValue(this.modeOfDelivery,'Specify','displayNone',true)
          }
+
+         
          
       },
       handleAlert(e:any){
@@ -238,26 +249,8 @@ export default defineComponent({
           modifyFieldValue(this.prevPregnancies, stillBirthsField.data.rowData[1].colData[0].name, 'alertsErrorMassage', errorMessage || '');
         }
       },
-
-
-
-
-
-
-      //Method for navigating sections
-    goToNextSection() {
-      if (this.currentSection < 3) {
-        this.currentSection++;
-      }
-    },
-    goToPreviousSection() {
-      if (this.currentSection > 0) {
-        this.currentSection--;
-      }
-    },
-
-      
-    }
+        
+      },
     });
 
 </script>

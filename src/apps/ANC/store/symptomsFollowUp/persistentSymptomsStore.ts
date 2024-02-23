@@ -148,6 +148,14 @@ export const usePersistentSymptomsStore = defineStore('persistentSymptomsStore',
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
+                        },
+                        {
+                            name: "None",
+                            value: 'none',
+                            labelPlacement: 'start',
+                            colSize: '6',
+                            justify: 'space-between',
+                            checked: false
                         }
                         
                     ],

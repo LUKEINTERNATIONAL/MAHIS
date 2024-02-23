@@ -27,7 +27,17 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                             ],
                             
                         },
-                        {
+
+                    ],
+                    
+                },
+          
+            },
+            {
+                data:
+                  {
+                    rowData:[
+                                                {
                             colData: [
                             {
                                 inputHeader: 'Abortions/Miscarriages',
@@ -52,7 +62,13 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                             
                         ]
                     },
-                    {
+                    ]
+                  }
+            },
+            {
+                data:{
+                    rowData:[
+                                            {
                         colData: [
                             {
                                 inputHeader: 'Live births',
@@ -76,12 +92,10 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
 
                         ]
                     },
+                    ]
+                }
+            }
 
-                    ],
-                    
-                },
-          
-            },   
         ] as any,
         abnormalities:[
             {
