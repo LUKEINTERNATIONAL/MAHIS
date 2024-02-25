@@ -36,7 +36,6 @@ import {
     modalController,
     AccordionGroupCustomEvent,
 } from "@ionic/vue";
-import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/components/DemographicBar.vue";
@@ -59,11 +58,12 @@ import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";
 import { Treatment } from "@/apps/NCD/services/treatment";
 import { isEmpty } from "lodash";
+import HisDate from "@/utils/Date";
+import { defineComponent } from "vue";
 import {
     DRUG_FREQUENCIES,
     DrugPrescriptionService,
 } from "../../../services/drug_prescription_service";
-import HisDate from "@/utils/Date";
 export default defineComponent({
     name: "Home",
     components: {

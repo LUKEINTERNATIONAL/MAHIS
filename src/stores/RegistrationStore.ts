@@ -465,9 +465,6 @@ export const useRegistrationStore = defineStore("registrationStore", {
                                             {
                                                 name: "Football Ground",
                                             },
-                                            {
-                                                name: "Other",
-                                            },
                                         ],
                                     },
                                 },
