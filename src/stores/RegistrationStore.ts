@@ -432,6 +432,44 @@ export const useRegistrationStore = defineStore("registrationStore", {
                                     eventType: "input",
                                     alertsError: false,
                                     alertsErrorMassage: "",
+                                    popOverData: {
+                                        filterData: true,
+                                        data: [
+                                            {
+                                                name: "Catholic Church",
+                                            },
+                                            {
+                                                name: "CCAP",
+                                            },
+                                            {
+                                                name: "Seventh Day",
+                                            },
+                                            {
+                                                name: "Mosque",
+                                            },
+                                            {
+                                                name: "Primary School",
+                                            },
+                                            {
+                                                name: "Borehole",
+                                            },
+                                            {
+                                                name: "Secondary School",
+                                            },
+                                            {
+                                                name: "College",
+                                            },
+                                            {
+                                                name: "Market",
+                                            },
+                                            {
+                                                name: "Football Ground",
+                                            },
+                                            {
+                                                name: "Other",
+                                            },
+                                        ],
+                                    },
                                 },
                             ],
                         },
