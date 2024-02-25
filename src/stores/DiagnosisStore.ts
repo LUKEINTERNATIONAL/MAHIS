@@ -1,58 +1,52 @@
-import { defineStore } from 'pinia'
-import { icons } from '@/utils/svg';
+import { defineStore } from "pinia";
+import { icons } from "@/utils/svg";
 
-export const useDiagnosisStore = defineStore('DiagnosisStore', {
+export const useDiagnosisStore = defineStore("DiagnosisStore", {
     state: () => ({
         diagnosis: [
             {
-                selectdData: [],
+                selectedData: [],
                 isFinishBtn: false,
-                data:
-                    { 
-                        rowData:[
-                            {
-                                colData:[
-                                    {
-                                        inputHeader: 'Diagnosis',
-                                        icon: icons.search,
-                                        popOver: true,
-                                        value: '',
-                                        name: 'diagnosis',
-                                        eventType: 'input',
-                                        required: true,
-                                        alertsError: false,
-                                        alertsErrorMassage: '',
-                                        popOverData: {
-                                            filterData: false,
-                                            data: []
-                                        } ,
-                                        id: '',
-                                        idName: 'district_id'
+                data: {
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                    inputHeader: "Diagnosis",
+                                    icon: icons.search,
+                                    popOver: true,
+                                    value: "",
+                                    name: "diagnosis",
+                                    eventType: "input",
+                                    required: true,
+                                    alertsError: false,
+                                    alertsErrorMassage: "",
+                                    popOverData: {
+                                        filterData: false,
+                                        data: [],
                                     },
-                                    
-                                ],
-                                btns:[
-                                    {
-                                        name: "Save",
-                                        fill: "clear",
-                                        btn_col_size: 3,
-                                        icon: icons.plus
-                                    }
-                                ]
-                            }
-                        ],
-                        
-                    }
-                 
-            }
-               
-        ] as any
+                                    id: "",
+                                    idName: "district_id",
+                                },
+                            ],
+                            btns: [
+                                {
+                                    name: "Save",
+                                    fill: "clear",
+                                    btn_col_size: 3,
+                                    icon: icons.plus,
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
+        ] as any,
     }),
-    actions:{
-        setDiagnosis(data: any){
-            this.diagnosis = data
-        }
+    actions: {
+        setDiagnosis(data: any) {
+            this.diagnosis = data;
+        },
     },
-    persist:true,
-
-})
+    persist: true,
+});
