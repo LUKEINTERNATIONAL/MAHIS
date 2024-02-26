@@ -218,7 +218,7 @@ export default {
                 type: this.basicInputFieldProperties[1].selection,
                 date: this.basicInputFieldProperties[2].date,
                 reason: this.basicInputFieldProperties[3].referralReason,
-            };
+            }
 
             const inputsValid = this.validateInputs();
             if (!inputsValid) {
@@ -226,7 +226,7 @@ export default {
             }
             this.displayValidationMessage = false;
 
-            this.dispositionStore.addDispositionData(referralData, this.editIndex);
+            this.dispositionStore.addDispositionData(referralData, this.editIndex)
             this.displayInputFields = false;
             this.addReferrals = true;
 
