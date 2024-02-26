@@ -232,6 +232,7 @@
     }
 
     function addReferral() {
+        showEmptyMsg.value = false
         showAddItemButton.value = false
         showAddReferralInfo.value = true
     }
