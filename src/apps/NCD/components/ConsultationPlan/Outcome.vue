@@ -1,7 +1,11 @@
 <template>
 
-    <DynamicDispositionList v-if="true" @update:removeItem="" @update:editItem=""
-        :displayData="dispositions" />
+    <ion-row>
+        <ion-col>
+            <DynamicDispositionList v-if="true" @update:removeItem="" @update:editItem=""
+            :displayData="dispositions" />
+        </ion-col>
+    </ion-row>
 
     <ion-row v-if="showEmptyMsg">
        <span class="dash_box">{{ initialMsg }}</span> 
@@ -228,7 +232,6 @@
     }
 
     function addReferral() {
-        showEmptyMsg.value = false
         showAddItemButton.value = false
         showAddReferralInfo.value = true
     }
@@ -240,8 +243,6 @@
             return
         }
 
-
-        showEmptyMsg.value = !false
         showAddItemButton.value = !false
         showAddReferralInfo.value = !true
 
