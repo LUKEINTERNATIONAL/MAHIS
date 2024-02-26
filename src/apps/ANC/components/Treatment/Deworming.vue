@@ -74,8 +74,8 @@ export default defineComponent({
     },
     computed:{
          ...mapState(useDewormingStore,["treatment"]),
-         ...mapState(useDewormingStore,["treatmentType"]),
-         ...mapState(useDewormingStore,["treatmentReason"]),
+        //  ...mapState(useDewormingStore,["treatmentType"]),
+        //  ...mapState(useDewormingStore,["treatmentReason"]),
          ...mapState(useDewormingStore,["malaria"]),
          ...mapState(useDewormingStore,["malariaReason"]),
       },
@@ -104,6 +104,7 @@ export default defineComponent({
           }else{
             modifyRadioValue(this.treatment,'treatInfo','displayNone',true)
           }
+          console.log(getRadioSelectedValue(this.treatment,'preventive'))
          
         },
         handleNoPreventative(){

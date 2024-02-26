@@ -40,13 +40,12 @@ export const useDewormingStore = defineStore ('dewormingStore', {
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
                 radioBtnContent:
                 {
                     header:{
                         title: 'Preventative antihelminthic treatment provided', 
                         selectedValue: '',
-                        mame:'treatInfo',
+                        name:'treatInfo',
                         displayNone:true
                     },
                     data:[
@@ -105,7 +104,6 @@ export const useDewormingStore = defineStore ('dewormingStore', {
             {
                 isFinishBtn: false,
                 sectionHeader: '',
-                classDash: 'dashed_bottom_border _padding',
 
                 data:{
                     rowData: [{
