@@ -59,22 +59,32 @@
                     :show-default-buttons="true"></ion-datetime>
             </ion-popover>
         </ion-col>
+
+        <ion-col>
+
+        </ion-col>
     </ion-row>
     <ion-row>
-        <ion-col>
+        <ion-col size="9">
             <BasicInputField :placeholder="basicInputFieldProperties[3].placeholder"
             :inputValue="basicInputFieldProperties[3].referralReason" @update:inputValue="updateReason" />
         </ion-col>
+        
+        <ion-col class="action_buttons">
+            <span style="cursor: pointer;" @click="">+ Save</span>
+        </ion-col>
+        
     </ion-row>
 
     <ion-row class="spc_btwn" v-if="showAddItemButton">
         <dynamic-button  v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" @clicked:btn="addReferral"></dynamic-button>
     </ion-row>
 
+
 </template>
 
 <script setup lang="ts">
-    import {     IonContent, IonHeader, IonCol, IonItem, IonList, IonButton, IonMenu, IonTitle, IonToolbar, IonInput, IonDatetime, IonLabel, IonTextarea, IonAccordion, IonAccordionGroup, AccordionGroupCustomEvent } from '@ionic/vue'
+    import { IonContent, IonHeader, IonCol, IonItem, IonList, IonButton, IonMenu, IonTitle, IonToolbar, IonInput, IonDatetime, IonLabel, IonTextarea, IonAccordion, IonAccordionGroup, AccordionGroupCustomEvent } from '@ionic/vue'
     import { checkmark,pulseOutline,addOutline,closeOutline, checkmarkOutline, filter, chevronDownOutline, chevronUpOutline, codeSlashOutline } from 'ionicons/icons'
     import { ref, watch, computed, onMounted, onUpdated } from 'vue'
     import { LocationService } from "@/services/location_service"
@@ -228,5 +238,12 @@
     ion-list.list-al {
         --background: #fff;
         -ion-item-background: #fff;
+    }
+    .saveContainer {
+        display: flex;
+        align-items: flex-end;
+    }
+    .action_buttons {
+        margin-top: 5px;
     }
 </style>
