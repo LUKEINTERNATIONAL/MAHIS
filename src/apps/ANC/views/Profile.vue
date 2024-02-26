@@ -27,8 +27,7 @@ import {
   IonItem,
   IonLabel,
   IonModal,
-  modalController,
-  AccordionGroupCustomEvent } from '@ionic/vue';
+} from '@ionic/vue';
 import { defineComponent } from 'vue';
 import Toolbar from "@/apps/ANC/components/Toolbar.vue";
 import ToolbarSearch from "@/apps/ANC/components/ToolbarSearch.vue";
@@ -215,8 +214,6 @@ export default defineComponent({
         console.log(selectedValue);
       }
 
-         // this.$router.push('symptomsFollowUp');
-
      },
   mounted(){
     // this.markWizard()
@@ -281,24 +278,6 @@ export default defineComponent({
         delete item?.display;
         return item?.data;
       });
-    },
-    validateProfileData() {
-      // Iterate through each section of medical history
-      this.medicalHistory.forEach(section => {
-        // Check if at least one checkbox is checked for each section
-        const errorMessage = !section.checkboxBtnContent.data.some(item => item.checked) ? "Please select at least one option" : '';
-
-        // Update error messages for checkboxes
-        section.checkboxBtnContent.data.forEach(item => {
-          // Modify error message and error state for each checkbox
-          const alertsError = !!errorMessage;
-          const alertsErrorMessage = errorMessage || '';
-
-          // Modify the field values accordingly
-          modifyFieldValue(item, 'alertsError', alertsError);
-          modifyFieldValue(item, 'alertsErrorMessage', alertsErrorMessage);
-        })
-      })
     },
     saveData(){ 
       const errors = []

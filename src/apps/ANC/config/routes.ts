@@ -1,6 +1,5 @@
 import symptomsFollowUp from '../views/symptomsFollowUp.vue';
 import counselling from '../views/counselling.vue';
-import referral from '../views/referral.vue';
 import ancEnd from '../views/ancEnd.vue';
 import Profile from '../views/Profile.vue';
 import QuickCheck from '@/apps/ANC/views/QuickCheck.vue';
@@ -11,16 +10,11 @@ import landingPage from "@/apps/ANC/views/landingPage.vue";
 import PreviousVisits from "@/apps/ANC/views/PreviousVisits.vue";
 import Enrollment from "@/apps/ANC/views/Enrollment.vue";
 import Dashboard from "@/apps/ANC/views/Dashboard.vue";
-import ProfileTest from "@/apps/ANC/views/ProfileTest.vue";
+import Referral from "@/apps/ANC/views/referral.vue";
 
 
 
 export default [
-    {
-    path: '/profileTest',
-    name: 'ProfileTest',
-    component: ProfileTest
-  },
   {
     path: '/ANCEnrollment',
     name: 'ANCEnrollment',
@@ -73,7 +67,7 @@ export default [
   {
     path: '/referral',
     name: 'referral',
-    component: referral
+    component: Referral
   },
   {
     path: '/ancEnd',

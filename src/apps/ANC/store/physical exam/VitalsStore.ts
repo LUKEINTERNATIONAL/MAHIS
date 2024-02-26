@@ -213,7 +213,8 @@ export const useVitalsStore = defineStore('vitalsStore',{
             }
                
         ] as any,
-        respiration: [
+        respiration:
+            [
             {
                 selectdData: [],
                 classDash:'dashed_bottom_border',
@@ -353,11 +354,12 @@ export const useVitalsStore = defineStore('vitalsStore',{
                         header:{
                             title: '',
                             selectedValue: '',
+                            name:'Other'
                         },
                         data:[
                             {
                                 name: 'Other',
-                                value: 'otherRespiratoryExam',
+                                value: 'other',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -394,31 +396,6 @@ export const useVitalsStore = defineStore('vitalsStore',{
                                 ],
 
                             },
-                            {
-                                colData:
-                                    [
-                                        {
-                                            displayNone:true,
-                                            inputHeader: 'Oximetry',
-                                            unit: '%',
-                                            icon:icons.respiratory,
-                                            value: '',
-                                            name: 'Oximetry',
-                                            required: true,
-                                            eventType: 'input'
-                                        },
-                                        {
-                                            displayNone: true,
-                                            inputHeader: 'Respiratory rate',
-                                            unit: 'bpm',
-                                            icon: icons.respiratory,
-                                            value: '',
-                                            name: 'RespiratoryRate',
-                                            required: true,
-                                            eventType: 'input'
-                                        }
-                                    ]
-                            }
                         ]
                     },
             },

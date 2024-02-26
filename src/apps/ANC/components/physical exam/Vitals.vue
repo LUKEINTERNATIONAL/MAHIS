@@ -227,13 +227,14 @@
 
       handleOtherAndNoRespirationDone(){
 
-        // if(getCheckboxSelectedValue(this.respiration,'Other')?.value =='otherRespiratoryExam'){
-        //
-        //   modifyFieldValue(this.respiration,'OtherRespiration','displayNone',false)
-        // }else{
-        //   modifyFieldValue(this.respiration,'OtherRespiration','displayNone',true)
-        // }
-        // console.log(getCheckboxSelectedValue(this.respiration,'Other')?.value =='otherRespiratoryExam')
+        if(getCheckboxSelectedValue(this.respiration,'Other')?.value =='other'){
+
+          modifyFieldValue(this.respiration,'OtherRespiration','displayNone',false)
+        }else{
+          modifyFieldValue(this.respiration,'OtherRespiration','displayNone',true)
+        }
+
+
         const checkBoxes=['Normal exam', 'Cough',' Rapid breathing','Slow breathing','Rapid breathing', 'Wheezing',
                           'Rales','Respiratory distress', 'Other']
 
@@ -249,6 +250,8 @@
         }
 
       },
+
+
       handlePreEclampsia(){
         const checkBoxes=['Severe headache', 'Visual disturbance','Vomiting','Epigastric pain', 'Dizziness']
 

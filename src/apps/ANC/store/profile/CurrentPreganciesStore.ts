@@ -3,57 +3,24 @@ import { icons } from '@/utils/svg'
 
 export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',{
     state: () => ({
-        currentPregnancies:[    
-            {
-                isFinishBtn: false,
-                sectionHeader: '',
-                classDash: '',
-                data:
-                { 
-                    rowData:[
+        palpation:[
 
-                         {
-                        colData: [
-                            {
-                                inputHeader: 'Fundal height',
-                                value: '',
-                                name: 'gestation',
-                                required: true,
-                                eventType: 'input',
-                                alertsError: false,
-                                alertsErrorMassage: '',
-                                inputWidth:'55%'
-                                
-                            },
-                            
-                        ],}
-                   
 
-                    ],
-                
-                },
-            },
-          
-             
         ] as any,
     lmnp:[
         {
-            selectdData: [],
-            isFinishBtn: false,
-            classDash: '',
             radioBtnContent:
             {
                 header:{
                     title: 'LNMP Known?',
+                    name:'Yes',
                     selectedValue: '',
-                    name:'LMNP',
-                    alertsError: false,
-                    alertsErrorMassage: '',
+
                 },
                 data:[
                     {
+                        value: 'yes',
                         name: 'Yes',
-                        value: 'Yes',
                         labelPlacement: 'start',
                         colSize: '7',
                         justify: 'space-between',
@@ -70,7 +37,7 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
                 
         },
         {
-            isFinishBtn: false,
+            sectionHeader:'',
             classDash: 'dashed_bottom_border _padding',
             data:
                 {
@@ -78,10 +45,10 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
                         {
                             colData: [
                                 {
+
                                     inputHeader: 'LNMP date*',
                                     value: '',
-                                    name: 'lmnpEDD',
-                                    required: true,
+                                    name: 'lmnp date',
                                     eventType: 'input',
                                     alertsError: false,
                                     alertsErrorMassage: '',
@@ -99,9 +66,21 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
                     ],
 
                 },
+            alerts:
+                [
+                    {
+                        backgroundColor: '',
+                        status: '',
+                        icon: icons.editPen,
+                        textColor: '',
+                        value: '',
+                        name: '',
+                        index: ''
+                    }
+                ],
         }
 
-    ],
+    ] as any,
     ultrasound:[
         {
             selectdData: [],
@@ -111,19 +90,20 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
             {
                 header:{
                     title: 'Ultrasound done?',
-                    selectedValue: ''
+                    selectedValue: '',
+                    name:'Yes'
                 },
                 data:[
                     {
                         name: 'Yes',
-                        value: 'Yes',
+                        value: 'yes',
                         labelPlacement: 'start',
                         colSize: '7',
                         justify: 'space-between',
                     },
                     {
                         name: 'No',
-                        value: 'No',
+                        value: 'no',
                         labelPlacement: 'start',
                         colSize: '7',
                         justify: 'space-between',
@@ -140,8 +120,8 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
                     rowData: [
                         {
                             colData: [
-                                {
-                                    inputHeader: 'Delivery date determined by ultrasound*',
+                                {   displayNone:true,
+                                    inputHeader: 'Date for ultrasound*',
                                     value: '',
                                     name: 'ultrasound delivery date',
                                     required: true,
@@ -162,7 +142,138 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
                     ],
 
                 },
-        }
+        },
+        {
+            isFinishBtn: false,
+            classDash: '',
+            data:
+                {
+                    rowData: [
+                        {
+                            colData: [
+                                {  displayNone: true,
+                                    inputHeader: 'Gestation age from ultrasound',
+                                    value: '',
+                                    name: 'gestation age from ultrasound',
+                                    required: true,
+                                    eventType: 'input',
+                                    alertsError: false,
+                                    alertsErrorMassage: '',
+                                    icon:icons.editPen,
+                                    placeholder: 'Enter gestation age from ultrasound',
+                                    inputWidth:'55%'
+                                },
+
+                            ],
+
+                        },
+
+
+                    ],
+
+                },
+        },
+        {
+            isFinishBtn: false,
+            classDash: 'dashed_bottom_border',
+            data:
+                {
+                    rowData: [
+                        {
+                            colData: [
+                                {  displayNone: true,
+                                    inputHeader: 'LMNP date from ultrasound',
+                                    value: '',
+                                    name: 'ultrasound lmnp date',
+                                    required: true,
+                                    eventType: 'input',
+                                    alertsError: false,
+                                    alertsErrorMassage: '',
+                                    isDatePopover: true,
+                                    icon: icons.calenderPrimary,
+                                    placeholder: 'Enter lmnp from ultrasound',
+                                    inputWidth:'55%'
+                                },
+
+                            ],
+
+                        },
+
+
+                    ],
+
+                },
+        },
+        {
+            isFinishBtn: false,
+            sectionHeader: 'Gestation age by Palpation',
+            classDash: 'dashed_bottom_border',
+            data:
+                {
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                    inputHeader: 'Gestation age by palpation',
+                                    value: '',
+                                    name: 'gestation age by palpation',
+                                    required: true,
+                                    eventType: 'input',
+                                    alertsError: false,
+                                    alertsErrorMassage: '',
+                                    icon:icons.editPen,
+                                    inputWidth: '175px',
+                                },
+
+                            ],
+
+                        },
+
+
+                    ],
+
+                },
+        },
+        {
+            selectdData: [],
+            isFinishBtn: false,
+            classDash: 'dashed_bottom_border',
+            radioBtnContent:
+                {
+                    header:{
+                        title: 'Gestation age to be used',
+                        selectedValue: '',
+                        name:'source of gestation age'
+                    },
+                    data:[
+                        {
+                            name: 'GA by  LNMP ',
+                            value: 'ga by lnmp',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'GA by ultrasound',
+                            value: 'ga by ultrasound',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'GA by palpation',
+                            value: 'ga by palpation',
+                            labelPlacement: 'start',
+                            colSize: '7',
+                            justify: 'space-between',
+                        },
+                    ]
+                }
+
+        },
+
+
+
 
     ],
     tetanus:[
@@ -173,34 +284,35 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
             radioBtnContent:
             {
                 header:{
-                    title: 'Tetanus dose',
-                    selectedValue: ''
+                    title: 'The woman received tetanus doses for immunization?',
+                    selectedValue: '',
+                    name:'Tetanus doses'
                 },
                 data:[
                     {
                         name: 'Fully Immunised',
-                        value: 'Full',
+                        value: 'fully immunised',
                         labelPlacement: 'start',
                         colSize: '7',
                         justify: 'space-between',
                     },
                     {
                         name: 'Under Immunised',
-                        value: 'Under',
+                        value: 'under immunised',
                         labelPlacement: 'start',
                         colSize: '7',
                         justify: 'space-between',
                     },
                     {
                         name: 'No doses',
-                        value: 'No',
+                        value: 'no doses',
                         labelPlacement: 'start',
                         colSize: '7',
                         justify: 'space-between',
                     },
                     {
-                        name: 'Unknown',
-                        value: 'Unknown',
+                        name: 'Unknown doses',
+                        value: 'unknown doses',
                         labelPlacement: 'start',
                         colSize: '7',
                         justify: 'space-between',
@@ -212,14 +324,13 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
         },
         {
             isFinishBtn: false,
-            sectionHeader: 'TTV 1 immunisation',
             classDash: '',
 
             data:{
                 rowData: [{
                     colData: [
                         {
-
+                        displayNone:true,
                         inputHeader: 'TTV 1 Date of Immunisation',
                         value: '',
                         name: 'tt1Date',
@@ -228,7 +339,7 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
                         placeholder: 'Pick the date',
                         required: true,
                         eventType: 'input',
-                        inputWidth: '175px',
+                        inputWidth: '55%',
                         alertsError: false,
                         alertsErrorMassage: ''
                     },
@@ -240,14 +351,13 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
         },
         {
             isFinishBtn: false,
-            sectionHeader: 'TTV 2 immunisation',
             classDash: '',
 
             data:{
                 rowData: [{
                     colData: [
                         {
-
+                            displayNone:true,
                             inputHeader: 'TTV 2 Date of Immunisation',
                             value: '',
                             name: 'tt2Date',
@@ -256,7 +366,7 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
                             placeholder: 'Pick the date',
                             required: true,
                             eventType: 'input',
-                            inputWidth: '175px',
+                            inputWidth: '55%',
                             alertsError: false,
                             alertsErrorMassage: ''
                         },
@@ -267,14 +377,13 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
         },
         {
             isFinishBtn: false,
-            sectionHeader: 'TTV 3 immunisation',
             classDash: '',
 
             data:{
                 rowData: [{
                     colData: [
                         {
-
+                            displayNone:true,
                             inputHeader: 'TTV 3 Date of Immunisation',
                             value: '',
                             name: 'tt3Date',
@@ -283,7 +392,7 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
                             placeholder: 'Pick the date',
                             required: true,
                             eventType: 'input',
-                            inputWidth: '175px',
+                            inputWidth: '55%',
                             alertsError: false,
                             alertsErrorMassage: ''
                         },
@@ -294,14 +403,13 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
         },
         {
             isFinishBtn: false,
-            sectionHeader: 'TTV 4 immunisation',
             classDash: '',
 
             data:{
                 rowData: [{
                     colData: [
                         {
-
+                            displayNone:true,
                             inputHeader: 'TTV 4 Date of Immunisation',
                             value: '',
                             name: 'tt4Date',
@@ -310,7 +418,7 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
                             placeholder: 'Pick the date',
                             required: true,
                             eventType: 'input',
-                            inputWidth: '175px',
+                            inputWidth: '55%',
                             alertsError: false,
                             alertsErrorMassage: ''
                         },
@@ -321,14 +429,12 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
         },
         {
             isFinishBtn: false,
-            sectionHeader: 'TTV 5 immunisation',
-            classDash: 'dashed_bottom_border _padding',
 
             data:{
                 rowData: [{
                     colData: [
                         {
-
+                            displayNone:true,
                             inputHeader: 'TTV 5 Date of Immunisation',
                             value: '',
                             name: 'tt5Date',
@@ -337,7 +443,31 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
                             placeholder: 'Pick the date',
                             required: true,
                             eventType: 'input',
-                            inputWidth: '175px',
+                            inputWidth: '55%',
+                            alertsError: false,
+                            alertsErrorMassage: ''
+                        },
+                    ],
+                }]
+            },
+
+        },
+        {
+            isFinishBtn: false,
+
+            data:{
+                rowData: [{
+                    colData: [
+                        {
+                            displayNone:true,
+                            inputHeader: 'Number of under immunised doses',
+                            value: '',
+                            name: 'number of under immunised doses',
+                            icon: icons.editPen,
+                            placeholder: 'Enter number of doses',
+                            required: true,
+                            eventType: 'input',
+                            inputWidth: '55%',
                             alertsError: false,
                             alertsErrorMassage: ''
                         },
@@ -355,7 +485,9 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
                 {
                     header:{
                         title: 'Reason Tetanus toxoid (TT) was not conducted',
-                        selectedValue: ''
+                        name:'Reasons for no tetanus doses',
+                        selectedValue: '',
+                        displayNone:true
                     },
                     data:[
                         {
@@ -367,14 +499,14 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
                         },
                         {
                             name: 'Client is ill',
-                            value: 'client',
+                            value: 'client is ill',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'Client refused',
-                            value: 'client',
+                            value: 'client refused',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
@@ -400,15 +532,13 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
         {
             isFinishBtn: false,
             sectionHeader: '',
-            classDash: 'dashed_bottom_border _padding',
-
             data:{
                 rowData: [{
                     colData: [{
-
+                        displayNone:true,
                         inputHeader: 'Specify',
                         value: '',
-                        name: 'other',
+                        name: 'Other',
                         icon: icons.editPen,
                         required: true,
                         eventType: 'input',
@@ -423,7 +553,7 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
     }),
     actions:{
         setPrevPregnancies(data: any){
-            this.currentPregnancies = data
+            this.palpation = data
         },
         setTetanus(data: any){
             this.tetanus = data
@@ -444,6 +574,6 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
 
       
     },
-    persist:true,
+    // persist:true,
 
 })

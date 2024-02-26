@@ -79,7 +79,6 @@
   import ConfirmDiagnosis from '@/apps/NCD/components/ConsultationPlan/ConfirmDiagnosis.vue'
   import Outcome from '@/apps/NCD/components/ConsultationPlan/Outcome.vue'
   import Investigations from '@/apps/NCD/components/ConsultationPlan/Investigations.vue'
-  import TreatmentPlan from '@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue'
   import Medications from "@/apps/ANC/components/profile/Medications.vue";
   import WomanBehaviour from "@/apps/ANC/components/profile/WomanBehaviour.vue";
   import DangerSigns from "@/apps/ANC/components/quick check/DangerSigns.vue";
@@ -97,7 +96,6 @@
   import UrineTest from '@/apps/ANC/components/lab_tests/UrineTest.vue';
   import TB from '@/apps/ANC/components/lab_tests/TB.vue';
   import DiagnosisTreatment from '@/apps/ANC/components/Treatment/DiagnosisTreatment.vue'
-  import MedicationDispensed from "@/apps/ANC/components/Treatment/MedicationDispensed.vue";
   import DiagnosisCounselling from '@/apps/ANC/components/Treatment/DiagnosisCounselling.vue';
   import Immunization from '@/apps/ANC/components/Treatment/Immunization.vue';
   import IntimatePartner from '@/apps/ANC/components/Treatment/IntimatePartner.vue';
@@ -145,7 +143,6 @@
         ConfirmDiagnosis,
         Outcome,
         Investigations,
-        TreatmentPlan,
         IonModal,
         Medications,
         WomanBehaviour,

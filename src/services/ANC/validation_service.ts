@@ -5,6 +5,10 @@ export function validateField(data: any,fieldName: string, value: any) {
     const validationRules: any = {
         'LMNP':()=>Validation.required(value),
         'lmnpEED':()=>Validation.required(value),
+        'Stillbirths':()=>Validation.checkMinMax(value,1,15),
+        'LiveBirths':()=>Validation.required(value),
+        'Parity':()=>Validation.required(value),
+        'Abortions':()=>Validation.required(value)
     };
     const isValid = validationRules[fieldName]?.() == null;
 

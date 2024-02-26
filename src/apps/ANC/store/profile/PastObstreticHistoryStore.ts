@@ -43,7 +43,7 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                                 inputHeader: 'Abortions/Miscarriages',
                                 value: '',
                                 icon: icons.editPen,
-                                name: 'abortions',
+                                name: 'Abortions',
                                 required: true,
                                 eventType: 'input',
                                 alertsError: false,
@@ -73,7 +73,7 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                             {
                                 inputHeader: 'Live births',
                                 value: '',
-                                name: 'Live births',
+                                name: 'LiveBirths',
                                 required: true,
                                 icon: icons.editPen,
                                 eventType: 'input',

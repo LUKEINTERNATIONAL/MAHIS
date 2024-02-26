@@ -3,7 +3,7 @@
         <ion-card class="section">
             <ion-card-header> <ion-card-title class="sub_item_header">History on previous pregnancies</ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="prevPregnancies" @update:inputValue="validaterowData($event)"></basic-form>
+                <basic-form :contentData="prevPregnancies"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
             </ion-card-content>
         </ion-card>
 
@@ -55,11 +55,23 @@ import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import { useObstreticHistoryStore} from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
 import { checkmark, pulseOutline } from 'ionicons/icons';
-import { dynamicValue, getCheckboxSelectedValue, getRadioSelectedValue, modifyCheckboxValue, modifyDynamicFieldValue, modifyFieldValue } from '@/services/data_helpers';
+import {
+  dynamicValue,
+  getCheckboxSelectedValue,
+  getFieldValue,
+  getRadioSelectedValue,
+  modifyCheckboxValue,
+  modifyDynamicFieldValue,
+  modifyFieldValue
+} from '@/services/data_helpers';
 import StandardValidations from "@/validations/StandardValidations";
+import {validateField} from "@/services/ANC/validation_service";
+import BasicCard from "@/components/BasicCard.vue";
+import { Service } from "@/services/service"
 export default defineComponent({
   name: "History",
   components:{
+    BasicCard,
     IonContent,
     IonHeader,
     IonItem,
@@ -85,7 +97,9 @@ export default defineComponent({
         hasValidationErrors: [] as any,
         prevPregnanciesInstance: {} as any,
         modeOfDeliveryInstance: {} as any,
-        currentSection: 0, 
+        currentSection: 0,
+        inputField: '' as any,
+
     };
   },
   computed:{
@@ -93,9 +107,12 @@ export default defineComponent({
         ...mapState(useObstreticHistoryStore,["preterm"]),
         ...mapState(useObstreticHistoryStore,["abnormalities"]),
         ...mapState(useObstreticHistoryStore,["modeOfDelivery"]),
-        ...mapState(useObstreticHistoryStore, ["Complications"])
-
-    },
+        ...mapState(useObstreticHistoryStore, ["Complications"]),
+        Stillbirths(){ return getFieldValue(this.prevPregnancies, 'Stillbirths','value')},
+        LiveBirths(){ return getFieldValue(this.prevPregnancies, 'LiveBirths','value')},
+        Parity(){ return getFieldValue(this.prevPregnancies, 'Parity','value')},
+        Abortions(){ return getFieldValue(this.prevPregnancies, 'Abortions','value')},
+  },
     created() {
         this.modeOfDelieveryRef = {...this.modeOfDelivery[0],...this.modeOfDelivery[1]}
     },
@@ -114,9 +131,6 @@ export default defineComponent({
             if (val && val[2].data.rowData[0].colData[0].value) {
               const liveBirths = parseInt(val[2].data.rowData[0].colData[0].value)
               this.prevPregnanciesInstance.setModeOfDelivery([])
-
-             
-
               const births = []
               for (let i = 0; i < liveBirths; ++i) {
                 const x = JSON.parse(JSON.stringify({...this.modeOfDelieveryRef, id: i}))
@@ -128,9 +142,10 @@ export default defineComponent({
 
               this.prevPregnanciesInstance.setModeOfDelivery(births)
             }
+
           },
 
-        deep: true
+        deep: true,
       },
       modeOfDelivery:{
         handler(){
@@ -192,67 +207,124 @@ export default defineComponent({
               }else{
                 modifyDynamicFieldValue(e.id,this.modeOfDelivery,'Specify','displayNone',true)
                }
-               console.log(dynamicValue(this.modeOfDelivery,'cesareanSec',e.id),e.id)
       },
-      // Validations
-      validaterowData(ev: any) {
-            const gravidaField = this.prevPregnancies.find((field: any) => field.data.rowData[0].colData[0].name === "Gravida");
-            const abortionsField = this.prevPregnancies.find((field: any) => field.data.rowData[0].colData[1].name === "Abortions/Miscarriages");
-            const stillBirthsField = this.prevPregnancies.find((field: any) => field.data.rowData[1].colData[0].name === "Stillbirths");
 
-            if (gravidaField && ev.name === gravidaField.data.rowData[0].colData[0].name) {
+
+      validationRules(event: any) {
+             return validateField(this.prevPregnancies,event.name, (this as any)[event.name]);
+      },
+
+      //Handling input data on Profile-Past Obstetric history
+      handleInputData(event: any){
+            this.validaterowData(event)
+            this.calculateParity(event)
+            this.calculateLiveBirths(event)
+            this.calculateStillBirths(event)
+      },
+
+      // Validations
+      validaterowData(event: any) {
+           this.validationRules(event)
+
+        const gravidaField = this.prevPregnancies.find((field: any) => field.data.rowData[0].colData[0].name === "Gravida");
+
+            const abortionsField = this.prevPregnancies.find((field: any) =>
+                field.data.rowData.length > 1 && field.data.rowData[1].colData[0].name === "Abortions/Miscarriages");
+
+            const stillBirthsField = this.prevPregnancies.find((field: any) =>
+                field.data.rowData.length > 1 && field.data.rowData[1].colData[1].name === "Stillbirths");
+
+            if (gravidaField && event.name === gravidaField.data.rowData[0].colData[0].name) {
               let errorMessage = '';
 
-              if (StandardValidations.required(ev.value) != null) {
-                errorMessage = StandardValidations.required(ev.value);
-              } else if (StandardValidations.isWholeNumber(ev.value) != null) {
-                errorMessage = StandardValidations.isWholeNumber(ev.value);
-              } else if (StandardValidations.checkMinMax(ev.value, 1, 15) != null) {
-                errorMessage = StandardValidations.checkMinMax(ev.value, 1, 15);
+              if (StandardValidations.required(event.value) != null) {
+                errorMessage = StandardValidations.required(event.value);
+              } else if (StandardValidations.isWholeNumber(event.value) != null) {
+                errorMessage = StandardValidations.isWholeNumber(event.value);
+              } else if (StandardValidations.checkMinMax(event.value, 1, 15) != null) {
+                errorMessage = StandardValidations.checkMinMax(event.value, 1, 15);
               }
 
               modifyFieldValue(this.prevPregnancies, gravidaField.data.rowData[0].colData[0].name, 'alertsError', !!errorMessage);
               modifyFieldValue(this.prevPregnancies, gravidaField.data.rowData[0].colData[0].name, 'alertsErrorMassage', errorMessage || '');
             }
 
-            if (abortionsField && ev.name === abortionsField.data.rowData[0].colData[1].name) {
+            if (abortionsField && event.name === abortionsField.data.rowData[1].colData[0].name) {
               let errorMessage = '';
 
-              if (StandardValidations.required(ev.value) != null) {
-                errorMessage = StandardValidations.required(ev.value);
-              } else if (StandardValidations.isWholeNumber(ev.value) != null) {
-                errorMessage = StandardValidations.isWholeNumber(ev.value);
-              } else if (StandardValidations.checkMinMax(ev.value, 0, 15) != null) {
-                errorMessage = StandardValidations.checkMinMax(ev.value, 0, 15);
+              if (StandardValidations.required(event.value) != null) {
+                errorMessage = StandardValidations.required(event.value);
+              } else if (StandardValidations.isWholeNumber(event.value) != null) {
+                errorMessage = StandardValidations.isWholeNumber(event.value);
+              } else if (StandardValidations.checkMinMax(event.value, 0, 15) != null) {
+                errorMessage = StandardValidations.checkMinMax(event.value, 0, 15);
               } else {
                 const gravidaValue = gravidaField.data.rowData[0].colData[0].value;
-                if (parseInt(ev.value) > parseInt(gravidaValue) || parseInt(ev.value) < 0) {
+                if (parseInt(event.value) > parseInt(gravidaValue) || parseInt(event.value) < 0) {
                   errorMessage = "Abortions/Miscarriages should be less than or equal to Gravida and greater than or equal to 0.";
                 }
               }
 
-              modifyFieldValue(this.prevPregnancies, abortionsField.data.rowData[0].colData[1].name, 'alertsError', !!errorMessage);
-              modifyFieldValue(this.prevPregnancies, abortionsField.data.rowData[0].colData[1].name, 'alertsErrorMassage', errorMessage || '');
+              modifyFieldValue(this.prevPregnancies, abortionsField.data.rowData[1].colData[0].name, 'alertsError', !!errorMessage);
+              modifyFieldValue(this.prevPregnancies, abortionsField.data.rowData[1].colData[0].name, 'alertsErrorMassage', errorMessage || '');
             }
 
-            if (stillBirthsField && ev.name === stillBirthsField.data.rowData[1].colData[0].name) {
+            if (stillBirthsField && event.name === stillBirthsField.data.rowData[1].colData[1].name) {
               let errorMessage = '';
 
-              if (StandardValidations.required(ev.value) != null) {
-                errorMessage = StandardValidations.required(ev.value);
-              } else if (StandardValidations.isWholeNumber(ev.value) != null) {
-                errorMessage = StandardValidations.isWholeNumber(ev.value);
-              } else if (StandardValidations.checkMinMax(ev.value, 0, 15) != null) {
-                errorMessage = StandardValidations.checkMinMax(ev.value, 0, 15);
+              if (StandardValidations.required(event.value) != null) {
+                errorMessage = StandardValidations.required(event.value);
+              } else if (StandardValidations.isWholeNumber(event.value) != null) {
+                errorMessage = StandardValidations.isWholeNumber(event.value);
+              } else if (StandardValidations.checkMinMax(event.value, 0, 15) != null) {
+                errorMessage = StandardValidations.checkMinMax(event.value, 0, 15);
               }
 
-              modifyFieldValue(this.prevPregnancies, stillBirthsField.data.rowData[1].colData[0].name, 'alertsError', !!errorMessage);
-              modifyFieldValue(this.prevPregnancies, stillBirthsField.data.rowData[1].colData[0].name, 'alertsErrorMassage', errorMessage || '');
+              modifyFieldValue(this.prevPregnancies, stillBirthsField.data.rowData[1].colData[1].name, 'alertsError', !!errorMessage);
+              modifyFieldValue(this.prevPregnancies, stillBirthsField.data.rowData[1].colData[1].name, 'alertsErrorMassage', errorMessage || '');
             }
+          },
+
+      calculateParity(event: any) {
+        if (event.name === 'LiveBirths' || event.name === 'Stillbirths') {
+          const stillbirthValue = parseInt(getFieldValue(this.prevPregnancies, 'Stillbirths', 'value'));
+          const liveBirthValue = parseInt(getFieldValue(this.prevPregnancies, 'LiveBirths', 'value'));
+          if (!isNaN(stillbirthValue) && !isNaN(liveBirthValue)) {
+            const parityValue = stillbirthValue + liveBirthValue;
+            modifyFieldValue(this.prevPregnancies, 'Parity', 'value', parityValue);
+          } else {
+            modifyFieldValue(this.prevPregnancies, 'LiveBirths', 'value', null);           }
+        }
       },
-        
+
+      calculateLiveBirths(event:any){
+        if (event.name === 'Gravida' || event.name === 'Abortions') {
+          const gravidaValue= parseInt(getFieldValue(this.prevPregnancies, 'Gravida', 'value'));
+          const abortionsValue = parseInt(getFieldValue(this.prevPregnancies, 'Abortions', 'value'));
+          if (!isNaN(gravidaValue) && !isNaN(abortionsValue)) {
+            const liveBirthsValue = (gravidaValue-1)-abortionsValue
+            modifyFieldValue(this.prevPregnancies, 'LiveBirths', 'value', liveBirthsValue);
+          } else {
+            // If either Gravida or Abortions is NaN, set LiveBirths to null
+            modifyFieldValue(this.prevPregnancies, 'LiveBirths', 'value', null);          }
+        }
       },
-    });
+      // calculateStillBirths(event:any){
+      //   if (event.name === 'Gravida' || event.name === 'Abortions' || event.name ==='LiveBirths') {
+      //     const gravidaValue= parseInt(getFieldValue(this.prevPregnancies, 'Gravida', 'value'));
+      //     const abortionsValue = parseInt(getFieldValue(this.prevPregnancies, 'Abortions', 'value'));
+      //     const liveBirthsValue= parseInt(getFieldValue(this.prevPregnancies, 'LiveBirths', 'value'));
+      //     if (!isNaN(gravidaValue) && !isNaN(abortionsValue && !isNaN(liveBirthsValue))) {
+      //       const stillbirthsValue = (gravidaValue-1)-(abortionsValue+liveBirthsValue)
+      //       modifyFieldValue(this.prevPregnancies, 'LiveBirths', 'value', stillbirthsValue);
+      //     } else {
+      //       this.validationRules({name:'StillBirths'})
+      //     }
+      //   }
+      // }
+
+    },
+});
 
 </script>
 

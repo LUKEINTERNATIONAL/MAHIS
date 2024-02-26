@@ -4,7 +4,7 @@
          <!-- Past Surgeries -->
             <ion-card class="section">
             <ion-card-header>
-                <ion-card-title class="dashed_bottom_border sub_item_header">Past Surgeries</ion-card-title>
+                <ion-card-title class="dashed_bottom_border sub_item_header">Does the woman have any past surgeries done?</ion-card-title>
             </ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="medicalHistory"></basic-form>
@@ -14,7 +14,7 @@
          <!-- Allegies -->
           <ion-card  class="section">
             <ion-card-header>
-                <ion-card-title class="dashed_bottom_border sub_item_header">Allergies</ion-card-title>
+                <ion-card-title class="dashed_bottom_border sub_item_header">Does the woman have any allergies?</ion-card-title>
             </ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="allegy"></basic-form>
@@ -24,7 +24,7 @@
         <!-- Chronical Health conditions -->
             <ion-card class="section">
             <ion-card-header>
-                <ion-card-title class="dashed_bottom_border sub_item_header">Existing Chronic Health Conditions</ion-card-title>
+                <ion-card-title class="dashed_bottom_border sub_item_header">Does the woman have any existing chronic conditions?</ion-card-title>
             </ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="exisitingChronicHealthConditions"></basic-form>
@@ -130,7 +130,7 @@ export default defineComponent({
         const hivTest = useMedicalHistoryStore()
         const syphilisTest = useMedicalHistoryStore()
         const  hKTMI = useMedicalHistoryStore()
-        const  otherSite = useMedicalHistoryStore()  
+        const  otherSite = useMedicalHistoryStore()
         this.handleHivResults()
         this.handleSyphilis()
         this.handleSurgries()
@@ -144,7 +144,7 @@ export default defineComponent({
         this. handleSyphilisNotDone()
         this.handleSpecifySyphilis()
         this.handleTestNotDone()
-    
+
     },
 
     watch:{
@@ -172,7 +172,7 @@ export default defineComponent({
             handler(){
                 this.handleSurgries()
                 this.handleDisable()
-                
+
             },
             deep:true
         },
@@ -188,7 +188,7 @@ export default defineComponent({
             },
             deep:true
         }
-        
+
     },
       computed:{
         ...mapState(useMedicalHistoryStore,["medicalHistory"]),
@@ -196,25 +196,25 @@ export default defineComponent({
         ...mapState(useMedicalHistoryStore,["exisitingChronicHealthConditions"]),
         ...mapState(useMedicalHistoryStore,["hivTest"]),
         ...mapState(useMedicalHistoryStore,["syphilisTest"]),
-       
+
     },
     methods:{
-        handleHivResults(){        
+        handleHivResults(){
             if(getRadioSelectedValue(this.hivTest,'test2') == 'hivPositive'){
                 modifyRadioValue(this.hivTest,'test1','displayNone',false)
             }else{
                 modifyRadioValue(this.hivTest,'test1','displayNone',true)
             }
-             
+
         },
 
-        handleHivConductedOptin(){        
+        handleHivConductedOptin(){
             if(getRadioSelectedValue(this.hivTest,'hivOption') == 'hivTestConducted'){
                 modifyRadioValue(this.hivTest,'test2','displayNone',false)
             }else{
                 modifyRadioValue(this.hivTest,'test2','displayNone',true)
             }
-             
+
         },
         handleOtherHiv(){
             if(getCheckboxSelectedValue(this.hivTest,'Other')?.value =='other'){
@@ -229,7 +229,7 @@ export default defineComponent({
            }else{
              modifyRadioValue(this.syphilisTest,'syphilisDetails','displayNone',true)
            }
-           
+
 
         },
         handleSurgries(){
@@ -252,7 +252,7 @@ export default defineComponent({
                 });
                 }
 
- 
+
         },
 
         handleAllergies(){
@@ -260,7 +260,7 @@ export default defineComponent({
                 modifyFieldValue(this.allegy,'other',"displayNone",false)
             }else{
                 modifyFieldValue(this.allegy,'other',"displayNone",true)
-            }        
+            }
             const checkBoxes = ['Other','PrEP(TDF)','Albendazole','Aluminium-hydroxide',
                                  'Calcium','Chamomile','Folic-acid','Ginger','Fish',
                                 'Iron','sulfadoxine-pyrimethamine','Mebendazole','Penicillin'];
@@ -297,7 +297,7 @@ export default defineComponent({
                     modifyCheckboxValue(this.exisitingChronicHealthConditions, checkbox, 'disabled', false);
                 });
                 }
-              
+
         },
         handleHivConducted(){
             if(getRadioSelectedValue(this.hivTest,'hivOption')=='hivTestConducted'){
@@ -326,7 +326,7 @@ export default defineComponent({
             }else{
                  modifyCheckboxHeader(this.medicalHistory,'Other','disabled',false)
             }
-         
+
         },
         handleSyphilisNotDone(){
             if(getRadioSelectedValue(this.syphilisTest,'syphilisOption')?.value =='syphilisTestNotDone'){
@@ -355,7 +355,7 @@ export default defineComponent({
           this.currentSection--;
         }
       },
-      
+
     }
 })
 </script>
