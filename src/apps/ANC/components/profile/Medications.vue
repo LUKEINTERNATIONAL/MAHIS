@@ -1,15 +1,15 @@
 <template>
-  <ion-list>
-    <ion-item :lines="medication" class="dashed_bottom_border">
-      <ion-toggle :checked="medicationChecked" @ionChange="medications">Current Medications</ion-toggle>
-    </ion-item>
-    <div class="sub_item_body" v-if="medicationChecked">
-      <basic-form
-          :contentData="Medication" >
-      </basic-form>
-    </div>
-    <ion-item class="sub_item_body_close" v-if="medicationChecked"/>
-  </ion-list>
+  <!--  medications-->
+  <div class="container">
+    <ion-card class="section">
+      <ion-card-header>
+        <ion-card-title class="dashed_bottom_border sub_item_header">Which medications is the woman currently prescribed?</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <basic-form :contentData="Medication"></basic-form>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </template>
 
 <script lang="ts">
@@ -25,7 +25,7 @@ import {
   IonToggle,
   IonSelectOption,
   IonInput,
-  IonSelect,
+  IonSelect, IonTextarea, IonLabel,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { checkmark,pulseOutline } from 'ionicons/icons';
@@ -34,11 +34,18 @@ import { icons } from '@/utils/svg';
 import BasicInputField from '@/components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import BasicForm from '@/components/BasicForm.vue'
-import {useMedicationsStore} from "@/apps/ANC/store/MedicationsStore";
+import {useMedicationsStore} from "@/apps/ANC/store/profile/MedicationsStore";
+import { modifyRadioValue,
+    getRadioSelectedValue,
+    getCheckboxSelectedValue,
+    getFieldValue,
+    modifyFieldValue,
+    modifyCheckboxValue} from '@/services/data_helpers'
 
 export default defineComponent({
   name: 'Menu',
   components:{
+    IonLabel, IonTextarea,
     IonContent,
     IonHeader,
     IonItem,
@@ -56,9 +63,19 @@ export default defineComponent({
   data() {
     return {
       iconsContent: icons,
-      medicationChecked : false,
-      medication: '' as any,
     };
+  },
+  mounted(){
+    this. handleOther()
+  },
+  watch:{
+     Medication:{
+          handler(){
+        this.handleOther()
+      },
+      deep:true
+     }
+   
   },
   computed: {
     ...mapState(useMedicationsStore, ["Medication"])
@@ -71,87 +88,55 @@ export default defineComponent({
       menuController.close()
       this.$router.push(url);
     },
-    medications(){
-      this.medicationChecked = !this.medicationChecked
-      if (this.medicationChecked) {
-        this.medication = 'none'
-      } else {this.medication = ''}
+    handleOther(){
+      if(getCheckboxSelectedValue(this.Medication,'Other')=='otherMedications'){
+        modifyFieldValue(this.Medication,'Other','displayNone',false)
+      }else{
+        modifyFieldValue(this.Medication,'Other','displayNone',true)
+      }
+     
     },
+    // medications(){
+    //   this.medicationChecked = !this.medicationChecked
+    //   if (this.medicationChecked) {
+    //     this.medication = 'none'
+    //   } else {this.medication = ''}
+    // },
   }
 });
 </script>
 
 <style scoped>
-#container {
-  text-align: center;
-
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
-}
-
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-
-  color: #8c8c8c;
-
-  margin: 0;
-}
-
-#container a {
-  text-decoration: none;
-}
-.foot_title{
-  color: #636363;
-  text-align: center;
-}
-.foot_content{
-  color:#00190E;
-  text-align: center;
-  border-bottom: solid 1px #ccc;
-  border-bottom-style: dashed;
-  padding: 10px 0px;
-  font-weight: 500;
-  font-size: 14px;
-}
-.first_col{
-  text-align: left;
-  font-weight: 400;
-  font-size: 14px;
-}
-.sub_item_body{
-  margin-left: 45px;
-}
-.foot_input{
+.section {
   width: 100%;
-  color: #636363;
-  text-align: left;
+  max-width: 1300px; /* Adjust max-width as needed */
+  margin-bottom: 20px;
+}
 
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 500px; /* Adjust max-width as needed */
 }
-.item-content {
-  background-color:#ffffff;
-}
-ion-select._item_eye {
-  --background: #fff;
 
+@media (max-width: 1500px) {
+  .container {
+    padding: 10px;
+  }
 }
-ion-item.item_eye_ {
-  --inner-border-width:0;
-  --background-hover: none;
+.sub_item_header{
+  font-weight: bold;
+  font-size: medium;
 }
-/* ion-toggle {
-    --track-background-checked: #006401
-} */
-ion-item.sub_item_body_close {
-  border-bottom: 2px dotted var(--ion-color-medium);
-  --inner-border-width:0;
+ion-card {
+  box-shadow:none;
+  background-color:inherit;
 }
 </style>

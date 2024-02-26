@@ -3,7 +3,7 @@
       <div class="content_manager" style="margin-top: unset;">
         <ion-toolbar  class="content_width primary_color_background">
           <ion-menu-button slot="start" />
-          <ion-title style="cursor: pointer;" @click="nav('/home')"><b>MAHIS-MNH</b></ion-title>
+          <ion-title style="cursor: pointer;" @click="nav('/home')"><b>MaHIS-MNH</b></ion-title>
           <ion-buttons slot="end" style="max-width: 500px;">
               <ToolbarSearch />
           </ion-buttons>
@@ -39,7 +39,7 @@
     components:{
         IonContent,
         IonHeader,
-        IonMenuButton,
+        // IonMenuButton,
         IonSearchbar,
         IonPage,
         IonTitle,
