@@ -8,6 +8,8 @@ import { alertController, loadingController, modalController, toastController } 
 
 import NCD from '@/apps/NCD/config/routes'
 import ANC from '@/apps/ANC/config/routes'
+import LABOUR from '@/apps/LABOUR/config/routes'
+import PNC from '@/apps/PNC/config/routes'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -36,7 +38,9 @@ const routes: Array<RouteRecordRaw> = [
     props: true
   },
   ...NCD,
-  ...ANC
+  ...ANC,
+  ...LABOUR,
+    ...PNC
 ]
 
 const router = createRouter({

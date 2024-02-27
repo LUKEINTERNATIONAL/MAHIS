@@ -3,9 +3,9 @@
   <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-              <basic-form :contentData="lmnp" @update:selected="handleInputData" @update:inputValue="handleInputData">></basic-form>
-              <basic-form :contentData="ultrasound"></basic-form>
-              <basic-form :contentData="palpation"></basic-form>
+              <basic-form :contentData="lmnp" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+              <basic-form :contentData="ultrasound" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+              <basic-form :contentData="palpation" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
 
             </ion-card-content>
     </ion-card>
@@ -50,6 +50,7 @@ import {
 } from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
 import {validateField} from "@/services/ANC/validation_service";
+import StandardValidations from "@/validations/StandardValidations";
 import HisDate from "@/utils/Date";
 
 
@@ -78,8 +79,8 @@ export default defineComponent({
       return {
           iconsContent: icons,
           currentPregnanciesInstance: {} as any,
-        inputField: '' as any,
-        setName: '' as any,
+          inputField: '' as any,
+          setName: '' as any,
           currentSection: 0,
          
       };
@@ -92,8 +93,10 @@ export default defineComponent({
         ...mapState(useCurrentPregnanciesStore,["tetanus"]),
         ...mapState(useCurrentPregnanciesStore,["ultrasound"]),
           LMNP(){ return getRadioSelectedValue(this.lmnp, 'LMNP')},
-          lmnpEED(){ return getFieldValue(this.lmnp, 'lmnpEED','value')}
-       
+          lmnpEED(){ return getFieldValue(this.lmnp, 'lmnpEED','value')},
+          lmnpGestationAge(){ return getFieldValue(this.lmnp, 'lmnpGestationAge','value')},
+          lmnpDate(){ return getFieldValue(this.lmnp, 'lmnpDate','value')}
+
   
       },
       mounted(){
@@ -135,14 +138,33 @@ export default defineComponent({
           return validateField(this.lmnp,event.name, (this as any)[event.name]);
         },
         async handleInputData(event: any) {
-          // this.validationRules(event)
-          // this.calculateEDDFromLNMP(event)
+          this.validationRules(event)
+          this.calculateGestationAgefromLNMP(event)
         },
+
+        calculateGestationAgefromLNMP(event: any) {
+          if (event.name == "lmnpDate") {
+            const lmnpDateValue = Date.parse(getFieldValue(this.lmnp, 'lmnpDate', 'value'));
+            if (!isNaN(lmnpDateValue)) {
+              const currentDate = new Date(); // current date
+              const lmnpGestationAge = Math.floor((currentDate - lmnpDateValue) / (1000 * 60 * 60 * 24 * 7)); // calculate gestation age in weeks
+              modifyFieldValue(this.lmnp, 'lmnpGestationAge', 'value', lmnpGestationAge);
+            } else {
+              modifyFieldValue(this.lmnp, 'lmnpGestationAge', 'value', null);
+            }
+          }
+        },
+
+
 
         handleLMNP(){
           if(getRadioSelectedValue(this.lmnp, 'Yes')=='yes'){
-            modifyFieldValue(this.lmnp,'lmnp date','displayNone', false)
-          }   else {modifyFieldValue(this.lmnp,'lmnp date','displayNone', true)}
+            modifyFieldValue(this.lmnp,'lmnpDate','displayNone', false)
+            modifyFieldValue(this.lmnp,'lmnpGestationAge','displayNone', false)
+          }   else {
+            modifyFieldValue(this.lmnp,'lmnpDate','displayNone', true)
+            modifyFieldValue(this.lmnp,'lmnpGestationAge','displayNone', true)
+          }
         },
 
         handleUltrasound(){

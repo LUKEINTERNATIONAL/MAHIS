@@ -8,7 +8,9 @@ export function validateField(data: any,fieldName: string, value: any) {
         'Stillbirths':()=>Validation.checkMinMax(value,1,15),
         'LiveBirths':()=>Validation.required(value),
         'Parity':()=>Validation.required(value),
-        'Abortions':()=>Validation.required(value)
+        'Abortions':()=>Validation.required(value),
+        'lmnpDate':()=>Validation.required(value),
+        'lmnpGestationAge':()=>Validation.required(value),
     };
     const isValid = validationRules[fieldName]?.() == null;
 

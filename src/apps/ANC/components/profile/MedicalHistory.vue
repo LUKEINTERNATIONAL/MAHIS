@@ -31,26 +31,26 @@
             </ion-card-content>
             </ion-card>
 
-        <!-- HIV -->
-            <ion-card  class="section">
-            <ion-card-header>
-                <ion-card-title class="dashed_bottom_border sub_item_header">HIV</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-                <basic-form :contentData="hivTest"></basic-form>
-            </ion-card-content>
-            </ion-card>
+<!--        &lt;!&ndash; HIV &ndash;&gt;-->
+<!--            <ion-card  class="section">-->
+<!--            <ion-card-header>-->
+<!--                <ion-card-title class="dashed_bottom_border sub_item_header">HIV</ion-card-title>-->
+<!--            </ion-card-header>-->
+<!--            <ion-card-content>-->
+<!--                <basic-form :contentData="hivTest"></basic-form>-->
+<!--            </ion-card-content>-->
+<!--            </ion-card>-->
 
         <!-- Syphilis Test -->
 
-            <ion-card class="section">
-            <ion-card-header>
-                <ion-card-title class="dashed_bottom_border sub_item_header">Syphilis</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-                <basic-form :contentData="syphilisTest"></basic-form>
-            </ion-card-content>
-            </ion-card>
+<!--            <ion-card class="section">-->
+<!--            <ion-card-header>-->
+<!--                <ion-card-title class="dashed_bottom_border sub_item_header">Syphilis</ion-card-title>-->
+<!--            </ion-card-header>-->
+<!--            <ion-card-content>-->
+<!--                <basic-form :contentData="syphilisTest"></basic-form>-->
+<!--            </ion-card-content>-->
+<!--            </ion-card>-->
 
 
 <!--    &lt;!&ndash; Navigation Buttons &ndash;&gt;-->
@@ -144,6 +144,7 @@ export default defineComponent({
         this. handleSyphilisNotDone()
         this.handleSpecifySyphilis()
         this.handleTestNotDone()
+      this.handleHIVPositive()
 
     },
 
@@ -185,6 +186,7 @@ export default defineComponent({
         exisitingChronicHealthConditions:{
             handler(){
                 this.handleChronicCondition()
+                this.handleHIVPositive()
             },
             deep:true
         }
@@ -199,6 +201,24 @@ export default defineComponent({
 
     },
     methods:{
+
+
+        // displaying other input fields when hiv positive is checked
+      handleHIVPositive(){
+         if(getCheckboxSelectedValue(this.exisitingChronicHealthConditions,'HIV positive')?.value=='hiv positive')
+         {
+           modifyFieldValue(this.exisitingChronicHealthConditions,'HIV test date', 'displayNone', false)
+           modifyRadioValue(this.exisitingChronicHealthConditions, 'Is client on ART','displayNone', false)
+           modifyFieldValue(this.exisitingChronicHealthConditions,'facility for art', 'displayNone', false)
+
+
+         }else {
+           modifyFieldValue(this.exisitingChronicHealthConditions,'HIV test date', 'displayNone', true)
+           modifyRadioValue(this.exisitingChronicHealthConditions, 'Is client on ART','displayNone', true)
+           modifyFieldValue(this.exisitingChronicHealthConditions,'facility for art', 'displayNone', true)
+
+         }
+      },
         handleHivResults(){
             if(getRadioSelectedValue(this.hivTest,'test2') == 'hivPositive'){
                 modifyRadioValue(this.hivTest,'test1','displayNone',false)
@@ -283,7 +303,7 @@ export default defineComponent({
             }else{
                 modifyFieldValue(this.exisitingChronicHealthConditions,'Specify',"displayNone",true)
             }
-            const checkBoxes=["Auto immune desease","Asthma","Sickle cell","Anemia",
+            const checkBoxes=["Auto immune desease","Asthma","Sickle cell","Anemia", "HIV positive",
                              "Thalassemia","Gynaecological","CCF","RHD","Gestational diabetes",
                              "pre-existing type 1","pre-existing type 2","Epilespy","Hypertension","Kidney","TB","Mental  illiness","Other"]
 
@@ -297,6 +317,10 @@ export default defineComponent({
                     modifyCheckboxValue(this.exisitingChronicHealthConditions, checkbox, 'disabled', false);
                 });
                 }
+
+
+
+
 
         },
         handleHivConducted(){
@@ -344,17 +368,6 @@ export default defineComponent({
             console.log(getCheckboxSelectedValue(this.syphilisTest,'notDone'))
         },
 
-
-      goToNextSection() {
-        if (this.currentSection < 4) {
-          this.currentSection++;
-        }
-      },
-      goToPreviousSection() {
-        if (this.currentSection > 0) {
-          this.currentSection--;
-        }
-      },
 
     }
 })

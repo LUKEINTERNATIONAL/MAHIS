@@ -41,6 +41,12 @@
                 <ion-card class="start_new_co" style=" margin-bottom: 20px;" >
                     + Enroll in ANC Program
                 </ion-card>
+              <ion-card class="start_new_co" style=" margin-bottom: 20px;" >
+                + Enroll in Labour and delivery program
+              </ion-card>
+              <ion-card class="start_new_co" style=" margin-bottom: 20px;" >
+                + Enroll in PNC program
+              </ion-card>
                 <ion-card class="start_new_co" style=" margin-bottom: 20px;" >
                     + Enroll in OPD Program
                 </ion-card>
@@ -77,7 +83,7 @@
                                     </li>
                                     <li class="form_list">
                                         <span v-html="iconsContent.referal" ></span>
-                                        <div class="form_list_content">Referal</div>
+                                        <div class="form_list_content">Referral</div>
                                     </li>
                                 </ul>
                                 

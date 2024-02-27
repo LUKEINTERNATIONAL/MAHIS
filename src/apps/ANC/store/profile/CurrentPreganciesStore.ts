@@ -38,7 +38,7 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
         },
         {
             sectionHeader:'',
-            classDash: 'dashed_bottom_border _padding',
+            classDash: '',
             data:
                 {
                     rowData: [
@@ -48,14 +48,14 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
 
                                     inputHeader: 'LNMP date*',
                                     value: '',
-                                    name: 'lmnp date',
+                                    name: 'lmnpDate',
                                     eventType: 'input',
                                     alertsError: false,
                                     alertsErrorMassage: '',
                                     isDatePopover: true,
                                     icon: icons.calenderPrimary,
                                     placeholder: 'Pick the date',
-                                    inputWidth:'55%'
+                                    inputWidth:'55%',
                                 },
 
                             ],
@@ -78,7 +78,38 @@ export const useCurrentPregnanciesStore = defineStore('currentPregnanciesStore',
                         index: ''
                     }
                 ],
+        },
+        {
+            sectionHeader:'',
+            classDash: 'dashed_bottom_border _padding',
+            data:
+                {
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                    displayNone:true,
+                                    inputHeader: 'Gestation age',
+                                    value: '',
+                                    name: 'lmnpGestationAge',
+                                    eventType: 'input',
+                                    alertsError: false,
+                                    alertsErrorMassage: '',
+                                    inputWidth:'55%',
+                                    unit: 'Weeks',
+                                    disabled:'disabled'
+                                },
+
+                            ],
+
+                        },
+
+
+                    ],
+
+                },
         }
+
 
     ] as any,
     ultrasound:[

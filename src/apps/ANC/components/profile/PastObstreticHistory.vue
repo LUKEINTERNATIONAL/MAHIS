@@ -1,9 +1,15 @@
 <template>
     <div class="container">
         <ion-card class="section">
+          <ion-card class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">The client is below 19, complete the HEADSS assessment</ion-card-title></ion-card-header>
+            <ion-card-content>
+              <basic-form :contentData="HeadssAssesment"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+            </ion-card-content>
+          </ion-card>
             <ion-card-header> <ion-card-title class="sub_item_header">History on previous pregnancies</ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="prevPregnancies"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+              <basic-form :contentData="prevPregnancies"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
             </ion-card-content>
         </ion-card>
 
@@ -41,7 +47,6 @@ import {
             IonTitle, 
             IonToolbar, 
             IonMenu,
-            menuController,
             IonToggle,
             IonSelectOption,
             IonInput,
@@ -104,6 +109,7 @@ export default defineComponent({
   },
   computed:{
         ...mapState(useObstreticHistoryStore,["prevPregnancies"]),
+        ...mapState(useObstreticHistoryStore,["HeadssAssesment"]),
         ...mapState(useObstreticHistoryStore,["preterm"]),
         ...mapState(useObstreticHistoryStore,["abnormalities"]),
         ...mapState(useObstreticHistoryStore,["modeOfDelivery"]),
@@ -219,7 +225,6 @@ export default defineComponent({
             this.validaterowData(event)
             this.calculateParity(event)
             this.calculateLiveBirths(event)
-            this.calculateStillBirths(event)
       },
 
       // Validations
@@ -285,6 +290,7 @@ export default defineComponent({
             }
           },
 
+          //Calculating parity.
       calculateParity(event: any) {
         if (event.name === 'LiveBirths' || event.name === 'Stillbirths') {
           const stillbirthValue = parseInt(getFieldValue(this.prevPregnancies, 'Stillbirths', 'value'));
@@ -293,10 +299,9 @@ export default defineComponent({
             const parityValue = stillbirthValue + liveBirthValue;
             modifyFieldValue(this.prevPregnancies, 'Parity', 'value', parityValue);
           } else {
-            modifyFieldValue(this.prevPregnancies, 'LiveBirths', 'value', null);           }
+            modifyFieldValue(this.prevPregnancies, 'Parity', 'value', null);           }
         }
       },
-
       calculateLiveBirths(event:any){
         if (event.name === 'Gravida' || event.name === 'Abortions') {
           const gravidaValue= parseInt(getFieldValue(this.prevPregnancies, 'Gravida', 'value'));

@@ -1005,7 +1005,8 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
              {
                  header:{
                      title: '',
-                     selectedValue: ''
+                     selectedValue: '',
+                     name:'HIV positive'
                  },
                  data:[
                      {
@@ -1085,11 +1086,11 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                  {
                      colData:[
                          {
-                             displayNone:false,
+                             displayNone:true,
                              inputHeader: 'HIV test date',
                              icon: icons.calenderPrimary,
                              value: '',
-                             name: 'testDate',
+                             name: 'HIV test date',
                              eventType: 'blur',
                              inputWidth: "89%",
                              required: true,
@@ -1106,12 +1107,12 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
      {
          selectdData: [],
          isFinishBtn: false,
-         classDash: 'dashed_bottom_border',
          radioBtnContent:{
              header:{
                  title: 'Is the client on ART',
                  selectedValue: '',
-                 name:"hivOption"
+                 name:"Is client on ART",
+                 displayNone:true
              },
              data:[
                  {
@@ -1142,6 +1143,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                      {
                          colData:[
                              {
+                                 displayNone:true,
                                  inputHeader: 'Facility for ART',
                                  icon: icons.search,
                                  value: '',
@@ -1151,6 +1153,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                                  required: true,
                                  alertsError: false,
                                  alertsErrorMassage: '',
+                                 inputWidth: "89%",
                                  placeholder:'Search for facility',
                                  popOverData: {
                                      filterData: false,
@@ -1161,13 +1164,13 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                              },
 
                          ],
-                         btns:[
-                             {
-                                 name: "Save",
-                                 fill: "clear",
-                                 icon: icons.plus
-                             }
-                         ]
+                         // btns:[
+                         //     {
+                         //         name: "Save",
+                         //         fill: "clear",
+                         //         icon: icons.plus
+                         //     }
+                         // ]
                      }
                  ],
 

@@ -19,6 +19,7 @@
                             :inputWidth="col.inputWidth"
                             :inputValue="col.value"
                             :eventType="col.eventType"
+                            :disabled="col.disabled"
                             @update:inputValue="handleInput(contentData, col, $event,'updateInput')"
                             @clicked:inputValue="handleInput(contentData, col, $event,'clickedInput')"
                             :popOverData="col.popOverData"
@@ -35,6 +36,7 @@
                             :inputWidth="col.inputWidth"
                             :inputValue="col.value"
                             :eventType="col.eventType"
+                            :disabled="col.disabled"
                             @update:dateValue="handleInput(contentData, col, $event,'updateDate')"
                            
                         />
