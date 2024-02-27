@@ -141,7 +141,6 @@
         },
         saveData(){
 
-          this.$router.push('Treatment');
 
         },
       }

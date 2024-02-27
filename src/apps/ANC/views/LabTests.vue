@@ -86,14 +86,15 @@ export default defineComponent({
     methods:{
   markWizard(){},
       saveData() {
-        // Simulate saving data
-        this.loading = true; // Show the spinner while data is being saved
-        setTimeout(() => {
-          // After some time (simulating a server request), hide the spinner
-          this.loading = false;
-          // Redirect to counselling page
-          this.$router.push('counselling');
-        }, 8000); // Simulate a 2-second delay
+        // // Simulate saving data
+        // this.loading = true; // Show the spinner while data is being saved
+        // setTimeout(() => {
+        //   // After some time (simulating a server request), hide the spinner
+        //   this.loading = false;
+        //   // Redirect to counselling page
+        //   this.$router.push('counselling');
+        // }, 8000); // Simulate a 2-second delay
+        this.$router.push('Treatment');
       },
     }
 

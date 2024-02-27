@@ -1,13 +1,13 @@
 <template>
     <div class="container">
-        <ion-card v-if="currentSection === 0" class="section">
+        <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="diagnoses"> </basic-form>
             </ion-card-content>
     </ion-card>
 
-    <ion-card v-if="currentSection === 1" class="section">
+    <ion-card class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="hypertension"> </basic-form>
@@ -17,7 +17,7 @@
             </ion-card-content>
     </ion-card>
 
-    <ion-card v-if="currentSection === 2" class="section">
+    <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="hiv"> </basic-form>
@@ -27,7 +27,7 @@
             </ion-card-content>
     </ion-card>
 
-    <ion-card v-if="currentSection === 3" class="section">
+    <ion-card class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="hepatitisC"> </basic-form>
@@ -37,7 +37,7 @@
             </ion-card-content>
     </ion-card>
 
-    <ion-card v-if="currentSection === 4" class="section">
+    <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>  
                 <basic-form :contentData="ASB"> </basic-form>
@@ -47,12 +47,6 @@
                 <basic-form :contentData="anaemia"> </basic-form>
             </ion-card-content>
     </ion-card>
-
-  <!-- Navigation Buttons -->
-  <div class="navigation-buttons">
-      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
-      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
-    </div> 
 
     </div>
 
@@ -87,6 +81,12 @@ import BasicForm from '../../../../components/BasicForm.vue';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import { icons } from '../../../../utils/svg'; 
 import {useDiagnosisStore} from '../../store/diagnosisStore';
+import { modifyRadioValue,
+    getRadioSelectedValue,
+    getCheckboxSelectedValue,
+    getFieldValue,
+    modifyFieldValue,
+    modifyCheckboxValue} from '@/services/data_helpers'
 export default defineComponent ({
     name: "diagnosisTreatment",
     components: {
@@ -135,6 +135,42 @@ export default defineComponent ({
         ...mapState(useDiagnosisStore, ["anaemia"]),
 
     },
+    mounted(){
+      this.handleHyperOther()
+      this. handledeHiv()
+      this.handleCounselHiv()
+      this.handleHperB()
+      this.handleasbReason()
+      this.handleOtherasb()
+    },
+    watch:{
+      hypertensionReason:{
+        handler(){
+          this.handleHyperOther()
+        },
+        deep:true
+      },
+      hiv:{
+        handler(){
+          this. handledeHiv()
+          this.handleCounselHiv()
+        },deep:true
+      },
+      hepatitisReason:{
+        handler(){
+          this.handleHperB()
+        },
+        deep:true
+      },
+      asbReason:{
+        handler(){
+          this.handleasbReason()
+          this.handleOtherasb()
+        },
+        deep:true
+      }
+
+    },
     methods :{
         goToNextSection() {
       if (this.currentSection < 4) {
@@ -144,6 +180,48 @@ export default defineComponent ({
     goToPreviousSection() {
       if (this.currentSection > 0) {
         this.currentSection--;
+      }
+    },
+    handleHyperOther(){
+      if(getRadioSelectedValue(this.hypertensionReason,'hypReasons')=='other'){
+        modifyFieldValue(this.hypertensionReason,'hypertensionCounselling','displayNone',false)
+      }else{
+        modifyFieldValue(this.hypertensionReason,'hypertensionCounselling','displayNone',true)
+      }
+    },
+    handledeHiv(){
+      if(getRadioSelectedValue(this.hiv,'hiv')=='other'){
+        modifyFieldValue(this.hiv,'hivCounselling','displayNone',false)
+      }else{
+         modifyFieldValue(this.hiv,'hivCounselling','displayNone',true)
+      }
+    },
+    handleCounselHiv(){
+      if(getRadioSelectedValue(this.hiv,'cousellHiv')=='no'){
+        modifyRadioValue(this.hiv,'hiv','displaNone',false)
+      }else{
+        modifyRadioValue(this.hiv,'hiv','displaNone',true)
+      }
+    },
+    handleHperB(){
+      if(getRadioSelectedValue(this.hepatitisReason,'hepatitisB')=='other'){
+        modifyFieldValue(this.hepatitisReason,'hypertensionCounselling','displayNone',false)
+      }else{
+         modifyFieldValue(this.hepatitisReason,'hypertensionCounselling','displayNone',true)
+      }
+    },
+    handleasbReason(){
+      if(getRadioSelectedValue(this.asbReason,'SevenDay')=='no'){
+        modifyRadioValue(this.asbReason,'SevenDayReason','displayNone',false)
+      }else{
+        modifyRadioValue(this.asbReason,'SevenDayReason','displayNone',true)
+      }
+    },
+    handleOtherasb(){
+      if(getRadioSelectedValue(this.asbReason,'SevenDayReason')=='other'){
+        modifyFieldValue(this.asbReason,'hypertensionCounselling','displayNone',false)
+      }else{
+        modifyFieldValue(this.asbReason,'hypertensionCounselling','displayNone',true)
       }
     },
 

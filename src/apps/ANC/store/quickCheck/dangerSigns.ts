@@ -14,15 +14,15 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
                             selectedValue: ''
                         },
                         data:[
-
                             {
-                                name: 'Bleeding vaginally',
-                                value: 'BleedingVaginally',
+                                name: 'No danger signs',
+                                value: 'NoDangerSigns',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
                                 justify: 'space-between',
                             },
+
                             {
                                 name: 'Central cyanosis',
                                 value: 'CentralCyanosis',
@@ -225,7 +225,7 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
             },
             {
                 selectdData: [],
-                classDash: 'dashed_bottom_border',
+                classDash: '',
                 checkboxBtnContent:
                     {
                         header:{
@@ -234,13 +234,14 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
                         },
                         data:[
                             {
-                                name: 'No danger signs',
-                                value: 'NoDangerSigns',
+                                name: 'Bleeding vaginally',
+                                value: 'BleedingVaginally',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
                                 justify: 'space-between',
                             },
+
                             {
                                 name: 'Other',
                                 value: 'other',
@@ -273,7 +274,7 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "85%",
-                                        required: true
+                                       
                                     },
 
                                 ]
@@ -342,14 +343,54 @@ export const useDangerSignsStore = defineStore('dangerSignsStore',{
 
             }
 
-        ] as any
+        ] as any,
+        PreviousVisitDate:[
+            {
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                data:
+                    {
+                        rowData: [
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Specify date*',
+                                        value: '',
+                                        name: 'ancDate',
+                                        required: true,
+                                        eventType: 'input',
+                                        alertsError: false,
+                                        alertsErrorMassage: '',
+                                        isDatePopover: true,
+                                        icon: icons.calenderPrimary,
+                                        placeholder: 'Pick the date',
+                                        inputWidth:'55%'
+                                    },
+
+                                ],
+
+                            },
+
+
+                        ],
+
+                    },
+            }
+        ]
+
     }),
 
     actions:{
         addDangerSigns(data: any){
             this.DangerSigns = data
+        },
+        setPreviousVisits(data:any){
+            this.PreviousVisit=data
+        },
+        setPreviousVisitDate (data:any){
+            this.PreviousVisitDate=data
         }
     },
-    persist:true,
+    // persist:true,
 
 })

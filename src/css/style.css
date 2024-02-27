@@ -390,6 +390,12 @@ ion-toast.custom-toast::part(container) {
     color: #636363;
 
 }
-.bold{
-    font-weight: bold;
+.previousView{
+    width: 100%;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+.previousLabel{
+    font-weight: 600;
+    color: #000;
 }

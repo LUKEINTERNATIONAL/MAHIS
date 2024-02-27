@@ -89,7 +89,8 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "55%",
-                                        required: true
+                                        displayNone: true
+                                        
                                     },
 
                                 ]
@@ -207,7 +208,8 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "55%",
-                                        required: true
+                                        displayNone: true
+                                        
                                     },
 
                                 ]
@@ -269,7 +271,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "55%",
-                                        required: true
+                                        
                                     },
 
                                 ]
@@ -336,7 +338,8 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "55%",
-                                        required: true
+                                        displayNone:true
+                                        
                                     },
 
                                 ]
@@ -350,7 +353,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
     }),
     actions:{
         setVitals(data: any){
-            this.vitals = data
+            this.clinicalEnquiry = data
         }
     },
     persist:true,

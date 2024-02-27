@@ -15,12 +15,19 @@ export const useDiagnosisStore = defineStore('DiagnosisStore', {
                                     {
                                         inputHeader: 'Diagnosis',
                                         icon: icons.search,
+                                        popOver: true,
                                         value: '',
                                         name: 'diagnosis',
                                         eventType: 'input',
                                         required: true,
                                         alertsError: false,
-                                        alertsErrorMassage: ''
+                                        alertsErrorMassage: '',
+                                        popOverData: {
+                                            filterData: false,
+                                            data: []
+                                        } ,
+                                        id: '',
+                                        idName: 'district_id'
                                     },
                                     
                                 ],

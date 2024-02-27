@@ -35,6 +35,12 @@ import BasicInputField from '@/components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import BasicForm from '@/components/BasicForm.vue'
 import {useMedicationsStore} from "@/apps/ANC/store/profile/MedicationsStore";
+import { modifyRadioValue,
+    getRadioSelectedValue,
+    getCheckboxSelectedValue,
+    getFieldValue,
+    modifyFieldValue,
+    modifyCheckboxValue} from '@/services/data_helpers'
 
 export default defineComponent({
   name: 'Menu',
@@ -59,6 +65,18 @@ export default defineComponent({
       iconsContent: icons,
     };
   },
+  mounted(){
+    this. handleOther()
+  },
+  watch:{
+     Medication:{
+          handler(){
+        this.handleOther()
+      },
+      deep:true
+     }
+   
+  },
   computed: {
     ...mapState(useMedicationsStore, ["Medication"])
   },
@@ -70,11 +88,32 @@ export default defineComponent({
       menuController.close()
       this.$router.push(url);
     },
-    medications(){
-      this.medicationChecked = !this.medicationChecked
-      if (this.medicationChecked) {
-        this.medication = 'none'
-      } else {this.medication = ''}
+    handleOther(){
+      if(getCheckboxSelectedValue(this.Medication,'Other')?.value =='otherMedications'){
+        modifyFieldValue(this.Medication,'Other','displayNone',false)
+      }else{
+        modifyFieldValue(this.Medication,'Other','displayNone',true)
+      }
+      const checkBoxes=['Oral PreP for HIV','Analgesic','Anti-consulsive',
+                        'Anti-TB','Antihelmintic','Antimarials','Antitussive',
+                        'Aspirin','Calcium','Doxylamine','Hematinic','Iron',
+                        'Metoclopramide','Thyroid medication','Antiacids',
+                        'Anti-psychotics','Anti-diabetic','Anti-hypertensive',
+                        'ARVs','Antivirals','Asthamatic','Co-trimoxazole',
+                        'Folic acid','Hemorrhoidal medication','Magnesium',
+                        'Multivitamin','Vitamin A','Other',]
+
+     if (getCheckboxSelectedValue(this.Medication, 'None')?.checked) {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.Medication, checkbox, 'checked', false);
+            modifyCheckboxValue(this.Medication, checkbox, 'disabled', true);
+        });
+        } else {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.Medication, checkbox, 'disabled', false);
+        });
+    }
+     
     },
   }
 });

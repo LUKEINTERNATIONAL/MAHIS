@@ -4,7 +4,7 @@
       <div class="login-container">
         <ion-card style="background-color: #fff;">
           <ion-card-content>
-          <ion-img class="login_img" src="/public/mw.png" id="logo"></ion-img>
+          <ion-img class="login_img" :src="loginIcon" id="logo"></ion-img>
           <ion-title class="login-title">MAHIS</ion-title>
               <ion-input 
               v-model="username"
@@ -57,6 +57,7 @@
   import { eye } from 'ionicons/icons';
   import { AuthService, InvalidCredentialsError } from "@/services/auth_service"
   import { toastWarning, toastDanger } from "@/utils/Alerts";
+  import img from "@/utils/Img"
 
   export default defineComponent({
     name: "Home",
@@ -88,6 +89,11 @@
         password: '' as any,
         username: '' as any,
         togglePasswordVisibility: false,
+      }
+    },
+    computed:{
+      loginIcon(){
+        return img('mw.png')
       }
     },
     setup() {

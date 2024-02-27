@@ -1,36 +1,36 @@
 <template>
   <div class="container">
     <!-- Height and Weight Section -->
-    <ion-card v-if="currentSection === 0" class="section">
+    <ion-card class="section">
       <ion-card-header>
         <ion-card-title class="dashed_bottom_border sub_item_header">Height and Weight</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="heightWeight"></basic-form>
+        <basic-form :contentData="heightWeight" @update:inputValue="validaterowData($event)"></basic-form>
       </ion-card-content>
     </ion-card>
 
     <!-- Blood Pressure Section -->
-    <ion-card v-if="currentSection === 1" class="section">
+    <ion-card  class="section">
       <ion-card-header>
         <ion-card-title class="dashed_bottom_border sub_item_header">Blood Pressure</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="bloodPressure"></basic-form>
+        <basic-form :contentData="bloodPressure" @update:inputValue="validaterowData($event)"></basic-form>
       </ion-card-content>
     </ion-card>
-    <!-- Pre-eclampsia Section -->
-    <ion-card v-if="currentSection === 2" class="section">
+    <!-- Temperature and Pulse Section -->
+    <ion-card  class="section">
       <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header"> Pre-eclampsia with severe symptoms</ion-card-title>
+        <ion-card-title class="dashed_bottom_border sub_item_header">Temperature and Pulse</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="preEclampsia"></basic-form>
+        <basic-form :contentData="temperature" @update:inputValue="validaterowData($event)"></basic-form>
+        <basic-form :contentData="pulse" @update:inputValue="validaterowData($event)"></basic-form>
       </ion-card-content>
     </ion-card>
-
     <!-- Respiratory Exam -->
-    <ion-card v-if="currentSection === 3" class="section">
+    <ion-card class="section">
       <ion-card-header>
         <ion-card-title class="dashed_bottom_border sub_item_header">Respiration Exam</ion-card-title>
       </ion-card-header>
@@ -38,23 +38,16 @@
         <basic-form :contentData="respiration"></basic-form>
       </ion-card-content>
     </ion-card>
-
-    <!-- Temperature and Pulse Section -->
-    <ion-card v-if="currentSection === 4" class="section">
+    <!-- Pre-eclampsia Section -->
+    <ion-card  class="section">
       <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Temperature and Pulse</ion-card-title>
+        <ion-card-title class="dashed_bottom_border sub_item_header"> Pre-eclampsia with severe symptoms</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="temperature"></basic-form>
-        <basic-form :contentData="pulse"></basic-form>
+        <basic-form :contentData="preEclampsia" @update:inputValue="validaterowData($event)"></basic-form>
       </ion-card-content>
     </ion-card>
 
-    <!-- Navigation Buttons -->
-    <div class="navigation-buttons">
-      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
-      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
-    </div>
   </div>
 </template>
 
@@ -83,16 +76,16 @@ import {
     import { arePropertiesNotEmpty } from "@/utils/Objects";
     import HisDate from "@/utils/Date";
     import BasicInputField from "@/components/BasicInputField.vue"
-    import { VitalsService } from "@/services/vitals_service";
+    import { VitalsService} from "@/services/ANC/anc_vitals_service";
     import BasicForm from '@/components/BasicForm.vue';
     import { Service } from "@/services/service";
-import {
-  modifyRadioValue,
-  modifyCheckboxValue,
-  getRadioSelectedValue,
-  getCheckboxSelectedValue,
-  modifyFieldValue
-} from "@/services/data_helpers";
+    import {
+    modifyRadioValue,
+    modifyCheckboxValue,
+    getRadioSelectedValue,
+    getCheckboxSelectedValue,
+    modifyFieldValue
+  } from "@/services/data_helpers";
 
 export default defineComponent({
     components:{
@@ -111,6 +104,11 @@ export default defineComponent({
     data() {
     return {
         iconsContent: icons,
+        BMI: {} as any,
+        BPStatus: {} as any,
+        vValidations: '' as any,
+        hasValidationErrors: [] as any,
+        vitalsInstance: {} as any,
         currentSection: 0, // Initialize currentSection to 0
     };
   },
@@ -125,11 +123,15 @@ export default defineComponent({
         ...mapState(useAncVitalsStore,["preEclampsia"]),
     },
     mounted(){
+        const userID: any  = Service.getUserID()
+        this.vitalsInstance = new VitalsService(this.demographics.patient_id,userID);
         const bloodPressure=useAncVitalsStore()
         const respiration=useAncVitalsStore()
         this.handleUnAbleToRecordBloodPressure()
         this.handleRespirationExam()
         this.handleOther()
+        this.validaterowData({})
+
     },
     watch: {
         vitals: {
@@ -218,49 +220,33 @@ export default defineComponent({
             const vitalsStore = useVitalsStore()
             vitalsStore.setVitals(this.vitals)
         },
-        async validaterowData(inputData: any) {
-            this.hasValidationErrors = []
-            
-            this.vitals.forEach((section,sectionIndex) => {
-                section.data.rowData.forEach((col: any,colIndex) => {
-                    if (col.colData[0].inputHeader == 'Systolic Pressure*') {
-                            const isSystolicValid = this.vitalsInstance.validator(col.colData[0]) == null && this.vitalsInstance.validator(col.colData[1]) == null;
-                            this.BPStatus = isSystolicValid ? this.getBloodPressureStatus(col.colData[0].value,col.colData[1].value) : {};
-                            this.updateBP(col.colData[0].value,col.colData[1].value);
-                        }
+      validaterowData(inputData: any) {
+        this.hasValidationErrors = [];
 
-                        if (col.colData[0].inputHeader == 'Height*') {
-                            const isHeightValid = this.vitalsInstance.validator(col.colData[0]) == null && this.vitalsInstance.validator(col.colData[1]) == null;
-                            this.BMI = isHeightValid ? this.setBMI(col.colData[1].value,col.colData[0].value) : {};
-                            this.updateBMI();
-                        }
-                        
-                        col.colData.some((input: any, inputIndex: any) => {
-                            const validateResult = this.vitalsInstance.validator(input);
-                            if (validateResult?.length > 0) {
-                                this.hasValidationErrors.push('false');
-                                if (input.inputHeader === inputData.inputHeader) {
-                                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsError = true
-                                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = validateResult.flat(Infinity)[0]
-                                    return true;
-                                }
-                            } else {
-                                this.hasValidationErrors.push('true');
-                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsError = false
-                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = ''
-                                    
-                            }
-
-                            return false;
-                        });
-                });
+        this.heightWeight.forEach((section, sectionIndex) => {
+          section.data.rowData.forEach((col: any, colIndex) => {
+            col.colData.forEach((input: any, inputIndex) => {
+              const validateResult = this.vitalsInstance.validator(input);
+              if (validateResult?.length > 0) {
+                this.hasValidationErrors.push(false);
+                if (input.inputHeader === inputData.inputHeader) {
+                  this.heightWeight[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsError = true;
+                  this.heightWeight[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = validateResult.flat(Infinity)[0];
+                }
+              } else {
+                this.hasValidationErrors.push(true);
+                this.heightWeight[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsError = false;
+                this.heightWeight[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = '';
+              }
             });
+          });
+        });
 
-            this.vitals.validationStatus = !this.hasValidationErrors.includes('false');
-          
-            
-        },
-        async setBMI(weight: any,height: any){
+        // Update the validation status of the section
+        this.heightWeight.validationStatus = !this.hasValidationErrors.includes(false);
+      },
+
+      async setBMI(weight: any,height: any){
             if(this.demographics.gender && this.demographics.birthdate){
                 this.BMI = await BMIService.getBMI(
                     parseInt(weight),

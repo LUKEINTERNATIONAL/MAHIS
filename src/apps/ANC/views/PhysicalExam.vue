@@ -45,7 +45,7 @@ import Stepper from "@/apps/ANC/components/Stepper.vue";
 import { Service } from "@/services/service";
 import { toastWarning,popoverConfirmation, toastSuccess } from '@/utils/Alerts';
 export default defineComponent({
-  name: "Home",
+  name: "PhysicalExam",
   components:{
     IonContent,
     IonHeader,
@@ -120,7 +120,7 @@ export default defineComponent({
       StepperData:[
         {
           'title': 'Vitals',
-          'componet': 'AncVitals',
+          'componet': 'vitals',
           'value': '1'
         },
         {
@@ -203,12 +203,12 @@ export default defineComponent({
         this.wizardData[2].checked = false;
       }
     },
-    deleteDisplayData(data: any){
-      return  data.map((item: any) => {
-        delete item?.display;
-        return item?.data;
-      });
-    },
+    // deleteDisplayData(data: any){
+    //   return  data.map((item: any) => {
+    //     delete item?.display;
+    //     return item?.data;
+    //   });
+    // },
     saveData(){
 
       this.$router.push('labTests');

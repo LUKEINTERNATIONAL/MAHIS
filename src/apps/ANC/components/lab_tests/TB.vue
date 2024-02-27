@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <ion-card v-if="currentSection === 0" class="section">
+        <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="tbTest"></basic-form>
@@ -8,19 +8,13 @@
             </ion-card-content>
     </ion-card>
 
-        <ion-card v-if="currentSection === 1" class="section">
+        <ion-card class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="reasons"></basic-form>
             </ion-card-content>
     </ion-card>
 
-
-        <!-- Navigation Buttons -->
-    <div class="navigation-buttons">
-      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
-      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
-    </div> 
  </div>
 </template>
 
@@ -47,7 +41,13 @@ import { mapState } from 'pinia';
 import BasicForm from '@/components/BasicForm.vue';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import { icons } from '../../../../utils/svg'; 
-import {useTBScreeningStore} from '../../store/TBScreeningStore'
+import {useTBScreeningStore} from '../../store/TBScreeningStore';
+import { modifyRadioValue,
+    getRadioSelectedValue,
+    getCheckboxSelectedValue,
+    getFieldValue,
+    modifyFieldValue,
+    modifyCheckboxValue} from '@/services/data_helpers'
 
 export default defineComponent({
     name:"TB screening",
@@ -75,7 +75,7 @@ export default defineComponent({
         }
     },
     computed:{
-        ...mapState(useTBScreeningStore, ["results"]),
+        // ...mapState(useTBScreeningStore, ["results"]),
         ...mapState(useTBScreeningStore, ["reasons"]),
         ...mapState(useTBScreeningStore, ["tbTest"]),
        
@@ -83,6 +83,24 @@ export default defineComponent({
     },
     mounted(){
         const tbScreening = useTBScreeningStore()
+        this.handleResults()
+        this.handleDate()
+        this.handleOther()
+    },
+    watch:{
+      tbTest:{
+        handler(){
+          this.handleResults()
+          this.handleDate()
+        },
+        deep:true
+      },
+      reasons:{
+        handler(){
+          this.handleOther()
+        },
+        deep:true
+      }
     },
     setup(){
         return { checkmark,pulseOutline };
@@ -97,6 +115,29 @@ export default defineComponent({
     goToPreviousSection() {
       if (this.currentSection > 0) {
         this.currentSection--;
+      }
+    },
+
+    handleResults(){
+      if(getRadioSelectedValue(this.tbTest,'tbConducted')=='conducted'){
+        modifyRadioValue(this.tbTest,'results','displayNone',false)
+      }else{
+        modifyRadioValue(this.tbTest,'results','displayNone',true)
+      }
+      console.log(getRadioSelectedValue(this.tbTest,'tbConducted'))
+    },
+    handleDate(){
+      if(getRadioSelectedValue(this.tbTest,'tbConducted')=='conducted'){
+        modifyFieldValue(this.tbTest,'UTD','displayNone',false)
+      }else{
+        modifyFieldValue(this.tbTest,'UTD','displayNone',true)
+      }
+    },
+    handleOther(){
+      if(getCheckboxSelectedValue(this.reasons,'Other')=='other'){
+        modifyFieldValue(this.reasons,'Other','displayNone',false)
+      }else{
+        modifyFieldValue(this.reasons,'Other','displayNone',true)
       }
     },
     }

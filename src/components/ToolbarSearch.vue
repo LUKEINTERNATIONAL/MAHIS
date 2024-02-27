@@ -52,17 +52,22 @@
     IonCardSubtitle, 
     IonCardTitle,
     IonPopover,
-    popoverController 
+    popoverController,
+    IonRow, 
+    IonCol 
   } from '@ionic/vue';
   import { defineComponent } from 'vue';
   import { Patientservice } from "@/services/patient_service"
-  import { checkmark, add } from 'ionicons/icons';
+  import { checkmark, add, search } from 'ionicons/icons';
   import { useDemographicsStore } from '@/stores/DemographicStore'
+  import { useGlobalPropertyStore} from '@/stores/GlobalPropertyStore'
   import { useVitalsStore } from '@/stores/VitalsStore'
   import DynButton from '@/components/DynamicButton.vue'
-  import { createModal } from '@/utils/Alerts'
+  import { createModal, toastWarning } from '@/utils/Alerts'
   import CheckPatientNationalID from '@/components/CheckPatientNationalID.vue';
   import { resetPatientData } from '@/services/reset_data'
+  import { mapState } from 'pinia';
+  import Validation from "@/validations/StandardValidations";
   
   export default defineComponent({
     name: "Home",
@@ -76,7 +81,9 @@
         IonToolbar,
         IonIcon,
         IonPopover,
-        DynButton
+        DynButton,
+        IonRow, 
+        IonCol 
       },
       setup() {
       return { checkmark,add };
@@ -85,37 +92,79 @@
       return {
         popoverOpen: false,
         event: null,
-        patients: "" as any,
+        patients: [] as any,
         showPopover: true
       };
+    }, 
+    computed:{
+      ...mapState(useGlobalPropertyStore,["globalPropertyStore"])
     },
     methods: {
       async handleInput(ev: any) {
         const searchText = ev.target.value;
-        this.patients = {}
+        this.patients = []
         this.popoverOpen = false;
-        if(searchText.length > 2){
+        if(searchText.length > 0){
           this.openPopover(ev)
           this.searchDemographicPayload(searchText)
         }
       },
-      searchDemographicPayload(searchText: any){
-        const splittedArray = searchText.split(' ');
-        const payload = {
-                        'given_name': splittedArray[0],
-                        'family_name': splittedArray.length >= 2 ? splittedArray[1] : '',
-                        'gender': splittedArray.length >= 3 ? splittedArray[2] : '',
-                        'page': '1',
-                        'per_page': '7'
-                    }
-        
-        this.searchPatient(payload)
+      async setID(scannedID: any){
+        const sitePrefix = await this.globalPropertyStore.sitePrefix
+        return {
+          'ARVNumber':`${sitePrefix}-ARV-${scannedID}`,
+          'NCDNumber':`${sitePrefix}-NCD-${scannedID}`,
+        }
       },
-      async searchPatient(payload: any){
-        this.patients = await Patientservice.search(payload);
+      async searchDemographicPayload(searchText: any){
+        if (/.+\$$/i.test(`${searchText}`)){
+          const scanned = `${searchText||''}`.replace(/\$/ig, '')
+
+          const IDs: any = await this.setID(scanned)
+          const artData = await Patientservice.findByOtherID(4,IDs['ARVNumber'])
+          const ncdData = await Patientservice.findByOtherID(4,IDs['NCDNumber'])
+
+          if(artData.length > 0){
+            this.patients.push(...artData)
+          }
+
+          if(ncdData.length > 0){
+            this.patients.push(...ncdData)
+          }
+
+          if(Validation.isMWNationalID(scanned) == null){
+            const nationalID = await Patientservice.findByOtherID(28,scanned)
+            if(nationalID.length > 0){
+              this.patients.push(...nationalID)
+            }
+          }
+
+          const idData = await Patientservice.findByNpid(scanned as string)
+          if(idData.length > 0)
+            this.patients.push(...idData)
+
+          if(this.patients.length == 1){
+            this.openNewPage('patientProfile',this.patients[0])
+            this.popoverOpen = false
+          }
+          if(this.patients.length == 0)
+            toastWarning("Not Found")
+        }else{
+          const splittedArray = searchText.split(' ');
+          const payload = {
+                          'given_name': splittedArray[0],
+                          'family_name': splittedArray.length >= 2 ? splittedArray[1] : '',
+                          'gender': splittedArray.length >= 3 ? splittedArray[2] : '',
+                          'page': '1',
+                          'per_page': '7'
+                      }
+          
+                this.patients = await Patientservice.search(payload);
+        }
+        
+        
       },
       patientIdentifier(item: any){
-        // return item
         const ids =item.patient_identifiers.length - 1
         if(ids >= 0)
           return item.patient_identifiers[ids].identifier

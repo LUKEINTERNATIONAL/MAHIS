@@ -12,7 +12,8 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                 {
                     header:{
                         title: 'Select whether:',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'urineInfo',
                     },
                     data:[
                         {
@@ -31,7 +32,7 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                         },
                         {
                             name: 'Urine test not done',
-                            value: 'not done',
+                            value: 'notDone',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
@@ -39,18 +40,18 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                     ]
                 }
                     
-            }
-        ] as any,
-        testType:[
-            {
+            },
+                        {
                 selectdData: [],
-                isFinishBtn: false,
-                
+                isFinishBtn: false,   
                 radioBtnContent:
                 {
                     header:{
                         title: 'Select the urine test conducted:',
-                        selectedValue: ''
+                        selectedValue: '',
+                        displayNone:true,
+                        name:'conductedInfo',
+                           
                     },
                     data:[
                         {
@@ -85,7 +86,8 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                     rowData:[
                         {
                             colData: [
-                                {
+                                {   
+                                    displayNone:true,
                                     inputHeader: 'Urine Test Date',
                                     value: '',
                                     name: 'UTD',
@@ -107,9 +109,12 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                 
                 },
                         
-            }
-        ] as any,
-         reason:[
+            },
+        // ] as any,
+        // // testType:[
+
+        // // ] as any,
+        //  reason:[
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -119,10 +124,12 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                 {
                     header:{
                         title: '',
-                        selectedValue: ''
+                        selectedValue: '',
+                        // displayNone:true,
+                        // name:'reason'
                     },
                     data:[
-                        {
+                        {   
                             name: 'Machine not functioning',
                             value: 'required',
                             labelPlacement: 'start',
@@ -132,6 +139,13 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                         {
                             name: 'Technician not available',
                             value: 'ordered',
+                            labelPlacement: 'start',
+                            colSize: '6',
+                            justify: 'space-between',
+                        },
+                        {
+                            name: 'Other',
+                            value: 'other',
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
@@ -150,8 +164,9 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                         rowData:[
                             {
                                 colData: [
-                                    {
-                                        inputHeader: 'Other (specify)',
+                                    {   
+                                        displayNone:true,
+                                        inputHeader: 'specify',
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
@@ -447,12 +462,12 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
     }),
 
     actions: {
-        setReason(data: any){
-            this.reason = data
-        },
-        setTestType(data: any){
-            this.testType = data
-        },
+        // setReason(data: any){
+        //     this.reason = data
+        // },
+        // setTestType(data: any){
+        //     this.testType = data
+        // },
         setUrineTest(data: any){
             this.urineTest = data
         },

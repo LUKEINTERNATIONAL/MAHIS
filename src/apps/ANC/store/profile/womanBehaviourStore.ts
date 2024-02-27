@@ -16,8 +16,8 @@ export const useWomanBehaviourStore = defineStore('womanBehaviourStore',{
                         data:[
 
                             {
-                                name: 'More than 2 cups of tea',
-                                value: 'more than 2 cups of tea',
+                                name: 'More than 2 cups of coffee',
+                                value: 'more than 2 cups of coffee',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '9',
@@ -104,8 +104,8 @@ export const useWomanBehaviourStore = defineStore('womanBehaviourStore',{
                         },
                         data:[
                             {
-                                name: 'None of the above',
-                                value: 'none of the above',
+                                name: 'None',
+                                value: 'none',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '9',

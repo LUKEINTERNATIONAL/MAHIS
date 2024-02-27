@@ -3,11 +3,162 @@ import { icons } from '@/utils/svg'
 
 export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
     state: () => ({
-        prevPregnancies: [
+
+        HeadssAssesment: [
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Who does the client live with?',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Parents',
+                                value: 'parents',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Siblings',
+                                value: 'No',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Extended family',
+                                value: 'Dont know',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Partner',
+                                value: 'partner',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Friend',
+                                value: 'No one',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'No one',
+                                value: 'No one',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Other',
+                                value: 'No one',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+
             {
                 isFinishBtn: false,
                 sectionHeader: '',
                 classDash: 'dashed_bottom_border _padding',
+
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        // displayNone:true,
+                                        inputHeader: 'How does the client perceive her home situation?',
+                                        unit: '',
+                                        icon: icons.editPen,
+                                        value: '',
+                                        name: 'how they perceive their home situation?',
+                                        required: true,
+                                        eventType: 'input',
+                                        inputWidth: "100%",
+                                    },
+
+                                ]
+                            }
+                        ]
+                    },
+            },
+            {
+                isFinishBtn: false,
+                sectionHeader: '',
+                classDash: 'dashed_bottom_border _padding',
+
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        // displayNone:true,
+                                        inputHeader: 'How does she perceive her relationship with her teachers and fellow students/employers and colleagues?',
+                                        unit: '',
+                                        icon: icons.editPen,
+                                        value: '',
+                                        name: 'how they perceive their relationship with their teachers and fellow students/employers and colleagues?',
+                                        required: true,
+                                        eventType: 'input',
+                                        inputWidth: "100%",
+                                    },
+
+                                ]
+                            }
+                        ]
+                    },
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Any recent changes in their situation?',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Yes',
+                                value: 'yes',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'No',
+                                value: 'no',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+        ],
+        prevPregnancies: [
+            {
+                isFinishBtn: false,
+                sectionHeader: '',
+                classDash: '',
                 data:
                 { 
                     rowData:[
@@ -17,15 +168,7 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                                     inputHeader: 'Gravida',
                                     value: '',
                                     name: 'Gravida',
-                                    required: true,
-                                    eventType: 'input',
-                                    alertsError: false,
-                                    alertsErrorMassage: ''
-                                },
-                                {
-                                    inputHeader: 'Parity',
-                                    value: '',
-                                    name: 'Parity',
+                                    icon: icons.editPen,
                                     required: true,
                                     eventType: 'input',
                                     alertsError: false,
@@ -35,49 +178,75 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                             ],
                             
                         },
-                        {
-                            colData: [
-                            {
-                                inputHeader: 'Abortions/Miscarriages',
-                                value: '',
-                                name: 'abortions',
-                                required: true,
-                                eventType: 'input',
-                                alertsError: false,
-                                alertsErrorMassage: ''
-                            },
-                            {
-                                inputHeader: 'Live births',
-                                value: '',
-                                name: 'Live births',
-                                required: true,
-                                eventType: 'input',
-                                alertsError: false,
-                                alertsErrorMassage: ''
-                            },
-                            
-                        ]
-                    },
-                    {
-                        colData: [
-                        {
-                            inputHeader: 'Stillbirths',
-                            value: '',
-                            name: 'Stillbirths',
-                            required: true,
-                            eventType: 'input',
-                            alertsError: false,
-                            alertsErrorMassage: ''
-                        },
-                        
-                    ]
-                },
 
                     ],
                     
                 },
           
-            },   
+            },
+            {
+                data:
+                  {
+                    rowData:[
+                                                {
+                            colData: [
+                            {
+                                inputHeader: 'Abortions/Miscarriages',
+                                value: '',
+                                icon: icons.editPen,
+                                name: 'Abortions',
+                                required: true,
+                                eventType: 'input',
+                                alertsError: false,
+                                alertsErrorMassage: ''
+                            },
+                                {
+                                    inputHeader: 'Stillbirths',
+                                    value: '',
+                                    name: 'Stillbirths',
+                                    required: true,
+                                    icon: icons.editPen,
+                                    eventType: 'input',
+                                    alertsError: false,
+                                    alertsErrorMassage: ''
+                                },
+                            
+                        ]
+                    },
+                    ]
+                  }
+            },
+            {
+                data:{
+                    rowData:[
+                                            {
+                        colData: [
+                            {
+                                inputHeader: 'Live births',
+                                value: '',
+                                name: 'LiveBirths',
+                                required: true,
+                                icon: icons.editPen,
+                                eventType: 'input',
+                                alertsError: false,
+                                alertsErrorMassage: ''
+                            },
+                            {
+                                inputHeader: 'Parity',
+                                value: '',
+                                name: 'Parity',
+                                required: true,
+                                eventType: 'input',
+                                alertsError: false,
+                                alertsErrorMassage: ''
+                            },
+
+                        ]
+                    },
+                    ]
+                }
+            }
+
         ] as any,
         abnormalities:[
             {
@@ -116,6 +285,29 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                 }
                     
             },
+            // {
+            //     data:{ 
+            //         rowData:[
+            //             {
+            //                 colData:[
+            //                     {
+            //                         // displayNone:true,
+            //                         inputHeader: 'Specify',
+            //                         icon: icons.editPen,
+            //                         value: "",
+            //                         name: "specify",
+            //                         eventType: 'input',
+            //                         inputWidth: "82%",
+            //                         required: true
+            //                     }
+                                
+            //                 ]
+            //             }
+            //         ],
+                    
+            //     }
+                    
+            // },
         ],
         preterm:[
             {
@@ -130,24 +322,24 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                     },
                     data:[
                         {
-                            name: 'Yes',
-                            value: 'Yes',
+                            name: 'Last live birth was preterm\n',
+                            value: 'notPreterm',
                             labelPlacement: 'start',
-                            colSize: '7',
+                            colSize: '9',
                             justify: 'space-between',
                         },
                         {
-                            name: 'No',
-                            value: 'No',
+                            name: 'Last live birth was not preterm/ Last live birth was full term\n',
+                            value: 'fullTerm',
                             labelPlacement: 'start',
-                            colSize: '7',
+                            colSize: '9',
                             justify: 'space-between',
                         },
                         {
-                            name: 'Dont know',
-                            value: 'Dont know',
+                            name: 'Last live birth had congenital abnormalities\n',
+                            value: 'congetalAbnormalities',
                             labelPlacement: 'start',
-                            colSize: '7',
+                            colSize: '9',
                             justify: 'space-between',
                         },
                     ]
@@ -156,66 +348,108 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
             },
         ],
         modeOfDelivery: [
+
             {
+                selectdData: [],
                 isFinishBtn: false,
-                sectionHeader: '',
-                classDash: 'dashed_bottom_border _padding',
-                data:
-                { 
+                classDash: 'dashed_bottom_border',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Specify mode of delivery',
+                            selectedValue: '',
+                            name:'cesareanSec',
+                        },
+                        data:[
+                            {
+                                name: 'Cesarean section',
+                                value: 'cesarean',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Vacuum',
+                                value: 'vacuum',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Breach',
+                                value: 'breach',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'SDV',
+                                value: 'sdv',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                data:{ 
                     rowData:[
                         {
-                            colData: [
+                            colData:[
                                 {
-                                    inputHeader: 'Mode of delivery',
+                                    displayNone:true,
+                                    inputHeader: 'specify',
+                                    icon: icons.editPen,
                                     value: '',
-                                    name: 'MOD',
-                                    required: true,
+                                    name: "Specify",
                                     eventType: 'input',
-                                    alertsError: false,
-                                  
-                                    alertsErrorMassage: ''
-                                },
-                                {
-                                    inputHeader: 'Number of ceasarian',
-                                    value: '',
-                                    name: 'Ceasarian',
-                                    required: true,
-                                    eventType: 'input',
-                                    alertsError: false,
-                                  
-                                    alertsErrorMassage: ''
-                                },
+                                    inputWidth: "82%",
+                                    required: true
+                                }
                                 
-                            ],
-                            
-                        },
-                         {
-                        colData: [
-                            {
-                                inputHeader: 'Last ceasarian section',
-                                value: '',
-                                name: 'LCS',
-                                required: true,
-                                eventType: 'input',
-                                alertsError: false,
-                                alertsErrorMassage: '',
-                                isDatePopover: true,
-                                icon: icons.calenderPrimary,
-                                placeholder: 'Pick the date',
-                            },
-                            
-                        ],}
-                   
-
+                            ]
+                        }
                     ],
-                
-                },
-            },
-          
-             
+                    
+                }
+                    
+            },         
         ] as any,
 
         Complications:[
+            {
+                selectdData: [],
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+
+                            {
+                                name: 'Asphyxia',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Does not know',
+                                value: 'does not know',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
             {
                 selectdData: [],
                 classDash: 'dashed_bottom_border',
@@ -327,7 +561,7 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Heavy bleeding ',
+                                name: 'Heavy bleeding',
                                 value: 'value',
                                 checked: false,
                                 labelPlacement: 'start',
@@ -378,8 +612,16 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                         },
                         data:[
                             {
-                                name: 'Asphyxia',
-                                value: 'value',
+                                name: 'None',
+                                value: 'none',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Other',
+                                value: 'otherInfo',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -400,12 +642,13 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                         rowData:[
                             {
                                 colData: [
-                                    {
-                                        inputHeader: 'Other (specify)',
+                                    {   
+                                        displayNone:true,
+                                        inputHeader: 'specify',
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Other',
+                                        name: 'otherC',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "85%",
@@ -439,6 +682,6 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
         },
       
     },
-    persist:true,
+    // persist:true,
 
 })

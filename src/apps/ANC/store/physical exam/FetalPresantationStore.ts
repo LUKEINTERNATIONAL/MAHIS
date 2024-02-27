@@ -82,7 +82,7 @@ export const useFetalPresentationStore = defineStore('fetalPresentationStore',{
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "55%",
-                                        required: true
+                                        
                                     },
 
                                 ]

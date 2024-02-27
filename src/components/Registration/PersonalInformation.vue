@@ -83,7 +83,7 @@ methods:{
    
 
     validationRules(event: any) {
-        return validateField(this.personInformation,event.name, this[event.name]);
+        return validateField(this.personInformation,event.name, (this as any)[event.name]);
     },
 
     async handleInputData(event: any) {

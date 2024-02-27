@@ -3,7 +3,7 @@
     <Toolbar />
     <ion-content :fullscreen="true">
       <DemographicBar />
-      <Stepper stepperTitle="Profile" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()"  :StepperData="StepperData"/>
+      <Stepper stepperTitle="Profile" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" @update:inputValue="validateProfileData($event)"  :StepperData="StepperData"/>
     </ion-content>
   </ion-page>
 </template>
@@ -27,12 +27,11 @@ import {
   IonItem,
   IonLabel,
   IonModal,
-  modalController,
-  AccordionGroupCustomEvent } from '@ionic/vue';
+} from '@ionic/vue';
 import { defineComponent } from 'vue';
 import Toolbar from "@/apps/ANC/components/Toolbar.vue";
-import ToolbarSearch from '@/components/ToolbarSearch.vue'
-import DemographicBar from "@/components/DemographicBar.vue";
+import ToolbarSearch from "@/apps/ANC/components/ToolbarSearch.vue";
+import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import { chevronBackOutline,checkmark } from 'ionicons/icons';
 import SaveProgressModal from '@/components/SaveProgressModal.vue'
 import { createModal } from '@/utils/Alerts'
@@ -43,7 +42,7 @@ import { toastWarning,popoverConfirmation, toastSuccess } from '@/utils/Alerts';
 import PastObstreticHistory from '../components/profile/PastObstreticHistory.vue';
 import CurrentPregnancies from '../components/profile/CurrentPregnancies.vue';
 import Medications from '../components/profile/Medications.vue';
-import MedicalHistory from '../components/profile/MedicalHistory.vue';
+import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue"
 import WomanBehaviour from '../components/profile/WomanBehaviour.vue';
 import {getCheckboxSelectedValue} from "@/services/data_helpers";
 import {useMedicalHistoryStore} from "@/apps/ANC/store/profile/medicalHistoryStore";
@@ -52,9 +51,9 @@ import {useCurrentPregnanciesStore} from "@/apps/ANC/store/profile/CurrentPregan
 import {useMedicationsStore} from "@/apps/ANC/store/profile/MedicationsStore";
 import {useWomanBehaviourStore} from "@/apps/ANC/store/profile/womanBehaviourStore";
 
-function someChecked(options, errorMessage="Missing check values") {
+function someChecked(options, errorMassage) {
   if (!options.filter(v => v.checkboxBtnContent).some(v => v.checkboxBtnContent.data.some(d => d.checked))) {
-    return errorMessage
+    return errorMassage
   }
 }
 export default defineComponent({
@@ -157,7 +156,7 @@ export default defineComponent({
           }
         },
         {
-          'title': 'Current Pregancy',
+          'title': 'Current Pregnancy',
           'componet': 'CurrentPregnancies',
           'value': '3',
         },
@@ -189,6 +188,33 @@ export default defineComponent({
     ...mapState(useWomanBehaviourStore,["dailyCaffeineIntake","Tobacco"])
 
   },
+      saveData(){
+
+      const medicalConditions = [
+        'Auto immune desease',
+        'Asthma',
+        'Diabetes',
+        'Sickle cell',
+        'Anaemia',
+        'Thalassemia',
+        'Gynaecological',
+        'CCF',
+        'RHD',
+        'Gestational diabetes',
+        'pre-existing type 1',
+        'pre-existing type 2',
+        'Epilepsy',
+        'Hypertension',
+        'Kidney',
+        'TB',
+        'Mental  illiness',
+      ];
+      for (const condition of medicalConditions) {
+        const selectedValue = getCheckboxSelectedValue(this.exisitingChronicHealthConditions, condition);
+        console.log(selectedValue);
+      }
+
+     },
   mounted(){
     // this.markWizard()
 
@@ -261,17 +287,12 @@ export default defineComponent({
           if (typeof stepper.validation[validationName] === 'function') {
             const state = stepper.validation[validationName](this[validationName])
             if (state) errors.push(state)
-          } 
+          }
         })
       })
       if (errors.length) {
         return alert(errors.join(','))
       }
-      console.log(errors)
-        // console.log(this.medicalHistory, "Medical history")
-        // console.log(this.currentPregnancies, "Current")
-        //   console.log(getCheckboxSelectedValue(this.medicalHistory, 'Myomectomy'))
-        //  this.$router.push('symptomsFollowUp');
 
      },
 

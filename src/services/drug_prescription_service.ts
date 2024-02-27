@@ -46,3 +46,16 @@ export const DRUG_FREQUENCIES: Array<{label: string; code: string; value: number
       })
     }
   }
+
+  export function getFrequencyLabelOrCheckCode(codeOrLabel: string): string | undefined {
+    const upperCaseInput = codeOrLabel.toUpperCase()
+    const labelExists = DRUG_FREQUENCIES.some(freq => freq.label.toUpperCase() === upperCaseInput)
+    if (labelExists) {
+        return codeOrLabel
+    }
+    const frequency = DRUG_FREQUENCIES.find(freq => freq.code === upperCaseInput)
+    if (frequency) {
+        return frequency.label
+    }
+    return undefined
+}

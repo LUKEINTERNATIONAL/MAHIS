@@ -46,7 +46,6 @@ import { icons } from '@/utils/svg';
 
 import DispositionModal from '@/components/ProfileModal/OutcomeModal.vue'
 import { createModal } from '@/utils/Alerts'
-import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue3-qrcode-reader'
 
 export default defineComponent({
 name: 'Menu',
@@ -58,9 +57,6 @@ components:{
     IonMenu,
     IonTitle,
     IonToolbar,
-    QrcodeStream,
-    QrcodeDropZone,
-    QrcodeCapture
 },
   data() {
 return {

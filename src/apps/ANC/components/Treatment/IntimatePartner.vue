@@ -1,6 +1,6 @@
 <template>
     <div class="container"> 
-        <ion-card v-if="currentSection === 0" class="section">
+        <ion-card class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="ipv"></basic-form>
@@ -9,7 +9,7 @@
         </ion-card>
 
        
-        <ion-card v-if="currentSection === 1" class="section">
+        <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="additionalCare"></basic-form>
@@ -18,7 +18,7 @@
         </ion-card>
 
         
-        <ion-card v-if="currentSection === 2" class="section">
+        <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="physical_violence"></basic-form>
@@ -26,7 +26,7 @@
             </ion-card-content>
         </ion-card>
 
-        <ion-card v-if="currentSection === 3" class="section">
+        <ion-card class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="woman_threatened"></basic-form>
@@ -34,7 +34,7 @@
             </ion-card-content>
         </ion-card>
 
-        <ion-card v-if="currentSection === 4" class="section">
+        <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="strangling"></basic-form>
@@ -42,18 +42,12 @@
             </ion-card-content>
         </ion-card>
 
-        <ion-card v-if="currentSection === 5" class="section">
+        <ion-card  class="section">
             <ion-card-header> <ion-card-title class="sub_item_header">Referrals made as part of first-line support</ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="referrals"></basic-form>
             </ion-card-content>
         </ion-card>
-
-          <!-- Navigation Buttons -->
-    <div class="navigation-buttons">
-      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
-      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
-    </div> 
     </div>
 </template>
 

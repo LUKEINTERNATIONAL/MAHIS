@@ -104,12 +104,15 @@ methods:{
     },
 
     validationRules(event: any) {
-        return validateField(this.guardianInformation,event.name, this[event.name]);
+        return validateField(this.guardianInformation,event.name, (this as any)[event.name]);
     },
     guardianValidationRules(){
         if( Validation.isName(this.guardianGivenName) == null &&
-            Validation.isName(this.guardianFamilyName) == null ) 
-            return true 
+            Validation.isName(this.guardianFamilyName) == null ) {
+                console.log("kkk")
+                return true 
+
+            }
         else {
             return false
         }

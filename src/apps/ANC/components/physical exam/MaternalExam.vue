@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <!-- Pallor -->
-    <ion-card v-if="currentSection === 0" class="section">
+    <ion-card class="section">
       <ion-card-header>
         <ion-card-title class="dashed_bottom_border sub_item_header">Is Pallor present?</ion-card-title>
       </ion-card-header>
@@ -11,7 +11,7 @@
     </ion-card>
 
     <!-- Breast exam Section -->
-    <ion-card v-if="currentSection === 1" class="section">
+    <ion-card class="section">
       <ion-card-header>
         <ion-card-title class="dashed_bottom_border sub_item_header">Breast exam result</ion-card-title>
       </ion-card-header>
@@ -20,7 +20,7 @@
       </ion-card-content>
     </ion-card>
     <!-- vaginal inspection Section -->
-    <ion-card v-if="currentSection === 2" class="section">
+    <ion-card class="section">
       <ion-card-header>
         <ion-card-title class="dashed_bottom_border sub_item_header"> Vaginal inspection</ion-card-title>
       </ion-card-header>
@@ -30,7 +30,7 @@
     </ion-card>
 
     <!-- Cervical exam -->
-    <ion-card v-if="currentSection === 3" class="section">
+    <ion-card  class="section">
       <ion-card-header>
         <ion-card-title class="dashed_bottom_border sub_item_header">Cervical exam conducted?</ion-card-title>
       </ion-card-header>
@@ -40,7 +40,7 @@
     </ion-card>
 
     <!-- oedema exam Section -->
-    <ion-card v-if="currentSection === 4" class="section">
+    <ion-card  class="section">
       <ion-card-header>
         <ion-card-title class="dashed_bottom_border sub_item_header">oedema</ion-card-title>
       </ion-card-header>
@@ -49,11 +49,6 @@
       </ion-card-content>
     </ion-card>
 
-    <!-- Navigation Buttons -->
-    <div class="navigation-buttons">
-      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
-      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
-    </div>
   </div>
 </template>
 
@@ -84,7 +79,7 @@ import BasicForm from '@/components/BasicForm.vue';
 import { Service } from "@/services/service";
 import {
   getCheckboxSelectedValue,
-  getRadioSelectedValue,
+  getRadioSelectedValue, modifyCheckboxValue,
   modifyFieldValue,
   modifyRadioValue
 } from "@/services/data_helpers";
@@ -170,11 +165,37 @@ export default defineComponent({
       if(getCheckboxSelectedValue(this.breastExam, 'Other breast exams')=='other breast exams'){
         modifyFieldValue(this.breastExam,'Other','displayNone', false)
       }   else {modifyFieldValue(this.breastExam,'Other','displayNone', true)}
+
+      const checkBoxes=['Normal breast exam result', 'Bleeding', 'Nodule','Discharge', 'Flushing','Local pain','Increased temperature', 'Epigastric pain', 'Other breast exams']
+
+      if (getCheckboxSelectedValue(this.breastExam, 'No breast exam conducted')?.checked) {
+        checkBoxes.forEach((checkbox) => {
+          modifyCheckboxValue(this.breastExam, checkbox, 'checked', false);
+          modifyCheckboxValue(this.breastExam, checkbox, 'disabled', true);
+        });
+      } else {
+        checkBoxes.forEach((checkbox) => {
+          modifyCheckboxValue(this.breastExam, checkbox, 'disabled', false);
+        });
+      }
     },
     handleVaginalInspection(){
       if(getCheckboxSelectedValue(this.vaginalInspection, 'Other')=='other'){
         modifyFieldValue(this.vaginalInspection,'Other','displayNone', false)
       }   else {modifyFieldValue(this.vaginalInspection,'Other','displayNone', true)}
+
+      const checkBoxes=['Normal vaginal exam result', 'Evidence of amniotic fluid', 'Genital pain','Abnormal discharge', 'Papules','Ulcers','Ulcers','Warts','Vesicles','Bleeding','Other']
+
+      if (getCheckboxSelectedValue(this.vaginalInspection, 'No vaginal exam done')?.checked) {
+        checkBoxes.forEach((checkbox) => {
+          modifyCheckboxValue(this.vaginalInspection, checkbox, 'checked', false);
+          modifyCheckboxValue(this.vaginalInspection, checkbox, 'disabled', true);
+        });
+      } else {
+        checkBoxes.forEach((checkbox) => {
+          modifyCheckboxValue(this.vaginalInspection, checkbox, 'disabled', false);
+        });
+      }
     },
     handleCervicalExam(){
       if(getRadioSelectedValue(this.cervicalExam, 'Yes')=='yes'){

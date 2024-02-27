@@ -274,35 +274,35 @@ export const useMedicationsStore = defineStore('medicationsStore',{
 
             },
 
-            {
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'ARVs',
-                                value: 'value',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Antivirals',
-                                value: 'value',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
+            // {
+            //     classDash: 'dashed_bottom_border',
+            //     checkboxBtnContent:
+            //         {
+            //             header:{
+            //                 title: '',
+            //                 selectedValue: ''
+            //             },
+            //             data:[
+            //                 {
+            //                     name: 'ARVs',
+            //                     value: 'value',
+            //                     checked: false,
+            //                     labelPlacement: 'start',
+            //                     colSize: '6',
+            //                     justify: 'space-between',
+            //                 },
+            //                 {
+            //                     name: 'Antivirals',
+            //                     value: 'value',
+            //                     checked: false,
+            //                     labelPlacement: 'start',
+            //                     colSize: '6',
+            //                     justify: 'space-between',
+            //                 },
+            //             ]
+            //         }
+            //
+            // },
             {
                 classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
@@ -409,8 +409,30 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Other medications',
+                                name: 'Other',
                                 value: 'otherMedications',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+
+                        ]
+                    }
+
+            },
+            {
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'None',
+                                value: 'none',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -431,7 +453,8 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                         rowData:[
                             {
                                 colData: [
-                                    {
+                                    {   
+                                        displayNone: true,
                                         inputHeader: 'Specify',
                                         unit: '',
                                         icon: icons.editPen,
@@ -440,7 +463,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "85%",
-                                        required: true
+                                        
                                     },
 
                                 ]

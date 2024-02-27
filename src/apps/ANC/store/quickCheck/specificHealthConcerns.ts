@@ -392,7 +392,7 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "85%",
-                                        required: true
+                                       
                                     },
 
                                 ]
