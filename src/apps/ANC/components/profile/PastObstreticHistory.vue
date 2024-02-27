@@ -113,8 +113,6 @@ export default defineComponent({
               const liveBirths = parseInt(val[2].data.rowData[0].colData[0].value)
               this.prevPregnanciesInstance.setModeOfDelivery([])
 
-             
-
               const births = []
               for (let i = 0; i < liveBirths; ++i) {
                 const x = JSON.parse(JSON.stringify({...this.modeOfDelieveryRef, id: i}))
