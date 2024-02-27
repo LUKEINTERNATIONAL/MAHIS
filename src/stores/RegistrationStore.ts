@@ -135,8 +135,8 @@ export const useRegistrationStore = defineStore('registrationStore',{
                                     value: '',
                                     name: 'birthdate',
                                     eventType: 'input',
-                                        alertsError: false,
-                                        alertsErrorMassage: '',
+                                    alertsError: false,
+                                    alertsErrorMassage: '',
                                     required: true,
                                     isDatePopover: true
                                 }

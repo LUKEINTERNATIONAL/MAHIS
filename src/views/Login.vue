@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <ion-page>
     <ion-content class="ion-padding login-page">
       <div class="login-container">
@@ -104,9 +104,9 @@
           if (this.auth.versionLockingIsEnabled()) {
             await this.auth.validateIfCorrectAPIVersion()
           }
-          if (!(await this.auth.checkTimeIntegrity())) {
-            throw "Local date does not match API date. Please Update your device's date"
-          }
+          // if (!(await this.auth.checkTimeIntegrity())) {
+          //   throw "Local date does not match API date. Please Update your device's date"
+          // }
           await this.auth.login(this.password)
           this.auth.startSession()
           this.$router.push("/home");
@@ -179,4 +179,98 @@
   width: 90px;
   margin: auto;
 }
+</style> -->
+
+<template>
+  <ion-page>
+    <ion-content class="ion-padding login-page">
+      <div class="login-container">
+        <ion-card style="background-color: #fff;">
+          <ion-card-content>
+            <ion-img class="login_img" src="/public/logo.png" alt="logo" width="100" height="100"></ion-img>
+            <ion-title class="login-title">Mahis</ion-title>
+            <div>
+              <ion-item>
+                <ion-label position="floating">Username</ion-label>
+                <ion-input :value="form.username" @input="form.username = $event.target.value" type="text" required></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">Password</ion-label>
+                <ion-input :value="form.password" @input="form.password = $event.target.value" type="password" required></ion-input>
+              </ion-item>
+              <ion-button type="submit" :disabled="isPending" style="--background: var(--ion-color-primary); font-size: var(--ion-button-font);" @click="submitForm">
+                {{ isPending ? 'Logging In...' : 'Login' }}
+              </ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </ion-content>
+  </ion-page>
+</template>
+
+<script lang="ts">
+import { ref } from 'vue';
+import { authenticate } from "@/services/ANC/login";
+import { useRouter } from 'vue-router';
+import { emrApiClient } from '@/services/ANC/emr_api_client';
+
+
+export default {
+  data() {
+    return {
+      form: {
+        username: '',
+        password: ''
+      },
+      isPending: false,
+      data: null
+    };
+  },
+  methods: {
+    async submitForm() {
+      this.isPending = true;
+      console.log('Username:', this.form.username);
+      console.log('Password:', this.form.password);
+      try {
+        const credentials = { username: this.form.username, password: this.form.password };
+        console.log(credentials)
+        const response = await authenticate(credentials, emrApiClient());
+        this.data = response;
+        this.$router.push('/home');
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.isPending = false;
+      }
+    }
+  }
+};
+</script>
+
+<style scoped>
+.login-page {
+  background-color: #ffffff;
+}
+
+.login-container {
+  max-width: 300px;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.login-title {
+  font-size: 24px;
+  margin-bottom: 30px;
+  font-weight: 700;
+  margin-top: 20px;
+}
+
+.login_img {
+  width: 90px;
+  margin: auto;
+}
 </style>
+
+
+

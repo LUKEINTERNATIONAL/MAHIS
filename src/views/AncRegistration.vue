@@ -205,10 +205,7 @@
                     this.buildPersonalInformation()
                     if(Object.keys(this.personInformation[0].selectdData).length === 0) return
                     const registration: any = new PatientRegistrationService()
-                    console.log(this.personInformation[0])
-
                     new Patientservice((await registration.registerPatient(this.personInformation[0].selectdData, [])))
-                   
                     const patientID = registration.getPersonID()
                     // this.createGuardian(patientID)
                     // this.createSocialHistory(patientID)
