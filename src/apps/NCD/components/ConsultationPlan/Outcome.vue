@@ -2,7 +2,7 @@
 
     <ion-row>
         <ion-col>
-            <DynamicDispositionList v-if="true" @update:removeItem="" @update:editItem=""
+            <DynamicDispositionList v-if="true" @update:removeItem="removeItem" @update:editItem="editItem"
             :displayData="dispositions" />
         </ion-col>
     </ion-row>
@@ -196,7 +196,7 @@
     })
 
     watch(
-        () => dispositions,
+        () => dispositions.value.length,
         async (newvalue) => {
             checkForDispositions()
         }
@@ -226,7 +226,7 @@
     function checkForDispositions() {
         if (dispositions.value.length > 0) {
             showEmptyMsg.value = false
-        } else if (dispositions.value.length == 0) {
+        } else if (dispositions.value.length == 0 && showAddReferralInfo.value == false) {
             showEmptyMsg.value = true
         }
     }
@@ -272,6 +272,19 @@
             show_error_msg_for_ref_type.value = false
         }
         return show_error_msg_for_ref_type.value
+    }
+
+    function removeItem(index: number) {
+        dispositions.value.splice(index, 1)
+    }
+
+    function editItem(index: any) {
+        faciltyName.value = dispositions.value[index].name
+        refType.value = dispositions.value[index].type
+        refDate.value = dispositions.value[index].date
+        refReason.value = dispositions.value[index].reason
+        dispositions.value.splice(index, 1)
+        addReferral()
     }
 
     async function validateRefDate() {
