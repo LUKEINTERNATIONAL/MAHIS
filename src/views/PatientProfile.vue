@@ -39,7 +39,7 @@
                     {{ NCDProgramActionName }}
                 </ion-card>
                 <ion-card class="start_new_co" style=" margin-bottom: 20px;" >
-                    + Enroll in ANC Program
+                  <router-link to="/profile">+ Enroll in ANC Program</router-link>
                 </ion-card>
               <ion-card class="start_new_co" style=" margin-bottom: 20px;" >
                 + Enroll in Labour and delivery program
