@@ -164,6 +164,30 @@ export const useIpvStore = defineStore('ipvStore',{
                     ],
                 }
                     
+        },
+                {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                {
+                    header:{
+                        title: '',
+                        selectedValue: ''
+                    },
+                    data:[
+                        {
+                            name: "None",
+                            value: 'none',
+                            labelPlacement: 'start',
+                            colSize: '6',
+                            justify: 'space-between',
+                            checked: false
+                        },
+                        
+                    ],
+                }
+                    
         }
      ] as any,
     }),

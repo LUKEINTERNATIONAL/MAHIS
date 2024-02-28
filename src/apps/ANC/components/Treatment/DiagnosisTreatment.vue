@@ -142,8 +142,15 @@ export default defineComponent ({
       this.handleHperB()
       this.handleasbReason()
       this.handleOtherasb()
+      this. handleNone()
     },
     watch:{
+      diagnoses:{
+        handler(){
+          this. handleNone()
+        },
+        deep:true
+      },
       hypertensionReason:{
         handler(){
           this.handleHyperOther()
@@ -223,6 +230,20 @@ export default defineComponent ({
       }else{
         modifyFieldValue(this.asbReason,'hypertensionCounselling','displayNone',true)
       }
+    },
+    handleNone(){
+        const checkBoxes=['Hypertension','Pre-eclampsia','HIV','Hepatitis B','Hepatitis C','Syphilis',]
+
+      if (getCheckboxSelectedValue(this.diagnoses, 'None')?.checked) {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.diagnoses, checkbox, 'checked', false);
+            modifyCheckboxValue(this.diagnoses, checkbox, 'disabled', true);
+        });
+        } else {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.diagnoses, checkbox, 'disabled', false);
+        });
+    }
     },
 
     }

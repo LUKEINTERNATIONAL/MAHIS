@@ -76,19 +76,20 @@ export const useDiagnosisCounsellingStore = defineStore ('diagnosisCounsellingSt
                 {
                     header:{
                         title: 'Aspirin provided?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'asprinInfo'
                     },
                     data:[
                         {
                             name: 'Yes',
-                            value: 'y',
+                            value: 'yes',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'No',
-                            value: 'n',
+                            value: 'no',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
@@ -105,7 +106,8 @@ export const useDiagnosisCounsellingStore = defineStore ('diagnosisCounsellingSt
                 data:{
                     rowData: [{
                         colData: [{
-                        
+                             
+                            displayNone:true,
                             inputHeader: 'Amount of daily aspirin provided until delivery',
                             value: '',
                             name: 'amount',
@@ -118,9 +120,9 @@ export const useDiagnosisCounsellingStore = defineStore ('diagnosisCounsellingSt
                     }]
                    } 
             },
-        ],
+        // ],
 
-        aspirinReason:[
+        // aspirinReason:[
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -130,7 +132,9 @@ export const useDiagnosisCounsellingStore = defineStore ('diagnosisCounsellingSt
                 {
                     header:{
                         title: 'Reason aspirin not prescribed',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'reasonNotProvided',
+                        displayNone:true
                     },
                     data:[
                         {
@@ -175,19 +179,20 @@ export const useDiagnosisCounsellingStore = defineStore ('diagnosisCounsellingSt
             {
                 isFinishBtn: false,
                 sectionHeader: '',
-                classDash: 'dashed_bottom_border _padding',
+               
 
                 data:
                     {
                         rowData:[
                             {
                                 colData: [
-                                    {
-                                        inputHeader: 'Other (specify)',
+                                    {    
+                                        displayNone:true,
+                                        inputHeader:'specify',
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Other',
+                                        name: 'Specify',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "85%",
@@ -305,19 +310,20 @@ export const useDiagnosisCounsellingStore = defineStore ('diagnosisCounsellingSt
                 {
                     header:{
                         title: 'PrEp for HIV prevention provided?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'prepInfo'
                     },
                     data:[
                         {
                             name: 'Yes',
-                            value: 'y',
+                            value: 'yes',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'No',
-                            value: 'n',
+                            value: 'no',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
@@ -334,10 +340,11 @@ export const useDiagnosisCounsellingStore = defineStore ('diagnosisCounsellingSt
                 data:{
                     rowData: [{
                         colData: [{
-                        
+                            
+                            displayNone:true,
                             inputHeader: 'Amount of PrEp provided',
                             value: '',
-                            name: 'iron',
+                            name: 'PreP',
                             required: true,
                             eventType: 'input',
                             alertsError: false,
@@ -347,9 +354,9 @@ export const useDiagnosisCounsellingStore = defineStore ('diagnosisCounsellingSt
                     }]
                    } 
             },
-        ],
+        // ],
 
-        prEpReason:[
+        // prEpReason:[
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -359,7 +366,8 @@ export const useDiagnosisCounsellingStore = defineStore ('diagnosisCounsellingSt
                 {
                     header:{
                         title: 'Reason PrEp for HIV prevention was not provided',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'reasonPrep'
                     },
                     data:[
                       
@@ -405,12 +413,13 @@ export const useDiagnosisCounsellingStore = defineStore ('diagnosisCounsellingSt
                         rowData:[
                             {
                                 colData: [
-                                    {
-                                        inputHeader: 'Other (specify)',
+                                    {    
+                                        displayNone:true,
+                                        inputHeader: 'specify',
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Other',
+                                        name: 'Specify',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "85%",
@@ -623,7 +632,8 @@ export const useDiagnosisCounsellingStore = defineStore ('diagnosisCounsellingSt
                 {
                     header:{
                         title: 'Planned birth place',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'birthPlace'
                     },
                     data:[
                       
@@ -662,12 +672,13 @@ export const useDiagnosisCounsellingStore = defineStore ('diagnosisCounsellingSt
                         rowData:[
                             {
                                 colData: [
-                                    {
-                                        inputHeader: 'Other (specify)',
+                                    {    
+                                        displayNone:true,
+                                        inputHeader: 'specify',
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Other',
+                                        name: 'Specify',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "85%",
@@ -800,5 +811,5 @@ export const useDiagnosisCounsellingStore = defineStore ('diagnosisCounsellingSt
             this.breastFeeding = data
         },
     },
-    persist:true
+    // persist:true
 })

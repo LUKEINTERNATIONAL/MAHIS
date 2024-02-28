@@ -17,6 +17,7 @@ import { mapState } from 'pinia';
  import BasicInputField from "@/components/BasicInputField.vue";
  import {useIpvStore} from "@/apps/ANC/store/symptomsFollowUp/ipvStore";
  import BasicForm from '@/components/BasicForm.vue';
+import { getCheckboxSelectedValue, modifyCheckboxValue } from "@/services/data_helpers";
 
 
 export default defineComponent({
@@ -30,10 +31,35 @@ export default defineComponent({
 
     mounted(){
         const  ipv =useIpvStore()
+        this.handleNone()
+    },
+    watch:{
+        ipv:{
+            handler(){
+                this.handleNone()
+            },
+            deep:true
+        }
     },
       computed:{
         ...mapState(useIpvStore,["ipv"]),
     },
+    methods:{
+        handleNone(){
+        const checkBoxes=["Ongoing stress","Injury to abdomen","Partner's intrusive during consultations","Misuse of alcohol","Unspecified harmful behaviours","Thoughts of self-harm","Unwanted Pregnancies","Misuse of drugs",]
+
+      if (getCheckboxSelectedValue(this.ipv, 'None')?.checked) {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.ipv, checkbox, 'checked', false);
+            modifyCheckboxValue(this.ipv, checkbox, 'disabled', true);
+        });
+        } else {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.ipv, checkbox, 'disabled', false);
+        });
+    }
+        },
+    }
 })
 </script>
 <style scoped>
