@@ -1,15 +1,9 @@
 <template>
   <div class="container">
     <ion-card class="section">
-      <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Danger signs</ion-card-title></ion-card-header>
-      <ion-card-content>
-        <basic-form :contentData="physicalExamination"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
-      </ion-card-content>
-    </ion-card>
-    <ion-card class="section">
       <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="labourDetails"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+        <basic-form :contentData="physicalExamination"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
@@ -69,7 +63,6 @@ export default defineComponent({
       iconsContent: icons,
       vValidations: '' as any,
       hasValidationErrors: [] as any,
-      inputField: '' as any,
 
     };
   },

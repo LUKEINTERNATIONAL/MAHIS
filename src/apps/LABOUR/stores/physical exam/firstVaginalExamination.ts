@@ -1,74 +1,13 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
 
-export const usePhysicalExamStore = defineStore('physicalExamStore',{
+export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminationStore',{
     state: () => ({
 
-        physicalExamination: [
-
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Hydration status',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Well hydrated',
-                                value: 'well',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Poorly hydrated',
-                                value: 'poorly hydrated',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'General condition',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Sick',
-                                value: 'sick',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Well',
-                                value: 'well',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
+        firstVaginalExamination: [
 
             {
                 isFinishBtn: false,
-                sectionHeader: 'Height',
                 classDash: 'dashed_bottom_border _padding',
 
                 data:
@@ -77,14 +16,23 @@ export const usePhysicalExamStore = defineStore('physicalExamStore',{
                             {
                                 colData: [
                                     {
-                                        inputHeader: 'specify',
+                                        inputHeader: 'State of Cervix',
+                                        unit: '',
+                                        icon: icons.editPen,
+                                        value: '',
+                                        name: 'state of cervix',
+                                        required: true,
+                                        eventType: 'input',
+                                    },
+                                    {
+                                        inputHeader: 'Cervix dilation',
                                         unit: 'cm',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'otherC',
+                                        name: 'state of cervix',
                                         required: true,
                                         eventType: 'input',
-                                        inputWidth: "85%",
+                                        placeholder:'Enter the number between 1-10'
                                     },
 
                                 ]
@@ -99,20 +47,20 @@ export const usePhysicalExamStore = defineStore('physicalExamStore',{
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Palmer pallor?',
+                            title: 'Percentage of effacement',
                             selectedValue: ''
                         },
                         data:[
                             {
-                                name: 'Yes',
-                                value: 'yes',
+                                name: '25%',
+                                value: '25%',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'No',
-                                value: 'no',
+                                name: '50%',
+                                value: '50%',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
@@ -128,20 +76,27 @@ export const usePhysicalExamStore = defineStore('physicalExamStore',{
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Jaundice?',
+                            title: 'Application of presenting part',
                             selectedValue: ''
                         },
                         data:[
                             {
-                                name: 'Yes',
-                                value: 'yes',
+                                name: 'Well applied',
+                                value: 'well applied',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'No',
-                                value: 'no',
+                                name: 'Loosely applied',
+                                value: 'loosely applied',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Not applied',
+                                value: 'not applied',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
@@ -157,20 +112,20 @@ export const usePhysicalExamStore = defineStore('physicalExamStore',{
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Haemoglobin low?',
+                            title: 'State of membranes?',
                             selectedValue: ''
                         },
                         data:[
                             {
-                                name: 'Yes',
-                                value: 'yes',
+                                name: 'Raptured',
+                                value: 'raptured',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'No',
-                                value: 'no',
+                                name: 'Intact',
+                                value: 'intact',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
@@ -180,13 +135,48 @@ export const usePhysicalExamStore = defineStore('physicalExamStore',{
 
             },
             {
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Time membranes raptured',
+                                        unit: '',
+                                        icon: icons.time,
+                                        value: '',
+                                        name: 'time membranes raptured',
+                                        required: true,
+                                        eventType: 'input',
+                                    },
+                                    {
+                                        inputHeader: 'Date membranes raptured',
+                                        unit: '',
+                                        icon: icons.calenderPrimary,
+                                        value: '',
+                                        name: 'date membranes raptured',
+                                        required: true,
+                                        datePopover:true,
+                                        eventType: 'input',
+                                        placeholder:'Pick date'
+                                    },
+
+                                ]
+                            }
+                        ]
+                    },
+            },
+            {
                 selectdData: [],
                 isFinishBtn: false,
                 classDash: 'dashed_bottom_border _padding',
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Oedema',
+                            title: 'Show',
                             selectedValue: ''
                         },
                         data:[
@@ -208,6 +198,7 @@ export const usePhysicalExamStore = defineStore('physicalExamStore',{
                     }
 
             },
+
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -215,27 +206,34 @@ export const usePhysicalExamStore = defineStore('physicalExamStore',{
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Lie',
+                            title: 'Soft tissues',
                             selectedValue: ''
                         },
                         data:[
                             {
-                                name: 'Longitudinal',
-                                value: 'longitudinal',
+                                name: 'Soft',
+                                value: 'soft',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Transverse',
-                                value: 'transverse',
+                                name: 'Warm and moist',
+                                value: 'warm and moist',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Oblique',
-                                value: 'oblique',
+                                name: 'Hot and dry',
+                                value: 'hot and dry',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Hot and moist',
+                                value: 'hot and moist',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
@@ -244,62 +242,7 @@ export const usePhysicalExamStore = defineStore('physicalExamStore',{
                     }
 
             },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Presentation',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Cephalic',
-                                value: 'Breech',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Face/Brow',
-                                value: 'face',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Footing',
-                                value: 'footing',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Cord',
-                                value: 'cord',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Fetal back/arms/shoulders',
-                                value: 'fetal back',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'No palpable fetal part',
-                                value: 'footing',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
 
-            },
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -307,20 +250,41 @@ export const usePhysicalExamStore = defineStore('physicalExamStore',{
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Choose position',
+                            title: 'Liquor',
                             selectedValue: ''
                         },
                         data:[
                             {
-                                name: 'ROA',
-                                value: 'roa',
+                                name: 'Clear',
+                                value: 'clear',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'LOA',
-                                value: 'loa',
+                                name: 'Blood stained',
+                                value: 'blood stained',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Meconium stained (Grade 1 to 3)',
+                                value: 'meconium stained',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Absent',
+                                value: 'absent',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Offensive smell',
+                                value: 'offensive smell',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
@@ -336,7 +300,7 @@ export const usePhysicalExamStore = defineStore('physicalExamStore',{
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Contractions',
+                            title: 'Cord',
                             selectedValue: ''
                         },
                         data:[
@@ -348,22 +312,70 @@ export const usePhysicalExamStore = defineStore('physicalExamStore',{
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Strong',
-                                value: 'strong',
+                                name: 'Prolapsed',
+                                value: 'prolapsed',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Position of sutures and fontanelles *',
+                                        unit: '',
+                                        icon: icons.editPen,
+                                        value: '',
+                                        name: 'Position of sutures and fontanelles *',
+                                        required: true,
+                                        eventType: 'input',
+                                        inputWidth:'55%'
+                                    },
+
+                                ]
+                            }
+                        ]
+                    },
+            },
+
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Level in relation to ischial spines *',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Below',
+                                value: 'below',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Moderate',
-                                value: 'moderate',
+                                name: 'Above',
+                                value: 'above',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Mild',
-                                value: 'mild',
+                                name: 'On level',
+                                value: 'on level',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
@@ -375,23 +387,74 @@ export const usePhysicalExamStore = defineStore('physicalExamStore',{
             {
                 selectdData: [],
                 isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Bladder',
+                            title: 'Caput',
                             selectedValue: ''
                         },
                         data:[
                             {
-                                name: 'Empty',
-                                value: 'empty',
+                                name: 'Nil',
+                                value: 'nil',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Full',
-                                value: 'full',
+                                name: 'Mild',
+                                value: 'mild',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'moderate',
+                                value: 'moderate',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Severe',
+                                value: 'severe',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Moulding *',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: '+',
+                                value: '+',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: '++',
+                                value: '++',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: '+++',
+                                value: '+++',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
@@ -405,8 +468,8 @@ export const usePhysicalExamStore = defineStore('physicalExamStore',{
         ] as any,
     }),
     actions:{
-        setPhysicalExamination(data: any){
-            this.physicalExamination = data
+        setVaginalExamination(data: any){
+            this.firstVaginalExamination = data
         },
     },
     persist:true,

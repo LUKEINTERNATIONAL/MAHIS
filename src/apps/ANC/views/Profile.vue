@@ -51,11 +51,11 @@ import {useCurrentPregnanciesStore} from "@/apps/ANC/store/profile/CurrentPregan
 import {useMedicationsStore} from "@/apps/ANC/store/profile/MedicationsStore";
 import {useWomanBehaviourStore} from "@/apps/ANC/store/profile/womanBehaviourStore";
 
-function someChecked(options, errorMassage) {
-  if (!options.filter(v => v.checkboxBtnContent).some(v => v.checkboxBtnContent.data.some(d => d.checked))) {
-    return errorMassage
-  }
-}
+// function someChecked(options, errorMassage) {
+//   if (!options.filter(v => v.checkboxBtnContent).some(v => v.checkboxBtnContent.data.some(d => d.checked))) {
+//     return errorMassage
+//   }
+// }
 export default defineComponent({
   name: "Home",
   components:{
@@ -146,14 +146,14 @@ export default defineComponent({
           'title': 'Past Medical history',
           'componet': 'MedicalHistory',
           'value': '2',
-          validation: {
-            medicalHistory: (data) => someChecked(data, "Medical history is required"), 
-            allegy: (data) => someChecked(data, "Allergy is required"), 
-            //existingChronicHealthConditions: (data)=>someChecked(data, "Existing chronic conditions is required"),
-            hivTest: (data)=>someChecked(data, "HIV test required"),
-            syphilisTest: (data)=>someChecked(data, "Syphilis test is required")
-            
-          }
+          // validation: {
+          //   medicalHistory: (data) => someChecked(data, "Medical history is required"),
+          //   allegy: (data) => someChecked(data, "Allergy is required"),
+          //   //existingChronicHealthConditions: (data)=>someChecked(data, "Existing chronic conditions is required"),
+          //   hivTest: (data)=>someChecked(data, "HIV test required"),
+          //   syphilisTest: (data)=>someChecked(data, "Syphilis test is required")
+          //
+          // }
         },
         {
           'title': 'Current Pregnancy',
@@ -279,24 +279,28 @@ export default defineComponent({
         return item?.data;
       });
     },
-    saveData(){ 
-      const errors = []
-      this.StepperData.forEach((stepper)=> {
-        if (!stepper.validation) return
-        Object.keys(stepper.validation).forEach((validationName) => {
-          if (typeof stepper.validation[validationName] === 'function') {
-            const state = stepper.validation[validationName](this[validationName])
-            if (state) errors.push(state)
-          }
-        })
-      })
-      if (errors.length) {
-        return alert(errors.join(','))
-      }
+    saveData() {
+      //  const errors = []
+      //  this.StepperData.forEach((stepper)=> {
+      //    if (!stepper.validation) return
+      //    Object.keys(stepper.validation).forEach((validationName) => {
+      //      if (typeof stepper.validation[validationName] === 'function') {
+      //        const state = stepper.validation[validationName](this[validationName])
+      //        if (state) errors.push(state)
+      //      }
+      //    })
+      //  })
+      //  if (errors.length) {
+      //    return alert(errors.join(','))
+      //  }
+      //
+      // },
 
-     },
+      this.$router.push('QuickCheck');
+    },
 
-    openModal(){
+
+      openModal(){
       createModal(SaveProgressModal)
     }
   }
