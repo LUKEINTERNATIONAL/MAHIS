@@ -71,7 +71,7 @@ export class ProgramService extends Service {
         return super.getJson(`/programs/1/next_available_arv_number`);
     }
     static getNextSuggestedNCDNumber() {
-        return super.getJson(`/programs/1/next_available_ncd_number`);
+        return super.getJson(`/programs/32/next_available_ncd_number`);
     }
     static getFastTrackStatus(patientID: number) {
         return super.getJson("/on_fast_track", {

@@ -26,6 +26,7 @@
                             :icon="col.icon"
                             :placeholder="col.placeholder"
                             :iconRight="col.iconRight"
+                            :leftText="col.leftText"
                             :inputWidth="col.inputWidth"
                             :inputValue="col.value"
                             :eventType="col.eventType"

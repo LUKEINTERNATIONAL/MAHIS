@@ -14,10 +14,10 @@ import { PatientPrintoutService } from "./patient_printout_service";
 import dayjs from "dayjs";
 
 export class PatientService extends Service {
-    patient: Patient;
-    constructor(patient: Patient) {
+    patient_id: any;
+    constructor(patient_id: any) {
         super();
-        this.patient = patient;
+        this.patient_id = patient_id;
     }
 
     public static mergePatients(payload: any) {
@@ -97,25 +97,21 @@ export class PatientService extends Service {
         return PatientIdentifierService.create(this.getID(), 4, arvNumber);
     }
 
-    updateARVNumber(newARVNumber: string) {
-        const patientIdentifierId =
-            this.getIdentifiers().find((i) => i.type.name === "ARV Number")
-                ?.patient_identifier_id || "";
-        return PatientService.reassignARVNumber(patientIdentifierId, {
-            identifier: newARVNumber,
-        });
+    createNcdNumber(ncdNumber: string) {
+        return PatientIdentifierService.create(this.getID(), 31, ncdNumber);
     }
+
+    // updateARVNumber(newARVNumber: string) {
+    //     const patientIdentifierId =
+    //         this.getIdentifiers().find((i) => i.type.name === "ARV Number")
+    //             ?.patient_identifier_id || "";
+    //     return PatientService.reassignARVNumber(patientIdentifierId, {
+    //         identifier: newARVNumber,
+    //     });
+    // }
 
     public static updateMWNationalId(newId: string, patientID: any) {
         return PatientIdentifierService.create(patientID, 28, newId);
-    }
-
-    isMale() {
-        return ["Male", "M"].includes(this.getGender());
-    }
-
-    isFemale() {
-        return ["Female", "F"].includes(this.getGender());
     }
 
     async isPregnant() {
@@ -136,18 +132,6 @@ export class PatientService extends Service {
         );
     }
 
-    async hasPregnancyObsToday() {
-        const date = await ObservationService.getFirstObsDatetime(
-            this.getID(),
-            "Is patient pregnant"
-        );
-        return (
-            date &&
-            HisDate.toStandardHisFormat(date) === Service.getSessionDate() &&
-            this.isFemale()
-        );
-    }
-
     async nextAppointment(programID = Service.getProgramID()) {
         try {
             const res = await Service.getJson("next_appointment", {
@@ -159,11 +143,6 @@ export class PatientService extends Service {
         } catch (e) {
             return null;
         }
-    }
-
-    isChildBearing() {
-        const age = this.getAge();
-        return this.isFemale() && age >= 12 && age <= 50;
     }
 
     async getInitialObs(concept: string, attr = "value_numeric") {
@@ -234,19 +213,6 @@ export class PatientService extends Service {
         return this.getInitialObs("BMI");
     }
 
-    async getBMI() {
-        //TODO: weight and height should have optional parameters to get weight and height
-        const weight = await this.getRecentWeight();
-        const height = await this.getRecentHeight();
-
-        if (!(weight && height)) return 0;
-
-        const gender = this.isMale() ? "M" : "F";
-        const bmi: any = await BMIService.getBMI(weight, height, gender, this.getAge());
-
-        return bmi;
-    }
-
     async calculateWeightPercentile() {
         const currentWeight = await this.getRecentWeight();
         const medianWeightHeight = await this.getMedianWeightHeight();
@@ -263,50 +229,8 @@ export class PatientService extends Service {
         });
     }
 
-    getObj() {
-        return this.patient;
-    }
-
     getID() {
-        return this.patient.patient_id;
-    }
-
-    getPatientInfoString() {
-        const data = [
-            this.getFullName(),
-            `(${this.getGender()})`,
-            this.getBirthdate(),
-            `, ${this.getCurrentDistrict()}`,
-        ];
-        return data.join(" ");
-    }
-
-    getCurrentDistrict() {
-        return this.getAddresses().currentDistrict;
-    }
-
-    getGender() {
-        return this.patient.person.gender;
-    }
-
-    getAge() {
-        return dayjs(Service.getSessionDate()).diff(this.patient.person.birthdate, "years");
-    }
-
-    getAgeInMonths() {
-        return this.getAge() * 12;
-    }
-
-    getBirthdate() {
-        return this.patient.person.birthdate;
-    }
-
-    getGivenName() {
-        return this.patient.person.names[0].given_name;
-    }
-
-    getFamilyName() {
-        return this.patient.person.names[0].family_name;
+        return this.patient_id;
     }
 
     private normaliseName(name: string) {
@@ -315,145 +239,5 @@ export class PatientService extends Service {
 
     async printNationalID() {
         return new PatientPrintoutService(this.getID()).printNidLbl();
-    }
-
-    getFullName() {
-        try {
-            const name = this.patient.person.names[0];
-            const firstName = name.given_name;
-            const lastName = name.family_name;
-            const middleName = name.middle_name;
-            return this.normaliseName(`${firstName} ${middleName} ${lastName}`);
-        } catch (e) {
-            console.error(e);
-            return "Unknown";
-        }
-    }
-
-    getDocID() {
-        const id = this.findIdentifierByType("DDE person document ID");
-        return id.match(/unknown/i) ? null : id;
-    }
-
-    getNationalID() {
-        return this.findIdentifierByType("National id");
-    }
-
-    getMWNationalID() {
-        return this.findIdentifierByType("Malawi National ID");
-    }
-
-    getArvNumber() {
-        return this.findIdentifierByType("ARV Number");
-    }
-
-    hasActiveFilingNumber() {
-        return this.hasIdentifierType("Filing number");
-    }
-
-    hasDormantFilingNumber() {
-        return this.hasIdentifierType("Archived filing number");
-    }
-
-    private hasIdentifierType(identifierType: string) {
-        const id = find(this.patient.patient_identifiers, {
-            type: {
-                name: identifierType,
-            },
-        });
-        return id ? true : false;
-    }
-
-    getFilingNumber() {
-        const finder = this.patient.patient_identifiers.filter(
-            (i: any) => i.type.name === "Filing number" || i.type.name === "Archived filing number"
-        );
-        return !isEmpty(finder) ? finder[0].identifier : "N/A";
-    }
-
-    private findIdentifierByType(type: string) {
-        return this.patient.patient_identifiers
-            .filter((i: any) => i.type.name === type)
-            .sort((a: any, b: any) => (a["date_created"] < b["date_created"] ? 1 : 0))
-            .reduce(
-                (defaultID, curID) => (defaultID === "Unknown" ? curID.identifier : defaultID),
-                "Unknown"
-            );
-    }
-
-    getIdentifiers() {
-        return this.patient.patient_identifiers;
-    }
-
-    getHomeDistrict() {
-        return this.getAddresses().ancestryDistrict;
-    }
-
-    getHomeTA() {
-        return this.getAddresses().ancestryTA;
-    }
-
-    getHomeVillage() {
-        return this.getAddresses().ancestryVillage;
-    }
-
-    getCurrentVillage() {
-        return this.getAddresses().currentVillage;
-    }
-
-    getCurrentTA() {
-        return this.getAddresses().currentTA;
-    }
-
-    getClosestLandmark() {
-        return this.getAttribute(19);
-    }
-
-    getOccupation() {
-        return this.getAttribute(13);
-    }
-
-    getPhoneNumber() {
-        return this.getAttribute(12); //get phone number
-    }
-
-    getAttribute(personAttributeTypeID: number) {
-        return getPersonAttribute(this.patient.person.person_attributes, personAttributeTypeID);
-    }
-
-    getPatientIdentifier(patientIdentifierTypeID: number) {
-        return getPatientIdentifier(this.patient.patient_identifiers, patientIdentifierTypeID);
-    }
-
-    patientIsComplete() {
-        return [
-            this.getGender(),
-            this.getBirthdate(),
-            this.getGivenName(),
-            this.getFamilyName(),
-            ...Object.values(this.getAddresses()),
-        ].every((a: any) => !isValueEmpty(a));
-    }
-
-    getAddresses() {
-        const addressOBJ = {
-            ancestryDistrict: "",
-            ancestryTA: "",
-            ancestryVillage: "",
-            currentDistrict: "",
-            currentTA: "",
-            currentVillage: "",
-        };
-        if (this.patient.person.addresses.length > 0) {
-            const addresses = this.patient.person.addresses[0];
-
-            addressOBJ.ancestryDistrict = addresses.address2;
-            addressOBJ.ancestryTA = addresses.county_district;
-            addressOBJ.ancestryVillage = addresses.neighborhood_cell;
-            addressOBJ.currentDistrict = addresses.state_province;
-            addressOBJ.currentTA = addresses.township_division;
-            addressOBJ.currentVillage = addresses.city_village;
-        }
-        return addressOBJ;
     }
 }

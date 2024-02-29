@@ -559,8 +559,8 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                         {
                             colData: [
                                 {
-                                    icon: icons.fullName,
                                     iconRight: icons.editStarts,
+                                    leftText: "",
                                     value: "",
                                     name: "NCDNumber",
                                     placeholder: "__-__-__-__",

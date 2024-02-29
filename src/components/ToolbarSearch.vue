@@ -181,6 +181,8 @@ export default defineComponent({
         },
         openNewPage(url: any, item: any) {
             const demographicsStore = useDemographicsStore();
+            demographicsStore.setPatient("item");
+            console.log("🚀 ~ openNewPage ~ item:", item);
             demographicsStore.setDemographics({
                 name: item.person.names[0].given_name + " " + item.person.names[0].family_name,
                 mrn: this.patientIdentifier(item),
@@ -190,7 +192,7 @@ export default defineComponent({
                 patient_id: item.patient_id,
             });
             resetPatientData();
-            this.$router.push(url);
+            // this.$router.push(url);
         },
 
         openPopover(e: any) {
