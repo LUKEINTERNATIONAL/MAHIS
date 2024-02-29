@@ -12,6 +12,9 @@ export const useDemographicsStore = defineStore("demographicStore", {
         setPatient(data: any) {
             this.patient = data;
         },
+        getPatient() {
+            return this.patient;
+        },
     },
     persist: true,
 });

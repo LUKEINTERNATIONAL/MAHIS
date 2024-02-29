@@ -28,38 +28,21 @@
                                 <ion-row>
                                     <ion-col size="4">Allergies</ion-col>
                                     <ion-col size="8">
-                                        <span
-                                            v-for="(item, index) in selectedMedicalAllergiesList"
-                                            :key="index"
-                                        >
-                                            <span class="allergies" v-if="item.selected">{{
-                                                item.name
-                                            }}</span>
+                                        <span v-for="(item, index) in selectedMedicalAllergiesList" :key="index">
+                                            <span class="allergies" v-if="item.selected">{{ item.name }}</span>
                                         </span>
                                     </ion-col>
                                 </ion-row>
                             </ion-card-content>
                         </ion-card>
-                        <ion-card
-                            class="start_new_co"
-                            style="margin-bottom: 20px"
-                            @click="handleNCD()"
-                        >
+                        <ion-card class="start_new_co" style="margin-bottom: 20px" @click="handleNCD()">
                             {{ NCDProgramActionName }}
                         </ion-card>
-                        <ion-card class="start_new_co" style="margin-bottom: 20px">
-                            + Enroll in ANC Program
-                        </ion-card>
-                        <ion-card class="start_new_co" style="margin-bottom: 20px">
-                            + Enroll in OPD Program
-                        </ion-card>
+                        <ion-card class="start_new_co" style="margin-bottom: 20px"> + Enroll in ANC Program </ion-card>
+                        <ion-card class="start_new_co" style="margin-bottom: 20px"> + Enroll in OPD Program </ion-card>
                         <ion-card style="margin-bottom: 20px; background-color: #fff">
                             <ion-accordion-group :value="['first']">
-                                <ion-accordion
-                                    value="first"
-                                    style="background-color: #fff"
-                                    toggle-icon-slot="start"
-                                >
+                                <ion-accordion value="first" style="background-color: #fff" toggle-icon-slot="start">
                                     <ion-item slot="header" color="white">
                                         <ion-label class="side_title">Templates/Forms</ion-label>
                                     </ion-item>
@@ -98,15 +81,9 @@
                         </ion-card>
                         <ion-card style="margin-bottom: 20px; background-color: #fff">
                             <ion-accordion-group>
-                                <ion-accordion
-                                    value="first"
-                                    style="background-color: #fff"
-                                    toggle-icon-slot="start"
-                                >
+                                <ion-accordion value="first" style="background-color: #fff" toggle-icon-slot="start">
                                     <ion-item slot="header" color="white">
-                                        <ion-label class="side_title"
-                                            >AETC Clerking Sheet</ion-label
-                                        >
+                                        <ion-label class="side_title">AETC Clerking Sheet</ion-label>
                                     </ion-item>
                                     <ion-card-content slot="content"> </ion-card-content>
                                 </ion-accordion>
@@ -120,10 +97,7 @@
                                 <div class="p_title">Consultation Overview</div>
                                 <div class="date">
                                     <span class="diplay_space_between" id="open-dates-trigger">
-                                        <span
-                                            v-html="iconsContent.calendar"
-                                            style="margin-right: 15px"
-                                        ></span>
+                                        <span v-html="iconsContent.calendar" style="margin-right: 15px"></span>
                                         <div>6th Oct, 2023</div>
                                     </span>
                                     <span v-html="iconsContent.today_date"></span>
@@ -143,11 +117,7 @@
                                     <ion-col class="col" style="border-bottom-left-radius: 4px">
                                         <MedicationsGrid />
                                     </ion-col>
-                                    <ion-col
-                                        class="col"
-                                        style="border-bottom-right-radius: 4px"
-                                        expand="block"
-                                    >
+                                    <ion-col class="col" style="border-bottom-right-radius: 4px" expand="block">
                                         <DispositionGrid />
                                     </ion-col>
                                 </ion-row>
@@ -157,12 +127,7 @@
                 </ion-row>
             </div>
 
-            <ion-popover
-                trigger="open-dates-trigger"
-                trigger-action="click"
-                :show-backdrop="false"
-                size="auto"
-            >
+            <ion-popover trigger="open-dates-trigger" trigger-action="click" :show-backdrop="false" size="auto">
                 <ul style="list-style: none; line-height: 50px">
                     <li>Novermber,2023</li>
                     <li>Today</li>
@@ -219,6 +184,7 @@ import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { mapState } from "pinia";
 import HisDate from "@/utils/Date";
 import { useEnrollementStore } from "@/stores/EnrollmentStore";
+import { PatientService } from "@/services/patient_service";
 
 import { ref } from "vue";
 export default defineComponent({
@@ -255,6 +221,7 @@ export default defineComponent({
         return {
             iconsContent: icons,
             isModalOpen: false,
+            url: "" as any,
             NCDProgramActionName: "+ Enroll in NCD Program" as any,
         };
     },
@@ -265,13 +232,18 @@ export default defineComponent({
         ...mapState(useGeneralStore, ["saveProgressStatus"]),
     },
     mounted() {
-        this.NCDProgramActionName = this.setProgramActionName();
         this.setNCDValue();
     },
     watch: {
         saveProgressStatus: {
             handler() {
-                console.log("ppppp");
+                this.setNCDValue();
+            },
+            deep: true,
+        },
+        demographics: {
+            handler() {
+                this.setNCDValue();
             },
             deep: true,
         },
@@ -284,8 +256,19 @@ export default defineComponent({
 
     methods: {
         setNCDValue() {
-            const identifier = this.patient;
-            console.log("🚀 ~ setNCDValue ~ identifier:", identifier);
+            sessionStorage.setItem("app", JSON.stringify({ programID: 32, applicationName: "NCD" }));
+            const patient = new PatientService();
+            if (patient.getNcdNumber() != "Unknown") {
+                if (this.saveProgressStatus) {
+                    this.NCDProgramActionName = "+ Continue NCD consultation";
+                } else {
+                    this.NCDProgramActionName = "+ Start new NCD consultation";
+                }
+                this.url = "consultationPlan";
+            } else {
+                this.url = "NCDEnrollment";
+                this.NCDProgramActionName = "+ Enroll in NCD Program";
+            }
         },
         openModal() {
             this.isModalOpen = true;
@@ -294,38 +277,14 @@ export default defineComponent({
             modalController.dismiss();
         },
         handleNCD() {
-            console.log("hhhhhh");
-            sessionStorage.setItem(
-                "app",
-                JSON.stringify({ programID: 32, applicationName: "NCD" })
-            );
-            let url = "";
-            if (
-                this.NCDProgramActionName == "+ Start new NCD consultation" ||
-                this.NCDProgramActionName == "+ Continue NCD consultation"
-            )
-                url = "consultationPlan";
-            else if (this.NCDProgramActionName == "+ Enroll in NCD Program") url = "NCDEnrollment";
-
-            console.log("🚀 ~ handleNCD ~ url:", url);
-            this.$router.push(url);
+            this.setNCDValue();
+            this.$router.push(this.url);
         },
         covertGender(gender: any) {
-            return ["Male", "M"].includes(gender)
-                ? "Male"
-                : ["Female", "F"].includes(gender)
-                  ? "Female"
-                  : "";
+            return ["Male", "M"].includes(gender) ? "Male" : ["Female", "F"].includes(gender) ? "Female" : "";
         },
         formatBirthdate() {
             return HisDate.getBirthdateAge(this.demographics.birthdate);
-        },
-        setProgramActionName() {
-            console.log("this.NCDNumber[0].data.rowData[0].colData[0].value");
-            if (this.saveProgressStatus) return "+ Continue NCD consultation";
-            else if (this.NCDNumber[0].data.rowData[0].colData[0].value != "")
-                return "+ Start new NCD consultation";
-            else return "+ Enroll in NCD Program";
         },
     },
 });

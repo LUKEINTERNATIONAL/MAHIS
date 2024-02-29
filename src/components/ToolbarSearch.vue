@@ -1,9 +1,5 @@
 <template>
-    <ion-searchbar
-        @ionInput="handleInput"
-        placeholder="Search client by MRN or Diabete clinical No."
-        class="searchField"
-    ></ion-searchbar>
+    <ion-searchbar @ionInput="handleInput" placeholder="Search client by MRN or Diabete clinical No." class="searchField"></ion-searchbar>
     <ion-popover
         :is-open="popoverOpen"
         :event="event"
@@ -20,30 +16,16 @@
                 <ion-col style="max-width: 70px">Gender</ion-col>
                 <ion-col style="max-width: 30px"></ion-col>
             </ion-row>
-            <ion-row
-                class="search_result"
-                v-for="(item, index) in patients"
-                :key="index"
-                @click="openNewPage('patientProfile', item)"
-            >
+            <ion-row class="search_result" v-for="(item, index) in patients" :key="index" @click="openNewPage('patientProfile', item)">
                 <ion-col>{{ patientIdentifier(item) }} </ion-col>
-                <ion-col>{{
-                    item.person.names[0].given_name + " " + item.person.names[0].family_name
-                }}</ion-col>
+                <ion-col>{{ item.person.names[0].given_name + " " + item.person.names[0].family_name }}</ion-col>
                 <ion-col>{{ item.person.birthdate }}</ion-col>
                 <ion-col style="max-width: 70px">{{ item.person.gender }}</ion-col>
-                <ion-col style="max-width: 30px"
-                    ><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon>
-                </ion-col>
+                <ion-col style="max-width: 30px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
             </ion-row>
             <ion-row>
                 <ion-col size="4">
-                    <DynButton
-                        :icon="add"
-                        :name="'Add Patient'"
-                        :fill="'clear'"
-                        @click="openCheckPaitentNationalIDModal"
-                    />
+                    <DynButton :icon="add" :name="'Add Patient'" :fill="'clear'" @click="openCheckPaitentNationalIDModal" />
                 </ion-col>
             </ion-row>
         </ion-content>
@@ -136,7 +118,7 @@ export default defineComponent({
 
                 const IDs: any = await this.setID(scanned);
                 const artData = await PatientService.findByOtherID(4, IDs["ARVNumber"]);
-                const ncdData = await PatientService.findByOtherID(4, IDs["NCDNumber"]);
+                const ncdData = await PatientService.findByOtherID(31, IDs["NCDNumber"]);
 
                 if (artData.length > 0) {
                     this.patients.push(...artData);
@@ -181,8 +163,7 @@ export default defineComponent({
         },
         openNewPage(url: any, item: any) {
             const demographicsStore = useDemographicsStore();
-            demographicsStore.setPatient("item");
-            console.log("🚀 ~ openNewPage ~ item:", item);
+            demographicsStore.setPatient(item);
             demographicsStore.setDemographics({
                 name: item.person.names[0].given_name + " " + item.person.names[0].family_name,
                 mrn: this.patientIdentifier(item),
@@ -192,7 +173,7 @@ export default defineComponent({
                 patient_id: item.patient_id,
             });
             resetPatientData();
-            // this.$router.push(url);
+            this.$router.push(url);
         },
 
         openPopover(e: any) {

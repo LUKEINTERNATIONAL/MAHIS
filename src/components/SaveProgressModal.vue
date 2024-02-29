@@ -19,28 +19,15 @@
         <br />
         <div class="triage_modal_btn center">
             <div class="center_btn">
-                <ion-button class="primary_btn" @click="nav('patientProfile', 'save')"
-                    >Save</ion-button
-                >
-                <span @click="nav('patientProfile', 'not_save')" style="cursor: pointer">
-                    Don't Save</span
-                >
+                <ion-button class="primary_btn" @click="nav('patientProfile', 'save')">Save</ion-button>
+                <span @click="nav('patientProfile', 'not_save')" style="cursor: pointer"> Don't Save</span>
             </div>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import {
-    IonContent,
-    IonHeader,
-    IonItem,
-    IonList,
-    IonTitle,
-    IonToolbar,
-    IonMenu,
-    modalController,
-} from "@ionic/vue";
+import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { checkmark, pulseOutline } from "ionicons/icons";
 import { ref } from "vue";
@@ -76,10 +63,12 @@ export default defineComponent({
             modalController.dismiss();
         },
         nav(url: any, action: any) {
-            if (action == "not_save") resetPatientData();
-            else {
-                const demographicsStore = useGeneralStore();
+            const demographicsStore = useGeneralStore();
+            if (action == "not_save") {
+                resetPatientData();
                 demographicsStore.setSaveProgressStatus(false);
+            } else {
+                demographicsStore.setSaveProgressStatus(true);
             }
             this.dismiss();
             this.$router.push(url);

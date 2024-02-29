@@ -7,11 +7,7 @@
                     <div class="demographics_title">Enrollment</div>
                 </div>
                 <div class="icon_div">
-                    <ion-icon
-                        :class="iconListStatus"
-                        :icon="list"
-                        @click="setDisplayType('list')"
-                    ></ion-icon>
+                    <ion-icon :class="iconListStatus" :icon="list" @click="setDisplayType('list')"></ion-icon>
                     <ion-icon
                         :class="iconGridStatus"
                         style="font-size: 21px; margin-top: 1.5px"
@@ -55,34 +51,15 @@
         </ion-content>
         <ion-footer v-if="enrollmentDisplayType == 'grid'">
             <div class="footer position_content">
-                <DynamicButton
-                    name="Previous"
-                    :icon="iconsContent.arrowLeftWhite"
-                    color="medium"
-                    @click="previousStep"
-                />
+                <DynamicButton name="Previous" :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
                 <ion-breadcrumbs class="breadcrumbs">
-                    <ion-breadcrumb
-                        @click="setCurrentStep('Enrollment')"
-                        :class="{ active: currentStep === 'Enrollment' }"
-                    >
+                    <ion-breadcrumb @click="setCurrentStep('Enrollment')" :class="{ active: currentStep === 'Enrollment' }">
                         <span class="breadcrumb-text">Enrollment</span>
-                        <ion-icon
-                            slot="separator"
-                            size="large"
-                            :icon="iconsContent.arrowRight"
-                        ></ion-icon>
+                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
                     </ion-breadcrumb>
-                    <ion-breadcrumb
-                        @click="setCurrentStep('Next Appointment')"
-                        :class="{ active: currentStep === 'Next Appointment' }"
-                    >
+                    <ion-breadcrumb @click="setCurrentStep('Next Appointment')" :class="{ active: currentStep === 'Next Appointment' }">
                         <span class="breadcrumb-text">Next Appointment</span>
-                        <ion-icon
-                            slot="separator"
-                            size="large"
-                            :icon="iconsContent.arrowRight"
-                        ></ion-icon>
+                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
                     </ion-breadcrumb>
                 </ion-breadcrumbs>
                 <DynamicButton
@@ -92,67 +69,31 @@
                     :icon="iconsContent.saveWhite"
                     @click="saveData()"
                 />
-                <DynamicButton
-                    v-else
-                    name="Next"
-                    iconSlot="end"
-                    :icon="iconsContent.arrowRightWhite"
-                    @click="nextStep"
-                />
+                <DynamicButton v-else name="Next" iconSlot="end" :icon="iconsContent.arrowRightWhite" @click="nextStep" />
             </div>
         </ion-footer>
         <ion-footer v-if="enrollmentDisplayType == 'list'">
             <div class="footer position_content">
-                <DynamicButton
-                    name="Previous"
-                    :icon="iconsContent.arrowLeftWhite"
-                    color="medium"
-                    @click="previousStep"
-                />
+                <DynamicButton name="Previous" :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
                 <ion-breadcrumbs class="breadcrumbs">
-                    <ion-breadcrumb
-                        @click="setCurrentStep('Substance & Diagnosis')"
-                        :class="{ active: currentStep === 'Substance & Diagnosis' }"
-                    >
+                    <ion-breadcrumb @click="setCurrentStep('Substance & Diagnosis')" :class="{ active: currentStep === 'Substance & Diagnosis' }">
                         <span class="breadcrumb-text">Substance & Diagnosis</span>
-                        <ion-icon
-                            slot="separator"
-                            size="large"
-                            :icon="iconsContent.arrowRight"
-                        ></ion-icon>
+                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
                     </ion-breadcrumb>
-                    <ion-breadcrumb
-                        @click="setCurrentStep('Patient History')"
-                        :class="{ active: currentStep === 'Patient History' }"
-                    >
+                    <ion-breadcrumb @click="setCurrentStep('Patient History')" :class="{ active: currentStep === 'Patient History' }">
                         <span class="breadcrumb-text">Patient History</span>
-                        <ion-icon
-                            slot="separator"
-                            size="large"
-                            :icon="iconsContent.arrowRight"
-                        ></ion-icon>
+                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
                     </ion-breadcrumb>
                     <ion-breadcrumb
                         @click="setCurrentStep('Family History and NCDNumber')"
                         :class="{ active: currentStep === 'Family History and NCDNumber' }"
                     >
                         <span class="breadcrumb-text">Family History and NCDNumber</span>
-                        <ion-icon
-                            slot="separator"
-                            size="large"
-                            :icon="iconsContent.arrowRight"
-                        ></ion-icon>
+                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
                     </ion-breadcrumb>
-                    <ion-breadcrumb
-                        @click="setCurrentStep('Next Appointment')"
-                        :class="{ active: currentStep === 'Next Appointment' }"
-                    >
+                    <ion-breadcrumb @click="setCurrentStep('Next Appointment')" :class="{ active: currentStep === 'Next Appointment' }">
                         <span class="breadcrumb-text">Next Appointment</span>
-                        <ion-icon
-                            slot="separator"
-                            size="large"
-                            :icon="iconsContent.arrowRight"
-                        ></ion-icon>
+                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
                     </ion-breadcrumb>
                 </ion-breadcrumbs>
                 <DynamicButton
@@ -162,13 +103,7 @@
                     :icon="iconsContent.saveWhite"
                     @click="saveData()"
                 />
-                <DynamicButton
-                    v-else
-                    name="Next"
-                    iconSlot="end"
-                    :icon="iconsContent.arrowRightWhite"
-                    @click="nextStep"
-                />
+                <DynamicButton v-else name="Next" iconSlot="end" :icon="iconsContent.arrowRightWhite" @click="nextStep" />
             </div>
         </ion-footer>
     </ion-page>
@@ -206,7 +141,6 @@ import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import { useVitalsStore } from "@/stores/VitalsStore";
 import { useDemographicsStore } from "@/stores/DemographicStore";
-import { useGeneralStore } from "@/stores/GeneralStore";
 import { useInvestigationStore } from "@/stores/InvestigationStore";
 import { useDiagnosisStore } from "@/stores/DiagnosisStore";
 import { mapState } from "pinia";
@@ -281,7 +215,6 @@ export default defineComponent({
         ...mapState(useVitalsStore, ["vitals"]),
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
-        ...mapState(useGeneralStore, ["saveProgressStatus"]),
         ...mapState(useConfigurationStore, ["enrollmentDisplayType"]),
         ...mapState(useEnrollementStore, ["NCDNumber"]),
     },
@@ -314,7 +247,7 @@ export default defineComponent({
             this.$router.push("consultationPlan");
         },
         async saveNcdNumber() {
-            const patient = new PatientService(this.demographics.patient_id);
+            const patient = new PatientService();
             const NCDNumber = getFieldValue(this.NCDNumber, "NCDNumber", "value");
             const sitePrefix = await GlobalPropertyService.get("site_prefix");
             patient.createNcdNumber(sitePrefix + "-NCD-" + NCDNumber);
@@ -331,12 +264,7 @@ export default defineComponent({
                 this.steps = ["Enrollment", "Next Appointment"];
             } else {
                 this.currentStep = "Substance & Diagnosis";
-                this.steps = [
-                    "Substance & Diagnosis",
-                    "Patient History",
-                    "Family History and NCDNumber",
-                    "Next Appointment",
-                ];
+                this.steps = ["Substance & Diagnosis", "Patient History", "Family History and NCDNumber", "Next Appointment"];
             }
             const demographicsStore = useConfigurationStore();
             demographicsStore.setEnrollmentDisplayType(type);
