@@ -30,12 +30,12 @@
 
         <ion-col>
             <ion-item class="input_item">
-                <ion-input  v-model="faciltyName"  @ionInput="FindTxt" fill="outline" :placeholder="searchPlaceHolder" :disabled="disableInputs"></ion-input>
+                <ion-input  v-model="facilityWardName"  @ionInput="FindTxt" fill="outline" :placeholder="searchPlaceHolder" :disabled="disableInputs"></ion-input>
                 <!--  -->
                 <ion-label><span v-html="iconsContent.search" class="selectedPatient"></span></ion-label>
             </ion-item>
             <div>
-                <ion-label v-if="show_error_msg_for_ref_facility_name" class="error-label">{{ refFacilityNameErrMsg }}</ion-label>
+                <ion-label v-if="show_error_msg_for_ref_facility_ward_name" class="error-label">{{ refFacilityNameErrMsg }}</ion-label>
             </div>
             
             <ion-popover 
@@ -46,7 +46,7 @@
                 :show-backdrop="false" 
                 :dismiss-on-select="true"
                 style="top: 10px;left: -25px;"
-                v-if="!show_error_msg_for_ref_facility_name"
+                v-if="!show_error_msg_for_ref_facility_ward_name"
                 >
                 <ion-content color="light"  class="ion-padding content-al" >
                     <!-- <ion-row class="search_result" v-for="(item, index) in diagnosisData" :key="index" >
@@ -122,10 +122,10 @@
     const initialMsg = ref("No referrals created yet")
 
     const show_error_msg_for_ref_type = ref(false)
-    const refTypErrMsg = ref("please enter a number")
+    const refTypErrMsg = ref("please select a type")
 
-    const show_error_msg_for_ref_facility_name = ref(false)
-    const refFacilityNameErrMsg = ref("please enter a valid facility name")
+    const show_error_msg_for_ref_facility_ward_name = ref(false)
+    const refFacilityNameErrMsg = ref('')
     const show_error_msg_for_ref_date = ref(false)
     const refDateErrMsg = ref("please select a date")
     const show_error_msg_for_ref_reason = ref(false)
@@ -141,7 +141,7 @@
     const refDate = ref('')
     const refReason = ref('')
     const showEmptyMsg = ref(true)
-    const faciltyName = ref('')
+    const facilityWardName = ref('')
     const editIndex = ref(NaN)
     const disableInputs = ref(true)
     const searchPlaceHolder = ref('')
@@ -243,6 +243,13 @@
         }
     )
 
+    watch(
+        () => facilityWardName.value,
+        async (newValue) => {
+            validateFacilityWardName()
+        }
+    )
+
     function checkForDispositions() {
         if (dispositions.value.length > 0) {
             showEmptyMsg.value = false
@@ -268,7 +275,7 @@
         showAddReferralInfo.value = !true
 
         const referralData = {
-            name: faciltyName.value,
+            name: facilityWardName.value,
             type: refType.value,
             date: refDate.value,
             reason: refReason.value,
@@ -279,7 +286,7 @@
     }
 
     function clearInputs() {
-        faciltyName.value = ''
+        facilityWardName.value = ''
         refType.value = ''
         refDate.value = ''
         refReason.value = ''
@@ -300,7 +307,7 @@
 
     function editItem(index: any) {
         EditEvnt.value = true
-        faciltyName.value = dispositions.value[index].name
+        facilityWardName.value = dispositions.value[index].name
         refType.value = dispositions.value[index].type
         refDate.value = dispositions.value[index].date
         refReason.value = dispositions.value[index].reason
@@ -326,12 +333,22 @@
         return show_error_msg_for_ref_reason.value
     }
 
+    async function validateFacilityWardName() {
+        if (facilityWardName.value === '') {
+            show_error_msg_for_ref_facility_ward_name.value = true
+        } else {
+            show_error_msg_for_ref_facility_ward_name.value = false
+        }
+        return show_error_msg_for_ref_facility_ward_name.value
+    }
+
     async function validateInputs() {
         const isReftypeValid = await validateReftype()
         const isRefDateValid = await validateRefDate()
         const isRefReasonValid = await validateRefReasons()
+        const isRefNameValid = await validateFacilityWardName()
 
-        if (!isReftypeValid && !isRefDateValid && !isRefReasonValid) {
+        if (!isReftypeValid && !isRefDateValid && !isRefReasonValid && !isRefNameValid) {
             return true
         } else {
             return false
@@ -368,7 +385,7 @@
 
     function selectedFaciltyName(name: any, obj: any) {
         console.log(name)
-        faciltyName.value = name
+        facilityWardName.value = name
         // drug_id.value = obj.drug_id
         // units.value = obj.units
     }
@@ -417,16 +434,19 @@
         if (ref_type == referralType.value[0].name) {
             searchPlaceHolder.value = 'find ward'
             fn = findWardName as any
+            refFacilityNameErrMsg.value = 'please select a ward'
         }
 
         if (ref_type == referralType.value[1].name) {
             searchPlaceHolder.value = 'find department'
             fn = findDepartMentName as any
+            refFacilityNameErrMsg.value = 'please select a department'
         }
         
         if (ref_type == referralType.value[2].name) {
             searchPlaceHolder.value = 'find facility name'
             fn = findFacilityName as any
+            refFacilityNameErrMsg.value = 'please select a facility name'
         }
 
         disableInputs.value = false

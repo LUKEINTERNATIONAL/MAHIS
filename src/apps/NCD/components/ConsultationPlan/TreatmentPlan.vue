@@ -42,7 +42,7 @@
                         <div class="ionLbltp" v-for="(item, index) in FirstPreviousAllegies" :key="index">
                             <div v-if="index == 1">
                                 <div>
-                                    <ion-label class="previousLabelDate">{{ removeOuterArray(item).date }}</ion-label>
+                                    <ion-label class="previousLabelDate">{{ item[0].date }}</ion-label>
                                 </div>
                                 <div v-for="(item1, index1) in item" :key="index1">
                                 <div class="previousSecDrgs">
