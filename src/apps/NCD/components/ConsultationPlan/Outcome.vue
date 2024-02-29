@@ -146,6 +146,7 @@
     const disableInputs = ref(true)
     const searchPlaceHolder = ref('')
     const fnToUse = ref()
+    const refDataItem = ref()
     const popoverOpen = ref(false)
     const showAddReferralInfo = ref(false)
     const store = useDispositionStore()
@@ -279,6 +280,7 @@
             type: refType.value,
             date: refDate.value,
             reason: refReason.value,
+            dataItem: refDataItem.value
         }
 
         store.addDispositionData(referralData, editIndex.value)
@@ -290,6 +292,7 @@
         refType.value = ''
         refDate.value = ''
         refReason.value = ''
+        refDataItem.value = null
     }
 
     async function validateReftype() {
@@ -386,8 +389,7 @@
     function selectedFaciltyName(name: any, obj: any) {
         console.log(name)
         facilityWardName.value = name
-        // drug_id.value = obj.drug_id
-        // units.value = obj.units
+        refDataItem.value = obj
     }
 
     function showOptions(event: Event) {

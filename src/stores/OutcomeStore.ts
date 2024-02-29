@@ -7,6 +7,7 @@ export const useDispositionStore = defineStore('outcome', {
             // type:
             // date:
             // reason:
+            // dataItem:
         ] as any,
     }),
     actions:{
