@@ -211,7 +211,7 @@ export default defineComponent({
     // },
     saveData(){
 
-      this.$router.push('labTests');
+      this.$router.push('LabTests');
 
     },
     openModal(){

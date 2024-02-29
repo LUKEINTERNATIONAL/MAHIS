@@ -114,7 +114,7 @@ export default defineComponent({
   },
   computed:{
 
-        ...mapState(useAncVitalsStore,["vitals"]),
+        // ...mapState(useAncVitalsStore,["vitals"]),
         ...mapState(useAncVitalsStore,["heightWeight"]),
         ...mapState(useAncVitalsStore,["bloodPressure"]),
         ...mapState(useAncVitalsStore,["respiration"]),

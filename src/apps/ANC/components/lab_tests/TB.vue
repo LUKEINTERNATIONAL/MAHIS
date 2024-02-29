@@ -4,7 +4,7 @@
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="tbTest"></basic-form>
-                <basic-form :contentData="results"></basic-form>
+                <!-- <basic-form :contentData="results"></basic-form> -->
             </ion-card-content>
     </ion-card>
 

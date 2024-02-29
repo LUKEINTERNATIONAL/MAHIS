@@ -28,6 +28,7 @@ import {
   IonLabel,
   IonModal,
 } from '@ionic/vue';
+
 import { defineComponent } from 'vue';
 import Toolbar from "@/apps/ANC/components/Toolbar.vue";
 import ToolbarSearch from "@/apps/ANC/components/ToolbarSearch.vue";
@@ -51,11 +52,11 @@ import {useCurrentPregnanciesStore} from "@/apps/ANC/store/profile/CurrentPregan
 import {useMedicationsStore} from "@/apps/ANC/store/profile/MedicationsStore";
 import {useWomanBehaviourStore} from "@/apps/ANC/store/profile/womanBehaviourStore";
 
-function someChecked(options, errorMassage) {
-  if (!options.filter(v => v.checkboxBtnContent).some(v => v.checkboxBtnContent.data.some(d => d.checked))) {
-    return errorMassage
-  }
-}
+// function someChecked(options, errorMassage) {
+//   if (!options.filter(v => v.checkboxBtnContent).some(v => v.checkboxBtnContent.data.some(d => d.checked))) {
+//     return errorMassage
+//   }
+// }
 export default defineComponent({
   name: "Home",
   components:{
@@ -146,14 +147,14 @@ export default defineComponent({
           'title': 'Past Medical history',
           'componet': 'MedicalHistory',
           'value': '2',
-          validation: {
-            medicalHistory: (data) => someChecked(data, "Medical history is required"), 
-            allegy: (data) => someChecked(data, "Allergy is required"), 
-            //existingChronicHealthConditions: (data)=>someChecked(data, "Existing chronic conditions is required"),
-            hivTest: (data)=>someChecked(data, "HIV test required"),
-            syphilisTest: (data)=>someChecked(data, "Syphilis test is required")
+          // validation: {
+          //   medicalHistory: (data) => someChecked(data, "Medical history is required"), 
+          //   allegy: (data) => someChecked(data, "Allergy is required"), 
+          //   //existingChronicHealthConditions: (data)=>someChecked(data, "Existing chronic conditions is required"),
+          //   hivTest: (data)=>someChecked(data, "HIV test required"),
+          //   syphilisTest: (data)=>someChecked(data, "Syphilis test is required")
             
-          }
+          // }
         },
         {
           'title': 'Current Pregnancy',
@@ -219,27 +220,6 @@ export default defineComponent({
     // this.markWizard()
 
   },
-  watch: {
-
-    vitals: {
-    //   handler(){
-    //     this.markWizard()
-    //   },
-    //   deep: true
-    // },
-    // investigations: {
-    //   handler(){
-    //     this.markWizard()
-    //   },
-    //   deep: true
-    // },
-    // diagnosis: {
-    //   handler(){
-    //     this.markWizard()
-    //   },
-      deep: true
-    }
-  },
   setup() {
     return { chevronBackOutline,checkmark };
   },
@@ -280,20 +260,20 @@ export default defineComponent({
       });
     },
     saveData(){ 
-      const errors = []
-      this.StepperData.forEach((stepper)=> {
-        if (!stepper.validation) return
-        Object.keys(stepper.validation).forEach((validationName) => {
-          if (typeof stepper.validation[validationName] === 'function') {
-            const state = stepper.validation[validationName](this[validationName])
-            if (state) errors.push(state)
-          }
-        })
-      })
-      if (errors.length) {
-        return alert(errors.join(','))
-      }
-
+      // const errors = []
+      // this.StepperData.forEach((stepper)=> {
+      //   if (!stepper.validation) return
+      //   Object.keys(stepper.validation).forEach((validationName) => {
+      //     if (typeof stepper.validation[validationName] === 'function') {
+      //       const state = stepper.validation[validationName](this[validationName])
+      //       if (state) errors.push(state)
+      //     }
+      //   })
+      // })
+      // if (errors.length) {
+      //   return alert(errors.join(','))
+      // }
+       this.$router.push('QuickCheck');
      },
 
     openModal(){
