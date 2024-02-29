@@ -12,6 +12,7 @@
             :value="inputValue"
             :placeholder="placeholder"
             :type="inputType"
+            :disabled="disabled"
         />
         <ion-label v-if="unit || iconRight" style="border-left: 1px solid #E6E6E6; padding-left: 10px;">
             <span v-if="iconRight" v-html="iconRight"></span>
@@ -86,6 +87,10 @@ export default defineComponent({
         },
         inputWidth:{
             default: ''
+        },
+        disabled:{
+            type: Boolean,
+            default: false
         }
 
     },

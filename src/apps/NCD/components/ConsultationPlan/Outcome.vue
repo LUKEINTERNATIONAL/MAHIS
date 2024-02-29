@@ -14,8 +14,23 @@
     <div v-if="showAddReferralInfo">    
     <ion-row>
         <ion-col>
+            <BasicInputField :placeholder="basicInputFieldProperties[1].placeholder"
+                :icon="basicInputFieldProperties[1].icon" :inputValue="refType"
+                @clicked:inputValue="showOptions" />
+
+            <SelectionPopover :content="popoverProperties.popoverData" :keyboardClose="popoverProperties.keyboardClose"
+                :title="popoverProperties.title" :popoverOpen="popoverProperties.popoverOpen"
+                :event="popoverProperties.event" @closePopoover="value => popoverProperties.popoverOpen = value"
+                @setSelection="setSelection" />
+
+            <div>
+                <ion-label v-if="show_error_msg_for_ref_type" class="error-label">{{ refTypErrMsg }}</ion-label>
+            </div>
+        </ion-col>
+
+        <ion-col>
             <ion-item class="input_item">
-                <ion-input  v-model="faciltyName"  @ionInput="FindFacilityName" fill="outline"></ion-input>
+                <ion-input  v-model="faciltyName"  @ionInput="FindTxt" fill="outline" :placeholder="searchPlaceHolder" :disabled="disableInputs"></ion-input>
                 <!--  -->
                 <ion-label><span v-html="iconsContent.search" class="selectedPatient"></span></ion-label>
             </ion-item>
@@ -38,7 +53,7 @@
                         <ion-col @click="selectedDrugName(item.name, item)">{{ item.name }} </ion-col>
                     </ion-row> -->
                     <ion-list class="list-al">
-                        <div class="item-al" v-for="(item, index) in facilityNameData" :key="index">
+                        <div class="item-al" v-for="(item, index) in NamesData" :key="index"  @click="selectedFaciltyName(item.name, item)">
                             <ion-col @click="selectedFaciltyName(item.name, item)">{{ item.name }} </ion-col>
                         </div>
                     </ion-list>
@@ -47,23 +62,8 @@
         </ion-col>
 
         <ion-col>
-            <BasicInputField :placeholder="basicInputFieldProperties[1].placeholder"
-                :icon="basicInputFieldProperties[1].icon" :inputValue="refType"
-                @clicked:inputValue="showOptions" />
-
-            <SelectionPopover :content="popoverProperties.popoverData" :keyboardClose="popoverProperties.keyboardClose"
-                :title="popoverProperties.title" :popoverOpen="popoverProperties.popoverOpen"
-                :event="popoverProperties.event" @closePopoover="value => popoverProperties.popoverOpen = value"
-                @setSelection="setSelection" />
-
-            <div>
-                <ion-label v-if="show_error_msg_for_ref_type" class="error-label">{{ refTypErrMsg }}</ion-label>
-            </div>
-        </ion-col>
-
-        <ion-col>
             <BasicInputField :placeholder="basicInputFieldProperties[2].placeholder"
-                :inputValue="refDate" :icon="basicInputFieldProperties[2].icon"
+                :inputValue="refDate" :icon="basicInputFieldProperties[2].icon" :disabled="disableInputs"
                 @update:inputValue="refDate" @clicked:inputValue="openDate" />
 
             <ion-popover :show-backdrop="false" :keep-contents-mounted="true" :is-open="popoverProperties.dateOpen"
@@ -82,7 +82,7 @@
     </ion-row>
     <ion-row>
         <ion-col size="9">
-            <BasicInputField :placeholder="basicInputFieldProperties[3].placeholder"
+            <BasicInputField :placeholder="basicInputFieldProperties[3].placeholder" :disabled="disableInputs"
             :inputValue="refReason" @update:inputValue="updateReason" />
             <div>
                 <ion-label v-if="show_error_msg_for_ref_reason" class="error-label">{{ refRsnErrMsg }}</ion-label>
@@ -116,6 +116,7 @@
     import DynamicDispositionList from "@/components/DynamicDispositionList.vue"
     import { useDispositionStore } from "@/stores/OutcomeStore"
     import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts"
+    import { getSpecialistClinics, getFacilityWards } from '@/apps/NCD/services/outcome'
 
     const iconsContent = icons
     const initialMsg = ref("No referrals created yet")
@@ -142,11 +143,15 @@
     const showEmptyMsg = ref(true)
     const faciltyName = ref('')
     const editIndex = ref(NaN)
+    const disableInputs = ref(true)
+    const searchPlaceHolder = ref('')
+    const fnToUse = ref()
     const popoverOpen = ref(false)
     const showAddReferralInfo = ref(false)
     const store = useDispositionStore()
     const dispositions = computed(() => store.dispositions)
-    const facilityNameData = ref([] as any)
+    const NamesData = ref([] as any)
+    const EditEvnt = ref(false)
     const basicInputFieldProperties = [
         {
             // ### leave as is (this obj)
@@ -173,6 +178,10 @@
 
     const referralType = ref([
         {
+            name: 'Admit',
+            selected: false,
+        },
+        {
             name: 'Internal',
             selected: false,
         },
@@ -194,6 +203,17 @@
     onMounted(async () => {
         checkForDispositions()
     })
+
+    watch(
+       () => refType.value,
+       async (newvalue) => {
+        if (EditEvnt.value == true) {
+            EditEvnt.value = false
+        } else {
+            checkRefType()
+        }
+       }
+    )
 
     watch(
         () => dispositions.value.length,
@@ -279,6 +299,7 @@
     }
 
     function editItem(index: any) {
+        EditEvnt.value = true
         faciltyName.value = dispositions.value[index].name
         refType.value = dispositions.value[index].type
         refDate.value = dispositions.value[index].date
@@ -317,10 +338,22 @@
         }
     }
 
-    async function FindFacilityName(evnt: any) {
+    async function FindTxt(evnt: any) {
         const searchText = evnt.target.value
+        await fnToUse.value(searchText)
         openPopover(evnt)
-        facilityNameData.value = await LocationService.getFacilities({ name: searchText })
+    }
+
+    async function findFacilityName(srch_text: string) {
+        NamesData.value = await LocationService.getFacilities({ name: srch_text })
+    }
+
+    async function findWardName(srch_text: string) {
+        NamesData.value = await getFacilityWards(srch_text)
+    }
+
+    async function findDepartMentName(srch_text: string) {
+        NamesData.value = await getSpecialistClinics()
     }
 
     function openPopover(e: any) {
@@ -334,6 +367,7 @@
     }
 
     function selectedFaciltyName(name: any, obj: any) {
+        console.log(name)
         faciltyName.value = name
         // drug_id.value = obj.drug_id
         // units.value = obj.units
@@ -372,6 +406,31 @@
     function updateReason(event: any) {
         const reason = event.target.value
         refReason.value = reason
+    }
+
+    async function checkRefType() {
+        const tempRefType = refType.value
+        clearInputs()
+        refType.value = tempRefType
+        let fn
+        const ref_type = refType.value
+        if (ref_type == referralType.value[0].name) {
+            searchPlaceHolder.value = 'find ward'
+            fn = findWardName as any
+        }
+
+        if (ref_type == referralType.value[1].name) {
+            searchPlaceHolder.value = 'find department'
+            fn = findDepartMentName as any
+        }
+        
+        if (ref_type == referralType.value[2].name) {
+            searchPlaceHolder.value = 'find facility name'
+            fn = findFacilityName as any
+        }
+
+        disableInputs.value = false
+        fnToUse.value = fn
     }
     
 </script>
