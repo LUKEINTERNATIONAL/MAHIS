@@ -120,17 +120,14 @@
 
     const iconsContent = icons
     const initialMsg = ref("No referrals created yet")
-
     const show_error_msg_for_ref_type = ref(false)
     const refTypErrMsg = ref("please select a type")
-
     const show_error_msg_for_ref_facility_ward_name = ref(false)
     const refFacilityNameErrMsg = ref('')
     const show_error_msg_for_ref_date = ref(false)
     const refDateErrMsg = ref("please select a date")
     const show_error_msg_for_ref_reason = ref(false)
     const refRsnErrMsg = ref("please enter a reason")
-
     const btnName1 = ref("Add new referral")
     const btnFill = 'clear'
     let event: null = null
