@@ -276,10 +276,11 @@ export default defineComponent({
                 this.saveInvestigation();
                 this.saveDiagnosis();
                 this.saveTreatmentPlan();
+                this.saveOutComeStatus();
                 this.$router.push("patientProfile");
             } else {
                 toastWarning("Please complete all required fields");
-                this.saveTreatmentPlan();
+                this.saveOutComeStatus();
             }
         },
         saveInvestigation() {
@@ -333,6 +334,13 @@ export default defineComponent({
                 if (!drugOrder) return toastWarning("Unable to create drug orders!");
                 toastSuccess("Drug order has been created");
             }
+        },
+
+        async saveOutComeStatus() {
+            const userID: any = Service.getUserID()
+            const patientID = this.demographics.patient_id
+
+
         },
         openModal() {
             createModal(SaveProgressModal);
