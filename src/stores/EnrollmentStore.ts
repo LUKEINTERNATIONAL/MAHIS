@@ -64,6 +64,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                     },
                     data: [
                         {
+                            colSize: 4.2,
                             name: "Type 1 DM",
                             value: "type_1",
                             checked: false,
@@ -92,6 +93,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                     },
                     data: [
                         {
+                            colSize: 4.2,
                             name: "Type 2 DM",
                             value: "type_2",
                             checked: false,
@@ -121,6 +123,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                     },
                     data: [
                         {
+                            colSize: 4.2,
                             name: "Hypertetion",
                             value: "hypertetion",
                             checked: false,
@@ -275,6 +278,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 checkboxBtnContent: {
                     data: [
                         {
+                            colSize: 4.2,
                             name: "Anxiety",
                             value: "Anxiety",
                             checked: false,
@@ -297,6 +301,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 checkboxBtnContent: {
                     data: [
                         {
+                            colSize: 4.2,
                             name: "Depression",
                             value: "Depression",
                             checked: false,
@@ -327,6 +332,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                     },
                     data: [
                         {
+                            colSize: 4.2,
                             name: "Smear pos",
                             value: "Smear pos",
                             checked: false,
@@ -349,6 +355,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 checkboxBtnContent: {
                     data: [
                         {
+                            colSize: 4.2,
                             name: "Smear neg",
                             value: "Smear neg",
                             checked: false,
@@ -371,6 +378,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 checkboxBtnContent: {
                     data: [
                         {
+                            colSize: 4.2,
                             name: "EPTB",
                             value: "EPTB",
                             checked: false,
@@ -390,9 +398,11 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 },
             },
             {
+                classDash: "dashed_bottom_border",
                 checkboxBtnContent: {
                     data: [
                         {
+                            colSize: 4.8,
                             name: "Never had TB",
                             value: "Never had TB",
                             checked: false,
@@ -482,6 +492,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 checkboxBtnContent: {
                     data: [
                         {
+                            colSize: 4.2,
                             name: "Stroke/TIA",
                             value: "Stroke/TIA",
                             checked: false,
