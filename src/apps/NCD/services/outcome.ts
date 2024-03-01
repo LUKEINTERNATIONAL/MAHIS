@@ -7,7 +7,6 @@ export class OutCome {
         const admissionService = new PatientAdmitService(patientID, providerID)
         await admissionService.createEncounter()
         await admissionService.saveObservationList(admissionData)
-
     }
 
     async onSubmitReferral(patientID: any, providerID: any, referralData: any) {
