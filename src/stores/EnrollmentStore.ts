@@ -11,6 +11,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 radioBtnContent: {
                     header: {
                         title: "Smoking",
+                        name: "smoking",
                         selectedValue: "",
                     },
                     data: [
@@ -33,6 +34,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 radioBtnContent: {
                     header: {
                         title: "Drinking alcohol",
+                        name: "drinking_alcohol",
                         selectedValue: "",
                     },
                     data: [
@@ -520,6 +522,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 radioBtnContent: {
                     header: {
                         title: "Diabetes",
+                        name: "diabetes",
                         selectedValue: "",
                     },
                     data: [
@@ -542,6 +545,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 radioBtnContent: {
                     header: {
                         title: "Hypertension",
+                        name: "hypertension",
                         selectedValue: "",
                     },
                     data: [

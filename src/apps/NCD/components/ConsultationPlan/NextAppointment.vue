@@ -1,52 +1,47 @@
 <template>
-    <div class="demographics">
-        <ion-card class="enrollment_card">
-            <div class="card_content">
-                <div class="card_hearder">Next appointment</div>
-                <ion-row>
-                    <ion-col>
-                        <VueDatePicker class="calender" @date-update="handleDateUpdate" v-model="date" inline auto-apply :enable-time-picker="false">
-                            <template #day="{ day }">
-                                <template v-if="day === tomorrow">
-                                    <p>
-                                        {{ day }}<sup style="color: #999">{{ bookedPatient }}</sup>
-                                    </p>
-                                </template>
-                                <template v-else>
-                                    {{ day }}
-                                </template>
-                            </template>
-                        </VueDatePicker>
-                    </ion-col>
-                    <ion-col size="3">
-                        <ion-item>
-                            <div class="dates_title">
-                                <div>Medication run out date</div>
-                                <div class="sub_data">20 June 2024</div>
-                            </div>
-                        </ion-item>
-                        <ion-item>
-                            <div class="dates_title">
-                                <div>User set appointment date</div>
-                                <div class="sub_data">20 June 2024</div>
-                            </div>
-                        </ion-item>
-                        <ion-item>
-                            <div class="dates_title">
-                                <div>Appointments</div>
-                                <div class="sub_data">{{ bookedPatient }}</div>
-                            </div>
-                        </ion-item>
-                        <ion-item>
-                            <div class="dates_title">
-                                <div>Appointment limit (per/day)</div>
-                                <div class="sub_data">{{ bookedPatient }}/120</div>
-                            </div>
-                        </ion-item>
-                    </ion-col>
-                </ion-row>
-            </div>
-        </ion-card>
+    <div class="card_content">
+        <ion-row>
+            <ion-col>
+                <VueDatePicker class="calender" @date-update="handleDateUpdate" v-model="date" inline auto-apply :enable-time-picker="false">
+                    <template #day="{ day }">
+                        <template v-if="day === tomorrow">
+                            <p>
+                                {{ day }}<sup style="color: #999">{{ bookedPatient }}</sup>
+                            </p>
+                        </template>
+                        <template v-else>
+                            {{ day }}
+                        </template>
+                    </template>
+                </VueDatePicker>
+            </ion-col>
+            <ion-col size="3.7">
+                <ion-item>
+                    <div class="dates_title">
+                        <div>Medication run out date</div>
+                        <div class="sub_data">20 June 2024</div>
+                    </div>
+                </ion-item>
+                <ion-item>
+                    <div class="dates_title">
+                        <div>User set appointment date</div>
+                        <div class="sub_data">{{ calendarDate }}</div>
+                    </div>
+                </ion-item>
+                <ion-item>
+                    <div class="dates_title">
+                        <div>Appointments</div>
+                        <div class="sub_data">{{ bookedPatient }}</div>
+                    </div>
+                </ion-item>
+                <ion-item>
+                    <div class="dates_title">
+                        <div>Appointment limit (per/day)</div>
+                        <div class="sub_data">{{ bookedPatient }}/120</div>
+                    </div>
+                </ion-item>
+            </ion-col>
+        </ion-row>
     </div>
 </template>
 
@@ -58,7 +53,7 @@ import { ref } from "vue";
 import { icons } from "@/utils/svg";
 
 import { createModal } from "@/utils/Alerts";
-import BasicInputField from "../../../components/BasicInputField.vue";
+import BasicInputField from "../../../../components/BasicInputField.vue";
 import HisDate from "@/utils/Date";
 import { useNextAppointmentStore } from "@/stores/NextAppointmentStore";
 import { mapState } from "pinia";
@@ -113,7 +108,7 @@ export default defineComponent({
             nextAppointmentStore.setNextAppointment(this.calendarDate);
         },
         handleDateUpdate(value: any) {
-            this.calendarDate = value;
+            this.calendarDate = HisDate.toStandardHisDisplayFormat(value);
             this.saveData();
         },
         async saveData() {
@@ -204,8 +199,8 @@ ion-datetime::part(calendar-day) {
     padding: 20px;
 }
 .calender {
-    --dp-cell-padding: 35px; /*Padding in the cell*/
+    --dp-cell-padding: 30px; /*Padding in the cell*/
     --dp-menu-padding: 20px 5px; /*Menu padding*/
-    --dp-font-size: 1.5rem; /*Default font-size*/
+    --dp-font-size: 18px; /*Default font-size*/
 }
 </style>

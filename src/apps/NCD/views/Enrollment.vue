@@ -17,20 +17,15 @@
                 </div>
             </div>
             <div v-if="enrollmentDisplayType == 'grid'">
-                <div v-if="currentStep == 'Enrollment'">
-                    <ion-row class="card_row" v-if="enrollmentDisplayType == 'grid'">
-                        <ion-col size="6">
-                            <PatientHistory />
-                        </ion-col>
-                        <ion-col size="6">
-                            <SubstanceDiagnosis />
-                            <FamilyHistoryNCDNumber />
-                        </ion-col>
-                    </ion-row>
-                </div>
-                <div v-if="currentStep == 'Next Appointment'">
-                    <NextAppointment />
-                </div>
+                <ion-row class="card_row" v-if="enrollmentDisplayType == 'grid'">
+                    <ion-col size="6">
+                        <PatientHistory />
+                    </ion-col>
+                    <ion-col size="6">
+                        <SubstanceDiagnosis />
+                        <FamilyHistoryNCDNumber />
+                    </ion-col>
+                </ion-row>
             </div>
             <div v-if="enrollmentDisplayType == 'list'">
                 <div v-if="currentStep == 'Substance & Diagnosis'">
@@ -44,34 +39,11 @@
                 <div v-if="currentStep == 'Family History and NCDNumber'">
                     <FamilyHistoryNCDNumber />
                 </div>
-                <div v-if="currentStep == 'Next Appointment'">
-                    <NextAppointment />
-                </div>
             </div>
         </ion-content>
-        <ion-footer v-if="enrollmentDisplayType == 'grid'">
-            <div class="footer position_content">
-                <DynamicButton name="Previous" :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
-                <ion-breadcrumbs class="breadcrumbs">
-                    <ion-breadcrumb @click="setCurrentStep('Enrollment')" :class="{ active: currentStep === 'Enrollment' }">
-                        <span class="breadcrumb-text">Enrollment</span>
-                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
-                    </ion-breadcrumb>
-                    <ion-breadcrumb @click="setCurrentStep('Next Appointment')" :class="{ active: currentStep === 'Next Appointment' }">
-                        <span class="breadcrumb-text">Next Appointment</span>
-                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
-                    </ion-breadcrumb>
-                </ion-breadcrumbs>
-                <DynamicButton
-                    v-if="currentStep == 'Next Appointment'"
-                    name="Save"
-                    iconSlot="end"
-                    :icon="iconsContent.saveWhite"
-                    @click="saveData()"
-                />
-                <DynamicButton v-else name="Next" iconSlot="end" :icon="iconsContent.arrowRightWhite" @click="nextStep" />
-            </div>
-        </ion-footer>
+        <div class="footer2" v-if="enrollmentDisplayType == 'grid'">
+            <DynamicButton name="Save" iconSlot="end" :icon="iconsContent.saveWhite" @click="saveData()" />
+        </div>
         <ion-footer v-if="enrollmentDisplayType == 'list'">
             <div class="footer position_content">
                 <DynamicButton name="Previous" :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
@@ -91,13 +63,9 @@
                         <span class="breadcrumb-text">Family History and NCDNumber</span>
                         <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
                     </ion-breadcrumb>
-                    <ion-breadcrumb @click="setCurrentStep('Next Appointment')" :class="{ active: currentStep === 'Next Appointment' }">
-                        <span class="breadcrumb-text">Next Appointment</span>
-                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
-                    </ion-breadcrumb>
                 </ion-breadcrumbs>
                 <DynamicButton
-                    v-if="currentStep == 'Next Appointment'"
+                    v-if="currentStep == 'Family History and NCDNumber'"
                     name="Save"
                     iconSlot="end"
                     :icon="iconsContent.saveWhite"
@@ -153,7 +121,6 @@ import { Diagnosis } from "@/apps/NCD/services/diagnosis";
 import PatientHistory from "@/apps/NCD/components/Enrollment/PatientHistory.vue";
 import SubstanceDiagnosis from "@/apps/NCD/components/Enrollment/SubstanceDiagnosis.vue";
 import FamilyHistoryNCDNumber from "@/apps/NCD/components/Enrollment/FamilyHistoryNCDNumber.vue";
-import NextAppointment from "@/apps/NCD/components/NextAppointment.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import { useConfigurationStore } from "@/stores/ConfigurationStore";
 import { arrowForwardCircle, grid, list } from "ionicons/icons";
@@ -195,7 +162,6 @@ export default defineComponent({
         PatientHistory,
         SubstanceDiagnosis,
         FamilyHistoryNCDNumber,
-        NextAppointment,
         DynamicButton,
     },
     data() {
@@ -261,10 +227,9 @@ export default defineComponent({
         setDisplayType(type: any) {
             if (type == "grid") {
                 this.currentStep = "Enrollment";
-                this.steps = ["Enrollment", "Next Appointment"];
             } else {
                 this.currentStep = "Substance & Diagnosis";
-                this.steps = ["Substance & Diagnosis", "Patient History", "Family History and NCDNumber", "Next Appointment"];
+                this.steps = ["Substance & Diagnosis", "Patient History", "Family History and NCDNumber"];
             }
             const demographicsStore = useConfigurationStore();
             demographicsStore.setEnrollmentDisplayType(type);
