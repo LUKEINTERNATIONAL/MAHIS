@@ -1,14 +1,13 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
-export const useMedicationsStore = defineStore('medicationsStore', {
+export const useMedicationsStore = defineStore("medicationsStore", {
     state: () => ({
-        medications: [] as any
+        medications: [] as any,
     }),
-    actions:{
-        setMedications(data: any){
-            this.medications = data
-        }
+    actions: {
+        setMedications(data: any) {
+            this.medications = data;
+        },
     },
-    persist:true,
-
-})
+    persist: true,
+});
