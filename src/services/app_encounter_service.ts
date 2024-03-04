@@ -86,8 +86,9 @@ export class AppEncounterService extends ObservationService {
             'value_text': 'Estimated'
         })
     }
-
+   
     async saveObservationList(obs: Array<ObsValue>) {
+        console.log(this.encounterID)
         return ObservationService.saveObsArray(this.encounterID, obs)
     }
 

@@ -149,7 +149,7 @@ export default defineComponent({
     };
   },
   computed:{
-     ...mapState(useAncVitalsStore,["vitals"]),
+    //  ...mapState(useAncVitalsStore,["vitals"]),
     ...mapState(useInvestigationStore,["investigations"]),
     ...mapState(useDiagnosisStore,["diagnosis"]),
   },

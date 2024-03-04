@@ -440,7 +440,7 @@ export const useMedicationsStore = defineStore('medicationsStore',{
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "85%",
-                                        required: true
+                                       
                                     },
 
                                 ]
