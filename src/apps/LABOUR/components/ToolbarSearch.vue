@@ -55,12 +55,12 @@
     popoverController 
   } from '@ionic/vue';
   import { defineComponent } from 'vue';
-  import { Patientservice } from "@/services/patient_service"
   import { checkmark, add } from 'ionicons/icons';
   import { useDemographicsStore } from '@/stores/DemographicStore'
   import { useVitalsStore } from '@/stores/VitalsStore'
   import DynButton from '@/components/DynamicButton.vue'
   import { createModal } from '@/utils/Alerts'
+  import { PatientService } from "@/services/patient_service";
   import CheckPatientNationalID from '@/components/CheckPatientNationalID.vue';
   import { resetPatientData } from '@/services/reset_data'
   
@@ -112,7 +112,7 @@
         this.searchPatient(payload)
       },
       async searchPatient(payload: any){
-        this.patients = await Patientservice.search(payload);
+        this.patients = await PatientService.search(payload);
       },
       patientIdentifier(item: any){
         // return item

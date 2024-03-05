@@ -537,12 +537,12 @@ export const useEnrollementStore = defineStore('enrollementStore',{
         ]
     }),
     actions:{
-        setSubstance(data: any){
-            this.substance = data
-        },
-        setDiagnosis(data: any){
-            this.diagnosis = data
-        },
+        // setSubstance(data: any){
+        //     this.substance = data
+        // },
+        // setDiagnosis(data: any){
+        //     this.diagnosis = data
+        // },
         setPatientHistory(data: any){
             this.patientHistory = data
         },

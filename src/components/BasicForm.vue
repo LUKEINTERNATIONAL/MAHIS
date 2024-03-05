@@ -29,12 +29,9 @@
                             :inputWidth="col.inputWidth"
                             :inputValue="col.value"
                             :eventType="col.eventType"
-                            @update:inputValue="
-                                handleInput(contentData, col, $event, 'updateInput')
-                            "
-                            @clicked:inputValue="
-                                handleInput(contentData, col, $event, 'clickedInput')
-                            "
+                            :disabled="col.disabled"
+                            @update:inputValue="handleInput(contentData, col, $event,'updateInput')"
+                            @clicked:inputValue="handleInput(contentData, col, $event,'clickedInput')"
                             :popOverData="col.popOverData"
                             @setPopoverValue="
                                 handleInput(contentData, col, $event, 'setPopoverValue')
@@ -51,7 +48,9 @@
                             :inputWidth="col.inputWidth"
                             :inputValue="col.value"
                             :eventType="col.eventType"
-                            @update:dateValue="handleInput(contentData, col, $event, 'updateDate')"
+                            :disabled="col.disabled"
+                            @update:dateValue="handleInput(contentData, col, $event,'updateDate')"
+                           
                         />
 
                         <div class="alerts_error" v-if="col.alertsError">
@@ -73,10 +72,8 @@
                     </ion-col>
                 </ion-row>
             </span>
-            <span v-if="item.radioBtnContent">
-                <div style="" v-if="item.radioBtnContent?.header">
-                    {{ item.radioBtnContent?.header.title }}
-                </div>
+            <span v-if="item.radioBtnContent && !item.radioBtnContent.header.displayNone">
+                <div style="font-weight: bold;" v-if="item.radioBtnContent?.header">{{ item.radioBtnContent?.header.title }} </div>
                 <ion-row class="checkbox_content">
                     <ion-col
                         :size="al.colSize"
