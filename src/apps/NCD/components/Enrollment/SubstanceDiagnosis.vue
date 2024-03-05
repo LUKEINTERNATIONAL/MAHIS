@@ -38,7 +38,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useEnrollementStore, ["substance"]),
-        ...mapState(useEnrollementStore, ["diagnosis"]),
+        ...mapState(useEnrollementStore, ["enrollmentDiagnosis"]),
     },
     watch: {
         personInformation: {
@@ -64,8 +64,8 @@ export default defineComponent({
                         content: this.substance,
                     },
                     {
-                        cardTitle: "Diagnosis",
-                        content: this.diagnosis,
+                        cardTitle: "enrollmentDiagnosis",
+                        content: this.enrollmentDiagnosis,
                     },
                 ],
             };
@@ -76,15 +76,17 @@ export default defineComponent({
         updateEnrollmentStores() {
             const enrollmentStore = useEnrollementStore();
             enrollmentStore.setSubstance(this.substance);
-            enrollmentStore.setDiagnosis(this.diagnosis);
+            enrollmentStore.setDiagnosis(this.enrollmentDiagnosis);
         },
+
         testF(data: any) {
             console.log(data);
         },
         async handleInputData(event: any) {
             console.log("🚀 ~ handleInputData ~ event:", event);
-            if (event?.value?.detail?.checked) modifyCheckboxInputField(this.diagnosis, event?.al?.name, "displayNone", false);
-            else modifyCheckboxInputField(this.diagnosis, event?.al?.name, "displayNone", true);
+            if (event?.value?.detail?.checked) {
+                modifyCheckboxInputField(this.enrollmentDiagnosis, event?.al?.name, "displayNone", false);
+            } else modifyCheckboxInputField(this.enrollmentDiagnosis, event?.al?.name, "displayNone", true);
         },
     },
 });

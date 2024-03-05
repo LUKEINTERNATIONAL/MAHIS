@@ -54,7 +54,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 },
             },
         ],
-        diagnosis: [
+        enrollmentDiagnosis: [
             {
                 selectedData: [],
                 isFinishBtn: false,
@@ -144,7 +144,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                     ],
                 },
             },
-        ],
+        ] as any,
         patientHistoryHIV: [
             {
                 selectedData: [],

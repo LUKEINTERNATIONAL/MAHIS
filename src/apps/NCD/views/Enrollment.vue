@@ -132,6 +132,7 @@ import {
     getRadioSelectedValue,
     getCheckboxSelectedValue,
     getFieldValue,
+    getCheckboxInputField,
     modifyFieldValue,
     modifyCheckboxValue,
 } from "@/services/data_helpers";
@@ -182,7 +183,7 @@ export default defineComponent({
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useConfigurationStore, ["enrollmentDisplayType"]),
-        ...mapState(useEnrollementStore, ["NCDNumber"]),
+        ...mapState(useEnrollementStore, ["NCDNumber", "enrollmentDiagnosis"]),
     },
     async mounted() {
         this.setDisplayType(this.enrollmentDisplayType);
@@ -209,9 +210,18 @@ export default defineComponent({
             }
         },
         saveData() {
-            this.saveNcdNumber();
-            this.$router.push("consultationPlan");
+            const hyper = getCheckboxSelectedValue(this.enrollmentDiagnosis, "Hypertetion");
+            getCheckboxInputField(this.enrollmentDiagnosis, "Hypertension", "value");
+            console.log("🚀 ~ saveData ~ hyper:", hyper);
+            console.log("🚀 ~ saveData ~ this.diagnosis[0].selectedData:", getCheckboxInputField(this.enrollmentDiagnosis, "Hypertension", "value"));
+
+            // this.saveNcdNumber();
+            // this.buildDiagnosis()
+            // if(this.diagnosis[0].selectedData.length > 0)
+            //     this.saveDiagnosis()
+            // this.$router.push("consultationPlan");
         },
+
         async saveNcdNumber() {
             const patient = new PatientService();
             const NCDNumber = getFieldValue(this.NCDNumber, "NCDNumber", "value");
@@ -243,6 +253,28 @@ export default defineComponent({
             } else if (this.enrollmentDisplayType == "grid") {
                 this.iconGridStatus = "active_icon";
             }
+        },
+        buildDiagnosis() {
+            this.diagnosis[0].selectedData.push({
+                concept_id: 6542, //primary diagnosis
+                value_coded: 6409, // type 1
+                obs_datetime: this.diagnosis,
+            });
+            this.diagnosis[0].selectedData.push({
+                concept_id: 6542, //primary diagnosis
+                value_coded: 6410, // type 2
+                obs_datetime: this.diagnosis,
+            });
+            this.diagnosis[0].selectedData.push({
+                concept_id: 6542, //primary diagnosis
+                value_coded: 903, // Hypertension
+                obs_datetime: this.diagnosis,
+            });
+        },
+        saveDiagnosis() {
+            const userID: any = Service.getUserID();
+            const diagnosisInstance = new Diagnosis();
+            diagnosisInstance.onSubmit(this.demographics.patient_id, userID, this.diagnosis[0].selectedData);
         },
     },
 });
