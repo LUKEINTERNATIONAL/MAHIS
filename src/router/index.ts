@@ -8,6 +8,8 @@ import { alertController, loadingController, modalController, toastController } 
 
 import NCD from '@/apps/NCD/config/routes'
 import ANC from '@/apps/ANC/config/routes'
+import LABOUR from '@/apps/LABOUR/config/routes'
+import PNC from '@/apps/PNC/config/routes'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -36,7 +38,9 @@ const routes: Array<RouteRecordRaw> = [
     props: true
   },
   ...NCD,
-  ...ANC
+  ...ANC,
+  ...LABOUR,
+    ...PNC
 ]
 
 const router = createRouter({
@@ -44,16 +48,16 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
-  loadingController.getTop().then(v => v ? loadingController.dismiss() : null)
-  modalController.getTop().then(v => v ? modalController.dismiss() : null)
-  alertController.getTop().then(v => v ? alertController.dismiss() : null)
-  toastController.getTop().then(v => v ? toastController.dismiss() : null)
-  const whitelistedUri = ['/login', '/settings/host']
-  if (!sessionStorage.getItem('apiKey') && !whitelistedUri.includes(to.path)) {
-    next('/login')
-  }
-  next()
-})
+// router.beforeEach((to, from, next) => {
+//   loadingController.getTop().then(v => v ? loadingController.dismiss() : null)
+//   modalController.getTop().then(v => v ? modalController.dismiss() : null)
+//   alertController.getTop().then(v => v ? alertController.dismiss() : null)
+//   toastController.getTop().then(v => v ? toastController.dismiss() : null)
+//   const whitelistedUri = ['/login', '/settings/host']
+//   if (!sessionStorage.getItem('apiKey') && !whitelistedUri.includes(to.path)) {
+//     next('/login')
+//   }
+//   next()
+// })
 
 export default router

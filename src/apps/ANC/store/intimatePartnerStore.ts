@@ -12,19 +12,20 @@ export const useIntimatePartnerStore = defineStore ('intimatePartnerStore', {
                 {
                     header:{
                         title: 'Intimate partner firstlline support provided?', 
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'intimateInfo'
                     },
                     data:[
                         {
                             name: 'Yes',
-                            value: 'y',
+                            value: 'yes',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'No',
-                            value: 'n',
+                            value: 'no',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
@@ -33,9 +34,9 @@ export const useIntimatePartnerStore = defineStore ('intimatePartnerStore', {
                 }
                     
             },
-        ],
+        // ],
 
-        ipvReason:[
+        // ipvReason:[
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -44,7 +45,9 @@ export const useIntimatePartnerStore = defineStore ('intimatePartnerStore', {
                 {
                     header:{
                         title: 'Reason IPV firstline support not done',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'reasonIPV',
+                        displayNone:true,
                     },
                     data:[
                         {
@@ -89,13 +92,11 @@ export const useIntimatePartnerStore = defineStore ('intimatePartnerStore', {
             {
                 isFinishBtn: false,
                 sectionHeader: '',
-                classDash: 'dashed_bottom_border _padding',
-
                 data:{
                     rowData: [{
                         colData: [{
                             
-                                inputHeader: 'Other (Specify)',
+                                inputHeader: 'specify',
                                 value: '',
                                 name: 'other',
                                 icon: icons.editPen,
@@ -453,37 +454,7 @@ export const useIntimatePartnerStore = defineStore ('intimatePartnerStore', {
                                             },
                                             data:[
                                                 {
-                                                    name: 'Police',
-                                                    value: 'police',
-                                                    labelPlacement: 'start',
-                                                    colSize: '6',
-                                                    justify: 'space-between',
-                                                },
-                                                {
                                                     name: 'Shelter or housing',
-                                                    value: 'shelter',
-                                                    labelPlacement: 'start',
-                                                    colSize: '6',
-                                                    justify: 'space-between',
-                                                },
-                                            ]
-                                        }
-                                            
-                                    },
-                                    {
-                                        selectdData: [],
-                                        isFinishBtn: false,
-                                         sectionHeader: '',
-                                        classDash: 'dashed_bottom_border ',
-                                        checkboxBtnContent:
-                                        {
-                                            header:{
-                                                title: '',
-                                                selectedValue: ''
-                                            },
-                                            data:[
-                                                {
-                                                    name: 'Legal aid & services',
                                                     value: 'legal_aid',
                                                     labelPlacement: 'start',
                                                     colSize: '6',
@@ -504,8 +475,8 @@ export const useIntimatePartnerStore = defineStore ('intimatePartnerStore', {
                                     {
                                         selectdData: [],
                                         isFinishBtn: false,
+                                        classDash: 'dashed_bottom_border ',
                                          sectionHeader: '',
-                                        classDash: '',
                                         checkboxBtnContent:
                                         {
                                             header:{
@@ -531,23 +502,47 @@ export const useIntimatePartnerStore = defineStore ('intimatePartnerStore', {
                                         }
                                             
                                     },
+                                    {
+                                        selectdData: [],
+                                        isFinishBtn: false,
+                                        classDash: 'dashed_bottom_border ',
+                                         sectionHeader: '',
+                                        checkboxBtnContent:
+                                        {
+                                            header:{
+                                                title: '',
+                                                selectedValue: ''
+                                            },
+                                            data:[
+                                                {
+                                                    name: 'None',
+                                                    value: 'none',
+                                                    labelPlacement: 'start',
+                                                    colSize: '6',
+                                                    justify: 'space-between',
+                                                },
+                                            ]
+                                        }
+                                            
+                                    },
                                     
                                     {
                                         isFinishBtn: false,
                                         sectionHeader: '',
-                                        classDash: 'dashed_bottom_border _padding',
+                                       
                         
                                         data:
                                             {
                                                 rowData:[
                                                     {
                                                         colData: [
-                                                            {
-                                                                inputHeader: 'Other (specify)',
+                                                            {   
+                                                                displayNone:true,
+                                                                inputHeader: 'specify',
                                                                 unit: '',
                                                                 icon: icons.editPen,
                                                                 value: '',
-                                                                name: 'Other',
+                                                                name: 'Specify',
                                                                 required: true,
                                                                 eventType: 'input',
                                                                 inputWidth: "85%",
@@ -564,9 +559,9 @@ export const useIntimatePartnerStore = defineStore ('intimatePartnerStore', {
         setIPV(data:any){
             this.ipv = data
         },
-        setIPVReason(data:any){
-            this.ipvReason = data
-        },
+        // setIPVReason(data:any){
+        //     this.ipvReason = data
+        // },
         setAddCare(data:any){
             this.additionalCare = data
         },

@@ -17,6 +17,7 @@ import { mapState } from 'pinia';
  import BasicInputField from "@/components/BasicInputField.vue";
  import {usePersistentSymptomsStore} from "@/apps/ANC/store/symptomsFollowUp/persistentSymptomsStore";
  import BasicForm from '@/components/BasicForm.vue';
+import { getCheckboxSelectedValue, modifyCheckboxValue } from "@/services/data_helpers";
 
 
 export default defineComponent({
@@ -30,9 +31,34 @@ export default defineComponent({
 
     mounted(){
         const persistentSymptom =usePersistentSymptomsStore()
+        this.handleNone()
+    },
+    watch:{
+        persistentSymptom:{
+            handler(){
+                this.handleNone()
+            },
+            deep:true
+        },
+        
     },
       computed:{
         ...mapState(usePersistentSymptomsStore,["persistentSymptom"]),
+    },methods:{
+        handleNone(){
+                   const checkBoxes=["Breathing difficulty","Leg cramps","Visual disturbance","Constipation","Headache","Heartburn","Pain-Leg",]
+
+                if (getCheckboxSelectedValue(this.persistentSymptom, 'None')?.checked) {
+                    checkBoxes.forEach((checkbox) => {
+                        modifyCheckboxValue(this.persistentSymptom, checkbox, 'checked', false);
+                        modifyCheckboxValue(this.persistentSymptom, checkbox, 'disabled', true);
+                    });
+                    } else {
+                    checkBoxes.forEach((checkbox) => {
+                        modifyCheckboxValue(this.persistentSymptom, checkbox, 'disabled', false);
+                    });
+                }
+        },
     },
 })
 </script>

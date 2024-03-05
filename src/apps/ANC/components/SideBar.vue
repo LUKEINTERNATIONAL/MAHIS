@@ -71,12 +71,12 @@ const ancPages = [
     iosIcon: heartOutline,
     mdIcon: heartSharp,
   },
-  {
-    title: 'Referral',
-    url: '/referral',
-    iosIcon: archiveOutline,
-    mdIcon: archiveSharp,
-  },
+  // {
+  //   title: 'Referral',
+  //   url: '/referral',
+  //   iosIcon: archiveOutline,
+  //   mdIcon: archiveSharp,
+  // },
   {
     title: 'ANCend',
     url: '/ancEnd',

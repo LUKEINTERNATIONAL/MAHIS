@@ -1,45 +1,96 @@
 <template>
-  <Toolbar/>
-  <DemographicBar/>
-  <SideBar />
+  <ion-page>
+    <Toolbar/>
+    <ion-content :fullscreen="true">
+      <DemographicBar/>
+      <Stepper stepperTitle="Referral" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
+    </ion-content>
+  </ion-page>
 </template>
 
-<script>
-import { IonPage, IonIcon, IonLabel, IonContent, IonToolbar, IonHeader, IonRow, IonCol, IonList, IonMenuButton } from '@ionic/vue';
-import { defineComponent } from 'vue';
-import SideBar from "@/apps/ANC/components/SideBar.vue";
+<script lang="ts">
+import {
+  IonContent,
+  IonHeader,
+  IonItem,
+  IonPage,
+  IonList,
+  IonTitle,
+  IonToolbar,
+  IonMenu,
+} from '@ionic/vue';
+import Toolbar from '@/components/Toolbar.vue'
 import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
-import Toolbar from "@/apps/ANC/components/Toolbar.vue";
-import Dashboard from "@/apps/ANC/components/Dashboard.vue";
+import { defineComponent } from 'vue';
+import BasicInputField from '@/components/BasicInputField.vue';
+import Stepper from '@/components/Stepper.vue';
+import { icons } from '@/utils/svg';
+import { chevronBackOutline, checkmark } from 'ionicons/icons';
+import Referral from "@/apps/ANC/components/referral/Referral.vue";
 
-export default defineComponent({
-  components: {Dashboard, IonPage, IonIcon, IonLabel, IonContent, IonToolbar, IonHeader, IonRow, IonCol, IonList, IonMenuButton, SideBar, DemographicBar, Toolbar },
 
-});
+
+export default defineComponent ({
+  name : 'treatment',
+  components : {
+    IonContent,
+    IonHeader,
+    IonItem,
+    IonPage,
+    IonList,
+    Toolbar,
+    DemographicBar,
+    IonMenu,
+    IonTitle,
+    IonToolbar,
+    BasicInputField,
+    Stepper,
+    Referral
+  },
+  data(){
+    return {
+      iconsContent: icons,
+      isOpen: false,
+      wizardData: [
+
+        {
+          'title': 'Referral',
+          'class': 'common_step',
+          'checked':false,
+          'disabled':false,
+          'number':1,
+          'last_step': 'last_step'
+        },
+
+      ],
+      StepperData: [
+        {
+          'title': 'Referral',
+          'componet': 'Referral',
+          'value': '1'
+        },
+
+      ],
+
+    }
+  },
+  setup () {
+    return {chevronBackOutline, checkmark}
+  },
+
+  methods: {
+    markWizard(){},
+    saveData(){
+
+      this.$router.push('counselling');
+
+    },
+  }
+})
+
 </script>
 
+
 <style scoped>
-ion-menu {
-  --width: 250px;
-}
-ion-toolbar {
-  --ion-padding: 10px;
-}
 
-ion-split-pane {
-  --side-width: 150px;
-}
-
-[v-cloak] {
-  display: none;
-}
-
-ion-item {
-  --inner-padding-start: 0px;
-  --color-hover: red;
-}
-
-ion-item.submenu {
-  height: 0px;
-}
 </style>

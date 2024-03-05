@@ -188,7 +188,7 @@
         },
         saveData(){
 
-          this.$router.push('physicalExam');
+          this.$router.push('physicalExamination');
 
         },
       }
