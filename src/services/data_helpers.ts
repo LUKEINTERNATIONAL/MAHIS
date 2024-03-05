@@ -1,5 +1,3 @@
-
-
 export function modifyFieldValue(data: any, fieldName: any, element: any, newValue: any) {
     for (const item of data) {
         const colData = data.flatMap((item: any) => item.data?.rowData?.[0]?.colData).find((col: any) => col?.name === fieldName);
@@ -21,28 +19,35 @@ export function getCheckboxSelectedValue(data: any, checkboxName: any) {
     return checkboxContent?.checkboxBtnContent?.data.find((checkbox: any) => checkbox.name === checkboxName && checkbox.checked)?.value;
 }
 
-export function modifyRadioValue(data: any, radioBtnName: any, element: any, newValue: any) {
-    const itemIndex = data.findIndex((item: any) => item.radioBtnContent && item.radioBtnContent.header.name === radioBtnName);
-    if (itemIndex !== -1)  data[itemIndex].radioBtnContent.header[element] = newValue;
+export function getCheckboxInputField(data: any, checkboxInputName: any, element: any) {
+    data.forEach((item: any) => {
+        const checkbox = item.checkboxBtnContent?.inputFields?.find((checkboxInput: any) => checkboxInput.name === checkboxInputName);
+        return checkbox;
+    });
 }
 
-export function modifyCheckboxValue(data: any, checkboxName: any,element: any, newValue: any) {
+export function modifyRadioValue(data: any, radioBtnName: any, element: any, newValue: any) {
+    const itemIndex = data.findIndex((item: any) => item.radioBtnContent && item.radioBtnContent.header.name === radioBtnName);
+    if (itemIndex !== -1) data[itemIndex].radioBtnContent.header[element] = newValue;
+}
+
+export function modifyCheckboxValue(data: any, checkboxName: any, element: any, newValue: any) {
     data.forEach((item: any) => {
         const checkbox = item.checkboxBtnContent?.data.find((checkbox: any) => checkbox.name === checkboxName);
         if (checkbox) checkbox[element] = newValue;
     });
 }
 
-export function modifyCheckboxInputField(data: any, checkboxInputName: any,element: any, newValue: any) {
+export function modifyCheckboxInputField(data: any, checkboxInputName: any, element: any, newValue: any) {
     data.forEach((item: any) => {
         const checkbox = item.checkboxBtnContent?.inputFields?.find((checkboxInput: any) => checkboxInput.name === checkboxInputName);
         if (checkbox) checkbox[element] = newValue;
     });
 }
 
-export function modifyCheckboxHeader(data: any,headerName: any, element: any, newValue: any) {
+export function modifyCheckboxHeader(data: any, headerName: any, element: any, newValue: any) {
     data.forEach((item: any) => {
-        console.log(item)
+        console.log(item);
         if (item?.checkboxBtnContent?.header?.name === headerName) {
             item.checkboxBtnContent.header[element] = newValue;
         }

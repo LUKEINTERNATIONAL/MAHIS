@@ -12,12 +12,14 @@ import { isValueEmpty } from "@/utils/Strs";
 import { PatientIdentifierService } from "./patient_identifier_service";
 import { PatientPrintoutService } from "./patient_printout_service";
 import dayjs from "dayjs";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 
 export class PatientService extends Service {
     patient: Patient;
-    constructor(patient: Patient) {
+    constructor() {
+        const demographicsStore = useDemographicsStore();
         super();
-        this.patient = patient;
+        this.patient = demographicsStore.getPatient();
     }
 
     public static mergePatients(payload: any) {
@@ -48,9 +50,7 @@ export class PatientService extends Service {
         return super.getJson(`/patients/${patientId}`);
     }
     public static async assignNHID(patientId: number | string, programID: number) {
-        return super.postJson(`/patients/${patientId}/npid`, {
-            program_id: programID,
-        });
+        return super.postJson(`/patients/${patientId}/npid`, { program_id: programID });
     }
     public static reassignARVNumber(
         patientIdentifierId: number | string,
@@ -96,6 +96,9 @@ export class PatientService extends Service {
     createArvNumber(arvNumber: string) {
         return PatientIdentifierService.create(this.getID(), 4, arvNumber);
     }
+    createNcdNumber(ncdNumber: string) {
+        return PatientIdentifierService.create(this.getID(), 31, ncdNumber);
+    }
 
     updateARVNumber(newARVNumber: string) {
         const patientIdentifierId =
@@ -106,8 +109,8 @@ export class PatientService extends Service {
         });
     }
 
-    public static updateMWNationalId(newId: string, patientID: any) {
-        return PatientIdentifierService.create(patientID, 28, newId);
+    updateMWNationalId(newId: string) {
+        return PatientIdentifierService.create(this.getID(), 28, newId);
     }
 
     isMale() {
@@ -345,6 +348,10 @@ export class PatientService extends Service {
 
     getArvNumber() {
         return this.findIdentifierByType("ARV Number");
+    }
+
+    getNcdNumber() {
+        return this.findIdentifierByType("NCD Number");
     }
 
     hasActiveFilingNumber() {

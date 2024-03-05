@@ -45,7 +45,6 @@ import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import { useVitalsStore } from "@/stores/VitalsStore";
 import { useDemographicsStore } from "@/stores/DemographicStore";
-import { useGeneralStore } from "@/stores/GeneralStore";
 import { useInvestigationStore } from "@/stores/InvestigationStore";
 import { useDiagnosisStore } from "@/stores/DiagnosisStore";
 import { mapState } from "pinia";
@@ -60,10 +59,7 @@ import { Treatment } from "@/apps/NCD/services/treatment";
 import { isEmpty } from "lodash";
 import HisDate from "@/utils/Date";
 import { defineComponent } from "vue";
-import {
-    DRUG_FREQUENCIES,
-    DrugPrescriptionService,
-} from "../../../services/drug_prescription_service";
+import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
 export default defineComponent({
     name: "Home",
     components: {
@@ -137,12 +133,21 @@ export default defineComponent({
                     last_step: "",
                 },
                 {
-                    title: "Outcome",
+                    title: "Next Appointment",
                     class: "common_step",
                     checked: "",
                     icon: false,
                     disabled: false,
                     number: 6,
+                    last_step: "",
+                },
+                {
+                    title: "Outcome",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+                    disabled: false,
+                    number: 7,
                     last_step: "last_step",
                 },
             ],
@@ -173,9 +178,14 @@ export default defineComponent({
                     value: "5",
                 },
                 {
+                    title: "Next Appointment",
+                    componet: "NextAppointment",
+                    value: "6",
+                },
+                {
                     title: "Outcome",
                     componet: "Outcome",
-                    value: "6",
+                    value: "7",
                 },
             ],
             isOpen: false,
@@ -187,12 +197,7 @@ export default defineComponent({
         ...mapState(useVitalsStore, ["vitals"]),
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
-        ...mapState(useTreatmentPlanStore, [
-            "selectedMedicalDrugsList",
-            "nonPharmalogicalTherapyAndOtherNotes",
-            "selectedMedicalAllergiesList",
-        ]),
-        ...mapState(useGeneralStore, ["saveProgressStatus"]),
+        ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
     },
     mounted() {
         this.markWizard();
@@ -228,7 +233,6 @@ export default defineComponent({
 
     methods: {
         markWizard() {
-            this.setProgressStatus();
             if (this.vitals.validationStatus) {
                 this.wizardData[0].checked = true;
                 this.wizardData[0].class = "open_step common_step";
@@ -257,21 +261,13 @@ export default defineComponent({
                 this.wizardData[4].checked = false;
             }
         },
-        setProgressStatus() {
-            const demographicsStore = useGeneralStore();
-            demographicsStore.setSaveProgressStatus(true);
-        },
         getFormatedData(data: any) {
             return data.map((item: any) => {
                 return item?.data;
             });
         },
         saveData() {
-            if (
-                this.vitals.validationStatus &&
-                this.investigations[0].selectedData.length > 0 &&
-                this.diagnosis[0].selectedData.length > 0
-            ) {
+            if (this.vitals.validationStatus && this.investigations[0].selectedData.length > 0 && this.diagnosis[0].selectedData.length > 0) {
                 this.saveVitals();
                 this.saveInvestigation();
                 this.saveDiagnosis();
@@ -284,10 +280,7 @@ export default defineComponent({
         },
         saveInvestigation() {
             const investigationInstance = new LabOrder();
-            investigationInstance.postActivities(
-                this.demographics.patient_id,
-                this.getFormatedData(this.investigations[0].selectedData)
-            );
+            investigationInstance.postActivities(this.demographics.patient_id, this.getFormatedData(this.investigations[0].selectedData));
         },
         saveVitals() {
             const userID: any = Service.getUserID();
@@ -297,11 +290,7 @@ export default defineComponent({
         saveDiagnosis() {
             const userID: any = Service.getUserID();
             const diagnosisInstance = new Diagnosis();
-            diagnosisInstance.onSubmit(
-                this.demographics.patient_id,
-                userID,
-                this.getFormatedData(this.diagnosis[0].selectedData)
-            );
+            diagnosisInstance.onSubmit(this.demographics.patient_id, userID, this.getFormatedData(this.diagnosis[0].selectedData));
         },
         async saveTreatmentPlan() {
             const userID: any = Service.getUserID();
@@ -340,19 +329,14 @@ export default defineComponent({
         mapToOrders(): any[] {
             return this.selectedMedicalDrugsList.map((drug: any) => {
                 const startDate = DrugPrescriptionService.getSessionDate();
-                const frequency =
-                    DRUG_FREQUENCIES.find((f) => f.label === drug.frequency) ||
-                    ({} as (typeof DRUG_FREQUENCIES)[0]);
+                const frequency = DRUG_FREQUENCIES.find((f) => f.label === drug.frequency) || ({} as (typeof DRUG_FREQUENCIES)[0]);
                 return {
                     drug_inventory_id: drug.drug_id,
-                    equivalent_daily_dose:
-                        drug.dose == "Unknown" ? 0 : drug.dose * frequency?.value || 0,
+                    equivalent_daily_dose: drug.dose == "Unknown" ? 0 : drug.dose * frequency?.value || 0,
                     start_date: startDate,
                     auto_expire_date: this.calculateExpireDate(startDate, drug.duration),
                     units: drug.units,
-                    instructions: `${drug.drugName}: ${drug.dose} ${drug.units} ${
-                        frequency?.code || ""
-                    } for ${drug.duration} days`,
+                    instructions: `${drug.drugName}: ${drug.dose} ${drug.units} ${frequency?.code || ""} for ${drug.duration} days`,
                     dose: drug.dose,
                     frequency: frequency?.code || "",
                 };
