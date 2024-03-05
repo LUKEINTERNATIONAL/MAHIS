@@ -1,28 +1,28 @@
-import { NotesService } from "@/services/notes_service";
-import { DrugAllergyService } from "@/services/drug_allargy_service";
-import { isEmpty } from "lodash";
-import { EncounterService } from "@/services/encounter_service";
-import { ObservationService, ObsValue } from "@/services/observation_service";
-import { ConceptService } from "@/services/concept_service";
-import { Service } from "@/services/service";
-import { useDemographicsStore } from "@/stores/DemographicStore";
-import { PatientService } from "@/services/patient_service";
-import { ProgramService } from "@/services/program_service";
-import { DrugOrderService } from "@/services/drug_order_service";
+import { NotesService } from "@/services/notes_service"
+import { DrugAllergyService } from "@/services/drug_allargy_service"
+import { isEmpty } from "lodash"
+import { EncounterService } from "@/services/encounter_service"
+import { ObservationService, ObsValue } from "@/services/observation_service"
+import { ConceptService } from "@/services/concept_service"
+import { Service } from "@/services/service"
+import { useDemographicsStore } from "@/stores/DemographicStore"
+import { PatientService } from "@/services/patient_service"
+import { ProgramService } from "@/services/program_service"
+import { DrugOrderService } from "@/services/drug_order_service"
 import HisDate from "@/utils/Date";
-import { getFrequencyLabelOrCheckCode } from "@/services/drug_prescription_service";
+import { getFrequencyLabelOrCheckCode } from "@/services/drug_prescription_service"
 
 export class Treatment {
     async onSubmitNotes(patientID: any, providerID: any, treatmentNotesData: any) {
-        const notesService = new NotesService(patientID, providerID);
-        await notesService.createEncounter();
-        await notesService.saveObservationList(treatmentNotesData);
+        const notesService = new NotesService(patientID, providerID)
+        await notesService.createEncounter()
+        await notesService.saveObservationList(treatmentNotesData)
     }
 
     async onSubmitAllergies(patientID: any, providerID: any, allergiesDataObs: any) {
-        const drug_allergy_service = new DrugAllergyService(patientID, providerID);
-        await drug_allergy_service.createEncounter();
-        await drug_allergy_service.saveObservationList(allergiesDataObs);
+        const drug_allergy_service = new DrugAllergyService(patientID, providerID)
+        await drug_allergy_service.createEncounter()
+        await drug_allergy_service.saveObservationList(allergiesDataObs)
     }
 }
 

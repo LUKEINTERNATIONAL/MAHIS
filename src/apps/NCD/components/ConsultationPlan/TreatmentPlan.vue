@@ -42,7 +42,7 @@
                         <div class="ionLbltp" v-for="(item, index) in FirstPreviousAllegies" :key="index">
                             <div v-if="index == 1">
                                 <div>
-                                    <ion-label class="previousLabelDate">{{ removeOuterArray(item).date }}</ion-label>
+                                    <ion-label class="previousLabelDate">{{ item[0].date }}</ion-label>
                                 </div>
                                 <div v-for="(item1, index1) in item" :key="index1">
                                 <div class="previousSecDrgs">
@@ -81,7 +81,6 @@
                     </div>
                 </ion-accordion>
             </ion-accordion-group>
-
 
         <ion-item lines="none">
             <ion-label>List of medications</ion-label>
@@ -300,7 +299,7 @@
 </template>
 
 <script setup lang="ts">
-    import {     IonContent, IonHeader, IonCol, IonItem, IonList, IonButton, IonMenu, IonTitle, IonToolbar, IonInput, IonDatetime, IonLabel, IonTextarea, IonAccordion, IonAccordionGroup, AccordionGroupCustomEvent } from '@ionic/vue';
+    import {     IonContent, IonHeader, IonCol, IonItem, IonList, IonButton, IonMenu, IonTitle, IonToolbar, IonInput, IonDatetime, IonLabel, IonTextarea, IonAccordion, IonAccordionGroup, AccordionGroupCustomEvent } from '@ionic/vue'
     import { checkmark,pulseOutline,addOutline,closeOutline, checkmarkOutline, filter, chevronDownOutline, chevronUpOutline, codeSlashOutline } from 'ionicons/icons'
     import { ref, watch, computed, onMounted, onUpdated } from 'vue'
     import { icons } from '@/utils/svg'
@@ -309,7 +308,6 @@
     import { ConceptName } from '@/interfaces/conceptName'
     import DynamicButton from "@/components/DynamicButton.vue"
     import DynamicList from '@/components/DynamicList.vue'
-    import { mapState } from 'pinia';
     import { useTreatmentPlanStore } from '@/stores/TreatmentPlanStore'
     import { ConceptService } from "@/services/concept_service"
     import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts"
@@ -317,18 +315,14 @@
     import { PreviousTreatment } from '@/apps/NCD/services/treatment'
 
     const iconsContent = icons
-    const searchText = ref('')
     const drug_frequencies = DRUG_FREQUENCIES
-    const no_item =  ref(true)
     const search_item = ref(false)
     const display_item = ref(false)
     const addItemButton = ref(true)
     const popoverOpen = ref(false)
     const prescPopoverOpen = ref(false)
-    const datetime = ref()
     let event: null = null
     const componentKey = ref(0)
-    let prescEvent = null
     const drugnameErrMsg = ref('')
     const show_error_msg_for_drug_name = ref(false)
     const doseErrMsg = ref('')
