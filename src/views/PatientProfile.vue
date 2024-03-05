@@ -35,7 +35,7 @@
                                 </ion-row>
                             </ion-card-content>
                         </ion-card>
-                        <ion-card class="start_new_co" style="margin-bottom: 20px" @click="nav()">
+                        <ion-card class="start_new_co" style="margin-bottom: 20px" @click="handleNCD()">
                             {{ NCDProgramActionName }}
                         </ion-card>
                         <ion-card class="start_new_co" style="margin-bottom: 20px">
