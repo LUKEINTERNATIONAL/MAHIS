@@ -1,22 +1,25 @@
 <template>
     <DashBox :status="no_item" :content="'No Investigations added '" />
     <span v-if="display_item">
-        <list :listData="investigations[0].selectdData" 
+        <list
+            :listData="investigations[0].selectedData"
             @clicked:edit="editTest($event)"
-            @clicked:delete="openDeletePopover($event)">
+            @clicked:delete="openDeletePopover($event)"
+        >
         </list>
     </span>
 
     <span v-if="search_item">
-        <basic-form 
-            :contentData="investigations" 
-            @update:selected="handleInputData" 
+        <basic-form
+            :contentData="investigations"
+            @update:selected="handleInputData"
             @update:inputValue="handleInputData"
-            @clicked:button="addNewRow">
+            @clicked:button="addNewRow"
+        >
         </basic-form>
     </span>
 
-    <ion-row v-if="addItemButton" style="margin-top:10px ;">
+    <ion-row v-if="addItemButton" style="margin-top: 10px">
         <DynamicButton
             fill="clear"
             :icon="iconsContent.plus"
@@ -27,7 +30,11 @@
     </ion-row>
     <ion-row>
         <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff;">
+            <ion-accordion
+                value="first"
+                toggle-icon-slot="start"
+                style="border-radius: 10px; background-color: #fff"
+            >
                 <ion-item slot="header" color="light">
                     <ion-label class="previousLabel">Previous measurements</ion-label>
                 </ion-item>
@@ -38,7 +45,7 @@
         </ion-accordion-group>
     </ion-row>
 </template>
-  
+
 <script lang="ts">
 import {
     IonContent,
@@ -49,31 +56,33 @@ import {
     IonToolbar,
     IonMenu,
     IonInput,
-    IonPopover
-} from '@ionic/vue';
-import { defineComponent, ref } from 'vue';
-import { build, checkmark, pulseOutline } from 'ionicons/icons';
-import { icons } from '@/utils/svg';
-import { OrderService } from "@/services/order_service"
-import DashBox from "@/components/DashBox.vue"
-import SelectionPopover from "@/components/SelectionPopover.vue"
-import BasicInputField from "@/components/BasicInputField.vue"
-import { useInvestigationStore } from '@/stores/InvestigationStore'
-import { mapState } from 'pinia';
-import { toastWarning,popoverConfirmation } from '@/utils/Alerts';
-import BasicForm from '@/components/BasicForm.vue';
-import List from '@/components/List.vue';
-import DynamicButton from '@/components/DynamicButton.vue';
-import previousInvestigations from '@/apps/NCD/components/ConsultationPlan/previousInvestigations.vue'
-import { modifyCheckboxInputField,
+    IonPopover,
+} from "@ionic/vue";
+import { defineComponent, ref } from "vue";
+import { build, checkmark, pulseOutline } from "ionicons/icons";
+import { icons } from "@/utils/svg";
+import { OrderService } from "@/services/order_service";
+import DashBox from "@/components/DashBox.vue";
+import SelectionPopover from "@/components/SelectionPopover.vue";
+import BasicInputField from "@/components/BasicInputField.vue";
+import { useInvestigationStore } from "@/stores/InvestigationStore";
+import { mapState } from "pinia";
+import { toastWarning, popoverConfirmation } from "@/utils/Alerts";
+import BasicForm from "@/components/BasicForm.vue";
+import List from "@/components/List.vue";
+import DynamicButton from "@/components/DynamicButton.vue";
+import previousInvestigations from "@/apps/NCD/components/ConsultationPlan/previousInvestigations.vue";
+import {
+    modifyCheckboxInputField,
     getCheckboxSelectedValue,
     getRadioSelectedValue,
     getFieldValue,
     modifyRadioValue,
-    modifyFieldValue } from '@/services/data_helpers'
+    modifyFieldValue,
+} from "@/services/data_helpers";
 
 export default defineComponent({
-    name: 'Menu',
+    name: "Menu",
     components: {
         IonContent,
         IonHeader,
@@ -90,8 +99,7 @@ export default defineComponent({
         BasicForm,
         List,
         DynamicButton,
-        previousInvestigations
-        
+        previousInvestigations,
     },
     data() {
         return {
@@ -100,13 +108,13 @@ export default defineComponent({
             search_item: false,
             display_item: false,
             addItemButton: true,
-            selectedText: '' as any,
-            testResult: '' as any,
-            test: '' as any,
+            selectedText: "" as any,
+            testResult: "" as any,
+            test: "" as any,
             testData: [] as any,
             popoverOpen: false,
-            event: '' as any,
-            labOrders: '' as any,
+            event: "" as any,
+            labOrders: "" as any,
         };
     },
     setup() {
@@ -114,170 +122,174 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useInvestigationStore, ["investigations"]),
-        inputFields(){
-            return this.investigations[0].data.rowData[0].colData
-        }
+        inputFields() {
+            return this.investigations[0].data.rowData[0].colData;
+        },
     },
-    watch:{
+    watch: {
         investigations: {
-            handler(){
-                this.setDashedBox()
+            handler() {
+                this.setDashedBox();
             },
-            deep: true
-        }
+            deep: true,
+        },
     },
     async mounted() {
-        this.updateInvestigationsStores()
-        this.setDashedBox()
-        this.labOrders = await OrderService.getTestTypesBySpecimen('Blood')
+        this.updateInvestigationsStores();
+        this.setDashedBox();
+        this.labOrders = await OrderService.getTestTypesBySpecimen("Blood");
     },
     methods: {
-        updateInvestigationsStores(){
-            const investigationsStore = useInvestigationStore()
-            investigationsStore.setInvestigations(this.investigations)
+        updateInvestigationsStores() {
+            const investigationsStore = useInvestigationStore();
+            investigationsStore.setInvestigations(this.investigations);
         },
         displayInputFields() {
-            this.testResult = ""
-            this.selectedText = ""
-            this.no_item = false
-            this.addItemButton = false
-            this.search_item = true
+            this.testResult = "";
+            this.selectedText = "";
+            this.no_item = false;
+            this.addItemButton = false;
+            this.search_item = true;
         },
         async validaterowData() {
-            this.investigations[0].data.rowData[0].colData[0].alertsError = false
-            this.investigations[0].data.rowData[0].colData[0].alertsErrorMassage =''
-            this.investigations[0].data.rowData[0].colData[1].alertsError = false
-            this.investigations[0].data.rowData[0].colData[1].alertsErrorMassage =''
-             this.test = await this.filterTest(this.inputFields[0].value) 
+            this.investigations[0].data.rowData[0].colData[0].alertsError = false;
+            this.investigations[0].data.rowData[0].colData[0].alertsErrorMassage = "";
+            this.investigations[0].data.rowData[0].colData[1].alertsError = false;
+            this.investigations[0].data.rowData[0].colData[1].alertsErrorMassage = "";
+            this.test = await this.filterTest(this.inputFields[0].value);
 
-            if (!this.numericValueIsValid(this.inputFields[1].value) && this.inputFields[1].value != '') {
-                this.investigations[0].data.rowData[0].colData[1].alertsError = true
-                this.investigations[0].data.rowData[0].colData[1].alertsErrorMassage ='You must enter a modifer and numbers only. i.e =90 / >19 / < 750'
-                return false
-            }else{
-                this.buildResults()
+            if (
+                !this.numericValueIsValid(this.inputFields[1].value) &&
+                this.inputFields[1].value != ""
+            ) {
+                this.investigations[0].data.rowData[0].colData[1].alertsError = true;
+                this.investigations[0].data.rowData[0].colData[1].alertsErrorMassage =
+                    "You must enter a modifer and numbers only. i.e =90 / >19 / < 750";
+                return false;
+            } else {
+                this.buildResults();
             }
-            if (this.test.length > 0){
-                if(this.test[0]?.name == this.inputFields[0].value) {
-                    
-                    return true
-                }  else {
-                this.search_item = true
-                this.investigations[0].data.rowData[0].colData[0].alertsError = true
-                this.investigations[0].data.rowData[0].colData[0].alertsErrorMassage = 'Please select test from the list'
-                return false
-            }
-
-            }
-            else {
-                this.search_item = true
-                this.investigations[0].data.rowData[0].colData[0].alertsError = true
-                this.investigations[0].data.rowData[0].colData[0].alertsErrorMassage = 'Not Found'
-                return false
-            }
-            
-        },
-        async addNewRow(){
-            if(await this.validaterowData()){
-                this.buildTest()
-                this.investigations[0].data.rowData[0].colData[0].value =''
-                this.investigations[0].data.rowData[0].colData[1].value =''
-                this.search_item = false
-                this.display_item = true
-                this.addItemButton = true
-            }
-            this.investigations[0].data.rowData[0].colData[0].value = ''
-            this.investigations[0].data.rowData[0].colData[0].popOverData.data = []
-        },
-        buildTest(){
-            this.investigations[0].selectdData.push({
-                actionBtn: true,
-                display: [
-                    this.inputFields[0].value,
-                    this.inputFields[1].value,
-                ],
-                data: {
-                    
-                    "concept_id": this.test[0].concept_id,
-                    "name":this.inputFields[0].value,
-                    "specimen": "Blood",
-                    "reason": "Routine",
-                    "specimenConcept": 8612
+            if (this.test.length > 0) {
+                if (this.test[0]?.name == this.inputFields[0].value) {
+                    return true;
+                } else {
+                    this.search_item = true;
+                    this.investigations[0].data.rowData[0].colData[0].alertsError = true;
+                    this.investigations[0].data.rowData[0].colData[0].alertsErrorMassage =
+                        "Please select test from the list";
+                    return false;
                 }
-            })
-        },
-        buildResults(){
-            const modifier = this.inputFields[1].value.charAt(0)
-            const result =  parseInt(this.inputFields[1].value.substring(1)) 
-            const  measures = {
-                "indicator": {
-                    "concept_id": 679
-                },
-                "value": result,
-                "value_modifier": modifier,
-                "value_type": "numeric"
+            } else {
+                this.search_item = true;
+                this.investigations[0].data.rowData[0].colData[0].alertsError = true;
+                this.investigations[0].data.rowData[0].colData[0].alertsErrorMassage = "Not Found";
+                return false;
             }
         },
-        numericValueIsValid(value: string){
+        async addNewRow() {
+            if (await this.validaterowData()) {
+                this.buildTest();
+                this.investigations[0].data.rowData[0].colData[0].value = "";
+                this.investigations[0].data.rowData[0].colData[1].value = "";
+                this.search_item = false;
+                this.display_item = true;
+                this.addItemButton = true;
+            }
+            this.investigations[0].data.rowData[0].colData[0].value = "";
+            this.investigations[0].data.rowData[0].colData[0].popOverData.data = [];
+        },
+        buildTest() {
+            this.investigations[0].selectedData.push({
+                actionBtn: true,
+                display: [this.inputFields[0].value, this.inputFields[1].value],
+                data: {
+                    concept_id: this.test[0].concept_id,
+                    name: this.inputFields[0].value,
+                    specimen: "Blood",
+                    reason: "Routine",
+                    specimenConcept: 8612,
+                },
+            });
+        },
+        buildResults() {
+            const modifier = this.inputFields[1].value.charAt(0);
+            const result = parseInt(this.inputFields[1].value.substring(1));
+            const measures = {
+                indicator: {
+                    concept_id: 679,
+                },
+                value: result,
+                value_modifier: modifier,
+                value_type: "numeric",
+            };
+        },
+        numericValueIsValid(value: string) {
             try {
-                return value.match(/^(=|<|>)([0-9]*)$/m) ? true : false
-            }catch(e) {
-                return false
+                return value.match(/^(=|<|>)([0-9]*)$/m) ? true : false;
+            } catch (e) {
+                return false;
             }
         },
         async handleInputData(col: any) {
-            if(col.inputHeader == 'Test'){
+            if (col.inputHeader == "Test") {
                 this.popoverOpen = true;
-                this.testData = await this.filterTest(col.value)
-                this.investigations[0].data.rowData[0].colData[0].popOverData.data = this.testData
-                this.validaterowData()
+                this.testData = await this.filterTest(col.value);
+                this.investigations[0].data.rowData[0].colData[0].popOverData.data = this.testData;
+                this.validaterowData();
             }
         },
-        async filterTest(name: any){
-           return await this.labOrders.filter((item: any) => item.name.toLowerCase().includes(name.toLowerCase()))
+        async filterTest(name: any) {
+            return await this.labOrders.filter((item: any) =>
+                item.name.toLowerCase().includes(name.toLowerCase())
+            );
         },
         setTest(value: any) {
-            this.selectedText =value.name
-            if(this.inputFields[0].inputHeader == 'Test'){
-                this.investigations[0].data.rowData[0].colData[0].value =value.name
-            }else{
-                this.investigations[0].data.rowData[0].colData[1].value =value.name
+            this.selectedText = value.name;
+            if (this.inputFields[0].inputHeader == "Test") {
+                this.investigations[0].data.rowData[0].colData[0].value = value.name;
+            } else {
+                this.investigations[0].data.rowData[0].colData[1].value = value.name;
             }
-            this.updateInvestigationsStores()
+            this.updateInvestigationsStores();
         },
         async openDeletePopover(e: any) {
-            const deleteConfirmed = await popoverConfirmation(`Do you want to delete ${e[1]} ?`, e[0])
+            const deleteConfirmed = await popoverConfirmation(
+                `Do you want to delete ${e[1]} ?`,
+                e[0]
+            );
             if (deleteConfirmed) {
-                this.deleteTest(e[1])
+                this.deleteTest(e[1]);
             }
         },
         deleteTest(test: any) {
-            this.investigations[0].selectdData = this.investigations[0].selectdData.filter((item: any) => item.display[0] !== test);
-            this.updateInvestigationsStores()
+            this.investigations[0].selectedData = this.investigations[0].selectedData.filter(
+                (item: any) => item.display[0] !== test
+            );
+            this.updateInvestigationsStores();
         },
         editTest(test: any) {
-            this.deleteTest(test[0])
-            this.selectedText = test[0]
-            this.investigations[0].data.rowData[0].colData[0].value =test[0]
-            this.investigations[0].data.rowData[0].colData[1].value =test[1]
-            this.addItemButton = false
-            this.search_item = true
-            this.updateInvestigationsStores()
+            this.deleteTest(test[0]);
+            this.selectedText = test[0];
+            this.investigations[0].data.rowData[0].colData[0].value = test[0];
+            this.investigations[0].data.rowData[0].colData[1].value = test[1];
+            this.addItemButton = false;
+            this.search_item = true;
+            this.updateInvestigationsStores();
         },
-        setDashedBox(){
-            if(this.inputFields[0].value || this.inputFields[1].value){
-                this.addItemButton = false
-                this.search_item = true
-                this.no_item = false
+        setDashedBox() {
+            if (this.inputFields[0].value || this.inputFields[1].value) {
+                this.addItemButton = false;
+                this.search_item = true;
+                this.no_item = false;
             }
-            if (this.investigations[0].selectdData.length > 0) {
-                this.display_item = true
-                this.no_item = false
-            }else if(!this.search_item) {
-                this.no_item = true
+            if (this.investigations[0].selectedData.length > 0) {
+                this.display_item = true;
+                this.no_item = false;
+            } else if (!this.search_item) {
+                this.no_item = true;
             }
-        }
-    }
+        },
+    },
 });
 </script>
 
@@ -338,4 +350,3 @@ export default defineComponent({
     opacity: 1; /* Show the action buttons when the row is hovered over */
 }
 </style>
-  

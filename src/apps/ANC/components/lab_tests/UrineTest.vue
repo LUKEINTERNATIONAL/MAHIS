@@ -5,7 +5,7 @@
             <ion-card-content>
                 <basic-form :contentData="urineTest"></basic-form>
                 <!-- <basic-form :contentData="testType"></basic-form> -->
-                 <basic-form :contentData="reason"></basic-form>
+                 <!-- <basic-form :contentData="reason"></basic-form> -->
                   <basic-form :contentData="culture"></basic-form>
                    <basic-form :contentData="gram"></basic-form>
                    <basic-form :contentData="nitrites"></basic-form>

@@ -87,9 +87,9 @@ export default defineComponent({
     },
     computed:{
         ...mapState(useCurrentPregnanciesStore,["palpation"]),
-        ...mapState(useCurrentPregnanciesStore,["deliveryDate"]),
+       // ...mapState(useCurrentPregnanciesStore,["deliveryDate"]),
         ...mapState(useCurrentPregnanciesStore,["lmnp"]),
-        ...mapState(useCurrentPregnanciesStore,["gestation"]),
+       // ...mapState(useCurrentPregnanciesStore,["gestation"]),
         ...mapState(useCurrentPregnanciesStore,["tetanus"]),
         ...mapState(useCurrentPregnanciesStore,["ultrasound"]),
           LMNP(){ return getRadioSelectedValue(this.lmnp, 'LMNP')},

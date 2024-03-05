@@ -25,14 +25,14 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                             },
                             {
                                 name: 'Siblings',
-                                value: 'No',
+                                value: 'siblings',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
                                 name: 'Extended family',
-                                value: 'Dont know',
+                                value: 'extendedFamily',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
@@ -46,21 +46,21 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                             },
                             {
                                 name: 'Friend',
-                                value: 'No one',
+                                value: 'friend',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
                                 name: 'No one',
-                                value: 'No one',
+                                value: 'noOne',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
                                 name: 'Other',
-                                value: 'No one',
+                                value: 'other',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
@@ -285,29 +285,6 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                 }
                     
             },
-            // {
-            //     data:{ 
-            //         rowData:[
-            //             {
-            //                 colData:[
-            //                     {
-            //                         // displayNone:true,
-            //                         inputHeader: 'Specify',
-            //                         icon: icons.editPen,
-            //                         value: "",
-            //                         name: "specify",
-            //                         eventType: 'input',
-            //                         inputWidth: "82%",
-            //                         required: true
-            //                     }
-                                
-            //                 ]
-            //             }
-            //         ],
-                    
-            //     }
-                    
-            // },
         ],
         preterm:[
             {
@@ -318,26 +295,27 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                 {
                     header:{
                         title: 'Was last live birth preterm?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'pretermInfo'
                     },
                     data:[
                         {
                             name: 'Last live birth was preterm\n',
-                            value: 'notPreterm',
+                            value: "Preterm pregnancy - less than 28 weeks",
                             labelPlacement: 'start',
                             colSize: '9',
                             justify: 'space-between',
                         },
                         {
                             name: 'Last live birth was not preterm/ Last live birth was full term\n',
-                            value: 'fullTerm',
+                            value: 'Preterm pregnancy - 28 to 34 weeks',
                             labelPlacement: 'start',
                             colSize: '9',
                             justify: 'space-between',
                         },
                         {
                             name: 'Last live birth had congenital abnormalities\n',
-                            value: 'congetalAbnormalities',
+                            value: 'Preterm premature rupture of membranes (PPROM)',
                             labelPlacement: 'start',
                             colSize: '9',
                             justify: 'space-between',

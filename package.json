@@ -2,7 +2,6 @@
   "name": "NCD",
   "private": true,
   "version": "0.0.1",
-  "min-api-version": "4.19.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host",

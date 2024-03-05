@@ -6,6 +6,7 @@ import QuickCheck from '@/apps/ANC/views/QuickCheck.vue';
 import Treatment from '../views/Treatment.vue'
 import LabTests from '../views/LabTests.vue';
 import Enrollment from "@/apps/ANC/views/Enrollment.vue";
+import physicalExamination from '@/apps/ANC/views/physicalExamination.vue';
 import Referral from "@/apps/ANC/views/referral.vue";
 import physicalExamination from "@/apps/ANC/views/physicalExamination.vue";
 import headssAssessment from "@/apps/ANC/views/headssAssessment.vue";
@@ -18,7 +19,6 @@ export default [
     name: 'ANCEnrollment',
     component: Enrollment
   },
-
   {
     path: '/profile',
     name: 'profile',
@@ -70,6 +70,5 @@ export default [
     name: 'labTests',
     component: LabTests
   },
-
 ]
 

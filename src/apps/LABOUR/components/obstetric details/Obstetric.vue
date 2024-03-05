@@ -86,10 +86,11 @@ export default defineComponent({
     ...mapState(useObstreticHistoryStore,["abnormalities"]),
     ...mapState(useObstreticHistoryStore,["modeOfDelivery"]),
     ...mapState(useObstreticHistoryStore, ["Complications"]),
-    Stillbirths(){ return getFieldValue(this.prevPregnancies, 'Stillbirths','value')},
-    LiveBirths(){ return getFieldValue(this.prevPregnancies, 'LiveBirths','value')},
-    Parity(){ return getFieldValue(this.prevPregnancies, 'Parity','value')},
-    Abortions(){ return getFieldValue(this.prevPregnancies, 'Abortions','value')},
+    // ...mapState(useObstreticHistoryStore,["HeadssAssesment"]),
+    // ...mapState(useObstreticHistoryStore,["preterm"]),
+    // ...mapState(useObstreticHistoryStore,["abnormalities"]),
+    // ...mapState(useObstreticHistoryStore,["modeOfDelivery"]),
+    // ...mapState(useObstreticHistoryStore, ["Complications"]),
   },
   mounted(){
     this.prevPregnanciesInstance = useObstreticHistoryStore()

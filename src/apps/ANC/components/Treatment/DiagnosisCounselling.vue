@@ -3,7 +3,7 @@
     <ion-card class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="preEclampsia"></basic-form>
+                <!-- <basic-form :contentData="preEclampsia"></basic-form> -->
                 <basic-form :contentData="preEclampsiaCounselling"></basic-form>
             </ion-card-content>
     </ion-card>
@@ -12,7 +12,7 @@
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="aspirin"></basic-form>
-                <basic-form :contentData="aspirinReason"></basic-form>
+                <!-- <basic-form :contentData="aspirinReason"></basic-form> -->
             </ion-card-content>
     </ion-card>
 
@@ -29,7 +29,7 @@
             <ion-card-content>
                 <basic-form :contentData="hivRisk"></basic-form>
                 <basic-form :contentData="prEp"></basic-form>
-                 <basic-form :contentData="prEpReason"></basic-form>
+                 <!-- <basic-form :contentData="prEpReason"></basic-form> -->
             </ion-card-content>
     </ion-card>
 

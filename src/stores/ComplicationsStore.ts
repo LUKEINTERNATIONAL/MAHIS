@@ -1,354 +1,329 @@
-import { defineStore } from 'pinia'
-import { icons } from '@/utils/svg';
+import { defineStore } from "pinia";
+import { icons } from "@/utils/svg";
 
-export const useComplicationsStore = defineStore('complicationsStore',{
+export const useComplicationsStore = defineStore("complicationsStore", {
     state: () => ({
         FootScreening: [
             {
-                selectdData: [],
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
+                selectedData: [],
+                checkboxBtnContent: {
+                    header: {
+                        title: "",
+                        selectedValue: "",
                     },
-                    data:[
+                    data: [
                         {
-                            name: 'Physical Exam',
-                            labelPlacement: 'start',
-                            colSize: '4',
-                            justify: 'space-between',
-                            header: true
+                            name: "Physical Exam",
+                            labelPlacement: "start",
+                            colSize: "4",
+                            justify: "space-between",
+                            header: true,
                         },
                         {
-                            name: 'Left foot',
-                            labelPlacement: 'start',
-                            colSize: '4',
-                            justify: 'space-between',
-                            header: true
+                            name: "Left foot",
+                            labelPlacement: "start",
+                            colSize: "4",
+                            justify: "space-between",
+                            header: true,
                         },
                         {
-                            name: 'Right foot',
-                            labelPlacement: 'start',
-                            colSize: '4',
-                            justify: 'space-between',
-                            header: true
+                            name: "Right foot",
+                            labelPlacement: "start",
+                            colSize: "4",
+                            justify: "space-between",
+                            header: true,
                         },
-                    ]
-                }
-                    
+                    ],
+                },
             },
             {
-                selectdData: [],
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
+                selectedData: [],
+                classDash: "dashed_bottom_border",
+                checkboxBtnContent: {
+                    header: {
+                        title: "",
+                        selectedValue: "",
                     },
-                    data:[
+                    data: [
                         {
-                            name: 'Previous Ulcer',
-                            value: 'previousUlcer',
+                            name: "Previous Ulcer",
+                            value: "previousUlcer",
                             checked: false,
-                            labelPlacement: 'start',
-                            colSize: '5',
-                            justify: 'space-between'
+                            labelPlacement: "start",
+                            colSize: "5",
+                            justify: "space-between",
                         },
                         {
-                            value: 'type_2',
+                            value: "type_2",
                             checked: false,
-                            colSize: '4',
-                            justify: 'end'
-                        }
-                    ]
-                }
-                    
+                            colSize: "4",
+                            justify: "end",
+                        },
+                    ],
+                },
             },
             {
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
+                classDash: "dashed_bottom_border",
+                checkboxBtnContent: {
+                    header: {
+                        title: "",
+                        selectedValue: "",
                     },
-                    data:[
+                    data: [
                         {
-                            name: 'Previous Amputation',
-                            value: 'value',
+                            name: "Previous Amputation",
+                            value: "value",
                             checked: false,
-                            labelPlacement: 'start',
-                            colSize: '5',
-                            justify: 'space-between'
+                            labelPlacement: "start",
+                            colSize: "5",
+                            justify: "space-between",
                         },
                         {
-                            value: 'value',
+                            value: "value",
                             checked: false,
-                            colSize: '4',
-                            justify: 'end'
-                        }
-                    ]
-                }
-                    
+                            colSize: "4",
+                            justify: "end",
+                        },
+                    ],
+                },
             },
             {
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
+                classDash: "dashed_bottom_border",
+                checkboxBtnContent: {
+                    header: {
+                        title: "",
+                        selectedValue: "",
                     },
-                    data:[
+                    data: [
                         {
-                            name: 'Deformity',
-                            value: 'value',
+                            name: "Deformity",
+                            value: "value",
                             checked: false,
-                            labelPlacement: 'start',
-                            colSize: '5',
-                            justify: 'space-between'
+                            labelPlacement: "start",
+                            colSize: "5",
+                            justify: "space-between",
                         },
                         {
-                            value: 'value',
+                            value: "value",
                             checked: false,
-                            colSize: '4',
-                            justify: 'end'
-                        }
-                    ]
-                }
-                    
+                            colSize: "4",
+                            justify: "end",
+                        },
+                    ],
+                },
             },
             {
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
+                classDash: "dashed_bottom_border",
+                checkboxBtnContent: {
+                    header: {
+                        title: "",
+                        selectedValue: "",
                     },
-                    data:[
+                    data: [
                         {
-                            name: 'Ingrown toenail',
-                            value: 'value',
+                            name: "Ingrown toenail",
+                            value: "value",
                             checked: false,
-                            labelPlacement: 'start',
-                            colSize: '5',
-                            justify: 'space-between'
+                            labelPlacement: "start",
+                            colSize: "5",
+                            justify: "space-between",
                         },
                         {
-                            value: 'value',
+                            value: "value",
                             checked: false,
-                            colSize: '4',
-                            justify: 'end'
-                        }
-                    ]
-                }
-                    
+                            colSize: "4",
+                            justify: "end",
+                        },
+                    ],
+                },
             },
             {
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
+                classDash: "dashed_bottom_border",
+                checkboxBtnContent: {
+                    header: {
+                        title: "",
+                        selectedValue: "",
                     },
-                    data:[
+                    data: [
                         {
-                            name: 'Absent Pedal Pulses',
-                            value: 'value',
+                            name: "Absent Pedal Pulses",
+                            value: "value",
                             checked: false,
-                            labelPlacement: 'start',
-                            colSize: '5',
-                            justify: 'space-between'
+                            labelPlacement: "start",
+                            colSize: "5",
+                            justify: "space-between",
                         },
                         {
-                            value: 'value',
+                            value: "value",
                             checked: false,
-                            colSize: '4',
-                            justify: 'end'
-                        }
-                    ]
-                }
-                    
+                            colSize: "4",
+                            justify: "end",
+                        },
+                    ],
+                },
             },
             {
-                selectdData: [],
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
+                selectedData: [],
+                checkboxBtnContent: {
+                    header: {
+                        title: "",
+                        selectedValue: "",
                     },
-                    data:[
+                    data: [
                         {
-                            name: 'Foot Lesions',
-                            labelPlacement: 'start',
-                            colSize: '4',
-                            justify: 'space-between',
-                            header: true
+                            name: "Foot Lesions",
+                            labelPlacement: "start",
+                            colSize: "4",
+                            justify: "space-between",
+                            header: true,
                         },
                         {
-                            name: 'Left foot',
-                            labelPlacement: 'start',
-                            colSize: '4',
-                            justify: 'space-between',
-                            header: true
+                            name: "Left foot",
+                            labelPlacement: "start",
+                            colSize: "4",
+                            justify: "space-between",
+                            header: true,
                         },
                         {
-                            name: 'Right foot',
-                            labelPlacement: 'start',
-                            colSize: '4',
-                            justify: 'space-between',
-                            header: true
+                            name: "Right foot",
+                            labelPlacement: "start",
+                            colSize: "4",
+                            justify: "space-between",
+                            header: true,
                         },
-                    ]
-                }
-                    
+                    ],
+                },
             },
             {
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
+                classDash: "dashed_bottom_border",
+                checkboxBtnContent: {
+                    header: {
+                        title: "",
+                        selectedValue: "",
                     },
-                    data:[
+                    data: [
                         {
-                            name: 'Active Ulcer',
-                            value: 'value',
+                            name: "Active Ulcer",
+                            value: "value",
                             checked: false,
-                            labelPlacement: 'start',
-                            colSize: '5',
-                            justify: 'space-between'
+                            labelPlacement: "start",
+                            colSize: "5",
+                            justify: "space-between",
                         },
                         {
-                            value: 'value',
+                            value: "value",
                             checked: false,
-                            colSize: '4',
-                            justify: 'end'
-                        }
-                    ]
-                }
-                    
+                            colSize: "4",
+                            justify: "end",
+                        },
+                    ],
+                },
             },
             {
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
+                classDash: "dashed_bottom_border",
+                checkboxBtnContent: {
+                    header: {
+                        title: "",
+                        selectedValue: "",
                     },
-                    data:[
+                    data: [
                         {
-                            name: 'Blisters',
-                            value: 'value',
+                            name: "Blisters",
+                            value: "value",
                             checked: false,
-                            labelPlacement: 'start',
-                            colSize: '5',
-                            justify: 'space-between'
+                            labelPlacement: "start",
+                            colSize: "5",
+                            justify: "space-between",
                         },
                         {
-                            value: 'value',
+                            value: "value",
                             checked: false,
-                            colSize: '4',
-                            justify: 'end'
-                        }
-                    ]
-                }
-                    
+                            colSize: "4",
+                            justify: "end",
+                        },
+                    ],
+                },
             },
             {
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
+                classDash: "dashed_bottom_border",
+                checkboxBtnContent: {
+                    header: {
+                        title: "",
+                        selectedValue: "",
                     },
-                    data:[
+                    data: [
                         {
-                            name: 'Calluses',
-                            value: 'value',
+                            name: "Calluses",
+                            value: "value",
                             checked: false,
-                            labelPlacement: 'start',
-                            colSize: '5',
-                            justify: 'space-between'
+                            labelPlacement: "start",
+                            colSize: "5",
+                            justify: "space-between",
                         },
                         {
-                            value: 'value',
+                            value: "value",
                             checked: false,
-                            colSize: '4',
-                            justify: 'end'
-                        }
-                    ]
-                }
-                    
+                            colSize: "4",
+                            justify: "end",
+                        },
+                    ],
+                },
             },
             {
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: '',
-                        selectedValue: ''
+                classDash: "dashed_bottom_border",
+                checkboxBtnContent: {
+                    header: {
+                        title: "",
+                        selectedValue: "",
                     },
-                    data:[
+                    data: [
                         {
-                            name: 'Fissure/Linear Crack',
-                            value: 'value',
+                            name: "Fissure/Linear Crack",
+                            value: "value",
                             checked: false,
-                            labelPlacement: 'start',
-                            colSize: '5',
-                            justify: 'space-between'
+                            labelPlacement: "start",
+                            colSize: "5",
+                            justify: "space-between",
                         },
                         {
-                            value: 'value',
+                            value: "value",
                             checked: false,
-                            colSize: '4',
-                            justify: 'end'
-                        }
-                    ]
-                }
-                    
+                            colSize: "4",
+                            justify: "end",
+                        },
+                    ],
+                },
             },
             {
-                sectionHeader: 'Neuropathy/Monofilament Exam',
+                sectionHeader: "Neuropathy/Monofilament Exam",
                 sectionHeaderFontWeight: 400,
-                data:
-                    { 
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'Negative piprics (left foot)',
-                                        value: '',
-                                        name: 'Temp',
-                                        eventType: 'blur'
-                                    },
-                                    {
-                                        inputHeader: 'Negative pinprics (right foot)',
-                                        value: '',
-                                        name: 'Pulse',
-                                        eventType: 'blur'
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-            }
-                
-        ] as any
+                data: {
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                    inputHeader: "Negative piprics (left foot)",
+                                    value: "",
+                                    name: "Temp",
+                                    eventType: "blur",
+                                },
+                                {
+                                    inputHeader: "Negative pinprics (right foot)",
+                                    value: "",
+                                    name: "Pulse",
+                                    eventType: "blur",
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
+        ] as any,
     }),
-    actions:{
-        setPersonalInformation(data: any){
-            this.FootScreening = data
-        }
+    actions: {
+        setPersonalInformation(data: any) {
+            this.FootScreening = data;
+        },
     },
-    persist:true,
-
-})
+    persist: true,
+});

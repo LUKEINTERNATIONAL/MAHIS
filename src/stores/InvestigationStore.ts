@@ -1,68 +1,62 @@
-import { defineStore } from 'pinia'
-import { icons } from '@/utils/svg';
+import { defineStore } from "pinia";
+import { icons } from "@/utils/svg";
 
-export const useInvestigationStore = defineStore('investigationStore', {
+export const useInvestigationStore = defineStore("investigationStore", {
     state: () => ({
         investigations: [
             {
                 db_data: [],
                 isFinishBtn: false,
-                selectdData: [],
+                selectedData: [],
                 displayData: [],
-                data:
-                    { 
-                        rowData:[
-                            {
-                                colData:[
-                                    {
-                                        inputHeader: 'Test',
-                                        icon: icons.search,
-                                        value: '',
-                                        name: 'test',
-                                        popOver: true,
-                                        eventType: 'input',
-                                        required: true,
-                                        alertsError: false,
-                                        alertsErrorMassage: '',
-                                        popOverData: {
-                                            filterData: false,
-                                            data: []
-                                        } ,
-                                        id: '',
-                                        idName: 'test_id'
+                data: {
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                    inputHeader: "Test",
+                                    icon: icons.search,
+                                    value: "",
+                                    name: "test",
+                                    popOver: true,
+                                    eventType: "input",
+                                    required: true,
+                                    alertsError: false,
+                                    alertsErrorMassage: "",
+                                    popOverData: {
+                                        filterData: false,
+                                        data: [],
                                     },
-                                    {
-                                        inputHeader: 'Result',
-                                        value: '',
-                                        name: 'result',
-                                        eventType: 'input',
-                                        required: true,
-                                        alertsError: false,
-                                        alertsErrorMassage: ''
-                                    },
-                                    
-                                ],
-                                btns:[
-                                    {
-                                        name: "Save",
-                                        fill: "clear",
-                                        icon: icons.plus
-                                    }
-                                ]
-                            }
-                        ],
-                        
-                    }
-                 
-            }
-               
-        ] as any
+                                    id: "",
+                                    idName: "test_id",
+                                },
+                                {
+                                    inputHeader: "Result",
+                                    value: "",
+                                    name: "result",
+                                    eventType: "input",
+                                    required: true,
+                                    alertsError: false,
+                                    alertsErrorMassage: "",
+                                },
+                            ],
+                            btns: [
+                                {
+                                    name: "Save",
+                                    fill: "clear",
+                                    icon: icons.plus,
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
+        ] as any,
     }),
-    actions:{
-        setInvestigations(data: any){
-            this.investigations = data
-        }
+    actions: {
+        setInvestigations(data: any) {
+            this.investigations = data;
+        },
     },
-    persist:true,
-
-})
+    persist: true,
+});

@@ -4,8 +4,8 @@
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="treatment"></basic-form>
-                <basic-form :contentData="treatmentType"></basic-form>
-                <basic-form :contentData="treatmentReason"></basic-form>
+                <!-- <basic-form :contentData="treatmentType"></basic-form>
+                <basic-form :contentData="treatmentReason"></basic-form> -->
             </ion-card-content>
     </ion-card>
 
