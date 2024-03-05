@@ -1,15 +1,15 @@
 <template>
     <div class="container"> 
-        <ion-card v-if="currentSection === 0" class="section">
+        <ion-card class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="ipv"></basic-form>
-                <basic-form :contentData="ipvReason"></basic-form>
+                <!-- <basic-form :contentData="ipvReason"></basic-form> -->
             </ion-card-content>
         </ion-card>
 
        
-        <ion-card v-if="currentSection === 1" class="section">
+        <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="additionalCare"></basic-form>
@@ -18,7 +18,7 @@
         </ion-card>
 
         
-        <ion-card v-if="currentSection === 2" class="section">
+        <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="physical_violence"></basic-form>
@@ -26,7 +26,7 @@
             </ion-card-content>
         </ion-card>
 
-        <ion-card v-if="currentSection === 3" class="section">
+        <ion-card class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="woman_threatened"></basic-form>
@@ -34,7 +34,7 @@
             </ion-card-content>
         </ion-card>
 
-        <ion-card v-if="currentSection === 4" class="section">
+        <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="strangling"></basic-form>
@@ -42,18 +42,12 @@
             </ion-card-content>
         </ion-card>
 
-        <ion-card v-if="currentSection === 5" class="section">
+        <ion-card  class="section">
             <ion-card-header> <ion-card-title class="sub_item_header">Referrals made as part of first-line support</ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="referrals"></basic-form>
             </ion-card-content>
         </ion-card>
-
-          <!-- Navigation Buttons -->
-    <div class="navigation-buttons">
-      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
-      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
-    </div> 
     </div>
 </template>
 
@@ -80,8 +74,7 @@ import BasicForm from '../../../../components/BasicForm.vue';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import { icons } from '../../../../utils/svg'; 
 import {useIntimatePartnerStore } from '../../store/intimatePartnerStore';
-
-
+import { getCheckboxSelectedValue, getRadioSelectedValue, modifyCheckboxValue, modifyFieldValue, modifyRadioValue } from '@/services/data_helpers';
 
 export default defineComponent ({
     name: "intimatePartner",
@@ -112,7 +105,7 @@ export default defineComponent ({
     },
     computed:{
          ...mapState(useIntimatePartnerStore, ["ipv"]),
-         ...mapState(useIntimatePartnerStore, ["ipvReason"]),
+        //  ...mapState(useIntimatePartnerStore, ["ipvReason"]),
          ...mapState(useIntimatePartnerStore, ["additionalCare"]),
          ...mapState(useIntimatePartnerStore, ["safety_assessment"]),
          ...mapState(useIntimatePartnerStore, ["physical_violence"]),
@@ -122,9 +115,27 @@ export default defineComponent ({
          ...mapState(useIntimatePartnerStore, ["strangling"]),
          ...mapState(useIntimatePartnerStore, ["murder_threat"]),
          ...mapState(useIntimatePartnerStore, ["referrals"]),
-      
-   
+  
 
+    },
+    mounted() {
+        this.handleIntimate()
+        this.handleOtherIpv()
+        this.handleReferal()
+    },
+    watch:{
+      ipv:{
+        handler(){
+        this.handleIntimate()
+        this.handleOtherIpv()
+      },
+        deep:true
+      },
+      referrals:{
+        handler(){
+          this.handleReferal()
+        },deep:true
+      }
     },
     methods :{
         goToNextSection() {
@@ -137,6 +148,41 @@ export default defineComponent ({
         this.currentSection--;
       }
     },
+      handleIntimate(){
+        if(getRadioSelectedValue(this.ipv,'intimateInfo')=='no'){
+          modifyRadioValue(this.ipv,'reasonIPV','displayNone',false)
+        }else{
+          modifyRadioValue(this.ipv,'reasonIPV','displayNone',true)
+        }
+      },
+      handleOtherIpv(){
+        if(getRadioSelectedValue(this.ipv,'reasonIPV')=='other'){
+          modifyFieldValue(this.ipv,'other','displayNone',false)
+        }else{
+           modifyFieldValue(this.ipv,'other','displayNone',true)
+        }
+      },
+      handleReferal(){
+        if(getCheckboxSelectedValue(this.referrals,'Other')?.value =='other'){
+          modifyFieldValue(this.referrals,'Specify','displayNone',false)
+        }else{
+          modifyFieldValue(this.referrals,'Specify','displayNone',true)
+        }
+
+        const checkBoxes=['Care at another facility','Crisis intervention or counselling','Police','Shelter or housing',
+                         'Shelter or housing','Child protection','Livelihood support','Other',]
+
+      if (getCheckboxSelectedValue(this.referrals, 'None')?.checked) {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.referrals, checkbox, 'checked', false);
+            modifyCheckboxValue(this.referrals, checkbox, 'disabled', true);
+        });
+        } else {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.referrals, checkbox, 'disabled', false);
+        });
+    }
+      },
     }
 
 })

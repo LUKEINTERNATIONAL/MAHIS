@@ -89,6 +89,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "55%",
+                                        displayNone: true
                                         
                                     },
 
@@ -207,6 +208,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "55%",
+                                        displayNone: true
                                         
                                     },
 
@@ -336,6 +338,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "55%",
+                                        displayNone:true
                                         
                                     },
 

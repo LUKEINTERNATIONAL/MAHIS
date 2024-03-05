@@ -30,7 +30,6 @@
           { title: 'Physical Exam', link: '', imageUrl: '' },
           { title: 'Counseling', link: '', imageUrl: '' },
           { title: 'Treatment', link: '', imageUrl: '' },
-          { title: 'Referral', link: '', imageUrl: '' },
           { title: 'Anc End', link: '', imageUrl: '' },
         ],
       };
