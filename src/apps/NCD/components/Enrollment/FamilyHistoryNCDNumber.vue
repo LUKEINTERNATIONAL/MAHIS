@@ -24,7 +24,15 @@ import { mapState } from "pinia";
 import BasicForm from "@/components/BasicForm.vue";
 import BasicCard from "@/components/BasicCard.vue";
 import { ProgramService } from "@/services/program_service";
-
+import {
+    modifyRadioValue,
+    getRadioSelectedValue,
+    getCheckboxSelectedValue,
+    getFieldValue,
+    modifyFieldValue,
+    modifyCheckboxValue,
+} from "@/services/data_helpers";
+import { journalOutline } from "ionicons/icons";
 export default defineComponent({
     name: "Menu",
     components: {
@@ -61,8 +69,18 @@ export default defineComponent({
     },
     async mounted() {
         const j = await ProgramService.getNextSuggestedNCDNumber();
-        console.log("🚀 ~ mounted ~ j:", j);
-        this.updateEnrollmentStores();
+        modifyFieldValue(
+            this.NCDNumber,
+            "NCDNumber",
+            "value",
+            j.ncd_number.replace(/^\D+|\s/g, "")
+        );
+        modifyFieldValue(
+            this.NCDNumber,
+            "NCDNumber",
+            "leftText",
+            `${j.ncd_number.replace(/\d+/g, "")}-NCD-`
+        );
         this.buidCards();
     },
     methods: {

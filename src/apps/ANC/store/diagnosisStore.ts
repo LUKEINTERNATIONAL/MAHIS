@@ -300,6 +300,28 @@ export const useDiagnosisStore = defineStore('diagnosisStore',{
                     }
 
             },
+                        {
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'None',
+                                value: 'none',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+
+                        ]
+                    }
+
+            },
         ] as any, 
 
         hypertension:[

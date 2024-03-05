@@ -17,6 +17,7 @@ import { mapState } from 'pinia';
  import BasicInputField from "@/components/BasicInputField.vue";
  import {useCurrentPhysiologicalSymptomsStore} from "@/apps/ANC/store/symptomsFollowUp/currentPhysiologicalSymptomsStore";
  import BasicForm from '@/components/BasicForm.vue';
+import { getCheckboxSelectedValue, modifyCheckboxValue } from "@/services/data_helpers";
 
 
 export default defineComponent({
@@ -30,10 +31,34 @@ export default defineComponent({
 
     mounted(){
         const physiologicalSymptoms =useCurrentPhysiologicalSymptomsStore()
+        this.handleNone()
+    },
+    watch:{
+        physiologicalSymptoms:{
+            handler(){
+                this.handleNone()
+            },deep:true
+        }
     },
       computed:{
         ...mapState(useCurrentPhysiologicalSymptomsStore,["physiologicalSymptoms"]),
     },
+    methods:{
+        handleNone(){
+        const checkBoxes=["Abnormal pulse rate","Cough lasting more than 3 weeks","Pain – Low back","Constipation","Headache","Heartburn","Pain-Leg","Pain-pelvic"]
+
+      if (getCheckboxSelectedValue(this.physiologicalSymptoms, 'None')?.checked) {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.physiologicalSymptoms, checkbox, 'checked', false);
+            modifyCheckboxValue(this.physiologicalSymptoms, checkbox, 'disabled', true);
+        });
+        } else {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.physiologicalSymptoms, checkbox, 'disabled', false);
+        });
+    }
+        },
+    }
 })
 </script>
 <style scoped>

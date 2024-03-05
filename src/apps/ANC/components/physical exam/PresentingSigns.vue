@@ -1,18 +1,18 @@
 <template>
   <div class="container">
     <!-- Signs of injury -->
-    <ion-card v-if="currentSection === 0" class="section">
+    <ion-card class="section">
       <ion-card-header>
         <ion-card-title class="dashed_bottom_border sub_item_header">Injuries</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <basic-form :contentData="signsOfInjury"></basic-form>
-        <basic-form :contentData="abdominalInjury"></basic-form>
+       <!-- <basic-form :contentData="abdominalInjury"></basic-form> -->
       </ion-card-content>
     </ion-card>
 
     <!-- clinical enquirry -->
-    <ion-card v-if="currentSection === 1" class="section">
+    <ion-card  class="section">
       <ion-card-header>
         <ion-card-title class="dashed_bottom_border sub_item_header"> Clinical enquiry</ion-card-title>
       </ion-card-header>
@@ -22,21 +22,15 @@
     </ion-card>
 
     <!-- any form of violence -->
-    <ion-card v-if="currentSection === 2" class="section">
+    <ion-card class="section">
       <ion-card-header>
         <ion-card-title class="dashed_bottom_border sub_item_header">Violence to the woman</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="violence"></basic-form>
+        <!-- <basic-form :contentData="violence"></basic-form> -->
         <basic-form :contentData="intimateViolence"></basic-form>
       </ion-card-content>
     </ion-card>
-
-    <!-- Navigation Buttons -->
-    <div class="navigation-buttons">
-      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
-      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
-    </div>
   </div>
 </template>
 <script lang="ts">
@@ -89,8 +83,8 @@ export default defineComponent({
   computed:{
 
     ...mapState(usePresentingSigns,["signsOfInjury"]),
-    ...mapState(usePresentingSigns,["abdominalInjury"]),
-    ...mapState(usePresentingSigns,["violence"]),
+    // ...mapState(usePresentingSigns,["abdominalInjury"]),
+    // ...mapState(usePresentingSigns,["violence"]),
     ...mapState(usePresentingSigns,["clinicalEnquiry"]),
     ...mapState(usePresentingSigns,["intimateViolence"]),
   },

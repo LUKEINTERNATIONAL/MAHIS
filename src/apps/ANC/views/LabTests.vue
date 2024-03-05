@@ -4,8 +4,6 @@
     <ion-content :fullscreen="true">
         <DemographicBar/>
         <Stepper stepper-title="Lab test and imaging" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"></Stepper>
-        <!-- Show spinner when isLoading is true -->
-      <Spinner :isLoading="loading" spinnerName="crescent" />
     </ion-content>
 </ion-page>
 
@@ -22,10 +20,9 @@ import { chevronBackOutline, checkmark } from 'ionicons/icons';
 import UrineTest from '@/apps/ANC/components/lab_tests/UrineTest.vue';
 import TB from '@/apps/ANC/components/lab_tests/TB.vue';
 import Stepper from "@/apps/ANC/components/Stepper.vue";
-import Spinner from "@/apps/ANC/components/Spinner.vue";
 export default defineComponent({
     name:"Lab",
-    components:{ IonPage, DemographicBar, Toolbar, IonContent,UltrasoundScan,UrineTest,TB, Stepper, Spinner },
+    components:{ IonPage, DemographicBar, Toolbar, IonContent,UltrasoundScan,UrineTest,TB, Stepper },
     data(){
         return {iconsContent: icons,
   isOpen: false,

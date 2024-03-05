@@ -3,7 +3,7 @@
     <Toolbar />
     <ion-content :fullscreen="true">
       <DemographicBar />
-      <Stepper stepperTitle="Profile" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()"  :StepperData="StepperData"/>
+      <Stepper stepperTitle="Profile" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" @update:inputValue="validateProfileData($event)"  :StepperData="StepperData"/>
     </ion-content>
   </ion-page>
 </template>
@@ -27,8 +27,8 @@ import {
   IonItem,
   IonLabel,
   IonModal,
-  modalController,
-  AccordionGroupCustomEvent } from '@ionic/vue';
+} from '@ionic/vue';  
+import { ConceptService } from "@/services/concept_service"
 import { defineComponent } from 'vue';
 import Toolbar from "@/apps/ANC/components/Toolbar.vue";
 import ToolbarSearch from "@/apps/ANC/components/ToolbarSearch.vue";
@@ -45,18 +45,21 @@ import CurrentPregnancies from '../components/profile/CurrentPregnancies.vue';
 import Medications from '../components/profile/Medications.vue';
 import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue"
 import WomanBehaviour from '../components/profile/WomanBehaviour.vue';
-import {getCheckboxSelectedValue} from "@/services/data_helpers";
+import {getCheckboxSelectedValue, getRadioSelectedValue} from "@/services/data_helpers";
 import {useMedicalHistoryStore} from "@/apps/ANC/store/profile/medicalHistoryStore";
 import {useObstreticHistoryStore} from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
 import {useCurrentPregnanciesStore} from "@/apps/ANC/store/profile/CurrentPreganciesStore";
 import {useMedicationsStore} from "@/apps/ANC/store/profile/MedicationsStore";
 import {useWomanBehaviourStore} from "@/apps/ANC/store/profile/womanBehaviourStore";
+import { Service } from "@/services/service"
+import { ProfileService } from '@/services/anc_profile_service';
+import { useDemographicsStore } from '@/stores/DemographicStore';
 
-function someChecked(options, errorMessage="Missing check values") {
-  if (!options.filter(v => v.checkboxBtnContent).some(v => v.checkboxBtnContent.data.some(d => d.checked))) {
-    return errorMessage
-  }
-}
+// function someChecked(options, errorMassage) {
+//   if (!options.filter(v => v.checkboxBtnContent).some(v => v.checkboxBtnContent.data.some(d => d.checked))) {
+//     return errorMassage
+//   }
+// }
 export default defineComponent({
   name: "Home",
   components:{
@@ -147,14 +150,14 @@ export default defineComponent({
           'title': 'Past Medical history',
           'componet': 'MedicalHistory',
           'value': '2',
-          validation: {
-            medicalHistory: (data) => someChecked(data, "Medical history is required"), 
-            allegy: (data) => someChecked(data, "Allergy is required"), 
-            //existingChronicHealthConditions: (data)=>someChecked(data, "Existing chronic conditions is required"),
-            hivTest: (data)=>someChecked(data, "HIV test required"),
-            syphilisTest: (data)=>someChecked(data, "Syphilis test is required")
+          // validation: {
+          //   medicalHistory: (data) => someChecked(data, "Medical history is required"), 
+          //   allegy: (data) => someChecked(data, "Allergy is required"), 
+          //   //existingChronicHealthConditions: (data)=>someChecked(data, "Existing chronic conditions is required"),
+          //   hivTest: (data)=>someChecked(data, "HIV test required"),
+          //   syphilisTest: (data)=>someChecked(data, "Syphilis test is required")
             
-          }
+          // }
         },
         {
           'title': 'Current Pregnancy',
@@ -182,11 +185,15 @@ export default defineComponent({
     }
   },
   computed:{
-    ...mapState(useMedicalHistoryStore,["medicalHistory", "allegy", "existingChronicHealthConditions","hivTest","syphilisTest"]),
-    ...mapState(useObstreticHistoryStore, ["prevPregnancies","preterm","abnormalities","modeOfDelivery","Complications"]),
-    ...mapState(useCurrentPregnanciesStore, ["currentPregnancies","deliveryDate","lmnp","gestation","tetanus","ultrasound"]),
-    ...mapState(useMedicationsStore,["Medication"]),
-    ...mapState(useWomanBehaviourStore,["dailyCaffeineIntake","Tobacco"])
+    
+    // ...mapState(useMedicalHistoryStore,["medicalHistory", "allegy", "existingChronicHealthConditions","hivTest","syphilisTest"]),
+    // ...mapState(useObstreticHistoryStore, ["prevPregnancies","preterm","abnormalities","modeOfDelivery","Complications"]),
+    // ...mapState(useCurrentPregnanciesStore, ["currentPregnancies","deliveryDate","lmnp","gestation","tetanus","ultrasound"]),
+    // ...mapState(useMedicationsStore,["Medication"]),
+    // ...mapState(useWomanBehaviourStore,["dailyCaffeineIntake","Tobacco"])
+     ...mapState(useDemographicsStore,["demographics"]),
+    ...mapState(useObstreticHistoryStore,['preterm']),
+    ...mapState(useObstreticHistoryStore,['Complications'])
 
   },
       saveData(){
@@ -210,38 +217,15 @@ export default defineComponent({
         'TB',
         'Mental  illiness',
       ];
-      for (const condition of medicalConditions) {
-        const selectedValue = getCheckboxSelectedValue(this.exisitingChronicHealthConditions, condition);
-        console.log(selectedValue);
-      }
-
-         // this.$router.push('symptomsFollowUp');
+      // for (const condition of medicalConditions) {
+      //   const selectedValue = getCheckboxSelectedValue(this.exisitingChronicHealthConditions, condition);
+      //   console.log(selectedValue);
+      // }
 
      },
   mounted(){
     // this.markWizard()
 
-  },
-  watch: {
-
-    vitals: {
-    //   handler(){
-    //     this.markWizard()
-    //   },
-    //   deep: true
-    // },
-    // investigations: {
-    //   handler(){
-    //     this.markWizard()
-    //   },
-    //   deep: true
-    // },
-    // diagnosis: {
-    //   handler(){
-    //     this.markWizard()
-    //   },
-      deep: true
-    }
   },
   setup() {
     return { chevronBackOutline,checkmark };
@@ -283,26 +267,50 @@ export default defineComponent({
       });
     },
     saveData(){ 
-      const errors = []
-      this.StepperData.forEach((stepper)=> {
-        if (!stepper.validation) return
-        Object.keys(stepper.validation).forEach((validationName) => {
-          if (typeof stepper.validation[validationName] === 'function') {
-            const state = stepper.validation[validationName](this[validationName])
-            if (state) errors.push(state)
-          }
-        })
-      })
-      if (errors.length) {
-        return alert(errors.join(','))
-      }
-      console.log(errors)
-        // console.log(this.medicalHistory, "Medical history")
-        // console.log(this.currentPregnancies, "Current")
-        //   console.log(getCheckboxSelectedValue(this.medicalHistory, 'Myomectomy'))
-        //  this.$router.push('symptomsFollowUp');
+      // const errors = []
+      // this.StepperData.forEach((stepper)=> {
+      //   if (!stepper.validation) return
+      //   Object.keys(stepper.validation).forEach((validationName) => {
+      //     if (typeof stepper.validation[validationName] === 'function') {
+      //       const state = stepper.validation[validationName](this[validationName])
+      //       if (state) errors.push(state)
+      //     }
+      //   })
+      // })
+      // if (errors.length) {
+      //   return alert(errors.join(','))
+      // }
+       this.savePreterm()
+      //  this.saveComplications()
+      //  this.$router.push('QuickCheck');
+     },
+     savePrevPregnancies(){},
+     saveModeOfDelivery(){},
+
+    async savePreterm(){
+      const userID: any = Service.getUserID()
+      const pretermInstance = new ProfileService(this.demographics.patient_id,userID)
+       await pretermInstance.createEncounter()
+      const data = await this.buildPreterm()
+      await pretermInstance.saveObservationList(data)
 
      },
+       async buildPreterm(){
+          const id = await ConceptService.getConceptID(getRadioSelectedValue(this.preterm,'pretermInfo'))
+          console.log(id)
+         return [
+                {
+                    "concept_id": 7141, //primary diagnosis
+                    "value_coded": id,
+                    "obs_datetime": Service.getSessionDate()
+                }
+        ]
+        },
+    //  saveComplications(){
+    //   const userID: any = Service.getUserID()
+    //   const complicationInstance = new ProfileService(this.demographics.patient_id,userID)
+    //   complicationInstance.onFinish(this.Complications);
+    //  },
 
     openModal(){
       createModal(SaveProgressModal)

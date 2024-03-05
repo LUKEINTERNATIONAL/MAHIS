@@ -77,30 +77,16 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 value: 'exam not done',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '7',
+                                colSize: '6',
                                 justify: 'space-between'
 
                             },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                classDash:'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
                             {
                                 name: 'Normal exam',
                                 value: 'normal exam',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '7',
+                                colSize: '6',
                                 justify: 'space-between'
 
                             },
@@ -108,6 +94,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                     }
 
             },
+
 
             {
                 selectdData: [],
@@ -124,30 +111,16 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 value: 'cough',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '7',
+                                colSize: '6',
                                 justify: 'space-between'
 
                             },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                classDash:'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
                             {
                                 name: 'Rapid breathing',
                                 value: 'rapid breathing',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '7',
+                                colSize: '6',
                                 justify: 'space-between'
 
                             },
@@ -155,6 +128,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                     }
 
             },
+
             {
                 selectdData: [],
                 classDash:'dashed_bottom_border',
@@ -170,30 +144,16 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 value: 'slow breathing',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '7',
+                                colSize: '6',
                                 justify: 'space-between'
 
                             },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                classDash:'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
                             {
                                 name: 'Wheezing',
                                 value: 'wheezing',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '7',
+                                colSize: '6',
                                 justify: 'space-between'
 
                             },
@@ -216,30 +176,16 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 value: 'rales',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '7',
+                                colSize: '6',
                                 justify: 'space-between'
 
                             },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                classDash:'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
                             {
                                 name: 'Respiratory distress',
                                 value: 'respiratory distress',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '7',
+                                colSize: '6',
                                 justify: 'space-between'
 
                             },
@@ -247,6 +193,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                     }
 
             },
+
             {
                 selectdData: [],
                 classDash:'dashed_bottom_border',
@@ -263,7 +210,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 value: 'other respiratory exam',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '7',
+                                colSize: '6',
                                 justify: 'space-between'
 
                             },
@@ -434,14 +381,14 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 justify: 'space-between'
 
                             },
-                            {
-                                value: 'otherBloodPressure',
-                                name: 'Other reason',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between'
-
-                            },
+                            // {
+                            //     value: 'otherBloodPressure',
+                            //     name: 'Other reason',
+                            //     labelPlacement: 'start',
+                            //     colSize: '7',
+                            //     justify: 'space-between'
+                            //
+                            // },
 
                         ]
                     }
@@ -565,30 +512,16 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 value: 'NoSymptomsOfEclampsia',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '7',
+                                colSize: '6',
                                 justify: 'space-between'
 
                             },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                classDash:'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
                             {
                                 name: 'Severe headache',
                                 value: 'SevereHeadache',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '7',
+                                colSize: '6',
                                 justify: 'space-between'
 
                             },
@@ -596,6 +529,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                     }
 
             },
+
             {
                 selectdData: [],
                 classDash:'dashed_bottom_border',
@@ -611,7 +545,16 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 value: 'VisualDisturbance',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '7',
+                                colSize: '6',
+                                justify: 'space-between'
+
+                            },
+                            {
+                                name: 'Vomiting',
+                                value: 'Vomiting',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
                                 justify: 'space-between'
 
                             },
@@ -634,30 +577,16 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 value: 'Vomiting',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '7',
+                                colSize: '6',
                                 justify: 'space-between'
 
                             },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                classDash:'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
                             {
                                 name: 'Epigastric pain',
                                 value: 'EpigastricPain',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '7',
+                                colSize: '6',
                                 justify: 'space-between'
 
                             },
@@ -665,6 +594,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                     }
 
             },
+
             {
                 selectdData: [],
                 classDash:'dashed_bottom_border',
@@ -680,7 +610,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 value: 'Dizziness',
                                 checked: false,
                                 labelPlacement: 'start',
-                                colSize: '7',
+                                colSize: '6',
                                 justify: 'space-between'
 
                             },
@@ -691,8 +621,11 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
         ]
     }),
     actions:{
-        setVitals(data: any){
+        setBloodPressure(data: any){
             this.bloodPressure = data
+        },
+        setHeightWeight(data: any){
+            this.heightWeight = data
         }
     },
     persist:true,
