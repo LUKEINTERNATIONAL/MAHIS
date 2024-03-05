@@ -53,6 +53,7 @@ import { Service } from "@/services/service";
 import { LabOrder } from "@/apps/NCD/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
+import { useDispositionStore } from "@/stores/OutcomeStore"
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";
 import { Treatment } from "@/apps/NCD/services/treatment";
@@ -272,10 +273,11 @@ export default defineComponent({
                 this.saveInvestigation();
                 this.saveDiagnosis();
                 this.saveTreatmentPlan();
+                this.saveOutComeStatus();
                 this.$router.push("patientProfile");
             } else {
                 toastWarning("Please complete all required fields");
-                this.saveTreatmentPlan();
+                this.saveOutComeStatus();
             }
         },
         saveInvestigation() {
@@ -321,6 +323,22 @@ export default defineComponent({
                 const drugOrder = await prescriptionService.createDrugOrder(drugOrders);
                 if (!drugOrder) return toastWarning("Unable to create drug orders!");
                 toastSuccess("Drug order has been created");
+            }
+        },
+
+        async saveOutComeStatus() {
+            const userID: any = Service.getUserID()
+            const patientID = this.demographics.patient_id
+
+            if (!isEmpty(this.dispositions)) {
+                for (let key in this.dispositions) {
+                    if (this.dispositions[key].type == 'Admit') {
+                        console.log(this.dispositions[key])
+                    } else {
+
+                    }
+                }
+
             }
         },
         openModal() {
