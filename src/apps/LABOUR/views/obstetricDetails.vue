@@ -3,7 +3,7 @@
     <Toolbar />
     <ion-content :fullscreen="true">
       <DemographicBar />
-      <Stepper stepperTitle="Obstetric Details" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" @update:inputValue="validateProfileData($event)"  :StepperData="StepperData"/>
+      <Stepper stepperTitle="Obstetric Management" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" @update:inputValue="validateProfileData($event)"  :StepperData="StepperData"/>
     </ion-content>
   </ion-page>
 </template>
@@ -69,7 +69,7 @@ export default defineComponent({
     return {
       wizardData: [
         {
-          'title': 'Obstetric',
+          'title': 'Obstetric history',
           'class': 'common_step',
           'checked':'',
           'icon': false,
@@ -78,7 +78,7 @@ export default defineComponent({
           'last_step': ''
         },
         {
-          'title': 'Pregnancy/Labour',
+          'title': 'Labour details',
           'class': 'common_step',
           'checked':'',
           'icon': false,
@@ -90,12 +90,12 @@ export default defineComponent({
       ],
       StepperData:[
         {
-          'title': 'Obstetric',
+          'title': 'Obstetric History',
           'componet': 'Obstetric',
           'value': '1'
         },
         {
-          'title': 'Pregnancy/Labour',
+          'title': 'Labour details',
           'componet': 'Labour',
           'value': '2',
         },

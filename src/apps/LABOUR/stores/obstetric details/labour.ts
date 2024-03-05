@@ -4,275 +4,66 @@ import { icons } from '@/utils/svg'
 export const useLabourDetailsStore = defineStore('labourDetailsStore',{
     state: () => ({
 
-        pastProblems: [
+        labourDetails:[
             {
                 selectdData: [],
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
+                isFinishBtn: false,
+                radioBtnContent:
                     {
                         header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-
-                            {
-                                name: 'Obstructed labour',
-                                value: 'obstructed labour',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Breech',
-                                value: 'breech',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-
-                            {
-                                name: 'Pre-eclampsia',
-                                value: 'value',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Eclampsia',
-                                value: 'value',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-
-            {
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
+                            title: 'Reason for coming to the facility?',
                             selectedValue: ''
                         },
                         data:[
                             {
-                                name: 'Twins',
-                                value: 'twins',
-                                checked: false,
+                                name: 'In labour',
+                                value: 'in labour',
                                 labelPlacement: 'start',
-                                colSize: '6',
+                                colSize: '7',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Vacuum extraction',
-                                value: 'vacuum extraction',
-                                checked: false,
+                                name: 'Delivered on the way to facility',
+                                value: 'delivered on the way to facility',
                                 labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-
-                        ]
-                    }
-
-            },
-            {
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'CPD',
-                                value: 'cpd',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Prolonged labour',
-                                value: 'prolonged labour',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-
-                        ]
-                    }
-
-            },
-
-            {
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Caesarean section',
-                                value: 'caesarian section',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Anaemia',
-                                value: 'anaemia',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-
-            {
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Retained placenta',
-                                value: 'retained placenta',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'APH',
-                                value: 'aph',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'PPH',
-                                value: 'pph',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Preterm labour',
-                                value: 'preterm labour',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'None',
-                                value: 'none',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
+                                colSize: '7',
                                 justify: 'space-between',
                             },
                             {
                                 name: 'Other',
-                                value: 'otherInfo',
-                                checked: false,
+                                value: 'other',
                                 labelPlacement: 'start',
-                                colSize: '6',
+                                colSize: '7',
                                 justify: 'space-between',
                             },
                         ]
                     }
 
             },
-
             {
-                isFinishBtn: false,
-                sectionHeader: '',
-                classDash: 'dashed_bottom_border _padding',
+                classDash: 'dashed_bottom_border',
+                data:{
+                    rowData:[
+                        {
+                            colData: [
+                                {
+                                    inputHeader: 'Specify',
+                                    value: '',
+                                    name: 'specify',
+                                    required: true,
+                                    icon: icons.editPen,
+                                    eventType: 'input',
+                                    alertsError: false,
+                                    alertsErrorMassage: '',
+                                    inputWidth:'55%'
+                                },
 
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        displayNone:true,
-                                        inputHeader: 'specify',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'otherC',
-                                        required: true,
-                                        eventType: 'input',
-                                        inputWidth: "85%",
-                                    },
-
-                                ]
-                            }
-                        ]
-                    },
+                            ]
+                        },
+                    ]
+                }
             },
+
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -280,20 +71,20 @@ export const useLabourDetailsStore = defineStore('labourDetailsStore',{
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Eclampsia/Pre-Eclampsia?',
+                            title: 'Labour onset type?',
                             selectedValue: ''
                         },
                         data:[
                             {
-                                name: 'Well',
-                                value: 'well',
+                                name: 'Induced',
+                                value: 'induced',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Disturbed',
-                                value: 'disturbed',
+                                name: 'Spontaneous',
+                                value: 'spontaneous',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
@@ -302,15 +93,12 @@ export const useLabourDetailsStore = defineStore('labourDetailsStore',{
                     }
 
             },
-    ] as any,
-
-        labourDetails:[
 
 
             {
                 isFinishBtn: false,
                 sectionHeader: '',
-                classDash: '',
+                classDash: 'dashed_bottom_border',
                 data:
                     {
                         rowData:[
@@ -349,7 +137,39 @@ export const useLabourDetailsStore = defineStore('labourDetailsStore',{
                     },
 
             },
+
             {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Membranes raptured?',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Yes',
+                                value: 'yes',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'No',
+                                value: 'no',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+
+            {
+                classDash: 'dashed_bottom_border',
                 data:
                     {
                         rowData:[
@@ -393,7 +213,7 @@ export const useLabourDetailsStore = defineStore('labourDetailsStore',{
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Has the woman had food?',
+                            title: 'Has the woman had food in 4 hrs?',
                             selectedValue: ''
                         },
                         data:[

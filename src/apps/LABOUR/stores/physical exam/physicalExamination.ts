@@ -4,7 +4,7 @@ import { icons } from '@/utils/svg'
 export const usePhysicalExamStore = defineStore('physicalExamStore',{
     state: () => ({
 
-        physicalExamination: [
+        vitals: [
 
             {
                 selectdData: [],
@@ -68,7 +68,75 @@ export const usePhysicalExamStore = defineStore('physicalExamStore',{
 
             {
                 isFinishBtn: false,
-                sectionHeader: 'Height',
+                sectionHeader: '',
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Height',
+                                        unit: 'cm',
+                                        icon: icons.height,
+                                        value: '',
+                                        name: 'Height',
+                                        required: true,
+                                        eventType: 'input',
+                                        placeholder:'Enter height'
+                                    },
+                                    {
+                                        inputHeader: 'Weight',
+                                        unit: 'KG',
+                                        icon: icons.weight,
+                                        value: '',
+                                        name: 'Weight',
+                                        required: true,
+                                        eventType: 'input',
+                                        placeholder:'Enter weight'
+                                    },
+
+                                ]
+                            }
+                        ]
+                    },
+            },
+            {
+                isFinishBtn: false,
+                sectionHeader: '',
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Fundal height',
+                                        unit: 'cm',
+                                        icon: icons.height,
+                                        value: '',
+                                        name: 'Weight',
+                                        required: true,
+                                        eventType: 'input',
+                                        placeholder:'Enter the height'
+                                    },
+                                    {
+                                        inputHeader: 'Fundus',
+                                        unit: 'Weeks',
+                                        icon: icons.weight,
+                                        value: '',
+                                        name: 'Fundus',
+                                        required: true,
+                                        eventType: 'input',
+                                        placeholder:'Enter fundus'
+                                    },
+
+                                ]
+                            }
+                        ]
+                    },
+            },
+            {
+                isFinishBtn: false,
+                sectionHeader: '',
                 classDash: 'dashed_bottom_border _padding',
 
                 data:
@@ -77,14 +145,14 @@ export const usePhysicalExamStore = defineStore('physicalExamStore',{
                             {
                                 colData: [
                                     {
-                                        inputHeader: 'specify',
-                                        unit: 'cm',
-                                        icon: icons.editPen,
+                                        inputHeader: 'Fetal heart rate',
+                                        unit: 'BPM',
+                                        icon: icons.bmi,
                                         value: '',
-                                        name: 'otherC',
+                                        name: 'Fetal heart rate',
                                         required: true,
                                         eventType: 'input',
-                                        inputWidth: "85%",
+                                        placeholder:'Enter fetal heart rate'
                                     },
 
                                 ]
@@ -92,6 +160,9 @@ export const usePhysicalExamStore = defineStore('physicalExamStore',{
                         ]
                     },
             },
+            ] as any,
+
+        anaemia:[
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -153,7 +224,6 @@ export const usePhysicalExamStore = defineStore('physicalExamStore',{
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
                 radioBtnContent:
                     {
                         header:{
@@ -179,6 +249,9 @@ export const usePhysicalExamStore = defineStore('physicalExamStore',{
                     }
 
             },
+            ] as any,
+
+            otherphysicalExams:[
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -247,6 +320,7 @@ export const usePhysicalExamStore = defineStore('physicalExamStore',{
             {
                 selectdData: [],
                 isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
                 radioBtnContent:
                     {
                         header:{
@@ -312,15 +386,43 @@ export const usePhysicalExamStore = defineStore('physicalExamStore',{
                         },
                         data:[
                             {
-                                name: 'ROA',
+                                name: 'Right occiput anterior (ROA)',
                                 value: 'roa',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'LOA',
+                                name: 'Left occiput anterior (LOA)',
                                 value: 'loa',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Left occiput transverse (LOT)',
+                                value: 'lot',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Right occiput transverse (ROT)',
+                                value: 'rot',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Left occiput posterior (lop)',
+                                value: 'lop',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Right occiput posterior (rop)',
+                                value: 'rop',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',

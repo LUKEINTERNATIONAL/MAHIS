@@ -7,6 +7,288 @@ export const usePelvicAssessmentStore = defineStore('pelvicAssessment',{
         pelvicAssessment: [
 
             {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Shape of brim',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Followed',
+                                value: 'followed',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Not followed',
+                                value: 'not followed',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Sacrum',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Well curved',
+                                value: 'well curved',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Not curved',
+                                value: 'not curved',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Sacral promotory',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Not tipped',
+                                value: 'not tipped',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Tipped',
+                                value: 'Not tipped',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Sacrospinous ligaments',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Flexible',
+                                value: 'flexible',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Thick',
+                                value: 'thick',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Ischial spines',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Blunt',
+                                value: 'blunt',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Prominent',
+                                value: 'prominent',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Station',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: '-4',
+                                value: '-4',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: '-3',
+                                value: '-3',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: '-2',
+                                value: '-2',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: '-1',
+                                value: '-1',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: '0',
+                                value: '0',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: '1',
+                                value: '1',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: '2',
+                                value: '2',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: '3',
+                                value: '3',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: '4',
+                                value: '4',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Sub-pubic arch',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Less than 90 degrees',
+                                value: 'less than 90 degrees',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'More than 90 degrees',
+                                value: 'more than 90 degrees',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Intertuberous diameter',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Admits 4 knuckles (Normal)',
+                                value: 'admits 4 knucles (Normal)',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Admits 4 knuckles (Abnormal)',
+                                value: 'admits 4 knuckles (Abrnormal)',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+
+            {
                 isFinishBtn: false,
                 classDash: 'dashed_bottom_border _padding',
 
@@ -16,311 +298,18 @@ export const usePelvicAssessmentStore = defineStore('pelvicAssessment',{
                             {
                                 colData: [
                                     {
-                                        inputHeader: 'State of Cervix',
+                                        inputHeader: 'Conclusion about pelvis',
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'state of cervix',
+                                        name: 'conclusion about pelvis',
                                         required: true,
                                         eventType: 'input',
                                     },
-                                    {
-                                        inputHeader: 'Cervix dilation',
-                                        unit: 'cm',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'state of cervix',
-                                        required: true,
-                                        eventType: 'input',
-                                        placeholder:'Enter the number between 1-10'
-                                    },
-
                                 ]
                             }
                         ]
                     },
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Percentage of effacement',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: '25%',
-                                value: '25%',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: '50%',
-                                value: '50%',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Application of presenting part',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Well applied',
-                                value: 'well applied',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Loosely applied',
-                                value: 'loosely applied',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Not applied',
-                                value: 'not applied',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'State of membranes?',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Raptured',
-                                value: 'raptured',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Intact',
-                                value: 'intact',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'Time membranes raptured',
-                                        unit: '',
-                                        icon: icons.time,
-                                        value: '',
-                                        name: 'time membranes raptured',
-                                        required: true,
-                                        eventType: 'input',
-                                    },
-                                    {
-                                        inputHeader: 'Date membranes raptured',
-                                        unit: '',
-                                        icon: icons.calenderPrimary,
-                                        value: '',
-                                        name: 'date membranes raptured',
-                                        required: true,
-                                        datePopover:true,
-                                        eventType: 'input',
-                                        placeholder:'Pick date'
-                                    },
-
-                                ]
-                            }
-                        ]
-                    },
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Show',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Present',
-                                value: 'present',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Absent',
-                                value: 'absent',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Soft tissues',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Soft',
-                                value: 'soft',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Warm and moist',
-                                value: 'warm and moist',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Hot and dry',
-                                value: 'hot and dry',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Hot and moist',
-                                value: 'hot and moist',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Liquor',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Clear',
-                                value: 'clear',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Blood stained',
-                                value: 'blood stained',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Meconium stained (Grade 1 to 3)',
-                                value: 'meconium stained',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Absent',
-                                value: 'absent',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Offensive smell',
-                                value: 'offensive smell',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Cord',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Not felt',
-                                value: 'not felt',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Prolapsed',
-                                value: 'prolapsed',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
             },
             {
                 isFinishBtn: false,
@@ -332,138 +321,19 @@ export const usePelvicAssessmentStore = defineStore('pelvicAssessment',{
                             {
                                 colData: [
                                     {
-                                        inputHeader: 'Position of sutures and fontanelles *',
+                                        inputHeader: 'Anticipated course of labour and delivery',
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Position of sutures and fontanelles *',
+                                        name: 'anticipated course of labour and delivery',
                                         required: true,
                                         eventType: 'input',
-                                        inputWidth:'55%'
                                     },
-
                                 ]
                             }
                         ]
                     },
             },
-
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Level in relation to ischial spines *',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Below',
-                                value: 'below',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Above',
-                                value: 'above',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'On level',
-                                value: 'on level',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Caput',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Nil',
-                                value: 'nil',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Mild',
-                                value: 'mild',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'moderate',
-                                value: 'moderate',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Severe',
-                                value: 'severe',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Moulding *',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: '+',
-                                value: '+',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: '++',
-                                value: '++',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: '+++',
-                                value: '+++',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-
 
         ] as any,
     }),

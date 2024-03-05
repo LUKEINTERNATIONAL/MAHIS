@@ -1,12 +1,6 @@
 <template>
   <div class="container">
     <ion-card class="section">
-      <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Past pregnancy problems</ion-card-title></ion-card-header>
-      <ion-card-content>
-        <basic-form :contentData="pastProblems"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
-      </ion-card-content>
-    </ion-card>
-    <ion-card class="section">
       <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Labour details</ion-card-title></ion-card-header>
       <ion-card-content>
         <basic-form :contentData="labourDetails"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
@@ -77,7 +71,6 @@ export default defineComponent({
   },
   computed:{
     ...mapState(useLabourDetailsStore,["labourDetails"]),
-    ...mapState(useLabourDetailsStore,["pastProblems"]),
 
   },
   mounted(){

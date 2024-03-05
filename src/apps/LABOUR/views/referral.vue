@@ -3,7 +3,7 @@
     <Toolbar />
     <ion-content :fullscreen="true">
       <DemographicBar />
-      <Stepper stepperTitle="Physical Examination" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" @update:inputValue="validateProfileData($event)"  :StepperData="StepperData"/>
+      <Stepper stepperTitle="Patient referral" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" @update:inputValue="validateProfileData($event)"  :StepperData="StepperData"/>
     </ion-content>
   </ion-page>
 </template>
@@ -38,10 +38,8 @@ import { createModal } from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
 import Stepper from "@/apps/LABOUR/components/Stepper.vue";
 import { mapState } from 'pinia';
-import {getCheckboxSelectedValue} from "@/services/data_helpers";
-
 export default defineComponent({
-  name: "obstetricDetails",
+  name: "referral",
   components:{
     IonContent,
     IonHeader,
@@ -69,63 +67,21 @@ export default defineComponent({
     return {
       wizardData: [
         {
-          'title': 'Quick Check',
+          'title': 'Referral',
           'class': 'common_step',
           'checked':'',
           'icon': false,
           'disabled':false,
           'number': 1,
-          'last_step': ''
-        },
-        {
-          'title': 'Physical examination',
-          'class': 'common_step',
-          'checked':'',
-          'icon': false,
-          'disabled':false,
-          'number': 2,
-          'last_step': ''
-        },
-        {
-          'title': 'First vaginal assessment',
-          'class': 'common_step',
-          'checked':'',
-          'icon': false,
-          'disabled':false,
-          'number': 3,
-          'last_step': ''
-        },
-        {
-          'title': 'Pelvis assessment',
-          'class': 'common_step',
-          'checked':'',
-          'icon': false,
-          'disabled':false,
-          'number': 4,
           'last_step': 'last_step'
         },
 
       ],
       StepperData:[
         {
-          'title': 'Quick check',
-          'componet': 'QuickCheck',
+          'title': 'Referral',
+          'componet': 'PatientReferral',
           'value': '1'
-        },
-        {
-          'title': 'Physical examination',
-          'componet': 'PhysicalExamination',
-          'value': '2',
-        },
-        {
-          'title': 'First vaginal examination',
-          'componet': 'FirstVaginalExamination',
-          'value': '3',
-        },
-        {
-          'title': 'Pelvic assessment',
-          'componet': 'PelvicAssessment',
-          'value': '4',
         },
       ],
       isOpen: false,
@@ -133,9 +89,7 @@ export default defineComponent({
     };
   },
   watch: {
-    medicalHistory(change) {
-      console.log(change)
-    }
+
   },
   computed:{
 
@@ -143,55 +97,13 @@ export default defineComponent({
   },
   saveData(){
 
-    const medicalConditions = [
-      'Auto immune desease',
-      'Asthma',
-      'Diabetes',
-      'Sickle cell',
-      'Anaemia',
-      'Thalassemia',
-      'Gynaecological',
-      'CCF',
-      'RHD',
-      'Gestational diabetes',
-      'pre-existing type 1',
-      'pre-existing type 2',
-      'Epilepsy',
-      'Hypertension',
-      'Kidney',
-      'TB',
-      'Mental  illiness',
-    ];
-    for (const condition of medicalConditions) {
-      const selectedValue = getCheckboxSelectedValue(this.exisitingChronicHealthConditions, condition);
-      console.log(selectedValue);
-    }
-
   },
   mounted(){
-    // this.markWizard()
+     this.markWizard()
 
   },
   watch: {
 
-    vitals: {
-      //   handler(){
-      //     this.markWizard()
-      //   },
-      //   deep: true
-      // },
-      // investigations: {
-      //   handler(){
-      //     this.markWizard()
-      //   },
-      //   deep: true
-      // },
-      // diagnosis: {
-      //   handler(){
-      //     this.markWizard()
-      //   },
-      deep: true
-    }
   },
   setup() {
     return { chevronBackOutline,checkmark };

@@ -3,7 +3,19 @@
     <ion-card class="section">
       <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="physicalExamination"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+        <basic-form :contentData="vitals"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+      </ion-card-content>
+    </ion-card>
+    <ion-card class="section">
+      <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Anaemia</ion-card-title></ion-card-header>
+      <ion-card-content>
+        <basic-form :contentData="anaemia"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+      </ion-card-content>
+    </ion-card>
+    <ion-card class="section">
+      <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+      <ion-card-content>
+        <basic-form :contentData="otherphysicalExams"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
@@ -67,7 +79,9 @@ export default defineComponent({
     };
   },
   computed:{
-    ...mapState(usePhysicalExamStore,["physicalExamination"]),
+    ...mapState(usePhysicalExamStore,["vitals"]),
+    ...mapState(usePhysicalExamStore,["anaemia"]),
+    ...mapState(usePhysicalExamStore,["otherphysicalExams"]),
   },
   mounted(){
   },

@@ -8,6 +8,7 @@ import LabTests from '../views/LabTests.vue';
 import Enrollment from "@/apps/ANC/views/Enrollment.vue";
 import Referral from "@/apps/ANC/views/referral.vue";
 import physicalExamination from "@/apps/ANC/views/physicalExamination.vue";
+import headssAssessment from "@/apps/ANC/views/headssAssessment.vue";
 
 
 
@@ -28,7 +29,11 @@ export default [
     name:'quickCheck',
     component: QuickCheck
   },
-
+  {
+    path: '/headssAssessment',
+    name:'headsAssessment',
+    component: headssAssessment
+  },
   {
     path: '/physicalExamination',
     name: 'physicalExamination',

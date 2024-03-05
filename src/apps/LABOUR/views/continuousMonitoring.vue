@@ -3,7 +3,7 @@
     <Toolbar />
     <ion-content :fullscreen="true">
       <DemographicBar />
-      <Stepper stepperTitle="Physical Examination" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" @update:inputValue="validateProfileData($event)"  :StepperData="StepperData"/>
+      <Stepper stepperTitle="Continuous monitoring" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" @update:inputValue="validateProfileData($event)"  :StepperData="StepperData"/>
     </ion-content>
   </ion-page>
 </template>
@@ -69,7 +69,7 @@ export default defineComponent({
     return {
       wizardData: [
         {
-          'title': 'Quick Check',
+          'title': 'Vitals',
           'class': 'common_step',
           'checked':'',
           'icon': false,
@@ -78,54 +78,25 @@ export default defineComponent({
           'last_step': ''
         },
         {
-          'title': 'Physical examination',
+          'title': 'Other exams',
           'class': 'common_step',
           'checked':'',
           'icon': false,
           'disabled':false,
           'number': 2,
-          'last_step': ''
-        },
-        {
-          'title': 'First vaginal assessment',
-          'class': 'common_step',
-          'checked':'',
-          'icon': false,
-          'disabled':false,
-          'number': 3,
-          'last_step': ''
-        },
-        {
-          'title': 'Pelvis assessment',
-          'class': 'common_step',
-          'checked':'',
-          'icon': false,
-          'disabled':false,
-          'number': 4,
           'last_step': 'last_step'
         },
-
       ],
       StepperData:[
         {
-          'title': 'Quick check',
-          'componet': 'QuickCheck',
+          'title': 'Vitals',
+          'componet': 'Vitals',
           'value': '1'
         },
         {
-          'title': 'Physical examination',
-          'componet': 'PhysicalExamination',
-          'value': '2',
-        },
-        {
-          'title': 'First vaginal examination',
-          'componet': 'FirstVaginalExamination',
-          'value': '3',
-        },
-        {
-          'title': 'Pelvic assessment',
-          'componet': 'PelvicAssessment',
-          'value': '4',
+          'title': 'Other exams',
+          'componet': 'OtherExams',
+          'value': '2'
         },
       ],
       isOpen: false,
@@ -133,9 +104,7 @@ export default defineComponent({
     };
   },
   watch: {
-    medicalHistory(change) {
-      console.log(change)
-    }
+
   },
   computed:{
 
@@ -143,55 +112,13 @@ export default defineComponent({
   },
   saveData(){
 
-    const medicalConditions = [
-      'Auto immune desease',
-      'Asthma',
-      'Diabetes',
-      'Sickle cell',
-      'Anaemia',
-      'Thalassemia',
-      'Gynaecological',
-      'CCF',
-      'RHD',
-      'Gestational diabetes',
-      'pre-existing type 1',
-      'pre-existing type 2',
-      'Epilepsy',
-      'Hypertension',
-      'Kidney',
-      'TB',
-      'Mental  illiness',
-    ];
-    for (const condition of medicalConditions) {
-      const selectedValue = getCheckboxSelectedValue(this.exisitingChronicHealthConditions, condition);
-      console.log(selectedValue);
-    }
-
   },
   mounted(){
-    // this.markWizard()
+     this.markWizard()
 
   },
   watch: {
 
-    vitals: {
-      //   handler(){
-      //     this.markWizard()
-      //   },
-      //   deep: true
-      // },
-      // investigations: {
-      //   handler(){
-      //     this.markWizard()
-      //   },
-      //   deep: true
-      // },
-      // diagnosis: {
-      //   handler(){
-      //     this.markWizard()
-      //   },
-      deep: true
-    }
   },
   setup() {
     return { chevronBackOutline,checkmark };

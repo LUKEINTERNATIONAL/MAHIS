@@ -1,13 +1,15 @@
 <template>
   <div class="container">
     <ion-card class="section">
-      <ion-card-header> <ion-card-title class=" sub_item_header"></ion-card-title></ion-card-header>
-      <ion-card-content>
-        <basic-form :contentData="pelvicAssessment"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
-      </ion-card-content>
-    </ion-card>
+        <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">The client is below 19, complete the HEADSS assessment</ion-card-title></ion-card-header>
+        <ion-card-content>
+          <basic-form :contentData="headssAssesment"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+        </ion-card-content>
+      </ion-card>
   </div>
+
 </template>
+
 <script lang="ts">
 import {defineComponent} from 'vue';
 import {
@@ -29,16 +31,24 @@ import BasicForm from '../../../../components/BasicForm.vue';
 import { icons } from '../../../../utils/svg';
 import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
+import { useObstreticHistoryStore} from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import {
   dynamicValue,
   getCheckboxSelectedValue,
   getFieldValue,
+  getRadioSelectedValue,
+  modifyCheckboxValue,
+  modifyDynamicFieldValue,
+  modifyFieldValue
 } from '@/services/data_helpers';
+import StandardValidations from "@/validations/StandardValidations";
+import {validateField} from "@/services/ANC/validation_service";
 import BasicCard from "@/components/BasicCard.vue";
-import {usePelvicAssessmentStore} from "@/apps/LABOUR/stores/physical exam/pelvicAssessment";
+import { Service } from "@/services/service"
+import {useHeadssAssessmentStore} from "@/apps/ANC/store/others/headsAssessment";
 export default defineComponent({
-  name: "FirstVaginalExamination",
+  name: "History",
   components:{
     BasicCard,
     IonContent,
@@ -68,16 +78,20 @@ export default defineComponent({
     };
   },
   computed:{
-    ...mapState(usePelvicAssessmentStore,["pelvicAssessment"]),
+    ...mapState(useHeadssAssessmentStore,["headssAssesment"]),
   },
+
   mounted(){
   },
   watch:{
+
   },
   setup() {
     return { checkmark,pulseOutline };
   },
-  methods: {}
+  methods:{
+
+  },
 });
 
 </script>

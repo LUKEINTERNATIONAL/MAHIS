@@ -6,6 +6,12 @@
         <basic-form :contentData="prevPregnancies"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
       </ion-card-content>
     </ion-card>
+    <ion-card class="section">
+      <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Past pregnancy problems</ion-card-title></ion-card-header>
+      <ion-card-content>
+        <basic-form :contentData="pastProblems"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+      </ion-card-content>
+    </ion-card>
   </div>
 
 </template>
@@ -75,7 +81,7 @@ export default defineComponent({
   },
   computed:{
     ...mapState(useObstreticHistoryStore,["prevPregnancies"]),
-    ...mapState(useObstreticHistoryStore,["HeadssAssesment"]),
+    ...mapState(useObstreticHistoryStore,["pastProblems"]),
     ...mapState(useObstreticHistoryStore,["preterm"]),
     ...mapState(useObstreticHistoryStore,["abnormalities"]),
     ...mapState(useObstreticHistoryStore,["modeOfDelivery"]),

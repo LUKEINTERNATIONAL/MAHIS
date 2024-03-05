@@ -1,269 +1,10 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
 
-export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminationStore',{
+export const useOtherExamsStore = defineStore('otherExamsStore',{
     state: () => ({
 
-        firstVaginalExamination: [
-
-            {
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'State of Cervix',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'state of cervix',
-                                        required: true,
-                                        eventType: 'input',
-                                    },
-                                    {
-                                        inputHeader: 'Cervix dilation',
-                                        unit: 'cm',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'cervix dilation',
-                                        required: true,
-                                        eventType: 'input',
-                                        placeholder:'Enter the number between 1-10'
-                                    },
-
-                                ]
-                            }
-                        ]
-                    },
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Percentage of effacement',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: '25%',
-                                value: '25',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: '50%',
-                                value: '50',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: '75%',
-                                value: '75',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: '100%',
-                                value: '100',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Not effaced',
-                                value: 'not effaced',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Application',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Well applied',
-                                value: 'well applied',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Loosely applied',
-                                value: 'loosely applied',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Not applied',
-                                value: 'not applied',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'State of membranes?',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Raptured',
-                                value: 'raptured',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Intact',
-                                value: 'intact',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'Time membranes raptured',
-                                        unit: '',
-                                        icon: icons.time,
-                                        value: '',
-                                        name: 'time membranes raptured',
-                                        required: true,
-                                        eventType: 'input',
-                                    },
-                                    {
-                                        inputHeader: 'Date membranes raptured',
-                                        unit: '',
-                                        icon: icons.calenderPrimary,
-                                        value: '',
-                                        name: 'date membranes raptured',
-                                        required: true,
-                                        datePopover:true,
-                                        eventType: 'input',
-                                        placeholder:'Pick date'
-                                    },
-
-                                ]
-                            }
-                        ]
-                    },
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Show',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Present',
-                                value: 'present',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Absent',
-                                value: 'absent',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Soft tissues',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Soft',
-                                value: 'soft',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Warm and moist',
-                                value: 'warm and moist',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Hot and dry',
-                                value: 'hot and dry',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Hot and moist',
-                                value: 'hot and moist',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-
+        otherExams: [
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -314,168 +55,6 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     }
 
             },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Cord',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Not felt',
-                                value: 'not felt',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Presenting',
-                                value: 'presenting',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Prolapsed',
-                                value: 'prolapsed',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'What part is presenting?',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Head',
-                                value: 'head',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Face',
-                                value: 'face',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Brow',
-                                value: 'brow',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Foot',
-                                value: 'foot',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Buttocks',
-                                value: 'buttocks',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Hand',
-                                value: 'hand',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Back',
-                                value: 'back',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Cord',
-                                value: 'cord',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Other',
-                                value: 'other',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'Specify',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'specify',
-                                        required: true,
-                                        eventType: 'input',
-                                    },
-
-                                ]
-                            }
-                        ]
-                    },
-            },
-            {
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'Position of sutures and fontanelles *',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'Position of sutures and fontanelles *',
-                                        required: true,
-                                        eventType: 'input',
-                                    },
-
-                                ]
-                            }
-                        ]
-                    },
-            },
 
             {
                 selectdData: [],
@@ -484,27 +63,27 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Level in relation to ischial spines *',
+                            title: 'Moulding *',
                             selectedValue: ''
                         },
                         data:[
                             {
-                                name: 'Below',
-                                value: 'below',
+                                name: '+',
+                                value: '+',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Above',
-                                value: 'above',
+                                name: '++',
+                                value: '++',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'On level',
-                                value: 'on level',
+                                name: '+++',
+                                value: '+++',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
@@ -563,27 +142,69 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Moulding *',
+                            title: 'Station',
                             selectedValue: ''
                         },
                         data:[
                             {
-                                name: '+',
-                                value: '+',
+                                name: '-4',
+                                value: '-4',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
-                                name: '++',
-                                value: '++',
+                                name: '-3',
+                                value: '-3',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
-                                name: '+++',
-                                value: '+++',
+                                name: '-2',
+                                value: '-2',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: '-1',
+                                value: '-1',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: '0',
+                                value: '0',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: '1',
+                                value: '1',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: '2',
+                                value: '2',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: '3',
+                                value: '3',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: '4',
+                                value: '4',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
@@ -592,9 +213,329 @@ export const usefirstVaginalExaminationStore = defineStore('firstVaginalExaminat
                     }
 
             },
+            {
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
 
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Cervix dilation',
+                                        unit: 'cm',
+                                        icon: icons.editPen,
+                                        value: '',
+                                        name: 'cervix dilation',
+                                        required: true,
+                                        eventType: 'input',
+                                        placeholder:'Enter the number between 1-10',
+                                        inputWidth:'55%'
+                                    },
 
+                                ]
+                            }
+                        ]
+                    },
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Descent',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: '0/5',
+                                value: '0/5',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: '1/5',
+                                value: '1/5',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: '2/5',
+                                value: '2/5',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: '3/5',
+                                value: '3/5',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: '4/5',
+                                value: '4/5',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: '5/5',
+                                value: '5/5',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Contractions',
+                                        unit: '',
+                                        icon: icons.editPen,
+                                        value: '',
+                                        name: 'contractions',
+                                        required: true,
+                                        eventType: 'input',
+                                        placeholder:'',
+                                        inputWidth:'55%'
+
+                                    },
+
+                                ]
+                            }
+                        ]
+                    },
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Severity of contractions',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'No contractions',
+                                value: 'no contractions',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Mild',
+                                value: 'mild',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Moderate',
+                                value: 'moderate',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Strong',
+                                value: 'strong',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
         ] as any,
+
+        urine:[
+
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Has the woman urinated?',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Yes',
+                                value: 'yes',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'No',
+                                value: 'no',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Amount of urine',
+                                        unit: '',
+                                        icon: icons.editPen,
+                                        value: '',
+                                        name: 'amount of urine',
+                                        required: true,
+                                        eventType: 'input',
+                                        placeholder:'',
+                                        inputWidth:'55%'
+
+                                    },
+
+                                ]
+                            }
+                        ]
+                    },
+            },
+            {
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Color of urine',
+                                        unit: '',
+                                        icon: icons.editPen,
+                                        value: '',
+                                        name: 'color of urine',
+                                        required: true,
+                                        eventType: 'input',
+                                        placeholder:'',
+                                        inputWidth:'55%'
+
+                                    },
+
+                                ]
+                            }
+                        ]
+                    },
+            },
+            {
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Odour of urine',
+                                        unit: '',
+                                        icon: icons.editPen,
+                                        value: '',
+                                        name: 'Odour',
+                                        required: true,
+                                        eventType: 'input',
+                                        placeholder:'',
+                                        inputWidth:'55%'
+
+                                    },
+
+                                ]
+                            }
+                        ]
+                    },
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Fully dilated?',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Yes',
+                                value: 'yes',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'No',
+                                value: 'no',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Time fully dilated',
+                                        unit: '',
+                                        icon: icons.time,
+                                        value: '',
+                                        name: 'Time fully dilated',
+                                        required: true,
+                                        eventType: 'input',
+                                        placeholder:'',
+                                        inputWidth:'55%'
+                                    },
+
+                                ]
+                            }
+                        ]
+                    },
+            },
+        ]
     }),
     actions:{
         setVaginalExamination(data: any){

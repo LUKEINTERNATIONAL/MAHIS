@@ -1,56 +1,35 @@
 <template>
-    <ion-row>
-        <ion-col size="1" size-lg="1"></ion-col>
-        <ion-col size="3" size-lg="3">
-            <ion-card class="wizard_card">
-                <div class="wizard_title"><strong > {{ stepperTitle }}</strong></div>
-                <ion-card-content>
-                    <div id="wizard_verticle" class="form_wizard wizard_verticle">
-                        <ul class="list-unstyled wizard_steps anchor">
-                            <li v-for="(item, index) in wizardData" :key="index" :class="item.last_step">
-                                <a  class="done" isdone="1" rel="1">
-                                    <span :class="item.class">
-                                        <ion-icon v-if="item.checked" :icon="checkmark" class="checked_step"></ion-icon>  
-                                        <span v-if="!item.checked" class="">{{ item.number }} </span>
-                                        <span class="wizard_text">{{ item.title }}</span> 
-                                    </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </ion-card-content>
-            </ion-card>
-        </ion-col>
-    
-        <ion-col size="7" size-lg="7" class="rightCol">
-            <div class="back_profile" @click="openModal()">
-                <ion-icon style="font-size: 20px;" :icon="chevronBackOutline"> </ion-icon>
-                <span style="cursor: pointer;"> Back to dashboard</span>
+  <ion-row>
+    <!-- Adjust the column size and position -->
+    <ion-col class="centered-content" size="12" size-lg="8" offset-lg="2">
+      <!-- Back to Profile button -->
+      <div class="back_profile" @click="openModal()">
+        <ion-icon style="font-size: 20px;" :icon="chevronBackOutline"> </ion-icon>
+        <span style="cursor: pointer;"> Back to dashboard</span>
+      </div>
+      <!-- Accordion content -->
+      <div class="accordion_group">
+        <ion-accordion-group @ionChange="accordionGroupChange($event)">
+          <ion-accordion v-for="(item, index) in StepperData" :key="index" :value="item.value">
+            <ion-item slot="header">
+              <ion-label>{{ item.title }}</ion-label>
+            </ion-item>
+            <div class="ion-padding" slot="content">
+              <component :is="item.componet"> </component>
             </div>
-
-            <div class="accordion_group">
-              <ion-accordion-group @ionChange="accordionGroupChange($event)" >
-                <ion-accordion v-for="(item, index) in StepperData" :key="index"  :value="item.value">
-                    <ion-item slot="header">
-                        <ion-label>{{ item.title }}</ion-label>
-                    </ion-item>
-                    <div class="ion-padding" slot="content">
-                        <component :is="item.componet" > </component>
-                    </div>
-                </ion-accordion>
-            </ion-accordion-group>
-            <div>
-              <hr style="background: rgba(0, 0, 0, 0.13);">
-              <ion-button class="primary_btn" style="padding-left: 15px" @click="$emit('finishBtn')">Save and proceed</ion-button>
-            </div>
-            </div>
-            
-           
-        </ion-col>
-    </ion-row>
+          </ion-accordion>
+        </ion-accordion-group>
+        <!-- Save button -->
+        <div>
+          <hr style="background: rgba(0, 0, 0, 0.13);">
+          <ion-button class="primary_btn" style="padding-left: 15px" @click="$emit('finishBtn')">Save and proceed</ion-button>
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
 </template>
-  
-  <script lang="ts">
+
+<script lang="ts">
   import { 
     IonContent, 
     IonHeader, 
@@ -74,18 +53,9 @@
   import Toolbar from '@/components/Toolbar.vue'
   import ToolbarSearch from '@/components/ToolbarSearch.vue'
   import { chevronBackOutline,checkmark } from 'ionicons/icons';
-  import SaveProgressModal from '@/components/SaveProgressModal.vue'
-  import Vitals from "@/apps/LABOUR/components/repeatable things/Vitals.vue";
-  import Obstetric from "@/apps/LABOUR/components/obstetric details/Obstetric.vue";
-  import Labour from "@/apps/LABOUR/components/obstetric details/Labour.vue";
-  import QuickCheck from "@/apps/LABOUR/components/physical exam/QuickCheck.vue";
-  import PhysicalExamination from "@/apps/LABOUR/components/physical exam/PhysicalExamination.vue";
-  import FirstVaginalExamination from "@/apps/LABOUR/components/physical exam/FirstVaginalExamination.vue";
-  import PelvicAssessment from "@/apps/LABOUR/components/physical exam/PelvicAssessment.vue";
-  import PatientReferral from "@/apps/LABOUR/components/repeatable things/PatientReferral.vue";
+import headAssessment from "@/apps/ANC/components/others/headAssessment.vue";
   import { createModal } from '@/utils/Alerts'
   import { icons } from '@/utils/svg';
-  import OtherExams from "@/apps/LABOUR/components/repeatable things/OtherExams.vue";
   export default defineComponent({
     name: "Home",
     components:{
@@ -107,17 +77,8 @@
         IonAccordionGroup,
         IonItem,
         IonLabel,
+        headAssessment,
         IonModal,
-        Obstetric,
-        Labour,
-        QuickCheck,
-        PhysicalExamination,
-        PelvicAssessment,
-        PatientReferral,
-        FirstVaginalExamination,
-        Vitals,
-        OtherExams,
-        PatientReferral
 
     },
     data(){

@@ -3,7 +3,13 @@
     <ion-card class="section">
       <ion-card-header> <ion-card-title class=" sub_item_header"></ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="pelvicAssessment"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+        <basic-form :contentData="otherExams"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+      </ion-card-content>
+    </ion-card>
+    <ion-card class="section">
+      <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Urine</ion-card-title></ion-card-header>
+      <ion-card-content>
+        <basic-form :contentData="urine"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
@@ -36,7 +42,7 @@ import {
   getFieldValue,
 } from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
-import {usePelvicAssessmentStore} from "@/apps/LABOUR/stores/physical exam/pelvicAssessment";
+import { useOtherExamsStore} from "@/apps/LABOUR/stores/repeatable things/otherExams";
 export default defineComponent({
   name: "FirstVaginalExamination",
   components:{
@@ -68,7 +74,8 @@ export default defineComponent({
     };
   },
   computed:{
-    ...mapState(usePelvicAssessmentStore,["pelvicAssessment"]),
+    ...mapState(useOtherExamsStore,["otherExams"]),
+    ...mapState(useOtherExamsStore,["urine"]),
   },
   mounted(){
   },
