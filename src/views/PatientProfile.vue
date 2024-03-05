@@ -1,109 +1,48 @@
 <template>
     <ion-page>
-      <Toolbar />
-      <ion-content :fullscreen="true">
-        <div class="content_manager">
-        <ion-row class="content_width">
-            <ion-col size="3" size-lg="3">
-                <ion-card style=" margin-bottom: 20px; background-color: #fff;">
-                    <div class="p_name_image">
-                        <div class="first_letter">
-                            {{ demographics.name.charAt(0) }}
-                        </div>
-                        <div class="p_name"> {{ demographics.name }}  </div>
-                    </div>
-                    <ion-card-content>
-                          <ion-row>
-                              <ion-col size="4">MRN</ion-col>
-                              <ion-col >{{ demographics.mrn }}</ion-col>
-                          </ion-row>
-                          <ion-row>
-                              <ion-col size="4" >Gendar</ion-col>
-                              <ion-col >{{ covertGender(demographics.gender) }}</ion-col>
-                          </ion-row>
-                          <ion-row>
-                              <ion-col size="4" >Age</ion-col>
-                              <ion-col >{{ formatBirthdate() }}</ion-col>
-                          </ion-row>
-                          <ion-row>                              
-                              <ion-col size="4">Allergies</ion-col>
-                              <ion-col size="8" >
-                                <span  v-for="(item, index) in selectedMedicalAllergiesList" :key="index" >
-                                    <span class="allergies" v-if="item.selected">{{ item.name }}</span>
-                                </span>
-                              </ion-col> 
-                          </ion-row>
-                    </ion-card-content>
-                </ion-card>
-                <ion-card class="start_new_co" style=" margin-bottom: 20px;" @click="nav()">
-                    {{ NCDProgramActionName }}
-                </ion-card>
-                <ion-card class="start_new_co" style=" margin-bottom: 20px;" >
-                  <router-link to="/profile">+ Enroll in ANC Program</router-link>
-                </ion-card>
-              <ion-card class="start_new_co" style=" margin-bottom: 20px;" >
-                + Enroll in Labour and delivery program
-              </ion-card>
-              <ion-card class="start_new_co" style=" margin-bottom: 20px;" >
-                + Enroll in PNC program
-              </ion-card>
-                <ion-card class="start_new_co" style=" margin-bottom: 20px;" >
-                    + Enroll in OPD Program
-                </ion-card>
-                <ion-card style=" margin-bottom: 20px; background-color: #fff;">
-                    <ion-accordion-group :value="['first']">
-                        <ion-accordion value="first" style="background-color: #fff;" toggle-icon-slot="start">
-                            <ion-item slot="header" color="white">
-                                <ion-label class="side_title">Templates/Forms</ion-label>
-                            </ion-item>
-                                <ul style="list-style: none;" slot="content">
-                                    <li class="form_list">
-                                        <span v-html="iconsContent.form" ></span>
-                                        <div class="form_list_content">AETC Form</div>
-                                    </li>
-                                    <li class="form_list">
-                                        <span v-html="iconsContent.inpatient" ></span>
-                                        <div class="form_list_content">Medical Inpatient</div>
-                                    </li>
-                                    <li class="form_list">
-                                        <span v-html="iconsContent.notes" ></span>
-                                        <div class="form_list_content">Surgucal Notes</div>
-                                    </li>
-                                    <li class="form_list">
-                                        <span v-html="iconsContent.gynacological" ></span>
-                                        <div class="form_list_content">Gynacological</div>
-                                    </li>
-                                    <li class="form_list">
-                                        <span v-html="iconsContent.notes" ></span>
-                                        <div class="form_list_content">SOAP</div>
-                                    </li>
-                                    <li class="form_list">
-                                        <span v-html="iconsContent.monitoring" ></span>
-                                        <div class="form_list_content">Monitoring Chart</div>
-                                    </li>
-                                    <li class="form_list">
-                                        <span v-html="iconsContent.referal" ></span>
-                                        <div class="form_list_content">Referral</div>
-                                    </li>
-                                </ul>
-                                
-                        </ion-accordion>
-                    </ion-accordion-group>
-                </ion-card>
-                <ion-card style=" margin-bottom: 20px; background-color: #fff;">
-                    <ion-accordion-group>
-                        <ion-accordion value="first" style="background-color: #fff;" toggle-icon-slot="start">
-                            <ion-item slot="header" color="white">
-                                <ion-label class="side_title">AETC Clerking Sheet</ion-label>
-                            </ion-item>
-                            <ion-card-content slot="content">
-                               
+        <Toolbar />
+        <ion-content :fullscreen="true">
+            <div class="content_manager">
+                <ion-row class="content_width">
+                    <ion-col size="3" size-lg="3">
+                        <ion-card style="margin-bottom: 20px; background-color: #fff">
+                            <div class="p_name_image">
+                                <div class="first_letter">
+                                    {{ demographics.name.charAt(0) }}
+                                </div>
+                                <div class="p_name">{{ demographics.name }}</div>
+                            </div>
+                            <ion-card-content>
+                                <ion-row>
+                                    <ion-col size="4">MRN</ion-col>
+                                    <ion-col>{{ demographics.mrn }}</ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col size="4">Gendar</ion-col>
+                                    <ion-col>{{ covertGender(demographics.gender) }}</ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col size="4">Age</ion-col>
+                                    <ion-col>{{ formatBirthdate() }}</ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col size="4">Allergies</ion-col>
+                                    <ion-col size="8">
+                                        <span v-for="(item, index) in selectedMedicalAllergiesList" :key="index">
+                                            <span class="allergies" v-if="item.selected">{{ item.name }}</span>
+                                        </span>
+                                    </ion-col>
+                                </ion-row>
                             </ion-card-content>
                         </ion-card>
                         <ion-card class="start_new_co" style="margin-bottom: 20px" @click="handleNCD()">
                             {{ NCDProgramActionName }}
                         </ion-card>
-                        <ion-card class="start_new_co" style="margin-bottom: 20px"> + Enroll in ANC Program </ion-card>
+                        <ion-card class="start_new_co" style="margin-bottom: 20px">
+                            <router-link to="/profile">+ Enroll in ANC Program</router-link>
+                        </ion-card>
+                        <ion-card class="start_new_co" style="margin-bottom: 20px"> + Enroll in Labour and delivery program </ion-card>
+                        <ion-card class="start_new_co" style="margin-bottom: 20px"> + Enroll in PNC program </ion-card>
                         <ion-card class="start_new_co" style="margin-bottom: 20px"> + Enroll in OPD Program </ion-card>
                         <ion-card style="margin-bottom: 20px; background-color: #fff">
                             <ion-accordion-group :value="['first']">
@@ -138,7 +77,7 @@
                                         </li>
                                         <li class="form_list">
                                             <span v-html="iconsContent.referal"></span>
-                                            <div class="form_list_content">Referal</div>
+                                            <div class="form_list_content">Referral</div>
                                         </li>
                                     </ul>
                                 </ion-accordion>

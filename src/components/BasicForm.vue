@@ -20,14 +20,8 @@
                             :inputWidth="col.inputWidth"
                             :inputValue="col.value"
                             :eventType="col.eventType"
-<<<<<<< HEAD
-                            :disabled="col.disabled"
-                            @update:inputValue="handleInput(contentData, col, $event,'updateInput')"
-                            @clicked:inputValue="handleInput(contentData, col, $event,'clickedInput')"
-=======
                             @update:inputValue="handleInput(contentData, col, $event, 'updateInput')"
                             @clicked:inputValue="handleInput(contentData, col, $event, 'clickedInput')"
->>>>>>> d7554128b96b0083ad5de3b9a2de4c755b76fe50
                             :popOverData="col.popOverData"
                             @setPopoverValue="handleInput(contentData, col, $event, 'setPopoverValue')"
                         />
