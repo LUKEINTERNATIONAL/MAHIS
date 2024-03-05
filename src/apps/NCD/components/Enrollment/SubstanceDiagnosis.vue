@@ -3,166 +3,151 @@
 </template>
 
 <script lang="ts">
-import { 
-      IonContent, 
-      IonHeader,
-      IonItem,
-      IonList,
-      IonTitle, 
-      IonToolbar, 
-      IonMenu,
-      modalController,
-      IonCheckbox
-  } from '@ionic/vue';
-import { defineComponent } from 'vue';
-import { icons } from '@/utils/svg';
+import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController, IonCheckbox } from "@ionic/vue";
+import { defineComponent } from "vue";
+import { icons } from "@/utils/svg";
 
-import DispositionModal from '@/components/ProfileModal/OutcomeModal.vue'
-import { createModal } from '@/utils/Alerts'
-import { useEnrollementStore } from '@/stores/EnrollmentStore'
-import { mapState } from 'pinia';
-import BasicForm from '@/components/BasicForm.vue';
-import BasicCard from '@/components/BasicCard.vue';
-import { modifyCheckboxInputField,getCheckboxSelectedValue,getRadioSelectedValue, modifyFieldValue } from '@/services/data_helpers'
+import DispositionModal from "@/components/ProfileModal/OutcomeModal.vue";
+import { createModal } from "@/utils/Alerts";
+import { useEnrollementStore } from "@/stores/EnrollmentStore";
+import { mapState } from "pinia";
+import BasicForm from "@/components/BasicForm.vue";
+import BasicCard from "@/components/BasicCard.vue";
+import { modifyCheckboxInputField, getCheckboxSelectedValue, getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
 
 export default defineComponent({
-name: 'Menu',
-components:{
-  IonContent,
-  IonHeader,
-  IonItem,
-  IonList,
-  IonMenu,
-  IonTitle,
-  IonToolbar,
-  IonCheckbox,
-  BasicForm,
-  BasicCard    },
-  data() {
-return {
-  iconsContent: icons,
-  test: '' as any,
-  cardData: {} as any
-};
-},
-computed:{
-    ...mapState(useEnrollementStore,["substance"]),
-    ...mapState(useEnrollementStore,["diagnosis"])
-},
-watch: {
-    personInformation: {
-        handler(){
-            this.updateEnrollmentStores();
-            this.buidCards()
+    name: "Menu",
+    components: {
+        IonContent,
+        IonHeader,
+        IonItem,
+        IonList,
+        IonMenu,
+        IonTitle,
+        IonToolbar,
+        IonCheckbox,
+        BasicForm,
+        BasicCard,
+    },
+    data() {
+        return {
+            iconsContent: icons,
+            test: "" as any,
+            cardData: {} as any,
+        };
+    },
+    computed: {
+        ...mapState(useEnrollementStore, ["substance"]),
+        ...mapState(useEnrollementStore, ["enrollmentDiagnosis"]),
+    },
+    watch: {
+        personInformation: {
+            handler() {
+                this.updateEnrollmentStores();
+                this.buidCards();
+            },
+            deep: true,
         },
-        deep: true
-    }
-},
+    },
 
-mounted(){
-    this.updateEnrollmentStores()
-    this.buidCards()
-},
-methods:{
-    buidCards(){
-        this.cardData ={
-            mainTitle:"Enrollment",
-            cards:[
-                {
-                    cardTitle:"Substance use / Consumption",
-                    content: this.substance
-                },
-                {
-                    cardTitle:"Diagnosis",
-                    content: this.diagnosis
-                }
-            ]
-           } 
+    mounted() {
+        this.updateEnrollmentStores();
+        this.buidCards();
     },
-    openModal(){
-        createModal(DispositionModal)
+    methods: {
+        buidCards() {
+            this.cardData = {
+                mainTitle: "Enrollment",
+                cards: [
+                    {
+                        cardTitle: "Substance use / Consumption",
+                        content: this.substance,
+                    },
+                    {
+                        cardTitle: "enrollmentDiagnosis",
+                        content: this.enrollmentDiagnosis,
+                    },
+                ],
+            };
+        },
+        openModal() {
+            createModal(DispositionModal);
+        },
+        updateEnrollmentStores() {
+            const enrollmentStore = useEnrollementStore();
+            enrollmentStore.setSubstance(this.substance);
+            enrollmentStore.setDiagnosis(this.enrollmentDiagnosis);
+        },
+
+        testF(data: any) {
+            console.log(data);
+        },
+        async handleInputData(event: any) {
+            console.log("🚀 ~ handleInputData ~ event:", event);
+            if (event?.value?.detail?.checked) {
+                modifyCheckboxInputField(this.enrollmentDiagnosis, event?.al?.name, "displayNone", false);
+            } else modifyCheckboxInputField(this.enrollmentDiagnosis, event?.al?.name, "displayNone", true);
+        },
     },
-    updateEnrollmentStores(){
-        const enrollmentStore = useEnrollementStore()
-        enrollmentStore.setSubstance(this.substance)
-        enrollmentStore.setDiagnosis(this.diagnosis)
-    },
-    testF(data: any){
-        console.log(data);
-    },
-    async handleInputData(event: any) {
-        if(event.value.detail.checked)
-            modifyCheckboxInputField(this.diagnosis,event.al.name, 'displayNone', false)
-        else
-            modifyCheckboxInputField(this.diagnosis, event.al.name,'displayNone', true)
-    },
-}
 });
 </script>
 
 <style scoped>
-
-.sub_title{
+.sub_title {
     font-weight: 400;
     font-size: 14px;
     color: #636363;
-    padding-top: 20px ;
+    padding-top: 20px;
     line-height: 25px;
 }
 
-.sub_title{
+.sub_title {
     line-height: 40px;
 }
-.diagnosis_col{
+.diagnosis_col {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.diplay_space_between{
-    color: var(--text_color, #00190E);
+.diplay_space_between {
+    color: var(--text_color, #00190e);
     font-family: Inter;
     font-size: 14px;
     font-style: normal;
     font-weight: 400;
-    line-height: 150%; 
-    
+    line-height: 150%;
 }
 ion-radio {
-   margin-right: 35px;
+    margin-right: 35px;
 }
-.dashed_bottom_border{
+.dashed_bottom_border {
     margin-top: 15px;
     margin-bottom: 15px;
 }
-.diagnosis_checkbox{
+.diagnosis_checkbox {
     display: flex;
     justify-content: space-between;
 }
-.diagnosis_input{
+.diagnosis_input {
     width: 220px;
     margin-bottom: 20px;
 }
-.tb_content{
+.tb_content {
     text-align: left;
     line-height: 3;
 }
-.small_font{
-font-family: 'Inter';
-font-style: normal;
-font-weight: 400;
-font-size: 12px;
-color: #636363;
-
+.small_font {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    color: #636363;
 }
-.checkbox_header{
-font-family: 'Inter';
-font-style: normal;
-font-weight: 400;
-font-size: 14px;
-color: #00190E;
-
+.checkbox_header {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: #00190e;
 }
 </style>
-
-
-

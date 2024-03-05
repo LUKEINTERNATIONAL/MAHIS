@@ -1,23 +1,13 @@
 <template>
-    <ion-row
-        v-for="(item, index) in contentData"
-        :key="index"
-        :class="contentData[index].classDash"
-    >
+    <ion-row v-for="(item, index) in contentData" :key="index" :class="contentData[index].classDash">
         <ion-col class="item_header_col" v-if="item['sectionHeader']">
-            <span class="item_header" :style="'font-weight:' + item.sectionHeaderFontWeight">{{
-                item["sectionHeader"]
-            }}</span>
+            <span class="item_header" :style="'font-weight:' + item.sectionHeaderFontWeight">{{ item["sectionHeader"] }}</span>
         </ion-col>
         <ion-col>
             <!-- rowData -->
             <span v-if="item.data">
                 <ion-row v-for="(element, index2) in item.data.rowData" :key="index2">
-                    <ion-col
-                        v-for="(col, colIndex) in element.colData"
-                        :key="colIndex"
-                        v-show="!col.displayNone"
-                    >
+                    <ion-col v-for="(col, colIndex) in element.colData" :key="colIndex" v-show="!col.displayNone">
                         <BasicInputField
                             v-if="!col.isDatePopover"
                             :inputHeader="col.inputHeader"
@@ -26,16 +16,20 @@
                             :icon="col.icon"
                             :placeholder="col.placeholder"
                             :iconRight="col.iconRight"
+                            :leftText="col.leftText"
                             :inputWidth="col.inputWidth"
                             :inputValue="col.value"
                             :eventType="col.eventType"
+<<<<<<< HEAD
                             :disabled="col.disabled"
                             @update:inputValue="handleInput(contentData, col, $event,'updateInput')"
                             @clicked:inputValue="handleInput(contentData, col, $event,'clickedInput')"
+=======
+                            @update:inputValue="handleInput(contentData, col, $event, 'updateInput')"
+                            @clicked:inputValue="handleInput(contentData, col, $event, 'clickedInput')"
+>>>>>>> d7554128b96b0083ad5de3b9a2de4c755b76fe50
                             :popOverData="col.popOverData"
-                            @setPopoverValue="
-                                handleInput(contentData, col, $event, 'setPopoverValue')
-                            "
+                            @setPopoverValue="handleInput(contentData, col, $event, 'setPopoverValue')"
                         />
                         <DateInputField
                             v-if="col.isDatePopover"
@@ -57,31 +51,15 @@
                             {{ col.alertsErrorMassage }}
                         </div>
                     </ion-col>
-                    <ion-col
-                        size="btn.btn_col_size || 1.7"
-                        class="btn_col"
-                        v-for="(btn, btnIndex) in element.btns"
-                        :key="btnIndex"
-                    >
-                        <DynamicButton
-                            :name="btn.name"
-                            :fill="btn.fill"
-                            :icon="btn.icon"
-                            @click="$emit('clicked:button', btn.name)"
-                        />
+                    <ion-col size="btn.btn_col_size || 1.7" class="btn_col" v-for="(btn, btnIndex) in element.btns" :key="btnIndex">
+                        <DynamicButton :name="btn.name" :fill="btn.fill" :icon="btn.icon" @click="$emit('clicked:button', btn.name)" />
                     </ion-col>
                 </ion-row>
             </span>
             <span v-if="item.radioBtnContent && !item.radioBtnContent.header.displayNone">
                 <div style="font-weight: bold;" v-if="item.radioBtnContent?.header">{{ item.radioBtnContent?.header.title }} </div>
                 <ion-row class="checkbox_content">
-                    <ion-col
-                        :size="al.colSize"
-                        class="checkout_col"
-                        style=""
-                        v-for="(al, index3) in item.radioBtnContent?.data"
-                        :key="index3"
-                    >
+                    <ion-col :size="al.colSize" class="checkout_col" style="" v-for="(al, index3) in item.radioBtnContent?.data" :key="index3">
                         <span v-if="al.header" class="first_col">
                             <ion-label>{{ al.name }} </ion-label>
                         </span>
@@ -89,29 +67,16 @@
                             v-else
                             style="width: 100%"
                             :value="item.radioBtnContent.header.selectedValue"
-                            @ionChange="
-                                handleInput(
-                                    contentData,
-                                    item.radioBtnContent.header,
-                                    $event,
-                                    'updateRadioBtnContent'
-                                )
-                            "
+                            @ionChange="handleInput(contentData, item.radioBtnContent.header, $event, 'updateRadioBtnContent')"
                         >
                             <span style="display: flex; width: 100%">
-                                <ion-radio
-                                    :value="al.value"
-                                    :justify="al.justify || 'start'"
-                                    :label-placement="al.labelPlacement || 'end'"
-                                    >{{ al.name }}</ion-radio
-                                >
+                                <ion-radio :value="al.value" :justify="al.justify || 'start'" :label-placement="al.labelPlacement || 'end'">{{
+                                    al.name
+                                }}</ion-radio>
                             </span>
                         </ion-radio-group>
                     </ion-col>
-                    <ion-col
-                        v-for="(radioInput, radioInputIndex) in item.radioBtnContent.inputFields"
-                        :key="radioInputIndex"
-                    >
+                    <ion-col v-for="(radioInput, radioInputIndex) in item.radioBtnContent.inputFields" :key="radioInputIndex">
                         <BasicInputField
                             :inputHeader="radioInput.inputHeader"
                             :unit="radioInput.unit"
@@ -121,12 +86,8 @@
                             :inputWidth="radioInput.inputWidth"
                             :inputValue="radioInput.value"
                             :eventType="radioInput.eventType"
-                            @update:inputValue="
-                                handleInput(contentData, radioInput, $event, 'updateInput')
-                            "
-                            @clicked:inputValue="
-                                handleInput(contentData, radioInput, $event, 'clickedInput')
-                            "
+                            @update:inputValue="handleInput(contentData, radioInput, $event, 'updateInput')"
+                            @clicked:inputValue="handleInput(contentData, radioInput, $event, 'clickedInput')"
                         />
 
                         <div class="alerts_error" v-if="radioInput.alertsError">
@@ -179,8 +140,7 @@
                     </ion-col>
                     <ion-col
                         v-show="!item.checkboxBtnContent.inputFields[0].displayNone"
-                        v-for="(checkboxInput, checkboxInputIndex) in item.checkboxBtnContent
-                            .inputFields"
+                        v-for="(checkboxInput, checkboxInputIndex) in item.checkboxBtnContent.inputFields"
                         :key="checkboxInputIndex"
                     >
                         <DateInputField
@@ -193,9 +153,7 @@
                             :inputWidth="checkboxInput.inputWidth"
                             :inputValue="checkboxInput.value"
                             :eventType="checkboxInput.eventType"
-                            @update:dateValue="
-                                handleInput(contentData, checkboxInput, $event, 'updateDate')
-                            "
+                            @update:dateValue="handleInput(contentData, checkboxInput, $event, 'updateDate')"
                         />
                         <div class="alerts_error" v-if="checkboxInput.alertsError">
                             {{ checkboxInput.alertsErrorMassage }}
@@ -204,22 +162,10 @@
                 </ion-row>
             </span>
             <span v-for="(al, index3) in item.alerts" :key="index3">
-                <ion-row
-                    v-if="al.value"
-                    :style="
-                        'border-radius: 5px;  margin-top:10px; margin-bottom:10px;background-color:' +
-                        al.backgroundColor
-                    "
-                >
+                <ion-row v-if="al.value" :style="'border-radius: 5px;  margin-top:10px; margin-bottom:10px;background-color:' + al.backgroundColor">
                     <span class="position_content alert_content">
                         <span v-html="al.icon"> </span>
-                        <span
-                            :style="
-                                'color:' + al.textColor + '; font-weight:600; margin: 0px 20px;'
-                            "
-                        >
-                            {{ al.index }}</span
-                        >
+                        <span :style="'color:' + al.textColor + '; font-weight:600; margin: 0px 20px;'"> {{ al.index }}</span>
                         <span :style="'color:' + al.textColor + ';'"> {{ al.value }} </span>
                     </span>
                 </ion-row>
@@ -279,6 +225,7 @@ export default defineComponent({
 
             if (inputType == "updateDate") {
                 modifyFieldValue(data, col.name, "value", event);
+                modifyCheckboxInputField(data, col.name, "value", event);
                 this.$emit("update:inputValue", col);
             }
 

@@ -1,9 +1,5 @@
 <template>
-    <ion-searchbar
-        @ionInput="handleInput"
-        placeholder="Search client by MRN or Diabete clinical No."
-        class="searchField"
-    ></ion-searchbar>
+    <ion-searchbar @ionInput="handleInput" placeholder="Search client by MRN or Name" class="searchField"></ion-searchbar>
     <ion-popover
         :is-open="popoverOpen"
         :event="event"
@@ -20,30 +16,16 @@
                 <ion-col style="max-width: 70px">Gender</ion-col>
                 <ion-col style="max-width: 30px"></ion-col>
             </ion-row>
-            <ion-row
-                class="search_result"
-                v-for="(item, index) in patients"
-                :key="index"
-                @click="openNewPage('patientProfile', item)"
-            >
+            <ion-row class="search_result" v-for="(item, index) in patients" :key="index" @click="openNewPage('patientProfile', item)">
                 <ion-col>{{ patientIdentifier(item) }} </ion-col>
-                <ion-col>{{
-                    item.person.names[0].given_name + " " + item.person.names[0].family_name
-                }}</ion-col>
+                <ion-col>{{ item.person.names[0].given_name + " " + item.person.names[0].family_name }}</ion-col>
                 <ion-col>{{ item.person.birthdate }}</ion-col>
                 <ion-col style="max-width: 70px">{{ item.person.gender }}</ion-col>
-                <ion-col style="max-width: 30px"
-                    ><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon>
-                </ion-col>
+                <ion-col style="max-width: 30px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
             </ion-row>
             <ion-row>
                 <ion-col size="4">
-                    <DynButton
-                        :icon="add"
-                        :name="'Add Patient'"
-                        :fill="'clear'"
-                        @click="openCheckPaitentNationalIDModal"
-                    />
+                    <DynButton :icon="add" :name="'Add Patient'" :fill="'clear'" @click="openCheckPaitentNationalIDModal" />
                 </ion-col>
             </ion-row>
         </ion-content>
@@ -120,7 +102,7 @@ export default defineComponent({
             this.popoverOpen = false;
             if (searchText.length > 0) {
                 this.openPopover(ev);
-                this.searchDemographicPayload(searchText);
+                await this.searchDemographicPayload(searchText);
             }
         },
         async setID(scannedID: any) {
@@ -131,12 +113,42 @@ export default defineComponent({
             };
         },
         async searchDemographicPayload(searchText: any) {
+            await this.searchByName(searchText);
+            await this.searchByOtherIds(searchText);
+            await this.searchByMWNationalID(searchText);
+            await this.searchByNpid(searchText);
+        },
+        async searchByName(searchText: any) {
+            const splittedArray = searchText.split(" ");
+            console.log(this.patients);
+            if (Validation.isName(splittedArray[0]) == null) {
+                const payload = {
+                    given_name: splittedArray[0],
+                    family_name: splittedArray.length >= 2 ? splittedArray[1] : "",
+                    gender: splittedArray.length >= 3 ? splittedArray[2] : "",
+                    page: "1",
+                    per_page: "7",
+                };
+                this.patients = await PatientService.search(payload);
+            }
+        },
+        async searchByNpid(searchText: any) {
             if (/.+\$$/i.test(`${searchText}`)) {
-                const scanned = `${searchText || ""}`.replace(/\$/gi, "");
+                searchText = `${searchText || ""}`.replace(/\$/gi, "");
+                const idData = await PatientService.findByNpid(searchText as any);
+                if (idData.length > 0) this.patients.push(...idData);
 
-                const IDs: any = await this.setID(scanned);
+                if (this.patients.length == 1) {
+                    this.openNewPage("patientProfile", this.patients[0]);
+                    this.popoverOpen = false;
+                }
+            }
+        },
+        async searchByOtherIds(searchText: any) {
+            if (Validation.isWholeNumber(searchText) === null) {
+                const IDs: any = await this.setID(searchText);
                 const artData = await PatientService.findByOtherID(4, IDs["ARVNumber"]);
-                const ncdData = await PatientService.findByOtherID(4, IDs["NCDNumber"]);
+                const ncdData = await PatientService.findByOtherID(31, IDs["NCDNumber"]);
 
                 if (artData.length > 0) {
                     this.patients.push(...artData);
@@ -145,33 +157,14 @@ export default defineComponent({
                 if (ncdData.length > 0) {
                     this.patients.push(...ncdData);
                 }
-
-                if (Validation.isMWNationalID(scanned) == null) {
-                    const nationalID = await PatientService.findByOtherID(28, scanned);
-                    if (nationalID.length > 0) {
-                        this.patients.push(...nationalID);
-                    }
+            }
+        },
+        async searchByMWNationalID(searchText: any) {
+            if (Validation.isMWNationalID(searchText) == null) {
+                const nationalID = await PatientService.findByOtherID(28, searchText);
+                if (nationalID.length > 0) {
+                    this.patients.push(...nationalID);
                 }
-
-                const idData = await PatientService.findByNpid(scanned as string);
-                if (idData.length > 0) this.patients.push(...idData);
-
-                if (this.patients.length == 1) {
-                    this.openNewPage("patientProfile", this.patients[0]);
-                    this.popoverOpen = false;
-                }
-                if (this.patients.length == 0) toastWarning("Not Found");
-            } else {
-                const splittedArray = searchText.split(" ");
-                const payload = {
-                    given_name: splittedArray[0],
-                    family_name: splittedArray.length >= 2 ? splittedArray[1] : "",
-                    gender: splittedArray.length >= 3 ? splittedArray[2] : "",
-                    page: "1",
-                    per_page: "7",
-                };
-
-                this.patients = await PatientService.search(payload);
             }
         },
         patientIdentifier(item: any) {
@@ -181,6 +174,7 @@ export default defineComponent({
         },
         openNewPage(url: any, item: any) {
             const demographicsStore = useDemographicsStore();
+            demographicsStore.setPatient(item);
             demographicsStore.setDemographics({
                 name: item.person.names[0].given_name + " " + item.person.names[0].family_name,
                 mrn: this.patientIdentifier(item),

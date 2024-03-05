@@ -11,6 +11,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 radioBtnContent: {
                     header: {
                         title: "Smoking",
+                        name: "smoking",
                         selectedValue: "",
                     },
                     data: [
@@ -33,6 +34,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 radioBtnContent: {
                     header: {
                         title: "Drinking alcohol",
+                        name: "drinking_alcohol",
                         selectedValue: "",
                     },
                     data: [
@@ -52,7 +54,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 },
             },
         ],
-        diagnosis: [
+        enrollmentDiagnosis: [
             {
                 selectedData: [],
                 isFinishBtn: false,
@@ -64,6 +66,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                     },
                     data: [
                         {
+                            colSize: 4.2,
                             name: "Type 1 DM",
                             value: "type_1",
                             checked: false,
@@ -92,6 +95,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                     },
                     data: [
                         {
+                            colSize: 4.2,
                             name: "Type 2 DM",
                             value: "type_2",
                             checked: false,
@@ -121,6 +125,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                     },
                     data: [
                         {
+                            colSize: 4.2,
                             name: "Hypertetion",
                             value: "hypertetion",
                             checked: false,
@@ -139,7 +144,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                     ],
                 },
             },
-        ],
+        ] as any,
         patientHistoryHIV: [
             {
                 selectedData: [],
@@ -275,6 +280,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 checkboxBtnContent: {
                     data: [
                         {
+                            colSize: 4.2,
                             name: "Anxiety",
                             value: "Anxiety",
                             checked: false,
@@ -297,6 +303,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 checkboxBtnContent: {
                     data: [
                         {
+                            colSize: 4.2,
                             name: "Depression",
                             value: "Depression",
                             checked: false,
@@ -327,6 +334,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                     },
                     data: [
                         {
+                            colSize: 4.2,
                             name: "Smear pos",
                             value: "Smear pos",
                             checked: false,
@@ -349,6 +357,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 checkboxBtnContent: {
                     data: [
                         {
+                            colSize: 4.2,
                             name: "Smear neg",
                             value: "Smear neg",
                             checked: false,
@@ -371,6 +380,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 checkboxBtnContent: {
                     data: [
                         {
+                            colSize: 4.2,
                             name: "EPTB",
                             value: "EPTB",
                             checked: false,
@@ -390,9 +400,11 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 },
             },
             {
+                classDash: "dashed_bottom_border",
                 checkboxBtnContent: {
                     data: [
                         {
+                            colSize: 4.8,
                             name: "Never had TB",
                             value: "Never had TB",
                             checked: false,
@@ -482,6 +494,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 checkboxBtnContent: {
                     data: [
                         {
+                            colSize: 4.2,
                             name: "Stroke/TIA",
                             value: "Stroke/TIA",
                             checked: false,
@@ -509,6 +522,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 radioBtnContent: {
                     header: {
                         title: "Diabetes",
+                        name: "diabetes",
                         selectedValue: "",
                     },
                     data: [
@@ -531,6 +545,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 radioBtnContent: {
                     header: {
                         title: "Hypertension",
+                        name: "hypertension",
                         selectedValue: "",
                     },
                     data: [
@@ -559,8 +574,8 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                         {
                             colData: [
                                 {
-                                    icon: icons.fullName,
                                     iconRight: icons.editStarts,
+                                    leftText: "",
                                     value: "",
                                     name: "NCDNumber",
                                     placeholder: "__-__-__-__",
