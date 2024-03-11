@@ -64,7 +64,7 @@ export default defineComponent({
                         content: this.substance,
                     },
                     {
-                        cardTitle: "enrollmentDiagnosis",
+                        cardTitle: "Diagnosis",
                         content: this.enrollmentDiagnosis,
                     },
                 ],
@@ -83,7 +83,6 @@ export default defineComponent({
             console.log(data);
         },
         async handleInputData(event: any) {
-            console.log("🚀 ~ handleInputData ~ event:", event);
             if (event?.value?.detail?.checked) {
                 modifyCheckboxInputField(this.enrollmentDiagnosis, event?.al?.name, "displayNone", false);
             } else modifyCheckboxInputField(this.enrollmentDiagnosis, event?.al?.name, "displayNone", true);

@@ -136,6 +136,8 @@ import {
     modifyFieldValue,
     modifyCheckboxValue,
 } from "@/services/data_helpers";
+import { formatRadioButtonData } from "@/services/formatServerData";
+
 export default defineComponent({
     name: "Home",
     components: {
@@ -183,9 +185,10 @@ export default defineComponent({
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useConfigurationStore, ["enrollmentDisplayType"]),
-        ...mapState(useEnrollementStore, ["NCDNumber", "enrollmentDiagnosis"]),
+        ...mapState(useEnrollementStore, ["NCDNumber", "enrollmentDiagnosis", "substance"]),
     },
     async mounted() {
+        formatRadioButtonData(this.substance);
         this.setDisplayType(this.enrollmentDisplayType);
     },
 
@@ -210,15 +213,9 @@ export default defineComponent({
             }
         },
         saveData() {
-            const hyper = getCheckboxSelectedValue(this.enrollmentDiagnosis, "Hypertetion");
-            getCheckboxInputField(this.enrollmentDiagnosis, "Hypertension", "value");
-            console.log("🚀 ~ saveData ~ hyper:", hyper);
-            console.log("🚀 ~ saveData ~ this.diagnosis[0].selectedData:", getCheckboxInputField(this.enrollmentDiagnosis, "Hypertension", "value"));
-
-            // this.saveNcdNumber();
-            // this.buildDiagnosis()
-            // if(this.diagnosis[0].selectedData.length > 0)
-            //     this.saveDiagnosis()
+            this.saveNcdNumber();
+            this.buildDiagnosis();
+            if (this.diagnosis[0].selectedData.length > 0) this.saveDiagnosis();
             // this.$router.push("consultationPlan");
         },
 
@@ -227,6 +224,80 @@ export default defineComponent({
             const NCDNumber = getFieldValue(this.NCDNumber, "NCDNumber", "value");
             const sitePrefix = await GlobalPropertyService.get("site_prefix");
             patient.createNcdNumber(sitePrefix + "-NCD-" + NCDNumber);
+        },
+        buildSubstance() {
+            [
+                {
+                    concept_id: 1551, // Smoking history
+                    value_coded: 3339, // Smoking
+                    obs_datetime: "2024-03-05",
+                },
+                {
+                    concept_id: 1551, // Smoking history
+                    value_coded: 1090, // Never
+                    obs_datetime: "2024-03-05",
+                },
+                {
+                    concept_id: 1551, // Smoking history
+                    value_coded: 1090, // Never
+                    obs_datetime: "2024-03-05",
+                },
+
+                {
+                    concept_id: 2318, // Does the patient drink alcohol?
+                    value_coded: 1090, // Never
+                    obs_datetime: "2024-03-05",
+                },
+                {
+                    concept_id: 2318, // Does the patient drink alcohol?
+                    value_coded: 1066, // No
+                    obs_datetime: "2024-03-05",
+                },
+                {
+                    concept_id: 2318, // Does the patient drink alcohol?
+                    value_coded: 1066, // No
+                    obs_datetime: "2024-03-05",
+                },
+            ];
+
+            // Never 1090
+            // Smoking history 1551
+            // Unknown 1067
+        },
+        buildFamilyHistory() {
+            [
+                {
+                    concept_id: 6740, //Diabetes family history
+                    value_coded: 1065, // Yes
+                    obs_datetime: "2024-03-05",
+                },
+                {
+                    concept_id: 6740, //Diabetes family history
+                    value_coded: 1066, // No
+                    obs_datetime: "2024-03-05",
+                },
+                {
+                    concept_id: 6740, //Diabetes family history
+                    value_coded: 1067, // Unknown
+                    obs_datetime: "2024-03-05",
+                },
+
+                {
+                    concept_id: 8921, // Does the family have a history of hypertension?
+                    value_coded: 1065, // Yes
+                    obs_datetime: "2024-03-05",
+                },
+                {
+                    concept_id: 8921, // Does the family have a history of hypertension?
+                    value_coded: 1066, // No
+                    obs_datetime: "2024-03-05",
+                },
+                {
+                    concept_id: 8921, // Does the family have a history of hypertension?
+                    value_coded: 1067, // Unknown
+                    obs_datetime: "2024-03-05",
+                },
+            ];
         },
         openModal() {
             createModal(SaveProgressModal);
@@ -255,21 +326,37 @@ export default defineComponent({
             }
         },
         buildDiagnosis() {
-            this.diagnosis[0].selectedData.push({
-                concept_id: 6542, //primary diagnosis
-                value_coded: 6409, // type 1
-                obs_datetime: this.diagnosis,
-            });
-            this.diagnosis[0].selectedData.push({
-                concept_id: 6542, //primary diagnosis
-                value_coded: 6410, // type 2
-                obs_datetime: this.diagnosis,
-            });
-            this.diagnosis[0].selectedData.push({
-                concept_id: 6542, //primary diagnosis
-                value_coded: 903, // Hypertension
-                obs_datetime: this.diagnosis,
-            });
+            this.diagnosis[0].selectedData = [];
+            if (
+                getCheckboxSelectedValue(this.enrollmentDiagnosis, "Type 1 DM") != undefined &&
+                getCheckboxInputField(this.enrollmentDiagnosis, "Type 1 DM", "value")
+            ) {
+                this.diagnosis[0].selectedData.push({
+                    concept_id: 6542, //primary diagnosis
+                    value_coded: 6409, // type 1
+                    obs_datetime: getCheckboxInputField(this.enrollmentDiagnosis, "Type 1 DM", "value"),
+                });
+            }
+            if (
+                getCheckboxSelectedValue(this.enrollmentDiagnosis, "Type 2 DM") != undefined &&
+                getCheckboxInputField(this.enrollmentDiagnosis, "Type 2 DM", "value")
+            ) {
+                this.diagnosis[0].selectedData.push({
+                    concept_id: 6542, //primary diagnosis
+                    value_coded: 6410, // type 2
+                    obs_datetime: getCheckboxInputField(this.enrollmentDiagnosis, "Type 2 DM", "value"),
+                });
+            }
+            if (
+                getCheckboxSelectedValue(this.enrollmentDiagnosis, "Hypertension") != undefined &&
+                getCheckboxInputField(this.enrollmentDiagnosis, "Hypertension", "value")
+            ) {
+                this.diagnosis[0].selectedData.push({
+                    concept_id: 6542, //primary diagnosis
+                    value_coded: 903, // Hypertension
+                    obs_datetime: getCheckboxInputField(this.enrollmentDiagnosis, "Hypertension", "value"),
+                });
+            }
         },
         saveDiagnosis() {
             const userID: any = Service.getUserID();

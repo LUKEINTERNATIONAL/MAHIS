@@ -11,21 +11,21 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 radioBtnContent: {
                     header: {
                         title: "Smoking",
-                        name: "smoking",
+                        name: "Smoking history",
                         selectedValue: "",
                     },
                     data: [
                         {
                             name: "Smoking",
-                            value: "smoking",
+                            value: "Smoking",
                         },
                         {
                             name: "Never",
-                            value: "never",
+                            value: "Never",
                         },
                         {
                             name: "Stopped",
-                            value: "stopped",
+                            value: "Stopped",
                         },
                     ],
                 },
@@ -34,21 +34,21 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 radioBtnContent: {
                     header: {
                         title: "Drinking alcohol",
-                        name: "drinking_alcohol",
+                        name: "Does the patient drink alcohol?",
                         selectedValue: "",
                     },
                     data: [
                         {
                             name: "Drinking",
-                            value: "drinking",
+                            value: "Drinking",
                         },
                         {
                             name: "Never",
-                            value: "never",
+                            value: "Never",
                         },
                         {
                             name: "Stopped",
-                            value: "stopped",
+                            value: "Stopped",
                         },
                     ],
                 },
@@ -126,8 +126,8 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                     data: [
                         {
                             colSize: 4.2,
-                            name: "Hypertetion",
-                            value: "hypertetion",
+                            name: "Hypertension",
+                            value: "Hypertension",
                             checked: false,
                         },
                     ],
@@ -136,7 +136,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                             icon: icons.calenderPrimary,
                             placeholder: "Pick the date",
                             value: "",
-                            name: "Hypertetion",
+                            name: "Hypertension",
                             eventType: "input",
                             isDatePopover: true,
                             displayNone: true,

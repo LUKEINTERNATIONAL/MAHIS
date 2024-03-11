@@ -1,63 +1,45 @@
 <template>
-    <DashBox :status="no_item" :content="'No Investigations added '" />
-    <span v-if="display_item">
-        <list
-            :listData="investigations[0].selectedData"
-            @clicked:edit="editTest($event)"
-            @clicked:delete="openDeletePopover($event)"
-        >
-        </list>
-    </span>
+    <ion-list>
+        <ion-item class="dashed_bottom_border">
+            <ion-toggle :checked="labOrderStatus" @ionChange="toggleLabOrderStatus">Lab Investigations</ion-toggle>
+        </ion-item>
+        <div class="sub_item_body" v-if="labOrderStatus" style="margin-top: 10px">
+            <!-- <DashBox :status="no_item" :content="'No Investigations added '" /> -->
+            <span>
+                <labResults />
+            </span>
+            <!-- <div>Lab Orders</div> -->
+            <!-- <span>
+                <labOrders />
+            </span> -->
 
-    <span v-if="search_item">
-        <basic-form
-            :contentData="investigations"
-            @update:selected="handleInputData"
-            @update:inputValue="handleInputData"
-            @clicked:button="addNewRow"
-        >
-        </basic-form>
-    </span>
+            <span v-if="search_item">
+                <basic-form
+                    :contentData="investigations"
+                    @update:selected="handleInputData"
+                    @update:inputValue="handleInputData"
+                    @clicked:button="addNewRow"
+                >
+                </basic-form>
+            </span>
 
-    <ion-row v-if="addItemButton" style="margin-top: 10px">
-        <DynamicButton
-            fill="clear"
-            :icon="iconsContent.plus"
-            iconSlot="icon-only"
-            @clicked:btn="displayInputFields()"
-            name="Add new test"
-        />
-    </ion-row>
-    <ion-row>
-        <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion
-                value="first"
-                toggle-icon-slot="start"
-                style="border-radius: 10px; background-color: #fff"
-            >
-                <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Previous measurements</ion-label>
-                </ion-item>
-                <div class="ion-padding" slot="content">
-                    <previousInvestigations />
-                </div>
-            </ion-accordion>
-        </ion-accordion-group>
-    </ion-row>
+            <ion-row v-if="addItemButton" style="margin-top: 10px">
+                <DynamicButton fill="clear" :icon="iconsContent.plus" iconSlot="icon-only" @clicked:btn="displayInputFields()" name="Add new test" />
+            </ion-row>
+        </div>
+        <ion-item class="dashed_bottom_border">
+            <ion-toggle :checked="radiologyOrdersStatus">Radiology Investigation<Section></Section> </ion-toggle>
+        </ion-item>
+        <div class="sub_item_body" v-if="radiologyOrdersStatus">Radiology Order</div>
+        <ion-item class="dashed_bottom_border">
+            <ion-toggle :checked="otherOrdersStatus">Other Investigation</ion-toggle>
+        </ion-item>
+        <div class="sub_item_body" v-if="otherOrdersStatus">Other</div>
+    </ion-list>
 </template>
 
 <script lang="ts">
-import {
-    IonContent,
-    IonHeader,
-    IonItem,
-    IonList,
-    IonTitle,
-    IonToolbar,
-    IonMenu,
-    IonInput,
-    IonPopover,
-} from "@ionic/vue";
+import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, IonInput, IonPopover } from "@ionic/vue";
 import { defineComponent, ref } from "vue";
 import { build, checkmark, pulseOutline } from "ionicons/icons";
 import { icons } from "@/utils/svg";
@@ -71,7 +53,9 @@ import { toastWarning, popoverConfirmation } from "@/utils/Alerts";
 import BasicForm from "@/components/BasicForm.vue";
 import List from "@/components/List.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
-import previousInvestigations from "@/apps/NCD/components/ConsultationPlan/previousInvestigations.vue";
+import labResults from "@/apps/NCD/components/ConsultationPlan/labResults.vue";
+import labOrders from "@/apps/NCD/components/ConsultationPlan/labOrders.vue";
+import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigations.vue";
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -99,7 +83,8 @@ export default defineComponent({
         BasicForm,
         List,
         DynamicButton,
-        previousInvestigations,
+        labResults,
+        labOrders,
     },
     data() {
         return {
@@ -113,8 +98,10 @@ export default defineComponent({
             test: "" as any,
             testData: [] as any,
             popoverOpen: false,
+            labOrderStatus: false,
             event: "" as any,
-            labOrders: "" as any,
+            radiologyOrdersStatus: false,
+            otherOrdersStatus: false,
         };
     },
     setup() {
@@ -140,6 +127,9 @@ export default defineComponent({
         this.labOrders = await OrderService.getTestTypesBySpecimen("Blood");
     },
     methods: {
+        toggleLabOrderStatus() {
+            this.labOrderStatus = !this.labOrderStatus;
+        },
         updateInvestigationsStores() {
             const investigationsStore = useInvestigationStore();
             investigationsStore.setInvestigations(this.investigations);
@@ -158,10 +148,7 @@ export default defineComponent({
             this.investigations[0].data.rowData[0].colData[1].alertsErrorMassage = "";
             this.test = await this.filterTest(this.inputFields[0].value);
 
-            if (
-                !this.numericValueIsValid(this.inputFields[1].value) &&
-                this.inputFields[1].value != ""
-            ) {
+            if (!this.numericValueIsValid(this.inputFields[1].value) && this.inputFields[1].value != "") {
                 this.investigations[0].data.rowData[0].colData[1].alertsError = true;
                 this.investigations[0].data.rowData[0].colData[1].alertsErrorMassage =
                     "You must enter a modifer and numbers only. i.e =90 / >19 / < 750";
@@ -175,8 +162,7 @@ export default defineComponent({
                 } else {
                     this.search_item = true;
                     this.investigations[0].data.rowData[0].colData[0].alertsError = true;
-                    this.investigations[0].data.rowData[0].colData[0].alertsErrorMassage =
-                        "Please select test from the list";
+                    this.investigations[0].data.rowData[0].colData[0].alertsErrorMassage = "Please select test from the list";
                     return false;
                 }
             } else {
@@ -239,9 +225,7 @@ export default defineComponent({
             }
         },
         async filterTest(name: any) {
-            return await this.labOrders.filter((item: any) =>
-                item.name.toLowerCase().includes(name.toLowerCase())
-            );
+            return await this.labOrders.filter((item: any) => item.name.toLowerCase().includes(name.toLowerCase()));
         },
         setTest(value: any) {
             this.selectedText = value.name;
@@ -253,18 +237,13 @@ export default defineComponent({
             this.updateInvestigationsStores();
         },
         async openDeletePopover(e: any) {
-            const deleteConfirmed = await popoverConfirmation(
-                `Do you want to delete ${e[1]} ?`,
-                e[0]
-            );
+            const deleteConfirmed = await popoverConfirmation(`Do you want to delete ${e[1]} ?`, e[0]);
             if (deleteConfirmed) {
                 this.deleteTest(e[1]);
             }
         },
         deleteTest(test: any) {
-            this.investigations[0].selectedData = this.investigations[0].selectedData.filter(
-                (item: any) => item.display[0] !== test
-            );
+            this.investigations[0].selectedData = this.investigations[0].selectedData.filter((item: any) => item.display[0] !== test);
             this.updateInvestigationsStores();
         },
         editTest(test: any) {
@@ -348,5 +327,8 @@ export default defineComponent({
 
 .dashed_bottom_border:hover .action_buttons {
     opacity: 1; /* Show the action buttons when the row is hovered over */
+}
+.sub_item_body {
+    margin-left: 45px;
 }
 </style>
