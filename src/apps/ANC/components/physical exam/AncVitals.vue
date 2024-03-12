@@ -217,7 +217,7 @@ export default defineComponent({
       },
 
       updateVitalsStores(){
-            const vitalsStore = useVitalsStore()
+            const vitalsStore = useAncVitalsStore()
             vitalsStore.setVitals(this.vitals)
         },
       validaterowData(inputData: any) {

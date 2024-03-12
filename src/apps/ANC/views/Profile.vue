@@ -191,7 +191,7 @@ export default defineComponent({
     // ...mapState(useCurrentPregnanciesStore, ["currentPregnancies","deliveryDate","lmnp","gestation","tetanus","ultrasound"]),
     // ...mapState(useMedicationsStore,["Medication"]),
     // ...mapState(useWomanBehaviourStore,["dailyCaffeineIntake","Tobacco"])
-     ...mapState(useDemographicsStore,["demographics"]),
+    ...mapState(useDemographicsStore,["demographics"]),
     ...mapState(useObstreticHistoryStore,['preterm']),
     ...mapState(useObstreticHistoryStore,['Complications'])
 
@@ -281,16 +281,14 @@ export default defineComponent({
       //   return alert(errors.join(','))
       // }
        this.savePreterm()
-      //  this.saveComplications()
       //  this.$router.push('QuickCheck');
      },
      savePrevPregnancies(){},
-     saveModeOfDelivery(){},
 
     async savePreterm(){
       const userID: any = Service.getUserID()
       const pretermInstance = new ProfileService(this.demographics.patient_id,userID)
-       await pretermInstance.createEncounter()
+      await pretermInstance.createEncounter()
       const data = await this.buildPreterm()
       await pretermInstance.saveObservationList(data)
 
@@ -300,17 +298,12 @@ export default defineComponent({
           console.log(id)
          return [
                 {
-                    "concept_id": 7141, //primary diagnosis
+                    "concept_id": 7141,
                     "value_coded": id,
                     "obs_datetime": Service.getSessionDate()
                 }
         ]
         },
-    //  saveComplications(){
-    //   const userID: any = Service.getUserID()
-    //   const complicationInstance = new ProfileService(this.demographics.patient_id,userID)
-    //   complicationInstance.onFinish(this.Complications);
-    //  },
 
     openModal(){
       createModal(SaveProgressModal)

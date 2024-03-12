@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <basic-card :content="cardData" @update:inputValue="handleInputData"></basic-card>
 </template>
 
@@ -101,4 +101,4 @@ methods:{
 </style>
 
 
-
+ -->
