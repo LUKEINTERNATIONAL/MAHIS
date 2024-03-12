@@ -137,6 +137,7 @@ import {
     modifyCheckboxValue,
 } from "@/services/data_helpers";
 import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServerData";
+import { IdentifierService } from "@/services/identifier_service";
 
 export default defineComponent({
     name: "Home",
@@ -213,15 +214,20 @@ export default defineComponent({
         },
         async saveData() {
             await this.saveNcdNumber();
-            await this.saveEnrollment();
-            this.$router.push("consultationPlan");
         },
 
         async saveNcdNumber() {
-            const patient = new PatientService();
             const NCDNumber = getFieldValue(this.NCDNumber, "NCDNumber", "value");
             const sitePrefix = await GlobalPropertyService.get("site_prefix");
-            patient.createNcdNumber(sitePrefix + "-NCD-" + NCDNumber);
+            const formattedNCDNumber = sitePrefix + "-NCD-" + NCDNumber;
+            const exists = await IdentifierService.ncdNumberExists(formattedNCDNumber);
+            if (exists) toastWarning("NCD number already exists", 5000);
+            else {
+                await this.saveEnrollment();
+                const patient = new PatientService();
+                patient.createNcdNumber(formattedNCDNumber);
+                this.$router.push("consultationPlan");
+            }
         },
         openModal() {
             createModal(SaveProgressModal);
