@@ -96,6 +96,7 @@ export default defineComponent({
             selectedText: "" as any,
             testResult: "" as any,
             test: "" as any,
+            labOrders: "" as any,
             testData: [] as any,
             popoverOpen: false,
             labOrderStatus: false,
