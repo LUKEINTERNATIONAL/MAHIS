@@ -63,12 +63,13 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                     header: {
                         title: "",
                         selectedValue: "",
+                        name: "Primary diagnosis",
                     },
                     data: [
                         {
                             colSize: 4.2,
                             name: "Type 1 DM",
-                            value: "type_1",
+                            value: "Type 1 diabetes",
                             checked: false,
                         },
                     ],
@@ -97,7 +98,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                         {
                             colSize: 4.2,
                             name: "Type 2 DM",
-                            value: "type_2",
+                            value: "Type 2 diabetes",
                             checked: false,
                         },
                     ],
@@ -153,23 +154,23 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 radioBtnContent: {
                     header: {
                         title: "HIV",
-                        name: "HIV",
+                        name: "HIV status",
                         selectedValue: "",
                     },
                     data: [
                         {
                             name: "R",
-                            value: "R",
+                            value: "Reactive",
                             checked: false,
                         },
                         {
                             name: "NR",
-                            value: "NR",
+                            value: "Non-reactive",
                             checked: false,
                         },
                         {
-                            name: "Unknow",
-                            value: "Unknow",
+                            name: "Unknown",
+                            value: "Unknown",
                             checked: false,
                         },
                     ],
@@ -195,27 +196,17 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 },
             },
             {
-                checkboxBtnContent: {
-                    data: [
-                        {
-                            name: "Use of traditional medicine",
-                            value: "Use of traditional medicine",
-                            checked: false,
-                        },
-                    ],
-                },
-            },
-            {
+                classDash: "dashed_bottom_border",
                 checkboxBtnContent: {
                     header: {
-                        title: "TB",
+                        title: "",
                         selectedValue: "",
+                        Name: "Medical history",
                     },
                     data: [
                         {
-                            name: "PVD",
-                            example: "eg. ulcers, gangrene",
-                            value: "PVD",
+                            name: "Use of traditional medicine",
+                            value: "Herbal traditional medications",
                             checked: false,
                         },
                     ],
@@ -224,7 +215,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                             icon: icons.calenderPrimary,
                             placeholder: "Pick the date",
                             value: "",
-                            name: "PVD",
+                            name: "traditional medicine",
                             eventType: "input",
                             isDatePopover: true,
                             displayNone: true,
@@ -232,98 +223,6 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                     ],
                 },
             },
-            {
-                checkboxBtnContent: {
-                    data: [
-                        {
-                            name: "Neuropathy",
-                            value: "Neuropathy",
-                            checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Neuropathy",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
-                        },
-                    ],
-                },
-            },
-            {
-                checkboxBtnContent: {
-                    data: [
-                        {
-                            name: "Sexual dysfunction",
-                            value: "Sexual dysfunction",
-                            checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Sexual dysfunction",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
-                        },
-                    ],
-                },
-            },
-            {
-                checkboxBtnContent: {
-                    data: [
-                        {
-                            colSize: 4.2,
-                            name: "Anxiety",
-                            value: "Anxiety",
-                            checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Anxiety",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
-                        },
-                    ],
-                },
-            },
-            {
-                checkboxBtnContent: {
-                    data: [
-                        {
-                            colSize: 4.2,
-                            name: "Depression",
-                            value: "Depression",
-                            checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Depression",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
-                        },
-                    ],
-                },
-            },
-        ],
-        patientHistory: [
             {
                 selectedData: [],
                 isFinishBtn: false,
@@ -331,12 +230,13 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                     header: {
                         title: "TB",
                         selectedValue: "",
+                        name: "Tuberculosis past history",
                     },
                     data: [
                         {
                             colSize: 4.2,
                             name: "Smear pos",
-                            value: "Smear pos",
+                            value: "Smear positive TB",
                             checked: false,
                         },
                     ],
@@ -355,11 +255,15 @@ export const useEnrollementStore = defineStore("enrollementStore", {
             },
             {
                 checkboxBtnContent: {
+                    header: {
+                        selectedValue: "",
+                        name: "Tuberculosis past history",
+                    },
                     data: [
                         {
                             colSize: 4.2,
                             name: "Smear neg",
-                            value: "Smear neg",
+                            value: "Smear negative TB",
                             checked: false,
                         },
                     ],
@@ -378,6 +282,10 @@ export const useEnrollementStore = defineStore("enrollementStore", {
             },
             {
                 checkboxBtnContent: {
+                    header: {
+                        selectedValue: "",
+                        name: "Tuberculosis past history",
+                    },
                     data: [
                         {
                             colSize: 4.2,
@@ -402,6 +310,10 @@ export const useEnrollementStore = defineStore("enrollementStore", {
             {
                 classDash: "dashed_bottom_border",
                 checkboxBtnContent: {
+                    header: {
+                        selectedValue: "",
+                        name: "Tuberculosis past history",
+                    },
                     data: [
                         {
                             colSize: 4.8,
@@ -423,12 +335,18 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                     ],
                 },
             },
+        ],
+        patientHistory: [
             {
+                classDash: "dashed_bottom_border",
                 checkboxBtnContent: {
+                    header: {
+                        name: "Medical history",
+                    },
                     data: [
                         {
                             name: "Cardiovascular disease",
-                            value: "Smear",
+                            value: "Cardiovascular disease",
                             example: "eg. heart attack, ischemic heart disease, CCF",
                             checked: false,
                         },
@@ -447,7 +365,11 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 },
             },
             {
+                classDash: "dashed_bottom_border",
                 checkboxBtnContent: {
+                    header: {
+                        name: "Medical history",
+                    },
                     data: [
                         {
                             name: "Retinopathy",
@@ -469,7 +391,11 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 },
             },
             {
+                classDash: "dashed_bottom_border",
                 checkboxBtnContent: {
+                    header: {
+                        name: "Medical history",
+                    },
                     data: [
                         {
                             name: "Renal disease",
@@ -491,12 +417,16 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 },
             },
             {
+                classDash: "dashed_bottom_border",
                 checkboxBtnContent: {
+                    header: {
+                        name: "Medical history",
+                    },
                     data: [
                         {
                             colSize: 4.2,
                             name: "Stroke/TIA",
-                            value: "Stroke/TIA",
+                            value: "Stroke",
                             checked: false,
                         },
                     ],
@@ -513,6 +443,140 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                     ],
                 },
             },
+
+            {
+                classDash: "dashed_bottom_border",
+                checkboxBtnContent: {
+                    header: {
+                        name: "Medical history",
+                    },
+                    data: [
+                        {
+                            name: "PVD",
+                            example: "eg. ulcers, gangrene",
+                            value: "PVD",
+                            checked: false,
+                        },
+                    ],
+                    inputFields: [
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: "Pick the date",
+                            value: "",
+                            name: "PVD",
+                            eventType: "input",
+                            isDatePopover: true,
+                            displayNone: true,
+                        },
+                    ],
+                },
+            },
+            {
+                classDash: "dashed_bottom_border",
+                checkboxBtnContent: {
+                    header: {
+                        name: "Medical history",
+                    },
+                    data: [
+                        {
+                            name: "Neuropathy",
+                            value: "Suspected neuropathy",
+                            checked: false,
+                        },
+                    ],
+                    inputFields: [
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: "Pick the date",
+                            value: "",
+                            name: "Neuropathy",
+                            eventType: "input",
+                            isDatePopover: true,
+                            displayNone: true,
+                        },
+                    ],
+                },
+            },
+            {
+                classDash: "dashed_bottom_border",
+                checkboxBtnContent: {
+                    header: {
+                        name: "Medical history",
+                    },
+                    data: [
+                        {
+                            name: "Sexual dysfunction",
+                            value: "Sexual dysfunction",
+                            checked: false,
+                        },
+                    ],
+                    inputFields: [
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: "Pick the date",
+                            value: "",
+                            name: "Sexual dysfunction",
+                            eventType: "input",
+                            isDatePopover: true,
+                            displayNone: true,
+                        },
+                    ],
+                },
+            },
+            {
+                classDash: "dashed_bottom_border",
+                checkboxBtnContent: {
+                    header: {
+                        name: "Medical history",
+                    },
+                    data: [
+                        {
+                            colSize: 4.2,
+                            name: "Anxiety",
+                            value: "Anxiety",
+                            checked: false,
+                        },
+                    ],
+                    inputFields: [
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: "Pick the date",
+                            value: "",
+                            name: "Anxiety",
+                            eventType: "input",
+                            isDatePopover: true,
+                            displayNone: true,
+                        },
+                    ],
+                },
+            },
+            {
+                classDash: "dashed_bottom_border",
+                checkboxBtnContent: {
+                    header: {
+                        name: "Medical history",
+                    },
+                    data: [
+                        {
+                            colSize: 4.2,
+                            name: "Depression",
+                            value: "Depression",
+                            checked: false,
+                        },
+                    ],
+                    inputFields: [
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: "Pick the date",
+                            value: "",
+                            name: "Depression",
+                            eventType: "input",
+                            isDatePopover: true,
+                            displayNone: true,
+                        },
+                    ],
+                },
+            },
         ],
         familyHistory: [
             {
@@ -522,7 +586,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 radioBtnContent: {
                     header: {
                         title: "Diabetes",
-                        name: "diabetes",
+                        name: "Diabetes family history",
                         selectedValue: "",
                     },
                     data: [
@@ -545,7 +609,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 radioBtnContent: {
                     header: {
                         title: "Hypertension",
-                        name: "hypertension",
+                        name: "Does the family have a history of hypertension?",
                         selectedValue: "",
                     },
                     data: [
@@ -593,7 +657,7 @@ export const useEnrollementStore = defineStore("enrollementStore", {
             this.substance = data;
         },
         setDiagnosis(data: any) {
-            this.diagnosis = data;
+            this.enrollmentDiagnosis = data;
         },
         setPatientHistory(data: any) {
             this.patientHistory = data;
