@@ -1,56 +1,57 @@
 <template>
     <ion-page>
-      <Toolbar />
-      <ion-content :fullscreen="true">
-        <DemographicBar />
-        <Stepper stepperTitle="Past Medical History" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
-      </ion-content>
+        <Toolbar />
+        <ion-content :fullscreen="true">
+            <DemographicBar />
+            <Stepper stepperTitle="Past Medical History" :wizardData="wizardData" @updateStatus="markWizard" :StepperData="StepperData" />
+        </ion-content>
     </ion-page>
-  </template>
-  
-  <script lang="ts">
-  import { 
-    IonContent, 
-    IonHeader, 
-    IonMenuButton, 
-    IonPage, 
+</template>
+
+<script lang="ts">
+import {
+    IonContent,
+    IonHeader,
+    IonMenuButton,
+    IonPage,
     IonTitle,
     IonToolbar,
-    IonButton, 
-    IonCard, 
-    IonCardContent, 
+    IonButton,
+    IonCard,
+    IonCardContent,
     IonCardHeader,
-    IonCardSubtitle, 
-    IonCardTitle, 
-    IonAccordion, 
-    IonAccordionGroup, 
-    IonItem, 
+    IonCardSubtitle,
+    IonCardTitle,
+    IonAccordion,
+    IonAccordionGroup,
+    IonItem,
     IonLabel,
     IonModal,
     modalController,
-    AccordionGroupCustomEvent } from '@ionic/vue';
-  import { defineComponent } from 'vue';
-  import Toolbar from '@/components/Toolbar.vue'
-  import ToolbarSearch from '@/components/ToolbarSearch.vue'
-  import DemographicBar from '@/components/DemographicBar.vue'
-  import { chevronBackOutline,checkmark } from 'ionicons/icons';
-  import SaveProgressModal from '@/components/SaveProgressModal.vue'
-  import { createModal } from '@/utils/Alerts'
-  import { icons } from '@/utils/svg';
-  import { useVitalsStore } from '@/stores/VitalsStore'
-  import { useDemographicsStore } from '@/stores/DemographicStore'
-  import { useInvestigationStore } from '@/stores/InvestigationStore'
-  import { useDiagnosisStore } from '@/stores/DiagnosisStore'
-  import { mapState } from 'pinia';
-  import Stepper from "@/apps/ANC/components/Stepper.vue";
-  import { Service } from "@/services/service";
-  import { LabOrder } from "@/apps/NCD/services/lab_order"
-  import { VitalsService } from "@/services/vitals_service";
-  import { toastWarning,popoverConfirmation, toastSuccess } from '@/utils/Alerts';
-  import { Diagnosis } from '@/apps/NCD/services/diagnosis'
-  export default defineComponent({
+    AccordionGroupCustomEvent,
+} from "@ionic/vue";
+import { defineComponent } from "vue";
+import Toolbar from "@/components/Toolbar.vue";
+import ToolbarSearch from "@/components/ToolbarSearch.vue";
+import DemographicBar from "@/components/DemographicBar.vue";
+import { chevronBackOutline, checkmark } from "ionicons/icons";
+import SaveProgressModal from "@/components/SaveProgressModal.vue";
+import { createModal } from "@/utils/Alerts";
+import { icons } from "@/utils/svg";
+import { useVitalsStore } from "@/stores/VitalsStore";
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import { useInvestigationStore } from "@/stores/InvestigationStore";
+import { useDiagnosisStore } from "@/stores/DiagnosisStore";
+import { mapState } from "pinia";
+import Stepper from "@/apps/ANC/components/Stepper.vue";
+import { Service } from "@/services/service";
+import { LabOrder } from "@/apps/NCD/services/lab_order";
+import { VitalsService } from "@/services/vitals_service";
+import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
+import { Diagnosis } from "@/apps/NCD/services/diagnosis";
+export default defineComponent({
     name: "Home",
-    components:{
+    components: {
         IonContent,
         IonHeader,
         IonMenuButton,
@@ -60,62 +61,59 @@
         Toolbar,
         ToolbarSearch,
         DemographicBar,
-        IonButton, 
-        IonCard, 
-        IonCardContent, 
-        IonCardHeader, 
-        IonCardSubtitle, 
+        IonButton,
+        IonCard,
+        IonCardContent,
+        IonCardHeader,
+        IonCardSubtitle,
         IonCardTitle,
         IonAccordion,
         IonAccordionGroup,
         IonItem,
         IonLabel,
         IonModal,
-        Stepper
+        Stepper,
     },
-    data(){
+    data() {
         return {
             wizardData: [
                 {
-                    'title': 'Past Medical History',
-                    'class': 'common_step',
-                    'checked':'',
-                    'icon': false,
-                    'disabled':false,
-                    'number': 1,
-                    'last_step': 'last_step'
+                    title: "Past Medical History",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+                    disabled: false,
+                    number: 1,
+                    last_step: "last_step",
                 },
             ],
-            StepperData:[
+            StepperData: [
                 {
-                    'title': 'Past Medical History',
-                    'componet': 'MedicalHistory',
-                    'value': '1',
+                    title: "Past Medical History",
+                    componet: "MedicalHistory",
+                    value: "1",
                 },
             ],
-        isOpen: false,
-        iconsContent: icons,
+            isOpen: false,
+            iconsContent: icons,
         };
     },
-    mounted(){
-        this.markWizard() 
+    mounted() {
+        this.markWizard();
     },
     setup() {
-        return { chevronBackOutline,checkmark };
+        return { chevronBackOutline, checkmark };
     },
-    
-      methods:{
-        markWizard(){  },
-        getFormatedData(data: any){
-          return  data.map((item: any) => {
+
+    methods: {
+        markWizard() {},
+        getFormatedData(data: any) {
+            return data.map((item: any) => {
                 return item?.data;
             });
         },
-      }
-    })
-  </script>
-  
-  <style scoped>
+    },
+});
+</script>
 
-  </style>
-  
+<style scoped></style>
