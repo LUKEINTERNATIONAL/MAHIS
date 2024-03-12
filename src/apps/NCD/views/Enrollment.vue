@@ -136,6 +136,8 @@ import {
     modifyFieldValue,
     modifyCheckboxValue,
 } from "@/services/data_helpers";
+import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServerData";
+
 export default defineComponent({
     name: "Home",
     components: {
@@ -183,7 +185,7 @@ export default defineComponent({
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useConfigurationStore, ["enrollmentDisplayType"]),
-        ...mapState(useEnrollementStore, ["NCDNumber", "enrollmentDiagnosis"]),
+        ...mapState(useEnrollementStore, ["NCDNumber", "enrollmentDiagnosis", "substance", "patientHistoryHIV", "patientHistory"]),
     },
     async mounted() {
         this.setDisplayType(this.enrollmentDisplayType);
@@ -209,17 +211,10 @@ export default defineComponent({
                 this.currentStep = this.steps[currentIndex - 1];
             }
         },
-        saveData() {
-            const hyper = getCheckboxSelectedValue(this.enrollmentDiagnosis, "Hypertetion");
-            getCheckboxInputField(this.enrollmentDiagnosis, "Hypertension", "value");
-            console.log("🚀 ~ saveData ~ hyper:", hyper);
-            console.log("🚀 ~ saveData ~ this.diagnosis[0].selectedData:", getCheckboxInputField(this.enrollmentDiagnosis, "Hypertension", "value"));
-
-            // this.saveNcdNumber();
-            // this.buildDiagnosis()
-            // if(this.diagnosis[0].selectedData.length > 0)
-            //     this.saveDiagnosis()
-            // this.$router.push("consultationPlan");
+        async saveData() {
+            await this.saveNcdNumber();
+            await this.saveEnrollment();
+            this.$router.push("consultationPlan");
         },
 
         async saveNcdNumber() {
@@ -254,27 +249,24 @@ export default defineComponent({
                 this.iconGridStatus = "active_icon";
             }
         },
-        buildDiagnosis() {
-            this.diagnosis[0].selectedData.push({
-                concept_id: 6542, //primary diagnosis
-                value_coded: 6409, // type 1
-                obs_datetime: this.diagnosis,
-            });
-            this.diagnosis[0].selectedData.push({
-                concept_id: 6542, //primary diagnosis
-                value_coded: 6410, // type 2
-                obs_datetime: this.diagnosis,
-            });
-            this.diagnosis[0].selectedData.push({
-                concept_id: 6542, //primary diagnosis
-                value_coded: 903, // Hypertension
-                obs_datetime: this.diagnosis,
-            });
+        async buildEnrollmentData() {
+            return [
+                ...(await formatRadioButtonData(this.patientHistoryHIV)),
+                ...(await formatRadioButtonData(this.substance)),
+                ...(await formatRadioButtonData(this.patientHistory)),
+                ...(await formatCheckBoxData(this.enrollmentDiagnosis)),
+                ...(await formatCheckBoxData(this.patientHistory)),
+                ...(await formatCheckBoxData(this.patientHistoryHIV)),
+            ];
         },
-        saveDiagnosis() {
-            const userID: any = Service.getUserID();
-            const diagnosisInstance = new Diagnosis();
-            diagnosisInstance.onSubmit(this.demographics.patient_id, userID, this.diagnosis[0].selectedData);
+        async saveEnrollment() {
+            const data: any = await this.buildEnrollmentData();
+            console.log("🚀 ~ saveEnrollment ~ data:", data);
+            if (data.length > 0) {
+                const userID: any = Service.getUserID();
+                const diagnosisInstance = new Diagnosis();
+                diagnosisInstance.onSubmit(this.demographics.patient_id, userID, data);
+            }
         },
     },
 });
