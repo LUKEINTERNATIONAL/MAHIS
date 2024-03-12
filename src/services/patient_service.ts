@@ -52,7 +52,7 @@ export class PatientService extends Service {
     public static async assignNHID(patientId: number | string, programID: number) {
         return super.postJson(`/patients/${patientId}/npid`, { program_id: programID });
     }
-    public static reassignARVNumber(patientIdentifierId: number | string, data: Record<string, any>) {
+    public static reassignMRNumber(patientIdentifierId: number | string, data: Record<string, any>) {
         return super.putJson("patient_identifiers/" + patientIdentifierId, data);
     }
     public static toPatient(json: string): Patient {
@@ -99,8 +99,14 @@ export class PatientService extends Service {
 
     updateARVNumber(newARVNumber: string) {
         const patientIdentifierId = this.getIdentifiers().find((i) => i.type.name === "ARV Number")?.patient_identifier_id || "";
-        return PatientService.reassignARVNumber(patientIdentifierId, {
+        return PatientService.reassignMRNumber(patientIdentifierId, {
             identifier: newARVNumber,
+        });
+    }
+    updateNCDNumber(newNCDNumber: string) {
+        const patientIdentifierId = this.getIdentifiers().find((i) => i.type.name === "NCD Number")?.patient_identifier_id || "";
+        return PatientService.reassignMRNumber(patientIdentifierId, {
+            identifier: newNCDNumber,
         });
     }
 
