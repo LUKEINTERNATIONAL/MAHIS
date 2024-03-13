@@ -1,7 +1,7 @@
-import {isEmpty, isPlainObject} from "lodash"
+import { isEmpty, isPlainObject } from "lodash";
 
 function required(value: any): boolean {
-    return value !== null && value !== undefined && value !== '';
+    return value !== null && value !== undefined && value !== "";
 }
 
 function isNumber(val: any): boolean {
@@ -12,24 +12,7 @@ function checkMinMax(val: any, min: number, max: number): boolean {
     return parseFloat(val) >= min && parseFloat(val) <= max;
 }
 
-
-
-
-
 export default {
-    isFloatingPointNumber,
-    validateSeries,
-    required,
-    isMWPhoneNumber,
-    isName,
     isNumber,
-    hasLengthRangeOf,
-    rangeOf,
-    neitherOr,
-    anyEmpty,
-    notTheSame,
-    isIPAddress,
-    isMWNationalID,
-    isEstimationDate,
-    checkMinMax
-}
+    checkMinMax,
+};

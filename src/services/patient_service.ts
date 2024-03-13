@@ -52,10 +52,7 @@ export class PatientService extends Service {
     public static async assignNHID(patientId: number | string, programID: number) {
         return super.postJson(`/patients/${patientId}/npid`, { program_id: programID });
     }
-    public static reassignARVNumber(
-        patientIdentifierId: number | string,
-        data: Record<string, any>
-    ) {
+    public static reassignMRNumber(patientIdentifierId: number | string, data: Record<string, any>) {
         return super.putJson("patient_identifiers/" + patientIdentifierId, data);
     }
     public static toPatient(json: string): Patient {
@@ -101,11 +98,15 @@ export class PatientService extends Service {
     }
 
     updateARVNumber(newARVNumber: string) {
-        const patientIdentifierId =
-            this.getIdentifiers().find((i) => i.type.name === "ARV Number")
-                ?.patient_identifier_id || "";
-        return PatientService.reassignARVNumber(patientIdentifierId, {
+        const patientIdentifierId = this.getIdentifiers().find((i) => i.type.name === "ARV Number")?.patient_identifier_id || "";
+        return PatientService.reassignMRNumber(patientIdentifierId, {
             identifier: newARVNumber,
+        });
+    }
+    updateNCDNumber(newNCDNumber: string) {
+        const patientIdentifierId = this.getIdentifiers().find((i) => i.type.name === "NCD Number")?.patient_identifier_id || "";
+        return PatientService.reassignMRNumber(patientIdentifierId, {
+            identifier: newNCDNumber,
         });
     }
 
@@ -123,32 +124,17 @@ export class PatientService extends Service {
 
     async isPregnant() {
         const obs = await ObservationService.getFirstObs(this.getID(), "Is patient pregnant");
-        return (
-            obs &&
-            (obs.value_coded.match(/Yes/i) ? true : false) &&
-            ObservationService.obsInValidPeriod(obs)
-        );
+        return obs && (obs.value_coded.match(/Yes/i) ? true : false) && ObservationService.obsInValidPeriod(obs);
     }
 
     async isBreastfeeding() {
         const obs = await ObservationService.getFirstObs(this.getID(), "Is patient breast feeding");
-        return (
-            obs &&
-            (obs.value_coded.match(/Yes/i) ? true : false) &&
-            ObservationService.obsInValidPeriod(obs)
-        );
+        return obs && (obs.value_coded.match(/Yes/i) ? true : false) && ObservationService.obsInValidPeriod(obs);
     }
 
     async hasPregnancyObsToday() {
-        const date = await ObservationService.getFirstObsDatetime(
-            this.getID(),
-            "Is patient pregnant"
-        );
-        return (
-            date &&
-            HisDate.toStandardHisFormat(date) === Service.getSessionDate() &&
-            this.isFemale()
-        );
+        const date = await ObservationService.getFirstObsDatetime(this.getID(), "Is patient pregnant");
+        return date && HisDate.toStandardHisFormat(date) === Service.getSessionDate() && this.isFemale();
     }
 
     async nextAppointment(programID = Service.getProgramID()) {
@@ -275,12 +261,7 @@ export class PatientService extends Service {
     }
 
     getPatientInfoString() {
-        const data = [
-            this.getFullName(),
-            `(${this.getGender()})`,
-            this.getBirthdate(),
-            `, ${this.getCurrentDistrict()}`,
-        ];
+        const data = [this.getFullName(), `(${this.getGender()})`, this.getBirthdate(), `, ${this.getCurrentDistrict()}`];
         return data.join(" ");
     }
 
@@ -382,10 +363,7 @@ export class PatientService extends Service {
         return this.patient.patient_identifiers
             .filter((i: any) => i.type.name === type)
             .sort((a: any, b: any) => (a["date_created"] < b["date_created"] ? 1 : 0))
-            .reduce(
-                (defaultID, curID) => (defaultID === "Unknown" ? curID.identifier : defaultID),
-                "Unknown"
-            );
+            .reduce((defaultID, curID) => (defaultID === "Unknown" ? curID.identifier : defaultID), "Unknown");
     }
 
     getIdentifiers() {
@@ -433,13 +411,9 @@ export class PatientService extends Service {
     }
 
     patientIsComplete() {
-        return [
-            this.getGender(),
-            this.getBirthdate(),
-            this.getGivenName(),
-            this.getFamilyName(),
-            ...Object.values(this.getAddresses()),
-        ].every((a: any) => !isValueEmpty(a));
+        return [this.getGender(), this.getBirthdate(), this.getGivenName(), this.getFamilyName(), ...Object.values(this.getAddresses())].every(
+            (a: any) => !isValueEmpty(a)
+        );
     }
 
     getAddresses() {

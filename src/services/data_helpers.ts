@@ -17,9 +17,9 @@ export function getFieldValue(data: any, fieldName: any, element: any) {
     return colData ? colData[element] : undefined;
 }
 
-export function getRadioSelectedValue(data: any, radioBtnName: any) {
+export function getRadioSelectedValue(data: any, radioBtnName: any, element = "selectedValue") {
     const radioContent = data.find((item: any) => item.radioBtnContent && item.radioBtnContent.header.name === radioBtnName);
-    return radioContent ? radioContent.radioBtnContent.header.selectedValue : undefined;
+    return radioContent ? radioContent.radioBtnContent.header[element] : undefined;
 }
 export function dynamicValue(data: any, radioBtnName: any, id: any) {
     const radioContent = data.find(
@@ -33,10 +33,10 @@ export function getCheckboxSelectedValue(data: any, checkboxName: any) {
 }
 
 export function getCheckboxInputField(data: any, checkboxInputName: any, element: any) {
-    data.forEach((item: any) => {
-        const checkbox = item.checkboxBtnContent?.inputFields?.find((checkboxInput: any) => checkboxInput.name === checkboxInputName);
-        return checkbox;
-    });
+    const checkboxContent = data.find((item: any) =>
+        item.checkboxBtnContent?.inputFields?.some((checkboxInput: any) => checkboxInput.name === checkboxInputName)
+    );
+    return checkboxContent.checkboxBtnContent.inputFields[0][element];
 }
 
 export function modifyRadioValue(data: any, radioBtnName: any, element: any, newValue: any) {

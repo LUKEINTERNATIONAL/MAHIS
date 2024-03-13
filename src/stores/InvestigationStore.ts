@@ -31,9 +31,9 @@ export const useInvestigationStore = defineStore("investigationStore", {
                                     idName: "test_id",
                                 },
                                 {
-                                    inputHeader: "Result",
+                                    inputHeader: "Specimen",
                                     value: "",
-                                    name: "result",
+                                    name: "specimen",
                                     eventType: "input",
                                     required: true,
                                     alertsError: false,

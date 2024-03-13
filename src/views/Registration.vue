@@ -3,11 +3,7 @@
         <ion-header>
             <div class="header position_content">
                 <div style="display: flex; align-items: center" @click="nav('/home')">
-                    <ion-icon
-                        slot="separator"
-                        size="large"
-                        :icon="iconsContent.arrowLeft"
-                    ></ion-icon>
+                    <ion-icon slot="separator" size="large" :icon="iconsContent.arrowLeft"></ion-icon>
                     <span style="padding-left: 10px">Go back</span>
                 </div>
                 <div>New patient registration</div>
@@ -23,11 +19,7 @@
                     <div class="demographics_title">Demographics</div>
                 </div>
                 <div class="icon_div">
-                    <ion-icon
-                        :class="iconListStatus"
-                        :icon="list"
-                        @click="setDisplayType('list')"
-                    ></ion-icon>
+                    <ion-icon :class="iconListStatus" :icon="list" @click="setDisplayType('list')"></ion-icon>
                     <ion-icon
                         :class="iconGridStatus"
                         style="font-size: 21px; margin-top: 1.5px"
@@ -73,65 +65,27 @@
             </div>
         </ion-content>
         <div class="footer2" v-if="registrationDisplayType == 'grid'">
-            <DynamicButton
-                name="Save"
-                iconSlot="end"
-                :icon="iconsContent.saveWhite"
-                @click="saveData()"
-            />
+            <DynamicButton name="Save" iconSlot="end" :icon="iconsContent.saveWhite" @click="saveData()" />
         </div>
         <ion-footer v-if="registrationType == 'manual' && registrationDisplayType == 'list'">
             <div class="footer position_content">
-                <DynamicButton
-                    name="Previous"
-                    :icon="iconsContent.arrowLeftWhite"
-                    color="medium"
-                    @click="previousStep"
-                />
+                <DynamicButton name="Previous" :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
                 <ion-breadcrumbs class="breadcrumbs">
-                    <ion-breadcrumb
-                        @click="setCurrentStep('Personal Information')"
-                        :class="{ active: currentStep === 'Personal Information' }"
-                    >
+                    <ion-breadcrumb @click="setCurrentStep('Personal Information')" :class="{ active: currentStep === 'Personal Information' }">
                         <span class="breadcrumb-text">Personal Information</span>
-                        <ion-icon
-                            slot="separator"
-                            size="large"
-                            :icon="iconsContent.arrowRight"
-                        ></ion-icon>
+                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
                     </ion-breadcrumb>
-                    <ion-breadcrumb
-                        @click="setCurrentStep('Location')"
-                        :class="{ active: currentStep === 'Location' }"
-                    >
+                    <ion-breadcrumb @click="setCurrentStep('Location')" :class="{ active: currentStep === 'Location' }">
                         <span class="breadcrumb-text">Location</span>
-                        <ion-icon
-                            slot="separator"
-                            size="large"
-                            :icon="iconsContent.arrowRight"
-                        ></ion-icon>
+                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
                     </ion-breadcrumb>
-                    <ion-breadcrumb
-                        @click="setCurrentStep('Social History')"
-                        :class="{ active: currentStep === 'Social History' }"
-                    >
+                    <ion-breadcrumb @click="setCurrentStep('Social History')" :class="{ active: currentStep === 'Social History' }">
                         <span class="breadcrumb-text">Social History</span>
-                        <ion-icon
-                            slot="separator"
-                            size="large"
-                            :icon="iconsContent.arrowRight"
-                        ></ion-icon>
+                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
                     </ion-breadcrumb>
-                    <ion-breadcrumb
-                        @click="setCurrentStep('Guardian Information')"
-                        :class="{ active: currentStep === 'Guardian Information' }"
-                    >
+                    <ion-breadcrumb @click="setCurrentStep('Guardian Information')" :class="{ active: currentStep === 'Guardian Information' }">
                         <span class="breadcrumb-text">Guardian Information</span>
-                        <ion-icon
-                            slot="separator"
-                            size="large"
-                            :icon="iconsContent.arrowRight"
-                        ></ion-icon>
+                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
                     </ion-breadcrumb>
                 </ion-breadcrumbs>
                 <DynamicButton
@@ -141,29 +95,14 @@
                     :icon="iconsContent.saveWhite"
                     @click="saveData()"
                 />
-                <DynamicButton
-                    v-else
-                    name="Next"
-                    iconSlot="end"
-                    :icon="iconsContent.arrowRightWhite"
-                    @click="nextStep"
-                />
+                <DynamicButton v-else name="Next" iconSlot="end" :icon="iconsContent.arrowRightWhite" @click="nextStep" />
             </div>
         </ion-footer>
     </ion-page>
 </template>
 
 <script lang="ts">
-import {
-    IonContent,
-    IonHeader,
-    IonMenuButton,
-    IonPage,
-    IonTitle,
-    IonBreadcrumb,
-    IonBreadcrumbs,
-    IonIcon,
-} from "@ionic/vue";
+import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonBreadcrumb, IonBreadcrumbs, IonIcon } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { arrowForwardCircle, grid, list } from "ionicons/icons";
 import { icons } from "@/utils/svg";
@@ -240,9 +179,7 @@ export default defineComponent({
             return getRadioSelectedValue(this.personInformation, "gender");
         },
         birthdate() {
-            return HisDate.toStandardHisFormat(
-                getFieldValue(this.personInformation, "birthdate", "value")
-            );
+            return HisDate.toStandardHisFormat(getFieldValue(this.personInformation, "birthdate", "value"));
         },
         guardianFirstname() {
             return getFieldValue(this.guardianInformation, "guardianFirstname", "value");
@@ -300,9 +237,7 @@ export default defineComponent({
                 }
             }
 
-            return fields.every((fieldName: string) =>
-                validateField(data, fieldName, (this as any)[fieldName])
-            );
+            return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
         },
 
         async createPatient() {
@@ -311,18 +246,11 @@ export default defineComponent({
                 this.buildPersonalInformation();
                 if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
                 const registration: any = new PatientRegistrationService();
-                new PatientService(
-                    await registration.registerPatient(this.personInformation[0].selectedData, [])
-                );
+                await registration.registerPatient(this.personInformation[0].selectedData, []);
                 const patientID = registration.getPersonID();
-                this.creatNationID(patientID);
+                this.createNationID(patientID);
                 if (Object.keys(this.guardianInformation[0].selectedData).length === 0) {
-                    if (
-                        await this.validations(this.guardianInformation, [
-                            "guardianFirstname",
-                            "guardianLastname",
-                        ])
-                    ) {
+                    if (await this.validations(this.guardianInformation, ["guardianFirstname", "guardianLastname"])) {
                         this.createGuardian(patientID);
                     }
                 }
@@ -330,13 +258,14 @@ export default defineComponent({
                 this.findPatient(patientID);
                 toastSuccess("Successfully Created Patient");
             } else {
-                if (!(await this.mwIdExists(this.nationalID)))
-                    toastWarning("Please complete all required fields");
+                if (!(await this.mwIdExists(this.nationalID))) toastWarning("Please complete all required fields");
             }
         },
-        async creatNationID(patientID: any) {
-            if (this.validatedNationalID())
-                await PatientService.updateMWNationalId(this.nationalID, patientID);
+        async createNationID(patientID: any) {
+            if (this.validatedNationalID()) {
+                const patient = new PatientService();
+                await patient.updateMWNationalId(patientID);
+            }
         },
         async mwIdExists(nid: string) {
             if (!nid) return false;
@@ -345,10 +274,7 @@ export default defineComponent({
             else return false;
         },
         validatedNationalID() {
-            if (
-                this.nationalID != "" &&
-                !getFieldValue(this.personInformation, "nationalID", "alertsError")
-            ) {
+            if (this.nationalID != "" && !getFieldValue(this.personInformation, "nationalID", "alertsError")) {
                 return true;
             } else return false;
         },
@@ -358,13 +284,8 @@ export default defineComponent({
             const guardian: any = new PatientRegistrationService();
             await guardian.registerGuardian(this.guardianInformation[0].selectedData);
             const guardianID = guardian.getPersonID();
-            const selectedID = getFieldValue(
-                this.guardianInformation,
-                "relationship",
-                "selectedID"
-            );
-            if (selectedID)
-                await RelationsService.createRelation(patientID, guardianID, selectedID);
+            const selectedID = getFieldValue(this.guardianInformation, "relationship", "selectedID");
+            if (selectedID) await RelationsService.createRelation(patientID, guardianID, selectedID);
         },
         openNewPage(url: any, item: any) {
             const demographicsStore = useDemographicsStore();
@@ -395,19 +316,11 @@ export default defineComponent({
                 birthdate_estimated: "false",
                 home_region: getFieldValue(this.personInformation, "homeDistrict", "value"),
                 home_district: getFieldValue(this.personInformation, "homeDistrict", "value"),
-                home_traditional_authority: getFieldValue(
-                    this.personInformation,
-                    "homeTraditionalAuthority",
-                    "value"
-                ),
+                home_traditional_authority: getFieldValue(this.personInformation, "homeTraditionalAuthority", "value"),
                 home_village: getFieldValue(this.personInformation, "homeVillage", "value"),
                 current_region: getFieldValue(this.personInformation, "currentDistrict", "value"),
                 current_district: getFieldValue(this.personInformation, "currentDistrict", "value"),
-                current_traditional_authority: getFieldValue(
-                    this.personInformation,
-                    "currentTraditionalAuthority",
-                    "value"
-                ),
+                current_traditional_authority: getFieldValue(this.personInformation, "currentTraditionalAuthority", "value"),
                 current_village: getFieldValue(this.personInformation, "currentVillage", "value"),
                 landmark: getFieldValue(this.personInformation, "closestLandmark", "value"),
                 cell_phone_number: getFieldValue(this.personInformation, "phoneNumber", "value"),

@@ -1,5 +1,5 @@
 <template>
-    <ion-searchbar @ionInput="handleInput" placeholder="Search client by MRN or Name" class="searchField"></ion-searchbar>
+    <ion-searchbar @ionInput="handleInput" placeholder="Search client by MRN, name or scan barcode/QR-Code" class="searchField"></ion-searchbar>
     <ion-popover
         :is-open="popoverOpen"
         :event="event"
