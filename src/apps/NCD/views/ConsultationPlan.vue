@@ -277,7 +277,8 @@ export default defineComponent({
                 this.$router.push("patientProfile");
             } else {
                 toastWarning("Please complete all required fields");
-                this.saveOutComeStatus();
+                // this.saveOutComeStatus();
+                // this.saveTreatmentPlan();
             }
         },
         saveInvestigation() {
@@ -329,6 +330,8 @@ export default defineComponent({
         async saveOutComeStatus() {
             const userID: any = Service.getUserID()
             const patientID = this.demographics.patient_id
+
+            console.log(this.dispositions)
 
             if (!isEmpty(this.dispositions)) {
                 for (let key in this.dispositions) {
