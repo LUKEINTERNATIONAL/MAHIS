@@ -17,39 +17,39 @@
 
                 <div class="m-cointainer">
                     <ion-grid>
-                    <ion-row>
-                        <ion-col>
-                            <div class="">
-                                <ion-label class="n-lbl-1">Full name</ion-label>
-                            </div> 
-                        </ion-col>
-                        <ion-col>
-                            <ion-label style="display: flex">
-                                <span  class="left-text"> First Name</span>
-                            </ion-label>
-                            <ion-input
-                                    fill="outline"
-                                    type="text"
-                                    class="m-input"
-                                >
-                            </ion-input>
-                            
-                        </ion-col>
-                        <ion-col style="padding-right: 0px;">
-                            <ion-label style="display: flex">
-                                <span  class="left-text"> Last Name</span>
-                            </ion-label>
-                            <ion-input
-                                    fill="outline"
-                                    type="text"
-                                    class="m-input"
-                                >
-                            </ion-input>
-                        </ion-col>
-                       
-                    </ion-row>
-                    <hr class="m-line-ds"/>
-                </ion-grid>
+                        <ion-row>
+                            <ion-col>
+                                <div class="">
+                                    <ion-label class="n-lbl-1">Full name</ion-label>
+                                </div> 
+                            </ion-col>
+                            <ion-col>
+                                <ion-label style="display: flex">
+                                    <span  class="left-text"> First Name</span>
+                                </ion-label>
+                                <ion-input
+                                        fill="outline"
+                                        type="text"
+                                        class="m-input"
+                                    >
+                                </ion-input>
+                                
+                            </ion-col>
+                            <ion-col style="padding-right: 0px;">
+                                <ion-label style="display: flex">
+                                    <span  class="left-text"> Last Name</span>
+                                </ion-label>
+                                <ion-input
+                                        fill="outline"
+                                        type="text"
+                                        class="m-input"
+                                    >
+                                </ion-input>
+                            </ion-col>
+                        
+                        </ion-row>
+                        <hr class="m-line-ds"/>
+                    </ion-grid>
                 </div>
                 
             </ion-card>
