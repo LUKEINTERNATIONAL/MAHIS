@@ -31,6 +31,8 @@
                                         fill="outline"
                                         type="text"
                                         class="m-input"
+                                        placeholder="Enter your first name"
+                                        v-model="name"
                                     >
                                 </ion-input>
                                 
@@ -43,6 +45,8 @@
                                         fill="outline"
                                         type="text"
                                         class="m-input"
+                                        placeholder="Enter your last name"
+                                        v-model="name"
                                     >
                                 </ion-input>
                             </ion-col>
@@ -51,6 +55,10 @@
                         <hr class="m-line-ds"/>
                     </ion-grid>
                 </div>
+
+                
+
+                
                 
             </ion-card>
         </div>  
@@ -86,11 +94,14 @@ import {
 } from "@ionic/vue";
 import Toolbar from '@/components/Toolbar.vue'
 import ToolbarSearch from '@/components/ToolbarSearch.vue'
+
+import { ref, watch, computed, onMounted, onUpdated } from "vue";
+
+const name = ref()
 </script>
 
 <style scoped>
 #container {
-  text-align: center;
   
   position: absolute;
   left: 0;
