@@ -3,10 +3,14 @@
       <Toolbar />
       <ion-content :fullscreen="true">
         <div id="container">
-          
-       
-        
-            
+            <ion-card style="margin-bottom: 20px; background-color: #fff">
+                <ion-col size="9">
+                    <div class="m-cointainer">
+                        <ion-label class="n-lbl">John Doe</ion-label>
+                        <hr class="m-line"/>  
+                    </div> 
+                </ion-col>
+            </ion-card>
         </div>  
       </ion-content>
     </ion-page>
@@ -73,5 +77,24 @@ import ToolbarSearch from '@/components/ToolbarSearch.vue'
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.n-lbl {
+    text-align: left;
+    display: flex;
+    align-items: left;
+    padding-left: 10px;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 29.05px;
+}
+.m-cointainer {
+    width: 95%;
+    margin-left: 2%;
+}
+.m-line {
+    margin: 0;
+    margin-top: 12px;
+    border: 0;
+    border-top: 3px solid #B3B3B3;
 }
 </style>
