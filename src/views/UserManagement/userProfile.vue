@@ -4,12 +4,54 @@
       <ion-content :fullscreen="true">
         <div id="container">
             <ion-card style="margin-bottom: 20px; background-color: #fff">
-                <ion-col size="9">
-                    <div class="m-cointainer">
-                        <ion-label class="n-lbl">John Doe</ion-label>
-                        <hr class="m-line"/>  
-                    </div> 
-                </ion-col>
+                <div style="width: 95%; margin-left: 2%;">
+                    <ion-row>
+                        <ion-col>
+                            <div>
+                                <ion-label class="n-lbl">John Doe</ion-label>
+                                <hr class="m-line"/>  
+                            </div> 
+                        </ion-col>
+                    </ion-row>
+                </div>
+
+                <div style="width: 95%; margin-left: 2%;">
+                    <ion-grid>
+                    <ion-row>
+                        <ion-col>
+                            <div class="">
+                                <ion-label class="n-lbl-1">Full name</ion-label>
+                            </div> 
+                        </ion-col>
+                        <ion-col>
+                            <ion-label style="display: flex">
+                                <span  class="left-text"> First Name</span>
+                            </ion-label>
+                            <ion-input
+                                    fill="outline"
+                                    type="text"
+                                    class="m-input"
+                                >
+                            </ion-input>
+                            
+                        </ion-col>
+                        <ion-col style="padding-right: 0px;">
+                            <ion-label style="display: flex">
+                                <span  class="left-text"> Last Name</span>
+                            </ion-label>
+                            <ion-input
+                                    fill="outline"
+                                    type="text"
+                                    class="m-input"
+                                >
+                            </ion-input>
+                        </ion-col>
+                       
+                    </ion-row>
+                    <hr class="m-line-ds"/>
+                </ion-grid>
+                </div>
+                
             </ion-card>
         </div>  
       </ion-content>
@@ -17,6 +59,7 @@
   </template>
 <script lang="ts">
 import { defineComponent } from "vue";
+import { text } from "ionicons/icons";
 export default defineComponent({
     watch: {},
     name: "xxxComponent",
@@ -86,6 +129,16 @@ import ToolbarSearch from '@/components/ToolbarSearch.vue'
     font-size: 24px;
     font-weight: 700;
     line-height: 29.05px;
+    color: #b4b0b0;
+}
+.n-lbl-1 {
+    text-align: left;
+    display: flex;
+    align-items: left;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 29.05px;
+    color:#b4b0b0
 }
 .m-cointainer {
     width: 95%;
@@ -95,6 +148,19 @@ import ToolbarSearch from '@/components/ToolbarSearch.vue'
     margin: 0;
     margin-top: 12px;
     border: 0;
-    border-top: 3px solid #B3B3B3;
+    border-top: 3px solid #b4b0b0;
+}
+.m-line-ds {
+    margin: 0;
+    margin-top: 50px;
+    border: 0;
+    border-top: 3px dashed #b4b0b0;
+}
+.left-text {
+    font-size: 15px;
+    color: #b4b0b0;
+}
+.m-input {
+    margin-top: 10px;
 }
 </style>
