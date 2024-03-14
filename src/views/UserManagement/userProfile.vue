@@ -4,7 +4,7 @@
       <ion-content :fullscreen="true">
         <div id="container">
             <ion-card style="margin-bottom: 20px; background-color: #fff">
-                <div style="width: 95%; margin-left: 2%;">
+                <div class="m-cointainer">
                     <ion-row>
                         <ion-col>
                             <div>
@@ -15,7 +15,7 @@
                     </ion-row>
                 </div>
 
-                <div style="width: 95%; margin-left: 2%;">
+                <div class="m-cointainer">
                     <ion-grid>
                     <ion-row>
                         <ion-col>
