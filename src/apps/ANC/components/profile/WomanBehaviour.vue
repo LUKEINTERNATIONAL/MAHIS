@@ -19,11 +19,6 @@
         <basic-form :contentData="Tobacco"></basic-form>
       </ion-card-content>
     </ion-card>
-<!--    &lt;!&ndash; Navigation Buttons &ndash;&gt;-->
-<!--    <div class="navigation-buttons">-->
-<!--      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>-->
-<!--      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>-->
-<!--    </div>-->
   </div>
 </template>
 
@@ -117,17 +112,6 @@ export default defineComponent({
             modifyCheckboxValue(this.dailyCaffeineIntake, checkbox, 'disabled', false);
         });
     }
-    },
-    //Method for navigating
-    goToNextSection() {
-      if (this.currentSection < 1) {
-        this.currentSection++;
-      }
-    },
-    goToPreviousSection() {
-      if (this.currentSection > 0) {
-        this.currentSection--;
-      }
     },
     navigationMenu(url: any){
       menuController.close()

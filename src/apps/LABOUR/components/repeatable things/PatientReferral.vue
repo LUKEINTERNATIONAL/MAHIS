@@ -3,7 +3,7 @@
     <ion-card class="section">
       <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Referral</ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="referral"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+        <basic-form :contentData="referral"></basic-form>
       </ion-card-content>
     </ion-card>
   </div>

@@ -3,19 +3,19 @@
     <ion-card class="section">
       <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="vitals"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+        <basic-form :contentData="vitals" ></basic-form>
       </ion-card-content>
     </ion-card>
     <ion-card class="section">
       <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Anaemia</ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="anaemia"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+        <basic-form :contentData="anaemia"></basic-form>
       </ion-card-content>
     </ion-card>
     <ion-card class="section">
       <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="otherphysicalExams"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+        <basic-form :contentData="otherphysicalExams" ></basic-form>
       </ion-card-content>
     </ion-card>
   </div>

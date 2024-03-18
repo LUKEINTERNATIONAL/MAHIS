@@ -3,7 +3,7 @@
     <Toolbar />
     <ion-content :fullscreen="true">
       <DemographicBar />
-      <Stepper stepperTitle="Immediate postnatal checks" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" @update:inputValue="validateProfileData($event)"  :StepperData="StepperData"/>
+      <Stepper stepperTitle="Immediate postnatal checks" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()"  :StepperData="StepperData"/>
     </ion-content>
   </ion-page>
 </template>
@@ -102,14 +102,9 @@ export default defineComponent({
       iconsContent: icons,
     };
   },
-  watch: {
 
-  },
   computed:{
 
-
-  },
-  saveData(){
 
   },
   mounted(){

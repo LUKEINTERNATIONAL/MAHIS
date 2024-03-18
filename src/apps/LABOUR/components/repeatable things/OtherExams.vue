@@ -3,13 +3,13 @@
     <ion-card class="section">
       <ion-card-header> <ion-card-title class=" sub_item_header"></ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="otherExams"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+        <basic-form :contentData="otherExams"></basic-form>
       </ion-card-content>
     </ion-card>
     <ion-card class="section">
       <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Urine</ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="urine"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+        <basic-form :contentData="urine" ></basic-form>
       </ion-card-content>
     </ion-card>
   </div>

@@ -3,13 +3,7 @@
     <ion-card class="section">
       <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Danger signs</ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="pastProblems"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
-      </ion-card-content>
-    </ion-card>
-    <ion-card class="section">
-      <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
-      <ion-card-content>
-        <basic-form :contentData="labourDetails"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+        <basic-form :contentData="pastProblems"  ></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
@@ -74,7 +68,6 @@ export default defineComponent({
     };
   },
   computed:{
-    ...mapState(useQuickCheckStore,["labourDetails"]),
     ...mapState(useQuickCheckStore,["pastProblems"]),
 
   },

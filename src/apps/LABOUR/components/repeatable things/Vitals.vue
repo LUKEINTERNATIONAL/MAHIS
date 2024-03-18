@@ -3,7 +3,7 @@
     <ion-card class="section">
       <ion-card-header> <ion-card-title class=" sub_item_header"></ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="vitals"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+        <basic-form :contentData="vitals" ></basic-form>
       </ion-card-content>
     </ion-card>
   </div>

@@ -3,7 +3,7 @@
     <Toolbar/>
     <ion-content :fullscreen="true">
       <DemographicBar />
-      <Accordion  :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
+      <Stepper stepper-title="End labour and delivery" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
     </ion-content>
   </ion-page>
 </template>
@@ -22,7 +22,7 @@ import {
 import DemographicBar from "@/apps/LABOUR/components/DemographicBar.vue";
 import { defineComponent } from 'vue';
 import BasicInputField from '@/components/BasicInputField.vue';
-import Accordion from "@/apps/LABOUR/components/Accordion.vue";
+import Stepper from "@/apps/LABOUR/components/Stepper.vue";
 import { icons } from '@/utils/svg';
 import { chevronBackOutline, checkmark } from 'ionicons/icons';
 import Toolbar from "@/apps/ANC/components/Toolbar.vue";
@@ -43,12 +43,24 @@ export default defineComponent ({
     IonTitle,
     IonToolbar,
     BasicInputField,
-    Accordion,
+    Stepper,
   },
   data(){
     return {
       iconsContent: icons,
       isOpen: false,
+      wizardData: [
+        {
+          'title': 'End labour',
+          'class': 'common_step',
+          'checked':'',
+          'icon': false,
+          'disabled':false,
+          'number': 1,
+          'last_step': 'last_step'
+        },
+
+      ],
       StepperData: [
         {
           'title': 'Labour and delivery end',

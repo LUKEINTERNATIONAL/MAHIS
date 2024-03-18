@@ -92,6 +92,7 @@
   import { createModal } from '@/utils/Alerts'
   import { icons } from '@/utils/svg';
   import OtherExams from "@/apps/LABOUR/components/repeatable things/OtherExams.vue";
+  import end from "@/apps/LABOUR/components/repeatable things/end.vue";
   export default defineComponent({
     name: "Home",
     components:{
@@ -123,11 +124,11 @@
         FirstVaginalExamination,
         Vitals,
         OtherExams,
-        PatientReferral,
         ImmidiatePostnatalChecksForChild,
         ImmidiatePostnatalChecksForMother,
         SecondStageDelivery,
-        ThirdStageDelivery
+        ThirdStageDelivery,
+        end
 
 
     },

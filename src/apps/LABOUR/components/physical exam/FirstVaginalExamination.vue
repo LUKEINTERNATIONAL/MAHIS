@@ -3,7 +3,7 @@
     <ion-card class="section">
       <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Cervix</ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="firstVaginalExamination"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+        <basic-form :contentData="firstVaginalExamination"></basic-form>
       </ion-card-content>
     </ion-card>
   </div>

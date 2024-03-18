@@ -189,12 +189,12 @@ export default defineComponent({
       //   this.wizardData[0].checked = false;
       // }
 
-      if(this.DangerSigns[0].selectdData.length > 0){
+      // if(this.DangerSigns[0].selectdData.length > 0){
         this.wizardData[1].checked = true;
         this.wizardData[1].class = 'open_step common_step'
-      }else{
-        this.wizardData[1].checked = false;
-      }
+      // }else{
+      //   this.wizardData[1].checked = false;
+      // }
 
       if(this.diagnosis[0].selectdData.length > 0){
         this.wizardData[2].checked = true;

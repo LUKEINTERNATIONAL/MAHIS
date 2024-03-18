@@ -1023,8 +1023,12 @@ export const usePostnatalWardStayStore = defineStore('postnatalWardStayStore',{
         ] as any,
     }),
     actions:{
-        setHIVStatusANDTreatment(data: any){
-            this.hivStatusAndTreatment = data
+        setDangerSigns(data: any){
+            this.dangerSigns = data
+        }, setvitals(data: any){
+            this.vitals = data
+        }, setOtherExams(data: any){
+            this.otherExams = data
         },
 
 

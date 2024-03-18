@@ -69,7 +69,7 @@ export const useImmediatePostnatalChecksForMotherStore = defineStore('immediateP
                                         unit: 'mmHg',
                                         icon: icons.systolicPressure,
                                         value: '',
-                                        name: 'Systolic',
+                                        name: 'Second systolic',
                                         required: true,
                                         eventType: 'input'
                                     },
@@ -78,7 +78,7 @@ export const useImmediatePostnatalChecksForMotherStore = defineStore('immediateP
                                         unit: 'mmHg',
                                         icon: icons.diastolicPressure,
                                         value: '',
-                                        name: 'Diastolic',
+                                        name: 'Second diastolic',
                                         required: true,
                                         eventType: 'input'
                                     }

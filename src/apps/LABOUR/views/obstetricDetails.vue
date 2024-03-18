@@ -3,7 +3,7 @@
     <Toolbar />
     <ion-content :fullscreen="true">
       <DemographicBar />
-      <Stepper stepperTitle="Obstetric Management" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" @update:inputValue="validateProfileData($event)"  :StepperData="StepperData"/>
+      <Stepper stepperTitle="Obstetric Management" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()"  :StepperData="StepperData"/>
     </ion-content>
   </ion-page>
 </template>
@@ -134,36 +134,11 @@ export default defineComponent({
         'TB',
         'Mental  illiness',
       ];
-      for (const condition of medicalConditions) {
-        const selectedValue = getCheckboxSelectedValue(this.exisitingChronicHealthConditions, condition);
-        console.log(selectedValue);
-      }
 
      },
   mounted(){
     // this.markWizard()
 
-  },
-  watch: {
-
-    vitals: {
-    //   handler(){
-    //     this.markWizard()
-    //   },
-    //   deep: true
-    // },
-    // investigations: {
-    //   handler(){
-    //     this.markWizard()
-    //   },
-    //   deep: true
-    // },
-    // diagnosis: {
-    //   handler(){
-    //     this.markWizard()
-    //   },
-      deep: true
-    }
   },
   setup() {
     return { chevronBackOutline,checkmark };
@@ -204,21 +179,7 @@ export default defineComponent({
         return item?.data;
       });
     },
-    saveData(){ 
-      const errors = []
-      this.StepperData.forEach((stepper)=> {
-        if (!stepper.validation) return
-        Object.keys(stepper.validation).forEach((validationName) => {
-          if (typeof stepper.validation[validationName] === 'function') {
-            const state = stepper.validation[validationName](this[validationName])
-            if (state) errors.push(state)
-          }
-        })
-      })
-      if (errors.length) {
-        return alert(errors.join(','))
-      }
-
+    saveData(){
      },
 
     openModal(){

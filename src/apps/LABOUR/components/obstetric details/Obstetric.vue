@@ -3,13 +3,13 @@
     <ion-card class="section">
       <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">History on previous pregnancies</ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="prevPregnancies"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+        <basic-form :contentData="prevPregnancies" ></basic-form>
       </ion-card-content>
     </ion-card>
     <ion-card class="section">
       <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Past pregnancy problems</ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="pastProblems"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+        <basic-form :contentData="pastProblems" ></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
@@ -72,8 +72,6 @@ export default defineComponent({
       iconsContent: icons,
       vValidations: '' as any,
       hasValidationErrors: [] as any,
-      prevPregnanciesInstance: {} as any,
-      modeOfDeliveryInstance: {} as any,
       currentSection: 0,
       inputField: '' as any,
 
@@ -82,24 +80,11 @@ export default defineComponent({
   computed:{
     ...mapState(useObstreticHistoryStore,["prevPregnancies"]),
     ...mapState(useObstreticHistoryStore,["pastProblems"]),
-    ...mapState(useObstreticHistoryStore,["preterm"]),
-    ...mapState(useObstreticHistoryStore,["abnormalities"]),
-    ...mapState(useObstreticHistoryStore,["modeOfDelivery"]),
-    ...mapState(useObstreticHistoryStore, ["Complications"]),
-    // ...mapState(useObstreticHistoryStore,["HeadssAssesment"]),
-    // ...mapState(useObstreticHistoryStore,["preterm"]),
-    // ...mapState(useObstreticHistoryStore,["abnormalities"]),
-    // ...mapState(useObstreticHistoryStore,["modeOfDelivery"]),
-    // ...mapState(useObstreticHistoryStore, ["Complications"]),
   },
   mounted(){
-    this.prevPregnanciesInstance = useObstreticHistoryStore()
 
   },
   watch:{
-    prevPregnancies: {
-
-    },
   },
   setup() {
     return { checkmark,pulseOutline };
