@@ -190,7 +190,7 @@ export default defineComponent({
     // ...mapState(useCurrentPregnanciesStore, ["currentPregnancies","deliveryDate","lmnp","gestation","tetanus","ultrasound"]),
     // ...mapState(useMedicationsStore,["Medication"]),
     // ...mapState(useWomanBehaviourStore,["dailyCaffeineIntake","Tobacco"])
-     ...mapState(useDemographicsStore,["demographics"]),
+    ...mapState(useDemographicsStore,["demographics"]),
     ...mapState(useObstreticHistoryStore,['preterm']),
     ...mapState(useObstreticHistoryStore,['Complications'])
 

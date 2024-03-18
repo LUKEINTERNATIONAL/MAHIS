@@ -1,5 +1,5 @@
 <template>
-    <ion-searchbar @ionInput="handleInput" placeholder="Search client by MRN or Name" class="searchField"></ion-searchbar>
+    <ion-searchbar @ionInput="handleInput" placeholder="Search client by MRN, name or scan barcode/QR-Code" class="searchField"></ion-searchbar>
     <ion-popover
         :is-open="popoverOpen"
         :event="event"
@@ -53,6 +53,7 @@ import {
     IonCol,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
+import { PatientService } from "@/services/patient_service";
 import { checkmark, add, search } from "ionicons/icons";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
@@ -63,7 +64,6 @@ import CheckPatientNationalID from "@/components/CheckPatientNationalID.vue";
 import { resetPatientData } from "@/services/reset_data";
 import { mapState } from "pinia";
 import Validation from "@/validations/StandardValidations";
-import { PatientService } from "@/services/patient_service";
 
 export default defineComponent({
     name: "Home",
