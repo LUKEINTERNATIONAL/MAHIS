@@ -1,23 +1,31 @@
 <template>
-    <ion-button
-        :fill="$props.fill"
-        :color="color"
-        @click="$emit('clicked:btn')">
-        <span>{{ $props.name }}</span>
-        <ion-icon v-if="icon" :slot="iconSlot" style="font-size: x-large;" :icon="$props.icon"></ion-icon>
+    <ion-button :expand="expand" :fill="$props.fill" :size="size" :color="color" @click="$emit('clicked:btn')">
+        <span v-if="!subName">
+            {{ $props.name }}
+        </span>
+        <span v-if="subName">
+            <span style="margin-bottom: 10px">{{ $props.name }}</span>
 
+            <br />
+            {{ $props.subName }}</span
+        >
+        <ion-icon v-if="icon" :slot="iconSlot" style="font-size: x-large" :icon="$props.icon"></ion-icon>
     </ion-button>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
-import { IonButton  } from "@ionic/vue"
+import { defineComponent, PropType } from "vue";
+import { IonButton } from "@ionic/vue";
 export default defineComponent({
     created() {
-       // this.$emit('onFooterInstance', this)
+        // this.$emit('onFooterInstance', this)
     },
     props: {
         name: {
+            type: String,
+            default: "",
+        },
+        subName: {
             type: String,
             default: "",
         },
@@ -26,26 +34,29 @@ export default defineComponent({
         },
         icon: {
             type: String as any,
-            default:''
+            default: "",
+        },
+        size: {
+            type: String as any,
+            default: "",
+        },
+        expand: {
+            type: String as any,
+            default: "",
         },
         iconSlot: {
             type: String as any,
-            default:'start'
+            default: "start",
         },
         color: {
             type: String,
-            default:'primary'
-        }
-
+            default: "primary",
+        },
     },
     components: {
         IonButton,
     },
-    watch: {
-
-    }
-})
+    watch: {},
+});
 </script>
-<style>
-
-</style>
+<style></style>

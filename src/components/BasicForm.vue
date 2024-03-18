@@ -375,14 +375,14 @@ ion-radio {
 .first_col {
     text-align: left;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 16px;
     color: #636363;
 }
 .bold {
     font-family: "Inter";
     font-style: normal;
     font-weight: 600;
-    font-size: 14px;
+    font-size: 16px;
     color: #00190e;
 }
 .alerts_error {
