@@ -54,6 +54,8 @@ import { useWomanBehaviourStore } from "@/apps/ANC/store/profile/womanBehaviourS
 import { Service } from "@/services/service";
 import { ProfileService } from "@/services/anc_profile_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
+import { formatRadioButtonData } from "@/services/formatServerData";
+import { Preterms } from "../service/preterm";
 
 // function someChecked(options, errorMassage) {
 //   if (!options.filter(v => v.checkboxBtnContent).some(v => v.checkboxBtnContent.data.some(d => d.checked))) {
@@ -185,11 +187,6 @@ export default defineComponent({
         },
     },
     computed: {
-        // ...mapState(useMedicalHistoryStore,["medicalHistory", "allegy", "existingChronicHealthConditions","hivTest","syphilisTest"]),
-        // ...mapState(useObstreticHistoryStore, ["prevPregnancies","preterm","abnormalities","modeOfDelivery","Complications"]),
-        // ...mapState(useCurrentPregnanciesStore, ["currentPregnancies","deliveryDate","lmnp","gestation","tetanus","ultrasound"]),
-        // ...mapState(useMedicationsStore,["Medication"]),
-        // ...mapState(useWomanBehaviourStore,["dailyCaffeineIntake","Tobacco"])
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useObstreticHistoryStore, ["preterm"]),
         ...mapState(useObstreticHistoryStore, ["Complications"]),
@@ -278,23 +275,37 @@ export default defineComponent({
         },
         savePrevPregnancies() {},
 
-        async savePreterm() {
-            const userID: any = Service.getUserID();
-            const pretermInstance = new ProfileService(this.demographics.patient_id, userID);
-            await pretermInstance.createEncounter();
-            const data = await this.buildPreterm();
-            await pretermInstance.saveObservationList(data);
-        },
-        async buildPreterm() {
-            const id = await ConceptService.getConceptID(getRadioSelectedValue(this.preterm, "pretermInfo"));
-            console.log(id);
+        // async savePreterm() {
+        //     const userID: any = Service.getUserID();
+        //     const pretermInstance = new ProfileService(this.demographics.patient_id, userID);
+        //     await pretermInstance.createEncounter();
+        //     const data = await this.buildPreterm();
+        //     await pretermInstance.saveObservationList(data);
+        // },
+        // async buildPreterm() {
+        //     const id = await ConceptService.getConceptID(getRadioSelectedValue(this.preterm, "pretermInfo"));
+        //     console.log(id);
+        //     return [
+        //         {
+        //             concept_id: 7141,
+        //             value_coded: id,
+        //             obs_datetime: Service.getSessionDate(),
+        //         },
+        //     ];
+        // },
+
+        async buildPretermData() {
             return [
-                {
-                    concept_id: 7141,
-                    value_coded: id,
-                    obs_datetime: Service.getSessionDate(),
-                },
+                ...(await formatRadioButtonData(this.preterm)),
             ];
+        },
+        async savePreterm() {
+            const data: any = await this.buildPretermData();
+            if (data.length > 0) {
+                const userID: any = Service.getUserID();
+                const pretermInstance = new Preterms();
+                pretermInstance.onSubmit(this.demographics.patient_id, userID, data);
+            }
         },
 
         openModal() {
