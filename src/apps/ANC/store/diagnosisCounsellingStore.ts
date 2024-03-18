@@ -354,9 +354,6 @@ export const useDiagnosisCounsellingStore = defineStore ('diagnosisCounsellingSt
                     }]
                    } 
             },
-        // ],
-
-        // prEpReason:[
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -765,9 +762,6 @@ export const useDiagnosisCounsellingStore = defineStore ('diagnosisCounsellingSt
         setAspirin(data:any){
             this.aspirin = data
         },
-        setAspirinReason(data:any){
-            this.aspirinReason = data
-        },
         setGDM(data:any){
             this.gdm = data
         },
@@ -779,9 +773,6 @@ export const useDiagnosisCounsellingStore = defineStore ('diagnosisCounsellingSt
         },
         setPrEp(data:any){
             this.prEp = data
-        },
-        setPrEpReason(data:any){
-            this.prEpReason = data
         },
         setSeekingCare(data:any){
             this.seekingCare = data
@@ -811,5 +802,5 @@ export const useDiagnosisCounsellingStore = defineStore ('diagnosisCounsellingSt
             this.breastFeeding = data
         },
     },
-    // persist:true
+     persist:true
 })

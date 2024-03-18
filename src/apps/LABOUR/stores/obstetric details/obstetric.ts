@@ -634,20 +634,9 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
         setPrevPregnancies(data: any){
             this.prevPregnancies = data
         },
-        // setPreterm(data: any){
-        //     this.preterm = data
-        // },
-        // setAbnormalities(data: any){
-        //     this.abnormalities = data
-        // },
-        // setModeOfDelivery(data:any) {
-        //     this.modeOfDelivery = data
-        // },
-        // setComplications(data:any) {
-        //     this.Complications = data
-        // },
+
 
     },
-    // persist:true,
+    persist:true,
 
 })

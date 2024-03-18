@@ -187,8 +187,8 @@ export const useFetalAssessment = defineStore('fetalAssessment',{
 
     }),
     actions:{
-        setVitals(data: any){
-            this.vitals = data
+        setFetalAssessment(data: any){
+            this.fetalAssessment = data
         }
     },
     persist:true,

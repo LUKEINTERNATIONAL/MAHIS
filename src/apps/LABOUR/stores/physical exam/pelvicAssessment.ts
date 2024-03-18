@@ -338,8 +338,8 @@ export const usePelvicAssessmentStore = defineStore('pelvicAssessment',{
         ] as any,
     }),
     actions:{
-        setVaginalExamination(data: any){
-            this.firstVaginalExamination = data
+        setPelvivAssessment(data: any){
+            this.pelvicAssessment = data
         },
     },
     persist:true,

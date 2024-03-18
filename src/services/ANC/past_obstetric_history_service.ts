@@ -5,8 +5,7 @@ import {modifyFieldValue} from "@/services/data_helpers";
 function validaterowData(ev: any) {
     // Check if the event corresponds to the "Gravida" field
     if (ev.name === "Gravida") {
-        let errorMessage = '';
-
+        let errorMessage: string = '';
         // Apply required validation
         if (StandardValidations.required(ev.value) != null) {
             errorMessage = StandardValidations.required(ev.value);

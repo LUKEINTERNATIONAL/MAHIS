@@ -121,14 +121,14 @@ export default defineComponent({
 
        },
         ultrasound:{
-         handler(event){
-           this.handleUltrasound(event)
+         handler(){
+           this.handleUltrasound()
          },
           deep:true
         },
         tetanus:{
-          handler(event){
-            this.handleTetanus(event)
+          handler(){
+            this.handleTetanus()
           },
           deep:true
         },
@@ -146,7 +146,7 @@ export default defineComponent({
           if (event.name == "lmnpDate") {
             const lmnpDateValue = Date.parse(getFieldValue(this.lmnp, 'lmnpDate', 'value'));
             if (!isNaN(lmnpDateValue)) {
-              const currentDate = new Date(); // current date
+              const currentDate = new Date().getTime(); // current date in milliseconds
               const lmnpGestationAge = Math.floor((currentDate - lmnpDateValue) / (1000 * 60 * 60 * 24 * 7)); // calculate gestation age in weeks
               modifyFieldValue(this.lmnp, 'lmnpGestationAge', 'value', lmnpGestationAge);
             } else {

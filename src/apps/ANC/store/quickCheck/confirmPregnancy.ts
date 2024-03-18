@@ -69,8 +69,11 @@ export const useConfirmPregnancyStore = defineStore('confirmPregnancyStore',{
         ] as any
     }),
     actions:{
-        setPersonalInformation(data: any){
-            this.ConfirmedPregnancy = data
+        setConfirmPregnancy(data: any){
+            this.ConfirmPregnancy = data
+        },
+        setPlannedPregnancy(data: any){
+            this.PlannedPregnancy = data
         }
     },
     persist:true,

@@ -181,6 +181,7 @@ export class VitalsService extends AppEncounterService{
       {
         name: "Pulse rate*",
         validator: (val: any) => {
+          const errors = []
           errors.push(this.isNotEmptyandNumber(val))
           const minErrors = this.checkMinMax(val, 60, 120);
           return this.mergeErrors([minErrors]); 
@@ -189,6 +190,7 @@ export class VitalsService extends AppEncounterService{
       {
         name: "Oxygen saturation",
         validator: (val: any) => {
+          const errors = []
           errors.push(this.isNotEmptyandNumber(val))
           const minErrors = this.checkMinMax(val, 60, 120);
           return this.mergeErrors([minErrors]);
@@ -197,6 +199,7 @@ export class VitalsService extends AppEncounterService{
       {
         name: "Respiratory rate",
         validator: (val: any) => {
+          const errors = []
           errors.push(this.isNotEmptyandNumber(val))
           const minErrors = this.checkMinMax(val, 60, 120);
           return this.mergeErrors([minErrors]);

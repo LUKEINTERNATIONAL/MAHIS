@@ -322,24 +322,6 @@ export const useImmunizationStore = defineStore ('immunizationStore', {
         setTTDoses(data:any){
             this.ttDoses = data
         },
-        setTT1(data:any){
-            this.tt1 = data
-        },
-        setTT2(data:any){
-            this.tt2 = data
-        },
-        setTT3(data:any){
-            this.tt3 = data
-        },
-        setTT4(data:any){
-            this.tt4 = data
-        },
-        setTT5(data:any){
-            this.tt5 = data
-        },
-        setTTReason(data:any){
-            this.ttReason = data
-        },
         setHepB1(data:any){
             this.HepB1 = data
         },

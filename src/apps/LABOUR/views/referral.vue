@@ -145,19 +145,6 @@ export default defineComponent({
       });
     },
     saveData(){
-      const errors = []
-      this.StepperData.forEach((stepper)=> {
-        if (!stepper.validation) return
-        Object.keys(stepper.validation).forEach((validationName) => {
-          if (typeof stepper.validation[validationName] === 'function') {
-            const state = stepper.validation[validationName](this[validationName])
-            if (state) errors.push(state)
-          }
-        })
-      })
-      if (errors.length) {
-        return alert(errors.join(','))
-      }
 
     },
 

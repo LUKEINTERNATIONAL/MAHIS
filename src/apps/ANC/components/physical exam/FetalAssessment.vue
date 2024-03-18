@@ -66,7 +66,7 @@ export default defineComponent({
     ...mapState(useFetalAssessment,["fetalAssessment"]),
   },
   mounted(){
-        this.handleFetalAssessment()
+        // this.handleFetalAssessment()
   },
   watch: {
     fetalAssessment:{
@@ -85,11 +85,11 @@ export default defineComponent({
       menuController.close()
       this.$router.push(url);
     },
-    handleFetalAssessment(){
-      if(getRadioSelectedValue(this.PreviousVisit, 'Yes')=='yes'){
-        modifyFieldValue(this.PreviousVisit,'number of fetuses','displayNone', false)
-      }   else {modifyFieldValue(this.PreviousVisit,'number of fetuses','displayNone', true)}
-    }
+    // handleFetalAssessment(){
+    //   if(getRadioSelectedValue(this.PreviousVisit, 'Yes')=='yes'){
+    //     modifyFieldValue(this.PreviousVisit,'number of fetuses','displayNone', false)
+    //   }   else {modifyFieldValue(this.PreviousVisit,'number of fetuses','displayNone', true)}
+    // }
 
   }
 });

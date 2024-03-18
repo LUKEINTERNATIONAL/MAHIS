@@ -507,8 +507,8 @@ export const usePhysicalExamStore = defineStore('physicalExamStore',{
         ] as any,
     }),
     actions:{
-        setPhysicalExamination(data: any){
-            this.physicalExamination = data
+        setLabourVitals(data: any){
+            this.vitals = data
         },
     },
     persist:true,

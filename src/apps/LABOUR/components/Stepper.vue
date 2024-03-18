@@ -83,6 +83,12 @@
   import FirstVaginalExamination from "@/apps/LABOUR/components/physical exam/FirstVaginalExamination.vue";
   import PelvicAssessment from "@/apps/LABOUR/components/physical exam/PelvicAssessment.vue";
   import PatientReferral from "@/apps/LABOUR/components/repeatable things/PatientReferral.vue";
+  import ImmidiatePostnatalChecksForChild
+    from "@/apps/LABOUR/components/delivery details/ImmidiatePostnatalChecksForChild.vue";
+  import ImmidiatePostnatalChecksForMother
+    from "@/apps/LABOUR/components/delivery details/ImmidiatePostnatalChecksForMother.vue";
+  import SecondStageDelivery from "@/apps/LABOUR/components/delivery details/SecondStageDelivery.vue";
+  import ThirdStageDelivery from "@/apps/LABOUR/components/delivery details/ThirdStageDelivery.vue";
   import { createModal } from '@/utils/Alerts'
   import { icons } from '@/utils/svg';
   import OtherExams from "@/apps/LABOUR/components/repeatable things/OtherExams.vue";
@@ -117,7 +123,12 @@
         FirstVaginalExamination,
         Vitals,
         OtherExams,
-        PatientReferral
+        PatientReferral,
+        ImmidiatePostnatalChecksForChild,
+        ImmidiatePostnatalChecksForMother,
+        SecondStageDelivery,
+        ThirdStageDelivery
+
 
     },
     data(){

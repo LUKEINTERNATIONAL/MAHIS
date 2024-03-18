@@ -159,7 +159,6 @@ export default defineComponent({
         ReasonForVisit,
         ConfirmPregnancy,
         SpecificHealthConcerns,
-        AncVitals,
         FetalPresentation,
         FetalAssessment,
         MaternalExam,

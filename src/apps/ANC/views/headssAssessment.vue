@@ -2,7 +2,7 @@
   <ion-page>
     <Toolbar/>
     <ion-content :fullscreen="true">
-      <Accordion  :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
+      <Stepper  stepper-title="HEADSS Assessment" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
     </ion-content>
   </ion-page>
 </template>
@@ -22,6 +22,7 @@ import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import { defineComponent } from 'vue';
 import BasicInputField from '@/components/BasicInputField.vue';
 import Accordion from "@/apps/ANC/components/Accordion.vue";
+import Stepper from "@/apps/ANC/components/Stepper.vue";
 import { icons } from '@/utils/svg';
 import { chevronBackOutline, checkmark } from 'ionicons/icons';
 import headAssessment from "@/apps/ANC/components/others/headAssessment.vue";
@@ -44,7 +45,8 @@ export default defineComponent ({
     IonToolbar,
     BasicInputField,
     Accordion,
-    headAssessment
+    headAssessment,
+    Stepper
   },
   data(){
     return {

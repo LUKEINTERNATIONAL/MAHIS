@@ -538,8 +538,11 @@ export const useOtherExamsStore = defineStore('otherExamsStore',{
         ]
     }),
     actions:{
-        setVaginalExamination(data: any){
-            this.firstVaginalExamination = data
+        setOtherExams(data: any){
+            this.otherExams = data
+        },
+        setUrine(data: any){
+            this.urine = data
         },
     },
     persist:true,

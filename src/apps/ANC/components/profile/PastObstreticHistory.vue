@@ -1,12 +1,6 @@
 <template>
     <div class="container">
         <ion-card class="section">
-          <ion-card class="section">
-            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">The client is below 19, complete the HEADSS assessment</ion-card-title></ion-card-header>
-            <ion-card-content>
-              <basic-form :contentData="HeadssAssesment"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
-            </ion-card-content>
-          </ion-card>
             <ion-card-header> <ion-card-title class="sub_item_header">History on previous pregnancies</ion-card-title></ion-card-header>
             <ion-card-content>
               <basic-form :contentData="prevPregnancies"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
@@ -109,7 +103,6 @@ export default defineComponent({
   },
   computed:{
         ...mapState(useObstreticHistoryStore,["prevPregnancies"]),
-        ...mapState(useObstreticHistoryStore,["HeadssAssesment"]),
         ...mapState(useObstreticHistoryStore,["preterm"]),
         ...mapState(useObstreticHistoryStore,["abnormalities"]),
         ...mapState(useObstreticHistoryStore,["modeOfDelivery"]),
@@ -240,7 +233,7 @@ export default defineComponent({
                 field.data.rowData.length > 1 && field.data.rowData[1].colData[1].name === "Stillbirths");
 
             if (gravidaField && event.name === gravidaField.data.rowData[0].colData[0].name) {
-              let errorMessage = '';
+              let errorMessage: string = '';
 
               if (StandardValidations.required(event.value) != null) {
                 errorMessage = StandardValidations.required(event.value);

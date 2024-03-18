@@ -17,19 +17,7 @@ function checkMinMax(val: any, min: number, max: number): boolean {
 
 
 export default {
-    isFloatingPointNumber,
-    validateSeries,
     required,
-    isMWPhoneNumber,
-    isName,
     isNumber,
-    hasLengthRangeOf,
-    rangeOf,
-    neitherOr,
-    anyEmpty,
-    notTheSame,
-    isIPAddress,
-    isMWNationalID,
-    isEstimationDate,
     checkMinMax
 }

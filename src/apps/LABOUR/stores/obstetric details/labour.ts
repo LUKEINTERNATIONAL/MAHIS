@@ -373,9 +373,6 @@ export const useLabourDetailsStore = defineStore('labourDetailsStore',{
         setLabourDetails(data: any){
             this.labourDetails = data
         },
-        setPastProblems(data: any){
-            this.pastProblems = data
-        },
     },
     persist:true,
 

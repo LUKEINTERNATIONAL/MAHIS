@@ -74,48 +74,18 @@
   import Toolbar from '@/components/Toolbar.vue'
   import ToolbarSearch from '@/components/ToolbarSearch.vue'
   import { chevronBackOutline,checkmark } from 'ionicons/icons';
-  import Diagnosis from '@/apps/NCD/components/ConsultationPlan/Diagnosis.vue'
-  import Complications from '@/apps/NCD/components/ConsultationPlan/Complications.vue'
-  import ConfirmDiagnosis from '@/apps/NCD/components/ConsultationPlan/ConfirmDiagnosis.vue'
-  import Outcome from '@/apps/NCD/components/ConsultationPlan/Outcome.vue'
-  import Investigations from '@/apps/NCD/components/ConsultationPlan/Investigations.vue'
-  import Medications from "@/apps/ANC/components/profile/Medications.vue";
-  import WomanBehaviour from "@/apps/ANC/components/profile/WomanBehaviour.vue";
-  import DangerSigns from "@/apps/ANC/components/quick check/DangerSigns.vue";
-  import ConfirmPregnancy from "@/apps/ANC/components/quick check/ConfirmPregnancy.vue";
-  import ReasonForVisit from "@/apps/ANC/components/quick check/ReasonForVisit.vue";
-  import SpecificHealthConcerns from "@/apps/ANC/components/quick check/SpecificHealthConcerns.vue";
-  import AncVitals from "@/apps/ANC/components/physical exam/AncVitals.vue"
-  import FetalAssessment from "@/apps/ANC/components/physical exam/FetalAssessment.vue";
-  import FetalPresentation from "@/apps/ANC/components/physical exam/FetalPresentation.vue";
-  import MaternalExam from "@/apps/ANC/components/physical exam/MaternalExam.vue";
-  import PresentingSigns from "@/apps/ANC/components/physical exam/PresentingSigns.vue";
-  import CurrentPregnancies from '@/apps/ANC/components/profile/CurrentPregnancies.vue';
-  import PastObstetricHistory from "@/apps/ANC/components/profile/PastObstreticHistory.vue";
-  import UltrasoundScan from '@/apps/ANC/components/lab_tests/UltrasoundScan.vue';
-  import UrineTest from '@/apps/ANC/components/lab_tests/UrineTest.vue';
-  import TB from '@/apps/ANC/components/lab_tests/TB.vue';
-  import DiagnosisTreatment from '@/apps/ANC/components/Treatment/DiagnosisTreatment.vue'
-  import DiagnosisCounselling from '@/apps/ANC/components/Treatment/DiagnosisCounselling.vue';
-  import Immunization from '@/apps/ANC/components/Treatment/Immunization.vue';
-  import IntimatePartner from '@/apps/ANC/components/Treatment/IntimatePartner.vue';
-  import Deworming from '@/apps/ANC/components/Treatment/Deworming.vue';
+  import DeliveryDetails from "@/apps/PNC/components/postnatal details/DeliveryDetails.vue";
+  import HIVStatusAndTreatment from "@/apps/PNC/components/postnatal details/HIVStatusAndTreatment.vue";
+  import ObstetricDetails from "@/apps/PNC/components/postnatal details/ObstetricDetails.vue";
   import SaveProgressModal from '@/components/SaveProgressModal.vue'
-  import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue";
-  import MedicalFollowUp from '@/apps/ANC/components/symptomsFollowUp/MedicalFollowUp.vue';
-  import PersistentBehaviour from '@/apps/ANC/components/symptomsFollowUp/PersistentBehaviour.vue';
-  import PersistentSymptoms from '@/apps/ANC/components/symptomsFollowUp/PersistentSymptoms.vue';
-  import CurrentPhysiologicalSymptoms from '@/apps/ANC/components/symptomsFollowUp/CurrentPhysiologicalSymptoms.vue';
-  import Ipv from '@/apps/ANC/components/symptomsFollowUp/Ipv.vue';
-  import FatalMovement from '@/apps/ANC/components/symptomsFollowUp/FatalMovement.vue';
-  import BehaviourCounselling from '@/apps/ANC/components/counselling/BehaviourCounselling.vue';
-  import PhysiologicalCounseling from '@/apps/ANC/components/counselling/PhysiologicalCounseling.vue';
-  import DietCounselling from '@/apps/ANC/components/counselling/DietCounselling.vue';
-  import Referral from '@/apps/ANC/components/referral/Referral.vue';
-  import AncEnd  from  '@/apps/ANC/components/ancEnd/AncEnd.vue';
-  import Vitals from '@/apps/ANC/components/physical exam/Vitals.vue'
   import { createModal } from '@/utils/Alerts'
   import { icons } from '@/utils/svg';
+  import PostnatalWardMonitoring from "@/apps/PNC/components/postanatal ward stay/PostnatalWardMonitoring.vue";
+  import BabyStatus from "@/apps/PNC/components/postanatal ward stay/BabyStatus.vue";
+  import VisitForMother from "@/apps/PNC/components/postnatal visits/VisitForMother.vue";
+  import VisitForBaby from "@/apps/PNC/components/postnatal visits/VisitForBaby.vue";
+  import DischargeWoman from "@/apps/PNC/components/others/DischargeWoman.vue";
+  import PNCEnd from "@/apps/PNC/components/others/PNCEnd.vue";
   export default defineComponent({
     name: "Home",
     components:{
@@ -137,46 +107,17 @@
         IonAccordionGroup,
         IonItem,
         IonLabel,
-        Vitals,
-        Diagnosis,
-        Complications,
-        ConfirmDiagnosis,
-        Outcome,
-        Investigations,
         IonModal,
-        Medications,
-        WomanBehaviour,
-        MedicalHistory,
-        DangerSigns,
-        ReasonForVisit,
-        ConfirmPregnancy,
-        SpecificHealthConcerns,
-        AncVitals,
-        FetalPresentation,
-        FetalAssessment,
-        MaternalExam,
-        PresentingSigns,
-        CurrentPregnancies,
-        PastObstetricHistory,
-        UltrasoundScan,
-        UrineTest,
-        TB,
-        MedicalFollowUp,
-        PersistentBehaviour,
-        PersistentSymptoms,
-        CurrentPhysiologicalSymptoms,
-        Ipv,
-        FatalMovement,
-        BehaviourCounselling,
-        PhysiologicalCounseling,
-        DietCounselling,
-        Referral,
-        AncEnd,
-        DiagnosisTreatment,
-        DiagnosisCounselling,
-        Immunization,
-        IntimatePartner,
-        Deworming,
+        DeliveryDetails,
+        HIVStatusAndTreatment,
+        ObstetricDetails,
+        PostnatalWardMonitoring,
+        BabyStatus,
+        VisitForMother,
+        VisitForBaby,
+        DischargeWoman,
+        PNCEnd
+
 
     },
     data(){

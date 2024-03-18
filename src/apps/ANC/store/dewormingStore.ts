@@ -34,9 +34,7 @@ export const useDewormingStore = defineStore ('dewormingStore', {
                 }
                     
             },
-        // ],
 
-        // treatmentType:[
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -67,9 +65,7 @@ export const useDewormingStore = defineStore ('dewormingStore', {
                 }
                     
             },
-        // ],
 
-        // treatmentReason:[
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -216,12 +212,6 @@ export const useDewormingStore = defineStore ('dewormingStore', {
     actions:{
         setTreatment(data:any){
             this.treatment = data
-        },
-        setTreatmentType(data:any){
-            this.treatmentType = data
-        },
-        setTreatmentReason(data:any){
-            this.treatmentReason = data
         },
         setMalaria(data:any){
             this.malaria = data

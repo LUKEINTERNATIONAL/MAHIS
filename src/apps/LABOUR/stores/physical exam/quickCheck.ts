@@ -240,9 +240,7 @@ export const useQuickCheckStore = defineStore('labourDetailsStore',{
 
     }),
     actions:{
-        setLabourDetails(data: any){
-            this.labourDetails = data
-        },
+
         setPastProblems(data: any){
             this.pastProblems = data
         },
