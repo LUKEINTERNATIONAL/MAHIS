@@ -8,7 +8,7 @@ export const useHeadssAssessmentStore = defineStore('headssAssessmentStore',{
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
+                classDash: '',
                 radioBtnContent:
                     {
                         header:{
@@ -46,7 +46,7 @@ export const useHeadssAssessmentStore = defineStore('headssAssessmentStore',{
                             },
                             {
                                 name: 'Friend',
-                                value: 'No one',
+                                value: 'friend',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
@@ -60,7 +60,7 @@ export const useHeadssAssessmentStore = defineStore('headssAssessmentStore',{
                             },
                             {
                                 name: 'Other',
-                                value: 'No one',
+                                value: 'other',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
@@ -68,6 +68,33 @@ export const useHeadssAssessmentStore = defineStore('headssAssessmentStore',{
                         ]
                     }
 
+            },
+            {
+                isFinishBtn: false,
+                sectionHeader: '',
+                classDash: 'dashed_bottom_border _padding',
+
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        displayNone:true,
+                                        inputHeader: 'Specify',
+                                        unit: '',
+                                        icon: icons.editPen,
+                                        value: '',
+                                        name: 'Other',
+                                        required: true,
+                                        eventType: 'input',
+                                        inputWidth: "100%",
+                                    },
+
+                                ]
+                            }
+                        ]
+                    },
             },
 
             {
