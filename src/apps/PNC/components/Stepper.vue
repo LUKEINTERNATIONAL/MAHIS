@@ -154,7 +154,6 @@
               if (item.number == ev.detail.value) {
                   item.class = 'open_step common_step';
               }
-
             }
           });
             this.$emit("updateStatus", ev);
