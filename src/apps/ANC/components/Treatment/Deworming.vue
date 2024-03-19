@@ -4,8 +4,8 @@
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="treatment"></basic-form>
-                <basic-form :contentData="treatmentType"></basic-form>
-                <basic-form :contentData="treatmentReason"></basic-form>
+                <!-- <basic-form :contentData="treatmentType"></basic-form>
+                <basic-form :contentData="treatmentReason"></basic-form> -->
             </ion-card-content>
     </ion-card>
 
@@ -44,6 +44,7 @@ import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import {useDewormingStore} from '../../store/dewormingStore';
+import { getRadioSelectedValue, modifyCheckboxValue, modifyFieldValue, modifyRadioValue } from '@/services/data_helpers';
 export default defineComponent({
     name: "Counselling",
     components:{
@@ -64,7 +65,7 @@ export default defineComponent({
       IonRadioGroup
   },
   
-          data() {
+    data() {
       return {
           iconsContent: icons,
           currentSection: 0,
@@ -73,18 +74,53 @@ export default defineComponent({
     },
     computed:{
          ...mapState(useDewormingStore,["treatment"]),
-         ...mapState(useDewormingStore,["treatmentType"]),
-         ...mapState(useDewormingStore,["treatmentReason"]),
+        //  ...mapState(useDewormingStore,["treatmentType"]),
+        //  ...mapState(useDewormingStore,["treatmentReason"]),
          ...mapState(useDewormingStore,["malaria"]),
          ...mapState(useDewormingStore,["malariaReason"]),
       },
       mounted(){
-         
+         this.handlepreventive()
+         this.handleNoPreventative()
+         this.handleOther()
       },
       setup() {
         return { checkmark,pulseOutline };
       },
+      watch:{
+        treatment:{
+          handler(){
+            this.handlepreventive()
+            this.handleNoPreventative()
+            this.handleOther()
+          },
+          deep:true
+        }
+      },
       methods:{
+        handlepreventive(){
+          if(getRadioSelectedValue(this.treatment,'preventive')=='yes'){
+            modifyRadioValue(this.treatment,'treatInfo','displayNone',false)
+          }else{
+            modifyRadioValue(this.treatment,'treatInfo','displayNone',true)
+          }
+          console.log(getRadioSelectedValue(this.treatment,'preventive'))
+         
+        },
+        handleNoPreventative(){
+          if(getRadioSelectedValue(this.treatment,'preventive')=='no'){
+            modifyRadioValue(this.treatment,'reason','displayNone',false)
+          }else{
+             modifyRadioValue(this.treatment,'reason','displayNone',true)
+          }
+        },
+        handleOther(){
+          if(getRadioSelectedValue(this.treatment,'reason',)=='other'){
+            modifyFieldValue(this.treatment,'Specify','displayNone',false)
+          }else{
+             modifyFieldValue(this.treatment,'Specify','displayNone',true)
+          }
+        },
         goToNextSection() {
       if (this.currentSection < 1) {
         this.currentSection++;

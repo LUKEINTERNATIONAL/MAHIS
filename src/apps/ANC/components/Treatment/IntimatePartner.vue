@@ -4,7 +4,7 @@
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="ipv"></basic-form>
-                <basic-form :contentData="ipvReason"></basic-form>
+                <!-- <basic-form :contentData="ipvReason"></basic-form> -->
             </ion-card-content>
         </ion-card>
 
@@ -74,8 +74,7 @@ import BasicForm from '../../../../components/BasicForm.vue';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import { icons } from '../../../../utils/svg'; 
 import {useIntimatePartnerStore } from '../../store/intimatePartnerStore';
-
-
+import { getCheckboxSelectedValue, getRadioSelectedValue, modifyCheckboxValue, modifyFieldValue, modifyRadioValue } from '@/services/data_helpers';
 
 export default defineComponent ({
     name: "intimatePartner",
@@ -106,7 +105,7 @@ export default defineComponent ({
     },
     computed:{
          ...mapState(useIntimatePartnerStore, ["ipv"]),
-         ...mapState(useIntimatePartnerStore, ["ipvReason"]),
+        //  ...mapState(useIntimatePartnerStore, ["ipvReason"]),
          ...mapState(useIntimatePartnerStore, ["additionalCare"]),
          ...mapState(useIntimatePartnerStore, ["safety_assessment"]),
          ...mapState(useIntimatePartnerStore, ["physical_violence"]),
@@ -116,9 +115,27 @@ export default defineComponent ({
          ...mapState(useIntimatePartnerStore, ["strangling"]),
          ...mapState(useIntimatePartnerStore, ["murder_threat"]),
          ...mapState(useIntimatePartnerStore, ["referrals"]),
-      
-   
+  
 
+    },
+    mounted() {
+        this.handleIntimate()
+        this.handleOtherIpv()
+        this.handleReferal()
+    },
+    watch:{
+      ipv:{
+        handler(){
+        this.handleIntimate()
+        this.handleOtherIpv()
+      },
+        deep:true
+      },
+      referrals:{
+        handler(){
+          this.handleReferal()
+        },deep:true
+      }
     },
     methods :{
         goToNextSection() {
@@ -131,6 +148,41 @@ export default defineComponent ({
         this.currentSection--;
       }
     },
+      handleIntimate(){
+        if(getRadioSelectedValue(this.ipv,'intimateInfo')=='no'){
+          modifyRadioValue(this.ipv,'reasonIPV','displayNone',false)
+        }else{
+          modifyRadioValue(this.ipv,'reasonIPV','displayNone',true)
+        }
+      },
+      handleOtherIpv(){
+        if(getRadioSelectedValue(this.ipv,'reasonIPV')=='other'){
+          modifyFieldValue(this.ipv,'other','displayNone',false)
+        }else{
+           modifyFieldValue(this.ipv,'other','displayNone',true)
+        }
+      },
+      handleReferal(){
+        if(getCheckboxSelectedValue(this.referrals,'Other')?.value =='other'){
+          modifyFieldValue(this.referrals,'Specify','displayNone',false)
+        }else{
+          modifyFieldValue(this.referrals,'Specify','displayNone',true)
+        }
+
+        const checkBoxes=['Care at another facility','Crisis intervention or counselling','Police','Shelter or housing',
+                         'Shelter or housing','Child protection','Livelihood support','Other',]
+
+      if (getCheckboxSelectedValue(this.referrals, 'None')?.checked) {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.referrals, checkbox, 'checked', false);
+            modifyCheckboxValue(this.referrals, checkbox, 'disabled', true);
+        });
+        } else {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.referrals, checkbox, 'disabled', false);
+        });
+    }
+      },
     }
 
 })

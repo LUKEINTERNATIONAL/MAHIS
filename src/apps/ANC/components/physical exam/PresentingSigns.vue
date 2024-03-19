@@ -7,7 +7,7 @@
       </ion-card-header>
       <ion-card-content>
         <basic-form :contentData="signsOfInjury"></basic-form>
-        <basic-form :contentData="abdominalInjury"></basic-form>
+       <!-- <basic-form :contentData="abdominalInjury"></basic-form> -->
       </ion-card-content>
     </ion-card>
 
@@ -27,7 +27,7 @@
         <ion-card-title class="dashed_bottom_border sub_item_header">Violence to the woman</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="violence"></basic-form>
+        <!-- <basic-form :contentData="violence"></basic-form> -->
         <basic-form :contentData="intimateViolence"></basic-form>
       </ion-card-content>
     </ion-card>
@@ -83,8 +83,8 @@ export default defineComponent({
   computed:{
 
     ...mapState(usePresentingSigns,["signsOfInjury"]),
-    ...mapState(usePresentingSigns,["abdominalInjury"]),
-    ...mapState(usePresentingSigns,["violence"]),
+    // ...mapState(usePresentingSigns,["abdominalInjury"]),
+    // ...mapState(usePresentingSigns,["violence"]),
     ...mapState(usePresentingSigns,["clinicalEnquiry"]),
     ...mapState(usePresentingSigns,["intimateViolence"]),
   },

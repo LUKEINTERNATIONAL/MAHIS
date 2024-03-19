@@ -3,7 +3,7 @@
     <ion-card class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="preEclampsia"></basic-form>
+                <!-- <basic-form :contentData="preEclampsia"></basic-form> -->
                 <basic-form :contentData="preEclampsiaCounselling"></basic-form>
             </ion-card-content>
     </ion-card>
@@ -12,7 +12,7 @@
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="aspirin"></basic-form>
-                <basic-form :contentData="aspirinReason"></basic-form>
+                <!-- <basic-form :contentData="aspirinReason"></basic-form> -->
             </ion-card-content>
     </ion-card>
 
@@ -29,7 +29,7 @@
             <ion-card-content>
                 <basic-form :contentData="hivRisk"></basic-form>
                 <basic-form :contentData="prEp"></basic-form>
-                 <basic-form :contentData="prEpReason"></basic-form>
+                 <!-- <basic-form :contentData="prEpReason"></basic-form> -->
             </ion-card-content>
     </ion-card>
 
@@ -87,6 +87,8 @@ import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import {useDiagnosisCounsellingStore} from '../../store/diagnosisCounsellingStore'
+import { getFieldValue, getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from '@/services/data_helpers';
+import { getFrequencyLabelOrCheckCode } from '@/services/drug_prescription_service';
 export default defineComponent({
     name: "Counselling",
     components:{
@@ -116,15 +118,15 @@ export default defineComponent({
       };
     },
     computed:{
-         ...mapState(useDiagnosisCounsellingStore,["preEclampsia"]),
+         //...mapState(useDiagnosisCounsellingStore,{}"preEclampsia"]),
          ...mapState(useDiagnosisCounsellingStore,["preEclampsiaCounselling"]),
          ...mapState(useDiagnosisCounsellingStore,["aspirin"]),
-         ...mapState(useDiagnosisCounsellingStore,["aspirinReason"]),
+        // ...mapState(useDiagnosisCounsellingStore,["aspirinReason"]),
          ...mapState(useDiagnosisCounsellingStore,["gdm"]),
          ...mapState(useDiagnosisCounsellingStore,["gdmCounselling"]),
          ...mapState(useDiagnosisCounsellingStore,["hivRisk"]),
          ...mapState(useDiagnosisCounsellingStore,["prEp"]),
-         ...mapState(useDiagnosisCounsellingStore,["prEpReason"]),
+        // ...mapState(useDiagnosisCounsellingStore,["prEpReason"]),
          ...mapState(useDiagnosisCounsellingStore,["seekingCare"]),
          ...mapState(useDiagnosisCounsellingStore,["dangerSigns"]),
          ...mapState(useDiagnosisCounsellingStore,["ancContact"]),
@@ -136,12 +138,91 @@ export default defineComponent({
          ...mapState(useDiagnosisCounsellingStore,["breastFeeding"]),
       },
       mounted(){
-         
+         this.handleAsprin()
+         this.handleAsprinNotProided()
+         this. handleOtherNoAsprin()
+         this.handlePrep()
+         this. handlePrepNotProvided()
+         this.handleOtherPrep()
+         this.handleBirthPlace()
+      },
+      watch:{
+        aspirin:{
+          handler(){
+            this.handleAsprin()
+            this.handleAsprinNotProided()
+            this. handleOtherNoAsprin()
+          },
+          deep:true
+        },
+        prEp:{
+          handler(){
+            this.handlePrep()
+            this. handlePrepNotProvided()
+            this.handleOtherPrep()
+          },
+          deep:true
+        },
+        birthPlace:{
+          handler(){
+            this.handleBirthPlace()
+          },deep:true
+        }
       },
       setup() {
         return { checkmark,pulseOutline };
       },
       methods:{
+        handleAsprin(){
+          if(getRadioSelectedValue(this.aspirin,'asprinInfo')=='yes'){
+            modifyFieldValue(this.aspirin,'amount','displayNone',false)
+          }else{
+            modifyFieldValue(this.aspirin,'amount','displayNone',true)
+          }
+        },
+        handleAsprinNotProided(){
+          if(getRadioSelectedValue(this.aspirin,'asprinInfo')=='no'){
+            modifyRadioValue(this.aspirin,'reasonNotProvided','displayNone',false)
+          }else{
+            modifyRadioValue(this.aspirin,'reasonNotProvided','displayNone',true)
+          }
+        },
+        handleOtherNoAsprin(){
+          if(getRadioSelectedValue(this.aspirin,'reasonNotProvided')=='other'){
+            modifyFieldValue(this.aspirin,'Specify','displayNone',false)
+          }else{
+             modifyFieldValue(this.aspirin,'Specify','displayNone',true)
+          }
+          console.log(getRadioSelectedValue(this.aspirin,'Other'))
+        },
+        handlePrep(){
+          if(getRadioSelectedValue(this.prEp,'prepInfo')=='yes'){
+            modifyFieldValue(this.prEp,'PreP','displayNone',false)
+          }else{
+            modifyFieldValue(this.prEp,'PreP','displayNone',true)
+          }
+        },
+        handlePrepNotProvided(){
+          if(getRadioSelectedValue(this.prEp,'prepInfo')=='no'){
+            modifyRadioValue(this.prEp,'reasonPrep','displayNone',false)
+          }else{
+            modifyRadioValue(this.prEp,'reasonPrep','displayNone',true)
+          }
+        },
+        handleOtherPrep(){
+          if(getRadioSelectedValue(this.prEp,'reasonPrep')=='other'){
+            modifyFieldValue(this.prEp,'Specify','displayNone',false)
+          }else{
+            modifyFieldValue(this.prEp,'Specify','displayNone',true)
+          }
+        },
+        handleBirthPlace(){
+          if(getRadioSelectedValue(this.birthPlace,'birthPlace')=='other'){
+            modifyFieldValue(this.birthPlace,'Specify','displayNone',false)
+          }else{
+            modifyFieldValue(this.birthPlace,'Specify','displayNone',true)
+          }
+        },
          //Method for navigating sections
     goToNextSection() {
       if (this.currentSection < 6) {

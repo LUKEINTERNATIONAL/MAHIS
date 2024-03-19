@@ -15,68 +15,66 @@
         </ion-content>
     </ion-menu>
 </template>
-  
-<script lang="ts">
-    import { 
-            IonContent, 
-            IonHeader,
-            IonItem,
-            IonList,
-            IonTitle, 
-            IonToolbar, 
-            IonMenu,
-            menuController 
-        } from '@ionic/vue';
-    import { defineComponent } from 'vue';
 
-    export default defineComponent({
-    name: 'Menu',
-    components:{
+<script lang="ts">
+import {
+    IonContent,
+    IonHeader,
+    IonItem,
+    IonList,
+    IonTitle,
+    IonToolbar,
+    IonMenu,
+    menuController,
+} from "@ionic/vue";
+import { defineComponent } from "vue";
+
+export default defineComponent({
+    name: "Menu",
+    components: {
         IonContent,
         IonHeader,
         IonItem,
         IonList,
         IonMenu,
         IonTitle,
-        IonToolbar
+        IonToolbar,
     },
-    methods:{
-        navigationMenu(url: any){
-            menuController.close()
+    methods: {
+        navigationMenu(url: any) {
+            menuController.close();
             this.$router.push(url);
-        }
-        
-    }
-    });
+        },
+    },
+});
 </script>
 
 <style scoped>
 #container {
-text-align: center;
+    text-align: center;
 
-position: absolute;
-left: 0;
-right: 0;
-top: 50%;
-transform: translateY(-50%);
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 #container strong {
-font-size: 20px;
-line-height: 26px;
+    font-size: 20px;
+    line-height: 26px;
 }
 
 #container p {
-font-size: 16px;
-line-height: 22px;
+    font-size: 16px;
+    line-height: 22px;
 
-color: #8c8c8c;
+    color: #8c8c8c;
 
-margin: 0;
+    margin: 0;
 }
 
 #container a {
-text-decoration: none;
+    text-decoration: none;
 }
 </style>
-  
