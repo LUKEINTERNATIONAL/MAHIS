@@ -193,7 +193,7 @@
       <div class="login-container">
         <ion-card style="background-color: #fff;">
           <ion-card-content>
-            <ion-img class="login_img" src="/public/logo.png" alt="logo" width="100" height="100"></ion-img>
+            <ion-img class="login_img" :src="loginIcon" id="logo"></ion-img>
             <ion-title class="login-title">Mahis</ion-title>
             <div>
               <ion-item>
@@ -216,13 +216,50 @@
 </template>
 
 <script lang="ts">
-import { ref } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { authenticate } from "@/services/ANC/login";
 import { useRouter } from 'vue-router';
 import { emrApiClient } from '@/services/ANC/emr_api_client';
+import img from "@/utils/Img"
+import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle,
+     IonToolbar,IonButton, IonCard, IonCardContent, IonCardHeader,
+      IonCardSubtitle, IonCardTitle, IonAccordion, IonAccordionGroup, IonItem, IonLabel,IonInput,IonImg } from '@ionic/vue';
+  import Toolbar from '@/components/Toolbar.vue'
+  import ToolbarSearch from '@/components/ToolbarSearch.vue'
+  import { eye } from 'ionicons/icons';
+  import { AuthService, InvalidCredentialsError } from "@/services/auth_service"
+  import { toastWarning, toastDanger } from "@/utils/Alerts";
 
 
-export default {
+export default defineComponent({
+  name: "Home",
+    components:{
+      IonContent,
+      IonHeader,
+      IonMenuButton,
+      IonPage,
+      IonTitle,
+      IonToolbar,
+      Toolbar,
+      ToolbarSearch,
+      IonButton, 
+      IonCard, 
+      IonCardContent, 
+      IonCardHeader, 
+      IonCardSubtitle, 
+      IonCardTitle,
+      IonAccordion,
+      IonAccordionGroup,
+      IonItem,
+      IonLabel,
+      IonInput,
+      IonImg
+    },
+    computed:{
+      loginIcon(){
+        return img('mw.png')
+      }
+    },
   data() {
     return {
       form: {
@@ -251,7 +288,7 @@ export default {
       }
     }
   }
-};
+});
 </script>
 
 <style scoped>

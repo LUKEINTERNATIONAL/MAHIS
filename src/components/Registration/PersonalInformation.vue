@@ -80,7 +80,6 @@ methods:{
         const registrationStore = useRegistrationStore()
         registrationStore.setPersonalInformation(this.personInformation)
     },
-   
 
     validationRules(event: any) {
         return validateField(this.personInformation,event.name, (this as any)[event.name]);
