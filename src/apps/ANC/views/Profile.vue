@@ -247,7 +247,7 @@ export default defineComponent({
             //     this.wizardData[2].checked = true;
             //     this.wizardData[2].class = 'open_step common_step'
             //   }else{
-            //     this.wizardData[2].checked = false;
+            //     this.wizardData[2].checked = false;  
             //   }
         },
         deleteDisplayData(data: any) {
@@ -257,6 +257,7 @@ export default defineComponent({
             });
         },
         saveData() {
+            console.log('testing')
             // const errors = []
             // this.StepperData.forEach((stepper)=> {
             //   if (!stepper.validation) return
@@ -295,17 +296,22 @@ export default defineComponent({
         // },
 
         async buildPretermData() {
+
             return [
                 ...(await formatRadioButtonData(this.preterm)),
+                
             ];
         },
         async savePreterm() {
             const data: any = await this.buildPretermData();
+               console.log("save preterm=====>",data)
             if (data.length > 0) {
                 const userID: any = Service.getUserID();
                 const pretermInstance = new Preterms();
                 pretermInstance.onSubmit(this.demographics.patient_id, userID, data);
             }
+         
+           
         },
 
         openModal() {

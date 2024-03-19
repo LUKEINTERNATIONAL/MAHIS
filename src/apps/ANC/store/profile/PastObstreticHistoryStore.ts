@@ -288,7 +288,7 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
         ],
         preterm:[
             {
-                selectdData: [],
+                selectedData: [],
                 isFinishBtn: false,
                 classDash: 'dashed_bottom_border',
                 radioBtnContent:
