@@ -300,21 +300,21 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                     },
                     data:[
                         {
-                            name: 'Last live birth was preterm\n',
+                            name: 'Last live birth was preterm',
                             value: "Preterm pregnancy - less than 28 weeks",
                             labelPlacement: 'start',
                             colSize: '9',
                             justify: 'space-between',
                         },
                         {
-                            name: 'Last live birth was not preterm/ Last live birth was full term\n',
+                            name: 'Last live birth was not preterm/ Last live birth was full term',
                             value: 'Preterm pregnancy - 28 to 34 weeks',
                             labelPlacement: 'start',
                             colSize: '9',
                             justify: 'space-between',
                         },
                         {
-                            name: 'Last live birth had congenital abnormalities\n',
+                            name: 'Last live birth had congenital abnormalities',
                             value: 'Preterm premature rupture of membranes (PPROM)',
                             labelPlacement: 'start',
                             colSize: '9',

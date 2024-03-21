@@ -6,7 +6,7 @@ export async function formatRadioButtonData(data: any) {
     const buildObjPromises: Promise<any>[] = data.map(async (item: any) => {
 
         // console.log("object")
-        // console.log(item)
+        console.log(item.radioBtnContent.header.selectedValue)
         if (item && item.radioBtnContent && item.radioBtnContent.header && item.radioBtnContent.header.selectedValue){
             return {
                 concept_id: await ConceptService.getConceptID(item.radioBtnContent.header.name),
