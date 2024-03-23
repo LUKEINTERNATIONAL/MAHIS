@@ -233,7 +233,7 @@ export default defineComponent({
                 field.data.rowData.length > 1 && field.data.rowData[1].colData[1].name === "Stillbirths");
 
             if (gravidaField && event.name === gravidaField.data.rowData[0].colData[0].name) {
-              let errorMessage: string = '';
+              let errorMessage: any = "";
 
               if (StandardValidations.required(event.value) != null) {
                 errorMessage = StandardValidations.required(event.value);
@@ -248,7 +248,7 @@ export default defineComponent({
             }
 
             if (abortionsField && event.name === abortionsField.data.rowData[1].colData[0].name) {
-              let errorMessage = '';
+              let errorMessage: any = "";
 
               if (StandardValidations.required(event.value) != null) {
                 errorMessage = StandardValidations.required(event.value);
@@ -268,7 +268,7 @@ export default defineComponent({
             }
 
             if (stillBirthsField && event.name === stillBirthsField.data.rowData[1].colData[1].name) {
-              let errorMessage = '';
+              let errorMessage: any = "";
 
               if (StandardValidations.required(event.value) != null) {
                 errorMessage = StandardValidations.required(event.value);

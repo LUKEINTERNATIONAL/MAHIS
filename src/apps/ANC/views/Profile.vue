@@ -178,11 +178,7 @@ export default defineComponent({
       iconsContent: icons,
     };
   },
-  watch: {
-    medicalHistory(change) {
-      console.log(change)
-    }
-  },
+
   computed:{
     
     // ...mapState(useMedicalHistoryStore,["medicalHistory", "allegy", "existingChronicHealthConditions","hivTest","syphilisTest"]),
@@ -192,7 +188,21 @@ export default defineComponent({
     // ...mapState(useWomanBehaviourStore,["dailyCaffeineIntake","Tobacco"])
     ...mapState(useDemographicsStore,["demographics"]),
     ...mapState(useObstreticHistoryStore,['preterm']),
-    ...mapState(useObstreticHistoryStore,['Complications'])
+    ...mapState(useObstreticHistoryStore,['Complications']),
+    ...mapState(useObstreticHistoryStore,['Complications']),
+    ...mapState(useObstreticHistoryStore,['Complications']),
+    ...mapState(useObstreticHistoryStore,['Complications']),
+    ...mapState(useObstreticHistoryStore,['Complications']),
+    ...mapState(useObstreticHistoryStore,['Complications']),
+
+  },
+  mounted(){
+    this.markWizard()
+  },
+  watch: {
+    medicalHistory(change) {
+      console.log(change)
+    },
 
   },
       saveData(){
@@ -222,10 +232,7 @@ export default defineComponent({
       // }
 
      },
-  mounted(){
-    // this.markWizard()
 
-  },
   setup() {
     return { chevronBackOutline,checkmark };
   },
@@ -238,14 +245,14 @@ export default defineComponent({
     //   }else{
     //     this.wizardData[0].checked = false;
     //   }
-
+    //
     //   if(this.medicalHistory[0].selectdData.length > 0){
     //     this.wizardData[1].checked = true;
     //     this.wizardData[1].class = 'open_step common_step'
     //   }else{
     //     this.wizardData[1].checked = false;
     //   }
-
+    //
     //   if(this.womanBehaviour[0].selectdData.length > 0){
     //     this.wizardData[2].checked = true;
     //     this.wizardData[2].class = 'open_step common_step'
@@ -258,12 +265,12 @@ export default defineComponent({
     //   }else{
     //     this.wizardData[2].checked = false;
     //   }
-     },
-    deleteDisplayData(data: any){
-      return  data.map((item: any) => {
-        delete item?.display;
-        return item?.data;
-      });
+    //  },
+    // deleteDisplayData(data: any){
+    //   return  data.map((item: any) => {
+    //     delete item?.display;
+    //     return item?.data;
+    //   });
     },
     saveData(){ 
       // const errors = []

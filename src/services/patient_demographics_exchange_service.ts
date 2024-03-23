@@ -69,9 +69,7 @@ export class PatientDemographicsExchangeService extends Service {
 
     /** Detects duplicates in patients */
     hasPatientDoubles(patients: Array<any>) {
-        return patients
-            .map((i: any) => patients.map((p) => p.patient_id).includes(i.patient_id))
-            .some(Boolean);
+        return patients.map((i: any) => patients.map((p) => p.patient_id).includes(i.patient_id)).some(Boolean);
     }
 
     /**
@@ -85,7 +83,7 @@ export class PatientDemographicsExchangeService extends Service {
             ...demographics,
         });
         const mapResults = (d: any, type: string) => {
-            const p = new PatientService(d);
+            const p = new PatientService();
             return {
                 patient_type: type,
                 doc_id: p.getPatientIdentifier(27),
@@ -137,10 +135,7 @@ export class PatientDemographicsExchangeService extends Service {
         return !isEmpty(diffs) && diffs.npid;
     }
 
-    formatDiffValuesByType(
-        diffs: Record<string, { remote?: any; local?: any }>,
-        by: "local" | "remote"
-    ) {
+    formatDiffValuesByType(diffs: Record<string, { remote?: any; local?: any }>, by: "local" | "remote") {
         const formatted: any = {};
         for (const i in diffs) {
             formatted[i] = diffs[by];
@@ -152,9 +147,7 @@ export class PatientDemographicsExchangeService extends Service {
         const turple: any = [];
         const formatValue: any = (label: string, value: string) => {
             // Detect date labels and format them
-            return typeof value === "string" && label.match(/date/i)
-                ? HisDate.toStandardHisDisplayFormat(value)
-                : value;
+            return typeof value === "string" && label.match(/date/i) ? HisDate.toStandardHisDisplayFormat(value) : value;
         };
         for (const index in diffs) {
             const diff = diffs[index];

@@ -21,7 +21,6 @@ import {
 import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import { defineComponent } from 'vue';
 import BasicInputField from '@/components/BasicInputField.vue';
-import Accordion from "@/apps/ANC/components/Accordion.vue";
 import Stepper from "@/apps/ANC/components/Stepper.vue";
 import { icons } from '@/utils/svg';
 import { chevronBackOutline, checkmark } from 'ionicons/icons';
@@ -44,7 +43,6 @@ export default defineComponent ({
     IonTitle,
     IonToolbar,
     BasicInputField,
-    Accordion,
     headAssessment,
     Stepper
   },
@@ -83,7 +81,7 @@ export default defineComponent ({
     markWizard(){},
     saveData(){
 
-      this.$router.push('counselling');
+      this.$router.push('profile');
 
     },
   }

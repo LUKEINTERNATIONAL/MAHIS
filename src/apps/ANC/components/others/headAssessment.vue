@@ -82,15 +82,27 @@ export default defineComponent({
   },
 
   mounted(){
+    this.handleHeadAssessment()
   },
   watch:{
-
+      headssAssesment:{
+        handler(){
+          this.handleHeadAssessment()
+        },
+        deep:true
+      }
   },
   setup() {
     return { checkmark,pulseOutline };
   },
   methods:{
-
+    handleHeadAssessment(){
+      if(getRadioSelectedValue(this.headssAssesment,'Who does does the client live with')=='other'){
+        modifyFieldValue(this.headssAssesment,'Other','displayNone',false)
+      }else{
+        modifyFieldValue(this.headssAssesment,'Other','displayNone',true)
+      }
+    }
   },
 });
 

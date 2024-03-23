@@ -63,6 +63,8 @@ export const useImmediatePostnatalChecksForMotherStore = defineStore('immediateP
                                         eventType: 'input'
                                     }
                                 ],
+                            },
+                            {
                                 colData: [
                                     {
                                         inputHeader: 'Second systolic Pressure',

@@ -1,11 +1,12 @@
 //Validations
 import StandardValidations from "@/validations/StandardValidations";
-import {modifyFieldValue} from "@/services/data_helpers";
+import { modifyFieldValue } from "@/services/data_helpers";
 
 function validaterowData(ev: any) {
     // Check if the event corresponds to the "Gravida" field
     if (ev.name === "Gravida") {
-        let errorMessage: string = '';
+        let errorMessage: any = "";
+
         // Apply required validation
         if (StandardValidations.required(ev.value) != null) {
             errorMessage = StandardValidations.required(ev.value);
@@ -22,13 +23,11 @@ function validaterowData(ev: any) {
         }
 
         // Update the UI based on validation results
-        modifyFieldValue(this.prevPregnancies, 'Gravida', 'alertsError', !!errorMessage);
+        // modifyFieldValue(this.prevPregnancies, 'Gravida', 'alertsError', !!errorMessage);
         // Update the error message in the UI
-        modifyFieldValue(this.prevPregnancies, 'Gravida', 'alertsErrorMassage', errorMessage || '');
+        // modifyFieldValue(this.prevPregnancies, 'Gravida', 'alertsErrorMassage', errorMessage || '');
     }
 }
 export default {
-    validaterowData
-
-
-}
+    validaterowData,
+};

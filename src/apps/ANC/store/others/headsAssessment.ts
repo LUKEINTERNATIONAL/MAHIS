@@ -13,7 +13,8 @@ export const useHeadssAssessmentStore = defineStore('headssAssessmentStore',{
                     {
                         header:{
                             title: 'Who does the client live with?',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'Who does does the client live with'
                         },
                         data:[
                             {

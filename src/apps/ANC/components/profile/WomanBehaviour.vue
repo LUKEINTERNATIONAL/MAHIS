@@ -40,8 +40,8 @@ import {
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { checkmark,pulseOutline } from 'ionicons/icons';
+import {icons} from "@/utils/svg";
 import { ref } from 'vue';
-import { icons } from '@/utils/svg.ts';
 import BasicInputField from '@/components/BasicInputField.vue';
 import BasicForm from "@/components/BasicForm.vue";
 import {mapState} from "pinia";

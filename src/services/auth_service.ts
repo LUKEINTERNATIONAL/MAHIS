@@ -98,7 +98,8 @@ export class AuthService {
         const apiVersion = await this.getApiVersion();
         // Remove the 'v' prefix if present
         const version = `${apiVersion}`.replace(/^v/, "");
-        const minimumVersion = `${PACK_CONF["min-api-version"]}`.replace(/^v/, "");
+        // const minimumVersion = `${PACK_CONF["min-api-version"]}`.replace(/^v/, "");
+        const minimumVersion = ``;
 
         // Split the versions into arrays of numbers
         const versionParts = version.split(".");
