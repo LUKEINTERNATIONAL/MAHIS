@@ -91,7 +91,7 @@ export default defineComponent({
             dispositions: "" as any,
             wizardData: [
                 {
-                    title: "Vital Signs",
+                    title: "Presenting Complaints",
                     class: "common_step",
                     checked: false,
                     disabled: false,
@@ -117,7 +117,7 @@ export default defineComponent({
                     last_step: "",
                 },
                 {
-                    title: "Complications Screening",
+                    title: "Physical Exams",
                     class: "common_step",
                     checked: "",
                     icon: false,
@@ -135,15 +135,6 @@ export default defineComponent({
                     last_step: "",
                 },
                 {
-                    title: "Next Appointment",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 6,
-                    last_step: "",
-                },
-                {
                     title: "Outcome",
                     class: "common_step",
                     checked: "",
@@ -155,7 +146,7 @@ export default defineComponent({
             ],
             StepperData: [
                 {
-                    title: "Vital Signs",
+                    title: "Presenting Complaints",
                     componet: "Vitals",
                     value: "1",
                 },
@@ -170,7 +161,7 @@ export default defineComponent({
                     value: "3",
                 },
                 {
-                    title: "Complications Screening",
+                    title: "Physical Exams",
                     componet: "Complications",
                     value: "4",
                 },
@@ -178,11 +169,6 @@ export default defineComponent({
                     title: "Treatment plan",
                     componet: "TreatmentPlan",
                     value: "5",
-                },
-                {
-                    title: "Next Appointment",
-                    componet: "NextAppointment",
-                    value: "6",
                 },
                 {
                     title: "Outcome",

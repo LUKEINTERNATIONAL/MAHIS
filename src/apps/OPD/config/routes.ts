@@ -1,15 +1,14 @@
-import ConsultationPlan from '../views/ConsultationPlan.vue'
-import Enrollment from '@/apps/NCD/views/Enrollment.vue'
+import ConsultationPlan from "../views/ConsultationPlan.vue";
+import Enrollment from "../views/Enrollment.vue";
 export default [
-  {
-    path: '/consultationPlan',
-    name: 'ConsultationPlan',
-    component: ConsultationPlan
-  },
-  {
-    path: '/NCDEnrollment',
-    name: 'NCDEnrollment',
-    component: Enrollment
-  },
-]
-
+    {
+        path: "/consultationPlan",
+        name: "ConsultationPlan",
+        component: ConsultationPlan,
+    },
+    {
+        path: "/OPDEnrollment",
+        name: "OPDEnrollment",
+        component: Enrollment,
+    },
+];
