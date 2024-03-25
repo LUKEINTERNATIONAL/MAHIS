@@ -76,6 +76,7 @@ import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import Vitals from "@/apps/NCD/components/ConsultationPlan/Vitals.vue";
+import OPDVitals from "@/apps/OPD/components/Vitals.vue"
 import Diagnosis from "@/apps/NCD/components/ConsultationPlan/Diagnosis.vue";
 import Complications from "@/apps/NCD/components/ConsultationPlan/Complications.vue";
 import ConfirmDiagnosis from "@/apps/NCD/components/ConsultationPlan/ConfirmDiagnosis.vue";
@@ -186,6 +187,7 @@ export default defineComponent({
         Immunization,
         IntimatePartner,
         Deworming,
+        OPDVitals
     },
     data() {
         return {

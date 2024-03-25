@@ -1,17 +1,5 @@
 <template>
     <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form>
-    <ion-row>
-        <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
-                <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Previous measurements</ion-label>
-                </ion-item>
-                <div class="ion-padding" slot="content">
-                    <PreviousVitals />
-                </div>
-            </ion-accordion>
-        </ion-accordion-group>
-    </ion-row>
 </template>
 
 <script lang="ts">
@@ -31,7 +19,6 @@ import BasicInputField from "@/components/BasicInputField.vue";
 import { VitalsService } from "@/services/vitals_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { Service } from "@/services/service";
-import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
 
 export default defineComponent({
     components: {
@@ -45,7 +32,6 @@ export default defineComponent({
         IonInput,
         BasicInputField,
         BasicForm,
-        PreviousVitals,
     },
     data() {
         return {
