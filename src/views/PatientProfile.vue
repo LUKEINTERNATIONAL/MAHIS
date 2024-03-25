@@ -43,7 +43,7 @@
                         </ion-card>
                         <ion-card class="start_new_co" style="margin-bottom: 20px"> + Enroll in Labour and delivery program </ion-card>
                         <ion-card class="start_new_co" style="margin-bottom: 20px"> + Enroll in PNC program </ion-card>
-                        <ion-card class="start_new_co" style="margin-bottom: 20px"> + Enroll in OPD Program </ion-card>
+                        <ion-card class="start_new_co" style="margin-bottom: 20px" @click="handleOPD()"> + Enroll in OPD Program </ion-card>
                         <ion-card style="margin-bottom: 20px; background-color: #fff">
                             <ion-accordion-group :value="['first']">
                                 <ion-accordion value="first" style="background-color: #fff" toggle-icon-slot="start">
@@ -227,6 +227,7 @@ export default defineComponent({
             isModalOpen: false,
             url: "" as any,
             NCDProgramActionName: "+ Enroll in NCD Program" as any,
+            OPDProgramActionName: "+ Enroll in OPD Program" as any,
         };
     },
     computed: {
@@ -274,6 +275,21 @@ export default defineComponent({
                 this.NCDProgramActionName = "+ Enroll in NCD Program";
             }
         },
+        setOPDValue() {
+            sessionStorage.setItem("app", JSON.stringify({ programID: 14, applicationName: "OPD" }));
+            const patient = new PatientService();
+            if (patient.getNcdNumber() != "Unknown") {
+                if (this.saveProgressStatus) {
+                    this.OPDProgramActionName = "+ Continue OPD consultation";
+                } else {
+                    this.OPDProgramActionName = "+ Start new OPD consultation";
+                }
+                this.url = "consultationPlan";
+            } else {
+                this.url = "OPDEnrollment";
+                this.OPDProgramActionName = "+ Enroll in OPD Program";
+            }
+        },
         openModal() {
             this.isModalOpen = true;
         },
@@ -282,6 +298,10 @@ export default defineComponent({
         },
         handleNCD() {
             this.setNCDValue();
+            this.$router.push(this.url);
+        },
+        handleOPD() {
+            this.setOPDValue();
             this.$router.push(this.url);
         },
         covertGender(gender: any) {
