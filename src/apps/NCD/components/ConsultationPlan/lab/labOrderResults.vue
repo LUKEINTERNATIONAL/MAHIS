@@ -123,8 +123,8 @@ export default defineComponent({
         dismiss() {
             modalController.dismiss();
         },
-        async voidLabOrder(order_id: any) {
-            await this.service.voidOrder(order_id, "Mistake entry");
+        async voidLabOrder(event: any) {
+            await this.service.voidOrder(event.id, "Mistake entry");
         },
 
         handleIcon() {},

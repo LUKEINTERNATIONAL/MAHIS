@@ -2,7 +2,7 @@
     <DashBox :status="no_item" :content="'No Diagnosis added'" />
 
     <span v-if="display_item">
-        <list :listData="diagnosis[0].selectedData" @clicked:edit="editDiagnosis($event)" @clicked:delete="openDeletePopover($event)"> </list>
+        <list :listData="diagnosis[0].selectedData" @clicked:edit="editDiagnosis($event)" @clicked:delete="deleteDiagnosis"> </list>
     </span>
 
     <ion-row v-if="search_item">
@@ -138,6 +138,9 @@ export default defineComponent({
         buildDiagnosis() {
             this.diagnosis[0].selectedData.push({
                 actionBtn: true,
+                btn: ["edit", "delete"],
+                name: this.inputFields[0].value,
+                id: this.diagnosisData[0].concept_id,
                 display: [this.inputFields[0].value],
                 data: {
                     concept_id: 6542, //primary diagnosis
@@ -165,21 +168,21 @@ export default defineComponent({
             return await PatientDiagnosisService.getDiagnosis(value, 1, 5);
         },
         editDiagnosis(test: any) {
-            this.deleteDiagnosis(test[0]);
-            this.selectedText = test[0];
-            this.diagnosis[0].data.rowData[0].colData[0].value = test[0];
+            this.deleteDiagnosis(test);
+            this.selectedText = test.name;
+            this.diagnosis[0].data.rowData[0].colData[0].value = test.name;
             this.addItemButton = false;
             this.search_item = true;
             this.updateDiagnosisStores();
         },
         async openDeletePopover(e: any) {
-            const deleteConfirmed = await popoverConfirmation(`Do you want to delete ${e[1]} ?`, e[0]);
+            const deleteConfirmed = await popoverConfirmation(`Do you want to delete ${e.name} ?`, e.event);
             if (deleteConfirmed) {
-                this.deleteDiagnosis(e[1]);
+                this.deleteDiagnosis(e.name);
             }
         },
         deleteDiagnosis(diagnosis: any) {
-            this.diagnosis[0].selectedData = this.diagnosis[0].selectedData.filter((item: any) => item.display[0] !== diagnosis);
+            this.diagnosis[0].selectedData = this.diagnosis[0].selectedData.filter((item: any) => item.display[0] !== diagnosis.name);
             this.updateDiagnosisStores();
         },
         setDashedBox() {

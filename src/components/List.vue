@@ -15,14 +15,14 @@
                 fill="clear"
                 :icon="iconsContent.attach"
                 iconSlot="icon-only"
-                @click="$emit('clicked:edit', item.id)"
+                @click="$emit('clicked:attach', { event: $event, name: item.name, id: item.id })"
             />
             <DynamicButton
                 v-if="item?.btn?.includes('print')"
                 fill="clear"
                 :icon="iconsContent.print"
                 iconSlot="icon-only"
-                @click="$emit('clicked:edit', item.id)"
+                @click="$emit('clicked:print', { event: $event, name: item.name, id: item.id })"
             />
 
             <DynamicButton
@@ -30,14 +30,14 @@
                 fill="clear"
                 :icon="iconsContent.view"
                 iconSlot="icon-only"
-                @click="$emit('clicked:edit', item.id)"
+                @click="$emit('clicked:view', { event: $event, name: item.name, id: item.id })"
             />
             <DynamicButton
                 v-if="item?.btn?.includes('edit')"
                 fill="clear"
                 :icon="iconsContent.edit"
                 iconSlot="icon-only"
-                @click="$emit('clicked:edit', item.id)"
+                @click="$emit('clicked:edit', { event: $event, name: item.name, id: item.id })"
             />
             <DynamicButton
                 v-if="item?.btn?.includes('delete')"
@@ -82,7 +82,7 @@ export default defineComponent({
         async openDeletePopover(e: any) {
             const deleteConfirmed = await popoverConfirmation(`Do you want to delete ${e.name} ?`, e.event);
             if (deleteConfirmed) {
-                this.$emit("clicked:delete", e.id);
+                this.$emit("clicked:delete", e);
             }
         },
     },
