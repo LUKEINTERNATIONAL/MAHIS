@@ -253,6 +253,29 @@ export const useRegistrationStore = defineStore("registrationStore", {
         ] as any,
         homeLocation: [
             {
+                selectdData: [],
+                isFinishBtn: false,
+                checkboxBtnContent:
+                {
+                    header: {
+                        title: '',
+                        selectedValue: '',
+                    },
+                    data: [
+                        {
+
+                            name: 'Same as current',
+                            value: 'sameas',
+                            labelPlacement: 'start',
+                            colSize: '6',
+                            justify: 'space-between',
+                            checked: false
+                        }
+                    ],
+                }
+
+            },
+            {
                 selectedData: [],
                 isFinishBtn: false,
                 data: {
@@ -337,6 +360,7 @@ export const useRegistrationStore = defineStore("registrationStore", {
             },
         ] as any,
         currentLocation: [
+
             {
                 selectedData: [],
                 isFinishBtn: false,
@@ -596,5 +620,5 @@ export const useRegistrationStore = defineStore("registrationStore", {
             this.guardianInformation = data;
         },
     },
-    persist: true,
+    persist: false,
 });
