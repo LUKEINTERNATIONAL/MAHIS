@@ -110,7 +110,7 @@ export const useVitalsStore = defineStore('vitalsStore',{
              header:{
                  title: 'Is Temperature Taken',
                  selectedValue: '',
-                 name:"temperature",
+                 name:"OpdTemperature",
                 //  displayNone:true
              },
              data:[
@@ -131,19 +131,27 @@ export const useVitalsStore = defineStore('vitalsStore',{
              ]
          }
      },
-            {
+         {
                 sectionHeader: 'Temperature and rates',
                 data:
                     { 
                         rowData:[
                             {
                                 colData: [
-                                    {
-                                        inputHeader: 'Temperature1',
+                                    {   
+                                        displayNone:true,
+                                        inputHeader: 'Temperature',
                                         unit: 'C',
                                         icon: icons.temprature,
                                         value: '',
                                         name: 'Temp',
+                                        eventType: 'input'
+                                    },
+                                    {
+                                        inputHeader: 'Specify',
+                                        icon: icons.editPen,
+                                        value: '',
+                                        name: 'specify',
                                         eventType: 'input'
                                     },
                                     {

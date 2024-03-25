@@ -121,11 +121,15 @@ export default defineComponent({
     },
     mounted() {
         this.markWizard();
+        this.handleHeight();
+        this.handleSpecifyHeight()
     },
     watch: {
         vitals: {
             handler() {
                 this.markWizard();
+                this.handleHeight();
+                this.handleSpecifyHeight()
             },
             deep: true,
         },
@@ -153,10 +157,17 @@ export default defineComponent({
 
     methods: {
         handleHeight(){
-            if(getRadioSelectedValue(this.vitals,'temperature')=='yes'){
-                modifyFieldValue(this.vitals,'Temperature1','displayNone',false)
+            if(getRadioSelectedValue(this.vitals,'OpdTemperature')=='yes'){
+                modifyFieldValue(this.vitals,'Temp','displayNone',false)
             }else{
-                 modifyFieldValue(this.vitals,'Temperature1','displayNone',true)
+                 modifyFieldValue(this.vitals,'Temp','displayNone',true)
+            }
+        },
+        handleSpecifyHeight(){
+            if(getRadioSelectedValue(this.vitals,'OpdTemperature')=='no'){
+                modifyFieldValue(this.vitals,'specify','displayNone',false)
+            }else{
+                 modifyFieldValue(this.vitals,'specify','displayNone',true)
             }
         },
         markWizard() {
