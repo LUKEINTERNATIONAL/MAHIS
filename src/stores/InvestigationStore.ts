@@ -32,12 +32,20 @@ export const useInvestigationStore = defineStore("investigationStore", {
                                 },
                                 {
                                     inputHeader: "Specimen",
+                                    icon: icons.search,
                                     value: "",
                                     name: "specimen",
                                     eventType: "input",
                                     required: true,
                                     alertsError: false,
                                     alertsErrorMassage: "",
+                                    disabled: false,
+                                    popOverData: {
+                                        filterData: true,
+                                        data: [],
+                                    },
+                                    id: "",
+                                    idName: "specimen_id",
                                 },
                             ],
                             btns: [

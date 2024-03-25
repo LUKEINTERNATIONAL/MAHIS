@@ -43,7 +43,7 @@
                         </ion-card>
                         <ion-card class="start_new_co" style="margin-bottom: 20px"> + Enroll in Labour and delivery program </ion-card>
                         <ion-card class="start_new_co" style="margin-bottom: 20px"> + Enroll in PNC program </ion-card>
-                        <ion-card class="start_new_co" style="margin-bottom: 20px"> + Enroll in OPD Program </ion-card>
+                        <ion-card class="start_new_co" style="margin-bottom: 20px" @click="handleOPD()"> + Enroll in OPD Program </ion-card>
                         <ion-card style="margin-bottom: 20px; background-color: #fff">
                             <ion-accordion-group :value="['first']">
                                 <ion-accordion value="first" style="background-color: #fff" toggle-icon-slot="start">
@@ -52,31 +52,31 @@
                                     </ion-item>
                                     <ul style="list-style: none" slot="content">
                                         <li class="form_list">
-                                            <span v-html="iconsContent.form"></span>
+                                            <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.form"></ion-icon>
                                             <div class="form_list_content">AETC Form</div>
                                         </li>
                                         <li class="form_list">
-                                            <span v-html="iconsContent.inpatient"></span>
+                                            <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.inpatient"></ion-icon>
                                             <div class="form_list_content">Medical Inpatient</div>
                                         </li>
                                         <li class="form_list">
-                                            <span v-html="iconsContent.notes"></span>
+                                            <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.notes"></ion-icon>
                                             <div class="form_list_content">Surgucal Notes</div>
                                         </li>
                                         <li class="form_list">
-                                            <span v-html="iconsContent.gynacological"></span>
+                                            <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.gynacological"></ion-icon>
                                             <div class="form_list_content">Gynacological</div>
                                         </li>
                                         <li class="form_list">
-                                            <span v-html="iconsContent.notes"></span>
+                                            <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.notes"></ion-icon>
                                             <div class="form_list_content">SOAP</div>
                                         </li>
                                         <li class="form_list">
-                                            <span v-html="iconsContent.monitoring"></span>
+                                            <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.monitoring"></ion-icon>
                                             <div class="form_list_content">Monitoring Chart</div>
                                         </li>
                                         <li class="form_list">
-                                            <span v-html="iconsContent.referal"></span>
+                                            <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.referal"></ion-icon>
                                             <div class="form_list_content">Referral</div>
                                         </li>
                                     </ul>
@@ -101,10 +101,10 @@
                                 <div class="p_title">Consultation Overview</div>
                                 <div class="date">
                                     <span class="diplay_space_between" id="open-dates-trigger">
-                                        <span v-html="iconsContent.calendar" style="margin-right: 15px"></span>
+                                        <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.calendar" style="margin-right: 15px"></ion-icon>
                                         <div>6th Oct, 2023</div>
                                     </span>
-                                    <span v-html="iconsContent.today_date"></span>
+                                    <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.today_date"></ion-icon>
                                 </div>
                             </div>
 
@@ -133,8 +133,8 @@
 
             <ion-popover trigger="open-dates-trigger" trigger-action="click" :show-backdrop="false" size="auto">
                 <ul style="list-style: none; line-height: 50px">
-                    <li>Novermber,2023</li>
                     <li>Today</li>
+                    <li>Novermber,2023</li>
                     <li>14th Oct, 2023</li>
                     <li>October, 2023</li>
                     <li>14th Oct, 2023</li>
@@ -227,6 +227,7 @@ export default defineComponent({
             isModalOpen: false,
             url: "" as any,
             NCDProgramActionName: "+ Enroll in NCD Program" as any,
+            OPDProgramActionName: "+ Enroll in OPD Program" as any,
         };
     },
     computed: {
@@ -274,6 +275,21 @@ export default defineComponent({
                 this.NCDProgramActionName = "+ Enroll in NCD Program";
             }
         },
+        setOPDValue() {
+            sessionStorage.setItem("app", JSON.stringify({ programID: 14, applicationName: "OPD" }));
+            const patient = new PatientService();
+            if (patient.getNcdNumber() != "Unknown") {
+                if (this.saveProgressStatus) {
+                    this.OPDProgramActionName = "+ Continue OPD consultation";
+                } else {
+                    this.OPDProgramActionName = "+ Start new OPD consultation";
+                }
+                this.url = "consultationPlan";
+            } else {
+                this.url = "OPDEnrollment";
+                this.OPDProgramActionName = "+ Enroll in OPD Program";
+            }
+        },
         openModal() {
             this.isModalOpen = true;
         },
@@ -282,6 +298,10 @@ export default defineComponent({
         },
         handleNCD() {
             this.setNCDValue();
+            this.$router.push(this.url);
+        },
+        handleOPD() {
+            this.setOPDValue();
             this.$router.push(this.url);
         },
         covertGender(gender: any) {
