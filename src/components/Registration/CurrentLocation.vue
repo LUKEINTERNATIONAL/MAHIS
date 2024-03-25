@@ -30,6 +30,7 @@ import {
   modifyFieldValue,
   getFieldValue,
   getRadioSelectedValue,
+  getCheckboxSelectedValue,
 } from "@/services/data_helpers";
 import { validateField } from "@/services/validation_service";
 
@@ -89,11 +90,80 @@ export default defineComponent({
       return this.getInputData(this.currentLocation, 3, 0, 0, "value");
     },
   },
+  watch: {
+    currentLocation: {
+      handler() {
+        this.changeHomeDistrict();
+        this.changeHomeTA();
+        this.changeHomeVillage();
+      },
+      deep: true,
+    },
+  },
   async mounted() {
     this.updateRegistrationStores();
     this.buidCards();
+    this.changeHomeVillage();
+    this.changeHomeDistrict();
+    this.changeHomeTA();
   },
   methods: {
+    changeHomeVillage() {
+      const CURRENT_VILLAGE = "currentVillage";
+      const VALUE = "value";
+      const HOME_VILLAGE = "homeVillage";
+
+      if (getCheckboxSelectedValue(this.homeLocation, "Same as current")) {
+        const currentVillage = getFieldValue(
+          this.currentLocation,
+          CURRENT_VILLAGE,
+          VALUE
+        );
+        modifyFieldValue(
+          this.homeLocation,
+          HOME_VILLAGE,
+          VALUE,
+          currentVillage
+        );
+      }
+    },
+    changeHomeDistrict() {
+      const VALUE = "value";
+      const CURRENT_DISTRICT = "currentDistrict";
+      const HOME_DISTRICT = "homeDistrict";
+
+      if (getCheckboxSelectedValue(this.homeLocation, "Same as current")) {
+        const currentDistrict = getFieldValue(
+          this.currentLocation,
+          CURRENT_DISTRICT,
+          VALUE
+        );
+        modifyFieldValue(
+          this.homeLocation,
+          HOME_DISTRICT,
+          VALUE,
+          currentDistrict
+        );
+      }
+    },
+    changeHomeTA() {
+      const HOME_TA = "homeTraditionalAuthority";
+      const VALUE = "value";
+      const CURRENT_TA = "currentTraditionalAuthority";
+      if (getCheckboxSelectedValue(this.homeLocation, "Same as current")) {
+        const currentTraditionalAuthority = getFieldValue(
+          this.currentLocation,
+          CURRENT_TA,
+          VALUE
+        );
+        modifyFieldValue(
+          this.homeLocation,
+          HOME_TA,
+          VALUE,
+          currentTraditionalAuthority
+        );
+      }
+    },
     buidCards() {
       this.cardData = {
         mainTitle: "Demographics",
