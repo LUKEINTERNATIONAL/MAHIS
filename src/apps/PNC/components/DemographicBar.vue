@@ -4,7 +4,7 @@
             <li>Fullname: <b>{{ demographics.name }}</b></li>
             <li>MRN: <b>{{ demographics.mrn }}</b></li>
             <li>Birthday: <b>{{ formatBirthdate()}} </b></li>
-            <li>Category: <b> ANC</b></li>
+            <li>Category: <b> PNC</b></li>
 <!--            <li>Gestation Age: <b>5 Weeks</b></li>-->
         </ul>
     </ion-card>

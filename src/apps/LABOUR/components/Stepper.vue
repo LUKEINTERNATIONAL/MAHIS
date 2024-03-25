@@ -88,8 +88,9 @@ import QuickCheck from "@/apps/LABOUR/components/physical exam/QuickCheck.vue";
 import PhysicalExamination from "@/apps/LABOUR/components/physical exam/PhysicalExamination.vue";
 import FirstVaginalExamination from "@/apps/LABOUR/components/physical exam/FirstVaginalExamination.vue";
 import PelvicAssessment from "@/apps/LABOUR/components/physical exam/PelvicAssessment.vue";
-import ContinuosMonitoring from "@/apps/LABOUR/components/physical exam/ContinuosMonitoring.vue";
-import PatientReferral from "@/apps/LABOUR/components/physical exam/PatientReferral.vue";
+import SecondStageDelivery from "@/apps/LABOUR/components/delivery details/SecondStageDelivery.vue";
+import ThirdStageDelivery from "@/apps/LABOUR/components/delivery details/ThirdStageDelivery.vue";
+import PatientReferral from "@/apps/LABOUR/components/repeatable things/PatientReferral.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 export default defineComponent({
@@ -121,7 +122,10 @@ export default defineComponent({
         PelvicAssessment,
         PatientReferral,
         FirstVaginalExamination,
-        ContinuosMonitoring,
+        SecondStageDelivery,
+        ThirdStageDelivery
+
+
     },
     data() {
         return {
