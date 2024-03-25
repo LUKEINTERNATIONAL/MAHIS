@@ -4,14 +4,9 @@
             <ion-toggle :checked="labOrderStatus" @ionChange="toggleLabOrderStatus">Lab Investigations</ion-toggle>
         </ion-item>
         <div class="sub_item_body" v-if="labOrderStatus" style="margin-top: 10px">
-            <!-- <DashBox :status="no_item" :content="'No Investigations added '" /> -->
             <span>
-                <labResults />
+                <labOrderResults :propOrders="orders" />
             </span>
-            <!-- <div>Lab Orders</div> -->
-            <!-- <span>
-                <labOrders />
-            </span> -->
 
             <span v-if="search_item">
                 <basic-form
@@ -53,9 +48,10 @@ import { toastWarning, popoverConfirmation } from "@/utils/Alerts";
 import BasicForm from "@/components/BasicForm.vue";
 import List from "@/components/List.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
-import labResults from "@/apps/NCD/components/ConsultationPlan/labResults.vue";
-import labOrders from "@/apps/NCD/components/ConsultationPlan/labOrders.vue";
+import labOrderResults from "@/apps/NCD/components/ConsultationPlan/lab/labOrderResults.vue";
 import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigations.vue";
+import { LabOrder } from "@/apps/NCD/services/lab_order";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -64,6 +60,7 @@ import {
     modifyRadioValue,
     modifyFieldValue,
 } from "@/services/data_helpers";
+import { ConceptService } from "@/services/concept_service";
 
 export default defineComponent({
     name: "Menu",
@@ -83,8 +80,7 @@ export default defineComponent({
         BasicForm,
         List,
         DynamicButton,
-        labResults,
-        labOrders,
+        labOrderResults,
     },
     data() {
         return {
@@ -96,11 +92,14 @@ export default defineComponent({
             selectedText: "" as any,
             testResult: "" as any,
             test: "" as any,
+            orders: "" as any,
+            filteredSpecimen: "" as any,
             labOrders: "" as any,
             testData: [] as any,
             popoverOpen: false,
             labOrderStatus: false,
             event: "" as any,
+            specimen: "" as any,
             radiologyOrdersStatus: false,
             otherOrdersStatus: false,
         };
@@ -110,6 +109,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useInvestigationStore, ["investigations"]),
+        ...mapState(useDemographicsStore, ["demographics"]),
         inputFields() {
             return this.investigations[0].data.rowData[0].colData;
         },
@@ -125,7 +125,8 @@ export default defineComponent({
     async mounted() {
         this.updateInvestigationsStores();
         this.setDashedBox();
-        this.labOrders = await OrderService.getTestTypesBySpecimen("Blood");
+        this.orders = await OrderService.getOrders(this.demographics.patient_id);
+        this.labOrders = await OrderService.getTestTypes();
     },
     methods: {
         toggleLabOrderStatus() {
@@ -142,61 +143,74 @@ export default defineComponent({
             this.addItemButton = false;
             this.search_item = true;
         },
-        async validaterowData() {
-            this.investigations[0].data.rowData[0].colData[0].alertsError = false;
-            this.investigations[0].data.rowData[0].colData[0].alertsErrorMassage = "";
-            this.investigations[0].data.rowData[0].colData[1].alertsError = false;
-            this.investigations[0].data.rowData[0].colData[1].alertsErrorMassage = "";
-            this.test = await this.filterTest(this.inputFields[0].value);
+        async validateRowData() {
+            const firstCol = this.investigations[0].data.rowData[0].colData[0];
+            const secondCol = this.investigations[0].data.rowData[0].colData[1];
 
-            if (!this.numericValueIsValid(this.inputFields[1].value) && this.inputFields[1].value != "") {
-                this.investigations[0].data.rowData[0].colData[1].alertsError = true;
-                this.investigations[0].data.rowData[0].colData[1].alertsErrorMassage =
-                    "You must enter a modifer and numbers only. i.e =90 / >19 / < 750";
-                return false;
-            } else {
-                this.buildResults();
-            }
-            if (this.test.length > 0) {
-                if (this.test[0]?.name == this.inputFields[0].value) {
-                    return true;
+            firstCol.alertsError = false;
+            firstCol.alertsErrorMassage = "";
+            secondCol.alertsError = false;
+            secondCol.alertsErrorMassage = "";
+
+            secondCol.disabled = false;
+
+            const testValue = this.inputFields[0].value;
+            const specimenValue = this.inputFields[1].value;
+
+            this.test = await this.filterTest(testValue);
+            this.filteredSpecimen = await this.filterSpecimen(specimenValue);
+
+            const testMatches = testValue && this.test[0]?.name === testValue;
+            const specimenMatches = specimenValue && this.filteredSpecimen[0]?.name === specimenValue;
+
+            if (testValue) {
+                if (testMatches) {
+                    this.specimen = await OrderService.getSpecimens(firstCol.value);
+                    if (this.specimen.length == 1) {
+                        secondCol.value = this.specimen[0].name;
+                        secondCol.disabled = true;
+                    }
+                    secondCol.popOverData.data = this.specimen;
                 } else {
+                    secondCol.value = "";
                     this.search_item = true;
-                    this.investigations[0].data.rowData[0].colData[0].alertsError = true;
-                    this.investigations[0].data.rowData[0].colData[0].alertsErrorMassage = "Please select test from the list";
-                    return false;
+                    firstCol.alertsError = true;
+                    firstCol.alertsErrorMassage = "Please select test from the list";
                 }
             } else {
-                this.search_item = true;
-                this.investigations[0].data.rowData[0].colData[0].alertsError = true;
-                this.investigations[0].data.rowData[0].colData[0].alertsErrorMassage = "Not Found";
-                return false;
+                secondCol.value = "";
             }
+
+            if (specimenValue && !specimenMatches && !secondCol.disabled) {
+                secondCol.alertsError = true;
+                secondCol.alertsErrorMassage = "Please select specimen from the list";
+            }
+
+            return testMatches && (specimenMatches || secondCol.disabled);
         },
         async addNewRow() {
-            if (await this.validaterowData()) {
-                this.buildTest();
+            if (await this.validateRowData()) {
+                this.saveTest();
                 this.investigations[0].data.rowData[0].colData[0].value = "";
                 this.investigations[0].data.rowData[0].colData[1].value = "";
                 this.search_item = false;
                 this.display_item = true;
                 this.addItemButton = true;
             }
-            this.investigations[0].data.rowData[0].colData[0].value = "";
             this.investigations[0].data.rowData[0].colData[0].popOverData.data = [];
         },
-        buildTest() {
-            this.investigations[0].selectedData.push({
-                actionBtn: true,
-                display: [this.inputFields[0].value, this.inputFields[1].value],
-                data: {
+        async saveTest() {
+            const investigationInstance = new LabOrder();
+            await investigationInstance.postActivities(this.demographics.patient_id, [
+                {
                     concept_id: this.test[0].concept_id,
                     name: this.inputFields[0].value,
-                    specimen: "Blood",
+                    specimen: this.inputFields[1].value,
                     reason: "Routine",
-                    specimenConcept: 8612,
+                    specimenConcept: await ConceptService.getConceptID(this.inputFields[1].value),
                 },
-            });
+            ]);
+            this.orders = await OrderService.getOrders(this.demographics.patient_id);
         },
         buildResults() {
             const modifier = this.inputFields[1].value.charAt(0);
@@ -210,23 +224,24 @@ export default defineComponent({
                 value_type: "numeric",
             };
         },
-        numericValueIsValid(value: string) {
-            try {
-                return value.match(/^(=|<|>)([0-9]*)$/m) ? true : false;
-            } catch (e) {
-                return false;
-            }
-        },
         async handleInputData(col: any) {
             if (col.inputHeader == "Test") {
                 this.popoverOpen = true;
                 this.testData = await this.filterTest(col.value);
                 this.investigations[0].data.rowData[0].colData[0].popOverData.data = this.testData;
-                this.validaterowData();
             }
+            this.validateRowData();
         },
+
         async filterTest(name: any) {
             return await this.labOrders.filter((item: any) => item.name.toLowerCase().includes(name.toLowerCase()));
+        },
+        async filterSpecimen(name: any) {
+            if (this.specimen[0]?.name && name) {
+                return await this.specimen.filter((item: any) => item?.name.toLowerCase().includes(name.toLowerCase()));
+            } else {
+                return [];
+            }
         },
         setTest(value: any) {
             this.selectedText = value.name;
@@ -328,6 +343,9 @@ export default defineComponent({
 
 .dashed_bottom_border:hover .action_buttons {
     opacity: 1; /* Show the action buttons when the row is hovered over */
+}
+.dashed_bottom_border {
+    font-weight: 700;
 }
 .sub_item_body {
     margin-left: 45px;

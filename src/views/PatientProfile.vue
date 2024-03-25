@@ -52,31 +52,31 @@
                                     </ion-item>
                                     <ul style="list-style: none" slot="content">
                                         <li class="form_list">
-                                            <span v-html="iconsContent.form"></span>
+                                            <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.form"></ion-icon>
                                             <div class="form_list_content">AETC Form</div>
                                         </li>
                                         <li class="form_list">
-                                            <span v-html="iconsContent.inpatient"></span>
+                                            <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.inpatient"></ion-icon>
                                             <div class="form_list_content">Medical Inpatient</div>
                                         </li>
                                         <li class="form_list">
-                                            <span v-html="iconsContent.notes"></span>
+                                            <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.notes"></ion-icon>
                                             <div class="form_list_content">Surgucal Notes</div>
                                         </li>
                                         <li class="form_list">
-                                            <span v-html="iconsContent.gynacological"></span>
+                                            <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.gynacological"></ion-icon>
                                             <div class="form_list_content">Gynacological</div>
                                         </li>
                                         <li class="form_list">
-                                            <span v-html="iconsContent.notes"></span>
+                                            <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.notes"></ion-icon>
                                             <div class="form_list_content">SOAP</div>
                                         </li>
                                         <li class="form_list">
-                                            <span v-html="iconsContent.monitoring"></span>
+                                            <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.monitoring"></ion-icon>
                                             <div class="form_list_content">Monitoring Chart</div>
                                         </li>
                                         <li class="form_list">
-                                            <span v-html="iconsContent.referal"></span>
+                                            <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.referal"></ion-icon>
                                             <div class="form_list_content">Referral</div>
                                         </li>
                                     </ul>
@@ -101,10 +101,10 @@
                                 <div class="p_title">Consultation Overview</div>
                                 <div class="date">
                                     <span class="diplay_space_between" id="open-dates-trigger">
-                                        <span v-html="iconsContent.calendar" style="margin-right: 15px"></span>
+                                        <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.calendar" style="margin-right: 15px"></ion-icon>
                                         <div>6th Oct, 2023</div>
                                     </span>
-                                    <span v-html="iconsContent.today_date"></span>
+                                    <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.today_date"></ion-icon>
                                 </div>
                             </div>
 
@@ -133,8 +133,8 @@
 
             <ion-popover trigger="open-dates-trigger" trigger-action="click" :show-backdrop="false" size="auto">
                 <ul style="list-style: none; line-height: 50px">
-                    <li>Novermber,2023</li>
                     <li>Today</li>
+                    <li>Novermber,2023</li>
                     <li>14th Oct, 2023</li>
                     <li>October, 2023</li>
                     <li>14th Oct, 2023</li>

@@ -5,7 +5,7 @@
             <span @click="dismiss()" style="cursor: pointer; font-weight: 300">x</span>
         </div>
         <div class="center">
-            <span v-html="iconsContent.triageWarning"></span>
+            <ion-icon style="font-size: 350px" :icon="iconsContent.triageWarning"></ion-icon>
         </div>
         <div class="center">
             <h4><b>Save the progress</b></h4>
