@@ -20,12 +20,12 @@
                         <ion-row>
                             <ion-col>
                                 <div class="">
-                                    <ion-label class="n-lbl-1">Full name</ion-label>
+                                    <ion-label class="n-lbl-1">About You</ion-label>
                                 </div> 
                             </ion-col>
                             <ion-col>
                                 <ion-label style="display: flex">
-                                    <span  class="left-text"> First Name</span>
+                                    <span  class="left-text">First Name</span>
                                 </ion-label>
                                 <ion-input
                                         fill="outline"
@@ -51,6 +51,181 @@
                                 </ion-input>
                             </ion-col>
                         
+                        </ion-row>
+                    </ion-grid>
+                    <ion-grid>
+                        <ion-row>
+                            <ion-col>
+                                <div class="">
+                                    
+                                </div> 
+                            </ion-col>
+                            <ion-col>
+                                <ion-label style="display: flex">
+                                    <span  class="left-text">Date Of Birth</span>
+                                </ion-label>
+                                <BasicInputField
+                                    :placeholder="DOBPlaceHolders"
+                                    :inputValue="DOB"
+                                    :icon="DOBIcon"
+                                    @update:inputValue="DOB"
+                                    @clicked:inputValue="openDate"
+                                />
+
+                                <ion-popover
+                                    :show-backdrop="false"
+                                    :keep-contents-mounted="true"
+                                    :is-open="dateOpen"
+                                    :event="dateOpenEvent"
+                                    @didDismiss="dateOpen = false"
+                                >
+                                    <ion-datetime @ionChange="saveTheDate" id="datetime" presentation="date" :show-default-buttons="true"></ion-datetime>
+                                </ion-popover>
+                                <!-- <div>
+                                    <ion-label v-if="show_error_msg_for_ref_date" class="error-label">{{ refDateErrMsg }}</ion-label>
+                                </div> -->
+                                
+                            </ion-col>
+                            <ion-col style="padding-right: 0px;">
+                                <ion-label style="display: flex">
+                                    <span  class="left-text">Gender</span>
+                                </ion-label>
+                                <BasicInputField
+                                    :placeholder="genderPlaceHolders"
+                                    :inputValue="gender"
+                                    :icon="GenderIcon"
+                                    @update:inputValue="gender"
+                                    @clicked:inputValue="openGenderDropdown"
+                                />
+
+                                
+                                <SelectionPopover
+                                    :content="GenderOptionsData"
+                                    :keyboardClose="keyboardClose"
+                                    :title="genderPlaceHolders"
+                                    :popoverOpen="genderPopoverOpen"
+                                    :event="GenderEvent"
+                                    @closePopoover="(value: boolean) => (genderPopoverOpen = value)"
+                                    @setSelection="setSelection"
+                                />
+                            </ion-col>
+                        </ion-row>
+                        <hr class="m-line-ds"/>
+                    </ion-grid>
+                </div>
+
+                <div class="m-cointainer">
+                    <ion-grid>
+                        <ion-row>
+                            <ion-col>
+                                <div class="">
+                                    <ion-label class="n-lbl-1">Contact Details</ion-label>
+                                </div> 
+                            </ion-col>
+                            <ion-col>
+                                <ion-label style="display: flex">
+                                    <span  class="left-text">Phone</span>
+                                </ion-label>
+                                <ion-input
+                                        fill="outline"
+                                        type="text"
+                                        class="m-input"
+                                        placeholder="Enter your first name"
+                                        v-model="name"
+                                    >
+                                </ion-input>
+                                
+                            </ion-col>
+                            <ion-col style="padding-right: 0px;">
+                                <ion-label style="display: flex">
+                                    <span  class="left-text">Email</span>
+                                </ion-label>
+                                <ion-input
+                                        fill="outline"
+                                        type="text"
+                                        class="m-input"
+                                        placeholder="Enter your last name"
+                                        v-model="name"
+                                    >
+                                </ion-input>
+                            </ion-col>
+                        
+                        </ion-row>
+                        <hr class="m-line-ds"/>
+                    </ion-grid>
+                </div>
+
+                <div class="m-cointainer">
+                    <ion-grid>
+                        <ion-row>
+                            <ion-col>
+                                <div class="">
+                                    <ion-label class="n-lbl-1">Access Control</ion-label>
+                                </div> 
+                            </ion-col>
+                            <ion-col>
+                                <ion-label style="display: flex">
+                                    <span  class="left-text">Old Password</span>
+                                </ion-label>
+                                <ion-input
+                                        fill="outline"
+                                        type="text"
+                                        class="m-input"
+                                        placeholder="Enter your first name"
+                                        v-model="name"
+                                    >
+                                </ion-input>
+                                
+                            </ion-col>
+                            <ion-col style="padding-right: 0px;">
+                                <ion-label style="display: flex">
+                                    <span  class="left-text">New Password</span>
+                                </ion-label>
+                                <ion-input
+                                        fill="outline"
+                                        type="text"
+                                        class="m-input"
+                                        placeholder="Enter your last name"
+                                        v-model="name"
+                                    >
+                                </ion-input>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                    <ion-grid>
+                        <ion-row>
+                            <ion-col>
+                                <div class="">
+                                    
+                                </div> 
+                            </ion-col>
+                            <ion-col>
+                                <ion-label style="display: flex">
+                                    <span  class="left-text">Old Password</span>
+                                </ion-label>
+                                <ion-input
+                                        fill="outline"
+                                        type="text"
+                                        class="m-input"
+                                        placeholder="Enter your first name"
+                                        v-model="name"
+                                    >
+                                </ion-input>
+                                
+                            </ion-col>
+                            <ion-col style="padding-right: 0px;">
+                                <ion-label style="display: flex">
+                                    <span  class="left-text">New Password</span>
+                                </ion-label>
+                                <ion-input
+                                        fill="outline"
+                                        type="text"
+                                        class="m-input"
+                                        placeholder="Enter your last name"
+                                        v-model="name"
+                                    >
+                                </ion-input>
+                            </ion-col>
                         </ion-row>
                         <hr class="m-line-ds"/>
                     </ion-grid>
@@ -87,6 +262,7 @@ import {
     IonInput,
     IonDatetime,
     IonLabel,
+    IonRow,
     IonTextarea,
     IonAccordion,
     IonAccordionGroup,
@@ -94,10 +270,64 @@ import {
 } from "@ionic/vue";
 import Toolbar from '@/components/Toolbar.vue'
 import ToolbarSearch from '@/components/ToolbarSearch.vue'
+import BasicInputField from "@/components/BasicInputField.vue"
+import { ref, watch, computed, onMounted, onUpdated } from "vue"
+import { icons } from "@/utils/svg"
 
-import { ref, watch, computed, onMounted, onUpdated } from "vue";
 
+const iconsContent = icons
 const name = ref()
+const DOB = ref()
+const DOBPlaceHolders = ref("Enter date of birth")
+const DOBIcon = icons.calendar
+const dateOpen = ref(false)
+const dateOpenEvent = ref({} as Event)
+const gender = ref()
+const genderPlaceHolders = ref("Select gender")
+const GenderIcon = icons.gender
+const GenderOptionsData = ref([
+    {>
+        name: "Female",
+        selected: false,
+    },
+    {
+        name: "Male",
+        selected: false,
+    },
+    {
+        name: "Other",
+        selected: false,
+    }
+])
+const keyboardClose = ref(true)
+const genderPopoverOpen = ref(false)
+const GenderEvent =  ref({} as Event)
+
+function openDate(event: any) {
+    dateOpen.value = true
+    dateOpenEvent.value = event
+}
+
+function saveTheDate(event: any) {
+    DOB.value = event.detail.value
+    DOB.value = formatDate(DOB.value)
+}
+
+function formatDate(date: any) {
+    let theDate = new Date(date);
+    let tempDate = new Date(theDate.getFullYear() + "-" + ("0" + (theDate.getMonth() + 1)).slice(-2) + "-" + ("0" + theDate.getDate()).slice(-2));
+    let options: Intl.DateTimeFormatOptions = { day: "2-digit", weekday: "long", month: "short", year: "numeric" };
+    let formattedDate = tempDate.toLocaleDateString("en-US", options);
+    return formattedDate;
+}
+
+function openGenderDropdown() {
+
+}
+
+function setSelection() {
+
+}
 </script>
 
 <style scoped>
