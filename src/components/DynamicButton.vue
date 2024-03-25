@@ -1,15 +1,13 @@
 <template>
     <ion-button :expand="expand" :fill="$props.fill" :size="size" :color="color" @click="$emit('clicked:btn')">
-        <span v-if="!subName">
+        <span v-if="!subName" :style="'font-size: 14px; font-weight:' + fontWeight">
             {{ $props.name }}
         </span>
         <span v-if="subName">
-            <span style="margin-bottom: 10px">{{ $props.name }}</span>
-
-            <br />
-            {{ $props.subName }}</span
-        >
-        <ion-icon v-if="icon" :slot="iconSlot" style="font-size: x-large" :icon="$props.icon"></ion-icon>
+            <div style="margin-bottom: px; font-size: 14px">{{ $props.name }}</div>
+            <span style="font-size: 14px; font-weight: 700">{{ $props.subName }}</span>
+        </span>
+        <ion-icon v-if="icon" :slot="iconSlot" :style="'font-size:' + iconFont" :icon="$props.icon"></ion-icon>
     </ion-button>
 </template>
 
@@ -48,9 +46,16 @@ export default defineComponent({
             type: String as any,
             default: "start",
         },
+        iconFont: {
+            type: String as any,
+            default: "x-large",
+        },
         color: {
             type: String,
             default: "primary",
+        },
+        fontWeight: {
+            default: "400",
         },
     },
     components: {

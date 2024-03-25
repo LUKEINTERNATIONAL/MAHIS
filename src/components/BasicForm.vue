@@ -13,6 +13,7 @@
                             :inputHeader="col.inputHeader"
                             :sectionHeaderFontWeight="col.sectionHeaderFontWeight"
                             :unit="col.unit"
+                            :disabled="col.disabled"
                             :icon="col.icon"
                             :placeholder="col.placeholder"
                             :iconRight="col.iconRight"
@@ -193,7 +194,7 @@
             <span v-for="(al, index3) in item.alerts" :key="index3">
                 <ion-row v-if="al.value" :style="'border-radius: 5px;  margin-top:10px; margin-bottom:10px;background-color:' + al.backgroundColor">
                     <span class="position_content alert_content">
-                        <span v-html="al.icon"> </span>
+                        <ion-icon slot="start" :icon="al.icon" aria-hidden="true"></ion-icon>
                         <span :style="'color:' + al.textColor + '; font-weight:600; margin: 0px 20px;'"> {{ al.index }}</span>
                         <span :style="'color:' + al.textColor + ';'"> {{ al.value }} </span>
                     </span>
@@ -359,7 +360,6 @@ ion-radio {
     margin-right: 150px;
 }
 .alerts_error {
-    background: #f5dad8;
     margin-top: 2px;
     color: #b42318;
     display: flex;
@@ -386,7 +386,7 @@ ion-radio {
     color: #00190e;
 }
 .alerts_error {
-    background: #f5dad8;
+    font-size: 14px;
     margin-top: 2px;
     color: #b42318;
     display: flex;

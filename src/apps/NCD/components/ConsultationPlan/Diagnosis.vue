@@ -2,41 +2,21 @@
     <DashBox :status="no_item" :content="'No Diagnosis added'" />
 
     <span v-if="display_item">
-        <list
-            :listData="diagnosis[0].selectedData"
-            @clicked:edit="editDiagnosis($event)"
-            @clicked:delete="openDeletePopover($event)"
-        >
-        </list>
+        <list :listData="diagnosis[0].selectedData" @clicked:edit="editDiagnosis($event)" @clicked:delete="openDeletePopover($event)"> </list>
     </span>
 
     <ion-row v-if="search_item">
-        <basic-form
-            :contentData="diagnosis"
-            @update:selected="handleInputData"
-            @update:inputValue="handleInputData"
-            @clicked:button="addNewRow"
-        >
+        <basic-form :contentData="diagnosis" @update:selected="handleInputData" @update:inputValue="handleInputData" @clicked:button="addNewRow">
         </basic-form>
     </ion-row>
     <ion-row v-if="addItemButton" style="margin-top: 10px">
-        <DynamicButton
-            fill="clear"
-            :icon="iconsContent.plus"
-            iconSlot="icon-only"
-            @clicked:btn="displayInputFields()"
-            name="Add new Diagnosis"
-        />
+        <DynamicButton fill="clear" :icon="iconsContent.plus" iconSlot="icon-only" @clicked:btn="displayInputFields()" name="Add new Diagnosis" />
     </ion-row>
     <ion-row>
         <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion
-                value="first"
-                toggle-icon-slot="start"
-                style="border-radius: 10px; background-color: #fff"
-            >
+            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
                 <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Previous measurements</ion-label>
+                    <ion-label class="previousLabel">Previous Diagnosis</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
                     <previousDiagnosis />
@@ -47,18 +27,7 @@
 </template>
 
 <script lang="ts">
-import {
-    IonContent,
-    IonHeader,
-    IonItem,
-    IonList,
-    IonTitle,
-    IonToolbar,
-    IonMenu,
-    menuController,
-    IonInput,
-    IonPopover,
-} from "@ionic/vue";
+import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController, IonInput, IonPopover } from "@ionic/vue";
 import { defineComponent, ref } from "vue";
 import { checkmark, pulseOutline } from "ionicons/icons";
 import { icons } from "@/utils/svg";
@@ -73,7 +42,8 @@ import List from "@/components/List.vue";
 import BasicForm from "@/components/BasicForm.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import { Service } from "@/services/service";
-import previousDiagnosis from "@/apps/NCD/components/ConsultationPlan/previousDiagnosis.vue";
+import previousDiagnosis from "@/apps/NCD/components/ConsultationPlan/previousVisits/previousDiagnosis.vue";
+import { Diagnosis } from "../../services/diagnosis";
 
 export default defineComponent({
     name: "Menu",
@@ -150,8 +120,7 @@ export default defineComponent({
             } else {
                 this.search_item = true;
                 this.diagnosis[0].data.rowData[0].colData[0].alertsError = true;
-                this.diagnosis[0].data.rowData[0].colData[0].alertsErrorMassage =
-                    "Please select diagnosis from the list";
+                this.diagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = "Please select diagnosis from the list";
                 return false;
             }
         },
@@ -204,18 +173,13 @@ export default defineComponent({
             this.updateDiagnosisStores();
         },
         async openDeletePopover(e: any) {
-            const deleteConfirmed = await popoverConfirmation(
-                `Do you want to delete ${e[1]} ?`,
-                e[0]
-            );
+            const deleteConfirmed = await popoverConfirmation(`Do you want to delete ${e[1]} ?`, e[0]);
             if (deleteConfirmed) {
                 this.deleteDiagnosis(e[1]);
             }
         },
         deleteDiagnosis(diagnosis: any) {
-            this.diagnosis[0].selectedData = this.diagnosis[0].selectedData.filter(
-                (item: any) => item.display[0] !== diagnosis
-            );
+            this.diagnosis[0].selectedData = this.diagnosis[0].selectedData.filter((item: any) => item.display[0] !== diagnosis);
             this.updateDiagnosisStores();
         },
         setDashedBox() {
