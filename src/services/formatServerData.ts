@@ -2,11 +2,7 @@ import { ConceptService } from "@/services/concept_service";
 
 export async function formatRadioButtonData(data: any) {
 
-    //  console.log(data)
     const buildObjPromises: Promise<any>[] = data.map(async (item: any) => {
-
-        // console.log("object")
-        console.log(item.radioBtnContent.header.selectedValue)
         if (item && item.radioBtnContent && item.radioBtnContent.header && item.radioBtnContent.header.selectedValue){
             return {
                 concept_id: await ConceptService.getConceptID(item.radioBtnContent.header.name),
