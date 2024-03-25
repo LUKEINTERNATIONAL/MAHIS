@@ -2,8 +2,8 @@ import ConsultationPlan from "../views/ConsultationPlan.vue";
 import Enrollment from "../views/Enrollment.vue";
 export default [
     {
-        path: "/consultationPlan",
-        name: "ConsultationPlan",
+        path: "/OPDConsultationPlan",
+        name: "OPDConsultationPlan",
         component: ConsultationPlan,
     },
     {
