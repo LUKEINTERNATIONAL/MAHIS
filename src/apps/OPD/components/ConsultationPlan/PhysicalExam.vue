@@ -1,8 +1,5 @@
 <template>
     <ion-list>
-      <ion-item class="dashed_bottom_border textSectionFormat">
-        <basic-form :contentData="physicalExam"></basic-form>
-      </ion-item>
         <ion-item :lines="visualAT" class="dashed_bottom_border textSectionFormat">
             <ion-toggle :checked="showVisualAcuityTest" @ionChange="toggleShowVisualAcuityTest">
                 <div class="toggle_content">
@@ -134,7 +131,6 @@ import { useComplicationsStore } from "@/stores/ComplicationsStore";
 import BasicForm from "@/components/BasicForm.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import Visits from "@/apps/ANC/components/Visits.vue";
-import {usePhysicalExaminationStore} from "@/stores/PhysicalExam";
 
 export default defineComponent({
     name: "Menu",
@@ -169,7 +165,6 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useComplicationsStore, ["FootScreening"]),
-        ...mapState(usePhysicalExaminationStore, ["physicalExam"]),
     },
     setup() {
         return { checkmark, pulseOutline };
