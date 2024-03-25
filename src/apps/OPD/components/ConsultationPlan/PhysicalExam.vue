@@ -1,12 +1,15 @@
 <template>
-  <ion-list>
-    <ion-item class="dashed_bottom_border">
-      <basic-form :contentData="physicalExam"></basic-form>
-    </ion-item>
-  </ion-list>
+  <div class="container">
+    <ion-card class="section">
+      <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Physical Examination</ion-card-title></ion-card-header>
+      <ion-card-content>
+        <basic-form :contentData="physicalExam" ></basic-form>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </template>
-
 <script lang="ts">
+import {defineComponent} from 'vue';
 import {
   IonContent,
   IonHeader,
@@ -15,27 +18,29 @@ import {
   IonTitle,
   IonToolbar,
   IonMenu,
-  menuController,
   IonToggle,
   IonSelectOption,
   IonInput,
   IonSelect,
-} from "@ionic/vue";
-import { defineComponent } from "vue";
-import { checkmark, pulseOutline } from "ionicons/icons";
-import { ref } from "vue";
-import { icons } from "@/utils/svg";
-import BasicInputField from "@/components/BasicInputField.vue";
-import { mapState } from "pinia";
-import { useComplicationsStore } from "@/stores/ComplicationsStore";
-import BasicForm from "@/components/BasicForm.vue";
-import DynamicButton from "@/components/DynamicButton.vue";
-import Visits from "@/apps/ANC/components/Visits.vue";
+  IonRadio,
+  IonRadioGroup,
+} from '@ionic/vue';
+import BasicForm from '../../../../components/BasicForm.vue';
+import { icons } from '../../../../utils/svg';
+import BasicInputField from '../../../../components/BasicInputField.vue';
+import { mapState } from 'pinia';
+import { checkmark, pulseOutline } from 'ionicons/icons';
+import {
+  dynamicValue,
+  getCheckboxSelectedValue,
+  getFieldValue,
+} from '@/services/data_helpers';
+import BasicCard from "@/components/BasicCard.vue";
 import {usePhysicalExaminationStore} from "@/stores/PhysicalExam";
-
 export default defineComponent({
-  name: "Menu",
-  components: {
+  name: "immidiatePostnatalChecksForChild",
+  components:{
+    BasicCard,
     IonContent,
     IonHeader,
     IonItem,
@@ -49,162 +54,69 @@ export default defineComponent({
     IonInput,
     BasicInputField,
     BasicForm,
-    DynamicButton,
+    IonRadio,
+    IonRadioGroup
   },
+
   data() {
     return {
       iconsContent: icons,
-      footChecked: false,
-      showVisualAcuityTest: false,
-      visualAT: "" as any,
-      footSC: "" as any,
-      cvdRiskObj: {
-        btnColor: "secondary",
-        btnName: "No risk",
-      },
+      vValidations: '' as any,
+      hasValidationErrors: [] as any,
+      inputField: '' as any,
+
     };
   },
-  computed: {
-    ...mapState(useComplicationsStore, ["FootScreening"]),
-    ...mapState(usePhysicalExaminationStore, ["physicalExam"]),
+  computed:{
+    ...mapState(usePhysicalExaminationStore,["physicalExam"]),
+  },
+  mounted(){
+  },
+  watch:{
   },
   setup() {
-    return { checkmark, pulseOutline };
+    return { checkmark,pulseOutline };
   },
-  methods: {
-    navigationMenu(url: any) {
-      menuController.close();
-      this.$router.push(url);
-    },
-    footScreening() {
-      this.footChecked = !this.footChecked;
-      if (this.footChecked) {
-        this.footSC = "none";
-      } else {
-        this.footSC = "";
-      }
-    },
-    toggleShowVisualAcuityTest() {
-      this.showVisualAcuityTest = !this.showVisualAcuityTest;
-      if (this.showVisualAcuityTest) {
-        this.visualAT = "none";
-      } else {
-        this.visualAT = "";
-      }
-    },
-    cvdRisk() {
-      if (this.cvdRiskObj.btnColor != "secondary") {
-        this.cvdRiskObj = {
-          btnColor: "secondary",
-          btnName: "No risk",
-        };
-      } else {
-        this.cvdRiskObj = {
-          btnColor: "danger",
-          btnName: "High risk",
-        };
-      }
-    },
-  },
+  methods: {}
 });
+
 </script>
 
 <style scoped>
-#container {
-  text-align: center;
-
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
-}
-
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-
-  color: #8c8c8c;
-
-  margin: 0;
-}
-
-#container a {
-  text-decoration: none;
-}
-.foot_title {
-  color: #636363;
-  text-align: center;
-}
-.foot_content {
-  color: #00190e;
-  text-align: center;
-  border-bottom: solid 1px #ccc;
-  border-bottom-style: dashed;
-  padding: 10px 0px;
-  font-weight: 500;
-  font-size: 14px;
-}
-.first_col {
-  text-align: left;
-  font-weight: 400;
-  font-size: 14px;
-}
-.sub_item_body {
-  margin-left: 45px;
-}
-.foot_input {
-  width: 100%;
-  color: #636363;
-  text-align: left;
-}
-.item-content {
-  background-color: #ffffff;
-}
-ion-select._item_eye {
-  --background: #fff;
-}
-ion-item.item_eye_ {
-  --inner-border-width: 0;
-  --background-hover: none;
-}
-/* ion-toggle {
-    --track-background-checked: #006401
-} */
-ion-item.sub_item_body_close {
-  border-bottom: 2px dotted var(--ion-color-medium);
-  --inner-border-width: 0;
-}
-.textSectionFormat {
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 600;
-  font-size: 16px;
-}
-.due_date {
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  color: #636363;
-}
-.toggle_content {
+.container {
   display: flex;
-  justify-content: space-between;
-  width: 370px;
+  flex-direction: column;
   align-items: center;
 }
-.other_content {
+
+.section {
+  width: 100%;
+  max-width: 1300px;
+  margin-bottom: 20px;
+}
+
+ion-card {
+  box-shadow:none;
+  background-color:inherit;
+  width: 100%;
+  color: black;
+}
+
+.navigation-buttons {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  align-items: center;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  max-width: 500px;
 }
+
+@media (max-width: 1500px) {
+  .container {
+    padding: 10px;
+  }
+}
+.sub_item_header{
+  font-weight: bold;
+  font-size: 14px;
+}
+
 </style>

@@ -50,7 +50,7 @@
                 </ion-row>
             </span>
             <span v-if="item.radioBtnContent">
-                <div style="" v-if="item.radioBtnContent?.header">
+                <div style="font-weight: bold" v-if="item.radioBtnContent?.header">
                     {{ item.radioBtnContent?.header.title }}
                 </div>
                 <ion-row class="checkbox_content">
@@ -102,7 +102,7 @@
             </span>
             <span v-if="item.groupedRadioBtnContent">
                 <ion-row class="checkbox_content">
-                    <ion-col class="checkout_col" style="" v-for="(al, index3) in item.groupedRadioBtnContent.groupedData" :key="index3">
+                    <ion-col class="checkout_col" style="font-weight: bold" v-for="(al, index3) in item.groupedRadioBtnContent.groupedData" :key="index3">
                         <ion-col :size="radioBtn.colSize" class="checkout_col" v-for="(radioBtn, index3) in al.data" :key="index3">
                             <span v-if="radioBtn.header" :class="'first_col ' + radioBtn.headClassName">
                                 <ion-label>{{ radioBtn.name }} </ion-label>
@@ -130,7 +130,7 @@
                 </ion-row>
             </span>
             <span v-if="item?.checkboxBtnContent && !item?.checkboxBtnContent?.header?.displayNone">
-                <div style="" v-if="item.checkboxBtnContent?.header">
+                <div style="font-weight: bold" v-if="item.checkboxBtnContent?.header">
                     {{ item.checkboxBtnContent?.header.title }}
                 </div>
                 <ion-row class="checkbox_content">
