@@ -57,6 +57,7 @@ import { useDispositionStore } from "@/stores/OutcomeStore";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";
 import { Treatment } from "@/apps/NCD/services/treatment";
+import PhysicalExam from "@/apps/OPD/components/ConsultationPlan/PhysicalExam.vue";
 import { isEmpty } from "lodash";
 import HisDate from "@/utils/Date";
 import { defineComponent } from "vue";
@@ -162,7 +163,7 @@ export default defineComponent({
                 },
                 {
                     title: "Physical Exams",
-                    componet: "Complications",
+                    componet: "PhysicalExam",
                     value: "4",
                 },
                 {

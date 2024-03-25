@@ -122,6 +122,7 @@ import Referral from "@/apps/ANC/components/referral/Referral.vue";
 import AncEnd from "@/apps/ANC/components/ancEnd/AncEnd.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
+import PhysicalExam from "@/apps/OPD/components/ConsultationPlan/PhysicalExam.vue";
 export default defineComponent({
     name: "Home",
     components: {
@@ -186,6 +187,7 @@ export default defineComponent({
         Immunization,
         IntimatePartner,
         Deworming,
+        PhysicalExam
     },
     data() {
         return {
