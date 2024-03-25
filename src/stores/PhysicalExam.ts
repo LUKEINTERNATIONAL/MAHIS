@@ -2056,6 +2056,27 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                }
 
            },
+           {
+               classDash: 'dashed_bottom_border',
+               checkboxBtnContent:
+                   {
+                       header:{
+                           title: '',
+                           selectedValue: ''
+                       },
+                       data:[
+                           {
+                               name: 'Visible bleeding',
+                               disabled:false,
+                               value:'visible bleeding',
+                               labelPlacement: 'end',
+                               colSize: '6',
+                               justify: 'space-between',
+                               checked: false
+                           },
+                       ],
+                   }
+           },
 
        ] as any
     }),
