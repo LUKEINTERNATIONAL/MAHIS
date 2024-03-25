@@ -10,7 +10,8 @@ import { icons } from "@/utils/svg";
 import { iconBloodPressure } from "@/utils/SvgDynamicColor";
 import { BMIService } from "@/services/bmi_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
-import { useVitalsStore } from "@/stores/VitalsStore";
+
+
 import { mapState } from "pinia";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { arePropertiesNotEmpty } from "@/utils/Objects";
@@ -19,6 +20,7 @@ import BasicInputField from "@/components/BasicInputField.vue";
 import { VitalsService } from "@/services/vitals_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { Service } from "@/services/service";
+import { useVitalsStore } from "../stores/OpdVitalsStore";
 
 export default defineComponent({
     components: {
@@ -54,7 +56,7 @@ export default defineComponent({
         this.validaterowData({});
     },
     watch: {
-        vitals: {
+        opDvitals: {
             handler() {
                 this.updateVitalsStores();
             },

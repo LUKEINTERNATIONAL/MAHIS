@@ -43,7 +43,7 @@ import { chevronBackOutline, checkmark } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
-import { useVitalsStore } from "@/stores/VitalsStore";
+//import { useVitalsStore } from "@/stores/VitalsStore";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useInvestigationStore } from "@/stores/InvestigationStore";
 import { useDiagnosisStore } from "@/stores/DiagnosisStore";
@@ -61,6 +61,8 @@ import { isEmpty } from "lodash";
 import HisDate from "@/utils/Date";
 import { defineComponent } from "vue";
 import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
+import { useVitalsStore } from "../stores/OpdVitalsStore";
+import { getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
 export default defineComponent({
     name: "Home",
     components: {
@@ -150,6 +152,13 @@ export default defineComponent({
     },
 
     methods: {
+        handleHeight(){
+            if(getRadioSelectedValue(this.vitals,'temperature')=='yes'){
+                modifyFieldValue(this.vitals,'Temperature1','displayNone',false)
+            }else{
+                 modifyFieldValue(this.vitals,'Temperature1','displayNone',true)
+            }
+        },
         markWizard() {
             if (this.vitals.validationStatus) {
                 this.wizardData[0].checked = true;
