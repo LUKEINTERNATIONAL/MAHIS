@@ -81,12 +81,26 @@ http://ionicframework.com/docs/theming/ */
     --ion-color-light-tint: #f5f6f9;
 }
 
+<<<<<<< HEAD
+/* @media (prefers-color-scheme: dark) { */
+  /*
+=======
 @media (prefers-color-scheme: dark) {
     /*
+>>>>>>> 23cb84044c256ed2cdb72d367bd84f5267c2880e
    * Dark Colors
    * -------------------------------------------
    */
 
+<<<<<<< HEAD
+  /* body {
+    --ion-color-primary: #428cff;
+    --ion-color-primary-rgb: 66,140,255;
+    --ion-color-primary-contrast: #ffffff;
+    --ion-color-primary-contrast-rgb: 255,255,255;
+    --ion-color-primary-shade: #3a7be0;
+    --ion-color-primary-tint: #5598ff;
+=======
     body {
         --ion-color-primary: #428cff;
         --ion-color-primary-rgb: 66, 140, 255;
@@ -94,6 +108,7 @@ http://ionicframework.com/docs/theming/ */
         --ion-color-primary-contrast-rgb: 255, 255, 255;
         --ion-color-primary-shade: #3a7be0;
         --ion-color-primary-tint: #5598ff;
+>>>>>>> 23cb84044c256ed2cdb72d367bd84f5267c2880e
 
         --ion-color-secondary: #50c8ff;
         --ion-color-secondary-rgb: 80, 200, 255;
@@ -130,6 +145,29 @@ http://ionicframework.com/docs/theming/ */
         --ion-color-danger-shade: #e04055;
         --ion-color-danger-tint: #ff5b71;
 
+<<<<<<< HEAD
+    --ion-color-dark: #f4f5f8;
+    --ion-color-dark-rgb: 244,245,248;
+    --ion-color-dark-contrast: #000000;
+    --ion-color-dark-contrast-rgb: 0,0,0;
+    --ion-color-dark-shade: #d7d8da;
+    --ion-color-dark-tint: #f5f6f9; */
+
+    /* --ion-color-medium: #989aa2;
+    --ion-color-medium-rgb: 152,154,162;
+    --ion-color-medium-contrast: #000000;
+    --ion-color-medium-contrast-rgb: 0,0,0;
+    --ion-color-medium-shade: #86888f;
+    --ion-color-medium-tint: #a2a4ab;
+
+    --ion-color-light: #222428;
+    --ion-color-light-rgb: 34,36,40;
+    --ion-color-light-contrast: #ffffff;
+    --ion-color-light-contrast-rgb: 255,255,255;
+    --ion-color-light-shade: #1e2023;
+    --ion-color-light-tint: #383a3e;
+  } */
+=======
         --ion-color-dark: #f4f5f8;
         --ion-color-dark-rgb: 244, 245, 248;
         --ion-color-dark-contrast: #000000;
@@ -151,15 +189,22 @@ http://ionicframework.com/docs/theming/ */
         --ion-color-light-shade: #1e2023;
         --ion-color-light-tint: #383a3e;
     }
+>>>>>>> 23cb84044c256ed2cdb72d367bd84f5267c2880e
 
     /*
    * iOS Dark Theme
    * -------------------------------------------
    */
 
+<<<<<<< HEAD
+  /* .ios body {
+    --ion-background-color: #000000;
+    --ion-background-color-rgb: 0,0,0;
+=======
     .ios body {
         --ion-background-color: #000000;
         --ion-background-color-rgb: 0, 0, 0;
+>>>>>>> 23cb84044c256ed2cdb72d367bd84f5267c2880e
 
         --ion-text-color: #ffffff;
         --ion-text-color-rgb: 255, 255, 255;
@@ -189,20 +234,34 @@ http://ionicframework.com/docs/theming/ */
         --ion-card-background: #1c1c1d;
     }
 
+<<<<<<< HEAD
+  .ios ion-modal {
+    --ion-background-color: var(--ion-color-step-100);
+    --ion-color-primary: var(--ion-color-step-150);
+    --ion-toolbar-border-color: var(--ion-color-step-250);
+  } */
+=======
     .ios ion-modal {
         --ion-background-color: var(--ion-color-step-100);
         --ion-color-primary: var(--ion-color-step-150);
         --ion-toolbar-border-color: var(--ion-color-step-250);
     }
+>>>>>>> 23cb84044c256ed2cdb72d367bd84f5267c2880e
 
     /*
    * Material Design Dark Theme
    * -------------------------------------------
    */
 
+<<<<<<< HEAD
+  /* .md body {
+    --ion-background-color: #121212;
+    --ion-background-color-rgb: 18,18,18;
+=======
     .md body {
         --ion-background-color: #121212;
         --ion-background-color-rgb: 18, 18, 18;
+>>>>>>> 23cb84044c256ed2cdb72d367bd84f5267c2880e
 
         --ion-text-color: #ffffff;
         --ion-text-color-rgb: 255, 255, 255;
@@ -235,6 +294,12 @@ http://ionicframework.com/docs/theming/ */
 
         --ion-tab-bar-background: #1f1f1f;
 
+<<<<<<< HEAD
+    --ion-card-background: #1e1e1e;
+  }
+} */
+=======
         --ion-card-background: #1e1e1e;
     }
 }
+>>>>>>> 23cb84044c256ed2cdb72d367bd84f5267c2880e
