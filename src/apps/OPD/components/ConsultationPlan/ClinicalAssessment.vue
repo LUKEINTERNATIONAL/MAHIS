@@ -5,13 +5,15 @@
                 >Level of consciousness
             </ion-toggle>
         </ion-item>
+
         <div class="sub_item_body" v-if="levelOfConsciousnessStatus"><LevelOfConsciousness /></div>
-        <ion-item class="dashed_bottom_border">
-            <ion-toggle :checked="radiologyOrdersStatus" @ionChange="presentingComplaintsStatus = !presentingComplaintsStatus"
-                >Presenting complaints<Section></Section>
-            </ion-toggle>
-        </ion-item>
+            <ion-item class="dashed_bottom_border">
+                <ion-toggle :checked="radiologyOrdersStatus" @ionChange="presentingComplaintsStatus = !presentingComplaintsStatus"
+                    >Presenting complaints<Section></Section>
+                </ion-toggle>
+            </ion-item>
         <div class="sub_item_body presentingComplaint" v-if="presentingComplaintsStatus"><PresentingComplaints /></div>
+        
         <ion-item class="dashed_bottom_border">
             <ion-toggle :checked="pregnancyBreastfeedingStatus" @ionChange="pregnancyBreastfeedingStatus = !pregnancyBreastfeedingStatus"
                 >Pregnancy and breastfeeding status</ion-toggle
