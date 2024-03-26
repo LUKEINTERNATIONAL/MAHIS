@@ -35,12 +35,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
            },
            {
                selectdData: [],
-               classDash: "dashed_bottom_border",
+               classDash: "",
                radioBtnContent: {
                    header: {
-                       title: "Reason why physical examination done?",
-                       selectedValue: "",
-                       name: "Yes",
+                       title: 'Reason why physical examination not done?',
+                       selectedValue: '',
+                       name: 'Reason why physical examination not done',
+                       displayNone:true
                    },
                    data: [
                        {
@@ -62,12 +63,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
            },
            {
                selectdData: [],
-               classDash: "dashed_bottom_border",
+               classDash: "",
                radioBtnContent: {
                    header: {
-                       title: "Eyes normal?",
-                       selectedValue: "",
-                       name: "Yes",
+                       title: 'Eyes normal?',
+                       selectedValue: '',
+                       name: 'Eyes normal',
+                       displayNone:true
                    },
                    data: [
                        {
@@ -90,12 +92,15 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
            {
                selectdData: [],
                isFinishBtn: false,
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
-                           title: 'Select abnormality',
+                           title: 'Select abnormality for eyes',
                            selectedValue: '',
+                           displayNone:true,
+                           name: 'Parlour',
+
 
                        },
                        data:[
@@ -114,12 +119,14 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
+                           name:'Jaundice'
                        },
                        data:[
                            {
@@ -136,12 +143,14 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
+                           name: 'Ulcerations',
                        },
                        data:[
                            {
@@ -164,7 +173,9 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
+                           name:'Other eye abnormality'
                        },
                        data:[
                            {
@@ -190,7 +201,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                    inputHeader: 'specify',
                                    icon: icons.editPen,
                                    value: 'other',
-                                   name: 'Other',
+                                   name: 'Other eye abnormality field',
                                    eventType: 'input',
                                    inputWidth: "100%",
                                    required: true
@@ -210,7 +221,8 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    header: {
                        title: "Mouth normal?",
                        selectedValue: "",
-                       name: "No",
+                       name: "Mouth normal",
+                       DisplayNone:true
                    },
                    data: [
                        {
@@ -233,12 +245,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
            {
                selectdData: [],
                isFinishBtn: false,
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
-                           title: 'Select abnormality',
+                           title: 'Select the abnormality in the mouth',
                            selectedValue: '',
+                           displayNone:true,
 
                        },
                        data:[
@@ -257,12 +270,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -279,12 +293,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -302,12 +317,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -348,12 +364,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
            },
            {
                selectdData: [],
-               classDash: "dashed_bottom_border",
+               classDash: "",
                radioBtnContent: {
                    header: {
                        title: "Ears normal?",
                        selectedValue: "",
-                       name: "No",
+                       name: "Ears normal",
+                       displayNone:true
                    },
                    data: [
                        {
@@ -376,12 +393,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
            {
                selectdData: [],
                isFinishBtn: false,
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: 'Select abnormality',
                            selectedValue: '',
+                           displayNone:true,
 
                        },
                        data:[
@@ -390,7 +408,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value: 'discharge',
                                labelPlacement: "start",
-                               colSize: '7',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -400,12 +418,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -422,12 +441,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -468,12 +488,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
            },
            {
                selectdData: [],
-               classDash: "dashed_bottom_border",
+               classDash: "",
                radioBtnContent: {
                    header: {
                        title: "Face normal?",
                        selectedValue: "",
-                       name: "No",
+                       name: "Face normal",
+                       displayNone:true
                    },
                    data: [
                        {
@@ -496,12 +517,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
            {
                selectdData: [],
                isFinishBtn: false,
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: 'Select abnormality',
                            selectedValue: '',
+                           displayNone:true,
 
                        },
                        data:[
@@ -520,12 +542,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -547,7 +570,8 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -594,7 +618,8 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    header: {
                        title: "Neck normal?",
                        selectedValue: "",
-                       name: "No",
+                       name: "Neck normal",
+                       displayNone:true
                    },
                    data: [
                        {
@@ -617,12 +642,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
            {
                selectdData: [],
                isFinishBtn: false,
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: 'Select abnormality',
                            selectedValue: '',
+                           displayNone:true,
 
                        },
                        data:[
@@ -641,12 +667,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -663,12 +690,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -685,12 +713,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -737,14 +766,15 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    header: {
                        title: "Chest inspection normal?",
                        selectedValue: "",
-                       name: "No",
+                       name: "Chest inspection normal",
+                       displayNone:true,
                    },
                    data: [
                        {
                            value: "yes",
                            name: "Yes",
                            labelPlacement: "start",
-                           colSize: '9',
+                           colSize: '7',
                            justify: "space-between",
                        },
                        {
@@ -760,12 +790,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
            {
                selectdData: [],
                isFinishBtn: false,
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
                            selectedValue: '',
+                           displayNone:true,
 
                        },
                        data:[
@@ -784,12 +815,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -806,12 +838,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -828,12 +861,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -850,12 +884,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -902,6 +937,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                        title: "Chest movement",
                        selectedValue: "",
                        name: "Chest movement",
+                       DisplayNone:true
                    },
                    data: [
                        {
@@ -929,7 +965,8 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    header: {
                        title: "Heart sounds normal?",
                        selectedValue: "",
-                       name: "No",
+                       name: "Heart sounds normal",
+                       DisplayNone:true
                    },
                    data: [
                        {
@@ -952,12 +989,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
            {
                selectdData: [],
                isFinishBtn: false,
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
                            selectedValue: '',
+                           displayNone:true,
 
                        },
                        data:[
@@ -965,7 +1003,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                name: 'Loud P2',
                                disabled:false,
                                value: 'loud p2',
-                               labelPlacement: 'end',
+                               labelPlacement: 'start',
                                colSize: '9',
                                justify: 'space-between',
                                checked: false
@@ -976,12 +1014,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -998,12 +1037,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -1019,12 +1059,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    }
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -1046,7 +1087,8 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    header: {
                        title: "Breath sounds normal",
                        selectedValue: "",
-                       name: "No",
+                       name: "Breath sounds normal",
+                       displayNone:true
                    },
                    data: [
                        {
@@ -1069,12 +1111,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
            {
                selectdData: [],
                isFinishBtn: false,
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
                            selectedValue: '',
+                           displayNone:true,
 
                        },
                        data:[
@@ -1093,12 +1136,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -1115,12 +1159,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_bordder',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -1138,40 +1183,14 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            {
                selectdData: [],
-               classDash: "dashed_bottom_border",
-               radioBtnContent: {
-                   header: {
-                       title: "Breath sounds normal",
-                       selectedValue: "",
-                       name: "No",
-                   },
-                   data: [
-                       {
-                           value: "yes",
-                           name: "Yes",
-                           labelPlacement: "start",
-                           colSize: "7",
-                           justify: "space-between",
-                       },
-                       {
-                           value: "no",
-                           name: "No",
-                           labelPlacement: "start",
-                           colSize: "7",
-                           justify: "space-between",
-                       },
-                   ],
-               },
-           },
-           {
-               selectdData: [],
                isFinishBtn: false,
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
                            selectedValue: '',
+                           displayNone:true,
 
                        },
                        data:[
@@ -1180,7 +1199,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value: 'clackles',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1190,12 +1209,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -1203,7 +1223,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value:'wheezes',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1212,12 +1232,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -1225,7 +1246,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value:'bronchial',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1233,33 +1254,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    }
            },
            {
-               classDash: 'dashed_bottom_bordder',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
-                       },
-                       data:[
-                           {
-                               name: 'Bronchial',
-                               disabled:false,
-                               value:'bronchial',
-                               labelPlacement: "start",
-                               colSize: '6',
-                               justify: 'space-between',
-                               checked: false
-                           },
-                       ],
-                   }
-           },
-           {
-               classDash: 'dashed_bottom_bordder',
-               checkboxBtnContent:
-                   {
-                       header:{
-                           title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -1267,7 +1268,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value:'Crepitations',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1281,7 +1282,8 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    header: {
                        title: "Abdominal inspection normal?",
                        selectedValue: "",
-                       name: "No",
+                       name: "Abdominal inspection normal",
+                       displayNone:true
                    },
                    data: [
                        {
@@ -1304,12 +1306,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
            {
                selectdData: [],
                isFinishBtn: false,
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
                            selectedValue: '',
+                           displayNone:true,
 
                        },
                        data:[
@@ -1318,7 +1321,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value: 'abdominal distension',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1328,12 +1331,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -1341,7 +1345,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value:'rash',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1350,12 +1354,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -1363,7 +1368,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value:'wound',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1371,12 +1376,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    }
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -1384,7 +1390,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value:'laceration',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1392,12 +1398,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    }
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -1405,7 +1412,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value:'bruise',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1413,12 +1420,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    }
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -1426,7 +1434,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value:'burn',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1434,12 +1442,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    }
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -1447,7 +1456,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value:'other',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1484,7 +1493,8 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    header: {
                        title: "Abdominal Auscultation normal?",
                        selectedValue: "",
-                       name: "No",
+                       name: "Abdominal Auscultation normal",
+                       displayNone:true
                    },
                    data: [
                        {
@@ -1507,12 +1517,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
            {
                selectdData: [],
                isFinishBtn: false,
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
                            selectedValue: '',
+                           displayNone:true,
 
                        },
                        data:[
@@ -1521,7 +1532,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value: 'bruit',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1531,12 +1542,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -1544,7 +1556,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value:'bowel sounds',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1553,12 +1565,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -1566,7 +1579,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value:'hyperactive',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1574,12 +1587,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    }
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -1587,7 +1601,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value:'reduced bowel sounds',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1595,12 +1609,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    }
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -1608,7 +1623,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value:'absent',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1616,20 +1631,21 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    }
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
                                name: 'Other',
                                disabled:false,
                                value:'other',
-                               labelPlacement: 'end',
-                               colSize: '6',
+                               labelPlacement: 'start',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1665,7 +1681,8 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    header: {
                        title: "Abdominal Palpation normal?",
                        selectedValue: "",
-                       name: "No",
+                       name: "Abdominal Palpation normal",
+                       displayNone:true
                    },
                    data: [
                        {
@@ -1688,12 +1705,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
            {
                selectdData: [],
                isFinishBtn: false,
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
                            selectedValue: '',
+                           displayNone:true,
 
                        },
                        data:[
@@ -1702,7 +1720,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value: 'tenderness',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1712,19 +1730,21 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
                                name: 'Hepatomegaly',
                                disabled:false,
                                value:'hepatomegaly',
-                               labelPlacement: "start",                               colSize: '6',
+                               labelPlacement: "start",
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1733,20 +1753,21 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
                                name: 'Splenomegaly',
                                disabled:false,
                                value:'splenomegaly',
-                               labelPlacement: 'end',
-                               colSize: '6',
+                               labelPlacement: 'start',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1754,12 +1775,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    }
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -1767,7 +1789,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value:'kidney ballotab',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1775,12 +1797,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    }
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -1788,7 +1811,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value:'other masses',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1824,7 +1847,8 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    header: {
                        title: "Genital examination normal?",
                        selectedValue: "",
-                       name: "No",
+                       name: "Genital examination normal",
+                       displayNone:true
                    },
                    data: [
                        {
@@ -1837,7 +1861,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                        {
                            value: "no",
                            name: "No",
-                           labelPlacement: "end",
+                           labelPlacement: "start",
                            colSize: "7",
                            justify: "space-between",
                        },
@@ -1847,12 +1871,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
            {
                selectdData: [],
                isFinishBtn: false,
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
                            selectedValue: '',
+                           displayNone:true,
 
                        },
                        data:[
@@ -1861,7 +1886,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value: 'warts',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1871,12 +1896,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -1884,7 +1910,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value:'vesicles',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1893,12 +1919,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -1906,7 +1933,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value:'growths',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1914,12 +1941,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    }
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -1927,7 +1955,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value:'genital sores',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1935,12 +1963,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    }
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -1948,7 +1977,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value:'urethral meatus abnormal',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1956,12 +1985,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    }
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -1969,7 +1999,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value:'oedema',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1977,12 +2007,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    }
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -1990,7 +2021,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value:'abnormal discharge',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -1998,12 +2029,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    }
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -2011,7 +2043,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value:'scrotal swelling',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -2019,20 +2051,21 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    }
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
-                               name: 'Testes swelling',
+                               name: '',
                                disabled:false,
                                value:'testes swelling',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -2040,20 +2073,21 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    }
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
                                name: 'Other',
                                disabled:false,
                                value:'other',
-                               labelPlacement: 'end',
-                               colSize: '6',
+                               labelPlacement: 'start',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -2083,12 +2117,13 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
 
            },
            {
-               classDash: 'dashed_bottom_border',
+               classDash: '',
                checkboxBtnContent:
                    {
                        header:{
                            title: '',
-                           selectedValue: ''
+                           selectedValue: '',
+                           displayNone:true,
                        },
                        data:[
                            {
@@ -2096,7 +2131,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                disabled:false,
                                value:'visible bleeding',
                                labelPlacement: "start",
-                               colSize: '6',
+                               colSize: '9',
                                justify: 'space-between',
                                checked: false
                            },
@@ -2111,5 +2146,5 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
             this.physicalExam = data;
         },
     },
-    persist: true,
+    // persist: true,
 });

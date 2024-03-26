@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <ion-card class="section">
-      <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Physical Examination</ion-card-title></ion-card-header>
+      <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
       <ion-card-content>
         <basic-form :contentData="physicalExam" ></basic-form>
       </ion-card-content>
@@ -33,7 +33,7 @@ import { checkmark, pulseOutline } from 'ionicons/icons';
 import {
   dynamicValue,
   getCheckboxSelectedValue,
-  getFieldValue,
+  getFieldValue, getRadioSelectedValue, modifyCheckboxHeader, modifyCheckboxValue, modifyFieldValue, modifyRadioValue,
 } from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
 import {usePhysicalExaminationStore} from "@/stores/PhysicalExam";
@@ -71,13 +71,78 @@ export default defineComponent({
     ...mapState(usePhysicalExaminationStore,["physicalExam"]),
   },
   mounted(){
+    this.handlePhysicalExam()
   },
   watch:{
+    physicalExam: {
+      handler() {
+        this.handlePhysicalExam()
+      },
+      deep:true
+    }
   },
   setup() {
     return { checkmark,pulseOutline };
   },
-  methods: {}
+  methods: {
+
+    handlePhysicalExam(){
+      if(getRadioSelectedValue(this.physicalExam,'Physical examination done')=='yes'){
+        modifyRadioValue(this.physicalExam,'Eyes normal','displayNone',false)
+
+          if(getRadioSelectedValue(this.physicalExam,'Eyes normal')=='no')
+          {
+            modifyCheckboxHeader(this.physicalExam, 'Parlour', 'displayNone', false);
+            modifyCheckboxHeader(this.physicalExam, 'Jaundice', 'displayNone', false);
+            modifyCheckboxHeader(this.physicalExam, 'Ulcerations', 'displayNone', false);
+            modifyCheckboxHeader(this.physicalExam, 'Other eye abnormality', 'displayNone', false);
+            if(getCheckboxSelectedValue(this.physicalExam,'Other eye abnormality')?.value =='other'){
+              modifyFieldValue(this.physicalExam,'Other eye abnormality field','displayNone',false)
+            }else
+            {
+              modifyFieldValue(this.physicalExam,'Other eye abnormality field','displayNone',true)
+
+            }
+          } else {
+            modifyCheckboxHeader(this.physicalExam, 'Parlour', 'displayNone', true);
+            modifyCheckboxHeader(this.physicalExam, 'Jaundice', 'displayNone', true);
+            modifyCheckboxHeader(this.physicalExam, 'Ulcerations', 'displayNone', true);
+            modifyCheckboxHeader(this.physicalExam, 'Other eye abnormality', 'displayNone', true);
+          }
+        modifyRadioValue(this.physicalExam,'Mouth normal','displayNone',false)
+        modifyRadioValue(this.physicalExam,'Ears normal','displayNone',false)
+        modifyRadioValue(this.physicalExam,'Face normal','displayNone',false)
+        modifyRadioValue(this.physicalExam,'Neck normal','displayNone',false)
+        modifyRadioValue(this.physicalExam,'Chest inspection normal','displayNone',false)
+        modifyRadioValue(this.physicalExam,'Chest movement','displayNone',false)
+        modifyRadioValue(this.physicalExam,'Heart sounds normal','displayNone',false)
+        modifyRadioValue(this.physicalExam,'Breath sounds normal','displayNone',false)
+        modifyRadioValue(this.physicalExam,'Abdominal inspection normal','displayNone',false)
+        modifyRadioValue(this.physicalExam,'Abdominal Auscultation normal','displayNone',false)
+        modifyRadioValue(this.physicalExam,'Abdominal Palpation normal','displayNone',false)
+        modifyRadioValue(this.physicalExam,'Genital examination normal','displayNone',false)
+      }else{
+        modifyRadioValue(this.physicalExam,'Eyes normal','displayNone',true)
+        modifyRadioValue(this.physicalExam,'Mouth normal','displayNone',true)
+        modifyRadioValue(this.physicalExam,'Ears normal','displayNone',true)
+        modifyRadioValue(this.physicalExam,'Face normal','displayNone',true)
+        modifyRadioValue(this.physicalExam,'Neck normal','displayNone',true)
+        modifyRadioValue(this.physicalExam,'Chest inspection normal','displayNone',true)
+        modifyRadioValue(this.physicalExam,'Chest movement','displayNone',true)
+        modifyRadioValue(this.physicalExam,'Heart sounds normal','displayNone',true)
+        modifyRadioValue(this.physicalExam,'Breath sounds normal','displayNone',true)
+        modifyRadioValue(this.physicalExam,'Abdominal inspection normal','displayNone',true)
+        modifyRadioValue(this.physicalExam,'Abdominal Auscultation normal','displayNone',true)
+        modifyRadioValue(this.physicalExam,'Abdominal Palpation normal','displayNone',true)
+        modifyRadioValue(this.physicalExam,'Genital examination normal','displayNone',true)
+      }
+
+      if(getRadioSelectedValue(this.physicalExam,'Physical examination done')=='no'){
+        modifyRadioValue(this.physicalExam,'Reason why physical examination not done','displayNone',false)
+      }else{
+        modifyRadioValue(this.physicalExam,'Reason why physical examination not done','displayNone',true)}
+    },
+  }
 });
 
 </script>

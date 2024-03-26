@@ -49,7 +49,7 @@
                     </ion-col>
                 </ion-row>
             </span>
-            <span v-if="item.radioBtnContent">
+          <span v-if="item?.radioBtnContent && !item?.radioBtnContent?.header?.displayNone">
                 <div style="font-weight: bold" v-if="item.radioBtnContent?.header">
                     {{ item.radioBtnContent?.header.title }}
                 </div>
