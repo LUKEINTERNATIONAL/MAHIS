@@ -9,7 +9,7 @@
             </ion-item>
         </ion-col>
         <ion-col :size="item.btnSize || 4" class="action_buttons" :class="item.class">
-            <DynamicButton v-if="item?.btn?.includes('enter_results')" name="Enter Result" @click="$emit('clicked:edit', item.display)" />
+            <DynamicButton v-if="item?.btn?.includes('enter_results')" name="Enter Result" @click="$emit('clicked:results', item)" />
             <DynamicButton
                 v-if="item?.btn?.includes('attach')"
                 fill="clear"
