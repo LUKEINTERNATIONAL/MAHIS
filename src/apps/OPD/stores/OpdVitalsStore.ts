@@ -59,6 +59,7 @@ export const useVitalsStore = defineStore("vitalsStore", {
         sectionHeader: "Is Temperature Taken",
         selectdData: [],
         isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
         radioBtnContent: {
           header: {
             title: "",
@@ -141,6 +142,7 @@ export const useVitalsStore = defineStore("vitalsStore", {
         sectionHeader: "Pulse Rate",
         selectdData: [],
         isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
         radioBtnContent: {
           header: {
             title: "",
@@ -244,6 +246,7 @@ export const useVitalsStore = defineStore("vitalsStore", {
         sectionHeader: "Blood Pressure",
         selectdData: [],
         isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
         radioBtnContent: {
           header: {
             title: "",
@@ -307,7 +310,6 @@ export const useVitalsStore = defineStore("vitalsStore", {
       },
       {
         sectionHeader: "",
-        classDash: "dashed_bottom_border _padding",
         data: {
           rowData: [
             {
@@ -382,6 +384,7 @@ export const useVitalsStore = defineStore("vitalsStore", {
         sectionHeader: "Respiratory Rate",
         selectdData: [],
         isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
         radioBtnContent: {
           header: {
             title: "",
