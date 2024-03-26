@@ -2,11 +2,11 @@
     <DashBox :status="no_item" :content="'No Diagnosis added'" />
 
     <span v-if="display_item">
-        <list :listData="diagnosis[0].selectedData" @clicked:edit="editDiagnosis($event)" @clicked:delete="deleteDiagnosis"> </list>
+        <list :listData="OPDdiagnosis[0].selectedData" @clicked:edit="editDiagnosis($event)" @clicked:delete="deleteDiagnosis"> </list>
     </span>
 
     <ion-row v-if="search_item">
-        <basic-form :contentData="diagnosis" @update:selected="handleInputData" @update:inputValue="handleInputData" @clicked:button="addNewRow">
+        <basic-form :contentData="OPDdiagnosis" @update:selected="handleInputData" @update:inputValue="handleInputData" @clicked:button="addNewRow">
         </basic-form>
     </ion-row>
     <ion-row v-if="addItemButton" style="margin-top: 10px">
@@ -35,7 +35,7 @@ import { PatientDiagnosisService } from "@/services/patient_diagnosis_service";
 import DashBox from "@/components/DashBox.vue";
 import SelectionPopover from "@/components/SelectionPopover.vue";
 import BasicInputField from "@/components/BasicInputField.vue";
-import { useDiagnosisStore } from "@/stores/DiagnosisStore";
+import { useOPDDiagnosisStore } from "@/apps/OPD/stores/DiagnosisStore";
 import { mapState } from "pinia";
 import { toastWarning, popoverConfirmation } from "@/utils/Alerts";
 import List from "@/components/List.vue";
@@ -85,13 +85,13 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     computed: {
-        ...mapState(useDiagnosisStore, ["diagnosis"]),
+        ...mapState(useOPDDiagnosisStore, ["OPDdiagnosis"]),
         inputFields() {
-            return this.diagnosis[0].data.rowData[0].colData;
+            return this.OPDdiagnosis[0].data.rowData[0].colData;
         },
     },
     watch: {
-        diagnosis: {
+        OPDdiagnosis: {
             handler() {
                 this.setDashedBox();
             },
@@ -111,57 +111,76 @@ export default defineComponent({
             this.search_item = true;
         },
         async validaterowData() {
-            this.diagnosis[0].data.rowData[0].colData[0].alertsError = false;
-            this.diagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = "";
+            this.OPDdiagnosis[0].data.rowData[0].colData[0].alertsError = false;
+            this.OPDdiagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = "";
 
             this.diagnosisData = await this.getDiagnosis(this.inputFields[0].value);
             if (this.inputFields[0].value == this.diagnosisData[0]?.name) {
                 return true;
             } else {
                 this.search_item = true;
-                this.diagnosis[0].data.rowData[0].colData[0].alertsError = true;
-                this.diagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = "Please select diagnosis from the list";
+                this.OPDdiagnosis[0].data.rowData[0].colData[0].alertsError = true;
+                this.OPDdiagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = "Please select diagnosis from the list";
+                return false;
+            }
+        },
+        async validateDifferentialrowData() {
+            this.OPDdiagnosis[0].data.rowData[0].colData[1].alertsError = false;
+            this.OPDdiagnosis[0].data.rowData[0].colData[1].alertsErrorMassage = "";
+
+            this.diagnosisData = await this.getDiagnosis(this.inputFields[1].value);
+            if (this.inputFields[0].value == this.diagnosisData[1]?.name) {
+                return true;
+            } else {
+                this.search_item = true;
+                this.OPDdiagnosis[0].data.rowData[0].colData[1].alertsError = true;
+                this.OPDdiagnosis[0].data.rowData[0].colData[1].alertsErrorMassage = "Please select diagnosis from the list";
                 return false;
             }
         },
         async addNewRow() {
             if (await this.validaterowData()) {
-                this.diagnosis[0].data.rowData[0].colData[0].value = this.inputFields[0].value;
+                this.OPDdiagnosis[0].data.rowData[0].colData[0].value = this.inputFields[0].value;
                 this.search_item = false;
                 this.display_item = true;
                 this.addItemButton = true;
                 this.buildDiagnosis();
             }
-            this.diagnosis[0].data.rowData[0].colData[0].value = "";
-            this.diagnosis[0].data.rowData[0].colData[0].popOverData.data = [];
+            this.OPDdiagnosis[0].data.rowData[0].colData[0].value = "";
+            this.OPDdiagnosis[0].data.rowData[0].colData[0].popOverData.data = [];
         },
         buildDiagnosis() {
-            this.diagnosis[0].selectedData.push({
+            this.OPDdiagnosis[0].selectedData.push({
                 actionBtn: true,
                 btn: ["edit", "delete"],
                 name: this.inputFields[0].value,
                 id: this.diagnosisData[0].concept_id,
                 display: [this.inputFields[0].value],
                 data: {
-                    concept_id: 6542, //primary diagnosis
+                    concept_id: 6542, //primary OPDdiagnosis
                     value_coded: this.diagnosisData[0].concept_id,
                     obs_datetime: Service.getSessionDate(),
                 },
             });
         },
         updateDiagnosisStores() {
-            const diagnosisStore = useDiagnosisStore();
-            diagnosisStore.setDiagnosis(this.diagnosis);
+            const diagnosisStore = useOPDDiagnosisStore();
+            diagnosisStore.setOPDDiagnosis(this.OPDdiagnosis);
         },
         openPopover(e: any) {
             this.event = e;
             this.popoverOpen = true;
         },
         async handleInputData(col: any) {
-            if (col.inputHeader == "Diagnosis") {
+            if (col.inputHeader == "Primary Diagnosis") {
                 this.diagnosisData = await this.getDiagnosis(col.value);
-                this.diagnosis[0].data.rowData[0].colData[0].popOverData.data = this.diagnosisData;
+                this.OPDdiagnosis[0].data.rowData[0].colData[0].popOverData.data = this.diagnosisData;
                 this.validaterowData();
+            }
+            if (col.inputHeader == "Differential Diagnosis") {
+                this.diagnosisData = await this.getDiagnosis(col.value);
+                this.OPDdiagnosis[0].data.rowData[0].colData[1].popOverData.data = this.diagnosisData;
+                this.validateDifferentialrowData();
             }
         },
         async getDiagnosis(value: any) {
@@ -170,7 +189,7 @@ export default defineComponent({
         editDiagnosis(test: any) {
             this.deleteDiagnosis(test);
             this.selectedText = test.name;
-            this.diagnosis[0].data.rowData[0].colData[0].value = test.name;
+            this.OPDdiagnosis[0].data.rowData[0].colData[0].value = test.name;
             this.addItemButton = false;
             this.search_item = true;
             this.updateDiagnosisStores();
@@ -181,8 +200,8 @@ export default defineComponent({
                 this.deleteDiagnosis(e.name);
             }
         },
-        deleteDiagnosis(diagnosis: any) {
-            this.diagnosis[0].selectedData = this.diagnosis[0].selectedData.filter((item: any) => item.display[0] !== diagnosis.name);
+        deleteDiagnosis(OPDdiagnosis: any) {
+            this.OPDdiagnosis[0].selectedData = this.OPDdiagnosis[0].selectedData.filter((item: any) => item.display[0] !== OPDdiagnosis.name);
             this.updateDiagnosisStores();
         },
         setDashedBox() {
@@ -191,7 +210,7 @@ export default defineComponent({
                 this.search_item = true;
                 this.no_item = false;
             }
-            if (this.diagnosis[0].selectedData.length > 0) {
+            if (this.OPDdiagnosis[0].selectedData.length > 0) {
                 this.display_item = true;
                 this.no_item = false;
             } else if (!this.search_item) {

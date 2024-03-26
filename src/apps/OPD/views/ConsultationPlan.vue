@@ -148,7 +148,7 @@ export default defineComponent({
                 },
                 {
                     title: "Diagnosis",
-                    componet: "Diagnosis",
+                    componet: "OPDDiagnosis",
                     value: "3",
                 },
                 {
