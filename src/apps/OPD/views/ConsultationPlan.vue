@@ -154,7 +154,7 @@ export default defineComponent({
                 {
                     title: "Treatment plan",
                     componet: "OPDTreatmentPlan",
-                    value: "5",
+                    value: "4",
                 },
                 {
                     title: "Outcome",

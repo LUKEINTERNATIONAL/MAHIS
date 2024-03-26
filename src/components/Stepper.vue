@@ -193,6 +193,7 @@ export default defineComponent({
         IntimatePartner,
         Deworming,
         OPDDiagnosis,
+        OPDTreatmentPlan
     },
     data() {
         return {

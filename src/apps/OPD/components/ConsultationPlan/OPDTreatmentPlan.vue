@@ -1,6 +1,5 @@
 <template>
-    <AllergiesComponent/>
-    
+    <ion-list>
         <ion-accordion-group ref="accordionGroup" class="previousView">
             <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
                 <ion-item slot="header" color="light">
@@ -336,7 +335,6 @@ import { ConceptService } from "@/services/concept_service";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { Service } from "@/services/service";
 import { PreviousTreatment } from "@/apps/NCD/services/treatment";
-import AllergiesComponent from "@/apps/OPD/components/ConsultationPlan/Allergies.vue"
 
 const iconsContent = icons;
 const drug_frequencies = DRUG_FREQUENCIES;
