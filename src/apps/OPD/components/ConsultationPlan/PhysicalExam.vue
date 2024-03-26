@@ -271,12 +271,12 @@ export default defineComponent({
           modifyCheckboxHeader(this.physicalExam, 'Hepatomegaly', 'displayNone', false);
           modifyCheckboxHeader(this.physicalExam, 'Splenomegaly', 'displayNone', false);
           modifyCheckboxHeader(this.physicalExam, 'Kidney ballotab', 'displayNone', false);
-          modifyCheckboxHeader(this.physicalExam, 'Other masses', 'displayNone', false);
-          if(getCheckboxSelectedValue(this.physicalExam,'Other masses')?.value =='other masses'){
-            modifyFieldValue(this.physicalExam,'Other masses field','displayNone',false)
+          modifyCheckboxHeader(this.physicalExam, 'Other abdominal masses', 'displayNone', false);
+          if(getCheckboxSelectedValue(this.physicalExam,'Other abdominal masses')?.value =='other abdominal masses'){
+            modifyFieldValue(this.physicalExam,'Other abdominal palpation abnormality field ','displayNone',false)
           }else
           {
-            modifyFieldValue(this.physicalExam,'Other masses field','displayNone',true)
+            modifyFieldValue(this.physicalExam,'Other abdominal palpation abnormality field ','displayNone',true)
 
           }
         } else {
@@ -284,7 +284,7 @@ export default defineComponent({
           modifyCheckboxHeader(this.physicalExam, 'Hepatomegaly', 'displayNone', true);
           modifyCheckboxHeader(this.physicalExam, 'Splenomegaly', 'displayNone', true);
           modifyCheckboxHeader(this.physicalExam, 'Kidney ballotab', 'displayNone', true);
-          modifyCheckboxHeader(this.physicalExam, 'Other masses', 'displayNone', true);
+          modifyCheckboxHeader(this.physicalExam, 'Other abdominal masses', 'displayNone', true);
         }
         modifyRadioValue(this.physicalExam,'Genital examination normal','displayNone',false)
       }else{
