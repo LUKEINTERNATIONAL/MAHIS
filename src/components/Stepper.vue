@@ -82,6 +82,7 @@ import ConfirmDiagnosis from "@/apps/NCD/components/ConsultationPlan/ConfirmDiag
 import Outcome from "@/apps/NCD/components/ConsultationPlan/Outcome.vue";
 import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigations.vue";
 import TreatmentPlan from "@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue";
+import OPDTreatmentPlan from "@/apps/OPD/components/ConsultationPlan/OPDTreatmentPlan.vue";
 import NextAppointment from "@/apps/NCD/components/ConsultationPlan/NextAppointment.vue";
 
 import Medications from "@/apps/ANC/components/profile/Medications.vue";

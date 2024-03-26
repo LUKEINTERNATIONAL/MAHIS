@@ -420,6 +420,7 @@ const showMoreNotesMsg = ref("Show more notes");
 const showMoreAllergyMsg = ref("Show more allergies");
 const FirstPreviousAllegies = ref();
 const RestOfPreviousAllegies = ref();
+import AllergiesComponent from "@/apps/OPD/components/ConsultationPlan/Allergies.vue"
 
 onMounted(async () => {
     const previousTreatment = new PreviousTreatment();

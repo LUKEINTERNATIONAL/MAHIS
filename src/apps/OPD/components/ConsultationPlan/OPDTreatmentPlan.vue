@@ -1,44 +1,6 @@
 <template>
-    <ion-list>
-        <ion-label>Medical allergies</ion-label>
-        <ion-row>
-            <ion-item lines="none" class="medicalAl">
-                <ion-row>
-                    <div v-for="(item, index) in selectedMedicalAllergiesList" :key="index">
-                        <ion-button v-if="item.selected" @click="selectAl(item)" class="medicalAlBtn">
-                            {{ item.name }}
-                            <ion-icon slot="end" style="font-size: x-large" :icon="closeOutline"></ion-icon>
-                        </ion-button>
-                    </div>
-                    <div>
-                        <ion-button id="click-trigger" fill="clear" class="medicalAlAddBtn" @click="setFocus">
-                            <ion-icon :icon="addOutline"></ion-icon>
-                        </ion-button>
-                        <ion-popover
-                            class="popover-al"
-                            :show-backdrop="false"
-                            trigger="click-trigger"
-                            trigger-action="click"
-                            @didPresent="dissmissDrugAddField"
-                        >
-                            <ion-content color="light" class="ion-padding content-al">
-                                <ion-label>Choose the allergy:</ion-label>
-                                <ion-input ref="input" v-model="drugName" @ionInput="FindAllegicDrugName" fill="outline"></ion-input>
-                                <ion-list class="list-al">
-                                    <div class="item-al" v-for="(item, index) in medicalAllergiesList" :key="index">
-                                        <ion-label @click="selectAl(item)" style="display: flex; justify-content: space-between">
-                                            {{ item.name }}
-                                            <ion-icon v-if="item.selected" class="icon-al" :icon="checkmarkOutline"></ion-icon>
-                                        </ion-label>
-                                    </div>
-                                </ion-list>
-                            </ion-content>
-                        </ion-popover>
-                    </div>
-                </ion-row>
-            </ion-item>
-        </ion-row>
-
+    <AllergiesComponent/>
+    
         <ion-accordion-group ref="accordionGroup" class="previousView">
             <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
                 <ion-item slot="header" color="light">
@@ -331,6 +293,7 @@ export default defineComponent({
     name: "xxxComponent",
 });
 </script>
+
 <script setup lang="ts">
 import {
     IonContent,
@@ -373,6 +336,7 @@ import { ConceptService } from "@/services/concept_service";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { Service } from "@/services/service";
 import { PreviousTreatment } from "@/apps/NCD/services/treatment";
+import AllergiesComponent from "@/apps/OPD/components/ConsultationPlan/Allergies.vue"
 
 const iconsContent = icons;
 const drug_frequencies = DRUG_FREQUENCIES;
@@ -542,7 +506,7 @@ async function saveData() {
     drugName.value = "";
     dose.value = "";
     frequency.value = "";
-    duration.value = "";
+    duration.value = "";import { ref, watch, computed, onMounted, onUpdated } from "vue";
     prescription.value = "";
     componentKey.value++;
     saveStateValuesState();

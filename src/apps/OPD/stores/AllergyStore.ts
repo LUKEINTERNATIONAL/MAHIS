@@ -1,67 +1,322 @@
 import { defineStore } from 'pinia'
 
-const temp_data = [
+export function concatenateArrays<T>(...arrays: T[][]): T[] {
+    // Concatenate all arrays
+    return arrays.reduce((acc, arr) => acc.concat(arr), []);
+}
+
+  const foodItems = [
     {
-      "concept_id": 88,
-      "name": "Aspirin",
+      "concept_id": 10003,
+      "name": "Injera Delight",
       "locale": "en",
       "creator": 1,
-      "date_created": "2004-01-01T00:00:00.000+02:00",
-      "concept_name_id": 91,
+      "date_created": "2024-03-26T08:00:00.000Z",
+      "concept_name_id": 100,
       "voided": 0,
       "voided_by": null,
       "date_voided": null,
       "void_reason": null,
-      "uuid": "b9965c3e-8d80-11d8-abbb-0024217bb78e",
+      "uuid": "a3e71b3e-8d80-11d8-abbb-0024217bb78e",
       "concept_name_type": "FULLY_SPECIFIED",
       "locale_preferred": 0
     },
     {
-      "concept_id": 72,
-      "name": "Paracetamol",
+      "concept_id": 10004,
+      "name": "Ugali Feast",
       "locale": "en",
       "creator": 1,
-      "date_created": "2005-03-15T00:00:00.000+02:00",
-      "concept_name_id": 65,
+      "date_created": "2024-03-26T09:00:00.000Z",
+      "concept_name_id": 101,
       "voided": 0,
       "voided_by": null,
       "date_voided": null,
       "void_reason": null,
-      "uuid": "c1243a6f-8d81-11d8-9876-0024217bb78e",
+      "uuid": "b3e71b3e-8d80-11d8-abbb-0024217bb78e",
       "concept_name_type": "FULLY_SPECIFIED",
       "locale_preferred": 0
     },
     {
-      "concept_id": 105,
-      "name": "Ibuprofen",
+      "concept_id": 10005,
+      "name": "Mursik Smoothie",
       "locale": "en",
       "creator": 1,
-      "date_created": "2006-07-20T00:00:00.000+02:00",
+      "date_created": "2024-03-26T10:00:00.000Z",
       "concept_name_id": 102,
       "voided": 0,
       "voided_by": null,
       "date_voided": null,
       "void_reason": null,
-      "uuid": "e29871c0-8d81-11d8-8df0-0024217bb78e",
+      "uuid": "c3e71b3e-8d80-11d8-abbb-0024217bb78e",
+      "concept_name_type": "FULLY_SPECIFIED",
+      "locale_preferred": 0
+    },
+    {
+      "concept_id": 10006,
+      "name": "Sukuma Wiki Surprise",
+      "locale": "en",
+      "creator": 1,
+      "date_created": "2024-03-26T11:00:00.000Z",
+      "concept_name_id": 103,
+      "voided": 0,
+      "voided_by": null,
+      "date_voided": null,
+      "void_reason": null,
+      "uuid": "d3e71b3e-8d80-11d8-abbb-0024217bb78e",
+      "concept_name_type": "FULLY_SPECIFIED",
+      "locale_preferred": 0
+    },
+    {
+      "concept_id": 10007,
+      "name": "Mahamri Mix",
+      "locale": "en",
+      "creator": 1,
+      "date_created": "2024-03-26T12:00:00.000Z",
+      "concept_name_id": 104,
+      "voided": 0,
+      "voided_by": null,
+      "date_voided": null,
+      "void_reason": null,
+      "uuid": "e3e71b3e-8d80-11d8-abbb-0024217bb78e",
+      "concept_name_type": "FULLY_SPECIFIED",
+      "locale_preferred": 0
+    },
+    {
+      "concept_id": 10008,
+      "name": "Chapati Charm",
+      "locale": "en",
+      "creator": 1,
+      "date_created": "2024-03-26T13:00:00.000Z",
+      "concept_name_id": 105,
+      "voided": 0,
+      "voided_by": null,
+      "date_voided": null,
+      "void_reason": null,
+      "uuid": "f3e71b3e-8d80-11d8-abbb-0024217bb78e",
+      "concept_name_type": "FULLY_SPECIFIED",
+      "locale_preferred": 0
+    },
+    {
+      "concept_id": 10009,
+      "name": "Nyama Choma Delight",
+      "locale": "en",
+      "creator": 1,
+      "date_created": "2024-03-26T14:00:00.000Z",
+      "concept_name_id": 106,
+      "voided": 0,
+      "voided_by": null,
+      "date_voided": null,
+      "void_reason": null,
+      "uuid": "g3e71b3e-8d80-11d8-abbb-0024217bb78e",
       "concept_name_type": "FULLY_SPECIFIED",
       "locale_preferred": 0
     }
-  ]
-  
+]
+
+const environmentalAllergies = [
+    {
+      "concept_id": 10003,
+      "name": "Pollen",
+      "locale": "en",
+      "creator": 1,
+      "date_created": "2024-03-26T08:00:00.000Z",
+      "concept_name_id": 100,
+      "voided": 0,
+      "voided_by": null,
+      "date_voided": null,
+      "void_reason": null,
+      "uuid": "a3e71b3e-8d80-11d8-abbb-0024217bb78e",
+      "concept_name_type": "FULLY_SPECIFIED",
+      "locale_preferred": 0
+    },
+    {
+      "concept_id": 10004,
+      "name": "Dust Mites",
+      "locale": "en",
+      "creator": 1,
+      "date_created": "2024-03-26T09:00:00.000Z",
+      "concept_name_id": 101,
+      "voided": 0,
+      "voided_by": null,
+      "date_voided": null,
+      "void_reason": null,
+      "uuid": "b3e71b3e-8d80-11d8-abbb-0024217bb78e",
+      "concept_name_type": "FULLY_SPECIFIED",
+      "locale_preferred": 0
+    },
+    {
+      "concept_id": 10005,
+      "name": "Mold",
+      "locale": "en",
+      "creator": 1,
+      "date_created": "2024-03-26T10:00:00.000Z",
+      "concept_name_id": 102,
+      "voided": 0,
+      "voided_by": null,
+      "date_voided": null,
+      "void_reason": null,
+      "uuid": "c3e71b3e-8d80-11d8-abbb-0024217bb78e",
+      "concept_name_type": "FULLY_SPECIFIED",
+      "locale_preferred": 0
+    },
+    {
+      "concept_id": 10006,
+      "name": "Pet Dander",
+      "locale": "en",
+      "creator": 1,
+      "date_created": "2024-03-26T11:00:00.000Z",
+      "concept_name_id": 103,
+      "voided": 0,
+      "voided_by": null,
+      "date_voided": null,
+      "void_reason": null,
+      "uuid": "d3e71b3e-8d80-11d8-abbb-0024217bb78e",
+      "concept_name_type": "FULLY_SPECIFIED",
+      "locale_preferred": 0
+    },
+    {
+      "concept_id": 10007,
+      "name": "Cockroach Droppings",
+      "locale": "en",
+      "creator": 1,
+      "date_created": "2024-03-26T12:00:00.000Z",
+      "concept_name_id": 104,
+      "voided": 0,
+      "voided_by": null,
+      "date_voided": null,
+      "void_reason": null,
+      "uuid": "e3e71b3e-8d80-11d8-abbb-0024217bb78e",
+      "concept_name_type": "FULLY_SPECIFIED",
+      "locale_preferred": 0
+    }
+]
+
+const healthcareEquipmentAllergies = [
+    {
+      "concept_id": 10003,
+      "name": "Latex",
+      "locale": "en",
+      "creator": 1,
+      "date_created": "2024-03-26T08:00:00.000Z",
+      "concept_name_id": 100,
+      "voided": 0,
+      "voided_by": null,
+      "date_voided": null,
+      "void_reason": null,
+      "uuid": "a3e71b3e-8d80-11d8-abbb-0024217bb78e",
+      "concept_name_type": "FULLY_SPECIFIED",
+      "locale_preferred": 0
+    },
+    {
+      "concept_id": 10004,
+      "name": "Nickel",
+      "locale": "en",
+      "creator": 1,
+      "date_created": "2024-03-26T09:00:00.000Z",
+      "concept_name_id": 101,
+      "voided": 0,
+      "voided_by": null,
+      "date_voided": null,
+      "void_reason": null,
+      "uuid": "b3e71b3e-8d80-11d8-abbb-0024217bb78e",
+      "concept_name_type": "FULLY_SPECIFIED",
+      "locale_preferred": 0
+    },
+    {
+        "concept_id": 10009,
+        "name": "Sulfur",
+        "locale": "en",
+        "creator": 1,
+        "date_created": "2024-03-26T09:00:00.000Z",
+        "concept_name_id": 101,
+        "voided": 0,
+        "voided_by": null,
+        "date_voided": null,
+        "void_reason": null,
+        "uuid": "b3e71b3e-8d80-11d8-abbb-0024217bb78e",
+        "concept_name_type": "FULLY_SPECIFIED",
+        "locale_preferred": 0
+      },
+    {
+      "concept_id": 10005,
+      "name": "Adhesive Tape",
+      "locale": "en",
+      "creator": 1,
+      "date_created": "2024-03-26T10:00:00.000Z",
+      "concept_name_id": 102,
+      "voided": 0,
+      "voided_by": null,
+      "date_voided": null,
+      "void_reason": null,
+      "uuid": "c3e71b3e-8d80-11d8-abbb-0024217bb78e",
+      "concept_name_type": "FULLY_SPECIFIED",
+      "locale_preferred": 0
+    },
+    {
+      "concept_id": 10006,
+      "name": "Surgical Gloves",
+      "locale": "en",
+      "creator": 1,
+      "date_created": "2024-03-26T11:00:00.000Z",
+      "concept_name_id": 103,
+      "voided": 0,
+      "voided_by": null,
+      "date_voided": null,
+      "void_reason": null,
+      "uuid": "d3e71b3e-8d80-11d8-abbb-0024217bb78e",
+      "concept_name_type": "FULLY_SPECIFIED",
+      "locale_preferred": 0
+    },
+    {
+      "concept_id": 10007,
+      "name": "Medical Implants",
+      "locale": "en",
+      "creator": 1,
+      "date_created": "2024-03-26T12:00:00.000Z",
+      "concept_name_id": 104,
+      "voided": 0,
+      "voided_by": null,
+      "date_voided": null,
+      "void_reason": null,
+      "uuid": "e3e71b3e-8d80-11d8-abbb-0024217bb78e",
+      "concept_name_type": "FULLY_SPECIFIED",
+      "locale_preferred": 0
+    }
+];
+
+export function searchHealthcareEquipmentAllergies(searchString: string) {
+    searchString = searchString ? searchString.toString() : "";
+    const hcea = healthcareEquipmentAllergies.filter(allergy => 
+        allergy.name.toLowerCase().includes(searchString.toLowerCase())
+    )
+
+    const fi = foodItems.filter(allergy => 
+        allergy.name.toLowerCase().includes(searchString.toLowerCase())
+    )
+
+    const ea = environmentalAllergies.filter(allergy => 
+        allergy.name.toLowerCase().includes(searchString.toLowerCase())
+    )
+
+    return concatenateArrays(ea, fi, hcea)
+} 
 
 export const useAllegyStore = defineStore('AllergyStore', {
     state: () => ({
         medicalAllergiesList: [] as any,
         selectedMedicalAllergiesList: [] as any,
 
-        healthcareItemsAllergiesList: temp_data as any,
+        healthcareItemsAllergiesList: healthcareEquipmentAllergies as any,
         selectedHealthcareItemsAllergiesList: [] as any,
 
-        environmentItemsAllergiesList: temp_data as any,
+        environmentItemsAllergiesList: environmentalAllergies as any,
         selectedEnvironmentItemsAllergiesList: [] as any,
 
-        foodItemsAllergiesList: [] as any,
-        selectedFoodItemsAllergiesList: temp_data as any,
+        foodItemsAllergiesList: foodItems as any,
+        selectedFoodItemsAllergiesList: [] as any,
+
+        allergiesList: [] as any,
+        selectedAllergiesList: [] as any,
     }),
     actions:{
         setMedicalAllergiesList(data: any) {
@@ -101,7 +356,26 @@ export const useAllegyStore = defineStore('AllergyStore', {
                 }
             })
             this.selectedFoodItemsAllergiesList.push(data)
-        }
+        },
+        getAllAllergiesList() {
+            const concatenatedArray: any[] = concatenateArrays(this.foodItemsAllergiesList, this.environmentItemsAllergiesList, this.medicalAllergiesList, this.healthcareItemsAllergiesList)
+            return concatenatedArray
+
+        },
+        setAllAllergiesList(data: any) {
+            this.selectedAllergiesList.forEach((allergy: any, index: number) => {
+                if (allergy.concept_name_id = data.concept_name_id) {
+                    this.selectedAllergiesList.splice(index, 1)
+                }
+            })
+            this.selectedAllergiesList.push(data)
+            this.selectedAllergiesList = this.getAllAllergiesList()
+        },
+        setAllergiesList(data: any) {
+            this.allergiesList = data
+
+            console.log(this.allergiesList)
+        },
     },
     persist:true,
 
