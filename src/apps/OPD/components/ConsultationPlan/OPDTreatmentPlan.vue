@@ -1,5 +1,18 @@
 <template>
     <ion-list>
+        <ion-label>Allergies (Medication, Healthcare items, Environment and Food)</ion-label>
+        <ion-row>
+            <ion-item lines="none" class="medicalAl">
+                <ion-row>
+                    <div v-for="(item, index) in selectedAllergiesList2" :key="index">
+                        <ion-button v-if="item.selected" class="medicalAlBtn">
+                            {{ item.name }}
+                        </ion-button>
+                    </div>
+                </ion-row>
+            </ion-item>
+        </ion-row>
+
         <ion-accordion-group ref="accordionGroup" class="previousView">
             <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
                 <ion-item slot="header" color="light">
@@ -330,11 +343,12 @@ import { DrugService } from "@/services/drug_service";
 import { ConceptName } from "@/interfaces/conceptName";
 import DynamicButton from "@/components/DynamicButton.vue";
 import DynamicList from "@/components/DynamicList.vue";
-import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { ConceptService } from "@/services/concept_service";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { Service } from "@/services/service";
 import { PreviousTreatment } from "@/apps/NCD/services/treatment";
+import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
+import { useAllegyStore} from "@/apps/OPD/stores/AllergyStore"
 
 const iconsContent = icons;
 const drug_frequencies = DRUG_FREQUENCIES;
@@ -366,7 +380,9 @@ const btnName3 = "Send to dispensation";
 const btnFill = "clear";
 const showMoreMedicationsMsg = ref("Show more medications");
 const store = useTreatmentPlanStore();
-const selectedMedicalDrugsList = computed(() => store.selectedMedicalDrugsList);
+const store2 = useAllegyStore();
+const selectedAllergiesList2 = computed(() => store2.selectedMedicalAllergiesList);
+const selectedAllergiesList = computed(() => store.selectedMedicalDrugsList);
 const medicalAllergiesList = computed(() => store.medicalAllergiesList);
 const nonPharmalogicalTherapyAndOtherNotes = computed(() => store.nonPharmalogicalTherapyAndOtherNotes);
 const selectedMedicalAllergiesList = computed(() => store.selectedMedicalAllergiesList);

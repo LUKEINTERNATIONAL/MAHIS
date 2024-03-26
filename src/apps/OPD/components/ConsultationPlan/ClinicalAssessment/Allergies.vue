@@ -93,15 +93,8 @@ const allergiesList = computed(() => store.medicalAllergiesList)
 
 onMounted(async () => {
     console.log("")
-    console.log("QQQQQQQQQQQQQ: ", selectedAllergiesList.value)
 })
 
-watch(
-    () => selectedAllergiesList,
-    async (newValue) => {
-        console.log(selectedAllergiesList)
-    }
-);
 
 function selectAl(item: any) {
     console.log("selectAl: ", !item.selected)
