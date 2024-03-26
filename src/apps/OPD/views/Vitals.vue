@@ -62,7 +62,7 @@ import HisDate from "@/utils/Date";
 import { defineComponent } from "vue";
 import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
 import { useVitalsStore } from "../stores/OpdVitalsStore";
-import { getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
+import { getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from "@/services/data_helpers";
 export default defineComponent({
     name: "Home",
     components: {
@@ -123,6 +123,14 @@ export default defineComponent({
         this.markWizard();
         this.handleHeight();
         this.handleSpecifyHeight()
+        this.handlePulseRate()
+        this.handlePulseRateNotDone()
+        this.handlePulseOtherNotDone()
+        this.handleBloodPressureDone()
+        this.handleBPNotDone()
+        this.handleRespiratoryRateDone()
+        this.handleRespiratoryRateNotDone()
+        this.handleRespiratoryRateNotDoneReason()
     },
     watch: {
         vitals: {
@@ -130,6 +138,14 @@ export default defineComponent({
                 this.markWizard();
                 this.handleHeight();
                 this.handleSpecifyHeight()
+                this.handlePulseRate()
+                this.handlePulseRateNotDone()
+                this.handlePulseOtherNotDone()
+                this.handleBloodPressureDone()
+                this.handleBPNotDone()
+                this.handleRespiratoryRateDone()
+                this.handleRespiratoryRateNotDone()
+                this. handleRespiratoryRateNotDoneReason()
             },
             deep: true,
         },
@@ -165,9 +181,67 @@ export default defineComponent({
         },
         handleSpecifyHeight(){
             if(getRadioSelectedValue(this.vitals,'OpdTemperature')=='no'){
-                modifyFieldValue(this.vitals,'specify','displayNone',false)
+                modifyRadioValue(this.vitals,'temperatureNotDone','displayNone',false)
             }else{
-                 modifyFieldValue(this.vitals,'specify','displayNone',true)
+                 modifyRadioValue(this.vitals,'temperatureNotDone','displayNone',true)
+            }
+        },
+        handlePulseRate(){
+            if(getRadioSelectedValue(this.vitals,'OpdPulseRate')=='done'){
+                modifyFieldValue(this.vitals,'Pulse','displayNone',false)
+            }else{
+                 modifyFieldValue(this.vitals,'Pulse','displayNone',true)
+            }
+        },
+        handlePulseRateNotDone(){
+            if(getRadioSelectedValue(this.vitals,'OpdPulseRate')=='notDone'){
+                modifyRadioValue(this.vitals,'OpdPulseRateNotDone','displayNone',false)
+            }else{
+                 modifyRadioValue(this.vitals,'OpdPulseRateNotDone','displayNone',true)
+            }
+        },
+        handlePulseOtherNotDone(){
+            if(getRadioSelectedValue(this.vitals,'OpdPulseRateNotDone')=='Other'){
+                modifyFieldValue(this.vitals,'otherReason','displayNone',false)
+            }else{
+                 modifyFieldValue(this.vitals,'otherReason','displayNone',true)
+            }
+        },
+        handleBloodPressureDone(){
+            if(getRadioSelectedValue(this.vitals,'OpdBloodPressure')=='done'){
+                modifyFieldValue(this.vitals,'Systolic','displayNone',false)
+                modifyFieldValue(this.vitals,'Diastolic','displayNone',false)
+            }else{
+                 modifyFieldValue(this.vitals,'Systolic','displayNone',true)
+                 modifyFieldValue(this.vitals,'Diastolic','displayNone',true)
+            }
+        },
+        handleBPNotDone(){
+            if(getRadioSelectedValue(this.vitals,'OpdBloodPressure')=='notDone'){
+                modifyRadioValue(this.vitals,'OpdBloodPressureReason','displayNone',false)
+            }else{
+                 modifyRadioValue(this.vitals,'OpdBloodPressureReason','displayNone',true)
+            }
+        },
+        handleRespiratoryRateDone(){
+            if(getRadioSelectedValue(this.vitals,'OpdRespiratoryRate')=='done'){
+                modifyFieldValue(this.vitals,'RespiratoryRate','displayNone',false)
+            }else{
+                 modifyFieldValue(this.vitals,'RespiratoryRate','displayNone',true)
+            }
+        },
+        handleRespiratoryRateNotDone(){
+            if(getRadioSelectedValue(this.vitals,'OpdRespiratoryRate')=='notDone'){
+                modifyRadioValue(this.vitals,'OpdRespiratoryRateNotDone','displayNone',false)
+            }else{
+                 modifyRadioValue(this.vitals,'OpdRespiratoryRateNotDone','displayNone',true)
+            }
+        },
+        handleRespiratoryRateNotDoneReason(){
+            if(getRadioSelectedValue(this.vitals,'OpdRespiratoryRateNotDone')=='reason'){
+                modifyFieldValue(this.vitals,'Respiratory reason','displayNone',false)
+            }else{
+                 modifyFieldValue(this.vitals,'Respiratory reason','displayNone',true)
             }
         },
         markWizard() {

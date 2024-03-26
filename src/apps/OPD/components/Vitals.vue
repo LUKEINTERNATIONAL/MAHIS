@@ -53,7 +53,7 @@ export default defineComponent({
         const userID: any = Service.getUserID();
         this.vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
         this.updateVitalsStores();
-        this.validaterowData({});
+        // this.validaterowData({});
     },
     watch: {
         opDvitals: {
