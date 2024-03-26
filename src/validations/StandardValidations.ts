@@ -31,9 +31,7 @@ function isEstimationDate(value: any): null | String {
 }
 
 function isFloatingPointNumber(val: any): null | string[] {
-    return isPlainObject(val) && !/^[-+]?[0-9]*\.?[0-9]+$/.test(`${val?.value}`)
-        ? ["Not a valid number"]
-        : null;
+    return isPlainObject(val) && !/^[-+]?[0-9]*\.?[0-9]+$/.test(`${val?.value}`) ? ["Not a valid number"] : null;
 }
 
 function isMWPhoneNumber(val: any) {
@@ -44,14 +42,11 @@ function isMWPhoneNumber(val: any) {
 
 function isMWNationalID(nationalId: any): null | string {
     const nationalIDRegex = /^(?=[a-zA-Z0-9]*$)(?=\d+[a-zA-Z]|[a-zA-Z]+\d)([a-zA-Z\d]){8}$/;
-    return !isEmpty(nationalId) && !nationalId.toString().match(nationalIDRegex)
-        ? "Not a valid Malawi National ID number"
-        : null;
+    return !isEmpty(nationalId) && !nationalId.toString().match(nationalIDRegex) ? "Not a valid Malawi National ID number" : null;
 }
 
 function isIPAddress(val: any) {
-    const validation =
-        /\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\b/;
+    const validation = /\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\b/;
     return !val || !val.value.match(validation) ? ["Not a valid IP address"] : null;
 }
 function isName(value: any): null | string {
@@ -60,7 +55,7 @@ function isName(value: any): null | string {
 }
 
 function isNumber(val: any) {
-    return isNaN(parseInt(val.value)) ? "Value must be a number" : null;
+    return isNaN(parseInt(val)) ? "Value must be a number" : null;
 }
 function isWholeNumber(val: any): null | string {
     // Regular expression to match only whole numbers
