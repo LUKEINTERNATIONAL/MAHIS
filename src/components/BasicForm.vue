@@ -13,6 +13,7 @@
                             :inputHeader="col.inputHeader"
                             :sectionHeaderFontWeight="col.sectionHeaderFontWeight"
                             :unit="col.unit"
+                            :input="col.input"
                             :disabled="col.disabled"
                             :icon="col.icon"
                             :placeholder="col.placeholder"
@@ -49,7 +50,7 @@
                     </ion-col>
                 </ion-row>
             </span>
-            <span v-if="item.radioBtnContent">
+            <span v-if="item.radioBtnContent && !item?.radioBtnContent?.header?.displayNone">
                 <div style="" v-if="item.radioBtnContent?.header">
                     {{ item.radioBtnContent?.header.title }}
                 </div>
@@ -81,6 +82,7 @@
                         <BasicInputField
                             :inputHeader="radioInput.inputHeader"
                             :unit="radioInput.unit"
+                            :input="radioInput.input"
                             :icon="radioInput.icon"
                             :placeholder="radioInput.placeholder"
                             :iconRight="radioInput.iconRight"
@@ -177,6 +179,7 @@
                             :inputHeader="checkboxInput.inputHeader"
                             :sectionHeaderFontWeight="checkboxInput.sectionHeaderFontWeight"
                             :unit="checkboxInput.unit"
+                            :input="checkboxInput.input"
                             :icon="checkboxInput.icon"
                             :placeholder="checkboxInput.placeholder"
                             :iconRight="checkboxInput.iconRight"
