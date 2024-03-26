@@ -76,6 +76,8 @@ import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import Vitals from "@/apps/NCD/components/ConsultationPlan/Vitals.vue";
+import PresentingComplaints from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PresentingComplaints.vue";
+import ClinicalAssessment from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment.vue";
 import Diagnosis from "@/apps/NCD/components/ConsultationPlan/Diagnosis.vue";
 import Complications from "@/apps/NCD/components/ConsultationPlan/Complications.vue";
 import ConfirmDiagnosis from "@/apps/NCD/components/ConsultationPlan/ConfirmDiagnosis.vue";
@@ -145,6 +147,8 @@ export default defineComponent({
         IonItem,
         IonLabel,
         Vitals,
+        PresentingComplaints,
+        ClinicalAssessment,
         Diagnosis,
         Complications,
         ConfirmDiagnosis,

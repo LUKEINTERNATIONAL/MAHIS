@@ -506,7 +506,7 @@ async function saveData() {
     drugName.value = "";
     dose.value = "";
     frequency.value = "";
-    duration.value = "";import { ref, watch, computed, onMounted, onUpdated } from "vue";
+    duration.value = "";
     prescription.value = "";
     componentKey.value++;
     saveStateValuesState();
