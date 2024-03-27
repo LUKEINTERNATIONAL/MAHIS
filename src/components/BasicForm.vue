@@ -50,8 +50,8 @@
                     </ion-col>
                 </ion-row>
             </span>
-            <span v-if="item?.radioBtnContent && !item?.radioBtnContent?.header?.displayNone">
-                <div style="font-weight: bold;" v-if="item.radioBtnContent?.header">
+            <span v-if="item.radioBtnContent && !item?.radioBtnContent?.header?.displayNone">
+                <div style="" v-if="item.radioBtnContent?.header" :class="item.radioBtnContent?.header?.class">
                     {{ item.radioBtnContent?.header.title }}
                 </div>
                 <ion-row class="checkbox_content">

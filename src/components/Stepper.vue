@@ -73,6 +73,8 @@ import {
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
+import PresentingComplaints from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PresentingComplaints.vue";
+import ClinicalAssessment from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import Vitals from "@/apps/NCD/components/ConsultationPlan/Vitals.vue";
@@ -147,8 +149,8 @@ export default defineComponent({
         IonItem,
         IonLabel,
         Vitals,
-        // PresentingComplaints,
-        // ClinicalAssessment,
+        PresentingComplaints,
+        ClinicalAssessment,
         Diagnosis,
         Complications,
         ConfirmDiagnosis,
@@ -191,7 +193,9 @@ export default defineComponent({
         Immunization,
         IntimatePartner,
         Deworming,
-        OPDVitals
+        OPDVitals,
+        OPDDiagnosis,
+        OPDTreatmentPlan
     },
     data() {
         return {
