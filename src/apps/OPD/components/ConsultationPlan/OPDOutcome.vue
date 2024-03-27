@@ -235,17 +235,20 @@ const basicInputFieldProperties = [
 
 const referralType = ref([
     {
-        name: "Admit",
+        name: "Admitted for short stay",
         selected: false,
     },
     {
-        name: "Internal",
+        name: "Referred out",
         selected: false,
     },
     {
-        name: "External",
-        selected: false,
+        name: "Discharged Home"
     },
+    {
+        name: "Dead",
+        selected: false,
+    }
 ]);
 
 const popoverProperties = ref({
@@ -449,7 +452,7 @@ function selectedFaciltyName(name: any, obj: any) {
 }
 
 function showOptions(event: Event) {
-    popoverProperties.value.title = "Referral Type";
+    popoverProperties.value.title = "Select Outcome";
     popoverProperties.value.keyboardClose = true;
     popoverProperties.value.popoverData = referralType.value;
     openPopoverForReferral(event);
@@ -490,19 +493,14 @@ async function checkRefType() {
     refType.value = tempRefType;
     let fn;
     const ref_type = refType.value;
-    if (ref_type == referralType.value[0].name) {
-        searchPlaceHolder.value = "find ward";
-        fn = findWardName as any;
-        refFacilityNameErrMsg.value = "please select a ward";
-    }
 
-    if (ref_type == referralType.value[1].name) {
+    if (ref_type == referralType.value[0].name) {
         searchPlaceHolder.value = "find department";
         fn = findDepartMentName as any;
         refFacilityNameErrMsg.value = "please select a department";
     }
 
-    if (ref_type == referralType.value[2].name) {
+    if (ref_type == referralType.value[1].name) {
         searchPlaceHolder.value = "find facility name";
         fn = findFacilityName as any;
         refFacilityNameErrMsg.value = "please select a facility name";
