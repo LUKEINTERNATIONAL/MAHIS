@@ -1,17 +1,5 @@
 <template>
     <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form>
-    <ion-row>
-        <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
-                <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Previous measurements</ion-label>
-                </ion-item>
-                <div class="ion-padding" slot="content">
-                    <PreviousVitals />
-                </div>
-            </ion-accordion>
-        </ion-accordion-group>
-    </ion-row>
 </template>
 
 <script lang="ts">
@@ -22,7 +10,8 @@ import { icons } from "@/utils/svg";
 import { iconBloodPressure } from "@/utils/SvgDynamicColor";
 import { BMIService } from "@/services/bmi_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
-import { useVitalsStore } from "@/stores/VitalsStore";
+
+
 import { mapState } from "pinia";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { arePropertiesNotEmpty } from "@/utils/Objects";
@@ -31,7 +20,7 @@ import BasicInputField from "@/components/BasicInputField.vue";
 import { VitalsService } from "@/services/vitals_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { Service } from "@/services/service";
-import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
+import { useVitalsStore } from "../stores/OpdVitalsStore";
 
 export default defineComponent({
     components: {
@@ -45,7 +34,6 @@ export default defineComponent({
         IonInput,
         BasicInputField,
         BasicForm,
-        PreviousVitals,
     },
     data() {
         return {
@@ -65,12 +53,14 @@ export default defineComponent({
         const userID: any = Service.getUserID();
         this.vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
         this.updateVitalsStores();
-        this.validaterowData({});
+        // this.pulseRateValidate()
+        // this.validaterowData({});
     },
     watch: {
-        vitals: {
+        opDvitals: {
             handler() {
                 this.updateVitalsStores();
+                // this.pulseRateValidate()
             },
             deep: true,
         },
@@ -79,6 +69,11 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     methods: {
+        // pulseRateValidate(){
+        //     const age= HisDate.getBirthdateAge(this.demographics.birthday);
+        //     console.log("==========>",{age})
+           
+        // },
         navigationMenu(url: any) {
             menuController.close();
             this.$router.push(url);
