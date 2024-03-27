@@ -90,7 +90,28 @@ export default defineComponent({
         return {
             dispositions: "" as any,
             showUndispensedMedication: false,
-            unprescribedList: [],
+            wizardData: [
+                {
+                    title: "Dispense Medications",
+                    class: "common_step",
+                    checked: false,
+                    disabled: false,
+
+                    number: 1,
+                    last_step: "",
+                },
+                {
+                    title: "Undispensed Medications",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+
+                    disabled: false,
+                    number: 2,
+                    last_step: "last_step",
+                },
+            ],
+            unprescribedLis: [],
             prescribedList: [
                 {
                     drugName: "Albendazol",
@@ -159,32 +180,12 @@ export default defineComponent({
                     index: 0
                 },
             ],
-            wizardData: [
-                {
-                    title: "Dispense Medications",
-                    class: "common_step",
-                    checked: false,
-                    disabled: false,
-
-                    number: 1,
-                    last_step: "",
-                },
-                {
-                    title: "Undispensed Medications",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-
-                    disabled: false,
-                    number: 2,
-                    last_step: "last_step",
-                },
-            ],
             StepperData: [
                 {
                     title: "Dispense Medications",
                     componet: "dispensedMedication",
-
+                    prescribedMedsdata: this.prescribedList,
+                    unprescribedMedsdata: this.unprescribedList,
                     value: "1",
                 },
                 {

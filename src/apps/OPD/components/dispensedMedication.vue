@@ -36,11 +36,11 @@
 
         <div class="space2" />
         <ion-label>Prescribed Medication</ion-label>
-        <dynamic-list @clickt="toggleCheckbox" :_selectedMedicalDrugsList="prescribedList"
+        <dynamic-list @clickt="toggleCheckbox" :_selectedMedicalDrugsList="previousDrugPrescriptions"
             :show_actions_buttons="false" />
         <div>
             <div class="space2" />
-            <ion-button class="primary_btn" style="padding-left: 15px" @click="populateUnprescribedMedication(prescribedList)">Dispense</ion-button>
+            <ion-button class="primary_btn" style="padding-left: 15px" @click="populateUnprescribedMedication(previousDrugPrescriptions)">Dispense</ion-button>
         </div>
 
 
@@ -54,112 +54,36 @@ import BasicForm from "@/components/BasicForm.vue";
 import DynamicList from "../components/DynamicList.vue";
 import { tr } from "date-fns/locale";
 
-const unprescribedList = []
-const prescribedList = [
-    {
-        drugName: "Albendazol",
-        dose: 5,
-        frequency: "2TimesPerDay",
-        duration: 5,
-        prescription: "",
-        drug_id: 1,
-        units: 10,
-        dispensed: true,
-        index: 0
-    },
-    {
-        drugName: "Albendazol",
-        dose: 5,
-        frequency: "2TimesPerDay",
-        duration: 5,
-        prescription: "",
-        drug_id: 1,
-        units: 10,
-        dispensed: true,
-        index: 0
-    },
-    {
-        drugName: "Albendazol",
-        dose: 5,
-        frequency: "2TimesPerDay",
-        duration: 5,
-        prescription: "",
-        drug_id: 1,
-        units: 10,
-        dispensed: true,
-        index: 0
-    },
-    {
-        drugName: "Albendazol",
-        dose: 5,
-        frequency: "2TimesPerDay",
-        duration: 5,
-        prescription: "",
-        drug_id: 1,
-        units: 10,
-        dispensed: true,
-        index: 0
-    },
-    {
-        drugName: "Albendazol",
-        dose: 5,
-        frequency: "2TimesPerDay",
-        duration: 5,
-        prescription: "",
-        drug_id: 1,
-        units: 10,
-        dispensed: true,
-        index: 0
-    },
-    {
-        drugName: "Albendazol",
-        dose: 5,
-        frequency: "2TimesPerDay",
-        duration: 5,
-        prescription: "",
-        drug_id: 1,
-        units: 10,
-        dispensed: true,
-        index: 0
-    },
-]
+import { PreviousTreatment } from "@/apps/NCD/services/treatment";
 
+onMounted(async () => {
+    const previousTreatment = new PreviousTreatment();
+    const { previousDrugPrescriptions, previousClinicalNotes, previousDrugAllergies } = await previousTreatment.getPatientEncounters();
+});
 export default defineComponent({
     watch: {},
     name: "xxxComponent",
     computed: {
         ...mapState(dispensationStore, ["dispensedMedications"]),
     },
-    // props: {
-    //     prescribedList: {
-    //         type: Array,
-    //         default: []
-    //     },
-    //     unprescribedList: {
-    //         type: Array,
-    //         default: []
-    //     }
-    // },
     methods: {
         toggleCheckbox(event: Event) {
-            const index = event.target.id;
-            const dispensedBool = event.detail.checked;
-            console.log(index)
-            prescribedList[index].dispensed = dispensedBool;
+            // const index = event.target.id;
+            // const dispensedBool = event.detail.checked;
+            // prescribedList[index].dispensed = dispensedBool;
         },
         populateUnprescribedMedication(prescribedListArray: any) {
-            for (let index = 0; index < prescribedListArray.length; index++) {
-                const object = prescribedListArray[index];
-                const checkedStatus = object.dispensed;
-                if (!checkedStatus) {
-                    unprescribedList.push(object.drugName)
-                }                
-            }
-            console.log(unprescribedList)
+            // for (let index = 0; index < prescribedListArray.length; index++) {
+            //     const object = prescribedListArray[index];
+            //     const checkedStatus = object.dispensed;
+            //     if (!checkedStatus) {
+            //         previousDrugPrescriptions.push(object.drugName)
+            //     }                
+            // }
+            console.log(previousDrugPrescriptions)
         }
     }
 });
-
 </script>
 <script setup lang="ts">
 import {
@@ -193,7 +117,6 @@ import {
 } from "ionicons/icons";
 import { icons } from "@/utils/svg";
 import { ref, watch, computed, onMounted, onUpdated } from "vue";
-
 </script>
 
 

@@ -46,7 +46,7 @@ export default defineComponent({
     props: {
         _selectedMedicalDrugsList: {
             type: Array,
-            default: [{drugName:"Paracetamol", frequency:"2 times a day", duration: "5 days", prescription:5}]
+            default: []
         },
         show_actions_buttons: {
             type: Boolean,
