@@ -77,15 +77,20 @@ import undispensedMedication from "@/apps/OPD/components/undispensedMedication.v
 
 import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
+import PresentingComplaints from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PresentingComplaints.vue";
+import ClinicalAssessment from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import Vitals from "@/apps/NCD/components/ConsultationPlan/Vitals.vue";
+import OPDVitals from "@/apps/OPD/components/Vitals.vue"
 import Diagnosis from "@/apps/NCD/components/ConsultationPlan/Diagnosis.vue";
+import OPDDiagnosis from "@/apps/OPD/components/ConsultationPlan/OPDDiagnosis.vue";
 import Complications from "@/apps/NCD/components/ConsultationPlan/Complications.vue";
 import ConfirmDiagnosis from "@/apps/NCD/components/ConsultationPlan/ConfirmDiagnosis.vue";
 import Outcome from "@/apps/NCD/components/ConsultationPlan/Outcome.vue";
 import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigations.vue";
 import TreatmentPlan from "@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue";
+import OPDTreatmentPlan from "@/apps/OPD/components/ConsultationPlan/OPDTreatmentPlan.vue";
 import NextAppointment from "@/apps/NCD/components/ConsultationPlan/NextAppointment.vue";
 
 import Medications from "@/apps/ANC/components/profile/Medications.vue";
@@ -150,6 +155,8 @@ export default defineComponent({
         IonItem,
         IonLabel,
         Vitals,
+        PresentingComplaints,
+        ClinicalAssessment,
         Diagnosis,
         Complications,
         ConfirmDiagnosis,
@@ -192,6 +199,9 @@ export default defineComponent({
         Immunization,
         IntimatePartner,
         Deworming,
+        OPDVitals,
+        OPDDiagnosis,
+        OPDTreatmentPlan
     },
     data() {
         return {
