@@ -4,7 +4,8 @@
         <ion-content :fullscreen="true">
             <DemographicBar />
             <Stepper stepperTitle="Dispensation" :wizardData="wizardData" @updateStatus="markWizard"
-                @finishBtn="saveData()" :StepperData="StepperData" />
+                @finishBtn="saveData()" :StepperData="StepperData"/>
+                <dispensedMedication @dispenseClicked="handleDispenseClick" />
         </ion-content>
     </ion-page>
 </template>
@@ -187,12 +188,15 @@ export default defineComponent({
 
                     value: "1",
                 },
-                {
-                    title: "Undispensed Medications",
-                    componet: "undispensedMedication",
-
-                    value: "2",
-                },
+                ...(this.showUndispensedMedication
+        ? [
+            {
+              title: "Undispensed Medications",
+              componet: "undispensedMedication",
+              value: "2",
+            },
+          ]
+        : []),
             ],
             isOpen: false,
             iconsContent: icons,
@@ -231,6 +235,21 @@ export default defineComponent({
     },
 
     methods: {
+        handleDispenseClick() {
+    this.showUndispensedMedication = true;
+    this.StepperData = [
+      {
+        title: "Dispense Medications",
+        componet: "dispensedMedication",
+        value: "1",
+      },
+      {
+        title: "Undispensed Medications",
+        componet: "undispensedMedication",
+        value: "2",
+      },
+    ];
+  },
         markWizard() {
 
         },

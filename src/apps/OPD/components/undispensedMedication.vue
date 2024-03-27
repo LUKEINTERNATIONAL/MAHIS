@@ -4,7 +4,7 @@
         <ion-col><ion-label>Why has this prescription not been dispensed?</ion-label></ion-col>
     </ion-row>
     <ion-row style="display: flex; align-items: center;">
-        <dynamic-list @clickt="toggleCheckbox" :_selectedMedicalDrugsList="prescribedList"
+        <dynamic-list @click="" :_selectedMedicalDrugsList="prescribedList"
             :show_actions_buttons="false" /> <ion-col>
 
             <ion-item class="input_item">

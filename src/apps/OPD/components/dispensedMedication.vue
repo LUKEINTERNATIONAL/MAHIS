@@ -40,7 +40,8 @@
             :show_actions_buttons="false" />
         <div>
             <div class="space2" />
-            <ion-button class="primary_btn" style="padding-left: 15px" @click="populateUnprescribedMedication(prescribedList)">Dispense</ion-button>
+            <ion-button class="primary_btn" style="padding-left: 15px"  @click="$emit('dispenseClicked')">Dispense</ion-button>
+            
         </div>
 
 
@@ -141,11 +142,15 @@ export default defineComponent({
     //     }
     // },
     methods: {
+        showUndispensedMedication() {
+      this.$emit('showUndispensedMedication');
+    },
+
         toggleCheckbox(event: Event) {
-            const index = event.target.id;
-            const dispensedBool = event.detail.checked;
-            console.log(index)
-            prescribedList[index].dispensed = dispensedBool;
+            // const index = event.target.id;
+            // const dispensedBool = event.detail.checked;
+            // console.log(index)
+            // prescribedList[index].dispensed = dispensedBool;
         },
         populateUnprescribedMedication(prescribedListArray: any) {
             for (let index = 0; index < prescribedListArray.length; index++) {
@@ -155,7 +160,7 @@ export default defineComponent({
                     unprescribedList.push(object.drugName)
                 }                
             }
-            console.log(unprescribedList)
+            // console.log(unprescribedList)
         }
     }
 });

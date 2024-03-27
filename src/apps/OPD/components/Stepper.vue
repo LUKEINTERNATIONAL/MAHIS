@@ -160,6 +160,10 @@ export default defineComponent({
         };
     },
     props: {
+    showUndispensedMedication: {
+      type: Boolean,
+      default: false,
+    },
         wizardData: {
             default: [] as any,
         },
