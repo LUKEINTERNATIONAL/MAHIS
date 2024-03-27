@@ -238,6 +238,8 @@
 
         <div style="margin-top: 14px; margin-left: 10px">
             <ion-label class="tpStndCls">Non-pharmalogical therapy and other notes</ion-label>
+
+            <NonPharmacologicalIntervention/>
             
             <ion-item class="input_item" style="min-height: 120px; margin-top: 14px">
                 <ion-label> <ion-icon slot="start" :icon="iconsContent.editPen" aria-hidden="true"></ion-icon> </ion-label>
@@ -351,6 +353,7 @@ import { Service } from "@/services/service";
 import { PreviousTreatment } from "@/apps/NCD/services/treatment";
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { useAllegyStore} from "@/apps/OPD/stores/AllergyStore"
+import NonPharmacologicalIntervention from "@/apps/OPD/components/ConsultationPlan/NonPharmacologicalIntervention.vue"
 
 const iconsContent = icons;
 const drug_frequencies = DRUG_FREQUENCIES;
