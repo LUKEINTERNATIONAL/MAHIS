@@ -11,7 +11,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                classDash: "dashed_bottom_border",
                radioBtnContent: {
                    header: {
-                       title: "Physical examination done?",
+                       title: "Has physical examination been done?",
                        selectedValue: "",
                        name: "Physical examination done",
                    },
