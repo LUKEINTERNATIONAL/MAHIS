@@ -36,11 +36,11 @@
 
         <div class="space2" />
         <ion-label>Prescribed Medication</ion-label>
-        <dynamic-list @clickt="toggleCheckbox" :_selectedMedicalDrugsList="previousDrugPrescriptions"
+        <dynamic-list @clickt="toggleCheckbox" :_selectedMedicalDrugsList="PreviuosSelectedMedicalDrugsList"
             :show_actions_buttons="false" />
         <div>
             <div class="space2" />
-            <ion-button class="primary_btn" style="padding-left: 15px" @click="populateUnprescribedMedication(previousDrugPrescriptions)">Dispense</ion-button>
+            <ion-button class="primary_btn" style="padding-left: 15px" @click="populateUnprescribedMedication(PreviuosSelectedMedicalDrugsList)">Dispense</ion-button>
         </div>
 
 
@@ -54,12 +54,6 @@ import BasicForm from "@/components/BasicForm.vue";
 import DynamicList from "../components/DynamicList.vue";
 import { tr } from "date-fns/locale";
 
-import { PreviousTreatment } from "@/apps/NCD/services/treatment";
-
-onMounted(async () => {
-    const previousTreatment = new PreviousTreatment();
-    const { previousDrugPrescriptions, previousClinicalNotes, previousDrugAllergies } = await previousTreatment.getPatientEncounters();
-});
 export default defineComponent({
     watch: {},
     name: "xxxComponent",
@@ -80,7 +74,7 @@ export default defineComponent({
             //         previousDrugPrescriptions.push(object.drugName)
             //     }                
             // }
-            console.log(previousDrugPrescriptions)
+            console.log(PreviuosSelectedMedicalDrugsList)
         }
     }
 });
@@ -117,6 +111,16 @@ import {
 } from "ionicons/icons";
 import { icons } from "@/utils/svg";
 import { ref, watch, computed, onMounted, onUpdated } from "vue";
+import { PreviousTreatment } from "@/apps/NCD/services/treatment";
+
+const PreviuosSelectedMedicalDrugsList = ref();
+
+onMounted(async () => {
+    const previousTreatment = new PreviousTreatment();
+    const { previousDrugPrescriptions, previousClinicalNotes, previousDrugAllergies } = await previousTreatment.getPatientEncounters();
+    PreviuosSelectedMedicalDrugsList.value = previousDrugPrescriptions;
+});
+
 </script>
 
 
