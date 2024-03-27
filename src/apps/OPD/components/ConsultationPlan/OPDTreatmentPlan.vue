@@ -402,6 +402,7 @@ const showMoreNotesMsg = ref("Show more notes");
 const showMoreAllergyMsg = ref("Show more allergies");
 const FirstPreviousAllegies = ref();
 const RestOfPreviousAllegies = ref();
+const currentDrugOb = ref()
 
 onMounted(async () => {
     const previousTreatment = new PreviousTreatment();
@@ -510,6 +511,11 @@ async function saveData() {
     const systemSessionDate = Service.getSessionDate();
     const daysToAdd = duration.value;
     const generatedPrescriptionDate = addDaysToDate(systemSessionDate, parseInt(duration.value));
+    let highlightbackground = false
+
+    if (isPresentInAllergyList(currentDrugOb.value) == true) {
+        highlightbackground = true;
+    }
 
     const drugString = {
         drugName: drugName.value,
@@ -519,6 +525,7 @@ async function saveData() {
         prescription: generatedPrescriptionDate,
         drug_id: drug_id.value,
         units: units.value,
+        highlightbackground: highlightbackground
     };
     selectedMedicalDrugsList.value.push(drugString);
     drugName.value = "";
@@ -528,6 +535,7 @@ async function saveData() {
     prescription.value = "";
     componentKey.value++;
     saveStateValuesState();
+    
 }
 
 async function FindDrugName(text: any) {
@@ -600,7 +608,9 @@ function isPresentInAllergyList(obj: any) {
     const filteredDrugs = hasMatchingIDs([obj] as any, filter_id_array as any)
     if (filteredDrugs == true) {
         toastWarning("Client is allergic to the selected medication", 4000)
-        return;
+        return true;
+    } else {
+        return false
     }
 }
 
@@ -669,6 +679,7 @@ function selectedDrugName(name: any, obj: any) {
     drugName.value = name;
     drug_id.value = obj.drug_id;
     units.value = obj.units;
+    currentDrugOb.value = obj
     isPresentInAllergyList(obj)
 }
 
