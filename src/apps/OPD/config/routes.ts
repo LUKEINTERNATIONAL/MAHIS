@@ -1,5 +1,5 @@
 import ConsultationPlan from "../views/ConsultationPlan.vue";
-import Vitals from "../views/Vistals.vue";
+import Vitals from "../views/Vitals.vue";
 import Enrollment from "../views/Enrollment.vue";
 export default [
     {
