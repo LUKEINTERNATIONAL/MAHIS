@@ -91,6 +91,10 @@ import SecondStageDelivery from "@/apps/LABOUR/components/delivery details/Secon
 import ThirdStageDelivery from "@/apps/LABOUR/components/delivery details/ThirdStageDelivery.vue";
 import PatientReferral from "@/apps/LABOUR/components/repeatable things/PatientReferral.vue";
 import end from "@/apps/LABOUR/components/repeatable things/end.vue";
+import ImmidiatePostnatalChecksForChild
+  from "@/apps/LABOUR/components/delivery details/ImmidiatePostnatalChecksForChild.vue";
+import ImmidiatePostnatalChecksForMother
+  from "@/apps/LABOUR/components/delivery details/ImmidiatePostnatalChecksForMother.vue";
 import OtherExams from "@/apps/LABOUR/components/repeatable things/OtherExams.vue";
 import Vitals from "@/apps/LABOUR/components/repeatable things/Vitals.vue";
 import { createModal } from "@/utils/Alerts";
@@ -128,7 +132,10 @@ export default defineComponent({
         ThirdStageDelivery,
       end,
       OtherExams,
-      Vitals
+      Vitals,
+      ImmidiatePostnatalChecksForChild,
+      ImmidiatePostnatalChecksForMother
+
 
 
     },

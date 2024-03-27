@@ -49,7 +49,7 @@
                 </ion-row>
             </span>
             <span v-if="item.radioBtnContent">
-                <div style="" v-if="item.radioBtnContent?.header">
+                <div style="font-weight: bold" v-if="item.radioBtnContent?.header">
                     {{ item.radioBtnContent?.header.title }}
                 </div>
                 <ion-row class="checkbox_content">
@@ -94,7 +94,7 @@
                 </ion-row>
             </span>
             <span v-if="item?.checkboxBtnContent && !item?.checkboxBtnContent?.header?.displayNone">
-                <div style="" v-if="item.checkboxBtnContent?.header">
+                <div style="font-weight: bold" v-if="item.checkboxBtnContent?.header">
                     {{ item.checkboxBtnContent?.header.title }}
                 </div>
                 <ion-row class="checkbox_content">
