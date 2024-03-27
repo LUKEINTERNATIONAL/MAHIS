@@ -91,7 +91,7 @@ export default defineComponent({
             dispositions: "" as any,
             wizardData: [
                 {
-                    title: "Presenting Complaints",
+                    title: "Clinical Assessment",
                     class: "common_step",
                     checked: false,
                     disabled: false,
@@ -117,7 +117,7 @@ export default defineComponent({
                     last_step: "",
                 },
                 {
-                    title: "Physical Exams",
+                    title: "Treatment",
                     class: "common_step",
                     checked: "",
                     icon: false,
@@ -126,28 +126,19 @@ export default defineComponent({
                     last_step: "",
                 },
                 {
-                    title: "Treatment",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 5,
-                    last_step: "",
-                },
-                {
                     title: "Outcome",
                     class: "common_step",
                     checked: "",
                     icon: false,
                     disabled: false,
-                    number: 7,
+                    number: 5,
                     last_step: "last_step",
                 },
             ],
             StepperData: [
                 {
-                    title: "Presenting Complaints",
-                    componet: "Vitals",
+                    title: "Clinical Assessment",
+                    componet: "ClinicalAssessment",
                     value: "1",
                 },
                 {
@@ -157,23 +148,18 @@ export default defineComponent({
                 },
                 {
                     title: "Diagnosis",
-                    componet: "Diagnosis",
+                    componet: "OPDDiagnosis",
                     value: "3",
                 },
                 {
-                    title: "Physical Exams",
-                    componet: "Complications",
-                    value: "4",
-                },
-                {
                     title: "Treatment plan",
-                    componet: "TreatmentPlan",
-                    value: "5",
+                    componet: "OPDTreatmentPlan",
+                    value: "4",
                 },
                 {
                     title: "Outcome",
                     componet: "Outcome",
-                    value: "7",
+                    value: "5",
                 },
             ],
             isOpen: false,

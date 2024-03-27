@@ -78,11 +78,13 @@ import { chevronBackOutline, checkmark } from "ionicons/icons";
 import Vitals from "@/apps/NCD/components/ConsultationPlan/Vitals.vue";
 import OPDVitals from "@/apps/OPD/components/Vitals.vue"
 import Diagnosis from "@/apps/NCD/components/ConsultationPlan/Diagnosis.vue";
+import OPDDiagnosis from "@/apps/OPD/components/ConsultationPlan/OPDDiagnosis.vue";
 import Complications from "@/apps/NCD/components/ConsultationPlan/Complications.vue";
 import ConfirmDiagnosis from "@/apps/NCD/components/ConsultationPlan/ConfirmDiagnosis.vue";
 import Outcome from "@/apps/NCD/components/ConsultationPlan/Outcome.vue";
 import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigations.vue";
 import TreatmentPlan from "@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue";
+import OPDTreatmentPlan from "@/apps/OPD/components/ConsultationPlan/OPDTreatmentPlan.vue";
 import NextAppointment from "@/apps/NCD/components/ConsultationPlan/NextAppointment.vue";
 
 import Medications from "@/apps/ANC/components/profile/Medications.vue";
@@ -145,6 +147,8 @@ export default defineComponent({
         IonItem,
         IonLabel,
         Vitals,
+        // PresentingComplaints,
+        // ClinicalAssessment,
         Diagnosis,
         Complications,
         ConfirmDiagnosis,

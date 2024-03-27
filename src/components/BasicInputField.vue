@@ -2,6 +2,7 @@
     <h6 v-if="inputHeader">{{ inputHeader }}</h6>
     <div class="" :style="'width:' + inputWidth">
         <ion-input
+            v-if="input == 'input'"
             @ionInput="handleInput"
             @ionBlur="handleBlur"
             @click="handleClick"
@@ -22,6 +23,27 @@
                 <span v-if="unit">{{ unit }}</span>
             </ion-label>
         </ion-input>
+        <ion-textarea
+            v-if="input == 'textArea'"
+            :clear-input="true"
+            :disabled="disabled"
+            @ionInput="handleInput"
+            @ionBlur="handleBlur"
+            @click="handleClick"
+            class="custom"
+            :placeholder="placeholder"
+            :auto-grow="true"
+            fill="outline"
+        >
+            <ion-label style="display: flex" slot="start">
+                <ion-icon v-if="icon" :icon="icon" aria-hidden="true"></ion-icon>
+                <span v-if="leftText" class="left-text"> {{ leftText }}</span>
+            </ion-label>
+            <ion-label v-if="unit || iconRight" slot="end" style="border-left: 1px solid #e6e6e6; padding-left: 10px">
+                <ion-icon v-if="iconRight" :icon="iconRight" aria-hidden="true"></ion-icon>
+                <span v-if="unit">{{ unit }}</span>
+            </ion-label>
+        </ion-textarea>
     </div>
     <SelectionPopover
         v-if="eventType === 'input' || eventType === 'blur'"
@@ -104,6 +126,9 @@ export default defineComponent({
         inputWidth: {
             default: "",
         },
+        input: {
+            default: "input",
+        },
         disabled: {
             type: Boolean,
             default: false,
@@ -145,7 +170,7 @@ h6 {
     color: #b4b0b0;
     width: 95px;
 }
-ion-input.custom {
+.custom {
     --background: #fff;
 }
 </style>
