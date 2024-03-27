@@ -153,7 +153,7 @@ export default defineComponent({
                 },
                 {
                     title: "Treatment plan",
-                    componet: "TreatmentPlan",
+                    componet: "OPDTreatmentPlan",
                     value: "4",
                 },
                 {
