@@ -540,22 +540,22 @@ async function FindDrugName(text: any) {
         page: page,
         page_size: limit,
     });
-    const filter_id_array: any[] = [];
-    selectedAllergiesList2.value.forEach((selectedMedicalAllergy: any) => {
-        if (selectedMedicalAllergy.selected) {
-            filter_id_array.push(selectedMedicalAllergy.concept_id);
-        }
-    });
+    // const filter_id_array: any[] = [];
+    // selectedAllergiesList2.value.forEach((selectedMedicalAllergy: any) => {
+    //     if (selectedMedicalAllergy.selected) {
+    //         filter_id_array.push(selectedMedicalAllergy.concept_id);
+    //     }
+    // });
 
-    const filteredDrugs = filterArrayByIDs(drugs as any, filter_id_array as any);
+    //const filteredDrugs = filterArrayByIDs(drugs as any, filter_id_array as any);
 
-    filteredDrugs.map((drug: any) => ({
+    drugs.map((drug: any) => ({
         label: drug.name,
         value: drug.name,
         other: drug,
     }));
 
-    diagnosisData.value = filteredDrugs;
+    diagnosisData.value = drugs;
 }
 
 async function FindDrugName2(text: any) {
@@ -571,23 +571,37 @@ async function FindDrugName2(text: any) {
         page: page,
         page_size: limit,
     });
-    const filter_id_array: any[] = [];
-    selectedAllergiesList2.value.forEach((selectedMedicalAllergy: any) => {
-        if (selectedMedicalAllergy.selected) {
-            filter_id_array.push(selectedMedicalAllergy.concept_id);
-        }
-    });
+    // const filter_id_array: any[] = []
+    // selectedAllergiesList2.value.forEach((selectedMedicalAllergy: any) => {
+    //     if (selectedMedicalAllergy.selected) {
+    //         filter_id_array.push(selectedMedicalAllergy.concept_id);
+    //     }
+    // })
 
-    const filteredDrugs = filterArrayByIDs(drugs as any, filter_id_array as any);
+    //const filteredDrugs = filterArrayByIDs(drugs as any, filter_id_array as any);
 
-    filteredDrugs.map((drug: any) => ({
+    drugs.map((drug: any) => ({
         label: drug.name,
         value: drug.name,
         other: drug,
     }));
 
-    diagnosisData.value = filteredDrugs;
-    return filteredDrugs;
+    diagnosisData.value = drugs;
+    return drugs;
+}
+
+function isPresentInAllergyList(obj: any) {
+    const filter_id_array: any[] = []
+    selectedAllergiesList2.value.forEach((selectedMedicalAllergy: any) => {
+        if (selectedMedicalAllergy.selected) {
+            filter_id_array.push(selectedMedicalAllergy.concept_id);
+        }
+    })
+    const filteredDrugs = hasMatchingIDs([obj] as any, filter_id_array as any)
+    if (filteredDrugs == true) {
+        toastWarning("Client is allergic to the selected medication", 4000)
+        return;
+    }
 }
 
 async function findIfDrugNameExists() {
@@ -608,12 +622,18 @@ async function findIfDrugNameExists() {
 }
 
 function filterArrayByIDs(mainArray: [], idsToFilter: []) {
-    // Using the filter method on the mainArray
     return mainArray.filter((item: any) => 
-        // Check if item's concept_id is not included in idsToFilter
         !idsToFilter.includes(item.concept_id as never)
     );
 }
+
+function hasMatchingIDs(mainArray: any[], idsToFilter: any[]): boolean {
+    // Check if any item in mainArray has concept_id included in idsToFilter
+    return mainArray.some((item: any) => 
+        idsToFilter.includes(item.concept_id as never)
+    );
+}
+
 
 async function FindAllegicDrugName(text: any) {
     const searchText = text.target.value;
@@ -649,6 +669,7 @@ function selectedDrugName(name: any, obj: any) {
     drugName.value = name;
     drug_id.value = obj.drug_id;
     units.value = obj.units;
+    isPresentInAllergyList(obj)
 }
 
 function popoverOpenForFrequencyFn2() {
