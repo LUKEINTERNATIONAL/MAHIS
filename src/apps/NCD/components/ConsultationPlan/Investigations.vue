@@ -1,36 +1,52 @@
 <template>
-    <ion-list>
-        <ion-item class="dashed_bottom_border">
-            <ion-toggle :checked="labOrderStatus" @ionChange="toggleLabOrderStatus">Lab Investigations</ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="labOrderStatus" style="margin-top: 10px">
-            <span>
-                <labOrderResults :propOrders="orders" />
-            </span>
+    <ion-accordion-group ref="accordionGroup" class="previousView">
+        <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+            <ion-item slot="header" color="light">
+                <ion-label class="previousLabel">Lab Investigations</ion-label>
+            </ion-item>
+            <div class="ion-padding" slot="content">
+                <span>
+                    <labOrderResults :propOrders="orders" />
+                </span>
 
-            <span v-if="search_item">
-                <basic-form
-                    :contentData="investigations"
-                    @update:selected="handleInputData"
-                    @update:inputValue="handleInputData"
-                    @clicked:button="addNewRow"
-                >
-                </basic-form>
-            </span>
+                <span v-if="search_item">
+                    <basic-form
+                        :contentData="investigations"
+                        @update:selected="handleInputData"
+                        @update:inputValue="handleInputData"
+                        @clicked:button="addNewRow"
+                    >
+                    </basic-form>
+                </span>
 
-            <ion-row v-if="addItemButton" style="margin-top: 10px">
-                <DynamicButton fill="clear" :icon="iconsContent.plus" iconSlot="icon-only" @clicked:btn="displayInputFields()" name="Add new test" />
-            </ion-row>
-        </div>
-        <ion-item class="dashed_bottom_border">
-            <ion-toggle :checked="radiologyOrdersStatus">Radiology Investigation<Section></Section> </ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="radiologyOrdersStatus">Radiology Order</div>
-        <ion-item class="dashed_bottom_border">
-            <ion-toggle :checked="otherOrdersStatus">Other Investigation</ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="otherOrdersStatus">Other</div>
-    </ion-list>
+                <ion-row v-if="addItemButton" style="margin-top: 10px">
+                    <DynamicButton
+                        fill="clear"
+                        :icon="iconsContent.plus"
+                        iconSlot="icon-only"
+                        @clicked:btn="displayInputFields()"
+                        name="Add new test"
+                    />
+                </ion-row>
+            </div>
+        </ion-accordion>
+    </ion-accordion-group>
+    <ion-accordion-group ref="accordionGroup" class="previousView">
+        <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+            <ion-item slot="header" color="light">
+                <ion-label class="previousLabel">Radiology Investigation</ion-label>
+            </ion-item>
+            <div class="ion-padding" slot="content"></div>
+        </ion-accordion>
+    </ion-accordion-group>
+    <ion-accordion-group ref="accordionGroup" class="previousView">
+        <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+            <ion-item slot="header" color="light">
+                <ion-label class="previousLabel">Other Investigation</ion-label>
+            </ion-item>
+            <div class="ion-padding" slot="content"></div>
+        </ion-accordion>
+    </ion-accordion-group>
 </template>
 
 <script lang="ts">

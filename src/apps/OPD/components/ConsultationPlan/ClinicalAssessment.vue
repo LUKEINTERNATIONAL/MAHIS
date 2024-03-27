@@ -1,38 +1,66 @@
 <template>
-    <ion-list>
-        <ion-item class="dashed_bottom_border">
-            <ion-toggle :checked="levelOfConsciousnessStatus" @ionChange="levelOfConsciousnessStatus = !levelOfConsciousnessStatus"
-                >Level of consciousness
-            </ion-toggle>
-        </ion-item>
-
-        <div class="sub_item_body" v-if="levelOfConsciousnessStatus"><LevelOfConsciousness /></div>
-            <ion-item class="dashed_bottom_border">
-                <ion-toggle :checked="radiologyOrdersStatus" @ionChange="presentingComplaintsStatus = !presentingComplaintsStatus"
-                    >Presenting complaints<Section></Section>
-                </ion-toggle>
-            </ion-item>
-        <div class="sub_item_body presentingComplaint" v-if="presentingComplaintsStatus"><PresentingComplaints /></div>
-        
-        <ion-item class="dashed_bottom_border">
-            <ion-toggle :checked="pregnancyBreastfeedingStatus" @ionChange="pregnancyBreastfeedingStatus = !pregnancyBreastfeedingStatus"
-                >Pregnancy and breastfeeding status</ion-toggle
-            >
-        </ion-item>
-        <!-- <div class="sub_item_body" v-if="pregnancyBreastfeedingStatus"><PregnancyBreastfeeding /></div> -->
-        <ion-item class="dashed_bottom_border">
-            <ion-toggle :checked="pastMedicalHistory" @ionChange="pastMedicalHistory = !pastMedicalHistory">Past medical history</ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="pastMedicalHistory"><PastMedicalHistory /></div>
-        <ion-item class="dashed_bottom_border">
-            <ion-toggle :checked="allergiesStatus" @ionChange="allergiesStatus = !allergiesStatus">Allergies</ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="allergiesStatus"><Allergies /></div>
-        <ion-item class="dashed_bottom_border">
-            <ion-toggle :checked="physicalExamination" @ionChange="physicalExamination = !physicalExamination">Physical examination </ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="physicalExamination"><PhysicalExamination /></div>
-    </ion-list>
+    <ion-row>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Level of consciousness</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <LevelOfConsciousness />
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Presenting complaints</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <PresentingComplaints />
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Pregnancy and breastfeeding status</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <PregnancyBreastfeeding />
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Past medical history</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <PastMedicalHistory />
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Allergies</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <Allergies />
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Physical examination</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <PhysicalExamination />
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+    </ion-row>
 </template>
 
 <script lang="ts">

@@ -15,8 +15,8 @@
         <br />
         <div class="triage_modal_btn center">
             <div class="center_btn">
-                <ion-button class="primary_btn" @click="nav('patientProfile', 'save')">Save</ion-button>
-                <span @click="nav('patientProfile', 'not_save')" style="cursor: pointer"> Don't Save</span>
+                <ion-button class="primary_btn" @click="dismiss()">Save</ion-button>
+                <span @click="dismiss()" style="cursor: pointer"> Don't Save</span>
             </div>
         </div>
     </div>
@@ -88,5 +88,13 @@ export default defineComponent({
 }
 .text_12 {
     font-size: 12px;
+    height: 510px;
+    overflow: scroll;
+}
+.large-modal {
+    --width: 80vw;
+}
+.modal_title {
+    margin-bottom: 0px;
 }
 </style>
