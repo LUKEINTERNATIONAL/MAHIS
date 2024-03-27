@@ -11,24 +11,23 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                classDash: "dashed_bottom_border",
                radioBtnContent: {
                    header: {
-                       title: "Has physical examination been done?",
+                       title: "Complete the physical examination below:",
                        selectedValue: "",
                        name: "Physical examination done",
                    },
                    data: [
                        {
                            value: "yes",
-                           name: "Yes",
+                          name: "Has physical examination been done?",
                            labelPlacement: "start",
-                           colSize: "7",
+                           colSize: "6",
                            justify: "space-between",
                        },
                        {
                            value: "no",
-                           name: "No",
-                           labelPlacement: "start",
-                           colSize: "7",
-                           justify: "space-between",
+                           labelPlacement: "end",
+                           colSize: "2",
+                           justify: "end",
                        },
                    ],
                },
@@ -66,7 +65,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                classDash: "",
                radioBtnContent: {
                    header: {
-                       title: 'Eyes normal?',
+                       radioTittle: ['Yes','No'],
                        selectedValue: '',
                        name: 'Eyes normal',
                        displayNone:true
@@ -74,17 +73,16 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    data: [
                        {
                            value: "yes",
-                           name: "Yes",
+                           name: "Eyes normal?",
                            labelPlacement: "start",
-                           colSize: "7",
+                           colSize: "6",
                            justify: "space-between",
                        },
                        {
                            value: "no",
-                           name: "No",
                            labelPlacement: "start",
-                           colSize: "7",
-                           justify: "space-between",
+                           colSize: "2",
+                           justify: "end",
                        },
                    ],
                },
@@ -220,25 +218,24 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                classDash: "dashed_bottom_border",
                radioBtnContent: {
                    header: {
-                       title: "Mouth normal?",
+                       title: "",
                        selectedValue: "",
                        name: "Mouth normal",
                        DisplayNone:true
                    },
                    data: [
                        {
-                           value: "yes",
-                           name: "Yes",
+                           value: "Yes",
+                           name: "Mouth normal?",
                            labelPlacement: "start",
-                           colSize: '7',
+                           colSize: '6',
                            justify: "space-between",
                        },
                        {
                            value: "no",
-                           name: "No",
                            labelPlacement: "start",
-                           colSize: '7',
-                           justify: "space-between",
+                           colSize: '2',
+                           justify: "end",
                        },
                    ],
                },
@@ -373,7 +370,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                classDash: "",
                radioBtnContent: {
                    header: {
-                       title: "Ears normal?",
+                       title: "",
                        selectedValue: "",
                        name: "Ears normal",
                        displayNone:true
@@ -381,17 +378,16 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    data: [
                        {
                            value: "yes",
-                           name: "Yes",
+                           name: "Ears normal?",
                            labelPlacement: "start",
-                           colSize: "7",
+                           colSize: "6",
                            justify: "space-between",
                        },
                        {
                            value: "no",
-                           name: "No",
                            labelPlacement: "start",
-                           colSize: "7",
-                           justify: "space-between",
+                           colSize: "2",
+                           justify: "end",
                        },
                    ],
                },
@@ -500,7 +496,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                classDash: "",
                radioBtnContent: {
                    header: {
-                       title: "Face normal?",
+                       title: "",
                        selectedValue: "",
                        name: "Face normal",
                        displayNone:true
@@ -508,17 +504,16 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    data: [
                        {
                            value: "yes",
-                           name: "Yes",
+                           name: "Face normal?",
                            labelPlacement: "start",
-                           colSize: "7",
+                           colSize: "6",
                            justify: "space-between",
                        },
                        {
                            value: "no",
-                           name: "No",
                            labelPlacement: "start",
-                           colSize: "7",
-                           justify: "space-between",
+                           colSize: "2",
+                           justify: "end",
                        },
                    ],
                },
@@ -629,7 +624,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                classDash: "dashed_bottom_border",
                radioBtnContent: {
                    header: {
-                       title: "Neck normal?",
+                       title: "",
                        selectedValue: "",
                        name: "Neck normal",
                        displayNone:true
@@ -637,17 +632,16 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    data: [
                        {
                            value: "yes",
-                           name: "Yes",
+                           name: "Neck normal?",
                            labelPlacement: "start",
-                           colSize: "7",
+                           colSize: "6",
                            justify: "space-between",
                        },
                        {
                            value: "no",
-                           name: "No",
                            labelPlacement: "start",
-                           colSize: "7",
-                           justify: "space-between",
+                           colSize: "2",
+                           justify: "end",
                        },
                    ],
                },
@@ -781,7 +775,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                classDash: "",
                radioBtnContent: {
                    header: {
-                       title: "Chest inspection normal?",
+                       title: "",
                        selectedValue: "",
                        name: "Chest inspection normal",
                        displayNone:true,
@@ -789,17 +783,16 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    data: [
                        {
                            value: "yes",
-                           name: "Yes",
+                           name: "Chest inspection normal?",
                            labelPlacement: "start",
-                           colSize: '7',
+                           colSize: '6',
                            justify: "space-between",
                        },
                        {
                            value: "no",
-                           name: "No",
                            labelPlacement: "start",
-                           colSize: "7",
-                           justify: "space-between",
+                           colSize: "2",
+                           justify: "end",
                        },
                    ],
                },
@@ -958,36 +951,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                classDash: "dashed_bottom_border",
                radioBtnContent: {
                    header: {
-                       title: "Chest movement",
-                       selectedValue: "",
-                       name: "Chest movement",
-                       DisplayNone:true
-                   },
-                   data: [
-                       {
-                           value: "symmetrical",
-                           name: "Symmetrical",
-                           labelPlacement: "start",
-                           colSize: "7",
-                           justify: "space-between",
-                       },
-                       {
-                           value: "asymmetrical",
-                           name: "Asymmetrical",
-                           labelPlacement: "start",
-                           colSize: "7",
-                           justify: "space-between",
-                       },
-                   ],
-               },
-           },
-
-           {
-               selectdData: [],
-               classDash: "dashed_bottom_border",
-               radioBtnContent: {
-                   header: {
-                       title: "Heart sounds normal?",
+                       title: "",
                        selectedValue: "",
                        name: "Heart sounds normal",
                        DisplayNone:true
@@ -995,17 +959,16 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    data: [
                        {
                            value: "yes",
-                           name: "Yes",
+                           name: "Heart sounds normal?",
                            labelPlacement: "start",
-                           colSize: "7",
+                           colSize: "6",
                            justify: "space-between",
                        },
                        {
                            value: "no",
-                           name: "No",
                            labelPlacement: "start",
-                           colSize: "7",
-                           justify: "space-between",
+                           colSize: "2",
+                           justify: "end",
                        },
                    ],
                },
@@ -1113,7 +1076,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                classDash: "dashed_bottom_border",
                radioBtnContent: {
                    header: {
-                       title: "Breath sounds normal",
+                       title: "",
                        selectedValue: "",
                        name: "Breath sounds normal",
                        displayNone:true
@@ -1121,17 +1084,16 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    data: [
                        {
                            value: "yes",
-                           name: "Yes",
+                           name: "Breath sounds normal",
                            labelPlacement: "start",
-                           colSize: "7",
+                           colSize: "6",
                            justify: "space-between",
                        },
                        {
                            value: "no",
-                           name: "No",
                            labelPlacement: "start",
-                           colSize: "7",
-                           justify: "space-between",
+                           colSize: "2",
+                           justify: "end",
                        },
                    ],
                },
@@ -1315,7 +1277,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                classDash: "dashed_bottom_border",
                radioBtnContent: {
                    header: {
-                       title: "Abdominal inspection normal?",
+                       title: "",
                        selectedValue: "",
                        name: "Abdominal inspection normal",
                        displayNone:true
@@ -1323,17 +1285,16 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    data: [
                        {
                            value: "yes",
-                           name: "Yes",
+                           name: "Abdominal inspection normal?",
                            labelPlacement: "start",
-                           colSize: "7",
+                           colSize: "6",
                            justify: "space-between",
                        },
                        {
                            value: "no",
-                           name: "No",
                            labelPlacement: "start",
-                           colSize: "7",
-                           justify: "space-between",
+                           colSize: "2",
+                           justify: "end",
                        },
                    ],
                },
@@ -1532,7 +1493,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                classDash: "dashed_bottom_border",
                radioBtnContent: {
                    header: {
-                       title: "Abdominal auscultation normal?",
+                       title: "",
                        selectedValue: "",
                        name: "Abdominal auscultation normal",
                        displayNone:true
@@ -1540,17 +1501,16 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    data: [
                        {
                            value: "yes",
-                           name: "Yes",
+                           name: "Abdominal auscultation normal?",
                            labelPlacement: "start",
-                           colSize: "7",
+                           colSize: "6",
                            justify: "space-between",
                        },
                        {
                            value: "no",
-                           name: "No",
                            labelPlacement: "start",
-                           colSize: "7",
-                           justify: "space-between",
+                           colSize: "2",
+                           justify: "end",
                        },
                    ],
                },
@@ -1726,7 +1686,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                classDash: "dashed_bottom_border",
                radioBtnContent: {
                    header: {
-                       title: "Abdominal Palpation normal?",
+                       title: "",
                        selectedValue: "",
                        name: "Abdominal Palpation normal",
                        displayNone:true
@@ -1734,17 +1694,16 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    data: [
                        {
                            value: "yes",
-                           name: "Yes",
+                           name: "Abdominal Palpation normal?",
                            labelPlacement: "start",
-                           colSize: "7",
+                           colSize: "6",
                            justify: "space-between",
                        },
                        {
                            value: "no",
-                           name: "No",
                            labelPlacement: "start",
-                           colSize: "7",
-                           justify: "space-between",
+                           colSize: "2",
+                           justify: "end",
                        },
                    ],
                },
@@ -1897,7 +1856,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                classDash: "dashed_bottom_border",
                radioBtnContent: {
                    header: {
-                       title: "Genital examination normal?",
+                       title: "",
                        selectedValue: "",
                        name: "Genital examination normal",
                        displayNone:true
@@ -1905,17 +1864,16 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                    data: [
                        {
                            value: "yes",
-                           name: "Yes",
+                           name: "Genital examination normal?",
                            labelPlacement: "start",
-                           colSize: "7",
+                           colSize: "6",
                            justify: "space-between",
                        },
                        {
                            value: "no",
-                           name: "No",
                            labelPlacement: "start",
-                           colSize: "7",
-                           justify: "space-between",
+                           colSize: "2",
+                           justify: "end",
                        },
                    ],
                },
@@ -2190,6 +2148,35 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                        ],
                    }
            },
+           {
+               selectdData: [],
+               classDash: "dashed_bottom_border",
+               radioBtnContent: {
+                   header: {
+                       title: "Chest movement",
+                       selectedValue: "",
+                       name: "Chest movement",
+                       DisplayNone:true
+                   },
+                   data: [
+                       {
+                           value: "symmetrical",
+                           name: "Symmetrical",
+                           labelPlacement: "start",
+                           colSize: "7",
+                           justify: "space-between",
+                       },
+                       {
+                           value: "asymmetrical",
+                           name: "Asymmetrical",
+                           labelPlacement: "start",
+                           colSize: "7",
+                           justify: "space-between",
+                       },
+                   ],
+               },
+           },
+
 
        ] as any
     }),
