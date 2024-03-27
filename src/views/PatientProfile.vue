@@ -147,31 +147,31 @@
 
 <script lang="ts">
 import {
-    IonContent,
-    IonHeader,
-    IonMenuButton,
-    IonPage,
-    IonTitle,
-    IonToolbar,
-    IonButton,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardSubtitle,
-    IonCardTitle,
-    IonAccordion,
-    IonAccordionGroup,
-    IonItem,
-    IonLabel,
-    IonModal,
-    IonRow,
-    IonCol,
-    IonGrid,
+  IonAccordion,
+  IonAccordionGroup,
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonCol,
+  IonContent,
+  IonGrid,
+  IonHeader,
+  IonItem,
+  IonLabel,
+  IonMenuButton,
+  IonModal,
+  IonPage,
+  IonRow,
+  IonTitle,
+  IonToolbar,
+  modalController,
 } from "@ionic/vue";
-import { defineComponent } from "vue";
-import { chevronBackOutline, checkmark } from "ionicons/icons";
-import { modalController } from "@ionic/vue";
-import { icons } from "@/utils/svg";
+import {defineComponent, ref} from "vue";
+import {checkmark, chevronBackOutline} from "ionicons/icons";
+import {icons} from "@/utils/svg";
 
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
@@ -182,15 +182,14 @@ import InvestigationsGrid from "@/components/PatientProfileGrid/InvestigationsGr
 import MedicationsGrid from "@/components/PatientProfileGrid/MedicationsGrid.vue";
 import VitalsGrid from "@/components/PatientProfileGrid/VitalsGrid.vue";
 
-import { useDemographicsStore } from "@/stores/DemographicStore";
-import { useGeneralStore } from "@/stores/GeneralStore";
-import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
-import { mapState } from "pinia";
+import {useDemographicsStore} from "@/stores/DemographicStore";
+import {useGeneralStore} from "@/stores/GeneralStore";
+import {useTreatmentPlanStore} from "@/stores/TreatmentPlanStore";
+import {mapState} from "pinia";
 import HisDate from "@/utils/Date";
-import { useEnrollementStore } from "@/stores/EnrollmentStore";
-import { PatientService } from "@/services/patient_service";
+import {useEnrollementStore} from "@/stores/EnrollmentStore";
+import {PatientService} from "@/services/patient_service";
 
-import { ref } from "vue";
 export default defineComponent({
     components: {
         IonContent,
@@ -284,9 +283,9 @@ export default defineComponent({
                 } else {
                     this.OPDProgramActionName = "+ Start new OPD consultation";
                 }
-                this.url = "consultationPlan";
+                this.url = "OPDConsultationPlan";
             } else {
-                this.url = "OPDEnrollment";
+                this.url = "OPDConsultationPlan";
                 this.OPDProgramActionName = "+ Enroll in OPD Program";
             }
         },

@@ -17,7 +17,7 @@
     <div class="modal_wrapper" v-if="listOrders.length > 1">
         <div style="font-weight: 700">Lab Orders</div>
         <div>
-            <list :listData="listOrders" @clicked:delete="voidLabOrder"></list>
+            <list :listData="listOrders" @clicked:delete="voidLabOrder" @clicked:results="openResultsForm"></list>
         </div>
         <div style="margin-top: 5px" v-if="listOrders.length <= 3 && listSeeMoreOrders.length > 3">
             <DynamicButton @click="seeResultsStatus('more')" name="Show More Lab Orders" fill="clear" iconSlot="icon-only" />
@@ -29,23 +29,20 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue";
-import { defineComponent } from "vue";
-import { checkmark, pulseOutline } from "ionicons/icons";
-import { ref } from "vue";
-import { icons } from "@/utils/svg";
+import {IonContent, IonHeader, IonItem, IonList, IonMenu, IonTitle, IonToolbar, modalController} from "@ionic/vue";
+import {defineComponent} from "vue";
+import {checkmark, pulseOutline} from "ionicons/icons";
 import ApexChart from "vue3-apexcharts";
 import List from "@/components/List.vue";
-import { ObservationService } from "@/services/observation_service";
-import { useDemographicsStore } from "@/stores/DemographicStore";
-import { mapState } from "pinia";
+import {useDemographicsStore} from "@/stores/DemographicStore";
+import {mapState} from "pinia";
 import HisDate from "@/utils/Date";
-import { iconGraph, iconList } from "@/utils/SvgDynamicColor";
-import { OrderService } from "@/services/order_service";
+import {iconGraph, iconList} from "@/utils/SvgDynamicColor";
 import DynamicButton from "@/components/DynamicButton.vue";
-import table from "@/components/DataViews/tables/ReportDataTable";
 import DashBox from "@/components/DashBox.vue";
-import { PatientLabService } from "@/services/lab/patient_lab_service";
+import {PatientLabService} from "@/services/lab/patient_lab_service";
+import {createModal} from "@/utils/Alerts";
+import SaveProgressModal from "@/components/SaveProgressModal.vue";
 
 export default defineComponent({
     name: "Menu",
@@ -128,6 +125,10 @@ export default defineComponent({
         },
 
         handleIcon() {},
+        openResultsForm(obs: any) {
+            console.log("ggggggg");
+            createModal(SaveProgressModal);
+        },
         setActivClass(active: any) {
             this.activeHeight = "";
             this.activeBMI = "";

@@ -3,17 +3,17 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController, IonCheckbox } from "@ionic/vue";
-import { defineComponent } from "vue";
-import { icons } from "@/utils/svg";
+import {IonCheckbox, IonContent, IonHeader, IonItem, IonList, IonMenu, IonTitle, IonToolbar} from "@ionic/vue";
+import {defineComponent} from "vue";
+import {icons} from "@/utils/svg";
 
 import DispositionModal from "@/components/ProfileModal/OutcomeModal.vue";
-import { createModal } from "@/utils/Alerts";
-import { useEnrollementStore } from "@/stores/EnrollmentStore";
-import { mapState } from "pinia";
+import {createModal} from "@/utils/Alerts";
+import {useEnrollementStore} from "@/stores/EnrollmentStore";
+import {mapState} from "pinia";
 import BasicForm from "@/components/BasicForm.vue";
 import BasicCard from "@/components/BasicCard.vue";
-import { modifyCheckboxInputField, getCheckboxSelectedValue, getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
+import {modifyCheckboxInputField} from "@/services/data_helpers";
 
 export default defineComponent({
     name: "Menu",
@@ -62,10 +62,6 @@ export default defineComponent({
                     {
                         cardTitle: "Substance use / Consumption",
                         content: this.substance,
-                    },
-                    {
-                        cardTitle: "Diagnosis",
-                        content: this.enrollmentDiagnosis,
                     },
                 ],
             };

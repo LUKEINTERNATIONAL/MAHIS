@@ -16,128 +16,61 @@
                     ></ion-icon>
                 </div>
             </div>
-            <div v-if="enrollmentDisplayType == 'grid'">
-                <ion-row class="card_row" v-if="enrollmentDisplayType == 'grid'">
-                    <ion-col size="6">
-                        <PatientHistory />
-                    </ion-col>
-                    <ion-col size="6">
-                        <SubstanceDiagnosis />
-                        <FamilyHistoryNCDNumber />
-                    </ion-col>
-                </ion-row>
-            </div>
-            <div v-if="enrollmentDisplayType == 'list'">
-                <div v-if="currentStep == 'Substance & Diagnosis'">
+            <div>
+                <div>
                     <SubstanceDiagnosis />
-                </div>
-                <div v-if="currentStep == 'Patient History'">
-                    <div style="display: flex; justify-content: center">
-                        <div><PatientHistory /></div>
-                    </div>
-                </div>
-                <div v-if="currentStep == 'Family History and NCDNumber'">
-                    <FamilyHistoryNCDNumber />
                 </div>
             </div>
         </ion-content>
-        <div class="footer2" v-if="enrollmentDisplayType == 'grid'">
+        <div class="footer2">
             <DynamicButton name="Save" iconSlot="end" :icon="iconsContent.saveWhite" @click="saveData()" />
         </div>
-        <ion-footer v-if="enrollmentDisplayType == 'list'">
-            <div class="footer position_content">
-                <DynamicButton name="Previous" :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
-                <ion-breadcrumbs class="breadcrumbs">
-                    <ion-breadcrumb @click="setCurrentStep('Substance & Diagnosis')" :class="{ active: currentStep === 'Substance & Diagnosis' }">
-                        <span class="breadcrumb-text">Substance & Diagnosis</span>
-                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
-                    </ion-breadcrumb>
-                    <ion-breadcrumb @click="setCurrentStep('Patient History')" :class="{ active: currentStep === 'Patient History' }">
-                        <span class="breadcrumb-text">Patient History</span>
-                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
-                    </ion-breadcrumb>
-                    <ion-breadcrumb
-                        @click="setCurrentStep('Family History and NCDNumber')"
-                        :class="{ active: currentStep === 'Family History and NCDNumber' }"
-                    >
-                        <span class="breadcrumb-text">Family History and NCDNumber</span>
-                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
-                    </ion-breadcrumb>
-                </ion-breadcrumbs>
-                <DynamicButton
-                    v-if="currentStep == 'Family History and NCDNumber'"
-                    name="Save"
-                    iconSlot="end"
-                    :icon="iconsContent.saveWhite"
-                    @click="saveData()"
-                />
-                <DynamicButton v-else name="Next" iconSlot="end" :icon="iconsContent.arrowRightWhite" @click="nextStep" />
-            </div>
-        </ion-footer>
     </ion-page>
 </template>
 
 <script lang="ts">
 import {
-    IonContent,
-    IonHeader,
-    IonMenuButton,
-    IonPage,
-    IonTitle,
-    IonToolbar,
-    IonButton,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardSubtitle,
-    IonCardTitle,
-    IonAccordion,
-    IonAccordionGroup,
-    IonItem,
-    IonLabel,
-    IonModal,
-    modalController,
-    AccordionGroupCustomEvent,
+  IonAccordion,
+  IonAccordionGroup,
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonContent,
+  IonHeader,
+  IonItem,
+  IonLabel,
+  IonMenuButton,
+  IonModal,
+  IonPage,
+  IonTitle,
+  IonToolbar,
 } from "@ionic/vue";
-import { defineComponent } from "vue";
+import {defineComponent} from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/components/DemographicBar.vue";
-import { chevronBackOutline, checkmark } from "ionicons/icons";
+import {arrowForwardCircle, checkmark, chevronBackOutline, grid, list} from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
-import { createModal } from "@/utils/Alerts";
-import { icons } from "@/utils/svg";
-import { useVitalsStore } from "@/stores/VitalsStore";
-import { useDemographicsStore } from "@/stores/DemographicStore";
-import { useInvestigationStore } from "@/stores/InvestigationStore";
-import { useDiagnosisStore } from "@/stores/DiagnosisStore";
-import { mapState } from "pinia";
+import {createModal} from "@/utils/Alerts";
+import {icons} from "@/utils/svg";
+import {useVitalsStore} from "@/stores/VitalsStore";
+import {useDemographicsStore} from "@/stores/DemographicStore";
+import {useInvestigationStore} from "@/stores/InvestigationStore";
+import {useDiagnosisStore} from "@/stores/DiagnosisStore";
+import {mapState} from "pinia";
 import Stepper from "@/components/Stepper.vue";
-import { Service } from "@/services/service";
-import { LabOrder } from "@/apps/NCD/services/lab_order";
-import { VitalsService } from "@/services/vitals_service";
-import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
-import { Diagnosis } from "@/apps/NCD/services/diagnosis";
+import {Service} from "@/services/service";
+import {Diagnosis} from "@/apps/NCD/services/diagnosis";
 import PatientHistory from "@/apps/NCD/components/Enrollment/PatientHistory.vue";
 import SubstanceDiagnosis from "@/apps/NCD/components/Enrollment/SubstanceDiagnosis.vue";
 import FamilyHistoryNCDNumber from "@/apps/NCD/components/Enrollment/FamilyHistoryNCDNumber.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
-import { useConfigurationStore } from "@/stores/ConfigurationStore";
-import { arrowForwardCircle, grid, list } from "ionicons/icons";
-import { PatientService } from "@/services/patient_service";
-import { useEnrollementStore } from "@/stores/EnrollmentStore";
-import { GlobalPropertyService } from "@/services/global_property_service";
-import {
-    modifyRadioValue,
-    getRadioSelectedValue,
-    getCheckboxSelectedValue,
-    getFieldValue,
-    getCheckboxInputField,
-    modifyFieldValue,
-    modifyCheckboxValue,
-} from "@/services/data_helpers";
-import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServerData";
-import { IdentifierService } from "@/services/identifier_service";
+import {useConfigurationStore} from "@/stores/ConfigurationStore";
+import {useEnrollementStore} from "@/stores/EnrollmentStore";
+import {formatCheckBoxData, formatRadioButtonData} from "@/services/formatServerData";
 
 export default defineComponent({
     name: "Home",
@@ -213,22 +146,9 @@ export default defineComponent({
             }
         },
         async saveData() {
-            await this.saveNcdNumber();
+            this.$router.push("OPDConsultationPlan");
         },
 
-        async saveNcdNumber() {
-            const NCDNumber = getFieldValue(this.NCDNumber, "NCDNumber", "value");
-            const sitePrefix = await GlobalPropertyService.get("site_prefix");
-            const formattedNCDNumber = sitePrefix + "-NCD-" + NCDNumber;
-            const exists = await IdentifierService.ncdNumberExists(formattedNCDNumber);
-            if (exists) toastWarning("NCD number already exists", 5000);
-            else {
-                await this.saveEnrollment();
-                const patient = new PatientService();
-                patient.createNcdNumber(formattedNCDNumber);
-                this.$router.push("consultationPlan");
-            }
-        },
         openModal() {
             createModal(SaveProgressModal);
         },

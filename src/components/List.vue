@@ -9,7 +9,7 @@
             </ion-item>
         </ion-col>
         <ion-col :size="item.btnSize || 4" class="action_buttons" :class="item.class">
-            <DynamicButton v-if="item?.btn?.includes('enter_results')" name="Enter Result" @click="$emit('clicked:edit', item.display)" />
+            <DynamicButton v-if="item?.btn?.includes('enter_results')" name="Enter Result" @click="$emit('clicked:results', item)" />
             <DynamicButton
                 v-if="item?.btn?.includes('attach')"
                 fill="clear"
@@ -51,11 +51,12 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonItem } from "@ionic/vue";
-import { defineComponent, ref } from "vue";
-import { icons } from "@/utils/svg";
+import {IonContent, IonHeader, IonItem} from "@ionic/vue";
+import {defineComponent} from "vue";
+import {icons} from "@/utils/svg";
 import DynamicButton from "@/components/DynamicButton.vue";
-import { toastWarning, popoverConfirmation } from "@/utils/Alerts";
+import {popoverConfirmation} from "@/utils/Alerts";
+
 export default defineComponent({
     name: "Menu",
     components: {

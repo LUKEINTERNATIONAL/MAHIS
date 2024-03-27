@@ -16,52 +16,48 @@
 
 <script lang="ts">
 import {
-    IonContent,
-    IonHeader,
-    IonMenuButton,
-    IonPage,
-    IonTitle,
-    IonToolbar,
-    IonButton,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardSubtitle,
-    IonCardTitle,
-    IonAccordion,
-    IonAccordionGroup,
-    IonItem,
-    IonLabel,
-    IonModal,
-    modalController,
-    AccordionGroupCustomEvent,
+  IonAccordion,
+  IonAccordionGroup,
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonContent,
+  IonHeader,
+  IonItem,
+  IonLabel,
+  IonMenuButton,
+  IonModal,
+  IonPage,
+  IonTitle,
+  IonToolbar,
 } from "@ionic/vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/components/DemographicBar.vue";
-import { chevronBackOutline, checkmark } from "ionicons/icons";
+import {checkmark, chevronBackOutline} from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
-import { createModal } from "@/utils/Alerts";
-import { icons } from "@/utils/svg";
-import { useVitalsStore } from "@/stores/VitalsStore";
-import { useDemographicsStore } from "@/stores/DemographicStore";
-import { useInvestigationStore } from "@/stores/InvestigationStore";
-import { useDiagnosisStore } from "@/stores/DiagnosisStore";
-import { mapState } from "pinia";
+import {createModal, toastSuccess, toastWarning} from "@/utils/Alerts";
+import {icons} from "@/utils/svg";
+import {useVitalsStore} from "@/stores/VitalsStore";
+import {useDemographicsStore} from "@/stores/DemographicStore";
+import {useInvestigationStore} from "@/stores/InvestigationStore";
+import {useDiagnosisStore} from "@/stores/DiagnosisStore";
+import {mapState} from "pinia";
 import Stepper from "@/components/Stepper.vue";
-import { Service } from "@/services/service";
-import { LabOrder } from "@/apps/NCD/services/lab_order";
-import { VitalsService } from "@/services/vitals_service";
-import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
-import { useDispositionStore } from "@/stores/OutcomeStore";
-import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
-import { Diagnosis } from "@/apps/NCD/services/diagnosis";
-import { Treatment } from "@/apps/NCD/services/treatment";
-import PhysicalExam from "@/apps/OPD/components/ConsultationPlan/PhysicalExam.vue";
-import { isEmpty } from "lodash";
+import {Service} from "@/services/service";
+import {LabOrder} from "@/apps/NCD/services/lab_order";
+import {VitalsService} from "@/services/vitals_service";
+import {useTreatmentPlanStore} from "@/stores/TreatmentPlanStore";
+import {Diagnosis} from "@/apps/NCD/services/diagnosis";
+import {Treatment} from "@/apps/NCD/services/treatment";
+import {isEmpty} from "lodash";
 import HisDate from "@/utils/Date";
-import { defineComponent } from "vue";
-import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
+import {defineComponent} from "vue";
+import {DRUG_FREQUENCIES, DrugPrescriptionService} from "../../../services/drug_prescription_service";
+
 export default defineComponent({
     name: "Home",
     components: {
@@ -92,7 +88,7 @@ export default defineComponent({
             dispositions: "" as any,
             wizardData: [
                 {
-                    title: "Presenting Complaints",
+                    title: "Clinical Assessment",
                     class: "common_step",
                     checked: false,
                     disabled: false,
@@ -118,7 +114,7 @@ export default defineComponent({
                     last_step: "",
                 },
                 {
-                    title: "Physical Exams",
+                    title: "Treatment",
                     class: "common_step",
                     checked: "",
                     icon: false,
@@ -127,28 +123,19 @@ export default defineComponent({
                     last_step: "",
                 },
                 {
-                    title: "Treatment",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 5,
-                    last_step: "",
-                },
-                {
                     title: "Outcome",
                     class: "common_step",
                     checked: "",
                     icon: false,
                     disabled: false,
-                    number: 7,
+                    number: 5,
                     last_step: "last_step",
                 },
             ],
             StepperData: [
                 {
-                    title: "Presenting Complaints",
-                    componet: "Vitals",
+                    title: "Clinical Assessment",
+                    componet: "ClinicalAssessment",
                     value: "1",
                 },
                 {
@@ -158,23 +145,18 @@ export default defineComponent({
                 },
                 {
                     title: "Diagnosis",
-                    componet: "Diagnosis",
+                    componet: "OPDDiagnosis",
                     value: "3",
                 },
                 {
-                    title: "Physical Exams",
-                    componet: "PhysicalExam",
-                    value: "4",
-                },
-                {
                     title: "Treatment plan",
-                    componet: "TreatmentPlan",
-                    value: "5",
+                    componet: "OPDTreatmentPlan",
+                    value: "4",
                 },
                 {
                     title: "Outcome",
                     componet: "Outcome",
-                    value: "7",
+                    value: "5",
                 },
             ],
             isOpen: false,
