@@ -235,8 +235,10 @@
                 </ion-accordion-group>
             </div>
         </div>
+
         <div style="margin-top: 14px; margin-left: 10px">
             <ion-label class="tpStndCls">Non-pharmalogical therapy and other notes</ion-label>
+            
             <ion-item class="input_item" style="min-height: 120px; margin-top: 14px">
                 <ion-label> <ion-icon slot="start" :icon="iconsContent.editPen" aria-hidden="true"></ion-icon> </ion-label>
                 <ion-textarea
@@ -382,8 +384,7 @@ const showMoreMedicationsMsg = ref("Show more medications");
 const store = useTreatmentPlanStore();
 const store2 = useAllegyStore();
 const selectedAllergiesList2 = computed(() => store2.selectedMedicalAllergiesList);
-const selectedAllergiesList = computed(() => store.selectedMedicalDrugsList);
-const medicalAllergiesList = computed(() => store.medicalAllergiesList);
+const selectedMedicalDrugsList = computed(() => store.selectedMedicalDrugsList);
 const nonPharmalogicalTherapyAndOtherNotes = computed(() => store.nonPharmalogicalTherapyAndOtherNotes);
 const selectedMedicalAllergiesList = computed(() => store.selectedMedicalAllergiesList);
 const input = ref();
@@ -537,7 +538,7 @@ async function FindDrugName(text: any) {
         page_size: limit,
     });
     const filter_id_array: any[] = [];
-    selectedMedicalAllergiesList.value.forEach((selectedMedicalAllergy: any) => {
+    selectedAllergiesList2.value.forEach((selectedMedicalAllergy: any) => {
         if (selectedMedicalAllergy.selected) {
             filter_id_array.push(selectedMedicalAllergy.concept_id);
         }
@@ -568,7 +569,7 @@ async function FindDrugName2(text: any) {
         page_size: limit,
     });
     const filter_id_array: any[] = [];
-    selectedMedicalAllergiesList.value.forEach((selectedMedicalAllergy: any) => {
+    selectedAllergiesList2.value.forEach((selectedMedicalAllergy: any) => {
         if (selectedMedicalAllergy.selected) {
             filter_id_array.push(selectedMedicalAllergy.concept_id);
         }
@@ -604,8 +605,13 @@ async function findIfDrugNameExists() {
 }
 
 function filterArrayByIDs(mainArray: [], idsToFilter: []) {
-    return mainArray.filter((item: any) => !idsToFilter.includes(item.concept_id as never));
+    // Using the filter method on the mainArray
+    return mainArray.filter((item: any) => 
+        // Check if item's concept_id is not included in idsToFilter
+        !idsToFilter.includes(item.concept_id as never)
+    );
 }
+
 async function FindAllegicDrugName(text: any) {
     const searchText = text.target.value;
     const page = 1,
