@@ -38,6 +38,7 @@ import ApexChart from "vue3-apexcharts";
 import List from "@/components/List.vue";
 import { ObservationService } from "@/services/observation_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
+import { useLabResultsStore } from "@/stores/LabResults";
 import { mapState } from "pinia";
 import HisDate from "@/utils/Date";
 import { iconGraph, iconList } from "@/utils/SvgDynamicColor";
@@ -48,6 +49,7 @@ import DashBox from "@/components/DashBox.vue";
 import { PatientLabService } from "@/services/lab/patient_lab_service";
 import { createModal } from "@/utils/Alerts";
 import LabResults from "@/apps/NCD/components/ConsultationPlan/lab/LabResults.vue";
+import { PatientLabResultService } from "@/services/patient_lab_result_service";
 
 export default defineComponent({
     name: "Menu",
@@ -67,6 +69,7 @@ export default defineComponent({
 
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useLabResultsStore, ["labResults"]),
     },
     props: {
         propOrders: {
@@ -130,7 +133,34 @@ export default defineComponent({
         },
 
         handleIcon() {},
-        openResultsForm(obs: any) {
+        async openResultsForm(obs: any) {
+            const testIndicators = await PatientLabResultService.getTestIndicatorsWithID(obs.item.concept_id);
+            const indicators = [] as any;
+            testIndicators.forEach((item: any) => {
+                indicators.push({
+                    validationStatus: "",
+                    data: {
+                        rowData: [
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: item.name,
+                                        value: "",
+                                        name: item.name,
+                                        required: true,
+                                        eventType: "input",
+                                        alertsError: false,
+                                        alertsErrorMassage: "",
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                });
+            });
+            console.log(indicators);
+            const lab = useLabResultsStore();
+            lab.setLabResults(indicators);
             createModal(LabResults);
         },
         setActivClass(active: any) {
@@ -182,6 +212,7 @@ export default defineComponent({
                             class: "",
                             id: item.order_id,
                             name: test.name,
+                            item: test,
                             display:
                                 type == "order"
                                     ? [HisDate.toStandardHisFormat(item.order_date), item.accession_number, test.name, item.specimen.name]

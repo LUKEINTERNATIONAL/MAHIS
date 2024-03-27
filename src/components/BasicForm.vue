@@ -3,11 +3,11 @@
         <ion-col class="item_header_col" v-if="item['sectionHeader']">
             <span class="item_header" :style="'font-weight:' + item.sectionHeaderFontWeight">{{ item["sectionHeader"] }}</span>
         </ion-col>
-        <ion-col>
+        <ion-col v-if="!item.displayNone">
             <!-- rowData -->
             <span v-if="item.data">
                 <ion-row v-for="(element, index2) in item.data.rowData" :key="index2">
-                    <ion-col v-for="(col, colIndex) in element.colData" :key="colIndex" v-show="!col.displayNone">
+                    <ion-col v-for="(col, colIndex) in element.colData" :key="colIndex" v-show="!col.displayNone" :size="col.colSize">
                         <BasicInputField
                             v-if="!col.isDatePopover"
                             :inputHeader="col.inputHeader"
@@ -51,7 +51,7 @@
                 </ion-row>
             </span>
             <span v-if="item.radioBtnContent && !item?.radioBtnContent?.header?.displayNone">
-                <div style="" v-if="item.radioBtnContent?.header">
+                <div style="" v-if="item.radioBtnContent?.header" :class="item.radioBtnContent?.header?.class">
                     {{ item.radioBtnContent?.header.title }}
                 </div>
                 <ion-row class="checkbox_content">
@@ -132,7 +132,7 @@
                 </ion-row>
             </span>
             <span v-if="item?.checkboxBtnContent && !item?.checkboxBtnContent?.header?.displayNone">
-                <div style="" v-if="item.checkboxBtnContent?.header">
+                <div style="" v-if="item.checkboxBtnContent?.header" :class="item.checkboxBtnContent?.header?.class">
                     {{ item.checkboxBtnContent?.header.title }}
                 </div>
                 <ion-row class="checkbox_content">
