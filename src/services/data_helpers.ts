@@ -44,6 +44,19 @@ export function modifyRadioValue(data: any, radioBtnName: any, element: any, new
     if (itemIndex !== -1) data[itemIndex].radioBtnContent.header[element] = newValue;
 }
 
+export function modifyGroupedRadioValue(data: any, radioBtnName: any, element: any, newValue: any) {
+    const item = data.find((item: any) =>
+        item?.groupedRadioBtnContent?.groupedData?.some((groupedItem: any) => groupedItem?.header?.name === radioBtnName)
+    );
+
+    if (item && item.groupedRadioBtnContent && item.groupedRadioBtnContent.groupedData) {
+        const groupedItem = item.groupedRadioBtnContent.groupedData.find((groupedItem: any) => groupedItem?.header?.name === radioBtnName);
+
+        if (groupedItem) {
+            groupedItem.header[element] = newValue;
+        }
+    }
+}
 export function modifyCheckboxValue(data: any, checkboxName: any, element: any, newValue: any) {
     data.forEach((item: any) => {
         const checkbox = item.checkboxBtnContent?.data.find((checkbox: any) => checkbox.name === checkboxName);

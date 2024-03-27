@@ -25,8 +25,8 @@
                                 <ion-label>Choose the allergy:</ion-label>
                                 <ion-input ref="input" v-model="drugName" @ionInput="FindAllegicDrugName" fill="outline"></ion-input>
                                 <ion-list class="list-al">
-                                    <div class="item-al" v-for="(item, index) in medicalAllergiesList" :key="index">
-                                        <ion-label @click="selectAl(item)" style="display: flex; justify-content: space-between">
+                                    <div class="item-al" v-for="(item, index) in medicalAllergiesList"  @click="selectAl(item)" :key="index">
+                                        <ion-label style="display: flex; justify-content: space-between">
                                             {{ item.name }}
                                             <ion-icon v-if="item.selected" class="icon-al" :icon="checkmarkOutline"></ion-icon>
                                         </ion-label>
@@ -104,7 +104,10 @@
                     <ion-item class="input_item">
                         <ion-input v-model="drugName" @ionInput="FindDrugName" fill="outline"></ion-input>
                         <!--  -->
-                        <ion-label><span v-html="iconsContent.search" class="selectedPatient"></span></ion-label>
+
+                        <ion-label>
+                            <ion-icon slot="start" :icon="iconsContent.search" class="selectedPatient" aria-hidden="true"></ion-icon>
+                        </ion-label>
                     </ion-item>
                     <div>
                         <ion-label v-if="show_error_msg_for_drug_name" class="error-label">{{ drugnameErrMsg }}</ion-label>
@@ -261,7 +264,7 @@
         <div style="margin-top: 14px; margin-left: 10px">
             <ion-label class="tpStndCls">Non-pharmalogical therapy and other notes</ion-label>
             <ion-item class="input_item" style="min-height: 120px; margin-top: 14px">
-                <ion-label><span v-html="iconsContent.editPen"></span></ion-label>
+                <ion-label> <ion-icon slot="start" :icon="iconsContent.editPen" aria-hidden="true"></ion-icon> </ion-label>
                 <ion-textarea
                     @ionInput="validateNotes"
                     v-model="nonPharmalogicalTherapyAndOtherNotes"
@@ -417,6 +420,7 @@ const showMoreNotesMsg = ref("Show more notes");
 const showMoreAllergyMsg = ref("Show more allergies");
 const FirstPreviousAllegies = ref();
 const RestOfPreviousAllegies = ref();
+import AllergiesComponent from "@/apps/OPD/components/ConsultationPlan/Allergies.vue"
 
 onMounted(async () => {
     const previousTreatment = new PreviousTreatment();
