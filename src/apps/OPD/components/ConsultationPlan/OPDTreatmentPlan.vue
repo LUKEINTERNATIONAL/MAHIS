@@ -1,39 +1,13 @@
 <template>
     <ion-list>
-        <ion-label>Medical allergies</ion-label>
+        <ion-label>Allergies (Medication, Healthcare items, Environment and Food)</ion-label>
         <ion-row>
             <ion-item lines="none" class="medicalAl">
                 <ion-row>
-                    <div v-for="(item, index) in selectedMedicalAllergiesList" :key="index">
-                        <ion-button v-if="item.selected" @click="selectAl(item)" class="medicalAlBtn">
+                    <div v-for="(item, index) in selectedAllergiesList2" :key="index">
+                        <ion-button v-if="item.selected" class="medicalAlBtn">
                             {{ item.name }}
-                            <ion-icon slot="end" style="font-size: x-large" :icon="closeOutline"></ion-icon>
                         </ion-button>
-                    </div>
-                    <div>
-                        <ion-button id="click-trigger" fill="clear" class="medicalAlAddBtn" @click="setFocus">
-                            <ion-icon :icon="addOutline"></ion-icon>
-                        </ion-button>
-                        <ion-popover
-                            class="popover-al"
-                            :show-backdrop="false"
-                            trigger="click-trigger"
-                            trigger-action="click"
-                            @didPresent="dissmissDrugAddField"
-                        >
-                            <ion-content color="light" class="ion-padding content-al">
-                                <ion-label>Choose the allergy:</ion-label>
-                                <ion-input ref="input" v-model="drugName" @ionInput="FindAllegicDrugName" fill="outline"></ion-input>
-                                <ion-list class="list-al">
-                                    <div class="item-al" v-for="(item, index) in medicalAllergiesList" :key="index">
-                                        <ion-label @click="selectAl(item)" style="display: flex; justify-content: space-between">
-                                            {{ item.name }}
-                                            <ion-icon v-if="item.selected" class="icon-al" :icon="checkmarkOutline"></ion-icon>
-                                        </ion-label>
-                                    </div>
-                                </ion-list>
-                            </ion-content>
-                        </ion-popover>
                     </div>
                 </ion-row>
             </ion-item>
@@ -331,6 +305,7 @@ export default defineComponent({
     name: "xxxComponent",
 });
 </script>
+
 <script setup lang="ts">
 import {
     IonContent,
@@ -368,11 +343,12 @@ import { DrugService } from "@/services/drug_service";
 import { ConceptName } from "@/interfaces/conceptName";
 import DynamicButton from "@/components/DynamicButton.vue";
 import DynamicList from "@/components/DynamicList.vue";
-import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { ConceptService } from "@/services/concept_service";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { Service } from "@/services/service";
 import { PreviousTreatment } from "@/apps/NCD/services/treatment";
+import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
+import { useAllegyStore} from "@/apps/OPD/stores/AllergyStore"
 
 const iconsContent = icons;
 const drug_frequencies = DRUG_FREQUENCIES;
@@ -404,7 +380,9 @@ const btnName3 = "Send to dispensation";
 const btnFill = "clear";
 const showMoreMedicationsMsg = ref("Show more medications");
 const store = useTreatmentPlanStore();
-const selectedMedicalDrugsList = computed(() => store.selectedMedicalDrugsList);
+const store2 = useAllegyStore();
+const selectedAllergiesList2 = computed(() => store2.selectedMedicalAllergiesList);
+const selectedAllergiesList = computed(() => store.selectedMedicalDrugsList);
 const medicalAllergiesList = computed(() => store.medicalAllergiesList);
 const nonPharmalogicalTherapyAndOtherNotes = computed(() => store.nonPharmalogicalTherapyAndOtherNotes);
 const selectedMedicalAllergiesList = computed(() => store.selectedMedicalAllergiesList);
