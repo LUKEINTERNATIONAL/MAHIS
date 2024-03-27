@@ -81,7 +81,6 @@ import ConfirmDiagnosis from "@/apps/NCD/components/ConsultationPlan/ConfirmDiag
 import Outcome from "@/apps/NCD/components/ConsultationPlan/Outcome.vue";
 import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigations.vue";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
-import Vitals from "@/apps/ANC/components/physical exam/Vitals.vue";
 import Obstetric from "@/apps/LABOUR/components/obstetric details/Obstetric.vue";
 import Labour from "@/apps/LABOUR/components/obstetric details/Labour.vue";
 import QuickCheck from "@/apps/LABOUR/components/physical exam/QuickCheck.vue";
@@ -91,6 +90,9 @@ import PelvicAssessment from "@/apps/LABOUR/components/physical exam/PelvicAsses
 import SecondStageDelivery from "@/apps/LABOUR/components/delivery details/SecondStageDelivery.vue";
 import ThirdStageDelivery from "@/apps/LABOUR/components/delivery details/ThirdStageDelivery.vue";
 import PatientReferral from "@/apps/LABOUR/components/repeatable things/PatientReferral.vue";
+import end from "@/apps/LABOUR/components/repeatable things/end.vue";
+import OtherExams from "@/apps/LABOUR/components/repeatable things/OtherExams.vue";
+import Vitals from "@/apps/LABOUR/components/repeatable things/Vitals.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 export default defineComponent({
@@ -123,7 +125,10 @@ export default defineComponent({
         PatientReferral,
         FirstVaginalExamination,
         SecondStageDelivery,
-        ThirdStageDelivery
+        ThirdStageDelivery,
+      end,
+      OtherExams,
+      Vitals
 
 
     },
