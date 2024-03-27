@@ -53,12 +53,14 @@ export default defineComponent({
         const userID: any = Service.getUserID();
         this.vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
         this.updateVitalsStores();
+        // this.pulseRateValidate()
         // this.validaterowData({});
     },
     watch: {
         opDvitals: {
             handler() {
                 this.updateVitalsStores();
+                // this.pulseRateValidate()
             },
             deep: true,
         },
@@ -67,6 +69,11 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     methods: {
+        // pulseRateValidate(){
+        //     const age= HisDate.getBirthdateAge(this.demographics.birthday);
+        //     console.log("==========>",{age})
+           
+        // },
         navigationMenu(url: any) {
             menuController.close();
             this.$router.push(url);
