@@ -1,52 +1,66 @@
 <template>
-    <ion-accordion-group ref="accordionGroup" class="previousView">
-        <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
-            <ion-item slot="header" color="light">
-                <ion-label class="previousLabel">Lab Investigations</ion-label>
-            </ion-item>
-            <div class="ion-padding" slot="content">
-                <span>
-                    <labOrderResults :propOrders="orders" />
-                </span>
-
-                <span v-if="search_item">
-                    <basic-form
-                        :contentData="investigations"
-                        @update:selected="handleInputData"
-                        @update:inputValue="handleInputData"
-                        @clicked:button="addNewRow"
-                    >
-                    </basic-form>
-                </span>
-
-                <ion-row v-if="addItemButton" style="margin-top: 10px">
-                    <DynamicButton
-                        fill="clear"
-                        :icon="iconsContent.plus"
-                        iconSlot="icon-only"
-                        @clicked:btn="displayInputFields()"
-                        name="Add new test"
-                    />
-                </ion-row>
-            </div>
-        </ion-accordion>
-    </ion-accordion-group>
-    <ion-accordion-group ref="accordionGroup" class="previousView">
-        <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
-            <ion-item slot="header" color="light">
-                <ion-label class="previousLabel">Radiology Investigation</ion-label>
-            </ion-item>
-            <div class="ion-padding" slot="content"></div>
-        </ion-accordion>
-    </ion-accordion-group>
-    <ion-accordion-group ref="accordionGroup" class="previousView">
-        <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
-            <ion-item slot="header" color="light">
-                <ion-label class="previousLabel">Other Investigation</ion-label>
-            </ion-item>
-            <div class="ion-padding" slot="content"></div>
-        </ion-accordion>
-    </ion-accordion-group>
+    <ion-row>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Level of consciousness</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <LevelOfConsciousness />
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Presenting complaints</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <PresentingComplaints />
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Pregnancy and breastfeeding status</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <PregnancyBreastfeeding />
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Past medical history</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <PastMedicalHistory />
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Allergies</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <Allergies />
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Physical examination</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <PhysicalExamination />
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+    </ion-row>
 </template>
 
 <script lang="ts">
@@ -67,6 +81,12 @@ import DynamicButton from "@/components/DynamicButton.vue";
 import labOrderResults from "@/apps/NCD/components/ConsultationPlan/lab/labOrderResults.vue";
 import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigations.vue";
 import { LabOrder } from "@/apps/NCD/services/lab_order";
+import Allergies from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/Allergies.vue";
+import LevelOfConsciousness from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/LevelOfConsciousness.vue";
+import PastMedicalHistory from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PastMedicalHistory.vue";
+import PhysicalExamination from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PhysicalExamination.vue";
+import PregnancyBreastfeeding from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PregnancyBreastfeeding.vue";
+import PresentingComplaints from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PresentingComplaints.vue";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import {
     modifyCheckboxInputField,
@@ -97,6 +117,12 @@ export default defineComponent({
         List,
         DynamicButton,
         labOrderResults,
+        Allergies,
+        LevelOfConsciousness,
+        PastMedicalHistory,
+        PhysicalExamination,
+        PregnancyBreastfeeding,
+        PresentingComplaints,
     },
     data() {
         return {
@@ -113,7 +139,12 @@ export default defineComponent({
             labOrders: "" as any,
             testData: [] as any,
             popoverOpen: false,
-            labOrderStatus: false,
+            levelOfConsciousnessStatus: false,
+            presentingComplaintsStatus: false,
+            pregnancyBreastfeedingStatus: false,
+            pastMedicalHistory: false,
+            allergiesStatus: false,
+            physicalExamination: false,
             event: "" as any,
             specimen: "" as any,
             radiologyOrdersStatus: false,
@@ -145,9 +176,6 @@ export default defineComponent({
         this.labOrders = await OrderService.getTestTypes();
     },
     methods: {
-        toggleLabOrderStatus() {
-            this.labOrderStatus = !this.labOrderStatus;
-        },
         updateInvestigationsStores() {
             const investigationsStore = useInvestigationStore();
             investigationsStore.setInvestigations(this.investigations);
@@ -365,5 +393,8 @@ export default defineComponent({
 }
 .sub_item_body {
     margin-left: 45px;
+}
+.presentingComplaint {
+    margin-top: 10px;
 }
 </style>

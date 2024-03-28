@@ -3,11 +3,11 @@
         class="ionLbltp" v-for="(item, index) in localMedicalDrugsList" :key="index"
         @mousemove="highlightItem(index)" @mouseout="undoHighlightItem(index)"
     >
-        <ion-col class="col-st1">
+        <ion-col class="col-st1" :class="highLightBnd(item)">
             <ion-label :id="asignLblID(index)" class="truncate-text" style="color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.drugName }}</ion-label>
         </ion-col>
 
-        <ion-col class="col-st2">
+        <ion-col class="col-st2" :class="highLightBnd(item)">
             <ion-label class="truncate-text" style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.dose }} / {{ item.frequency }} / daily / {{ item.duration }} / until {{ item.prescription }}</ion-label>
         </ion-col>
 
@@ -15,6 +15,7 @@
             <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end; flex: auto;" @click="editItemAtIndex(index)"><ion-icon   :icon="iconsContent.edit"></ion-icon></ion-label>
             <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end;" @click="removeItemAtIndex(index, $event)"><ion-icon   :icon="iconsContent.delete"></ion-icon></ion-label>
         </ion-col>
+        
 
     </ion-item>
 </template>
@@ -47,7 +48,11 @@ export default defineComponent({
         show_actions_buttons: {
             type: Boolean,
             default: true
-        }
+        },
+        highLightBackground: {
+            type: String,
+            default: "item-native"
+        },
     },
     watch: {
 
@@ -93,6 +98,11 @@ export default defineComponent({
         },
         editItemAtIndex(index: any) {
             this.$emit('edit-item', index)
+        },
+        highLightBnd(item: any) {
+            if (item.highlightbackground !== undefined && item.highlightbackground == true) {
+                return this.$props.highLightBackground
+            }
         }
     }
 })
@@ -125,5 +135,8 @@ ion-item.ionLbltp {
 }
 .col-st2 {
     max-width: 58%;
+}
+.item-native {
+    background-color: yellow !important;
 }
 </style>

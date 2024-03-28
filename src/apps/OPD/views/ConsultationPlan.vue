@@ -91,7 +91,7 @@ export default defineComponent({
             dispositions: "" as any,
             wizardData: [
                 {
-                    title: "Vital Signs",
+                    title: "Clinical Assessment",
                     class: "common_step",
                     checked: false,
                     disabled: false,
@@ -117,7 +117,7 @@ export default defineComponent({
                     last_step: "",
                 },
                 {
-                    title: "Complications Screening",
+                    title: "Treatment",
                     class: "common_step",
                     checked: "",
                     icon: false,
@@ -126,37 +126,19 @@ export default defineComponent({
                     last_step: "",
                 },
                 {
-                    title: "Treatment",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 5,
-                    last_step: "",
-                },
-                {
-                    title: "Next Appointment",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 6,
-                    last_step: "",
-                },
-                {
                     title: "Outcome",
                     class: "common_step",
                     checked: "",
                     icon: false,
                     disabled: false,
-                    number: 7,
+                    number: 5,
                     last_step: "last_step",
                 },
             ],
             StepperData: [
                 {
-                    title: "Vital Signs",
-                    componet: "Vitals",
+                    title: "Clinical Assessment",
+                    componet: "ClinicalAssessment",
                     value: "1",
                 },
                 {
@@ -166,28 +148,18 @@ export default defineComponent({
                 },
                 {
                     title: "Diagnosis",
-                    componet: "Diagnosis",
+                    componet: "OPDDiagnosis",
                     value: "3",
                 },
                 {
-                    title: "Complications Screening",
-                    componet: "Complications",
+                    title: "Treatment plan",
+                    componet: "OPDTreatmentPlan",
                     value: "4",
                 },
                 {
-                    title: "Treatment plan",
-                    componet: "TreatmentPlan",
-                    value: "5",
-                },
-                {
-                    title: "Next Appointment",
-                    componet: "NextAppointment",
-                    value: "6",
-                },
-                {
                     title: "Outcome",
-                    componet: "Outcome",
-                    value: "7",
+                    componet: "OPDOutcome",
+                    value: "5",
                 },
             ],
             isOpen: false,
