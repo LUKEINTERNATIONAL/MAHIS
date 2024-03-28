@@ -127,5 +127,5 @@ export const useNonPharmacologicalInterventionStore = defineStore("nonPharmacolo
             this.nonPharmacologicalIntervention = data;
         },
     },
-    // persist: true,
+    persist: true,
 });
