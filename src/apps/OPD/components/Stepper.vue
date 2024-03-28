@@ -31,7 +31,7 @@
             </div>
 
             <div class="accordion_group">
-                <ion-accordion-group @ionChange="accordionGroupChange($event)">
+                <ion-accordion-group @ionChange="accordionGroupChange($event)" :value="[accordionValue]">
                     <ion-accordion v-for="(item, index) in StepperData" :key="index" :value="item.value">
                         <ion-item slot="header">
                             <ion-label>{{ item.title }}</ion-label>
@@ -43,7 +43,11 @@
                 </ion-accordion-group>
                 <div>
                     <hr style="background: rgba(0, 0, 0, 0.13)" />
-                    <ion-button class="primary_btn" @click="$emit('finishBtn')">Finish and Save</ion-button>
+                    <ion-row>
+                        <ion-button class="primary_btn" style="padding-left: 15px" @click="dispenseClicked" v-if="!showFinishButton">Dispense</ion-button>
+                    <ion-button class="primary_btn" @click="$emit('finishBtn')" v-if="showFinishButton">Finish and Save</ion-button>
+                    </ion-row>
+                
                 </div>
             </div>
         </ion-col>
@@ -157,13 +161,11 @@ export default defineComponent({
         return {
             isOpen: false,
             iconsContent: icons,
+            showFinishButton: false,
+            accordionValue: '1' 
         };
     },
     props: {
-    showUndispensedMedication: {
-      type: Boolean,
-      default: false,
-    },
         wizardData: {
             default: [] as any,
         },
@@ -195,6 +197,11 @@ export default defineComponent({
         openModal() {
             createModal(SaveProgressModal);
         },
+        dispenseClicked() {
+      this.showFinishButton = true;
+      this.accordionValue = '2'; 
+      this.$emit('dispenseClicked');
+    }
     },
 
 });

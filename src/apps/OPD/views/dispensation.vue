@@ -4,11 +4,13 @@
         <ion-content :fullscreen="true">
             <DemographicBar />
             <Stepper stepperTitle="Dispensation" :wizardData="wizardData" @updateStatus="markWizard"
-                @finishBtn="saveData()" :StepperData="StepperData"/>
-                <dispensedMedication @dispenseClicked="handleDispenseClick" />
+                @finishBtn="saveData()" @dispenseClicked="handleDispenseClick" :StepperData="StepperData"/>
+                
         </ion-content>
     </ion-page>
 </template>
+
+
 
 <script lang="ts">
 import {
@@ -32,9 +34,6 @@ import {
     modalController,
     AccordionGroupCustomEvent,
 } from "@ionic/vue";
-
-import dispensedMedication from "@/apps/OPD/components/dispensedMedication.vue";
-import undispensedMedication from "@/apps/OPD/components/undispensedMedication.vue";
 
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
@@ -60,6 +59,8 @@ import { Treatment } from "@/apps/NCD/services/treatment";
 import { isEmpty } from "lodash";
 import HisDate from "@/utils/Date";
 import { defineComponent } from "vue";
+import dispensedMedication from "@/apps/OPD/components/dispensedMedication.vue";
+import undispensedMedication from "@/apps/OPD/components/undispensedMedication.vue";
 import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
 
 export default defineComponent({
@@ -86,6 +87,7 @@ export default defineComponent({
         IonLabel,
         IonModal,
         Stepper,
+        dispensedMedication
     },
     data() {
         return {
@@ -188,15 +190,6 @@ export default defineComponent({
 
                     value: "1",
                 },
-                ...(this.showUndispensedMedication
-        ? [
-            {
-              title: "Undispensed Medications",
-              componet: "undispensedMedication",
-              value: "2",
-            },
-          ]
-        : []),
             ],
             isOpen: false,
             iconsContent: icons,
@@ -235,27 +228,25 @@ export default defineComponent({
     },
 
     methods: {
+        saveData() {
+            this.showUndispensedMedication = true; 
+
+        },
         handleDispenseClick() {
-    this.showUndispensedMedication = true;
-    this.StepperData = [
-      {
-        title: "Dispense Medications",
-        componet: "dispensedMedication",
-        value: "1",
-      },
-      {
-        title: "Undispensed Medications",
-        componet: "undispensedMedication",
-        value: "2",
-      },
-    ];
-  },
+      this.showUndispensedMedication = !this.showUndispensedMedication;
+      this.StepperData = [
+        {
+          title: "Dispense Medications",
+          componet: "dispensedMedication",
+          value: "1",
+        },
+        ...(this.showUndispensedMedication
+          ? [{ title: "Undispensed Medications", componet: "undispensedMedication", value: "2" }]
+          : [])]},
         markWizard() {
 
         },
-        saveData() {
-
-        },
+    
     },
 });
 </script>

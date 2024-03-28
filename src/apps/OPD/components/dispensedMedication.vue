@@ -39,9 +39,6 @@
         <dynamic-list @clickt="toggleCheckbox" :_selectedMedicalDrugsList="prescribedList"
             :show_actions_buttons="false" />
         <div>
-            <div class="space2" />
-            <ion-button class="primary_btn" style="padding-left: 15px"  @click="$emit('dispenseClicked')">Dispense</ion-button>
-            
         </div>
 
 
