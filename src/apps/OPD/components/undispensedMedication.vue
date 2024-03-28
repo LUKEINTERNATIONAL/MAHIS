@@ -1,10 +1,9 @@
-<template>    
-<ion-row style="margin-bottom: 2rem; font-weight: bold;">
+<template>    <ion-row style="margin-bottom: 2rem; font-weight: bold;">
     <ion-col><ion-label>Undispensed Medications</ion-label></ion-col>
     <ion-col><ion-label>Why has this prescription not been dispensed?</ion-label></ion-col>
 </ion-row>
 <ion-row style="display: flex; align-items: center;">
-    <dynamic-list :_selectedMedicalDrugsList="prescribedList" :show_actions_buttons="false" /> <ion-col>
+    <dynamic-list :_selectedMedicalDrugsList="dispensationStore.getUnprescribedMedications()" :show_actions_buttons="false" /> <ion-col>
 
         <ion-item class="input_item">
             <span class="spcls" id="chooseType" @click="popoverOpenForFrequencyFn2">
@@ -32,11 +31,22 @@
     </ion-col>
 </ion-row>
 </template>
-<script lang="ts">
 
+<script lang="ts">
 import { defineComponent } from "vue";
-import { useDispensationStore } from '@/apps/OPD/stores/DispensationStore'
 import { mapState } from "pinia";
+import DynamicList from "../components/DynamicList.vue";
+import { useDispensationStore } from '@/apps/OPD/stores/DispensationStore'
+
+export default defineComponent({
+    watch: {},
+    name: "xxxComponent",
+    computed: {
+        ...mapState(useDispensationStore, ['storeDrugPrescriptions', 'undispensedPrescriptions']),
+    },
+});
+</script>
+<script setup lang="ts">
 import {
     IonContent,
     IonHeader,
@@ -66,19 +76,20 @@ import {
     chevronUpOutline,
     codeSlashOutline,
 } from "ionicons/icons";
-import { ref, watch, computed, onMounted, onUpdated } from "vue";
-import DynamicList from "@/components/DynamicList.vue";
-import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
+import { ref, watch, computed, onMounted, onUpdated } from "vue"
+import { PreviousTreatment } from "@/apps/NCD/services/treatment"
 
-export default defineComponent({
-    watch: {},
-    name: "xxxComponent",
-    computed: {
-        ...mapState(useDispensationStore, ["previousDrugPrescriptions"]),
-    },
-});
-</script>
-<script setup lang="ts">
+const dispensationStore = useDispensationStore()
+
+onMounted(async () => {
+    const previousTreatment = new PreviousTreatment()
+    const { previousDrugPrescriptions } = await previousTreatment.getPatientEncounters()
+
+    dispensationStore.setPreviousDrugPrescriptions(previousDrugPrescriptions[0].previousPrescriptions)
+    for (let index = 0; index < dispensationStore.getPreviousDrugPrescriptions().length; index++) {
+        dispensationStore.addCheckboxBool(true, index)
+    }
+})
 
 const popoverOpen = ref(false);
 const prescPopoverOpen = ref(false);
