@@ -43,7 +43,6 @@ import { chevronBackOutline, checkmark } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
-//import { useVitalsStore } from "@/stores/VitalsStore";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useInvestigationStore } from "@/stores/InvestigationStore";
 import { useDiagnosisStore } from "@/stores/DiagnosisStore";
@@ -115,22 +114,9 @@ export default defineComponent({
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useVitalsStore, ["vitals"]),
-       // ...mapState(useInvestigationStore, ["investigations"]),
-       // ...mapState(useDiagnosisStore, ["diagnosis"]),
-       // ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
     },
     mounted() {
         this.markWizard();
-        // this.handleHeight();
-        // this.handleSpecifyHeight()
-        // this.handlePulseRate()
-        // this.handlePulseRateNotDone()
-        // this.handlePulseOtherNotDone()
-        // this.handleBloodPressureDone()
-        // this.handleBPNotDone()
-        // this.handleRespiratoryRateDone()
-        // this.handleRespiratoryRateNotDone()
-        // this.handleRespiratoryRateNotDoneReason()
         this.pulseRateValidate()
         this.respiratoryValidate()
         this.systolicValidate()
@@ -140,16 +126,6 @@ export default defineComponent({
         vitals: {
             handler() {
                 this.markWizard();
-                // this.handleHeight();
-                // this.handleSpecifyHeight()
-                // this.handlePulseRate()
-                // this.handlePulseRateNotDone()
-                // this.handlePulseOtherNotDone()
-                // this.handleBloodPressureDone()
-                // this.handleBPNotDone()
-                // this.handleRespiratoryRateDone()
-                // this.handleRespiratoryRateNotDone()
-                // this. handleRespiratoryRateNotDoneReason()
                 this.pulseRateValidate()
                 this.respiratoryValidate()
                 this.systolicValidate()
@@ -310,78 +286,6 @@ export default defineComponent({
                 clearErrors()
             }
         },
-        // handleHeight(){
-        //     if(getRadioSelectedValue(this.vitals,'OpdTemperature')=='yes'){
-        //         modifyFieldValue(this.vitals,'Temp','displayNone',false)
-        //     }else{
-        //          modifyFieldValue(this.vitals,'Temp','displayNone',true)
-        //     }
-        // },
-        // handleSpecifyHeight(){
-        //     if(getRadioSelectedValue(this.vitals,'OpdTemperature')=='no'){
-        //         modifyRadioValue(this.vitals,'temperatureNotDone','displayNone',false)
-        //     }else{
-        //          modifyRadioValue(this.vitals,'temperatureNotDone','displayNone',true)
-        //     }
-        // },
-        // handlePulseRate(){
-        //     if(getRadioSelectedValue(this.vitals,'OpdPulseRate')=='done'){
-        //         modifyFieldValue(this.vitals,'Pulse','displayNone',false)
-        //     }else{
-        //          modifyFieldValue(this.vitals,'Pulse','displayNone',true)
-        //     }
-        // },
-        // handlePulseRateNotDone(){
-        //     if(getRadioSelectedValue(this.vitals,'OpdPulseRate')=='notDone'){
-        //         modifyRadioValue(this.vitals,'OpdPulseRateNotDone','displayNone',false)
-        //     }else{
-        //          modifyRadioValue(this.vitals,'OpdPulseRateNotDone','displayNone',true)
-        //     }
-        // },
-        // handlePulseOtherNotDone(){
-        //     if(getRadioSelectedValue(this.vitals,'OpdPulseRateNotDone')=='Other'){
-        //         modifyFieldValue(this.vitals,'otherReason','displayNone',false)
-        //     }else{
-        //          modifyFieldValue(this.vitals,'otherReason','displayNone',true)
-        //     }
-        // },
-        // handleBloodPressureDone(){
-        //     if(getRadioSelectedValue(this.vitals,'OpdBloodPressure')=='done'){
-        //         modifyFieldValue(this.vitals,'Systolic','displayNone',false)
-        //         modifyFieldValue(this.vitals,'Diastolic','displayNone',false)
-        //     }else{
-        //          modifyFieldValue(this.vitals,'Systolic','displayNone',true)
-        //          modifyFieldValue(this.vitals,'Diastolic','displayNone',true)
-        //     }
-        // },
-        // handleBPNotDone(){
-        //     if(getRadioSelectedValue(this.vitals,'OpdBloodPressure')=='notDone'){
-        //         modifyRadioValue(this.vitals,'OpdBloodPressureReason','displayNone',false)
-        //     }else{
-        //          modifyRadioValue(this.vitals,'OpdBloodPressureReason','displayNone',true)
-        //     }
-        // },
-        // handleRespiratoryRateDone(){
-        //     if(getRadioSelectedValue(this.vitals,'OpdRespiratoryRate')=='done'){
-        //         modifyFieldValue(this.vitals,'RespiratoryRate','displayNone',false)
-        //     }else{
-        //          modifyFieldValue(this.vitals,'RespiratoryRate','displayNone',true)
-        //     }
-        // },
-        // handleRespiratoryRateNotDone(){
-        //     if(getRadioSelectedValue(this.vitals,'OpdRespiratoryRate')=='notDone'){
-        //         modifyRadioValue(this.vitals,'OpdRespiratoryRateNotDone','displayNone',false)
-        //     }else{
-        //          modifyRadioValue(this.vitals,'OpdRespiratoryRateNotDone','displayNone',true)
-        //     }
-        // },
-        // handleRespiratoryRateNotDoneReason(){
-        //     if(getRadioSelectedValue(this.vitals,'OpdRespiratoryRateNotDone')=='reason'){
-        //         modifyFieldValue(this.vitals,'Respiratory reason','displayNone',false)
-        //     }else{
-        //          modifyFieldValue(this.vitals,'Respiratory reason','displayNone',true)
-        //     }
-        // },
         markWizard() {
             if (this.vitals.validationStatus) {
                 this.wizardData[0].checked = true;
