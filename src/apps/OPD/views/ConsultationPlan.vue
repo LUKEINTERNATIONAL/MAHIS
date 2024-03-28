@@ -158,7 +158,7 @@ export default defineComponent({
                 },
                 {
                     title: "Outcome",
-                    componet: "Outcome",
+                    componet: "OPDOutcome",
                     value: "5",
                 },
             ],

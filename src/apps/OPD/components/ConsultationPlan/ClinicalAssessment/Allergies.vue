@@ -1,5 +1,6 @@
 <template>
-    <ion-list>
+    <ion-list style="margin-left: 10px;">
+        
         <ion-label>Allergies (Medication, Healthcare items, Environment and Food)</ion-label>
         <ion-row>
             <ion-item lines="none" class="medicalAl">

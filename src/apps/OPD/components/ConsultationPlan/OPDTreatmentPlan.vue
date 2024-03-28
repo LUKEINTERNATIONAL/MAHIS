@@ -16,7 +16,7 @@
         <ion-accordion-group ref="accordionGroup" class="previousView">
             <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
                 <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Previous visits allergies</ion-label>
+                    <ion-label class="previousLabel">Allergies</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
                     <div class="ionLbltp" v-for="(item, index) in FirstPreviousAllegies" :key="index">
@@ -235,8 +235,12 @@
                 </ion-accordion-group>
             </div>
         </div>
+
         <div style="margin-top: 14px; margin-left: 10px">
             <ion-label class="tpStndCls">Non-pharmalogical therapy and other notes</ion-label>
+
+            <NonPharmacologicalIntervention/>
+            
             <ion-item class="input_item" style="min-height: 120px; margin-top: 14px">
                 <ion-label> <ion-icon slot="start" :icon="iconsContent.editPen" aria-hidden="true"></ion-icon> </ion-label>
                 <ion-textarea
@@ -349,6 +353,7 @@ import { Service } from "@/services/service";
 import { PreviousTreatment } from "@/apps/NCD/services/treatment";
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { useAllegyStore} from "@/apps/OPD/stores/AllergyStore"
+import NonPharmacologicalIntervention from "@/apps/OPD/components/ConsultationPlan/NonPharmacologicalIntervention.vue"
 
 const iconsContent = icons;
 const drug_frequencies = DRUG_FREQUENCIES;
@@ -382,8 +387,7 @@ const showMoreMedicationsMsg = ref("Show more medications");
 const store = useTreatmentPlanStore();
 const store2 = useAllegyStore();
 const selectedAllergiesList2 = computed(() => store2.selectedMedicalAllergiesList);
-const selectedAllergiesList = computed(() => store.selectedMedicalDrugsList);
-const medicalAllergiesList = computed(() => store.medicalAllergiesList);
+const selectedMedicalDrugsList = computed(() => store.selectedMedicalDrugsList);
 const nonPharmalogicalTherapyAndOtherNotes = computed(() => store.nonPharmalogicalTherapyAndOtherNotes);
 const selectedMedicalAllergiesList = computed(() => store.selectedMedicalAllergiesList);
 const input = ref();
@@ -398,6 +402,7 @@ const showMoreNotesMsg = ref("Show more notes");
 const showMoreAllergyMsg = ref("Show more allergies");
 const FirstPreviousAllegies = ref();
 const RestOfPreviousAllegies = ref();
+const currentDrugOb = ref()
 
 onMounted(async () => {
     const previousTreatment = new PreviousTreatment();
@@ -506,6 +511,11 @@ async function saveData() {
     const systemSessionDate = Service.getSessionDate();
     const daysToAdd = duration.value;
     const generatedPrescriptionDate = addDaysToDate(systemSessionDate, parseInt(duration.value));
+    let highlightbackground = false
+
+    if (isPresentInAllergyList(currentDrugOb.value) == true) {
+        highlightbackground = true;
+    }
 
     const drugString = {
         drugName: drugName.value,
@@ -515,6 +525,7 @@ async function saveData() {
         prescription: generatedPrescriptionDate,
         drug_id: drug_id.value,
         units: units.value,
+        highlightbackground: highlightbackground
     };
     selectedMedicalDrugsList.value.push(drugString);
     drugName.value = "";
@@ -524,6 +535,7 @@ async function saveData() {
     prescription.value = "";
     componentKey.value++;
     saveStateValuesState();
+    
 }
 
 async function FindDrugName(text: any) {
@@ -536,22 +548,22 @@ async function FindDrugName(text: any) {
         page: page,
         page_size: limit,
     });
-    const filter_id_array: any[] = [];
-    selectedMedicalAllergiesList.value.forEach((selectedMedicalAllergy: any) => {
-        if (selectedMedicalAllergy.selected) {
-            filter_id_array.push(selectedMedicalAllergy.concept_id);
-        }
-    });
+    // const filter_id_array: any[] = [];
+    // selectedAllergiesList2.value.forEach((selectedMedicalAllergy: any) => {
+    //     if (selectedMedicalAllergy.selected) {
+    //         filter_id_array.push(selectedMedicalAllergy.concept_id);
+    //     }
+    // });
 
-    const filteredDrugs = filterArrayByIDs(drugs as any, filter_id_array as any);
+    //const filteredDrugs = filterArrayByIDs(drugs as any, filter_id_array as any);
 
-    filteredDrugs.map((drug: any) => ({
+    drugs.map((drug: any) => ({
         label: drug.name,
         value: drug.name,
         other: drug,
     }));
 
-    diagnosisData.value = filteredDrugs;
+    diagnosisData.value = drugs;
 }
 
 async function FindDrugName2(text: any) {
@@ -567,23 +579,39 @@ async function FindDrugName2(text: any) {
         page: page,
         page_size: limit,
     });
-    const filter_id_array: any[] = [];
-    selectedMedicalAllergiesList.value.forEach((selectedMedicalAllergy: any) => {
-        if (selectedMedicalAllergy.selected) {
-            filter_id_array.push(selectedMedicalAllergy.concept_id);
-        }
-    });
+    // const filter_id_array: any[] = []
+    // selectedAllergiesList2.value.forEach((selectedMedicalAllergy: any) => {
+    //     if (selectedMedicalAllergy.selected) {
+    //         filter_id_array.push(selectedMedicalAllergy.concept_id);
+    //     }
+    // })
 
-    const filteredDrugs = filterArrayByIDs(drugs as any, filter_id_array as any);
+    //const filteredDrugs = filterArrayByIDs(drugs as any, filter_id_array as any);
 
-    filteredDrugs.map((drug: any) => ({
+    drugs.map((drug: any) => ({
         label: drug.name,
         value: drug.name,
         other: drug,
     }));
 
-    diagnosisData.value = filteredDrugs;
-    return filteredDrugs;
+    diagnosisData.value = drugs;
+    return drugs;
+}
+
+function isPresentInAllergyList(obj: any) {
+    const filter_id_array: any[] = []
+    selectedAllergiesList2.value.forEach((selectedMedicalAllergy: any) => {
+        if (selectedMedicalAllergy.selected) {
+            filter_id_array.push(selectedMedicalAllergy.concept_id);
+        }
+    })
+    const filteredDrugs = hasMatchingIDs([obj] as any, filter_id_array as any)
+    if (filteredDrugs == true) {
+        toastWarning("Client is allergic to the selected medication", 4000)
+        return true;
+    } else {
+        return false
+    }
 }
 
 async function findIfDrugNameExists() {
@@ -604,8 +632,19 @@ async function findIfDrugNameExists() {
 }
 
 function filterArrayByIDs(mainArray: [], idsToFilter: []) {
-    return mainArray.filter((item: any) => !idsToFilter.includes(item.concept_id as never));
+    return mainArray.filter((item: any) => 
+        !idsToFilter.includes(item.concept_id as never)
+    );
 }
+
+function hasMatchingIDs(mainArray: any[], idsToFilter: any[]): boolean {
+    // Check if any item in mainArray has concept_id included in idsToFilter
+    return mainArray.some((item: any) => 
+        idsToFilter.includes(item.concept_id as never)
+    );
+}
+
+
 async function FindAllegicDrugName(text: any) {
     const searchText = text.target.value;
     const page = 1,
@@ -640,6 +679,8 @@ function selectedDrugName(name: any, obj: any) {
     drugName.value = name;
     drug_id.value = obj.drug_id;
     units.value = obj.units;
+    currentDrugOb.value = obj
+    isPresentInAllergyList(obj)
 }
 
 function popoverOpenForFrequencyFn2() {
