@@ -36,11 +36,16 @@
 
         <div class="space2" />
         <ion-label>Prescribed Medication</ion-label>
-        <dynamic-list @clickt="toggleCheckbox" :_selectedMedicalDrugsList="PreviuosSelectedMedicalDrugsList"
-            :show_actions_buttons="false" />
+        <div v-if="dispensationStore.getPreviousDrugPrescriptions() && dispensationStore.getPreviousDrugPrescriptions().length > 0">
+            <dynamic-list @clickt="toggleCheckbox"
+                :_selectedMedicalDrugsList="dispensationStore.getPreviousDrugPrescriptions()"
+                :show_actions_buttons="false" />
+        </div>
+        <div v-else>Loading...</div>
         <div>
             <div class="space2" />
-            <ion-button class="primary_btn" style="padding-left: 15px" @click="populateUnprescribedMedication(PreviuosSelectedMedicalDrugsList)">Dispense</ion-button>
+            <ion-button class="primary_btn" style="padding-left: 15px"
+                @click="populateUnprescribedMedication()">Dispense</ion-button>
         </div>
 
 
@@ -49,34 +54,15 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { mapState } from "pinia";
-import { dispensationStore } from "../store/dispensation";
-import BasicForm from "@/components/BasicForm.vue";
 import DynamicList from "../components/DynamicList.vue";
-import { tr } from "date-fns/locale";
 
+import { useDispensationStore } from '@/apps/OPD/stores/DispensationStore'
 export default defineComponent({
     watch: {},
     name: "xxxComponent",
     computed: {
-        ...mapState(dispensationStore, ["dispensedMedications"]),
+        ...mapState(useDispensationStore, ['storeDrugPrescriptions', 'undispensedPrescriptions']),
     },
-    methods: {
-        toggleCheckbox(event: Event) {
-            // const index = event.target.id;
-            // const dispensedBool = event.detail.checked;
-            // prescribedList[index].dispensed = dispensedBool;
-        },
-        populateUnprescribedMedication(prescribedListArray: any) {
-            // for (let index = 0; index < prescribedListArray.length; index++) {
-            //     const object = prescribedListArray[index];
-            //     const checkedStatus = object.dispensed;
-            //     if (!checkedStatus) {
-            //         previousDrugPrescriptions.push(object.drugName)
-            //     }                
-            // }
-            console.log(PreviuosSelectedMedicalDrugsList)
-        }
-    }
 });
 </script>
 <script setup lang="ts">
@@ -98,31 +84,32 @@ import {
     IonAccordionGroup,
     AccordionGroupCustomEvent,
 } from "@ionic/vue";
-import {
-    checkmark,
-    pulseOutline,
-    addOutline,
-    closeOutline,
-    checkmarkOutline,
-    filter,
-    chevronDownOutline,
-    chevronUpOutline,
-    codeSlashOutline,
-} from "ionicons/icons";
-import { icons } from "@/utils/svg";
-import { ref, watch, computed, onMounted, onUpdated } from "vue";
-import { PreviousTreatment } from "@/apps/NCD/services/treatment";
-
-const PreviuosSelectedMedicalDrugsList = ref();
+import { ref, watch, computed, onMounted, onUpdated } from "vue"
+import { PreviousTreatment } from "@/apps/NCD/services/treatment"
+const dispensationStore = useDispensationStore()
 
 onMounted(async () => {
-    const previousTreatment = new PreviousTreatment();
-    const { previousDrugPrescriptions, previousClinicalNotes, previousDrugAllergies } = await previousTreatment.getPatientEncounters();
-    PreviuosSelectedMedicalDrugsList.value = previousDrugPrescriptions;
-});
+    const previousTreatment = new PreviousTreatment()
+    const { previousDrugPrescriptions } = await previousTreatment.getPatientEncounters()
 
+    dispensationStore.setPreviousDrugPrescriptions(previousDrugPrescriptions[0].previousPrescriptions)
+    for (let index = 0; index < dispensationStore.getPreviousDrugPrescriptions().length; index++) {
+        dispensationStore.addCheckboxBool(true, index)
+    }
+})
+
+function toggleCheckbox(event: Event) {
+    const index = event.target.id;
+    const medicationDespensedBoolean = event.detail.checked;
+
+    dispensationStore.addCheckboxBool(medicationDespensedBoolean, index)
+}
+
+function populateUnprescribedMedication() {
+    const unprescribedMedication = dispensationStore.getUnprescribedMedications()
+    console.log(unprescribedMedication)
+}
 </script>
-
 
 <style scoped>
 #container {
@@ -284,3 +271,4 @@ ion-list.list-al {
     margin: 4%;
 }
 </style>
+../stores/dispensation
