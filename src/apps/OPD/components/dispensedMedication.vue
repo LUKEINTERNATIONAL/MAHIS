@@ -36,8 +36,12 @@
 
         <div class="space2" />
         <ion-label>Prescribed Medication</ion-label>
-        <dynamic-list @clickt="toggleCheckbox" :_selectedMedicalDrugsList="prescribedList"
-            :show_actions_buttons="false" />
+        <div v-if="dispensationStore.getPreviousDrugPrescriptions() && dispensationStore.getPreviousDrugPrescriptions().length > 0">
+            <dynamic-list @clickt="toggleCheckbox"
+                :_selectedMedicalDrugsList="dispensationStore.getPreviousDrugPrescriptions()"
+                :show_actions_buttons="false" />
+        </div>
+        <div v-else>Loading...</div>
         <div>
         </div>
 
@@ -47,121 +51,16 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { mapState } from "pinia";
-import { dispensationStore } from "../store/dispensation";
-import BasicForm from "@/components/BasicForm.vue";
 import DynamicList from "../components/DynamicList.vue";
-import { tr } from "date-fns/locale";
 
-const unprescribedList = []
-const prescribedList = [
-    {
-        drugName: "Albendazol",
-        dose: 5,
-        frequency: "2TimesPerDay",
-        duration: 5,
-        prescription: "",
-        drug_id: 1,
-        units: 10,
-        dispensed: true,
-        index: 0
-    },
-    {
-        drugName: "Albendazol",
-        dose: 5,
-        frequency: "2TimesPerDay",
-        duration: 5,
-        prescription: "",
-        drug_id: 1,
-        units: 10,
-        dispensed: true,
-        index: 0
-    },
-    {
-        drugName: "Albendazol",
-        dose: 5,
-        frequency: "2TimesPerDay",
-        duration: 5,
-        prescription: "",
-        drug_id: 1,
-        units: 10,
-        dispensed: true,
-        index: 0
-    },
-    {
-        drugName: "Albendazol",
-        dose: 5,
-        frequency: "2TimesPerDay",
-        duration: 5,
-        prescription: "",
-        drug_id: 1,
-        units: 10,
-        dispensed: true,
-        index: 0
-    },
-    {
-        drugName: "Albendazol",
-        dose: 5,
-        frequency: "2TimesPerDay",
-        duration: 5,
-        prescription: "",
-        drug_id: 1,
-        units: 10,
-        dispensed: true,
-        index: 0
-    },
-    {
-        drugName: "Albendazol",
-        dose: 5,
-        frequency: "2TimesPerDay",
-        duration: 5,
-        prescription: "",
-        drug_id: 1,
-        units: 10,
-        dispensed: true,
-        index: 0
-    },
-]
-
+import { useDispensationStore } from '@/apps/OPD/stores/DispensationStore'
 export default defineComponent({
     watch: {},
     name: "xxxComponent",
     computed: {
-        ...mapState(dispensationStore, ["dispensedMedications"]),
+        ...mapState(useDispensationStore, ['storeDrugPrescriptions', 'undispensedPrescriptions']),
     },
-    // props: {
-    //     prescribedList: {
-    //         type: Array,
-    //         default: []
-    //     },
-    //     unprescribedList: {
-    //         type: Array,
-    //         default: []
-    //     }
-    // },
-    methods: {
-        showUndispensedMedication() {
-      this.$emit('showUndispensedMedication');
-    },
-
-        toggleCheckbox(event: Event) {
-            // const index = event.target.id;
-            // const dispensedBool = event.detail.checked;
-            // console.log(index)
-            // prescribedList[index].dispensed = dispensedBool;
-        },
-        populateUnprescribedMedication(prescribedListArray: any) {
-            for (let index = 0; index < prescribedListArray.length; index++) {
-                const object = prescribedListArray[index];
-                const checkedStatus = object.dispensed;
-                if (!checkedStatus) {
-                    unprescribedList.push(object.drugName)
-                }                
-            }
-            // console.log(unprescribedList)
-        }
-    }
 });
-
 </script>
 <script setup lang="ts">
 import {
@@ -182,22 +81,32 @@ import {
     IonAccordionGroup,
     AccordionGroupCustomEvent,
 } from "@ionic/vue";
-import {
-    checkmark,
-    pulseOutline,
-    addOutline,
-    closeOutline,
-    checkmarkOutline,
-    filter,
-    chevronDownOutline,
-    chevronUpOutline,
-    codeSlashOutline,
-} from "ionicons/icons";
-import { icons } from "@/utils/svg";
-import { ref, watch, computed, onMounted, onUpdated } from "vue";
+import { ref, watch, computed, onMounted, onUpdated } from "vue"
+import { PreviousTreatment } from "@/apps/NCD/services/treatment"
+const dispensationStore = useDispensationStore()
 
+onMounted(async () => {
+    const previousTreatment = new PreviousTreatment()
+    const { previousDrugPrescriptions } = await previousTreatment.getPatientEncounters()
+
+    dispensationStore.setPreviousDrugPrescriptions(previousDrugPrescriptions[0].previousPrescriptions)
+    for (let index = 0; index < dispensationStore.getPreviousDrugPrescriptions().length; index++) {
+        dispensationStore.addCheckboxBool(true, index)
+    }
+})
+
+function toggleCheckbox(event: Event) {
+    const index = event.target.id;
+    const medicationDespensedBoolean = event.detail.checked;
+
+    dispensationStore.addCheckboxBool(medicationDespensedBoolean, index)
+}
+
+function populateUnprescribedMedication() {
+    const unprescribedMedication = dispensationStore.getUnprescribedMedications()
+    console.log(unprescribedMedication)
+}
 </script>
-
 
 <style scoped>
 #container {
@@ -359,3 +268,4 @@ ion-list.list-al {
     margin: 4%;
 }
 </style>
+../stores/dispensation
