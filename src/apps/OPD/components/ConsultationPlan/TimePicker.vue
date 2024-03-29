@@ -12,9 +12,15 @@
         :keep-contents-mounted="true"
         :is-open="popoverProperties.isOpen"
         :event="popoverProperties.event"
+        side="top"
         @didDismiss="popoverProperties.isOpen = false"
     >
-        <ion-datetime v-if="showPicker" @ionChange="saveTime" id="datetime" presentation="time" :show-default-buttons="true"></ion-datetime>
+        <ion-datetime 
+            v-if="showPicker"
+            @ionChange="saveTime"
+            id="datetime" presentation="time"
+            :show-default-buttons="true"
+        />
     </ion-popover>
 </template>
 <script setup lang="ts">
@@ -59,8 +65,8 @@ function openDatePopOver(event: Event) {
     } else {
         showPicker.value = true
     }
-    popoverProperties.value.isOpen = true;
-    popoverProperties.value.event = event;
+    popoverProperties.value.isOpen = true
+    popoverProperties.value.event = event
 }
 
 function saveTime(event: any) {
