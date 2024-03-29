@@ -716,9 +716,8 @@ function removeItemAtIndex(index: any) {
 }
 
 function validateNotes(ev: any) {
-    let value = ev.target.value;
-    const textArry = [];
-    refSetNonPharmalogicalTherapyAndOtherNotes(value);
+    let value = ev.target.value
+    refSetNonPharmalogicalTherapyAndOtherNotes(value)
 }
 
 function saveStateValuesState() {
