@@ -4,7 +4,7 @@
         :inputValue="refDate"
         :icon="today"
         :-inner-action-btn-propeties="InnerActionBtnPropeties"
-        @update:inputValue="refDate"
+        @update:inputValue="componentKey"
         @clicked:inputValue="openDate"
     />
     <ion-popover
@@ -45,6 +45,7 @@ const InnerActionBtnPropeties = {
             }
 const showPicker = ref(true)
 const isSetTimeNowPressed = ref(false)
+const componentKey = ref(0 as any)
 
 function openDate(event: any) {
     if (isSetTimeNowPressed.value == true) {
@@ -66,6 +67,7 @@ function saveTheDate(event: any) {
 function setDateNow() {
     isSetTimeNowPressed.value = true
     refDate.value = formatDate( new Date())
+    componentKey.value++
 }
 
 function formatDate(date: any) {
