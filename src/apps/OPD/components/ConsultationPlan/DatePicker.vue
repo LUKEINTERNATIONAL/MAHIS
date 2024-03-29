@@ -4,8 +4,9 @@
         :inputValue="refDate"
         :icon="today"
         :-inner-action-btn-propeties="InnerActionBtnPropeties"
-        @update:inputValue="componentKey"
         @clicked:inputValue="openDate"
+        :key="componentKey"
+       
     />
     <ion-popover
         :show-backdrop="false"

@@ -5,7 +5,7 @@
         :icon="time"
         :-inner-action-btn-propeties="InnerActionBtnPropeties"
         @clicked:inputValue="openDatePopOver"
-        @update:inputValue="componentKey"
+        :key="componentKey"
     />
     <ion-popover
         :show-backdrop="false"
