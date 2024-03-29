@@ -1,4 +1,5 @@
 <template>
+    
     <ion-row>
         <ion-col>
             <DynamicDispositionList v-if="true" @update:removeItem="removeItem" @update:editItem="editItem" :displayData="dispositions" />
@@ -131,6 +132,8 @@
     <ion-row class="spc_btwn" v-if="showAddItemButton">
         <dynamic-button v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" @clicked:btn="addReferral"></dynamic-button>
     </ion-row>
+
+    <deadOutcome/>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
@@ -178,6 +181,7 @@ import DynamicDispositionList from "@/components/DynamicDispositionList.vue";
 import { useDispositionStore } from "@/stores/OutcomeStore";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { getSpecialistClinics, getFacilityWards } from "@/apps/NCD/services/outcome";
+import deadOutcome from "../ConsultationPlan/DeadOutcome.vue"
 
 const iconsContent = icons;
 const initialMsg = ref("No referrals created yet");
@@ -219,7 +223,7 @@ const basicInputFieldProperties = [
     },
     {
         name: "referralType",
-        placeholder: "Referral Type",
+        placeholder: "Outcome",
         icon: icons.chevronUp,
         selection: "" as string,
     },
