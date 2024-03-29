@@ -20,7 +20,7 @@
         <ion-datetime @ionChange="saveTime" id="datetime" presentation="time" :show-default-buttons="true"></ion-datetime>
     </ion-popover>
 </template>
-<script lang="ts">
+<script setup lang="ts">
 import {
     IonContent,
     IonHeader,
@@ -51,12 +51,6 @@ import {
     time,
     codeSlashOutline,
 } from "ionicons/icons"
-import { defineComponent } from "vue"
-export default defineComponent({
-    name: "xxxComponent",
-});
-</script>
-<script setup lang="ts">
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
 import BasicInputField from "@/components/BasicInputField.vue"
 import DynamicButton from "@/components/DynamicButton.vue"
@@ -74,6 +68,15 @@ const popoverProperties = ref({
 })
 const nowBtn = ref("Now")
 const timeObject = ref()
+
+
+const emit = defineEmits<{
+  (e: "timeUpDated", timeObject: any): void;
+}>();
+
+function timeUpDated() {
+  emit("timeUpDated", timeObject);
+}
 
 function openDatePopOver(event: Event) {
     popoverProperties.value.isOpen = true;
@@ -102,6 +105,11 @@ function formatTime(date: any) {
     hours = hours % 12
     hours = hours ? hours : 12
     let formattedTime = hours.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0') + ' ' + ampm
+    timeObject.value = {
+        time: formattedTime,
+        meridian: ampm
+    }
+    timeUpDated()
     return formattedTime
 }
 
@@ -110,50 +118,4 @@ function setTimeNow() {
     refTime.value = formatTime(new Date)
 }
 
-
-
 </script>
-
-<style scoped>
-.initTxt {
-    text-align: center;
-}
-.spc_btwn {
-    margin-top: 2%;
-}
-.item-al {
-    cursor: pointer;
-    padding: 5px;
-    background-color: #ebebeb;
-    margin-top: 8px;
-}
-.item-al:hover {
-    background-color: #55515148;
-    padding: 5px;
-    border-radius: 3px;
-}
-ion-popover.popover-al {
-    --background: #fff;
-}
-ion-list.list-al {
-    --background: #fff;
-    -ion-item-background: #fff;
-}
-.saveContainer {
-    display: flex;
-    align-items: flex-end;
-}
-.action_buttons {
-    margin-top: 5px;
-}
-.error-label {
-    background: #fecdca;
-    color: #b42318;
-    text-transform: none;
-    padding: 6%;
-    border-radius: 10px;
-    margin-top: 7px;
-    display: flex;
-    text-align: center;
-}
-</style>

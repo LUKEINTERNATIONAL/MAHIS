@@ -1,5 +1,5 @@
 <template>
-    <TimePicker/>
+    <TimePicker @time-up-dated="timeUpdate"/>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
@@ -8,7 +8,14 @@ export default defineComponent({
 });
 </script>
 <script setup lang="ts">
+import { ref, watch, computed, onMounted, onUpdated } from "vue"
 import TimePicker from "@/apps/OPD/components/ConsultationPlan/TimePicker.vue"
+
+const timeData = ref()
+
+function timeUpdate(data: any) {
+    console.log(data)
+}
 </script>
 
 <style scoped>
