@@ -73,7 +73,7 @@ import {
 } from "@ionic/vue";
 import dispensation from "@/apps/OPD/views/dispensation.vue";
 import dispensedMedication from "@/apps/OPD/components/dispensedMedication.vue";
-import undispensedMedication from "@/apps/OPD/components/undispensedMedication.vue";
+import dispensationSummary from "@/apps/OPD/components/dispensationSummary.vue";
 
 import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
@@ -131,10 +131,11 @@ import Referral from "@/apps/ANC/components/referral/Referral.vue";
 import AncEnd from "@/apps/ANC/components/ancEnd/AncEnd.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
+
 export default defineComponent({
     name: "Home",
     components: {
-        undispensedMedication,
+        dispensationSummary,
         dispensedMedication,
         IonContent,
         IonHeader,
@@ -224,7 +225,6 @@ export default defineComponent({
     setup() {
         return { chevronBackOutline, checkmark };
     },
-
     methods: {
         accordionGroupChange(ev: AccordionGroupCustomEvent) {
             this.wizardData.forEach((item: any) => {

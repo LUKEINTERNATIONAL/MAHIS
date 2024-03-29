@@ -1,52 +1,12 @@
 <template>
     <ion-list>
-        <ion-label>Current Medical allergies</ion-label>
-        <div class="space"></div>
-        <ion-row>
-            <ion-button class="medicalAlBtn">
-                Regular Insulin
-            </ion-button>
-            <ion-button class="medicalAlBtn">
-                Aspirin
-            </ion-button>
-            <ion-button class="medicalAlBtn">
-                Paracetamol
-            </ion-button>
-            <ion-button class="medicalAlBtn">
-                Quinine
-            </ion-button>
-            <ion-button class="medicalAlBtn">
-                Folic Acid
-            </ion-button>
-        </ion-row>
-        <div class="space"></div>
-        <ion-label>Current Diagnoses</ion-label>
-        <div class="space"></div>
-        <ion-row>
-            <ion-button color="secondary" class="medicalAlBtn">
-                Covid 19
-            </ion-button>
-            <ion-button color="secondary" class="medicalAlBtn">
-                TB
-            </ion-button>
-            <ion-button color="secondary" class="medicalAlBtn">
-                Malaria
-            </ion-button>
-        </ion-row>
-
-        <div class="space2" />
-        <ion-label>Prescribed Medications To Be Dispensed</ion-label>
-        <div v-if="dispensationStore.getDrugPrescriptions() && dispensationStore.getDrugPrescriptions().length > 0">
-            <dynamic-list @clickt="toggleCheckbox" :dataArray="dispensationStore.drugPrescriptions"
-                :withCheckboxs="true" :showInputs="true" :show_actions_buttons="false"
-                @updateQuantity="sendQuantityToStore" />
+        <ion-label>Here is the dispensation summary</ion-label>
+        <div
+            v-if="dispensationStore.getDispensedMedications() && dispensationStore.getDispensedMedications().length > 0">
+            <dynamic-list :dataArray="dispensationStore.getDispensedMedications()" :withCheckboxs="false" :showInputs="false"
+                :show_actions_buttons="false" />
         </div>
         <div v-else>Loading, Please Wait. If this takes more than 2 seconds then something went wrong...</div>
-        <div>
-            <div class="space3"/>
-            <ion-button class="primary_btn" style="padding-left: 15px"
-                @click="saveDispensations()">Dispense</ion-button>
-        </div>
     </ion-list>
 </template>
 
@@ -88,34 +48,10 @@ import { PreviousTreatment } from "@/apps/NCD/services/treatment"
 const dispensationStore = useDispensationStore()
 
 onMounted(async () => {
-    const previousTreatment = new PreviousTreatment()
-    const { previousDrugPrescriptions } = await previousTreatment.getPatientEncounters()
-
-    dispensationStore.setDrugPrescriptions(previousDrugPrescriptions[0].previousPrescriptions)
-    for (let index = 0; index < dispensationStore.getDrugPrescriptions().length; index++) {
-        dispensationStore.updateCheckboxBool(true, index)
-    }
 })
 
-function sendQuantityToStore(event: Event) {
-    const index = event.target.id
-    const quantity = event.detail.value
-
-    dispensationStore.addQuantity(quantity, index)
-}
-
-function toggleCheckbox(event: Event) {
-    const index = event.target.id;
-    const CheckboxBoolean = event.detail.checked;
-
-    dispensationStore.updateCheckboxBool(CheckboxBoolean, index)
-}
-
-function saveDispensations() {
-    dispensationStore.saveDispensedMedications()
-    dispensationStore.setDispensedMedicationsPayload()
-    
-    return dispensationStore.getDispensedMedicationsPayload()
+function populateUnprescribedMedication() {
+    const unprescribedMedication = dispensationStore.getUnprescribedMedications()
 }
 </script>
 
@@ -154,11 +90,7 @@ ion-label {
 }
 
 .space2 {
-    height: 2.5rem;
-}
-
-.space3 {
-    height: 2rem;
+    height: 3rem;
 }
 
 #container a {

@@ -42,8 +42,7 @@
                     </ion-accordion>
                 </ion-accordion-group>
                 <div>
-                    <hr style="background: rgba(0, 0, 0, 0.13)" />
-                    <ion-button class="primary_btn" @click="$emit('finishBtn')">Finish and Save</ion-button>
+                    <ion-button class="primary_btn" @click="$emit('finishBtn')">Finish</ion-button>
                 </div>
             </div>
         </ion-col>
@@ -73,7 +72,7 @@ import {
 } from "@ionic/vue";
 import dispensation from "../views/dispensation.vue";
 import dispensedMedication from "../components/dispensedMedication.vue";
-import undispensedMedication from "../components/undispensedMedication.vue";
+import dispensationSummary from "../components/dispensationSummary.vue";
 
 import { defineComponent } from "vue";
 import Toolbar from "../../../components/Toolbar.vue";
@@ -129,7 +128,7 @@ import { icons } from "../../../utils/svg";
 export default defineComponent({
     name: "Home",
     components: {
-        undispensedMedication,
+        dispensationSummary,
         dispensedMedication,
         IonContent,
         IonHeader,

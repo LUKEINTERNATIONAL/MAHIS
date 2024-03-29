@@ -33,7 +33,7 @@ import {
 } from "@ionic/vue";
 
 import dispensedMedication from "@/apps/OPD/components/dispensedMedication.vue";
-import undispensedMedication from "@/apps/OPD/components/undispensedMedication.vue";
+import dispensationSummary from "@/apps/OPD/components/dispensationSummary.vue";
 
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
@@ -101,7 +101,7 @@ export default defineComponent({
                     last_step: "",
                 },
                 {
-                    title: "Undispensed Medications",
+                    title: "Dispensation Summary",
                     class: "common_step",
                     checked: "",
                     icon: false,
@@ -184,14 +184,11 @@ export default defineComponent({
                 {
                     title: "Dispense Medications",
                     componet: "dispensedMedication",
-                    prescribedMedsdata: this.prescribedList,
-                    unprescribedMedsdata: this.unprescribedList,
                     value: "1",
                 },
                 {
-                    title: "Undispensed Medications",
-                    componet: "undispensedMedication",
-
+                    title: "Dispensation Summary",
+                    componet: "dispensationSummary",
                     value: "2",
                 },
             ],
