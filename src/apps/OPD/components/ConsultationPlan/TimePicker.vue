@@ -3,13 +3,9 @@
         :placeholder="timePlaceholder"
         :inputValue="refTime"
         :icon="time"
+        :-inner-action-btn-propeties="InnerActionBtnPropeties"
         @clicked:inputValue="openDatePopOver"
-        @update:inputValue="refTime"
-    />
-    <dynamic-button
-        :name="nowBtn"
-        :icon="time"
-        @clicked:btn="setTimeNow"
+        @update:inputValue="componentKey"
     />
     <ion-popover
         :show-backdrop="false"
@@ -18,13 +14,13 @@
         :event="popoverProperties.event"
         @didDismiss="popoverProperties.isOpen = false"
     >
-        <ion-datetime @ionChange="saveTime" id="datetime" presentation="time" :show-default-buttons="true"></ion-datetime>
+        <ion-datetime v-if="showPicker" @ionChange="saveTime" id="datetime" presentation="time" :show-default-buttons="true"></ion-datetime>
     </ion-popover>
 </template>
 <script setup lang="ts">
 import { IonDatetime } from "@ionic/vue"
 import { time } from "ionicons/icons"
-import { ref } from "vue"
+import { ref, watch } from "vue"
 import BasicInputField from "@/components/BasicInputField.vue"
 import DynamicButton from "@/components/DynamicButton.vue"
 
@@ -38,18 +34,31 @@ const popoverProperties = ref({
     keyboardClose: false,
     popoverData: {} as Object,
 })
-const nowBtn = ref("Now")
 const timeObject = ref()
+const InnerActionBtnPropeties = {
+                name: 'Now',
+                show: true,
+                fn: setTimeNow,
+            }
+const showPicker = ref(true)
+const isSetTimeNowPressed = ref(false)
+const componentKey = ref(0 as any)
 
 const emit = defineEmits<{
   (e: "timeUpDated", timeObject: any): void;
 }>();
 
 function timeUpDated() {
-  emit("timeUpDated", timeObject);
+  emit("timeUpDated", timeObject)
 }
 
 function openDatePopOver(event: Event) {
+    if (isSetTimeNowPressed.value == true) {
+        showPicker.value = false
+        isSetTimeNowPressed.value = false
+    } else {
+        showPicker.value = true
+    }
     popoverProperties.value.isOpen = true;
     popoverProperties.value.event = event;
 }
@@ -85,7 +94,10 @@ function formatTime(date: any) {
 }
 
 function setTimeNow() {
+    isSetTimeNowPressed.value = true
     refTime.value = formatTime(new Date)
+    showPicker.value = false
+    componentKey.value++
 }
 
 </script>

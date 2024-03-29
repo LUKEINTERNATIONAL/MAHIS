@@ -1,6 +1,6 @@
 <template>
     <TimePicker @time-up-dated="timeUpdate"/>
-    <DatePicker/>
+    <DatePicker @dateUpDated="dateUpdate"/>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
@@ -16,6 +16,10 @@ import DatePicker from "@/apps/OPD/components/ConsultationPlan/DatePicker.vue";
 const timeData = ref()
 
 function timeUpdate(data: any) {
+    console.log(data)
+}
+
+function dateUpdate(data: any) {
     console.log(data)
 }
 </script>

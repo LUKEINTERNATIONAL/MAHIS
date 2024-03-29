@@ -3,16 +3,10 @@
         :placeholder="datePlaceholder"
         :inputValue="refDate"
         :icon="today"
+        :-inner-action-btn-propeties="InnerActionBtnPropeties"
         @update:inputValue="refDate"
         @clicked:inputValue="openDate"
     />
-
-    <dynamic-button
-        :name="todayBtn"
-        :icon="today"
-        @clicked:btn="setDateNow"
-    />
-
     <ion-popover
         :show-backdrop="false"
         :keep-contents-mounted="true"
@@ -20,7 +14,7 @@
         :event="popoverProperties.event"
         @didDismiss="popoverProperties.isOpen = false"
     >
-        <ion-datetime @ionChange="saveTheDate" id="datetime" presentation="date" :show-default-buttons="true"/>
+        <ion-datetime v-if="showPicker" @ionChange="saveTheDate" id="datetime" presentation="date" :show-default-buttons="true"/>
     </ion-popover>
 </template>
 <script setup lang="ts">
@@ -44,8 +38,21 @@ const popoverProperties = ref({
 })
 const todayBtn = ref("Today")
 const dateObject = ref()
+const InnerActionBtnPropeties = {
+                name: 'Today',
+                show: true,
+                fn: setDateNow,
+            }
+const showPicker = ref(true)
+const isSetTimeNowPressed = ref(false)
 
 function openDate(event: any) {
+    if (isSetTimeNowPressed.value == true) {
+        showPicker.value = false
+        isSetTimeNowPressed.value = false
+    } else {
+        showPicker.value = true
+    }
     popoverProperties.value.isOpen = true
     popoverProperties.value.event = event
 }
@@ -53,9 +60,11 @@ function openDate(event: any) {
 function saveTheDate(event: any) {
     refDate.value = event.detail.value
     refDate.value = formatDate(refDate.value)
+    showPicker.value = false
 }
 
 function setDateNow() {
+    isSetTimeNowPressed.value = true
     refDate.value = formatDate( new Date())
 }
 

@@ -286,7 +286,7 @@ watch(
 watch(
     () => dispositions.value.length,
     async (newvalue) => {
-        checkForDispositions();
+        checkForDispositions()
     }
 );
 

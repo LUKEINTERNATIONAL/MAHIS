@@ -14,10 +14,16 @@
             :disabled="disabled"
             class="custom"
         >
-            <ion-label style="display: flex" slot="start">
+            
+        <ion-label v-if="InnerActionBtnPropeties.show" style="display: flex" slot="end">
+            <ion-button slot="end" @click="InnerActionBtnPropeties.fn">{{ InnerActionBtnPropeties.name }}</ion-button>
+        </ion-label>
+        
+        <ion-label style="display: flex" slot="start">
                 <ion-icon v-if="icon" :icon="icon" aria-hidden="true"></ion-icon>
                 <span v-if="leftText" class="left-text"> {{ leftText }}</span>
             </ion-label>
+
             <ion-label v-if="unit || iconRight" slot="end" style="border-left: 1px solid #e6e6e6; padding-left: 10px">
                 <ion-icon v-if="iconRight" :icon="iconRight" aria-hidden="true"></ion-icon>
                 <span v-if="unit">{{ unit }}</span>
@@ -133,6 +139,14 @@ export default defineComponent({
             type: Boolean,
             default: false,
         },
+        InnerActionBtnPropeties: {
+            type: {} as any,
+            default: {
+                name: 'provide name',
+                show: false,
+                fn: ()=>{},
+            },
+        }
     },
     methods: {
         handleClick(event: any) {
