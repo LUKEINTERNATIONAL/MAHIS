@@ -1,7 +1,17 @@
 <template>
-    <TimePicker @time-up-dated="timeUpdate"/>
-    <DatePicker @dateUpDated="dateUpdate"/>
-    <Note @notes-up-dated="notesUpDated"/>
+    <ion-row>
+        <ion-col>
+            <TimePicker @time-up-dated="timeUpdate"/>
+        </ion-col>
+        <ion-col>
+            <DatePicker @dateUpDated="dateUpdate"/>
+        </ion-col>
+    </ion-row>
+    <ion-row>
+        <ion-col>
+            <Note @notes-up-dated="notesUpDated"/>
+        </ion-col>
+    </ion-row>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";

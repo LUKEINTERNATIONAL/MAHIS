@@ -1,5 +1,5 @@
 <template>
-    <ion-item class="input_item" style="min-height: 120px; margin-top: 14px">
+    <ion-item class="input_item">
     <ion-label> <ion-icon slot="start" :icon="editPen" aria-hidden="true"></ion-icon> </ion-label>
     <ion-textarea
         @ionInput="validateNotes"
