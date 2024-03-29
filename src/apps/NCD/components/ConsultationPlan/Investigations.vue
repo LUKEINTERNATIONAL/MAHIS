@@ -68,6 +68,7 @@ import labOrderResults from "@/apps/NCD/components/ConsultationPlan/lab/labOrder
 import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigations.vue";
 import { LabOrder } from "@/apps/NCD/services/lab_order";
 import { useDemographicsStore } from "@/stores/DemographicStore";
+
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -228,18 +229,7 @@ export default defineComponent({
             ]);
             this.orders = await OrderService.getOrders(this.demographics.patient_id);
         },
-        buildResults() {
-            const modifier = this.inputFields[1].value.charAt(0);
-            const result = parseInt(this.inputFields[1].value.substring(1));
-            const measures = {
-                indicator: {
-                    concept_id: 679,
-                },
-                value: result,
-                value_modifier: modifier,
-                value_type: "numeric",
-            };
-        },
+
         async handleInputData(col: any) {
             if (col.inputHeader == "Test") {
                 this.popoverOpen = true;

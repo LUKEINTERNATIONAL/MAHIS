@@ -1,30 +1,34 @@
 <template>
-    <div class="modal_wrapper">
-        <div class="modal_title diplay_space_between">
-            <span></span>
-            <span @click="dismiss()" style="cursor: pointer; font-weight: 300">x</span>
-        </div>
-        <div class="center">
-            <h4>
-                <b>Enter lab results for ({{ labResults[0].name }}) test</b>
-            </h4>
-        </div>
-        <div class="center text_12">
-            <ion-row>
-                <basic-form :contentData="labResults"> </basic-form>
-            </ion-row>
-        </div>
-        <br />
-        <div class="triage_modal_btn center">
-            <div class="center_btn">
-                <ion-button class="primary_btn" @click="saveResults()">Save</ion-button>
-                <span @click="dismiss()" style="cursor: pointer"> Don't Save</span>
+    <ion-modal :is-open="popoverOpen" :show-backdrop="true" @didDismiss="$emit('closePopoover', false)" :keyboard-close="keyboardClose">
+        <ion-header>
+            <ion-toolbar>
+                <ion-title
+                    ><b>Enter lab results for ({{ labResults[0].name }}) test</b></ion-title
+                >
+                <ion-buttons slot="end">
+                    <ion-button @click="$emit('closeModal')">Close</ion-button>
+                </ion-buttons>
+            </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+            <div class="modal_wrapper">
+                <div class="center text_12">
+                    <ion-row>
+                        <basic-form :contentData="labResults"> </basic-form>
+                    </ion-row>
+                </div>
             </div>
-        </div>
-    </div>
+        </ion-content>
+        <ion-footer :translucent="true">
+            <ion-toolbar>
+                <DynamicButton @click="saveResults()" name="Save" fill="clear" iconSlot="icon-only" style="float: right" />
+            </ion-toolbar>
+        </ion-footer>
+    </ion-modal>
 </template>
 
 <script lang="ts">
+import { IonButtons, IonButton, IonModal, IonAvatar, IonImg, IonLabel, IonPage, IonFooter } from "@ionic/vue";
 import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { checkmark, pulseOutline } from "ionicons/icons";
@@ -45,26 +49,58 @@ import {
     modifyRadioValue,
     modifyFieldValue,
 } from "@/services/data_helpers";
+import DynamicButton from "@/components/DynamicButton.vue";
 
 export default defineComponent({
-    name: "Menu",
     components: {
-        IonContent,
+        IonButtons,
+        IonButton,
+        IonModal,
         IonHeader,
+        IonContent,
+        IonToolbar,
+        IonTitle,
         IonItem,
         IonList,
+        IonAvatar,
+        IonImg,
+        IonLabel,
+        IonPage,
         IonMenu,
-        IonTitle,
-        IonToolbar,
         BasicForm,
+        IonFooter,
+        DynamicButton,
     },
     data() {
         return {
-            iconsContent: icons,
+            popoverStatus: null,
         };
     },
-    setup() {
-        return { checkmark, pulseOutline };
+    props: {
+        keyboardClose: {
+            type: Boolean,
+            default: false,
+        },
+        keepContentsMounted: {
+            type: Boolean,
+            default: false,
+        },
+        content: {
+            type: Object,
+            default: {},
+        },
+        popoverOpen: {
+            type: Boolean,
+            default: false,
+        },
+        event: {
+            type: Event,
+            default: "",
+        },
+        title: {
+            type: String,
+            default: "",
+        },
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
@@ -86,6 +122,7 @@ export default defineComponent({
             patientLabResultService.setResultDate(HisDate.currentDate());
             await patientLabResultService.createEncounter();
             await patientLabResultService.createLabResult(this.buildResults());
+            this.$emit("saved");
         },
 
         buildResults() {
@@ -102,7 +139,6 @@ export default defineComponent({
                     });
                 }
             });
-            console.log("🚀 ~ buildResults ~ measures:", measures);
             return measures;
         },
         nav(url: any, action: any) {
@@ -119,27 +155,12 @@ export default defineComponent({
     },
 });
 </script>
-
 <style scoped>
-.center {
-    display: flex;
-    justify-content: space-around;
+ion-footer {
+    --ion-toolbar-background: #f4f4f4f4;
 }
-.center_btn {
-    display: flex;
-    align-items: center;
-    width: 170px;
-    justify-content: space-between;
-}
-.text_12 {
-    font-size: 12px;
-    height: 510px;
-    overflow: scroll;
-}
-.large-modal {
-    --width: 80vw;
-}
-.modal_title {
-    margin-bottom: 0px;
+ion-modal {
+    --width: 90%;
+    --height: 94%;
 }
 </style>

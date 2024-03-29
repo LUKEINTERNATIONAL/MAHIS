@@ -26,6 +26,7 @@
             <DynamicButton @click="seeResultsStatus('less')" name="Show Less Lab Orders" fill="clear" iconSlot="icon-only" />
         </div>
     </div>
+    <LabModal :popoverOpen="openModal" @saved="updateLabList" @closeModal="openModal = false" />
 </template>
 
 <script lang="ts">
@@ -50,6 +51,7 @@ import { PatientLabService } from "@/services/lab/patient_lab_service";
 import { createModal } from "@/utils/Alerts";
 import LabResults from "@/apps/NCD/components/ConsultationPlan/lab/LabResults.vue";
 import { PatientLabResultService } from "@/services/patient_lab_result_service";
+import LabModal from "@/apps/NCD/components/ConsultationPlan/lab/LabModal.vue";
 
 export default defineComponent({
     name: "Menu",
@@ -65,6 +67,7 @@ export default defineComponent({
         List,
         DynamicButton,
         DashBox,
+        LabModal,
     },
 
     computed: {
@@ -99,6 +102,7 @@ export default defineComponent({
             listHeaderResults: "" as any,
             listHeaderOrders: "" as any,
             service: "" as any,
+            openModal: false,
             series: [
                 {
                     name: "",
@@ -125,17 +129,26 @@ export default defineComponent({
         },
     },
     methods: {
+        async updateLabList() {
+            this.openModal = false;
+            this.orders = await OrderService.getOrders(this.demographics.patient_id);
+            this.setListData(this.orders);
+        },
         dismiss() {
             modalController.dismiss();
         },
         async voidLabOrder(event: any) {
             await this.service.voidOrder(event.id, "Mistake entry");
+            this.updateLabList();
         },
 
         handleIcon() {},
         async openResultsForm(obs: any) {
+            console.log("🚀 ~ openResultsForm ~ obs:", obs);
+
             const testIndicators = await PatientLabResultService.getTestIndicatorsWithID(obs.item.concept_id);
             const indicators = [] as any;
+            indicators.push(obs.item);
             testIndicators.forEach((item: any) => {
                 indicators.push({
                     validationStatus: "",
@@ -146,6 +159,7 @@ export default defineComponent({
                                     {
                                         inputHeader: item.name,
                                         value: "",
+                                        id: item.concept_id,
                                         name: item.name,
                                         required: true,
                                         eventType: "input",
@@ -158,10 +172,12 @@ export default defineComponent({
                     },
                 });
             });
-            console.log(indicators);
             const lab = useLabResultsStore();
             lab.setLabResults(indicators);
-            createModal(LabResults);
+            this.openModal = true;
+            //  this.orders = await OrderService.getOrders(this.demographics.patient_id);
+            // const labf = createModal(LabResults);
+            // console.log("🚀 ~ openResultsForm ~ labf:", labf);
         },
         setActivClass(active: any) {
             this.activeHeight = "";
@@ -198,35 +214,44 @@ export default defineComponent({
 
         generateListItems(data: any, type: any, isMore: any, tableSize = {} as any) {
             let count = 0;
+            if (data.length > 0) {
+                return data.flatMap((item: any) => {
+                    return item.tests.flatMap((test: any) => {
+                        const result = test?.result != null ? test?.result[0]?.value_modifier + test?.result[0]?.value : null;
 
-            return data.flatMap((item: any) => {
-                return item.tests.flatMap((test: any) => {
-                    const result = test?.result != null ? test?.result[0]?.value_modifier + test?.result[0]?.value : null;
+                        if ((type === "result" && result !== null) || (type === "order" && result === null)) {
+                            const listItem = {
+                                containSize: tableSize?.containSize,
+                                btnSize: tableSize?.btnSize,
+                                btn: type === "order" ? ["enter_results", "attach", "print", "delete"] : ["print", "delete"],
+                                minHeight: "--min-height: 25px;",
+                                class: "",
+                                id: item.order_id,
+                                name: test.name,
+                                item: test,
+                                display:
+                                    type == "order"
+                                        ? [HisDate.toStandardHisFormat(item.order_date), item.accession_number, test.name, item.specimen.name]
+                                        : [
+                                              HisDate.toStandardHisFormat(item.order_date),
+                                              item.accession_number,
+                                              test.name,
+                                              item.specimen.name,
+                                              result,
+                                          ],
+                            };
 
-                    if ((type === "result" && result !== null) || (type === "order" && result === null)) {
-                        const listItem = {
-                            containSize: tableSize?.containSize,
-                            btnSize: tableSize?.btnSize,
-                            btn: type === "order" ? ["enter_results", "attach", "print", "delete"] : ["print", "delete"],
-                            minHeight: "--min-height: 25px;",
-                            class: "",
-                            id: item.order_id,
-                            name: test.name,
-                            item: test,
-                            display:
-                                type == "order"
-                                    ? [HisDate.toStandardHisFormat(item.order_date), item.accession_number, test.name, item.specimen.name]
-                                    : [HisDate.toStandardHisFormat(item.order_date), item.accession_number, test.name, item.specimen.name, result],
-                        };
-
-                        if (isMore || count < 2) {
-                            count++;
-                            return [listItem];
+                            if (isMore || count < 2) {
+                                count++;
+                                return [listItem];
+                            }
                         }
-                    }
-                    return [];
+                        return [];
+                    });
                 });
-            });
+            } else {
+                return [];
+            }
         },
         seeOrderStatus(status: any) {
             if (status == "more") {

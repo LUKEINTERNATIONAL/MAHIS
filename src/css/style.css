@@ -405,3 +405,26 @@ ion-select .select-wrapper .select-wrapper-inner {
     width: 100%;
     color: red;
 }
+ion-accordion {
+    z-index: unset;
+}
+.multiselect__content-wrapper {
+    position: fixed;
+    width: 300px;
+}
+#null-0 {
+    display: none;
+}
+
+.multiselect__input,
+.multiselect__single {
+    min-height: 40px;
+    line-height: 40px;
+}
+.multiselect__tags {
+    min-height: 56px;
+    border: 1px solid #b3b3b3;
+}
+.multiselect__select::before {
+    top: 95%;
+}

@@ -6,7 +6,13 @@
     </span>
 
     <ion-row v-if="search_item">
-        <basic-form :contentData="OPDdiagnosis" @update:selected="handleInputData" @update:inputValue="handleInputData" @clicked:button="addNewRow">
+        <basic-form
+            :contentData="OPDdiagnosis"
+            @update:selected="handleInputData"
+            @update:inputValue="handleInputData"
+            @clicked:button="addNewRow"
+            @search-change="asyncFind"
+        >
         </basic-form>
     </ion-row>
     <ion-row v-if="addItemButton" style="margin-top: 10px">
@@ -79,6 +85,7 @@ export default defineComponent({
             popoverOpen: false,
             event: "" as any,
             selectedCondition: "" as any,
+            selected: null,
         };
     },
     setup() {
@@ -98,11 +105,16 @@ export default defineComponent({
             deep: true,
         },
     },
-    mounted() {
+    async mounted() {
         this.updateDiagnosisStores();
         this.setDashedBox();
+
+        this.OPDdiagnosis[0].data.rowData[0].colData[1].multiSelectData = await this.getDiagnosis("");
     },
     methods: {
+        async asyncFind(query: any) {
+            this.OPDdiagnosis[0].data.rowData[0].colData[1].multiSelectData = await this.getDiagnosis(query);
+        },
         displayInputFields() {
             this.conditionStatus = "";
             this.selectedText = "";
@@ -124,20 +136,7 @@ export default defineComponent({
                 return false;
             }
         },
-        async validateDifferentialrowData() {
-            this.OPDdiagnosis[0].data.rowData[0].colData[1].alertsError = false;
-            this.OPDdiagnosis[0].data.rowData[0].colData[1].alertsErrorMassage = "";
 
-            this.diagnosisData = await this.getDiagnosis(this.inputFields[1].value);
-            if (this.inputFields[0].value == this.diagnosisData[1]?.name) {
-                return true;
-            } else {
-                this.search_item = true;
-                this.OPDdiagnosis[0].data.rowData[0].colData[1].alertsError = true;
-                this.OPDdiagnosis[0].data.rowData[0].colData[1].alertsErrorMassage = "Please select diagnosis from the list";
-                return false;
-            }
-        },
         async addNewRow() {
             if (await this.validaterowData()) {
                 this.OPDdiagnosis[0].data.rowData[0].colData[0].value = this.inputFields[0].value;
@@ -147,6 +146,7 @@ export default defineComponent({
                 this.buildDiagnosis();
             }
             this.OPDdiagnosis[0].data.rowData[0].colData[0].value = "";
+            this.OPDdiagnosis[0].data.rowData[0].colData[1].value = "";
             this.OPDdiagnosis[0].data.rowData[0].colData[0].popOverData.data = [];
         },
         buildDiagnosis() {
@@ -155,13 +155,29 @@ export default defineComponent({
                 btn: ["edit", "delete"],
                 name: this.inputFields[0].value,
                 id: this.diagnosisData[0].concept_id,
-                display: [this.inputFields[0].value],
+                display: [this.inputFields[0].value, "Primary diagnosis"],
                 data: {
-                    concept_id: 6542, //primary OPDdiagnosis
+                    concept_id: 6542, //Primary diagnosis
                     value_coded: this.diagnosisData[0].concept_id,
                     obs_datetime: Service.getSessionDate(),
                 },
             });
+            if (this.inputFields[1].value) {
+                this.inputFields[1].value.forEach((item: any) => {
+                    this.OPDdiagnosis[0].selectedData.push({
+                        actionBtn: true,
+                        btn: ["edit", "delete"],
+                        name: item.name,
+                        id: item.concept_id,
+                        display: [item.name, "Differential diagnosis"],
+                        data: {
+                            concept_id: 6543, //Secondary diagnosis
+                            value_coded: item.concept_id,
+                            obs_datetime: Service.getSessionDate(),
+                        },
+                    });
+                });
+            }
         },
         updateDiagnosisStores() {
             const diagnosisStore = useOPDDiagnosisStore();
@@ -172,15 +188,14 @@ export default defineComponent({
             this.popoverOpen = true;
         },
         async handleInputData(col: any) {
-            if (col.inputHeader == "Primary Diagnosis") {
+            if (col.inputHeader == "Primary Diagnosis*") {
                 this.diagnosisData = await this.getDiagnosis(col.value);
                 this.OPDdiagnosis[0].data.rowData[0].colData[0].popOverData.data = this.diagnosisData;
                 this.validaterowData();
             }
             if (col.inputHeader == "Differential Diagnosis") {
                 this.diagnosisData = await this.getDiagnosis(col.value);
-                this.OPDdiagnosis[0].data.rowData[0].colData[1].popOverData.data = this.diagnosisData;
-                this.validateDifferentialrowData();
+                this.OPDdiagnosis[0].data.rowData[0].colData[1].multiSelectData = this.diagnosisData;
             }
         },
         async getDiagnosis(value: any) {
@@ -205,7 +220,7 @@ export default defineComponent({
             this.updateDiagnosisStores();
         },
         setDashedBox() {
-            if (this.inputFields[0].value) {
+            if (this.inputFields[0].value || this.inputFields[1].value) {
                 this.addItemButton = false;
                 this.search_item = true;
                 this.no_item = false;
