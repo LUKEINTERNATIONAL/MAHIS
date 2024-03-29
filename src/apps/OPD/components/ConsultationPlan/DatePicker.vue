@@ -43,6 +43,7 @@ const popoverProperties = ref({
     popoverData: {} as Object,
 })
 const todayBtn = ref("Today")
+const dateObject = ref()
 
 function openDate(event: any) {
     popoverProperties.value.isOpen = true
@@ -63,7 +64,23 @@ function formatDate(date: any) {
     let tempDate = new Date(theDate.getFullYear() + "-" + ("0" + (theDate.getMonth() + 1)).slice(-2) + "-" + ("0" + theDate.getDate()).slice(-2))
     let options: Intl.DateTimeFormatOptions = { day: "2-digit", weekday: "long", month: "short", year: "numeric" }
     let formattedDate = tempDate.toLocaleDateString("en-US", options)
+
+    const data_data: { day: number, month: number, year: number } = {
+        day: theDate.getDate(),
+        month: theDate.getMonth() + 1,
+        year: theDate.getFullYear()
+    }
+    dateObject.value = data_data
+    dateUpDated()
     return formattedDate;
+}
+
+const emit = defineEmits<{
+  (e: "dateUpDated", dateObject: any): void;
+}>();
+
+function dateUpDated() {
+  emit("dateUpDated", dateObject)
 }
 
 </script>
