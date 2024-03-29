@@ -21,40 +21,11 @@
     </ion-popover>
 </template>
 <script setup lang="ts">
-import {
-    IonContent,
-    IonHeader,
-    IonCol,
-    IonItem,
-    IonList,
-    IonButton,
-    IonMenu,
-    IonTitle,
-    IonToolbar,
-    IonInput,
-    IonDatetime,
-    IonLabel,
-    IonTextarea,
-    IonAccordion,
-    IonAccordionGroup,
-    AccordionGroupCustomEvent,
-} from "@ionic/vue"
-import {
-    checkmark,
-    pulseOutline,
-    addOutline,
-    closeOutline,
-    checkmarkOutline,
-    filter,
-    chevronDownOutline,
-    chevronUpOutline,
-    time,
-    codeSlashOutline,
-} from "ionicons/icons"
-import { ref, watch, computed, onMounted, onUpdated } from "vue"
+import { IonDatetime } from "@ionic/vue"
+import { time } from "ionicons/icons"
+import { ref } from "vue"
 import BasicInputField from "@/components/BasicInputField.vue"
 import DynamicButton from "@/components/DynamicButton.vue"
-const btnFill = "clear"
 
 const refTime = ref()
 const timePlaceholder = ref("Select refTime")
@@ -68,7 +39,6 @@ const popoverProperties = ref({
 })
 const nowBtn = ref("Now")
 const timeObject = ref()
-
 
 const emit = defineEmits<{
   (e: "timeUpDated", timeObject: any): void;
@@ -114,7 +84,6 @@ function formatTime(date: any) {
 }
 
 function setTimeNow() {
-    console.log("wwww: ",refTime.value)
     refTime.value = formatTime(new Date)
 }
 
