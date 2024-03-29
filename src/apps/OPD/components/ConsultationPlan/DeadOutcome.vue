@@ -1,7 +1,7 @@
 <template>
     <TimePicker @time-up-dated="timeUpdate"/>
     <DatePicker @dateUpDated="dateUpdate"/>
-    <Note/>
+    <Note @notes-up-dated="notesUpDated"/>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
@@ -24,6 +24,11 @@ function timeUpdate(data: any) {
 function dateUpdate(data: any) {
     console.log(data)
 }
+
+function notesUpDated(data: any) {
+    console.log(data)
+}
+
 </script>
 
 <style scoped>

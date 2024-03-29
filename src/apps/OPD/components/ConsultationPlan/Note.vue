@@ -36,8 +36,20 @@ import { icons } from "@/utils/svg"
 
 const editPen = icons.editPen;
 const refNotes = ref()
+const notesObject = ref()
+
 function validateNotes(ev: any) {
     let value = ev.target.value
+    notesObject.value = value
+    notesUpDated()
+}
+
+const emit = defineEmits<{
+  (e: "notesUpDated", notesObject: any): void;
+}>();
+
+function notesUpDated() {
+  emit("notesUpDated", notesObject)
 }
 
 
