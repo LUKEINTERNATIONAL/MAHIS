@@ -2,6 +2,7 @@
     <BasicInputField
         :placeholder="timePlaceholder"
         :inputValue="refTime"
+        :icon="time"
         @clicked:inputValue="openDatePopOver"
         @update:inputValue="refTime"
     />
@@ -28,7 +29,7 @@ import BasicInputField from "@/components/BasicInputField.vue"
 import DynamicButton from "@/components/DynamicButton.vue"
 
 const refTime = ref()
-const timePlaceholder = ref("Select refTime")
+const timePlaceholder = ref("Select Time")
 const popoverProperties = ref({
     title: "Set Time",
     popoverOpen: false,
