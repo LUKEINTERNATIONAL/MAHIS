@@ -129,6 +129,7 @@ import PhysiologicalCounseling from "@/apps/ANC/components/counselling/Physiolog
 import DietCounselling from "@/apps/ANC/components/counselling/DietCounselling.vue";
 import Referral from "@/apps/ANC/components/referral/Referral.vue";
 import AncEnd from "@/apps/ANC/components/ancEnd/AncEnd.vue";
+import OPDOutcome from "@/apps/OPD/components/ConsultationPlan/OPDOutcome.vue"
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 
@@ -202,7 +203,8 @@ export default defineComponent({
         Deworming,
         OPDVitals,
         OPDDiagnosis,
-        OPDTreatmentPlan
+        OPDTreatmentPlan,
+        OPDOutcome,
     },
     data() {
         return {
