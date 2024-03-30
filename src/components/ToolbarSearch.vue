@@ -120,7 +120,6 @@ export default defineComponent({
         },
         async searchByName(searchText: any) {
             const splittedArray = searchText.split(" ");
-            console.log(this.patients);
             if (Validation.isName(splittedArray[0]) == null) {
                 const payload = {
                     given_name: splittedArray[0],
