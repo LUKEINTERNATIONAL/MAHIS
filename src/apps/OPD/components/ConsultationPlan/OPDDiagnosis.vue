@@ -128,7 +128,17 @@ export default defineComponent({
 
             this.diagnosisData = await this.getDiagnosis(this.inputFields[0].value);
             if (this.inputFields[0].value == this.diagnosisData[0]?.name) {
-                return true;
+                const isPrimaryValid = this.OPDdiagnosis[0].selectedData.every((item: any) => {
+                    if (item.display[1] == "Primary diagnosis") {
+                        this.OPDdiagnosis[0].data.rowData[0].colData[0].alertsError = true;
+                        this.OPDdiagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = "Primary diagnosis can not be more than two";
+                        return false;
+                    } else return true;
+                });
+                console.log("🚀 ~ isPrimaryValid ~ isPrimaryValid:", isPrimaryValid);
+
+                if (!isPrimaryValid) return false;
+                else return true;
             } else {
                 this.search_item = true;
                 this.OPDdiagnosis[0].data.rowData[0].colData[0].alertsError = true;
@@ -139,20 +149,22 @@ export default defineComponent({
 
         async addNewRow() {
             if (await this.validaterowData()) {
-                this.OPDdiagnosis[0].data.rowData[0].colData[0].value = this.inputFields[0].value;
-                this.search_item = false;
-                this.display_item = true;
-                this.addItemButton = true;
-                this.buildDiagnosis();
+                if (this.buildDiagnosis()) {
+                    this.OPDdiagnosis[0].data.rowData[0].colData[0].value = this.inputFields[0].value;
+                    this.search_item = false;
+                    this.display_item = true;
+                    this.addItemButton = true;
+                }
             }
             this.OPDdiagnosis[0].data.rowData[0].colData[0].value = "";
             this.OPDdiagnosis[0].data.rowData[0].colData[1].value = "";
             this.OPDdiagnosis[0].data.rowData[0].colData[0].popOverData.data = [];
         },
         buildDiagnosis() {
-            this.OPDdiagnosis[0].selectedData.push({
+            const diagnosis = [];
+            diagnosis.push({
                 actionBtn: true,
-                btn: ["edit", "delete"],
+                btn: ["delete"],
                 name: this.inputFields[0].value,
                 id: this.diagnosisData[0].concept_id,
                 display: [this.inputFields[0].value, "Primary diagnosis"],
@@ -164,9 +176,9 @@ export default defineComponent({
             });
             if (this.inputFields[1].value) {
                 this.inputFields[1].value.forEach((item: any) => {
-                    this.OPDdiagnosis[0].selectedData.push({
+                    diagnosis.push({
                         actionBtn: true,
-                        btn: ["edit", "delete"],
+                        btn: ["delete"],
                         name: item.name,
                         id: item.concept_id,
                         display: [item.name, "Differential diagnosis"],
@@ -178,6 +190,26 @@ export default defineComponent({
                     });
                 });
             }
+            const compareArrays = this.compareArrays(this.OPDdiagnosis[0].selectedData, diagnosis);
+            if (compareArrays[0] === "Differential diagnosis") {
+                this.OPDdiagnosis[0].data.rowData[0].colData[1].alertsError = true;
+                this.OPDdiagnosis[0].data.rowData[0].colData[1].alertsErrorMassage = "Diagnosis already selected";
+                return false;
+            }
+            if (compareArrays[0] === "Primary diagnosis") {
+                this.OPDdiagnosis[0].data.rowData[0].colData[0].alertsError = true;
+                this.OPDdiagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = "Diagnosis already selected";
+                return false;
+            }
+            this.OPDdiagnosis[0].selectedData = diagnosis;
+            return true;
+        },
+        compareArrays(array1: any, array2: any) {
+            return array1.reduce((result: any, obj1: any) => {
+                const match = array2.find((obj2: any) => obj2.name === obj1.name);
+                if (match) result.push(match.display[1]);
+                return result;
+            }, []);
         },
         updateDiagnosisStores() {
             const diagnosisStore = useOPDDiagnosisStore();

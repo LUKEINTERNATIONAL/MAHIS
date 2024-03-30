@@ -63,5 +63,5 @@ export const useOPDDiagnosisStore = defineStore("OPDDiagnosisStore", {
             this.OPDdiagnosis = data;
         },
     },
-    // persist: true,
+    persist: true,
 });
