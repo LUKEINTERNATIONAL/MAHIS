@@ -31,7 +31,9 @@
         <div v-if="dispensationStore.getDrugPrescriptions() && dispensationStore.getDrugPrescriptions().length > 0">
             <dynamic-list @clickt="toggleCheckbox" :dataArray="dispensationStore.drugPrescriptions"
                 :withCheckboxs="true" :showInputs="true" :show_actions_buttons="false"
-                @updateQuantity="sendQuantityToStore" />
+                @updateQuantity="sendQuantityToStore"
+                @getInputID="updateReason"
+                @getSelectedReason="setSelectedReason"/>
         </div>
         <div v-else>Loading, Please Wait. If this takes more than 2 seconds then something went wrong...</div>
         <div>
@@ -54,6 +56,11 @@ export default defineComponent({
     computed: {
         ...mapState(useDispensationStore, ['drugPrescriptions']),
     },
+    data () {
+        return {
+        };
+    },
+
 });
 </script>
 <script setup lang="ts">
@@ -81,6 +88,7 @@ import { PreviousTreatment } from "@/apps/NCD/services/treatment"
 const dispensationStore = useDispensationStore()
 const store2 = useAllegyStore();
 const selectedAllergiesList2 = computed(() => store2.selectedMedicalAllergiesList);
+const selectedReason = ref("")
 
 onMounted(async () => {
     const previousTreatment = new PreviousTreatment()
@@ -92,20 +100,28 @@ onMounted(async () => {
     }
 })
 
+function setSelectedReason(event: Event) {
+    selectedReason.value = event.name
+}
+function updateReason(event: Event) {
+    if (selectedReason.value == "") {
+        return
+    }
+    dispensationStore.setReason(selectedReason.value, event.target.id)
+    selectedReason.value = ""
+}
 function sendQuantityToStore(event: Event) {
     const index = event.target.id
     const quantity = event.detail.value
 
     dispensationStore.addQuantity(quantity, index)
 }
-
 function toggleCheckbox(event: Event) {
     const index = event.target.id;
     const CheckboxBoolean = event.detail.checked;
 
     dispensationStore.updateCheckboxBool(CheckboxBoolean, index)
 }
-
 function saveDispensations() {
     dispensationStore.saveDispensedMedications()
     dispensationStore.setDispensedMedicationsPayload()

@@ -15,6 +15,9 @@ export const useDispensationStore = defineStore('dispensation', {
         payload: {}
     }),
     actions: {
+        setReason(reason: string, index: number) {
+            this.drugPrescriptions[index].reason = reason
+        },
         setDrugPrescriptions(prescriptions: any[]) {
             this.drugPrescriptions = prescriptions
         },
@@ -25,12 +28,14 @@ export const useDispensationStore = defineStore('dispensation', {
             this.drugPrescriptions[index].isSelected = selected
             if (!selected) {
                 this.drugPrescriptions[index].other.quantity = 0
+                this.drugPrescriptions[index].reason = ""
             }
         },
         getCheckedBool(index: any) {
             return this.drugPrescriptions[index].isSelected
         },
-        getUnprescribedMedications() {
+        getReason(index: number) {
+            return this.drugPrescriptions[index].reason
         },
         getDispensedMedications() {
             return this.dispensedMedication;
