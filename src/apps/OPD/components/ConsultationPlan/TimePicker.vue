@@ -1,6 +1,6 @@
 <template>
     <BasicInputField
-        :placeholder="timePlaceholder"
+        :placeholder="props.place_holder.default"
         :inputValue="refTime"
         :icon="time"
         :-inner-action-btn-propeties="InnerActionBtnPropeties"
@@ -31,7 +31,6 @@ import BasicInputField from "@/components/BasicInputField.vue"
 import DynamicButton from "@/components/DynamicButton.vue"
 
 const refTime = ref()
-const timePlaceholder = ref("Select Time")
 const popoverProperties = ref({
     title: "Set Time",
     popoverOpen: false,
@@ -49,6 +48,13 @@ const InnerActionBtnPropeties = {
 const showPicker = ref(true)
 const isSetTimeNowPressed = ref(false)
 const componentKey = ref(0 as any)
+
+const props = defineProps<{
+    place_holder: {
+      type: string,
+      default: ''
+    }
+}>()
 
 const emit = defineEmits<{
   (e: "timeUpDated", timeObject: any): void;

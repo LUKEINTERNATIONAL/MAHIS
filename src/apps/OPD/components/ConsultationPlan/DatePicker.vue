@@ -1,6 +1,6 @@
 <template>
     <BasicInputField
-        :placeholder="datePlaceholder"
+        :placeholder="props.place_holder.default"
         :inputValue="refDate"
         :icon="today"
         :-inner-action-btn-propeties="InnerActionBtnPropeties"
@@ -32,7 +32,6 @@ import { today } from "ionicons/icons"
 import { ref } from "vue"
 import { icons } from "@/utils/svg"
 
-const datePlaceholder = ref("Select Date")
 const refDate = ref()
 const calenderIcon = icons.calendar
 const popoverProperties = ref({
@@ -53,6 +52,13 @@ const InnerActionBtnPropeties = {
 const showPicker = ref(true)
 const isSetTimeNowPressed = ref(false)
 const componentKey = ref(0 as any)
+
+const props = defineProps<{
+    place_holder: {
+      type: string,
+      default: ''
+    }
+  }>()
 
 function openDate(event: any) {
     if (isSetTimeNowPressed.value == true) {

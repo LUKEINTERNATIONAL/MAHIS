@@ -1,10 +1,10 @@
 <template>
     <ion-row>
         <ion-col>
-            <TimePicker @time-up-dated="timeUpdate"/>
+            <TimePicker :place_holder="place" @time-up-dated="timeUpdate"/>
         </ion-col>
         <ion-col>
-            <DatePicker @dateUpDated="dateUpdate"/>
+            <DatePicker :place_holder="place" @dateUpDated="dateUpdate"/>
         </ion-col>
     </ion-row>
     <ion-row>
@@ -26,6 +26,7 @@ import DatePicker from "@/apps/OPD/components/ConsultationPlan/DatePicker.vue"
 import Note from "@/apps/OPD/components/ConsultationPlan/Note.vue";
 
 const timeData = ref()
+const place = ref({default: 'Select time'} as any)
 
 function timeUpdate(data: any) {
     console.log(data)
