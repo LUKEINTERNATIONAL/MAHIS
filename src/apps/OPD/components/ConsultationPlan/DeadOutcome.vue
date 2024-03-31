@@ -1,5 +1,11 @@
 <template>
-   <ListPicker @item-list-up-dated="listUpdated"/>
+        <ListPicker 
+            :name_of_list="name"
+            :choose_place_holder="name"
+            :items_-list="items_List"
+            @item-list-up-dated="listUpdated"
+        />
+        
         <ion-row>
             <TimePicker
                 :place_holder="time_properties[0].placeHolder"
@@ -64,6 +70,20 @@ import TimePicker from "@/apps/OPD/components/ConsultationPlan/TimePicker.vue"
 import DatePicker from "@/apps/OPD/components/ConsultationPlan/DatePicker.vue"
 import Note from "@/apps/OPD/components/ConsultationPlan/Note.vue"
 import ListPicker from "@/apps/OPD/components/ConsultationPlan/ListPicker.vue"
+
+const name = "nnnnnn" as any
+const  items_List = ref([
+        {"name": "Toyota Camry", "selected": true},
+        {"name": "Honda Civic", "selected": false},
+        {"name": "Ford Mustang", "selected": true},
+        {"name": "Chevrolet Corvette", "selected": false},
+        {"name": "BMW 3 Series", "selected": true},
+        {"name": "Mercedes-Benz E-Class", "selected": false},
+        {"name": "Audi A4", "selected": true},
+        {"name": "Tesla Model S", "selected": false},
+        {"name": "Subaru Outback", "selected": true},
+        {"name": "Volkswagen Golf", "selected": false}
+    ] as any)
 
 
 const time_properties = [
@@ -175,6 +195,7 @@ function notesUpDated_fn5(data: any) {
 
 function listUpdated(data: any) {
     console.log(data)
+    items_List.value = data
 }
 </script>
 

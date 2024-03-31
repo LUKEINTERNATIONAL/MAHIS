@@ -4,7 +4,7 @@
         <ion-row>
             <ion-item lines="none" class="ItemAl">
             <ion-row>
-                <div v-for="(item, index) in itemsList" :key="index">
+                <div v-for="(item, index) in items_List as any" :key="index">
                     <ion-button v-if="item.selected" @click="selectAl(item)" class="itemAlBtn">
                         {{ item.name }}
                     <ion-icon slot="end" style="font-size: x-large" :icon="closeOutline"></ion-icon>
@@ -25,7 +25,7 @@
                         <ion-label>{{ choose_place_holder }}</ion-label>
                         <ion-input ref="input" v-model="itemName" @ionInput="FindItemName" fill="outline"></ion-input>
                         <ion-list class="list-al">
-                            <div class="item-al" v-for="(item, index) in itemsList" @click="selectAl(item)" :key="index">
+                            <div class="item-al" v-for="(item, index) in items_List" @click="selectAl(item)" :key="index">
                                 <ion-label style="display: flex; justify-content: space-between">
                                     {{ item.name }}
                                     <ion-icon v-if="item.selected" class="icon-al" :icon="checkmarkOutline"></ion-icon>
@@ -45,25 +45,18 @@ import { IonList, IonLabel, IonRow, IonItem, IonButton, IonIcon, IonInput, IonPo
 import { closeOutline, addOutline, checkmarkOutline } from "ionicons/icons"
 import { ref, watch } from "vue"
 
-const name_of_list = ref('name of list')
 const input = ref()
-const choose_place_holder = ref('Choose placeholder')
 const itemName = ref("")
-const itemsList = ref([
-    {"name": "Toyota Camry", "selected": true},
-    {"name": "Honda Civic", "selected": false},
-    {"name": "Ford Mustang", "selected": true},
-    {"name": "Chevrolet Corvette", "selected": false},
-    {"name": "BMW 3 Series", "selected": true},
-    {"name": "Mercedes-Benz E-Class", "selected": false},
-    {"name": "Audi A4", "selected": true},
-    {"name": "Tesla Model S", "selected": false},
-    {"name": "Subaru Outback", "selected": true},
-    {"name": "Volkswagen Golf", "selected": false}
-])
+
+const props = defineProps<{
+    name_of_list: 'name of list',
+    choose_place_holder: 'Choose placeholder',
+    items_List: []
+}>()
+
 
 function selectAl(sel_item: any) {
-    itemsList.value.forEach((item: any) => {
+    props.items_List.forEach((item: any) => {
         if (item.name === sel_item.name) {
             item.selected = !item.selected;
         }
@@ -85,7 +78,7 @@ const emit = defineEmits<{
 }>();
 
 function itemListUpDated() {
-  emit("itemListUpDated", itemsList)
+  emit("itemListUpDated", props.items_List)
 }
 
 </script>
