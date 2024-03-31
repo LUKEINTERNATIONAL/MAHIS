@@ -1,17 +1,56 @@
 <template>
-    <ion-row>
-        <ion-col>
-            <TimePicker :place_holder="place" @time-up-dated="timeUpdate"/>
-        </ion-col>
-        <ion-col>
-            <DatePicker :place_holder="place" @dateUpDated="dateUpdate"/>
-        </ion-col>
-    </ion-row>
-    <ion-row>
-        <ion-col>
-            <Note :place_holder="place" @notes-up-dated="notesUpDated"/>
-        </ion-col>
-    </ion-row>
+   
+        <ion-row>
+            <TimePicker
+                :place_holder="time_properties[0].placeHolder"
+                @time-up-dated="time_properties[0].dataHandler"
+            />
+            <TimePicker
+                :place_holder="time_properties[1].placeHolder"
+                @time-up-dated="time_properties[1].dataHandler"
+            />
+            <TimePicker
+                :place_holder="time_properties[2].placeHolder"
+                @time-up-dated="time_properties[2].dataHandler"
+            />
+  
+            <DatePicker
+                :place_holder="date_properties[0].placeHolder"
+                @time-up-dated="date_properties[0].dataHandler"
+            />
+
+            <DatePicker
+                :place_holder="date_properties[1].placeHolder"
+                @time-up-dated="date_properties[1].dataHandler"
+            />
+        
+
+            <Note
+                :place_holder="note_properties[0].placeHolder"
+                @time-up-dated="note_properties[0].dataHandler"
+            />
+
+            <Note
+                :place_holder="note_properties[1].placeHolder"
+                @time-up-dated="note_properties[1].dataHandler"
+            />
+
+            <Note
+                :place_holder="note_properties[2].placeHolder"
+                @time-up-dated="note_properties[2].dataHandler"
+            />
+
+            <Note
+                :place_holder="note_properties[3].placeHolder"
+                @time-up-dated="note_properties[3].dataHandler"
+            />
+
+            <Note
+                :place_holder="note_properties[4].placeHolder"
+                @time-up-dated="note_properties[4].dataHandler"
+            />
+        </ion-row>
+
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
@@ -25,21 +64,113 @@ import TimePicker from "@/apps/OPD/components/ConsultationPlan/TimePicker.vue"
 import DatePicker from "@/apps/OPD/components/ConsultationPlan/DatePicker.vue"
 import Note from "@/apps/OPD/components/ConsultationPlan/Note.vue";
 
-const timeData = ref()
-const place = ref({default: 'Select time'} as any)
 
-function timeUpdate(data: any) {
-    console.log(data)
+const time_properties = [
+    {
+        placeHolder: {default: 'Enter time of death if known'} as any,
+        dataHandler: timeUpdate_fn1,
+        dataValue: ref(),
+    },
+    {
+        placeHolder: {default: 'Enter time arrived'} as any,
+        dataHandler: timeUpdate_fn2,
+        dataValue: ref(),
+    },
+    {
+        placeHolder: {default: 'Enter time confirming death'} as any,
+        dataHandler: timeUpdate_fn3,
+        dataValue: ref(),
+    }, 
+]
+
+const date_properties = [
+    {
+        placeHolder: {default: 'Enter date of death'} as any,
+        dataHandler: dateUpdate_fn1,
+        dataValue: ref(),
+    },
+    {
+        placeHolder: {default: 'Enter date arrived'} as any,
+        dataHandler: dateUpdate_fn2,
+        dataValue: ref(),
+    },
+    {
+        placeHolder: {default: 'Enter date confirming death'} as any,
+        dataHandler: dateUpdate_fn3,
+        dataValue: ref(),
+    }, 
+]
+
+const note_properties = [
+    {
+        placeHolder: {default: 'Enter place of death'} as any,
+        dataHandler: notesUpDated_fn1,
+        dataValue: ref(),
+    },
+    {
+        placeHolder: {default: 'Enter name of guardian'} as any,
+        dataHandler: notesUpDated_fn2,
+        dataValue: ref(),
+    },
+    {
+        placeHolder: {default: 'Enter name of person confirming death'} as any,
+        dataHandler: notesUpDated_fn3,
+        dataValue: ref(),
+    },
+    {
+        placeHolder: {default: 'Enter position of the person confirming death'} as any,
+        dataHandler: notesUpDated_fn4,
+        dataValue: ref(),
+    },
+    {
+        placeHolder: {default: 'Enter medical council registration number of the person confirming death'} as any,
+        dataHandler: notesUpDated_fn5,
+        dataValue: ref(),
+    },
+]
+
+function timeUpdate_fn1(data: any) {
+    time_properties[0].dataValue.value = data
 }
 
-function dateUpdate(data: any) {
-    console.log(data)
+function timeUpdate_fn2(data: any) {
+    time_properties[1].dataValue.value = data
 }
 
-function notesUpDated(data: any) {
-    console.log(data)
+function timeUpdate_fn3(data: any) {
+    time_properties[2].dataValue.value = data
 }
 
+function dateUpdate_fn1(data: any) {
+    date_properties[0].dataValue.value = data
+}
+
+function dateUpdate_fn2(data: any) {
+    date_properties[1].dataValue.value = data
+}
+
+function dateUpdate_fn3(data: any) {
+    date_properties[2].dataValue.value = data
+}
+
+function notesUpDated_fn1(data: any) {
+    note_properties[0].dataValue.value = data
+}
+function notesUpDated_fn2(data: any) {
+    note_properties[1].dataValue.value = data
+}
+
+function notesUpDated_fn3(data: any) {
+    note_properties[2].dataValue.value = data
+}
+
+function notesUpDated_fn4(data: any) {
+    note_properties[3].dataValue.value = data
+}
+
+function notesUpDated_fn5(data: any) {
+    note_properties[4].dataValue.value = data
+}
 </script>
 
 <style scoped>
