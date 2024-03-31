@@ -8,6 +8,7 @@
         class="inputTpln"
         :auto-grow="true"
         fill="outline"
+        :placeholder="props.place_holder.default"
     ></ion-textarea>
 </ion-item>
 </template>
@@ -37,6 +38,13 @@ import { icons } from "@/utils/svg"
 const editPen = icons.editPen;
 const refNotes = ref()
 const notesObject = ref()
+
+const props = defineProps<{
+    place_holder: {
+      type: string,
+      default: ''
+    }
+}>()
 
 function validateNotes(ev: any) {
     let value = ev.target.value

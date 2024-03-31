@@ -229,7 +229,7 @@ export default defineComponent({
     }
 })
 </script>
-<style>
+<style scoped>
 .input_item {
     height: 50px;
     margin-top: 5px;

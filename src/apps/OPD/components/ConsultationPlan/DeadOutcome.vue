@@ -9,7 +9,7 @@
     </ion-row>
     <ion-row>
         <ion-col>
-            <Note @notes-up-dated="notesUpDated"/>
+            <Note :place_holder="place" @notes-up-dated="notesUpDated"/>
         </ion-col>
     </ion-row>
 </template>
