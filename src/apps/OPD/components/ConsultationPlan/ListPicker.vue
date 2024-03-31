@@ -23,7 +23,7 @@
                         @didPresent="dissmissAddField"
                     >
                     <ion-content color="light" class="ion-padding content-al">
-                        <ion-label>Choose the allergy:</ion-label>
+                        <ion-label>{{ choose_place_holder }}</ion-label>
                         <ion-input ref="input" v-model="itemName" @ionInput="FindItemName" fill="outline"></ion-input>
                         <ion-list class="list-al">
                             <div class="item-al" v-for="(item, index) in itemsList" @click="selectAl(item)" :key="index">
@@ -48,6 +48,7 @@ import { ref, watch } from "vue"
 
 const name_of_list = ref('name of list')
 const input = ref()
+const choose_place_holder = ref('Choose placeholder')
 const itemName = ref("")
 const itemsList = ref([
     {"name": "Toyota Camry", "selected": true},
