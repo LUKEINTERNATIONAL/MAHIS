@@ -5,17 +5,24 @@ interface DispensationData {
     drugPrescriptions: any[]
     dispensedMedication: any[]
     payload: {} //{"dispensations":[{"drug_order_id":2399362,"date":"2024-03-27","quantity":"3"}],"program_id":14}
-
+    saveInitiated: Boolean
 }
 
 export const useDispensationStore = defineStore('dispensation', {
     state: (): DispensationData => ({
         drugPrescriptions: [],
         dispensedMedication: [],
-        payload: {}
+        payload: {},
+        saveInitiated: false
     }),
     actions: {
+        isSaveInitiated(bool: boolean) {
+            this.saveInitiated = bool
+        },
         validateInputs() {
+            if (this.saveInitiated == false) {
+                return
+            }
             let isThereAnError = false
             this.drugPrescriptions.forEach(Element => {
                 if (Element.other.quantity == 0 && Element.reason == "") {

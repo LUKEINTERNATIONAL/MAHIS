@@ -127,6 +127,7 @@ function toggleCheckbox(event: Event) {
     dispensationStore.updateCheckboxBool(CheckboxBoolean, index)
 }
 function saveDispensations() {
+    dispensationStore.isSaveInitiated(true)
     if (dispensationStore.validateInputs()) {
         return
     }
