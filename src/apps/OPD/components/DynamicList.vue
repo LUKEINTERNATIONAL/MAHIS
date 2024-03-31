@@ -66,7 +66,7 @@
                     style="width: 200px;">
                     <span style="display: flex; align-items: center;" id="chooseType"
                         @click="popoverOpenForFrequencyFn2">
-                        <ion-input placeholder="Reasons why?" v-model="frequency"></ion-input>
+                        <ion-input placeholder="Reason why?" v-model="frequency"></ion-input>
                         <ion-icon v-if="!showPopoverOpenForFrequency" :icon="chevronDownOutline" />
                         <ion-icon v-if="showPopoverOpenForFrequency" :icon="chevronUpOutline" />
                     </span>

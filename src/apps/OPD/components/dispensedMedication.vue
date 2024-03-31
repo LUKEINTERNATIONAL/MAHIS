@@ -1,27 +1,19 @@
 <template>
     <ion-list>
-        <ion-label>Current Medical allergies</ion-label>
-        <div class="space"></div>
+        <ion-label>Allergies (Medication, Healthcare items, Environment and Food)</ion-label>
         <ion-row>
-            <ion-button class="medicalAlBtn">
-                Regular Insulin
-            </ion-button>
-            <ion-button class="medicalAlBtn">
-                Aspirin
-            </ion-button>
-            <ion-button class="medicalAlBtn">
-                Paracetamol
-            </ion-button>
-            <ion-button class="medicalAlBtn">
-                Quinine
-            </ion-button>
-            <ion-button class="medicalAlBtn">
-                Folic Acid
-            </ion-button>
+            <ion-item lines="none" class="medicalAl">
+                <ion-row>
+                    <div v-for="(item, index) in selectedAllergiesList2" :key="index">
+                        <ion-button v-if="item.selected" class="medicalAlBtn">
+                            {{ item.name }}
+                        </ion-button>
+                    </div>
+                </ion-row>
+            </ion-item>
         </ion-row>
-        <div class="space"></div>
+
         <ion-label>Current Diagnoses</ion-label>
-        <div class="space"></div>
         <ion-row>
             <ion-button color="secondary" class="medicalAlBtn">
                 Covid 19
@@ -65,6 +57,7 @@ export default defineComponent({
 });
 </script>
 <script setup lang="ts">
+import { useAllegyStore} from "@/apps/OPD/stores/AllergyStore"
 import {
     IonContent,
     IonHeader,
@@ -86,6 +79,8 @@ import {
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
 import { PreviousTreatment } from "@/apps/NCD/services/treatment"
 const dispensationStore = useDispensationStore()
+const store2 = useAllegyStore();
+const selectedAllergiesList2 = computed(() => store2.selectedMedicalAllergiesList);
 
 onMounted(async () => {
     const previousTreatment = new PreviousTreatment()
@@ -114,7 +109,7 @@ function toggleCheckbox(event: Event) {
 function saveDispensations() {
     dispensationStore.saveDispensedMedications()
     dispensationStore.setDispensedMedicationsPayload()
-    
+
     return dispensationStore.getDispensedMedicationsPayload()
 }
 </script>
@@ -168,12 +163,16 @@ ion-label {
 ion-item.medicalAl {
     --background: #fff;
     --border-radius: 5px;
+    width: 100%;
+    padding: 1rem 0px;
 }
 
 ion-button.medicalAlBtn {
     --background: #fecdca;
     --color: #b42318;
     text-transform: none;
+    margin: 1rem;
+    font-size: 1rem;
 }
 
 .error-label {
