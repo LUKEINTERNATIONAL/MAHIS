@@ -1,5 +1,5 @@
 <template>
-   <ListPicker/>
+   <ListPicker @item-list-up-dated="listUpdated"/>
         <ion-row>
             <TimePicker
                 :place_holder="time_properties[0].placeHolder"
@@ -171,6 +171,10 @@ function notesUpDated_fn4(data: any) {
 
 function notesUpDated_fn5(data: any) {
     note_properties[4].dataValue.value = data
+}
+
+function listUpdated(data: any) {
+    console.log(data)
 }
 </script>
 

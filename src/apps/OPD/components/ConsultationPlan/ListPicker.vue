@@ -20,7 +20,6 @@
                         :show-backdrop="false"
                         trigger="click-trigger-dup"
                         trigger-action="click"
-                        @didPresent="dissmissAddField"
                     >
                     <ion-content color="light" class="ion-padding content-al">
                         <ion-label>{{ choose_place_holder }}</ion-label>
@@ -69,6 +68,7 @@ function selectAl(sel_item: any) {
             item.selected = !item.selected;
         }
     })
+    itemListUpDated()
 }
 
 
@@ -76,17 +76,17 @@ async function FindItemName(text: any) {
     const searchText = text.target.value
 }
 
-function dissmissAddField(): void {
-    // search_item.value = false;
-    // display_item.value = true;
-    // addItemButton.value = true;
-}
-
 function setFocus() {
     input.value.$el.setFocus();
 }
 
+const emit = defineEmits<{
+  (e: "itemListUpDated", timeObject: any): void;
+}>();
 
+function itemListUpDated() {
+  emit("itemListUpDated", itemsList)
+}
 
 </script>
 
@@ -136,13 +136,6 @@ ion-button.itemAlBtn {
     margin-top: 7px;
     display: flex;
     text-align: center;
-}
-ion-button.addMedicalTpBtn {
-    --background: #ddeedd;
-    --color: #006401;
-    text-transform: none;
-    font-weight: 600;
-    font-size: 16px;
 }
 ion-button.itemAlAddBtn {
     font-size: large;
