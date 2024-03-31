@@ -60,16 +60,16 @@ const itemsList = ref([
     {"name": "Tesla Model S", "selected": false},
     {"name": "Subaru Outback", "selected": true},
     {"name": "Volkswagen Golf", "selected": false}
-]
-)
+])
 
-function selectAl(item: any) {
-    // console.log("selectAl: ", !item.selected)
-    // item.selected = !item.selected
-    // const AllergyStore = store
-    // AllergyStore.setSelectedMedicalAllergiesList(item)
-    //saveStateValuesState()
+function selectAl(sel_item: any) {
+    itemsList.value.forEach((item: any) => {
+        if (item.name === sel_item.name) {
+            item.selected = !item.selected;
+        }
+    })
 }
+
 
 async function FindItemName(text: any) {
     const searchText = text.target.value
