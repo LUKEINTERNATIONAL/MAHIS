@@ -5,16 +5,56 @@ interface DispensationData {
     drugPrescriptions: any[]
     dispensedMedication: any[]
     payload: {} //{"dispensations":[{"drug_order_id":2399362,"date":"2024-03-27","quantity":"3"}],"program_id":14}
-
+    saveInitiated: Boolean
 }
 
 export const useDispensationStore = defineStore('dispensation', {
     state: (): DispensationData => ({
         drugPrescriptions: [],
         dispensedMedication: [],
-        payload: {}
+        payload: {},
+        saveInitiated: false
     }),
     actions: {
+        isSaveInitiated(bool: boolean) {
+            this.saveInitiated = bool
+        },
+        validateInputs() {
+            if (this.saveInitiated == false) {
+                return
+            }
+            let isThereAnError = false
+            this.drugPrescriptions.forEach(Element => {
+                if (Element.other.quantity == 0 && Element.reason == "") {
+                    Element.showValidation = true
+                    isThereAnError = true
+                } else {
+                    Element.showValidation = false
+                }
+            })
+            return isThereAnError
+        },
+        initializeDispensedAmount() {
+            this.drugPrescriptions.forEach(Element => {
+                Element.other.quantity = 0
+            })
+        },
+        initializeValidationsBoolean() {
+            this.drugPrescriptions.forEach(Element => {
+                Element.showValidation = false
+            })
+        },
+        initializeReasonParameter() {
+            this.drugPrescriptions.forEach(Element => {
+                Element.reason = ""
+            })
+        },
+        getValidation(index: number) {
+            return this.drugPrescriptions[index].showValidation
+        },
+        setReason(reason: string, index: number) {
+            this.drugPrescriptions[index].reason = reason
+        },
         setDrugPrescriptions(prescriptions: any[]) {
             this.drugPrescriptions = prescriptions
         },
@@ -25,12 +65,14 @@ export const useDispensationStore = defineStore('dispensation', {
             this.drugPrescriptions[index].isSelected = selected
             if (!selected) {
                 this.drugPrescriptions[index].other.quantity = 0
+                this.drugPrescriptions[index].reason = ""
             }
         },
         getCheckedBool(index: any) {
             return this.drugPrescriptions[index].isSelected
         },
-        getUnprescribedMedications() {
+        getReason(index: number) {
+            return this.drugPrescriptions[index].reason
         },
         getDispensedMedications() {
             return this.dispensedMedication;

@@ -6,7 +6,7 @@
             <dynamic-list :dataArray="dispensationStore.getDispensedMedications()" :withCheckboxs="false" :showInputs="false"
                 :show_actions_buttons="false" />
         </div>
-        <div v-else>Loading, Please Wait. If this takes more than 2 seconds then something went wrong...</div>
+        <div v-else>Please complete dispensing of prescribed medications first. Then the summary will appear here.</div>
     </ion-list>
 </template>
 
@@ -46,13 +46,6 @@ import {
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
 import { PreviousTreatment } from "@/apps/NCD/services/treatment"
 const dispensationStore = useDispensationStore()
-
-onMounted(async () => {
-})
-
-function populateUnprescribedMedication() {
-    const unprescribedMedication = dispensationStore.getUnprescribedMedications()
-}
 </script>
 
 <style scoped>
