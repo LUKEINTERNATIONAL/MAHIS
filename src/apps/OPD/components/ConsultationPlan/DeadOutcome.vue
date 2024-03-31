@@ -1,5 +1,5 @@
 <template>
-   
+   <ListPicker/>
         <ion-row>
             <TimePicker
                 :place_holder="time_properties[0].placeHolder"
@@ -62,7 +62,8 @@ export default defineComponent({
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
 import TimePicker from "@/apps/OPD/components/ConsultationPlan/TimePicker.vue"
 import DatePicker from "@/apps/OPD/components/ConsultationPlan/DatePicker.vue"
-import Note from "@/apps/OPD/components/ConsultationPlan/Note.vue";
+import Note from "@/apps/OPD/components/ConsultationPlan/Note.vue"
+import ListPicker from "@/apps/OPD/components/ConsultationPlan/ListPicker.vue"
 
 
 const time_properties = [
