@@ -31,13 +31,12 @@
         <div v-if="dispensationStore.getDrugPrescriptions() && dispensationStore.getDrugPrescriptions().length > 0">
             <dynamic-list @clickt="toggleCheckbox" :dataArray="dispensationStore.drugPrescriptions"
                 :withCheckboxs="true" :showInputs="true" :show_actions_buttons="false"
-                @updateQuantity="sendQuantityToStore"
-                @getInputID="updateReason"
-                @getSelectedReason="setSelectedReason"/>
+                @updateQuantity="sendQuantityToStore" @getInputID="updateReason"
+                @getSelectedReason="setSelectedReason" />
         </div>
         <div v-else>Loading, Please Wait. If this takes more than 2 seconds then something went wrong...</div>
         <div>
-            <div class="space3"/>
+            <div class="space3" />
             <ion-button class="primary_btn" style="padding-left: 15px"
                 @click="saveDispensations()">Dispense</ion-button>
         </div>
@@ -56,7 +55,7 @@ export default defineComponent({
     computed: {
         ...mapState(useDispensationStore, ['drugPrescriptions']),
     },
-    data () {
+    data() {
         return {
         };
     },
@@ -64,7 +63,7 @@ export default defineComponent({
 });
 </script>
 <script setup lang="ts">
-import { useAllegyStore} from "@/apps/OPD/stores/AllergyStore"
+import { useAllegyStore } from "@/apps/OPD/stores/AllergyStore"
 import {
     IonContent,
     IonHeader,
@@ -96,6 +95,9 @@ onMounted(async () => {
 
     dispensationStore.setDrugPrescriptions(previousDrugPrescriptions[0].previousPrescriptions)
     for (let index = 0; index < dispensationStore.getDrugPrescriptions().length; index++) {
+        dispensationStore.initializeValidationsBoolean()
+        dispensationStore.initializeReasonParameter()
+        dispensationStore.initializeDispensedAmount()
         dispensationStore.updateCheckboxBool(true, index)
     }
 })
@@ -109,12 +111,14 @@ function updateReason(event: Event) {
     }
     dispensationStore.setReason(selectedReason.value, event.target.id)
     selectedReason.value = ""
+    dispensationStore.validateInputs()
 }
 function sendQuantityToStore(event: Event) {
     const index = event.target.id
     const quantity = event.detail.value
 
     dispensationStore.addQuantity(quantity, index)
+    dispensationStore.validateInputs()
 }
 function toggleCheckbox(event: Event) {
     const index = event.target.id;
@@ -123,6 +127,9 @@ function toggleCheckbox(event: Event) {
     dispensationStore.updateCheckboxBool(CheckboxBoolean, index)
 }
 function saveDispensations() {
+    if (dispensationStore.validateInputs()) {
+        return
+    }
     dispensationStore.saveDispensedMedications()
     dispensationStore.setDispensedMedicationsPayload()
 

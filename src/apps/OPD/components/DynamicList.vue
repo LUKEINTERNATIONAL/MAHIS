@@ -64,6 +64,9 @@
                     <ion-label style="padding-right: 3px;">Quantity:</ion-label>
                     <ion-input :id="index" placeholder="0" @ionInput="$emit('updateQuantity', $event)"></ion-input>
                 </ion-item>
+                <span v-if="dispensationStore.getValidation(index)">
+                    <ion-label style="color: red;">Please fill in this section</ion-label>
+                </span>
                 <ion-item v-if="!(dispensationStore.getCheckedBool(index)) && showInputs" class="input_item"
                     style="width: 200px;">
                     <span style="display: flex; align-items: center;" id="chooseType"

@@ -15,6 +15,36 @@ export const useDispensationStore = defineStore('dispensation', {
         payload: {}
     }),
     actions: {
+        validateInputs() {
+            let isThereAnError = false
+            this.drugPrescriptions.forEach(Element => {
+                if (Element.other.quantity == 0 && Element.reason == "") {
+                    Element.showValidation = true
+                    isThereAnError = true
+                } else {
+                    Element.showValidation = false
+                }
+            })
+            return isThereAnError
+        },
+        initializeDispensedAmount() {
+            this.drugPrescriptions.forEach(Element => {
+                Element.other.quantity = 0
+            })
+        },
+        initializeValidationsBoolean() {
+            this.drugPrescriptions.forEach(Element => {
+                Element.showValidation = false
+            })
+        },
+        initializeReasonParameter() {
+            this.drugPrescriptions.forEach(Element => {
+                Element.reason = ""
+            })
+        },
+        getValidation(index: number) {
+            return this.drugPrescriptions[index].showValidation
+        },
         setReason(reason: string, index: number) {
             this.drugPrescriptions[index].reason = reason
         },
