@@ -1,8 +1,7 @@
 <template>
     <ion-item
         class="ionLbltp" v-for="(item, index) in localMedicalDrugsList" :key="index"
-        @mousemove="highlightItem(index)" @mouseout="undoHighlightItem(index)"
-    >
+        @mousemove="highlightItem(index)" @mouseout="undoHighlightItem(index)">
         <ion-col class="col-st1" :class="highLightBnd(item)">
             <ion-label :id="asignLblID(index)" class="truncate-text" style="color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.drugName }}</ion-label>
         </ion-col>
