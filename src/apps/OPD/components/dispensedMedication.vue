@@ -1,27 +1,19 @@
 <template>
     <ion-list>
-        <ion-label>Current Medical allergies</ion-label>
-        <div class="space"></div>
+        <ion-label>Allergies (Medication, Healthcare items, Environment and Food)</ion-label>
         <ion-row>
-            <ion-button class="medicalAlBtn">
-                Regular Insulin
-            </ion-button>
-            <ion-button class="medicalAlBtn">
-                Aspirin
-            </ion-button>
-            <ion-button class="medicalAlBtn">
-                Paracetamol
-            </ion-button>
-            <ion-button class="medicalAlBtn">
-                Quinine
-            </ion-button>
-            <ion-button class="medicalAlBtn">
-                Folic Acid
-            </ion-button>
+            <ion-item lines="none" class="medicalAl">
+                <ion-row>
+                    <div v-for="(item, index) in selectedAllergiesList2" :key="index">
+                        <ion-button v-if="item.selected" class="medicalAlBtn">
+                            {{ item.name }}
+                        </ion-button>
+                    </div>
+                </ion-row>
+            </ion-item>
         </ion-row>
-        <div class="space"></div>
+
         <ion-label>Current Diagnoses</ion-label>
-        <div class="space"></div>
         <ion-row>
             <ion-button color="secondary" class="medicalAlBtn">
                 Covid 19
@@ -39,11 +31,12 @@
         <div v-if="dispensationStore.getDrugPrescriptions() && dispensationStore.getDrugPrescriptions().length > 0">
             <dynamic-list @clickt="toggleCheckbox" :dataArray="dispensationStore.drugPrescriptions"
                 :withCheckboxs="true" :showInputs="true" :show_actions_buttons="false"
-                @updateQuantity="sendQuantityToStore" />
+                @updateQuantity="sendQuantityToStore" @getInputID="updateReason"
+                @getSelectedReason="setSelectedReason" />
         </div>
         <div v-else>Loading, Please Wait. If this takes more than 2 seconds then something went wrong...</div>
         <div>
-            <div class="space3"/>
+            <div class="space3" />
             <ion-button class="primary_btn" style="padding-left: 15px"
                 @click="saveDispensations()">Dispense</ion-button>
         </div>
@@ -62,9 +55,15 @@ export default defineComponent({
     computed: {
         ...mapState(useDispensationStore, ['drugPrescriptions']),
     },
+    data() {
+        return {
+        };
+    },
+
 });
 </script>
 <script setup lang="ts">
+import { useAllegyStore } from "@/apps/OPD/stores/AllergyStore"
 import {
     IonContent,
     IonHeader,
@@ -86,6 +85,9 @@ import {
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
 import { PreviousTreatment } from "@/apps/NCD/services/treatment"
 const dispensationStore = useDispensationStore()
+const store2 = useAllegyStore();
+const selectedAllergiesList2 = computed(() => store2.selectedMedicalAllergiesList);
+const selectedReason = ref("")
 
 onMounted(async () => {
     const previousTreatment = new PreviousTreatment()
@@ -93,28 +95,45 @@ onMounted(async () => {
 
     dispensationStore.setDrugPrescriptions(previousDrugPrescriptions[0].previousPrescriptions)
     for (let index = 0; index < dispensationStore.getDrugPrescriptions().length; index++) {
+        dispensationStore.initializeValidationsBoolean()
+        dispensationStore.initializeReasonParameter()
+        dispensationStore.initializeDispensedAmount()
         dispensationStore.updateCheckboxBool(true, index)
     }
 })
 
+function setSelectedReason(event: Event) {
+    selectedReason.value = event.name
+}
+function updateReason(event: Event) {
+    if (selectedReason.value == "") {
+        return
+    }
+    dispensationStore.setReason(selectedReason.value, event.target.id)
+    selectedReason.value = ""
+    dispensationStore.validateInputs()
+}
 function sendQuantityToStore(event: Event) {
     const index = event.target.id
     const quantity = event.detail.value
 
     dispensationStore.addQuantity(quantity, index)
+    dispensationStore.validateInputs()
 }
-
 function toggleCheckbox(event: Event) {
     const index = event.target.id;
     const CheckboxBoolean = event.detail.checked;
 
     dispensationStore.updateCheckboxBool(CheckboxBoolean, index)
 }
-
 function saveDispensations() {
+    dispensationStore.isSaveInitiated(true)
+    if (dispensationStore.validateInputs()) {
+        return
+    }
     dispensationStore.saveDispensedMedications()
     dispensationStore.setDispensedMedicationsPayload()
-    
+
     return dispensationStore.getDispensedMedicationsPayload()
 }
 </script>
@@ -168,12 +187,16 @@ ion-label {
 ion-item.medicalAl {
     --background: #fff;
     --border-radius: 5px;
+    width: 100%;
+    padding: 1rem 0px;
 }
 
 ion-button.medicalAlBtn {
     --background: #fecdca;
     --color: #b42318;
     text-transform: none;
+    margin: 1rem;
+    font-size: 1rem;
 }
 
 .error-label {
