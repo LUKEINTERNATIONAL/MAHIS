@@ -207,7 +207,7 @@ export default defineComponent({
         },
         async addNewRow() {
             if (await this.validateRowData()) {
-                this.saveTest();
+                await this.saveTest();
                 this.investigations[0].data.rowData[0].colData[0].value = "";
                 this.investigations[0].data.rowData[0].colData[1].value = "";
                 this.search_item = false;
@@ -224,9 +224,10 @@ export default defineComponent({
                     name: this.inputFields[0].value,
                     specimen: this.inputFields[1].value,
                     reason: "Routine",
-                    specimenConcept: await ConceptService.getConceptID(this.inputFields[1].value),
+                    specimenConcept: await ConceptService.getConceptID(this.inputFields[1].value, true),
                 },
             ]);
+            console.log(this.inputFields[1].value);
             this.orders = await OrderService.getOrders(this.demographics.patient_id);
         },
 

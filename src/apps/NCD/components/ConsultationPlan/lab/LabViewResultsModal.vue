@@ -3,7 +3,7 @@
         <ion-header>
             <ion-toolbar>
                 <ion-title
-                    ><b>Enter lab results for ({{ labResults[0].name }}) test</b></ion-title
+                    ><b>Lab results for ({{ content.item.name }}) test</b></ion-title
                 >
                 <ion-buttons slot="end">
                     <ion-button @click="$emit('closeModal')">Close</ion-button>
@@ -14,16 +14,17 @@
             <div class="modal_wrapper">
                 <div class="center text_12">
                     <ion-row>
-                        <basic-form :contentData="labResults"> </basic-form>
+                        <ion-col size="4" v-for="(item1, index1) in content.item.item.result" :key="index1">
+                            <ion-row>
+                                <ion-col size="8">{{ item1.indicator.name }}</ion-col>
+                                <ion-col size="0.5">:</ion-col>
+                                <ion-col size="2">{{ item1.value }}</ion-col>
+                            </ion-row>
+                        </ion-col>
                     </ion-row>
                 </div>
             </div>
         </ion-content>
-        <ion-footer :translucent="true">
-            <ion-toolbar>
-                <DynamicButton @click="saveResults()" name="Save" fill="clear" iconSlot="icon-only" style="float: right" />
-            </ion-toolbar>
-        </ion-footer>
     </ion-modal>
 </template>
 
@@ -86,8 +87,7 @@ export default defineComponent({
             default: false,
         },
         content: {
-            type: Object,
-            default: {},
+            default: [] as any,
         },
         popoverOpen: {
             type: Boolean,
@@ -102,51 +102,12 @@ export default defineComponent({
             default: "",
         },
     },
-    computed: {
-        ...mapState(useDemographicsStore, ["demographics"]),
-        ...mapState(useLabResultsStore, ["labResults"]),
-    },
-    mounted() {
-        this.labResults;
-        // getFieldValue(this.labResults, this.labResults, "data");
-        console.log("🚀 ~ mounted ~ this.labResults:", this.labResults[0].concept_id);
-        console.log("🚀 ~ mounted ~ this.labResults:", this.labResults[0].name);
-    },
     methods: {
         dismiss() {
             modalController.dismiss();
         },
-        async saveResults() {
-            const patientLabResultService = new PatientLabResultService(this.demographics.patient_id);
-            patientLabResultService.setTestID(this.labResults[0].id);
-            patientLabResultService.setResultDate(HisDate.currentDate());
-            await patientLabResultService.createEncounter();
-            await patientLabResultService.createLabResult(this.buildResults());
-            this.$emit("saved");
-        },
 
-        buildResults() {
-            let measures = [] as any;
-            this.labResults[1].data.rowData[0].colData.forEach((item: any) => {
-                measures.push({
-                    indicator: {
-                        concept_id: item.id,
-                    },
-                    value: item.value || "not done",
-                    value_modifier: "",
-                    value_type: "text",
-                });
-            });
-            return measures;
-        },
         nav(url: any, action: any) {
-            const demographicsStore = useLabResultsStore();
-            if (action == "not_save") {
-                resetPatientData();
-                demographicsStore.setLabResults(false);
-            } else {
-                demographicsStore.setLabResults(true);
-            }
             this.dismiss();
             this.$router.push(url);
         },
