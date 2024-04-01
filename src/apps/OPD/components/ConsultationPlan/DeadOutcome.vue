@@ -104,13 +104,13 @@ const  items_List = ref([
 const items_List2 = ref([
     {"name": "New York", "selected": true},
     {"name": "Los Angeles", "selected": false},
-    {"name": "Chicago", "selected": true},
+    {"name": "Chicago", "selected": false},
     {"name": "Houston", "selected": false},
-    {"name": "Phoenix", "selected": true},
+    {"name": "Phoenix", "selected": false},
     {"name": "Philadelphia", "selected": false},
-    {"name": "San Antonio", "selected": true},
+    {"name": "San Antonio", "selected": false},
     {"name": "San Diego", "selected": false},
-    {"name": "Dallas", "selected": true},
+    {"name": "Dallas", "selected": false},
     {"name": "San Jose", "selected": false}
 ] as any);
 
