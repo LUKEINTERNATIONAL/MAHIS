@@ -1,5 +1,6 @@
 <template>
         <ListPicker
+            :multiSelection="multi_Selection"
             :uniqueId="id_1"
             :name_of_list="name"
             :choose_place_holder="name"
@@ -9,11 +10,12 @@
         />
 
         <ListPicker
+            :multiSelection="multi_Selection2"
             :uniqueId="id_2"
             :name_of_list="name"
             :choose_place_holder="name"
-            :items_-list="items_List"
-            @item-list-up-dated="listUpdated"
+            :items_-list="items_List2"
+            @item-list-up-dated="listUpdated2"
         />
         
         <ion-row>
@@ -82,6 +84,8 @@ import Note from "@/apps/OPD/components/ConsultationPlan/Note.vue"
 import ListPicker from "@/apps/OPD/components/ConsultationPlan/ListPicker.vue"
 
 const name = "nnnnnn" as any
+const multi_Selection = true as any
+const multi_Selection2 = false as any
 const id_1 = "1" as any
 const id_2 = "2" as any
 const  items_List = ref([
@@ -96,6 +100,20 @@ const  items_List = ref([
         {"name": "Subaru Outback", "selected": true},
         {"name": "Volkswagen Golf", "selected": false}
     ] as any)
+
+const items_List2 = ref([
+    {"name": "New York", "selected": true},
+    {"name": "Los Angeles", "selected": false},
+    {"name": "Chicago", "selected": true},
+    {"name": "Houston", "selected": false},
+    {"name": "Phoenix", "selected": true},
+    {"name": "Philadelphia", "selected": false},
+    {"name": "San Antonio", "selected": true},
+    {"name": "San Diego", "selected": false},
+    {"name": "Dallas", "selected": true},
+    {"name": "San Jose", "selected": false}
+] as any);
+
 
 
 const time_properties = [
@@ -210,8 +228,13 @@ function listUpdated(data: any) {
     items_List.value = data
 }
 
+function listUpdated2(data: any) {
+    console.log(data)
+    items_List2.value = data
+}
+
 function iweFn(data: any) {
-    
+
 }
 </script>
 

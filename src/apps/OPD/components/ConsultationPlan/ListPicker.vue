@@ -52,11 +52,17 @@ const props = defineProps<{
     uniqueId: "unique_id_1_please_do_procide_a_unique_id"
     name_of_list: 'name of list',
     choose_place_holder: 'Choose placeholder',
-    items_List: []
+    items_List: [],
+    multiSelection: false,
 }>()
 
 
 function selectAl(sel_item: any) {
+    if (props.multiSelection == false) {
+        props.items_List.forEach((item: any) =>{
+            item.selected = false
+        })
+    }
     props.items_List.forEach((item: any) => {
         if (item.name === sel_item.name) {
             item.selected = !item.selected;
