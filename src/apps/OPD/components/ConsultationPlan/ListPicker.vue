@@ -4,7 +4,7 @@
         <ion-row>
             <ion-item lines="none" class="ItemAl">
             <ion-row>
-                <div v-for="(item, index) in items_List as any" :key="index">
+                <div v-for="(item, index) in items_List" :key="index">
                     <ion-button v-if="item.selected" @click="selectAl(item)" class="itemAlBtn">
                         {{ item.name }}
                     <ion-icon slot="end" style="font-size: x-large" :icon="closeOutline"></ion-icon>
@@ -12,20 +12,20 @@
                 </div>
 
                 <div>
-                    <ion-button id="click-trigger-dup" fill="clear" class="itemAlAddBtn" @click="setFocus">
+                    <ion-button :id="uniqueId" fill="clear" class="itemAlAddBtn" @click="setFocus">
                         <ion-icon :icon="addOutline"></ion-icon>
                     </ion-button>
                     <ion-popover
                         class="popover-al"
                         :show-backdrop="false"
-                        trigger="click-trigger-dup"
+                        :trigger="uniqueId"
                         trigger-action="click"
                     >
                     <ion-content color="light" class="ion-padding content-al">
                         <ion-label>{{ choose_place_holder }}</ion-label>
                         <ion-input ref="input" v-model="itemName" @ionInput="FindItemName" fill="outline"></ion-input>
                         <ion-list class="list-al">
-                            <div class="item-al" v-for="(item, index) in items_List" @click="selectAl(item)" :key="index">
+                            <div class="item-al" v-for="(item, index) in items_List_copy" @click="selectAl(item)" :key="index">
                                 <ion-label style="display: flex; justify-content: space-between">
                                     {{ item.name }}
                                     <ion-icon v-if="item.selected" class="icon-al" :icon="checkmarkOutline"></ion-icon>
@@ -49,6 +49,7 @@ const input = ref()
 const itemName = ref("")
 
 const props = defineProps<{
+    uniqueId: "unique_id_1_please_do_procide_a_unique_id"
     name_of_list: 'name of list',
     choose_place_holder: 'Choose placeholder',
     items_List: []
@@ -64,9 +65,12 @@ function selectAl(sel_item: any) {
     itemListUpDated()
 }
 
+const items_List_copy =  ref(props.items_List)
 
 async function FindItemName(text: any) {
     const searchText = text.target.value
+    itemSearchText(searchText)
+    itemListFiltered(searchText)
 }
 
 function setFocus() {
@@ -74,11 +78,31 @@ function setFocus() {
 }
 
 const emit = defineEmits<{
-  (e: "itemListUpDated", timeObject: any): void;
+    (e: "itemListUpDated", ObjectsArray: any): void;
+    (e: "itemListFiltered", ObjectsArray: any): void;
+    (e: "itemSearchText", ObjectsArray: any): void;
 }>();
 
 function itemListUpDated() {
   emit("itemListUpDated", props.items_List)
+}
+
+function itemSearchText(searchString: string) {
+    emit("itemSearchText", searchString)
+}
+
+function itemListFiltered(searchString: string) {
+    const items =  [...props.items_List]
+    const filtered_items = [] as any
+    searchString = searchString ? searchString.toString() : "";
+    items.forEach((item: any) => {
+        if (item.name.toLowerCase().includes(searchString.toLowerCase())) {
+            console.log(item)
+            filtered_items.push(item)
+        }
+    })
+    items_List_copy.value = filtered_items
+    emit("itemListFiltered", filtered_items)
 }
 
 </script>

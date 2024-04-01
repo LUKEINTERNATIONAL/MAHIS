@@ -1,5 +1,15 @@
 <template>
-        <ListPicker 
+        <ListPicker
+            :uniqueId="id_1"
+            :name_of_list="name"
+            :choose_place_holder="name"
+            :items_-list="items_List"
+            @item-list-up-dated="listUpdated"
+            @item-list-filtered="iweFn"
+        />
+
+        <ListPicker
+            :uniqueId="id_2"
             :name_of_list="name"
             :choose_place_holder="name"
             :items_-list="items_List"
@@ -72,6 +82,8 @@ import Note from "@/apps/OPD/components/ConsultationPlan/Note.vue"
 import ListPicker from "@/apps/OPD/components/ConsultationPlan/ListPicker.vue"
 
 const name = "nnnnnn" as any
+const id_1 = "1" as any
+const id_2 = "2" as any
 const  items_List = ref([
         {"name": "Toyota Camry", "selected": true},
         {"name": "Honda Civic", "selected": false},
@@ -196,6 +208,10 @@ function notesUpDated_fn5(data: any) {
 function listUpdated(data: any) {
     console.log(data)
     items_List.value = data
+}
+
+function iweFn(data: any) {
+    
 }
 </script>
 
