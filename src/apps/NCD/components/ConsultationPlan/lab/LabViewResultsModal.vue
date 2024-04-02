@@ -17,8 +17,8 @@
                         <ion-col size="4" v-for="(item1, index1) in content.item.item.result" :key="index1">
                             <ion-row>
                                 <ion-col size="8">{{ item1.indicator.name }}</ion-col>
-                                <ion-col size="0.5">:</ion-col>
-                                <ion-col size="2">{{ item1.value }}</ion-col>
+                                <ion-col class="bold" size="0.5">:</ion-col>
+                                <ion-col class="bold" size="2">{{ item1.value }}</ion-col>
                             </ion-row>
                         </ion-col>
                     </ion-row>

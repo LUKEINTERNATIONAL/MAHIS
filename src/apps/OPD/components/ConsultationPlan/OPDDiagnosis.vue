@@ -1,26 +1,28 @@
 <template>
-    <DashBox :status="no_item" :content="'No Diagnosis added'" />
-
-    <span v-if="display_item">
-        <list :listData="OPDdiagnosis[0].selectedData" @clicked:edit="editDiagnosis($event)" @clicked:delete="deleteDiagnosis"> </list>
-    </span>
-
-    <ion-row v-if="search_item">
-        <basic-form
-            :contentData="OPDdiagnosis"
-            @update:selected="handleInputData"
-            @update:inputValue="handleInputData"
-            @clicked:button="addNewRow"
-            @search-change="asyncFind"
-        >
-        </basic-form>
-    </ion-row>
-    <ion-row v-if="addItemButton" style="margin-top: 10px">
-        <DynamicButton fill="clear" :icon="iconsContent.plus" iconSlot="icon-only" @clicked:btn="displayInputFields()" name="Add new Diagnosis" />
-    </ion-row>
+    <div class="custom_card" style="padding:10px">
+        <DashBox :status="no_item" :content="'No Diagnosis added'" />
+    
+        <span v-if="display_item">
+            <list :listData="OPDdiagnosis[0].selectedData" @clicked:edit="editDiagnosis($event)" @clicked:delete="deleteDiagnosis"> </list>
+        </span>
+    
+        <ion-row v-if="search_item">
+            <basic-form
+                :contentData="OPDdiagnosis"
+                @update:selected="handleInputData"
+                @update:inputValue="handleInputData"
+                @clicked:button="addNewRow"
+                @search-change="asyncFind"
+            >
+            </basic-form>
+        </ion-row>
+        <ion-row v-if="addItemButton" style="margin-top: 10px">
+            <DynamicButton fill="clear" :icon="iconsContent.plus" iconSlot="icon-only" @clicked:btn="displayInputFields()" name="Add new Diagnosis" />
+        </ion-row>
+    </div>
     <ion-row>
         <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
                 <ion-item slot="header" color="light">
                     <ion-label class="previousLabel">Previous Diagnosis</ion-label>
                 </ion-item>
@@ -201,7 +203,7 @@ export default defineComponent({
                 this.OPDdiagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = "Diagnosis already selected";
                 return false;
             }
-            this.OPDdiagnosis[0].selectedData = diagnosis;
+            this.OPDdiagnosis[0].selectedData = [...this.OPDdiagnosis[0].selectedData,...diagnosis];
             return true;
         },
         compareArrays(array1: any, array2: any) {

@@ -1,6 +1,6 @@
 <template>
     <ion-accordion-group ref="accordionGroup" class="previousView">
-        <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+        <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
             <ion-item slot="header" color="light">
                 <ion-label class="previousLabel">Lab Investigations</ion-label>
             </ion-item>
@@ -32,7 +32,7 @@
         </ion-accordion>
     </ion-accordion-group>
     <ion-accordion-group ref="accordionGroup" class="previousView">
-        <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+        <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
             <ion-item slot="header" color="light">
                 <ion-label class="previousLabel">Radiology Investigation</ion-label>
             </ion-item>
@@ -40,7 +40,7 @@
         </ion-accordion>
     </ion-accordion-group>
     <ion-accordion-group ref="accordionGroup" class="previousView">
-        <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+        <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
             <ion-item slot="header" color="light">
                 <ion-label class="previousLabel">Other Investigation</ion-label>
             </ion-item>
