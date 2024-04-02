@@ -56,7 +56,7 @@ export const useDispensationStore = defineStore('dispensation', {
 
             this.dispensedMedication.forEach(Element => {
                 const drug_order_id = Element.other.order.order_id
-                const quantity = 
+            
             })
         }
     }
