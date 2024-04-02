@@ -1,6 +1,6 @@
 <template>
     <ion-accordion-group ref="accordionGroup" class="previousView">
-        <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+        <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
             <ion-item slot="header" color="light">
                 <ion-label class="previousLabel">Lab Investigations</ion-label>
             </ion-item>
@@ -32,7 +32,7 @@
         </ion-accordion>
     </ion-accordion-group>
     <ion-accordion-group ref="accordionGroup" class="previousView">
-        <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+        <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
             <ion-item slot="header" color="light">
                 <ion-label class="previousLabel">Radiology Investigation</ion-label>
             </ion-item>
@@ -40,7 +40,7 @@
         </ion-accordion>
     </ion-accordion-group>
     <ion-accordion-group ref="accordionGroup" class="previousView">
-        <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+        <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
             <ion-item slot="header" color="light">
                 <ion-label class="previousLabel">Other Investigation</ion-label>
             </ion-item>
@@ -50,33 +50,24 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, IonInput, IonPopover } from "@ionic/vue";
-import { defineComponent, ref } from "vue";
-import { build, checkmark, pulseOutline } from "ionicons/icons";
-import { icons } from "@/utils/svg";
-import { OrderService } from "@/services/order_service";
+import {IonContent, IonHeader, IonInput, IonItem, IonList, IonMenu, IonPopover, IonTitle, IonToolbar} from "@ionic/vue";
+import {defineComponent} from "vue";
+import {checkmark, pulseOutline} from "ionicons/icons";
+import {icons} from "@/utils/svg";
+import {OrderService} from "@/services/order_service";
 import DashBox from "@/components/DashBox.vue";
 import SelectionPopover from "@/components/SelectionPopover.vue";
 import BasicInputField from "@/components/BasicInputField.vue";
-import { useInvestigationStore } from "@/stores/InvestigationStore";
-import { mapState } from "pinia";
-import { toastWarning, popoverConfirmation } from "@/utils/Alerts";
+import {useInvestigationStore} from "@/stores/InvestigationStore";
+import {mapState} from "pinia";
+import {popoverConfirmation} from "@/utils/Alerts";
 import BasicForm from "@/components/BasicForm.vue";
 import List from "@/components/List.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import labOrderResults from "@/apps/NCD/components/ConsultationPlan/lab/labOrderResults.vue";
-import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigations.vue";
-import { LabOrder } from "@/apps/NCD/services/lab_order";
-import { useDemographicsStore } from "@/stores/DemographicStore";
-import {
-    modifyCheckboxInputField,
-    getCheckboxSelectedValue,
-    getRadioSelectedValue,
-    getFieldValue,
-    modifyRadioValue,
-    modifyFieldValue,
-} from "@/services/data_helpers";
-import { ConceptService } from "@/services/concept_service";
+import {LabOrder} from "@/apps/NCD/services/lab_order";
+import {useDemographicsStore} from "@/stores/DemographicStore";
+import {ConceptService} from "@/services/concept_service";
 
 export default defineComponent({
     name: "Menu",
@@ -206,7 +197,7 @@ export default defineComponent({
         },
         async addNewRow() {
             if (await this.validateRowData()) {
-                this.saveTest();
+                await this.saveTest();
                 this.investigations[0].data.rowData[0].colData[0].value = "";
                 this.investigations[0].data.rowData[0].colData[1].value = "";
                 this.search_item = false;
@@ -223,23 +214,13 @@ export default defineComponent({
                     name: this.inputFields[0].value,
                     specimen: this.inputFields[1].value,
                     reason: "Routine",
-                    specimenConcept: await ConceptService.getConceptID(this.inputFields[1].value),
+                    specimenConcept: await ConceptService.getConceptID(this.inputFields[1].value, true),
                 },
             ]);
+            console.log(this.inputFields[1].value);
             this.orders = await OrderService.getOrders(this.demographics.patient_id);
         },
-        buildResults() {
-            const modifier = this.inputFields[1].value.charAt(0);
-            const result = parseInt(this.inputFields[1].value.substring(1));
-            const measures = {
-                indicator: {
-                    concept_id: 679,
-                },
-                value: result,
-                value_modifier: modifier,
-                value_type: "numeric",
-            };
-        },
+
         async handleInputData(col: any) {
             if (col.inputHeader == "Test") {
                 this.popoverOpen = true;

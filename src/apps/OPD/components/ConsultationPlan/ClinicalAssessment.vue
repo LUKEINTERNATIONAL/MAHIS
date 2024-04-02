@@ -1,7 +1,7 @@
 <template>
     <ion-row>
         <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
                 <ion-item slot="header" color="light">
                     <ion-label class="previousLabel">Level of consciousness</ion-label>
                 </ion-item>
@@ -11,7 +11,7 @@
             </ion-accordion>
         </ion-accordion-group>
         <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
                 <ion-item slot="header" color="light">
                     <ion-label class="previousLabel">Presenting complaints</ion-label>
                 </ion-item>
@@ -21,7 +21,7 @@
             </ion-accordion>
         </ion-accordion-group>
         <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
                 <ion-item slot="header" color="light">
                     <ion-label class="previousLabel">Pregnancy and breastfeeding status</ion-label>
                 </ion-item>
@@ -31,7 +31,7 @@
             </ion-accordion>
         </ion-accordion-group>
         <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
                 <ion-item slot="header" color="light">
                     <ion-label class="previousLabel">Past medical history</ion-label>
                 </ion-item>
@@ -41,7 +41,7 @@
             </ion-accordion>
         </ion-accordion-group>
         <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
                 <ion-item slot="header" color="light">
                     <ion-label class="previousLabel">Allergies</ion-label>
                 </ion-item>
@@ -51,7 +51,7 @@
             </ion-accordion>
         </ion-accordion-group>
         <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
                 <ion-item slot="header" color="light">
                     <ion-label class="previousLabel">Physical examination</ion-label>
                 </ion-item>
@@ -64,39 +64,31 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, IonInput, IonPopover } from "@ionic/vue";
-import { defineComponent, ref } from "vue";
-import { build, checkmark, pulseOutline } from "ionicons/icons";
-import { icons } from "@/utils/svg";
-import { OrderService } from "@/services/order_service";
+import {IonContent, IonHeader, IonInput, IonItem, IonList, IonMenu, IonPopover, IonTitle, IonToolbar} from "@ionic/vue";
+import {defineComponent} from "vue";
+import {checkmark, pulseOutline} from "ionicons/icons";
+import {icons} from "@/utils/svg";
+import {OrderService} from "@/services/order_service";
 import DashBox from "@/components/DashBox.vue";
 import SelectionPopover from "@/components/SelectionPopover.vue";
 import BasicInputField from "@/components/BasicInputField.vue";
-import { useInvestigationStore } from "@/stores/InvestigationStore";
-import { mapState } from "pinia";
-import { toastWarning, popoverConfirmation } from "@/utils/Alerts";
+import {useInvestigationStore} from "@/stores/InvestigationStore";
+import {mapState} from "pinia";
+import {popoverConfirmation} from "@/utils/Alerts";
 import BasicForm from "@/components/BasicForm.vue";
 import List from "@/components/List.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import labOrderResults from "@/apps/NCD/components/ConsultationPlan/lab/labOrderResults.vue";
-import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigations.vue";
-import { LabOrder } from "@/apps/NCD/services/lab_order";
+import {LabOrder} from "@/apps/NCD/services/lab_order";
 import Allergies from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/Allergies.vue";
 import LevelOfConsciousness from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/LevelOfConsciousness.vue";
 import PastMedicalHistory from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PastMedicalHistory.vue";
 import PhysicalExamination from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PhysicalExamination.vue";
-import PregnancyBreastfeeding from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PregnancyBreastfeeding.vue";
+import PregnancyBreastfeeding
+  from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PregnancyBreastfeeding.vue";
 import PresentingComplaints from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PresentingComplaints.vue";
-import { useDemographicsStore } from "@/stores/DemographicStore";
-import {
-    modifyCheckboxInputField,
-    getCheckboxSelectedValue,
-    getRadioSelectedValue,
-    getFieldValue,
-    modifyRadioValue,
-    modifyFieldValue,
-} from "@/services/data_helpers";
-import { ConceptService } from "@/services/concept_service";
+import {useDemographicsStore} from "@/stores/DemographicStore";
+import {ConceptService} from "@/services/concept_service";
 
 export default defineComponent({
     name: "Menu",

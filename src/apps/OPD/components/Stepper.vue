@@ -42,8 +42,7 @@
                     </ion-accordion>
                 </ion-accordion-group>
                 <div>
-                    <hr style="background: rgba(0, 0, 0, 0.13)" />
-                    <ion-button class="primary_btn" @click="$emit('finishBtn')">Finish and Save</ion-button>
+                    <ion-button class="primary_btn" @click="$emit('finishBtn')">Finish</ion-button>
                 </div>
             </div>
         </ion-col>
@@ -71,65 +70,59 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/vue";
-import dispensedMedication from "@/apps/OPD/components/dispensedMedication.vue";
-import dispensationSummary from "@/apps/OPD/components/dispensationSummary.vue";
+import dispensedMedication from "../components/dispensedMedication.vue";
+import dispensationSummary from "../components/dispensationSummary.vue";
 
 import {defineComponent} from "vue";
-import Toolbar from "@/components/Toolbar.vue";
-import PresentingComplaints from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PresentingComplaints.vue";
-import ClinicalAssessment from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment.vue";
-import ToolbarSearch from "@/components/ToolbarSearch.vue";
+import Toolbar from "../../../components/Toolbar.vue";
+import ToolbarSearch from "../../../components/ToolbarSearch.vue";
 import {checkmark, chevronBackOutline} from "ionicons/icons";
-import Vitals from "@/apps/NCD/components/ConsultationPlan/Vitals.vue";
-import OPDVitals from "@/apps/OPD/components/Vitals.vue"
-import Diagnosis from "@/apps/NCD/components/ConsultationPlan/Diagnosis.vue";
-import OPDDiagnosis from "@/apps/OPD/components/ConsultationPlan/OPDDiagnosis.vue";
-import Complications from "@/apps/NCD/components/ConsultationPlan/Complications.vue";
-import ConfirmDiagnosis from "@/apps/NCD/components/ConsultationPlan/ConfirmDiagnosis.vue";
-import Outcome from "@/apps/NCD/components/ConsultationPlan/Outcome.vue";
-import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigations.vue";
-import TreatmentPlan from "@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue";
-import OPDTreatmentPlan from "@/apps/OPD/components/ConsultationPlan/OPDTreatmentPlan.vue";
-import NextAppointment from "@/apps/NCD/components/ConsultationPlan/NextAppointment.vue";
-
-import Medications from "@/apps/ANC/components/profile/Medications.vue";
-import WomanBehaviour from "@/apps/ANC/components/profile/WomanBehaviour.vue";
-import DangerSigns from "@/apps/ANC/components/quick check/DangerSigns.vue";
-import ConfirmPregnancy from "@/apps/ANC/components/quick check/ConfirmPregnancy.vue";
-import ReasonForVisit from "@/apps/ANC/components/quick check/ReasonForVisit.vue";
-import SpecificHealthConcerns from "@/apps/ANC/components/quick check/SpecificHealthConcerns.vue";
-import AncVitals from "@/apps/ANC/components/physical exam/AncVitals.vue";
-import FetalAssessment from "@/apps/ANC/components/physical exam/FetalAssessment.vue";
-import FetalPresentation from "@/apps/ANC/components/physical exam/FetalPresentation.vue";
-import MaternalExam from "@/apps/ANC/components/physical exam/MaternalExam.vue";
-import PresentingSigns from "@/apps/ANC/components/physical exam/PresentingSigns.vue";
-import CurrentPregnancies from "@/apps/ANC/components/profile/CurrentPregnancies.vue";
-import PastObstreticHistory from "@/apps/ANC/components/profile/PastObstreticHistory.vue";
-import UltrasoundScan from "@/apps/ANC/components/lab_tests/UltrasoundScan.vue";
-import UrineTest from "@/apps/ANC/components/lab_tests/UrineTest.vue";
-import TB from "@/apps/ANC/components/lab_tests/TB.vue";
-import DiagnosisTreatment from "@/apps/ANC/components/Treatment/DiagnosisTreatment.vue";
-import MedicationDispensed from "@/apps/ANC/components/Treatment/MedicationDispensed.vue";
-import DiagnosisCounselling from "@/apps/ANC/components/Treatment/DiagnosisCounselling.vue";
-import Immunization from "@/apps/ANC/components/Treatment/Immunization.vue";
-import IntimatePartner from "@/apps/ANC/components/Treatment/IntimatePartner.vue";
-import Deworming from "@/apps/ANC/components/Treatment/Deworming.vue";
-import SaveProgressModal from "@/components/SaveProgressModal.vue";
-import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue";
-import MedicalFollowUp from "@/apps/ANC/components/symptomsFollowUp/MedicalFollowUp.vue";
-import PersistentBehaviour from "@/apps/ANC/components/symptomsFollowUp/PersistentBehaviour.vue";
-import PersistentSymptoms from "@/apps/ANC/components/symptomsFollowUp/PersistentSymptoms.vue";
-import CurrentPhysiologicalSymptoms from "@/apps/ANC/components/symptomsFollowUp/CurrentPhysiologicalSymptoms.vue";
-import Ipv from "@/apps/ANC/components/symptomsFollowUp/Ipv.vue";
-import FatalMovement from "@/apps/ANC/components/symptomsFollowUp/FatalMovement.vue";
-import BehaviourCounselling from "@/apps/ANC/components/counselling/BehaviourCounselling.vue";
-import PhysiologicalCounseling from "@/apps/ANC/components/counselling/PhysiologicalCounseling.vue";
-import DietCounselling from "@/apps/ANC/components/counselling/DietCounselling.vue";
-import Referral from "@/apps/ANC/components/referral/Referral.vue";
-import AncEnd from "@/apps/ANC/components/ancEnd/AncEnd.vue";
-import OPDOutcome from "@/apps/OPD/components/ConsultationPlan/OPDOutcome.vue"
-import {createModal} from "@/utils/Alerts";
-import {icons} from "@/utils/svg";
+// import Vitals from "@/apps/NCD/components/ConsultationPlan/Vitals.vue";
+// import Diagnosis from "@/apps/NCD/components/ConsultationPlan/Diagnosis.vue";
+// import Complications from "@/apps/NCD/components/ConsultationPlan/Complications.vue";
+// import ConfirmDiagnosis from "@/apps/NCD/components/ConsultationPlan/ConfirmDiagnosis.vue";
+// import Outcome from "@/apps/NCD/components/ConsultationPlan/Outcome.vue";
+// import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigations.vue";
+// import TreatmentPlan from "@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue";
+// import NextAppointment from "@/apps/NCD/components/ConsultationPlan/NextAppointment.vue";
+// import Medications from "@/apps/ANC/components/profile/Medications.vue";
+// import WomanBehaviour from "@/apps/ANC/components/profile/WomanBehaviour.vue";
+// import DangerSigns from "@/apps/ANC/components/quick check/DangerSigns.vue";
+// import ConfirmPregnancy from "@/apps/ANC/components/quick check/ConfirmPregnancy.vue";
+// import ReasonForVisit from "@/apps/ANC/components/quick check/ReasonForVisit.vue";
+// import SpecificHealthConcerns from "@/apps/ANC/components/quick check/SpecificHealthConcerns.vue";
+// import AncVitals from "@/apps/ANC/components/physical exam/AncVitals.vue";
+// import FetalAssessment from "@/apps/ANC/components/physical exam/FetalAssessment.vue";
+// import FetalPresentation from "@/apps/ANC/components/physical exam/FetalPresentation.vue";
+// import MaternalExam from "@/apps/ANC/components/physical exam/MaternalExam.vue";
+// import PresentingSigns from "@/apps/ANC/components/physical exam/PresentingSigns.vue";
+// import CurrentPregnancies from "@/apps/ANC/components/profile/CurrentPregnancies.vue";
+// import PastObstreticHistory from "@/apps/ANC/components/profile/PastObstreticHistory.vue";
+// import PastObstetricHistory from "@/apps/ANC/components/profile/PastObstreticHistory.vue";
+// import UltrasoundScan from "@/apps/ANC/components/lab_tests/UltrasoundScan.vue";
+// import UrineTest from "@/apps/ANC/components/lab_tests/UrineTest.vue";
+// import TB from "@/apps/ANC/components/lab_tests/TB.vue";
+// import DiagnosisTreatment from "@/apps/ANC/components/Treatment/DiagnosisTreatment.vue";
+// import MedicationDispensed from "@/apps/ANC/components/Treatment/MedicationDispensed.vue";
+// import DiagnosisCounselling from "@/apps/ANC/components/Treatment/DiagnosisCounselling.vue";
+// import Immunization from "@/apps/ANC/components/Treatment/Immunization.vue";
+// import IntimatePartner from "@/apps/ANC/components/Treatment/IntimatePartner.vue";
+// import Deworming from "@/apps/ANC/components/Treatment/Deworming.vue";
+import SaveProgressModal from "../../../components/SaveProgressModal.vue";
+// import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue";
+// import MedicalFollowUp from "@/apps/ANC/components/symptomsFollowUp/MedicalFollowUp.vue";
+// import PersistentBehaviour from "@/apps/ANC/components/symptomsFollowUp/PersistentBehaviour.vue";
+// import PersistentSymptoms from "@/apps/ANC/components/symptomsFollowUp/PersistentSymptoms.vue";
+// import CurrentPhysiologicalSymptoms from "@/apps/ANC/components/symptomsFollowUp/CurrentPhysiologicalSymptoms.vue";
+// import Ipv from "@/apps/ANC/components/symptomsFollowUp/Ipv.vue";
+// import FatalMovement from "@/apps/ANC/components/symptomsFollowUp/FatalMovement.vue";
+// import BehaviourCounselling from "@/apps/ANC/components/counselling/BehaviourCounselling.vue";
+// import PhysiologicalCounseling from "@/apps/ANC/components/counselling/PhysiologicalCounseling.vue";
+// import DietCounselling from "@/apps/ANC/components/counselling/DietCounselling.vue";
+// import Referral from "@/apps/ANC/components/referral/Referral.vue";
+// import AncEnd from "@/apps/ANC/components/ancEnd/AncEnd.vue";
+import {createModal} from "../../../utils/Alerts";
+import {icons} from "../../../utils/svg";
 
 export default defineComponent({
     name: "Home",
@@ -154,55 +147,9 @@ export default defineComponent({
         IonAccordionGroup,
         IonItem,
         IonLabel,
-        Vitals,
-        PresentingComplaints,
-        ClinicalAssessment,
-        Diagnosis,
-        Complications,
-        ConfirmDiagnosis,
-        Outcome,
-        Investigations,
-        TreatmentPlan,
-        NextAppointment,
+       
         IonModal,
-        Medications,
-        WomanBehaviour,
-        MedicalHistory,
-        DangerSigns,
-        ReasonForVisit,
-        ConfirmPregnancy,
-        SpecificHealthConcerns,
-        AncVitals,
-        FetalPresentation,
-        FetalAssessment,
-        MaternalExam,
-        PresentingSigns,
-        CurrentPregnancies,
-        PastObstreticHistory,
-        UltrasoundScan,
-        UrineTest,
-        TB,
-        MedicalFollowUp,
-        PersistentBehaviour,
-        PersistentSymptoms,
-        CurrentPhysiologicalSymptoms,
-        Ipv,
-        FatalMovement,
-        BehaviourCounselling,
-        PhysiologicalCounseling,
-        DietCounselling,
-        Referral,
-        AncEnd,
-        DiagnosisTreatment,
-        MedicationDispensed,
-        DiagnosisCounselling,
-        Immunization,
-        IntimatePartner,
-        Deworming,
-        OPDVitals,
-        OPDDiagnosis,
-        OPDTreatmentPlan,
-        OPDOutcome,
+      
     },
     data() {
         return {
@@ -225,6 +172,7 @@ export default defineComponent({
     setup() {
         return { chevronBackOutline, checkmark };
     },
+
     methods: {
         accordionGroupChange(ev: AccordionGroupCustomEvent) {
             this.wizardData.forEach((item: any) => {
@@ -242,6 +190,7 @@ export default defineComponent({
             createModal(SaveProgressModal);
         },
     },
+
 });
 </script>
 

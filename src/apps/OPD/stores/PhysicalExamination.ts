@@ -1,7 +1,5 @@
-import { defineStore } from "pinia";
-import { icons } from "@/utils/svg";
-import { radio } from "ionicons/icons";
-import { size } from "lodash";
+import {defineStore} from "pinia";
+import {icons} from "@/utils/svg";
 
 export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
     state: () => ({
@@ -34,7 +32,8 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
             },
             {
                 selectdData: [],
-                classDash: "",
+                displayNone:true,
+                classDash: "dashed_bottom_border",
                 radioBtnContent: {
                     header: {
                         title: 'Reason why physical examination not done?',

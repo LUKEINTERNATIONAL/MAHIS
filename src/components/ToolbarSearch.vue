@@ -34,35 +34,28 @@
 
 <script lang="ts">
 import {
-    IonContent,
-    IonHeader,
-    IonMenuButton,
-    IonPage,
-    IonTitle,
-    IonIcon,
-    IonToolbar,
-    IonSearchbar,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardSubtitle,
-    IonCardTitle,
-    IonPopover,
-    popoverController,
-    IonRow,
-    IonCol,
+  IonCol,
+  IonContent,
+  IonHeader,
+  IonIcon,
+  IonMenuButton,
+  IonPage,
+  IonPopover,
+  IonRow,
+  IonSearchbar,
+  IonTitle,
+  IonToolbar,
 } from "@ionic/vue";
-import { defineComponent } from "vue";
-import { PatientService } from "@/services/patient_service";
-import { checkmark, add, search } from "ionicons/icons";
-import { useDemographicsStore } from "@/stores/DemographicStore";
-import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
-import { useVitalsStore } from "@/stores/VitalsStore";
+import {defineComponent} from "vue";
+import {PatientService} from "@/services/patient_service";
+import {add, checkmark} from "ionicons/icons";
+import {useDemographicsStore} from "@/stores/DemographicStore";
+import {useGlobalPropertyStore} from "@/stores/GlobalPropertyStore";
 import DynButton from "@/components/DynamicButton.vue";
-import { createModal, toastWarning } from "@/utils/Alerts";
+import {createModal} from "@/utils/Alerts";
 import CheckPatientNationalID from "@/components/CheckPatientNationalID.vue";
-import { resetPatientData } from "@/services/reset_data";
-import { mapState } from "pinia";
+import {resetPatientData} from "@/services/reset_data";
+import {mapState} from "pinia";
 import Validation from "@/validations/StandardValidations";
 
 export default defineComponent({
@@ -120,7 +113,6 @@ export default defineComponent({
         },
         async searchByName(searchText: any) {
             const splittedArray = searchText.split(" ");
-            console.log(this.patients);
             if (Validation.isName(splittedArray[0]) == null) {
                 const payload = {
                     given_name: splittedArray[0],

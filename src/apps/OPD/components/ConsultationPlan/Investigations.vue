@@ -34,33 +34,24 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, IonInput, IonPopover } from "@ionic/vue";
-import { defineComponent, ref } from "vue";
-import { build, checkmark, pulseOutline } from "ionicons/icons";
-import { icons } from "@/utils/svg";
-import { OrderService } from "@/services/order_service";
+import {IonContent, IonHeader, IonInput, IonItem, IonList, IonMenu, IonPopover, IonTitle, IonToolbar} from "@ionic/vue";
+import {defineComponent} from "vue";
+import {checkmark, pulseOutline} from "ionicons/icons";
+import {icons} from "@/utils/svg";
+import {OrderService} from "@/services/order_service";
 import DashBox from "@/components/DashBox.vue";
 import SelectionPopover from "@/components/SelectionPopover.vue";
 import BasicInputField from "@/components/BasicInputField.vue";
-import { useInvestigationStore } from "@/stores/InvestigationStore";
-import { mapState } from "pinia";
-import { toastWarning, popoverConfirmation } from "@/utils/Alerts";
+import {useInvestigationStore} from "@/stores/InvestigationStore";
+import {mapState} from "pinia";
+import {popoverConfirmation} from "@/utils/Alerts";
 import BasicForm from "@/components/BasicForm.vue";
 import List from "@/components/List.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import labOrderResults from "@/apps/NCD/components/ConsultationPlan/lab/labOrderResults.vue";
-import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigations.vue";
-import { LabOrder } from "@/apps/NCD/services/lab_order";
-import { useDemographicsStore } from "@/stores/DemographicStore";
-import {
-    modifyCheckboxInputField,
-    getCheckboxSelectedValue,
-    getRadioSelectedValue,
-    getFieldValue,
-    modifyRadioValue,
-    modifyFieldValue,
-} from "@/services/data_helpers";
-import { ConceptService } from "@/services/concept_service";
+import {LabOrder} from "@/apps/NCD/services/lab_order";
+import {useDemographicsStore} from "@/stores/DemographicStore";
+import {ConceptService} from "@/services/concept_service";
 
 export default defineComponent({
     name: "Menu",
@@ -201,13 +192,14 @@ export default defineComponent({
         },
         async saveTest() {
             const investigationInstance = new LabOrder();
+            console.log(this.inputFields[1].value);
             await investigationInstance.postActivities(this.demographics.patient_id, [
                 {
                     concept_id: this.test[0].concept_id,
                     name: this.inputFields[0].value,
                     specimen: this.inputFields[1].value,
                     reason: "Routine",
-                    specimenConcept: await ConceptService.getConceptID(this.inputFields[1].value),
+                    specimenConcept: await ConceptService.getConceptID(this.inputFields[1].value, true),
                 },
             ]);
             this.orders = await OrderService.getOrders(this.demographics.patient_id);

@@ -29,24 +29,18 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue";
-import { defineComponent } from "vue";
-import { checkmark, pulseOutline } from "ionicons/icons";
-import { ref } from "vue";
-import { icons } from "@/utils/svg";
+import {IonContent, IonHeader, IonItem, IonList, IonMenu, IonTitle, IonToolbar, modalController} from "@ionic/vue";
+import {defineComponent} from "vue";
+import {checkmark, pulseOutline} from "ionicons/icons";
 import ApexChart from "vue3-apexcharts";
 import List from "@/components/List.vue";
-import { ObservationService } from "@/services/observation_service";
-import { useDemographicsStore } from "@/stores/DemographicStore";
-import { mapState } from "pinia";
-import HisDate from "@/utils/Date";
-import { iconGraph, iconList } from "@/utils/SvgDynamicColor";
-import { OrderService } from "@/services/order_service";
+import {useDemographicsStore} from "@/stores/DemographicStore";
+import {mapState} from "pinia";
+import {iconGraph, iconList} from "@/utils/SvgDynamicColor";
 import DynamicButton from "@/components/DynamicButton.vue";
-import table from "@/components/DataViews/tables/ReportDataTable";
 import DashBox from "@/components/DashBox.vue";
-import { PatientLabService } from "@/services/lab/patient_lab_service";
-import { createModal } from "@/utils/Alerts";
+import {PatientLabService} from "@/services/lab/patient_lab_service";
+import {createModal} from "@/utils/Alerts";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
 
 export default defineComponent({
@@ -172,6 +166,7 @@ export default defineComponent({
 
             return data.flatMap((item: any) => {
                 return item.tests.flatMap((test: any) => {
+                    console.log("🚀 ~ returnitem.tests.flatMap ~ test:", test);
                     const result = test?.result != null ? test?.result[0]?.value_modifier + test?.result[0]?.value : null;
 
                     if ((type === "result" && result !== null) || (type === "order" && result === null)) {
@@ -183,10 +178,6 @@ export default defineComponent({
                             class: "",
                             id: item.order_id,
                             name: test.name,
-                            display:
-                                type == "order"
-                                    ? [HisDate.toStandardHisFormat(item.order_date), item.accession_number, test.name, item.specimen.name]
-                                    : [HisDate.toStandardHisFormat(item.order_date), item.accession_number, test.name, item.specimen.name, result],
                         };
 
                         if (isMore || count < 2) {

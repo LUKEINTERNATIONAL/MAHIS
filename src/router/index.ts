@@ -1,10 +1,10 @@
-import { createRouter, createWebHistory } from "@ionic/vue-router";
-import { RouteRecordRaw } from "vue-router";
+import {createRouter, createWebHistory} from "@ionic/vue-router";
+import {RouteRecordRaw} from "vue-router";
 import HomePage from "../views/HomePage.vue";
 import Login from "../views/Login.vue";
 import PatientProfile from "../views/PatientProfile.vue";
 import PatientRegistration from "@/views/Registration.vue";
-import { alertController, loadingController, modalController, toastController } from "@ionic/vue";
+import {alertController, loadingController, modalController, toastController} from "@ionic/vue";
 
 import NCD from "@/apps/NCD/config/routes";
 import OPD from "@/apps/OPD/config/routes";
@@ -43,6 +43,7 @@ const routes: Array<RouteRecordRaw> = [
     ...ANC,
     ...LABOUR,
     ...PNC,
+    ...OPD,
 ];
 
 const router = createRouter({

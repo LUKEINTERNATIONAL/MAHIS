@@ -1,8 +1,7 @@
 <template>
     <ion-item
         class="ionLbltp" v-for="(item, index) in localMedicalDrugsList" :key="index"
-        @mousemove="highlightItem(index)" @mouseout="undoHighlightItem(index)"
-    >
+        @mousemove="highlightItem(index)" @mouseout="undoHighlightItem(index)">
         <ion-col class="col-st1" :class="highLightBnd(item)">
             <ion-label :id="asignLblID(index)" class="truncate-text" style="color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.drugName }}</ion-label>
         </ion-col>
@@ -21,10 +20,11 @@
 </template>
 
 <script lang="ts">
-import { IonItem, IonCol, IonLabel } from '@ionic/vue'
-import { defineComponent } from 'vue'
-import { createModal,popoverConfirmation,alertConfirmation } from '@/utils/Alerts'
-import { icons } from '@/utils/svg';
+import {IonCol, IonItem, IonLabel} from '@ionic/vue'
+import {defineComponent} from 'vue'
+import {popoverConfirmation} from '@/utils/Alerts'
+import {icons} from '@/utils/svg';
+
 export default defineComponent({
     created() {
        // this.$emit('onFooterInstance', this)
