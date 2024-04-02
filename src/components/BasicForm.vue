@@ -1,5 +1,5 @@
 <template>
-    <ion-row v-for="(item, index) in contentData" :key="index" :class="contentData[index].classDash" style="width: 100%">
+    <ion-row v-for="(item, index) in contentData" :key="index" :class="contentData[index].classDash" style="width: 100%" v-show="!contentData[index].displayNone">
         <ion-col class="item_header_col" v-if="item['sectionHeader']">
             <span class="item_header" :style="'font-weight:' + item.sectionHeaderFontWeight">{{ item["sectionHeader"] }}</span>
         </ion-col>
