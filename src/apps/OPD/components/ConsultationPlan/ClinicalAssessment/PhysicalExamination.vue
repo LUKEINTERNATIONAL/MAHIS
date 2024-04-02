@@ -25,9 +25,9 @@ import {
   IonRadio,
   IonRadioGroup,
 } from '@ionic/vue';
-import BasicForm from '../../../../components/BasicForm.vue';
-import { icons } from '../../../../utils/svg';
-import BasicInputField from '../../../../components/BasicInputField.vue';
+import BasicForm from "@/components/BasicForm.vue";
+import { icons} from "@/utils/svg";
+import BasicInputField from "@/components/BasicInputField.vue";
 import { mapState } from 'pinia';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import {
@@ -36,7 +36,8 @@ import {
   getFieldValue, getRadioSelectedValue, modifyCheckboxHeader, modifyCheckboxValue, modifyFieldValue, modifyRadioValue,
 } from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
-import {usePhysicalExaminationStore} from "@/stores/PhysicalExam";
+import {usePhysicalExaminationStore} from "@/apps/OPD/stores/PhysicalExamination";
+
 export default defineComponent({
   name: "immidiatePostnatalChecksForChild",
   components:{
