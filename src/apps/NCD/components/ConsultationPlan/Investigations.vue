@@ -1,6 +1,6 @@
 <template>
     <ion-accordion-group ref="accordionGroup" class="previousView">
-        <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+        <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
             <ion-item slot="header" color="light">
                 <ion-label class="previousLabel">Lab Investigations</ion-label>
             </ion-item>
@@ -32,7 +32,7 @@
         </ion-accordion>
     </ion-accordion-group>
     <ion-accordion-group ref="accordionGroup" class="previousView">
-        <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+        <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
             <ion-item slot="header" color="light">
                 <ion-label class="previousLabel">Radiology Investigation</ion-label>
             </ion-item>
@@ -40,7 +40,7 @@
         </ion-accordion>
     </ion-accordion-group>
     <ion-accordion-group ref="accordionGroup" class="previousView">
-        <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+        <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
             <ion-item slot="header" color="light">
                 <ion-label class="previousLabel">Other Investigation</ion-label>
             </ion-item>
@@ -68,6 +68,7 @@ import labOrderResults from "@/apps/NCD/components/ConsultationPlan/lab/labOrder
 import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigations.vue";
 import { LabOrder } from "@/apps/NCD/services/lab_order";
 import { useDemographicsStore } from "@/stores/DemographicStore";
+
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -206,7 +207,7 @@ export default defineComponent({
         },
         async addNewRow() {
             if (await this.validateRowData()) {
-                this.saveTest();
+                await this.saveTest();
                 this.investigations[0].data.rowData[0].colData[0].value = "";
                 this.investigations[0].data.rowData[0].colData[1].value = "";
                 this.search_item = false;
@@ -223,23 +224,13 @@ export default defineComponent({
                     name: this.inputFields[0].value,
                     specimen: this.inputFields[1].value,
                     reason: "Routine",
-                    specimenConcept: await ConceptService.getConceptID(this.inputFields[1].value),
+                    specimenConcept: await ConceptService.getConceptID(this.inputFields[1].value, true),
                 },
             ]);
+            console.log(this.inputFields[1].value);
             this.orders = await OrderService.getOrders(this.demographics.patient_id);
         },
-        buildResults() {
-            const modifier = this.inputFields[1].value.charAt(0);
-            const result = parseInt(this.inputFields[1].value.substring(1));
-            const measures = {
-                indicator: {
-                    concept_id: 679,
-                },
-                value: result,
-                value_modifier: modifier,
-                value_type: "numeric",
-            };
-        },
+
         async handleInputData(col: any) {
             if (col.inputHeader == "Test") {
                 this.popoverOpen = true;

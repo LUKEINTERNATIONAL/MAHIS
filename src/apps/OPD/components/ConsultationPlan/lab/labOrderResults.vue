@@ -172,6 +172,7 @@ export default defineComponent({
 
             return data.flatMap((item: any) => {
                 return item.tests.flatMap((test: any) => {
+                    console.log("🚀 ~ returnitem.tests.flatMap ~ test:", test);
                     const result = test?.result != null ? test?.result[0]?.value_modifier + test?.result[0]?.value : null;
 
                     if ((type === "result" && result !== null) || (type === "order" && result === null)) {
@@ -183,10 +184,6 @@ export default defineComponent({
                             class: "",
                             id: item.order_id,
                             name: test.name,
-                            display:
-                                type == "order"
-                                    ? [HisDate.toStandardHisFormat(item.order_date), item.accession_number, test.name, item.specimen.name]
-                                    : [HisDate.toStandardHisFormat(item.order_date), item.accession_number, test.name, item.specimen.name, result],
                         };
 
                         if (isMore || count < 2) {
