@@ -254,23 +254,32 @@ export default defineComponent({
         },
         getFormatedData(data: any) {
             return data.map((item: any) => {
-                return item?.data;
+                return item?.data[0] || item?.data;
             });
         },
-        saveData() {
+        async saveData() {
             if (this.OPDdiagnosis[0].selectedData.length > 0) {
-                this.saveDiagnosis();
+                await this.saveDiagnosis();
             }
-            this.saveTreatmentPlan();
-            this.saveOutComeStatus();
+            await this.saveTreatmentPlan();
+            await this.saveOutComeStatus();
+            await this.saveWomenStatus();
+            await this.savePresentingComplaints();
             this.$router.push("patientProfile");
-            this.saveWomenStatus();
-            // this.savePresentingComplaints();
         },
-        // async savePresentingComplaints() {
-        //     this.presentingComplaints[0].selectedData;
-        //     console.log("🚀 ~ savePresentingComplaints ~  this.presentingComplaints[0].selectedData:", this.presentingComplaints[0].selectedData);
-        // },
+        async savePresentingComplaints() {
+            if (this.presentingComplaints[0].selectedData.length > 0) {
+                const userID: any = Service.getUserID();
+                const PatientComplaints = new PatientComplaintsService(this.demographics.patient_id, userID);
+                const encounter = await PatientComplaints.createEncounter();
+                if (!encounter) return toastWarning("Unable to create patient complaints encounter");
+                const patientStatus = await PatientComplaints.saveObservationList(this.getFormatedData(this.presentingComplaints[0].selectedData));
+                if (!patientStatus) return toastWarning("Unable to create patient complaints  !");
+                toastSuccess("Patient complaints has been created");
+            }
+            this.presentingComplaints[0].selectedData;
+            console.log("🚀 ~ savePresentingComplaints ~  this.presentingComplaints[0].selectedData:", this.presentingComplaints[0].selectedData);
+        },
         async saveWomenStatus() {
             const womenStatus = await formatRadioButtonData(this.pregnancy);
             if (womenStatus.length > 0) {

@@ -249,7 +249,7 @@ export default defineComponent({
                 await registration.registerPatient(this.personInformation[0].selectedData, []);
                 const patientID = registration.getPersonID();
                 this.createNationID(patientID);
-                if (Object.keys(this.guardianInformation[0].selectedData).length === 0) {
+                if (Object.keys(this.guardianInformation[0].selectedData).length > 0) {
                     if (await this.validations(this.guardianInformation, ["guardianFirstname", "guardianLastname"])) {
                         this.createGuardian(patientID);
                     }
