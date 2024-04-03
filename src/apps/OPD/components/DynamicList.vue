@@ -223,9 +223,8 @@ export default defineComponent({
     }
 })
 </script>
-<style>
+<style scoped>
 .input_item {
-    width: 150px;
     height: 50px;
     margin-top: 5px;
 }

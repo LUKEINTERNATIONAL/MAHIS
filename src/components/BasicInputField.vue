@@ -14,10 +14,15 @@
             :disabled="disabled"
             class="custom"
         >
+            <ion-label v-if="InnerActionBtnPropeties.show" style="display: flex" slot="end">
+                <ion-button slot="end" @click="handleInnerActionBtnPropetiesFn">{{ InnerActionBtnPropeties.name }}</ion-button>
+            </ion-label>
+
             <ion-label style="display: flex" slot="start">
                 <ion-icon v-if="icon" :icon="icon" aria-hidden="true"></ion-icon>
                 <span v-if="leftText" class="left-text"> {{ leftText }}</span>
             </ion-label>
+
             <ion-label v-if="unit || iconRight" slot="end" style="border-left: 1px solid #e6e6e6; padding-left: 10px">
                 <ion-icon v-if="iconRight" :icon="iconRight" aria-hidden="true"></ion-icon>
                 <span v-if="unit">{{ unit }}</span>
@@ -133,6 +138,12 @@ export default defineComponent({
             type: Boolean,
             default: false,
         },
+        InnerActionBtnPropeties: {
+            default: {
+                name: "provide name",
+                show: false,
+            },
+        },
     },
     methods: {
         handleClick(event: any) {
@@ -155,6 +166,9 @@ export default defineComponent({
             if (this.popOverData.filterData)
                 this.filteredData = this.popOverData.data.filter((item: any) => item.name.toLowerCase().includes(event.target.value.toLowerCase()));
             else this.filteredData = this.popOverData.data;
+        },
+        handleInnerActionBtnPropetiesFn(event: any) {
+            this.$emit("update:InnerActionBtnPropetiesAction", event);
         },
     },
 });

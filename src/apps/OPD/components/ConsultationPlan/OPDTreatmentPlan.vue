@@ -110,6 +110,18 @@
                     </ion-popover>
                 </ion-col>
                 <ion-col>
+                <ListPicker style="margin-top: -2%;"
+                    :multiSelection="multi_Selection"
+                    :uniqueId="uniqueId"
+                    :name_of_list="name_of_list"
+                    :choose_place_holder="list_place_holder"
+                    :items_-list="route_list"
+                    :show_label="show_list_label"
+                    @item-list-up-dated="routeListUpdated"
+                    @item-list-filtered="routeListFiltred"
+                />
+                </ion-col>
+                <ion-col>
                     <ion-item class="input_item">
                         <ion-input placeholder="Dose" v-model="dose" fill="outline"></ion-input>
                         <ion-label><span class="selectedPatient"></span></ion-label>
@@ -354,6 +366,7 @@ import { PreviousTreatment } from "@/apps/NCD/services/treatment";
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { useAllegyStore} from "@/apps/OPD/stores/AllergyStore"
 import NonPharmacologicalIntervention from "@/apps/OPD/components/ConsultationPlan/NonPharmacologicalIntervention.vue"
+import ListPicker from "@/apps/OPD/components/ConsultationPlan/ListPicker.vue"
 
 const iconsContent = icons;
 const drug_frequencies = DRUG_FREQUENCIES;
@@ -403,6 +416,33 @@ const showMoreAllergyMsg = ref("Show more allergies");
 const FirstPreviousAllegies = ref();
 const RestOfPreviousAllegies = ref();
 const currentDrugOb = ref()
+
+const multi_Selection = false as any
+const uniqueId = "45" as any
+const name_of_list = ref("List" as any)
+const list_place_holder = ref("Please select method of prescribing medication" as any)
+const route_list = ref([
+    { name: "Oral" },
+    { name: "Intravenous (IV)" },
+    { name: "Intramuscular (IM)" },
+    { name: "Intradermal" },
+    { name: "Rectally" },
+    { name: "Sublingual" },
+    { name: "Vaginally" },
+    { name: "Buccal" },
+    { name: "Subcutaneous" },
+    { name: "Intraosseous" },
+    { name: "Other"}
+] as any)
+const show_list_label = false as any
+
+function routeListUpdated(data: any) {
+
+}
+
+function routeListFiltred(data: any) {
+
+}
 
 onMounted(async () => {
     const previousTreatment = new PreviousTreatment();
@@ -716,9 +756,8 @@ function removeItemAtIndex(index: any) {
 }
 
 function validateNotes(ev: any) {
-    let value = ev.target.value;
-    const textArry = [];
-    refSetNonPharmalogicalTherapyAndOtherNotes(value);
+    let value = ev.target.value
+    refSetNonPharmalogicalTherapyAndOtherNotes(value)
 }
 
 function saveStateValuesState() {
