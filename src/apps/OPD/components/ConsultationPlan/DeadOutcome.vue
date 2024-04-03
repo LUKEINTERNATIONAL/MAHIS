@@ -1,23 +1,26 @@
 <template>
         <ListPicker
-            :multiSelection="multi_Selection"
-            :uniqueId="id_1"
-            :name_of_list="name"
-            :choose_place_holder="name"
-            :items_-list="items_List"
-            @item-list-up-dated="listUpdated"
-            @item-list-filtered="iweFn"
+            :multiSelection="list_picker_prperties[0].multi_Selection"
+            :show_label="list_picker_prperties[0].show_list_label"
+            :uniqueId="list_picker_prperties[0].unqueId"
+            :name_of_list="list_picker_prperties[0].name_of_list"
+            :choose_place_holder="list_picker_prperties[0].placeHolder"
+            :items_-list="list_picker_prperties[0].items"
+            @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
+            @item-list-filtered="list_picker_prperties[0].listFilteredFN"
         />
 
         <ListPicker
-            :multiSelection="multi_Selection2"
-            :uniqueId="id_2"
-            :name_of_list="name"
-            :choose_place_holder="name"
-            :items_-list="items_List2"
-            @item-list-up-dated="listUpdated2"
+            :multiSelection="list_picker_prperties[1].multi_Selection"
+            :show_label="list_picker_prperties[1].show_list_label"
+            :uniqueId="list_picker_prperties[1].unqueId"
+            :name_of_list="list_picker_prperties[1].name_of_list"
+            :choose_place_holder="list_picker_prperties[1].placeHolder"
+            :items_-list="list_picker_prperties[1].items"
+            @item-list-up-dated="list_picker_prperties[1].listUpdatedFN"
+            @item-list-filtered="list_picker_prperties[1].listFilteredFN"
         />
-        
+
         <ion-row>
             <TimePicker
                 :place_holder="time_properties[0].placeHolder"
@@ -83,39 +86,6 @@ import DatePicker from "@/apps/OPD/components/ConsultationPlan/DatePicker.vue"
 import Note from "@/apps/OPD/components/ConsultationPlan/Note.vue"
 import ListPicker from "@/apps/OPD/components/ConsultationPlan/ListPicker.vue"
 
-const name = "nnnnnn" as any
-const multi_Selection = true as any
-const multi_Selection2 = false as any
-const id_1 = "1" as any
-const id_2 = "2" as any
-const  items_List = ref([
-        {"name": "Toyota Camry", "selected": true},
-        {"name": "Honda Civic", "selected": false},
-        {"name": "Ford Mustang", "selected": true},
-        {"name": "Chevrolet Corvette", "selected": false},
-        {"name": "BMW 3 Series", "selected": true},
-        {"name": "Mercedes-Benz E-Class", "selected": false},
-        {"name": "Audi A4", "selected": true},
-        {"name": "Tesla Model S", "selected": false},
-        {"name": "Subaru Outback", "selected": true},
-        {"name": "Volkswagen Golf", "selected": false}
-    ] as any)
-
-const items_List2 = ref([
-    {"name": "New York", "selected": true},
-    {"name": "Los Angeles", "selected": false},
-    {"name": "Chicago", "selected": false},
-    {"name": "Houston", "selected": false},
-    {"name": "Phoenix", "selected": false},
-    {"name": "Philadelphia", "selected": false},
-    {"name": "San Antonio", "selected": false},
-    {"name": "San Diego", "selected": false},
-    {"name": "Dallas", "selected": false},
-    {"name": "San Jose", "selected": false}
-] as any);
-
-
-
 const time_properties = [
     {
         placeHolder: {default: 'Enter time of death if known'} as any,
@@ -180,6 +150,46 @@ const note_properties = [
     },
 ]
 
+const mannerOfDeath = ref([
+    { name: "Natural" },
+    { name: "Accident" },
+    { name: "Homicide" },
+    { name: "Suicide" },
+    { name: "Pending investigation" },
+    { name: "Could not be determined" },
+    { name: "Other - specify" }
+] as any)
+
+const causesOfDeath = ref([
+    { name: "Motor vehicle (passenger)" },
+    { name: "Motor vehicle (pedestrian)" },
+    { name: "Drowning" },
+    { name: "Other - specify" }
+] as any)
+
+const list_picker_prperties = [
+    {
+        multi_Selection: false as any,
+        show_list_label: true as any,
+        unqueId: 'qwerty' as any,
+        name_of_list: 'qwerty' as any,
+        placeHolder: 'qwerty' as any,
+        items: mannerOfDeath.value,
+        listUpdatedFN: listUpdated1,
+        listFilteredFN: ()=>{},
+    },
+    {
+        multi_Selection: false as any,
+        show_list_label: true as any,
+        unqueId: 'qwerty1' as any,
+        name_of_list: 'qwerty' as any,
+        placeHolder: 'qwerty' as any,
+        items: causesOfDeath.value,
+        listUpdatedFN: listUpdated2,
+        listFilteredFN: ()=>{},
+    },
+]
+
 function timeUpdate_fn1(data: any) {
     time_properties[0].dataValue.value = data
 }
@@ -223,14 +233,14 @@ function notesUpDated_fn5(data: any) {
     note_properties[4].dataValue.value = data
 }
 
-function listUpdated(data: any) {
+function listUpdated1(data: any) {
     console.log(data)
-    items_List.value = data
+    mannerOfDeath.value = data
 }
 
 function listUpdated2(data: any) {
     console.log(data)
-    items_List2.value = data
+    causesOfDeath.value = data
 }
 
 function iweFn(data: any) {
