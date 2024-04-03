@@ -170,10 +170,17 @@ export default defineComponent({
 
             const age= HisDate.calculateAge(this.demographics.birthdate,new Date());
             const value= getFieldValue(this.vitals,'Pulse', 'value')
+
+            let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate,new Date());
+            ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
             
             if(value == "")return
-
-            if(age>10 && !(value>=60 && value<=100)){
+                        
+           if(age<1 && (ageInMonth == 1) && !(value>=70 && value<=190)){ 
+            triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`)
+           }else if(age<1 && (ageInMonth >= 1 && ageInMonth <=11 ) && !(value>=80 && value<=160)){ 
+            triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`)
+           } else if(age>10 && !(value>=60 && value<=100)){
                 triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`)
             }else if((age>=1 && age<=2) && !(value>=80 && value<=130)){
                 triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`)
@@ -191,6 +198,12 @@ export default defineComponent({
            
         },
         respiratoryValidate(){
+
+            
+              let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate,new Date());
+                console.log({ageInMonth})
+
+
             const triggerError = (errorMessage:string)=>{
             modifyFieldValue(this.vitals,'RespiratoryRate','alertsError',true)
             modifyFieldValue(this.vitals,'RespiratoryRate','alertsErrorMassage',errorMessage)
@@ -201,12 +214,27 @@ export default defineComponent({
             modifyFieldValue(this.vitals,'RespiratoryRate','alertsErrorMassage',"")
             }
 
+
+
             const age= HisDate.calculateAge(this.demographics.birthdate,new Date());
-            const value= getFieldValue(this.vitals,'RespiratoryRate', 'value')
+            const value= getFieldValue(this.vitals,'RespiratoryRate','value')
 
-            if(value == "")return
+                 ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
+                console.log({ageInMonth})
 
-           if((age>=1 && age<=3) && !(value>=20 && value<=30)){
+                console.log({age,value,ageInMonth})
+
+           if(value == "")return
+
+
+
+
+           if(age<1 && (ageInMonth >= 1 && ageInMonth <=5 ) && !(value>=25 && value<=40)){ 
+            triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
+           }else if(age<1 && (ageInMonth >= 6 && ageInMonth <=12 ) && !(value>=20 && value<=30)){ 
+            triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
+           }
+           else if((age>=1 && age<=3) && !(value>=20 && value<=30)){
                 triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
             }else if((age>=3 && age<=5) && !(value>=20 && value<=30)){
                 triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
@@ -236,11 +264,16 @@ export default defineComponent({
             }
 
             const age= HisDate.calculateAge(this.demographics.birthdate,new Date());
-            const value= getFieldValue(this.vitals,'Systolic', 'value')
+            const value= getFieldValue(this.vitals,'Systolic', 'value');
+            let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate,new Date());
+            ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
 
             if(value == "")return
-
-           if((age>=1 && age<=4) && !(value>=80 && value<=110)){
+           
+           if(age<1 && (ageInMonth >= 1 && ageInMonth <=12 ) && !(value>=75 && value<=100)){ 
+            triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
+           }
+           else if((age>=1 && age<=4) && !(value>=80 && value<=110)){
                 triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
             }else if((age>=3 && age<=5) && !(value>=80 && value<=110)){
                 triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
@@ -269,9 +302,15 @@ export default defineComponent({
             const age= HisDate.calculateAge(this.demographics.birthdate,new Date());
             const value= getFieldValue(this.vitals,'Diastolic', 'value')
 
-            if(value == "")return
+            let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate,new Date());
+            ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
 
-           if((age>=1 && age<=4) && !(value>=50 && value<=80)){
+            if(value == "")return
+           
+           if(age<1 && (ageInMonth >= 1 && ageInMonth <=12 ) && !(value>=50 && value<=70)){ 
+            triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`)
+           }
+           else if((age>=1 && age<=4) && !(value>=50 && value<=80)){
                 triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`)
             }else if((age>=3 && age<=5) && !(value>=50 && value<=80)){
                 triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`)
