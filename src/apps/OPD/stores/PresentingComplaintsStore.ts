@@ -76,5 +76,5 @@ export const usePresentingComplaintsStore = defineStore("PresentingComplaintsSto
             this.presentingComplaints = data;
         },
     },
-    // persist: true,
+    persist: true,
 });

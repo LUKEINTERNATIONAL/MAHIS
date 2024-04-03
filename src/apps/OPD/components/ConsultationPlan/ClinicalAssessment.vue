@@ -20,7 +20,7 @@
                 </div>
             </ion-accordion>
         </ion-accordion-group>
-        <ion-accordion-group ref="accordionGroup" class="previousView">
+        <ion-accordion-group ref="accordionGroup" class="previousView" v-if="checkPatient()">
             <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
                 <ion-item slot="header" color="light">
                     <ion-label class="previousLabel">Pregnancy and breastfeeding status</ion-label>
@@ -97,6 +97,7 @@ import {
     modifyFieldValue,
 } from "@/services/data_helpers";
 import { ConceptService } from "@/services/concept_service";
+import { PatientService } from "@/services/patient_service";
 
 export default defineComponent({
     name: "Menu",
@@ -176,6 +177,10 @@ export default defineComponent({
         this.labOrders = await OrderService.getTestTypes();
     },
     methods: {
+        checkPatient() {
+            const patient = new PatientService();
+            return patient.isChildBearing();
+        },
         updateInvestigationsStores() {
             const investigationsStore = useInvestigationStore();
             investigationsStore.setInvestigations(this.investigations);
