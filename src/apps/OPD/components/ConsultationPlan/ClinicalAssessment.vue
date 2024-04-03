@@ -1,7 +1,7 @@
 <template>
     <ion-row>
         <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
                 <ion-item slot="header" color="light">
                     <ion-label class="previousLabel">Level of consciousness</ion-label>
                 </ion-item>
@@ -11,7 +11,7 @@
             </ion-accordion>
         </ion-accordion-group>
         <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
                 <ion-item slot="header" color="light">
                     <ion-label class="previousLabel">Presenting complaints</ion-label>
                 </ion-item>
@@ -21,7 +21,7 @@
             </ion-accordion>
         </ion-accordion-group>
         <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
                 <ion-item slot="header" color="light">
                     <ion-label class="previousLabel">Pregnancy and breastfeeding status</ion-label>
                 </ion-item>
@@ -31,7 +31,7 @@
             </ion-accordion>
         </ion-accordion-group>
         <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
                 <ion-item slot="header" color="light">
                     <ion-label class="previousLabel">Past medical history</ion-label>
                 </ion-item>
@@ -41,7 +41,7 @@
             </ion-accordion>
         </ion-accordion-group>
         <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
                 <ion-item slot="header" color="light">
                     <ion-label class="previousLabel">Allergies</ion-label>
                 </ion-item>
@@ -51,7 +51,7 @@
             </ion-accordion>
         </ion-accordion-group>
         <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
                 <ion-item slot="header" color="light">
                     <ion-label class="previousLabel">Physical examination</ion-label>
                 </ion-item>
