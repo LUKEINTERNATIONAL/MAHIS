@@ -1,79 +1,121 @@
 <template>
-    <div class="modal_wrapper">
-        <ListPicker
-            :multiSelection="list_picker_prperties[0].multi_Selection"
-            :show_label="list_picker_prperties[0].show_list_label"
-            :uniqueId="list_picker_prperties[0].unqueId"
-            :name_of_list="list_picker_prperties[0].name_of_list"
-            :choose_place_holder="list_picker_prperties[0].placeHolder"
-            :items_-list="list_picker_prperties[0].items"
-            @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
-            @item-list-filtered="list_picker_prperties[0].listFilteredFN"
-        />
-    </div>
+        <ion-row class="checkbox_content md">
+            <ion-col>
+                <BasicInputField
+                    :placeholder="note_properties[0].placeHolder"
+                    :icon="locationOutline"
+                    :inputValue="note_properties[0].dataValue.value"
+                />
+            </ion-col>
+            <ion-col>
+                <DatePicker
+                    :place_holder="date_properties[0].placeHolder"
+                    @time-up-dated="date_properties[0].dataHandler"
+                />
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <TimePicker
+                    :place_holder="time_properties[0].placeHolder"
+                    @time-up-dated="time_properties[0].dataHandler"
+                />
+            </ion-col>
+            <ion-col></ion-col>
+        </ion-row>
 
-
-        <ListPicker
-            :multiSelection="list_picker_prperties[1].multi_Selection"
-            :show_label="list_picker_prperties[1].show_list_label"
-            :uniqueId="list_picker_prperties[1].unqueId"
-            :name_of_list="list_picker_prperties[1].name_of_list"
-            :choose_place_holder="list_picker_prperties[1].placeHolder"
-            :items_-list="list_picker_prperties[1].items"
-            @item-list-up-dated="list_picker_prperties[1].listUpdatedFN"
-            @item-list-filtered="list_picker_prperties[1].listFilteredFN"
-        />
+        <ion-row class="checkbox_content md">
+            <ion-col>
+                <BasicInputField
+                    :placeholder="note_properties[1].placeHolder"
+                    :icon="personCircleOutline"
+                    :inputValue="note_properties[1].dataValue.value"
+                />
+            </ion-col>
+            <ion-col>
+                <BasicInputField
+                    :placeholder="phone_number_place_holder"
+                    :icon="phonePortraitOutline"
+                    :inputValue="phone_number_value"
+                />
+            </ion-col>
+        </ion-row>
 
         <ion-row>
-            <TimePicker
-                :place_holder="time_properties[0].placeHolder"
-                @time-up-dated="time_properties[0].dataHandler"
-            />
-            <TimePicker
-                :place_holder="time_properties[1].placeHolder"
-                @time-up-dated="time_properties[1].dataHandler"
-            />
-            <TimePicker
-                :place_holder="time_properties[2].placeHolder"
-                @time-up-dated="time_properties[2].dataHandler"
-            />
-  
-            <DatePicker
-                :place_holder="date_properties[0].placeHolder"
-                @time-up-dated="date_properties[0].dataHandler"
-            />
-
-            <DatePicker
-                :place_holder="date_properties[1].placeHolder"
-                @time-up-dated="date_properties[1].dataHandler"
-            />
-        
-
-            <Note
-                :place_holder="note_properties[0].placeHolder"
-                @time-up-dated="note_properties[0].dataHandler"
-            />
-
-            <Note
-                :place_holder="note_properties[1].placeHolder"
-                @time-up-dated="note_properties[1].dataHandler"
-            />
-
-            <Note
-                :place_holder="note_properties[2].placeHolder"
-                @time-up-dated="note_properties[2].dataHandler"
-            />
-
-            <Note
-                :place_holder="note_properties[3].placeHolder"
-                @time-up-dated="note_properties[3].dataHandler"
-            />
-
-            <Note
-                :place_holder="note_properties[4].placeHolder"
-                @time-up-dated="note_properties[4].dataHandler"
-            />
+            <ion-col>
+                <DatePicker
+                    :place_holder="date_properties[1].placeHolder"
+                    @time-up-dated="date_properties[1].dataHandler"
+                />
+            </ion-col>
+            <ion-col>
+                <TimePicker
+                    :place_holder="time_properties[1].placeHolder"
+                    @time-up-dated="time_properties[1].dataHandler"
+                />
+            </ion-col>
         </ion-row>
+
+        <ion-row>
+            <ion-col>
+                <ListPicker
+                    :multiSelection="list_picker_prperties[0].multi_Selection"
+                    :show_label="list_picker_prperties[0].show_list_label"
+                    :uniqueId="list_picker_prperties[0].unqueId"
+                    :name_of_list="list_picker_prperties[0].name_of_list"
+                    :choose_place_holder="list_picker_prperties[0].placeHolder"
+                    :items_-list="list_picker_prperties[0].items"
+                    @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
+                    @item-list-filtered="list_picker_prperties[0].listFilteredFN"
+                />
+            </ion-col>
+
+            <ion-col>
+                <ListPicker
+                    :multiSelection="list_picker_prperties[1].multi_Selection"
+                    :show_label="list_picker_prperties[1].show_list_label"
+                    :uniqueId="list_picker_prperties[1].unqueId"
+                    :name_of_list="list_picker_prperties[1].name_of_list"
+                    :choose_place_holder="list_picker_prperties[1].placeHolder"
+                    :items_-list="list_picker_prperties[1].items"
+                    @item-list-up-dated="list_picker_prperties[1].listUpdatedFN"
+                    @item-list-filtered="list_picker_prperties[1].listFilteredFN"
+                />
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col>
+                <TimePicker
+                    :place_holder="time_properties[2].placeHolder"
+                    @time-up-dated="time_properties[2].dataHandler"
+                />
+            </ion-col>
+            
+            <ion-col>
+                <BasicInputField
+                    :placeholder="note_properties[2].placeHolder"
+                    :icon="personCircleOutline"
+                    :inputValue="note_properties[2].dataValue.value"
+                />
+            </ion-col>
+
+        </ion-row>
+        <ion-col>
+                <BasicInputField
+                    :placeholder="note_properties[3].placeHolder"
+                    :icon="medicalOutline"
+                    :inputValue="note_properties[3].dataValue.value"
+                />
+            </ion-col>
+
+            <ion-col>
+                <BasicInputField
+                    :placeholder="note_properties[4].placeHolder"
+                    :icon="pencilOutline"
+                    :inputValue="note_properties[4].dataValue.value"
+                />
+            </ion-col>
 
 </template>
 <script lang="ts">
@@ -83,11 +125,33 @@ export default defineComponent({
 });
 </script>
 <script setup lang="ts">
+import { IonRow, IonCol, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue";
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
 import TimePicker from "@/apps/OPD/components/ConsultationPlan/TimePicker.vue"
 import DatePicker from "@/apps/OPD/components/ConsultationPlan/DatePicker.vue"
 import Note from "@/apps/OPD/components/ConsultationPlan/Note.vue"
 import ListPicker from "@/apps/OPD/components/ConsultationPlan/ListPicker.vue"
+import BasicInputField from "@/components/BasicInputField.vue"
+import {
+    checkmark,
+    pulseOutline,
+    addOutline,
+    closeOutline,
+    checkmarkOutline,
+    filter,
+    chevronDownOutline,
+    chevronUpOutline,
+    codeSlashOutline,
+    phoneLandscape,
+    phonePortraitOutline,
+    locationOutline,
+    personCircleOutline,
+    medicalOutline,
+    pencilOutline
+} from "ionicons/icons";
+
+const phone_number_value = ref()
+const phone_number_place_holder = ref('gurdian phone number')
 
 const time_properties = [
     {
@@ -127,27 +191,27 @@ const date_properties = [
 
 const note_properties = [
     {
-        placeHolder: {default: 'Enter place of death'} as any,
+        placeHolder: 'Enter place of death',
         dataHandler: notesUpDated_fn1,
         dataValue: ref(),
     },
     {
-        placeHolder: {default: 'Enter name of guardian'} as any,
+        placeHolder: 'Enter name of guardian',
         dataHandler: notesUpDated_fn2,
         dataValue: ref(),
     },
     {
-        placeHolder: {default: 'Enter name of person confirming death'} as any,
+        placeHolder: 'Enter name of person confirming death',
         dataHandler: notesUpDated_fn3,
         dataValue: ref(),
     },
     {
-        placeHolder: {default: 'Enter position of the person confirming death'} as any,
+        placeHolder:'Enter position of the person confirming death',
         dataHandler: notesUpDated_fn4,
         dataValue: ref(),
     },
     {
-        placeHolder: {default: 'Enter medical council registration number of the person confirming death'} as any,
+        placeHolder: 'Enter medical council registration number of the person confirming death',
         dataHandler: notesUpDated_fn5,
         dataValue: ref(),
     },

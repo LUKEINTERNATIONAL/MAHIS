@@ -4,7 +4,7 @@
     <ion-textarea
         @ionInput="validateNotes"
         v-model="refNotes"
-        style="min-height: 120px"
+        style="min-height: 3px !important"
         class="inputTpln"
         :auto-grow="true"
         fill="outline"
