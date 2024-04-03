@@ -192,11 +192,15 @@ export default defineComponent({
                 name: this.inputFields[0].value,
                 id: this.presentingComplaintsListData[0].concept_id,
                 display: [this.inputFields[0].value, this.inputFields[1].value],
-                data: {
+                data: [{
                     concept_id: 6542, //primary presentingComplaints
                     value_coded: this.presentingComplaintsListData[0].concept_id,
                     obs_datetime: Service.getSessionDate(),
-                },
+                },{
+                    concept_id: 1294, //Duration of symptom in days
+                    value_numeric: this.presentingComplaintsListData[0].concept_id,
+                    obs_datetime: Service.getSessionDate(),
+                }],
             });
         },
         updatePresentingComplaintsListStores() {

@@ -1,6 +1,6 @@
 <template>
     <div class="modal_wrapper">
-        <basic-form :contentData="pregnancy"></basic-form>
+        <basic-form :contentData="pregnancy" @update:inputValue="handleInputData"></basic-form>
     </div>
 </template>
 
@@ -29,7 +29,7 @@ export default defineComponent({
     computed: {
         ...mapState(usePregnancyStore, ["pregnancy"]),
     },
-    methods: {},
+    methods: { handleInputData() {} },
 });
 </script>
 
