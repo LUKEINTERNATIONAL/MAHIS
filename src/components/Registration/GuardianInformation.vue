@@ -57,13 +57,6 @@ export default defineComponent({
   },
   computed: {
     ...mapState(useRegistrationStore, ["guardianInformation"]),
-    nationalId() {
-      return getFieldValue(
-        this.guardianInformation,
-        "guardianNationalID",
-        "value"
-      );
-    },
     guardianFirstname() {
       return getFieldValue(
         this.guardianInformation,
@@ -149,7 +142,11 @@ export default defineComponent({
         current_village: "",
         landmark: "",
         cell_phone_number: this.guardianPhoneNumber,
-        national_id: this.nationalId(),
+        national_id: getFieldValue(
+          this.guardianInformation,
+          "guardianNationalID",
+          "value"
+        ),
       };
     },
 
