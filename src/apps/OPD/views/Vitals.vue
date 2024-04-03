@@ -164,7 +164,7 @@ export default defineComponent({
             const age= HisDate.calculateAge(this.demographics.birthdate,new Date());
             const value= getFieldValue(this.vitals,'Pulse', 'value')
 
-            let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate,new Date());
+            let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
             ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
             
             if(value == "")return
@@ -193,7 +193,7 @@ export default defineComponent({
         respiratoryValidate(){
 
             
-              let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate,new Date());
+              let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
                 console.log({ageInMonth})
 
 
@@ -296,7 +296,7 @@ export default defineComponent({
             const value = getFieldValue(this.vitals, "Systolic", "value");
 
 
-            let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate,new Date());
+            let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
             ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
 
             if (value == "") return;
@@ -331,7 +331,7 @@ export default defineComponent({
             const age = HisDate.calculateAge(this.demographics.birthdate, new Date());
             const value = getFieldValue(this.vitals, "Diastolic", "value");
 
-            let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate,new Date());
+            let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
             ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
 
             if(value == "")return
