@@ -2,62 +2,113 @@ import { DrugPrescriptionService } from '@/services/drug_prescription_service';
 import { defineStore } from 'pinia'
 
 interface DispensationData {
-    storeDrugPrescriptions: any[]
-    undispensedPrescriptions: any[]
+    drugPrescriptions: any[]
     dispensedMedication: any[]
-    payload: any[]
+    payload: {} //{"dispensations":[{"drug_order_id":2399362,"date":"2024-03-27","quantity":"3"}],"program_id":14}
+    saveInitiated: Boolean
 }
 
 export const useDispensationStore = defineStore('dispensation', {
     state: (): DispensationData => ({
-        storeDrugPrescriptions: [],
-        undispensedPrescriptions: [],
+        drugPrescriptions: [],
         dispensedMedication: [],
-        payload: []
+        payload: {},
+        saveInitiated: false
     }),
     actions: {
-        setPreviousDrugPrescriptions(prescriptions: any[]) {
-            this.storeDrugPrescriptions = prescriptions;
+        isSaveInitiated(bool: boolean) {
+            this.saveInitiated = bool
         },
-        getPreviousDrugPrescriptions() {
-            return this.storeDrugPrescriptions;
-        },
-        addCheckboxBool(checked: boolean, index: any) {
-            this.storeDrugPrescriptions[index].isSelected = checked;
-        },
-        getUnprescribedMedications() {
-            const drugPrescriptions = this.storeDrugPrescriptions
-
-            drugPrescriptions.forEach(element => {
-                if (element.isSelected) {
-                    return
+        validateInputs() {
+            if (this.saveInitiated == false) {
+                return
+            }
+            let isThereAnError = false
+            this.drugPrescriptions.forEach(Element => {
+                if (Element.other.quantity == 0 && Element.reason == "") {
+                    Element.showValidation = true
+                    isThereAnError = true
                 } else {
-                    this.undispensedPrescriptions.push(element)
+                    Element.showValidation = false
                 }
             })
-            return this.undispensedPrescriptions
+            return isThereAnError
         },
-        setDispensedMedications() {
-            const drugPrescriptions = this.storeDrugPrescriptions
-
-            drugPrescriptions.forEach(element => {
-                if (element.isSelected) {
-                    this.dispensedMedication.push(element)
-                } else {
-                    return
-                }
+        initializeDispensedAmount() {
+            this.drugPrescriptions.forEach(Element => {
+                Element.other.quantity = 0
             })
-            
         },
-        setPayload() {
-            const payloadObject = {}
-            const dispensedDrugsArray = []
-            const drugObject = {}
+        initializeValidationsBoolean() {
+            this.drugPrescriptions.forEach(Element => {
+                Element.showValidation = false
+            })
+        },
+        initializeReasonParameter() {
+            this.drugPrescriptions.forEach(Element => {
+                Element.reason = ""
+            })
+        },
+        getValidation(index: number) {
+            return this.drugPrescriptions[index].showValidation
+        },
+        setReason(reason: string, index: number) {
+            this.drugPrescriptions[index].reason = reason
+        },
+        setDrugPrescriptions(prescriptions: any[]) {
+            this.drugPrescriptions = prescriptions
+        },
+        getDrugPrescriptions() {
+            return this.drugPrescriptions
+        },
+        updateCheckboxBool(selected: boolean, index: any) {
+            this.drugPrescriptions[index].isSelected = selected
+            if (!selected) {
+                this.drugPrescriptions[index].other.quantity = 0
+                this.drugPrescriptions[index].reason = ""
+            }
+        },
+        getCheckedBool(index: any) {
+            return this.drugPrescriptions[index].isSelected
+        },
+        getReason(index: number) {
+            return this.drugPrescriptions[index].reason
+        },
+        getDispensedMedications() {
+            return this.dispensedMedication;
+        },
+        addQuantity(quantity: number, index: number) {
+            this.drugPrescriptions[index].other.quantity = quantity
+        },
+        saveDispensedMedications() {
+            this.dispensedMedication = this.drugPrescriptions
+        },
+        setDispensedMedicationsPayload() {
+            //{"dispensations":[{"drug_order_id":2399362,"date":"2024-03-27","quantity":"3"}],"program_id":14}
+            const payloadObject = {
+                dispensations: [] as any[],
+                program_id: 14
+            }
+            const dispensedDrugsWithDetailsArray = [] as any[]
 
             this.dispensedMedication.forEach(Element => {
-                const drug_order_id = Element.other.order.order_id
-            
+                const dispensedDrugsDetailsObject = {
+                    drug_order_id: null,
+                    quantity: null,
+                    date: null
+                }
+
+                dispensedDrugsDetailsObject.drug_order_id = Element.other.order_id
+                dispensedDrugsDetailsObject.quantity = Element.other.quantity
+                dispensedDrugsDetailsObject.date = Element.prescription
+
+                dispensedDrugsWithDetailsArray.push(dispensedDrugsDetailsObject)
             })
+            payloadObject.dispensations = dispensedDrugsWithDetailsArray
+            this.payload = payloadObject
+        },
+        getDispensedMedicationsPayload() {
+            return this.payload
         }
     }
 })

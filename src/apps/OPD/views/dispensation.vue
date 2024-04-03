@@ -35,6 +35,9 @@ import {
     AccordionGroupCustomEvent,
 } from "@ionic/vue";
 
+import dispensedMedication from "@/apps/OPD/components/dispensedMedication.vue";
+import dispensationSummary from "@/apps/OPD/components/dispensationSummary.vue";
+
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/components/DemographicBar.vue";
@@ -59,8 +62,6 @@ import { Treatment } from "@/apps/NCD/services/treatment";
 import { isEmpty } from "lodash";
 import HisDate from "@/utils/Date";
 import { defineComponent } from "vue";
-import dispensedMedication from "@/apps/OPD/components/dispensedMedication.vue";
-import undispensedMedication from "@/apps/OPD/components/undispensedMedication.vue";
 import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
 
 export default defineComponent({
@@ -87,7 +88,8 @@ export default defineComponent({
         IonLabel,
         IonModal,
         Stepper,
-        dispensedMedication
+        dispensedMedication,
+        dispensationSummary
     },
     data() {
         return {
@@ -104,7 +106,7 @@ export default defineComponent({
                     last_step: "",
                 },
                 {
-                    title: "Undispensed Medications",
+                    title: "Dispensation Summary",
                     class: "common_step",
                     checked: "",
                     icon: false,
@@ -187,8 +189,6 @@ export default defineComponent({
                 {
                     title: "Dispense Medications",
                     componet: "dispensedMedication",
-                    prescribedMedsdata: this.prescribedList,
-                    unprescribedMedsdata: this.unprescribedList,
                     value: "1",
                 },
             ],
@@ -242,12 +242,14 @@ export default defineComponent({
           value: "1",
         },
         ...(this.showUndispensedMedication
-          ? [{ title: "Undispensed Medications", componet: "undispensedMedication", value: "2" }]
+          ? [{ title: "Dispensation Summary", componet: "dispensationSummary", value: "2" }]
           : [])]},
         markWizard() {
 
         },
-    
+        saveData() {
+            this.$router.push('/pharmacy');
+        },
     },
 });
 </script>

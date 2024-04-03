@@ -39,9 +39,10 @@
                     <ion-input
                         v-model="facilityWardName"
                         @ionInput="FindTxt"
+                        @mousedown="FindTxt"
                         fill="outline"
                         :placeholder="searchPlaceHolder"
-                        :disabled="disableInputs"
+                        :disabled="disableFacilityWardNameInput"
                     ></ion-input>
                     <!--  -->
                     <ion-label>
@@ -61,6 +62,7 @@
                     :dismiss-on-select="true"
                     style="top: 10px; left: -25px"
                     v-if="!show_error_msg_for_ref_facility_ward_name"
+                    :key="componentKey"
                 >
                     <ion-content color="light" class="ion-padding content-al">
                         <!-- <ion-row class="search_result" v-for="(item, index) in diagnosisData" :key="index" >
@@ -200,6 +202,7 @@ const showEmptyMsg = ref(true);
 const facilityWardName = ref("");
 const editIndex = ref(NaN);
 const disableInputs = ref(true);
+const disableFacilityWardNameInput = ref(true);
 const searchPlaceHolder = ref("");
 const fnToUse = ref();
 const refDataItem = ref();
@@ -209,6 +212,7 @@ const store = useDispositionStore();
 const dispositions = computed(() => store.dispositions);
 const NamesData = ref([] as any);
 const EditEvnt = ref(false);
+const componentKey = ref(0)
 const basicInputFieldProperties = [
     {
         // ### leave as is (this obj)
@@ -221,31 +225,34 @@ const basicInputFieldProperties = [
     },
     {
         name: "date",
-        placeholder: "Referral Date",
+        placeholder: "Date",
         icon: icons.calendar,
         keepContentsMounted: true,
         date: "" as string,
     },
     {
         name: "reason",
-        placeholder: "Referral Reason",
+        placeholder: "Reason",
         referralReason: "" as string,
     },
 ];
 
 const referralType = ref([
     {
-        name: "Admit",
+        name: "Admitted for short stay",
         selected: false,
     },
     {
-        name: "Internal",
+        name: "Referred out",
         selected: false,
     },
     {
-        name: "External",
-        selected: false,
+        name: "Discharged Home"
     },
+    {
+        name: "Dead",
+        selected: false,
+    }
 ]);
 
 const popoverProperties = ref({
@@ -267,7 +274,7 @@ watch(
         if (EditEvnt.value == true) {
             EditEvnt.value = false;
         } else {
-            checkRefType();
+            checkRefType()
         }
     }
 );
@@ -303,7 +310,7 @@ watch(
 watch(
     () => facilityWardName.value,
     async (newValue) => {
-        validateFacilityWardName();
+        validateFacilityWardName()
     }
 );
 
@@ -316,17 +323,23 @@ function checkForDispositions() {
 }
 
 function addReferral() {
-    showEmptyMsg.value = false;
-    showAddItemButton.value = false;
-    showAddReferralInfo.value = true;
+    showEmptyMsg.value = false
+    showAddItemButton.value = false
+    showAddReferralInfo.value = true
 }
 
 async function saveReferralInfo() {
     const are_fieldsValid = await validateInputs();
-    if (!are_fieldsValid) {
-        toastWarning("Please enter correct data values", 4000);
-        return;
+
+    if (dsischargedHomeExecption() == true) {
+
+    } else {
+        if (!are_fieldsValid) {
+            toastWarning("Please enter correct data values", 4000);
+            return;
+        }
     }
+
 
     showAddItemButton.value = !false;
     showAddReferralInfo.value = !true;
@@ -372,6 +385,7 @@ function editItem(index: any) {
     refReason.value = dispositions.value[index].reason;
     dispositions.value.splice(index, 1);
     addReferral();
+    checkRefType(false)
 }
 
 async function validateRefDate() {
@@ -424,12 +438,25 @@ async function findFacilityName(srch_text: string) {
     NamesData.value = await LocationService.getFacilities({ name: srch_text });
 }
 
-async function findWardName(srch_text: string) {
-    NamesData.value = await getFacilityWards(srch_text);
+function concatenateArrays<T>(...arrays: T[][]): T[] {
+    // Concatenate all arrays
+    return arrays.reduce((acc, arr) => acc.concat(arr), []);
 }
 
-async function findDepartMentName(srch_text: string) {
-    NamesData.value = await getSpecialistClinics();
+ function searchTxt(searchString: string, target: any) {
+    searchString = searchString ? searchString.toString() : "";
+    const hcea = target.filter((item: any) => 
+    item.name.toLowerCase().includes(searchString.toLowerCase())
+    )
+    return hcea
+} 
+
+async function findDepartMentNameAndfindWardName(srch_text: string) {
+    const temp_data1 = await getFacilityWards(srch_text)
+    let temp_data2 = await getSpecialistClinics()
+    temp_data2 = searchTxt(srch_text, temp_data2)
+    NamesData.value = concatenateArrays(temp_data1, temp_data2)
+    componentKey.value++;
 }
 
 function openPopover(e: any) {
@@ -449,7 +476,7 @@ function selectedFaciltyName(name: any, obj: any) {
 }
 
 function showOptions(event: Event) {
-    popoverProperties.value.title = "Referral Type";
+    popoverProperties.value.title = "Select Outcome";
     popoverProperties.value.keyboardClose = true;
     popoverProperties.value.popoverData = referralType.value;
     openPopoverForReferral(event);
@@ -484,31 +511,45 @@ function updateReason(event: any) {
     refReason.value = reason;
 }
 
-async function checkRefType() {
+function dsischargedHomeExecption() {
+    const tempRefType = refType.value
+    refType.value = tempRefType
+
+    if (refType.value == referralType.value[2].name) {
+        return true
+    } else return false
+}
+
+async function checkRefType(clear_inputs: boolean = true) {
     const tempRefType = refType.value;
-    clearInputs();
+    if (clear_inputs == true) {
+        clearInputs()
+    }
     refType.value = tempRefType;
     let fn;
     const ref_type = refType.value;
+
     if (ref_type == referralType.value[0].name) {
-        searchPlaceHolder.value = "find ward";
-        fn = findWardName as any;
-        refFacilityNameErrMsg.value = "please select a ward";
+        searchPlaceHolder.value = "find department or ward";
+        fn = findDepartMentNameAndfindWardName as any;
+        refFacilityNameErrMsg.value = "please select a department or ward";
     }
 
     if (ref_type == referralType.value[1].name) {
-        searchPlaceHolder.value = "find department";
-        fn = findDepartMentName as any;
-        refFacilityNameErrMsg.value = "please select a department";
-    }
-
-    if (ref_type == referralType.value[2].name) {
         searchPlaceHolder.value = "find facility name";
         fn = findFacilityName as any;
         refFacilityNameErrMsg.value = "please select a facility name";
     }
 
-    disableInputs.value = false;
+    if (ref_type == referralType.value[2].name) {
+        searchPlaceHolder.value = ""
+        disableInputs.value = false
+        disableFacilityWardNameInput.value = true
+        return
+    }
+
+    disableInputs.value = false
+    disableFacilityWardNameInput.value = false
     fnToUse.value = fn;
 }
 </script>
