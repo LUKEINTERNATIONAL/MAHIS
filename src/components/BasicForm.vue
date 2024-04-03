@@ -1,5 +1,15 @@
 <template>
-    <ion-row v-for="(item, index) in contentData" :key="index" :class="contentData[index].classDash" style="width: 100%" v-show="!contentData[index].displayNone">
+    <ion-row
+        v-for="(item, index) in contentData"
+        :key="index"
+        :class="contentData[index].classDash"
+        style="width: 100%"
+        v-show="
+            !contentData[index]?.radioBtnContent?.header?.displayNone &&
+            !contentData[index]?.checkboxBtnContent?.header?.displayNone &&
+            !contentData[index]?.data?.rowData[0]?.colData[0]?.displayNone
+        "
+    >
         <ion-col class="item_header_col" v-if="item['sectionHeader']">
             <span class="item_header" :style="'font-weight:' + item.sectionHeaderFontWeight">{{ item["sectionHeader"] }}</span>
         </ion-col>
