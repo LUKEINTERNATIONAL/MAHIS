@@ -141,8 +141,8 @@ function saveDispensations() {
     usedemographics_store
     const dispensation_srvc = new DispensationService(demographics.value.patient_id, Service.getUserID() as any)
     dispensation_srvc.saveDispensations((dispensationStore.getDispensedMedicationsPayload()).dispensations as any)
-    return dispensationStore.getDispensedMedicationsPayload()
-}
+    dispensationStore.toggleStepperData()
+    }
 </script>
 
 <style scoped>
