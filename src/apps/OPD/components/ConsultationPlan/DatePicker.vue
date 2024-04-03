@@ -7,7 +7,6 @@
         @update:InnerActionBtnPropetiesAction="InnerActionBtnPropeties.fn"
         @clicked:inputValue="openDate"
         :key="componentKey"
-       
     />
     <ion-popover
         :show-backdrop="false"
@@ -17,24 +16,19 @@
         side="top"
         @didDismiss="popoverProperties.isOpen = false"
     >
-        <ion-datetime
-            v-if="showPicker"
-            @ionChange="saveTheDate"
-            id="datetime" presentation="date"
-            :show-default-buttons="true"
-        />
+        <ion-datetime v-if="showPicker" @ionChange="saveTheDate" id="datetime" presentation="date" :show-default-buttons="true" />
     </ion-popover>
 </template>
 <script setup lang="ts">
-import { IonDatetime } from "@ionic/vue"
-import BasicInputField from "@/components/BasicInputField.vue"
-import DynamicButton from "@/components/DynamicButton.vue"
-import { today } from "ionicons/icons"
-import { ref } from "vue"
-import { icons } from "@/utils/svg"
+import { IonDatetime } from "@ionic/vue";
+import BasicInputField from "@/components/BasicInputField.vue";
+import DynamicButton from "@/components/DynamicButton.vue";
+import { today } from "ionicons/icons";
+import { ref } from "vue";
+import { icons } from "@/utils/svg";
 
-const refDate = ref()
-const calenderIcon = icons.calendar
+const refDate = ref();
+const calenderIcon = icons.calendar;
 const popoverProperties = ref({
     title: "Set Time",
     popoverOpen: false,
@@ -42,70 +36,69 @@ const popoverProperties = ref({
     event: {} as Event,
     keyboardClose: false,
     popoverData: {} as Object,
-})
-const todayBtn = ref("Today")
-const dateObject = ref()
+});
+const todayBtn = ref("Today");
+const dateObject = ref();
 const InnerActionBtnPropeties = {
-                name: 'Today',
-                show: true,
-                fn: setDateNow,
-            }
-const showPicker = ref(true)
-const isSetTimeNowPressed = ref(false)
-const componentKey = ref(0 as any)
+    name: "Today",
+    show: true,
+    fn: setDateNow as any,
+};
+const showPicker = ref(true);
+const isSetTimeNowPressed = ref(false);
+const componentKey = ref(0 as any);
 
 const props = defineProps<{
     place_holder: {
-      type: string,
-      default: ''
-    }
-  }>()
+        type: string;
+        default: "";
+    };
+}>();
 
 function openDate(event: any) {
     if (isSetTimeNowPressed.value == true) {
-        showPicker.value = false
-        isSetTimeNowPressed.value = false
+        showPicker.value = false;
+        isSetTimeNowPressed.value = false;
     } else {
-        showPicker.value = true
+        showPicker.value = true;
     }
-    popoverProperties.value.isOpen = true
-    popoverProperties.value.event = event
+    popoverProperties.value.isOpen = true;
+    popoverProperties.value.event = event;
 }
 
 function saveTheDate(event: any) {
-    refDate.value = event.detail.value
-    refDate.value = formatDate(refDate.value)
-    showPicker.value = false
+    refDate.value = event.detail.value;
+    refDate.value = formatDate(refDate.value);
+    showPicker.value = false;
 }
 
 function setDateNow() {
-    isSetTimeNowPressed.value = true
-    refDate.value = formatDate( new Date())
-    componentKey.value++
+    isSetTimeNowPressed.value = true;
+    refDate.value = formatDate(new Date());
+    componentKey.value++;
 }
 
 function formatDate(date: any) {
-    let theDate = new Date(date)
-    let tempDate = new Date(theDate.getFullYear() + "-" + ("0" + (theDate.getMonth() + 1)).slice(-2) + "-" + ("0" + theDate.getDate()).slice(-2))
-    let options: Intl.DateTimeFormatOptions = { day: "2-digit", weekday: "long", month: "short", year: "numeric" }
-    let formattedDate = tempDate.toLocaleDateString("en-US", options)
+    let theDate = new Date(date);
+    let tempDate = new Date(theDate.getFullYear() + "-" + ("0" + (theDate.getMonth() + 1)).slice(-2) + "-" + ("0" + theDate.getDate()).slice(-2));
+    let options: Intl.DateTimeFormatOptions = { day: "2-digit", weekday: "long", month: "short", year: "numeric" };
+    let formattedDate = tempDate.toLocaleDateString("en-US", options);
 
-    const data_data: { day: number, month: number, year: number } = {
+    const data_data: { day: number; month: number; year: number } = {
         day: theDate.getDate(),
         month: theDate.getMonth() + 1,
-        year: theDate.getFullYear()
-    }
-    dateObject.value = data_data
-    dateUpDated()
+        year: theDate.getFullYear(),
+    };
+    dateObject.value = data_data;
+    dateUpDated();
     return formattedDate;
 }
 
 const emit = defineEmits<{
-  (e: "dateUpDated", dateObject: any): void;
+    (e: "dateUpDated", dateObject: any): void;
 }>();
 
 function dateUpDated() {
-  emit("dateUpDated", dateObject)
+    emit("dateUpDated", dateObject);
 }
-
 </script>
