@@ -201,13 +201,14 @@ export default defineComponent({
         },
         async saveTest() {
             const investigationInstance = new LabOrder();
+            console.log(this.inputFields[1].value);
             await investigationInstance.postActivities(this.demographics.patient_id, [
                 {
                     concept_id: this.test[0].concept_id,
                     name: this.inputFields[0].value,
                     specimen: this.inputFields[1].value,
                     reason: "Routine",
-                    specimenConcept: await ConceptService.getConceptID(this.inputFields[1].value),
+                    specimenConcept: await ConceptService.getConceptID(this.inputFields[1].value, true),
                 },
             ]);
             this.orders = await OrderService.getOrders(this.demographics.patient_id);

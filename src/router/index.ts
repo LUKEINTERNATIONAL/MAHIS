@@ -7,6 +7,7 @@ import PatientRegistration from "@/views/Registration.vue";
 import { alertController, loadingController, modalController, toastController } from "@ionic/vue";
 
 import NCD from "@/apps/NCD/config/routes";
+import OPD from "@/apps/OPD/config/routes";
 import ANC from "@/apps/ANC/config/routes";
 import LABOUR from "@/apps/LABOUR/config/routes";
 import PNC from "@/apps/PNC/config/routes";
@@ -38,9 +39,11 @@ const routes: Array<RouteRecordRaw> = [
         props: true,
     },
     ...NCD,
+    ...OPD,
     ...ANC,
     ...LABOUR,
     ...PNC,
+    ...OPD,
 ];
 
 const router = createRouter({

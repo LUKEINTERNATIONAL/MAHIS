@@ -17,7 +17,7 @@
     <div class="modal_wrapper" v-if="listOrders.length > 1">
         <div style="font-weight: 700">Lab Orders</div>
         <div>
-            <list :listData="listOrders" @clicked:delete="voidLabOrder"></list>
+            <list :listData="listOrders" @clicked:delete="voidLabOrder" @clicked:results="openResultsForm"></list>
         </div>
         <div style="margin-top: 5px" v-if="listOrders.length <= 3 && listSeeMoreOrders.length > 3">
             <DynamicButton @click="seeResultsStatus('more')" name="Show More Lab Orders" fill="clear" iconSlot="icon-only" />
@@ -46,6 +46,8 @@ import DynamicButton from "@/components/DynamicButton.vue";
 import table from "@/components/DataViews/tables/ReportDataTable";
 import DashBox from "@/components/DashBox.vue";
 import { PatientLabService } from "@/services/lab/patient_lab_service";
+import { createModal } from "@/utils/Alerts";
+import SaveProgressModal from "@/components/SaveProgressModal.vue";
 
 export default defineComponent({
     name: "Menu",
@@ -128,6 +130,10 @@ export default defineComponent({
         },
 
         handleIcon() {},
+        openResultsForm(obs: any) {
+            console.log("ggggggg");
+            createModal(SaveProgressModal);
+        },
         setActivClass(active: any) {
             this.activeHeight = "";
             this.activeBMI = "";
@@ -166,6 +172,7 @@ export default defineComponent({
 
             return data.flatMap((item: any) => {
                 return item.tests.flatMap((test: any) => {
+                    console.log("🚀 ~ returnitem.tests.flatMap ~ test:", test);
                     const result = test?.result != null ? test?.result[0]?.value_modifier + test?.result[0]?.value : null;
 
                     if ((type === "result" && result !== null) || (type === "order" && result === null)) {
@@ -177,10 +184,6 @@ export default defineComponent({
                             class: "",
                             id: item.order_id,
                             name: test.name,
-                            display:
-                                type == "order"
-                                    ? [HisDate.toStandardHisFormat(item.order_date), item.accession_number, test.name, item.specimen.name]
-                                    : [HisDate.toStandardHisFormat(item.order_date), item.accession_number, test.name, item.specimen.name, result],
                         };
 
                         if (isMore || count < 2) {

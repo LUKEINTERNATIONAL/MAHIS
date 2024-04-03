@@ -5,11 +5,19 @@
                 <span>{{ value }}</span>
             </ion-item>
             <ion-item class="item_no_border" :style="item.minHeight" v-else>
-                <span>{{ value }}</span>
+                <span v-if="isArray(value)"
+                    ><DynamicButton
+                        fill="clear"
+                        :icon="iconsContent.view"
+                        iconSlot="icon-only"
+                        @click="$emit('clicked:view', { item: item, results: value })"
+                    />
+                </span>
+                <span v-else>{{ value }}</span>
             </ion-item>
         </ion-col>
         <ion-col :size="item.btnSize || 4" class="action_buttons" :class="item.class">
-            <DynamicButton v-if="item?.btn?.includes('enter_results')" name="Enter Result" @click="$emit('clicked:edit', item.display)" />
+            <DynamicButton v-if="item?.btn?.includes('enter_results')" name="Enter Result" @click="$emit('clicked:results', item)" />
             <DynamicButton
                 v-if="item?.btn?.includes('attach')"
                 fill="clear"
@@ -79,6 +87,9 @@ export default defineComponent({
         },
     },
     methods: {
+        isArray(value: any) {
+            return Array.isArray(value);
+        },
         async openDeletePopover(e: any) {
             const deleteConfirmed = await popoverConfirmation(`Do you want to delete ${e.name} ?`, e.event);
             if (deleteConfirmed) {
@@ -115,5 +126,8 @@ export default defineComponent({
 
     /* Secondary */
     color: #636363;
+}
+ion-item::part(native){
+    background: #fff;
 }
 </style>
