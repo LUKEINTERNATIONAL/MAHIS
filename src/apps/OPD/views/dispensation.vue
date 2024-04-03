@@ -9,6 +9,8 @@
     </ion-page>
 </template>
 
+
+
 <script lang="ts">
 import {
     IonContent,
@@ -135,6 +137,21 @@ export default defineComponent({
     },
 
     methods: {
+        saveData() {
+            this.showUndispensedMedication = true; 
+
+        },
+        handleDispenseClick() {
+      this.showUndispensedMedication = !this.showUndispensedMedication;
+      this.StepperData = [
+        {
+          title: "Dispense Medications",
+          componet: "dispensedMedication",
+          value: "1",
+        },
+        ...(this.showUndispensedMedication
+          ? [{ title: "Dispensation Summary", componet: "dispensationSummary", value: "2" }]
+          : [])]},
         markWizard() {
 
         },

@@ -59,6 +59,7 @@ function toStandardHisFormat(date: string | Date): string {
     return fdate
 }
 
+
 function estimateDateFromAge(age: number): string {
     const date = dayjs(sessionDate()).subtract(age, 'years')
     return date.format(STANDARD_DATE_FORMAT)
