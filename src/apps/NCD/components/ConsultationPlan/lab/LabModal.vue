@@ -111,12 +111,7 @@ export default defineComponent({
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useLabResultsStore, ["labResults"]),
     },
-    mounted() {
-        this.labResults;
-        // getFieldValue(this.labResults, this.labResults, "data");
-        console.log("🚀 ~ mounted ~ this.labResults:", this.labResults[0].concept_id);
-        console.log("🚀 ~ mounted ~ this.labResults:", this.labResults[0].name);
-    },
+    mounted() {},
     methods: {
         dismiss() {
             modalController.dismiss();
