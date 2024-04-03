@@ -102,10 +102,19 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonBreadcrumb, IonBreadcrumbs, IonIcon } from "@ionic/vue";
-import { defineComponent } from "vue";
-import { arrowForwardCircle, grid, list } from "ionicons/icons";
-import { icons } from "@/utils/svg";
+import {
+  IonBreadcrumb,
+  IonBreadcrumbs,
+  IonContent,
+  IonHeader,
+  IonIcon,
+  IonMenuButton,
+  IonPage,
+  IonTitle
+} from "@ionic/vue";
+import {defineComponent} from "vue";
+import {arrowForwardCircle, grid, list} from "ionicons/icons";
+import {icons} from "@/utils/svg";
 import DynamicButton from "@/components/DynamicButton.vue";
 import PersonalInformation from "@/components/Registration/PersonalInformation.vue";
 import GuardianInformation from "@/components/Registration/GuardianInformation.vue";
@@ -113,21 +122,18 @@ import HomeLocation from "@/components/Registration/HomeLocation.vue";
 import CurrentLocation from "@/components/Registration/CurrentLocation.vue";
 import SocialHistory from "@/components/Registration/SocialHistory.vue";
 import ScanRegistration from "@/components/Registration/ScanRegistration.vue";
-import { useRegistrationStore } from "@/stores/RegistrationStore";
-import { mapState } from "pinia";
-import { PatientRegistrationService } from "@/services/patient_registration_service";
-import { PatientService } from "@/services/patient_service";
-import { RelationsService } from "@/services/relations_service";
-import { SocialHistoryService } from "@/services/social_history_service";
-import { Service } from "@/services/service";
-import { useDemographicsStore } from "@/stores/DemographicStore";
-import { resetPatientData } from "@/services/reset_data";
-import { validateField } from "@/services/validation_service";
-import { toastSuccess, toastWarning } from "@/utils/Alerts";
-import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
+import {useRegistrationStore} from "@/stores/RegistrationStore";
+import {mapState} from "pinia";
+import {PatientRegistrationService} from "@/services/patient_registration_service";
+import {PatientService} from "@/services/patient_service";
+import {RelationsService} from "@/services/relations_service";
+import {useDemographicsStore} from "@/stores/DemographicStore";
+import {resetPatientData} from "@/services/reset_data";
+import {validateField} from "@/services/validation_service";
+import {toastSuccess, toastWarning} from "@/utils/Alerts";
+import {getFieldValue, getRadioSelectedValue} from "@/services/data_helpers";
 import HisDate from "@/utils/Date";
-import { useConfigurationStore } from "@/stores/ConfigurationStore";
-import { isEmpty } from "lodash";
+import {useConfigurationStore} from "@/stores/ConfigurationStore";
 
 export default defineComponent({
     components: {
@@ -249,7 +255,7 @@ export default defineComponent({
                 await registration.registerPatient(this.personInformation[0].selectedData, []);
                 const patientID = registration.getPersonID();
                 this.createNationID(patientID);
-                if (Object.keys(this.guardianInformation[0].selectedData).length === 0) {
+                if (Object.keys(this.guardianInformation[0].selectedData).length > 0) {
                     if (await this.validations(this.guardianInformation, ["guardianFirstname", "guardianLastname"])) {
                         this.createGuardian(patientID);
                     }

@@ -42,33 +42,21 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController, IonInput } from "@ionic/vue";
-import { defineComponent } from "vue";
-import { checkmark, pulseOutline } from "ionicons/icons";
-import { icons } from "@/utils/svg";
-import { iconBloodPressure } from "@/utils/SvgDynamicColor";
-import { BMIService } from "@/services/bmi_service";
-import { useDemographicsStore } from "@/stores/DemographicStore";
-import { useVitalsStore } from "@/stores/VitalsStore";
-import { mapState } from "pinia";
-import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
-import { arePropertiesNotEmpty } from "@/utils/Objects";
-import HisDate from "@/utils/Date";
+import {IonContent, IonHeader, IonInput, IonItem, IonList, IonMenu, IonPopover, IonTitle, IonToolbar} from "@ionic/vue";
+import {defineComponent} from "vue";
+import {checkmark, pulseOutline} from "ionicons/icons";
+import {icons} from "@/utils/svg";
+import {useDemographicsStore} from "@/stores/DemographicStore";
+import {mapState} from "pinia";
 import BasicInputField from "@/components/BasicInputField.vue";
-import { VitalsService } from "@/services/vitals_service";
 import BasicForm from "@/components/BasicForm.vue";
-import { Service } from "@/services/service";
+import {Service} from "@/services/service";
 import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
 import previousComplaints from "@/apps/OPD/components/ConsultationPlan/previousVisits/previousComplaints.vue";
-import { usePresentingComplaintsStore } from "@/apps/OPD/stores/PresentingComplaintsStore";
-import { PatientComplaintsService } from "@/apps/OPD/services/patient_complaints_service";
-import Complications from "@/apps/NCD/components/ConsultationPlan/Complications.vue";
-
-import { IonPopover } from "@ionic/vue";
+import {usePresentingComplaintsStore} from "@/apps/OPD/stores/PresentingComplaintsStore";
+import {PatientComplaintsService} from "@/apps/OPD/services/patient_complaints_service";
 import DashBox from "@/components/DashBox.vue";
 import SelectionPopover from "@/components/SelectionPopover.vue";
-import { useDiagnosisStore } from "@/stores/DiagnosisStore";
-import { popoverConfirmation } from "@/utils/Alerts";
 import List from "@/components/List.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import Validation from "@/validations/StandardValidations";
@@ -192,15 +180,18 @@ export default defineComponent({
                 name: this.inputFields[0].value,
                 id: this.presentingComplaintsListData[0].concept_id,
                 display: [this.inputFields[0].value, this.inputFields[1].value],
-                data: [{
-                    concept_id: 6542, //primary presentingComplaints
-                    value_coded: this.presentingComplaintsListData[0].concept_id,
-                    obs_datetime: Service.getSessionDate(),
-                },{
-                    concept_id: 1294, //Duration of symptom in days
-                    value_numeric: this.presentingComplaintsListData[0].concept_id,
-                    obs_datetime: Service.getSessionDate(),
-                }],
+                data: [
+                    {
+                        concept_id: 6542, //primary presentingComplaints
+                        value_coded: this.presentingComplaintsListData[0].concept_id,
+                        obs_datetime: Service.getSessionDate(),
+                    },
+                    {
+                        concept_id: 1294, //Duration of symptom in days
+                        value_numeric: this.presentingComplaintsListData[0].concept_id,
+                        obs_datetime: Service.getSessionDate(),
+                    },
+                ],
             });
         },
         updatePresentingComplaintsListStores() {

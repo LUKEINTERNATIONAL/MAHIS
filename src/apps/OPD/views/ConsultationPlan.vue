@@ -16,66 +16,51 @@
 
 <script lang="ts">
 import {
-    IonContent,
-    IonHeader,
-    IonMenuButton,
-    IonPage,
-    IonTitle,
-    IonToolbar,
-    IonButton,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardSubtitle,
-    IonCardTitle,
-    IonAccordion,
-    IonAccordionGroup,
-    IonItem,
-    IonLabel,
-    IonModal,
-    modalController,
-    AccordionGroupCustomEvent,
+  IonAccordion,
+  IonAccordionGroup,
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonContent,
+  IonHeader,
+  IonItem,
+  IonLabel,
+  IonMenuButton,
+  IonModal,
+  IonPage,
+  IonTitle,
+  IonToolbar,
 } from "@ionic/vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/components/DemographicBar.vue";
-import { chevronBackOutline, checkmark } from "ionicons/icons";
+import {checkmark, chevronBackOutline} from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
-import { createModal } from "@/utils/Alerts";
-import { icons } from "@/utils/svg";
-import { useVitalsStore } from "@/stores/VitalsStore";
-import { useDemographicsStore } from "@/stores/DemographicStore";
-import { useInvestigationStore } from "@/stores/InvestigationStore";
-import { useDiagnosisStore } from "@/stores/DiagnosisStore";
-import { mapState } from "pinia";
+import {createModal, toastSuccess, toastWarning} from "@/utils/Alerts";
+import {icons} from "@/utils/svg";
+import {useVitalsStore} from "@/stores/VitalsStore";
+import {useDemographicsStore} from "@/stores/DemographicStore";
+import {useInvestigationStore} from "@/stores/InvestigationStore";
+import {mapState} from "pinia";
 import Stepper from "@/components/Stepper.vue";
-import { Service } from "@/services/service";
-import { LabOrder } from "@/apps/NCD/services/lab_order";
-import { VitalsService } from "@/services/vitals_service";
-import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
-import { useDispositionStore } from "@/stores/OutcomeStore";
-import { usePregnancyStore } from "@/apps/OPD/stores/PregnancyStore";
-import { usePresentingComplaintsStore } from "@/apps/OPD/stores/PresentingComplaintsStore";
-import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
-import { useOPDDiagnosisStore } from "@/apps/OPD/stores/DiagnosisStore";
-import { Treatment } from "@/apps/NCD/services/treatment";
-import { isEmpty } from "lodash";
+import {Service} from "@/services/service";
+import {useTreatmentPlanStore} from "@/stores/TreatmentPlanStore";
+import {usePregnancyStore} from "@/apps/OPD/stores/PregnancyStore";
+import {usePresentingComplaintsStore} from "@/apps/OPD/stores/PresentingComplaintsStore";
+import {useOPDDiagnosisStore} from "@/apps/OPD/stores/DiagnosisStore";
+import {Treatment} from "@/apps/NCD/services/treatment";
+import {isEmpty} from "lodash";
 import HisDate from "@/utils/Date";
-import { defineComponent } from "vue";
-import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
-import { Diagnosis } from "@/apps/NCD/services/diagnosis";
-import {
-    modifyRadioValue,
-    getRadioSelectedValue,
-    getCheckboxSelectedValue,
-    getFieldValue,
-    getCheckboxInputField,
-    modifyFieldValue,
-    modifyCheckboxValue,
-} from "@/services/data_helpers";
-import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServerData";
-import { PatientComplaintsService } from "@/apps/OPD/services/patient_complaints_service";
-import { PatientGeneralConsultationService } from "@/services/patient_general_consultation";
+import {defineComponent} from "vue";
+import {DRUG_FREQUENCIES, DrugPrescriptionService} from "../../../services/drug_prescription_service";
+import {Diagnosis} from "@/apps/NCD/services/diagnosis";
+import {formatRadioButtonData} from "@/services/formatServerData";
+import {PatientComplaintsService} from "@/apps/OPD/services/patient_complaints_service";
+import {PatientGeneralConsultationService} from "@/services/patient_general_consultation";
+
 export default defineComponent({
     name: "Home",
     components: {
@@ -254,23 +239,32 @@ export default defineComponent({
         },
         getFormatedData(data: any) {
             return data.map((item: any) => {
-                return item?.data;
+                return item?.data[0] || item?.data;
             });
         },
-        saveData() {
+        async saveData() {
             if (this.OPDdiagnosis[0].selectedData.length > 0) {
-                this.saveDiagnosis();
+                await this.saveDiagnosis();
             }
-            this.saveTreatmentPlan();
-            this.saveOutComeStatus();
+            await this.saveTreatmentPlan();
+            await this.saveOutComeStatus();
+            await this.saveWomenStatus();
+            await this.savePresentingComplaints();
             this.$router.push("patientProfile");
-            this.saveWomenStatus();
-            // this.savePresentingComplaints();
         },
-        // async savePresentingComplaints() {
-        //     this.presentingComplaints[0].selectedData;
-        //     console.log("🚀 ~ savePresentingComplaints ~  this.presentingComplaints[0].selectedData:", this.presentingComplaints[0].selectedData);
-        // },
+        async savePresentingComplaints() {
+            if (this.presentingComplaints[0].selectedData.length > 0) {
+                const userID: any = Service.getUserID();
+                const PatientComplaints = new PatientComplaintsService(this.demographics.patient_id, userID);
+                const encounter = await PatientComplaints.createEncounter();
+                if (!encounter) return toastWarning("Unable to create patient complaints encounter");
+                const patientStatus = await PatientComplaints.saveObservationList(this.getFormatedData(this.presentingComplaints[0].selectedData));
+                if (!patientStatus) return toastWarning("Unable to create patient complaints  !");
+                toastSuccess("Patient complaints has been created");
+            }
+            this.presentingComplaints[0].selectedData;
+            console.log("🚀 ~ savePresentingComplaints ~  this.presentingComplaints[0].selectedData:", this.presentingComplaints[0].selectedData);
+        },
         async saveWomenStatus() {
             const womenStatus = await formatRadioButtonData(this.pregnancy);
             if (womenStatus.length > 0) {
