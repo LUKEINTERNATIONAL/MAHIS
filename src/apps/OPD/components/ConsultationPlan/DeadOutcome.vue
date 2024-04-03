@@ -1,4 +1,5 @@
 <template>
+    <div class="modal_wrapper">
         <ListPicker
             :multiSelection="list_picker_prperties[0].multi_Selection"
             :show_label="list_picker_prperties[0].show_list_label"
@@ -9,6 +10,8 @@
             @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
             @item-list-filtered="list_picker_prperties[0].listFilteredFN"
         />
+    </div>
+
 
         <ListPicker
             :multiSelection="list_picker_prperties[1].multi_Selection"
@@ -172,8 +175,8 @@ const list_picker_prperties = [
         multi_Selection: false as any,
         show_list_label: true as any,
         unqueId: 'qwerty' as any,
-        name_of_list: 'qwerty' as any,
-        placeHolder: 'qwerty' as any,
+        name_of_list: 'Manner of death ' as any,
+        placeHolder: 'Choose one' as any,
         items: mannerOfDeath.value,
         listUpdatedFN: listUpdated1,
         listFilteredFN: ()=>{},
@@ -182,8 +185,8 @@ const list_picker_prperties = [
         multi_Selection: false as any,
         show_list_label: true as any,
         unqueId: 'qwerty1' as any,
-        name_of_list: 'qwerty' as any,
-        placeHolder: 'qwerty' as any,
+        name_of_list: 'How did it occur?' as any,
+        placeHolder: 'Choose one' as any,
         items: causesOfDeath.value,
         listUpdatedFN: listUpdated2,
         listFilteredFN: ()=>{},
