@@ -16,7 +16,7 @@ export const useDispensationStore = defineStore('dispensation', {
         saveInitiated: false
     }),
     actions: {
-        isSaveInitiated(bool: boolean) {
+        isSaveInitiated(bool: boolean): void {
             this.saveInitiated = bool
         },
         validateInputs() {
