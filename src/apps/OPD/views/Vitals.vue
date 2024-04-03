@@ -385,7 +385,7 @@ export default defineComponent({
             if (this.vitals.validationStatus) {
                 this.saveVitals();
                 this.saveOutComeStatus();
-                this.$router.push("patientProfile");
+                this.$router.push("OPDConsultationPlan");
             } else {
                 toastWarning("Please complete all required fields");
                 this.saveOutComeStatus();

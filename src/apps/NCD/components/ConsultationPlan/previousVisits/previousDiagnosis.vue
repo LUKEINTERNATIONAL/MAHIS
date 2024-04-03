@@ -68,7 +68,7 @@ export default defineComponent({
     async mounted() {
         const obsP = await ObservationService.getAll(this.demographics.patient_id, "Primary diagnosis");
         const obsS = await ObservationService.getAll(this.demographics.patient_id, "Secondary diagnosis");
-        const obs = [...obsP, ...obsS];
+        const obs = [...(obsP || []), ...(obsS || [])];
         const diagnosis = !isEmpty(obs)
             ? Promise.all(
                   obs.map(async (ob: any) => {

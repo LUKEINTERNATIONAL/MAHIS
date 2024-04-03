@@ -284,9 +284,9 @@ export default defineComponent({
                 } else {
                     this.OPDProgramActionName = "+ Start new OPD consultation";
                 }
-                this.url = "OPDConsultationPlan";
+                this.url = "OPDvitals";
             } else {
-                this.url = "OPDConsultationPlan";
+                this.url = "OPDvitals";
                 this.OPDProgramActionName = "+ Enroll in OPD Program";
             }
         },
