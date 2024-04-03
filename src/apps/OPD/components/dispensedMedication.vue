@@ -84,6 +84,11 @@ import {
 } from "@ionic/vue";
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
 import { PreviousTreatment } from "@/apps/NCD/services/treatment"
+import { DispensationService } from "@/apps/OPD/services/dispensation_service"
+import { useDemographicsStore } from "@/stores/DemographicStore"
+import { Service } from "@/services/service"
+const usedemographics_store = useDemographicsStore()
+const demographics = computed(() => usedemographics_store.demographics)
 const dispensationStore = useDispensationStore()
 const store2 = useAllegyStore();
 const selectedAllergiesList2 = computed(() => store2.selectedMedicalAllergiesList);
@@ -133,7 +138,9 @@ function saveDispensations() {
     }
     dispensationStore.saveDispensedMedications()
     dispensationStore.setDispensedMedicationsPayload()
-
+    usedemographics_store
+    const dispensation_srvc = new DispensationService(demographics.value.patient_id, Service.getUserID() as any)
+    dispensation_srvc.saveDispensations((dispensationStore.getDispensedMedicationsPayload()).dispensations as any)
     return dispensationStore.getDispensedMedicationsPayload()
 }
 </script>
