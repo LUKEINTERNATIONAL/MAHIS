@@ -4,6 +4,7 @@
         :inputValue="refDate"
         :icon="today"
         :-inner-action-btn-propeties="InnerActionBtnPropeties"
+        @update:InnerActionBtnPropetiesAction="InnerActionBtnPropeties.fn"
         @clicked:inputValue="openDate"
         :key="componentKey"
        

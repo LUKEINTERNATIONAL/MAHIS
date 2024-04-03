@@ -16,7 +16,7 @@
         >
             
         <ion-label v-if="InnerActionBtnPropeties.show" style="display: flex" slot="end">
-            <ion-button slot="end" @click="InnerActionBtnPropeties.fn">{{ InnerActionBtnPropeties.name }}</ion-button>
+            <ion-button slot="end" @click="handleInnerActionBtnPropetiesFn">{{ InnerActionBtnPropeties.name }}</ion-button>
         </ion-label>
         
         <ion-label style="display: flex" slot="start">
@@ -144,7 +144,6 @@ export default defineComponent({
             default: {
                 name: 'provide name',
                 show: false,
-                fn: ()=>{},
             },
         }
     },
@@ -170,6 +169,9 @@ export default defineComponent({
                 this.filteredData = this.popOverData.data.filter((item: any) => item.name.toLowerCase().includes(event.target.value.toLowerCase()));
             else this.filteredData = this.popOverData.data;
         },
+        handleInnerActionBtnPropetiesFn(event: any) {
+            this.$emit("update:InnerActionBtnPropetiesAction", event);
+        }
     },
 });
 </script>
