@@ -4,7 +4,7 @@
         <ion-content :fullscreen="true">
             <DemographicBar />
             <Stepper stepperTitle="Dispensation" :wizardData="wizardData" @updateStatus="markWizard"
-                @finishBtn="saveData()" :StepperData="dispensationStore.getStepperData()" :showSteeper="dispensationStore.getStepperValue()"/>
+                @finishBtn="saveData()" :StepperData="dispensationStore.getStepperData()" :showSteeper="1"/>
         </ion-content>
     </ion-page>
 </template>

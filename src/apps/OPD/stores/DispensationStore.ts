@@ -6,7 +6,6 @@ interface DispensationData {
     dispensedMedication: any[]
     payload: {} //{"dispensations":[{"drug_order_id":2399362,"date":"2024-03-27","quantity":"3"}],"program_id":14}
     saveInitiated: Boolean
-    showSteeper: string
     StepperData: any[]
 }
 
@@ -16,7 +15,6 @@ export const useDispensationStore = defineStore('dispensation', {
         dispensedMedication: [],
         payload: {},
         saveInitiated: false,
-        showSteeper: "1",
         StepperData: [
             {
                 title: "Dispense Medications",
@@ -26,11 +24,14 @@ export const useDispensationStore = defineStore('dispensation', {
         ]
     }),
     actions: {
+        editDispensations() {
+            this.toggleStepperData()
+        },
         getStepperData() {
             return this.StepperData
         },
         toggleStepperData() {
-            if (this.StepperData[0].value == "1") {
+            if (this.StepperData[0].componet == "dispensedMedication") {
                 this.StepperData.splice(0, 1,
                     {
                         title: "Dispensation Summary",
@@ -46,9 +47,6 @@ export const useDispensationStore = defineStore('dispensation', {
                         },
                         )
                     }
-        },
-        getStepperValue() {
-            return this.showSteeper
         },
         isSaveInitiated(bool: boolean): void {
             this.saveInitiated = bool

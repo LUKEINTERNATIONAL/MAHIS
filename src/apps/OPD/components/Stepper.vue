@@ -31,7 +31,7 @@
             </div>
 
             <div class="accordion_group">
-                <ion-accordion-group @ionChange="accordionGroupChange($event)" :value="showSteeper">
+                <ion-accordion-group @ionChange="accordionGroupChange($event)" value="1">
                     <ion-accordion v-for="(item, index) in StepperData" :key="index" :value="item.value">
                         <ion-item slot="header">
                             <ion-label>{{ item.title }}</ion-label>
@@ -172,10 +172,6 @@ export default defineComponent({
             default: [] as any,
         },
         stepperTitle: {
-            type: String,
-            default: "",
-        },
-        showSteeper: {
             type: String,
             default: "",
         },
