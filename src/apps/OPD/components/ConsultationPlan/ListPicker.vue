@@ -1,9 +1,8 @@
 <template>
     <ion-list>
-        <ion-label>{{ name_of_list }}</ion-label>
+        <ion-label v-if="show_label">{{ name_of_list }}</ion-label>
         <ion-row>
             <ion-item lines="none" class="ItemAl">
-            <ion-row>
                 <div v-for="(item, index) in items_List" :key="index">
                     <ion-button v-if="item.selected" @click="selectAl(item)" class="itemAlBtn">
                         {{ item.name }}
@@ -11,6 +10,7 @@
                     </ion-button>
                 </div>
 
+            <ion-row>
                 <div>
                     <ion-button :id="uniqueId" fill="clear" class="itemAlAddBtn" @click="setFocus">
                         <ion-icon :icon="addOutline"></ion-icon>
@@ -20,6 +20,7 @@
                         :show-backdrop="false"
                         :trigger="uniqueId"
                         trigger-action="click"
+                        @didPresent="dissmissDrugAddField"
                     >
                     <ion-content color="light" class="ion-padding content-al">
                         <ion-label>{{ choose_place_holder }}</ion-label>
@@ -41,7 +42,7 @@
     </ion-list>
 </template>
 <script setup lang="ts">
-import { IonList, IonLabel, IonRow, IonItem, IonButton, IonIcon, IonInput, IonPopover, IonContent } from "@ionic/vue"
+import { IonList, IonLabel, IonRow, IonCol, IonItem, IonButton, IonIcon, IonInput, IonContent } from "@ionic/vue"
 import { closeOutline, addOutline, checkmarkOutline } from "ionicons/icons"
 import { ref, watch } from "vue"
 
@@ -49,11 +50,12 @@ const input = ref()
 const itemName = ref("")
 
 const props = defineProps<{
-    uniqueId: "unique_id_1_please_do_procide_a_unique_id"
+    uniqueId: "99"
     name_of_list: 'name of list',
     choose_place_holder: 'Choose placeholder',
     items_List: [],
     multiSelection: false,
+    show_label: true,
 }>()
 
 
@@ -80,7 +82,8 @@ async function FindItemName(text: any) {
 }
 
 function setFocus() {
-    input.value.$el.setFocus();
+    console.log("sssssss", props.uniqueId)
+    input.value.$el.setFocus()
 }
 
 const emit = defineEmits<{
@@ -111,6 +114,12 @@ function itemListFiltered(searchString: string) {
     emit("itemListFiltered", filtered_items)
 }
 
+function dissmissDrugAddField(): void {
+    // search_item.value = false;
+    // display_item.value = true;
+    // addItemButton.value = true;
+}
+
 </script>
 
 <style scoped>
@@ -120,7 +129,6 @@ function itemListFiltered(searchString: string) {
     position: absolute;
     left: 0;
     right: 0;
-    top: 50%;
     transform: translateY(-50%);
 }
 
