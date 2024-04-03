@@ -133,7 +133,7 @@
         <dynamic-button v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" @clicked:btn="addReferral"></dynamic-button>
     </ion-row>
 
-    <deadOutcome/>
+    <deadOutcome v-if="show_dead_options"/>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
@@ -184,7 +184,7 @@ import { getSpecialistClinics, getFacilityWards } from "@/apps/NCD/services/outc
 import deadOutcome from "../ConsultationPlan/DeadOutcome.vue"
 
 const iconsContent = icons;
-const initialMsg = ref("No referrals created yet");
+const initialMsg = ref("No outcome created yet");
 const show_error_msg_for_ref_type = ref(false);
 const refTypErrMsg = ref("please select a type");
 const show_error_msg_for_ref_facility_ward_name = ref(false);
@@ -193,7 +193,7 @@ const show_error_msg_for_ref_date = ref(false);
 const refDateErrMsg = ref("please select a date");
 const show_error_msg_for_ref_reason = ref(false);
 const refRsnErrMsg = ref("please enter a reason");
-const btnName1 = ref("Add new referral");
+const btnName1 = ref("Add new outcome");
 const btnFill = "clear";
 let event: null = null;
 const saveBtn = ref("Save");
@@ -217,6 +217,7 @@ const dispositions = computed(() => store.dispositions);
 const NamesData = ref([] as any);
 const EditEvnt = ref(false);
 const componentKey = ref(0)
+const show_dead_options = ref(false)
 const basicInputFieldProperties = [
     {
         // ### leave as is (this obj)
@@ -526,12 +527,19 @@ function dsischargedHomeExecption() {
 
 async function checkRefType(clear_inputs: boolean = true) {
     const tempRefType = refType.value;
+
     if (clear_inputs == true) {
         clearInputs()
     }
     refType.value = tempRefType;
     let fn;
     const ref_type = refType.value;
+
+    if (ref_type == referralType.value[3].name) {
+        show_dead_options.value = !show_dead_options.value
+    } else {
+        show_dead_options.value = !show_dead_options.value
+    }
 
     if (ref_type == referralType.value[0].name) {
         searchPlaceHolder.value = "find department or ward";
