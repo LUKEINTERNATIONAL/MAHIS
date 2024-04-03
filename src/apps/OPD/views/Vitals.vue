@@ -3,13 +3,7 @@
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
-            <Stepper
-                stepperTitle="Vitals"
-                :wizardData="wizardData"
-                @updateStatus="markWizard"
-                @finishBtn="saveData()"
-                :StepperData="StepperData"
-            />
+            <Stepper stepperTitle="Vitals" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData" />
         </ion-content>
     </ion-page>
 </template>
@@ -156,17 +150,16 @@ export default defineComponent({
     },
 
     methods: {
-        pulseRateValidate(){
+        pulseRateValidate() {
+            const triggerError = (errorMessage: string) => {
+                modifyFieldValue(this.vitals, "Pulse", "alertsError", true);
+                modifyFieldValue(this.vitals, "Pulse", "alertsErrorMassage", errorMessage);
+            };
 
-            const triggerError = (errorMessage:string)=>{
-                modifyFieldValue(this.vitals,'Pulse','alertsError',true)
-            modifyFieldValue(this.vitals,'Pulse','alertsErrorMassage',errorMessage)
-            }
-
-            const clearErrors = ()=>{
-                modifyFieldValue(this.vitals,'Pulse','alertsError',false)
-            modifyFieldValue(this.vitals,'Pulse','alertsErrorMassage',"")
-            }
+            const clearErrors = () => {
+                modifyFieldValue(this.vitals, "Pulse", "alertsError", false);
+                modifyFieldValue(this.vitals, "Pulse", "alertsErrorMassage", "");
+            };
 
             const age= HisDate.calculateAge(this.demographics.birthdate,new Date());
             const value= getFieldValue(this.vitals,'Pulse', 'value')
@@ -252,55 +245,91 @@ export default defineComponent({
                 clearErrors()
             }
         },
-        systolicValidate(){
-            const triggerError = (errorMessage:string)=>{
-            modifyFieldValue(this.vitals,'Systolic','alertsError',true)
-            modifyFieldValue(this.vitals,'Systolic','alertsErrorMassage',errorMessage)
-            }
+        // respiratoryValidate() {
+        //     const triggerError = (errorMessage: string) => {
+        //         modifyFieldValue(this.vitals, "RespiratoryRate", "alertsError", true);
+        //         modifyFieldValue(this.vitals, "RespiratoryRate", "alertsErrorMassage", errorMessage);
+        //     };
 
-            const clearErrors = ()=>{
-            modifyFieldValue(this.vitals,'Systolic','alertsError',false)
-            modifyFieldValue(this.vitals,'Systolic','alertsErrorMassage',"")
-            }
+        //     const clearErrors = () => {
+        //         modifyFieldValue(this.vitals, "RespiratoryRate", "alertsError", false);
+        //         modifyFieldValue(this.vitals, "RespiratoryRate", "alertsErrorMassage", "");
+        //     };
 
-            const age= HisDate.calculateAge(this.demographics.birthdate,new Date());
-            const value= getFieldValue(this.vitals,'Systolic', 'value');
+        //     const age= HisDate.calculateAge(this.demographics.birthdate,new Date());
+        //     const value= getFieldValue(this.vitals,'Systolic', 'value');
+        //     let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate,new Date());
+        //     ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
+
+        //     if(value == "")return
+           
+        //    if(age<1 && (ageInMonth >= 1 && ageInMonth <=12 ) && !(value>=75 && value<=100)){ 
+        //     triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
+        //    }
+        //    else if((age>=1 && age<=4) && !(value>=80 && value<=110)){
+        //         triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
+        //     }else if((age>=3 && age<=5) && !(value>=80 && value<=110)){
+        //         triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
+        //     }else if((age>=6 && age<=13) && !(value>=85 && value<=120)){
+        //         triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
+        //     }else if((age>=13 && age<=18) && !(value>=95 && value<=140)){
+        //         triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
+        //     }else if(age>18  && !(value>=100 && value<=130)){
+        //         triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
+        //     }
+        //     else {
+        //         clearErrors()
+        //     }
+        // },
+        systolicValidate() {
+            const triggerError = (errorMessage: string) => {
+                modifyFieldValue(this.vitals, "Systolic", "alertsError", true);
+                modifyFieldValue(this.vitals, "Systolic", "alertsErrorMassage", errorMessage);
+            };
+
+            const clearErrors = () => {
+                modifyFieldValue(this.vitals, "Systolic", "alertsError", false);
+                modifyFieldValue(this.vitals, "Systolic", "alertsErrorMassage", "");
+            };
+
+            const age = HisDate.calculateAge(this.demographics.birthdate, new Date());
+            const value = getFieldValue(this.vitals, "Systolic", "value");
+
+
             let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate,new Date());
             ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
 
-            if(value == "")return
-           
+            if (value == "") return;
+            
            if(age<1 && (ageInMonth >= 1 && ageInMonth <=12 ) && !(value>=75 && value<=100)){ 
             triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
-           }
-           else if((age>=1 && age<=4) && !(value>=80 && value<=110)){
-                triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
-            }else if((age>=3 && age<=5) && !(value>=80 && value<=110)){
-                triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
-            }else if((age>=6 && age<=13) && !(value>=85 && value<=120)){
-                triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
-            }else if((age>=13 && age<=18) && !(value>=95 && value<=140)){
-                triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
-            }else if(age>18  && !(value>=100 && value<=130)){
-                triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
-            }
-            else {
-                clearErrors()
+           }else if (age >= 1 && age <= 4 && !(value >= 80 && value <= 110)) {
+                triggerError(`Systolic can't be ${value} for patient with an age of ${age}`);
+            } else if (age >= 3 && age <= 5 && !(value >= 80 && value <= 110)) {
+                triggerError(`Systolic can't be ${value} for patient with an age of ${age}`);
+            } else if (age >= 6 && age <= 13 && !(value >= 85 && value <= 120)) {
+                triggerError(`Systolic can't be ${value} for patient with an age of ${age}`);
+            } else if (age >= 13 && age <= 18 && !(value >= 95 && value <= 140)) {
+                triggerError(`Systolic can't be ${value} for patient with an age of ${age}`);
+            } else if (age > 18 && !(value >= 100 && value <= 130)) {
+                triggerError(`Systolic can't be ${value} for patient with an age of ${age}`);
+            } else {
+                clearErrors();
             }
         },
-        diastolicValidate(){
-            const triggerError = (errorMessage:string)=>{
-            modifyFieldValue(this.vitals,'Diastolic','alertsError',true)
-            modifyFieldValue(this.vitals,'Diastolic','alertsErrorMassage',errorMessage)
-            }
+        diastolicValidate() {
+            const triggerError = (errorMessage: string) => {
+                modifyFieldValue(this.vitals, "Diastolic", "alertsError", true);
+                modifyFieldValue(this.vitals, "Diastolic", "alertsErrorMassage", errorMessage);
+            };
 
-            const clearErrors = ()=>{
-            modifyFieldValue(this.vitals,'Diastolic','alertsError',false)
-            modifyFieldValue(this.vitals,'Diastolic','alertsErrorMassage',"")
-            }
+            const clearErrors = () => {
+                modifyFieldValue(this.vitals, "Diastolic", "alertsError", false);
+                modifyFieldValue(this.vitals, "Diastolic", "alertsErrorMassage", "");
+            };
 
-            const age= HisDate.calculateAge(this.demographics.birthdate,new Date());
-            const value= getFieldValue(this.vitals,'Diastolic', 'value')
+            const age = HisDate.calculateAge(this.demographics.birthdate, new Date());
+            const value = getFieldValue(this.vitals, "Diastolic", "value");
 
             let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate,new Date());
             ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
@@ -332,7 +361,6 @@ export default defineComponent({
             } else {
                 this.wizardData[0].checked = false;
             }
-
         },
         getFormatedData(data: any) {
             return data.map((item: any) => {
@@ -340,32 +368,22 @@ export default defineComponent({
             });
         },
         saveData() {
-            if (this.vitals.validationStatus ) {
+            if (this.vitals.validationStatus) {
                 this.saveVitals();
                 this.saveOutComeStatus();
-                this.$router.push("patientProfile");
+                this.$router.push("OPDConsultationPlan");
             } else {
                 toastWarning("Please complete all required fields");
                 this.saveOutComeStatus();
             }
-        },
-        saveInvestigation() {
-            const investigationInstance = new LabOrder();
-            investigationInstance.postActivities(this.demographics.patient_id, this.getFormatedData(this.investigations[0].selectedData));
         },
         saveVitals() {
             const userID: any = Service.getUserID();
             const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
             vitalsInstance.onFinish(this.vitals);
         },
-        saveDiagnosis() {
-            const userID: any = Service.getUserID();
-            const diagnosisInstance = new Diagnosis();
-            diagnosisInstance.onSubmit(this.demographics.patient_id, userID, this.getFormatedData(this.diagnosis[0].selectedData));
-        },
 
-        async saveOutComeStatus() {
-        },
+        async saveOutComeStatus() {},
         openModal() {
             createModal(SaveProgressModal);
         },

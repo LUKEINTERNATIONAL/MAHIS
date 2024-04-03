@@ -43,6 +43,7 @@ const routes: Array<RouteRecordRaw> = [
     ...ANC,
     ...LABOUR,
     ...PNC,
+    ...OPD,
 ];
 
 const router = createRouter({

@@ -2,8 +2,8 @@
     <DashBox v-if="listResults.length < 1 && listOrders.length < 1" :content="'No Investigations added '" />
     <div class="modal_wrapper" v-if="listResults.length > 1">
         <div style="font-weight: 700">Lab Results</div>
-        <div>
-            <list :listData="listResults" @clicked:delete="voidLabOrder"></list>
+        <div style="--background: #fff">
+            <list :listData="listResults" @clicked:delete="voidLabOrder" @clicked:view="viewLabOrder"></list>
         </div>
         <div style="margin-top: 5px" v-if="listResults.length <= 3 && listSeeMoreResults.length > 3">
             <DynamicButton @click="seeOrderStatus('more')" name="Show More Lab Results" fill="clear" iconSlot="icon-only" />
@@ -26,6 +26,8 @@
             <DynamicButton @click="seeResultsStatus('less')" name="Show Less Lab Orders" fill="clear" iconSlot="icon-only" />
         </div>
     </div>
+    <LabModal :popoverOpen="openModal" @saved="updateLabList" @closeModal="openModal = false" />
+    <LabViewResultsModal :popoverOpen="openResultsModal" :content="labResultsContent" @closeModal="openResultsModal = false" />
 </template>
 
 <script lang="ts">
@@ -50,6 +52,9 @@ import { PatientLabService } from "@/services/lab/patient_lab_service";
 import { createModal } from "@/utils/Alerts";
 import LabResults from "@/apps/NCD/components/ConsultationPlan/lab/LabResults.vue";
 import { PatientLabResultService } from "@/services/patient_lab_result_service";
+import LabModal from "@/apps/NCD/components/ConsultationPlan/lab/LabModal.vue";
+import LabViewResultsModal from "@/apps/NCD/components/ConsultationPlan/lab/LabViewResultsModal.vue";
+import labOrderResults from "@/apps/NCD/components/ConsultationPlan/lab/labOrderResults.vue";
 
 export default defineComponent({
     name: "Menu",
@@ -65,6 +70,8 @@ export default defineComponent({
         List,
         DynamicButton,
         DashBox,
+        LabModal,
+        LabViewResultsModal,
     },
 
     computed: {
@@ -97,8 +104,11 @@ export default defineComponent({
             listSeeMoreResults: [] as any,
             listSeeLessResults: [] as any,
             listHeaderResults: "" as any,
+            labResultsContent: "" as any,
             listHeaderOrders: "" as any,
             service: "" as any,
+            openModal: false,
+            openResultsModal: false,
             series: [
                 {
                     name: "",
@@ -125,43 +135,60 @@ export default defineComponent({
         },
     },
     methods: {
+        async updateLabList() {
+            this.openModal = false;
+            this.orders = await OrderService.getOrders(this.demographics.patient_id);
+            this.setListData(this.orders);
+        },
         dismiss() {
             modalController.dismiss();
         },
         async voidLabOrder(event: any) {
             await this.service.voidOrder(event.id, "Mistake entry");
+            this.updateLabList();
         },
 
         handleIcon() {},
         async openResultsForm(obs: any) {
             const testIndicators = await PatientLabResultService.getTestIndicatorsWithID(obs.item.concept_id);
-            const indicators = [] as any;
-            testIndicators.forEach((item: any) => {
-                indicators.push({
+            const indicators = [
+                obs.item,
+                {
                     validationStatus: "",
                     data: {
                         rowData: [
                             {
-                                colData: [
-                                    {
-                                        inputHeader: item.name,
-                                        value: "",
-                                        name: item.name,
-                                        required: true,
-                                        eventType: "input",
-                                        alertsError: false,
-                                        alertsErrorMassage: "",
-                                    },
-                                ],
+                                colData: [],
                             },
                         ],
                     },
+                },
+            ] as any;
+            testIndicators.forEach((item: any) => {
+                indicators[1].data.rowData[0].colData.push({
+                    inputHeader: item.name,
+                    value: "",
+                    colSize: 3,
+                    id: item.concept_id,
+                    name: item.name,
+                    required: true,
+                    eventType: "input",
+                    alertsError: false,
+                    alertsErrorMassage: "",
                 });
             });
-            console.log(indicators);
             const lab = useLabResultsStore();
             lab.setLabResults(indicators);
-            createModal(LabResults);
+            this.openModal = true;
+            this.orders = await OrderService.getOrders(this.demographics.patient_id);
+        },
+        async viewLabOrder(labResults: any) {
+            console.log("🚀 ~ openResultsForm ~ labResults:", labResults);
+            this.labResultsContent = labResults;
+            this.openResultsModal = true;
+            //  this.orders = await OrderService.getOrders(this.demographics.patient_id);
+            // const labf = createModal(LabResults);
+            // console.log("🚀 ~ openResultsForm ~ labf:", labf);
         },
         setActivClass(active: any) {
             this.activeHeight = "";
@@ -198,35 +225,49 @@ export default defineComponent({
 
         generateListItems(data: any, type: any, isMore: any, tableSize = {} as any) {
             let count = 0;
-
-            return data.flatMap((item: any) => {
-                return item.tests.flatMap((test: any) => {
-                    const result = test?.result != null ? test?.result[0]?.value_modifier + test?.result[0]?.value : null;
-
-                    if ((type === "result" && result !== null) || (type === "order" && result === null)) {
-                        const listItem = {
-                            containSize: tableSize?.containSize,
-                            btnSize: tableSize?.btnSize,
-                            btn: type === "order" ? ["enter_results", "attach", "print", "delete"] : ["print", "delete"],
-                            minHeight: "--min-height: 25px;",
-                            class: "",
-                            id: item.order_id,
-                            name: test.name,
-                            item: test,
-                            display:
-                                type == "order"
-                                    ? [HisDate.toStandardHisFormat(item.order_date), item.accession_number, test.name, item.specimen.name]
-                                    : [HisDate.toStandardHisFormat(item.order_date), item.accession_number, test.name, item.specimen.name, result],
-                        };
-
-                        if (isMore || count < 2) {
-                            count++;
-                            return [listItem];
+            if (data.length > 0) {
+                return data.flatMap((item: any) => {
+                    return item.tests.flatMap((test: any) => {
+                        let result = null;
+                        if (test?.result?.length == 1) {
+                            result = test?.result != null ? test?.result[0]?.value_modifier + test?.result[0]?.value : null;
+                        } else if (test?.result?.length > 1) {
+                            result = test?.result;
                         }
-                    }
-                    return [];
+                        if (result == "") console.log("🚀 ~ returnitem.tests.flatMap ~ result:", test);
+                        if ((type === "result" && result !== null) || (type === "order" && result === null)) {
+                            const listItem = {
+                                containSize: tableSize?.containSize,
+                                btnSize: tableSize?.btnSize,
+                                btn: type === "order" ? ["enter_results", "attach", "print", "delete"] : ["print", "delete"],
+                                minHeight: "--min-height: 25px;",
+                                class: "",
+                                id: item.order_id,
+                                name: test.name,
+                                item: test,
+                                display:
+                                    type == "order"
+                                        ? [HisDate.toStandardHisFormat(item.order_date), item.accession_number, test.name, item.specimen.name]
+                                        : [
+                                              HisDate.toStandardHisFormat(item.order_date),
+                                              item.accession_number,
+                                              test.name,
+                                              item.specimen.name,
+                                              result,
+                                          ],
+                            };
+
+                            if (isMore || count < 2) {
+                                count++;
+                                return [listItem];
+                            }
+                        }
+                        return [];
+                    });
                 });
-            });
+            } else {
+                return [];
+            }
         },
         seeOrderStatus(status: any) {
             if (status == "more") {

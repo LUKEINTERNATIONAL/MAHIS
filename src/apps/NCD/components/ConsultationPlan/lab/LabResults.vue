@@ -5,7 +5,9 @@
             <span @click="dismiss()" style="cursor: pointer; font-weight: 300">x</span>
         </div>
         <div class="center">
-            <h4><b>Enter Lab results</b></h4>
+            <h4>
+                <b>Enter lab results for ({{ labResults[0].name }}) test</b>
+            </h4>
         </div>
         <div class="center text_12">
             <ion-row>
@@ -15,7 +17,7 @@
         <br />
         <div class="triage_modal_btn center">
             <div class="center_btn">
-                <ion-button class="primary_btn" @click="dismiss()">Save</ion-button>
+                <ion-button class="primary_btn" @click="saveResults()">Save</ion-button>
                 <span @click="dismiss()" style="cursor: pointer"> Don't Save</span>
             </div>
         </div>
@@ -32,6 +34,17 @@ import { resetPatientData } from "@/services/reset_data";
 import { useLabResultsStore } from "@/stores/LabResults";
 import { mapState } from "pinia";
 import BasicForm from "@/components/BasicForm.vue";
+import { PatientLabResultService } from "@/services/patient_lab_result_service";
+import HisDate from "@/utils/Date";
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import {
+    modifyCheckboxInputField,
+    getCheckboxSelectedValue,
+    getRadioSelectedValue,
+    getFieldValue,
+    modifyRadioValue,
+    modifyFieldValue,
+} from "@/services/data_helpers";
 
 export default defineComponent({
     name: "Menu",
@@ -54,11 +67,43 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     computed: {
+        ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useLabResultsStore, ["labResults"]),
+    },
+    mounted() {
+        this.labResults;
+        // getFieldValue(this.labResults, this.labResults, "data");
+        console.log("🚀 ~ mounted ~ this.labResults:", this.labResults[0].concept_id);
+        console.log("🚀 ~ mounted ~ this.labResults:", this.labResults[0].name);
     },
     methods: {
         dismiss() {
             modalController.dismiss();
+        },
+        async saveResults() {
+            const patientLabResultService = new PatientLabResultService(this.demographics.patient_id);
+            patientLabResultService.setTestID(this.labResults[0].id);
+            patientLabResultService.setResultDate(HisDate.currentDate());
+            await patientLabResultService.createEncounter();
+            await patientLabResultService.createLabResult(this.buildResults());
+        },
+
+        buildResults() {
+            let measures = [] as any;
+            this.labResults.forEach((item: any) => {
+                if (item?.data?.rowData[0]?.colData[0]?.value) {
+                    measures.push({
+                        indicator: {
+                            concept_id: item?.data?.rowData[0]?.colData[0]?.id,
+                        },
+                        value: item?.data?.rowData[0]?.colData[0]?.value,
+                        value_modifier: "",
+                        value_type: "numeric",
+                    });
+                }
+            });
+            console.log("🚀 ~ buildResults ~ measures:", measures);
+            return measures;
         },
         nav(url: any, action: any) {
             const demographicsStore = useLabResultsStore();

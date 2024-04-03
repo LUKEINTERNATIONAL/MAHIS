@@ -11,7 +11,7 @@ export const usePregnancyStore = defineStore("pregnancyStore", {
                 radioBtnContent: {
                     header: {
                         title: "Are you pregnant?",
-                        name: "pregnant",
+                        name: "Patient pregnant",
                         selectedValue: "",
                     },
                     data: [
@@ -32,7 +32,7 @@ export const usePregnancyStore = defineStore("pregnancyStore", {
                 radioBtnContent: {
                     header: {
                         title: "Breastfeeding?",
-                        name: "breastfeeding",
+                        name: "Is patient breast feeding",
                         selectedValue: "",
                     },
                     data: [
@@ -56,5 +56,5 @@ export const usePregnancyStore = defineStore("pregnancyStore", {
             this.pregnancy = data;
         },
     },
-    // persist: true,
+    persist: true,
 });
