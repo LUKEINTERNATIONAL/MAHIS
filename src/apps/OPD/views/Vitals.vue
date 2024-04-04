@@ -245,6 +245,7 @@ export default defineComponent({
                 clearErrors()
             }
         },
+        //
         // respiratoryValidate() {
         //     const triggerError = (errorMessage: string) => {
         //         modifyFieldValue(this.vitals, "RespiratoryRate", "alertsError", true);
