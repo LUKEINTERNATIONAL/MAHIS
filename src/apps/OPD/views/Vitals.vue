@@ -111,19 +111,19 @@ export default defineComponent({
     },
     mounted() {
         this.markWizard();
-        this.pulseRateValidate()
-        this.respiratoryValidate()
-        this.systolicValidate()
-        this.diastolicValidate()
+        this.pulseRateValidate();
+        this.respiratoryValidate();
+        this.systolicValidate();
+        this.diastolicValidate();
     },
     watch: {
         vitals: {
             handler() {
                 this.markWizard();
-                this.pulseRateValidate()
-                this.respiratoryValidate()
-                this.systolicValidate()
-                this.diastolicValidate()
+                this.pulseRateValidate();
+                this.respiratoryValidate();
+                this.systolicValidate();
+                this.diastolicValidate();
             },
             deep: true,
         },
@@ -161,88 +161,74 @@ export default defineComponent({
                 modifyFieldValue(this.vitals, "Pulse", "alertsErrorMassage", "");
             };
 
-            const age= HisDate.calculateAge(this.demographics.birthdate,new Date());
-            const value= getFieldValue(this.vitals,'Pulse', 'value')
+            const age = HisDate.calculateAge(this.demographics.birthdate, new Date());
+            const value = getFieldValue(this.vitals, "Pulse", "value");
 
             let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
             ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
-            
-            if(value == "")return
-                        
-           if(age<1 && (ageInMonth == 1) && !(value>=70 && value<=190)){ 
-            triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`)
-           }else if(age<1 && (ageInMonth >= 1 && ageInMonth <=11 ) && !(value>=80 && value<=160)){ 
-            triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`)
-           } else if(age>10 && !(value>=60 && value<=100)){
-                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`)
-            }else if((age>=1 && age<=2) && !(value>=80 && value<=130)){
-                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`)
-            }else if((age>=3 && age<=4) && !(value>=80 && value<=120)){
-                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`)
-            }else if((age>=5 && age<=6) && !(value>=75 && value<=115)){
-                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`)
-            }else if((age>=7 && age<=9) && !(value>=70 && value<=110)){
-                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`)
-            }
-            else {
-                clearErrors()
-            }
 
-           
+            if (value == "") return;
+
+            if (age < 1 && ageInMonth == 1 && !(value >= 70 && value <= 190)) {
+                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`);
+            } else if (age < 1 && ageInMonth >= 1 && ageInMonth <= 11 && !(value >= 80 && value <= 160)) {
+                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`);
+            } else if (age > 10 && !(value >= 60 && value <= 100)) {
+                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`);
+            } else if (age >= 1 && age <= 2 && !(value >= 80 && value <= 130)) {
+                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`);
+            } else if (age >= 3 && age <= 4 && !(value >= 80 && value <= 120)) {
+                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`);
+            } else if (age >= 5 && age <= 6 && !(value >= 75 && value <= 115)) {
+                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`);
+            } else if (age >= 7 && age <= 9 && !(value >= 70 && value <= 110)) {
+                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`);
+            } else {
+                clearErrors();
+            }
         },
-        respiratoryValidate(){
+        respiratoryValidate() {
+            let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
+            console.log({ ageInMonth });
 
-            
-              let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
-                console.log({ageInMonth})
+            const triggerError = (errorMessage: string) => {
+                modifyFieldValue(this.vitals, "RespiratoryRate", "alertsError", true);
+                modifyFieldValue(this.vitals, "RespiratoryRate", "alertsErrorMassage", errorMessage);
+            };
 
+            const clearErrors = () => {
+                modifyFieldValue(this.vitals, "RespiratoryRate", "alertsError", false);
+                modifyFieldValue(this.vitals, "RespiratoryRate", "alertsErrorMassage", "");
+            };
 
-            const triggerError = (errorMessage:string)=>{
-            modifyFieldValue(this.vitals,'RespiratoryRate','alertsError',true)
-            modifyFieldValue(this.vitals,'RespiratoryRate','alertsErrorMassage',errorMessage)
-            }
+            const age = HisDate.calculateAge(this.demographics.birthdate, new Date());
+            const value = getFieldValue(this.vitals, "RespiratoryRate", "value");
 
-            const clearErrors = ()=>{
-            modifyFieldValue(this.vitals,'RespiratoryRate','alertsError',false)
-            modifyFieldValue(this.vitals,'RespiratoryRate','alertsErrorMassage',"")
-            }
+            ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
+            console.log({ ageInMonth });
 
+            console.log({ age, value, ageInMonth });
 
+            if (value == "") return;
 
-            const age= HisDate.calculateAge(this.demographics.birthdate,new Date());
-            const value= getFieldValue(this.vitals,'RespiratoryRate','value')
-
-                 ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
-                console.log({ageInMonth})
-
-                console.log({age,value,ageInMonth})
-
-           if(value == "")return
-
-
-
-
-           if(age<1 && (ageInMonth >= 1 && ageInMonth <=5 ) && !(value>=25 && value<=40)){ 
-            triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
-           }else if(age<1 && (ageInMonth >= 6 && ageInMonth <=12 ) && !(value>=20 && value<=30)){ 
-            triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
-           }
-           else if((age>=1 && age<=3) && !(value>=20 && value<=30)){
-                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
-            }else if((age>=3 && age<=5) && !(value>=20 && value<=30)){
-                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
-            }else if((age>=6 && age<=10) && !(value>=15 && value<=30)){
-                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
-            }else if((age>=11 && age<=14) && !(value>=12 && value<=20)){
-                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
-            }else if((age>=15 && age<=20) && !(value>=12 && value<=30)){
-                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
-            }else 
-            if(age>20 && !(value>=16 && value<=20)){
-                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
-            }
-            else {
-                clearErrors()
+            if (age < 1 && ageInMonth >= 1 && ageInMonth <= 5 && !(value >= 25 && value <= 40)) {
+                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`);
+            } else if (age < 1 && ageInMonth >= 6 && ageInMonth <= 12 && !(value >= 20 && value <= 30)) {
+                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`);
+            } else if (age >= 1 && age <= 3 && !(value >= 20 && value <= 30)) {
+                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`);
+            } else if (age >= 3 && age <= 5 && !(value >= 20 && value <= 30)) {
+                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`);
+            } else if (age >= 6 && age <= 10 && !(value >= 15 && value <= 30)) {
+                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`);
+            } else if (age >= 11 && age <= 14 && !(value >= 12 && value <= 20)) {
+                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`);
+            } else if (age >= 15 && age <= 20 && !(value >= 12 && value <= 30)) {
+                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`);
+            } else if (age > 20 && !(value >= 16 && value <= 20)) {
+                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`);
+            } else {
+                clearErrors();
             }
         },
         //
@@ -263,8 +249,8 @@ export default defineComponent({
         //     ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
 
         //     if(value == "")return
-           
-        //    if(age<1 && (ageInMonth >= 1 && ageInMonth <=12 ) && !(value>=75 && value<=100)){ 
+
+        //    if(age<1 && (ageInMonth >= 1 && ageInMonth <=12 ) && !(value>=75 && value<=100)){
         //     triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
         //    }
         //    else if((age>=1 && age<=4) && !(value>=80 && value<=110)){
@@ -296,15 +282,14 @@ export default defineComponent({
             const age = HisDate.calculateAge(this.demographics.birthdate, new Date());
             const value = getFieldValue(this.vitals, "Systolic", "value");
 
-
             let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
             ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
 
             if (value == "") return;
-            
-           if(age<1 && (ageInMonth >= 1 && ageInMonth <=12 ) && !(value>=75 && value<=100)){ 
-            triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
-           }else if (age >= 1 && age <= 4 && !(value >= 80 && value <= 110)) {
+
+            if (age < 1 && ageInMonth >= 1 && ageInMonth <= 12 && !(value >= 75 && value <= 100)) {
+                triggerError(`Systolic can't be ${value} for patient with an age of ${age}`);
+            } else if (age >= 1 && age <= 4 && !(value >= 80 && value <= 110)) {
                 triggerError(`Systolic can't be ${value} for patient with an age of ${age}`);
             } else if (age >= 3 && age <= 5 && !(value >= 80 && value <= 110)) {
                 triggerError(`Systolic can't be ${value} for patient with an age of ${age}`);
@@ -335,24 +320,22 @@ export default defineComponent({
             let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
             ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
 
-            if(value == "")return
-           
-           if(age<1 && (ageInMonth >= 1 && ageInMonth <=12 ) && !(value>=50 && value<=70)){ 
-            triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`)
-           }
-           else if((age>=1 && age<=4) && !(value>=50 && value<=80)){
-                triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`)
-            }else if((age>=3 && age<=5) && !(value>=50 && value<=80)){
-                triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`)
-            }else if((age>=6 && age<=13) && !(value>=55 && value<=80)){
-                triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`)
-            }else if((age>=13 && age<=18) && !(value>=60 && value<=90)){
-                triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`)
-            }else if(age>18  && !(value>=60 && value<=90)){
-                triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`)
-            }
-            else {
-                clearErrors()
+            if (value == "") return;
+
+            if (age < 1 && ageInMonth >= 1 && ageInMonth <= 12 && !(value >= 50 && value <= 70)) {
+                triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`);
+            } else if (age >= 1 && age <= 4 && !(value >= 50 && value <= 80)) {
+                triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`);
+            } else if (age >= 3 && age <= 5 && !(value >= 50 && value <= 80)) {
+                triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`);
+            } else if (age >= 6 && age <= 13 && !(value >= 55 && value <= 80)) {
+                triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`);
+            } else if (age >= 13 && age <= 18 && !(value >= 60 && value <= 90)) {
+                triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`);
+            } else if (age > 18 && !(value >= 60 && value <= 90)) {
+                triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`);
+            } else {
+                clearErrors();
             }
         },
         markWizard() {
@@ -372,11 +355,8 @@ export default defineComponent({
             if (this.vitals.validationStatus) {
                 this.saveVitals();
                 this.saveOutComeStatus();
-                this.$router.push("OPDConsultationPlan");
-            } else {
-                toastWarning("Please complete all required fields");
-                this.saveOutComeStatus();
             }
+            this.$router.push("OPDConsultationPlan");
         },
         saveVitals() {
             const userID: any = Service.getUserID();
