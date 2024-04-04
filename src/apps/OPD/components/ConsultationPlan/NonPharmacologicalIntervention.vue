@@ -17,11 +17,11 @@ import {
     modifyFieldValue,
     modifyRadioValue,
 } from "@/services/data_helpers";
-import {formatCheckBoxData} from "@/services/formatServerData";
-import {Service} from "@/services/service";
-import {Diagnosis} from "@/apps/NCD/services/diagnosis";
+import { formatCheckBoxData } from "@/services/formatServerData";
+import { Service } from "@/services/service";
+import { Diagnosis } from "@/apps/NCD/services/diagnosis";
 import treatment from "@/apps/ANC/views/Treatment.vue";
-import {Treatment} from "@/apps/OPD/services/treatment";
+import { Treatment } from "@/apps/OPD/services/treatment";
 export default defineComponent({
     name: "Menu",
     components: {
@@ -56,20 +56,18 @@ export default defineComponent({
             //     this.nonPharmacologicalIntervention[2].displayNone = true;
             // }
         },
-      async BuildNonPharmacologicalIntervention() {
-          return [
-              ...(await formatCheckBoxData(this.nonPharmacologicalIntervention))
-          ];
-      },
-      async saveNonPharmacologicalIntervention(){
-        const data: any = await this.BuildNonPharmacologicalIntervention();
-        console.log("🚀 ~ saveNonPharmacologicalIntervention ~ data:", data);
-        if (data.length > 0) {
-          const userID: any = Service.getUserID();
-          const treatmentInstance = new Treatment();
-          treatmentInstance.onSubmit(this.treatment.patient_id, userID, data);
-        }
-      }
+        async BuildNonPharmacologicalIntervention() {
+            return [...(await formatCheckBoxData(this.nonPharmacologicalIntervention))];
+        },
+        async saveNonPharmacologicalIntervention() {
+            const data: any = await this.BuildNonPharmacologicalIntervention();
+            console.log("🚀 ~ saveNonPharmacologicalIntervention ~ data:", data);
+            if (data.length > 0) {
+                const userID: any = Service.getUserID();
+                const treatmentInstance = new Treatment();
+                //   treatmentInstance.onSubmit(this.treatment.patient_id, userID, data);
+            }
+        },
     },
 });
 </script>

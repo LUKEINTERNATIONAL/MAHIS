@@ -11,7 +11,6 @@ import OPD from "@/apps/OPD/config/routes";
 import ANC from "@/apps/ANC/config/routes";
 import LABOUR from "@/apps/LABOUR/config/routes";
 import PNC from "@/apps/PNC/config/routes";
-import OPD from "@/apps/OPD/config/routes";
 
 const routes: Array<RouteRecordRaw> = [
     {

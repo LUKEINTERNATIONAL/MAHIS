@@ -25,7 +25,7 @@
                                 <ion-label>Choose the allergy:</ion-label>
                                 <ion-input ref="input" v-model="drugName" @ionInput="FindAllegicDrugName" fill="outline"></ion-input>
                                 <ion-list class="list-al">
-                                    <div class="item-al" v-for="(item, index) in medicalAllergiesList"  @click="selectAl(item)" :key="index">
+                                    <div class="item-al" v-for="(item, index) in medicalAllergiesList" @click="selectAl(item)" :key="index">
                                         <ion-label style="display: flex; justify-content: space-between">
                                             {{ item.name }}
                                             <ion-icon v-if="item.selected" class="icon-al" :icon="checkmarkOutline"></ion-icon>
