@@ -43,7 +43,7 @@ import { chevronBackOutline, checkmark } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
-import { useVitalsStore } from "@/stores/VitalsStore";
+import { useVitalsStore } from "../stores/OpdVitalsStore";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useInvestigationStore } from "@/stores/InvestigationStore";
 import { useDiagnosisStore } from "@/stores/DiagnosisStore";
@@ -379,4 +379,3 @@ export default defineComponent({
 </script>
 
 <style scoped></style>
-@/services/patient_general_consultation

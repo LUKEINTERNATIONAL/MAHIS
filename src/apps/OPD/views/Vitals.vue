@@ -37,7 +37,6 @@ import { chevronBackOutline, checkmark } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
-//import { useVitalsStore } from "@/stores/VitalsStore";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useInvestigationStore } from "@/stores/InvestigationStore";
 import { useDiagnosisStore } from "@/stores/DiagnosisStore";
@@ -109,45 +108,22 @@ export default defineComponent({
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useVitalsStore, ["vitals"]),
-        // ...mapState(useInvestigationStore, ["investigations"]),
-        // ...mapState(useDiagnosisStore, ["diagnosis"]),
-        // ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
     },
     mounted() {
         this.markWizard();
-        // this.handleHeight();
-        // this.handleSpecifyHeight()
-        // this.handlePulseRate()
-        // this.handlePulseRateNotDone()
-        // this.handlePulseOtherNotDone()
-        // this.handleBloodPressureDone()
-        // this.handleBPNotDone()
-        // this.handleRespiratoryRateDone()
-        // this.handleRespiratoryRateNotDone()
-        // this.handleRespiratoryRateNotDoneReason()
-        this.pulseRateValidate();
-        this.respiratoryValidate();
-        this.systolicValidate();
-        this.diastolicValidate();
+        this.pulseRateValidate()
+        this.respiratoryValidate()
+        this.systolicValidate()
+        this.diastolicValidate()
     },
     watch: {
         vitals: {
             handler() {
                 this.markWizard();
-                // this.handleHeight();
-                // this.handleSpecifyHeight()
-                // this.handlePulseRate()
-                // this.handlePulseRateNotDone()
-                // this.handlePulseOtherNotDone()
-                // this.handleBloodPressureDone()
-                // this.handleBPNotDone()
-                // this.handleRespiratoryRateDone()
-                // this.handleRespiratoryRateNotDone()
-                // this. handleRespiratoryRateNotDoneReason()
-                this.pulseRateValidate();
-                this.respiratoryValidate();
-                this.systolicValidate();
-                this.diastolicValidate();
+                this.pulseRateValidate()
+                this.respiratoryValidate()
+                this.systolicValidate()
+                this.diastolicValidate()
             },
             deep: true,
         },
@@ -185,57 +161,127 @@ export default defineComponent({
                 modifyFieldValue(this.vitals, "Pulse", "alertsErrorMassage", "");
             };
 
-            const age = HisDate.calculateAge(this.demographics.birthdate, new Date());
-            const value = getFieldValue(this.vitals, "Pulse", "value");
+            const age= HisDate.calculateAge(this.demographics.birthdate,new Date());
+            const value= getFieldValue(this.vitals,'Pulse', 'value')
 
-            if (value == "") return;
+            let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
+            ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
+            
+            if(value == "")return
+                        
+           if(age<1 && (ageInMonth == 1) && !(value>=70 && value<=190)){ 
+            triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`)
+           }else if(age<1 && (ageInMonth >= 1 && ageInMonth <=11 ) && !(value>=80 && value<=160)){ 
+            triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`)
+           } else if(age>10 && !(value>=60 && value<=100)){
+                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`)
+            }else if((age>=1 && age<=2) && !(value>=80 && value<=130)){
+                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`)
+            }else if((age>=3 && age<=4) && !(value>=80 && value<=120)){
+                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`)
+            }else if((age>=5 && age<=6) && !(value>=75 && value<=115)){
+                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`)
+            }else if((age>=7 && age<=9) && !(value>=70 && value<=110)){
+                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`)
+            }
+            else {
+                clearErrors()
+            }
 
-            if (age > 10 && !(value >= 60 && value <= 100)) {
-                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`);
-            } else if (age >= 1 && age <= 2 && !(value >= 80 && value <= 130)) {
-                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`);
-            } else if (age >= 3 && age <= 4 && !(value >= 80 && value <= 120)) {
-                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`);
-            } else if (age >= 5 && age <= 6 && !(value >= 75 && value <= 115)) {
-                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`);
-            } else if (age >= 7 && age <= 9 && !(value >= 70 && value <= 110)) {
-                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`);
-            } else {
-                clearErrors();
+           
+        },
+        respiratoryValidate(){
+
+            
+              let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
+                console.log({ageInMonth})
+
+
+            const triggerError = (errorMessage:string)=>{
+            modifyFieldValue(this.vitals,'RespiratoryRate','alertsError',true)
+            modifyFieldValue(this.vitals,'RespiratoryRate','alertsErrorMassage',errorMessage)
+            }
+
+            const clearErrors = ()=>{
+            modifyFieldValue(this.vitals,'RespiratoryRate','alertsError',false)
+            modifyFieldValue(this.vitals,'RespiratoryRate','alertsErrorMassage',"")
+            }
+
+
+
+            const age= HisDate.calculateAge(this.demographics.birthdate,new Date());
+            const value= getFieldValue(this.vitals,'RespiratoryRate','value')
+
+                 ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
+                console.log({ageInMonth})
+
+                console.log({age,value,ageInMonth})
+
+           if(value == "")return
+
+
+
+
+           if(age<1 && (ageInMonth >= 1 && ageInMonth <=5 ) && !(value>=25 && value<=40)){ 
+            triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
+           }else if(age<1 && (ageInMonth >= 6 && ageInMonth <=12 ) && !(value>=20 && value<=30)){ 
+            triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
+           }
+           else if((age>=1 && age<=3) && !(value>=20 && value<=30)){
+                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
+            }else if((age>=3 && age<=5) && !(value>=20 && value<=30)){
+                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
+            }else if((age>=6 && age<=10) && !(value>=15 && value<=30)){
+                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
+            }else if((age>=11 && age<=14) && !(value>=12 && value<=20)){
+                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
+            }else if((age>=15 && age<=20) && !(value>=12 && value<=30)){
+                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
+            }else 
+            if(age>20 && !(value>=16 && value<=20)){
+                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
+            }
+            else {
+                clearErrors()
             }
         },
-        respiratoryValidate() {
-            const triggerError = (errorMessage: string) => {
-                modifyFieldValue(this.vitals, "RespiratoryRate", "alertsError", true);
-                modifyFieldValue(this.vitals, "RespiratoryRate", "alertsErrorMassage", errorMessage);
-            };
+        //
+        // respiratoryValidate() {
+        //     const triggerError = (errorMessage: string) => {
+        //         modifyFieldValue(this.vitals, "RespiratoryRate", "alertsError", true);
+        //         modifyFieldValue(this.vitals, "RespiratoryRate", "alertsErrorMassage", errorMessage);
+        //     };
 
-            const clearErrors = () => {
-                modifyFieldValue(this.vitals, "RespiratoryRate", "alertsError", false);
-                modifyFieldValue(this.vitals, "RespiratoryRate", "alertsErrorMassage", "");
-            };
+        //     const clearErrors = () => {
+        //         modifyFieldValue(this.vitals, "RespiratoryRate", "alertsError", false);
+        //         modifyFieldValue(this.vitals, "RespiratoryRate", "alertsErrorMassage", "");
+        //     };
 
-            const age = HisDate.calculateAge(this.demographics.birthdate, new Date());
-            const value = getFieldValue(this.vitals, "RespiratoryRate", "value");
+        //     const age= HisDate.calculateAge(this.demographics.birthdate,new Date());
+        //     const value= getFieldValue(this.vitals,'Systolic', 'value');
+        //     let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate,new Date());
+        //     ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
 
-            if (value == "") return;
-
-            if (age >= 1 && age <= 3 && !(value >= 20 && value <= 30)) {
-                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`);
-            } else if (age >= 3 && age <= 5 && !(value >= 20 && value <= 30)) {
-                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`);
-            } else if (age >= 6 && age <= 10 && !(value >= 15 && value <= 30)) {
-                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`);
-            } else if (age >= 11 && age <= 14 && !(value >= 12 && value <= 20)) {
-                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`);
-            } else if (age >= 15 && age <= 20 && !(value >= 12 && value <= 30)) {
-                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`);
-            } else if (age > 20 && !(value >= 16 && value <= 20)) {
-                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`);
-            } else {
-                clearErrors();
-            }
-        },
+        //     if(value == "")return
+           
+        //    if(age<1 && (ageInMonth >= 1 && ageInMonth <=12 ) && !(value>=75 && value<=100)){ 
+        //     triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
+        //    }
+        //    else if((age>=1 && age<=4) && !(value>=80 && value<=110)){
+        //         triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
+        //     }else if((age>=3 && age<=5) && !(value>=80 && value<=110)){
+        //         triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
+        //     }else if((age>=6 && age<=13) && !(value>=85 && value<=120)){
+        //         triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
+        //     }else if((age>=13 && age<=18) && !(value>=95 && value<=140)){
+        //         triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
+        //     }else if(age>18  && !(value>=100 && value<=130)){
+        //         triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
+        //     }
+        //     else {
+        //         clearErrors()
+        //     }
+        // },
         systolicValidate() {
             const triggerError = (errorMessage: string) => {
                 modifyFieldValue(this.vitals, "Systolic", "alertsError", true);
@@ -250,9 +296,15 @@ export default defineComponent({
             const age = HisDate.calculateAge(this.demographics.birthdate, new Date());
             const value = getFieldValue(this.vitals, "Systolic", "value");
 
-            if (value == "") return;
 
-            if (age >= 1 && age <= 4 && !(value >= 80 && value <= 110)) {
+            let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
+            ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
+
+            if (value == "") return;
+            
+           if(age<1 && (ageInMonth >= 1 && ageInMonth <=12 ) && !(value>=75 && value<=100)){ 
+            triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
+           }else if (age >= 1 && age <= 4 && !(value >= 80 && value <= 110)) {
                 triggerError(`Systolic can't be ${value} for patient with an age of ${age}`);
             } else if (age >= 3 && age <= 5 && !(value >= 80 && value <= 110)) {
                 triggerError(`Systolic can't be ${value} for patient with an age of ${age}`);
@@ -280,94 +332,29 @@ export default defineComponent({
             const age = HisDate.calculateAge(this.demographics.birthdate, new Date());
             const value = getFieldValue(this.vitals, "Diastolic", "value");
 
-            if (value == "") return;
+            let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
+            ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
 
-            if (age >= 1 && age <= 4 && !(value >= 50 && value <= 80)) {
-                triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`);
-            } else if (age >= 3 && age <= 5 && !(value >= 50 && value <= 80)) {
-                triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`);
-            } else if (age >= 6 && age <= 13 && !(value >= 55 && value <= 80)) {
-                triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`);
-            } else if (age >= 13 && age <= 18 && !(value >= 60 && value <= 90)) {
-                triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`);
-            } else if (age > 18 && !(value >= 60 && value <= 90)) {
-                triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`);
-            } else {
-                clearErrors();
+            if(value == "")return
+           
+           if(age<1 && (ageInMonth >= 1 && ageInMonth <=12 ) && !(value>=50 && value<=70)){ 
+            triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`)
+           }
+           else if((age>=1 && age<=4) && !(value>=50 && value<=80)){
+                triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`)
+            }else if((age>=3 && age<=5) && !(value>=50 && value<=80)){
+                triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`)
+            }else if((age>=6 && age<=13) && !(value>=55 && value<=80)){
+                triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`)
+            }else if((age>=13 && age<=18) && !(value>=60 && value<=90)){
+                triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`)
+            }else if(age>18  && !(value>=60 && value<=90)){
+                triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`)
+            }
+            else {
+                clearErrors()
             }
         },
-        // handleHeight(){
-        //     if(getRadioSelectedValue(this.vitals,'OpdTemperature')=='yes'){
-        //         modifyFieldValue(this.vitals,'Temp','displayNone',false)
-        //     }else{
-        //          modifyFieldValue(this.vitals,'Temp','displayNone',true)
-        //     }
-        // },
-        // handleSpecifyHeight(){
-        //     if(getRadioSelectedValue(this.vitals,'OpdTemperature')=='no'){
-        //         modifyRadioValue(this.vitals,'temperatureNotDone','displayNone',false)
-        //     }else{
-        //          modifyRadioValue(this.vitals,'temperatureNotDone','displayNone',true)
-        //     }
-        // },
-        // handlePulseRate(){
-        //     if(getRadioSelectedValue(this.vitals,'OpdPulseRate')=='done'){
-        //         modifyFieldValue(this.vitals,'Pulse','displayNone',false)
-        //     }else{
-        //          modifyFieldValue(this.vitals,'Pulse','displayNone',true)
-        //     }
-        // },
-        // handlePulseRateNotDone(){
-        //     if(getRadioSelectedValue(this.vitals,'OpdPulseRate')=='notDone'){
-        //         modifyRadioValue(this.vitals,'OpdPulseRateNotDone','displayNone',false)
-        //     }else{
-        //          modifyRadioValue(this.vitals,'OpdPulseRateNotDone','displayNone',true)
-        //     }
-        // },
-        // handlePulseOtherNotDone(){
-        //     if(getRadioSelectedValue(this.vitals,'OpdPulseRateNotDone')=='Other'){
-        //         modifyFieldValue(this.vitals,'otherReason','displayNone',false)
-        //     }else{
-        //          modifyFieldValue(this.vitals,'otherReason','displayNone',true)
-        //     }
-        // },
-        // handleBloodPressureDone(){
-        //     if(getRadioSelectedValue(this.vitals,'OpdBloodPressure')=='done'){
-        //         modifyFieldValue(this.vitals,'Systolic','displayNone',false)
-        //         modifyFieldValue(this.vitals,'Diastolic','displayNone',false)
-        //     }else{
-        //          modifyFieldValue(this.vitals,'Systolic','displayNone',true)
-        //          modifyFieldValue(this.vitals,'Diastolic','displayNone',true)
-        //     }
-        // },
-        // handleBPNotDone(){
-        //     if(getRadioSelectedValue(this.vitals,'OpdBloodPressure')=='notDone'){
-        //         modifyRadioValue(this.vitals,'OpdBloodPressureReason','displayNone',false)
-        //     }else{
-        //          modifyRadioValue(this.vitals,'OpdBloodPressureReason','displayNone',true)
-        //     }
-        // },
-        // handleRespiratoryRateDone(){
-        //     if(getRadioSelectedValue(this.vitals,'OpdRespiratoryRate')=='done'){
-        //         modifyFieldValue(this.vitals,'RespiratoryRate','displayNone',false)
-        //     }else{
-        //          modifyFieldValue(this.vitals,'RespiratoryRate','displayNone',true)
-        //     }
-        // },
-        // handleRespiratoryRateNotDone(){
-        //     if(getRadioSelectedValue(this.vitals,'OpdRespiratoryRate')=='notDone'){
-        //         modifyRadioValue(this.vitals,'OpdRespiratoryRateNotDone','displayNone',false)
-        //     }else{
-        //          modifyRadioValue(this.vitals,'OpdRespiratoryRateNotDone','displayNone',true)
-        //     }
-        // },
-        // handleRespiratoryRateNotDoneReason(){
-        //     if(getRadioSelectedValue(this.vitals,'OpdRespiratoryRateNotDone')=='reason'){
-        //         modifyFieldValue(this.vitals,'Respiratory reason','displayNone',false)
-        //     }else{
-        //          modifyFieldValue(this.vitals,'Respiratory reason','displayNone',true)
-        //     }
-        // },
         markWizard() {
             if (this.vitals.validationStatus) {
                 this.wizardData[0].checked = true;
