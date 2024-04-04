@@ -141,8 +141,12 @@ export default defineComponent({
         current_traditional_authority: "",
         current_village: "",
         landmark: "",
-
         cell_phone_number: this.guardianPhoneNumber,
+        national_id: getFieldValue(
+          this.guardianInformation,
+          "guardianNationalID",
+          "value"
+        ),
       };
     },
 

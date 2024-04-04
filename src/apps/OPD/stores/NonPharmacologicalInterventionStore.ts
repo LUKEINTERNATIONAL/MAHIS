@@ -12,24 +12,14 @@ export const useNonPharmacologicalInterventionStore = defineStore("nonPharmacolo
                     header: {
                         title: "",
                         selectedValue: "",
+                        name: "Wound dressing",
                     },
                     data: [
                         {
                             colSize: 4.2,
-                            name: "Wound Dressing",
-                            value: "Wound Dressing",
-                            checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
                             name: "Wound dressing",
-                            showDatePopover: false,
-                            eventType: "input",
-                            displayNone: true,
+                            value: "Wound dressing",
+                            checked: false,
                         },
                     ],
                 },
@@ -42,6 +32,7 @@ export const useNonPharmacologicalInterventionStore = defineStore("nonPharmacolo
                     header: {
                         title: "",
                         selectedValue: "",
+                        name: "Patient education",
                     },
                     data: [
                         {
@@ -51,17 +42,7 @@ export const useNonPharmacologicalInterventionStore = defineStore("nonPharmacolo
                             checked: false,
                         },
                     ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Patient education",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
-                        },
-                    ],
+
                 },
             },
             {
@@ -69,7 +50,7 @@ export const useNonPharmacologicalInterventionStore = defineStore("nonPharmacolo
                 checkboxBtnContent: {
                     header: {
                         selectedValue: "",
-                        name: "",
+                        name: "Counselling",
                     },
                     data: [
                         {
@@ -77,17 +58,6 @@ export const useNonPharmacologicalInterventionStore = defineStore("nonPharmacolo
                             name: "Counselling",
                             value: "Counselling",
                             checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Counselling",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
                         },
                     ],
                 },
@@ -105,17 +75,6 @@ export const useNonPharmacologicalInterventionStore = defineStore("nonPharmacolo
                             name: "Minor Surgery",
                             value: "Minor Surgery",
                             checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            eventType: "input",
-                            name: "Minor Surgery",
-                            isDatePopover: true,
-                            displayNone: true,
                         },
                     ],
                 },

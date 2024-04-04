@@ -1,5 +1,15 @@
 <template>
-    <ion-row v-for="(item, index) in contentData" :key="index" :class="contentData[index].classDash">
+    <ion-row
+        v-for="(item, index) in contentData"
+        :key="index"
+        :class="contentData[index].classDash"
+        style="width: 100%"
+        v-show="
+            !contentData[index]?.radioBtnContent?.header?.displayNone &&
+            !contentData[index]?.checkboxBtnContent?.header?.displayNone &&
+            !contentData[index]?.data?.rowData[0]?.colData[0]?.displayNone
+        "
+    >
         <ion-col class="item_header_col" v-if="item['sectionHeader']">
             <span class="item_header" :style="'font-weight:' + item.sectionHeaderFontWeight">{{ item["sectionHeader"] }}</span>
         </ion-col>
@@ -9,7 +19,7 @@
                 <ion-row v-for="(element, index2) in item.data.rowData" :key="index2">
                     <ion-col v-for="(col, colIndex) in element.colData" :key="colIndex" v-show="!col.displayNone" :size="col.colSize">
                         <BasicInputField
-                            v-if="!col.isDatePopover"
+                            v-if="!col.isDatePopover && !col.isMultiSelect"
                             :inputHeader="col.inputHeader"
                             :sectionHeaderFontWeight="col.sectionHeaderFontWeight"
                             :unit="col.unit"
@@ -27,6 +37,29 @@
                             :popOverData="col.popOverData"
                             @setPopoverValue="handleInput(contentData, col, $event, 'setPopoverValue')"
                         />
+                        <div v-if="col.isMultiSelect">
+                            <h6 v-if="col.inputHeader">{{ col.inputHeader }}</h6>
+                            <VueMultiselect
+                                v-if="col.isMultiSelect"
+                                v-model="col.value"
+                                @update:model-value="handleInput(contentData, col, $event, 'updateMultiselect')"
+                                :multiple="true"
+                                :taggable="true"
+                                :hide-selected="true"
+                                :close-on-select="false"
+                                openDirection="bottom"
+                                @tag="addTag"
+                                tag-placeholder=""
+                                placeholder=""
+                                selectLabel=""
+                                label="name"
+                                :searchable="true"
+                                @search-change="$emit('search-change', $event)"
+                                track-by="concept_id"
+                                :options="col.multiSelectData"
+                            />
+                        </div>
+
                         <DateInputField
                             v-if="col.isDatePopover"
                             :inputHeader="col.inputHeader"
@@ -215,6 +248,7 @@ import DateInputField from "@/components/DateInputField.vue";
 import DynamicButton from "./DynamicButton.vue";
 import { IonDatetime, IonDatetimeButton, IonCheckbox } from "@ionic/vue";
 import HisDate from "@/utils/Date";
+import VueMultiselect from "vue-multiselect";
 import { createModal } from "@/utils/Alerts";
 
 import {
@@ -234,6 +268,7 @@ export default defineComponent({
         IonDatetimeButton,
         IonCheckbox,
         DateInputField,
+        VueMultiselect,
     },
     data() {
         return {
@@ -242,6 +277,8 @@ export default defineComponent({
             header: "" as any,
             flow: ["month", "year", "calendar"],
             date: "",
+            value: [] as any,
+            options: [{ name: "Vue.js" }, { name: "Javascript" }, { name: "Open Source" }, { name: "kaka" }],
         };
     },
     props: {
@@ -250,10 +287,22 @@ export default defineComponent({
         },
     },
     methods: {
+        addTag(newTag: any) {
+            const tag = {
+                name: newTag,
+                code: newTag.substring(0, 2) + Math.floor(Math.random() * 10000000),
+            };
+            this.options.push(tag);
+            this.value.push(tag);
+        },
         handleInput(data: any, col: any, event: any, inputType: any) {
             this.event = event;
             if (inputType == "updateInput") {
                 modifyFieldValue(data, col.name, "value", event.target.value);
+                this.$emit("update:inputValue", col);
+            }
+            if (inputType == "updateMultiselect") {
+                modifyFieldValue(data, col.name, "value", event);
                 this.$emit("update:inputValue", col);
             }
 
@@ -401,4 +450,11 @@ ion-radio {
     padding: 5px;
     border-radius: 3px;
 }
+.multiselect__content-wrapper {
+    width: 400px;
+}
+h6 {
+    margin-top: 0px;
+}
 </style>
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>

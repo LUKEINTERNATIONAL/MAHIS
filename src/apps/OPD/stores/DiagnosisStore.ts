@@ -12,7 +12,7 @@ export const useOPDDiagnosisStore = defineStore("OPDDiagnosisStore", {
                         {
                             colData: [
                                 {
-                                    inputHeader: "Primary Diagnosis",
+                                    inputHeader: "Primary Diagnosis*",
                                     icon: icons.search,
                                     popOver: true,
                                     value: "",
@@ -31,9 +31,11 @@ export const useOPDDiagnosisStore = defineStore("OPDDiagnosisStore", {
                                 {
                                     inputHeader: "Differential Diagnosis",
                                     icon: icons.search,
+                                    isMultiSelect: true,
                                     popOver: true,
                                     value: "",
                                     name: "differentialDiagnosis",
+                                    multiSelectData: [],
                                     eventType: "input",
                                     required: true,
                                     alertsError: false,
@@ -44,7 +46,7 @@ export const useOPDDiagnosisStore = defineStore("OPDDiagnosisStore", {
                             ],
                             btns: [
                                 {
-                                    name: "Save",
+                                    name: "Add",
                                     fill: "clear",
                                     btn_col_size: 3,
                                     icon: icons.plus,
@@ -61,5 +63,5 @@ export const useOPDDiagnosisStore = defineStore("OPDDiagnosisStore", {
             this.OPDdiagnosis = data;
         },
     },
-    // persist: true,
+    persist: true,
 });

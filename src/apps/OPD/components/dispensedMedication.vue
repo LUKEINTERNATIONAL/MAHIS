@@ -23,16 +23,21 @@
         <div class="space" />
         <ion-label>Prescribed Medications To Be Dispensed</ion-label>
         <div v-if="dispensationStore.getDrugPrescriptions() && dispensationStore.getDrugPrescriptions().length > 0">
-            <dynamic-list @clickt="toggleCheckbox" :dataArray="dispensationStore.drugPrescriptions"
-                :withCheckboxs="true" :showInputs="true" :show_actions_buttons="false"
-                @updateQuantity="sendQuantityToStore" @getInputID="updateReason"
-                @getSelectedReason="setSelectedReason" />
+            <dynamic-list
+                @clickt="toggleCheckbox"
+                :dataArray="dispensationStore.drugPrescriptions"
+                :withCheckboxs="true"
+                :showInputs="true"
+                :show_actions_buttons="false"
+                @updateQuantity="sendQuantityToStore"
+                @getInputID="updateReason"
+                @getSelectedReason="setSelectedReason"
+            />
         </div>
         <div v-else>Loading, Please Wait. If this takes more than 2 seconds then something went wrong...</div>
         <div>
             <div class="space3" />
-            <ion-button class="primary_btn" style="padding-left: 15px"
-                @click="saveDispensations()">Dispense</ion-button>
+            <ion-button class="primary_btn" style="padding-left: 15px" @click="saveDispensations()">Dispense</ion-button>
         </div>
     </ion-list>
 </template>
@@ -90,7 +95,7 @@ export default defineComponent({
 });
 </script>
 <script setup lang="ts">
-import { useAllegyStore } from "@/apps/OPD/stores/AllergyStore"
+import { useAllegyStore } from "@/apps/OPD/stores/AllergyStore";
 import {
     IonContent,
     IonHeader,
@@ -118,55 +123,56 @@ const demographics = computed(() => usedemographics_store.demographics)
 const dispensationStore = useDispensationStore()
 const store2 = useAllegyStore();
 const selectedAllergiesList2 = computed(() => store2.selectedMedicalAllergiesList);
-const selectedReason = ref("")
+const selectedReason = ref("");
 
 onMounted(async () => {
-    const previousTreatment = new PreviousTreatment()
-    const { previousDrugPrescriptions } = await previousTreatment.getPatientEncounters()
+    const previousTreatment = new PreviousTreatment();
+    const { previousDrugPrescriptions } = await previousTreatment.getPatientEncounters();
 
-    dispensationStore.setDrugPrescriptions(previousDrugPrescriptions[0].previousPrescriptions)
+    dispensationStore.setDrugPrescriptions(previousDrugPrescriptions[0].previousPrescriptions);
     for (let index = 0; index < dispensationStore.getDrugPrescriptions().length; index++) {
-        dispensationStore.initializeValidationsBoolean()
-        dispensationStore.initializeReasonParameter()
-        dispensationStore.initializeDispensedAmount()
-        dispensationStore.updateCheckboxBool(true, index)
+        dispensationStore.initializeValidationsBoolean();
+        dispensationStore.initializeReasonParameter();
+        dispensationStore.initializeDispensedAmount();
+        dispensationStore.updateCheckboxBool(true, index);
     }
-})
+});
 
-function setSelectedReason(event: Event) {
-    selectedReason.value = event.name
+function setSelectedReason(event: any) {
+    selectedReason.value = event.name;
 }
-function updateReason(event: Event) {
+function updateReason(event: any) {
     if (selectedReason.value == "") {
-        return
+        return;
     }
-    dispensationStore.setReason(selectedReason.value, event.target.id)
-    selectedReason.value = ""
-    dispensationStore.validateInputs()
+    dispensationStore.setReason(selectedReason.value, event.target.id);
+    selectedReason.value = "";
+    dispensationStore.validateInputs();
 }
-function sendQuantityToStore(event: Event) {
-    const index = event.target.id
-    const quantity = event.detail.value
+function sendQuantityToStore(event: any) {
+    const index = event.target.id;
+    const quantity = event.detail.value;
 
-    dispensationStore.addQuantity(quantity, index)
-    dispensationStore.validateInputs()
+    dispensationStore.addQuantity(quantity, index);
+    dispensationStore.validateInputs();
 }
-function toggleCheckbox(event: Event) {
+function toggleCheckbox(event: any) {
     const index = event.target.id;
     const CheckboxBoolean = event.detail.checked;
 
-    dispensationStore.updateCheckboxBool(CheckboxBoolean, index)
+    dispensationStore.updateCheckboxBool(CheckboxBoolean, index);
 }
 function saveDispensations() {
-    dispensationStore.isSaveInitiated(true)
+    dispensationStore.isSaveInitiated(true);
     if (dispensationStore.validateInputs()) {
-        return
+        return;
     }
     dispensationStore.saveDispensedMedications()
     dispensationStore.setDispensedMedicationsPayload()
     usedemographics_store
     const dispensation_srvc = new DispensationService(demographics.value.patient_id, Service.getUserID() as any)
-    dispensation_srvc.saveDispensations((dispensationStore.getDispensedMedicationsPayload()).dispensations as any)
+    const dispensation_payload: any = dispensationStore.getDispensedMedicationsPayload()
+    dispensation_srvc.saveDispensations(dispensation_payload.dispensations)
     dispensationStore.toggleStepperData()
 }
 </script>
