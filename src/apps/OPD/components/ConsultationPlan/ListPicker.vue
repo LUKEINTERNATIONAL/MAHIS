@@ -53,7 +53,10 @@ const props = defineProps<{
     uniqueId: "99"
     name_of_list: 'name of list',
     choose_place_holder: 'Choose placeholder',
-    items_List: [],
+    items_List: [{
+        selected: false,
+        name: '',
+    }],
     multiSelection: false,
     show_label: true,
 }>()

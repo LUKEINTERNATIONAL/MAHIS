@@ -26,7 +26,7 @@
                     :title="popoverProperties.title"
                     :popoverOpen="popoverProperties.popoverOpen"
                     :event="popoverProperties.event"
-                    @closePopoover="(value) => (popoverProperties.popoverOpen = value)"
+                    @closePopoover="popoverProperties.popoverOpen"
                     @setSelection="setSelection"
                 />
 
