@@ -14,13 +14,13 @@
         </ion-row>
 
         <ion-label>Current Diagnoses</ion-label>
-        <ion-row>
-            <ion-button color="secondary" class="medicalAlBtn"> Covid 19 </ion-button>
-            <ion-button color="secondary" class="medicalAlBtn"> TB </ion-button>
-            <ion-button color="secondary" class="medicalAlBtn"> Malaria </ion-button>
-        </ion-row>
+        <div v-for="(item, index) in list" :key="index">
+            <ion-button color="secondary" class="medicalAlBtn">
+                {{ item.display[0] }}
+            </ion-button>
+        </div>
 
-        <div class="space2" />
+        <div class="space" />
         <ion-label>Prescribed Medications To Be Dispensed</ion-label>
         <div v-if="dispensationStore.getDrugPrescriptions() && dispensationStore.getDrugPrescriptions().length > 0">
             <dynamic-list
@@ -46,17 +46,52 @@
 import { defineComponent } from "vue";
 import { mapState } from "pinia";
 import DynamicList from "../components/DynamicList.vue";
-import { useDispensationStore } from "@/apps/OPD/stores/DispensationStore";
+import { useDispensationStore } from '@/apps/OPD/stores/DispensationStore'
+import { ObservationService } from "@/services/observation_service";
+import { isEmpty } from "lodash";
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import HisDate from "@/utils/Date";
+
 
 export default defineComponent({
     watch: {},
     name: "xxxComponent",
     computed: {
-        ...mapState(useDispensationStore, ["drugPrescriptions"]),
+        ...mapState(useDispensationStore, ['drugPrescriptions']),
+        ...mapState(useDemographicsStore, ["demographics"])
     },
     data() {
-        return {};
+        return {
+            list: [] as any,
+        };
     },
+    async mounted() {
+        const obs = await ObservationService.getAll(this.demographics.patient_id, 'Primary diagnosis')
+        const diagnosis = !isEmpty(obs) ? Promise.all(obs.map(async (ob: any) => {
+            return {
+                'name': await ObservationService.getConceptName(ob['value_coded']),
+                'obs_date': ob.obs_datetime
+            }
+        }
+        )) : []
+        this.setListData(await diagnosis)
+    },
+    methods: {
+        setListData(data: any) {
+            this.list = []
+            data.forEach((item: any) => {
+
+                this.list.push({
+                    'display': [
+                        item.name,
+                    ]
+                })
+
+            })
+
+        }
+    }
+
 });
 </script>
 <script setup lang="ts">
@@ -79,14 +114,13 @@ import {
     IonAccordionGroup,
     AccordionGroupCustomEvent,
 } from "@ionic/vue";
-import { ref, watch, computed, onMounted, onUpdated } from "vue";
-import { PreviousTreatment } from "@/apps/NCD/services/treatment";
-import { DispensationService } from "@/apps/OPD/services/dispensation_service";
-import { useDemographicsStore } from "@/stores/DemographicStore";
-import { Service } from "@/services/service";
-const usedemographics_store = useDemographicsStore();
-const demographics = computed(() => usedemographics_store.demographics);
-const dispensationStore = useDispensationStore();
+import { ref, watch, computed, onMounted, onUpdated } from "vue"
+import { PreviousTreatment } from "@/apps/NCD/services/treatment"
+import { DispensationService } from "@/apps/OPD/services/dispensation_service"
+import { Service } from "@/services/service"
+const usedemographics_store = useDemographicsStore()
+const demographics = computed(() => usedemographics_store.demographics)
+const dispensationStore = useDispensationStore()
 const store2 = useAllegyStore();
 const selectedAllergiesList2 = computed(() => store2.selectedMedicalAllergiesList);
 const selectedReason = ref("");
@@ -133,13 +167,13 @@ function saveDispensations() {
     if (dispensationStore.validateInputs()) {
         return;
     }
-    dispensationStore.saveDispensedMedications();
-    dispensationStore.setDispensedMedicationsPayload();
-    usedemographics_store;
-    const dispensation_srvc = new DispensationService(demographics.value.patient_id, Service.getUserID() as any);
-    const payload: any = dispensationStore.getDispensedMedicationsPayload();
-    dispensation_srvc.saveDispensations(payload.dispensations);
-    return dispensationStore.getDispensedMedicationsPayload();
+    dispensationStore.saveDispensedMedications()
+    dispensationStore.setDispensedMedicationsPayload()
+    usedemographics_store
+    const dispensation_srvc = new DispensationService(demographics.value.patient_id, Service.getUserID() as any)
+    const dispensation_payload: any = dispensationStore.getDispensedMedicationsPayload()
+    dispensation_srvc.saveDispensations(dispensation_payload.dispensations)
+    dispensationStore.toggleStepperData()
 }
 </script>
 

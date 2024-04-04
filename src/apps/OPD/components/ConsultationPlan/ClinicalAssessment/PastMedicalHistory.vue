@@ -40,9 +40,9 @@ export default defineComponent({
         handleInputData(event: any) {
             console.log(event);
             if (event?.al?.name == "TB" && event?.al?.checked) {
-                modifyRadioValue(this.pastMedicalHistory, "TBmedication", "displayNone", false);
+                modifyRadioValue(this.pastMedicalHistory, "TB treatment", "displayNone", false);
             } else if (event?.al?.name == "TB" && !event?.al?.checked) {
-                modifyRadioValue(this.pastMedicalHistory, "TBmedication", "displayNone", true);
+                modifyRadioValue(this.pastMedicalHistory, "TB treatment", "displayNone", true);
             }
 
             if (event?.name == "TBmedication" && event?.selectedValue == "Yes") {
