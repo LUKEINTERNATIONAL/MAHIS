@@ -15,7 +15,7 @@ export const useVitalsStore = defineStore("vitalsStore", {
             {
               colData: [
                 {
-                  inputHeader: "Height*",
+                  inputHeader: "Height",
                   unit: "cm",
                   icon: icons.height,
                   value: "",
@@ -26,7 +26,7 @@ export const useVitalsStore = defineStore("vitalsStore", {
                   alertsErrorMassage: "",
                 },
                 {
-                  inputHeader: "Weight*",
+                  inputHeader: "Weight",
                   unit: "kg",
                   icon: icons.weight,
                   value: "",
@@ -110,7 +110,7 @@ export const useVitalsStore = defineStore("vitalsStore", {
               colData: [
                 {
                  
-                  inputHeader: "Systolic Pressure*",
+                  inputHeader: "Systolic Pressure",
                   unit: "mmHg",
                   icon: icons.systolicPressure,
                   value: "",
@@ -122,7 +122,7 @@ export const useVitalsStore = defineStore("vitalsStore", {
                 },
                 {
                  
-                  inputHeader: "Diastolic pressure*",
+                  inputHeader: "Diastolic pressure",
                   unit: "mmHg",
                   icon: icons.diastolicPressure,
                   value: "",
