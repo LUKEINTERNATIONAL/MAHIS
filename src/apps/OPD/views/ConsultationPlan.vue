@@ -379,4 +379,3 @@ export default defineComponent({
 </script>
 
 <style scoped></style>
-@/services/patient_general_consultation
