@@ -29,12 +29,14 @@ export const usePastMedicalHistoryStore = defineStore("pastMedicalHistoryStore",
             {
                 selectedData: [],
                 isFinishBtn: false,
+                sideColSize: 1,
                 radioBtnContent: {
                     header: {
                         title: "On TB medication",
                         name: "TB treatment",
                         selectedValue: "",
                         displayNone: true,
+                        class: "bold",
                     },
                     data: [
                         {
@@ -89,14 +91,6 @@ export const usePastMedicalHistoryStore = defineStore("pastMedicalHistoryStore",
                                     idName: "startDate",
                                 },
                             ],
-                            btns: [
-                                {
-                                    name: "Save",
-                                    fill: "clear",
-                                    btn_col_size: 3,
-                                    icon: icons.plus,
-                                },
-                            ],
                         },
                     ],
                 },
@@ -109,7 +103,7 @@ export const usePastMedicalHistoryStore = defineStore("pastMedicalHistoryStore",
                     header: {
                         title: "",
                         selectedValue: "",
-                        name: "Primary diagnosis",
+                        name: "Chronic disease",
                     },
                     data: [
                         {
@@ -117,17 +111,6 @@ export const usePastMedicalHistoryStore = defineStore("pastMedicalHistoryStore",
                             name: "Chronic Obstructive Pulmonary Disease (COPD)",
                             value: "Chronic obstructive pulmonary disease",
                             checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Chronic obstructive pulmonary disease",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
                         },
                     ],
                 },
@@ -139,6 +122,7 @@ export const usePastMedicalHistoryStore = defineStore("pastMedicalHistoryStore",
                     header: {
                         title: "",
                         selectedValue: "",
+                        name: "Chronic disease",
                     },
                     data: [
                         {
@@ -146,17 +130,6 @@ export const usePastMedicalHistoryStore = defineStore("pastMedicalHistoryStore",
                             name: "Asthma",
                             value: "Asthma",
                             checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Asthma",
-                            showDatePopover: false,
-                            eventType: "input",
-                            displayNone: true,
                         },
                     ],
                 },
@@ -169,6 +142,7 @@ export const usePastMedicalHistoryStore = defineStore("pastMedicalHistoryStore",
                     header: {
                         title: "",
                         selectedValue: "",
+                        name: "Chronic disease",
                     },
                     data: [
                         {
@@ -178,17 +152,6 @@ export const usePastMedicalHistoryStore = defineStore("pastMedicalHistoryStore",
                             checked: false,
                         },
                     ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Epilepsy",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
-                        },
-                    ],
                 },
             },
             {
@@ -196,7 +159,7 @@ export const usePastMedicalHistoryStore = defineStore("pastMedicalHistoryStore",
                 checkboxBtnContent: {
                     header: {
                         selectedValue: "",
-                        name: "",
+                        name: "Chronic disease",
                     },
                     data: [
                         {
@@ -206,17 +169,6 @@ export const usePastMedicalHistoryStore = defineStore("pastMedicalHistoryStore",
                             checked: false,
                         },
                     ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Previous stroke",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
-                        },
-                    ],
                 },
             },
             {
@@ -224,7 +176,7 @@ export const usePastMedicalHistoryStore = defineStore("pastMedicalHistoryStore",
                 checkboxBtnContent: {
                     header: {
                         selectedValue: "",
-                        name: "Peptic Ulcer Disease (PUD)",
+                        name: "Chronic disease",
                     },
                     data: [
                         {
@@ -234,17 +186,6 @@ export const usePastMedicalHistoryStore = defineStore("pastMedicalHistoryStore",
                             checked: false,
                         },
                     ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            eventType: "input",
-                            name: "Peptic Ulcer Disease (PUD)",
-                            isDatePopover: true,
-                            displayNone: true,
-                        },
-                    ],
                 },
             },
             {
@@ -252,7 +193,7 @@ export const usePastMedicalHistoryStore = defineStore("pastMedicalHistoryStore",
                 checkboxBtnContent: {
                     header: {
                         selectedValue: "",
-                        name: "Mental disorder",
+                        name: "Chronic disease",
                     },
                     data: [
                         {
@@ -260,17 +201,6 @@ export const usePastMedicalHistoryStore = defineStore("pastMedicalHistoryStore",
                             name: "Mental disorder",
                             value: "Mental disorder",
                             checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Mental disorder",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
                         },
                     ],
                 },
@@ -308,7 +238,7 @@ export const usePastMedicalHistoryStore = defineStore("pastMedicalHistoryStore",
                 checkboxBtnContent: {
                     header: {
                         selectedValue: "",
-                        name: "Hypertension",
+                        name: "Chronic disease",
                     },
                     data: [
                         {
@@ -318,15 +248,58 @@ export const usePastMedicalHistoryStore = defineStore("pastMedicalHistoryStore",
                             checked: false,
                         },
                     ],
-                    inputFields: [
+                },
+            },
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                radioBtnContent: {
+                    header: {
+                        title: "On medication",
+                        name: "Treatment",
+                        selectedValue: "",
+                        displayNone: true,
+                    },
+                    data: [
                         {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Hypertension",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
+                            name: "Yes",
+                            value: "Yes",
+                            colSize: 2,
+                        },
+                        {
+                            name: "No",
+                            value: "No",
+                            colSize: 2,
+                        },
+                    ],
+                },
+            },
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                displayNone: true,
+                data: {
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                    inputHeader: "Select medication",
+                                    icon: icons.search,
+                                    popOver: true,
+                                    value: "",
+                                    name: "drugs",
+                                    eventType: "input",
+                                    required: true,
+                                    alertsError: false,
+                                    alertsErrorMassage: "",
+                                    popOverData: {
+                                        filterData: false,
+                                        data: [],
+                                    },
+                                    id: "",
+                                    idName: "medication",
+                                },
+                            ],
                         },
                     ],
                 },
@@ -336,7 +309,7 @@ export const usePastMedicalHistoryStore = defineStore("pastMedicalHistoryStore",
                 checkboxBtnContent: {
                     header: {
                         selectedValue: "",
-                        name: "HIV Positive",
+                        name: "Chronic disease",
                     },
                     data: [
                         {
@@ -346,15 +319,58 @@ export const usePastMedicalHistoryStore = defineStore("pastMedicalHistoryStore",
                             checked: false,
                         },
                     ],
-                    inputFields: [
+                },
+            },
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                radioBtnContent: {
+                    header: {
+                        title: "ART status",
+                        name: "ART status",
+                        selectedValue: "",
+                        displayNone: true,
+                    },
+                    data: [
                         {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "HIV Positive",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
+                            name: "Yes",
+                            value: "Yes",
+                            colSize: 2,
+                        },
+                        {
+                            name: "No",
+                            value: "No",
+                            colSize: 2,
+                        },
+                    ],
+                },
+            },
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                displayNone: true,
+                data: {
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                    inputHeader: "Enter ARV start date",
+                                    icon: icons.search,
+                                    popOver: true,
+                                    value: "",
+                                    name: "Enter ARV start date",
+                                    eventType: "input",
+                                    required: true,
+                                    alertsError: false,
+                                    alertsErrorMassage: "",
+                                    popOverData: {
+                                        filterData: false,
+                                        data: [],
+                                    },
+                                    id: "",
+                                    idName: "medication",
+                                },
+                            ],
                         },
                     ],
                 },
@@ -364,7 +380,7 @@ export const usePastMedicalHistoryStore = defineStore("pastMedicalHistoryStore",
                 checkboxBtnContent: {
                     header: {
                         selectedValue: "",
-                        name: "Diabetes Mellitus",
+                        name: "Chronic disease",
                     },
                     data: [
                         {
@@ -374,15 +390,62 @@ export const usePastMedicalHistoryStore = defineStore("pastMedicalHistoryStore",
                             checked: false,
                         },
                     ],
-                    inputFields: [
+                },
+            },
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                radioBtnContent: {
+                    header: {
+                        title: "Type",
+                        name: "Type",
+                        selectedValue: "",
+                        displayNone: true,
+                    },
+                    data: [
                         {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Diabetes Mellitus",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
+                            name: "Type I",
+                            value: "Type I",
+                            colSize: 2,
+                        },
+                        {
+                            name: "Type II",
+                            value: "Type II",
+                            colSize: 2,
+                        },
+                        {
+                            name: "Unsure",
+                            value: "Unsure",
+                            colSize: 2,
+                        },
+                    ],
+                },
+            },
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                radioBtnContent: {
+                    header: {
+                        title: "Controlled by",
+                        name: "Controlled by",
+                        selectedValue: "",
+                        displayNone: true,
+                    },
+                    data: [
+                        {
+                            name: "Diet",
+                            value: "Diet",
+                            colSize: 2,
+                        },
+                        {
+                            name: "Tablets",
+                            value: "Tablets",
+                            colSize: 2,
+                        },
+                        {
+                            name: "Insulin",
+                            value: "Insulin",
+                            colSize: 2,
                         },
                     ],
                 },
@@ -392,7 +455,7 @@ export const usePastMedicalHistoryStore = defineStore("pastMedicalHistoryStore",
                 checkboxBtnContent: {
                     header: {
                         selectedValue: "",
-                        name: "None",
+                        name: "Chronic disease",
                     },
                     data: [
                         {

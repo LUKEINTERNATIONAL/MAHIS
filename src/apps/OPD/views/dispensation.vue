@@ -3,13 +3,17 @@
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
-            <Stepper stepperTitle="Dispensation" :wizardData="wizardData" @updateStatus="markWizard"
-                @finishBtn="saveData()" :StepperData="dispensationStore.getStepperData()" :showSteeper="1"/>
+            <Stepper
+                stepperTitle="Dispensation"
+                :wizardData="wizardData"
+                @updateStatus="markWizard"
+                @finishBtn="saveData()"
+                :StepperData="StepperData"
+                :showSteeper="1"
+            />
         </ion-content>
     </ion-page>
 </template>
-
-
 
 <script lang="ts">
 import {
@@ -45,7 +49,7 @@ import { useDiagnosisStore } from "@/stores/DiagnosisStore";
 import { mapState } from "pinia";
 import Stepper from "../components/Stepper.vue";
 import { defineComponent } from "vue";
-import { useDispensationStore } from '@/apps/OPD/stores/DispensationStore'
+import { useDispensationStore } from "@/apps/OPD/stores/DispensationStore";
 
 export default defineComponent({
     name: "Home",
@@ -73,7 +77,7 @@ export default defineComponent({
         Stepper,
     },
     computed: {
-        ...mapState(useDispensationStore, ['drugPrescriptions']),
+        ...mapState(useDispensationStore, ["StepperData"]),
     },
     data() {
         return {
@@ -137,30 +141,10 @@ export default defineComponent({
     },
 
     methods: {
+        markWizard() {},
         saveData() {
-            this.showUndispensedMedication = true; 
-
-        },
-        handleDispenseClick() {
-      this.showUndispensedMedication = !this.showUndispensedMedication;
-      this.StepperData = [
-        {
-          title: "Dispense Medications",
-          componet: "dispensedMedication",
-          value: "1",
-        },
-        ...(this.showUndispensedMedication
-          ? [{ title: "Dispensation Summary", componet: "dispensationSummary", value: "2" }]
-          : [])]},
-        markWizard() {
-
-        },
-        saveData() {
-            this.$router.push('/pharmacy');
+            this.$router.push("/pharmacy");
         },
     },
 });
-</script>
-<script setup lang="ts">
-const dispensationStore = useDispensationStore()
 </script>
