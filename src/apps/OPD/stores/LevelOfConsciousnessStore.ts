@@ -33,6 +33,21 @@ export const motorResponseWeights: { [key: string]: number } = {
     "No response": 1
 }
 
+export const eyeOpeningMinorWeights: { [key: string]: number } = {
+    "Not directed": 0,
+    "Directed eye movements": 1
+}
+export const motorResponseMinorWeights: { [key: string]: number } = {
+    'Non specific or no response': 0,
+    'Withdraws from pain': 1,
+    'Localizes pain': 2
+}
+export const verbalResponseMinorWeights: { [key: string]: number } = {
+    'No cry': 0,
+    'Inappropriate cry or moan': 1,
+    'Appropriate cry': 2
+}
+
 export const useLevelOfConsciousnessStore = defineStore("levelOfConsciousnessStore", {
     state: () => ({
         levelOfConsciousness: [
@@ -153,6 +168,93 @@ export const useLevelOfConsciousnessStore = defineStore("levelOfConsciousnessSto
                 },
             },
         ] as any,
+        levelOfConsciousnessMinor: [
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                classDash: "dashed_bottom_border",
+                radioBtnContent: {
+                    header: {
+                        title: "Eye-opening response",
+                        name: ConsciousnessConcepts.EYE_OPENING_RESPONSE,
+                        selectedValue: "",
+                        class: "bold",
+                    },
+                    data: [
+                        {
+                            name: "Directed eye movements",
+                            value: "Directed eye movements",
+                            colSize: 6,
+                        },
+                        {
+                            name: "Not directed",
+                            value: "Not directed",
+                            colSize: 6,
+                        },
+
+                    ],
+                },
+            },
+            {
+                classDash: "dashed_bottom_border",
+                radioBtnContent: {
+                    header: {
+                        title: "Best verbal response",
+                        name: ConsciousnessConcepts.BEST_VERBAL_RESPONSE,
+                        selectedValue: "",
+                        class: "bold",
+                    },
+                    data: [
+                        {
+                            name: "Appropriate cry",
+                            value: "Appropriate cry",
+                            colSize: 6,
+                        },
+                        {
+                            name: "Inappropriate cry or moan",
+                            value: "Inappropriate cry or moan",
+                            colSize: 6,
+                        },
+                        {
+                            name: "No cry",
+                            value: "No cry",
+                            colSize: 6,
+                        },
+                    ],
+                },
+            },
+            {
+                classDash: "dashed_bottom_border",
+                radioBtnContent: {
+                    header: {
+                        title: "Best motor response",
+                        name: ConsciousnessConcepts.BEST_MOTOR_RESPONSE,
+                        selectedValue: "",
+                        class: "bold",
+                    },
+                    data: [
+                        {
+                            name: "Localizes pain",
+                            value: "Localizes pain",
+                            colSize: 6,
+                        },
+                        {
+                            name: "Withdraws from pain",
+                            value: "Withdraws from pain",
+                            colSize: 6,
+                        },
+                        {
+                            name: "Non specific or no response",
+                            value: "Non specific or no response",
+                            colSize: 6,
+                        },
+
+                    ],
+                },
+            },
+        ] as any,
+
+
     }),
     actions: {
         setPregnancy(data: any) {
