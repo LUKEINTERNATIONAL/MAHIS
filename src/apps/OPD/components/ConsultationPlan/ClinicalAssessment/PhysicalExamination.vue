@@ -429,7 +429,7 @@ export default defineComponent({
     // },
 
     handlePhysicalExam() {
-      if (getRadioSelectedValue(this.physicalExam, 'Physical examination done') == 'yes') {
+      if (getRadioSelectedValue(this.physicalExam, 'Physical examination') == 'Yes') {
         // Handle Eyes Normal section
         modifyRadioValue(this.physicalExam, 'Eyes normal', 'displayNone', false);
         if (getRadioSelectedValue(this.physicalExam, 'Eyes normal') == 'no') {

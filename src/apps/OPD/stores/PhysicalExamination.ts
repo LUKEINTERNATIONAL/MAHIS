@@ -44,18 +44,18 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     header: {
                         radioTittle: ["Yes", "No"],
                         selectedValue: "",
-                        name: "Physical examination done",
+                        name: "Physical examination",
                     },
                     data: [
                         {
-                            value: "yes",
+                            value: "Yes",
                             name: "Has physical examination been done?",
                             labelPlacement: "start",
                             colSize: "6.1",
                             justify: "space-between",
                         },
                         {
-                            value: "no",
+                            value: "No",
                             labelPlacement: "end",
                             colSize: "2.1",
                             justify: "end",

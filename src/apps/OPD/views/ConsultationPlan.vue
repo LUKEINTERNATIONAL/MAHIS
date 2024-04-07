@@ -76,6 +76,8 @@ import {
 import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServerData";
 import { PatientComplaintsService } from "@/apps/OPD/services/patient_complaints_service";
 import { PatientGeneralConsultationService } from "@/services/patient_general_consultation";
+import {PhysicalExamService} from "@/apps/OPD/services/physical_exam_service";
+import {usePhysicalExaminationStore} from "@/apps/OPD/stores/PhysicalExamination";
 export default defineComponent({
     name: "Home",
     components: {
@@ -182,6 +184,7 @@ export default defineComponent({
         };
     },
     computed: {
+        ...mapState(usePhysicalExaminationStore,["physicalExam"]),
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(usePregnancyStore, ["pregnancy"]),
         ...mapState(usePresentingComplaintsStore, ["presentingComplaints"]),
@@ -265,8 +268,20 @@ export default defineComponent({
             await this.saveOutComeStatus();
             await this.saveWomenStatus();
             await this.savePresentingComplaints();
+            await this.savePhysicalExam();
             this.$router.push("patientProfile");
         },
+      async savePhysicalExam() {
+        if (this.physicalExam[0].selectedData.length > 0) {
+          const userID: any = Service.getUserID();
+          const PhysicalExam = new PhysicalExamService(this.demographics.patient_id, userID);
+          const encounter = await PhysicalExam.createEncounter();
+          if (!encounter) return toastWarning("Unable to create patient physical examination encounter");
+          const patientStatus = await PhysicalExam.saveObservationList(this.getFormatedData(this.physicalExam[0].selectedData));
+          if (!patientStatus) return toastWarning("Unable to create physical examination  !");
+          toastSuccess("Patient physical examination has been created");
+        }
+      },
         async savePresentingComplaints() {
             if (this.presentingComplaints[0].selectedData.length > 0) {
                 const userID: any = Service.getUserID();
