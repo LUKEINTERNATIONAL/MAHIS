@@ -32,7 +32,7 @@ import {checkmark, pulseOutline} from 'ionicons/icons';
 import {
   getCheckboxSelectedValue,
   getRadioSelectedValue,
-  modifyCheckboxHeader,
+  modifyCheckboxHeader, modifyCheckboxValue,
   modifyFieldValue,
   modifyRadioValue,
 } from '@/services/data_helpers';
@@ -433,8 +433,12 @@ export default defineComponent({
         // Handle Eyes Normal section
         modifyRadioValue(this.physicalExam, 'Eyes normal', 'displayNone', false);
         if (getRadioSelectedValue(this.physicalExam, 'Eyes normal') == 'no') {
+
+          modifyCheckboxValue(this.physicalExam, 'Pallor', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Pallor', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Jaundice', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Jaundice', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Ulcerations', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Ulcerations', 'displayNone', false);
           modifyCheckboxHeader(this.physicalExam, 'Other eye abnormality', 'displayNone', false);
           if (getCheckboxSelectedValue(this.physicalExam, 'Other eye abnormality')?.value == 'other eye abnormality') {
@@ -449,14 +453,16 @@ export default defineComponent({
           modifyCheckboxHeader(this.physicalExam, 'Ulcerations', 'displayNone', true);
           modifyCheckboxHeader(this.physicalExam, 'Other eye abnormality', 'displayNone', true);
           modifyFieldValue(this.physicalExam, 'Other eye abnormality field', 'displayNone', true);
-          modifyFieldValue(this.physicalExam, 'Other eye abnormality field', 'inputValue', "");
         }
 
         // Handle Mouth Normal section
         modifyRadioValue(this.physicalExam, 'Mouth normal', 'displayNone', false);
         if (getRadioSelectedValue(this.physicalExam, 'Mouth normal') == 'no') {
+          modifyCheckboxValue(this.physicalExam, 'Oral thrush', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Oral thrush', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Kaposi’s Sarcoma lesions', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Kaposi’s Sarcoma lesions', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Sores', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Sores', 'displayNone', false);
           modifyCheckboxHeader(this.physicalExam, 'Other mouth abnormality', 'displayNone', false);
           if (getCheckboxSelectedValue(this.physicalExam, 'Other mouth abnormality')?.value == 'other mouth abnormality') {
@@ -475,7 +481,9 @@ export default defineComponent({
         // Handle Ears Normal section
         modifyRadioValue(this.physicalExam, 'Ears normal', 'displayNone', false);
         if (getRadioSelectedValue(this.physicalExam, 'Ears normal') == 'no') {
+          modifyCheckboxValue(this.physicalExam, 'Discharge', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Discharge', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Bleeding', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Bleeding', 'displayNone', false);
           modifyCheckboxHeader(this.physicalExam, 'Other ears abnormality', 'displayNone', false);
           if (getCheckboxSelectedValue(this.physicalExam, 'Other ears abnormality')?.value == 'other ears abnormality') {
@@ -493,7 +501,9 @@ export default defineComponent({
         // Handle Face Normal section
         modifyRadioValue(this.physicalExam, 'Face normal', 'displayNone', false);
         if (getRadioSelectedValue(this.physicalExam, 'Face normal') == 'no') {
+          modifyCheckboxValue(this.physicalExam, 'Rash', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Rash', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Swelling', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Swelling', 'displayNone', false);
           modifyCheckboxHeader(this.physicalExam, 'Other face abnormality', 'displayNone', false);
           if (getCheckboxSelectedValue(this.physicalExam, 'Other face abnormality')?.value == 'other face abnormality') {
@@ -511,8 +521,11 @@ export default defineComponent({
         // Handle Neck Normal section
         modifyRadioValue(this.physicalExam, 'Neck normal', 'displayNone', false);
         if (getRadioSelectedValue(this.physicalExam, 'Neck normal') == 'no') {
+          modifyCheckboxValue(this.physicalExam, 'Neck rash', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Neck rash', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Neck swelling', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Neck swelling', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Neck mass', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Neck mass', 'displayNone', false);
           modifyCheckboxHeader(this.physicalExam, 'Other neck abnormality', 'displayNone', false);
           if (getCheckboxSelectedValue(this.physicalExam, 'Other neck abnormality')?.value == 'other neck abnormality') {
@@ -531,9 +544,13 @@ export default defineComponent({
         // Handle Chest Inspection Normal section
         modifyRadioValue(this.physicalExam, 'Chest inspection normal', 'displayNone', false);
         if (getRadioSelectedValue(this.physicalExam, 'Chest inspection normal') == 'no') {
+          modifyCheckboxValue(this.physicalExam, 'Chest rash', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Chest rash', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Chest burns', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Chest burns', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Chest bruises', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Chest bruises', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Chest wounds', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Chest wounds', 'displayNone', false);
           modifyCheckboxHeader(this.physicalExam, 'Other chest abnormality', 'displayNone', false);
           if (getCheckboxSelectedValue(this.physicalExam, 'Other chest abnormality')?.value == 'other chest abnormality') {
@@ -553,9 +570,13 @@ export default defineComponent({
         // Handle Heart Sounds Normal section
         modifyRadioValue(this.physicalExam, 'Heart sounds normal', 'displayNone', false);
         if (getRadioSelectedValue(this.physicalExam, 'Heart sounds normal') == 'no') {
+          modifyCheckboxValue(this.physicalExam, 'Loud P2', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Loud P2', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Splitting P2', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Splitting P2', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Gallop rhythm', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Gallop rhythm', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Murmur', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Murmur', 'displayNone', false);
         } else {
           modifyCheckboxHeader(this.physicalExam, 'Loud P2', 'displayNone', true);
@@ -567,13 +588,19 @@ export default defineComponent({
         // Handle Breath Sounds Normal section
         modifyRadioValue(this.physicalExam, 'Breath sounds normal', 'displayNone', false);
         if (getRadioSelectedValue(this.physicalExam, 'Breath sounds normal') == 'no') {
+          modifyCheckboxValue(this.physicalExam, 'Absent', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Absent', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Reduced', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Reduced', 'displayNone', false);
           modifyCheckboxHeader(this.physicalExam, 'Added', 'displayNone', false);
           if (getCheckboxSelectedValue(this.physicalExam, 'Added')?.value == 'added') {
+            modifyCheckboxValue(this.physicalExam, 'Clackles', 'checked', false);
             modifyCheckboxHeader(this.physicalExam, 'Clackles', 'displayNone', false);
+            modifyCheckboxValue(this.physicalExam, 'Wheezes', 'checked', false);
             modifyCheckboxHeader(this.physicalExam, 'Wheezes', 'displayNone', false);
+            modifyCheckboxValue(this.physicalExam, 'Bronchial', 'checked', false);
             modifyCheckboxHeader(this.physicalExam, 'Bronchial', 'displayNone', false);
+            modifyCheckboxValue(this.physicalExam, 'Crepitations', 'checked', false);
             modifyCheckboxHeader(this.physicalExam, 'Crepitations', 'displayNone', false);
           } else {
             modifyCheckboxHeader(this.physicalExam, 'Clackles', 'displayNone', true);
@@ -590,11 +617,17 @@ export default defineComponent({
         // Handle Abdominal Inspection Normal section
         modifyRadioValue(this.physicalExam, 'Abdominal inspection normal', 'displayNone', false);
         if (getRadioSelectedValue(this.physicalExam, 'Abdominal inspection normal') == 'no') {
+          modifyCheckboxValue(this.physicalExam, 'Abdominal distension', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Abdominal distension', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Abdominal rash', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Abdominal rash', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Abdominal burns', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Abdominal burns', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Laceration', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Laceration', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Abdominal bruises', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Abdominal bruises', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Abdominal wounds', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Abdominal wounds', 'displayNone', false);
           modifyCheckboxHeader(this.physicalExam, 'Other abdominal abnormality', 'displayNone', false);
           if (getCheckboxSelectedValue(this.physicalExam, 'Other abdominal abnormality')?.value == 'other abdominal abnormality') {
@@ -612,12 +645,44 @@ export default defineComponent({
           modifyCheckboxHeader(this.physicalExam, 'Other abdominal abnormality', 'displayNone', true);
           modifyFieldValue(this.physicalExam, 'Other abdominal abnormality field', 'displayNone', true);
         }
+        //Handle abdominal ausaltation
+        modifyRadioValue(this.physicalExam,'Abdominal auscultation normal','displayNone', false);
+        if(getRadioSelectedValue(this.physicalExam,'Abdominal auscultation normal')=='no'){
+          modifyCheckboxValue(this.physicalExam, 'Bruit', 'checked', false);
+          modifyCheckboxHeader(this.physicalExam, 'Bruit', 'displayNone', false);
+          modifyCheckboxHeader(this.physicalExam, 'Bowel sounds', 'displayNone', false);
+          if(getCheckboxSelectedValue(this.physicalExam,'Bowel sounds')?.value=='bowel sounds'){
+            modifyCheckboxValue(this.physicalExam, 'Hyperactive', 'checked', false);
+            modifyCheckboxHeader(this.physicalExam, 'Hyperactive', 'displayNone', false);
+            modifyCheckboxValue(this.physicalExam, 'Reduced bowel sounds', 'checked', false);
+            modifyCheckboxHeader(this.physicalExam, 'Reduced bowel sounds', 'displayNone', false);
+            modifyCheckboxHeader(this.physicalExam, 'Other abdominal auscultation abnormality', 'displayNone', false);
+            if (getCheckboxSelectedValue(this.physicalExam, 'Other abdominal auscultation abnormality')?.value == 'other abdominal auscultation abnormality') {
+              modifyFieldValue(this.physicalExam, 'Other abdominal auscultation abnormality field', 'displayNone', false);
+            } else {
+              modifyFieldValue(this.physicalExam, 'Other abdominal auscultation abnormality field', 'displayNone', true);
+            }
+          }
+        }
+        else {
+          modifyCheckboxHeader(this.physicalExam, 'Bruit', 'displayNone', true);
+          modifyCheckboxHeader(this.physicalExam, 'Bowel sounds', 'displayNone', true);
+          modifyCheckboxHeader(this.physicalExam, 'Hyperactive', 'displayNone', true);
+          modifyCheckboxHeader(this.physicalExam, 'Reduced bowel sounds', 'displayNone', true);
+          modifyCheckboxHeader(this.physicalExam, 'Other abdominal auscultation abnormality', 'displayNone', true);
+
+
+        }
         // Handle Abdominal Palpation Normal section
         modifyRadioValue(this.physicalExam, 'Abdominal palpation normal', 'displayNone', false);
         if (getRadioSelectedValue(this.physicalExam, 'Abdominal palpation normal') == 'no') {
+          modifyCheckboxValue(this.physicalExam, 'Tenderness', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Tenderness', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Hepatomegaly', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Hepatomegaly', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Splenomegaly', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Splenomegaly', 'displayNone', false);
+          modifyCheckboxHeader(this.physicalExam, 'Kidney ballotab', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Kidney ballotab', 'displayNone', false);
           modifyCheckboxHeader(this.physicalExam, 'Other abdominal masses', 'displayNone', false);
           if (getCheckboxSelectedValue(this.physicalExam, 'Other abdominal masses')?.value == 'other abdominal masses') {
@@ -637,34 +702,70 @@ export default defineComponent({
         // Handle Genital Examination Normal section
         modifyRadioValue(this.physicalExam, 'Genital examination normal', 'displayNone', false);
         if (getRadioSelectedValue(this.physicalExam, 'Genital examination normal') == 'no') {
+          modifyCheckboxValue(this.physicalExam, 'Warts and Vesicles', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Warts and Vesicles', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Vesicles', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Vesicles', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Growths and Genital sores', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Growths and Genital sores', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Genital sores', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Genital sores', 'displayNone', false);
           modifyCheckboxHeader(this.physicalExam, 'Urethral meatus abnormal', 'displayNone', false);
-          modifyCheckboxHeader(this.physicalExam, 'Urethral meatus abnormalities', 'displayNone', false);
+          if(getCheckboxSelectedValue(this.physicalExam,'Urethral meatus abnormal')?.value=='urethral meatus abnormal'){
+            modifyCheckboxValue(this.physicalExam, 'Urethral meatus abnormalities', 'checked', false);
+            modifyCheckboxHeader(this.physicalExam, 'Urethral meatus abnormalities', 'displayNone', false);
+          }
+          else {
+            modifyCheckboxHeader(this.physicalExam, 'Urethral meatus abnormalities', 'displayNone', true);
+
+          }
           modifyCheckboxHeader(this.physicalExam, 'Vulva examination', 'displayNone', false);
-          modifyCheckboxHeader(this.physicalExam, 'Vulva inspection abnormalities', 'displayNone', false);
+          if(getCheckboxSelectedValue(this.physicalExam,'Vulva examination')?.value=='vulva examination'){
+            modifyCheckboxValue(this.physicalExam, 'Vulva inspection abnormalities', 'checked', false);
+            modifyCheckboxHeader(this.physicalExam, 'Vulva inspection abnormalities', 'displayNone', false);
+          }
+          else {
+            modifyCheckboxHeader(this.physicalExam, 'Vulva inspection abnormalities', 'displayNone', true);
+
+          }
+          modifyCheckboxHeader(this.physicalExam, 'Other genital abnormalities', 'displayNone', false);
+          if(getCheckboxSelectedValue(this.physicalExam,'Other genital abnormalities')?.value=='other genital abnormalities'){
+            modifyFieldValue(this.physicalExam,"Other genital abnormality field", 'displayNone',false)
+          }
+          else
+          {
+            modifyFieldValue(this.physicalExam,"Other genital abnormality field", 'displayNone',true)
+
+          }
         } else {
           modifyCheckboxHeader(this.physicalExam, 'Warts and Vesicles', 'displayNone', true);
           modifyCheckboxHeader(this.physicalExam, 'Growths and Genital sores', 'displayNone', true);
           modifyCheckboxHeader(this.physicalExam, 'Urethral meatus abnormal', 'displayNone', true);
-          modifyCheckboxHeader(this.physicalExam, 'Urethral meatus abnormalities', 'displayNone', true);
           modifyCheckboxHeader(this.physicalExam, 'Vulva examination', 'displayNone', true);
-          modifyCheckboxHeader(this.physicalExam, 'Vulva inspection abnormalities', 'displayNone', true);
+          modifyCheckboxHeader(this.physicalExam, 'Other genital abnormalities', 'displayNone', true);
+
         }
 
         // Handle Extremities Normal section
         modifyRadioValue(this.physicalExam, 'Extremities normal', 'displayNone', false);
         if (getRadioSelectedValue(this.physicalExam, 'Extremities normal') == 'no') {
+          modifyCheckboxValue(this.physicalExam, 'Cold and clammy', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Cold and clammy', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Oedema present', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Oedema present', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Fracture', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Fracture', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Extremity burns', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Extremity burns', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Extremity rash', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Extremity rash', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Deformity', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Deformity', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Finger clubbing', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Finger clubbing', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Decreased Power', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Decreased Power', 'displayNone', false);
+          modifyCheckboxValue(this.physicalExam, 'Decreased Sensation', 'checked', false);
           modifyCheckboxHeader(this.physicalExam, 'Decreased Sensation', 'displayNone', false);
           modifyCheckboxHeader(this.physicalExam, 'Other extremities abnormalities', 'displayNone', false);
           if (getCheckboxSelectedValue(this.physicalExam, 'Other extremities abnormalities')?.value == 'other extremities abnormalities') {
@@ -783,6 +884,16 @@ export default defineComponent({
         modifyCheckboxHeader(this.physicalExam, 'Abdominal wounds', 'displayNone', true);
         modifyCheckboxHeader(this.physicalExam, 'Other abdominal abnormality', 'displayNone', true);
         modifyFieldValue(this.physicalExam, 'Other abdominal abnormality field', 'displayNone', true);
+// reset state for abdominal ausaltation
+        modifyRadioValue(this.physicalExam,'Abdominal auscultation normal','displayNone', true);
+        modifyRadioValue(this.physicalExam,'Abdominal auscultation normal','selectedValue', "");
+        modifyCheckboxHeader(this.physicalExam, 'Bruit', 'displayNone', true);
+
+        modifyCheckboxHeader(this.physicalExam, 'Bowel sounds', 'displayNone', true);
+        modifyCheckboxHeader(this.physicalExam, 'Hyperactive', 'displayNone', true);
+        modifyCheckboxHeader(this.physicalExam, 'Reduced bowel sounds', 'displayNone', true);
+        modifyCheckboxHeader(this.physicalExam, 'Other abdominal auscultation abnormality', 'displayNone', true);
+        modifyCheckboxHeader(this.physicalExam, 'Other abdominal auscultation abnormality field', 'displayNone', true);
 
         // Reset state for Abdominal Palpation Normal section
         modifyRadioValue(this.physicalExam, 'Abdominal palpation normal', 'displayNone', true);
@@ -805,6 +916,8 @@ export default defineComponent({
         modifyCheckboxHeader(this.physicalExam, 'Urethral meatus abnormalities', 'displayNone', true);
         modifyCheckboxHeader(this.physicalExam, 'Vulva examination', 'displayNone', true);
         modifyCheckboxHeader(this.physicalExam, 'Vulva inspection abnormalities', 'displayNone', true);
+        modifyCheckboxHeader(this.physicalExam, 'Other genital abnormalities', 'displayNone', true);
+        modifyCheckboxHeader(this.physicalExam, 'Other genital abnormality field', 'displayNone', true);
 
         // Reset state for Extremities Normal section
         modifyRadioValue(this.physicalExam, 'Extremities normal', 'displayNone', true);
