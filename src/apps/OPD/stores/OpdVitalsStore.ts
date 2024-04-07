@@ -7,7 +7,7 @@ export const useVitalsStore = defineStore("vitalsStore", {
       {
         isFinishBtn: false,
         validationStatus: "",
-        sectionHeader: "Hieght and weight",
+        sectionHeader: "Height and weight",
         classDash: "dashed_bottom_border _padding",
 
         data: {
@@ -57,8 +57,8 @@ export const useVitalsStore = defineStore("vitalsStore", {
       },
 
       {
-        sectionHeader: "Temperature",
-        classDash: "dashed_bottom_border _padding",
+        sectionHeader: "Temperature*",
+        // classDash: "dashed_bottom_border _padding",
         data: {
           rowData: [
             {
@@ -70,8 +70,33 @@ export const useVitalsStore = defineStore("vitalsStore", {
                   value: "",
                   name: "Temp",
                   eventType: "input",
+                  disabled: true,
+                  alertsError: false,
+                  alertsErrorMassage: "",
                 },
               ],
+            },
+          ],
+        },
+      },
+      {
+        selectdData: [],
+        isFinishBtn: false,
+        sideColSize: 6,
+        classDash: "dashed_bottom_border _padding",
+        checkboxBtnContent: {
+          header: {
+            title: "",
+            selectedValue: "",
+          },
+          data: [
+            {
+              name: "Temperature not Done",
+              value: "notDoneT",
+              labelPlacement: "end",
+              colSize: "6",
+              justify: "",
+              checked: false,
             },
           ],
         },
@@ -79,14 +104,13 @@ export const useVitalsStore = defineStore("vitalsStore", {
 
       {
         sectionHeader: "Pulse rate",
-        classDash: "dashed_bottom_border _padding",
+        // classDash: "dashed_bottom_border _padding",
         data: {
           rowData: [
             {
               colData: [
                 {
-                
-                  inputHeader: "Pulse rate",
+                  inputHeader: "Pulse rate*",
                   unit: "BMP",
                   icon: icons.pulse,
                   value: "",
@@ -100,17 +124,37 @@ export const useVitalsStore = defineStore("vitalsStore", {
           ],
         },
       },
+      {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        checkboxBtnContent: {
+          header: {
+            title: "",
+            selectedValue: "",
+          },
+          data: [
+            {
+              name: "Pulse rate not done",
+              value: "notDone",
+              labelPlacement: "start",
+              colSize: "6",
+              justify: "space-between",
+              checked: true,
+            },
+          ],
+        },
+      },
 
       {
         sectionHeader: "Blood Pressure",
-        classDash: "dashed_bottom_border _padding",
+        // classDash: "dashed_bottom_border _padding",
         data: {
           rowData: [
             {
               colData: [
                 {
-                 
-                  inputHeader: "Systolic Pressure",
+                  inputHeader: "Systolic Pressure*",
                   unit: "mmHg",
                   icon: icons.systolicPressure,
                   value: "",
@@ -121,8 +165,7 @@ export const useVitalsStore = defineStore("vitalsStore", {
                   alertsErrorMassage: "",
                 },
                 {
-                 
-                  inputHeader: "Diastolic pressure",
+                  inputHeader: "Diastolic pressure*",
                   unit: "mmHg",
                   icon: icons.diastolicPressure,
                   value: "",
@@ -148,17 +191,37 @@ export const useVitalsStore = defineStore("vitalsStore", {
           },
         ],
       },
+      {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        checkboxBtnContent: {
+          header: {
+            title: "",
+            selectedValue: "",
+          },
+          data: [
+            {
+              name: "Blood Pressure not done",
+              value: "notDone",
+              labelPlacement: "start",
+              colSize: "6",
+              justify: "space-between",
+              checked: false,
+            },
+          ],
+        },
+      },
 
       {
         sectionHeader: "Respiratory rate",
-        classDash: "dashed_bottom_border _padding",
+        // classDash: "dashed_bottom_border _padding",
         data: {
           rowData: [
             {
               colData: [
                 {
-                 
-                  inputHeader: "Respiratory rate",
+                  inputHeader: "Respiratory rate*",
                   unit: "BMP",
                   icon: icons.respiratory,
                   value: "",
@@ -172,6 +235,27 @@ export const useVitalsStore = defineStore("vitalsStore", {
           ],
         },
       },
+      {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        checkboxBtnContent: {
+          header: {
+            title: "",
+            selectedValue: "",
+          },
+          data: [
+            {
+              name: "Respiratory rate not done",
+              value: "notDone",
+              labelPlacement: "start",
+              colSize: "6",
+              justify: "space-between",
+              checked: false,
+            },
+          ],
+        },
+      },
     ] as any,
   }),
   actions: {
@@ -179,5 +263,5 @@ export const useVitalsStore = defineStore("vitalsStore", {
       this.vitals = data;
     },
   },
-  persist: false,
+  //persist: false,
 });

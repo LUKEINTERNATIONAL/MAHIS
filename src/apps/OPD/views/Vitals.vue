@@ -55,7 +55,7 @@ import HisDate from "@/utils/Date";
 import { defineComponent } from "vue";
 import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
 import { useVitalsStore } from "../stores/OpdVitalsStore";
-import { getFieldValue, getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from "@/services/data_helpers";
+import { getCheckboxSelectedValue, getFieldValue, getRadioSelectedValue, modifyCheckboxValue, modifyFieldValue, modifyRadioValue } from "@/services/data_helpers";
 export default defineComponent({
     name: "Home",
     components: {
@@ -115,6 +115,8 @@ export default defineComponent({
         this.respiratoryValidate()
         this.systolicValidate()
         this.diastolicValidate()
+        this.handleTemperature()
+        this.validateTemperature()
     },
     watch: {
         vitals: {
@@ -124,6 +126,8 @@ export default defineComponent({
                 this.respiratoryValidate()
                 this.systolicValidate()
                 this.diastolicValidate()
+                this.handleTemperature()
+                this.validateTemperature()
             },
             deep: true,
         },
@@ -170,19 +174,19 @@ export default defineComponent({
             if(value == "")return
                         
            if(age<1 && (ageInMonth == 1) && !(value>=70 && value<=190)){ 
-            triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`)
+            triggerError(`Pulse Rate can't be ${value}`)
            }else if(age<1 && (ageInMonth >= 1 && ageInMonth <=11 ) && !(value>=80 && value<=160)){ 
-            triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`)
+            triggerError(`Pulse Rate can't be ${value}`)
            } else if(age>10 && !(value>=60 && value<=100)){
-                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`)
+                triggerError(`Pulse Rate can't be ${value}`)
             }else if((age>=1 && age<=2) && !(value>=80 && value<=130)){
-                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`)
+                triggerError(`Pulse Rate can't be ${value}`)
             }else if((age>=3 && age<=4) && !(value>=80 && value<=120)){
-                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`)
+                triggerError(`Pulse Rate can't be ${value}`)
             }else if((age>=5 && age<=6) && !(value>=75 && value<=115)){
-                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`)
+                triggerError(`Pulse Rate can't be ${value}`)
             }else if((age>=7 && age<=9) && !(value>=70 && value<=110)){
-                triggerError(`Pulse Rate can't be ${value} for patient with an age of ${age}`)
+                triggerError(`Pulse Rate can't be ${value}`)
             }
             else {
                 clearErrors()
@@ -223,23 +227,23 @@ export default defineComponent({
 
 
            if(age<1 && (ageInMonth >= 1 && ageInMonth <=5 ) && !(value>=25 && value<=40)){ 
-            triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
+            triggerError(`Respiratory Rate can't be ${value}`)
            }else if(age<1 && (ageInMonth >= 6 && ageInMonth <=12 ) && !(value>=20 && value<=30)){ 
-            triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
+            triggerError(`Respiratory Rate can't be ${value}`)
            }
            else if((age>=1 && age<=3) && !(value>=20 && value<=30)){
-                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
+                triggerError(`Respiratory Rate can't be ${value}`)
             }else if((age>=3 && age<=5) && !(value>=20 && value<=30)){
-                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
+                triggerError(`Respiratory Rate can't be ${value}`)
             }else if((age>=6 && age<=10) && !(value>=15 && value<=30)){
-                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
+                triggerError(`Respiratory Rate can't be ${value}`)
             }else if((age>=11 && age<=14) && !(value>=12 && value<=20)){
-                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
+                triggerError(`Respiratory Rate can't be ${value}`)
             }else if((age>=15 && age<=20) && !(value>=12 && value<=30)){
-                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
+                triggerError(`Respiratory Rate can't be ${value}`)
             }else 
             if(age>20 && !(value>=16 && value<=20)){
-                triggerError(`Respiratory Rate can't be ${value} for patient with an age of ${age}`)
+                triggerError(`Respiratory Rate can't be ${value}`)
             }
             else {
                 clearErrors()
@@ -303,17 +307,17 @@ export default defineComponent({
             if (value == "") return;
             
            if(age<1 && (ageInMonth >= 1 && ageInMonth <=12 ) && !(value>=75 && value<=100)){ 
-            triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
+            triggerError(`Systolic can't be ${value}`)
            }else if (age >= 1 && age <= 4 && !(value >= 80 && value <= 110)) {
-                triggerError(`Systolic can't be ${value} for patient with an age of ${age}`);
+                triggerError(`Systolic can't be ${value}`);
             } else if (age >= 3 && age <= 5 && !(value >= 80 && value <= 110)) {
-                triggerError(`Systolic can't be ${value} for patient with an age of ${age}`);
+                triggerError(`Systolic can't be ${value}`);
             } else if (age >= 6 && age <= 13 && !(value >= 85 && value <= 120)) {
-                triggerError(`Systolic can't be ${value} for patient with an age of ${age}`);
+                triggerError(`Systolic can't be ${value}`);
             } else if (age >= 13 && age <= 18 && !(value >= 95 && value <= 140)) {
-                triggerError(`Systolic can't be ${value} for patient with an age of ${age}`);
+                triggerError(`Systolic can't be ${value}`);
             } else if (age > 18 && !(value >= 100 && value <= 130)) {
-                triggerError(`Systolic can't be ${value} for patient with an age of ${age}`);
+                triggerError(`Systolic can't be ${value}`);
             } else {
                 clearErrors();
             }
@@ -338,22 +342,49 @@ export default defineComponent({
             if(value == "")return
            
            if(age<1 && (ageInMonth >= 1 && ageInMonth <=12 ) && !(value>=50 && value<=70)){ 
-            triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`)
+            triggerError(`Diastolic can't be ${value}`)
            }
            else if((age>=1 && age<=4) && !(value>=50 && value<=80)){
-                triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`)
+                triggerError(`Diastolic can't be ${value}`)
             }else if((age>=3 && age<=5) && !(value>=50 && value<=80)){
-                triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`)
+                triggerError(`Diastolic can't be ${value}`)
             }else if((age>=6 && age<=13) && !(value>=55 && value<=80)){
-                triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`)
+                triggerError(`Diastolic can't be ${value}`)
             }else if((age>=13 && age<=18) && !(value>=60 && value<=90)){
-                triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`)
+                triggerError(`Diastolic can't be ${value}`)
             }else if(age>18  && !(value>=60 && value<=90)){
-                triggerError(`Diastolic can't be ${value} for patient with an age of ${age}`)
+                triggerError(`Diastolic can't be ${value}`)
             }
             else {
                 clearErrors()
             }
+        },
+        validateTemperature(){
+                const triggerError = (errorMessage: string) => {
+                modifyFieldValue(this.vitals, "Temp", "alertsError", true);
+                modifyFieldValue(this.vitals, "Temp", "alertsErrorMassage", errorMessage);
+            };
+                const clearErrors = () => {
+                modifyFieldValue(this.vitals, "Temp", "alertsError", false);
+                modifyFieldValue(this.vitals, "Temp", "alertsErrorMassage", "");
+            };
+              const value = getFieldValue(this.vitals, "Temp", "value");
+            if(value == "")return
+
+           if (!(value>=35.5 && value<=37.4)){ 
+              triggerError(`Temperature can't be ${value}`)
+           }else {
+                clearErrors()
+          }
+          
+        },
+        handleTemperature(){
+            if(!getCheckboxSelectedValue(this.vitals,'Temperature not Done')?.checked){
+                modifyFieldValue(this.vitals, 'Temp', 'disabled', false);
+            }else{
+                modifyFieldValue(this.vitals, 'Temp', 'disabled', true);
+            }
+            console.log(getCheckboxSelectedValue(this.vitals,'Temperature not Done'))
         },
         markWizard() {
             if (this.vitals.validationStatus) {
@@ -369,13 +400,16 @@ export default defineComponent({
             });
         },
         saveData() {
+            console.log("=========",this.vitals);
             if (this.vitals.validationStatus) {
                 this.saveVitals();
                 this.saveOutComeStatus();
                 this.$router.push("OPDConsultationPlan");
-            } else {
-                toastWarning("Please complete all required fields");
+            }
+             else {
+                //toastWarning("Please complete all required fields");
                 this.saveOutComeStatus();
+                this.saveVitals();
             }
         },
         saveVitals() {
