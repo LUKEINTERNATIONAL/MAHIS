@@ -1,5 +1,5 @@
 <template>
-    <h6 v-if="inputHeader">{{ inputHeader }}</h6>
+    <h6 v-if="inputHeader" :class="bold">{{ inputHeader }}</h6>
     <div class="" :style="'width:' + inputWidth">
         <ion-input
             v-if="input == 'input'"
@@ -115,6 +115,10 @@ export default defineComponent({
             default: "",
         },
         iconRight: {
+            type: String,
+            default: "",
+        },
+        bold: {
             type: String,
             default: "",
         },
