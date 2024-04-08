@@ -407,7 +407,7 @@ export default defineComponent({
                 this.$router.push("OPDConsultationPlan");
             }
              else {
-                //toastWarning("Please complete all required fields");
+                toastWarning("Please complete all required fields");
                 this.saveOutComeStatus();
                 this.saveVitals();
             }

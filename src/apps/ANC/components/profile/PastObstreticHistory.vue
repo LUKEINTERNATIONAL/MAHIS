@@ -32,7 +32,7 @@
         <ion-card class="section">
             <ion-card-header>
                 <ion-card-title class="sub_item_header"
-                    >Does the woman have any complications due to past pregnancies?</ion-card-title
+                    ></ion-card-title
                 ></ion-card-header
             >
             <ion-card-content>
