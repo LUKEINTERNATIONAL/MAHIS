@@ -62,6 +62,7 @@ import {
   toastSuccess,
 } from "@/utils/Alerts";
 import { useOPDDiagnosisStore } from "@/apps/OPD/stores/DiagnosisStore";
+import { usePastMedicalHistoryStore } from "@/apps/OPD/stores/PastMedicalHistoryStore";
 import { Treatment } from "@/apps/NCD/services/treatment";
 import { isEmpty } from "lodash";
 import HisDate from "@/utils/Date";
@@ -71,159 +72,169 @@ import {
   DrugPrescriptionService,
 } from "../../../services/drug_prescription_service";
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";
-
-import { formatRadioButtonData } from "@/services/formatServerData";
+import {
+    modifyRadioValue,
+    getRadioSelectedValue,
+    getCheckboxSelectedValue,
+    getFieldValue,
+    getCheckboxInputField,
+    modifyFieldValue,
+    modifyCheckboxValue,
+} from "@/services/data_helpers";
+import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from "@/services/formatServerData";
 import { PatientComplaintsService } from "@/apps/OPD/services/patient_complaints_service";
 import { PatientGeneralConsultationService } from "@/services/patient_general_consultation";
+import { PastMedicalHistory } from "../services/past_medical_history_service";
 import { useLevelOfConsciousnessStore } from "@/apps/OPD/stores/LevelOfConsciousnessStore";
 import { ConsciousnessService } from "@/apps/OPD/services/consciousness_service";
+
 export default defineComponent({
-  name: "Home",
-  components: {
-    IonContent,
-    IonHeader,
-    IonMenuButton,
-    IonPage,
-    IonTitle,
-    IonToolbar,
-    Toolbar,
-    ToolbarSearch,
-    DemographicBar,
-    IonButton,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardSubtitle,
-    IonCardTitle,
-    IonAccordion,
-    IonAccordionGroup,
-    IonItem,
-    IonLabel,
-    IonModal,
-    Stepper,
-  },
-  data() {
-    return {
-      dispositions: "" as any,
-      wizardData: [
-        {
-          title: "Clinical Assessment",
-          class: "common_step",
-          checked: false,
-          disabled: false,
-          number: 1,
-          last_step: "",
-        },
-        {
-          title: "Investigations",
-          class: "common_step",
-          checked: "",
-          icon: false,
-          disabled: false,
-          number: 2,
-          last_step: "",
-        },
-        {
-          title: "Diagnosis",
-          class: "common_step",
-          checked: "",
-          icon: false,
-          disabled: false,
-          number: 3,
-          last_step: "",
-        },
-        {
-          title: "Treatment",
-          class: "common_step",
-          checked: "",
-          icon: false,
-          disabled: false,
-          number: 4,
-          last_step: "",
-        },
-        {
-          title: "Outcome",
-          class: "common_step",
-          checked: "",
-          icon: false,
-          disabled: false,
-          number: 5,
-          last_step: "last_step",
-        },
-      ],
-      StepperData: [
-        {
-          title: "Clinical Assessment",
-          componet: "ClinicalAssessment",
-          value: "1",
-        },
-        {
-          title: "Investigations",
-          componet: "Investigations",
-          value: "2",
-        },
-        {
-          title: "Diagnosis",
-          componet: "OPDDiagnosis",
-          value: "3",
-        },
-        {
-          title: "Treatment plan",
-          componet: "OPDTreatmentPlan",
-          value: "4",
-        },
-        {
-          title: "Outcome",
-          componet: "OPDOutcome",
-          value: "5",
-        },
-      ],
-      isOpen: false,
-      iconsContent: icons,
-    };
-  },
-  computed: {
-    ...mapState(useDemographicsStore, ["demographics"]),
-    ...mapState(usePregnancyStore, ["pregnancy"]),
-    ...mapState(usePresentingComplaintsStore, ["presentingComplaints"]),
-    ...mapState(useVitalsStore, ["vitals"]),
-    ...mapState(useInvestigationStore, ["investigations"]),
-    ...mapState(useOPDDiagnosisStore, ["OPDdiagnosis"]),
-    ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList","nonPharmalogicalTherapyAndOtherNotes","selectedMedicalAllergiesList",
-    ]),
-    ...mapState(useLevelOfConsciousnessStore, ["levelOfConsciousness"]),
-  },
-  mounted() {
-    this.markWizard();
-  },
-  watch: {
-    vitals: {
-      handler() {
-        this.markWizard();
-      },
-      deep: true,
+    name: "Home",
+    components: {
+        IonContent,
+        IonHeader,
+        IonMenuButton,
+        IonPage,
+        IonTitle,
+        IonToolbar,
+        Toolbar,
+        ToolbarSearch,
+        DemographicBar,
+        IonButton,
+        IonCard,
+        IonCardContent,
+        IonCardHeader,
+        IonCardSubtitle,
+        IonCardTitle,
+        IonAccordion,
+        IonAccordionGroup,
+        IonItem,
+        IonLabel,
+        IonModal,
+        Stepper,
     },
-    investigations: {
-      handler() {
-        this.markWizard();
-      },
-      deep: true,
+    data() {
+        return {
+            dispositions: "" as any,
+            wizardData: [
+                {
+                    title: "Clinical Assessment",
+                    class: "common_step",
+                    checked: false,
+                    disabled: false,
+                    number: 1,
+                    last_step: "",
+                },
+                {
+                    title: "Investigations",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+                    disabled: false,
+                    number: 2,
+                    last_step: "",
+                },
+                {
+                    title: "Diagnosis",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+                    disabled: false,
+                    number: 3,
+                    last_step: "",
+                },
+                {
+                    title: "Treatment",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+                    disabled: false,
+                    number: 4,
+                    last_step: "",
+                },
+                {
+                    title: "Outcome",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+                    disabled: false,
+                    number: 5,
+                    last_step: "last_step",
+                },
+            ],
+            StepperData: [
+                {
+                    title: "Clinical Assessment",
+                    componet: "ClinicalAssessment",
+                    value: "1",
+                },
+                {
+                    title: "Investigations",
+                    componet: "Investigations",
+                    value: "2",
+                },
+                {
+                    title: "Diagnosis",
+                    componet: "OPDDiagnosis",
+                    value: "3",
+                },
+                {
+                    title: "Treatment plan",
+                    componet: "OPDTreatmentPlan",
+                    value: "4",
+                },
+                {
+                    title: "Outcome",
+                    componet: "OPDOutcome",
+                    value: "5",
+                },
+            ],
+            isOpen: false,
+            iconsContent: icons,
+        };
     },
-    OPDdiagnosis: {
-      handler() {
-        this.markWizard();
-      },
-      deep: true,
+    computed: {
+        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(usePregnancyStore, ["pregnancy"]),
+        ...mapState(usePresentingComplaintsStore, ["presentingComplaints"]),
+        ...mapState(usePastMedicalHistoryStore, ["pastMedicalHistory"]),
+        ...mapState(useVitalsStore, ["vitals"]),
+        ...mapState(useInvestigationStore, ["investigations"]),
+        ...mapState(useOPDDiagnosisStore, ["OPDdiagnosis"]),
+        ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
+        ...mapState(useLevelOfConsciousnessStore, ["levelOfConsciousness"]),
     },
-    selectedMedicalDrugsList: {
-      handler() {
+    async mounted() {
         this.markWizard();
-      },
     },
-  },
-  setup() {
-    return { chevronBackOutline, checkmark };
-  },
+    watch: {
+        vitals: {
+            handler() {
+                this.markWizard();
+            },
+            deep: true,
+        },
+        investigations: {
+            handler() {
+                this.markWizard();
+            },
+            deep: true,
+        },
+        OPDdiagnosis: {
+            handler() {
+                this.markWizard();
+            },
+            deep: true,
+        },
+        selectedMedicalDrugsList: {
+            handler() {
+                this.markWizard();
+            },
+        },
+    },
+    setup() {
+        return { chevronBackOutline, checkmark };
+    },
 
   methods: {
     markWizard() {
@@ -248,84 +259,75 @@ export default defineComponent({
         this.wizardData[2].checked = false;
       }
 
-      if (this.selectedMedicalDrugsList.length > 0) {
-        this.wizardData[4].checked = true;
-        this.wizardData[4].class = "open_step common_step";
-      } else {
-        this.wizardData[4].checked = false;
-      }
-    },
-    getFormatedData(data: any) {
-      return data.map((item: any) => {
-        return item?.data[0] || item?.data;
-      });
-    },
-    async saveData() {
-      if (this.OPDdiagnosis[0].selectedData.length > 0) {
-        await this.saveDiagnosis();
-      }
-      await this.saveTreatmentPlan();
-      await this.saveOutComeStatus();
-      await this.saveWomenStatus();
-      await this.savePresentingComplaints();
-      await this.saveConsciousness();
-      this.$router.push("patientProfile");
-    },
-    async savePresentingComplaints() {
-      if (this.presentingComplaints[0].selectedData.length > 0) {
-        const userID: any = Service.getUserID();
-        const PatientComplaints = new PatientComplaintsService(
-          this.demographics.patient_id,
-          userID
-        );
-        const encounter = await PatientComplaints.createEncounter();
-        if (!encounter)
-          return toastWarning("Unable to create patient complaints encounter");
-        const patientStatus = await PatientComplaints.saveObservationList(
-          this.getFormatedData(this.presentingComplaints[0].selectedData)
-        );
-        if (!patientStatus)
-          return toastWarning("Unable to create patient complaints  !");
-        toastSuccess("Patient complaints has been created");
-      }
-      this.presentingComplaints[0].selectedData;
-      console.log(
-        "🚀 ~ savePresentingComplaints ~  this.presentingComplaints[0].selectedData:",
-        this.presentingComplaints[0].selectedData
-      );
-    },
-    async saveWomenStatus() {
-      const womenStatus = await formatRadioButtonData(this.pregnancy);
-      if (womenStatus.length > 0) {
-        const userID: any = Service.getUserID();
-        const patientPregnancy = new PatientGeneralConsultationService(
-          this.demographics.patient_id,
-          userID
-        );
-        const encounter = await patientPregnancy.createEncounter();
-        if (!encounter)
-          return toastWarning("Unable to create pregnant Status encounter");
-        const patientStatus = await patientPregnancy.saveObservationList(
-          womenStatus
-        );
-        if (!patientStatus)
-          return toastWarning("Unable to create pregnant Status !");
-        toastSuccess("Pregnant Status has been created");
-      }
-    },
-    saveDiagnosis() {
-      const userID: any = Service.getUserID();
-      const diagnosisInstance = new Diagnosis();
-      diagnosisInstance.onSubmit(
-        this.demographics.patient_id,
-        userID,
-        this.getFormatedData(this.OPDdiagnosis[0].selectedData)
-      );
-    },
-    async saveTreatmentPlan() {
-      const userID: any = Service.getUserID();
-      const patientID = this.demographics.patient_id;
-      const treatmentInstance = new Treatment();
+            if (this.selectedMedicalDrugsList.length > 0) {
+                this.wizardData[4].checked = true;
+                this.wizardData[4].class = "open_step common_step";
+            } else {
+                this.wizardData[4].checked = false;
+            }
+        },
+        getFormatedData(data: any) {
+            return data.map((item: any) => {
+                return item?.data[0] || item?.data;
+            });
+        },
+        async saveData() {
+            if (this.OPDdiagnosis[0].selectedData.length > 0) {
+                await this.saveDiagnosis();
+            }
+            await this.saveTreatmentPlan();
+            await this.saveOutComeStatus();
+            await this.saveWomenStatus();
+            await this.savePresentingComplaints();
+            await this.savePastMedicalHistory();
+            await this.saveConsciousness();
+            this.$router.push("patientProfile");
+        },
+        async savePastMedicalHistory() {
+            const pastMedicalHistoryData: any = await this.buildPastMedicalHistory();
+            const userID: any = Service.getUserID();
+            if (pastMedicalHistoryData.length > 0) {
+                const pastMedicalHistory = new PastMedicalHistory(this.demographics.patient_id, userID);
+                const encounter = await pastMedicalHistory.createEncounter();
+                if (!encounter) return toastWarning("Unable to create past medical history encounter");
+                const savingStatus = await pastMedicalHistory.saveObservationList(pastMedicalHistoryData);
+                if (!savingStatus) return toastWarning("Unable to create past medical history!");
+                toastSuccess("Past medical history has been created");
+            }
+        },
+        async savePresentingComplaints() {
+            if (this.presentingComplaints[0].selectedData.length > 0) {
+                const userID: any = Service.getUserID();
+                const PatientComplaints = new PatientComplaintsService(this.demographics.patient_id, userID);
+                const encounter = await PatientComplaints.createEncounter();
+                if (!encounter) return toastWarning("Unable to create patient complaints encounter");
+                const patientStatus = await PatientComplaints.saveObservationList(this.getFormatedData(this.presentingComplaints[0].selectedData));
+                if (!patientStatus) return toastWarning("Unable to create patient complaints  !");
+                toastSuccess("Patient complaints has been created");
+            }
+            this.presentingComplaints[0].selectedData;
+        },
+        async saveWomenStatus() {
+            const womenStatus = await formatRadioButtonData(this.pregnancy);
+            if (womenStatus.length > 0) {
+                const userID: any = Service.getUserID();
+                const patientPregnancy = new PatientGeneralConsultationService(this.demographics.patient_id, userID);
+                const encounter = await patientPregnancy.createEncounter();
+                if (!encounter) return toastWarning("Unable to create pregnant Status encounter");
+                const patientStatus = await patientPregnancy.saveObservationList(womenStatus);
+                if (!patientStatus) return toastWarning("Unable to create pregnant Status !");
+                toastSuccess("Pregnant Status has been created");
+            }
+        },
+        saveDiagnosis() {
+            const userID: any = Service.getUserID();
+            const diagnosisInstance = new Diagnosis();
+            diagnosisInstance.onSubmit(this.demographics.patient_id, userID, this.getFormatedData(this.OPDdiagnosis[0].selectedData));
+        },
+        async saveTreatmentPlan() {
+            const userID: any = Service.getUserID();
+            const patientID = this.demographics.patient_id;
+            const treatmentInstance = new Treatment();
 
       if (!isEmpty(this.selectedMedicalAllergiesList)) {
         const allergies = this.mapToAllergies();
@@ -343,72 +345,70 @@ export default defineComponent({
         treatmentInstance.onSubmitNotes(patientID, userID, treatmentNotesTxt);
       }
 
-      if (!isEmpty(this.selectedMedicalDrugsList)) {
-        const drugOrders = this.mapToOrders();
-        const prescriptionService = new DrugPrescriptionService(
-          patientID,
-          userID
-        );
-        const encounter = await prescriptionService.createEncounter();
-        if (!encounter)
-          return toastWarning("Unable to create treatment encounter");
-        const drugOrder = await prescriptionService.createDrugOrder(drugOrders);
-        if (!drugOrder) return toastWarning("Unable to create drug orders!");
-        toastSuccess("Drug order has been created");
-      }
-    },
-    async saveOutComeStatus() {
-      // const userID: any = Service.getUserID()
-      // const patientID = this.demographics.patient_id
-      // if (!isEmpty(this.dispositions)) {
-      //     for (let key in this.dispositions) {
-      //         if (this.dispositions[key].type == 'Admit') {
-      //             console.log(this.dispositions[key])
-      //         } else {
-      //         }
-      //     }
-      // }
-    },
-    openModal() {
-      createModal(SaveProgressModal);
-    },
-    mapToOrders(): any[] {
-      return this.selectedMedicalDrugsList.map((drug: any) => {
-        const startDate = DrugPrescriptionService.getSessionDate();
-        const frequency =
-          DRUG_FREQUENCIES.find((f) => f.label === drug.frequency) ||
-          ({} as (typeof DRUG_FREQUENCIES)[0]);
-        return {
-          drug_inventory_id: drug.drug_id,
-          equivalent_daily_dose:
-            drug.dose == "Unknown" ? 0 : drug.dose * frequency?.value || 0,
-          start_date: startDate,
-          auto_expire_date: this.calculateExpireDate(startDate, drug.duration),
-          units: drug.units,
-          instructions: `${drug.drugName}: ${drug.dose} ${drug.units} ${
-            frequency?.code || ""
-          } for ${drug.duration} days`,
-          dose: drug.dose,
-          frequency: frequency?.code || "",
-        };
-      });
-    },
-    calculateExpireDate(startDate: string | Date, duration: any) {
-      const date = new Date(startDate);
-      date.setDate(date.getDate() + parseInt(duration));
-      return HisDate.toStandardHisFormat(date);
-    },
-    mapToAllergies(): any[] {
-      return this.selectedMedicalAllergiesList.map((allergy: any) => {
-        return {
-          concept_id: 985,
-          obs_datetime: Service.getSessionDate(),
-          value_coded: allergy.concept_id,
-        };
-      });
-    },
+            if (!isEmpty(this.selectedMedicalDrugsList)) {
+                const drugOrders = this.mapToOrders();
+                const prescriptionService = new DrugPrescriptionService(patientID, userID);
+                const encounter = await prescriptionService.createEncounter();
+                if (!encounter) return toastWarning("Unable to create treatment encounter");
+                const drugOrder = await prescriptionService.createDrugOrder(drugOrders);
+                if (!drugOrder) return toastWarning("Unable to create drug orders!");
+                toastSuccess("Drug order has been created");
+            }
+        },
 
-     async saveConsciousness() {
+        async saveOutComeStatus() {
+            // const userID: any = Service.getUserID()
+            // const patientID = this.demographics.patient_id
+            // if (!isEmpty(this.dispositions)) {
+            //     for (let key in this.dispositions) {
+            //         if (this.dispositions[key].type == 'Admit') {
+            //             console.log(this.dispositions[key])
+            //         } else {
+            //         }
+            //     }
+            // }
+        },
+        openModal() {
+            createModal(SaveProgressModal);
+        },
+        mapToOrders(): any[] {
+            return this.selectedMedicalDrugsList.map((drug: any) => {
+                const startDate = DrugPrescriptionService.getSessionDate();
+                const frequency = DRUG_FREQUENCIES.find((f) => f.label === drug.frequency) || ({} as (typeof DRUG_FREQUENCIES)[0]);
+                return {
+                    drug_inventory_id: drug.drug_id,
+                    equivalent_daily_dose: drug.dose == "Unknown" ? 0 : drug.dose * frequency?.value || 0,
+                    start_date: startDate,
+                    auto_expire_date: this.calculateExpireDate(startDate, drug.duration),
+                    units: drug.units,
+                    instructions: `${drug.drugName}: ${drug.dose} ${drug.units} ${frequency?.code || ""} for ${drug.duration} days`,
+                    dose: drug.dose,
+                    frequency: frequency?.code || "",
+                };
+            });
+        },
+        calculateExpireDate(startDate: string | Date, duration: any) {
+            const date = new Date(startDate);
+            date.setDate(date.getDate() + parseInt(duration));
+            return HisDate.toStandardHisFormat(date);
+        },
+        mapToAllergies(): any[] {
+            return this.selectedMedicalAllergiesList.map((allergy: any) => {
+                return {
+                    concept_id: 985,
+                    obs_datetime: Service.getSessionDate(),
+                    value_coded: allergy.concept_id,
+                };
+            });
+        },
+        async buildPastMedicalHistory() {
+            return [
+                ...(await formatCheckBoxData(this.pastMedicalHistory)),
+                ...(await formatRadioButtonData(this.pastMedicalHistory)),
+                ...(await formatInputFiledData(this.pastMedicalHistory)),
+            ];
+        },
+         async saveConsciousness() {
       const data = await formatRadioButtonData(this.levelOfConsciousness);
 
       console.log({ data });
@@ -428,7 +428,7 @@ export default defineComponent({
       const dat = await formatRadioButtonData(this.levelOfConsciousness);
       //   await consciousness.saveObservationList(gcs);
     },
-  },
+    },
 });
 </script>
 
