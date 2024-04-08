@@ -64,9 +64,7 @@
                             <ion-icon slot="start" :icon="iconsContent.search" class="selectedPatient" aria-hidden="true"></ion-icon>
                         </ion-label>
                     </ion-item>
-                    <div>
-                        <ion-label v-if="show_error_msg_for_ref_facility_ward_name" class="error-label">{{ refFacilityNameErrMsg }}</ion-label>
-                    </div>
+
 
                     <ion-popover
                         :is-open="popoverOpen"
@@ -446,7 +444,7 @@ async function validateRefDate() {
 
 async function validateRefReasons() {
     if (refReason.value === "") {
-        show_error_msg_for_ref_reason.value = true;
+        show_error_msg_for_ref_reason.vmsg_for_ref_facility_ward_namealue = true;
     } else {
         show_error_msg_for_ref_reason.value = false;
     }
