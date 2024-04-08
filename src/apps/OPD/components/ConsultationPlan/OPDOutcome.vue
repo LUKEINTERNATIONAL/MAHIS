@@ -11,8 +11,10 @@
         </ion-row>
 
         <div v-if="showAddReferralInfo">
+            <AdmittedforShortStayOutcomef/>
+            <ReferredOutCome/>
             <ion-row>
-                <AdmittedforShortStayOutcomef/>
+                
                 <ion-col>
                     <!-- <BasicInputField
                         :placeholder="basicInputFieldProperties[1].placeholder"
@@ -37,6 +39,7 @@
                         :name_of_list="list_picker_prperties[0].name_of_list"
                         :choose_place_holder="list_picker_prperties[0].placeHolder"
                         :items_-list="list_picker_prperties[0].items"
+                        :use_internal_filter="list_picker_prperties[0].use_internal_filter"
                         @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
                         @item-list-filtered="list_picker_prperties[0].listFilteredFN"
                     />
@@ -197,6 +200,7 @@ import { getSpecialistClinics, getFacilityWards } from "@/apps/OPD/services/outc
 import deadOutcome from "../ConsultationPlan/DeadOutcome.vue"
 import ListPicker from "@/apps/OPD/components/ConsultationPlan/ListPicker.vue"
 import AdmittedforShortStayOutcomef from "../ConsultationPlan/AdmittedforShortStayOutcome.vue"
+import ReferredOutCome from '../ConsultationPlan/ReferredOutCome.vue'
 
 const iconsContent = icons;
 const initialMsg = ref("No outcome created yet");
@@ -285,6 +289,7 @@ const list_picker_prperties = [
         items: referralType.value,
         listUpdatedFN: listUpdated1,
         listFilteredFN: ()=>{},
+        use_internal_filter: true as any,
     }
 ]
 

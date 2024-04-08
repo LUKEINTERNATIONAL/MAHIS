@@ -65,6 +65,7 @@
                     :name_of_list="list_picker_prperties[0].name_of_list"
                     :choose_place_holder="list_picker_prperties[0].placeHolder"
                     :items_-list="list_picker_prperties[0].items"
+                    :use_internal_filter="list_picker_prperties[0].use_internal_filter"
                     @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
                     @item-list-filtered="list_picker_prperties[0].listFilteredFN"
                 />
@@ -78,6 +79,7 @@
                     :name_of_list="list_picker_prperties[1].name_of_list"
                     :choose_place_holder="list_picker_prperties[1].placeHolder"
                     :items_-list="list_picker_prperties[1].items"
+                    :use_internal_filter="list_picker_prperties[0].use_internal_filter"
                     @item-list-up-dated="list_picker_prperties[1].listUpdatedFN"
                     @item-list-filtered="list_picker_prperties[1].listFilteredFN"
                 />
@@ -248,6 +250,7 @@ const list_picker_prperties = [
         items: mannerOfDeath.value,
         listUpdatedFN: listUpdated1,
         listFilteredFN: ()=>{},
+        use_internal_filter: true as any,
     },
     {
         multi_Selection: false as any,
@@ -258,6 +261,7 @@ const list_picker_prperties = [
         items: causesOfDeath.value,
         listUpdatedFN: listUpdated2,
         listFilteredFN: ()=>{},
+        use_internal_filter: true as any,
     },
 ]
 

@@ -9,8 +9,10 @@
                     :name_of_list="list_picker_prperties[0].name_of_list"
                     :choose_place_holder="list_picker_prperties[0].placeHolder"
                     :items_-list="list_picker_prperties[0].items"
+                    :use_internal_filter="list_picker_prperties[0].use_internal_filter"
                     @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
                     @item-list-filtered="list_picker_prperties[0].listFilteredFN"
+                    @item-search-text="list_picker_prperties[0].searchTextFN"
                 />
             </ion-col>
             <ion-col>
@@ -65,12 +67,12 @@ import {
 import ListPicker from "@/apps/OPD/components/ConsultationPlan/ListPicker.vue"
 import DatePicker from "@/apps/OPD/components/ConsultationPlan/DatePicker.vue"
 import BasicInputField from "@/components/BasicInputField.vue"
-import { getSpecialistClinics, getFacilityWards } from "@/apps/OPD/services/outcome";
+import { LocationService } from "@/services/location_service";
 
-const WardsData = ref([] as any)
+const FacilityData = ref([] as any)
 
 onMounted(async () => {
-    findWardName({})
+    findWardName('')
 })
 
 const note_properties = [
@@ -101,28 +103,35 @@ const list_picker_prperties = [
     {
         multi_Selection: false as any,
         show_list_label: true as any,
-        unqueId: 'qwerty3' as any,
-        name_of_list: 'Choose Ward' as any,
+        unqueId: 'qwerty4' as any,
+        name_of_list: 'Choose Facility' as any,
         placeHolder: 'Choose one' as any,
-        items: WardsData.value,
+        items: FacilityData.value,
         listUpdatedFN: listUpdated1,
         listFilteredFN: ()=>{},
+        searchTextFN: findWardName,
+        use_internal_filter: true as any,
     }
 ]
 
+const uniqueLocations = new Set()
 async function findWardName(data: any) {
-    const srch_text = data.value
-    const temp_data1 = await getFacilityWards(srch_text)
+    const srch_text = data
+    const temp_data1 = await LocationService.getFacilities({ name: srch_text })
     temp_data1.forEach((item: any) => {
-        const _item_ = {
-            name: item.name,
-            selected: false,
+        if (!uniqueLocations.has(item.location_id)) {
+            uniqueLocations.add(item.location_id)
+            const _item_ = {
+                name: item.name,
+                selected: false,
+            }
+            FacilityData.value.push(_item_)
         }
-        WardsData.value.push(_item_)
     })
 }
 
 function listUpdated1(data: any) {
-    WardsData.value = data
+    FacilityData.value = data
 }
+
 </script>

@@ -60,6 +60,7 @@ const props = defineProps<{
     }],
     multiSelection: false,
     show_label: true,
+    use_internal_filter: true,
 }>()
 
 watch(
@@ -115,16 +116,18 @@ function itemSearchText(searchString: string) {
 }
 
 function itemListFiltered(searchString: string) {
-    const items =  [...props.items_List]
-    const filtered_items = [] as any
-    searchString = searchString ? searchString.toString() : "";
-    items.forEach((item: any) => {
-        if (item.name.toLowerCase().includes(searchString.toLowerCase())) {
-            filtered_items.push(item)
-        }
-    })
-    items_List_copy.value = filtered_items
-    emit("itemListFiltered", filtered_items)
+    if (props.use_internal_filter == true) {
+        const items =  [...props.items_List]
+        const filtered_items = [] as any
+        searchString = searchString ? searchString.toString() : "";
+        items.forEach((item: any) => {
+            if (item.name.toLowerCase().includes(searchString.toLowerCase())) {
+                filtered_items.push(item)
+            }
+        })
+        items_List_copy.value = filtered_items
+        emit("itemListFiltered", filtered_items)
+    }
 }
 
 function dissmissDrugAddField(): void {
