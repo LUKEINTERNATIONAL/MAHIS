@@ -1,19 +1,38 @@
 <template>
-    <ListPicker
-        :multiSelection="list_picker_prperties[0].multi_Selection"
-        :show_label="list_picker_prperties[0].show_list_label"
-        :uniqueId="list_picker_prperties[0].unqueId"
-        :name_of_list="list_picker_prperties[0].name_of_list"
-        :choose_place_holder="list_picker_prperties[0].placeHolder"
-        :items_-list="list_picker_prperties[0].items"
-        @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
-        @item-list-filtered="list_picker_prperties[0].listFilteredFN"
-    />
-    <BasicInputField
-        :placeholder="note_properties[0].placeHolder"
-        :icon="pencilOutline"
-        :inputValue="note_properties[0].dataValue.value"
-    />
+    <ion-list>
+        <ion-row>
+            <ion-col>
+                <ListPicker
+                    :multiSelection="list_picker_prperties[0].multi_Selection"
+                    :show_label="list_picker_prperties[0].show_list_label"
+                    :uniqueId="list_picker_prperties[0].unqueId"
+                    :name_of_list="list_picker_prperties[0].name_of_list"
+                    :choose_place_holder="list_picker_prperties[0].placeHolder"
+                    :items_-list="list_picker_prperties[0].items"
+                    @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
+                    @item-list-filtered="list_picker_prperties[0].listFilteredFN"
+                />
+            </ion-col>
+            <ion-col>
+                <div style="margin-top: 10%;">
+                    <DatePicker
+                        :place_holder="date_properties[0].placeHolder"
+                        @time-up-dated="date_properties[0].dataHandler"
+                    />
+                </div>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col>
+                <BasicInputField
+                    :placeholder="note_properties[0].placeHolder"
+                    :icon="pencilOutline"
+                    :inputValue="note_properties[0].dataValue.value"
+                />
+            </ion-col>
+        </ion-row>
+    </ion-list>
 </template>
 
 <script lang="ts">
@@ -54,7 +73,6 @@ onMounted(async () => {
     findWardName({})
 })
 
-
 const note_properties = [
     {
         placeHolder: 'Reason',
@@ -62,6 +80,18 @@ const note_properties = [
         dataValue: ref(),
     },
 ]
+
+const date_properties = [
+    {
+        placeHolder: {default: 'Enter date'} as any,
+        dataHandler: dateUpdate_fn1,
+        dataValue: ref(),
+    }
+]
+
+function dateUpdate_fn1(data: any) {
+    date_properties[0].dataValue.value = data
+}
 
 function notesUpDated_fn1(data: any) {
     note_properties[0].dataValue.value = data

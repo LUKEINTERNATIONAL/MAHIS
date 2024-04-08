@@ -120,7 +120,6 @@ function itemListFiltered(searchString: string) {
     searchString = searchString ? searchString.toString() : "";
     items.forEach((item: any) => {
         if (item.name.toLowerCase().includes(searchString.toLowerCase())) {
-            console.log(item)
             filtered_items.push(item)
         }
     })

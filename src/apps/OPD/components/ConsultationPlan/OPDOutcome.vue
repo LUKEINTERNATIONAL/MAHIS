@@ -512,7 +512,6 @@ function openPopoverForReferral(event: Event) {
 }
 
 function selectedFaciltyName(name: any, obj: any) {
-    console.log(name);
     facilityWardName.value = name;
     refDataItem.value = obj;
 }
