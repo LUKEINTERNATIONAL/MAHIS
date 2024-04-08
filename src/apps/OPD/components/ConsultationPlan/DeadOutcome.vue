@@ -101,7 +101,9 @@
             </ion-col>
 
         </ion-row>
-        <ion-col>
+
+        <ion-row>
+            <ion-col>
                 <BasicInputField
                     :placeholder="note_properties[3].placeHolder"
                     :icon="medicalOutline"
@@ -116,6 +118,8 @@
                     :inputValue="note_properties[4].dataValue.value"
                 />
             </ion-col>
+        </ion-row>
+
 
 </template>
 <script lang="ts">

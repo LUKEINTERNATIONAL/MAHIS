@@ -1,6 +1,6 @@
 <template>
     <ion-list>
-        <ion-label v-if="show_label">{{ name_of_list }}</ion-label>
+        <ion-label v-if="show_label" class="ion-lblCls">{{ name_of_list }}</ion-label>
         <ion-row>
             <ion-item lines="none" class="ItemAl">
                 <div v-for="(item, index) in items_List" :key="index">
@@ -242,5 +242,8 @@ ion-list.list-al {
 }
 .notes_p {
     margin: 4%;
+}
+.ion-lblCls {
+    font-weight: bold;
 }
 </style>

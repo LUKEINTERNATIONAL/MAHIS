@@ -35,7 +35,7 @@
                 </div>
             </ion-col>
 
-            <ion-col>
+            <ion-col v-if="!show_dead_options">
                 <ion-item class="input_item">
                     <ion-input
                         v-model="facilityWardName"
@@ -78,7 +78,7 @@
                 </ion-popover>
             </ion-col>
 
-            <ion-col>
+            <ion-col v-if="!show_dead_options">
                 <BasicInputField
                     :placeholder="basicInputFieldProperties[2].placeholder"
                     :inputValue="refDate"
@@ -102,9 +102,9 @@
                 </div>
             </ion-col>
 
-            <ion-col> </ion-col>
+            
         </ion-row>
-        <ion-row>
+        <ion-row v-if="!show_dead_options">
             <ion-col size="9">
                 <BasicInputField
                     :placeholder="basicInputFieldProperties[3].placeholder"
