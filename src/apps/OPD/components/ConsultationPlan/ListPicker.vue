@@ -3,7 +3,7 @@
         <ion-label v-if="show_label" class="ion-lblCls">{{ name_of_list }}</ion-label>
         <ion-row>
             <ion-item lines="none" class="ItemAl">
-                <div v-for="(item, index) in items_List" :key="index">
+                <div v-for="(item, index) in local_itmes_List" :key="index">
                     <ion-button v-if="item.selected" @click="selectAl(item)" class="itemAlBtn">
                         {{ item.name }}
                     <ion-icon slot="end" style="font-size: x-large" :icon="closeOutline"></ion-icon>
@@ -44,10 +44,11 @@
 <script setup lang="ts">
 import { IonList, IonLabel, IonRow, IonCol, IonItem, IonButton, IonIcon, IonInput, IonContent } from "@ionic/vue"
 import { closeOutline, addOutline, checkmarkOutline } from "ionicons/icons"
-import { ref, watch } from "vue"
+import { ref, watch, onMounted } from "vue"
 
 const input = ref()
 const itemName = ref("")
+const local_itmes_List = ref([] as any)
 
 const props = defineProps<{
     uniqueId: "99"
@@ -60,6 +61,17 @@ const props = defineProps<{
     multiSelection: false,
     show_label: true,
 }>()
+
+watch(
+    () => props.items_List,
+    async (newValue) => {
+        local_itmes_List.value = newValue
+    }
+)
+
+onMounted(async () => {
+    local_itmes_List.value = props.items_List
+})
 
 
 function selectAl(sel_item: any) {
@@ -85,7 +97,6 @@ async function FindItemName(text: any) {
 }
 
 function setFocus() {
-    console.log("sssssss", props.uniqueId)
     input.value.$el.setFocus()
 }
 

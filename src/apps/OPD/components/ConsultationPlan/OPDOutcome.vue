@@ -12,6 +12,7 @@
 
         <div v-if="showAddReferralInfo">
             <ion-row>
+                <AdmittedforShortStayOutcomef/>
                 <ion-col>
                     <!-- <BasicInputField
                         :placeholder="basicInputFieldProperties[1].placeholder"
@@ -192,9 +193,10 @@ import BasicInputField from "@/components/BasicInputField.vue";
 import DynamicDispositionList from "@/components/DynamicDispositionList.vue";
 import { useDispositionStore } from "@/stores/OutcomeStore";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
-import { getSpecialistClinics, getFacilityWards } from "@/apps/NCD/services/outcome";
+import { getSpecialistClinics, getFacilityWards } from "@/apps/OPD/services/outcome";
 import deadOutcome from "../ConsultationPlan/DeadOutcome.vue"
 import ListPicker from "@/apps/OPD/components/ConsultationPlan/ListPicker.vue"
+import AdmittedforShortStayOutcomef from "../ConsultationPlan/AdmittedforShortStayOutcome.vue"
 
 const iconsContent = icons;
 const initialMsg = ref("No outcome created yet");
