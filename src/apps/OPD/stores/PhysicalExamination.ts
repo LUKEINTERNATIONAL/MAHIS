@@ -76,14 +76,14 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     },
                     data: [
                         {
-                            value: "condition does not necessitate assessment",
+                            value: "Condition does not necessitate assessment",
                             name: "Condition does not necessitate assessment",
                             labelPlacement: "start",
                             colSize: "6.01",
                             justify: "space-between",
                         },
                         {
-                            value: "patient refused to consent",
+                            value: "Patient refused to consent",
                             name: "Patient refused to consent",
                             labelPlacement: "start",
                             colSize: "6.01",
@@ -104,14 +104,14 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     },
                     data: [
                         {
-                            value: "yes",
+                            value: "Yes",
                             name: "Eyes normal?",
                             labelPlacement: "start",
                             colSize: "6",
                             justify: "space-between",
                         },
                         {
-                            value: "no",
+                            value: "No",
                             labelPlacement: "start",
                             colSize: "2",
                             justify: "end",
@@ -135,7 +135,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Pallor",
                             disabled: false,
-                            value: "pallor",
+                            value: "Pallor",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -158,7 +158,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Jaundice",
                             disabled: false,
-                            value: "jaundice",
+                            value: "Jaundice",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -181,7 +181,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Ulcerations",
                             disabled: false,
-                            value: "ulcerations",
+                            value: "Ulcerations",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -203,7 +203,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     data: [
                         {
                             name: "Other eye abnormality",
-                            value: "other eye abnormality",
+                            value: "Other eye abnormality",
                             disabled: false,
                             labelPlacement: "start",
                             colSize: "8",
@@ -224,7 +224,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                     inputHeader: "specify eye abnormality",
                                     icon: icons.editPen,
                                     value: "",
-                                    name: "Other eye abnormality field",
+                                    name: "Other eye abnormality notes",
                                     eventType: "input",
                                     inputWidth: "100%",
                                     required: true,
@@ -254,7 +254,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                             justify: "space-between",
                         },
                         {
-                            value: "no",
+                            value: "No",
                             labelPlacement: "start",
                             colSize: "2",
                             justify: "end",
@@ -278,7 +278,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Oral thrush",
                             disabled: false,
-                            value: "oral thrush",
+                            value: "Oral thrush",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -301,7 +301,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Kaposi’s Sarcoma lesions",
                             disabled: false,
-                            value: "kaposi’s Sarcoma lesions",
+                            value: "Kaposi’s Sarcoma lesions",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -324,7 +324,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Sores",
                             disabled: false,
-                            value: "sores",
+                            value: "Sores",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -346,7 +346,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     data: [
                         {
                             name: "Other mouth abnormality",
-                            value: "other mouth abnormality",
+                            value: "Other mouth abnormality",
                             disabled: false,
                             labelPlacement: "start",
                             colSize: "8",
@@ -368,7 +368,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                     inputHeader: "specify",
                                     icon: icons.editPen,
                                     value: "other",
-                                    name: "Other mouth abnormality field",
+                                    name: "Other mouth abnormality notes",
                                     eventType: "input",
                                     inputWidth: "100%",
                                     required: true,
@@ -391,14 +391,14 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     },
                     data: [
                         {
-                            value: "yes",
+                            value: "Yes",
                             name: "Ears normal?",
                             labelPlacement: "start",
                             colSize: "6",
                             justify: "space-between",
                         },
                         {
-                            value: "no",
+                            value: "No",
                             labelPlacement: "start",
                             colSize: "2",
                             justify: "end",
@@ -422,7 +422,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Discharge",
                             disabled: false,
-                            value: "discharge",
+                            value: "Discharge",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -445,7 +445,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Bleeding",
                             disabled: false,
-                            value: "bleeding",
+                            value: "Bleeding",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -467,7 +467,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     data: [
                         {
                             name: "Other ears abnormality",
-                            value: "other ears abnormality",
+                            value: "Other ears abnormality",
                             disabled: false,
                             labelPlacement: "start",
                             colSize: "8",
@@ -489,7 +489,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                     inputHeader: "specify",
                                     icon: icons.editPen,
                                     value: "other",
-                                    name: "Other ears abnormality field",
+                                    name: "Other ears abnormality notes",
                                     eventType: "input",
                                     inputWidth: "100%",
                                     required: true,
@@ -512,14 +512,14 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     },
                     data: [
                         {
-                            value: "yes",
+                            value: "Yes",
                             name: "Face normal?",
                             labelPlacement: "start",
                             colSize: "6",
                             justify: "space-between",
                         },
                         {
-                            value: "no",
+                            value: "No",
                             labelPlacement: "start",
                             colSize: "2",
                             justify: "end",
@@ -543,7 +543,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Rash",
                             disabled: false,
-                            value: "rash",
+                            value: "Rash",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -566,7 +566,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Swelling",
                             disabled: false,
-                            value: "swelling",
+                            value: "Swelling",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -588,7 +588,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     data: [
                         {
                             name: "Other face abnormality",
-                            value: "other face abnormality",
+                            value: "Other face abnormality",
                             disabled: false,
                             labelPlacement: "start",
                             colSize: "8",
@@ -610,7 +610,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                     inputHeader: "specify",
                                     icon: icons.editPen,
                                     value: "Other face abnormality",
-                                    name: "Other face abnormality field",
+                                    name: "Other face abnormality notes",
                                     eventType: "input",
                                     inputWidth: "100%",
                                     required: true,
@@ -634,14 +634,14 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     },
                     data: [
                         {
-                            value: "yes",
+                            value: "Yes",
                             name: "Neck normal?",
                             labelPlacement: "start",
                             colSize: "6",
                             justify: "space-between",
                         },
                         {
-                            value: "no",
+                            value: "No",
                             labelPlacement: "start",
                             colSize: "2",
                             justify: "end",
@@ -688,7 +688,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Neck swelling",
                             disabled: false,
-                            value: "swelling",
+                            value: "Neck Swelling",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -711,7 +711,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Neck mass",
                             disabled: false,
-                            value: "mass",
+                            value: "Neck mass",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -733,7 +733,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     data: [
                         {
                             name: "Other neck abnormality",
-                            value: "other neck abnormality",
+                            value: "Other neck abnormality",
                             disabled: false,
                             labelPlacement: "start",
                             colSize: "8",
@@ -753,8 +753,8 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                     displayNone: true,
                                     inputHeader: "specify",
                                     icon: icons.editPen,
-                                    value: "Other neck abnormality",
-                                    name: "Other neck abnormality field",
+                                    value: "Other neck abnormality notes",
+                                    name: "Other neck abnormality notes",
                                     eventType: "input",
                                     inputWidth: "100%",
                                     required: true,
@@ -778,14 +778,14 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     },
                     data: [
                         {
-                            value: "yes",
+                            value: "Yes",
                             name: "Chest inspection normal?",
                             labelPlacement: "start",
                             colSize: "6",
                             justify: "space-between",
                         },
                         {
-                            value: "no",
+                            value: "No",
                             labelPlacement: "start",
                             colSize: "2",
                             justify: "end",
@@ -878,7 +878,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Chest wounds",
                             disabled: false,
-                            value: "wounds",
+                            value: "Chest wounds",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -900,7 +900,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     data: [
                         {
                             name: "Other chest abnormality",
-                            value: "other chest abnormality",
+                            value: "Other chest abnormality",
                             disabled: false,
                             labelPlacement: "start",
                             colSize: "8",
@@ -922,7 +922,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                     inputHeader: "specify",
                                     icon: icons.editPen,
                                     value: "Other chest abnormality",
-                                    name: "Other chest abnormality field",
+                                    name: "Other chest abnormality notes",
                                     eventType: "input",
                                     inputWidth: "100%",
                                     required: true,
@@ -945,14 +945,14 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     },
                     data: [
                         {
-                            value: "yes",
+                            value: "Yes",
                             name: "Heart sounds normal?",
                             labelPlacement: "start",
                             colSize: "6",
                             justify: "space-between",
                         },
                         {
-                            value: "no",
+                            value: "No",
                             labelPlacement: "start",
                             colSize: "2",
                             justify: "end",
@@ -976,7 +976,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Loud P2",
                             disabled: false,
-                            value: "loud p2",
+                            value: "Loud p2",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -999,7 +999,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Splitting P2",
                             disabled: false,
-                            value: "splitting P2",
+                            value: "Splitting P2",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1022,7 +1022,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Gallop rhythm",
                             disabled: false,
-                            value: "gallop rhythm",
+                            value: "Gallop rhythm",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1045,7 +1045,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Murmur",
                             disabled: false,
-                            value: "murmur",
+                            value: "Murmur",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1067,14 +1067,14 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     },
                     data: [
                         {
-                            value: "yes",
+                            value: "Yes",
                             name: "Breath sounds normal",
                             labelPlacement: "start",
                             colSize: "6",
                             justify: "space-between",
                         },
                         {
-                            value: "no",
+                            value: "No",
                             labelPlacement: "start",
                             colSize: "2",
                             justify: "end",
@@ -1098,7 +1098,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Absent",
                             disabled: false,
-                            value: "absent",
+                            value: "Absent",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1121,7 +1121,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Reduced",
                             disabled: false,
-                            value: "reduced",
+                            value: "Reduced",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1144,7 +1144,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Added",
                             disabled: false,
-                            value: "added",
+                            value: "Added",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1170,7 +1170,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Clackles",
                             disabled: false,
-                            value: "clackles",
+                            value: "Clackles",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1193,7 +1193,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Wheezes",
                             disabled: false,
-                            value: "wheezes",
+                            value: "Wheezes",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1216,7 +1216,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Bronchial",
                             disabled: false,
-                            value: "bronchial",
+                            value: "Bronchial",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1227,7 +1227,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
             },
             {
                 sideColSize:0.3,
-                classDash: "",
+                classDash: "dashed_bottom_border",
                 checkboxBtnContent: {
                     header: {
                         title: "",
@@ -1261,14 +1261,14 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     },
                     data: [
                         {
-                            value: "yes",
+                            value: "Yes",
                             name: "Abdominal inspection normal?",
                             labelPlacement: "start",
                             colSize: "6",
                             justify: "space-between",
                         },
                         {
-                            value: "no",
+                            value: "No",
                             labelPlacement: "start",
                             colSize: "2",
                             justify: "end",
@@ -1292,7 +1292,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Abdominal distension",
                             disabled: false,
-                            value: "abdominal distension",
+                            value: "Abdominal distension",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1315,7 +1315,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Abdominal rash",
                             disabled: false,
-                            value: "rash",
+                            value: "Abdominal rash",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1338,7 +1338,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Abdominal wounds",
                             disabled: false,
-                            value: "wound",
+                            value: "Abdominal wounds",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1361,7 +1361,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Laceration",
                             disabled: false,
-                            value: "laceration",
+                            value: "Laceration",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1384,7 +1384,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Abdominal bruises",
                             disabled: false,
-                            value: "bruise",
+                            value: "Abdominal bruises",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1407,7 +1407,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Abdominal burns",
                             disabled: false,
-                            value: "burn",
+                            value: "Abdominal burns",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1430,7 +1430,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Other abdominal abnormality",
                             disabled: false,
-                            value: "other abdominal abnormality",
+                            value: "Other abdominal abnormality",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1451,7 +1451,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                     inputHeader: "specify",
                                     icon: icons.editPen,
                                     value: "Other abdominal abnormality",
-                                    name: "Other abdominal abnormality field",
+                                    name: "Other abdominal abnormality notes",
                                     eventType: "input",
                                     inputWidth: "100%",
                                     required: true,
@@ -1475,14 +1475,14 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     },
                     data: [
                         {
-                            value: "yes",
+                            value: "Yes",
                             name: "Abdominal auscultation normal?",
                             labelPlacement: "start",
                             colSize: "6",
                             justify: "space-between",
                         },
                         {
-                            value: "no",
+                            value: "No",
                             labelPlacement: "start",
                             colSize: "2",
                             justify: "end",
@@ -1506,7 +1506,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Bruit",
                             disabled: false,
-                            value: "bruit",
+                            value: "Bruit",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1517,7 +1517,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
             },
             {
                 sideColSize:0.3,
-                classDash: "dashed_bottom_border",
+                classDash: "",
                 checkboxBtnContent: {
                     header: {
                         title: "",
@@ -1529,7 +1529,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Bowel sounds",
                             disabled: false,
-                            value: "bowel sounds",
+                            value: "Bowel sounds",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1552,7 +1552,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Hyperactive",
                             disabled: false,
-                            value: "hyperactive",
+                            value: "Hyperactive",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1575,7 +1575,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Reduced bowel sounds",
                             disabled: false,
-                            value: "reduced bowel sounds",
+                            value: "Reduced bowel sounds",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1598,7 +1598,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Abdominal auscultation absent",
                             disabled: false,
-                            value: "abdominal auscultation absent",
+                            value: "Abdominal auscultation absent",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1621,7 +1621,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Other abdominal auscultation abnormality",
                             disabled: false,
-                            value: "other abdominal auscultation abnormality",
+                            value: "Other abdominal auscultation abnormality",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1642,7 +1642,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                     inputHeader: "specify",
                                     icon: icons.editPen,
                                     value: "",
-                                    name: "Other abdominal auscultation abnormality field",
+                                    name: "Other abdominal auscultation abnormality notes",
                                     eventType: "input",
                                     inputWidth: "100%",
                                     required: true,
@@ -1665,14 +1665,14 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     },
                     data: [
                         {
-                            value: "yes",
+                            value: "Yes",
                             name: "Abdominal palpation normal?",
                             labelPlacement: "start",
                             colSize: "6",
                             justify: "space-between",
                         },
                         {
-                            value: "no",
+                            value: "No",
                             labelPlacement: "start",
                             colSize: "2",
                             justify: "end",
@@ -1696,7 +1696,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Tenderness",
                             disabled: false,
-                            value: "tenderness",
+                            value: "Tenderness",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1719,7 +1719,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Hepatomegaly",
                             disabled: false,
-                            value: "hepatomegaly",
+                            value: "Hepatomegaly",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1742,7 +1742,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Splenomegaly",
                             disabled: false,
-                            value: "splenomegaly",
+                            value: "Splenomegaly",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1765,7 +1765,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Kidney ballotab",
                             disabled: false,
-                            value: "kidney ballotab",
+                            value: "Kidney ballotab",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1776,7 +1776,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
             },
             {
                 sideColSize:0.3,
-                classDash: "",
+                classDash: "dashed_bottom_border",
                 checkboxBtnContent: {
                     header: {
                         title: "",
@@ -1788,7 +1788,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Other abdominal masses",
                             disabled: false,
-                            value: "other abdominal masses",
+                            value: "Other abdominal masses",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1798,6 +1798,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                 },
             },
             {
+                classDash: "dashed_bottom_border",
                 sideColSize:0.3,
                 data: {
                     rowData: [
@@ -1808,7 +1809,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                     inputHeader: "specify",
                                     icon: icons.editPen,
                                     value: "Other abdominal palpation abnormality",
-                                    name: "Other abdominal palpation abnormality field ",
+                                    name: "Other abdominal palpation abnormality notes",
                                     eventType: "input",
                                     inputWidth: "100%",
                                     required: true,
@@ -1831,14 +1832,14 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     },
                     data: [
                         {
-                            value: "yes",
+                            value: "Yes",
                             name: "Genital examination normal?",
                             labelPlacement: "start",
                             colSize: "6",
                             justify: "space-between",
                         },
                         {
-                            value: "no",
+                            value: "No",
                             labelPlacement: "start",
                             colSize: "2",
                             justify: "end",
@@ -1856,23 +1857,40 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     header: {
                         title: "",
                         selectedValue: "",
-                        name: "Warts and Vesicles",
+                        name: "Warts",
                         displayNone: true,
                     },
                     data: [
                         {
                             name: "Warts",
                             disabled: false,
-                            value: "warts",
+                            value: "Warts",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
                             checked: false,
                         },
+                    ],
+                },
+            },
+            {
+
+                sideColSize:0.3,
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: "",
+                checkboxBtnContent: {
+                    header: {
+                        title: "",
+                        selectedValue: "",
+                        name: "Vesicles",
+                        displayNone: true,
+                    },
+                    data: [
                         {
                             name: "Vesicles",
                             disabled: false,
-                            value: "vesicles",
+                            value: "Vesicles",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1889,23 +1907,40 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     header: {
                         title: "",
                         selectedValue: "",
-                        name: "Growths and Genital sores",
+                        name: "Growths",
                         displayNone: true,
                     },
                     data: [
                         {
                             name: "Growths",
                             disabled: false,
-                            value: "growths",
+                            value: "Growths",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
                             checked: false,
                         },
+
+                    ],
+                },
+            },
+
+            {
+                sideColSize:0.3,
+                classDash: "",
+                checkboxBtnContent: {
+                    header: {
+                        title: "",
+                        selectedValue: "",
+                        name: "Genital sores",
+                        displayNone: true,
+                    },
+                    data: [
+
                         {
                             name: "Genital sores",
                             disabled: false,
-                            value: "genital sores",
+                            value: "Genital sores",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1930,7 +1965,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Urethral meatus abnormal",
                             disabled: false,
-                            value: "urethral meatus abnormal",
+                            value: "Urethral meatus abnormal",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1953,7 +1988,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Oedema",
                             disabled: false,
-                            value: "oedema",
+                            value: "Oedema",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1962,7 +1997,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Abnormal discharge",
                             disabled: false,
-                            value: "abnormal discharge",
+                            value: "Abnormal discharge",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1971,7 +2006,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Scrotal swelling",
                             disabled: false,
-                            value: "scrotal swelling",
+                            value: "Scrotal swelling",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -1980,7 +2015,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Testes swelling",
                             disabled: false,
-                            value: "testes swelling",
+                            value: "Testes swelling",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -2004,7 +2039,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Vulva examination",
                             disabled: false,
-                            value: "vulva examination",
+                            value: "Vulva examination",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -2027,7 +2062,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Visible bleeding",
                             disabled: false,
-                            value: "visible bleeding",
+                            value: "Visible bleeding",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -2036,7 +2071,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Abnormal vaginal discharge",
                             disabled: false,
-                            value: "abnormal vaginal discharge",
+                            value: "Abnormal vaginal discharge",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -2059,7 +2094,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Other genital abnormalities",
                             disabled: false,
-                            value: "other genital abnormalities",
+                            value: "Other genital abnormalities",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -2081,7 +2116,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                     inputHeader: "specify",
                                     icon: icons.editPen,
                                     value: "",
-                                    name: "Other genital abnormality field",
+                                    name: "Other genital abnormality notes",
                                     eventType: "input",
                                     inputWidth: "100%",
                                     required: true,
@@ -2104,14 +2139,14 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     },
                     data: [
                         {
-                            value: "yes",
+                            value: "Yes",
                             name: "Extremities normal?",
                             labelPlacement: "start",
                             colSize: "6",
                             justify: "space-between",
                         },
                         {
-                            value: "no",
+                            value: "No",
                             labelPlacement: "start",
                             colSize: "2",
                             justify: "end",
@@ -2158,7 +2193,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Oedema present",
                             disabled: false,
-                            value: "oedema present",
+                            value: "Oedema present",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -2181,7 +2216,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Fracture",
                             disabled: false,
-                            value: "fracture",
+                            value: "Fracture",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -2204,7 +2239,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Extremity burns",
                             disabled: false,
-                            value: "burns",
+                            value: "Extremity burns",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -2227,7 +2262,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Extremity rash",
                             disabled: false,
-                            value: "rash",
+                            value: "Extremity rash",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -2250,7 +2285,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Deformity",
                             disabled: false,
-                            value: "deformity",
+                            value: "Deformity",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -2273,7 +2308,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Finger clubbing",
                             disabled: false,
-                            value: "finger clubbing",
+                            value: "Finger clubbing",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -2296,7 +2331,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Decreased Power",
                             disabled: false,
-                            value: "decreased Power",
+                            value: "Decreased Power",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -2319,7 +2354,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Decreased Sensation",
                             disabled: false,
-                            value: "decreased Sensation",
+                            value: "Decreased Sensation",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -2342,7 +2377,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         {
                             name: "Other extremities abnormalities",
                             disabled: false,
-                            value: "other extremities abnormalities",
+                            value: "Other extremities abnormalities",
                             labelPlacement: "start",
                             colSize: "8",
                             justify: "space-between",
@@ -2363,7 +2398,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                                     inputHeader: "specify",
                                     icon: icons.editPen,
                                     value: "",
-                                    name: "Other extremities abnormalities field",
+                                    name: "Other extremities abnormalities notes",
                                     eventType: "input",
                                     inputWidth: "100%",
                                     required: true,

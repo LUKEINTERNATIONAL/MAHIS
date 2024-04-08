@@ -58,7 +58,6 @@ import { usePregnancyStore } from "@/apps/OPD/stores/PregnancyStore";
 import { usePresentingComplaintsStore } from "@/apps/OPD/stores/PresentingComplaintsStore";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { useOPDDiagnosisStore } from "@/apps/OPD/stores/DiagnosisStore";
-import { usePastMedicalHistoryStore } from "@/apps/OPD/stores/PastMedicalHistoryStore";
 import { Treatment } from "@/apps/NCD/services/treatment";
 import { isEmpty } from "lodash";
 import HisDate from "@/utils/Date";
