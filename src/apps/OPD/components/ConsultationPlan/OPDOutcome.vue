@@ -1,139 +1,150 @@
 <template>
-    
-    <ion-row>
-        <ion-col>
-            <DynamicDispositionList v-if="true" @update:removeItem="removeItem" @update:editItem="editItem" :displayData="dispositions" />
-        </ion-col>
-    </ion-row>
-
-    <ion-row v-if="showEmptyMsg">
-        <span class="dash_box">{{ initialMsg }}</span>
-    </ion-row>
-
-    <div v-if="showAddReferralInfo">
+    <ion-list>
         <ion-row>
             <ion-col>
-                <BasicInputField
-                    :placeholder="basicInputFieldProperties[1].placeholder"
-                    :icon="basicInputFieldProperties[1].icon"
-                    :inputValue="refType"
-                    @clicked:inputValue="showOptions"
-                />
-
-                <SelectionPopover
-                    :content="popoverProperties.popoverData"
-                    :keyboardClose="popoverProperties.keyboardClose"
-                    :title="popoverProperties.title"
-                    :popoverOpen="popoverProperties.popoverOpen"
-                    :event="popoverProperties.event"
-                    @closePopoover="popoverProperties.popoverOpen"
-                    @setSelection="setSelection"
-                />
-
-                <div>
-                    <ion-label v-if="show_error_msg_for_ref_type" class="error-label">{{ refTypErrMsg }}</ion-label>
-                </div>
-            </ion-col>
-
-            <ion-col v-if="!show_dead_options">
-                <ion-item class="input_item">
-                    <ion-input
-                        v-model="facilityWardName"
-                        @ionInput="FindTxt"
-                        @mousedown="FindTxt"
-                        fill="outline"
-                        :placeholder="searchPlaceHolder"
-                        :disabled="disableFacilityWardNameInput"
-                    ></ion-input>
-                    <!--  -->
-                    <ion-label>
-                        <ion-icon slot="start" :icon="iconsContent.search" class="selectedPatient" aria-hidden="true"></ion-icon>
-                    </ion-label>
-                </ion-item>
-                <div>
-                    <ion-label v-if="show_error_msg_for_ref_facility_ward_name" class="error-label">{{ refFacilityNameErrMsg }}</ion-label>
-                </div>
-
-                <ion-popover
-                    :is-open="popoverOpen"
-                    :event="event"
-                    @didDismiss="popoverOpen = false"
-                    :keyboard-close="false"
-                    :show-backdrop="false"
-                    :dismiss-on-select="true"
-                    style="top: 10px; left: -25px"
-                    v-if="!show_error_msg_for_ref_facility_ward_name"
-                    :key="componentKey"
-                >
-                    <ion-content color="light" class="ion-padding content-al">
-                        <!-- <ion-row class="search_result" v-for="(item, index) in diagnosisData" :key="index" >
-                        <ion-col @click="selectedDrugName(item.name, item)">{{ item.name }} </ion-col>
-                    </ion-row> -->
-                        <ion-list class="list-al">
-                            <div class="item-al" v-for="(item, index) in NamesData" :key="index" @click="selectedFaciltyName(item.name, item)">
-                                <ion-col @click="selectedFaciltyName(item.name, item)">{{ item.name }} </ion-col>
-                            </div>
-                        </ion-list>
-                    </ion-content>
-                </ion-popover>
-            </ion-col>
-
-            <ion-col v-if="!show_dead_options">
-                <BasicInputField
-                    :placeholder="basicInputFieldProperties[2].placeholder"
-                    :inputValue="refDate"
-                    :icon="basicInputFieldProperties[2].icon"
-                    :disabled="disableInputs"
-                    @update:inputValue="refDate"
-                    @clicked:inputValue="openDate"
-                />
-
-                <ion-popover
-                    :show-backdrop="false"
-                    :keep-contents-mounted="true"
-                    :is-open="popoverProperties.dateOpen"
-                    :event="popoverProperties.event"
-                    @didDismiss="popoverProperties.dateOpen = false"
-                >
-                    <ion-datetime @ionChange="saveTheDate" id="datetime" presentation="date" :show-default-buttons="true"></ion-datetime>
-                </ion-popover>
-                <div>
-                    <ion-label v-if="show_error_msg_for_ref_date" class="error-label">{{ refDateErrMsg }}</ion-label>
-                </div>
-            </ion-col>
-
-            
-        </ion-row>
-        <ion-row v-if="!show_dead_options">
-            <ion-col size="9">
-                <BasicInputField
-                    :placeholder="basicInputFieldProperties[3].placeholder"
-                    :disabled="disableInputs"
-                    :inputValue="refReason"
-                    @update:inputValue="updateReason"
-                />
-                <div>
-                    <ion-label v-if="show_error_msg_for_ref_reason" class="error-label">{{ refRsnErrMsg }}</ion-label>
-                </div>
-            </ion-col>
-
-            <ion-col>
-                <dynamic-button
-                    v-if="addItemButton"
-                    :name="saveBtn"
-                    :fill="btnFill"
-                    :icon="addOutline"
-                    @clicked:btn="saveReferralInfo"
-                ></dynamic-button>
+                <DynamicDispositionList v-if="true" @update:removeItem="removeItem" @update:editItem="editItem" :displayData="dispositions" />
             </ion-col>
         </ion-row>
-    </div>
 
-    <ion-row class="spc_btwn" v-if="showAddItemButton">
-        <dynamic-button v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" @clicked:btn="addReferral"></dynamic-button>
-    </ion-row>
+        <ion-row v-if="showEmptyMsg">
+            <span class="dash_box">{{ initialMsg }}</span>
+        </ion-row>
 
-    <deadOutcome v-if="show_dead_options"/>
+        <div v-if="showAddReferralInfo">
+            <ion-row>
+                <ion-col>
+                    <!-- <BasicInputField
+                        :placeholder="basicInputFieldProperties[1].placeholder"
+                        :icon="basicInputFieldProperties[1].icon"
+                        :inputValue="refType"
+                        @clicked:inputValue="showOptions"
+                    />
+
+                    <SelectionPopover
+                        :content="popoverProperties.popoverData"
+                        :keyboardClose="popoverProperties.keyboardClose"
+                        :title="popoverProperties.title"
+                        :popoverOpen="popoverProperties.popoverOpen"
+                        :event="popoverProperties.event"
+                        @closePopoover="popoverProperties.popoverOpen"
+                        @setSelection="setSelection"
+                    /> -->
+                    <ListPicker
+                        :multiSelection="list_picker_prperties[0].multi_Selection"
+                        :show_label="list_picker_prperties[0].show_list_label"
+                        :uniqueId="list_picker_prperties[0].unqueId"
+                        :name_of_list="list_picker_prperties[0].name_of_list"
+                        :choose_place_holder="list_picker_prperties[0].placeHolder"
+                        :items_-list="list_picker_prperties[0].items"
+                        @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
+                        @item-list-filtered="list_picker_prperties[0].listFilteredFN"
+                    />
+
+                    <div>
+                        <ion-label v-if="show_error_msg_for_ref_type" class="error-label">{{ refTypErrMsg }}</ion-label>
+                    </div>
+                </ion-col>
+
+                <ion-col v-if="!show_dead_options">
+                    <ion-item class="input_item">
+                        <ion-input
+                            v-model="facilityWardName"
+                            @ionInput="FindTxt"
+                            @mousedown="FindTxt"
+                            fill="outline"
+                            :placeholder="searchPlaceHolder"
+                            :disabled="disableFacilityWardNameInput"
+                        ></ion-input>
+                        <!--  -->
+                        <ion-label>
+                            <ion-icon slot="start" :icon="iconsContent.search" class="selectedPatient" aria-hidden="true"></ion-icon>
+                        </ion-label>
+                    </ion-item>
+                    <div>
+                        <ion-label v-if="show_error_msg_for_ref_facility_ward_name" class="error-label">{{ refFacilityNameErrMsg }}</ion-label>
+                    </div>
+
+                    <ion-popover
+                        :is-open="popoverOpen"
+                        :event="event"
+                        @didDismiss="popoverOpen = false"
+                        :keyboard-close="false"
+                        :show-backdrop="false"
+                        :dismiss-on-select="true"
+                        style="top: 10px; left: -25px"
+                        v-if="!show_error_msg_for_ref_facility_ward_name"
+                        :key="componentKey"
+                    >
+                        <ion-content color="light" class="ion-padding content-al">
+                            <!-- <ion-row class="search_result" v-for="(item, index) in diagnosisData" :key="index" >
+                            <ion-col @click="selectedDrugName(item.name, item)">{{ item.name }} </ion-col>
+                        </ion-row> -->
+                            <ion-list class="list-al">
+                                list               <div class="item-al" v-for="(item, index) in NamesData" :key="index" @click="selectedFaciltyName(item.name, item)">
+                                    <ion-col @click="selectedFaciltyName(item.name, item)">{{ item.name }} </ion-col>
+                                </div>
+                            </ion-list>
+                        </ion-content>
+                    </ion-popover>
+                </ion-col>
+
+                <ion-col v-if="!show_dead_options">
+                    <BasicInputField
+                        :placeholder="basicInputFieldProperties[2].placeholder"
+                        :inputValue="refDate"
+                        :icon="basicInputFieldProperties[2].icon"
+                        :disabled="disableInputs"
+                        @update:inputValue="refDate"
+                        @clicked:inputValue="openDate"
+                    />
+
+                    <ion-popover
+                        :show-backdrop="false"
+                        :keep-contents-mounted="true"
+                        :is-open="popoverProperties.dateOpen"
+                        :event="popoverProperties.event"
+                        @didDismiss="popoverProperties.dateOpen = false"
+                    >
+                        <ion-datetime @ionChange="saveTheDate" id="datetime" presentation="date" :show-default-buttons="true"></ion-datetime>
+                    </ion-popover>
+                    <div>
+                        <ion-label v-if="show_error_msg_for_ref_date" class="error-label">{{ refDateErrMsg }}</ion-label>
+                    </div>
+                </ion-col>
+
+                
+            </ion-row>
+            <ion-row v-if="!show_dead_options">
+                <ion-col size="9">
+                    <BasicInputField
+                        :placeholder="basicInputFieldProperties[3].placeholder"
+                        :disabled="disableInputs"
+                        :inputValue="refReason"
+                        @update:inputValue="updateReason"
+                    />
+                    <div>
+                        <ion-label v-if="show_error_msg_for_ref_reason" class="error-label">{{ refRsnErrMsg }}</ion-label>
+                    </div>
+                </ion-col>
+
+                <ion-col>
+                    <dynamic-button
+                        v-if="addItemButton"
+                        :name="saveBtn"
+                        :fill="btnFill"
+                        :icon="addOutline"
+                        @clicked:btn="saveReferralInfo"
+                    ></dynamic-button>
+                </ion-col>
+            </ion-row>
+        </div>
+
+        <ion-row class="spc_btwn" v-if="showAddItemButton">
+            <dynamic-button v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" @clicked:btn="addReferral"></dynamic-button>
+        </ion-row>
+
+        <deadOutcome v-if="show_dead_options"/>
+    </ion-list>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
@@ -141,6 +152,7 @@ export default defineComponent({
     name: "xxxComponent",
 });
 </script>
+
 <script setup lang="ts">
 import {
     IonContent,
@@ -182,6 +194,7 @@ import { useDispositionStore } from "@/stores/OutcomeStore";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { getSpecialistClinics, getFacilityWards } from "@/apps/NCD/services/outcome";
 import deadOutcome from "../ConsultationPlan/DeadOutcome.vue"
+import ListPicker from "@/apps/OPD/components/ConsultationPlan/ListPicker.vue"
 
 const iconsContent = icons;
 const initialMsg = ref("No outcome created yet");
@@ -258,7 +271,29 @@ const referralType = ref([
         name: "Dead",
         selected: false,
     }
-]);
+] as any)
+
+const list_picker_prperties = [
+    {
+        multi_Selection: false as any,
+        show_list_label: true as any,
+        unqueId: 'qwerty2' as any,
+        name_of_list: 'Choose Outcome' as any,
+        placeHolder: 'Choose one' as any,
+        items: referralType.value,
+        listUpdatedFN: listUpdated1,
+        listFilteredFN: ()=>{},
+    }
+]
+
+function listUpdated1(data: any) {
+    referralType.value = data
+    referralType.value.forEach((item: any) => {
+        if (item.selected == true) {
+            refType.value = item.name
+        }
+    })
+}
 
 const popoverProperties = ref({
     title: "List of facilities",
@@ -536,9 +571,10 @@ async function checkRefType(clear_inputs: boolean = true) {
     const ref_type = refType.value;
 
     if (ref_type == referralType.value[3].name) {
-        show_dead_options.value = !show_dead_options.value
-    } else {
-        show_dead_options.value = !show_dead_options.value
+        show_dead_options.value = true
+    } 
+    else {
+        show_dead_options.value = false
     }
 
     if (ref_type == referralType.value[0].name) {
