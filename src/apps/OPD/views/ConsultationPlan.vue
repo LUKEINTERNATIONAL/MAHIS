@@ -71,23 +71,12 @@ import {
   DrugPrescriptionService,
 } from "../../../services/drug_prescription_service";
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";
-import {
-  modifyRadioValue,
-  getRadioSelectedValue,
-  getCheckboxSelectedValue,
-  getFieldValue,
-  getCheckboxInputField,
-  modifyFieldValue,
-  modifyCheckboxValue,
-} from "@/services/data_helpers";
-import {
-  formatRadioButtonData,
-  formatCheckBoxData,
-} from "@/services/formatServerData";
+
+import { formatRadioButtonData } from "@/services/formatServerData";
 import { PatientComplaintsService } from "@/apps/OPD/services/patient_complaints_service";
-import { ConsciousnessService } from "@/apps/OPD/services/consciousness_service";
 import { PatientGeneralConsultationService } from "@/services/patient_general_consultation";
 import { useLevelOfConsciousnessStore } from "@/apps/OPD/stores/LevelOfConsciousnessStore";
+import { ConsciousnessService } from "@/apps/OPD/services/consciousness_service";
 export default defineComponent({
   name: "Home",
   components: {
@@ -200,10 +189,7 @@ export default defineComponent({
     ...mapState(useVitalsStore, ["vitals"]),
     ...mapState(useInvestigationStore, ["investigations"]),
     ...mapState(useOPDDiagnosisStore, ["OPDdiagnosis"]),
-    ...mapState(useTreatmentPlanStore, [
-      "selectedMedicalDrugsList",
-      "nonPharmalogicalTherapyAndOtherNotes",
-      "selectedMedicalAllergiesList",
+    ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList","nonPharmalogicalTherapyAndOtherNotes","selectedMedicalAllergiesList",
     ]),
     ...mapState(useLevelOfConsciousnessStore, ["levelOfConsciousness"]),
   },
@@ -278,13 +264,12 @@ export default defineComponent({
       if (this.OPDdiagnosis[0].selectedData.length > 0) {
         await this.saveDiagnosis();
       }
-
-      await this.saveConsciousness();
       await this.saveTreatmentPlan();
       await this.saveOutComeStatus();
       await this.saveWomenStatus();
       await this.savePresentingComplaints();
-      // this.$router.push("patientProfile");
+      await this.saveConsciousness();
+      this.$router.push("patientProfile");
     },
     async savePresentingComplaints() {
       if (this.presentingComplaints[0].selectedData.length > 0) {
@@ -372,28 +357,6 @@ export default defineComponent({
         toastSuccess("Drug order has been created");
       }
     },
-
-    async saveConsciousness() {
-      const data = await formatRadioButtonData(this.levelOfConsciousness);
-
-      console.log({ data });
-
-      return;
-      const userID: any = Service.getUserID();
-      const consciousness = new ConsciousnessService(
-        this.demographics.patient_id,
-        userID
-      );
-      const encounter = await consciousness.createEncounter();
-      if (!encounter)
-        return toastWarning("Unable to create patient complaints encounter");
-
-      //   const gcs = this.levelOfConsciousness[0].radioBtnContent.data;
-
-      const dat = await formatRadioButtonData(this.levelOfConsciousness);
-      //   await consciousness.saveObservationList(gcs);
-    },
-
     async saveOutComeStatus() {
       // const userID: any = Service.getUserID()
       // const patientID = this.demographics.patient_id
@@ -443,6 +406,27 @@ export default defineComponent({
           value_coded: allergy.concept_id,
         };
       });
+    },
+
+     async saveConsciousness() {
+      const data = await formatRadioButtonData(this.levelOfConsciousness);
+
+      console.log({ data });
+
+      return;
+      const userID: any = Service.getUserID();
+      const consciousness = new ConsciousnessService(
+        this.demographics.patient_id,
+        userID
+      );
+      const encounter = await consciousness.createEncounter();
+      if (!encounter)
+        return toastWarning("Unable to create patient complaints encounter");
+
+      //   const gcs = this.levelOfConsciousness[0].radioBtnContent.data;
+
+      const dat = await formatRadioButtonData(this.levelOfConsciousness);
+      //   await consciousness.saveObservationList(gcs);
     },
   },
 });
