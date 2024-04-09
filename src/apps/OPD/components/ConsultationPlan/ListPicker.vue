@@ -1,6 +1,6 @@
 <template>
     <ion-list>
-        <ion-label v-if="show_label" class="ion-lblCls">{{ name_of_list }}</ion-label>
+        <ion-label v-if="show_label" :class="disableCls">{{ name_of_list }}</ion-label>
         <ion-row>
             <ion-item lines="none" class="ItemAl">
                 <div v-for="(item, index) in local_itmes_List" :key="index">
@@ -12,8 +12,13 @@
 
             <ion-row>
                 <div>
-                    <ion-button :id="uniqueId" fill="clear" class="itemAlAddBtn" @click="setFocus">
-                        <ion-icon :icon="addOutline"></ion-icon>
+                    <ion-button
+                        :id="uniqueId"
+                        fill="clear" class="itemAlAddBtn"
+                        @click="setFocus"
+                        :disabled="local_disabled"
+                        >
+                            <ion-icon :icon="addOutline"></ion-icon>
                     </ion-button>
                     <ion-popover
                         class="popover-al"
@@ -49,6 +54,8 @@ import { ref, watch, onMounted } from "vue"
 const input = ref()
 const itemName = ref("")
 const local_itmes_List = ref([] as any)
+const local_disabled = ref(false)
+const disableCls = ref('')
 
 const props = defineProps<{
     uniqueId: "99"
@@ -61,6 +68,7 @@ const props = defineProps<{
     multiSelection: false,
     show_label: true,
     use_internal_filter: true,
+    disabled: false,
 }>()
 
 watch(
@@ -70,9 +78,26 @@ watch(
     }
 )
 
+watch(
+    () => props.disabled,
+    async (newValue) => {
+        isDisabled()
+    }
+)
+
 onMounted(async () => {
     local_itmes_List.value = props.items_List
+    isDisabled()
 })
+
+function isDisabled() {
+    local_disabled.value = props.disabled
+    if (props.disabled == true as boolean) {
+        disableCls.value = "ion-lblCls-disabled"
+    } else if (props.disabled == false as boolean) {
+        disableCls.value = "ion-lblCls"
+    }
+}
 
 
 function selectAl(sel_item: any) {
@@ -258,5 +283,9 @@ ion-list.list-al {
 }
 .ion-lblCls {
     font-weight: bold;
+}
+.ion-lblCls-disabled {
+    font-weight: bold;
+    color:#8c8c8c
 }
 </style>

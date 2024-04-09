@@ -10,15 +10,14 @@
             <span class="dash_box">{{ initialMsg }}</span>
         </ion-row>
 
-        <ion-row class="spc_btwn" v-if="showAddItemButton">
+        <!-- <ion-row class="spc_btwn" v-if="showAddItemButton">
             <dynamic-button v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" @clicked:btn="addReferral"></dynamic-button>
-        </ion-row>
+        </ion-row> -->
 
-        <div v-if="showAddReferralInfo">
+        <div v-if="showAddItemButton">
             <ion-row>
                 
                 <ion-col>
-
                     <ListPicker
                         :multiSelection="list_picker_prperties[0].multi_Selection"
                         :show_label="list_picker_prperties[0].show_list_label"
@@ -27,6 +26,7 @@
                         :choose_place_holder="list_picker_prperties[0].placeHolder"
                         :items_-list="list_picker_prperties[0].items"
                         :use_internal_filter="list_picker_prperties[0].use_internal_filter"
+                        :disabled="list_picker_prperties[0].disabled.value"
                         @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
                         @item-list-filtered="list_picker_prperties[0].listFilteredFN"
                     />
@@ -137,12 +137,13 @@ const list_picker_prperties = [
         multi_Selection: false as any,
         show_list_label: true as any,
         unqueId: 'qwerty2' as any,
-        name_of_list: 'Choose Outcome' as any,
+        name_of_list: 'Add new outcome' as any,
         placeHolder: 'Choose one' as any,
         items: referralType.value,
         listUpdatedFN: listUpdated1,
         listFilteredFN: ()=>{},
         use_internal_filter: true as any,
+        disabled: ref(false) as any,
     }
 ]
 
@@ -186,11 +187,6 @@ function checkForDispositions() {
     }
 }
 
-function addReferral() {
-    showEmptyMsg.value = false
-    showAddItemButton.value = false
-    showAddReferralInfo.value = true
-}
 
 function removeItem(index: number) {
     dispositions.value.splice(index, 1);

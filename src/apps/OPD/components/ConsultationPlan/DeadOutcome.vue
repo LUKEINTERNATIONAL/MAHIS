@@ -33,12 +33,25 @@
                 />
             </ion-col>
             <ion-col>
+                <ion-checkbox 
+                    :value="checkbox_properties[0].value"
+                    alignment="start"
+                    class="ion-lblCls"
+                    > 
+                        {{ checkbox_properties[0].lblTxt }}
+                    </ion-checkbox>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col>
                 <BasicInputField
                     :placeholder="phone_number_place_holder"
                     :icon="phonePortraitOutline"
                     :inputValue="phone_number_value"
                 />
             </ion-col>
+            <ion-col></ion-col>
         </ion-row>
 
         <ion-row>
@@ -66,6 +79,7 @@
                     :choose_place_holder="list_picker_prperties[0].placeHolder"
                     :items_-list="list_picker_prperties[0].items"
                     :use_internal_filter="list_picker_prperties[0].use_internal_filter"
+                    :disabled="list_picker_prperties[0].disabled.value"
                     @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
                     @item-list-filtered="list_picker_prperties[0].listFilteredFN"
                 />
@@ -80,6 +94,7 @@
                     :choose_place_holder="list_picker_prperties[1].placeHolder"
                     :items_-list="list_picker_prperties[1].items"
                     :use_internal_filter="list_picker_prperties[0].use_internal_filter"
+                    :disabled="list_picker_prperties[1].disabled.value"
                     @item-list-up-dated="list_picker_prperties[1].listUpdatedFN"
                     @item-list-filtered="list_picker_prperties[1].listFilteredFN"
                 />
@@ -135,7 +150,7 @@ export default defineComponent({
 });
 </script>
 <script setup lang="ts">
-import { IonRow, IonCol, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue"
+import { IonRow, IonCol, IonCheckbox, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue"
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
 import TimePicker from "@/apps/OPD/components/ConsultationPlan/TimePicker.vue"
 import DatePicker from "@/apps/OPD/components/ConsultationPlan/DatePicker.vue"
@@ -164,6 +179,7 @@ import {
 
 const phone_number_value = ref()
 const phone_number_place_holder = ref('gurdian phone number')
+const isClientFemale = ref(true)
 
 const time_properties = [
     {
@@ -212,6 +228,13 @@ const date_properties = [
         show_error: ref(false),
         error_message: 'error',
     }, 
+]
+
+const checkbox_properties = [
+    {
+        lblTxt: 'Was the individual pregnant at the time of death?',
+        value: ref(false),
+    }
 ]
 
 const note_properties = [
@@ -288,6 +311,7 @@ const list_picker_prperties = [
         listUpdatedFN: listUpdated1,
         listFilteredFN: ()=>{},
         use_internal_filter: true as any,
+        disabled: ref(false) as any,
     },
     {
         multi_Selection: false as any,
@@ -299,6 +323,7 @@ const list_picker_prperties = [
         listUpdatedFN: listUpdated2,
         listFilteredFN: ()=>{},
         use_internal_filter: true as any,
+        disabled: ref(true) as any,
     },
 ]
 
@@ -413,5 +438,8 @@ function validateForm() {
     }
     .spc_btwn {
         margin-top: 2%;
+    }
+    .ion-lblCls {
+        font-weight: bold;
     }
 </style>

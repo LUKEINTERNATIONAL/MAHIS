@@ -10,6 +10,7 @@
                     :choose_place_holder="list_picker_prperties[0].placeHolder"
                     :items_-list="list_picker_prperties[0].items"
                     :use_internal_filter="list_picker_prperties[0].use_internal_filter"
+                    :disabled="list_picker_prperties[0].disabled.value"
                     @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
                     @item-list-filtered="list_picker_prperties[0].listFilteredFN"
                     @item-search-text="list_picker_prperties[0].searchTextFN"
@@ -49,7 +50,20 @@
         </ion-row>
 
         <ion-row class="spc_btwn" v-if="dynamic_button_properties[0].showAddItemButton">
-            <dynamic-button v-if="dynamic_button_properties[0].addItemButton" :name="dynamic_button_properties[0].name" :fill="dynamic_button_properties[0].btnFill" :icon="addOutline" @clicked:btn="dynamic_button_properties[0].fn"/>
+            <dynamic-button
+                v-if="dynamic_button_properties[0].addItemButton"
+                :name="dynamic_button_properties[0].name"
+                :fill="dynamic_button_properties[0].btnFill"
+                :icon="addOutline" @clicked:btn="dynamic_button_properties[0].fn"
+            />
+
+            <dynamic-button
+                v-if="dynamic_button_properties[1].addItemButton"
+                :name="dynamic_button_properties[1].name"
+                :fill="dynamic_button_properties[1].btnFill"
+                :icon="removeOutline"
+                @clicked:btn="dynamic_button_properties[1].fn"
+            />
         </ion-row>
     </ion-list>
 </template>
@@ -66,7 +80,8 @@ import { IonRow, IonCol, IonList, IonLabel } from "@ionic/vue"
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
 import {
     addOutline,
-    pencilOutline
+    pencilOutline,
+    removeOutline
 } from "ionicons/icons";
 import ListPicker from "@/apps/OPD/components/ConsultationPlan/ListPicker.vue"
 import DatePicker from "@/apps/OPD/components/ConsultationPlan/DatePicker.vue"
@@ -135,6 +150,7 @@ const list_picker_prperties = [
         use_internal_filter: true as any,
         show_error: ref(false),
         error_message: 'please select a Facility',
+        disabled: ref(false) as any,
     }
 ]
 
@@ -208,6 +224,10 @@ function saveDataToStores() {
     }
 
     store.addOutcomeData(referralData, editIndex.value)
+    dataSaved({"dataSaved": false})
+}
+
+function cancelE() {
     dataSaved()
 }
 
@@ -215,8 +235,8 @@ const emit = defineEmits<{
     (e: "dataSaved", ObjectsArray: any): void
 }>()
 
-function dataSaved() {
-    emit("dataSaved", {"dataSaved": true})
+function dataSaved(data = {"dataSaved": true}) {
+    emit("dataSaved", data )
 }
 
 const dynamic_button_properties = [
@@ -226,6 +246,14 @@ const dynamic_button_properties = [
         name: "save",
         btnFill: 'clear',
         fn: validateForm,
+    },
+
+    {
+        showAddItemButton: true,
+        addItemButton: true,
+        name: "cancel",
+        btnFill: 'clear',
+        fn: cancelE,
     }
 ]
 
