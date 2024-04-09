@@ -208,6 +208,15 @@ function saveDataToStores() {
     }
 
     store.addOutcomeData(referralData, editIndex.value)
+    dataSaved()
+}
+
+const emit = defineEmits<{
+    (e: "dataSaved", ObjectsArray: any): void
+}>()
+
+function dataSaved() {
+    emit("dataSaved", {"dataSaved": true})
 }
 
 const dynamic_button_properties = [
