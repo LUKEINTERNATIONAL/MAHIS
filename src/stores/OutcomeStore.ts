@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-export const useDispositionStore = defineStore('outcome', {
+export const useOutcomeStore = defineStore('outcome', {
     state: () => ({
         dispositions: [
             // name:
@@ -11,7 +11,7 @@ export const useDispositionStore = defineStore('outcome', {
         ] as any,
     }),
     actions:{
-        addDispositionData(data: any, index: any) {
+        addOutcomeData(data: any, index: any) {
             
             if (isNaN(index)) {
                 this.dispositions.unshift(data);

@@ -144,7 +144,7 @@
         <ion-row class="spc_btwn" v-if="showAddItemButton">
             <dynamic-button v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" @clicked:btn="addReferral"></dynamic-button>
         </ion-row>
-        
+
         <deadOutcome v-if="show_dead_options"/>
     </ion-list>
 </template>
@@ -192,8 +192,8 @@ import SelectionPopover from "@/components/SelectionPopover.vue"
 import { icons } from "@/utils/svg"
 import BasicInputField from "@/components/BasicInputField.vue"
 import DynamicDispositionList from "@/components/DynamicDispositionList.vue"
-import { useDispositionStore } from "@/stores/OutcomeStore"
-import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
+import { useOutcomeStore } from "@/stores/OutcomeStore"
+import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts"
 import { getSpecialistClinics, getFacilityWards } from "@/apps/OPD/services/outcome";
 import deadOutcome from "../ConsultationPlan/DeadOutcome.vue"
 import ListPicker from "@/apps/OPD/components/ConsultationPlan/ListPicker.vue"
@@ -229,7 +229,7 @@ const fnToUse = ref();
 const refDataItem = ref();
 const popoverOpen = ref(false);
 const showAddReferralInfo = ref(false);
-const store = useDispositionStore();
+const store = useOutcomeStore();
 const dispositions = computed(() => store.dispositions);
 const NamesData = ref([] as any);
 const EditEvnt = ref(false);
@@ -380,8 +380,8 @@ async function saveReferralInfo() {
 
     } else {
         if (!are_fieldsValid) {
-            toastWarning("Please enter correct data values", 4000);
-            return;
+            toastWarning("Please enter correct data values", 4000)
+            return
         }
     }
 
@@ -395,7 +395,7 @@ async function saveReferralInfo() {
         date: refDate.value,
         reason: refReason.value,
         dataItem: refDataItem.value,
-    };
+    }
 
     store.addDispositionData(referralData, editIndex.value);
     clearInputs();
@@ -607,45 +607,45 @@ async function checkRefType(clear_inputs: boolean = true) {
 </script>
 
 <style scoped>
-.initTxt {
-    text-align: center;
-}
-.spc_btwn {
-    margin-top: 2%;
-}
-.item-al {
-    cursor: pointer;
-    padding: 5px;
-    background-color: #ebebeb;
-    margin-top: 8px;
-}
-.item-al:hover {
-    background-color: #55515148;
-    padding: 5px;
-    border-radius: 3px;
-}
-ion-popover.popover-al {
-    --background: #fff;
-}
-ion-list.list-al {
-    --background: #fff;
-    -ion-item-background: #fff;
-}
-.saveContainer {
-    display: flex;
-    align-items: flex-end;
-}
-.action_buttons {
-    margin-top: 5px;
-}
-.error-label {
-    background: #fecdca;
-    color: #b42318;
-    text-transform: none;
-    padding: 6%;
-    border-radius: 10px;
-    margin-top: 7px;
-    display: flex;
-    text-align: center;
-}
+    .initTxt {
+        text-align: center;
+    }
+    .spc_btwn {
+        margin-top: 2%;
+    }
+    .item-al {
+        cursor: pointer;
+        padding: 5px;
+        background-color: #ebebeb;
+        margin-top: 8px;
+    }
+    .item-al:hover {
+        background-color: #55515148;
+        padding: 5px;
+        border-radius: 3px;
+    }
+    ion-popover.popover-al {
+        --background: #fff;
+    }
+    ion-list.list-al {
+        --background: #fff;
+        -ion-item-background: #fff;
+    }
+    .saveContainer {
+        display: flex;
+        align-items: flex-end;
+    }
+    .action_buttons {
+        margin-top: 5px;
+    }
+    .error-label {
+        background: #fecdca;
+        color: #b42318;
+        text-transform: none;
+        padding: 6%;
+        border-radius: 10px;
+        margin-top: 7px;
+        display: flex;
+        text-align: center;
+    }
 </style>

@@ -53,7 +53,7 @@ import { Service } from "@/services/service";
 import { LabOrder } from "@/apps/NCD/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
-import { useDispositionStore } from "@/stores/OutcomeStore";
+import { useOutcomeStore } from "@/stores/OutcomeStore";
 import { usePregnancyStore } from "@/apps/OPD/stores/PregnancyStore";
 import { usePresentingComplaintsStore } from "@/apps/OPD/stores/PresentingComplaintsStore";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
