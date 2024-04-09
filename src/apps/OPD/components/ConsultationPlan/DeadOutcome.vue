@@ -122,6 +122,10 @@
             </ion-col>
         </ion-row>
 
+        <ion-row class="spc_btwn" v-if="dynamic_button_properties[0].showAddItemButton">
+            <dynamic-button v-if="dynamic_button_properties[0].addItemButton" :name="dynamic_button_properties[0].name" :fill="dynamic_button_properties[0].btnFill" :icon="addOutline" @clicked:btn="dynamic_button_properties[0].fn"/>
+        </ion-row>
+
 
 </template>
 <script lang="ts">
@@ -138,6 +142,7 @@ import DatePicker from "@/apps/OPD/components/ConsultationPlan/DatePicker.vue"
 import Note from "@/apps/OPD/components/ConsultationPlan/Note.vue"
 import ListPicker from "@/apps/OPD/components/ConsultationPlan/ListPicker.vue"
 import BasicInputField from "@/components/BasicInputField.vue"
+import DynamicButton from "@/components/DynamicButton.vue"
 import {
     checkmark,
     pulseOutline,
@@ -221,6 +226,16 @@ const note_properties = [
         dataHandler: notesUpDated_fn5,
         dataValue: ref(),
     },
+]
+
+const dynamic_button_properties = [
+    {
+        showAddItemButton: true,
+        addItemButton: true,
+        name: "save",
+        btnFill: 'clear',
+        fn: validateForm,
+    }
 ]
 
 const mannerOfDeath = ref([
@@ -321,48 +336,54 @@ function listUpdated2(data: any) {
 function iweFn(data: any) {
 
 }
+function validateForm() {
+
+}
 </script>
 
 <style scoped>
-.initTxt {
-    text-align: center;
-}
-.spc_btwn {
-    margin-top: 2%;
-}
-.item-al {
-    cursor: pointer;
-    padding: 5px;
-    background-color: #ebebeb;
-    margin-top: 8px;
-}
-.item-al:hover {
-    background-color: #55515148;
-    padding: 5px;
-    border-radius: 3px;
-}
-ion-popover.popover-al {
-    --background: #fff;
-}
-ion-list.list-al {
-    --background: #fff;
-    -ion-item-background: #fff;
-}
-.saveContainer {
-    display: flex;
-    align-items: flex-end;
-}
-.action_buttons {
-    margin-top: 5px;
-}
-.error-label {
-    background: #fecdca;
-    color: #b42318;
-    text-transform: none;
-    padding: 6%;
-    border-radius: 10px;
-    margin-top: 7px;
-    display: flex;
-    text-align: center;
-}
+    .initTxt {
+        text-align: center;
+    }
+    .spc_btwn {
+        margin-top: 2%;
+    }
+    .item-al {
+        cursor: pointer;
+        padding: 5px;
+        background-color: #ebebeb;
+        margin-top: 8px;
+    }
+    .item-al:hover {
+        background-color: #55515148;
+        padding: 5px;
+        border-radius: 3px;
+    }
+    ion-popover.popover-al {
+        --background: #fff;
+    }
+    ion-list.list-al {
+        --background: #fff;
+        -ion-item-background: #fff;
+    }
+    .saveContainer {
+        display: flex;
+        align-items: flex-end;
+    }
+    .action_buttons {
+        margin-top: 5px;
+    }
+    .error-label {
+        background: #fecdca;
+        color: #b42318;
+        text-transform: none;
+        padding: 6%;
+        border-radius: 10px;
+        margin-top: 7px;
+        display: flex;
+        text-align: center;
+    }
+    .spc_btwn {
+        margin-top: 2%;
+    }
 </style>
