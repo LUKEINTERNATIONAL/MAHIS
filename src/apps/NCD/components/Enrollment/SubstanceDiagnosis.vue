@@ -63,10 +63,6 @@ export default defineComponent({
                         cardTitle: "Substance use / Consumption",
                         content: this.substance,
                     },
-                    {
-                        cardTitle: "Diagnosis",
-                        content: this.enrollmentDiagnosis,
-                    },
                 ],
             };
         },

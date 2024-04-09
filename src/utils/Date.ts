@@ -14,6 +14,19 @@ function calculateAge(birthdate:any, currentdate:any) {
     }
     return age;
 }
+function ageInMonths(startDateStr: string) {
+  const startDate = new Date(startDateStr);
+  const endDate = new Date();
+
+  const startYear = startDate.getFullYear();
+  const startMonth = startDate.getMonth();
+  const endYear = endDate.getFullYear();
+  const endMonth = endDate.getMonth();
+
+  return (endYear - startYear) * 12 + (endMonth - startMonth);
+}
+
+
 function getBirthdateAge(date: any){
     return  calculateAge(date, currentDate()) +'y ('+toStandardHisDisplayFormat(date)+')' 
 }
@@ -58,6 +71,7 @@ function toStandardHisFormat(date: string | Date): string {
     if (fdate.match(/invalid/i)) return ''
     return fdate
 }
+
 
 function estimateDateFromAge(age: number): string {
     const date = dayjs(sessionDate()).subtract(age, 'years')
@@ -124,25 +138,26 @@ function stitchDate(year: number | string, month=-1 as number | string, day=-1 a
 }
 
 export default {
-    currentDate,
-    getYearOfAge,
-    getYear,
-    dateDiffInDays,
-    getAgeInYears,
-    toStandardHisTimeFormat,
-    toStandardHisDisplayFormat,
-    toStandardHisShortFormat,
-    currentDisplayDate,
-    stitchDate,
-    toStandardHisFormat,
-    estimateDateFromAge,
-    getYearFromAge,
-    getCurrentYear,
-    getDateBeforeByDays,
-    getMonth,
-    getDay,
-    add,
-    subtract,
-    calculateAge,
-    getBirthdateAge
-}
+  currentDate,
+  getYearOfAge,
+  getYear,
+  dateDiffInDays,
+  getAgeInYears,
+  toStandardHisTimeFormat,
+  toStandardHisDisplayFormat,
+  toStandardHisShortFormat,
+  currentDisplayDate,
+  stitchDate,
+  toStandardHisFormat,
+  estimateDateFromAge,
+  getYearFromAge,
+  getCurrentYear,
+  getDateBeforeByDays,
+  getMonth,
+  getDay,
+  add,
+  subtract,
+  calculateAge,
+  getBirthdateAge,
+  ageInMonths,
+};

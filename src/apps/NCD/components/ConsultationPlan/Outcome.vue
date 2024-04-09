@@ -25,7 +25,7 @@
                     :title="popoverProperties.title"
                     :popoverOpen="popoverProperties.popoverOpen"
                     :event="popoverProperties.event"
-                    @closePopoover="(value) => (popoverProperties.popoverOpen = value)"
+                    @closePopoover="popoverProperties.popoverOpen"
                     @setSelection="setSelection"
                 />
 
@@ -44,7 +44,9 @@
                         :disabled="disableInputs"
                     ></ion-input>
                     <!--  -->
-                    <ion-label><span v-html="iconsContent.search" class="selectedPatient"></span></ion-label>
+                    <ion-label>
+                        <ion-icon slot="start" :icon="iconsContent.search" class="selectedPatient" aria-hidden="true"></ion-icon>
+                    </ion-label>
                 </ion-item>
                 <div>
                     <ion-label v-if="show_error_msg_for_ref_facility_ward_name" class="error-label">{{ refFacilityNameErrMsg }}</ion-label>

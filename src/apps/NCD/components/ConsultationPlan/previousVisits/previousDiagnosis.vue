@@ -3,9 +3,6 @@
         <div>
             <list :listData="list"></list>
         </div>
-        <div style="margin-top: 5px">
-            <DynamicButton name="Show More Lab Results" fill="clear" iconSlot="icon-only" />
-        </div>
     </div>
 </template>
 
@@ -22,8 +19,8 @@ import { useDemographicsStore } from "@/stores/DemographicStore";
 import { mapState } from "pinia";
 import HisDate from "@/utils/Date";
 import { iconGraph, iconList } from "@/utils/SvgDynamicColor";
-import { OrderService } from "@/services/order_service";
-import DynamicButton from "@/components/DynamicButton.vue";
+import { AppEncounterService } from "@/services/app_encounter_service";
+import { isEmpty } from "lodash";
 
 export default defineComponent({
     name: "Menu",
@@ -37,7 +34,6 @@ export default defineComponent({
         IonToolbar,
         ApexChart,
         List,
-        DynamicButton,
     },
 
     computed: {
@@ -58,7 +54,6 @@ export default defineComponent({
             activeHeight: [] as any,
             activeBMI: [] as any,
             list: [] as any,
-            listSeeMore: [] as any,
             series: [
                 {
                     name: "",
@@ -71,8 +66,20 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     async mounted() {
-        this.orders = await OrderService.getOrders(this.demographics.patient_id);
-        this.setListData(this.orders);
+        const obsP = await ObservationService.getAll(this.demographics.patient_id, "Primary diagnosis");
+        const obsS = await ObservationService.getAll(this.demographics.patient_id, "Secondary diagnosis");
+        const obs = [...(obsP || []), ...(obsS || [])];
+        const diagnosis = !isEmpty(obs)
+            ? Promise.all(
+                  obs.map(async (ob: any) => {
+                      return {
+                          name: await ObservationService.getConceptName(ob["value_coded"]),
+                          obs_date: ob.obs_datetime,
+                      };
+                  })
+              )
+            : [];
+        this.setListData(await diagnosis);
     },
     methods: {
         dismiss() {
@@ -91,46 +98,24 @@ export default defineComponent({
             this.list = [];
             this.list.push({
                 actionBtn: false,
-                class: "",
+                class: "col_background",
                 header: true,
                 minHeight: "--min-height: 25px;",
-                display: ["Date", "Accession Number", "Lab Test", "Specimen"],
+                display: ["Date", "Diagnosis", "Notes"],
             });
-            let number = 0;
             data.forEach((item: any) => {
-                item.tests.forEach((test: any) => {
-                    if (test?.result == null) {
-                        if (number < 2) {
-                            this.list.push({
-                                actionBtn: true,
-                                btn: ["enter_results", "attach", "print", "delete"],
-                                minHeight: "--min-height: 25px;",
-                                class: "",
-                                display: [HisDate.toStandardHisFormat(item.order_date), item.accession_number, test.name, item.specimen.name],
-                            });
-                        } else {
-                            this.listSeeMore.push({
-                                actionBtn: true,
-                                btn: ["enter_results", "attach", "print", "delete"],
-                                minHeight: "--min-height: 25px;",
-                                class: "",
-                                display: [HisDate.toStandardHisFormat(item.order_date), item.accession_number, test.name, item.specimen.name],
-                            });
-                        }
-                        number++;
-                    }
+                this.list.push({
+                    actionBtn: false,
+                    minHeight: "--min-height: 25px;",
+                    class: "col_background",
+                    display: [HisDate.toStandardHisFormat(item.obs_date), item.name, ""],
                 });
             });
         },
     },
 });
 </script>
-<!-- ["print", "delete"] -->
-<!-- print'
-    delete
-attach
-view')
-edit') -->
+
 <style scoped>
 .bmi_blood {
     font-size: 14px;

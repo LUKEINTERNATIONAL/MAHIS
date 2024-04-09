@@ -1,348 +1,348 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg';
 
-const medicalHistoryForm ={
-    dilationAndCurrettage:{
-        name:"Dilation and currettage",
+const medicalHistoryForm = {
+    dilationAndCurrettage: {
+        name: "Dilation and currettage",
         value: "dilation"
     },
-        Myomectomy:{
-        name:"Myomectomy",
+    Myomectomy: {
+        name: "Myomectomy",
         value: "myomectomy"
-    },  
-        removalOfOvarianCystst:{
-        name:"Removal of ovarian cystst",
+    },
+    removalOfOvarianCystst: {
+        name: "Removal of ovarian cystst",
         value: "removelOfOvarianCystst"
     },
-        Oophorectomy:{
-        name:"Oophorectomy",
+    Oophorectomy: {
+        name: "Oophorectomy",
         value: "oophorectomy"
-    },  
-       Salpingectomy:{
-        name:"Salpingectomy",
+    },
+    Salpingectomy: {
+        name: "Salpingectomy",
         value: "salpingectomy"
     },
-        cervicalCone:{
-        name:"Cervical cone",
+    cervicalCone: {
+        name: "Cervical cone",
         value: "cervicalCone"
     },
-       otherSurgerirs:{
-        name:"Other",
+    otherSurgerirs: {
+        name: "Other",
         value: "otherSurgerirs"
-       }
+    }
 }
 
-const allegiesForm ={
-        albendazole:{
-        name:"Albendazole",
+const allegiesForm = {
+    albendazole: {
+        name: "Albendazole",
         value: "albendazole"
     },
-       aluminiumHydroxide:{
-        name:"Aluminium-hydroxide",
+    aluminiumHydroxide: {
+        name: "Aluminium-hydroxide",
         value: "aluminiumHydroxide"
-    },  
-       calcium:{
-        name:"Calcium",
+    },
+    calcium: {
+        name: "Calcium",
         value: "calcium"
     },
-        chamomile:{
-        name:"Chamomile",
+    chamomile: {
+        name: "Chamomile",
         value: "chamomile"
-    },  
-       folicAcid:{
-        name:"Folic-acid",
+    },
+    folicAcid: {
+        name: "Folic-acid",
         value: "folicAcid"
     },
-        ginger:{
-        name:"Ginger",
+    ginger: {
+        name: "Ginger",
         value: "ginger"
     },
-        fish:{
-        name:"Fish",
+    fish: {
+        name: "Fish",
         value: "fish"
-    },  
-       iron:{
-        name:"Iron",
+    },
+    iron: {
+        name: "Iron",
         value: "iron"
     },
-        malariaMedication:{
-        name:"sulfadoxine-pyrimethamine",
+    malariaMedication: {
+        name: "sulfadoxine-pyrimethamine",
         value: "malariaMedication"
-    },  
-        mebendazole:{
-        name:"Mebendazole",
+    },
+    mebendazole: {
+        name: "Mebendazole",
         value: "mebendazole"
     },
-        penicillin:{
-        name:"Penicillin",
+    penicillin: {
+        name: "Penicillin",
         value: "penicillin"
-    },  
-       prEPTenofovirDisoproxilFumarate:{
-        name:"PrEP(TDF)",
+    },
+    prEPTenofovirDisoproxilFumarate: {
+        name: "PrEP(TDF)",
         value: "prEPTenofovirDisoproxilFumarate"
     },
-        otherAllegies:{
-        name:"",
+    otherAllegies: {
+        name: "",
         value: "OtherAllergies"
-       }
+    }
 }
 
 const chronicHealthConditionsForm = {
-        autoImmuneDesease:{
-        name:"Auto immune desease",
+    autoImmuneDesease: {
+        name: "Auto immune desease",
         value: "autoImmuneDesease"
     },
-       asthma:{
-        name:"Asthma",
+    asthma: {
+        name: "Asthma",
         value: "asthma"
-    },  
-       diabetes:{
-        name:"Diabetes",
+    },
+    diabetes: {
+        name: "Diabetes",
         value: "diabetes"
     }
 }
 
 const bloodDisorderForm = {
-        sickleCell:{
-        name:"Sickle cell",
+    sickleCell: {
+        name: "Sickle cell",
         value: "sickleCell"
     },
-       anaemia:{
-        name:"Anemia",
+    anaemia: {
+        name: "Anemia",
         value: "anemia"
-    },  
-       thalassemia:{
-        name:"Thalassemia",
+    },
+    thalassemia: {
+        name: "Thalassemia",
         value: "thalassemia"
     }
 }
 
 const cancerForm = {
 
-        gynaelogical:{
-        name:"Gynaecological",
+    gynaelogical: {
+        name: "Gynaecological",
         value: "gynaecological"
     },
-        otherSite:{
-        name:"",
+    otherSite: {
+        name: "",
         value: "otherSite"
-       }
+    }
 }
 
 const heartDeseaseForm = {
 
-        ccf:{
-        name:"CCF",
+    ccf: {
+        name: "CCF",
         value: "ccf"
     },
-        rhd:{
-        name:"RHD",
+    rhd: {
+        name: "RHD",
         value: "rhd"
     }
 }
 
 const diabetesForm = {
 
-        gestationalDiabetes:{
-        name:"Gestational diabetes",
+    gestationalDiabetes: {
+        name: "Gestational diabetes",
         value: "gestationalDiabetes"
     },
-        preExistingType1:{
-        name:"pre-existing type 1",
+    preExistingType1: {
+        name: "pre-existing type 1",
         value: "pre-existingType1"
     },
-        preExistingType2:{
-        name:"pre-existing type 2",
+    preExistingType2: {
+        name: "pre-existing type 2",
         value: "pre-existingType2"
     },
-        otherDiabetis:{
-        name:"",
+    otherDiabetis: {
+        name: "",
         value: "otherDiabetis"
-       }
+    }
 }
 
 const epilespyForm = {
 
-        epilespy:{
-        name:"Epilespy",
+    epilespy: {
+        name: "Epilespy",
         value: "epilespy"
     }
 }
-const hivTestForm ={
+const hivTestForm = {
 
-        hivTestRequired:{
-        name:"HIV test required",
+    hivTestRequired: {
+        name: "HIV test required",
         value: "hivTestRequired"
     },
 
-        hivTestOrdered:{
-        name:"HIV test ordered",
+    hivTestOrdered: {
+        name: "HIV test ordered",
         value: "hivTestOrdered"
     },
-        hivTestConducted:{
-        name:"HIV test conducted",
+    hivTestConducted: {
+        name: "HIV test conducted",
         value: "hivTestConducted"
     },
 
-        hivTestNotDone:{
-        name:"HIV test not done",
+    hivTestNotDone: {
+        name: "HIV test not done",
         value: "hivTestNotDone"
     },
-        testStockOut:{
-        name:"Test stock-out",
+    testStockOut: {
+        name: "Test stock-out",
         value: "testStockOut"
     },
-        expiredTests:{
-        name:"Expired tests",
+    expiredTests: {
+        name: "Expired tests",
         value: " expiredTests"
     },
-        hivPositive:{
-        name:"HIV Positive",
+    hivPositive: {
+        name: "HIV Positive",
         value: "hivPositive"
-    },  
-        hivNegative1:{
-        name:"HIV Negative 1",
+    },
+    hivNegative1: {
+        name: "HIV Negative 1",
         value: "hivNegative1"
-    },  
-        hivNegative2:{
-        name:"HIV Negative 2",
+    },
+    hivNegative2: {
+        name: "HIV Negative 2",
         value: "hivNegative2"
-    },  
-        inconclusive:{
-        name:"Inconclusive",
+    },
+    inconclusive: {
+        name: "Inconclusive",
         value: "inconclusive"
     },
-        highRiskYes:{
-        name:"Yes",
+    highRiskYes: {
+        name: "Yes",
         value: "yes"
     },
-        highRiskNo:{
-        name:"No",
+    highRiskNo: {
+        name: "No",
         value: "no"
     },
-        testDate:{
-        name:"Test Date",
+    testDate: {
+        name: "Test Date",
         value: "testDate"
     },
-        reasonsTestNotDone:{
-        name:"",
+    reasonsTestNotDone: {
+        name: "",
         value: "reasonsTestNotDone"
     }
 }
 
-const syphilisForm={
+const syphilisForm = {
 
-        syphilisTestConducted:{
-        name:"Syphilis test conducted",
+    syphilisTestConducted: {
+        name: "Syphilis test conducted",
         value: "syphilisTestConducted"
     },
 
-        syphilisTestOrdered:{
-        name:"Syphilis test ordered",
+    syphilisTestOrdered: {
+        name: "Syphilis test ordered",
         value: "syphilisTestOrdered"
     },
-        syphilisTestNotDone:{
-        name:"Syphilis Test Not Done",
+    syphilisTestNotDone: {
+        name: "Syphilis Test Not Done",
         value: "syphilisTestNotDone"
     },
 
-        rapidSyphilisTest:{
-        name:"Rapid syphilis test",
+    rapidSyphilisTest: {
+        name: "Rapid syphilis test",
         value: "rapidSyphilisTest"
     },
-        offSiteLabTest:{
-        name:"Off-site lab test",
+    offSiteLabTest: {
+        name: "Off-site lab test",
         value: "offSiteLabTest"
     },
-        treponemaPallidum:{
-        name:"TPHA",
+    treponemaPallidum: {
+        name: "TPHA",
         value: "treponemaPallidum"
     },
-        testStockOut:{
-        name:"Test stock-out",
+    testStockOut: {
+        name: "Test stock-out",
         value: "testStockOut"
-    },  
-        expiredTests:{
-        name:"Expired tests",
+    },
+    expiredTests: {
+        name: "Expired tests",
         value: "expiredTests"
     },
 
-    other:{
-        name:"Other",
+    other: {
+        name: "Other",
         value: "other"
     },
-    syphilisPositiveResults:{
-        name:"Syphilis positive",
+    syphilisPositiveResults: {
+        name: "Syphilis positive",
         value: "syphilisPositiveResults"
-    },  
-        syphilisNegativeResults:{
-        name:"Syphilis negative",
+    },
+    syphilisNegativeResults: {
+        name: "Syphilis negative",
         value: "syphilisNegativeResults"
     },
-        syphilisPositiveDiagnosis:{
-        name:"Syphilis positive",
+    syphilisPositiveDiagnosis: {
+        name: "Syphilis positive",
         value: "syphilisPositiveDiagnosis"
     },
-        syphilisNegativeDiagnosis:{
-        name:"Syphilis Negative",
+    syphilisNegativeDiagnosis: {
+        name: "Syphilis Negative",
         value: "syphilisNegativeDiagnosis"
     },
-        testDate:{
-        name:"Test Date",
+    testDate: {
+        name: "Test Date",
         value: "testDate"
     },
-        reasonsTestNotDone:{
-        name:"Reason",
+    reasonsTestNotDone: {
+        name: "Reason",
         value: ""
     }
 }
 
 const hypertensionForm = {
 
-        hypertension:{
-        name:"Hypertension",
+    hypertension: {
+        name: "Hypertension",
         value: "hypertension"
     }
 }
 const kidneyForm = {
 
-        kidney:{
-        name:"Kidney",
+    kidney: {
+        name: "Kidney",
         value: "kidney"
     }
 }
 const tbForm = {
 
-        tb:{
-        name:"TB",
+    tb: {
+        name: "TB",
         value: "tb"
     }
 }
 
 const mentalIllinessForm = {
 
-        mentalIlliness:{
-        name:"Mental  illiness",
+    mentalIlliness: {
+        name: "Mental  illiness",
         value: "mentalIlliness"
     }
 }
 
-export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
+export const useMedicalHistoryStore = defineStore('medicalHistoryStore', {
     state: () => ({
-    medicalHistory:[  
-        {
+        medicalHistory: [
+            {
                 selectdData: [],
                 isFinishBtn: false,
                 classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                 {
-                    header:{
+                    header: {
                         title: '',
                         selectedValue: '',
-                       
-                        
+
+
                     },
-                    data:[
+                    data: [
                         {
                             name: medicalHistoryForm.dilationAndCurrettage.name,
                             value: medicalHistoryForm.dilationAndCurrettage.value,
@@ -359,20 +359,20 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             justify: 'space-between',
                             checked: false
                         }
-                        
+
                     ],
                 }
-                    
-        },
-        {
+
+            },
+            {
                 classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                 {
-                    header:{
+                    header: {
                         title: '',
                         selectedValue: ''
                     },
-                    data:[
+                    data: [
                         {
                             name: medicalHistoryForm.removalOfOvarianCystst.name,
                             value: medicalHistoryForm.removalOfOvarianCystst.value,
@@ -381,7 +381,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             justify: 'space-between',
                             checked: false
                         },
-                            {
+                        {
                             name: medicalHistoryForm.Oophorectomy.name,
                             value: medicalHistoryForm.Oophorectomy.value,
                             labelPlacement: 'start',
@@ -389,20 +389,20 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             justify: 'space-between',
                             checked: false
                         }
-                        
+
                     ],
                 }
-                    
-        },
-        {
+
+            },
+            {
                 classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                 {
-                    header:{
+                    header: {
                         title: '',
                         selectedValue: ''
                     },
-                    data:[
+                    data: [
                         {
                             name: medicalHistoryForm.Salpingectomy.name,
                             value: medicalHistoryForm.Salpingectomy.name,
@@ -411,7 +411,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             justify: 'space-between',
                             checked: false
                         },
-                            {
+                        {
                             name: medicalHistoryForm.cervicalCone.name,
                             value: medicalHistoryForm.cervicalCone.value,
                             labelPlacement: 'start',
@@ -419,21 +419,21 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             justify: 'space-between',
                             checked: false
                         }
-                        
+
                     ],
                 }
-                    
-        },
-         {
-            classDash: 'dashed_bottom_border',
+
+            },
+            {
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                 {
-                    header:{
+                    header: {
                         title: '',
                         selectedValue: '',
                     },
-                    data:[
-                       {
+                    data: [
+                        {
                             name: "None",
                             value: "noSurgeries",
                             labelPlacement: 'start',
@@ -449,19 +449,19 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             justify: 'space-between',
                             checked: false
                         }
-                        
+
                     ],
                 }
-                    
-        },
-        {
-                data:{ 
-                    rowData:[
+
+            },
+            {
+                data: {
+                    rowData: [
                         {
-                            colData:[
+                            colData: [
                                 {
-                                    displayNone:true,
-                            
+                                    displayNone: true,
+
                                     inputHeader: 'Specify',
                                     icon: icons.editPen,
                                     value: medicalHistoryForm.otherSurgerirs.name,
@@ -470,95 +470,95 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                                     inputWidth: "82%",
                                     required: true
                                 }
-                                
+
                             ]
                         }
                     ],
-                    
+
                 }
-                    
+
             },
-    ]as any,
-     allegy:[  
-        {
+        ] as any,
+        allegy: [
+            {
                 selectdData: [],
                 isFinishBtn: false,
                 classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                 {
-                    header:{
+                    header: {
                         title: '',
                         selectedValue: '',
-                        
+
                     },
-                    data:[
+                    data: [
                         {
                             name: allegiesForm.albendazole.name,
-                            disabled:false,
+                            disabled: false,
                             value: allegiesForm.albendazole.value,
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
                         },
-                            {
+                        {
                             name: allegiesForm.aluminiumHydroxide.name,
-                            disabled:false,
+                            disabled: false,
                             value: allegiesForm.aluminiumHydroxide.value,
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
                         }
-                        
+
                     ],
                 }
-                    
-        },
-        {
+
+            },
+            {
                 classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                 {
-                    header:{
+                    header: {
                         title: '',
                         selectedValue: ''
                     },
-                    data:[
+                    data: [
                         {
                             name: allegiesForm.calcium.name,
-                            disabled:false,
+                            disabled: false,
                             value: allegiesForm.calcium.value,
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
                         },
-                            {
+                        {
                             name: allegiesForm.chamomile.name,
-                            disabled:false,
+                            disabled: false,
                             value: allegiesForm.chamomile.value,
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
                         }
-                        
+
                     ],
                 }
-                    
-        },
-        {
+
+            },
+            {
                 classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                 {
-                    header:{
+                    header: {
                         title: '',
                         selectedValue: ''
                     },
-                    data:[
+                    data: [
                         {
                             name: allegiesForm.folicAcid.name,
-                            disabled:false,
+                            disabled: false,
                             value: allegiesForm.folicAcid.value,
                             labelPlacement: 'start',
                             colSize: '6',
@@ -567,125 +567,125 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         },
                         {
                             name: allegiesForm.ginger.name,
-                            disabled:false,
+                            disabled: false,
                             value: allegiesForm.ginger.value,
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
                         }
-                        
+
                     ],
                 }
-                    
-        },
-         {
-            classDash: 'dashed_bottom_border',
+
+            },
+            {
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                 {
-                    header:{
+                    header: {
                         title: '',
                         selectedValue: ''
                     },
-                    data:[
+                    data: [
                         {
                             name: allegiesForm.fish.name,
-                            disabled:false,
+                            disabled: false,
                             value: allegiesForm.fish.value,
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
                         },
-                            {
+                        {
                             name: allegiesForm.iron.name,
-                            disabled:false,
+                            disabled: false,
                             value: allegiesForm.iron.value,
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
                         }
-                        
+
                     ],
                 }
-                    
-        },
-         {
-            classDash: 'dashed_bottom_border',
+
+            },
+            {
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                 {
-                    header:{
+                    header: {
                         title: '',
                         selectedValue: ''
                     },
-                    data:[
+                    data: [
                         {
                             name: allegiesForm.malariaMedication.name,
-                            disabled:false,
+                            disabled: false,
                             value: allegiesForm.malariaMedication.value,
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
                         },
-                            {
+                        {
                             name: allegiesForm.mebendazole.name,
-                            disabled:false,
+                            disabled: false,
                             value: allegiesForm.mebendazole.value,
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
                         },
-                        
+
                     ],
                 }
-                    
-        },
-        {
-            classDash: 'dashed_bottom_border',
+
+            },
+            {
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                 {
-                    header:{
+                    header: {
                         title: '',
                         selectedValue: ''
                     },
-                    data:[
+                    data: [
 
-                            {
+                        {
                             name: allegiesForm.penicillin.name,
-                            disabled:false,
+                            disabled: false,
                             value: allegiesForm.penicillin.value,
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
                         },
-                            {
+                        {
                             name: allegiesForm.prEPTenofovirDisoproxilFumarate.name,
-                            disabled:false,
+                            disabled: false,
                             value: allegiesForm.prEPTenofovirDisoproxilFumarate.value,
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
                         }
-                        
+
                     ],
                 }
-                    
-        },
-        {
-            classDash: 'dashed_bottom_border',
+
+            },
+            {
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                 {
-                    header:{
+                    header: {
                         title: '',
                         selectedValue: ''
                     },
-                    data:[
-                         {
+                    data: [
+                        {
                             name: "None",
                             value: "noAllergies",
                             labelPlacement: 'start',
@@ -693,26 +693,27 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             justify: 'space-between',
                             checked: false
                         },
-                         {
+                        {
                             name: "Other",
                             value: "otherAllergies",
-                            disabled:false,
+                            disabled: false,
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
                         }
-                        
+
                     ],
                 }
-                    
-        },
-           {
-                data:{ 
-                    rowData:[
+
+            },
+            {
+                data: {
+                    rowData: [
                         {
-                            colData:[
-                                {   displayNone:true,
+                            colData: [
+                                {
+                                    displayNone: true,
                                     inputHeader: 'Other(specify)',
                                     icon: icons.editPen,
                                     value: allegiesForm.otherAllegies.name,
@@ -721,27 +722,27 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                                     inputWidth: "82%",
                                     required: true
                                 }
-                                
+
                             ]
                         }
                     ],
-                    
+
                 }
-                    
+
             },
-    ]as any,
- exisitingChronicHealthConditions:[  
-        {
+        ] as any,
+        exisitingChronicHealthConditions: [
+            {
                 selectdData: [],
                 isFinishBtn: false,
                 classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                 {
-                    header:{
+                    header: {
                         title: '',
                         selectedValue: ''
                     },
-                    data:[
+                    data: [
                         {
                             name: chronicHealthConditionsForm.autoImmuneDesease.name,
                             value: chronicHealthConditionsForm.autoImmuneDesease.value,
@@ -758,21 +759,21 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             justify: 'space-between',
                             checked: false
                         }
-                        
+
                     ],
                 }
-            
-                    
-        },
-                {
-            classDash: 'dashed_bottom_border',
+
+
+            },
+            {
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                 {
-                    header:{
+                    header: {
                         title: '',
                         selectedValue: ''
                     },
-                    data:[
+                    data: [
                         {
                             name: bloodDisorderForm.sickleCell.name,
                             value: bloodDisorderForm.sickleCell.value,
@@ -789,22 +790,22 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             justify: 'space-between',
                             checked: false
                         },
-                        
+
                     ],
                 }
-                    
-        },
-        {
+
+            },
+            {
                 selectdData: [],
                 isFinishBtn: false,
                 classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                 {
-                    header:{
+                    header: {
                         title: '',
                         selectedValue: ''
                     },
-                    data:[
+                    data: [
 
                         {
                             name: bloodDisorderForm.anaemia.name,
@@ -816,30 +817,30 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         },
                         {
                             name: bloodDisorderForm.thalassemia.name,
-                            value:bloodDisorderForm.thalassemia.value,
+                            value: bloodDisorderForm.thalassemia.value,
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
                         },
-                        
+
                     ],
                 }
-            
-                    
-        },
 
-        {
+
+            },
+
+            {
                 selectdData: [],
                 isFinishBtn: false,
                 classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                 {
-                    header:{
+                    header: {
                         title: '',
                         selectedValue: ''
                     },
-                    data:[
+                    data: [
                         {
                             name: heartDeseaseForm.ccf.name,
                             value: heartDeseaseForm.rhd.value,
@@ -856,25 +857,25 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             justify: 'space-between',
                             checked: false
                         }
-                        
+
                     ],
                 },
-                
-            
-                    
-        },
 
-        {
+
+
+            },
+
+            {
                 selectdData: [],
                 isFinishBtn: false,
                 classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                 {
-                    header:{
+                    header: {
                         title: '',
                         selectedValue: ''
                     },
-                    data:[
+                    data: [
                         {
                             name: diabetesForm.gestationalDiabetes.name,
                             value: diabetesForm.gestationalDiabetes.value,
@@ -883,7 +884,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             justify: 'space-between',
                             checked: false
                         },
-                            {
+                        {
                             name: diabetesForm.preExistingType1.name,
                             value: diabetesForm.preExistingType1.value,
                             labelPlacement: 'start',
@@ -891,22 +892,22 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             justify: 'space-between',
                             checked: false
                         }
-                        
+
                     ],
                 },
-                
-            
-                    
-        },
-         {
-            classDash: 'dashed_bottom_border',
+
+
+
+            },
+            {
+                classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                 {
-                    header:{
+                    header: {
                         title: '',
                         selectedValue: ''
                     },
-                    data:[
+                    data: [
                         {
                             name: diabetesForm.preExistingType2.name,
                             value: diabetesForm.preExistingType2.value,
@@ -917,28 +918,28 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                         },
                         {
                             name: epilespyForm.epilespy.name,
-                            value:epilespyForm.epilespy.value,
+                            value: epilespyForm.epilespy.value,
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
                         }
-                        
+
                     ],
                 }
-                    
-        },
-        {
+
+            },
+            {
                 selectdData: [],
                 isFinishBtn: false,
                 classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                 {
-                    header:{
+                    header: {
                         title: '',
                         selectedValue: ''
                     },
-                    data:[
+                    data: [
                         {
                             name: hypertensionForm.hypertension.name,
                             value: hypertensionForm.hypertension.value,
@@ -946,7 +947,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
-                            
+
                         },
                         {
                             name: kidneyForm.kidney.name,
@@ -956,24 +957,24 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             justify: 'space-between',
                             checked: false
                         }
-                        
+
                     ],
                 },
-                
-            
-                    
-        }, 
-        {
+
+
+
+            },
+            {
                 selectdData: [],
                 isFinishBtn: false,
                 classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                 {
-                    header:{
+                    header: {
                         title: '',
                         selectedValue: ''
                     },
-                    data:[
+                    data: [
                         {
                             name: tbForm.tb.name,
                             value: tbForm.tb.value,
@@ -990,59 +991,59 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             justify: 'space-between',
                             checked: false
                         }
-                        
+
                     ],
                 },
-                
-            
-                    
-        },
-     {
-         selectdData: [],
-         isFinishBtn: false,
-         classDash: 'dashed_bottom_border',
-         checkboxBtnContent:
-             {
-                 header:{
-                     title: '',
-                     selectedValue: '',
-                     name:'HIV positive'
-                 },
-                 data:[
-                     {
-                         name: 'HIV positive',
-                         value: 'hiv positive',
-                         labelPlacement: 'start',
-                         colSize: '6',
-                         justify: 'space-between',
-                         checked: false
-                     },
-                     {
-                         name: 'Other',
-                         value: 'other',
-                         labelPlacement: 'start',
-                         colSize: '6',
-                         justify: 'space-between',
-                         checked: false
-                     }
-
-                 ],
-             }
 
 
-     },
-                {
+
+            },
+            {
                 selectdData: [],
                 isFinishBtn: false,
                 classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                 {
-                    header:{
+                    header: {
+                        title: '',
+                        selectedValue: '',
+                        name: 'HIV positive'
+                    },
+                    data: [
+                        {
+                            name: 'HIV positive',
+                            value: 'hiv positive',
+                            labelPlacement: 'start',
+                            colSize: '6',
+                            justify: 'space-between',
+                            checked: false
+                        },
+                        {
+                            name: 'Other',
+                            value: 'other',
+                            labelPlacement: 'start',
+                            colSize: '6',
+                            justify: 'space-between',
+                            checked: false
+                        }
+
+                    ],
+                }
+
+
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                {
+                    header: {
                         title: '',
                         selectedValue: ''
                     },
-                    data:[
-                       {
+                    data: [
+                        {
                             name: 'None',
                             value: 'none',
                             labelPlacement: 'start',
@@ -1050,18 +1051,18 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             justify: 'space-between',
                             checked: false
                         },
-                        
+
                     ],
                 }
-            
-                    
-        },
-         {
-                data:{ 
-                    rowData:[
+
+
+            },
+            {
+                data: {
+                    rowData: [
                         {
-                            colData:[
-                                {   
+                            colData: [
+                                {
                                     // displayNone:true,
                                     inputHeader: 'Other',
                                     icon: icons.editPen,
@@ -1071,165 +1072,165 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                                     inputWidth: "82%",
                                     required: true
                                 }
-                                
+
                             ]
                         }
                     ],
-                    
+
                 }
-                    
+
             },
-     {
+            {
 
-         data:{
-             rowData:[
-                 {
-                     colData:[
-                         {
-                             displayNone:true,
-                             inputHeader: 'HIV test date',
-                             icon: icons.calenderPrimary,
-                             value: '',
-                             name: 'HIV test date',
-                             eventType: 'blur',
-                             inputWidth: "89%",
-                             required: true,
-                             isDatePopover: true,
-                             placeholder:'Pick HIV test date'
-                         }
+                data: {
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                    displayNone: true,
+                                    inputHeader: 'HIV test date',
+                                    icon: icons.calenderPrimary,
+                                    value: '',
+                                    name: 'HIV test date',
+                                    eventType: 'blur',
+                                    inputWidth: "89%",
+                                    required: true,
+                                    isDatePopover: true,
+                                    placeholder: 'Pick HIV test date'
+                                }
 
-                     ]
-                 }
-             ],
+                            ]
+                        }
+                    ],
 
-         },
-     },
-     {
-         selectdData: [],
-         isFinishBtn: false,
-         radioBtnContent:{
-             header:{
-                 title: 'Is the client on ART',
-                 selectedValue: '',
-                 name:"Is client on ART",
-                 displayNone:true
-             },
-             data:[
-                 {
-                     name: 'Yes',
-                     value: 'yes',
-                     labelPlacement:'start',
-                     colSize: "7",
-                     justify:"space-between"
-                 },
-                 {
-                     name: 'No',
-                     value: 'no',
-                     labelPlacement:'start',
-                     colSize: "7",
-                     justify:"space-between"
-                 },
-             ]
-         }
-     },
-     {
-         db_data: [],
-         isFinishBtn: false,
-         selectdData: [],
-         displayData: [],
-         data:
-             {
-                 rowData:[
-                     {
-                         colData:[
-                             {
-                                 displayNone:true,
-                                 inputHeader: 'Facility for ART',
-                                 icon: icons.search,
-                                 value: '',
-                                 name: 'facility for art',
-                                 popOver: true,
-                                 eventType: 'input',
-                                 required: true,
-                                 alertsError: false,
-                                 alertsErrorMassage: '',
-                                 inputWidth: "89%",
-                                 placeholder:'Search for facility',
-                                 popOverData: {
-                                     filterData: false,
-                                     data: []
-                                 } ,
-                                 id: '',
-                                 idName: 'facility_id'
-                             },
-
-                         ],
-                         // btns:[
-                         //     {
-                         //         name: "Save",
-                         //         fill: "clear",
-                         //         icon: icons.plus
-                         //     }
-                         // ]
-                     }
-                 ],
-
-             }
-
-     }
-
-    ]as any,
-         hivTest: [
+                },
+            },
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:{
-                    header:{
-                        title: 'Was the hiv test conducted?',
+                radioBtnContent: {
+                    header: {
+                        title: 'Is the client on ART',
                         selectedValue: '',
-                        name:"hivOption"
+                        name: "Is client on ART",
+                        displayNone: true
                     },
-                    data:[
-                        {  
-                            name: hivTestForm.hivTestRequired.name,
-                            value: hivTestForm.hivTestRequired.value,
-                            labelPlacement:'start',
+                    data: [
+                        {
+                            name: 'Yes',
+                            value: 'yes',
+                            labelPlacement: 'start',
                             colSize: "7",
-                            justify:"space-between" 
-                        },
-                        { 
-                            name: hivTestForm.hivTestOrdered.name,
-                            value: hivTestForm.hivTestOrdered.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            justify: "space-between"
                         },
                         {
-                            name:  hivTestForm.hivTestConducted.name,
-                            value: "hivTestConducted",
-                            labelPlacement:'start',
+                            name: 'No',
+                            value: 'no',
+                            labelPlacement: 'start',
                             colSize: "7",
-                            justify:"space-between" 
-                        },
-                        {
-                            name: hivTestForm.hivTestNotDone.name,
-                            value: "hivTestNotDone",
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            justify: "space-between"
                         },
                     ]
                 }
             },
             {
-               
-                data:{ 
-                    rowData:[
+                db_data: [],
+                isFinishBtn: false,
+                selectdData: [],
+                displayData: [],
+                data:
+                {
+                    rowData: [
                         {
-                            colData:[
-                                {   
-                                    displayNone:true,
+                            colData: [
+                                {
+                                    displayNone: true,
+                                    inputHeader: 'Facility for ART',
+                                    icon: icons.search,
+                                    value: '',
+                                    name: 'facility for art',
+                                    popOver: true,
+                                    eventType: 'input',
+                                    required: true,
+                                    alertsError: false,
+                                    alertsErrorMassage: '',
+                                    inputWidth: "89%",
+                                    placeholder: 'Search for facility',
+                                    popOverData: {
+                                        filterData: false,
+                                        data: []
+                                    },
+                                    id: '',
+                                    idName: 'facility_id'
+                                },
+
+                            ],
+                            // btns:[
+                            //     {
+                            //         name: "Save",
+                            //         fill: "clear",
+                            //         icon: icons.plus
+                            //     }
+                            // ]
+                        }
+                    ],
+
+                }
+
+            }
+
+        ] as any,
+        hivTest: [
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border',
+                radioBtnContent: {
+                    header: {
+                        title: 'Was the hiv test conducted?',
+                        selectedValue: '',
+                        name: "hivOption"
+                    },
+                    data: [
+                        {
+                            name: hivTestForm.hivTestRequired.name,
+                            value: hivTestForm.hivTestRequired.value,
+                            labelPlacement: 'start',
+                            colSize: "7",
+                            justify: "space-between"
+                        },
+                        {
+                            name: hivTestForm.hivTestOrdered.name,
+                            value: hivTestForm.hivTestOrdered.value,
+                            labelPlacement: 'start',
+                            colSize: "7",
+                            justify: "space-between"
+                        },
+                        {
+                            name: hivTestForm.hivTestConducted.name,
+                            value: "hivTestConducted",
+                            labelPlacement: 'start',
+                            colSize: "7",
+                            justify: "space-between"
+                        },
+                        {
+                            name: hivTestForm.hivTestNotDone.name,
+                            value: "hivTestNotDone",
+                            labelPlacement: 'start',
+                            colSize: "7",
+                            justify: "space-between"
+                        },
+                    ]
+                }
+            },
+            {
+
+                data: {
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                    displayNone: true,
                                     inputHeader: 'HIV test date',
                                     icon: icons.calenderPrimary,
                                     value: '',
@@ -1238,63 +1239,63 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                                     required: true,
                                     isDatePopover: true
                                 }
-                                
+
                             ]
                         }
                     ],
-                    
+
                 },
             },
-             {
-        
-                 checkboxBtnContent:
-                     {
-                         header:{
-                             title: 'Reasons HIV test not done:',
-                             selectedValue: '',
-                             displayNone: true,
-                             name:"hivOutcome",
-                         },
-                         data:[
-                             {
-                                 name: "Test Stock Out",
-                                 value: hivTestForm.testStockOut.value,
-                                 labelPlacement: 'start',
-                                 colSize: '9',
-                                 justify: 'space-between',
-                                 checked: false
-                             },
-                             {
-                                 name: "Expired Tests",
-                                 value:hivTestForm.expiredTests.value,
-                                 labelPlacement: 'start',
-                                 colSize: '9',
-                                 justify: 'space-between',
-                                 checked:false
-                             },
-                            {  
+            {
 
-                                name: "Other",
-                                value: 'other',
-                                labelPlacement: 'start',
-                                colSize: '9',
-                                justify: 'space-between',
-                                checked:false
-                            }
-
-
-                         ],
-                     }
-
-             },
-            {   
-               
-                data:{ 
-                    rowData:[
+                checkboxBtnContent:
+                {
+                    header: {
+                        title: 'Reasons HIV test not done:',
+                        selectedValue: '',
+                        displayNone: true,
+                        name: "hivOutcome",
+                    },
+                    data: [
                         {
-                            colData:[
-                                {   
-                                    displayNone:true,
+                            name: "Test Stock Out",
+                            value: hivTestForm.testStockOut.value,
+                            labelPlacement: 'start',
+                            colSize: '9',
+                            justify: 'space-between',
+                            checked: false
+                        },
+                        {
+                            name: "Expired Tests",
+                            value: hivTestForm.expiredTests.value,
+                            labelPlacement: 'start',
+                            colSize: '9',
+                            justify: 'space-between',
+                            checked: false
+                        },
+                        {
+
+                            name: "Other",
+                            value: 'other',
+                            labelPlacement: 'start',
+                            colSize: '9',
+                            justify: 'space-between',
+                            checked: false
+                        }
+
+
+                    ],
+                }
+
+            },
+            {
+
+                data: {
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                    displayNone: true,
                                     inputHeader: 'specify',
                                     icon: icons.editPen,
                                     value: hivTestForm.reasonsTestNotDone.name,
@@ -1303,54 +1304,54 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                                     inputWidth: "55%",
                                     required: true
                                 }
-                                
+
                             ]
                         }
                     ],
-                    
+
                 }
-                    
+
             },
             {
                 selectdData: [],
                 isFinishBtn: false,
                 classDash: 'dashed_bottom_border',
-                radioBtnContent:{
-                    header:{
+                radioBtnContent: {
+                    header: {
                         title: 'Select the result of HIV test',
-                        name:'test2',
+                        name: 'test2',
                         selectedValue: '',
-                        displayNone:true,
+                        displayNone: true,
                     },
-                    data:[
+                    data: [
                         {
                             name: hivTestForm.hivPositive.name,
                             value: hivTestForm.hivPositive.value,
-                            labelPlacement:'start',
+                            labelPlacement: 'start',
                             colSize: "7",
-                            justify:"space-between" 
+                            justify: "space-between"
                         },
 
                         {
                             name: hivTestForm.hivNegative1.name,
                             value: hivTestForm.hivNegative1.value,
-                            labelPlacement:'start',
+                            labelPlacement: 'start',
                             colSize: "7",
-                            justify:"space-between" 
+                            justify: "space-between"
                         },
                         {
-                            name:  hivTestForm.hivNegative2.name,
+                            name: hivTestForm.hivNegative2.name,
                             value: hivTestForm.hivNegative2.value,
-                            labelPlacement:'start',
+                            labelPlacement: 'start',
                             colSize: "7",
-                            justify:"space-between" 
+                            justify: "space-between"
                         },
                         {
                             name: hivTestForm.inconclusive.name,
                             value: hivTestForm.inconclusive.value,
-                            labelPlacement:'start',
+                            labelPlacement: 'start',
                             colSize: "7",
-                            justify:"space-between" 
+                            justify: "space-between"
 
                         }
                     ]
@@ -1359,194 +1360,195 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
             {
                 selectdData: [],
                 isFinishBtn: false,
-                radioBtnContent:{
-                    header:{
+                radioBtnContent: {
+                    header: {
                         displayNone: true,
-                        name:"test1",
+                        name: "test1",
                         title: 'Is the woman at high risk of HIV?',
                         selectedValue: ''
                     },
-                    data:[
+                    data: [
                         {
                             name: hivTestForm.highRiskYes.name,
                             value: hivTestForm.highRiskYes.value,
-                            labelPlacement:'start',
+                            labelPlacement: 'start',
                             colSize: "7",
-                            justify:"space-between" 
+                            justify: "space-between"
                         },
                         {
                             name: hivTestForm.highRiskNo.name,
                             value: hivTestForm.highRiskNo.value,
-                            labelPlacement:'start',
+                            labelPlacement: 'start',
                             colSize: "7",
-                            justify:"space-between" 
+                            justify: "space-between"
                         },
                     ]
                 }
             },
-         ]as any,
-          syphilisTest: [
+        ] as any,
+        syphilisTest: [
             {
                 selectdData: [],
                 isFinishBtn: false,
                 classDash: 'dashed_bottom_border',
-                radioBtnContent:{
-                    header:{
+                radioBtnContent: {
+                    header: {
                         title: 'Select whether:',
-                        name:'syphilisOption',
+                        name: 'syphilisOption',
                         selectedValue: '',
-                        
+
                     },
-                    data:[
+                    data: [
                         {
                             name: syphilisForm.syphilisTestConducted.name,
                             value: syphilisForm.syphilisTestConducted.value,
-                            labelPlacement:'start',
+                            labelPlacement: 'start',
                             colSize: "7",
-                            justify:"space-between" 
+                            justify: "space-between"
                         },
                         {
                             name: syphilisForm.syphilisTestOrdered.name,
                             value: syphilisForm.syphilisTestOrdered.value,
-                            labelPlacement:'start',
+                            labelPlacement: 'start',
                             colSize: "7",
-                            justify:"space-between" 
+                            justify: "space-between"
                         },
                         {
-                            name:  syphilisForm.syphilisTestNotDone.name,
+                            name: syphilisForm.syphilisTestNotDone.name,
                             value: syphilisForm.syphilisTestNotDone.value,
-                            labelPlacement:'start',
+                            labelPlacement: 'start',
                             colSize: "7",
-                            justify:"space-between" 
+                            justify: "space-between"
                         },
                     ]
                 }
             },
             {
-            
+
                 radioBtnContent:
                 {
-                    header:{
-                         displayNone: true,
-                        name:"syphilisDetails",
+                    header: {
+                        displayNone: true,
+                        name: "syphilisDetails",
                         title: 'Select the type of syphilis test that was done',
                         selectedValue: ''
                     },
-                    data:[
+                    data: [
                         {
                             name: syphilisForm.rapidSyphilisTest.name,
                             value: syphilisForm.rapidSyphilisTest.value,
-                            labelPlacement:'start',
+                            labelPlacement: 'start',
                             colSize: "7",
-                            justify:"space-between", 
+                            justify: "space-between",
                             checked: false
                         },
                         {
                             name: syphilisForm.offSiteLabTest.name,
                             value: syphilisForm.offSiteLabTest.value,
-                            labelPlacement:'start',
+                            labelPlacement: 'start',
                             colSize: "7",
-                            justify:"space-between", 
-                            checked:false
+                            justify: "space-between",
+                            checked: false
                         },
                         {
                             name: syphilisForm.treponemaPallidum.name,
                             value: syphilisForm.treponemaPallidum.value,
-                            labelPlacement:'start',
+                            labelPlacement: 'start',
                             colSize: "7",
-                            justify:"space-between", 
-                            checked:false
+                            justify: "space-between",
+                            checked: false
                         }
-                        
+
                     ],
                 }
-                    
+
             },
-              {
-                  selectdData: [],
-                  isFinishBtn: false,
-                  radioBtnContent:{
-                      header:{
-                          title: 'Syphilis test result',
-                          selectedValue: '',
-                          name:'syphlisResults',
-                          displayNone:true
-                      },
-                      data:[
-                          {
-                              name: syphilisForm.syphilisPositiveResults.name,
-                              value: syphilisForm.syphilisPositiveResults.value,
-                              labelPlacement:'start',
-                              colSize: "7",
-                              justify:"space-between"
-                          },
-                          {
-                              name: syphilisForm.syphilisNegativeResults.name,
-                              value: syphilisForm.syphilisNegativeResults.value,
-                              labelPlacement:'start',
-                              colSize: "7",
-                              justify:"space-between"
-                          },
-                      ]
-                  }
-              },
-              {
-                  data:{
-                      rowData:[
-                          {
-                              colData:[
-                                  {   
-                                      displayNone:true,
-                                      inputHeader: 'Syphilis test date',
-                                      icon: icons.calenderPrimary,
-                                      value: '',
-                                      name: 'syphilisDate',
-                                      eventType: 'blur',
-                                      required: true,
-                                      inputWidth: "55%",
-                                      isDatePopover: true
-                                  }
-
-                              ]
-                          }
-                      ],
-
-                  },
-              },
             {
-                
-                data:{ 
-                    rowData:[
+                selectdData: [],
+                isFinishBtn: false,
+                radioBtnContent: {
+                    header: {
+                        title: 'Syphilis test result',
+                        selectedValue: '',
+                        name: 'syphlisResults',
+                        displayNone: true
+                    },
+                    data: [
                         {
-                            colData:[
-                                {   displayNone:true,
+                            name: syphilisForm.syphilisPositiveResults.name,
+                            value: syphilisForm.syphilisPositiveResults.value,
+                            labelPlacement: 'start',
+                            colSize: "7",
+                            justify: "space-between"
+                        },
+                        {
+                            name: syphilisForm.syphilisNegativeResults.name,
+                            value: syphilisForm.syphilisNegativeResults.value,
+                            labelPlacement: 'start',
+                            colSize: "7",
+                            justify: "space-between"
+                        },
+                    ]
+                }
+            },
+            {
+                data: {
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                    displayNone: true,
                                     inputHeader: 'Syphilis test date',
                                     icon: icons.calenderPrimary,
                                     value: '',
                                     name: 'syphilisDate',
                                     eventType: 'blur',
                                     required: true,
-                                     inputWidth: "300px",
+                                    inputWidth: "55%",
                                     isDatePopover: true
                                 }
-                                
+
                             ]
                         }
                     ],
-                    
+
+                },
+            },
+            {
+
+                data: {
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                    displayNone: true,
+                                    inputHeader: 'Syphilis test date',
+                                    icon: icons.calenderPrimary,
+                                    value: '',
+                                    name: 'syphilisDate',
+                                    eventType: 'blur',
+                                    required: true,
+                                    inputWidth: "300px",
+                                    isDatePopover: true
+                                }
+
+                            ]
+                        }
+                    ],
+
                 },
             },
             {
                 selectdData: [],
                 isFinishBtn: false,
-                checkboxBtnContent:{
-                    header:{
+                checkboxBtnContent: {
+                    header: {
                         title: 'Reason syphilis test not done',
                         selectedValue: '',
-                        name:'notDone',
-                        displayNone:true,
+                        name: 'notDone',
+                        displayNone: true,
                     },
-                    data:[
+                    data: [
                         {
                             name: syphilisForm.testStockOut.name,
                             value: syphilisForm.testStockOut.value,
@@ -1554,7 +1556,7 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             labelPlacement: 'start',
                             colSize: '9',
                             justify: 'space-between'
-                            
+
                         },
 
                         {
@@ -1565,25 +1567,25 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                             colSize: '9',
                             justify: 'space-between'
                         },
-                         {
-                              name: "Other",
-                              value: 'other',
-                              checked: false,
-                              labelPlacement: 'start',
-                              colSize: '9',
-                              justify: 'space-between'
-                          },
+                        {
+                            name: "Other",
+                            value: 'other',
+                            checked: false,
+                            labelPlacement: 'start',
+                            colSize: '9',
+                            justify: 'space-between'
+                        },
                     ]
                 }
             },
             {
-                
-                data:{ 
-                    rowData:[
+
+                data: {
+                    rowData: [
                         {
-                            colData:[
-                                {   
-                                    displayNone:true,
+                            colData: [
+                                {
+                                    displayNone: true,
                                     inputHeader: 'specify',
                                     icon: icons.editPen,
                                     value: syphilisForm.reasonsTestNotDone.value,
@@ -1592,33 +1594,33 @@ export const useMedicalHistoryStore = defineStore('medicalHistoryStore',{
                                     inputWidth: "55%",
                                     required: true
                                 }
-                                
+
                             ]
                         }
                     ],
-                    
+
                 }
-                    
+
             },
-        ]as any,
+        ] as any,
 
     }),
-    actions:{
-         addMedicalHistory(data:any){
+    actions: {
+        addMedicalHistory(data: any) {
             console.log("sonmething changedS", data)
             this.medicalHistory = data
-         },
-        addAllegy(data:any){
-            this.allegy =data
         },
-        addExisitingChronicHealthConditions(data:any){
-            this.exisitingChronicHealthConditions= data
+        addAllegy(data: any) {
+            this.allegy = data
         },
-            addhivTest(data:any){
-                this.hivTest =data
+        addExisitingChronicHealthConditions(data: any) {
+            this.exisitingChronicHealthConditions = data
         },
-            addSyphilisTest(data:any){
-                this.syphilisTest = data
+        addhivTest(data: any) {
+            this.hivTest = data
+        },
+        addSyphilisTest(data: any) {
+            this.syphilisTest = data
         },
         // addOtherSite(data:any){
         //     this.otherSite = data
