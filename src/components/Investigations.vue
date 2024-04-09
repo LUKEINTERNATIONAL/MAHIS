@@ -1,36 +1,52 @@
 <template>
-    <ion-list>
-        <ion-item class="dashed_bottom_border">
-            <ion-toggle :checked="labOrderStatus" @ionChange="toggleLabOrderStatus">Lab Investigations</ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="labOrderStatus" style="margin-top: 10px">
-            <span>
-                <labOrderResults :propOrders="orders" />
-            </span>
+    <ion-accordion-group ref="accordionGroup" class="previousView">
+        <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+            <ion-item slot="header" color="light">
+                <ion-label class="previousLabel">Lab Investigations</ion-label>
+            </ion-item>
+            <div class="ion-padding" slot="content">
+                <span>
+                    <labOrderResults :propOrders="orders" />
+                </span>
 
-            <span v-if="search_item">
-                <basic-form
-                    :contentData="investigations"
-                    @update:selected="handleInputData"
-                    @update:inputValue="handleInputData"
-                    @clicked:button="addNewRow"
-                >
-                </basic-form>
-            </span>
+                <span v-if="search_item">
+                    <basic-form
+                        :contentData="investigations"
+                        @update:selected="handleInputData"
+                        @update:inputValue="handleInputData"
+                        @clicked:button="addNewRow"
+                    >
+                    </basic-form>
+                </span>
 
-            <ion-row v-if="addItemButton" style="margin-top: 10px">
-                <DynamicButton fill="clear" :icon="iconsContent.plus" iconSlot="icon-only" @clicked:btn="displayInputFields()" name="Add new test" />
-            </ion-row>
-        </div>
-        <ion-item class="dashed_bottom_border">
-            <ion-toggle :checked="radiologyOrdersStatus">Radiology Investigation<Section></Section> </ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="radiologyOrdersStatus">Radiology Order</div>
-        <ion-item class="dashed_bottom_border">
-            <ion-toggle :checked="otherOrdersStatus">Other Investigation</ion-toggle>
-        </ion-item>
-        <div class="sub_item_body" v-if="otherOrdersStatus">Other</div>
-    </ion-list>
+                <ion-row v-if="addItemButton" style="margin-top: 10px">
+                    <DynamicButton
+                        fill="clear"
+                        :icon="iconsContent.plus"
+                        iconSlot="icon-only"
+                        @clicked:btn="displayInputFields()"
+                        name="Add new test"
+                    />
+                </ion-row>
+            </div>
+        </ion-accordion>
+    </ion-accordion-group>
+    <ion-accordion-group ref="accordionGroup" class="previousView">
+        <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+            <ion-item slot="header" color="light">
+                <ion-label class="previousLabel">Radiology Investigation</ion-label>
+            </ion-item>
+            <div class="ion-padding" slot="content"></div>
+        </ion-accordion>
+    </ion-accordion-group>
+    <ion-accordion-group ref="accordionGroup" class="previousView">
+        <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+            <ion-item slot="header" color="light">
+                <ion-label class="previousLabel">Other Investigation</ion-label>
+            </ion-item>
+            <div class="ion-padding" slot="content"></div>
+        </ion-accordion>
+    </ion-accordion-group>
 </template>
 
 <script lang="ts">
@@ -48,10 +64,11 @@ import { toastWarning, popoverConfirmation } from "@/utils/Alerts";
 import BasicForm from "@/components/BasicForm.vue";
 import List from "@/components/List.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
-import labOrderResults from "@/apps/NCD/components/ConsultationPlan/lab/labOrderResults.vue";
-import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigations.vue";
-import { LabOrder } from "@/apps/NCD/services/lab_order";
+import labOrderResults from "@/components/Lab/labOrderResults.vue";
+import { LabOrder } from "@/services/lab_order";
 import { useDemographicsStore } from "@/stores/DemographicStore";
+import HisDate from "@/utils/Date";
+
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -126,6 +143,14 @@ export default defineComponent({
         this.updateInvestigationsStores();
         this.setDashedBox();
         this.orders = await OrderService.getOrders(this.demographics.patient_id);
+        const filteredArray = await this.orders.filter((obj: any) => {
+            return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
+        });
+        if (filteredArray.length > 0) {
+            this.investigations[0].selectedData = filteredArray;
+        } else {
+            this.investigations[0].selectedData = "";
+        }
         this.labOrders = await OrderService.getTestTypes();
     },
     methods: {
@@ -190,7 +215,7 @@ export default defineComponent({
         },
         async addNewRow() {
             if (await this.validateRowData()) {
-                this.saveTest();
+                await this.saveTest();
                 this.investigations[0].data.rowData[0].colData[0].value = "";
                 this.investigations[0].data.rowData[0].colData[1].value = "";
                 this.search_item = false;
@@ -201,7 +226,6 @@ export default defineComponent({
         },
         async saveTest() {
             const investigationInstance = new LabOrder();
-            console.log(this.inputFields[1].value);
             await investigationInstance.postActivities(this.demographics.patient_id, [
                 {
                     concept_id: this.test[0].concept_id,
@@ -211,20 +235,10 @@ export default defineComponent({
                     specimenConcept: await ConceptService.getConceptID(this.inputFields[1].value, true),
                 },
             ]);
+            console.log(this.inputFields[1].value);
             this.orders = await OrderService.getOrders(this.demographics.patient_id);
         },
-        buildResults() {
-            const modifier = this.inputFields[1].value.charAt(0);
-            const result = parseInt(this.inputFields[1].value.substring(1));
-            const measures = {
-                indicator: {
-                    concept_id: 679,
-                },
-                value: result,
-                value_modifier: modifier,
-                value_type: "numeric",
-            };
-        },
+
         async handleInputData(col: any) {
             if (col.inputHeader == "Test") {
                 this.popoverOpen = true;

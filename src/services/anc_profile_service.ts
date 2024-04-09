@@ -8,3 +8,8 @@ export class PastObstetricHistoryService extends AppEncounterService{
   }
 
 }
+export class MedicalHistoryService extends AppEncounterService {
+  constructor(patientID: number, providerID: number) {
+    super(patientID,30, providerID); 
+  }
+}

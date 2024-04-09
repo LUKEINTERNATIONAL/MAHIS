@@ -2,35 +2,35 @@ import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg';
 
 const medicalHistoryForm = {
-    dilationAndCurrettage: {
-        name: "Dilation and currettage",
-        value: "dilation"
-    },
-    Myomectomy: {
-        name: "Myomectomy",
-        value: "myomectomy"
-    },
-    removalOfOvarianCystst: {
-        name: "Removal of ovarian cystst",
-        value: "removelOfOvarianCystst"
-    },
-    Oophorectomy: {
-        name: "Oophorectomy",
-        value: "oophorectomy"
-    },
-    Salpingectomy: {
-        name: "Salpingectomy",
-        value: "salpingectomy"
-    },
-    cervicalCone: {
-        name: "Cervical cone",
-        value: "cervicalCone"
-    },
-    otherSurgerirs: {
-        name: "Other",
-        value: "otherSurgerirs"
-    }
-}
+  dilationAndCurrettage: {
+    name: "Dilation and currettage",
+    value: "dilation and currettage",
+  },
+  Myomectomy: {
+    name: "Myomectomy",
+    value: "myomectomy",
+  },
+  removalOfOvarianCystst: {
+    name: "Removal of ovarian cystst",
+    value: "removal of ovarian cystst",
+  },
+  Oophorectomy: {
+    name: "Oophorectomy",
+    value: "oophorectomy",
+  },
+  Salpingectomy: {
+    name: "Salpingectomy",
+    value: "salpingectomy",
+  },
+  cervicalCone: {
+    name: "Cervical cone",
+    value: "cervical cone",
+  },
+  otherSurgerirs: {
+    name: "Other",
+    value: "other",
+  },
+};
 
 const allegiesForm = {
     albendazole: {
@@ -338,6 +338,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "Does the woman have any past surgeries done?",
             selectedValue: "",
+            name: "Does the woman have any past surgeries done?",
           },
           data: [
             {
@@ -365,6 +366,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            name:"Does the woman have any past surgeries done?",
           },
           data: [
             {
@@ -392,6 +394,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Does the woman have any past surgeries done?",
           },
           data: [
             {
@@ -419,11 +422,12 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Does the woman have any past surgeries done?",
           },
           data: [
             {
               name: "None",
-              value: "noSurgeries",
+              value: "none",
               labelPlacement: "start",
               colSize: "6",
               justify: "space-between",
@@ -431,7 +435,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
             },
             {
               name: "Other",
-              value: "otherSurguries",
+              value: "other",
               labelPlacement: "start",
               colSize: "6",
               justify: "space-between",

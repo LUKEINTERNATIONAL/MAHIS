@@ -52,7 +52,7 @@ import { useCurrentPregnanciesStore } from "@/apps/ANC/store/profile/CurrentPreg
 import { useMedicationsStore } from "@/apps/ANC/store/profile/MedicationsStore";
 import { useWomanBehaviourStore } from "@/apps/ANC/store/profile/womanBehaviourStore";
 import { Service } from "@/services/service";
-import { ProfileService } from "@/services/anc_profile_service";
+//import { ProfileService } from "@/services/anc_profile_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { formatCheckBoxData, formatRadioButtonData } from "@/services/formatServerData";
 import { Preterms } from "../service/preterm";
@@ -182,6 +182,7 @@ export default defineComponent({
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useObstreticHistoryStore, ["preterm"]),
         ...mapState(useObstreticHistoryStore, ["Complications"]),
+        ...mapState(useMedicalHistoryStore,['medicalHistory'])
     },
     mounted() {
         // this.markWizard()
@@ -226,6 +227,7 @@ export default defineComponent({
          async saveData() {
             this.savePreterm()
             this.savePastPregnancyComplication()
+            this.savePastSurgeries()
         },
         async savePreterm(){
         // if (this.preterm[0].selectedData.length > 0) {
@@ -251,6 +253,9 @@ export default defineComponent({
         // }
         console.log(await this.buildPastPregnancyComplication())
         },
+        async savePastSurgeries(){
+            console.log(await this.buildPastSurgeries())
+        },
         async buildPreterm() {
             return [
                 ...(await formatRadioButtonData(this.preterm)),       
@@ -261,7 +266,11 @@ export default defineComponent({
                 ...(await formatCheckBoxData(this.Complications))        
             ];
         },
-
+        async buildPastSurgeries(){
+            return[
+                ...(await formatCheckBoxData(this.medicalHistory))
+            ]
+        },
         openModal() {
             createModal(SaveProgressModal);
         },

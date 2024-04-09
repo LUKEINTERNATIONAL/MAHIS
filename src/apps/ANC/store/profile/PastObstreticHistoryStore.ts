@@ -397,6 +397,14 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
               colSize: "6",
               justify: "space-between",
             },
+            // {
+            //   name: "Pre-eclampsia",
+            //   value: "pre-eclampsia",
+            //   checked: false,
+            //   labelPlacement: "start",
+            //   colSize: "6",
+            //   justify: "space-between",
+            // },
           ],
         },
       },
@@ -407,11 +415,12 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Does the woman have any complications due to past pregnancies?",
           },
           data: [
             {
               name: "Pre-eclampsia",
-              value: "value",
+              value: "pre-eclampsia",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -419,7 +428,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
             },
             {
               name: "Eclampsia",
-              value: "value",
+              value: "eclampsia",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -435,11 +444,12 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Does the woman have any complications due to past pregnancies?",
           },
           data: [
             {
               name: "Puerperal Sepsis",
-              value: "value",
+              value: "puerperal sepsis",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -447,7 +457,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
             },
             {
               name: "Baby died within 24hrs of birth",
-              value: "value",
+              value: "baby died within 24hrs of birth",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -462,11 +472,12 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Does the woman have any complications due to past pregnancies?",
           },
           data: [
             {
               name: "Convulsions",
-              value: "value",
+              value: "convulsions",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -474,7 +485,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
             },
             {
               name: "Forceps",
-              value: "value",
+              value: "forceps",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -490,11 +501,12 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Does the woman have any complications due to past pregnancies?",
           },
           data: [
             {
               name: "Gestational diabetes mellitus",
-              value: "value",
+              value: "gestational diabetes mellitus",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -502,7 +514,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
             },
             {
               name: "Heavy bleeding",
-              value: "value",
+              value: "heavy bleeding",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -518,11 +530,12 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Does the woman have any complications due to past pregnancies?",
           },
           data: [
             {
               name: "Macrosomia",
-              value: "value",
+              value: "macrosomia",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -530,7 +543,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
             },
             {
               name: "Perineal tear (3rd or 4th degree)",
-              value: "value",
+              value: "perineal tear (3rd or 4th degree)",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -545,6 +558,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Does the woman have any complications due to past pregnancies?",
           },
           data: [
             {
@@ -557,7 +571,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
             },
             {
               name: "Other",
-              value: "otherInfo",
+              value: "other",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -571,7 +585,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
         isFinishBtn: false,
         sectionHeader: "",
         classDash: "dashed_bottom_border _padding",
-
+        name: "Does the woman have any complications due to past pregnancies?",
         data: {
           rowData: [
             {
