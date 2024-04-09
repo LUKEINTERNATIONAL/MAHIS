@@ -1,328 +1,328 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg';
 
-const medicalHistoryForm ={
-    dilationAndCurrettage:{
-        name:"Dilation and currettage",
+const medicalHistoryForm = {
+    dilationAndCurrettage: {
+        name: "Dilation and currettage",
         value: "dilation"
     },
-        Myomectomy:{
-        name:"Myomectomy",
+    Myomectomy: {
+        name: "Myomectomy",
         value: "myomectomy"
-    },  
-        removalOfOvarianCystst:{
-        name:"Removal of ovarian cystst",
+    },
+    removalOfOvarianCystst: {
+        name: "Removal of ovarian cystst",
         value: "removelOfOvarianCystst"
     },
-        Oophorectomy:{
-        name:"Oophorectomy",
+    Oophorectomy: {
+        name: "Oophorectomy",
         value: "oophorectomy"
-    },  
-       Salpingectomy:{
-        name:"Salpingectomy",
+    },
+    Salpingectomy: {
+        name: "Salpingectomy",
         value: "salpingectomy"
     },
-        cervicalCone:{
-        name:"Cervical cone",
+    cervicalCone: {
+        name: "Cervical cone",
         value: "cervicalCone"
     },
-       otherSurgerirs:{
-        name:"Other",
+    otherSurgerirs: {
+        name: "Other",
         value: "otherSurgerirs"
-       }
+    }
 }
 
-const allegiesForm ={
-        albendazole:{
-        name:"Albendazole",
+const allegiesForm = {
+    albendazole: {
+        name: "Albendazole",
         value: "albendazole"
     },
-       aluminiumHydroxide:{
-        name:"Aluminium-hydroxide",
+    aluminiumHydroxide: {
+        name: "Aluminium-hydroxide",
         value: "aluminiumHydroxide"
-    },  
-       calcium:{
-        name:"Calcium",
+    },
+    calcium: {
+        name: "Calcium",
         value: "calcium"
     },
-        chamomile:{
-        name:"Chamomile",
+    chamomile: {
+        name: "Chamomile",
         value: "chamomile"
-    },  
-       folicAcid:{
-        name:"Folic-acid",
+    },
+    folicAcid: {
+        name: "Folic-acid",
         value: "folicAcid"
     },
-        ginger:{
-        name:"Ginger",
+    ginger: {
+        name: "Ginger",
         value: "ginger"
     },
-        fish:{
-        name:"Fish",
+    fish: {
+        name: "Fish",
         value: "fish"
-    },  
-       iron:{
-        name:"Iron",
+    },
+    iron: {
+        name: "Iron",
         value: "iron"
     },
-        malariaMedication:{
-        name:"sulfadoxine-pyrimethamine",
+    malariaMedication: {
+        name: "sulfadoxine-pyrimethamine",
         value: "malariaMedication"
-    },  
-        mebendazole:{
-        name:"Mebendazole",
+    },
+    mebendazole: {
+        name: "Mebendazole",
         value: "mebendazole"
     },
-        penicillin:{
-        name:"Penicillin",
+    penicillin: {
+        name: "Penicillin",
         value: "penicillin"
-    },  
-       prEPTenofovirDisoproxilFumarate:{
-        name:"PrEP(TDF)",
+    },
+    prEPTenofovirDisoproxilFumarate: {
+        name: "PrEP(TDF)",
         value: "prEPTenofovirDisoproxilFumarate"
     },
-        otherAllegies:{
-        name:"",
+    otherAllegies: {
+        name: "",
         value: "OtherAllergies"
-       }
+    }
 }
 
 const chronicHealthConditionsForm = {
-        autoImmuneDesease:{
-        name:"Auto immune desease",
+    autoImmuneDesease: {
+        name: "Auto immune desease",
         value: "autoImmuneDesease"
     },
-       asthma:{
-        name:"Asthma",
+    asthma: {
+        name: "Asthma",
         value: "asthma"
-    },  
-       diabetes:{
-        name:"Diabetes",
+    },
+    diabetes: {
+        name: "Diabetes",
         value: "diabetes"
     }
 }
 
 const bloodDisorderForm = {
-        sickleCell:{
-        name:"Sickle cell",
+    sickleCell: {
+        name: "Sickle cell",
         value: "sickleCell"
     },
-       anaemia:{
-        name:"Anemia",
+    anaemia: {
+        name: "Anemia",
         value: "anemia"
-    },  
-       thalassemia:{
-        name:"Thalassemia",
+    },
+    thalassemia: {
+        name: "Thalassemia",
         value: "thalassemia"
     }
 }
 
 const cancerForm = {
 
-        gynaelogical:{
-        name:"Gynaecological",
+    gynaelogical: {
+        name: "Gynaecological",
         value: "gynaecological"
     },
-        otherSite:{
-        name:"",
+    otherSite: {
+        name: "",
         value: "otherSite"
-       }
+    }
 }
 
 const heartDeseaseForm = {
 
-        ccf:{
-        name:"CCF",
+    ccf: {
+        name: "CCF",
         value: "ccf"
     },
-        rhd:{
-        name:"RHD",
+    rhd: {
+        name: "RHD",
         value: "rhd"
     }
 }
 
 const diabetesForm = {
 
-        gestationalDiabetes:{
-        name:"Gestational diabetes",
+    gestationalDiabetes: {
+        name: "Gestational diabetes",
         value: "gestationalDiabetes"
     },
-        preExistingType1:{
-        name:"pre-existing type 1",
+    preExistingType1: {
+        name: "pre-existing type 1",
         value: "pre-existingType1"
     },
-        preExistingType2:{
-        name:"pre-existing type 2",
+    preExistingType2: {
+        name: "pre-existing type 2",
         value: "pre-existingType2"
     },
-        otherDiabetis:{
-        name:"",
+    otherDiabetis: {
+        name: "",
         value: "otherDiabetis"
-       }
+    }
 }
 
 const epilespyForm = {
 
-        epilespy:{
-        name:"Epilespy",
+    epilespy: {
+        name: "Epilespy",
         value: "epilespy"
     }
 }
-const hivTestForm ={
+const hivTestForm = {
 
-        hivTestRequired:{
-        name:"HIV test required",
+    hivTestRequired: {
+        name: "HIV test required",
         value: "hivTestRequired"
     },
 
-        hivTestOrdered:{
-        name:"HIV test ordered",
+    hivTestOrdered: {
+        name: "HIV test ordered",
         value: "hivTestOrdered"
     },
-        hivTestConducted:{
-        name:"HIV test conducted",
+    hivTestConducted: {
+        name: "HIV test conducted",
         value: "hivTestConducted"
     },
 
-        hivTestNotDone:{
-        name:"HIV test not done",
+    hivTestNotDone: {
+        name: "HIV test not done",
         value: "hivTestNotDone"
     },
-        testStockOut:{
-        name:"Test stock-out",
+    testStockOut: {
+        name: "Test stock-out",
         value: "testStockOut"
     },
-        expiredTests:{
-        name:"Expired tests",
+    expiredTests: {
+        name: "Expired tests",
         value: " expiredTests"
     },
-        hivPositive:{
-        name:"HIV Positive",
+    hivPositive: {
+        name: "HIV Positive",
         value: "hivPositive"
-    },  
-        hivNegative1:{
-        name:"HIV Negative 1",
+    },
+    hivNegative1: {
+        name: "HIV Negative 1",
         value: "hivNegative1"
-    },  
-        hivNegative2:{
-        name:"HIV Negative 2",
+    },
+    hivNegative2: {
+        name: "HIV Negative 2",
         value: "hivNegative2"
-    },  
-        inconclusive:{
-        name:"Inconclusive",
+    },
+    inconclusive: {
+        name: "Inconclusive",
         value: "inconclusive"
     },
-        highRiskYes:{
-        name:"Yes",
+    highRiskYes: {
+        name: "Yes",
         value: "yes"
     },
-        highRiskNo:{
-        name:"No",
+    highRiskNo: {
+        name: "No",
         value: "no"
     },
-        testDate:{
-        name:"Test Date",
+    testDate: {
+        name: "Test Date",
         value: "testDate"
     },
-        reasonsTestNotDone:{
-        name:"",
+    reasonsTestNotDone: {
+        name: "",
         value: "reasonsTestNotDone"
     }
 }
 
-const syphilisForm={
+const syphilisForm = {
 
-        syphilisTestConducted:{
-        name:"Syphilis test conducted",
+    syphilisTestConducted: {
+        name: "Syphilis test conducted",
         value: "syphilisTestConducted"
     },
 
-        syphilisTestOrdered:{
-        name:"Syphilis test ordered",
+    syphilisTestOrdered: {
+        name: "Syphilis test ordered",
         value: "syphilisTestOrdered"
     },
-        syphilisTestNotDone:{
-        name:"Syphilis Test Not Done",
+    syphilisTestNotDone: {
+        name: "Syphilis Test Not Done",
         value: "syphilisTestNotDone"
     },
 
-        rapidSyphilisTest:{
-        name:"Rapid syphilis test",
+    rapidSyphilisTest: {
+        name: "Rapid syphilis test",
         value: "rapidSyphilisTest"
     },
-        offSiteLabTest:{
-        name:"Off-site lab test",
+    offSiteLabTest: {
+        name: "Off-site lab test",
         value: "offSiteLabTest"
     },
-        treponemaPallidum:{
-        name:"TPHA",
+    treponemaPallidum: {
+        name: "TPHA",
         value: "treponemaPallidum"
     },
-        testStockOut:{
-        name:"Test stock-out",
+    testStockOut: {
+        name: "Test stock-out",
         value: "testStockOut"
-    },  
-        expiredTests:{
-        name:"Expired tests",
+    },
+    expiredTests: {
+        name: "Expired tests",
         value: "expiredTests"
     },
 
-    other:{
-        name:"Other",
+    other: {
+        name: "Other",
         value: "other"
     },
-    syphilisPositiveResults:{
-        name:"Syphilis positive",
+    syphilisPositiveResults: {
+        name: "Syphilis positive",
         value: "syphilisPositiveResults"
     },  
         syphilisNegativeResults:{
         name:"Syphilis Negative",
         value: "syphilisNegativeResults"
     },
-        syphilisPositiveDiagnosis:{
-        name:"Syphilis positive",
+    syphilisPositiveDiagnosis: {
+        name: "Syphilis positive",
         value: "syphilisPositiveDiagnosis"
     },
-        syphilisNegativeDiagnosis:{
-        name:"Syphilis Negative",
+    syphilisNegativeDiagnosis: {
+        name: "Syphilis Negative",
         value: "syphilisNegativeDiagnosis"
     },
-        testDate:{
-        name:"Test Date",
+    testDate: {
+        name: "Test Date",
         value: "testDate"
     },
-        reasonsTestNotDone:{
-        name:"Reason",
+    reasonsTestNotDone: {
+        name: "Reason",
         value: ""
     }
 }
 
 const hypertensionForm = {
 
-        hypertension:{
-        name:"Hypertension",
+    hypertension: {
+        name: "Hypertension",
         value: "hypertension"
     }
 }
 const kidneyForm = {
 
-        kidney:{
-        name:"Kidney",
+    kidney: {
+        name: "Kidney",
         value: "kidney"
     }
 }
 const tbForm = {
 
-        tb:{
-        name:"TB",
+    tb: {
+        name: "TB",
         value: "tb"
     }
 }
 
 const mentalIllinessForm = {
 
-        mentalIlliness:{
-        name:"Mental  illiness",
+    mentalIlliness: {
+        name: "Mental  illiness",
         value: "mentalIlliness"
     }
 }

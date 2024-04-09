@@ -174,37 +174,6 @@ export const useRegistrationStore = defineStore("registrationStore", {
         ] as any,
         socialHistory: [
             {
-                selectedData: [],
-                isFinishBtn: false,
-                radioBtnContent: {
-                    header: {
-                        title: "Marital status",
-                        selectedValue: "",
-                        name: "maritalStatus",
-                        alertsError: false,
-                        alertsErrorMassage: "",
-                    },
-                    data: [
-                        {
-                            name: "Single",
-                            value: "single",
-                        },
-                        {
-                            name: "Married",
-                            value: "married",
-                        },
-                        {
-                            name: "Widow",
-                            value: "widow",
-                        },
-                        {
-                            name: "Divorced",
-                            value: "divorced",
-                        },
-                    ],
-                },
-            },
-            {
                 data: {
                     rowData: [
                         {
@@ -250,8 +219,94 @@ export const useRegistrationStore = defineStore("registrationStore", {
                     ],
                 },
             },
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                radioBtnContent: {
+                    header: {
+                        title: "Marital status",
+                        selectedValue: "",
+                        name: "maritalStatus",
+                        alertsError: false,
+                        alertsErrorMassage: "",
+                    },
+                    data: [
+                        {
+                            name: "Single",
+                            value: "single",
+                        },
+                        {
+                            name: "Married",
+                            value: "married",
+                        },
+                        {
+                            name: "Widow",
+                            value: "widow",
+                        },
+                        {
+                            name: "Divorced",
+                            value: "divorced",
+                        },
+                    ],
+                },
+            },
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                radioBtnContent: {
+                    header: {
+                        title: "Highest Level Of Education",
+                        selectedValue: "",
+                        name: "highestLevelOfEducation",
+                        alertsError: false,
+                        alertsErrorMassage: "",
+                    },
+                    data: [
+                        {
+                            name: "No education",
+                            value: "No education",
+                        },
+                        {
+                            name: "Primary school",
+                            value: "primary school",
+                        },
+                        {
+                            name: "Secondary school",
+                            value: "secondary school",
+                        },
+                        {
+                            name: "Tertiary education",
+                            value: "tertiary education",
+                        },
+                    ],
+                },
+            },
+
         ] as any,
         homeLocation: [
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                checkboxBtnContent:
+                {
+                    header: {
+                        title: '',
+                        selectedValue: '',
+                    },
+                    data: [
+                        {
+
+                            name: 'Same as current',
+                            value: 'sameas',
+                            labelPlacement: 'start',
+                            colSize: '6',
+                            justify: 'space-between',
+                            checked: false
+                        }
+                    ],
+                }
+
+            },
             {
                 selectedData: [],
                 isFinishBtn: false,
@@ -337,6 +392,7 @@ export const useRegistrationStore = defineStore("registrationStore", {
             },
         ] as any,
         currentLocation: [
+
             {
                 selectedData: [],
                 isFinishBtn: false,
@@ -483,8 +539,34 @@ export const useRegistrationStore = defineStore("registrationStore", {
                         {
                             colData: [
                                 {
+                                    inputHeader: "Guardian National ID",
+                                    iconRight: icons.scannerIcon,
+                                    icon: icons.nationalID,
+                                    value: "",
+                                    name: "guardianNationalID",
+                                    eventType: "input",
+                                    alertsError: false,
+                                    alertsErrorMassage: "",
+                                    placeholder: "__-__-__-__",
+                                    displayNone: true
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
+
+
+            {
+                selectedData: {},
+                isFinishBtn: false,
+                data: {
+                    rowData: [
+                        {
+                            colData: [
+                                {
                                     inputHeader: "First name",
-                                    icon: icons.fullName,
+                                    //icon: icons.fullName,
                                     value: "",
                                     name: "guardianFirstname",
                                     eventType: "input",
@@ -596,5 +678,5 @@ export const useRegistrationStore = defineStore("registrationStore", {
             this.guardianInformation = data;
         },
     },
-    persist: true,
+    persist: false,
 });

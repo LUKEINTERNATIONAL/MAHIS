@@ -54,7 +54,7 @@ import { useWomanBehaviourStore } from "@/apps/ANC/store/profile/womanBehaviourS
 import { Service } from "@/services/service";
 import { ProfileService } from "@/services/anc_profile_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
-import { formatRadioButtonData } from "@/services/formatServerData";
+import { formatCheckBoxData, formatRadioButtonData } from "@/services/formatServerData";
 import { Preterms } from "../service/preterm";
 
 // function someChecked(options, errorMassage) {
@@ -152,14 +152,6 @@ export default defineComponent({
                     title: "Past Medical history",
                     componet: "MedicalHistory",
                     value: "2",
-                    // validation: {
-                    //   medicalHistory: (data) => someChecked(data, "Medical history is required"),
-                    //   allegy: (data) => someChecked(data, "Allergy is required"),
-                    //   //existingChronicHealthConditions: (data)=>someChecked(data, "Existing chronic conditions is required"),
-                    //   hivTest: (data)=>someChecked(data, "HIV test required"),
-                    //   syphilisTest: (data)=>someChecked(data, "Syphilis test is required")
-
-                    // }
                 },
                 {
                     title: "Current Pregnancy",
@@ -190,31 +182,6 @@ export default defineComponent({
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useObstreticHistoryStore, ["preterm"]),
         ...mapState(useObstreticHistoryStore, ["Complications"]),
-    },
-    saveData() {
-        const medicalConditions = [
-            "Auto immune desease",
-            "Asthma",
-            "Diabetes",
-            "Sickle cell",
-            "Anaemia",
-            "Thalassemia",
-            "Gynaecological",
-            "CCF",
-            "RHD",
-            "Gestational diabetes",
-            "pre-existing type 1",
-            "pre-existing type 2",
-            "Epilepsy",
-            "Hypertension",
-            "Kidney",
-            "TB",
-            "Mental  illiness",
-        ];
-        // for (const condition of medicalConditions) {
-        //   const selectedValue = getCheckboxSelectedValue(this.exisitingChronicHealthConditions, condition);
-        //   console.log(selectedValue);
-        // }
     },
     mounted() {
         // this.markWizard()
@@ -256,62 +223,43 @@ export default defineComponent({
                 return item?.data;
             });
         },
-        saveData() {
-            console.log('testing')
-            // const errors = []
-            // this.StepperData.forEach((stepper)=> {
-            //   if (!stepper.validation) return
-            //   Object.keys(stepper.validation).forEach((validationName) => {
-            //     if (typeof stepper.validation[validationName] === 'function') {
-            //       const state = stepper.validation[validationName](this[validationName])
-            //       if (state) errors.push(state)
-            //     }
-            //   })
-            // })
-            // if (errors.length) {
-            //   return alert(errors.join(','))
-            // }
-            this.savePreterm();
-            //  this.$router.push('QuickCheck');
+         async saveData() {
+            this.savePreterm()
+            this.savePastPregnancyComplication()
         },
-        savePrevPregnancies() {},
-
-        // async savePreterm() {
+        async savePreterm(){
+        // if (this.preterm[0].selectedData.length > 0) {
         //     const userID: any = Service.getUserID();
-        //     const pretermInstance = new ProfileService(this.demographics.patient_id, userID);
-        //     await pretermInstance.createEncounter();
-        //     const data = await this.buildPreterm();
-        //     await pretermInstance.saveObservationList(data);
-        // },
-        // async buildPreterm() {
-        //     const id = await ConceptService.getConceptID(getRadioSelectedValue(this.preterm, "pretermInfo"));
-        //     console.log(id);
-        //     return [
-        //         {
-        //             concept_id: 7141,
-        //             value_coded: id,
-        //             obs_datetime: Service.getSessionDate(),
-        //         },
-        //     ];
-        // },
-
-        async buildPretermData() {
-
+        //     const Preterm = new ProfileService(this.demographics.patient_id, userID);
+        //     const encounter = await Preterm.createEncounter();
+        //     if (!encounter) return toastWarning("Unable to create Preterm encounter");
+        //     const patientStatus = await Preterm.saveObservationList(await this.buildPastObstetricHistory());
+        //     if (!patientStatus) return toastWarning("Unable to create Preterm !");
+        //     toastSuccess("Pretermhas been created");
+        // }
+       // console.log(await this.buildPreterm())
+        },
+        async savePastPregnancyComplication(){
+        // if (this.preterm[0].selectedData.length > 0) {
+        //     const userID: any = Service.getUserID();
+        //     const Preterm = new ProfileService(this.demographics.patient_id, userID);
+        //     const encounter = await Preterm.createEncounter();
+        //     if (!encounter) return toastWarning("Unable to create Preterm encounter");
+        //     const patientStatus = await Preterm.saveObservationList(await this.buildPastObstetricHistory());
+        //     if (!patientStatus) return toastWarning("Unable to create Preterm !");
+        //     toastSuccess("Pretermhas been created");
+        // }
+        console.log(await this.buildPastPregnancyComplication())
+        },
+        async buildPreterm() {
             return [
-                ...(await formatRadioButtonData(this.preterm)),
-                
+                ...(await formatRadioButtonData(this.preterm)),       
             ];
         },
-        async savePreterm() {
-            const data: any = await this.buildPretermData();
-               console.log("save preterm=====>",data)
-            if (data.length > 0) {
-                const userID: any = Service.getUserID();
-                const pretermInstance = new Preterms();
-                pretermInstance.onSubmit(this.demographics.patient_id, userID, data);
-            }
-         
-           
+        async buildPastPregnancyComplication(){
+            return [
+                ...(await formatCheckBoxData(this.Complications))        
+            ];
         },
 
         openModal() {

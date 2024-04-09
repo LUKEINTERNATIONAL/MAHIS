@@ -1,39 +1,13 @@
 <template>
     <ion-list>
-        <ion-label>Medical allergies</ion-label>
+        <ion-label>Allergies (Medication, Healthcare items, Environment and Food)</ion-label>
         <ion-row>
             <ion-item lines="none" class="medicalAl">
                 <ion-row>
-                    <div v-for="(item, index) in selectedMedicalAllergiesList" :key="index">
-                        <ion-button v-if="item.selected" @click="selectAl(item)" class="medicalAlBtn">
+                    <div v-for="(item, index) in selectedAllergiesList2" :key="index">
+                        <ion-button v-if="item.selected" class="medicalAlBtn">
                             {{ item.name }}
-                            <ion-icon slot="end" style="font-size: x-large" :icon="closeOutline"></ion-icon>
                         </ion-button>
-                    </div>
-                    <div>
-                        <ion-button id="click-trigger" fill="clear" class="medicalAlAddBtn" @click="setFocus">
-                            <ion-icon :icon="addOutline"></ion-icon>
-                        </ion-button>
-                        <ion-popover
-                            class="popover-al"
-                            :show-backdrop="false"
-                            trigger="click-trigger"
-                            trigger-action="click"
-                            @didPresent="dissmissDrugAddField"
-                        >
-                            <ion-content color="light" class="ion-padding content-al">
-                                <ion-label>Choose the allergy:</ion-label>
-                                <ion-input ref="input" v-model="drugName" @ionInput="FindAllegicDrugName" fill="outline"></ion-input>
-                                <ion-list class="list-al">
-                                    <div class="item-al" v-for="(item, index) in medicalAllergiesList" :key="index">
-                                        <ion-label @click="selectAl(item)" style="display: flex; justify-content: space-between">
-                                            {{ item.name }}
-                                            <ion-icon v-if="item.selected" class="icon-al" :icon="checkmarkOutline"></ion-icon>
-                                        </ion-label>
-                                    </div>
-                                </ion-list>
-                            </ion-content>
-                        </ion-popover>
                     </div>
                 </ion-row>
             </ion-item>
@@ -42,7 +16,7 @@
         <ion-accordion-group ref="accordionGroup" class="previousView">
             <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
                 <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Previous visits allergies</ion-label>
+                    <ion-label class="previousLabel">Allergies</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
                     <div class="ionLbltp" v-for="(item, index) in FirstPreviousAllegies" :key="index">
@@ -134,6 +108,18 @@
                             </ion-list>
                         </ion-content>
                     </ion-popover>
+                </ion-col>
+                <ion-col>
+                <ListPicker style="margin-top: -2%;"
+                    :multiSelection="multi_Selection"
+                    :uniqueId="uniqueId"
+                    :name_of_list="name_of_list"
+                    :choose_place_holder="list_place_holder"
+                    :items_-list="route_list"
+                    :show_label="show_list_label"
+                    @item-list-up-dated="routeListUpdated"
+                    @item-list-filtered="routeListFiltred"
+                />
                 </ion-col>
                 <ion-col>
                     <ion-item class="input_item">
@@ -261,8 +247,12 @@
                 </ion-accordion-group>
             </div>
         </div>
+
         <div style="margin-top: 14px; margin-left: 10px">
             <ion-label class="tpStndCls">Non-pharmalogical therapy and other notes</ion-label>
+
+            <NonPharmacologicalIntervention/>
+            
             <ion-item class="input_item" style="min-height: 120px; margin-top: 14px">
                 <ion-label> <ion-icon slot="start" :icon="iconsContent.editPen" aria-hidden="true"></ion-icon> </ion-label>
                 <ion-textarea
@@ -331,6 +321,7 @@ export default defineComponent({
     name: "xxxComponent",
 });
 </script>
+
 <script setup lang="ts">
 import {
     IonContent,
@@ -368,11 +359,14 @@ import { DrugService } from "@/services/drug_service";
 import { ConceptName } from "@/interfaces/conceptName";
 import DynamicButton from "@/components/DynamicButton.vue";
 import DynamicList from "@/components/DynamicList.vue";
-import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { ConceptService } from "@/services/concept_service";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { Service } from "@/services/service";
 import { PreviousTreatment } from "@/apps/NCD/services/treatment";
+import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
+import { useAllegyStore} from "@/apps/OPD/stores/AllergyStore"
+import NonPharmacologicalIntervention from "@/apps/OPD/components/ConsultationPlan/NonPharmacologicalIntervention.vue"
+import ListPicker from "@/apps/OPD/components/ConsultationPlan/ListPicker.vue"
 
 const iconsContent = icons;
 const drug_frequencies = DRUG_FREQUENCIES;
@@ -404,8 +398,9 @@ const btnName3 = "Send to dispensation";
 const btnFill = "clear";
 const showMoreMedicationsMsg = ref("Show more medications");
 const store = useTreatmentPlanStore();
+const store2 = useAllegyStore();
+const selectedAllergiesList2 = computed(() => store2.selectedMedicalAllergiesList);
 const selectedMedicalDrugsList = computed(() => store.selectedMedicalDrugsList);
-const medicalAllergiesList = computed(() => store.medicalAllergiesList);
 const nonPharmalogicalTherapyAndOtherNotes = computed(() => store.nonPharmalogicalTherapyAndOtherNotes);
 const selectedMedicalAllergiesList = computed(() => store.selectedMedicalAllergiesList);
 const input = ref();
@@ -420,6 +415,34 @@ const showMoreNotesMsg = ref("Show more notes");
 const showMoreAllergyMsg = ref("Show more allergies");
 const FirstPreviousAllegies = ref();
 const RestOfPreviousAllegies = ref();
+const currentDrugOb = ref()
+
+const multi_Selection = false as any
+const uniqueId = "45" as any
+const name_of_list = ref("List" as any)
+const list_place_holder = ref("Please select method of prescribing medication" as any)
+const route_list = ref([
+    { name: "Oral" },
+    { name: "Intravenous (IV)" },
+    { name: "Intramuscular (IM)" },
+    { name: "Intradermal" },
+    { name: "Rectally" },
+    { name: "Sublingual" },
+    { name: "Vaginally" },
+    { name: "Buccal" },
+    { name: "Subcutaneous" },
+    { name: "Intraosseous" },
+    { name: "Other"}
+] as any)
+const show_list_label = false as any
+
+function routeListUpdated(data: any) {
+
+}
+
+function routeListFiltred(data: any) {
+
+}
 
 onMounted(async () => {
     const previousTreatment = new PreviousTreatment();
@@ -528,6 +551,11 @@ async function saveData() {
     const systemSessionDate = Service.getSessionDate();
     const daysToAdd = duration.value;
     const generatedPrescriptionDate = addDaysToDate(systemSessionDate, parseInt(duration.value));
+    let highlightbackground = false
+
+    if (isPresentInAllergyList(currentDrugOb.value) == true) {
+        highlightbackground = true;
+    }
 
     const drugString = {
         drugName: drugName.value,
@@ -537,6 +565,7 @@ async function saveData() {
         prescription: generatedPrescriptionDate,
         drug_id: drug_id.value,
         units: units.value,
+        highlightbackground: highlightbackground
     };
     selectedMedicalDrugsList.value.push(drugString);
     drugName.value = "";
@@ -546,6 +575,7 @@ async function saveData() {
     prescription.value = "";
     componentKey.value++;
     saveStateValuesState();
+    
 }
 
 async function FindDrugName(text: any) {
@@ -558,22 +588,22 @@ async function FindDrugName(text: any) {
         page: page,
         page_size: limit,
     });
-    const filter_id_array: any[] = [];
-    selectedMedicalAllergiesList.value.forEach((selectedMedicalAllergy: any) => {
-        if (selectedMedicalAllergy.selected) {
-            filter_id_array.push(selectedMedicalAllergy.concept_id);
-        }
-    });
+    // const filter_id_array: any[] = [];
+    // selectedAllergiesList2.value.forEach((selectedMedicalAllergy: any) => {
+    //     if (selectedMedicalAllergy.selected) {
+    //         filter_id_array.push(selectedMedicalAllergy.concept_id);
+    //     }
+    // });
 
-    const filteredDrugs = filterArrayByIDs(drugs as any, filter_id_array as any);
+    //const filteredDrugs = filterArrayByIDs(drugs as any, filter_id_array as any);
 
-    filteredDrugs.map((drug: any) => ({
+    drugs.map((drug: any) => ({
         label: drug.name,
         value: drug.name,
         other: drug,
     }));
 
-    diagnosisData.value = filteredDrugs;
+    diagnosisData.value = drugs;
 }
 
 async function FindDrugName2(text: any) {
@@ -589,23 +619,39 @@ async function FindDrugName2(text: any) {
         page: page,
         page_size: limit,
     });
-    const filter_id_array: any[] = [];
-    selectedMedicalAllergiesList.value.forEach((selectedMedicalAllergy: any) => {
-        if (selectedMedicalAllergy.selected) {
-            filter_id_array.push(selectedMedicalAllergy.concept_id);
-        }
-    });
+    // const filter_id_array: any[] = []
+    // selectedAllergiesList2.value.forEach((selectedMedicalAllergy: any) => {
+    //     if (selectedMedicalAllergy.selected) {
+    //         filter_id_array.push(selectedMedicalAllergy.concept_id);
+    //     }
+    // })
 
-    const filteredDrugs = filterArrayByIDs(drugs as any, filter_id_array as any);
+    //const filteredDrugs = filterArrayByIDs(drugs as any, filter_id_array as any);
 
-    filteredDrugs.map((drug: any) => ({
+    drugs.map((drug: any) => ({
         label: drug.name,
         value: drug.name,
         other: drug,
     }));
 
-    diagnosisData.value = filteredDrugs;
-    return filteredDrugs;
+    diagnosisData.value = drugs;
+    return drugs;
+}
+
+function isPresentInAllergyList(obj: any) {
+    const filter_id_array: any[] = []
+    selectedAllergiesList2.value.forEach((selectedMedicalAllergy: any) => {
+        if (selectedMedicalAllergy.selected) {
+            filter_id_array.push(selectedMedicalAllergy.concept_id);
+        }
+    })
+    const filteredDrugs = hasMatchingIDs([obj] as any, filter_id_array as any)
+    if (filteredDrugs == true) {
+        toastWarning("Client is allergic to the selected medication", 4000)
+        return true;
+    } else {
+        return false
+    }
 }
 
 async function findIfDrugNameExists() {
@@ -626,8 +672,19 @@ async function findIfDrugNameExists() {
 }
 
 function filterArrayByIDs(mainArray: [], idsToFilter: []) {
-    return mainArray.filter((item: any) => !idsToFilter.includes(item.concept_id as never));
+    return mainArray.filter((item: any) => 
+        !idsToFilter.includes(item.concept_id as never)
+    );
 }
+
+function hasMatchingIDs(mainArray: any[], idsToFilter: any[]): boolean {
+    // Check if any item in mainArray has concept_id included in idsToFilter
+    return mainArray.some((item: any) => 
+        idsToFilter.includes(item.concept_id as never)
+    );
+}
+
+
 async function FindAllegicDrugName(text: any) {
     const searchText = text.target.value;
     const page = 1,
@@ -662,6 +719,8 @@ function selectedDrugName(name: any, obj: any) {
     drugName.value = name;
     drug_id.value = obj.drug_id;
     units.value = obj.units;
+    currentDrugOb.value = obj
+    isPresentInAllergyList(obj)
 }
 
 function popoverOpenForFrequencyFn2() {
@@ -697,9 +756,8 @@ function removeItemAtIndex(index: any) {
 }
 
 function validateNotes(ev: any) {
-    let value = ev.target.value;
-    const textArry = [];
-    refSetNonPharmalogicalTherapyAndOtherNotes(value);
+    let value = ev.target.value
+    refSetNonPharmalogicalTherapyAndOtherNotes(value)
 }
 
 function saveStateValuesState() {

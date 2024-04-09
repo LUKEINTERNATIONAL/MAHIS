@@ -37,7 +37,7 @@
                     <div>
                         <ion-icon :icon="iconsContent.bmi_rusults"></ion-icon>
                     </div>
-                    <div style="margin-left: 40px">{{ Systolic.value_text }} / {{ Diastolic.value_text }}</div>
+                    <div style="margin-left: 40px">{{ Systolic?.value_text }} / {{ Diastolic?.value_text }}</div>
                 </div>
             </div>
         </span>

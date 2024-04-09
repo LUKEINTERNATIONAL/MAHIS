@@ -43,7 +43,7 @@ import { chevronBackOutline, checkmark } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
-import { useVitalsStore } from "@/stores/VitalsStore";
+import { useVitalsStore } from "../stores/OpdVitalsStore";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useInvestigationStore } from "@/stores/InvestigationStore";
 import { useDiagnosisStore } from "@/stores/DiagnosisStore";
@@ -54,13 +54,30 @@ import { LabOrder } from "@/apps/NCD/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { useDispositionStore } from "@/stores/OutcomeStore";
+import { usePregnancyStore } from "@/apps/OPD/stores/PregnancyStore";
+import { usePresentingComplaintsStore } from "@/apps/OPD/stores/PresentingComplaintsStore";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
-import { Diagnosis } from "@/apps/NCD/services/diagnosis";
+import { useOPDDiagnosisStore } from "@/apps/OPD/stores/DiagnosisStore";
+import { usePastMedicalHistoryStore } from "@/apps/OPD/stores/PastMedicalHistoryStore";
 import { Treatment } from "@/apps/NCD/services/treatment";
 import { isEmpty } from "lodash";
 import HisDate from "@/utils/Date";
 import { defineComponent } from "vue";
 import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
+import { Diagnosis } from "@/apps/NCD/services/diagnosis";
+import {
+    modifyRadioValue,
+    getRadioSelectedValue,
+    getCheckboxSelectedValue,
+    getFieldValue,
+    getCheckboxInputField,
+    modifyFieldValue,
+    modifyCheckboxValue,
+} from "@/services/data_helpers";
+import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from "@/services/formatServerData";
+import { PatientComplaintsService } from "@/apps/OPD/services/patient_complaints_service";
+import { PatientGeneralConsultationService } from "@/services/patient_general_consultation";
+import { PastMedicalHistory } from "../services/past_medical_history_service";
 export default defineComponent({
     name: "Home",
     components: {
@@ -91,7 +108,7 @@ export default defineComponent({
             dispositions: "" as any,
             wizardData: [
                 {
-                    title: "Vital Signs",
+                    title: "Clinical Assessment",
                     class: "common_step",
                     checked: false,
                     disabled: false,
@@ -117,7 +134,7 @@ export default defineComponent({
                     last_step: "",
                 },
                 {
-                    title: "Complications Screening",
+                    title: "Treatment",
                     class: "common_step",
                     checked: "",
                     icon: false,
@@ -126,37 +143,19 @@ export default defineComponent({
                     last_step: "",
                 },
                 {
-                    title: "Treatment",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 5,
-                    last_step: "",
-                },
-                {
-                    title: "Next Appointment",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 6,
-                    last_step: "",
-                },
-                {
                     title: "Outcome",
                     class: "common_step",
                     checked: "",
                     icon: false,
                     disabled: false,
-                    number: 7,
+                    number: 5,
                     last_step: "last_step",
                 },
             ],
             StepperData: [
                 {
-                    title: "Vital Signs",
-                    componet: "Vitals",
+                    title: "Clinical Assessment",
+                    componet: "ClinicalAssessment",
                     value: "1",
                 },
                 {
@@ -166,28 +165,18 @@ export default defineComponent({
                 },
                 {
                     title: "Diagnosis",
-                    componet: "Diagnosis",
+                    componet: "OPDDiagnosis",
                     value: "3",
                 },
                 {
-                    title: "Complications Screening",
-                    componet: "Complications",
+                    title: "Treatment plan",
+                    componet: "OPDTreatmentPlan",
                     value: "4",
                 },
                 {
-                    title: "Treatment plan",
-                    componet: "TreatmentPlan",
-                    value: "5",
-                },
-                {
-                    title: "Next Appointment",
-                    componet: "NextAppointment",
-                    value: "6",
-                },
-                {
                     title: "Outcome",
-                    componet: "Outcome",
-                    value: "7",
+                    componet: "OPDOutcome",
+                    value: "5",
                 },
             ],
             isOpen: false,
@@ -196,12 +185,15 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(usePregnancyStore, ["pregnancy"]),
+        ...mapState(usePresentingComplaintsStore, ["presentingComplaints"]),
+        ...mapState(usePastMedicalHistoryStore, ["pastMedicalHistory"]),
         ...mapState(useVitalsStore, ["vitals"]),
         ...mapState(useInvestigationStore, ["investigations"]),
-        ...mapState(useDiagnosisStore, ["diagnosis"]),
+        ...mapState(useOPDDiagnosisStore, ["OPDdiagnosis"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
     },
-    mounted() {
+    async mounted() {
         this.markWizard();
     },
     watch: {
@@ -217,7 +209,7 @@ export default defineComponent({
             },
             deep: true,
         },
-        diagnosis: {
+        OPDdiagnosis: {
             handler() {
                 this.markWizard();
             },
@@ -249,7 +241,7 @@ export default defineComponent({
                 this.wizardData[1].checked = false;
             }
 
-            if (this.diagnosis[0].selectedData.length > 0) {
+            if (this.OPDdiagnosis[0].selectedData.length > 0) {
                 this.wizardData[2].checked = true;
                 this.wizardData[2].class = "open_step common_step";
             } else {
@@ -265,35 +257,60 @@ export default defineComponent({
         },
         getFormatedData(data: any) {
             return data.map((item: any) => {
-                return item?.data;
+                return item?.data[0] || item?.data;
             });
         },
-        saveData() {
-            if (this.vitals.validationStatus && this.investigations[0].selectedData.length > 0 && this.diagnosis[0].selectedData.length > 0) {
-                this.saveVitals();
-                this.saveInvestigation();
-                this.saveDiagnosis();
-                this.saveTreatmentPlan();
-                this.saveOutComeStatus();
-                this.$router.push("patientProfile");
-            } else {
-                toastWarning("Please complete all required fields");
-                this.saveOutComeStatus();
+        async saveData() {
+            if (this.OPDdiagnosis[0].selectedData.length > 0) {
+                await this.saveDiagnosis();
+            }
+            await this.saveTreatmentPlan();
+            await this.saveOutComeStatus();
+            await this.saveWomenStatus();
+            await this.savePresentingComplaints();
+            await this.savePastMedicalHistory();
+            this.$router.push("patientProfile");
+        },
+        async savePastMedicalHistory() {
+            const pastMedicalHistoryData: any = await this.buildPastMedicalHistory();
+            const userID: any = Service.getUserID();
+            if (pastMedicalHistoryData.length > 0) {
+                const pastMedicalHistory = new PastMedicalHistory(this.demographics.patient_id, userID);
+                const encounter = await pastMedicalHistory.createEncounter();
+                if (!encounter) return toastWarning("Unable to create past medical history encounter");
+                const savingStatus = await pastMedicalHistory.saveObservationList(pastMedicalHistoryData);
+                if (!savingStatus) return toastWarning("Unable to create past medical history!");
+                toastSuccess("Past medical history has been created");
             }
         },
-        saveInvestigation() {
-            const investigationInstance = new LabOrder();
-            investigationInstance.postActivities(this.demographics.patient_id, this.getFormatedData(this.investigations[0].selectedData));
+        async savePresentingComplaints() {
+            if (this.presentingComplaints[0].selectedData.length > 0) {
+                const userID: any = Service.getUserID();
+                const PatientComplaints = new PatientComplaintsService(this.demographics.patient_id, userID);
+                const encounter = await PatientComplaints.createEncounter();
+                if (!encounter) return toastWarning("Unable to create patient complaints encounter");
+                const patientStatus = await PatientComplaints.saveObservationList(this.getFormatedData(this.presentingComplaints[0].selectedData));
+                if (!patientStatus) return toastWarning("Unable to create patient complaints  !");
+                toastSuccess("Patient complaints has been created");
+            }
+            this.presentingComplaints[0].selectedData;
         },
-        saveVitals() {
-            const userID: any = Service.getUserID();
-            const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
-            vitalsInstance.onFinish(this.vitals);
+        async saveWomenStatus() {
+            const womenStatus = await formatRadioButtonData(this.pregnancy);
+            if (womenStatus.length > 0) {
+                const userID: any = Service.getUserID();
+                const patientPregnancy = new PatientGeneralConsultationService(this.demographics.patient_id, userID);
+                const encounter = await patientPregnancy.createEncounter();
+                if (!encounter) return toastWarning("Unable to create pregnant Status encounter");
+                const patientStatus = await patientPregnancy.saveObservationList(womenStatus);
+                if (!patientStatus) return toastWarning("Unable to create pregnant Status !");
+                toastSuccess("Pregnant Status has been created");
+            }
         },
         saveDiagnosis() {
             const userID: any = Service.getUserID();
             const diagnosisInstance = new Diagnosis();
-            diagnosisInstance.onSubmit(this.demographics.patient_id, userID, this.getFormatedData(this.diagnosis[0].selectedData));
+            diagnosisInstance.onSubmit(this.demographics.patient_id, userID, this.getFormatedData(this.OPDdiagnosis[0].selectedData));
         },
         async saveTreatmentPlan() {
             const userID: any = Service.getUserID();
@@ -371,6 +388,13 @@ export default defineComponent({
                     value_coded: allergy.concept_id,
                 };
             });
+        },
+        async buildPastMedicalHistory() {
+            return [
+                ...(await formatCheckBoxData(this.pastMedicalHistory)),
+                ...(await formatRadioButtonData(this.pastMedicalHistory)),
+                ...(await formatInputFiledData(this.pastMedicalHistory)),
+            ];
         },
     },
 });

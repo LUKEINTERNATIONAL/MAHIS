@@ -1,11 +1,10 @@
 import { AppEncounterService } from "@/services/app_encounter_service";
 
-export class ProfileService extends AppEncounterService{
+export class PastObstetricHistoryService extends AppEncounterService{
  
   constructor(patientID: number, providerID: number) {
-    super(patientID, 151, providerID);  //encounter type 151
+    super(patientID, 82, providerID);  //encounter type 82
    
   }
-
 
 }
