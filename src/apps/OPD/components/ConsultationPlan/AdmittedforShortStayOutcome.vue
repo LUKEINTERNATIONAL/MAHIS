@@ -15,18 +15,18 @@
                 />
 
                 <div>
-                    <ion-label v-if="list_picker_prperties[0].show_error" class="error-label">{{ list_picker_prperties[0].error_message }}</ion-label>
+                    <ion-label v-if="list_picker_prperties[0].show_error.value" class="error-label">{{ list_picker_prperties[0].error_message }}</ion-label>
                 </div>
             </ion-col>
             <ion-col>
                 <div style="margin-top: 7%;">
                     <DatePicker
                         :place_holder="date_properties[0].placeHolder"
-                        @time-up-dated="date_properties[0].dataHandler"
+                        @date-up-dated="date_properties[0].dataHandler"
                     />
 
                     <div>
-                        <ion-label v-if="date_properties[0].show_error" class="error-label">{{ date_properties[0].error_message }}</ion-label>
+                        <ion-label v-if="date_properties[0].show_error.value" class="error-label">{{ date_properties[0].error_message }}</ion-label>
                     </div>
                 </div>
             </ion-col>
@@ -38,10 +38,11 @@
                     :placeholder="note_properties[0].placeHolder"
                     :icon="pencilOutline"
                     :inputValue="note_properties[0].dataValue.value"
+                    @update:inputValue="note_properties[0].dataHandler"
                 />
 
                 <div>
-                    <ion-label v-if="note_properties[0].show_error" class="error-label">{{ note_properties[0].error_message }}</ion-label>
+                    <ion-label v-if="note_properties[0].show_error.value" class="error-label">{{ note_properties[0].error_message }}</ion-label>
                 </div>
             </ion-col>
         </ion-row>
@@ -83,10 +84,14 @@ import {
 import ListPicker from "@/apps/OPD/components/ConsultationPlan/ListPicker.vue"
 import DatePicker from "@/apps/OPD/components/ConsultationPlan/DatePicker.vue"
 import BasicInputField from "@/components/BasicInputField.vue"
+import { useOutcomeStore } from "@/stores/OutcomeStore"
 import { getSpecialistClinics, getFacilityWards } from "@/apps/OPD/services/outcome"
 import { isEmpty } from "lodash"
+import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts"
 
 const WardsData = ref([] as any)
+const store = useOutcomeStore()
+let temp_data_v: any[] = []
 
 onMounted(async () => {
     findWardName({})
@@ -98,7 +103,7 @@ const dynamic_button_properties = [
         addItemButton: true,
         name: "save",
         btnFill: 'clear',
-        fn: ()=>{},
+        fn: validateForm,
     }
 ]
 
@@ -107,7 +112,7 @@ const note_properties = [
         placeHolder: 'Reason',
         dataHandler: notesUpDated_fn1,
         dataValue: ref(),
-        show_error: false,
+        show_error: ref(false),
         error_message: 'please provide a reason'
     },
 ]
@@ -117,17 +122,23 @@ const date_properties = [
         placeHolder: {default: 'Enter date'} as any,
         dataHandler: dateUpdate_fn1,
         dataValue: ref(),
-        show_error: false,
+        show_error: ref(false),
         error_message: 'please provide date'
     }
 ]
 
 function dateUpdate_fn1(data: any) {
-    date_properties[0].dataValue.value = data
+    const date_data = {
+        day: data.value.day,
+        month: data.value.month,
+        year: data.value.year,
+    }
+    date_properties[0].dataValue.value = date_data
 }
 
-function notesUpDated_fn1(data: any) {
-    note_properties[0].dataValue.value = data
+function notesUpDated_fn1(event: any) {
+    const reason = event.target.value
+    note_properties[0].dataValue.value = reason
 }
 
 const list_picker_prperties = [
@@ -141,7 +152,7 @@ const list_picker_prperties = [
         listUpdatedFN: listUpdated1,
         listFilteredFN: ()=>{},
         use_internal_filter: true as any,
-        show_error: false,
+        show_error: ref(false),
         error_message: 'please select a ward',
     }
 ]
@@ -163,29 +174,55 @@ function listUpdated1(data: any) {
 }
 
 function validateForm() {
-    const temp_data_v = []
+    validateWard()
+    validateNotes()
+    validateDate()
+    if (date_properties[0].show_error.value == false && note_properties[0].show_error.value == false && list_picker_prperties[0].show_error.value == false) {
+        saveDataToStores()
+    } else {
+        toastWarning("Please enter correct data values", 4000)
+    }
+}
+
+function validateWard() {
+    temp_data_v = []
     WardsData.value.forEach((item: any) => {
         if (item.selected == true) {
             temp_data_v.push(item)
         }
     })
-
     if (temp_data_v.length > 0) {
-        list_picker_prperties[0].show_error = false 
+        list_picker_prperties[0].show_error.value = false 
     } else {
-        list_picker_prperties[0].show_error = true
+        list_picker_prperties[0].show_error.value = true
+        console.log( list_picker_prperties[0].show_error)
     }
+}
 
-    if (isEmpty(note_properties[0].dataValue.value) == true) {
-        note_properties[0].show_error = true
+function validateNotes() {
+    if (note_properties[0].dataValue.value == "" || note_properties[0].dataValue.value === undefined) {
+        note_properties[0].show_error.value = true
     } else {
-        note_properties[0].show_error = false  
+        note_properties[0].show_error.value = false
     }
+}
 
-    if (isEmpty(date_properties[0].dataValue.value) == true) {
-        date_properties[0].show_error = true 
+function saveDataToStores() {
+    const referralData = {
+        name: temp_data_v[0].name,
+        type: 'Admitted for short stay',
+        date: date_properties[0].dataValue,
+        reason: note_properties[0].dataValue,
+        // dataItem: refDataItem.value,
+    }
+}
+
+function validateDate() {
+    console.log(date_properties[0].dataValue.value)
+    if (date_properties[0].dataValue.value === undefined || date_properties[0].dataValue.value == "") {
+        date_properties[0].show_error.value = true 
     } else {
-        date_properties[0].show_error = false
+        date_properties[0].show_error.value = false
     }
 }
 </script>

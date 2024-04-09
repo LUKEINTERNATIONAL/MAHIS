@@ -106,6 +106,7 @@ const date_properties = [
 ]
 
 function dateUpdate_fn1(data: any) {
+    console.log("kkk: ",data)
     const date_data = {
         day: data.value.day,
         month: data.value.month,
