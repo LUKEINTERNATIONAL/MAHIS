@@ -3,7 +3,7 @@
         <!-- Caffeine -->
         <ion-card class="section">
             <ion-card-header>
-                <ion-card-title class="dashed_bottom_border sub_item_header">Daily caffeine use</ion-card-title>
+                <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title>
             </ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="dailyCaffeineIntake"></basic-form>
@@ -13,7 +13,7 @@
         <!-- tobbaco -->
         <ion-card class="section">
             <ion-card-header>
-                <ion-card-title class="dashed_bottom_border sub_item_header">Tobacco use</ion-card-title>
+                <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title>
             </ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="Tobacco"></basic-form>
