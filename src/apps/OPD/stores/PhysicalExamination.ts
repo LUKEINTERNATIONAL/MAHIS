@@ -272,7 +272,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "Select the abnormality found in the mouth",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Oral thrush",
+                        name: "Abnormality for  mouth",
                     },
                     data: [
                         {
@@ -295,7 +295,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Kaposi’s Sarcoma lesions",
+                        name: "Abnormality for  mouth",
                     },
                     data: [
                         {
@@ -318,7 +318,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Sores",
+                        name: "Abnormality for  mouth",
                     },
                     data: [
                         {
@@ -341,7 +341,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Other mouth abnormality",
+                        name: "Abnormality for  mouth",
                     },
                     data: [
                         {
@@ -413,10 +413,10 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                 classDash: "",
                 checkboxBtnContent: {
                     header: {
-                        title: "Select abnormality",
+                        title: "Select abnormality for ears",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Discharge",
+                        name: "Abnormality for ears",
                     },
                     data: [
                         {
@@ -439,7 +439,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Bleeding",
+                        name: "Abnormality for ears",
                     },
                     data: [
                         {
@@ -462,7 +462,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Other ears abnormality",
+                        name: "Abnormality for ears",
                     },
                     data: [
                         {
@@ -537,7 +537,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "Select abnormality on the face",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Rash",
+                        name: "Abnormality for face",
                     },
                     data: [
                         {
@@ -560,7 +560,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Swelling",
+                        name: "Abnormality for ears",
                     },
                     data: [
                         {
@@ -583,7 +583,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Other face abnormality",
+                        name: "Abnormality for ears",
                     },
                     data: [
                         {
@@ -659,7 +659,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "Select neck abnormality",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Neck rash",
+                        name: "Abnormality for neck",
                     },
                     data: [
                         {
@@ -682,7 +682,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Neck swelling",
+                        name: "Abnormality for ears",
                     },
                     data: [
                         {
@@ -705,7 +705,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Neck mass",
+                        name: "Abnormality for ears",
                     },
                     data: [
                         {
@@ -728,7 +728,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Other neck abnormality",
+                        name: "Abnormality for ears",
                     },
                     data: [
                         {
@@ -803,7 +803,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "Select the abnormalities after chest inspection",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Chest rash",
+                        name: "Abnormality for  chest inspection",
                     },
                     data: [
                         {
@@ -826,7 +826,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Chest burns",
+                        name: "Abnormality for  chest inspection",
                     },
                     data: [
                         {
@@ -849,7 +849,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Chest bruises",
+                        name: "Abnormality for  chest inspection",
                     },
                     data: [
                         {
@@ -872,7 +872,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Chest wounds",
+                        name: "Abnormality for  chest inspection",
                     },
                     data: [
                         {
@@ -895,7 +895,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Other chest abnormality",
+                        name: "Abnormality for  chest inspection",
                     },
                     data: [
                         {
@@ -970,7 +970,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Loud P2",
+                        name: "Heart sounds abnormality",
                     },
                     data: [
                         {
@@ -993,7 +993,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Splitting P2",
+                        name: "Heart sounds abnormality",
                     },
                     data: [
                         {
@@ -1016,7 +1016,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Gallop rhythm",
+                        name: "Heart sounds abnormality",
                     },
                     data: [
                         {
@@ -1039,7 +1039,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Murmur",
+                        name: "Heart sounds abnormality",
                     },
                     data: [
                         {
@@ -1092,7 +1092,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "Select the abnormalities on breath sounds",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Absent",
+                        name: "Breath sounds abnormality",
                     },
                     data: [
                         {
@@ -1115,7 +1115,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Reduced",
+                        name: "Breath sounds abnormality",
                     },
                     data: [
                         {
@@ -1138,7 +1138,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Added",
+                        name: "Breath sounds abnormality",
                     },
                     data: [
                         {
@@ -1164,7 +1164,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: 'Choose specific abnormalities when "Added"',
                         selectedValue: "",
                         displayNone: true,
-                        name: "Clackles",
+                        name: "Abnormalities when added",
                     },
                     data: [
                         {
@@ -1187,7 +1187,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Wheezes",
+                        name: "Abnormalities when added",
                     },
                     data: [
                         {
@@ -1210,7 +1210,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Bronchial",
+                        name: "Abnormalities when added",
                     },
                     data: [
                         {
@@ -1233,7 +1233,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Crepitations",
+                        name: "Abnormalities when added",
                     },
                     data: [
                         {
@@ -1286,7 +1286,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Abdominal distension",
+                        name: "Abdominal inspection abnormality",
                     },
                     data: [
                         {
@@ -1309,7 +1309,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Abdominal rash",
+                        name: "Abdominal inspection abnormality",
                     },
                     data: [
                         {
@@ -1332,7 +1332,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Abdominal wounds",
+                        name: "Abdominal inspection abnormality",
                     },
                     data: [
                         {
@@ -1355,7 +1355,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Laceration",
+                        name: "Abdominal inspection abnormality",
                     },
                     data: [
                         {
@@ -1378,7 +1378,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Abdominal bruises",
+                        name: "Abdominal inspection abnormality",
                     },
                     data: [
                         {
@@ -1401,7 +1401,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Abdominal burns",
+                        name: "Abdominal inspection abnormality",
                     },
                     data: [
                         {
@@ -1424,7 +1424,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Other abdominal abnormality",
+                        name: "Abdominal inspection abnormality",
                     },
                     data: [
                         {
@@ -1500,7 +1500,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "Select abdominal auscultation abnormalities",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Bruit",
+                        name: "Abdominal auscultation abnormality",
                     },
                     data: [
                         {
@@ -1523,7 +1523,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Bowel sounds",
+                        name: "Abdominal auscultation abnormality",
                     },
                     data: [
                         {
@@ -1546,7 +1546,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "Select bowel sounds",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Hyperactive",
+                        name: "Bowel sounds abnormality",
                     },
                     data: [
                         {
@@ -1569,7 +1569,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Reduced bowel sounds",
+                        name: "Bowel sounds abnormality",
                     },
                     data: [
                         {
@@ -1592,7 +1592,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Abdominal auscultation absent",
+                        name: "Bowel sounds abnormality",
                     },
                     data: [
                         {
@@ -1615,7 +1615,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Other abdominal auscultation abnormality",
+                        name: "Bowel sounds abnormality",
                     },
                     data: [
                         {
@@ -1690,7 +1690,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Tenderness",
+                        name: "Abdominal palpation abnormality",
                     },
                     data: [
                         {
@@ -1713,7 +1713,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Hepatomegaly",
+                        name: "Abdominal palpation abnormality",
                     },
                     data: [
                         {
@@ -1736,7 +1736,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Splenomegaly",
+                        name: "Abdominal palpation abnormality",
                     },
                     data: [
                         {
@@ -1759,7 +1759,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Kidney ballotab",
+                        name: "Abdominal palpation abnormality",
                     },
                     data: [
                         {
@@ -1782,7 +1782,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Other abdominal masses",
+                        name: "Abdominal palpation abnormality",
                     },
                     data: [
                         {
@@ -1857,7 +1857,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     header: {
                         title: "",
                         selectedValue: "",
-                        name: "Warts",
+                        name: "Genital examination abnormality",
                         displayNone: true,
                     },
                     data: [
@@ -1883,7 +1883,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     header: {
                         title: "",
                         selectedValue: "",
-                        name: "Vesicles",
+                        name: "Genital examination abnormality",
                         displayNone: true,
                     },
                     data: [
@@ -1907,7 +1907,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     header: {
                         title: "",
                         selectedValue: "",
-                        name: "Growths",
+                        name: "Genital examination abnormality",
                         displayNone: true,
                     },
                     data: [
@@ -1932,7 +1932,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     header: {
                         title: "",
                         selectedValue: "",
-                        name: "Genital sores",
+                        name: "Genital examination abnormality",
                         displayNone: true,
                     },
                     data: [
@@ -2164,7 +2164,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Cold and clammy",
+                        name: "Abnormality for extremities",
                     },
                     data: [
                         {
@@ -2187,7 +2187,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Oedema present",
+                        name: "Abnormality for extremities",
                     },
                     data: [
                         {
@@ -2210,7 +2210,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Fracture",
+                        name: "Abnormality for extremities",
                     },
                     data: [
                         {
@@ -2233,7 +2233,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Extremity burns",
+                        name: "Abnormality for extremities",
                     },
                     data: [
                         {
@@ -2256,7 +2256,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Extremity rash",
+                        name: "Abnormality for extremities",
                     },
                     data: [
                         {
@@ -2279,7 +2279,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Deformity",
+                        name: "Abnormality for extremities",
                     },
                     data: [
                         {
@@ -2302,7 +2302,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Finger clubbing",
+                        name: "Abnormality for extremities",
                     },
                     data: [
                         {
@@ -2325,7 +2325,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Decreased Power",
+                        name: "Abnormality for extremities",
                     },
                     data: [
                         {
@@ -2348,7 +2348,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Decreased Sensation",
+                        name: "Abnormality for extremities",
                     },
                     data: [
                         {
@@ -2371,7 +2371,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Other extremities abnormalities",
+                        name: "Abnormality for extremities",
                     },
                     data: [
                         {
@@ -2417,19 +2417,19 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                     header: {
                         title: "Chest movement",
                         selectedValue: "",
-                        name: "Chest movement",
+                        name: "Chest movements",
                         displayNone: true,
                     },
                     data: [
                         {
-                            value: "symmetrical",
+                            value: "Symmetrical",
                             name: "Symmetrical",
                             labelPlacement: "start",
                             colSize: "6.01",
                             justify: "space-between",
                         },
                         {
-                            value: "asymmetrical",
+                            value: "Asymmetrical",
                             name: "Asymmetrical",
                             labelPlacement: "start",
                             colSize: "6.01",
