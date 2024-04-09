@@ -65,7 +65,7 @@ import { useDiagnosisStore } from "@/stores/DiagnosisStore";
 import { mapState } from "pinia";
 import Stepper from "@/components/Stepper.vue";
 import { Service } from "@/services/service";
-import { LabOrder } from "@/apps/NCD/services/lab_order";
+import { LabOrder } from "@/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";

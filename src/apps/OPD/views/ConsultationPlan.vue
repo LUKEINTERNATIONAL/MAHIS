@@ -50,7 +50,7 @@ import { useDiagnosisStore } from "@/stores/DiagnosisStore";
 import { mapState } from "pinia";
 import Stepper from "@/components/Stepper.vue";
 import { Service } from "@/services/service";
-import { LabOrder } from "@/apps/NCD/services/lab_order";
+import { LabOrder } from "@/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { useDispositionStore } from "@/stores/OutcomeStore";
@@ -194,6 +194,8 @@ export default defineComponent({
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
     },
     async mounted() {
+        this.investigations;
+        console.log("🚀 ~ mounted ~ this.investigations:", this.investigations);
         this.markWizard();
     },
     watch: {
@@ -227,6 +229,15 @@ export default defineComponent({
 
     methods: {
         markWizard() {
+            // const filteredArray = await this.orders.filter((obj: any) => {
+            //     return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
+            // });
+            // if (filteredArray.length > 0) {
+            //     this.investigations[0].selectedData = filteredArray;
+            // } else {
+            //     this.investigations[0].selectedData = "";
+            // }
+
             if (this.vitals.validationStatus) {
                 this.wizardData[0].checked = true;
                 this.wizardData[0].class = "open_step common_step";
