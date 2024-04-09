@@ -129,7 +129,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "Select the abnormality on eyes",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Pallor",
+                        name: "Abnormality for eyes",
                     },
                     data: [
                         {
@@ -152,7 +152,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Jaundice",
+                        name: "Abnormality for eyes",
                     },
                     data: [
                         {
@@ -175,7 +175,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Ulcerations",
+                        name: "Abnormality for eyes",
                     },
                     data: [
                         {
@@ -198,7 +198,7 @@ export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
                         title: "",
                         selectedValue: "",
                         displayNone: true,
-                        name: "Other eye abnormality",
+                        name: "Abnormality for eyes",
                     },
                     data: [
                         {
