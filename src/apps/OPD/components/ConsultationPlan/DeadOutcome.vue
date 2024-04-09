@@ -143,6 +143,7 @@ import Note from "@/apps/OPD/components/ConsultationPlan/Note.vue"
 import ListPicker from "@/apps/OPD/components/ConsultationPlan/ListPicker.vue"
 import BasicInputField from "@/components/BasicInputField.vue"
 import DynamicButton from "@/components/DynamicButton.vue"
+import { PatientService } from "@/services/patient_service"
 import {
     checkmark,
     pulseOutline,
@@ -357,6 +358,12 @@ function listUpdated2(data: any) {
 function iweFn(data: any) {
 
 }
+
+function checkPatient() {
+    const patient = new PatientService()
+    return patient.isChildBearing()
+}
+
 function validateForm() {
 
 }
