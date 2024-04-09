@@ -11,6 +11,7 @@ export const useWomanBehaviourStore = defineStore("womanBehaviourStore", {
           header: {
             title: "Daily caffeine use",
             selectedValue: "",
+            name: "Daily caffeine use",
           },
           data: [
             {

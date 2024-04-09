@@ -11,6 +11,7 @@ export const useMedicationsStore = defineStore("medicationsStore", {
           header: {
             title: "Which medications is the woman currently prescribed?",
             selectedValue: "",
+            name: "Which medications is the woman currently prescribed?",
           },
           data: [
             {
