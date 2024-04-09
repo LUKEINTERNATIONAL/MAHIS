@@ -83,7 +83,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
                   unit: "",
                   icon: icons.editPen,
                   value: "",
-                  name: "how they perceive their home situation?",
+                  name: "home situation",
                   required: true,
                   eventType: "input",
                   inputWidth: "100%",
@@ -109,7 +109,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
                   unit: "",
                   icon: icons.editPen,
                   value: "",
-                  name: "how they perceive their relationship with their teachers and fellow students/employers and colleagues?",
+                  name: "perceive relationship",
                   required: true,
                   eventType: "input",
                   inputWidth: "100%",
@@ -180,7 +180,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
                   inputHeader: "Abortions/Miscarriages",
                   value: "",
                   icon: icons.editPen,
-                  name: "Abortions",
+                  name: "Abortions/Miscarriages",
                   required: true,
                   eventType: "input",
                   alertsError: false,
@@ -209,7 +209,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
                 {
                   inputHeader: "Live births",
                   value: "",
-                  name: "LiveBirths",
+                  name: "Live Births",
                   required: true,
                   icon: icons.editPen,
                   eventType: "input",
@@ -378,12 +378,12 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
             title:
               "Does the woman have any complications due to past pregnancies?",
             selectedValue: "",
-            name:"Does the woman have any complications due to past pregnancies?",
+            name: "Does the woman have any complications due to past pregnancies?",
           },
           data: [
             {
               name: "Asphyxia",
-              value: "value",
+              value: "Asphyxia",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -391,7 +391,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
             },
             {
               name: "Does not know",
-              value: "does not know",
+              value: "Does not know",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -400,198 +400,198 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
           ],
         },
       },
-        {
-          selectdData: [],
-          classDash: "dashed_bottom_border",
-          checkboxBtnContent: {
-            header: {
-              title: "",
-              selectedValue: "",
-            },
-            data: [
-              {
-                name: "Pre-eclampsia",
-                value: "value",
-                checked: false,
-                labelPlacement: "start",
-                colSize: "6",
-                justify: "space-between",
-              },
-              {
-                name: "Eclampsia",
-                value: "value",
-                checked: false,
-                labelPlacement: "start",
-                colSize: "6",
-                justify: "space-between",
-              },
-            ],
+      {
+        selectdData: [],
+        classDash: "dashed_bottom_border",
+        checkboxBtnContent: {
+          header: {
+            title: "",
+            selectedValue: "",
           },
+          data: [
+            {
+              name: "Pre-eclampsia",
+              value: "value",
+              checked: false,
+              labelPlacement: "start",
+              colSize: "6",
+              justify: "space-between",
+            },
+            {
+              name: "Eclampsia",
+              value: "value",
+              checked: false,
+              labelPlacement: "start",
+              colSize: "6",
+              justify: "space-between",
+            },
+          ],
         },
+      },
 
-        {
-          classDash: "dashed_bottom_border",
-          checkboxBtnContent: {
-            header: {
-              title: "",
-              selectedValue: "",
-            },
-            data: [
-              {
-                name: "Puerperal Sepsis",
-                value: "value",
-                checked: false,
-                labelPlacement: "start",
-                colSize: "6",
-                justify: "space-between",
-              },
-              {
-                name: "Baby died within 24hrs of birth",
-                value: "value",
-                checked: false,
-                labelPlacement: "start",
-                colSize: "6",
-                justify: "space-between",
-              },
-            ],
+      {
+        classDash: "dashed_bottom_border",
+        checkboxBtnContent: {
+          header: {
+            title: "",
+            selectedValue: "",
           },
-        },
-        {
-          classDash: "dashed_bottom_border",
-          checkboxBtnContent: {
-            header: {
-              title: "",
-              selectedValue: "",
+          data: [
+            {
+              name: "Puerperal Sepsis",
+              value: "value",
+              checked: false,
+              labelPlacement: "start",
+              colSize: "6",
+              justify: "space-between",
             },
-            data: [
-              {
-                name: "Convulsions",
-                value: "value",
-                checked: false,
-                labelPlacement: "start",
-                colSize: "6",
-                justify: "space-between",
-              },
-              {
-                name: "Forceps",
-                value: "value",
-                checked: false,
-                labelPlacement: "start",
-                colSize: "6",
-                justify: "space-between",
-              },
-            ],
-          },
+            {
+              name: "Baby died within 24hrs of birth",
+              value: "value",
+              checked: false,
+              labelPlacement: "start",
+              colSize: "6",
+              justify: "space-between",
+            },
+          ],
         },
+      },
+      {
+        classDash: "dashed_bottom_border",
+        checkboxBtnContent: {
+          header: {
+            title: "",
+            selectedValue: "",
+          },
+          data: [
+            {
+              name: "Convulsions",
+              value: "value",
+              checked: false,
+              labelPlacement: "start",
+              colSize: "6",
+              justify: "space-between",
+            },
+            {
+              name: "Forceps",
+              value: "value",
+              checked: false,
+              labelPlacement: "start",
+              colSize: "6",
+              justify: "space-between",
+            },
+          ],
+        },
+      },
 
-        {
-          classDash: "dashed_bottom_border",
-          checkboxBtnContent: {
-            header: {
-              title: "",
-              selectedValue: "",
+      {
+        classDash: "dashed_bottom_border",
+        checkboxBtnContent: {
+          header: {
+            title: "",
+            selectedValue: "",
+          },
+          data: [
+            {
+              name: "Gestational diabetes mellitus",
+              value: "value",
+              checked: false,
+              labelPlacement: "start",
+              colSize: "6",
+              justify: "space-between",
             },
-            data: [
-              {
-                name: "Gestational diabetes mellitus",
-                value: "value",
-                checked: false,
-                labelPlacement: "start",
-                colSize: "6",
-                justify: "space-between",
-              },
-              {
-                name: "Heavy bleeding",
-                value: "value",
-                checked: false,
-                labelPlacement: "start",
-                colSize: "6",
-                justify: "space-between",
-              },
-            ],
-          },
-        },
-
-        {
-          classDash: "dashed_bottom_border",
-          checkboxBtnContent: {
-            header: {
-              title: "",
-              selectedValue: "",
+            {
+              name: "Heavy bleeding",
+              value: "value",
+              checked: false,
+              labelPlacement: "start",
+              colSize: "6",
+              justify: "space-between",
             },
-            data: [
-              {
-                name: "Macrosomia",
-                value: "value",
-                checked: false,
-                labelPlacement: "start",
-                colSize: "6",
-                justify: "space-between",
-              },
-              {
-                name: "Perineal tear (3rd or 4th degree)",
-                value: "value",
-                checked: false,
-                labelPlacement: "start",
-                colSize: "6",
-                justify: "space-between",
-              },
-            ],
-          },
+          ],
         },
-        {
-          classDash: "dashed_bottom_border",
-          checkboxBtnContent: {
-            header: {
-              title: "",
-              selectedValue: "",
+      },
+
+      {
+        classDash: "dashed_bottom_border",
+        checkboxBtnContent: {
+          header: {
+            title: "",
+            selectedValue: "",
+          },
+          data: [
+            {
+              name: "Macrosomia",
+              value: "value",
+              checked: false,
+              labelPlacement: "start",
+              colSize: "6",
+              justify: "space-between",
             },
-            data: [
-              {
-                name: "None",
-                value: "none",
-                checked: false,
-                labelPlacement: "start",
-                colSize: "6",
-                justify: "space-between",
-              },
-              {
-                name: "Other",
-                value: "otherInfo",
-                checked: false,
-                labelPlacement: "start",
-                colSize: "6",
-                justify: "space-between",
-              },
-            ],
-          },
+            {
+              name: "Perineal tear (3rd or 4th degree)",
+              value: "value",
+              checked: false,
+              labelPlacement: "start",
+              colSize: "6",
+              justify: "space-between",
+            },
+          ],
         },
-
-        {
-          isFinishBtn: false,
-          sectionHeader: "",
-          classDash: "dashed_bottom_border _padding",
-
-          data: {
-            rowData: [
-              {
-                colData: [
-                  {
-                    displayNone: true,
-                    inputHeader: "specify",
-                    unit: "",
-                    icon: icons.editPen,
-                    value: "",
-                    name: "otherC",
-                    required: true,
-                    eventType: "input",
-                    inputWidth: "85%",
-                  },
-                ],
-              },
-            ],
+      },
+      {
+        classDash: "dashed_bottom_border",
+        checkboxBtnContent: {
+          header: {
+            title: "",
+            selectedValue: "",
           },
+          data: [
+            {
+              name: "None",
+              value: "none",
+              checked: false,
+              labelPlacement: "start",
+              colSize: "6",
+              justify: "space-between",
+            },
+            {
+              name: "Other",
+              value: "otherInfo",
+              checked: false,
+              labelPlacement: "start",
+              colSize: "6",
+              justify: "space-between",
+            },
+          ],
         },
+      },
+
+      {
+        isFinishBtn: false,
+        sectionHeader: "",
+        classDash: "dashed_bottom_border _padding",
+
+        data: {
+          rowData: [
+            {
+              colData: [
+                {
+                  displayNone: true,
+                  inputHeader: "specify",
+                  unit: "",
+                  icon: icons.editPen,
+                  value: "",
+                  name: "otherC",
+                  required: true,
+                  eventType: "input",
+                  inputWidth: "85%",
+                },
+              ],
+            },
+          ],
+        },
+      },
     ] as any,
   }),
   actions: {

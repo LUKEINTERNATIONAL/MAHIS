@@ -237,7 +237,7 @@ export default defineComponent({
         //     if (!patientStatus) return toastWarning("Unable to create Preterm !");
         //     toastSuccess("Pretermhas been created");
         // }
-       // console.log(await this.buildPreterm())
+        console.log(await this.buildPreterm())
         },
         async savePastPregnancyComplication(){
         // if (this.preterm[0].selectedData.length > 0) {

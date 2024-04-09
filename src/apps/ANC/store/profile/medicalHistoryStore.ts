@@ -1135,7 +1135,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
                   inputHeader: "HIV test date",
                   icon: icons.calenderPrimary,
                   value: "",
-                  name: "testDate",
+                  name: "Test Date",
                   eventType: "blur",
                   required: true,
                   isDatePopover: true,
