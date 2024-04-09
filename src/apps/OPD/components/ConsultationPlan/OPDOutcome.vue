@@ -11,27 +11,10 @@
         </ion-row>
 
         <div v-if="showAddReferralInfo">
-            <AdmittedforShortStayOutcomef/>
-            <ReferredOutCome/>
             <ion-row>
                 
                 <ion-col>
-                    <!-- <BasicInputField
-                        :placeholder="basicInputFieldProperties[1].placeholder"
-                        :icon="basicInputFieldProperties[1].icon"
-                        :inputValue="refType"
-                        @clicked:inputValue="showOptions"
-                    />
 
-                    <SelectionPopover
-                        :content="popoverProperties.popoverData"
-                        :keyboardClose="popoverProperties.keyboardClose"
-                        :title="popoverProperties.title"
-                        :popoverOpen="popoverProperties.popoverOpen"
-                        :event="popoverProperties.event"
-                        @closePopoover="popoverProperties.popoverOpen"
-                        @setSelection="setSelection"
-                    /> -->
                     <ListPicker
                         :multiSelection="list_picker_prperties[0].multi_Selection"
                         :show_label="list_picker_prperties[0].show_list_label"
@@ -47,104 +30,17 @@
                     <div>
                         <ion-label v-if="show_error_msg_for_ref_type" class="error-label">{{ refTypErrMsg }}</ion-label>
                     </div>
-                </ion-col>
-
-                <ion-col v-if="!show_dead_options">
-                    <ion-item class="input_item">
-                        <ion-input
-                            v-model="facilityWardName"
-                            @ionInput="FindTxt"
-                            @mousedown="FindTxt"
-                            fill="outline"
-                            :placeholder="searchPlaceHolder"
-                            :disabled="disableFacilityWardNameInput"
-                        ></ion-input>
-                        <!--  -->
-                        <ion-label>
-                            <ion-icon slot="start" :icon="iconsContent.search" class="selectedPatient" aria-hidden="true"></ion-icon>
-                        </ion-label>
-                    </ion-item>
-
-
-                    <ion-popover
-                        :is-open="popoverOpen"
-                        :event="event"
-                        @didDismiss="popoverOpen = false"
-                        :keyboard-close="false"
-                        :show-backdrop="false"
-                        :dismiss-on-select="true"
-                        style="top: 10px; left: -25px"
-                        v-if="!show_error_msg_for_ref_facility_ward_name"
-                        :key="componentKey"
-                    >
-                        <ion-content color="light" class="ion-padding content-al">
-                            <!-- <ion-row class="search_result" v-for="(item, index) in diagnosisData" :key="index" >
-                            <ion-col @click="selectedDrugName(item.name, item)">{{ item.name }} </ion-col>
-                        </ion-row> -->
-                            <ion-list class="list-al">
-                                list               <div class="item-al" v-for="(item, index) in NamesData" :key="index" @click="selectedFaciltyName(item.name, item)">
-                                    <ion-col @click="selectedFaciltyName(item.name, item)">{{ item.name }} </ion-col>
-                                </div>
-                            </ion-list>
-                        </ion-content>
-                    </ion-popover>
-                </ion-col>
-
-                <ion-col v-if="!show_dead_options">
-                    <BasicInputField
-                        :placeholder="basicInputFieldProperties[2].placeholder"
-                        :inputValue="refDate"
-                        :icon="basicInputFieldProperties[2].icon"
-                        :disabled="disableInputs"
-                        @update:inputValue="refDate"
-                        @clicked:inputValue="openDate"
-                    />
-
-                    <ion-popover
-                        :show-backdrop="false"
-                        :keep-contents-mounted="true"
-                        :is-open="popoverProperties.dateOpen"
-                        :event="popoverProperties.event"
-                        @didDismiss="popoverProperties.dateOpen = false"
-                    >
-                        <ion-datetime @ionChange="saveTheDate" id="datetime" presentation="date" :show-default-buttons="true"></ion-datetime>
-                    </ion-popover>
-                    <div>
-                        <ion-label v-if="show_error_msg_for_ref_date" class="error-label">{{ refDateErrMsg }}</ion-label>
-                    </div>
-                </ion-col>
-
-                
+                </ion-col>  
             </ion-row>
-            <ion-row v-if="!show_dead_options">
-                <ion-col size="9">
-                    <BasicInputField
-                        :placeholder="basicInputFieldProperties[3].placeholder"
-                        :disabled="disableInputs"
-                        :inputValue="refReason"
-                        @update:inputValue="updateReason"
-                    />
-                    <div>
-                        <ion-label v-if="show_error_msg_for_ref_reason" class="error-label">{{ refRsnErrMsg }}</ion-label>
-                    </div>
-                </ion-col>
 
-                <ion-col>
-                    <dynamic-button
-                        v-if="addItemButton"
-                        :name="saveBtn"
-                        :fill="btnFill"
-                        :icon="addOutline"
-                        @clicked:btn="saveReferralInfo"
-                    ></dynamic-button>
-                </ion-col>
-            </ion-row>
         </div>
 
         <ion-row class="spc_btwn" v-if="showAddItemButton">
             <dynamic-button v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" @clicked:btn="addReferral"></dynamic-button>
         </ion-row>
 
+        <AdmittedforShortStayOutcomef v-if="show_admitted_options"/>
+        <ReferredOutCome v-if="show_referred_options"/>
         <deadOutcome v-if="show_dead_options"/>
     </ion-list>
 </template>
@@ -186,78 +82,32 @@ import {
     codeSlashOutline,
 } from "ionicons/icons";
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
-import { LocationService } from "@/services/location_service"
 import DynamicButton from "@/components/DynamicButton.vue"
-import SelectionPopover from "@/components/SelectionPopover.vue"
 import { icons } from "@/utils/svg"
-import BasicInputField from "@/components/BasicInputField.vue"
 import DynamicDispositionList from "@/components/DynamicDispositionList.vue"
 import { useOutcomeStore } from "@/stores/OutcomeStore"
-import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts"
-import { getSpecialistClinics, getFacilityWards } from "@/apps/OPD/services/outcome";
 import deadOutcome from "../ConsultationPlan/DeadOutcome.vue"
 import ListPicker from "@/apps/OPD/components/ConsultationPlan/ListPicker.vue"
 import AdmittedforShortStayOutcomef from "../ConsultationPlan/AdmittedforShortStayOutcome.vue"
 import ReferredOutCome from '../ConsultationPlan/ReferredOutCome.vue'
 
-const iconsContent = icons;
 const initialMsg = ref("No outcome created yet");
 const show_error_msg_for_ref_type = ref(false);
 const refTypErrMsg = ref("please select a type");
-const show_error_msg_for_ref_facility_ward_name = ref(false);
-const refFacilityNameErrMsg = ref("");
-const show_error_msg_for_ref_date = ref(false);
-const refDateErrMsg = ref("please select a date");
-const show_error_msg_for_ref_reason = ref(false);
-const refRsnErrMsg = ref("please enter a reason");
 const btnName1 = ref("Add new outcome");
 const btnFill = "clear";
 let event: null = null;
-const saveBtn = ref("Save");
 const addItemButton = ref(true);
 const showAddItemButton = ref(true);
 const refType = ref("");
-const refDate = ref();
-const refReason = ref("");
-const showEmptyMsg = ref(true);
-const facilityWardName = ref("");
-const editIndex = ref(NaN);
-const disableInputs = ref(true);
-const disableFacilityWardNameInput = ref(true);
-const searchPlaceHolder = ref("");
-const fnToUse = ref();
-const refDataItem = ref();
-const popoverOpen = ref(false);
+const showEmptyMsg = ref(true);;
 const showAddReferralInfo = ref(false);
 const store = useOutcomeStore();
 const dispositions = computed(() => store.dispositions);
-const NamesData = ref([] as any);
 const EditEvnt = ref(false);
-const componentKey = ref(0)
 const show_dead_options = ref(false)
-const basicInputFieldProperties = [
-    {
-        // ### leave as is (this obj)
-    },
-    {
-        name: "referralType",
-        placeholder: "Outcome",
-        icon: icons.chevronUp,
-        selection: "" as string,
-    },
-    {
-        name: "date",
-        placeholder: "Date",
-        icon: icons.calendar,
-        keepContentsMounted: true,
-        date: "" as string,
-    },
-    {
-        name: "reason",
-        placeholder: "Reason",
-        referralReason: "" as string,
-    },
-];
+const show_admitted_options = ref(false)
+const show_referred_options = ref(false)
 
 const referralType = ref([
     {
@@ -300,15 +150,6 @@ function listUpdated1(data: any) {
     })
 }
 
-const popoverProperties = ref({
-    title: "List of facilities",
-    popoverOpen: false,
-    dateOpen: false,
-    event: {} as Event,
-    keyboardClose: false,
-    popoverData: {} as Object,
-});
-
 onMounted(async () => {
     checkForDispositions();
 });
@@ -331,33 +172,6 @@ watch(
     }
 );
 
-watch(
-    () => refType.value,
-    async (newValue) => {
-        validateReftype();
-    }
-);
-
-watch(
-    () => refDate.value,
-    async (newValue) => {
-        validateRefDate();
-    }
-);
-
-watch(
-    () => refReason.value,
-    async (newValue) => {
-        validateRefReasons();
-    }
-);
-
-watch(
-    () => facilityWardName.value,
-    async (newValue) => {
-        validateFacilityWardName()
-    }
-);
 
 function checkForDispositions() {
     if (dispositions.value.length > 0) {
@@ -373,206 +187,30 @@ function addReferral() {
     showAddReferralInfo.value = true
 }
 
-async function saveReferralInfo() {
-    const are_fieldsValid = await validateInputs();
-
-    if (dsischargedHomeExecption() == true) {
-
-    } else {
-        if (!are_fieldsValid) {
-            toastWarning("Please enter correct data values", 4000)
-            return
-        }
-    }
-
-
-    showAddItemButton.value = !false;
-    showAddReferralInfo.value = !true;
-
-    const referralData = {
-        name: facilityWardName.value,
-        type: refType.value,
-        date: refDate.value,
-        reason: refReason.value,
-        dataItem: refDataItem.value,
-    }
-
-    store.addDispositionData(referralData, editIndex.value);
-    clearInputs();
-}
-
-function clearInputs() {
-    facilityWardName.value = "";
-    refType.value = "";
-    refDate.value = "";
-    refReason.value = "";
-    refDataItem.value = null;
-}
-
-async function validateReftype() {
-    if (refType.value === "") {
-        show_error_msg_for_ref_type.value = true;
-    } else {
-        show_error_msg_for_ref_type.value = false;
-    }
-    return show_error_msg_for_ref_type.value;
-}
-
 function removeItem(index: number) {
     dispositions.value.splice(index, 1);
-}
-
-function editItem(index: any) {
-    EditEvnt.value = true;
-    facilityWardName.value = dispositions.value[index].name;
-    refType.value = dispositions.value[index].type;
-    refDate.value = dispositions.value[index].date;
-    refReason.value = dispositions.value[index].reason;
-    dispositions.value.splice(index, 1);
-    addReferral();
-    checkRefType(false)
-}
-
-async function validateRefDate() {
-    if (refDate.value === "") {
-        show_error_msg_for_ref_date.value = true;
-    } else {
-        show_error_msg_for_ref_date.value = false;
-    }
-    return show_error_msg_for_ref_date.value;
-}
-
-async function validateRefReasons() {
-    if (refReason.value === "") {
-        show_error_msg_for_ref_reason.vmsg_for_ref_facility_ward_namealue = true;
-    } else {
-        show_error_msg_for_ref_reason.value = false;
-    }
-    return show_error_msg_for_ref_reason.value;
-}
-
-async function validateFacilityWardName() {
-    if (facilityWardName.value === "") {
-        show_error_msg_for_ref_facility_ward_name.value = true;
-    } else {
-        show_error_msg_for_ref_facility_ward_name.value = false;
-    }
-    return show_error_msg_for_ref_facility_ward_name.value;
-}
-
-async function validateInputs() {
-    const isReftypeValid = await validateReftype();
-    const isRefDateValid = await validateRefDate();
-    const isRefReasonValid = await validateRefReasons();
-    const isRefNameValid = await validateFacilityWardName();
-
-    if (!isReftypeValid && !isRefDateValid && !isRefReasonValid && !isRefNameValid) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-async function FindTxt(evnt: any) {
-    const searchText = evnt.target.value;
-    await fnToUse.value(searchText);
-    openPopover(evnt);
-}
-
-async function findFacilityName(srch_text: string) {
-    NamesData.value = await LocationService.getFacilities({ name: srch_text });
-}
-
-function concatenateArrays<T>(...arrays: T[][]): T[] {
-    // Concatenate all arrays
-    return arrays.reduce((acc, arr) => acc.concat(arr), []);
-}
-
- function searchTxt(searchString: string, target: any) {
-    searchString = searchString ? searchString.toString() : "";
-    const hcea = target.filter((item: any) => 
-    item.name.toLowerCase().includes(searchString.toLowerCase())
-    )
-    return hcea
-} 
-
-async function findDepartMentNameAndfindWardName(srch_text: string) {
-    const temp_data1 = await getFacilityWards(srch_text)
-    let temp_data2 = await getSpecialistClinics()
-    temp_data2 = searchTxt(srch_text, temp_data2)
-    NamesData.value = concatenateArrays(temp_data1, temp_data2)
-    componentKey.value++;
-}
-
-function openPopover(e: any) {
-    event = e;
-    popoverOpen.value = true;
-}
-
-function openPopoverForReferral(event: Event) {
-    popoverProperties.value.event = event;
-    popoverProperties.value.popoverOpen = true;
-}
-
-function selectedFaciltyName(name: any, obj: any) {
-    facilityWardName.value = name;
-    refDataItem.value = obj;
-}
-
-function showOptions(event: Event) {
-    popoverProperties.value.title = "Select Outcome";
-    popoverProperties.value.keyboardClose = true;
-    popoverProperties.value.popoverData = referralType.value;
-    openPopoverForReferral(event);
-}
-
-function openDate(event: any) {
-    popoverProperties.value.dateOpen = true;
-    popoverProperties.value.event = event;
-}
-
-function saveTheDate(event: any) {
-    refDate.value = event.detail.value;
-    formatDate(refDate.value);
-}
-
-function setSelection(selectedValue: any) {
-    const name = selectedValue.name;
-    refType.value = name;
-    popoverProperties.value.popoverOpen = false;
-}
-
-function formatDate(date: any) {
-    let theDate = new Date(date);
-    let tempDate = new Date(theDate.getFullYear() + "-" + ("0" + (theDate.getMonth() + 1)).slice(-2) + "-" + ("0" + theDate.getDate()).slice(-2));
-    let options: Intl.DateTimeFormatOptions = { day: "2-digit", weekday: "long", month: "short", year: "numeric" };
-    let formattedDate = tempDate.toLocaleDateString("en-US", options);
-    refDate.value = formattedDate;
-}
-
-function updateReason(event: any) {
-    const reason = event.target.value;
-    refReason.value = reason;
-}
-
-function dsischargedHomeExecption() {
-    const tempRefType = refType.value
-    refType.value = tempRefType
-
-    if (refType.value == referralType.value[2].name) {
-        return true
-    } else return false
 }
 
 async function checkRefType(clear_inputs: boolean = true) {
     const tempRefType = refType.value;
 
-    if (clear_inputs == true) {
-        clearInputs()
-    }
+    
     refType.value = tempRefType;
-    let fn;
     const ref_type = refType.value;
+
+    if (ref_type == referralType.value[0].name) {
+        show_admitted_options.value = true
+    } 
+    else {
+        show_admitted_options.value = false
+    }
+
+    if (ref_type == referralType.value[1].name) {
+        show_referred_options.value = true
+    } 
+    else {
+        show_referred_options.value = false
+    }
 
     if (ref_type == referralType.value[3].name) {
         show_dead_options.value = true
@@ -580,30 +218,7 @@ async function checkRefType(clear_inputs: boolean = true) {
     else {
         show_dead_options.value = false
     }
-
-    if (ref_type == referralType.value[0].name) {
-        searchPlaceHolder.value = "find department or ward";
-        fn = findDepartMentNameAndfindWardName as any;
-        refFacilityNameErrMsg.value = "please select a department or ward";
     }
-
-    if (ref_type == referralType.value[1].name) {
-        searchPlaceHolder.value = "find facility name";
-        fn = findFacilityName as any;
-        refFacilityNameErrMsg.value = "please select a facility name";
-    }
-
-    if (ref_type == referralType.value[2].name) {
-        searchPlaceHolder.value = ""
-        disableInputs.value = false
-        disableFacilityWardNameInput.value = true
-        return
-    }
-
-    disableInputs.value = false
-    disableFacilityWardNameInput.value = false
-    fnToUse.value = fn;
-}
 </script>
 
 <style scoped>
