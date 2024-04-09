@@ -339,7 +339,7 @@ async function saveReferralInfo() {
         dataItem: refDataItem.value,
     };
 
-    store.addDispositionData(referralData, editIndex.value);
+    store.addOutcomeData(referralData, editIndex.value)
     clearInputs();
 }
 

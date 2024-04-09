@@ -78,6 +78,7 @@ import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts"
 const WardsData = ref([] as any)
 const store = useOutcomeStore()
 let temp_data_v: any[] = []
+const editIndex = ref(NaN)
 
 onMounted(async () => {
     findWardName({})
@@ -201,6 +202,8 @@ function saveDataToStores() {
         reason: note_properties[0].dataValue,
         // dataItem: refDataItem.value,
     }
+
+    store.addOutcomeData(referralData, editIndex.value)
 }
 
 function validateDate() {

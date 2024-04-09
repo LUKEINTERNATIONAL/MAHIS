@@ -76,6 +76,7 @@ import DynamicButton from "@/components/DynamicButton.vue"
 import { isEmpty } from "lodash"
 import { useOutcomeStore } from "@/stores/OutcomeStore"
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts"
+const editIndex = ref(NaN)
 
 const FacilityData = ref([] as any)
 const store = useOutcomeStore()
@@ -205,6 +206,8 @@ function saveDataToStores() {
         reason: note_properties[0].dataValue,
         // dataItem: refDataItem.value,
     }
+
+    store.addOutcomeData(referralData, editIndex.value)
 }
 
 const dynamic_button_properties = [
