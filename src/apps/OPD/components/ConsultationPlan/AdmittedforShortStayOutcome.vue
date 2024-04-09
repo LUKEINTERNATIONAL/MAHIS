@@ -45,6 +45,10 @@
                 </div>
             </ion-col>
         </ion-row>
+
+        <ion-row class="spc_btwn" v-if="dynamic_button_properties[0].showAddItemButton">
+            <dynamic-button v-if="dynamic_button_properties[0].addItemButton" :name="dynamic_button_properties[0].name" :fill="dynamic_button_properties[0].btnFill" :icon="addOutline" @clicked:btn="dynamic_button_properties[0].fn"/>
+        </ion-row>
     </ion-list>
 </template>
 
@@ -58,6 +62,7 @@ export default defineComponent({
 <script setup lang="ts">
 import { IonRow, IonCol, IonLabel, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue"
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
+import DynamicButton from "@/components/DynamicButton.vue"
 import {
     checkmark,
     pulseOutline,
@@ -86,6 +91,16 @@ const WardsData = ref([] as any)
 onMounted(async () => {
     findWardName({})
 })
+
+const dynamic_button_properties = [
+    {
+        showAddItemButton: true,
+        addItemButton: true,
+        name: "save",
+        btnFill: 'clear',
+        fn: ()=>{},
+    }
+]
 
 const note_properties = [
     {
@@ -185,5 +200,8 @@ function validateForm() {
     margin-top: 7px;
     display: flex;
     text-align: center;
+}
+.spc_btwn {
+    margin-top: 2%;
 }
 </style>

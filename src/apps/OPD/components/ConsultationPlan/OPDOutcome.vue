@@ -144,7 +144,7 @@
         <ion-row class="spc_btwn" v-if="showAddItemButton">
             <dynamic-button v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" @clicked:btn="addReferral"></dynamic-button>
         </ion-row>
-
+        
         <deadOutcome v-if="show_dead_options"/>
     </ion-list>
 </template>
@@ -185,14 +185,14 @@ import {
     chevronUpOutline,
     codeSlashOutline,
 } from "ionicons/icons";
-import { ref, watch, computed, onMounted, onUpdated } from "vue";
-import { LocationService } from "@/services/location_service";
-import DynamicButton from "@/components/DynamicButton.vue";
-import SelectionPopover from "@/components/SelectionPopover.vue";
-import { icons } from "@/utils/svg";
-import BasicInputField from "@/components/BasicInputField.vue";
-import DynamicDispositionList from "@/components/DynamicDispositionList.vue";
-import { useDispositionStore } from "@/stores/OutcomeStore";
+import { ref, watch, computed, onMounted, onUpdated } from "vue"
+import { LocationService } from "@/services/location_service"
+import DynamicButton from "@/components/DynamicButton.vue"
+import SelectionPopover from "@/components/SelectionPopover.vue"
+import { icons } from "@/utils/svg"
+import BasicInputField from "@/components/BasicInputField.vue"
+import DynamicDispositionList from "@/components/DynamicDispositionList.vue"
+import { useDispositionStore } from "@/stores/OutcomeStore"
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { getSpecialistClinics, getFacilityWards } from "@/apps/OPD/services/outcome";
 import deadOutcome from "../ConsultationPlan/DeadOutcome.vue"
