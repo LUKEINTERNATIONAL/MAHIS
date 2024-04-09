@@ -169,16 +169,22 @@ const time_properties = [
         placeHolder: {default: 'Enter time of death if known'} as any,
         dataHandler: timeUpdate_fn1,
         dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'error',
     },
     {
         placeHolder: {default: 'Enter time arrived'} as any,
         dataHandler: timeUpdate_fn2,
         dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'error',
     },
     {
         placeHolder: {default: 'Enter time confirming death'} as any,
         dataHandler: timeUpdate_fn3,
         dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'error',
     }, 
 ]
 
@@ -187,16 +193,23 @@ const date_properties = [
         placeHolder: {default: 'Enter date of death'} as any,
         dataHandler: dateUpdate_fn1,
         dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'error',
     },
     {
         placeHolder: {default: 'Enter date arrived'} as any,
         dataHandler: dateUpdate_fn2,
         dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'error',        show_error: ref(false),
+        error_message: 'error',
     },
     {
         placeHolder: {default: 'Enter date confirming death'} as any,
         dataHandler: dateUpdate_fn3,
         dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'error',
     }, 
 ]
 
@@ -205,11 +218,15 @@ const note_properties = [
         placeHolder: 'Enter place of death',
         dataHandler: notesUpDated_fn1,
         dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'error',
     },
     {
         placeHolder: 'Enter name of guardian',
         dataHandler: notesUpDated_fn2,
         dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'error',
     },
     {
         placeHolder: 'Enter name of person confirming death',
@@ -220,11 +237,15 @@ const note_properties = [
         placeHolder:'Enter position of the person confirming death',
         dataHandler: notesUpDated_fn4,
         dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'error',
     },
     {
         placeHolder: 'Enter medical council registration number of the person confirming death',
         dataHandler: notesUpDated_fn5,
         dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'error',
     },
 ]
 
