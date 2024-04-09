@@ -73,7 +73,6 @@ export function modifyCheckboxInputField(data: any, checkboxInputName: any, elem
 
 export function modifyCheckboxHeader(data: any, headerName: any, element: any, newValue: any) {
     data.forEach((item: any) => {
-        console.log(item);
         if (item?.checkboxBtnContent?.header?.name === headerName) {
             item.checkboxBtnContent.header[element] = newValue;
         }

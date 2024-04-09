@@ -10,7 +10,7 @@
             !contentData[index]?.data?.rowData[0]?.colData[0]?.displayNone
         "
     >
-        <ion-col class="item_header_col" v-if="item['sectionHeader']">
+        <ion-col class="item_header_col" v-if="item['sectionHeader'] || item['sideColSize']" :size="item['sideColSize']">
             <span class="item_header" :style="'font-weight:' + item.sectionHeaderFontWeight">{{ item["sectionHeader"] }}</span>
         </ion-col>
         <ion-col v-if="!item.displayNone">
@@ -22,6 +22,7 @@
                             v-if="!col.isDatePopover && !col.isMultiSelect"
                             :inputHeader="col.inputHeader"
                             :sectionHeaderFontWeight="col.sectionHeaderFontWeight"
+                            :bold="col.class"
                             :unit="col.unit"
                             :input="col.input"
                             :disabled="col.disabled"
@@ -64,6 +65,7 @@
                             v-if="col.isDatePopover"
                             :inputHeader="col.inputHeader"
                             :sectionHeaderFontWeight="col.sectionHeaderFontWeight"
+                            :bold="col.bold"
                             :unit="col.unit"
                             :icon="col.icon"
                             :placeholder="col.placeholder"

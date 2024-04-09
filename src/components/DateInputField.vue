@@ -1,5 +1,5 @@
 <template>
-    <h6 v-if="inputHeader">{{ inputHeader }}</h6>
+    <h6 v-if="inputHeader" :class="bold">{{ inputHeader }}</h6>
     <VueDatePicker
         @date-update="$emit('update:dateValue', formatDate($event))"
         auto-apply
@@ -9,10 +9,7 @@
         :auto-position="true"
     >
         <template #trigger>
-            <ion-item class="input_item" :style="'width:' + inputWidth">
-                <ion-label>
-                    <ion-icon v-if="icon" slot="start" class="selectedPatient" :icon="icon" aria-hidden="true"></ion-icon>
-                </ion-label>
+            <div class="" :style="'width:' + inputWidth">
                 <ion-input
                     @ionInput="handleInput"
                     @ionBlur="handleBlur"
@@ -21,12 +18,22 @@
                     :value="inputValue"
                     :placeholder="placeholder"
                     :type="inputType"
-                />
-                <ion-label v-if="unit || iconRight" style="border-left: 1px solid #e6e6e6; padding-left: 10px">
-                    <ion-icon v-if="iconRight" slot="start" :icon="iconRight" aria-hidden="true"></ion-icon>
-                    <span v-if="unit">{{ unit }}</span>
-                </ion-label>
-            </ion-item>
+                >
+                    <ion-label v-if="InnerActionBtnPropeties.show" style="display: flex" slot="end">
+                        <ion-button slot="end" @click="handleInnerActionBtnPropetiesFn">{{ InnerActionBtnPropeties.name }}</ion-button>
+                    </ion-label>
+
+                    <ion-label style="display: flex" slot="start">
+                        <ion-icon v-if="icon" :icon="icon" aria-hidden="true"></ion-icon>
+                        <span v-if="leftText" class="left-text"> {{ leftText }}</span>
+                    </ion-label>
+
+                    <ion-label v-if="unit || iconRight" slot="end" style="border-left: 1px solid #e6e6e6; padding-left: 10px">
+                        <ion-icon v-if="iconRight" :icon="iconRight" aria-hidden="true"></ion-icon>
+                        <span v-if="unit">{{ unit }}</span>
+                    </ion-label>
+                </ion-input>
+            </div>
         </template>
     </VueDatePicker>
 </template>
@@ -90,6 +97,16 @@ export default defineComponent({
         inputWidth: {
             default: "",
         },
+        InnerActionBtnPropeties: {
+            default: {
+                name: "provide name",
+                show: false,
+            },
+        },
+        leftText: {
+            type: String,
+            default: "",
+        },
     },
     methods: {
         handleInput(event: any) {
@@ -111,6 +128,9 @@ export default defineComponent({
         },
         formatDate(date: any) {
             return HisDate.toStandardHisDisplayFormat(date);
+        },
+        handleInnerActionBtnPropetiesFn(event: any) {
+            this.$emit("update:InnerActionBtnPropetiesAction", event);
         },
     },
 });
