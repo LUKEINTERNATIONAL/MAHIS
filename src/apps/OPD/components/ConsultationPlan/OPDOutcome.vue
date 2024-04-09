@@ -10,6 +10,10 @@
             <span class="dash_box">{{ initialMsg }}</span>
         </ion-row>
 
+        <ion-row class="spc_btwn" v-if="showAddItemButton">
+            <dynamic-button v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" @clicked:btn="addReferral"></dynamic-button>
+        </ion-row>
+
         <div v-if="showAddReferralInfo">
             <ion-row>
                 
@@ -32,15 +36,16 @@
                     </div>
                 </ion-col>  
             </ion-row>
-
         </div>
 
-        <ion-row class="spc_btwn" v-if="showAddItemButton">
-            <dynamic-button v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" @clicked:btn="addReferral"></dynamic-button>
-        </ion-row>
-
-        <AdmittedforShortStayOutcomef v-if="show_admitted_options"/>
-        <ReferredOutCome v-if="show_referred_options"/>
+        <AdmittedforShortStayOutcomef
+            v-if="show_admitted_options"
+            @data-saved="dataSavedTrigFn"
+        />
+        <ReferredOutCome 
+            v-if="show_referred_options"
+            @data-saved="dataSavedTrigFn"
+        />
         <deadOutcome v-if="show_dead_options"/>
     </ion-list>
 </template>
@@ -218,7 +223,13 @@ async function checkRefType(clear_inputs: boolean = true) {
     else {
         show_dead_options.value = false
     }
-    }
+}
+
+function dataSavedTrigFn() {
+    show_dead_options.value = false
+    show_admitted_options.value = false
+    show_referred_options.value = false
+}
 </script>
 
 <style scoped>
