@@ -65,20 +65,7 @@ import { IonRow, IonCol, IonLabel, IonItem, IonList, IonTitle, IonToolbar, IonMe
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
 import DynamicButton from "@/components/DynamicButton.vue"
 import {
-    checkmark,
-    pulseOutline,
     addOutline,
-    closeOutline,
-    checkmarkOutline,
-    filter,
-    chevronDownOutline,
-    chevronUpOutline,
-    codeSlashOutline,
-    phoneLandscape,
-    phonePortraitOutline,
-    locationOutline,
-    personCircleOutline,
-    medicalOutline,
     pencilOutline
 } from "ionicons/icons";
 import ListPicker from "@/apps/OPD/components/ConsultationPlan/ListPicker.vue"
@@ -86,7 +73,6 @@ import DatePicker from "@/apps/OPD/components/ConsultationPlan/DatePicker.vue"
 import BasicInputField from "@/components/BasicInputField.vue"
 import { useOutcomeStore } from "@/stores/OutcomeStore"
 import { getSpecialistClinics, getFacilityWards } from "@/apps/OPD/services/outcome"
-import { isEmpty } from "lodash"
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts"
 
 const WardsData = ref([] as any)
