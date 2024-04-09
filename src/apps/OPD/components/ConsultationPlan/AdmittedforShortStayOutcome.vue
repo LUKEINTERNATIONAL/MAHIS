@@ -148,9 +148,8 @@ function listUpdated1(data: any) {
 }
 
 function validateForm() {
-    console.log("QWERTYUIOIUYGTFGHJK")
     const temp_data_v = []
-    FacilityData.value.forEach((item: any) => {
+    WardsData.value.forEach((item: any) => {
         if (item.selected == true) {
             temp_data_v.push(item)
         }
