@@ -13,6 +13,7 @@ const initialPhysicalExam= [
                 title:'Has physical examination been done?',
                 selectedValue: "",
                 name: "Physical examination",
+                displayNext: "Yes",
                 class:"bold"
             },
             data: [
@@ -39,7 +40,7 @@ const initialPhysicalExam= [
                 title: "Reason why physical examination not done?",
                 selectedValue: "",
                 name: "Reason why physical examination not done",
-                // displayNone: true,
+                displayNone: true,
                 class:'bold'
             },
             data: [
@@ -59,7 +60,7 @@ const initialPhysicalExam= [
     {
         selectdData: [],
         sideColSize:0.3,
-        childName:"Yes",
+        childName:"Physical examination",
         classDash: "dashed_bottom_border",
         radioBtnContent: {
             header: {
@@ -68,7 +69,7 @@ const initialPhysicalExam= [
                 title: "Eyes normal?",
                 displayNext:"No",
                 class:"bold",
-                // displayNone: true,
+                displayNone: true,
             },
             data: [
                 {
@@ -88,12 +89,13 @@ const initialPhysicalExam= [
         selectdData: [],
         sideColSize:1,
         isFinishBtn: false,
+        childName:"Eyes normal",
         classDash: "",
         checkboxBtnContent: {
             header: {
                 title: "What are the abnormalities on eyes?",
                 selectedValue: "",
-                // displayNone: true,
+                displayNone: true,
                 name: "Abnormality for eyes",
                 class:'bold'
             },
@@ -133,13 +135,14 @@ const initialPhysicalExam= [
     {
         selectdData: [],
         sideColSize:1,
+        childName:"Eyes normal",
         isFinishBtn: false,
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
             header: {
                 title: "",
                 selectedValue: "",
-                // displayNone: true,
+                 displayNone: true,
                 name: "Abnormality for eyes",
             },
             data: [
@@ -157,6 +160,7 @@ const initialPhysicalExam= [
     },
 
     {
+        childName:"Other eye abnormality",
         classDash: "dashed_bottom_border",
         sideColSize:1,
         data: {
@@ -164,7 +168,7 @@ const initialPhysicalExam= [
                 {
                     colData: [
                         {
-                            // displayNone: true,
+                            displayNone: true,
                             inputHeader: "Specify eye abnormality",
                             class:'bold',
                             icon: icons.editPen,
