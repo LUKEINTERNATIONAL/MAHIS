@@ -173,7 +173,7 @@ import SelectionPopover from "@/components/SelectionPopover.vue";
 import { icons } from "@/utils/svg";
 import BasicInputField from "@/components/BasicInputField.vue";
 import DynamicDispositionList from "@/components/DynamicDispositionList.vue";
-import { useDispositionStore } from "@/stores/OutcomeStore";
+import { useOutcomeStore } from "@/stores/OutcomeStore";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { getSpecialistClinics, getFacilityWards } from "@/apps/NCD/services/outcome";
 
@@ -205,7 +205,7 @@ const fnToUse = ref();
 const refDataItem = ref();
 const popoverOpen = ref(false);
 const showAddReferralInfo = ref(false);
-const store = useDispositionStore();
+const store = useOutcomeStore();
 const dispositions = computed(() => store.dispositions);
 const NamesData = ref([] as any);
 const EditEvnt = ref(false);
@@ -339,7 +339,7 @@ async function saveReferralInfo() {
         dataItem: refDataItem.value,
     };
 
-    store.addDispositionData(referralData, editIndex.value);
+    store.addOutcomeData(referralData, editIndex.value)
     clearInputs();
 }
 
