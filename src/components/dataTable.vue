@@ -82,9 +82,7 @@
   const searchFieldS = ref([]) as any
 
   const headers = ref<Header[]>( [] )
-    // { text: "PLAYER", value: "player" },
   const items_local = ref<Item[]>([])
-    // { player: "Stephen Curry", team: "GSW", number: 30, position: 'G', indicator: {"height": '6-2', "weight": 185}, lastAttended: "Davidson", country: "USA"}
   
   const props = defineProps<{
     colums: any,
