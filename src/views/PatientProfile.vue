@@ -44,10 +44,11 @@
                         <ion-card class="start_new_co" style="margin-bottom: 20px"> + Enroll in Labour and delivery program </ion-card>
                         <ion-card class="start_new_co" style="margin-bottom: 20px"> + Enroll in PNC program </ion-card>
                         <ion-card class="start_new_co" style="margin-bottom: 20px" @click="handleOPD()"> + Enroll in OPD Program </ion-card>
-                       
-                            <router-link to="/dispensation"> 
-                                <ion-card class="start_new_co" style="margin-bottom: 20px">+ Dispense Medication  </ion-card></router-link>
-                       
+
+                        <router-link to="/dispensation">
+                            <ion-card class="start_new_co" style="margin-bottom: 20px">+ Dispense Medication </ion-card></router-link
+                        >
+
                         <ion-card style="margin-bottom: 20px; background-color: #fff">
                             <ion-accordion-group :value="['first']">
                                 <ion-accordion value="first" style="background-color: #fff" toggle-icon-slot="start">
@@ -193,6 +194,8 @@ import { mapState } from "pinia";
 import HisDate from "@/utils/Date";
 import { useEnrollementStore } from "@/stores/EnrollmentStore";
 import { PatientService } from "@/services/patient_service";
+import { UserService } from "@/services/user_service";
+import { Service } from "@/services/service";
 
 import { ref } from "vue";
 export default defineComponent({
@@ -231,7 +234,7 @@ export default defineComponent({
             isModalOpen: false,
             url: "" as any,
             NCDProgramActionName: "+ Enroll in NCD Program" as any,
-            OPDProgramActionName: "+ Enroll in OPD Program" as any,
+            OPDProgramActionName: "+ Start New OPD consultation" as any,
         };
     },
     computed: {
@@ -264,7 +267,20 @@ export default defineComponent({
     },
 
     methods: {
-        setNCDValue() {
+        async getUserActivities(activities: any) {
+            const userID: any = Service.getUserID();
+            const generalStore = useGeneralStore();
+            generalStore.setActivity([
+                (
+                    await UserService.getJson("user_properties", {
+                        user_id: userID,
+                        property: activities,
+                    })
+                ).property_value,
+            ]);
+        },
+        async setNCDValue() {
+            this.getUserActivities("OPD_activities");
             sessionStorage.setItem("app", JSON.stringify({ programID: 32, applicationName: "NCD" }));
             const patient = new PatientService();
             if (patient.getNcdNumber() != "Unknown") {
@@ -291,7 +307,7 @@ export default defineComponent({
                 this.url = "OPDvitals";
             } else {
                 this.url = "OPDvitals";
-                this.OPDProgramActionName = "+ Enroll in OPD Program";
+                this.OPDProgramActionName = "+ Start new OPD OPD Program";
             }
         },
         openModal() {

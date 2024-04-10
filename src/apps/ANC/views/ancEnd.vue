@@ -90,7 +90,7 @@ export default defineComponent({
             StepperData: [
                 {
                     title: "AncEnd",
-                    componet: "AncEnd",
+                    component: "AncEnd",
                     value: "1",
                 },
             ],

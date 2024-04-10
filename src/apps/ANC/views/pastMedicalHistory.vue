@@ -90,7 +90,7 @@ export default defineComponent({
             StepperData: [
                 {
                     title: "Past Medical History",
-                    componet: "MedicalHistory",
+                    component: "MedicalHistory",
                     value: "1",
                 },
             ],

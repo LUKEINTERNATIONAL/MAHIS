@@ -96,12 +96,12 @@ export default defineComponent({
             StepperData: [
                 {
                     title: "Obstetric",
-                    componet: "Obstetric",
+                    component: "Obstetric",
                     value: "1",
                 },
                 {
                     title: "Pregnancy/Labour",
-                    componet: "Labour",
+                    component: "Labour",
                     value: "2",
                 },
             ],
