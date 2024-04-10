@@ -107,6 +107,7 @@
                     :placeholder="note_properties[5].placeHolder"
                     :icon="pencilOutline"
                     :inputValue="note_properties[5].dataValue.value"
+                    :disabled="temP_AA"
                 />
             </ion-col>
         </ion-row>
@@ -191,6 +192,7 @@ const phone_number_value = ref()
 const phone_number_place_holder = ref('gurdian phone number')
 const isClientFemale = ref(true)
 const temP_A = ref(true as any)
+const temP_AA = ref(true as any)
 
 const time_properties = [
     {
@@ -287,6 +289,7 @@ const note_properties = [
         dataValue: ref(),
         show_error: ref(false),
         error_message: 'error',
+        dissabled: temP_AA.value
     }, 
 ]
 
@@ -400,6 +403,14 @@ function listUpdated1(data: any) {
             resetSelectionForCausesOfDeath()
             temP_A.value = true
         }
+
+        if (index == 6 && datum.selected == true) {
+            temP_AA.value = false
+            return
+        } else if (index == 6 && datum.selected == false) {
+            resetSelectionForCausesOfDeath()
+            temP_AA.value = true
+        }
     })
     mannerOfDeath.value = data
 }
@@ -411,7 +422,16 @@ function resetSelectionForCausesOfDeath() {
 }
 
 function listUpdated2(data: any) {
-    console.log(data)
+    data.forEach((datum: any, index: number) => {
+        if (index == 3 && datum.selected == true) {
+            temP_AA.value = false
+            return
+        } else if (index == 3 && datum.selected == false) {
+            resetSelectionForCausesOfDeath()
+            temP_AA.value = true
+        }
+    })
+            
     causesOfDeath.value = data
 }
 
