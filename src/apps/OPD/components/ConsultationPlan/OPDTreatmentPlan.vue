@@ -115,8 +115,10 @@
                     :uniqueId="uniqueId"
                     :name_of_list="name_of_list"
                     :choose_place_holder="list_place_holder"
+                    :use_internal_filter="true"
                     :items_-list="route_list"
                     :show_label="show_list_label"
+                    :disabled="false"
                     @item-list-up-dated="routeListUpdated"
                     @item-list-filtered="routeListFiltred"
                 />
@@ -366,7 +368,7 @@ import { PreviousTreatment } from "@/apps/NCD/services/treatment";
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { useAllegyStore} from "@/apps/OPD/stores/AllergyStore"
 import NonPharmacologicalIntervention from "@/apps/OPD/components/ConsultationPlan/NonPharmacologicalIntervention.vue"
-import ListPicker from "@/apps/OPD/components/ConsultationPlan/ListPicker.vue"
+import ListPicker from "@/components/ListPicker.vue"
 
 const iconsContent = icons;
 const drug_frequencies = DRUG_FREQUENCIES;
