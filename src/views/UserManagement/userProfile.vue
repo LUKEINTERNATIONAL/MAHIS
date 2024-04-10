@@ -13,6 +13,8 @@
         @item-search-text="list_picker_prperties[0].searchTextFN"
     />
 
+    
+
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
@@ -59,7 +61,6 @@ async function getUsers() {
     user_data.value = await UserService.getAllUsers()
     const temp_array = [] as any
     user_data.value.forEach((item: any) => {
-        console.log(item)
         temp_array.push(
             {
                 name: item.username,
@@ -78,7 +79,7 @@ const list_picker_prperties = [
         show_list_label: true as any,
         unqueId: 'qwerty_3' as any,
         name_of_list: 'Choose User' as any,
-        placeHolder: 'Choose one' as any,
+        placeHolder: 'Search for a User' as any,
         items: user_data.value,
         listUpdatedFN: listUpdated1,
         listFilteredFN: ()=>{},
