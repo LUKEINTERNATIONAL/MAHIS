@@ -366,7 +366,7 @@ import { PreviousTreatment } from "@/apps/NCD/services/treatment";
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { useAllegyStore} from "@/apps/OPD/stores/AllergyStore"
 import NonPharmacologicalIntervention from "@/apps/OPD/components/ConsultationPlan/NonPharmacologicalIntervention.vue"
-import ListPicker from "@/apps/OPD/components/ConsultationPlan/ListPicker.vue"
+import ListPicker from "@/components/ListPicker.vue"
 
 const iconsContent = icons;
 const drug_frequencies = DRUG_FREQUENCIES;

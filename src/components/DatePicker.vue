@@ -21,11 +21,11 @@
 </template>
 <script setup lang="ts">
 import { IonDatetime } from "@ionic/vue";
-import BasicInputField from "@/components/BasicInputField.vue";
-import DynamicButton from "@/components/DynamicButton.vue";
+import BasicInputField from "./BasicInputField.vue";
+import DynamicButton from "./DynamicButton.vue";
 import { today } from "ionicons/icons";
 import { ref } from "vue";
-import { icons } from "@/utils/svg";
+import { icons } from "../utils/svg";
 
 const refDate = ref();
 const calenderIcon = icons.calendar;

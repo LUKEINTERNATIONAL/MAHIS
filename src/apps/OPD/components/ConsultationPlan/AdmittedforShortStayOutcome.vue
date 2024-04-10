@@ -84,8 +84,8 @@ import {
     pencilOutline,
     removeOutline
 } from "ionicons/icons";
-import ListPicker from "@/apps/OPD/components/ConsultationPlan/ListPicker.vue"
-import DatePicker from "@/apps/OPD/components/ConsultationPlan/DatePicker.vue"
+import ListPicker from "@/components/ListPicker.vue"
+import DatePicker from "@/components/DatePicker.vue"
 import BasicInputField from "@/components/BasicInputField.vue"
 import { useOutcomeStore } from "@/stores/OutcomeStore"
 import { getSpecialistClinics, getFacilityWards } from "@/apps/OPD/services/outcome"

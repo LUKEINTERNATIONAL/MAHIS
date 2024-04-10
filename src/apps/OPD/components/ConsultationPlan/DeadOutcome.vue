@@ -189,10 +189,10 @@ export default defineComponent({
 <script setup lang="ts">
 import { IonRow, IonCol, IonCheckbox, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue"
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
-import TimePicker from "@/apps/OPD/components/ConsultationPlan/TimePicker.vue"
-import DatePicker from "@/apps/OPD/components/ConsultationPlan/DatePicker.vue"
+import TimePicker from "@/components/TimePicker.vue"
+import DatePicker from "@/components/DatePicker.vue"
 import Note from "@/apps/OPD/components/ConsultationPlan/Note.vue"
-import ListPicker from "@/apps/OPD/components/ConsultationPlan/ListPicker.vue"
+import ListPicker from "@/components/ListPicker.vue"
 import BasicInputField from "@/components/BasicInputField.vue"
 import DynamicButton from "@/components/DynamicButton.vue"
 import { PatientService } from "@/services/patient_service"

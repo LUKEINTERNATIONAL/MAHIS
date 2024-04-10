@@ -97,7 +97,7 @@ import { icons } from "@/utils/svg"
 import DynamicDispositionList from "@/components/DynamicDispositionList.vue"
 import { useOutcomeStore } from "@/stores/OutcomeStore"
 import deadOutcome from "../ConsultationPlan/DeadOutcome.vue"
-import ListPicker from "@/apps/OPD/components/ConsultationPlan/ListPicker.vue"
+import ListPicker from "@/components/ListPicker.vue"
 import AdmittedforShortStayOutcomef from "../ConsultationPlan/AdmittedforShortStayOutcome.vue"
 import ReferredOutCome from '../ConsultationPlan/ReferredOutCome.vue'
 
