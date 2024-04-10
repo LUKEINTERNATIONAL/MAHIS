@@ -278,7 +278,8 @@ export default defineComponent({
                 this.$router.push("patientProfile");
             } else {
                 toastWarning("Please complete all required fields");
-                this.saveOutComeStatus();
+                // this.saveOutComeStatus();
+                // this.saveTreatmentPlan();
             }
         },
         saveInvestigation() {
