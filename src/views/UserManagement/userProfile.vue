@@ -53,7 +53,7 @@ const _search_fields_ = ref([
         value: 'username',
         name: 'username',
     }
-])
+]) as any
 
 onMounted(async () => {
     getUsers()
