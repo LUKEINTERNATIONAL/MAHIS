@@ -55,6 +55,7 @@ export default defineComponent({
     },
     data() {
         return {
+            bold:'text-bold',
             displayList: [] as any,
             popoverOpen: false,
             event: "" as any,
@@ -151,5 +152,8 @@ export default defineComponent({
 <style scoped>
 h6 {
     margin-top: 0px;
+}
+.text-bold {
+  font-weight: bold;
 }
 </style>
