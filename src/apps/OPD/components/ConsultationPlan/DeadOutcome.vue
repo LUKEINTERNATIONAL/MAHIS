@@ -5,13 +5,24 @@
                     :placeholder="note_properties[0].placeHolder"
                     :icon="locationOutline"
                     :inputValue="note_properties[0].dataValue.value"
+                    @update:inputValue="note_properties[0].dataHandler"
                 />
+
+                <div>
+                    <ion-label v-if="note_properties[0].show_error.value" class="error-label">
+                        {{ note_properties[0].error_message }}
+                    </ion-label>
+                </div>
             </ion-col>
             <ion-col>
                 <DatePicker
                     :place_holder="date_properties[0].placeHolder"
-                    @time-up-dated="date_properties[0].dataHandler"
+                    @date-up-dated="date_properties[0].dataHandler"
                 />
+
+                <div>
+                    <ion-label v-if="date_properties[0].show_error.value" class="error-label">{{ date_properties[0].error_message }}</ion-label>
+                </div>
             </ion-col>
         </ion-row>
         <ion-row>
@@ -270,7 +281,7 @@ const note_properties = [
         placeHolder: 'Enter place of death',
         dataHandler: notesUpDated_fn1,
         dataValue: ref(),
-        show_error: ref(false),
+        show_error: ref(false) as any,
         error_message: 'error',
     },
     {
@@ -395,7 +406,13 @@ function timeUpdate_fn3(data: any) {
 }
 
 function dateUpdate_fn1(data: any) {
-    date_properties[0].dataValue.value = data
+    const date_data = {
+        day: data.value.day,
+        month: data.value.month,
+        year: data.value.year,
+        formattedDate: data.formattedDate
+    }
+    date_properties[0].dataValue.value = date_data
 }
 
 function dateUpdate_fn2(data: any) {
@@ -406,8 +423,9 @@ function dateUpdate_fn3(data: any) {
     date_properties[2].dataValue.value = data
 }
 
-function notesUpDated_fn1(data: any) {
-    note_properties[0].dataValue.value = data
+function notesUpDated_fn1(event: any) {
+    const reason = event.target.value
+    note_properties[0].dataValue.value = reason
 }
 function notesUpDated_fn2(data: any) {
     note_properties[1].dataValue.value = data
@@ -480,8 +498,26 @@ function checkPatient() {
 }
 
 function validateForm() {
-
+    validatePlaceOfDeath()
+    validateDateOfDeath()
 }
+
+function validatePlaceOfDeath() {
+    if (note_properties[0].dataValue.value == "" || note_properties[0].dataValue.value === undefined) {
+        note_properties[0].show_error.value = true
+    } else {
+        note_properties[0].show_error.value = false
+    }
+}
+
+function validateDateOfDeath() {
+    if (date_properties[0].dataValue.value === undefined || date_properties[0].dataValue.value == "") {
+        date_properties[0].show_error.value = true 
+    } else {
+        date_properties[0].show_error.value = false
+    }
+}
+
 </script>
 
 <style scoped>
