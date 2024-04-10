@@ -31,7 +31,7 @@ import Referral from "@/apps/ANC/components/referral/Referral.vue";
 
 
 export default defineComponent ({
-  name : 'referral',
+  name : 'treatment',
   components : {
     IonContent,
     IonHeader,

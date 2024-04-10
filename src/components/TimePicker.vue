@@ -23,8 +23,8 @@
 import { IonDatetime } from "@ionic/vue";
 import { time } from "ionicons/icons";
 import { ref, watch } from "vue";
-import BasicInputField from "@/components/BasicInputField.vue";
-import DynamicButton from "@/components/DynamicButton.vue";
+import BasicInputField from "./BasicInputField.vue";
+import DynamicButton from "./DynamicButton.vue";
 
 const refTime = ref();
 const popoverProperties = ref({

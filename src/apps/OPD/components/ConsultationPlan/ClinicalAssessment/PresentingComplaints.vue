@@ -62,7 +62,6 @@ import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
 import previousComplaints from "@/apps/OPD/components/ConsultationPlan/previousVisits/previousComplaints.vue";
 import { usePresentingComplaintsStore } from "@/apps/OPD/stores/PresentingComplaintsStore";
 import { PatientComplaintsService } from "@/apps/OPD/services/patient_complaints_service";
-import Complications from "@/apps/NCD/components/ConsultationPlan/Complications.vue";
 
 import { IonPopover } from "@ionic/vue";
 import DashBox from "@/components/DashBox.vue";

@@ -53,7 +53,7 @@ import { Service } from "@/services/service";
 import { LabOrder } from "@/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
-import { useDispositionStore } from "@/stores/OutcomeStore";
+import { useOutcomeStore } from "@/stores/OutcomeStore";
 import { usePregnancyStore } from "@/apps/OPD/stores/PregnancyStore";
 import { usePresentingComplaintsStore } from "@/apps/OPD/stores/PresentingComplaintsStore";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
@@ -155,27 +155,27 @@ export default defineComponent({
             StepperData: [
                 {
                     title: "Clinical Assessment",
-                    componet: "ClinicalAssessment",
+                    component: "ClinicalAssessment",
                     value: "1",
                 },
                 {
                     title: "Investigations",
-                    componet: "Investigations",
+                    component: "Investigations",
                     value: "2",
                 },
                 {
                     title: "Diagnosis",
-                    componet: "OPDDiagnosis",
+                    component: "OPDDiagnosis",
                     value: "3",
                 },
                 {
                     title: "Treatment plan",
-                    componet: "OPDTreatmentPlan",
+                    component: "OPDTreatmentPlan",
                     value: "4",
                 },
                 {
                     title: "Outcome",
-                    componet: "OPDOutcome",
+                    component: "OPDOutcome",
                     value: "5",
                 },
             ],
