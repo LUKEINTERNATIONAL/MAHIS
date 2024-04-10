@@ -158,7 +158,7 @@ function listUpdated1(data: any) {
 
 onMounted(async () => {
     checkForDispositions();
-});
+})
 
 watch(
     () => refType.value,
@@ -169,14 +169,20 @@ watch(
             checkRefType()
         }
     }
-);
+)
 
 watch(
     () => dispositions.value.length,
     async (newvalue) => {
         checkForDispositions()
     }
-);
+)
+
+function resetSelection() {
+    referralType.value.forEach((item: any) =>{
+            item.selected = false
+        })
+}
 
 
 function checkForDispositions() {
@@ -225,6 +231,7 @@ function dataSavedTrigFn() {
     show_dead_options.value = false
     show_admitted_options.value = false
     show_referred_options.value = false
+    resetSelection()
 }
 </script>
 

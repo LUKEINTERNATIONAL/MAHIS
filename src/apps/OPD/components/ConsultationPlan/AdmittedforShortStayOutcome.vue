@@ -10,6 +10,7 @@
                     :choose_place_holder="list_picker_prperties[0].placeHolder"
                     :items_-list="list_picker_prperties[0].items"
                     :use_internal_filter="list_picker_prperties[0].use_internal_filter"
+                    :disabled="list_picker_prperties[0].disabled.value"
                     @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
                     @item-list-filtered="list_picker_prperties[0].listFilteredFN"
                 />
@@ -48,7 +49,21 @@
         </ion-row>
 
         <ion-row class="spc_btwn" v-if="dynamic_button_properties[0].showAddItemButton">
-            <dynamic-button v-if="dynamic_button_properties[0].addItemButton" :name="dynamic_button_properties[0].name" :fill="dynamic_button_properties[0].btnFill" :icon="addOutline" @clicked:btn="dynamic_button_properties[0].fn"/>
+            <dynamic-button
+                v-if="dynamic_button_properties[0].addItemButton"
+                :name="dynamic_button_properties[0].name"
+                :fill="dynamic_button_properties[0].btnFill"
+                :icon="addOutline"
+                @clicked:btn="dynamic_button_properties[0].fn"
+            />
+
+            <dynamic-button
+                v-if="dynamic_button_properties[1].addItemButton"
+                :name="dynamic_button_properties[1].name"
+                :fill="dynamic_button_properties[1].btnFill"
+                :icon="removeOutline"
+                @clicked:btn="dynamic_button_properties[1].fn"
+            />
         </ion-row>
     </ion-list>
 </template>
@@ -66,7 +81,8 @@ import { ref, watch, computed, onMounted, onUpdated } from "vue"
 import DynamicButton from "@/components/DynamicButton.vue"
 import {
     addOutline,
-    pencilOutline
+    pencilOutline,
+    removeOutline
 } from "ionicons/icons";
 import ListPicker from "@/apps/OPD/components/ConsultationPlan/ListPicker.vue"
 import DatePicker from "@/apps/OPD/components/ConsultationPlan/DatePicker.vue"
@@ -91,6 +107,14 @@ const dynamic_button_properties = [
         name: "save",
         btnFill: 'clear',
         fn: validateForm,
+    },
+
+    {
+        showAddItemButton: true,
+        addItemButton: true,
+        name: "cancel",
+        btnFill: 'clear',
+        fn: cancelE,
     }
 ]
 
@@ -119,7 +143,9 @@ function dateUpdate_fn1(data: any) {
         day: data.value.day,
         month: data.value.month,
         year: data.value.year,
+        formattedDate: data.formattedDate
     }
+
     date_properties[0].dataValue.value = date_data
 }
 
@@ -141,6 +167,7 @@ const list_picker_prperties = [
         use_internal_filter: true as any,
         show_error: ref(false),
         error_message: 'please select a ward',
+        disabled: ref(false) as any,
     }
 ]
 
@@ -204,15 +231,19 @@ function saveDataToStores() {
     }
 
     store.addOutcomeData(referralData, editIndex.value)
-    dataSaved()
+    dataSaved({"dataSaved": false})
 }
 
 const emit = defineEmits<{
     (e: "dataSaved", ObjectsArray: any): void
 }>()
 
-function dataSaved() {
-  emit("dataSaved", {"dataSaved": true})
+function dataSaved(data = {"dataSaved": true}) {
+    emit("dataSaved", data )
+}
+
+function cancelE() {
+    dataSaved()
 }
 
 function validateDate() {

@@ -84,11 +84,12 @@ function formatDate(date: any) {
     let options: Intl.DateTimeFormatOptions = { day: "2-digit", weekday: "long", month: "short", year: "numeric" };
     let formattedDate = tempDate.toLocaleDateString("en-US", options);
 
-    const data_data: { day: number; month: number; year: number } = {
+    const data_data: { day: number; month: number; year: number; formattedDate: string } = {
         day: theDate.getDate(),
         month: theDate.getMonth() + 1,
         year: theDate.getFullYear(),
-    };
+        formattedDate: formattedDate
+    }
     dateObject.value = data_data;
     dateUpDated();
     return formattedDate;
