@@ -218,8 +218,7 @@ const date_properties = [
         dataHandler: dateUpdate_fn2,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'error',        show_error: ref(false),
-        error_message: 'error',
+        error_message: 'error'
     },
     {
         placeHolder: {default: 'Enter date confirming death'} as any,
