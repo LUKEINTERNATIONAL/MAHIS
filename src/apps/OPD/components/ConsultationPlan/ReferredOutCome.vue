@@ -82,7 +82,7 @@ import {
     addOutline,
     pencilOutline,
     removeOutline
-} from "ionicons/icons";
+} from "ionicons/icons"
 import ListPicker from "@/components/ListPicker.vue"
 import DatePicker from "@/components/DatePicker.vue"
 import BasicInputField from "@/components/BasicInputField.vue"

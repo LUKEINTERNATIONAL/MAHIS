@@ -74,10 +74,15 @@ const props = defineProps<{
 watch(
     () => props.items_List,
     async (newValue) => {
-        local_itmes_List.value = newValue
+
+        if (newValue) {
+            local_itmes_List.value = newValue
+        } else {
+            local_itmes_List.value = newValue
+        }
+        
     }
 )
-
 watch(
     () => props.disabled,
     async (newValue) => {

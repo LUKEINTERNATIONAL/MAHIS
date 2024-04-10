@@ -1,18 +1,10 @@
 <template>
-    <dataTable/>
-    <ListPicker
-        :multiSelection="list_picker_prperties[0].multi_Selection"
-        :show_label="list_picker_prperties[0].show_list_label"
-        :uniqueId="list_picker_prperties[0].unqueId"
-        :name_of_list="list_picker_prperties[0].name_of_list"
-        :choose_place_holder="list_picker_prperties[0].placeHolder"
-        :items_-list="user_data"
-        :use_internal_filter="list_picker_prperties[0].use_internal_filter"
-        :disabled="list_picker_prperties[0].disabled.value"
-        @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
-        @item-list-filtered="list_picker_prperties[0].listFilteredFN"
-        @item-search-text="list_picker_prperties[0].searchTextFN"
+    <dataTable
+        :colums="data_table_properties[0].columns"
+        :items="_items_"
+        :search_fields="_search_fields_"
     />
+
 
     
 
@@ -20,6 +12,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { text } from "ionicons/icons";
+import { it } from "date-fns/locale";
 export default defineComponent({
     watch: {},
     name: "xxxComponent",
@@ -52,8 +45,15 @@ import { ref, watch, computed, onMounted, onUpdated } from "vue"
 import { UserService } from "@/services/user_service"
 import ListPicker from "@/components/ListPicker.vue"
 import dataTable from "@/components/dataTable.vue"
+import type { Header, Item } from "vue3-easy-data-table"
 
 const user_data = ref()
+const _search_fields_ = ref([
+    {
+        value: 'username',
+        name: 'username',
+    }
+])
 
 onMounted(async () => {
     getUsers()
@@ -65,15 +65,44 @@ async function getUsers() {
     user_data.value.forEach((item: any) => {
         temp_array.push(
             {
-                name: item.username,
+                username: item.username,
                 label: item.username,
                 value: item.user_id,
                 other: item
             }
         )
     })
+
+    const temp_aR: Item[] | {
+        /* __placeholder__ */
+        username:
+        /* __placeholder__ */
+        any;
+        /* __placeholder__ */
+        role:
+        /* __placeholder__ */
+        any;
+    }[] = []
+
+    user_data.value.forEach((item: any, index: number) => {
+
+        // if (index < 8)
+        temp_aR.push(
+            {
+                username: item.username,
+                role: item.user_id
+            }
+        )
+    })
+
+    _items_.value = temp_aR
+
+    console.log(_items_.value)
+
     user_data.value = temp_array
 }
+
+const _items_  = ref<Item[]>([] as any)
 
 const list_picker_prperties = [
     {
@@ -90,6 +119,30 @@ const list_picker_prperties = [
         show_error: ref(false),
         error_message: 'please select a User',
         disabled: ref(false) as any,
+    }
+]
+
+const _columns_ = ref<Header[]>([
+    {
+        text: 'Full Name',
+        value: 'username',
+        sortable: true
+    },
+    {
+        text: 'Role',
+        value: 'role',
+        sortable: true
+    },
+] as any)
+
+
+
+
+const data_table_properties = [
+    {
+        columns: _columns_.value as any,
+        items: _items_.value as any,
+        search_fields: _search_fields_
     }
 ]
 
