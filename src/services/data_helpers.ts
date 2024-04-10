@@ -96,6 +96,7 @@ function modifyObjects(data: any[], triggerName: any, initialData: any) {
             data[index] = _.cloneDeep(initialData[index]);
             if (data[index].radioBtnContent) modifyObjects(data, data[index].radioBtnContent.header.name, initialData);
             if (data[index].data) modifyObjects(data, data[index].data.rowData[0].colData[0].name, initialData);
+            if (data[index].checkboxBtnContent) modifyObjects(data, data[index].checkboxBtnContent.data[0].name, initialData);
         }
     });
 }
@@ -105,6 +106,7 @@ function displayObjects(data: any[], triggerName: any) {
         if (item.childName === triggerName) {
             if (data[index].radioBtnContent) data[index].radioBtnContent.header.displayNone = false;
             if (data[index].data) data[index].data.rowData[0].colData[0].displayNone = false;
+            if (data[index].checkboxBtnContent) data[index].checkboxBtnContent.data[0].displayNone = false;
         }
     });
 }
