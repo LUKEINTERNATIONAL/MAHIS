@@ -2,21 +2,8 @@
   <div class="container">
     <!-- Danger signs -->
     <ion-card  class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Danger signs</ion-card-title>
-      </ion-card-header>
       <ion-card-content>
         <basic-form :contentData="DangerSigns"></basic-form>
-      </ion-card-content>
-    </ion-card>
-
-    <!-- previous visit -->
-    <ion-card  class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Has the woman had previous ANC visits at another facility?</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <basic-form :contentData="PreviousVisit"></basic-form>
       </ion-card-content>
     </ion-card>
 
@@ -81,15 +68,12 @@ export default defineComponent({
 
     };
   },
-  created() {
-    this.previousVisitDateRef= {...this.PreviousVisitDate[0],...this.PreviousVisitDate[1]}
-  },
+
   mounted() {
     const DangerSigns =useDangerSignsStore()
     const PreviousVisit =useDangerSignsStore()
     this.previousVisitInstance=useDangerSignsStore()
     this.previousVisitInstance.setPreviousVisitDate([])
-    this.handleNumberOfVisits()
     this.handleDangerSigns()
   },
   watch:{
@@ -112,8 +96,6 @@ export default defineComponent({
         this.previousVisitDateInstance.setPreviousVisitDate(visits)
       }
 
-      this.handleNumberOfVisits()
-
 
     },
     deep:true
@@ -127,8 +109,7 @@ export default defineComponent({
   },
   computed: {
     ...mapState(useDangerSignsStore, ["DangerSigns"]),
-    ...mapState(useDangerSignsStore, ["PreviousVisit"]),
-    ...mapState(useDangerSignsStore, ["PreviousVisitDate"]),
+
   },
   setup() {
     return { checkmark,pulseOutline };
@@ -159,12 +140,6 @@ export default defineComponent({
       }
 
       },
-
-    handleNumberOfVisits(){
-      if(getRadioSelectedValue(this.PreviousVisit, 'Yes')=='yes'){
-        modifyFieldValue(this.PreviousVisit,'number of previous anc visits','displayNone', false)
-      }   else {modifyFieldValue(this.PreviousVisit,'number of previous anc visits','displayNone', true)}
-    },
     //Method for navigating
     goToNextSection() {
       if (this.currentSection < 1) {
