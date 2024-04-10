@@ -37,12 +37,24 @@
                 :search-value="searchValue"
             >
             <template #pagination="{ prevPage, nextPage, isFirstPage, isLastPage }">
-              <button :disabled="isFirstPage" @click="prevPage">
-                prev page
-              </button>
-              <button :disabled="isLastPage" @click="nextPage">
-                next page
-              </button>
+
+              <ion-row class="spc_btwn" v-if="dynamic_button_properties[0].showAddItemButton">
+                <dynamic-button
+                  v-if="dynamic_button_properties[0].addItemButton"
+                      :name="dynamic_button_properties[0].name"
+                      :fill="dynamic_button_properties[0].btnFill"
+                      :icon="returnUpBackOutline"
+                      @clicked:btn="prevPage"
+                />
+
+                <dynamic-button
+                  v-if="dynamic_button_properties[1].addItemButton"
+                      :name="dynamic_button_properties[1].name"
+                      :fill="dynamic_button_properties[1].btnFill"
+                      :icon="returnUpForwardOutline"
+                      @clicked:btn="nextPage"
+                />
+              </ion-row>
             </template>
           </EasyDataTable>
         </ion-card>
@@ -50,14 +62,18 @@
   
   <script setup lang="ts">
   import type { Header, Item } from "vue3-easy-data-table"
-  import { IonRow, IonCard, IonCol, IonList, IonLabel } from "@ionic/vue"
+  import { IonRow, IonCard, IonCol, IonButton, IonLabel } from "@ionic/vue"
   import { ref, watch, computed, onMounted, onUpdated } from "vue"
   import BasicInputField from "@/components/BasicInputField.vue"
   import ListPicker from "./ListPicker.vue"
+  import DynamicButton from "@/components/DynamicButton.vue"
   import {
     addOutline,
     pencilOutline,
-    searchOutline
+    searchOutline,
+    returnUpBackOutline,
+    returnUpForwardOutline
+    
 } from "ionicons/icons"
 
   const searchField = ref("username")
@@ -132,6 +148,23 @@ const note_properties = [
         error_message: 'please provide a reason'
     },
 ]
+
+const dynamic_button_properties = [
+    {
+        showAddItemButton: true,
+        addItemButton: true,
+        name: "prev page",
+        btnFill: 'clear',
+        fn: ()=>{},
+    },
+    {
+        showAddItemButton: true,
+        addItemButton: true,
+        name: "next page",
+        btnFill: 'clear',
+        fn: ()=>{},
+    },
+  ]
 
 const list_picker_prperties = [
     {
