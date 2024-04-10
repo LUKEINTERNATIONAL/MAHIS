@@ -115,8 +115,10 @@
                     :uniqueId="uniqueId"
                     :name_of_list="name_of_list"
                     :choose_place_holder="list_place_holder"
+                    :use_internal_filter="true"
                     :items_-list="route_list"
                     :show_label="show_list_label"
+                    :disabled="false"
                     @item-list-up-dated="routeListUpdated"
                     @item-list-filtered="routeListFiltred"
                 />
