@@ -1,37 +1,100 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
+import { radio } from "ionicons/icons";
+import { size } from "lodash";
 
 export const useComplicationsStore = defineStore("complicationsStore", {
     state: () => ({
         FootScreening: [
             {
                 selectedData: [],
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
+                groupedRadioBtnContent: {
+                    groupedData: [
                         {
-                            name: "Physical Exam",
-                            labelPlacement: "start",
-                            colSize: "4",
-                            justify: "space-between",
-                            header: true,
+                            data: [
+                                {
+                                    name: "Physical Exam",
+                                    labelPlacement: "start",
+                                    colSize: "5",
+                                    justify: "space-between",
+                                    header: true,
+                                },
+                                {
+                                    name: "Left foot",
+                                    labelPlacement: "start",
+                                    colSize: "4.5",
+                                    justify: "space-between",
+                                    header: true,
+                                },
+                                {
+                                    name: "Right foot",
+                                    labelPlacement: "start",
+                                    colSize: "4",
+                                    justify: "space-between",
+                                    header: true,
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
+            {
+                selectedData: [],
+                classDash: "dashed_bottom_border",
+                groupedRadioBtnContent: {
+                    groupedData: [
+                        {
+                            header: {
+                                selectedValue: "",
+                                name: "previousUlcerLeft",
+                            },
+                            data: [
+                                {
+                                    name: "Previous Ulcer",
+                                    labelPlacement: "start",
+                                    colSize: "8",
+                                    justify: "space-between",
+                                    header: true,
+                                    headClassName: "bold",
+                                },
+                                {
+                                    name: "Yes",
+                                    value: "Yes",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                                {
+                                    name: "No",
+                                    value: "No",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                            ],
                         },
                         {
-                            name: "Left foot",
-                            labelPlacement: "start",
-                            colSize: "4",
-                            justify: "space-between",
-                            header: true,
-                        },
-                        {
-                            name: "Right foot",
-                            labelPlacement: "start",
-                            colSize: "4",
-                            justify: "space-between",
-                            header: true,
+                            header: {
+                                title: "",
+                                selectedValue: "",
+                                name: "previousUlcerRight",
+                            },
+                            data: [
+                                {
+                                    name: "Yes",
+                                    value: "Yes2",
+                                    checked: false,
+                                    colSize: "8",
+                                    justify: "end",
+                                },
+                                {
+                                    name: "No",
+                                    value: "No2",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                            ],
                         },
                     ],
                 },
@@ -39,257 +102,519 @@ export const useComplicationsStore = defineStore("complicationsStore", {
             {
                 selectedData: [],
                 classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
+                groupedRadioBtnContent: {
+                    groupedData: [
                         {
-                            name: "Previous Ulcer",
-                            value: "previousUlcer",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "5",
-                            justify: "space-between",
+                            header: {
+                                selectedValue: "",
+                                name: "amputationLeft",
+                            },
+                            data: [
+                                {
+                                    name: "Previous Amputation",
+                                    labelPlacement: "start",
+                                    colSize: "8",
+                                    justify: "space-between",
+                                    header: true,
+                                    headClassName: "bold",
+                                },
+                                {
+                                    name: "Yes",
+                                    value: "Yes",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                                {
+                                    name: "No",
+                                    value: "No",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                            ],
                         },
                         {
-                            value: "type_2",
-                            checked: false,
-                            colSize: "4",
-                            justify: "end",
-                        },
-                    ],
-                },
-            },
-            {
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Previous Amputation",
-                            value: "value",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "5",
-                            justify: "space-between",
-                        },
-                        {
-                            value: "value",
-                            checked: false,
-                            colSize: "4",
-                            justify: "end",
-                        },
-                    ],
-                },
-            },
-            {
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Deformity",
-                            value: "value",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "5",
-                            justify: "space-between",
-                        },
-                        {
-                            value: "value",
-                            checked: false,
-                            colSize: "4",
-                            justify: "end",
-                        },
-                    ],
-                },
-            },
-            {
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Ingrown toenail",
-                            value: "value",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "5",
-                            justify: "space-between",
-                        },
-                        {
-                            value: "value",
-                            checked: false,
-                            colSize: "4",
-                            justify: "end",
-                        },
-                    ],
-                },
-            },
-            {
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Absent Pedal Pulses",
-                            value: "value",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "5",
-                            justify: "space-between",
-                        },
-                        {
-                            value: "value",
-                            checked: false,
-                            colSize: "4",
-                            justify: "end",
+                            header: {
+                                title: "",
+                                selectedValue: "",
+                                name: "Amputation2",
+                            },
+                            data: [
+                                {
+                                    name: "Yes",
+                                    value: "Yes2",
+                                    checked: false,
+                                    colSize: "8",
+                                    justify: "end",
+                                },
+                                {
+                                    name: "No",
+                                    value: "No2",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                            ],
                         },
                     ],
                 },
             },
             {
                 selectedData: [],
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
+                classDash: "dashed_bottom_border",
+                groupedRadioBtnContent: {
+                    groupedData: [
                         {
-                            name: "Foot Lesions",
-                            labelPlacement: "start",
-                            colSize: "4",
-                            justify: "space-between",
-                            header: true,
+                            header: {
+                                selectedValue: "",
+                                name: "deformityLeft",
+                            },
+                            data: [
+                                {
+                                    name: "Deformity",
+                                    labelPlacement: "start",
+                                    colSize: "8",
+                                    justify: "space-between",
+                                    header: true,
+                                    headClassName: "bold",
+                                },
+                                {
+                                    name: "Yes",
+                                    value: "Yes",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                                {
+                                    name: "No",
+                                    value: "No",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                            ],
                         },
                         {
-                            name: "Left foot",
-                            labelPlacement: "start",
-                            colSize: "4",
-                            justify: "space-between",
-                            header: true,
-                        },
-                        {
-                            name: "Right foot",
-                            labelPlacement: "start",
-                            colSize: "4",
-                            justify: "space-between",
-                            header: true,
+                            header: {
+                                title: "",
+                                selectedValue: "",
+                                name: "deformityRight",
+                            },
+                            data: [
+                                {
+                                    name: "Yes",
+                                    value: "Yes",
+                                    checked: false,
+                                    colSize: "8",
+                                    justify: "end",
+                                },
+                                {
+                                    name: "No",
+                                    value: "No",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                            ],
                         },
                     ],
                 },
             },
             {
+                selectedData: [],
                 classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
+                groupedRadioBtnContent: {
+                    groupedData: [
                         {
-                            name: "Active Ulcer",
-                            value: "value",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "5",
-                            justify: "space-between",
+                            header: {
+                                selectedValue: "",
+                                name: "toenailRight",
+                            },
+                            data: [
+                                {
+                                    name: "Ingrown toenail",
+                                    labelPlacement: "start",
+                                    colSize: "8",
+                                    justify: "space-between",
+                                    header: true,
+                                    headClassName: "bold",
+                                },
+                                {
+                                    name: "Yes",
+                                    value: "Yes",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                                {
+                                    name: "No",
+                                    value: "No",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                            ],
                         },
                         {
-                            value: "value",
-                            checked: false,
-                            colSize: "4",
-                            justify: "end",
+                            header: {
+                                title: "",
+                                selectedValue: "",
+                                name: "toenailRight",
+                            },
+                            data: [
+                                {
+                                    name: "Yes",
+                                    value: "Yes",
+                                    checked: false,
+                                    colSize: "8",
+                                    justify: "end",
+                                },
+                                {
+                                    name: "No",
+                                    value: "No",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                            ],
                         },
                     ],
                 },
             },
             {
+                selectedData: [],
                 classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
+                groupedRadioBtnContent: {
+                    groupedData: [
                         {
-                            name: "Blisters",
-                            value: "value",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "5",
-                            justify: "space-between",
+                            header: {
+                                selectedValue: "",
+                                name: "pedalPulsesLeft",
+                            },
+                            data: [
+                                {
+                                    name: "Absent Pedal Pulses",
+                                    labelPlacement: "start",
+                                    colSize: "8",
+                                    justify: "space-between",
+                                    header: true,
+                                    headClassName: "bold",
+                                },
+                                {
+                                    name: "Yes",
+                                    value: "Yes",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                                {
+                                    name: "No",
+                                    value: "No",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                            ],
                         },
                         {
-                            value: "value",
-                            checked: false,
-                            colSize: "4",
-                            justify: "end",
+                            header: {
+                                title: "",
+                                selectedValue: "",
+                                name: "pedalPulsesRight",
+                            },
+                            data: [
+                                {
+                                    name: "Yes",
+                                    value: "Yes",
+                                    checked: false,
+                                    colSize: "8",
+                                    justify: "end",
+                                },
+                                {
+                                    name: "No",
+                                    value: "No",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                            ],
                         },
                     ],
                 },
             },
             {
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
+                selectedData: [],
+                groupedRadioBtnContent: {
+                    groupedData: [
                         {
-                            name: "Calluses",
-                            value: "value",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "5",
-                            justify: "space-between",
-                        },
-                        {
-                            value: "value",
-                            checked: false,
-                            colSize: "4",
-                            justify: "end",
+                            data: [
+                                {
+                                    name: "Foot Lesions",
+                                    labelPlacement: "start",
+                                    colSize: "5",
+                                    justify: "space-between",
+                                    header: true,
+                                },
+                                {
+                                    name: "Left foot",
+                                    labelPlacement: "start",
+                                    colSize: "4.5",
+                                    justify: "space-between",
+                                    header: true,
+                                },
+                                {
+                                    name: "Right foot",
+                                    labelPlacement: "start",
+                                    colSize: "4",
+                                    justify: "space-between",
+                                    header: true,
+                                },
+                            ],
                         },
                     ],
                 },
             },
             {
+                selectedData: [],
                 classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
+                groupedRadioBtnContent: {
+                    groupedData: [
                         {
-                            name: "Fissure/Linear Crack",
-                            value: "value",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "5",
-                            justify: "space-between",
+                            header: {
+                                selectedValue: "",
+                                name: "activeUlcerLeft",
+                            },
+                            data: [
+                                {
+                                    name: "Active Ulcer",
+                                    labelPlacement: "start",
+                                    colSize: "8",
+                                    justify: "space-between",
+                                    header: true,
+                                    headClassName: "bold",
+                                },
+                                {
+                                    name: "Yes",
+                                    value: "Yes",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                                {
+                                    name: "No",
+                                    value: "No",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                            ],
                         },
                         {
-                            value: "value",
-                            checked: false,
-                            colSize: "4",
-                            justify: "end",
+                            header: {
+                                title: "",
+                                selectedValue: "",
+                                name: "activeUlcerLeft",
+                            },
+                            data: [
+                                {
+                                    name: "Yes",
+                                    value: "Yes",
+                                    checked: false,
+                                    colSize: "8",
+                                    justify: "end",
+                                },
+                                {
+                                    name: "No",
+                                    value: "No",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
+            {
+                selectedData: [],
+                classDash: "dashed_bottom_border",
+                groupedRadioBtnContent: {
+                    groupedData: [
+                        {
+                            header: {
+                                selectedValue: "",
+                                name: "blistersLeft",
+                            },
+                            data: [
+                                {
+                                    name: "Blisters",
+                                    labelPlacement: "start",
+                                    colSize: "8",
+                                    justify: "space-between",
+                                    header: true,
+                                    headClassName: "bold",
+                                },
+                                {
+                                    name: "Yes",
+                                    value: "Yes",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                                {
+                                    name: "No",
+                                    value: "No",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                            ],
+                        },
+                        {
+                            header: {
+                                title: "",
+                                selectedValue: "",
+                                name: "blistersRight",
+                            },
+                            data: [
+                                {
+                                    name: "Yes",
+                                    value: "Yes",
+                                    checked: false,
+                                    colSize: "8",
+                                    justify: "end",
+                                },
+                                {
+                                    name: "No",
+                                    value: "No",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
+            {
+                selectedData: [],
+                classDash: "dashed_bottom_border",
+                groupedRadioBtnContent: {
+                    groupedData: [
+                        {
+                            header: {
+                                selectedValue: "",
+                                name: "callusesLeft",
+                            },
+                            data: [
+                                {
+                                    name: "Calluses",
+                                    labelPlacement: "start",
+                                    colSize: "8",
+                                    justify: "space-between",
+                                    header: true,
+                                    headClassName: "bold",
+                                },
+                                {
+                                    name: "Yes",
+                                    value: "Yes",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                                {
+                                    name: "No",
+                                    value: "No",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                            ],
+                        },
+                        {
+                            header: {
+                                title: "",
+                                selectedValue: "",
+                                name: "callusesRight",
+                            },
+                            data: [
+                                {
+                                    name: "Yes",
+                                    value: "Yes",
+                                    checked: false,
+                                    colSize: "8",
+                                    justify: "end",
+                                },
+                                {
+                                    name: "No",
+                                    value: "No",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
+            {
+                selectedData: [],
+                classDash: "dashed_bottom_border",
+                groupedRadioBtnContent: {
+                    groupedData: [
+                        {
+                            header: {
+                                selectedValue: "",
+                                name: "fissureLeft",
+                            },
+                            data: [
+                                {
+                                    name: "Fissure",
+                                    labelPlacement: "start",
+                                    colSize: "8",
+                                    justify: "space-between",
+                                    header: true,
+                                    headClassName: "bold",
+                                },
+                                {
+                                    name: "Yes",
+                                    value: "Yes",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                                {
+                                    name: "No",
+                                    value: "No",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                            ],
+                        },
+                        {
+                            header: {
+                                title: "",
+                                selectedValue: "",
+                                name: "fissureRight",
+                            },
+                            data: [
+                                {
+                                    name: "Yes",
+                                    value: "Yes",
+                                    checked: false,
+                                    colSize: "8",
+                                    justify: "end",
+                                },
+                                {
+                                    name: "No",
+                                    value: "No",
+                                    checked: false,
+                                    colSize: "3",
+                                    justify: "end",
+                                },
+                            ],
                         },
                     ],
                 },

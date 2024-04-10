@@ -1,18 +1,31 @@
 <template>
-    <ion-row v-for="(item, index) in contentData" :key="index" :class="contentData[index].classDash">
-        <ion-col class="item_header_col" v-if="item['sectionHeader']">
+    <ion-row
+        v-for="(item, index) in contentData"
+        :key="index"
+        :class="contentData[index].classDash"
+        style="width: 100%"
+        v-show="
+            !contentData[index]?.radioBtnContent?.header?.displayNone &&
+            !contentData[index]?.checkboxBtnContent?.header?.displayNone &&
+            !contentData[index]?.data?.rowData[0]?.colData[0]?.displayNone
+        "
+    >
+        <ion-col class="item_header_col" v-if="item['sectionHeader'] || item['sideColSize']" :size="item['sideColSize']">
             <span class="item_header" :style="'font-weight:' + item.sectionHeaderFontWeight">{{ item["sectionHeader"] }}</span>
         </ion-col>
-        <ion-col>
+        <ion-col v-if="!item.displayNone">
             <!-- rowData -->
             <span v-if="item.data">
                 <ion-row v-for="(element, index2) in item.data.rowData" :key="index2">
-                    <ion-col v-for="(col, colIndex) in element.colData" :key="colIndex" v-show="!col.displayNone">
+                    <ion-col v-for="(col, colIndex) in element.colData" :key="colIndex" v-show="!col.displayNone" :size="col.colSize">
                         <BasicInputField
-                            v-if="!col.isDatePopover"
+                            v-if="!col.isDatePopover && !col.isMultiSelect"
                             :inputHeader="col.inputHeader"
                             :sectionHeaderFontWeight="col.sectionHeaderFontWeight"
+                            :bold="col.class"
                             :unit="col.unit"
+                            :input="col.input"
+                            :disabled="col.disabled"
                             :icon="col.icon"
                             :placeholder="col.placeholder"
                             :iconRight="col.iconRight"
@@ -25,10 +38,34 @@
                             :popOverData="col.popOverData"
                             @setPopoverValue="handleInput(contentData, col, $event, 'setPopoverValue')"
                         />
+                        <div v-if="col.isMultiSelect">
+                            <h6 v-if="col.inputHeader">{{ col.inputHeader }}</h6>
+                            <VueMultiselect
+                                v-if="col.isMultiSelect"
+                                v-model="col.value"
+                                @update:model-value="handleInput(contentData, col, $event, 'updateMultiselect')"
+                                :multiple="true"
+                                :taggable="true"
+                                :hide-selected="true"
+                                :close-on-select="false"
+                                openDirection="bottom"
+                                @tag="addTag"
+                                tag-placeholder=""
+                                placeholder=""
+                                selectLabel=""
+                                label="name"
+                                :searchable="true"
+                                @search-change="$emit('search-change', $event)"
+                                track-by="concept_id"
+                                :options="col.multiSelectData"
+                            />
+                        </div>
+
                         <DateInputField
                             v-if="col.isDatePopover"
                             :inputHeader="col.inputHeader"
                             :sectionHeaderFontWeight="col.sectionHeaderFontWeight"
+                            :bold="col.bold"
                             :unit="col.unit"
                             :icon="col.icon"
                             :placeholder="col.placeholder"
@@ -48,12 +85,18 @@
                     </ion-col>
                 </ion-row>
             </span>
-            <span v-if="item.radioBtnContent">
-                <div style="" v-if="item.radioBtnContent?.header">
+            <span v-if="item.radioBtnContent && !item?.radioBtnContent?.header?.displayNone">
+                <div style="" v-if="item.radioBtnContent?.header" :class="item.radioBtnContent?.header?.class">
                     {{ item.radioBtnContent?.header.title }}
                 </div>
                 <ion-row class="checkbox_content">
-                    <ion-col :size="al.colSize" class="checkout_col" style="" v-for="(al, index3) in item.radioBtnContent?.data" :key="index3">
+                    <ion-col
+                        :size="al.colSize"
+                        class="checkout_col"
+                        style=""
+                        v-for="(al, index3) in item.radioBtnContent?.data || item.radioBtnContent?.groupedData"
+                        :key="index3"
+                    >
                         <span v-if="al.header" class="first_col">
                             <ion-label>{{ al.name }} </ion-label>
                         </span>
@@ -74,6 +117,7 @@
                         <BasicInputField
                             :inputHeader="radioInput.inputHeader"
                             :unit="radioInput.unit"
+                            :input="radioInput.input"
                             :icon="radioInput.icon"
                             :placeholder="radioInput.placeholder"
                             :iconRight="radioInput.iconRight"
@@ -93,8 +137,37 @@
                     </div>
                 </ion-row>
             </span>
+            <span v-if="item.groupedRadioBtnContent">
+                <ion-row class="checkbox_content">
+                    <ion-col class="checkout_col" style="" v-for="(al, index3) in item.groupedRadioBtnContent.groupedData" :key="index3">
+                        <ion-col :size="radioBtn.colSize" class="checkout_col" v-for="(radioBtn, index3) in al.data" :key="index3">
+                            <span v-if="radioBtn.header" :class="'first_col ' + radioBtn.headClassName">
+                                <ion-label>{{ radioBtn.name }} </ion-label>
+                            </span>
+                            <ion-radio-group
+                                v-else
+                                style="width: 100%"
+                                :value="al.header.selectedValue"
+                                @ionChange="handleInput(contentData, al.header, $event, 'updateGroupedRadioBtnContent')"
+                            >
+                                <span style="display: flex; width: 100%">
+                                    <ion-radio
+                                        :value="radioBtn.value"
+                                        :justify="radioBtn.justify || 'start'"
+                                        :label-placement="radioBtn.labelPlacement || 'end'"
+                                        >{{ radioBtn.name }}</ion-radio
+                                    >
+                                </span>
+                            </ion-radio-group>
+                        </ion-col>
+                    </ion-col>
+                    <!-- <div class="alerts_error" v-if="item.groupedRadioBtnContent?.header.alertsError">
+                        {{ item.groupedRadioBtnContent?.header.alertsErrorMassage }}
+                    </div> -->
+                </ion-row>
+            </span>
             <span v-if="item?.checkboxBtnContent && !item?.checkboxBtnContent?.header?.displayNone">
-                <div style="" v-if="item.checkboxBtnContent?.header">
+                <div style="" v-if="item.checkboxBtnContent?.header" :class="item.checkboxBtnContent?.header?.class">
                     {{ item.checkboxBtnContent?.header.title }}
                 </div>
                 <ion-row class="checkbox_content">
@@ -106,7 +179,7 @@
                         :key="index3"
                         v-show="!al.displayNone"
                     >
-                        <span v-if="al.header" class="first_col">
+                        <span v-if="al.header" :class="'first_col ' + al.headClassName">
                             <ion-label>{{ al.name }} </ion-label>
                         </span>
                         <ion-checkbox
@@ -141,6 +214,7 @@
                             :inputHeader="checkboxInput.inputHeader"
                             :sectionHeaderFontWeight="checkboxInput.sectionHeaderFontWeight"
                             :unit="checkboxInput.unit"
+                            :input="checkboxInput.input"
                             :icon="checkboxInput.icon"
                             :placeholder="checkboxInput.placeholder"
                             :iconRight="checkboxInput.iconRight"
@@ -158,7 +232,7 @@
             <span v-for="(al, index3) in item.alerts" :key="index3">
                 <ion-row v-if="al.value" :style="'border-radius: 5px;  margin-top:10px; margin-bottom:10px;background-color:' + al.backgroundColor">
                     <span class="position_content alert_content">
-                        <span v-html="al.icon"> </span>
+                        <ion-icon slot="start" :icon="al.icon" aria-hidden="true"></ion-icon>
                         <span :style="'color:' + al.textColor + '; font-weight:600; margin: 0px 20px;'"> {{ al.index }}</span>
                         <span :style="'color:' + al.textColor + ';'"> {{ al.value }} </span>
                     </span>
@@ -176,6 +250,7 @@ import DateInputField from "@/components/DateInputField.vue";
 import DynamicButton from "./DynamicButton.vue";
 import { IonDatetime, IonDatetimeButton, IonCheckbox } from "@ionic/vue";
 import HisDate from "@/utils/Date";
+import VueMultiselect from "vue-multiselect";
 import { createModal } from "@/utils/Alerts";
 
 import {
@@ -184,6 +259,7 @@ import {
     getRadioSelectedValue,
     modifyRadioValue,
     modifyFieldValue,
+    modifyGroupedRadioValue,
 } from "@/services/data_helpers";
 
 export default defineComponent({
@@ -194,6 +270,7 @@ export default defineComponent({
         IonDatetimeButton,
         IonCheckbox,
         DateInputField,
+        VueMultiselect,
     },
     data() {
         return {
@@ -202,6 +279,8 @@ export default defineComponent({
             header: "" as any,
             flow: ["month", "year", "calendar"],
             date: "",
+            value: [] as any,
+            options: [{ name: "Vue.js" }, { name: "Javascript" }, { name: "Open Source" }, { name: "kaka" }],
         };
     },
     props: {
@@ -210,10 +289,22 @@ export default defineComponent({
         },
     },
     methods: {
+        addTag(newTag: any) {
+            const tag = {
+                name: newTag,
+                code: newTag.substring(0, 2) + Math.floor(Math.random() * 10000000),
+            };
+            this.options.push(tag);
+            this.value.push(tag);
+        },
         handleInput(data: any, col: any, event: any, inputType: any) {
             this.event = event;
             if (inputType == "updateInput") {
                 modifyFieldValue(data, col.name, "value", event.target.value);
+                this.$emit("update:inputValue", col);
+            }
+            if (inputType == "updateMultiselect") {
+                modifyFieldValue(data, col.name, "value", event);
                 this.$emit("update:inputValue", col);
             }
 
@@ -238,6 +329,10 @@ export default defineComponent({
 
             if (inputType == "updateRadioBtnContent") {
                 modifyRadioValue(data, col.name, "selectedValue", event.target.value);
+                this.$emit("update:inputValue", col);
+            }
+            if (inputType == "updateGroupedRadioBtnContent") {
+                modifyGroupedRadioValue(data, col.name, "selectedValue", event.target.value);
                 this.$emit("update:inputValue", col);
             }
 
@@ -319,7 +414,6 @@ ion-radio {
     margin-right: 150px;
 }
 .alerts_error {
-    background: #f5dad8;
     margin-top: 2px;
     color: #b42318;
     display: flex;
@@ -335,11 +429,18 @@ ion-radio {
 .first_col {
     text-align: left;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 16px;
     color: #636363;
 }
+.bold {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    color: #00190e;
+}
 .alerts_error {
-    background: #f5dad8;
+    font-size: 14px;
     margin-top: 2px;
     color: #b42318;
     display: flex;
@@ -351,4 +452,11 @@ ion-radio {
     padding: 5px;
     border-radius: 3px;
 }
+.multiselect__content-wrapper {
+    width: 400px;
+}
+h6 {
+    margin-top: 0px;
+}
 </style>
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>

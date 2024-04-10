@@ -25,7 +25,7 @@
                     :title="popoverProperties.title"
                     :popoverOpen="popoverProperties.popoverOpen"
                     :event="popoverProperties.event"
-                    @closePopoover="(value) => (popoverProperties.popoverOpen = value)"
+                    @closePopoover="popoverProperties.popoverOpen"
                     @setSelection="setSelection"
                 />
 
@@ -44,7 +44,9 @@
                         :disabled="disableInputs"
                     ></ion-input>
                     <!--  -->
-                    <ion-label><span v-html="iconsContent.search" class="selectedPatient"></span></ion-label>
+                    <ion-label>
+                        <ion-icon slot="start" :icon="iconsContent.search" class="selectedPatient" aria-hidden="true"></ion-icon>
+                    </ion-label>
                 </ion-item>
                 <div>
                     <ion-label v-if="show_error_msg_for_ref_facility_ward_name" class="error-label">{{ refFacilityNameErrMsg }}</ion-label>
@@ -171,7 +173,7 @@ import SelectionPopover from "@/components/SelectionPopover.vue";
 import { icons } from "@/utils/svg";
 import BasicInputField from "@/components/BasicInputField.vue";
 import DynamicDispositionList from "@/components/DynamicDispositionList.vue";
-import { useDispositionStore } from "@/stores/OutcomeStore";
+import { useOutcomeStore } from "@/stores/OutcomeStore";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { getSpecialistClinics, getFacilityWards } from "@/apps/NCD/services/outcome";
 
@@ -203,7 +205,7 @@ const fnToUse = ref();
 const refDataItem = ref();
 const popoverOpen = ref(false);
 const showAddReferralInfo = ref(false);
-const store = useDispositionStore();
+const store = useOutcomeStore();
 const dispositions = computed(() => store.dispositions);
 const NamesData = ref([] as any);
 const EditEvnt = ref(false);
@@ -337,7 +339,7 @@ async function saveReferralInfo() {
         dataItem: refDataItem.value,
     };
 
-    store.addDispositionData(referralData, editIndex.value);
+    store.addOutcomeData(referralData, editIndex.value)
     clearInputs();
 }
 
