@@ -94,7 +94,7 @@
                     :choose_place_holder="list_picker_prperties[1].placeHolder"
                     :items_-list="list_picker_prperties[1].items"
                     :use_internal_filter="list_picker_prperties[0].use_internal_filter"
-                    :disabled="list_picker_prperties[1].disabled.value"
+                    :disabled="temP_A"
                     @item-list-up-dated="list_picker_prperties[1].listUpdatedFN"
                     @item-list-filtered="list_picker_prperties[1].listFilteredFN"
                 />
@@ -180,6 +180,7 @@ import {
 const phone_number_value = ref()
 const phone_number_place_holder = ref('gurdian phone number')
 const isClientFemale = ref(true)
+const temP_A = ref(true as any)
 
 const time_properties = [
     {
@@ -322,7 +323,7 @@ const list_picker_prperties = [
         listUpdatedFN: listUpdated2,
         listFilteredFN: ()=>{},
         use_internal_filter: true as any,
-        disabled: ref(true) as any,
+        disabled: temP_A.value,
     },
 ]
 
@@ -370,8 +371,22 @@ function notesUpDated_fn5(data: any) {
 }
 
 function listUpdated1(data: any) {
-    console.log(data)
+    data.forEach((datum: any, index: number) => {
+        if (index == 1 && datum.selected == true) {
+            temP_A.value = false
+            return
+        } else if (index == 1 && datum.selected == false) {
+            resetSelectionForCausesOfDeath()
+            temP_A.value = true
+        }
+    })
     mannerOfDeath.value = data
+}
+
+function resetSelectionForCausesOfDeath() {
+    causesOfDeath.value.forEach((item: any) =>{
+            item.selected = false
+        })
 }
 
 function listUpdated2(data: any) {
