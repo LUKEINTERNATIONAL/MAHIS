@@ -7,6 +7,10 @@
         vertical
         :enable-time-picker="false"
         :auto-position="true"
+        :min-date="minDate"
+        :max-date="maxDate"
+        prevent-min-max-navigation
+        :teleport="true"
     >
         <template #trigger>
             <div class="" :style="'width:' + inputWidth">
@@ -56,10 +60,18 @@ export default defineComponent({
             event: "" as any,
             selectedText: "" as any,
             filteredData: [] as any,
-            flow: ["month", "year", "calendar"],
+            flow: ["year", "month", "calendar"],
         };
     },
     props: {
+        minDate: {
+            type: String,
+            default: "",
+        },
+        maxDate: {
+            type: String,
+            default: HisDate.currentDate(),
+        },
         placeholder: {
             type: String,
             default: "",
