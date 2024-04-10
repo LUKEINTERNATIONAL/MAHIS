@@ -103,6 +103,16 @@
 
         <ion-row>
             <ion-col>
+                <BasicInputField
+                    :placeholder="note_properties[5].placeHolder"
+                    :icon="pencilOutline"
+                    :inputValue="note_properties[5].dataValue.value"
+                />
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col>
                 <TimePicker
                     :place_holder="time_properties[2].placeHolder"
                     @time-up-dated="time_properties[2].dataHandler"
@@ -271,6 +281,13 @@ const note_properties = [
         show_error: ref(false),
         error_message: 'error',
     },
+    {
+        placeHolder: 'Other (specify)',
+        dataHandler: notesUpDated_fn6,
+        dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'error',
+    }, 
 ]
 
 const dynamic_button_properties = [
@@ -368,6 +385,10 @@ function notesUpDated_fn4(data: any) {
 
 function notesUpDated_fn5(data: any) {
     note_properties[4].dataValue.value = data
+}
+
+function notesUpDated_fn6(data: any) {
+    note_properties[5].dataValue.value = data
 }
 
 function listUpdated1(data: any) {
