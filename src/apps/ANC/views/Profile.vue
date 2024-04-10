@@ -145,12 +145,12 @@ export default defineComponent({
             StepperData: [
                 {
                     title: "Past Obstetric History",
-                    componet: "PastObstetricHistory",
+                    component: "PastObstetricHistory",
                     value: "1",
                 },
                 {
                     title: "Past Medical history",
-                    componet: "MedicalHistory",
+                    component: "MedicalHistory",
                     value: "2",
                     // validation: {
                     //   medicalHistory: (data) => someChecked(data, "Medical history is required"),
@@ -163,17 +163,17 @@ export default defineComponent({
                 },
                 {
                     title: "Current Pregnancy",
-                    componet: "CurrentPregnancies",
+                    component: "CurrentPregnancies",
                     value: "3",
                 },
                 {
                     title: "Medications",
-                    componet: "Medications",
+                    component: "Medications",
                     value: "4",
                 },
                 {
                     title: "Woman behaviour",
-                    componet: "WomanBehaviour",
+                    component: "WomanBehaviour",
                     value: "5",
                 },
             ],
@@ -247,7 +247,7 @@ export default defineComponent({
             //     this.wizardData[2].checked = true;
             //     this.wizardData[2].class = 'open_step common_step'
             //   }else{
-            //     this.wizardData[2].checked = false;  
+            //     this.wizardData[2].checked = false;
             //   }
         },
         deleteDisplayData(data: any) {
@@ -257,7 +257,7 @@ export default defineComponent({
             });
         },
         saveData() {
-            console.log('testing')
+            console.log("testing");
             // const errors = []
             // this.StepperData.forEach((stepper)=> {
             //   if (!stepper.validation) return
@@ -296,22 +296,16 @@ export default defineComponent({
         // },
 
         async buildPretermData() {
-
-            return [
-                ...(await formatRadioButtonData(this.preterm)),
-                
-            ];
+            return [...(await formatRadioButtonData(this.preterm))];
         },
         async savePreterm() {
             const data: any = await this.buildPretermData();
-               console.log("save preterm=====>",data)
+            console.log("save preterm=====>", data);
             if (data.length > 0) {
                 const userID: any = Service.getUserID();
                 const pretermInstance = new Preterms();
                 pretermInstance.onSubmit(this.demographics.patient_id, userID, data);
             }
-         
-           
         },
 
         openModal() {

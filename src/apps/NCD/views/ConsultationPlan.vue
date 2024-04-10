@@ -89,107 +89,8 @@ export default defineComponent({
     data() {
         return {
             dispositions: "" as any,
-            wizardData: [
-                {
-                    title: "Vital Signs",
-                    class: "common_step",
-                    checked: false,
-                    disabled: false,
-                    number: 1,
-                    last_step: "",
-                },
-                {
-                    title: "Investigations",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 2,
-                    last_step: "",
-                },
-                {
-                    title: "Diagnosis",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 3,
-                    last_step: "",
-                },
-                {
-                    title: "Complications Screening",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 4,
-                    last_step: "",
-                },
-                {
-                    title: "Treatment",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 5,
-                    last_step: "",
-                },
-                {
-                    title: "Next Appointment",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 6,
-                    last_step: "",
-                },
-                {
-                    title: "Outcome",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 7,
-                    last_step: "last_step",
-                },
-            ],
-            StepperData: [
-                {
-                    title: "Vital Signs",
-                    componet: "Vitals",
-                    value: "1",
-                },
-                {
-                    title: "Investigations",
-                    componet: "Investigations",
-                    value: "2",
-                },
-                {
-                    title: "Diagnosis",
-                    componet: "Diagnosis",
-                    value: "3",
-                },
-                {
-                    title: "Complications Screening",
-                    componet: "Complications",
-                    value: "4",
-                },
-                {
-                    title: "Treatment plan",
-                    componet: "TreatmentPlan",
-                    value: "5",
-                },
-                {
-                    title: "Next Appointment",
-                    componet: "NextAppointment",
-                    value: "6",
-                },
-                {
-                    title: "Outcome",
-                    componet: "Outcome",
-                    value: "7",
-                },
-            ],
+            wizardData: [] as any,
+            StepperData: [] as any,
             isOpen: false,
             iconsContent: icons,
         };
@@ -200,6 +101,9 @@ export default defineComponent({
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
+    },
+    created() {
+        this.getData();
     },
     mounted() {
         this.markWizard();
@@ -234,6 +138,28 @@ export default defineComponent({
     },
 
     methods: {
+        getData() {
+            const steps = ["Vital Signs", "Investigations", "Diagnosis", "Complications Screening", "Treatment Plan", "Next Appointment", "Outcome"];
+            for (let i = 0; i < steps.length; i++) {
+                const title = steps[i];
+                const number = i + 1;
+
+                this.wizardData.push({
+                    title,
+                    class: "common_step",
+                    checked: i === 0 ? false : "",
+                    disabled: false,
+                    number,
+                    last_step: i === steps.length - 1 ? "last_step" : "",
+                });
+
+                this.StepperData.push({
+                    title,
+                    component: title.replace(/\s+/g, ""),
+                    value: number.toString(),
+                });
+            }
+        },
         markWizard() {
             if (this.vitals.validationStatus) {
                 this.wizardData[0].checked = true;
