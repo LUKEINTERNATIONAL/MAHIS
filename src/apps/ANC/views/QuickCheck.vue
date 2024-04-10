@@ -70,7 +70,7 @@ export default defineComponent({
     IonItem,
     IonLabel,
     IonModal,
-    Stepper
+    Stepper,
   },
   data(){
     return {
@@ -113,24 +113,24 @@ export default defineComponent({
       ],
       StepperData:[
         {
-          'title': 'Danger signs',
-          'componet': 'DangerSigns',
-          'value': '1'
+          title: 'Danger signs',
+          component: 'DangerSigns',
+          value: '1'
         },
         {
-          'title': 'Reason for visit',
-          'componet': 'ReasonForVisit',
-          'value': '2',
+          title: 'Reason for visit',
+          component: 'ReasonForVisit',
+          value: '2',
         },
         {
-          'title': 'Confirm pregnancy',
-          'componet': 'ConfirmPregnancy',
-          'value': '3',
+          title: 'Confirm pregnancy',
+          component: 'ConfirmPregnancy',
+          value: '3',
         },
         {
-          'title': 'Specific health concerns',
-          'componet': 'SpecificHealthConcerns',
-          'value': '4',
+          title: 'Specific health concerns',
+          component: 'SpecificHealthConcerns',
+          value: '4',
         },
       ],
       isOpen: false,
