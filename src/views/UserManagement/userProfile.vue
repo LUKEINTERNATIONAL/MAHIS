@@ -73,24 +73,18 @@ async function getUsers() {
         )
     })
 
-    const temp_aR: Item[] | {
-        /* __placeholder__ */
-        username:
-        /* __placeholder__ */
-        any;
-        /* __placeholder__ */
-        role:
-        /* __placeholder__ */
-        any;
-    }[] = []
+    const temp_aR: Item[] | {}[] = []
 
     user_data.value.forEach((item: any, index: number) => {
 
         // if (index < 8)
         temp_aR.push(
             {
+                userId: item.user_id,
                 username: item.username,
-                role: item.user_id
+                role: userRolesStr(item.roles),
+                programs: userProgramsStr(item.programs),
+                gender: item.person.gender    
             }
         )
     })
@@ -103,6 +97,32 @@ async function getUsers() {
 }
 
 const _items_  = ref<Item[]>([] as any)
+
+function userRolesStr(items: any) {
+    let _str_: string = ''
+    items.forEach((item: any, index: number) => {
+        if (_str_.length > 0) {
+            _str_+=', '+item.role
+        }
+        else if (_str_.length == 0) {
+            _str_+=item.role
+        }
+    })
+    return _str_
+}
+
+function userProgramsStr(items: any) {
+    let _str_: string = ''
+    items.forEach((item: any, index: number) => {
+        if (_str_.length > 0) {
+            _str_+=', '+item.name
+        }
+        else if (_str_.length == 0) {
+            _str_+=item.name
+        }
+    })
+    return _str_
+}
 
 const list_picker_prperties = [
     {
@@ -124,13 +144,28 @@ const list_picker_prperties = [
 
 const _columns_ = ref<Header[]>([
     {
-        text: 'Full Name',
+        text: 'userId',
+        value: 'userId',
+        sortable: true
+    },
+    {
+        text: 'Username',
         value: 'username',
+        sortable: true
+    },
+    {
+        text: 'Gender',
+        value: 'gender',
         sortable: true
     },
     {
         text: 'Role',
         value: 'role',
+        sortable: true
+    },
+    {
+        text: 'Programs',
+        value: 'programs',
         sortable: true
     },
 ] as any)
