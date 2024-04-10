@@ -400,22 +400,22 @@ export default defineComponent({
             });
         },
         saveData() {
-            console.log("=========",this.vitals);
-            if (this.vitals.validationStatus) {
-                this.saveVitals();
-                this.saveOutComeStatus();
-                this.$router.push("OPDConsultationPlan");
-            }
-             else {
-                toastWarning("Please complete all required fields");
-                this.saveOutComeStatus();
-                this.saveVitals();
-            }
+            // if (this.vitals.validationStatus) {
+            //     this.saveVitals();
+            //     this.saveOutComeStatus();
+                
+            // }
+            //  else {
+            //     toastWarning("Please complete all required fields");
+            //     this.saveOutComeStatus();
+            //     this.saveVitals();
+            // }
+            this.$router.push("OPDConsultationPlan");
         },
         saveVitals() {
-            const userID: any = Service.getUserID();
-            const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
-            vitalsInstance.onFinish(this.vitals);
+            // const userID: any = Service.getUserID();
+            // const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
+            // vitalsInstance.onFinish(this.vitals);
         },
 
         async saveOutComeStatus() {},
