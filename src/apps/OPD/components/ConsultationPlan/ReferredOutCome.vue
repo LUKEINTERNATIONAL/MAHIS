@@ -247,7 +247,6 @@ const dynamic_button_properties = [
         btnFill: 'clear',
         fn: validateForm,
     },
-
     {
         showAddItemButton: true,
         addItemButton: true,

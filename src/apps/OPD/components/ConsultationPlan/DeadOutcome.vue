@@ -149,7 +149,22 @@
         </ion-row>
 
         <ion-row class="spc_btwn" v-if="dynamic_button_properties[0].showAddItemButton">
-            <dynamic-button v-if="dynamic_button_properties[0].addItemButton" :name="dynamic_button_properties[0].name" :fill="dynamic_button_properties[0].btnFill" :icon="addOutline" @clicked:btn="dynamic_button_properties[0].fn"/>
+            <dynamic-button
+                v-if="dynamic_button_properties[0].addItemButton"
+                :name="dynamic_button_properties[0].name"
+                :fill="dynamic_button_properties[0].btnFill"
+                :icon="addOutline"
+                @clicked:btn="dynamic_button_properties[0].fn"
+            />
+
+            <dynamic-button
+                v-if="dynamic_button_properties[1].addItemButton"
+                :name="dynamic_button_properties[1].name"
+                :fill="dynamic_button_properties[1].btnFill"
+                :icon="removeOutline"
+                @clicked:btn="dynamic_button_properties[1].fn"
+            />
+
         </ion-row>
 
 
@@ -185,7 +200,8 @@ import {
     locationOutline,
     personCircleOutline,
     medicalOutline,
-    pencilOutline
+    pencilOutline,
+    removeOutline
 } from "ionicons/icons";
 
 const phone_number_value = ref()
@@ -300,6 +316,13 @@ const dynamic_button_properties = [
         name: "save",
         btnFill: 'clear',
         fn: validateForm,
+    },
+    {
+        showAddItemButton: true,
+        addItemButton: true,
+        name: "cancel",
+        btnFill: 'clear',
+        fn: cancelE,
     }
 ]
 
@@ -346,6 +369,18 @@ const list_picker_prperties = [
         disabled: temP_A.value,
     },
 ]
+
+function cancelE() {
+    dataSaved()
+}
+
+const emit = defineEmits<{
+    (e: "dataSaved", ObjectsArray: any): void
+}>()
+
+function dataSaved(data = {"dataSaved": true}) {
+    emit("dataSaved", data )
+}
 
 function timeUpdate_fn1(data: any) {
     time_properties[0].dataValue.value = data

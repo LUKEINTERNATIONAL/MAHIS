@@ -42,11 +42,16 @@
             v-if="show_admitted_options"
             @data-saved="dataSavedTrigFn"
         />
+
         <ReferredOutCome 
             v-if="show_referred_options"
             @data-saved="dataSavedTrigFn"
         />
-        <deadOutcome v-if="show_dead_options"/>
+
+        <deadOutcome
+            v-if="show_dead_options"
+            @data-saved="dataSavedTrigFn"
+        />
     </ion-list>
 </template>
 <script lang="ts">
@@ -180,8 +185,9 @@ watch(
 
 function resetSelection() {
     referralType.value.forEach((item: any) =>{
-            item.selected = false
-        })
+        item.selected = false
+    })
+    refType.value = ''
 }
 
 
