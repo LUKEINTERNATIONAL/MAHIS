@@ -40,7 +40,7 @@
                     </div>
                 </ion-checkbox>
                 <div v-if="!withCheckboxs">
-                    <div style="display: flex; padding: 0.3em; ">
+                    <div @click="$emit('click', $event)" style="display: flex; padding: 0.3em; ">
                         <ion-label :id="asignLblID(index)"
                             style="width: 260px; color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{
         item.drugName }}</ion-label>
@@ -132,11 +132,7 @@ import {
 } from "ionicons/icons";
 
 export default defineComponent({
-    created() {
-        // this.$emit('onFooterInstance', this)
-    },
     components: {
-        // IonContent,
         IonItem,
         IonCol,
         IonLabel

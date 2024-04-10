@@ -166,11 +166,10 @@ export default defineComponent({
                 }
             }
         },
-        patientIdentifier(identifiers: any) {
-            return identifiers.patient_identifiers
-                .filter((identifier: any) => identifier.identifier_type === 3)
-                .map((identifier: any) => identifier.identifier)
-                .join(", ");
+        patientIdentifier(item: any) {
+            const ids = item.patient_identifiers.length - 1;
+            if (ids >= 0) return item.patient_identifiers[ids].identifier;
+            else return "";
         },
         openNewPage(url: any, item: any) {
             const demographicsStore = useDemographicsStore();

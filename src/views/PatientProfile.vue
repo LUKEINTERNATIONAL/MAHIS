@@ -44,6 +44,10 @@
                         <ion-card class="start_new_co" style="margin-bottom: 20px"> + Enroll in Labour and delivery program </ion-card>
                         <ion-card class="start_new_co" style="margin-bottom: 20px"> + Enroll in PNC program </ion-card>
                         <ion-card class="start_new_co" style="margin-bottom: 20px" @click="handleOPD()"> + Enroll in OPD Program </ion-card>
+                       
+                            <router-link to="/dispensation"> 
+                                <ion-card class="start_new_co" style="margin-bottom: 20px">+ Dispense Medication  </ion-card></router-link>
+                       
                         <ion-card style="margin-bottom: 20px; background-color: #fff">
                             <ion-accordion-group :value="['first']">
                                 <ion-accordion value="first" style="background-color: #fff" toggle-icon-slot="start">

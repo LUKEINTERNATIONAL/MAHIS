@@ -44,7 +44,8 @@ import { mapState } from "pinia";
 import Stepper from "@/components/Stepper.vue";
 import { Service } from "@/services/service";
 import { LabOrder } from "@/apps/NCD/services/lab_order";
-import { VitalsService } from "@/services/vitals_service";
+// import { OPDVitalsService } from "@/services/vitals_service";
+import { OPDVitalsService } from "@/apps/OPD/services/vitals"
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { useDispositionStore } from "@/stores/OutcomeStore";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
@@ -56,6 +57,7 @@ import { defineComponent } from "vue";
 import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
 import { useVitalsStore } from "../stores/OpdVitalsStore";
 import { getCheckboxSelectedValue, getFieldValue, getRadioSelectedValue, modifyCheckboxValue, modifyFieldValue, modifyRadioValue } from "@/services/data_helpers";
+import { formatCheckBoxData, formatInputFiledData } from "@/services/formatServerData";
 export default defineComponent({
     name: "Home",
     components: {
@@ -128,6 +130,10 @@ export default defineComponent({
                 this.diastolicValidate()
                 this.handleTemperature()
                 this.validateTemperature()
+                this.handlePulseRate()
+                this.handleBPD()
+                this.handleBPS()
+                this.handleRespiratory()
             },
             deep: true,
         },
@@ -198,7 +204,7 @@ export default defineComponent({
 
             
               let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
-                console.log({ageInMonth})
+                
 
 
             const triggerError = (errorMessage:string)=>{
@@ -249,43 +255,6 @@ export default defineComponent({
                 clearErrors()
             }
         },
-        //
-        // respiratoryValidate() {
-        //     const triggerError = (errorMessage: string) => {
-        //         modifyFieldValue(this.vitals, "RespiratoryRate", "alertsError", true);
-        //         modifyFieldValue(this.vitals, "RespiratoryRate", "alertsErrorMassage", errorMessage);
-        //     };
-
-        //     const clearErrors = () => {
-        //         modifyFieldValue(this.vitals, "RespiratoryRate", "alertsError", false);
-        //         modifyFieldValue(this.vitals, "RespiratoryRate", "alertsErrorMassage", "");
-        //     };
-
-        //     const age= HisDate.calculateAge(this.demographics.birthdate,new Date());
-        //     const value= getFieldValue(this.vitals,'Systolic', 'value');
-        //     let ageInMonth = HisDate.ageInMonths(this.demographics.birthdate,new Date());
-        //     ageInMonth = HisDate.ageInMonths(this.demographics.birthdate);
-
-        //     if(value == "")return
-           
-        //    if(age<1 && (ageInMonth >= 1 && ageInMonth <=12 ) && !(value>=75 && value<=100)){ 
-        //     triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
-        //    }
-        //    else if((age>=1 && age<=4) && !(value>=80 && value<=110)){
-        //         triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
-        //     }else if((age>=3 && age<=5) && !(value>=80 && value<=110)){
-        //         triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
-        //     }else if((age>=6 && age<=13) && !(value>=85 && value<=120)){
-        //         triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
-        //     }else if((age>=13 && age<=18) && !(value>=95 && value<=140)){
-        //         triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
-        //     }else if(age>18  && !(value>=100 && value<=130)){
-        //         triggerError(`Systolic can't be ${value} for patient with an age of ${age}`)
-        //     }
-        //     else {
-        //         clearErrors()
-        //     }
-        // },
         systolicValidate() {
             const triggerError = (errorMessage: string) => {
                 modifyFieldValue(this.vitals, "Systolic", "alertsError", true);
@@ -384,7 +353,39 @@ export default defineComponent({
             }else{
                 modifyFieldValue(this.vitals, 'Temp', 'disabled', true);
             }
-            console.log(getCheckboxSelectedValue(this.vitals,'Temperature not Done'))
+           
+        },
+        handlePulseRate(){
+            if(!getCheckboxSelectedValue(this.vitals,'Pulse rate not done')?.checked){
+                modifyFieldValue(this.vitals, 'Pulse', 'disabled', false);
+            }else{
+                modifyFieldValue(this.vitals, 'Pulse', 'disabled', true);
+            }
+            
+        },
+        handleBPD(){
+            if(!getCheckboxSelectedValue(this.vitals,'Blood Pressure not done')?.checked){
+                modifyFieldValue(this.vitals, 'Systolic', 'disabled', false);
+            }else{
+                modifyFieldValue(this.vitals, 'Systolic', 'disabled', true);
+            }
+            
+        },
+        handleBPS(){
+            if(!getCheckboxSelectedValue(this.vitals,'Blood Pressure not done')?.checked){
+                modifyFieldValue(this.vitals, 'Diastolic', 'disabled', false);
+            }else{
+                modifyFieldValue(this.vitals, 'Diastolic', 'disabled', true);
+            }
+            
+        },
+        handleRespiratory(){
+            if(!getCheckboxSelectedValue(this.vitals,'Respiratory rate not done')?.checked){
+                modifyFieldValue(this.vitals, 'Respiratory Rate', 'disabled', false);
+            }else{
+                modifyFieldValue(this.vitals, 'Respiratory Rate', 'disabled', true);
+            }
+            
         },
         markWizard() {
             if (this.vitals.validationStatus) {
@@ -400,23 +401,25 @@ export default defineComponent({
             });
         },
         saveData() {
-            // if (this.vitals.validationStatus) {
-            //     this.saveVitals();
-            //     this.saveOutComeStatus();
-                
-            // }
-            //  else {
-            //     toastWarning("Please complete all required fields");
-            //     this.saveOutComeStatus();
-            //     this.saveVitals();
-            // }
-            this.$router.push("OPDConsultationPlan");
+            this.saveVitals()
         },
-        saveVitals() {
-            // const userID: any = Service.getUserID();
-            // const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
-            // vitalsInstance.onFinish(this.vitals);
+       async saveVitals() {
+        //   if (this.vitals[0].selectedData.length > 0) {
+        //         const userID: any = Service.getUserID();
+        //         const Vital = new OPDVitalsService(this.demographics.patient_id, userID);
+        //         const encounter = await Vital.createEncounter();
+        //         if (!encounter) return toastWarning("Unable to create Opd Vitals encounter");
+        //         const patientStatus = await Vital.saveObservationList(await this.buildVitals());
+        //         if (!patientStatus) return toastWarning("Unable to create patient Opd Vitals  !");
+        //         toastSuccess("OPD vitals has been created");
+        //     }
+            console.log(await this.buildVitals())
         },
+        async buildVitals() {
+        return [
+             ...(await formatInputFiledData(this.vitals)),
+        ];
+    },
 
         async saveOutComeStatus() {},
         openModal() {

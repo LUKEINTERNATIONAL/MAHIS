@@ -10,7 +10,7 @@
             !contentData[index]?.data?.rowData[0]?.colData[0]?.displayNone
         "
     >
-        <ion-col class="item_header_col" v-if="item['sectionHeader']">
+        <ion-col class="item_header_col" v-if="item['sectionHeader'] || item['sideColSize']" :size="item['sideColSize']">
             <span class="item_header" :style="'font-weight:' + item.sectionHeaderFontWeight">{{ item["sectionHeader"] }}</span>
         </ion-col>
         <ion-col v-if="!item.displayNone">
@@ -22,6 +22,7 @@
                             v-if="!col.isDatePopover && !col.isMultiSelect"
                             :inputHeader="col.inputHeader"
                             :sectionHeaderFontWeight="col.sectionHeaderFontWeight"
+                            :bold="col.class"
                             :unit="col.unit"
                             :input="col.input"
                             :disabled="col.disabled"
@@ -64,6 +65,7 @@
                             v-if="col.isDatePopover"
                             :inputHeader="col.inputHeader"
                             :sectionHeaderFontWeight="col.sectionHeaderFontWeight"
+                            :bold="col.bold"
                             :unit="col.unit"
                             :icon="col.icon"
                             :placeholder="col.placeholder"
@@ -186,12 +188,7 @@
                             :checked="al.checked"
                             style="width: 100%"
                             :disabled="al.disabled"
-                            @ionChange="
-                                (value) => {
-                                    al.checked = value.detail.checked;
-                                    $emit('update:inputValue', { al, value });
-                                }
-                            "
+                            @ionChange="handleInput(contentData, al, $event, 'updateCheckbox')"
                             :label-placement="al.labelPlacement || 'end'"
                         >
                             <span style="line-height: 1">
@@ -255,6 +252,7 @@ import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
     getRadioSelectedValue,
+    modifyCheckboxValue,
     modifyRadioValue,
     modifyFieldValue,
     modifyGroupedRadioValue,
@@ -283,6 +281,9 @@ export default defineComponent({
     },
     props: {
         contentData: {
+            default: [] as any,
+        },
+        initialData: {
             default: [] as any,
         },
     },
@@ -326,7 +327,7 @@ export default defineComponent({
             }
 
             if (inputType == "updateRadioBtnContent") {
-                modifyRadioValue(data, col.name, "selectedValue", event.target.value);
+                modifyRadioValue(data, col.name, "selectedValue", event.target.value, this.initialData);
                 this.$emit("update:inputValue", col);
             }
             if (inputType == "updateGroupedRadioBtnContent") {
@@ -337,6 +338,11 @@ export default defineComponent({
             if (inputType == "checkboxInput") {
                 modifyCheckboxInputField(data, col.name, "value", event.target.value);
                 this.$emit("update:inputValue", col);
+            }
+            if (inputType == "updateCheckbox") {
+                console.log("🚀 ~ handleInput ~ updateCheckbox:", this.initialData);
+                modifyCheckboxValue(data, col.name, "checked", event.detail.checked, this.initialData);
+                this.$emit("update:inputValue", { col, event });
             }
         },
         handleSelected(col: any) {

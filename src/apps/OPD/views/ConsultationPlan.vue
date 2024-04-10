@@ -50,7 +50,7 @@ import { useDiagnosisStore } from "@/stores/DiagnosisStore";
 import { mapState } from "pinia";
 import Stepper from "@/components/Stepper.vue";
 import { Service } from "@/services/service";
-import { LabOrder } from "@/apps/NCD/services/lab_order";
+import { LabOrder } from "@/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { useDispositionStore } from "@/stores/OutcomeStore";
@@ -58,6 +58,7 @@ import { usePregnancyStore } from "@/apps/OPD/stores/PregnancyStore";
 import { usePresentingComplaintsStore } from "@/apps/OPD/stores/PresentingComplaintsStore";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { useOPDDiagnosisStore } from "@/apps/OPD/stores/DiagnosisStore";
+import { usePastMedicalHistoryStore } from "@/apps/OPD/stores/PastMedicalHistoryStore";
 import { Treatment } from "@/apps/NCD/services/treatment";
 import { isEmpty } from "lodash";
 import HisDate from "@/utils/Date";
@@ -73,9 +74,10 @@ import {
     modifyFieldValue,
     modifyCheckboxValue,
 } from "@/services/data_helpers";
-import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServerData";
+import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from "@/services/formatServerData";
 import { PatientComplaintsService } from "@/apps/OPD/services/patient_complaints_service";
 import { PatientGeneralConsultationService } from "@/services/patient_general_consultation";
+import { PastMedicalHistory } from "../services/past_medical_history_service";
 export default defineComponent({
     name: "Home",
     components: {
@@ -185,12 +187,15 @@ export default defineComponent({
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(usePregnancyStore, ["pregnancy"]),
         ...mapState(usePresentingComplaintsStore, ["presentingComplaints"]),
+        ...mapState(usePastMedicalHistoryStore, ["pastMedicalHistory"]),
         ...mapState(useVitalsStore, ["vitals"]),
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useOPDDiagnosisStore, ["OPDdiagnosis"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
     },
-    mounted() {
+    async mounted() {
+        this.investigations;
+        console.log("🚀 ~ mounted ~ this.investigations:", this.investigations);
         this.markWizard();
     },
     watch: {
@@ -224,6 +229,15 @@ export default defineComponent({
 
     methods: {
         markWizard() {
+            // const filteredArray = await this.orders.filter((obj: any) => {
+            //     return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
+            // });
+            // if (filteredArray.length > 0) {
+            //     this.investigations[0].selectedData = filteredArray;
+            // } else {
+            //     this.investigations[0].selectedData = "";
+            // }
+
             if (this.vitals.validationStatus) {
                 this.wizardData[0].checked = true;
                 this.wizardData[0].class = "open_step common_step";
@@ -265,7 +279,20 @@ export default defineComponent({
             await this.saveOutComeStatus();
             await this.saveWomenStatus();
             await this.savePresentingComplaints();
+            await this.savePastMedicalHistory();
             this.$router.push("patientProfile");
+        },
+        async savePastMedicalHistory() {
+            const pastMedicalHistoryData: any = await this.buildPastMedicalHistory();
+            const userID: any = Service.getUserID();
+            if (pastMedicalHistoryData.length > 0) {
+                const pastMedicalHistory = new PastMedicalHistory(this.demographics.patient_id, userID);
+                const encounter = await pastMedicalHistory.createEncounter();
+                if (!encounter) return toastWarning("Unable to create past medical history encounter");
+                const savingStatus = await pastMedicalHistory.saveObservationList(pastMedicalHistoryData);
+                if (!savingStatus) return toastWarning("Unable to create past medical history!");
+                toastSuccess("Past medical history has been created");
+            }
         },
         async savePresentingComplaints() {
             if (this.presentingComplaints[0].selectedData.length > 0) {
@@ -278,7 +305,6 @@ export default defineComponent({
                 toastSuccess("Patient complaints has been created");
             }
             this.presentingComplaints[0].selectedData;
-            console.log("🚀 ~ savePresentingComplaints ~  this.presentingComplaints[0].selectedData:", this.presentingComplaints[0].selectedData);
         },
         async saveWomenStatus() {
             const womenStatus = await formatRadioButtonData(this.pregnancy);
@@ -373,6 +399,13 @@ export default defineComponent({
                     value_coded: allergy.concept_id,
                 };
             });
+        },
+        async buildPastMedicalHistory() {
+            return [
+                ...(await formatCheckBoxData(this.pastMedicalHistory)),
+                ...(await formatRadioButtonData(this.pastMedicalHistory)),
+                ...(await formatInputFiledData(this.pastMedicalHistory)),
+            ];
         },
     },
 });

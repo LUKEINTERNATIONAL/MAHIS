@@ -82,7 +82,7 @@ export const useVitalsStore = defineStore("vitalsStore", {
       {
         selectdData: [],
         isFinishBtn: false,
-        sideColSize: 6,
+        //sideColSize: 6,
         classDash: "dashed_bottom_border _padding",
         checkboxBtnContent: {
           header: {
@@ -93,9 +93,9 @@ export const useVitalsStore = defineStore("vitalsStore", {
             {
               name: "Temperature not Done",
               value: "notDoneT",
-              labelPlacement: "end",
+              labelPlacement: "start",
               colSize: "6",
-              justify: "",
+              justify: "space-between",
               checked: false,
             },
           ],
@@ -103,14 +103,14 @@ export const useVitalsStore = defineStore("vitalsStore", {
       },
 
       {
-        sectionHeader: "Pulse rate",
+        sectionHeader: "Pulse rate*",
         // classDash: "dashed_bottom_border _padding",
         data: {
           rowData: [
             {
               colData: [
                 {
-                  inputHeader: "Pulse rate*",
+                  inputHeader: "",
                   unit: "BMP",
                   icon: icons.pulse,
                   value: "",
@@ -140,21 +140,21 @@ export const useVitalsStore = defineStore("vitalsStore", {
               labelPlacement: "start",
               colSize: "6",
               justify: "space-between",
-              checked: true,
+              checked: false,
             },
           ],
         },
       },
 
       {
-        sectionHeader: "Blood Pressure",
+        sectionHeader: "Blood Pressure*",
         // classDash: "dashed_bottom_border _padding",
         data: {
           rowData: [
             {
               colData: [
                 {
-                  inputHeader: "Systolic Pressure*",
+                  inputHeader: "Systolic Pressure",
                   unit: "mmHg",
                   icon: icons.systolicPressure,
                   value: "",
@@ -165,7 +165,7 @@ export const useVitalsStore = defineStore("vitalsStore", {
                   alertsErrorMassage: "",
                 },
                 {
-                  inputHeader: "Diastolic pressure*",
+                  inputHeader: "Diastolic pressure",
                   unit: "mmHg",
                   icon: icons.diastolicPressure,
                   value: "",
@@ -214,18 +214,18 @@ export const useVitalsStore = defineStore("vitalsStore", {
       },
 
       {
-        sectionHeader: "Respiratory rate",
+        sectionHeader: "Respiratory rate*",
         // classDash: "dashed_bottom_border _padding",
         data: {
           rowData: [
             {
               colData: [
                 {
-                  inputHeader: "Respiratory rate*",
+                  inputHeader: "",
                   unit: "BMP",
                   icon: icons.respiratory,
                   value: "",
-                  name: "RespiratoryRate",
+                  name: "Respiratory Rate",
                   eventType: "input",
                   alertsError: false,
                   alertsErrorMassage: "",
