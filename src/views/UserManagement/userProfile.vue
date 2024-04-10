@@ -1,4 +1,5 @@
 <template>
+    <dataTable/>
     <ListPicker
         :multiSelection="list_picker_prperties[0].multi_Selection"
         :show_label="list_picker_prperties[0].show_list_label"
@@ -50,6 +51,7 @@ import BasicInputField from "@/components/BasicInputField.vue"
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
 import { UserService } from "@/services/user_service"
 import ListPicker from "@/components/ListPicker.vue"
+import dataTable from "@/components/dataTable.vue"
 
 const user_data = ref()
 
