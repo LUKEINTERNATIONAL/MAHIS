@@ -11,13 +11,14 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name: 'Specific health concerns'
                         },
                         data:[
 
                             {
-                                name: 'Abnorminal varginal discharge',
-                                value: 'AbnorminalVarginalDischarge',
+                                name: 'Abdominal virginal discharge',
+                                value: 'AbnominalVarginalDischarge',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -42,7 +43,9 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name: 'Specific health concerns'
+
                         },
                         data:[
                             {
@@ -110,7 +113,7 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
                         },
                         data:[
                             {
-                                name: 'constipation',
+                                name: 'Constipation',
                                 value: 'Constipation',
                                 checked: false,
                                 labelPlacement: 'start',
@@ -150,8 +153,8 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Intimate partiner violence',
-                                value: 'IntimatePartinerViolence',
+                                name: 'Intimate partner violence',
+                                value: 'IntimatePartnerViolence',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -211,7 +214,7 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Heartburn',
+                                name: 'Dyspepsia',
                                 value: 'heartburn',
                                 checked: false,
                                 labelPlacement: 'start',
@@ -388,7 +391,7 @@ export const useSpecificHealthConcernsStore = defineStore('specificHealthConcern
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Other',
+                                        name: 'Other notes',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "85%",

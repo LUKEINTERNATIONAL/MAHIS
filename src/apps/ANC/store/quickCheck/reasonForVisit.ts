@@ -10,7 +10,8 @@ export const useReasonForVisitStore = defineStore('reasonForVisitStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'Reason for visit'
                         },
                         data:[
                             {

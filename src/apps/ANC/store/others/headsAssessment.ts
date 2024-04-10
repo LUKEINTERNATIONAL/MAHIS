@@ -14,7 +14,7 @@ export const useHeadssAssessmentStore = defineStore('headssAssessmentStore',{
                         header:{
                             title: 'Who does the client live with?',
                             selectedValue: '',
-                            name:'Who does does the client live with'
+                            name:'Who does the client live with'
                         },
                         data:[
                             {
@@ -86,7 +86,7 @@ export const useHeadssAssessmentStore = defineStore('headssAssessmentStore',{
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Other',
+                                        name: 'Other notes',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "100%",
@@ -114,7 +114,7 @@ export const useHeadssAssessmentStore = defineStore('headssAssessmentStore',{
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'how they perceive their home situation?',
+                                        name: 'How they perceive their home situation',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "100%",
@@ -141,7 +141,7 @@ export const useHeadssAssessmentStore = defineStore('headssAssessmentStore',{
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'how they perceive their relationship with their teachers and fellow students/employers and colleagues?',
+                                        name: 'How they perceive their relationship with their teachers and fellow students/employers and colleagues',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "100%",
@@ -160,19 +160,20 @@ export const useHeadssAssessmentStore = defineStore('headssAssessmentStore',{
                     {
                         header:{
                             title: 'Any recent changes in their situation?',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'Changes to situation'
                         },
                         data:[
                             {
                                 name: 'Yes',
-                                value: 'yes',
+                                value: 'Yes',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
                                 name: 'No',
-                                value: 'no',
+                                value: 'No',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',

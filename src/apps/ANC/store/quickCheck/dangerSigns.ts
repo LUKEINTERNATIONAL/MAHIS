@@ -11,6 +11,7 @@ export const useDangerSignsStore = defineStore("dangerSignsStore", {
                     header: {
                         title: "",
                         selectedValue: "",
+                        name:'Danger signs'
                     },
                     data: [
                         {
@@ -107,7 +108,7 @@ export const useDangerSignsStore = defineStore("dangerSignsStore", {
                             justify: "space-between",
                         },
                         {
-                            name: "Severe vomiting",
+                            name: "Vomiting",
                             value: "SevereVomiting",
                             checked: false,
                             labelPlacement: "start",
@@ -245,7 +246,7 @@ export const useDangerSignsStore = defineStore("dangerSignsStore", {
                                     unit: "",
                                     icon: icons.editPen,
                                     value: "",
-                                    name: "Other",
+                                    name: "Other notes",
                                     required: true,
                                     eventType: "input",
                                     inputWidth: "85%",
@@ -264,18 +265,18 @@ export const useDangerSignsStore = defineStore("dangerSignsStore", {
                     header: {
                         title: "",
                         selectedValue: "",
-                        name: "Yes",
+                        name: "Previous visits",
                     },
                     data: [
                         {
-                            value: "yes",
+                            value: "Yes",
                             name: "Yes",
                             labelPlacement: "start",
                             colSize: "7",
                             justify: "space-between",
                         },
                         {
-                            value: "no",
+                            value: "No",
                             name: "No",
                             labelPlacement: "start",
                             colSize: "7",
@@ -297,7 +298,7 @@ export const useDangerSignsStore = defineStore("dangerSignsStore", {
                                     unit: "",
                                     icon: "",
                                     value: "",
-                                    name: "number of previous anc visits",
+                                    name: "Number of previous anc visits",
                                     eventType: "input",
                                     inputWidth: "55%",
                                 },
@@ -318,7 +319,7 @@ export const useDangerSignsStore = defineStore("dangerSignsStore", {
                                 {
                                     inputHeader: "Specify date*",
                                     value: "",
-                                    name: "ancDate",
+                                    name: "Visit date",
                                     required: true,
                                     eventType: "input",
                                     alertsError: false,

@@ -10,10 +10,11 @@ export const useConfirmPregnancyStore = defineStore("confirmPregnancyStore", {
                     header: {
                         title: "",
                         selectedValue: "",
+                        name:'Pregnancy confirmed'
                     },
                     data: [
                         {
-                            value: "Y",
+                            value: "Yes",
                             name: "Yes",
                             labelPlacement: "start",
                             colSize: "7",
@@ -37,17 +38,18 @@ export const useConfirmPregnancyStore = defineStore("confirmPregnancyStore", {
                     header: {
                         title: "Was the pregnancy planned?",
                         selectedValue: "",
+                        name:'Pregnancy planned'
                     },
                     data: [
                         {
-                            value: "Y",
+                            value: "Yes",
                             name: "Yes",
                             labelPlacement: "start",
                             colSize: "7",
                             justify: "space-between",
                         },
                         {
-                            value: "N",
+                            value: "No",
                             name: "No",
                             labelPlacement: "start",
                             colSize: "7",
