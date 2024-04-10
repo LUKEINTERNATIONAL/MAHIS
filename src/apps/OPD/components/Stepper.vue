@@ -37,16 +37,15 @@
                             <ion-label>{{ item.title }}</ion-label>
                         </ion-item>
                         <div class="ion-padding" slot="content">
-                            <component :is="item.componet"> </component>
+                            <component :is="item.component"> </component>
                         </div>
                     </ion-accordion>
                 </ion-accordion-group>
                 <div>
                     <hr style="background: rgba(0, 0, 0, 0.13)" />
                     <ion-row>
-                    <ion-button class="primary_btn" @click="$emit('finishBtn')">Finish and Save</ion-button>
+                        <ion-button class="primary_btn" @click="$emit('finishBtn')">Finish and Save</ion-button>
                     </ion-row>
-                
                 </div>
             </div>
         </ion-col>
@@ -114,7 +113,7 @@ import { chevronBackOutline, checkmark } from "ionicons/icons";
 // import Immunization from "@/apps/ANC/components/Treatment/Immunization.vue";
 // import IntimatePartner from "@/apps/ANC/components/Treatment/IntimatePartner.vue";
 // import Deworming from "@/apps/ANC/components/Treatment/Deworming.vue";
- import SaveProgressModal from "../../../components/SaveProgressModal.vue";
+import SaveProgressModal from "../../../components/SaveProgressModal.vue";
 // import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue";
 // import MedicalFollowUp from "@/apps/ANC/components/symptomsFollowUp/MedicalFollowUp.vue";
 // import PersistentBehaviour from "@/apps/ANC/components/symptomsFollowUp/PersistentBehaviour.vue";
@@ -152,16 +151,15 @@ export default defineComponent({
         IonAccordionGroup,
         IonItem,
         IonLabel,
-       
+
         IonModal,
-      
     },
     data() {
         return {
             isOpen: false,
             iconsContent: icons,
             showFinishButton: false,
-            accordionValue: '1' 
+            accordionValue: "1",
         };
     },
     props: {
@@ -197,12 +195,11 @@ export default defineComponent({
             createModal(SaveProgressModal);
         },
         dispenseClicked() {
-      this.showFinishButton = true;
-      this.accordionValue = '2'; 
-      this.$emit('dispenseClicked');
-    }
+            this.showFinishButton = true;
+            this.accordionValue = "2";
+            this.$emit("dispenseClicked");
+        },
     },
-
 });
 </script>
 

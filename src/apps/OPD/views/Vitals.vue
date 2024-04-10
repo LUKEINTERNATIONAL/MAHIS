@@ -97,7 +97,7 @@ export default defineComponent({
             StepperData: [
                 {
                     title: "Vitals",
-                    componet: "OPDVitals",
+                    component: "OPDVitals",
                     value: "1",
                 },
             ],

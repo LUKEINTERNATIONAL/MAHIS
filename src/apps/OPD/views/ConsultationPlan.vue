@@ -155,27 +155,27 @@ export default defineComponent({
             StepperData: [
                 {
                     title: "Clinical Assessment",
-                    componet: "ClinicalAssessment",
+                    component: "ClinicalAssessment",
                     value: "1",
                 },
                 {
                     title: "Investigations",
-                    componet: "Investigations",
+                    component: "Investigations",
                     value: "2",
                 },
                 {
                     title: "Diagnosis",
-                    componet: "OPDDiagnosis",
+                    component: "OPDDiagnosis",
                     value: "3",
                 },
                 {
                     title: "Treatment plan",
-                    componet: "OPDTreatmentPlan",
+                    component: "OPDTreatmentPlan",
                     value: "4",
                 },
                 {
                     title: "Outcome",
-                    componet: "OPDOutcome",
+                    component: "OPDOutcome",
                     value: "5",
                 },
             ],

@@ -37,7 +37,7 @@
                             <ion-label>{{ item.title }}</ion-label>
                         </ion-item>
                         <div class="ion-padding" slot="content">
-                            <component :is="item.componet"> </component>
+                            <component :is="item.component"> </component>
                         </div>
                     </ion-accordion>
                 </ion-accordion-group>
@@ -76,10 +76,8 @@ import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import Diagnosis from "@/apps/NCD/components/ConsultationPlan/Diagnosis.vue";
-import Complications from "@/apps/NCD/components/ConsultationPlan/Complications.vue";
 import ConfirmDiagnosis from "@/apps/NCD/components/ConsultationPlan/ConfirmDiagnosis.vue";
 import Outcome from "@/apps/NCD/components/ConsultationPlan/Outcome.vue";
-import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigations.vue";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
 import Vitals from "@/apps/ANC/components/physical exam/Vitals.vue";
 import Obstetric from "@/apps/LABOUR/components/obstetric details/Obstetric.vue";
