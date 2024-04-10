@@ -43,19 +43,27 @@ export async function formatInputFiledData(data: any) {
 }
 
 export async function formatCheckBoxData(data: any) {
-    const buildObjPromises: Promise<any>[] = data.map(async (item: any) => {
-        if (item?.checkboxBtnContent?.data[0]?.checked) {
-            return {
-                concept_id: await ConceptService.getConceptID(item.checkboxBtnContent.header.name, true),
-                value_coded: await ConceptService.getConceptID(item?.checkboxBtnContent?.data[0]?.value, true),
-                obs_datetime: item?.checkboxBtnContent?.inputFields
-                    ? item?.checkboxBtnContent?.inputFields[0]?.value
-                    : "" || ConceptService.getSessionDate(),
-            };
+    const buildObjPromises: Promise<any>[] = data.flatMap(async (item: any) => {
+        if (item?.checkboxBtnContent?.data && item.checkboxBtnContent.data.length > 0) {
+            return await Promise.all(
+                item.checkboxBtnContent.data.map(async (checkboxData: any) => {
+                    if (checkboxData.checked) {
+                        return {
+                            concept_id: await ConceptService.getConceptID(item.checkboxBtnContent.header.name, true),
+                            value_coded: await ConceptService.getConceptID(checkboxData.value, true),
+                            obs_datetime: item.checkboxBtnContent.inputFields
+                                ? item.checkboxBtnContent.inputFields[0]?.value || ConceptService.getSessionDate()
+                                : ConceptService.getSessionDate(),
+                        };
+                    } else {
+                        return null;
+                    }
+                })
+            );
         } else {
             return null;
         }
     });
 
-    return (await Promise.all(buildObjPromises)).filter((obj) => obj !== null);
+    return (await Promise.all(buildObjPromises)).flat().filter((obj) => obj !== null);
 }
