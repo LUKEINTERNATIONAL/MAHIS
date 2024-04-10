@@ -157,27 +157,27 @@ export default defineComponent({
       StepperData: [
         {
           title: "Clinical Assessment",
-          componet: "ClinicalAssessment",
+          component: "ClinicalAssessment",
           value: "1",
         },
         {
           title: "Investigations",
-          componet: "Investigations",
+          component: "Investigations",
           value: "2",
         },
         {
           title: "Diagnosis",
-          componet: "OPDDiagnosis",
+          component: "OPDDiagnosis",
           value: "3",
         },
         {
           title: "Treatment plan",
-          componet: "OPDTreatmentPlan",
+          component: "OPDTreatmentPlan",
           value: "4",
         },
         {
           title: "Outcome",
-          componet: "OPDOutcome",
+          component: "OPDOutcome",
           value: "5",
         },
       ],
@@ -264,16 +264,16 @@ export default defineComponent({
       });
     },
     async saveData() {
-      // if (this.OPDdiagnosis[0].selectedData.length > 0) {
-      //   await this.saveDiagnosis();
-      // }
-      // await this.saveTreatmentPlan();
-      // await this.saveOutComeStatus();
-      // await this.saveWomenStatus();
-      // await this.savePresentingComplaints();
-      // await this.savePastMedicalHistory();
+      if (this.OPDdiagnosis[0].selectedData.length > 0) {
+        await this.saveDiagnosis();
+      }
+      await this.saveTreatmentPlan();
+      await this.saveOutComeStatus();
+      await this.saveWomenStatus();
+      await this.savePresentingComplaints();
+      await this.savePastMedicalHistory();
       await this.savePhysicalExam();
-      // this.$router.push("patientProfile");
+      this.$router.push("patientProfile");
     },
     async savePastMedicalHistory() {
       const pastMedicalHistoryData: any = await this.buildPastMedicalHistory();
@@ -300,15 +300,15 @@ export default defineComponent({
       this.presentingComplaints[0].selectedData;
     },
     async savePhysicalExam() {
-      // if (this.physicalExam[0].selectedData.length > 0) {
-      //   const userID: any = Service.getUserID();
-      //   const PhysicalExam = new PhysicalExamService(this.demographics.patient_id, userID);
-      //   const encounter = await PhysicalExam.createEncounter();
-      //   if (!encounter) return toastWarning("Unable to create patient physical examination encounter");
-      //   const patientStatus = await PhysicalExam.saveObservationList(await this.buildPhysicalExamination());
-      //   if (!patientStatus) return toastWarning("Unable to create patient physical examination  !");
-      //   toastSuccess("Physical examination has been created");
-      // }
+      if (this.physicalExam.length > 0) {
+        const userID: any = Service.getUserID();
+        const PhysicalExam = new PhysicalExamService(this.demographics.patient_id, userID);
+        const encounter = await PhysicalExam.createEncounter();
+        if (!encounter) return toastWarning("Unable to create patient physical examination encounter");
+        const patientStatus = await PhysicalExam.saveObservationList(await this.buildPhysicalExamination());
+        if (!patientStatus) return toastWarning("Unable to create patient physical examination  !");
+        toastSuccess("Physical examination has been created");
+      }
       console.log(await this.buildPhysicalExamination())
     },
     async saveWomenStatus() {
