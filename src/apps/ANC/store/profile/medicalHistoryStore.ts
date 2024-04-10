@@ -33,89 +33,89 @@ const medicalHistoryForm = {
 };
 
 const allegiesForm = {
-    albendazole: {
-        name: "Albendazole",
-        value: "albendazole"
-    },
-    aluminiumHydroxide: {
-        name: "Aluminium-hydroxide",
-        value: "aluminiumHydroxide"
-    },
-    calcium: {
-        name: "Calcium",
-        value: "calcium"
-    },
-    chamomile: {
-        name: "Chamomile",
-        value: "chamomile"
-    },
-    folicAcid: {
-        name: "Folic-acid",
-        value: "folicAcid"
-    },
-    ginger: {
-        name: "Ginger",
-        value: "ginger"
-    },
-    fish: {
-        name: "Fish",
-        value: "fish"
-    },
-    iron: {
-        name: "Iron",
-        value: "iron"
-    },
-    malariaMedication: {
-        name: "sulfadoxine-pyrimethamine",
-        value: "malariaMedication"
-    },
-    mebendazole: {
-        name: "Mebendazole",
-        value: "mebendazole"
-    },
-    penicillin: {
-        name: "Penicillin",
-        value: "penicillin"
-    },
-    prEPTenofovirDisoproxilFumarate: {
-        name: "PrEP(TDF)",
-        value: "prEPTenofovirDisoproxilFumarate"
-    },
-    otherAllegies: {
-        name: "",
-        value: "OtherAllergies"
-    }
-}
+  albendazole: {
+    name: "Albendazole",
+    value: "albendazole",
+  },
+  aluminiumHydroxide: {
+    name: "Aluminium-hydroxide",
+    value: "aluminium-hydroxide",
+  },
+  calcium: {
+    name: "Calcium",
+    value: "calcium",
+  },
+  chamomile: {
+    name: "Chamomile",
+    value: "chamomile",
+  },
+  folicAcid: {
+    name: "Folic-acid",
+    value: "folic-acid",
+  },
+  ginger: {
+    name: "Ginger",
+    value: "ginger",
+  },
+  fish: {
+    name: "Fish",
+    value: "fish",
+  },
+  iron: {
+    name: "Iron",
+    value: "iron",
+  },
+  malariaMedication: {
+    name: "sulfadoxine-pyrimethamine",
+    value: "sulfadoxine-pyrimethamine",
+  },
+  mebendazole: {
+    name: "Mebendazole",
+    value: "mebendazole",
+  },
+  penicillin: {
+    name: "Penicillin",
+    value: "penicillin",
+  },
+  prEPTenofovirDisoproxilFumarate: {
+    name: "PrEP(TDF)",
+    value: "PrEP(TDF)",
+  },
+  otherAllegies: {
+    name: "Other",
+    value: "other",
+  },
+};
 
 const chronicHealthConditionsForm = {
-    autoImmuneDesease: {
-        name: "Auto immune desease",
-        value: "autoImmuneDesease"
-    },
-    asthma: {
-        name: "Asthma",
-        value: "asthma"
-    },
-    diabetes: {
-        name: "Diabetes",
-        value: "diabetes"
-    }
-}
+  autoImmuneDesease: {
+    name: "Auto immune desease",
+    value: "auto immune desease",
+  },
+  asthma: {
+    name: "Asthma",
+    value: "asthma",
+  },
+  diabetes: {
+    name: "Diabetes",
+    value: "diabetes",
+  },
+};
 
 const bloodDisorderForm = {
-    sickleCell: {
-        name: "Sickle cell",
-        value: "sickleCell"
-    },
-    anaemia: {
-        name: "Anemia",
-        value: "anemia"
-    },
-    thalassemia: {
-        name: "Thalassemia",
-        value: "thalassemia"
-    }
-}
+  sickleCell: {
+    name: "Sickle cell",
+    value: "sickle cell",
+  },
+  anaemia: {
+    name: "Anemia",
+    value: "anemia",
+  },
+  thalassemia: {
+    name: "Thalassemia",
+    value: "thalassemia",
+  },
+};
 
 const cancerForm = {
 
@@ -142,24 +142,23 @@ const heartDeseaseForm = {
 }
 
 const diabetesForm = {
-
-    gestationalDiabetes: {
-        name: "Gestational diabetes",
-        value: "gestationalDiabetes"
-    },
-    preExistingType1: {
-        name: "pre-existing type 1",
-        value: "pre-existingType1"
-    },
-    preExistingType2: {
-        name: "pre-existing type 2",
-        value: "pre-existingType2"
-    },
-    otherDiabetis: {
-        name: "",
-        value: "otherDiabetis"
-    }
-}
+  gestationalDiabetes: {
+    name: "Gestational diabetes",
+    value: "gestational diabetes",
+  },
+  preExistingType1: {
+    name: "pre-existing type 1",
+    value: "pre-existing type 1",
+  },
+  preExistingType2: {
+    name: "pre-existing type 2",
+    value: "pre-existing type 2",
+  },
+  otherDiabetis: {
+    name: "",
+    value: "otherDiabetis",
+  },
+};
 
 const epilespyForm = {
 
@@ -169,133 +168,131 @@ const epilespyForm = {
     }
 }
 const hivTestForm = {
+  hivTestRequired: {
+    name: "HIV test required",
+    value: "HIV test required",
+  },
 
-    hivTestRequired: {
-        name: "HIV test required",
-        value: "hivTestRequired"
-    },
+  hivTestOrdered: {
+    name: "HIV test ordered",
+    value: "HIV test ordered",
+  },
+  hivTestConducted: {
+    name: "HIV test ordered",
+    value: "HIV test ordered",
+  },
 
-    hivTestOrdered: {
-        name: "HIV test ordered",
-        value: "hivTestOrdered"
-    },
-    hivTestConducted: {
-        name: "HIV test conducted",
-        value: "hivTestConducted"
-    },
-
-    hivTestNotDone: {
-        name: "HIV test not done",
-        value: "hivTestNotDone"
-    },
-    testStockOut: {
-        name: "Test stock-out",
-        value: "testStockOut"
-    },
-    expiredTests: {
-        name: "Expired tests",
-        value: " expiredTests"
-    },
-    hivPositive: {
-        name: "HIV Positive",
-        value: "hivPositive"
-    },
-    hivNegative1: {
-        name: "HIV Negative 1",
-        value: "hivNegative1"
-    },
-    hivNegative2: {
-        name: "HIV Negative 2",
-        value: "hivNegative2"
-    },
-    inconclusive: {
-        name: "Inconclusive",
-        value: "inconclusive"
-    },
-    highRiskYes: {
-        name: "Yes",
-        value: "yes"
-    },
-    highRiskNo: {
-        name: "No",
-        value: "no"
-    },
-    testDate: {
-        name: "Test Date",
-        value: "testDate"
-    },
-    reasonsTestNotDone: {
-        name: "",
-        value: "reasonsTestNotDone"
-    }
-}
+  hivTestNotDone: {
+    name: "HIV test not done",
+    value: "HIV test not done",
+  },
+  testStockOut: {
+    name: "Test stock-out",
+    value: "Test stock-out",
+  },
+  expiredTests: {
+    name: "Expired tests",
+    value: " expired tests",
+  },
+  hivPositive: {
+    name: "HIV Positive",
+    value: "HIV Positive",
+  },
+  hivNegative1: {
+    name: "HIV Negative 1",
+    value: "HIV Negative 1",
+  },
+  hivNegative2: {
+    name: "HIV Negative 2",
+    value: "HIV Negative 2",
+  },
+  inconclusive: {
+    name: "Inconclusive",
+    value: "inconclusive",
+  },
+  highRiskYes: {
+    name: "Yes",
+    value: "yes",
+  },
+  highRiskNo: {
+    name: "No",
+    value: "no",
+  },
+  testDate: {
+    name: "Test Date",
+    value: "Test Date",
+  },
+  reasonsTestNotDone: {
+    name: "",
+    value: "reasonsTestNotDone",
+  },
+};
 
 const syphilisForm = {
+  syphilisTestConducted: {
+    name: "Syphilis test conducted",
+    value: "Syphilis test conducted",
+  },
 
-    syphilisTestConducted: {
-        name: "Syphilis test conducted",
-        value: "syphilisTestConducted"
-    },
+  syphilisTestOrdered: {
+    name: "Syphilis test ordered",
+    value: "Syphilis test ordered",
+  },
+  syphilisTestNotDone: {
+    name: "Syphilis Test Not Done",
+    value: "syphilisTestNotDone",
+  },
 
-    syphilisTestOrdered: {
-        name: "Syphilis test ordered",
-        value: "syphilisTestOrdered"
-    },
-    syphilisTestNotDone: {
-        name: "Syphilis Test Not Done",
-        value: "syphilisTestNotDone"
-    },
+  rapidSyphilisTest: {
+    name: "Rapid syphilis test",
+    value: "rapid syphilis test",
+  },
+  offSiteLabTest: {
+    name: "Off-site lab test",
+    value: "Off-site lab test",
+  },
+  treponemaPallidum: {
+    name: "TPHA",
+    value: "TPHA",
+  },
+  testStockOut: {
+    name: "Test stock-out",
+    value: "Test stock-out",
+  },
+  expiredTests: {
+    name: "Expired tests",
+    value: "Expired tests",
+  },
 
-    rapidSyphilisTest: {
-        name: "Rapid syphilis test",
-        value: "rapidSyphilisTest"
-    },
-    offSiteLabTest: {
-        name: "Off-site lab test",
-        value: "offSiteLabTest"
-    },
-    treponemaPallidum: {
-        name: "TPHA",
-        value: "treponemaPallidum"
-    },
-    testStockOut: {
-        name: "Test stock-out",
-        value: "testStockOut"
-    },
-    expiredTests: {
-        name: "Expired tests",
-        value: "expiredTests"
-    },
-
-    other: {
-        name: "Other",
-        value: "other"
-    },
-    syphilisPositiveResults: {
-        name: "Syphilis positive",
-        value: "syphilisPositiveResults"
-    },  
-        syphilisNegativeResults:{
-        name:"Syphilis Negative",
-        value: "syphilisNegativeResults"
-    },
-    syphilisPositiveDiagnosis: {
-        name: "Syphilis positive",
-        value: "syphilisPositiveDiagnosis"
-    },
-    syphilisNegativeDiagnosis: {
-        name: "Syphilis Negative",
-        value: "syphilisNegativeDiagnosis"
-    },
-    testDate: {
-        name: "Test Date",
-        value: "testDate"
-    },
-    reasonsTestNotDone: {
-        name: "Reason",
-        value: ""
-    }
-}
+  other: {
+    name: "Other",
+    value: "other",
+  },
+  syphilisPositiveResults: {
+    name: "Syphilis positive",
+    value: "Syphilis positive",
+  },
+  syphilisNegativeResults: {
+    name: "Syphilis Negative",
+    value: "syphilis negative",
+  },
+  syphilisPositiveDiagnosis: {
+    name: "Syphilis positive",
+    value: "syphilis positive",
+  },
+  syphilisNegativeDiagnosis: {
+    name: "Syphilis Negative",
+    value: "syphilis negative",
+  },
+  testDate: {
+    name: "Test Date",
+    value: "Test Date",
+  },
+  reasonsTestNotDone: {
+    name: "Reason",
+    value: "",
+  },
+};
 
 const hypertensionForm = {
 
@@ -320,12 +317,11 @@ const tbForm = {
 }
 
 const mentalIllinessForm = {
-
-    mentalIlliness: {
-        name: "Mental  illiness",
-        value: "mentalIlliness"
-    }
-}
+  mentalIlliness: {
+    name: "Mental  illiness",
+    value: "Mental  illiness",
+  },
+};
 
 export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
   state: () => ({
@@ -366,7 +362,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
-            name:"Does the woman have any past surgeries done?",
+            name: "Does the woman have any past surgeries done?",
           },
           data: [
             {
@@ -475,6 +471,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "Does the woman have any allergies?",
             selectedValue: "",
+            name: "Does the woman have any allergies?",
           },
           data: [
             {
@@ -504,6 +501,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Does the woman have any allergies?",
           },
           data: [
             {
@@ -533,6 +531,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Does the woman have any allergies?",
           },
           data: [
             {
@@ -562,6 +561,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Does the woman have any allergies?",
           },
           data: [
             {
@@ -591,6 +591,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Does the woman have any allergies?",
           },
           data: [
             {
@@ -620,6 +621,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Does the woman have any allergies?",
           },
           data: [
             {
@@ -649,11 +651,12 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Does the woman have any allergies?",
           },
           data: [
             {
               name: "None",
-              value: "noAllergies",
+              value: "none",
               labelPlacement: "start",
               colSize: "6",
               justify: "space-between",
@@ -661,7 +664,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
             },
             {
               name: "Other",
-              value: "otherAllergies",
+              value: "other",
               disabled: false,
               labelPlacement: "start",
               colSize: "6",
@@ -701,6 +704,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "Does the woman have any existing chronic conditions?",
             selectedValue: "",
+            name: "chronic conditions",
           },
           data: [
             {
@@ -728,6 +732,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "chronic conditions",
           },
           data: [
             {
@@ -757,6 +762,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "chronic conditions",
           },
           data: [
             {
@@ -787,6 +793,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "chronic conditions",
           },
           data: [
             {
@@ -817,6 +824,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "chronic conditions",
           },
           data: [
             {
@@ -844,6 +852,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "chronic conditions",
           },
           data: [
             {
@@ -873,6 +882,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "chronic conditions",
           },
           data: [
             {
@@ -902,6 +912,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "chronic conditions",
           },
           data: [
             {
@@ -931,7 +942,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
-            name: "HIV positive",
+            name: "chronic conditions",
           },
           data: [
             {
@@ -961,6 +972,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "chronic conditions",
           },
           data: [
             {
@@ -1023,7 +1035,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "Is the client on ART?",
             selectedValue: "",
-            name: "Is client on ART",
+            name: "chronic conditions",
             displayNone: true,
           },
           data: [

@@ -16,7 +16,7 @@ export const useMedicationsStore = defineStore("medicationsStore", {
           data: [
             {
               name: "Oral PreP for HIV",
-              value: "OralPrePforHIV",
+              value: "Oral PreP for HIV",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -24,7 +24,7 @@ export const useMedicationsStore = defineStore("medicationsStore", {
             },
             {
               name: "Analgesic",
-              value: "value",
+              value: "Analgesic",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -40,11 +40,12 @@ export const useMedicationsStore = defineStore("medicationsStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Which medications is the woman currently prescribed?",
           },
           data: [
             {
               name: "Anti-consulsive",
-              value: "value",
+              value: "Anti-consulsive",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -52,7 +53,7 @@ export const useMedicationsStore = defineStore("medicationsStore", {
             },
             {
               name: "Anti-TB",
-              value: "value",
+              value: "Anti-TB",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -67,11 +68,12 @@ export const useMedicationsStore = defineStore("medicationsStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Which medications is the woman currently prescribed?",
           },
           data: [
             {
               name: "Antihelmintic",
-              value: "value",
+              value: "Antihelmintic",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -79,7 +81,7 @@ export const useMedicationsStore = defineStore("medicationsStore", {
             },
             {
               name: "Antimarials",
-              value: "value",
+              value: "Antimarials",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -95,11 +97,12 @@ export const useMedicationsStore = defineStore("medicationsStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Which medications is the woman currently prescribed?",
           },
           data: [
             {
               name: "Antitussive",
-              value: "value",
+              value: "Antitussive",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -107,7 +110,7 @@ export const useMedicationsStore = defineStore("medicationsStore", {
             },
             {
               name: "Aspirin",
-              value: "value",
+              value: "Aspirin",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -123,11 +126,12 @@ export const useMedicationsStore = defineStore("medicationsStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Which medications is the woman currently prescribed?",
           },
           data: [
             {
               name: "Calcium",
-              value: "value",
+              value: "Calcium",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -135,7 +139,7 @@ export const useMedicationsStore = defineStore("medicationsStore", {
             },
             {
               name: "Doxylamine",
-              value: "value",
+              value: "Doxylamine",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -150,11 +154,12 @@ export const useMedicationsStore = defineStore("medicationsStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Which medications is the woman currently prescribed?",
           },
           data: [
             {
               name: "Hematinic",
-              value: "value",
+              value: "Hematinic",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -162,7 +167,7 @@ export const useMedicationsStore = defineStore("medicationsStore", {
             },
             {
               name: "Iron",
-              value: "value",
+              value: "Iron",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -177,11 +182,12 @@ export const useMedicationsStore = defineStore("medicationsStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Which medications is the woman currently prescribed?",
           },
           data: [
             {
               name: "Metoclopramide",
-              value: "value",
+              value: "Metoclopramide",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -189,7 +195,7 @@ export const useMedicationsStore = defineStore("medicationsStore", {
             },
             {
               name: "Thyroid medication",
-              value: "value",
+              value: "Thyroid medication",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -204,11 +210,12 @@ export const useMedicationsStore = defineStore("medicationsStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Which medications is the woman currently prescribed?",
           },
           data: [
             {
               name: "Antiacids",
-              value: "value",
+              value: "Antiacids",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -216,7 +223,7 @@ export const useMedicationsStore = defineStore("medicationsStore", {
             },
             {
               name: "Anti-psychotics",
-              value: "value",
+              value: "Anti-psychotics",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -232,11 +239,12 @@ export const useMedicationsStore = defineStore("medicationsStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Which medications is the woman currently prescribed?",
           },
           data: [
             {
               name: "Anti-diabetic",
-              value: "value",
+              value: "Anti-diabetic",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -244,7 +252,7 @@ export const useMedicationsStore = defineStore("medicationsStore", {
             },
             {
               name: "Anti-hypertensive",
-              value: "value",
+              value: "Anti-hypertensive",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -259,11 +267,12 @@ export const useMedicationsStore = defineStore("medicationsStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Which medications is the woman currently prescribed?",
           },
           data: [
             {
               name: "Asthamatic",
-              value: "value",
+              value: "Asthamatic",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -271,7 +280,7 @@ export const useMedicationsStore = defineStore("medicationsStore", {
             },
             {
               name: "Co-trimoxazole",
-              value: "value",
+              value: "Co-trimoxazole",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -286,11 +295,12 @@ export const useMedicationsStore = defineStore("medicationsStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Which medications is the woman currently prescribed?",
           },
           data: [
             {
               name: "Folic acid",
-              value: "value",
+              value: "Folic acid",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -298,7 +308,7 @@ export const useMedicationsStore = defineStore("medicationsStore", {
             },
             {
               name: "Hemorrhoidal medication",
-              value: "value",
+              value: "Hemorrhoidal medication",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -313,11 +323,12 @@ export const useMedicationsStore = defineStore("medicationsStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Which medications is the woman currently prescribed?",
           },
           data: [
             {
               name: "Magnesium",
-              value: "value",
+              value: "Magnesium",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -325,7 +336,7 @@ export const useMedicationsStore = defineStore("medicationsStore", {
             },
             {
               name: "Multivitamin",
-              value: "value",
+              value: "Multivitamin",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -341,11 +352,12 @@ export const useMedicationsStore = defineStore("medicationsStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Which medications is the woman currently prescribed?",
           },
           data: [
             {
               name: "Vitamin A",
-              value: "value",
+              value: "Vitamin A",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -353,7 +365,7 @@ export const useMedicationsStore = defineStore("medicationsStore", {
             },
             {
               name: "Other",
-              value: "otherMedications",
+              value: "Other",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -368,6 +380,7 @@ export const useMedicationsStore = defineStore("medicationsStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Which medications is the woman currently prescribed?",
           },
           data: [
             {

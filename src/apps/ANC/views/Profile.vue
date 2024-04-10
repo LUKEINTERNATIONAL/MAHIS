@@ -182,7 +182,10 @@ export default defineComponent({
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useObstreticHistoryStore, ["preterm"]),
         ...mapState(useObstreticHistoryStore, ["Complications"]),
-        ...mapState(useMedicalHistoryStore,['medicalHistory'])
+        ...mapState(useMedicalHistoryStore,['medicalHistory','allegy','exisitingChronicHealthConditions']),
+        ...mapState(useCurrentPregnanciesStore,['palpation','tetanus','lmnp','ultrasound']),
+        ...mapState(useMedicationsStore,['Medication']),
+        ...mapState(useWomanBehaviourStore,['dailyCaffeineIntake'])
     },
     mounted() {
         // this.markWizard()
@@ -228,6 +231,11 @@ export default defineComponent({
             this.savePreterm()
             this.savePastPregnancyComplication()
             this.savePastSurgeries()
+            this.saveAllergy()
+            this.saveChronicHealthCondition()
+            this.saveCurrentPrengancy()
+            this.saveMedication()
+            this.saveCaffeinIntake()
         },
         async savePreterm(){
         // if (this.preterm[0].selectedData.length > 0) {
@@ -256,7 +264,22 @@ export default defineComponent({
         async savePastSurgeries(){
             console.log(await this.buildPastSurgeries())
         },
-        async buildPreterm() {
+        async saveAllergy(){
+            console.log(await this.buildAllergy())
+        },
+        async saveChronicHealthCondition(){
+            console.log(await this.buildChronicHealthCondition())
+        },
+        async saveCurrentPrengancy(){
+            console.log(await this.buildCurrentPrengancy())
+        },
+        async saveMedication(){
+            console.log(await this.buildMedication())
+        },
+        async saveCaffeinIntake(){
+            console.log(await this.buildCaffeinIntake())
+        },
+        async buildPreterm(){
             return [
                 ...(await formatRadioButtonData(this.preterm)),       
             ];
@@ -269,6 +292,36 @@ export default defineComponent({
         async buildPastSurgeries(){
             return[
                 ...(await formatCheckBoxData(this.medicalHistory))
+            ]
+        },
+        async buildAllergy(){
+            return[
+                ...(await formatCheckBoxData(this.allegy))
+            ]
+        },
+        async buildChronicHealthCondition(){
+            return[
+                ...(await formatCheckBoxData(this.exisitingChronicHealthConditions))
+            ]
+        },
+        async buildCurrentPrengancy(){
+            return[
+                ...(await formatRadioButtonData(this.palpation)),
+                ...(await formatRadioButtonData(this.tetanus)),
+                ...(await formatRadioButtonData(this.lmnp)),
+                ...(await formatRadioButtonData(this.ultrasound)),
+            ]
+        },
+        async buildMedication(){
+            return[
+                ...(await formatCheckBoxData(this.Medication))
+            ]
+        },
+        async buildCaffeinIntake(){
+            return[
+                ...(await formatCheckBoxData(this.dailyCaffeineIntake)),
+                ...(await formatRadioButtonData(this.dailyCaffeineIntake)),
+                ...(await formatRadioButtonData(this.dailyCaffeineIntake)),
             ]
         },
         openModal() {

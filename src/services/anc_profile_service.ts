@@ -13,3 +13,9 @@ export class MedicalHistoryService extends AppEncounterService {
     super(patientID,30, providerID); 
   }
 }
+
+export class MedicationService extends AppEncounterService {
+  constructor(patientID: number, providerID: number) {
+    super(patientID, 30, providerID);  //place holder for medication encounter type
+  }
+}

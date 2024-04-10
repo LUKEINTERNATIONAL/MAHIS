@@ -32,6 +32,7 @@ export const useWomanBehaviourStore = defineStore("womanBehaviourStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Daily caffeine use",
           },
           data: [
             {
@@ -51,6 +52,7 @@ export const useWomanBehaviourStore = defineStore("womanBehaviourStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Daily caffeine use",
           },
           data: [
             {
@@ -71,6 +73,7 @@ export const useWomanBehaviourStore = defineStore("womanBehaviourStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Daily caffeine use",
           },
           data: [
             {
@@ -91,6 +94,7 @@ export const useWomanBehaviourStore = defineStore("womanBehaviourStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Daily caffeine use",
           },
           data: [
             {
@@ -112,17 +116,18 @@ export const useWomanBehaviourStore = defineStore("womanBehaviourStore", {
           header: {
             title: "Recently quit tobacco products",
             selectedValue: "",
+            name: "Recently quit tobacco products",
           },
           data: [
             {
-              value: "Y",
+              value: "Yes",
               name: "Yes",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
-              value: "N",
+              value: "No",
               name: "No",
               labelPlacement: "start",
               colSize: "7",
@@ -137,17 +142,18 @@ export const useWomanBehaviourStore = defineStore("womanBehaviourStore", {
           header: {
             title: "Exposure to second hand smoke",
             selectedValue: "",
+            name: "Exposure to second hand smoke",
           },
           data: [
             {
-              value: "Y",
+              value: "Yes",
               name: "Yes",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
-              value: "N",
+              value: "No",
               name: "No",
               labelPlacement: "start",
               colSize: "7",
