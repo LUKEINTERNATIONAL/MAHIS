@@ -32,7 +32,6 @@
                                         type="text"
                                         class="m-input"
                                         placeholder="Enter your first name"
-                                        v-model="name"
                                     >
                                 </ion-input>
                                 
@@ -45,8 +44,7 @@
                                         fill="outline"
                                         type="text"
                                         class="m-input"
-                                        placeholder="Enter your last name"
-                                        v-model="name"
+                                        placeholder="Enter your last name"  
                                     >
                                 </ion-input>
                             </ion-col>
@@ -131,7 +129,7 @@
                                         type="text"
                                         class="m-input"
                                         placeholder="Enter your first name"
-                                        v-model="name"
+                                       
                                     >
                                 </ion-input>
                                 
@@ -145,7 +143,7 @@
                                         type="text"
                                         class="m-input"
                                         placeholder="Enter your last name"
-                                        v-model="name"
+                                       
                                     >
                                 </ion-input>
                             </ion-col>
@@ -172,7 +170,7 @@
                                         type="text"
                                         class="m-input"
                                         placeholder="Enter your first name"
-                                        v-model="name"
+                                        
                                     >
                                 </ion-input>
                                 
@@ -186,7 +184,7 @@
                                         type="text"
                                         class="m-input"
                                         placeholder="Enter your last name"
-                                        v-model="name"
+                                        
                                     >
                                 </ion-input>
                             </ion-col>
@@ -208,7 +206,7 @@
                                         type="text"
                                         class="m-input"
                                         placeholder="Enter your first name"
-                                        v-model="name"
+                                       
                                     >
                                 </ion-input>
                                 
@@ -222,7 +220,7 @@
                                         type="text"
                                         class="m-input"
                                         placeholder="Enter your last name"
-                                        v-model="name"
+                                       
                                     >
                                 </ion-input>
                             </ion-col>
@@ -286,7 +284,7 @@ const gender = ref()
 const genderPlaceHolders = ref("Select gender")
 const GenderIcon = icons.gender
 const GenderOptionsData = ref([
-    {>
+    {
         name: "Female",
         selected: false,
     },
