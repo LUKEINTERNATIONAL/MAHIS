@@ -119,6 +119,8 @@ const show_dead_options = ref(false)
 const show_admitted_options = ref(false)
 const show_referred_options = ref(false)
 
+const editItem = ref()
+
 const referralType = ref([
     {
         name: "Admitted for short stay",
