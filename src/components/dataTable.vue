@@ -1,12 +1,21 @@
 <template>
-    <EasyDataTable
-      :headers="headers"
-      :items="items"
-    />
+
+        <ion-card>
+            <EasyDataTable
+                :headers="headers"
+                :items="items"
+            />
+        </ion-card>
+
+   
+
   </template>
   
   <script setup lang="ts">
-  import type { Header, Item } from "vue3-easy-data-table";
+  import type { Header, Item } from "vue3-easy-data-table"
+  import { IonRow, IonCard, IonCol, IonList, IonLabel } from "@ionic/vue"
+  import { ref, watch, computed, onMounted, onUpdated } from "vue"
+
   
   const headers: Header[] = [
     { text: "PLAYER", value: "player" },
