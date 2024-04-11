@@ -14,7 +14,11 @@
             <div class="modal_wrapper">
                 <div class="center text_12">
                     <ion-row>
-                        <basic-form :contentData="[]"> </basic-form>
+                        <!-- <basic-form :contentData="[]"> </basic-form> -->
+                        <ion-col>
+                            <editUser/>
+                        </ion-col>
+                       
                     </ion-row>
                 </div>
             </div>
@@ -38,7 +42,8 @@ export default defineComponent({
 </script>
 <script setup lang="ts">
 import { IonButtons, IonButton, IonModal, IonAvatar, IonImg, IonLabel, IonPage, IonFooter } from "@ionic/vue"
-import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue"
+import { IonContent, IonHeader, IonItem, IonCol, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue"
+import editUser from "./editUser.vue"
 import { checkmark, pulseOutline } from "ionicons/icons"
 import { ref } from "vue"
 import { icons } from "@/utils/svg"
