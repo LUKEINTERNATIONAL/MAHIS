@@ -198,7 +198,7 @@ ion-item.ItemAl {
 ion-button.itemAlBtn {
     --background: #5cc55e;
     --color: #006401;
-    font-size: 18px;
+    font-size: 15px;
     font-weight: bold;
     text-transform: none;
 }
@@ -219,6 +219,8 @@ ion-icon.icon-al {
     /* margin-left: 40%; */
     font-size: x-large;
     margin-bottom: -5px;
+    font-weight: 530;
+    font-size: 28px
 }
 .item-al {
     cursor: pointer;
@@ -226,7 +228,7 @@ ion-icon.icon-al {
     background-color: #ebebeb;
     margin-top: 8px;
     font-weight: 530;
-    font-size: 19px;
+    font-size: 15px;
 }
 .item-al:hover {
     background-color: #55515148;
@@ -288,20 +290,18 @@ ion-list.list-al {
 }
 .ion-lblCls {
     font-weight: bold;
-    font-size: 19px;
-    line-height: 2;
-    background-color: #ecf0edd3;
+    font-size: 15px;
+    line-height: 3;
     border-radius: 10%;
-    padding: 10px;
+    padding: 4px;
 }
 .ion-lblCls-disabled {
     font-weight: bold;
-    font-size: 19px;
+    font-size: 15px;
     color:#8c8c8c;
-    line-height: 2;
-    background-color: #ecf0edd3;
+    line-height: 3;
     border-radius: 10%;
-    padding: 10px;
+    padding: 4px;
 }
 
 

@@ -20,6 +20,7 @@
             
             <ion-col>
                 <BasicInputField
+                style="margin: 1%;"
                 :placeholder="note_properties[0].placeHolder"
                 :icon="searchOutline"
                 :inputValue="note_properties[0].dataValue.value"
