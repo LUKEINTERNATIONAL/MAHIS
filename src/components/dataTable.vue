@@ -1,7 +1,7 @@
 <template>
         <ion-card>
           <ion-row>
-            
+                
             <ion-col>
               <ListPicker
                   :multiSelection="list_picker_prperties[0].multi_Selection"
@@ -36,7 +36,10 @@
                 :search-field="searchField"
                 :search-value="searchValue"
                 :loading="pageIsLoading"
+                @click-row="showRow"
             >
+
+            <div id="row-clicked"></div>
 
               <template #loading>
                 <img
@@ -93,7 +96,12 @@
 
   const headers = ref<Header[]>( [] )
   const items_local = ref<Item[]>([])
-  
+
+  type ClickRowArgument = Item & {
+    isSelected?: boolean,
+    indexInCurrentPage?: number,
+  }
+
   const props = defineProps<{
     colums: any,
     items: any,
@@ -206,6 +214,11 @@ function listUpdated1(data: any) {
       searchField.value = item.value
     }
   })
+}
 
+const showRow = (item: ClickRowArgument) => {
+  console.log(item)
+
+  
 }
 </script>
