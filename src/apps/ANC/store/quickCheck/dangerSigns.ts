@@ -7,7 +7,6 @@ const initialDangerSigns= [
     // {
     //     selectdData: [],
     //     sideColSize:0.3,
-    //     childName:"Yes",
     //     classDash: "dashed_bottom_border",
     //     radioBtnContent: {
     //         header: {
@@ -15,6 +14,7 @@ const initialDangerSigns= [
     //             name: "Extremities normal",
     //             title: "Extremities normal?",
     //             class:"bold",
+    //             displayNext:"Yes"
     //             // displayNone: true,
     //         },
     //         data: [
@@ -32,6 +32,7 @@ const initialDangerSigns= [
     //     },
     // },
     {
+
         selectdData: [],
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
@@ -39,7 +40,8 @@ const initialDangerSigns= [
                 title: "What danger signs does the woman has?",
                 selectedValue: "",
                 class:"bold",
-                name:'Danger signs'
+                name:'Danger signs',
+                // displayNone:true
             },
             data: [
                 {

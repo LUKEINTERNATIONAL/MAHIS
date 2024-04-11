@@ -124,14 +124,10 @@ export default defineComponent({
       this.$router.push(url);
     },
     handleDangerSigns(){
-      if(getCheckboxSelectedValue(this.DangerSigns, 'Other')?.value =='other'){
-      modifyFieldValue(this.DangerSigns,'Other','displayNone', false)
-    }   else {modifyFieldValue(this.DangerSigns,'Other','displayNone', true)
 
-      }
       const checkBoxes=['Pre-term labour','Central cyanosis', 'Unconscious', 'Fever', 'Imminent delivery',
                         'Severe headache', 'Severe vomiting','Severe abdominal pain','Draining liquor',
-                        'Respiratory problems','Convulsion history', 'Oedema', 'Epigastric pain', 'Bleeding vaginally', 'Other']
+                        'Respiratory problems','Convulsion history','Vomiting' , 'Oedema', 'Epigastric pain', 'Bleeding vaginally', 'Other']
       if (getCheckboxSelectedValue(this.DangerSigns, 'No danger signs')?.checked) {
         checkBoxes.forEach((checkbox) => {
           modifyCheckboxValue(this.DangerSigns, checkbox, 'checked', false);
@@ -144,19 +140,6 @@ export default defineComponent({
       }
 
       },
-    //Method for navigating
-    goToNextSection() {
-      if (this.currentSection < 1) {
-        this.currentSection++;
-      }
-    },
-    goToPreviousSection() {
-      if (this.currentSection > 0) {
-        this.currentSection--;
-      }
-    },
-
-
   }
 });
 </script>
