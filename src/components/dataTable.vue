@@ -35,27 +35,36 @@
                 :rows-per-page="10"
                 :search-field="searchField"
                 :search-value="searchValue"
+                :loading="pageIsLoading"
             >
-            <template #pagination="{ prevPage, nextPage, isFirstPage, isLastPage }">
 
-              <ion-row class="spc_btwn" v-if="dynamic_button_properties[0].showAddItemButton">
-                <dynamic-button
-                  v-if="dynamic_button_properties[0].addItemButton"
-                      :name="dynamic_button_properties[0].name"
-                      :fill="dynamic_button_properties[0].btnFill"
-                      :icon="returnUpBackOutline"
-                      @clicked:btn="prevPage"
+              <template #loading>
+                <img
+                  src="https://i.pinimg.com/originals/94/fd/2b/94fd2bf50097ade743220761f41693d5.gif"
+                  style="width: 100px; height: 80px;"
                 />
+              </template>
+              
+              <template #pagination="{ prevPage, nextPage, isFirstPage, isLastPage }">
 
-                <dynamic-button
-                  v-if="dynamic_button_properties[1].addItemButton"
-                      :name="dynamic_button_properties[1].name"
-                      :fill="dynamic_button_properties[1].btnFill"
-                      :icon="returnUpForwardOutline"
-                      @clicked:btn="nextPage"
-                />
-              </ion-row>
-            </template>
+                <ion-row class="spc_btwn" v-if="dynamic_button_properties[0].showAddItemButton">
+                  <dynamic-button
+                    v-if="dynamic_button_properties[0].addItemButton"
+                        :name="dynamic_button_properties[0].name"
+                        :fill="dynamic_button_properties[0].btnFill"
+                        :icon="returnUpBackOutline"
+                        @clicked:btn="prevPage"
+                  />
+
+                  <dynamic-button
+                    v-if="dynamic_button_properties[1].addItemButton"
+                        :name="dynamic_button_properties[1].name"
+                        :fill="dynamic_button_properties[1].btnFill"
+                        :icon="returnUpForwardOutline"
+                        @clicked:btn="nextPage"
+                  />
+                </ion-row>
+              </template>
           </EasyDataTable>
         </ion-card>
   </template>
@@ -80,6 +89,7 @@
   const searchValue = ref("")
 
   const searchFieldS = ref([]) as any
+  const pageIsLoading = ref(true)
 
   const headers = ref<Header[]>( [] )
   const items_local = ref<Item[]>([])
@@ -128,12 +138,14 @@ watch(() => props.search_fields,
 onMounted(async ()=>{
   items_local.value = props.items
   console.log("qwweerrt....")
+  //
   console.log(items_local.value)
 })
 
 watch(() => props.items,
     async (newValue) => {
-      items_local.value = newValue 
+      items_local.value = newValue
+      pageIsLoading.value = false 
     }
 )
 
