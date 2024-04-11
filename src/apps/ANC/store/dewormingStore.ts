@@ -12,6 +12,7 @@ export const useDewormingStore = defineStore("dewormingStore", {
           header: {
             title: "Was preventative antihelminthic treatment provided?",
             selectedValue: "",
+            class: "bold",
             name: "antihelminthic treatment",
           },
           data: [
@@ -42,20 +43,21 @@ export const useDewormingStore = defineStore("dewormingStore", {
           header: {
             title: "Preventative antihelminthic treatment provided",
             selectedValue: "",
+            class: "bold",
             name: "antihelminthic treatment provided",
-            displayNone: true,
+            //displayNone: true,
           },
           data: [
             {
               name: "Single-dose albendazole 400mg",
-              value: "single",
+              value: "single-dose albendazole 400mg",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "Single-dose albendazole 500mg",
-              value: "n",
+              value: "single-dose albendazole 500mg",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -74,13 +76,14 @@ export const useDewormingStore = defineStore("dewormingStore", {
           header: {
             title: "Reason no preventative treatment provided",
             selectedValue: "",
+            class: "bold",
             name: "no preventative treatment provided",
-            displayNone: true,
+            //displayNone: true,
           },
           data: [
             {
               name: "Client was referred",
-              value: "client_referred",
+              value: "client was referred",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -104,7 +107,7 @@ export const useDewormingStore = defineStore("dewormingStore", {
             {
               colData: [
                 {
-                  displayNone: true,
+                  //displayNone: true,
                   inputHeader: "specify",
                   value: "",
                   name: "Specify",
@@ -131,19 +134,20 @@ export const useDewormingStore = defineStore("dewormingStore", {
           header: {
             title: "Was preventative antihelminthic treatment provided?",
             selectedValue: "",
+            class: "bold",
             name: " preventative antihelminthic treatment",
           },
           data: [
             {
               name: "Yes",
-              value: "y",
+              value: "yes",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "No",
-              value: "n",
+              value: "no",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -163,12 +167,13 @@ export const useDewormingStore = defineStore("dewormingStore", {
             title:
               "Reason no counselling on malaria prevention was not conducted",
             selectedValue: "",
+            class: "bold",
             name: "counselling on malaria prevention",
           },
           data: [
             {
               name: "Client was referred",
-              value: "client_referred",
+              value: "client was referred",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -227,5 +232,5 @@ export const useDewormingStore = defineStore("dewormingStore", {
       this.malariaReason = data;
     },
   },
-  persist: true,
+  //persist: true,
 });

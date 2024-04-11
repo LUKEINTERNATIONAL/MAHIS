@@ -28,3 +28,9 @@ export class IntimatePartnerService extends AppEncounterService {
     super(patientID, 25, providerID); //encounter typeplace holder Intimate Partner
   }
 }
+
+export class DewormingService extends AppEncounterService {
+  constructor(patientID: number, providerID: number) {
+    super(patientID, 25, providerID); //encounter typeplace holder Deworming
+  }
+}

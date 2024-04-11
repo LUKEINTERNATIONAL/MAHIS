@@ -39,6 +39,7 @@ import { useMedicationDispensedStore } from '../store/medicationDispensed';
 import { useDiagnosisCounsellingStore } from '../store/diagnosisCounsellingStore';
 import { useImmunizationStore } from '../store/immunizationStore';
 import { useIntimatePartnerStore } from '../store/intimatePartnerStore';
+import { useDewormingStore } from '../store/dewormingStore';
 
 
 
@@ -170,7 +171,8 @@ computed:{
                                             
   ...mapState(useImmunizationStore,['ttDoses','HepBCounselling','HepB1','HepB2','HepB3','hepBReason']),
   ...mapState( useIntimatePartnerStore,['ipv','additionalCare','safety_assessment','physical_violence','beaten_pregnant',
-                                 'woman_threatened','constant_jealous','strangling','murder_threat','referrals'])
+                                 'woman_threatened','constant_jealous','strangling','murder_threat','referrals']),
+  ...mapState(useDewormingStore,['treatment','malaria','malariaReason'])
 },
 
 methods: {
@@ -181,6 +183,7 @@ methods: {
     this.saveCouselling();
     this.saveImmunisation();
     this.saveIntimatePartner();
+    this.saveDeworming();
     //this.$router.push('counselling');
 
   },
@@ -198,6 +201,9 @@ methods: {
   },
   async saveIntimatePartner(){
     console.log(await this.buildIntimatePartner())
+  },
+  async saveDeworming(){
+    console.log(await this.buildDeworming())
   },
     async buildDiagnosis(){
       return[
@@ -264,7 +270,14 @@ methods: {
        ...(await formatRadioButtonData(this.constant_jealous)),
        ...(await formatRadioButtonData(this.strangling)),
        ...(await formatRadioButtonData(this.murder_threat)),
-       ...(await formatRadioButtonData(this.referrals))
+       ...(await formatCheckBoxData(this.referrals))
+    ]
+  },
+  async buildDeworming(){
+    return[
+       ...(await formatRadioButtonData(this.treatment)),
+       ...(await formatRadioButtonData(this.malaria)),
+       ...(await formatRadioButtonData(this.malariaReason)),
     ]
   },
 }

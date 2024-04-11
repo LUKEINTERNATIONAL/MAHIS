@@ -180,14 +180,14 @@ export const useIntimatePartnerStore = defineStore("intimatePartnerStore", {
           data: [
             {
               name: "Yes",
-              value: "y",
+              value: "yes",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "No",
-              value: "n",
+              value: "no",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -399,12 +399,13 @@ export const useIntimatePartnerStore = defineStore("intimatePartnerStore", {
             title: "Referrals made as part of first-line support",
             selectedValue: "",
             class: "bold",
+            name: "tried to strangle", // concepts is a placeholder
             //name: "first-line support",
           },
           data: [
             {
-              name: "Care at another facility",
-              value: "care at another facility",
+              name: "         Care at another facility", //do not remove the space at the begining
+              value: "         care at another facility",
               labelPlacement: "start",
               colSize: "6",
               justify: "space-between",
@@ -428,6 +429,7 @@ export const useIntimatePartnerStore = defineStore("intimatePartnerStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "tried to strangle", // concepts is a placeholder
           },
           data: [
             {
@@ -456,6 +458,7 @@ export const useIntimatePartnerStore = defineStore("intimatePartnerStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "tried to strangle", // concepts is a placeholder
           },
           data: [
             {
@@ -485,6 +488,7 @@ export const useIntimatePartnerStore = defineStore("intimatePartnerStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "tried to strangle", // concepts is a placeholder
           },
           data: [
             {
@@ -513,6 +517,7 @@ export const useIntimatePartnerStore = defineStore("intimatePartnerStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "tried to strangle", // concepts is a placeholder
           },
           data: [
             {

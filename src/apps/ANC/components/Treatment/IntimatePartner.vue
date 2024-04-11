@@ -169,7 +169,7 @@ export default defineComponent ({
           modifyFieldValue(this.referrals,'Specify','displayNone',true)
         }
 
-        const checkBoxes=['Care at another facility','Crisis intervention or counselling','Police','Shelter or housing',
+        const checkBoxes=['Care at another facility',"         Care at another facility",'Crisis intervention or counselling','Police','Shelter or housing',
                          'Shelter or housing','Child protection','Livelihood support','Other',]
 
       if (getCheckboxSelectedValue(this.referrals, 'None')?.checked) {
