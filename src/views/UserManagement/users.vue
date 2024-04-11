@@ -3,6 +3,12 @@
         <Toolbar />
         <ion-content :fullscreen="true">
             <div id="" style="margin-top: 30px;">
+
+                <div class="back_profile" @click="nav('patientProfile')">
+                    <ion-icon style="font-size: 20px" :icon="chevronBackOutline"> </ion-icon>
+                    <span style="cursor: pointer"> Back to profile</span>
+                </div>
+
                 <dataTable
                     :colums="data_table_properties[0].columns"
                     :items="_items_"
@@ -17,6 +23,7 @@
                 </ion-content>
     </ion-page>
 </template>
+<!-- @click="nav(' -->
 <script lang="ts">
 import { defineComponent } from "vue"
 import { text } from "ionicons/icons"
@@ -55,6 +62,8 @@ import ListPicker from "@/components/ListPicker.vue"
 import dataTable from "@/components/dataTable.vue"
 import type { Header, Item } from "vue3-easy-data-table"
 import editUserModal from "./editUserModal.vue"
+import { chevronBackOutline, checkmark } from "ionicons/icons"
+import router from '@/router'
 
 const isPopooverOpen = ref(false)
 const user_data = ref()
@@ -229,7 +238,21 @@ function listUpdated1(data: any) {
 function clickRow(data: any) {
     isPopooverOpen.value = true
 }
+
+function nav(url: any) {
+    router.push(url)
+}
 </script>
 
 <style scoped>
+.back_profile {
+    display: flex;
+    justify-content: space-between;
+    width: 140px;
+    align-items: center;
+    font-weight: 400;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 1%;
+}
 </style>
