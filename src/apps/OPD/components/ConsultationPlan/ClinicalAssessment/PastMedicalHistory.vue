@@ -1,6 +1,11 @@
 <template>
     <div class="modal_wrapper">
-        <basic-form :contentData="pastMedicalHistory" @update:inputValue="handleInputData"></basic-form>
+        <basic-form
+            :contentData="pastMedicalHistory"
+            :initialData="initialData"
+            @update:inputValue="handleInputData"
+            @update:selected="handleInputData"
+        ></basic-form>
     </div>
 </template>
 
@@ -31,25 +36,57 @@ export default defineComponent({
     },
 
     data() {
-        return {};
+        return {
+            initialData: [] as any,
+        };
     },
     computed: {
         ...mapState(usePastMedicalHistoryStore, ["pastMedicalHistory"]),
     },
+    mounted() {
+        const medicationHistory = usePastMedicalHistoryStore();
+        this.initialData = medicationHistory.getInitial();
+    },
     methods: {
         handleInputData(event: any) {
-            console.log(event);
-            if (event?.al?.name == "TB" && event?.al?.checked) {
-                modifyRadioValue(this.pastMedicalHistory, "TB treatment", "displayNone", false);
-            } else if (event?.al?.name == "TB" && !event?.al?.checked) {
-                modifyRadioValue(this.pastMedicalHistory, "TB treatment", "displayNone", true);
-            }
-
-            if (event?.name == "TBmedication" && event?.selectedValue == "Yes") {
-                this.pastMedicalHistory[2].displayNone = false;
-            } else if (event?.name == "TBmedication" && event?.selectedValue == "No") {
-                this.pastMedicalHistory[2].displayNone = true;
-            }
+            modifyFieldValue(this.pastMedicalHistory, "TB drugs", "popOverData", {
+                filterData: true,
+                data: [
+                    { name: "Auramine ‘O’ (C.I. 41000) 50g" },
+                    { name: "Bedaquilline 100mg" },
+                    { name: "Clofazimine 100mg" },
+                    { name: "Clofazimine 50mg" },
+                    { name: "Cycloserine 125mg" },
+                    { name: "Cycloserine 250mg" },
+                    { name: "Delamanid 50mg" },
+                    { name: "Ethambutol 100mg" },
+                    { name: "Ethambutol 400mg" },
+                    { name: "Ethionamide 250mg" },
+                    { name: "Isoniazid 100mg " },
+                    { name: "Isoniazid 300mg" },
+                    { name: "Isoniazid / Rifapentine 300mg / 300mg" },
+                    { name: "Levofloxacin 100mg" },
+                    { name: "Levofloxacin 250mg" },
+                    { name: "Linezolid 600mg" },
+                    { name: "Moxifloxacin 400mg" },
+                    { name: "Pyrazinamide 400mg" },
+                    { name: "Rifabutin 150mg Capsules" },
+                    { name: "Rifampicin 150mg/isoniazid 75mg" },
+                    { name: "Rifampicin 75mg+INH 50mg dispersible" },
+                    { name: "Rifampicin 75mg+INH 50mg+Pyrazinamide 150mg dispersible" },
+                    { name: "Rifampicin150mg/Isoniazid75mg/Pyrazinamide 400mg/Ethambutol" },
+                ],
+            });
+            modifyFieldValue(this.pastMedicalHistory, "Current hypertension treatment regimen", "popOverData", {
+                filterData: true,
+                data: [
+                    { name: "Captopril 12.5mg" },
+                    { name: "Aspirin 75mg" },
+                    { name: "Hydrochlorothiazide 25mg" },
+                    { name: "Enalapril Meleate 5mg" },
+                    { name: "Enalapril Maleate 10mg" },
+                ],
+            });
         },
     },
 });

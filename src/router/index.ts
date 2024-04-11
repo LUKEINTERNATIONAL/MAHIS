@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { RouteRecordRaw } from "vue-router";
 import HomePage from "../views/HomePage.vue";
 import Login from "../views/Login.vue";
+import userProfile from  "../views/UserManagement/userProfile.vue"
 import PatientProfile from "../views/PatientProfile.vue";
 import PatientRegistration from "@/views/Registration.vue";
 import { alertController, loadingController, modalController, toastController } from "@ionic/vue";
@@ -36,6 +37,12 @@ const routes: Array<RouteRecordRaw> = [
         path: "/registration/:registrationType",
         name: "registration",
         component: PatientRegistration,
+        props: true,
+    },
+    {
+        path: "/userProfile",
+        name: "userProfile",
+        component: userProfile,
         props: true,
     },
     ...NCD,

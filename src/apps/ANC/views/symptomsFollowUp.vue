@@ -1,56 +1,63 @@
 <template>
     <ion-page>
-      <Toolbar />
-      <ion-content :fullscreen="true">
-        <DemographicBar />
-        <Stepper stepperTitle="Symptoms  and follow up" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
-      </ion-content>
+        <Toolbar />
+        <ion-content :fullscreen="true">
+            <DemographicBar />
+            <Stepper
+                stepperTitle="Symptoms  and follow up"
+                :wizardData="wizardData"
+                @updateStatus="markWizard"
+                @finishBtn="saveData()"
+                :StepperData="StepperData"
+            />
+        </ion-content>
     </ion-page>
-  </template>
-  
-  <script lang="ts">
-  import { 
-    IonContent, 
-    IonHeader, 
-    IonMenuButton, 
-    IonPage, 
+</template>
+
+<script lang="ts">
+import {
+    IonContent,
+    IonHeader,
+    IonMenuButton,
+    IonPage,
     IonTitle,
     IonToolbar,
-    IonButton, 
-    IonCard, 
-    IonCardContent, 
+    IonButton,
+    IonCard,
+    IonCardContent,
     IonCardHeader,
-    IonCardSubtitle, 
-    IonCardTitle, 
-    IonAccordion, 
-    IonAccordionGroup, 
-    IonItem, 
+    IonCardSubtitle,
+    IonCardTitle,
+    IonAccordion,
+    IonAccordionGroup,
+    IonItem,
     IonLabel,
     IonModal,
     modalController,
-    AccordionGroupCustomEvent } from '@ionic/vue';
-  import { defineComponent } from 'vue';
-  import Toolbar from '@/components/Toolbar.vue'
-  import ToolbarSearch from '@/components/ToolbarSearch.vue'
-  import DemographicBar from '@/components/DemographicBar.vue'
-  import { chevronBackOutline,checkmark } from 'ionicons/icons';
-  import SaveProgressModal from '@/components/SaveProgressModal.vue'
-  import { createModal } from '@/utils/Alerts'
-  import { icons } from '@/utils/svg';
-  import { useVitalsStore } from '@/stores/VitalsStore'
-  import { useDemographicsStore } from '@/stores/DemographicStore'
-  import { useInvestigationStore } from '@/stores/InvestigationStore'
-  import { useDiagnosisStore } from '@/stores/DiagnosisStore'
-  import { mapState } from 'pinia';
-  import Stepper from "@/apps/ANC/components/Stepper.vue";
-  import { Service } from "@/services/service";
-  import { LabOrder } from "@/apps/NCD/services/lab_order"
-  import { VitalsService } from "@/services/vitals_service";
-  import { toastWarning,popoverConfirmation, toastSuccess } from '@/utils/Alerts';
-  import { Diagnosis } from '@/apps/NCD/services/diagnosis'
-  export default defineComponent({
+    AccordionGroupCustomEvent,
+} from "@ionic/vue";
+import { defineComponent } from "vue";
+import Toolbar from "@/components/Toolbar.vue";
+import ToolbarSearch from "@/components/ToolbarSearch.vue";
+import DemographicBar from "@/components/DemographicBar.vue";
+import { chevronBackOutline, checkmark } from "ionicons/icons";
+import SaveProgressModal from "@/components/SaveProgressModal.vue";
+import { createModal } from "@/utils/Alerts";
+import { icons } from "@/utils/svg";
+import { useVitalsStore } from "@/stores/VitalsStore";
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import { useInvestigationStore } from "@/stores/InvestigationStore";
+import { useDiagnosisStore } from "@/stores/DiagnosisStore";
+import { mapState } from "pinia";
+import Stepper from "@/apps/ANC/components/Stepper.vue";
+import { Service } from "@/services/service";
+import { LabOrder } from "@/apps/NCD/services/lab_order";
+import { VitalsService } from "@/services/vitals_service";
+import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
+import { Diagnosis } from "@/apps/NCD/services/diagnosis";
+export default defineComponent({
     name: "Home",
-    components:{
+    components: {
         IonContent,
         IonHeader,
         IonMenuButton,
@@ -60,142 +67,132 @@
         Toolbar,
         ToolbarSearch,
         DemographicBar,
-        IonButton, 
-        IonCard, 
-        IonCardContent, 
-        IonCardHeader, 
-        IonCardSubtitle, 
+        IonButton,
+        IonCard,
+        IonCardContent,
+        IonCardHeader,
+        IonCardSubtitle,
         IonCardTitle,
         IonAccordion,
         IonAccordionGroup,
         IonItem,
         IonLabel,
         IonModal,
-        Stepper
+        Stepper,
     },
-    data(){
+    data() {
         return {
             wizardData: [
                 {
-                    'title': 'Medical follow-up',
-                    'class': 'common_step',
-                    'checked':'',
-                    'icon': false,
-                    'disabled':false,
-                    'number': 1,
-                    'last_step': ''
-                    
+                    title: "Medical follow-up",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+                    disabled: false,
+                    number: 1,
+                    last_step: "",
                 },
                 {
-                    'title': 'Persistent behaviours',
-                    'class': 'common_step',
-                    'checked':'',
-                    'icon': false,
-                    'disabled':false,
-                    'number': 2,
-                    'last_step': ''
-                    
-                },
-                    {
-                    'title': 'Persistent symptoms',
-                    'class': 'common_step',
-                    'checked':'',
-                    'icon': false,
-                    'disabled':false,
-                    'number': 3,
-                    'last_step': ''
+                    title: "Persistent behaviours",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+                    disabled: false,
+                    number: 2,
+                    last_step: "",
                 },
                 {
-                    'title': 'Current physiological symptoms',
-                    'class': 'common_step',
-                    'checked':'',
-                    'icon': false,
-                    'disabled':false,
-                    'number': 4,
-                    'last_step': ''
+                    title: "Persistent symptoms",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+                    disabled: false,
+                    number: 3,
+                    last_step: "",
                 },
                 {
-                    'title': 'Intimate partner violence(IPV)',
-                    'class': 'common_step',
-                    'checked':'',
-                    'icon': false,
-                    'disabled':false,
-                    'number': 5,
-                    'last_step': ''
-                    
+                    title: "Current physiological symptoms",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+                    disabled: false,
+                    number: 4,
+                    last_step: "",
                 },
                 {
-                    'title': 'Fatal Movement',
-                    'class': 'common_step',
-                    'checked':'',
-                    'icon': false,
-                    'disabled':false,
-                    'number': 6,
-                    'last_step': 'last_step'
-                    
-                },
-                
-            ],
-            StepperData:[
-                {
-                    'title': 'Medical follow-up',
-                    'componet': 'MedicalFollowUp',
-                    'value': '1',
+                    title: "Intimate partner violence(IPV)",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+                    disabled: false,
+                    number: 5,
+                    last_step: "",
                 },
                 {
-                    'title': 'Persistent behaviours',
-                    'componet': 'PersistentBehaviour',
-                    'value': '2',
-                },
-                {
-                    'title': 'Persistent symptoms',
-                    'componet': 'PersistentSymptoms',
-                    'value': '3',
-                },
-                {
-                    'title': 'Current physiological symptoms',
-                    'componet': 'CurrentPhysiologicalSymptoms',
-                    'value': '4',
-                },
-                {
-                    'title': 'Intimate partner violence(IPV)',
-                    'componet': 'Ipv',
-                    'value': '5',
-                },
-                                {
-                    'title': 'Fatal Movement',
-                    'componet': 'FatalMovement',
-                    'value': '6',
+                    title: "Fatal Movement",
+                    class: "common_step",
+                    checked: "",
+                    icon: false,
+                    disabled: false,
+                    number: 6,
+                    last_step: "last_step",
                 },
             ],
-        isOpen: false,
-        iconsContent: icons,
+            StepperData: [
+                {
+                    title: "Medical follow-up",
+                    component: "MedicalFollowUp",
+                    value: "1",
+                },
+                {
+                    title: "Persistent behaviours",
+                    component: "PersistentBehaviour",
+                    value: "2",
+                },
+                {
+                    title: "Persistent symptoms",
+                    component: "PersistentSymptoms",
+                    value: "3",
+                },
+                {
+                    title: "Current physiological symptoms",
+                    component: "CurrentPhysiologicalSymptoms",
+                    value: "4",
+                },
+                {
+                    title: "Intimate partner violence(IPV)",
+                    component: "Ipv",
+                    value: "5",
+                },
+                {
+                    title: "Fatal Movement",
+                    component: "FatalMovement",
+                    value: "6",
+                },
+            ],
+            isOpen: false,
+            iconsContent: icons,
         };
     },
-    mounted(){
-        this.markWizard() 
+    mounted() {
+        this.markWizard();
     },
     setup() {
-        return { chevronBackOutline,checkmark };
+        return { chevronBackOutline, checkmark };
     },
-    
-      methods:{
-        markWizard(){  },
-        getFormatedData(data: any){
-          return  data.map((item: any) => {
+
+    methods: {
+        markWizard() {},
+        getFormatedData(data: any) {
+            return data.map((item: any) => {
                 return item?.data;
             });
         },
-        saveData(){
-
-          this.$router.push('physicalExamination');
-
+        saveData() {
+            this.$router.push("physicalExamination");
         },
-      }
-    })
-  </script>
-  
-  <style scoped>
+    },
+});
+</script>
 
-  </style>
-  
+<style scoped></style>

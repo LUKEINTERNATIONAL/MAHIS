@@ -21,11 +21,11 @@
 </template>
 <script setup lang="ts">
 import { IonDatetime } from "@ionic/vue";
-import BasicInputField from "@/components/BasicInputField.vue";
-import DynamicButton from "@/components/DynamicButton.vue";
+import BasicInputField from "./BasicInputField.vue";
+import DynamicButton from "./DynamicButton.vue";
 import { today } from "ionicons/icons";
 import { ref } from "vue";
-import { icons } from "@/utils/svg";
+import { icons } from "../utils/svg";
 
 const refDate = ref();
 const calenderIcon = icons.calendar;
@@ -84,11 +84,12 @@ function formatDate(date: any) {
     let options: Intl.DateTimeFormatOptions = { day: "2-digit", weekday: "long", month: "short", year: "numeric" };
     let formattedDate = tempDate.toLocaleDateString("en-US", options);
 
-    const data_data: { day: number; month: number; year: number } = {
+    const data_data: { day: number; month: number; year: number; formattedDate: string } = {
         day: theDate.getDate(),
         month: theDate.getMonth() + 1,
         year: theDate.getFullYear(),
-    };
+        formattedDate: formattedDate
+    }
     dateObject.value = data_data;
     dateUpDated();
     return formattedDate;

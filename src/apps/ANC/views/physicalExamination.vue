@@ -130,27 +130,27 @@ export default defineComponent({
             StepperData: [
                 {
                     title: "Vitals",
-                    componet: "vitals",
+                    component: "vitals",
                     value: "1",
                 },
                 {
                     title: "Maternal exam",
-                    componet: "MaternalExam",
+                    component: "MaternalExam",
                     value: "2",
                 },
                 {
                     title: "Fetal assessment",
-                    componet: "FetalAssessment",
+                    component: "FetalAssessment",
                     value: "3",
                 },
                 {
                     title: "Fetal presentation",
-                    componet: "FetalPresentation",
+                    component: "FetalPresentation",
                     value: "4",
                 },
                 {
                     title: "Presenting signs or conditions for IPV ",
-                    componet: "PresentingSigns",
+                    component: "PresentingSigns",
                     value: "5",
                 },
             ],
