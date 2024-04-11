@@ -201,7 +201,7 @@ const list_picker_prperties = [
         multi_Selection: true as any,
         show_list_label: true as any,
         unqueId: 'qwerty_8_0' as any,
-        name_of_list: 'search field' as any,
+        name_of_list: 'Roles' as any,
         placeHolder: 'Search for a field' as any,
         items: [],
         listUpdatedFN: listUpdated1,
@@ -272,5 +272,15 @@ function listUpdated1(data: any) {
 .previousLabel {
     font-weight: 600;
     color: #000;
+}
+.ListPicker.error-label {
+    background: #006401;
+    color: #006401;
+    text-transform: none;
+    padding: 6%;
+    border-radius: 10px;
+    margin-top: 7px;
+    display: flex;
+    text-align: center;
 }
 </style>
