@@ -1,7 +1,7 @@
 <template>
         <ion-card>
           <ion-row>
-                
+
             <ion-col>
               <ListPicker
                   :multiSelection="list_picker_prperties[0].multi_Selection"
@@ -216,9 +216,16 @@ function listUpdated1(data: any) {
   })
 }
 
+const emit = defineEmits<{
+    (e: "clickRow", ObjectsArray: any): void
+}>()
+
+function clickRow(data: any) {
+    emit("clickRow", data)
+}
+
 const showRow = (item: ClickRowArgument) => {
   console.log(item)
-
-  
+  clickRow(item)
 }
 </script>

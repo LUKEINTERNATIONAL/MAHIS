@@ -3,16 +3,18 @@
         :colums="data_table_properties[0].columns"
         :items="_items_"
         :search_fields="_search_fields_"
+        @click-row="clickRow"
     />
-
-
-    
+    <editUserModal
+        :is_open="isPopooverOpen"
+        @close-popoover="isPopooverOpen = false"
+    />
 
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-import { text } from "ionicons/icons";
-import { it } from "date-fns/locale";
+import { defineComponent } from "vue"
+import { text } from "ionicons/icons"
+import { it } from "date-fns/locale"
 export default defineComponent({
     watch: {},
     name: "xxxComponent",
@@ -46,7 +48,9 @@ import { UserService } from "@/services/user_service"
 import ListPicker from "@/components/ListPicker.vue"
 import dataTable from "@/components/dataTable.vue"
 import type { Header, Item } from "vue3-easy-data-table"
+import editUserModal from "./editUserModal.vue"
 
+const isPopooverOpen = ref(false)
 const user_data = ref()
 const _search_fields_ = ref([
     {
@@ -203,6 +207,7 @@ const _columns_ = ref<Header[]>([
 
 
 
+
 const data_table_properties = [
     {
         columns: _columns_.value as any,
@@ -215,6 +220,9 @@ function listUpdated1(data: any) {
     user_data.value = data
 }
 
+function clickRow(data: any) {
+    isPopooverOpen.value = true
+}
 </script>
 
 <style scoped>
