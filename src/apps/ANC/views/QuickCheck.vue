@@ -55,6 +55,12 @@ import {Treatment} from "@/apps/NCD/services/treatment";
 import {isEmpty} from "lodash";
 import {DRUG_FREQUENCIES, DrugPrescriptionService} from "@/services/drug_prescription_service";
 import HisDate from "@/utils/Date";
+import {usePregnancyStore} from "@/apps/OPD/stores/PregnancyStore";
+import {usePresentingComplaintsStore} from "@/apps/OPD/stores/PresentingComplaintsStore";
+import {usePastMedicalHistoryStore} from "@/apps/OPD/stores/PastMedicalHistoryStore";
+import {useOPDDiagnosisStore} from "@/apps/OPD/stores/DiagnosisStore";
+import {usePhysicalExaminationStore} from "@/apps/OPD/stores/PhysicalExamination";
+import {useTreatmentPlanStore} from "@/stores/TreatmentPlanStore";
 export default defineComponent({
   name: "Home",
   components:{
@@ -145,6 +151,18 @@ export default defineComponent({
       iconsContent: icons,
     };
   },
+  computed: {
+    ...mapState(useDemographicsStore, ["demographics"]),
+    ...mapState(usePregnancyStore, ["pregnancy"]),
+    ...mapState(usePresentingComplaintsStore, ["presentingComplaints"]),
+    ...mapState(usePastMedicalHistoryStore, ["pastMedicalHistory"]),
+    ...mapState(useVitalsStore, ["vitals"]),
+    ...mapState(useInvestigationStore, ["investigations"]),
+    ...mapState(useOPDDiagnosisStore, ["OPDdiagnosis"]),
+    ...mapState(usePhysicalExaminationStore, ["physicalExam"]),
+    ...mapState(useDangerSignsStore,["DangerSigns"]),
+    ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
+  },
 
   async mounted() {
     this.markWizard();
@@ -221,12 +239,12 @@ export default defineComponent({
     async saveDangerSigns() {
       if (this.DangerSigns.length > 0) {
         const userID: any = Service.getUserID();
-        const PhysicalExam = new PhysicalExamService(this.demographics.patient_id, userID);
-        const encounter = await PhysicalExam.createEncounter();
-        if (!encounter) return toastWarning("Unable to create patient physical examination encounter");
-        const patientStatus = await PhysicalExam.saveObservationList(await this.buildPhysicalExamination());
-        if (!patientStatus) return toastWarning("Unable to create patient physical examination  !");
-        toastSuccess("Physical examination has been created");
+        const DangerSigns = new PhysicalExamService(this.demographics.patient_id, userID);
+        const encounter = await DangerSigns.createEncounter();
+        if (!encounter) return toastWarning("Unable to create patient danger signs encounter");
+        const patientStatus = await DangerSigns.saveObservationList(await this.buildPhysicalExamination());
+        if (!patientStatus) return toastWarning("Unable to create patient danger signs  !");
+        toastSuccess("Danger signs has been created");
       }
       console.log(await this.buildPhysicalExamination())
     },
