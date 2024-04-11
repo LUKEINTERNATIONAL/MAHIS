@@ -76,15 +76,17 @@ async function getUsers() {
     const temp_aR: Item[] | {}[] = []
 
     user_data.value.forEach((item: any, index: number) => {
-
-        // if (index < 8)
         temp_aR.push(
             {
                 userId: item.user_id,
                 username: item.username,
                 role: userRolesStr(item.roles),
                 programs: userProgramsStr(item.programs),
-                gender: item.person.gender    
+                gender: item.person.gender,
+                status: item.deactivated_on,
+                firstname: userFirstname(item.person.names),
+                lastname: userLastname(item.person.names),
+
             }
         )
     })
@@ -110,6 +112,23 @@ function userRolesStr(items: any) {
     })
     return _str_
 }
+
+function userFirstname(items: any) {
+    let _str_: string = ''
+    items.forEach((item: any, index: number) => {
+        _str_+=item.given_name
+    })
+    return _str_
+}
+
+function userLastname(items: any) {
+    let _str_: string = ''
+    items.forEach((item: any, index: number) => {
+        _str_+=item.family_name
+    })
+    return _str_
+}
+
 
 function userProgramsStr(items: any) {
     let _str_: string = ''
@@ -154,6 +173,16 @@ const _columns_ = ref<Header[]>([
         sortable: true
     },
     {
+        text: 'First name',
+        value: 'firstname',
+        sortable: true
+    },
+    {
+        text: 'Last name',
+        value: 'lastname',
+        sortable: true
+    },
+    {
         text: 'Gender',
         value: 'gender',
         sortable: true
@@ -168,6 +197,7 @@ const _columns_ = ref<Header[]>([
         value: 'programs',
         sortable: true
     },
+
 ] as any)
 
 
