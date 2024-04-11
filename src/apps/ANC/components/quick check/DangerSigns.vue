@@ -63,9 +63,6 @@ export default defineComponent({
   data() {
     return {
       initialData:[]as any,
-      previousVisitDateRef: {},
-      previousVisitInstance: {} as any,
-      previousVisitDateInstance: {} as any,
       iconsContent: icons,
 
 
@@ -74,31 +71,27 @@ export default defineComponent({
 
   mounted() {
     const DangerSigns =useDangerSignsStore()
-    const PreviousVisit =useDangerSignsStore()
-    this.previousVisitInstance=useDangerSignsStore()
-    this.previousVisitInstance.setPreviousVisitDate([])
     this.initialData=DangerSigns.getInitial();
     this.handleDangerSigns()
   },
   watch:{
     PreviousVisit:{
     handler(val){
-      console.log(val)
-      if (val && val[1].data.rowData[0].colData[0].value) {
-        const numberOfvisits = parseInt(val[1].data.rowData[0].colData[0].value)
-        this.previousVisitInstance.setPreviousVisitDate([])
-
-        const visits = []
-        for (let i = 0; i < numberOfvisits; ++i) {
-          const x = JSON.parse(JSON.stringify({...this.previousVisitDateRef, id: i}))
-          x.data.sectionHeader = `Enter the date of (Visit ${i + 1})`;
-          x.data.sectionHeader.id=i
-          x.data.id=i
-          visits.push(x)
-        }
-
-        this.previousVisitDateInstance.setPreviousVisitDate(visits)
-      }
+      // if (val && val[1].data.rowData[0].colData[0].value) {
+      //   const numberOfvisits = parseInt(val[1].data.rowData[0].colData[0].value)
+      //   this.previousVisitInstance.setPreviousVisitDate([])
+      //
+      //   const visits = []
+      //   for (let i = 0; i < numberOfvisits; ++i) {
+      //     const x = JSON.parse(JSON.stringify({...this.previousVisitDateRef, id: i}))
+      //     x.data.sectionHeader = `Enter the date of (Visit ${i + 1})`;
+      //     x.data.sectionHeader.id=i
+      //     x.data.id=i
+      //     visits.push(x)
+      //   }
+      //
+      //   this.previousVisitDateInstance.setPreviousVisitDate(visits)
+      // }
 
 
     },

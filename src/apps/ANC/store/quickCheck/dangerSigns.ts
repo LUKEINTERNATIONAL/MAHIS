@@ -46,7 +46,7 @@ const initialDangerSigns= [
             data: [
                 {
                     name: "No danger signs",
-                    value: "NoDangerSigns",
+                    value: "No danger signs",
                     checked: false,
                     labelPlacement: "start",
                     colSize: "6",
@@ -55,7 +55,7 @@ const initialDangerSigns= [
 
                 {
                     name: "Central cyanosis",
-                    value: "CentralCyanosis",
+                    value: "Central cyanosis",
                     checked: false,
                     labelPlacement: "start",
                     colSize: "6",
@@ -77,7 +77,7 @@ const initialDangerSigns= [
             data: [
                 {
                     name: "Pre-term labour",
-                    value: "PreTermLabour",
+                    value: "Pre-term labour",
                     checked: false,
                     labelPlacement: "start",
                     colSize: "6",
@@ -115,7 +115,7 @@ const initialDangerSigns= [
                 },
                 {
                     name: "Imminent delivery",
-                    value: "BleedingDelivery",
+                    value: "Imminent delivery",
                     checked: false,
                     labelPlacement: "start",
                     colSize: "6",
@@ -137,7 +137,7 @@ const initialDangerSigns= [
             data: [
                 {
                     name: "Severe headache",
-                    value: "SevereHeadache",
+                    value: "Severe headache",
                     checked: false,
                     labelPlacement: "start",
                     colSize: "6",
@@ -145,7 +145,7 @@ const initialDangerSigns= [
                 },
                 {
                     name: "Vomiting",
-                    value: "SevereVomiting",
+                    value: "Vomiting",
                     checked: false,
                     labelPlacement: "start",
                     colSize: "6",
@@ -167,7 +167,7 @@ const initialDangerSigns= [
             data: [
                 {
                     name: "Severe abdominal pain",
-                    value: "SevereAbdominalPain",
+                    value: "Severe abdominal pain",
                     checked: false,
                     labelPlacement: "start",
                     colSize: "6",
@@ -175,7 +175,7 @@ const initialDangerSigns= [
                 },
                 {
                     name: "Draining liquor",
-                    value: "DrainingLiquor",
+                    value: "Draining liquor",
                     checked: false,
                     labelPlacement: "start",
                     colSize: "6",
@@ -197,7 +197,7 @@ const initialDangerSigns= [
             data: [
                 {
                     name: "Respiratory problems",
-                    value: "RespiratoryProblems",
+                    value: "Respiratory problems",
                     checked: false,
                     labelPlacement: "start",
                     colSize: "6",
@@ -205,7 +205,7 @@ const initialDangerSigns= [
                 },
                 {
                     name: "Convulsion history",
-                    value: "ConvulsionHistory",
+                    value: "Convulsion history",
                     checked: false,
                     labelPlacement: "start",
                     colSize: "6",
@@ -257,7 +257,7 @@ const initialDangerSigns= [
             data: [
                 {
                     name: "Bleeding vaginally",
-                    value: "BleedingVaginally",
+                    value: "Bleeding vaginally",
                     checked: false,
                     labelPlacement: "start",
                     colSize: "6",

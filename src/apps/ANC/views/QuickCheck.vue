@@ -61,6 +61,11 @@ import {usePastMedicalHistoryStore} from "@/apps/OPD/stores/PastMedicalHistorySt
 import {useOPDDiagnosisStore} from "@/apps/OPD/stores/DiagnosisStore";
 import {usePhysicalExaminationStore} from "@/apps/OPD/stores/PhysicalExamination";
 import {useTreatmentPlanStore} from "@/stores/TreatmentPlanStore";
+import {DangerSignsService} from "@/apps/ANC/service/danger_signs_service";
+import {useConfirmPregnancyStore} from "@/apps/ANC/store/quickCheck/confirmPregnancy";
+import {ConfirmPregnancyService} from "@/apps/ANC/service/confirm_pregnancy_service";
+import {SpecificHealthConcernsService} from "@/apps/ANC/service/specific_health_concerns_service";
+import {useSpecificHealthConcernsStore} from "@/apps/ANC/store/quickCheck/specificHealthConcerns";
 export default defineComponent({
   name: "Home",
   components:{
@@ -161,6 +166,8 @@ export default defineComponent({
     ...mapState(useOPDDiagnosisStore, ["OPDdiagnosis"]),
     ...mapState(usePhysicalExaminationStore, ["physicalExam"]),
     ...mapState(useDangerSignsStore,["DangerSigns"]),
+    ...mapState(useConfirmPregnancyStore,["ConfirmPregnancy"]),
+    ...mapState(useSpecificHealthConcernsStore,["HealthConcerns"]),
     ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
   },
 
@@ -198,33 +205,33 @@ export default defineComponent({
 
   methods: {
     markWizard() {
-      if (this.vitals.validationStatus) {
-        this.wizardData[0].checked = true;
-        this.wizardData[0].class = "open_step common_step";
-      } else {
-        this.wizardData[0].checked = false;
-      }
-
-      if (this.investigations[0].selectedData.length > 0) {
-        this.wizardData[1].checked = true;
-        this.wizardData[1].class = "open_step common_step";
-      } else {
-        this.wizardData[1].checked = false;
-      }
-
-      if (this.OPDdiagnosis[0].selectedData.length > 0) {
-        this.wizardData[2].checked = true;
-        this.wizardData[2].class = "open_step common_step";
-      } else {
-        this.wizardData[2].checked = false;
-      }
-
-      if (this.selectedMedicalDrugsList.length > 0) {
-        this.wizardData[4].checked = true;
-        this.wizardData[4].class = "open_step common_step";
-      } else {
-        this.wizardData[4].checked = false;
-      }
+      // if (this.vitals.validationStatus) {
+      //   this.wizardData[0].checked = true;
+      //   this.wizardData[0].class = "open_step common_step";
+      // } else {
+      //   this.wizardData[0].checked = false;
+      // }
+      //
+      // if (this.investigations[0].selectedData.length > 0) {
+      //   this.wizardData[1].checked = true;
+      //   this.wizardData[1].class = "open_step common_step";
+      // } else {
+      //   this.wizardData[1].checked = false;
+      // }
+      //
+      // if (this.OPDdiagnosis[0].selectedData.length > 0) {
+      //   this.wizardData[2].checked = true;
+      //   this.wizardData[2].class = "open_step common_step";
+      // } else {
+      //   this.wizardData[2].checked = false;
+      // }
+      //
+      // if (this.selectedMedicalDrugsList.length > 0) {
+      //   this.wizardData[4].checked = true;
+      //   this.wizardData[4].class = "open_step common_step";
+      // } else {
+      //   this.wizardData[4].checked = false;
+      // }
     },
     getFormatedData(data: any) {
       return data.map((item: any) => {
@@ -233,31 +240,74 @@ export default defineComponent({
     },
     async saveData() {
       await this.saveDangerSigns();
-      this.$router.push("patientProfile");
+      await this.saveConfirmPregnancy();
+      await this.saveHealthConcerns();
+      this.$router.push("symptomsFollowUp");
     },
 
     async saveDangerSigns() {
       if (this.DangerSigns.length > 0) {
         const userID: any = Service.getUserID();
-        const DangerSigns = new PhysicalExamService(this.demographics.patient_id, userID);
+        const DangerSigns = new DangerSignsService(this.demographics.patient_id, userID);
         const encounter = await DangerSigns.createEncounter();
         if (!encounter) return toastWarning("Unable to create patient danger signs encounter");
-        const patientStatus = await DangerSigns.saveObservationList(await this.buildPhysicalExamination());
+        const patientStatus = await DangerSigns.saveObservationList(await this.buildDangerSigns());
         if (!patientStatus) return toastWarning("Unable to create patient danger signs  !");
-        toastSuccess("Danger signs has been created");
+        toastSuccess("Danger signs have been created");
       }
-      console.log(await this.buildPhysicalExamination())
+      console.log(await this.buildDangerSigns())
+
+    },
+
+    async saveConfirmPregnancy() {
+      if (this.ConfirmPregnancy.length > 0) {
+        const userID: any = Service.getUserID();
+        const ConfirmPregnancy = new ConfirmPregnancyService(this.demographics.patient_id, userID);
+        const encounter = await ConfirmPregnancy.createEncounter();
+        if (!encounter) return toastWarning("Unable to create patient pregnancy confirmation encounter");
+        const patientStatus = await ConfirmPregnancy.saveObservationList(await this.buildConfirmPregnancy());
+        if (!patientStatus) return toastWarning("Unable to create patient pregnancy confirmation details!");
+        toastSuccess("Pregnancy confirmation details have been created");
+      }
+      console.log(await this.buildConfirmPregnancy())
+    },
+    async saveHealthConcerns() {
+      if (this.HealthConcerns.length > 0) {
+        const userID: any = Service.getUserID();
+        const HealthConcerns = new SpecificHealthConcernsService(this.demographics.patient_id, userID);
+        const encounter = await HealthConcerns.createEncounter();
+        if (!encounter) return toastWarning("Unable to create patient health concerns encounter");
+        const patientStatus = await HealthConcerns.saveObservationList(await this.buildHealthConcerns());
+        if (!patientStatus) return toastWarning("Unable to create patient health concerns!");
+        toastSuccess("Patient's specific health concerns have been created");
+      }
+      console.log(await this.buildHealthConcerns())
     },
 
     openModal() {
       createModal(SaveProgressModal);
     },
 
-    async buildPhysicalExamination() {
+    async buildDangerSigns() {
       return [
         ...(await formatCheckBoxData(this.DangerSigns)),
         ...(await formatRadioButtonData(this.DangerSigns)),
         // ...(await formatInputFiledData(this.physicalExam)),
+      ];
+    },
+    async buildConfirmPregnancy() {
+      return [
+        ...(await formatCheckBoxData(this.ConfirmPregnancy)),
+        ...(await formatRadioButtonData(this.ConfirmPregnancy)),
+        // ...(await formatInputFiledData(this.ConfirmPregnancy)),
+      ];
+    },
+
+    async buildHealthConcerns() {
+      return [
+        ...(await formatCheckBoxData(this.HealthConcerns)),
+        ...(await formatRadioButtonData(this.HealthConcerns)),
+        // ...(await formatInputFiledData(this.HealthConcerns)),
       ];
     },
   },
