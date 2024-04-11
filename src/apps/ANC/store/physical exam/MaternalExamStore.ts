@@ -10,7 +10,8 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'pallor'
                         },
                         data:[
                             {

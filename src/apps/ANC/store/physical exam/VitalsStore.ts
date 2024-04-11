@@ -6,6 +6,7 @@ export const useVitalsStore = defineStore('vitalsStore',{
         vitals: [
             {
                 isFinishBtn: false,
+                selectedData: [],
                 validationStatus: '',
                 sectionHeader: 'Height and weight',
                 classDash: 'dashed_bottom_border _padding',
@@ -192,7 +193,7 @@ export const useVitalsStore = defineStore('vitalsStore',{
                                         unit: '%',
                                         icon: icons.oxgenStaturation,
                                         value: '',
-                                        name: 'SP02',
+                                        name: 'oxygenSaturation',
                                         eventType: 'input'
                                     },
                                     {
@@ -200,7 +201,7 @@ export const useVitalsStore = defineStore('vitalsStore',{
                                         unit: 'BMP',
                                         icon: icons.respiratory,
                                         value: '',
-                                        name: 'Respiratory rate',
+                                        name: 'respiratoryRate',
                                         eventType: 'input'
                                     },
                                 ]
@@ -222,7 +223,8 @@ export const useVitalsStore = defineStore('vitalsStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'respirationExam'
                         },
                         data:[
                             {
@@ -256,7 +258,8 @@ export const useVitalsStore = defineStore('vitalsStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'respirationExam'
                         },
                         data:[
                             {
@@ -289,7 +292,8 @@ export const useVitalsStore = defineStore('vitalsStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'respirationExam'
                         },
                         data:[
                             {
@@ -321,7 +325,8 @@ export const useVitalsStore = defineStore('vitalsStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'respirationExam'
                         },
                         data:[
                             {
@@ -386,7 +391,7 @@ export const useVitalsStore = defineStore('vitalsStore',{
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'OtherRespiration',
+                                        name: 'Specify',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "100%",
@@ -400,7 +405,7 @@ export const useVitalsStore = defineStore('vitalsStore',{
                     },
             },
 
-        ],
+        ] as any,
         preEclampsia: [
 
             {
@@ -410,7 +415,8 @@ export const useVitalsStore = defineStore('vitalsStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'preEclampsia'
                         },
                         data:[
                             {
@@ -443,7 +449,8 @@ export const useVitalsStore = defineStore('vitalsStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'preEclampsia'
                         },
                         data:[
                             {
@@ -475,7 +482,8 @@ export const useVitalsStore = defineStore('vitalsStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'preEclampsia'
                         },
                         data:[
                             {
@@ -508,7 +516,8 @@ export const useVitalsStore = defineStore('vitalsStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'preEclampsia'
                         },
                         data:[
                             {
@@ -524,7 +533,7 @@ export const useVitalsStore = defineStore('vitalsStore',{
                     }
 
             },
-        ]
+        ] as any
     }),
     actions:{
         setVitals(data: any){
