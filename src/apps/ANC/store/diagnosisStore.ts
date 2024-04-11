@@ -12,12 +12,13 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
           header: {
             title: "Reason counselling on hypertension not provided",
             selectedValue: "",
+            class: "bold",
             name: "hypReasons",
           },
           data: [
             {
               name: "Stockout",
-              value: "required",
+              value: "Stockout",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -49,6 +50,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
                   icon: icons.editPen,
                   required: true,
                   eventType: "input",
+                  valueType: "text",
                   inputWidth: "85%",
                   alertsError: false,
                   alertsErrorMassage: "",
@@ -71,6 +73,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
           header: {
             title: "Reason counselling on Hepatitis B not provided",
             selectedValue: "",
+            class: "bold",
             name: "hepatitisB",
           },
           data: [
@@ -129,6 +132,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
             title:
               "Seven-day antibiotic regemen for asymptomatic bacteriuria (ASB) provided?",
             selectedValue: "",
+            class: "bold",
             name: "SevenDay",
           },
           data: [
@@ -158,6 +162,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
             title:
               "Reason seven-day antibiotic regimen for asymptomatic bacteriuria (ASB) not provided",
             selectedValue: "",
+            class: "bold",
             name: "SevenDayReason",
             displayNone: true,
           },
@@ -213,13 +218,15 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
           header: {
-            title: "",
+            title: "Patient diagnosis",
             selectedValue: "",
+            class: "bold",
+            name: "severe hypertension", //this concept is temporary
           },
           data: [
             {
               name: "Hypertension",
-              value: "value",
+              value: "Hypertension",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -227,7 +234,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
             },
             {
               name: "Pre-eclampsia",
-              value: "value",
+              value: "Pre-eclampsia",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -243,11 +250,12 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "severe hypertension", //this concept is temporary
           },
           data: [
             {
               name: "HIV",
-              value: "value",
+              value: "HIV",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -255,7 +263,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
             },
             {
               name: "Hepatitis B",
-              value: "value",
+              value: "Hepatitis B",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -270,11 +278,12 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "severe hypertension", //this concept is temporary
           },
           data: [
             {
               name: "Hepatitis C",
-              value: "value",
+              value: "Hepatitis C",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -282,7 +291,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
             },
             {
               name: "Syphilis",
-              value: "value",
+              value: "Syphilis",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -297,6 +306,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "severe hypertension", //this concept is temporary
           },
           data: [
             {
@@ -321,6 +331,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
           header: {
             title: "Has client developed severe hypertension?",
             selectedValue: "",
+            class: "bold",
             name: "severe hypertension",
           },
           data: [
@@ -353,6 +364,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
             title:
               "Does the patient have severe pre-eclampsia with severe features?",
             selectedValue: "",
+            class: "bold",
             name: "severe pre-eclampsia",
           },
           data: [
@@ -384,6 +396,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
           header: {
             title: "Counselling conducted on hypertension?",
             selectedValue: "",
+            class: "bold",
             name: "Counselling on hypertension",
           },
           data: [
@@ -415,6 +428,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
           header: {
             title: "Counselling on HIV positive conducted?",
             selectedValue: "",
+            class: "bold",
             name: "Counselling on HIV positive",
           },
           data: [
@@ -443,13 +457,14 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
           header: {
             title: "Reason counselling on HIV not provided",
             selectedValue: "",
+            class: "bold",
             name: "counselling on HIV not provided",
-            displayNone: true,
+            // displayNone: true,
           },
           data: [
             {
               name: "Stockout",
-              value: "required",
+              value: "Stockout",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -481,6 +496,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
                   icon: icons.editPen,
                   required: true,
                   eventType: "input",
+                  valueType: "text",
                   inputWidth: "85%",
                   alertsError: false,
                   alertsErrorMassage: "",
@@ -501,6 +517,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
           header: {
             title: "Counselling on Hepatitis B conducted?",
             selectedValue: "",
+            class: "bold",
             name: "Counselling on Hepatitis B",
           },
           data: [
@@ -532,6 +549,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
           header: {
             title: "Counselling on Hepatitis C conducted?",
             selectedValue: "",
+            class: "bold",
             name: "Counselling on Hepatitis C",
           },
           data: [
@@ -563,6 +581,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
           header: {
             title: "Counselling on Syphilis conducted?",
             selectedValue: "",
+            class: "bold",
             name: "Counselling on Syphilis",
           },
           data: [
@@ -594,6 +613,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
           header: {
             title: "Counselling on Syphilis conducted?",
             selectedValue: "",
+            class: "bold",
             name: "Counselling on Syphilis",
           },
           data: [
@@ -621,6 +641,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
         selectdData: [],
         isFinishBtn: false,
         classDash: "dashed_bottom_border",
+        class: "bold",
         radioBtnContent: {
           header: {
             title: "Counselling on TB screening conducted?",
@@ -658,6 +679,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
           header: {
             title: "Counselling on gestational diabetes mellitus (GDM)?",
             selectedValue: "",
+            class: "bold",
             name: "gestational diabetes mellitus counselling",
           },
           data: [
@@ -688,6 +710,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
           header: {
             title: "Counselling on diabetes mellitus conducted?",
             selectedValue: "",
+            class: "bold",
             name: "diabetes mellitus counselling",
           },
           data: [
@@ -718,7 +741,8 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
           header: {
             title: "Counselling on anaemia conducted?",
             selectedValue: "",
-            name: ' anaemia counselling',
+            class: "bold",
+            name: "anaemia counselling",
           },
           data: [
             {
@@ -797,5 +821,5 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
       this.anaemia = data;
     },
   },
-  persist: true,
+   persist: true,
 });

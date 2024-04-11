@@ -174,9 +174,7 @@ export default defineComponent({
         };
     },
     watch: {
-        medicalHistory(change) {
-            console.log(change);
-        },
+        medicalHistory(change) {},
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),

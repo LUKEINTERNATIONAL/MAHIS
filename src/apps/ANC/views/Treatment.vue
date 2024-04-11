@@ -32,6 +32,13 @@ import DiagnosisCounselling from '@/apps/ANC/components/Treatment/DiagnosisCouns
 import Immunization from '@/apps/ANC/components/Treatment/Immunization.vue'
 import IntimatePartner from '@/apps/ANC/components/Treatment/IntimatePartner.vue';
 import Deworming from '@/apps/ANC/components/Treatment/Deworming.vue';
+import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from '@/services/formatServerData';
+import { mapState } from 'pinia';
+import { useDiagnosisStore } from '../store/diagnosisStore';
+import { useMedicationDispensedStore } from '../store/medicationDispensed';
+import { useDiagnosisCounsellingStore } from '../store/diagnosisCounsellingStore';
+import { useImmunizationStore } from '../store/immunizationStore';
+import { useIntimatePartnerStore } from '../store/intimatePartnerStore';
 
 
 
@@ -150,13 +157,115 @@ export default defineComponent ({
 setup () {
   return {chevronBackOutline, checkmark}
 },
+computed:{        
+  ...mapState(useDiagnosisStore, ["diagnoses","hypertension","preEclampsia",
+                                  "hyper","hiv","hepatitisB","hepatitisC",
+                                  "syphilis","syphilisTesting","tbScreening",
+                                  "GDM","diabetes","anaemia","hypertensionReason"]),
+  ...mapState(useMedicationDispensedStore, ["iron",'calciumReason']),
+  ...mapState(useDiagnosisCounsellingStore, ["preEclampsia","preEclampsiaCounselling",
+                                             "aspirin","gdm","gdmCounselling","hivRisk",
+                                            "prEp","seekingCare","dangerSigns","ancContact",
+                                            "birth","modeOfTransport","intrapartum","birthPlace","postpartum","breastFeeding"]),
+                                            
+  ...mapState(useImmunizationStore,['ttDoses','HepBCounselling','HepB1','HepB2','HepB3','hepBReason']),
+  ...mapState( useIntimatePartnerStore,['ipv','additionalCare','safety_assessment','physical_violence','beaten_pregnant',
+                                 'woman_threatened','constant_jealous','strangling','murder_threat','referrals'])
+},
 
 methods: {
   markWizard(){},
   saveData(){
+    this.saveDiagnosis();
+    this.saveMedicationDispensed();
+    this.saveCouselling();
+    this.saveImmunisation();
+    this.saveIntimatePartner();
+    //this.$router.push('counselling');
 
-    this.$router.push('counselling');
-
+  },
+  async saveDiagnosis(){
+    console.log(await this.buildDiagnosis())
+  },
+  async saveMedicationDispensed(){
+    console.log(await this.buildMedicationDispensed())
+  },
+  async saveCouselling(){
+    console.log(await this.buildCouselling())
+  },
+  async saveImmunisation(){
+    console.log(await this.buildImmunisation())
+  },
+  async saveIntimatePartner(){
+    console.log(await this.buildIntimatePartner())
+  },
+    async buildDiagnosis(){
+      return[
+          ...(await formatCheckBoxData(this.diagnoses)),
+          ...(await formatRadioButtonData(this.hypertension)),
+          ...(await formatRadioButtonData(this.preEclampsia)),
+          ...(await formatRadioButtonData(this.hyper)),
+          ...(await formatRadioButtonData(this.hiv)),
+          ...(await formatInputFiledData(this.hiv)),
+          ...(await formatInputFiledData(this.hypertensionReason)),
+          ...(await formatRadioButtonData(this.hepatitisB)),
+          ...(await formatRadioButtonData(this. hepatitisC)),
+          ...(await formatRadioButtonData(this.syphilis)),
+          ...(await formatRadioButtonData(this.syphilisTesting)),
+          ...(await formatRadioButtonData(this.tbScreening)),
+          ...(await formatRadioButtonData(this.GDM)),
+          ...(await formatRadioButtonData(this.diabetes)),
+          ...(await formatRadioButtonData(this.anaemia)),
+      ]
+  },
+  async buildMedicationDispensed(){
+    return[
+       ...(await formatRadioButtonData(this.iron)),
+       ...(await formatRadioButtonData(this.calciumReason)),
+    ]
+  },  
+   async buildCouselling(){
+    return[
+       ...(await formatRadioButtonData(this.preEclampsia)),
+       ...(await formatRadioButtonData(this.preEclampsiaCounselling)),
+       ...(await formatRadioButtonData(this.aspirin)),
+       ...(await formatRadioButtonData(this.gdm)),
+       ...(await formatRadioButtonData(this.gdmCounselling)),
+       ...(await formatRadioButtonData(this.hivRisk)),
+       ...(await formatRadioButtonData(this.prEp)),
+       ...(await formatRadioButtonData(this.seekingCare)),
+       ...(await formatRadioButtonData(this.dangerSigns)),
+       ...(await formatRadioButtonData(this.birth)),
+       ...(await formatRadioButtonData(this.modeOfTransport)),
+       ...(await formatRadioButtonData(this.intrapartum)),
+       ...(await formatRadioButtonData(this.birthPlace)),
+       ...(await formatRadioButtonData(this.postpartum)),
+       ...(await formatRadioButtonData(this.breastFeeding)),
+    ]
+  },
+  async buildImmunisation(){
+    return[
+       ...(await formatRadioButtonData(this.ttDoses)),
+       ...(await formatRadioButtonData(this.HepBCounselling)),
+       ...(await formatRadioButtonData(this.HepB1)),
+       ...(await formatRadioButtonData(this.HepB2)),
+       ...(await formatRadioButtonData(this.HepB3)),
+       ...(await formatRadioButtonData(this.hepBReason)),
+    ]
+  },
+  async buildIntimatePartner(){
+    return[
+       ...(await formatRadioButtonData(this.ipv)),
+       ...(await formatRadioButtonData(this.additionalCare)),
+       ...(await formatRadioButtonData(this.safety_assessment)),
+       ...(await formatRadioButtonData(this.physical_violence)),
+       ...(await formatRadioButtonData(this.beaten_pregnant)),
+       ...(await formatRadioButtonData(this.woman_threatened)),
+       ...(await formatRadioButtonData(this.constant_jealous)),
+       ...(await formatRadioButtonData(this.strangling)),
+       ...(await formatRadioButtonData(this.murder_threat)),
+       ...(await formatRadioButtonData(this.referrals))
+    ]
   },
 }
 })

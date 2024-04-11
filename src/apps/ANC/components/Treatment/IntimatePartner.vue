@@ -43,7 +43,7 @@
         </ion-card>
 
         <ion-card  class="section">
-            <ion-card-header> <ion-card-title class="sub_item_header">Referrals made as part of first-line support</ion-card-title></ion-card-header>
+            <ion-card-header> <ion-card-title class="sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="referrals"></basic-form>
             </ion-card-content>

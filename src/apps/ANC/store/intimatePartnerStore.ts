@@ -12,6 +12,7 @@ export const useIntimatePartnerStore = defineStore("intimatePartnerStore", {
           header: {
             title: "Intimate partner firstlline support provided?",
             selectedValue: "",
+            class: "bold",
             name: "intimateInfo",
           },
           data: [
@@ -43,34 +44,35 @@ export const useIntimatePartnerStore = defineStore("intimatePartnerStore", {
           header: {
             title: "Reason IPV firstline support not done",
             selectedValue: "",
+            class: "bold",
             name: "IPV firstline support",
-            displayNone: true,
+            //displayNone: true,
           },
           data: [
             {
               name: "Client was referred",
-              value: "client_referred",
+              value: "client was referred",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "Trained provided unavailable",
-              value: "trained",
+              value: "trained provided unavailable",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "Private/safe space unavailable",
-              value: "safe_space",
+              value: "private/safe space unavailable",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "Confidentiality could not be assured",
-              value: "confidentiality",
+              value: "confidentiality could not be assured",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -119,40 +121,41 @@ export const useIntimatePartnerStore = defineStore("intimatePartnerStore", {
           header: {
             title: "What additional care provided?",
             selectedValue: "",
+            class: "bold",
             name: "additional care provided",
           },
           data: [
             {
               name: "No action necessary",
-              value: "no_action",
+              value: "no action necessary",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "Safety assessment conducted",
-              value: "safety",
+              value: "safety assessment conducted",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "Mental health care",
-              value: "mental_health_care",
+              value: "mental health care",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "Care for other presenting signs and symptoms",
-              value: "signs_and_symptoms",
+              value: "care for other presenting signs and symptoms",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "Client was referred",
-              value: "client_referred",
+              value: "client was referred",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -171,6 +174,7 @@ export const useIntimatePartnerStore = defineStore("intimatePartnerStore", {
           header: {
             title: "Safety assessment conducted?",
             selectedValue: "",
+            class: "bold",
             name: "Safety assessment",
           },
           data: [
@@ -203,19 +207,20 @@ export const useIntimatePartnerStore = defineStore("intimatePartnerStore", {
             title:
               "Has the physical violence happened more often or gotten worse over the past 6 months?",
             selectedValue: "",
+            class: "bold",
             name: "physical violence",
           },
           data: [
             {
               name: "Yes",
-              value: "y",
+              value: "yes",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "No",
-              value: "n",
+              value: "no",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -239,14 +244,14 @@ export const useIntimatePartnerStore = defineStore("intimatePartnerStore", {
           data: [
             {
               name: "Yes",
-              value: "y",
+              value: "yes",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "No",
-              value: "n",
+              value: "no",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -265,19 +270,20 @@ export const useIntimatePartnerStore = defineStore("intimatePartnerStore", {
           header: {
             title: "Has he ever threatened you with a weapon?",
             selectedValue: "",
+            class: "bold",
             name: "threatened with a weapon",
           },
           data: [
             {
               name: "Yes",
-              value: "y",
+              value: "yes",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "No",
-              value: "n",
+              value: "no",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -296,19 +302,20 @@ export const useIntimatePartnerStore = defineStore("intimatePartnerStore", {
           header: {
             title: "Is he violently and constantly jealous of you?",
             selectedValue: "",
+            class: "bold",
             name: "violently and constantly jealous",
           },
           data: [
             {
               name: "Yes",
-              value: "y",
+              value: "yes",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "No",
-              value: "n",
+              value: "no",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -327,19 +334,20 @@ export const useIntimatePartnerStore = defineStore("intimatePartnerStore", {
           header: {
             title: "Has he ever tried to strangle you?",
             selectedValue: "",
+            class: "bold",
             name: "tried to strangle",
           },
           data: [
             {
               name: "Yes",
-              value: "y",
+              value: "yes",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "No",
-              value: "n",
+              value: "no",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -358,19 +366,20 @@ export const useIntimatePartnerStore = defineStore("intimatePartnerStore", {
           header: {
             title: "Do you believe he could kill you?",
             selectedValue: "",
+            class: "bold",
             name: "he could kill you",
           },
           data: [
             {
               name: "Yes",
-              value: "y",
+              value: "yes",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "No",
-              value: "n",
+              value: "no",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -387,21 +396,22 @@ export const useIntimatePartnerStore = defineStore("intimatePartnerStore", {
         classDash: "dashed_bottom_border ",
         checkboxBtnContent: {
           header: {
-            title: "",
+            title: "Referrals made as part of first-line support",
             selectedValue: "",
-           
+            class: "bold",
+            //name: "first-line support",
           },
           data: [
             {
               name: "Care at another facility",
-              value: "care_at_facility",
+              value: "care at another facility",
               labelPlacement: "start",
               colSize: "6",
               justify: "space-between",
             },
             {
               name: "Crisis intervention or counselling",
-              value: "crisis",
+              value: "crisis intervention or counselling",
               labelPlacement: "start",
               colSize: "6",
               justify: "space-between",
@@ -429,7 +439,7 @@ export const useIntimatePartnerStore = defineStore("intimatePartnerStore", {
             },
             {
               name: "Shelter or housing",
-              value: "shelter",
+              value: "shelter or housing",
               labelPlacement: "start",
               colSize: "6",
               justify: "space-between",
@@ -450,14 +460,14 @@ export const useIntimatePartnerStore = defineStore("intimatePartnerStore", {
           data: [
             {
               name: "Shelter or housing",
-              value: "legal_aid",
+              value: "shelter or housing",
               labelPlacement: "start",
               colSize: "6",
               justify: "space-between",
             },
             {
               name: "Child protection",
-              value: "protection",
+              value: "child protection",
               labelPlacement: "start",
               colSize: "6",
               justify: "space-between",
@@ -479,7 +489,7 @@ export const useIntimatePartnerStore = defineStore("intimatePartnerStore", {
           data: [
             {
               name: "Livelihood support",
-              value: "police",
+              value: "livelihood support",
               labelPlacement: "start",
               colSize: "6",
               justify: "space-between",
@@ -577,5 +587,5 @@ export const useIntimatePartnerStore = defineStore("intimatePartnerStore", {
       this.referrals = data;
     },
   },
-  persist: true,
+  //  persist: true,
 });

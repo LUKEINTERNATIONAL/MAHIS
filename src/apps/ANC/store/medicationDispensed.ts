@@ -12,6 +12,7 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
           header: {
             title: "Iron prescribed?",
             selectedValue: "",
+            class:'bold',
             //name:'ironInfo'
             name: "Iron prescription",
           },
@@ -496,5 +497,5 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
       this.calciumReason = data;
     },
   },
-  persist: true,
+ // persist: true,
 });

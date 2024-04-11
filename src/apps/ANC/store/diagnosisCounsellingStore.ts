@@ -12,19 +12,20 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
           header: {
             title: "Pre-eclampsia risk",
             selectedValue: "",
+            class: "bold",
             name: "Pre-eclampsia risk",
           },
           data: [
             {
               name: "Yes",
-              value: "y",
+              value: "yes",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "No",
-              value: "n",
+              value: "no",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -43,19 +44,20 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
           header: {
             title: "Pre-eclampsia counselling provided?",
             name: "Pre-eclampsia counselling",
+            class: "bold",
             selectedValue: "",
           },
           data: [
             {
               name: "Yes",
-              value: "y",
+              value: "yes",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "No",
-              value: "n",
+              value: "no",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -74,6 +76,7 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
           header: {
             title: "Aspirin provided?",
             selectedValue: "",
+            class: "bold",
             name: "Aspirin provided",
           },
           data: [
@@ -131,8 +134,9 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
           header: {
             title: "Reason aspirin not prescribed",
             selectedValue: "",
+            class: "bold",
             name: "aspirin not prescribed",
-            displayNone: true,
+            //displayNone: true,
           },
           data: [
             {
@@ -151,14 +155,14 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
             },
             {
               name: "Gestational less than 13 weeks",
-              value: "gestational",
+              value: "gestational less than 13 weeks",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "Allergy to medication",
-              value: "referred",
+              value: "allergy to medication",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -208,19 +212,20 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
           header: {
             title: "Risk of gestational mellitus (GDM)",
             selectedValue: "",
+            class: "bold",
             name: "GDM",
           },
           data: [
             {
               name: "Yes",
-              value: "y",
+              value: "yes",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "No",
-              value: "n",
+              value: "no",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -240,19 +245,20 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
             title:
               "Gestational diabetes mellitus (GDM) risk counselling conducted?",
             selectedValue: "",
+            class: "bold",
             name: "GDM counselling conducted",
           },
           data: [
             {
               name: "Yes",
-              value: "y",
+              value: "yes",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "No",
-              value: "n",
+              value: "no",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -271,19 +277,20 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
           header: {
             title: "Counselling conducted on HIV risk?",
             selectedValue: "",
+            class: "bold",
             name: "Counselling on HIV ",
           },
           data: [
             {
               name: "Yes",
-              value: "y",
+              value: "yes",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "No",
-              value: "n",
+              value: "no",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -302,6 +309,7 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
           header: {
             title: "PrEp for HIV prevention provided?",
             selectedValue: "",
+            class: "bold",
             name: "PrEp for HIV prevention",
           },
           data: [
@@ -358,26 +366,27 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
           header: {
             title: "Reason PrEp for HIV prevention was not provided",
             selectedValue: "",
+            class: "bold",
             name: "PrEp for HIV prevention was not provided",
           },
           data: [
             {
               name: "Client was referred",
-              value: "referred",
+              value: "client was referred",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "Stock-out",
-              value: "stockout",
+              value: "stock-out",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "Client refused",
-              value: "refused",
+              value: "client refused",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -428,19 +437,20 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
           header: {
             title: "Counselling conducted on seeking care?",
             selectedValue: "",
+            class: "bold",
             name: "Counselling on seeking care",
           },
           data: [
             {
               name: "Yes",
-              value: "y",
+              value: "yes",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "No",
-              value: "n",
+              value: "no",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -460,19 +470,20 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
             title:
               "Counsel to immediately go to hospital if severe danger signs are present",
             selectedValue: "",
+            class: "bold",
             name: "Counsel to immediately go to hospital",
           },
           data: [
             {
               name: "Yes",
-              value: "y",
+              value: "yes",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "No",
-              value: "n",
+              value: "no",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -491,19 +502,20 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
           header: {
             title: "Counseling on ANC contact schedule?",
             selectedValue: "",
+            class: "bold",
             name: "Counseling on ANC contact",
           },
           data: [
             {
               name: "Yes",
-              value: "y",
+              value: "yes",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "No",
-              value: "n",
+              value: "no",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -522,19 +534,20 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
           header: {
             title: "Counselling conducted on birth?",
             selectedValue: "",
+            class: "bold",
             name: "Counselling on birth",
           },
           data: [
             {
               name: "Yes",
-              value: "y",
+              value: "yes",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "No",
-              value: "n",
+              value: "no",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -552,19 +565,20 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
           header: {
             title: "Counselling conducted on mode of transport?",
             selectedValue: "",
+            class: "bold",
             name: "Counselling on mode of transport",
           },
           data: [
             {
               name: "Yes",
-              value: "y",
+              value: "yes",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "No",
-              value: "n",
+              value: "no",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -582,19 +596,20 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
           header: {
             title: "Counselling conducted on intrapartum?",
             selectedValue: "",
+            class: "bold",
             name: "Counselling on intrapartum",
           },
           data: [
             {
               name: "Yes",
-              value: "y",
+              value: "yes",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "No",
-              value: "n",
+              value: "no",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -613,6 +628,7 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
           header: {
             title: "Planned birth place",
             selectedValue: "",
+            class: "bold",
             name: "birth Place",
           },
           data: [
@@ -625,7 +641,7 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
             },
             {
               name: "Facility (elective ceasarian section)",
-              value: "stockout",
+              value: "facility (elective ceasarian section)",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -676,19 +692,20 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
           header: {
             title: "Counselling conducted on postpartum family planning?",
             selectedValue: "",
+            class: "bold",
             name: "Counselling on postpartum",
           },
           data: [
             {
               name: "Yes",
-              value: "y",
+              value: "yes",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "No",
-              value: "n",
+              value: "no",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -707,19 +724,20 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
           header: {
             title: "Counselling conducted on breast feeding?",
             selectedValue: "",
+            class: "bold",
             name: "Counselling on breast feeding",
           },
           data: [
             {
               name: "Yes",
-              value: "y",
+              value: "yes",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "No",
-              value: "n",
+              value: "no",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",

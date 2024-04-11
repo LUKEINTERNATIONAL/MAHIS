@@ -12,19 +12,20 @@ export const useImmunizationStore = defineStore("immunizationStore", {
           header: {
             title: "Did the client complete Tetanus Toxoid (TT) doses before?",
             selectedValue: "",
+            class: "bold",
             name: "Tetanus Toxoid",
           },
           data: [
             {
               name: "Yes",
-              value: "y",
+              value: "yes",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "No",
-              value: "n",
+              value: "no",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -43,19 +44,20 @@ export const useImmunizationStore = defineStore("immunizationStore", {
           header: {
             title: "Counselling conducted on Hep B negative",
             selectedValue: "",
+            class: "bold",
             name: "Counselling on Hep B negative",
           },
           data: [
             {
               name: "Yes",
-              value: "y",
+              value: "yes",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "No",
-              value: "n",
+              value: "no",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -73,6 +75,7 @@ export const useImmunizationStore = defineStore("immunizationStore", {
           header: {
             title: "Hepatitis B-1",
             selectedValue: "",
+            class: "bold",
             name: "Hepatitis B-1",
           },
           data: [
@@ -103,7 +106,7 @@ export const useImmunizationStore = defineStore("immunizationStore", {
             {
               colData: [
                 {
-                  displayNone: true,
+                  //displayNone: true,
                   inputHeader: "Hep B-1 Date",
                   value: "",
                   name: "hepb1 Date",
@@ -131,7 +134,8 @@ export const useImmunizationStore = defineStore("immunizationStore", {
           header: {
             title: "Hepatitis B-2",
             selectedValue: "",
-            name: "b2",
+            class: "bold",
+            name: "Hepatitis B-2",
           },
           data: [
             {
@@ -161,7 +165,7 @@ export const useImmunizationStore = defineStore("immunizationStore", {
             {
               colData: [
                 {
-                  displayNone: true,
+                  //displayNone: true,
                   inputHeader: "Hep B-2 Date",
                   value: "",
                   name: "Hep B-2 Date",
@@ -190,7 +194,8 @@ export const useImmunizationStore = defineStore("immunizationStore", {
           header: {
             title: "Hepatitis B-3",
             selectedValue: "",
-            name: "b3",
+            class: "bold",
+            name: "Hepatitis B-3",
           },
           data: [
             {
@@ -220,7 +225,7 @@ export const useImmunizationStore = defineStore("immunizationStore", {
             {
               colData: [
                 {
-                  displayNone: true,
+                  //displayNone: true,
                   inputHeader: "Hep B-3 Date",
                   value: "",
                   name: "hep3Date",
@@ -250,6 +255,7 @@ export const useImmunizationStore = defineStore("immunizationStore", {
             title: "Reason Hepatitis B vaccination not conducted",
             selectedValue: "",
             name: "Hepatitis B",
+            class: "bold",
           },
           data: [
             {
@@ -261,21 +267,21 @@ export const useImmunizationStore = defineStore("immunizationStore", {
             },
             {
               name: "Client is ill",
-              value: "client",
+              value: "client is ill",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "Client refused",
-              value: "client_refused",
+              value: "client refused",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
             },
             {
               name: "Allergy to vaccinate",
-              value: "allergy",
+              value: "allergy to vaccinate",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -300,7 +306,7 @@ export const useImmunizationStore = defineStore("immunizationStore", {
             {
               colData: [
                 {
-                  displayNone: true,
+                  //displayNone: true,
                   inputHeader: "specify",
                   value: "",
                   name: "Specify",
