@@ -3,7 +3,10 @@
     <!-- Danger signs -->
     <ion-card  class="section">
       <ion-card-content>
-        <basic-form :contentData="DangerSigns"></basic-form>
+        <basic-form :contentData="DangerSigns"
+                    :initialData="initialData"
+
+        ></basic-form>
       </ion-card-content>
     </ion-card>
 
@@ -59,11 +62,11 @@ export default defineComponent({
   },
   data() {
     return {
+      initialData:[]as any,
       previousVisitDateRef: {},
       previousVisitInstance: {} as any,
       previousVisitDateInstance: {} as any,
       iconsContent: icons,
-      currentSection: 0, // Initialize currentSection to 0
 
 
     };
@@ -74,6 +77,7 @@ export default defineComponent({
     const PreviousVisit =useDangerSignsStore()
     this.previousVisitInstance=useDangerSignsStore()
     this.previousVisitInstance.setPreviousVisitDate([])
+    this.initialData=DangerSigns.getInitial();
     this.handleDangerSigns()
   },
   watch:{
