@@ -1,15 +1,21 @@
 <template>
-    <dataTable
-        :colums="data_table_properties[0].columns"
-        :items="_items_"
-        :search_fields="_search_fields_"
-        @click-row="clickRow"
-    />
-    <editUserModal
-        :is_open="isPopooverOpen"
-        @close-popoover="isPopooverOpen = false"
-    />
-
+    <ion-page>
+        <Toolbar />
+        <ion-content :fullscreen="true">
+            <div id="" style="margin-top: 30px;">
+                <dataTable
+                    :colums="data_table_properties[0].columns"
+                    :items="_items_"
+                    :search_fields="_search_fields_"
+                    @click-row="clickRow"
+                />
+                <editUserModal
+                    :is_open="isPopooverOpen"
+                    @close-popoover="isPopooverOpen = false"
+                />
+                    </div>
+                </ion-content>
+    </ion-page>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue"
