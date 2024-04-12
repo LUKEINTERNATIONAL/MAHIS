@@ -19,7 +19,7 @@
           <ion-popover :is-open="popoverOpen" :show-backdrop="false" :dismiss-on-select="true" :event="event" @didDismiss="popoverOpen = false">
             <ion-content>
               <ion-list>
-                <ion-item :button="true" :detail="false" @click="nav('/users')"style="cursor: pointer;">Profile</ion-item>
+                <ion-item :button="true" :detail="false" @click="nav('/users')" style="cursor: pointer;">Profile</ion-item>
                 <ion-item :button="true" :detail="false" @click="nav('/login')" style="cursor: pointer;">Logout</ion-item>
               </ion-list>
             </ion-content>
