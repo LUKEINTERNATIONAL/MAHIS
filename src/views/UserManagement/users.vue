@@ -24,7 +24,6 @@
                 </ion-content>
     </ion-page>
 </template>
-<!-- @click="nav(' -->
 <script lang="ts">
 import { defineComponent } from "vue"
 import { text } from "ionicons/icons"
@@ -53,7 +52,7 @@ import {
     IonAccordion,
     IonAccordionGroup,
     AccordionGroupCustomEvent,
-} from "@ionic/vue";
+} from "@ionic/vue"
 import Toolbar from '@/components/Toolbar.vue'
 import ToolbarSearch from '@/components/ToolbarSearch.vue'
 import BasicInputField from "@/components/BasicInputField.vue"
