@@ -119,6 +119,10 @@ export default defineComponent({
             type: String,
             default: "",
         },
+        bold: {
+            type: String,
+            default: "",
+        },
     },
     methods: {
         handleInput(event: any) {
