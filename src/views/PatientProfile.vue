@@ -241,7 +241,7 @@ export default defineComponent({
         ...mapState(useDemographicsStore, ["demographics", "patient"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalAllergiesList"]),
         ...mapState(useEnrollementStore, ["NCDNumber"]),
-        ...mapState(useGeneralStore, ["saveProgressStatus"]),
+        ...mapState(useGeneralStore, ["saveProgressStatus", "activities"]),
     },
     mounted() {
         this.setNCDValue();
@@ -268,19 +268,26 @@ export default defineComponent({
 
     methods: {
         async getUserActivities(activities: any) {
-            const userID: any = Service.getUserID();
-            const generalStore = useGeneralStore();
-            generalStore.setActivity([
-                (
-                    await UserService.getJson("user_properties", {
-                        user_id: userID,
-                        property: activities,
-                    })
-                ).property_value,
-            ]);
+            try {
+                const userID = Service.getUserID();
+                const userData = await UserService.getJson("user_properties", {
+                    user_id: userID,
+                    property: activities,
+                });
+                if (userData.property_value) {
+                    return userData.property_value.split(",");
+                } else {
+                    return []; // Return an empty array if property_value is not available
+                }
+            } catch (error) {
+                console.error("Error fetching user activities:", error);
+                return []; // Return an empty array in case of error
+            }
         },
+
         async setNCDValue() {
-            this.getUserActivities("OPD_activities");
+            const generalStore = useGeneralStore();
+            generalStore.setActivity(await this.getUserActivities("NCD_activities"));
             sessionStorage.setItem("app", JSON.stringify({ programID: 32, applicationName: "NCD" }));
             const patient = new PatientService();
             if (patient.getNcdNumber() != "Unknown") {
