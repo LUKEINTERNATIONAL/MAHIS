@@ -409,6 +409,7 @@ export const useMedicationsStore = defineStore("medicationsStore", {
                   unit: "",
                   icon: icons.editPen,
                   value: "",
+                  valueType:'text',
                   name: "Other",
                   required: true,
                   eventType: "input",

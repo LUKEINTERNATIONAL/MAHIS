@@ -162,6 +162,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
                   name: "Gravida",
                   icon: icons.editPen,
                   required: true,
+                  valueType: "text",
                   eventType: "input",
                   alertsError: false,
                   alertsErrorMassage: "",
@@ -182,6 +183,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
                   icon: icons.editPen,
                   name: "Abortions/Miscarriages",
                   required: true,
+                  valueType: "text",
                   eventType: "input",
                   alertsError: false,
                   alertsErrorMassage: "",
@@ -191,6 +193,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
                   value: "",
                   name: "Stillbirths",
                   required: true,
+                  valueType: "text",
                   icon: icons.editPen,
                   eventType: "input",
                   alertsError: false,
@@ -211,6 +214,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
                   value: "",
                   name: "Live Births",
                   required: true,
+                  valueType: "text",
                   icon: icons.editPen,
                   eventType: "input",
                   alertsError: false,
@@ -220,6 +224,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
                   inputHeader: "Parity",
                   value: "",
                   name: "Parity",
+                  valueType: "text",
                   required: true,
                   eventType: "input",
                   alertsError: false,
@@ -591,12 +596,13 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
             {
               colData: [
                 {
-                  displayNone: true,
+                 // displayNone: true,
                   inputHeader: "specify",
                   unit: "",
                   icon: icons.editPen,
                   value: "",
-                  name: "otherC",
+                  name: "other",
+                  valueType:'text',
                   required: true,
                   eventType: "input",
                   inputWidth: "85%",
@@ -625,5 +631,5 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
       this.Complications = data;
     },
   },
-  // persist:true,
+   persist:true,
 });

@@ -54,7 +54,7 @@ import { useWomanBehaviourStore } from "@/apps/ANC/store/profile/womanBehaviourS
 import { Service } from "@/services/service";
 //import { ProfileService } from "@/services/anc_profile_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
-import { formatCheckBoxData, formatRadioButtonData } from "@/services/formatServerData";
+import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
 import { Preterms } from "../service/preterm";
 
 // function someChecked(options, errorMassage) {
@@ -178,8 +178,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
-        ...mapState(useObstreticHistoryStore, ["preterm"]),
-        ...mapState(useObstreticHistoryStore, ["Complications"]),
+        ...mapState(useObstreticHistoryStore, ["preterm","prevPregnancies","Complications"]),
         ...mapState(useMedicalHistoryStore,['medicalHistory','allegy','exisitingChronicHealthConditions']),
         ...mapState(useCurrentPregnanciesStore,['palpation','tetanus','lmnp','ultrasound']),
         ...mapState(useMedicationsStore,['Medication']),
@@ -226,6 +225,7 @@ export default defineComponent({
             });
         },
          async saveData() {
+            this.savePrevPregnancies()
             this.savePreterm()
             this.savePastPregnancyComplication()
             this.savePastSurgeries()
@@ -234,6 +234,9 @@ export default defineComponent({
             this.saveCurrentPrengancy()
             this.saveMedication()
             this.saveCaffeinIntake()
+        },
+        async savePrevPregnancies(){
+            console.log(await this.buildPregnancyHistory())
         },
         async savePreterm(){
         // if (this.preterm[0].selectedData.length > 0) {
@@ -277,6 +280,11 @@ export default defineComponent({
         async saveCaffeinIntake(){
             console.log(await this.buildCaffeinIntake())
         },
+        async buildPregnancyHistory(){
+            return[
+                ...(await formatInputFiledData(this.prevPregnancies))
+            ]
+        },
         async buildPreterm(){
             return [
                 ...(await formatRadioButtonData(this.preterm)),       
@@ -284,22 +292,26 @@ export default defineComponent({
         },
         async buildPastPregnancyComplication(){
             return [
-                ...(await formatCheckBoxData(this.Complications))        
+                ...(await formatCheckBoxData(this.Complications)),
+                ...(await formatInputFiledData(this.Complications))       
             ];
         },
         async buildPastSurgeries(){
             return[
-                ...(await formatCheckBoxData(this.medicalHistory))
+                ...(await formatCheckBoxData(this.medicalHistory)),
+                ...(await formatInputFiledData(this.medicalHistory))
             ]
         },
         async buildAllergy(){
             return[
-                ...(await formatCheckBoxData(this.allegy))
+                ...(await formatCheckBoxData(this.allegy)),
+                 ...(await formatInputFiledData(this.allegy))
             ]
         },
         async buildChronicHealthCondition(){
             return[
-                ...(await formatCheckBoxData(this.exisitingChronicHealthConditions))
+                ...(await formatCheckBoxData(this.exisitingChronicHealthConditions)),
+                ...(await formatInputFiledData(this.exisitingChronicHealthConditions))
             ]
         },
         async buildCurrentPrengancy(){
@@ -308,11 +320,13 @@ export default defineComponent({
                 ...(await formatRadioButtonData(this.tetanus)),
                 ...(await formatRadioButtonData(this.lmnp)),
                 ...(await formatRadioButtonData(this.ultrasound)),
+                ...(await formatInputFiledData(this.ultrasound))
             ]
         },
         async buildMedication(){
             return[
-                ...(await formatCheckBoxData(this.Medication))
+                ...(await formatCheckBoxData(this.Medication)),
+                ...(await formatInputFiledData(this.Medication))
             ]
         },
         async buildCaffeinIntake(){

@@ -334,6 +334,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "Does the woman have any past surgeries done?",
             selectedValue: "",
+            class: "bold",
             name: "Does the woman have any past surgeries done?",
           },
           data: [
@@ -362,6 +363,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            class: "bold",
             name: "Does the woman have any past surgeries done?",
           },
           data: [
@@ -390,6 +392,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            class: "bold",
             name: "Does the woman have any past surgeries done?",
           },
           data: [
@@ -418,6 +421,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            class: "bold",
             name: "Does the woman have any past surgeries done?",
           },
           data: [
@@ -446,12 +450,12 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
             {
               colData: [
                 {
-                  displayNone: true,
-
+                  //displayNone: true,
                   inputHeader: "Specify",
                   icon: icons.editPen,
                   value: medicalHistoryForm.otherSurgerirs.name,
                   name: "specify",
+                  valueType: "text",
                   eventType: "input",
                   inputWidth: "82%",
                   required: true,
@@ -471,6 +475,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "Does the woman have any allergies?",
             selectedValue: "",
+            class: "bold",
             name: "Does the woman have any allergies?",
           },
           data: [
@@ -501,6 +506,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            class: "bold",
             name: "Does the woman have any allergies?",
           },
           data: [
@@ -531,6 +537,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            class: "bold",
             name: "Does the woman have any allergies?",
           },
           data: [
@@ -561,6 +568,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            class: "bold",
             name: "Does the woman have any allergies?",
           },
           data: [
@@ -591,6 +599,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            class: "bold",
             name: "Does the woman have any allergies?",
           },
           data: [
@@ -621,6 +630,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            class: "bold",
             name: "Does the woman have any allergies?",
           },
           data: [
@@ -651,6 +661,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            class: "bold",
             name: "Does the woman have any allergies?",
           },
           data: [
@@ -680,11 +691,12 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
             {
               colData: [
                 {
-                  displayNone: true,
-                  inputHeader: "Other(specify)",
+                  // displayNone: true,
+                  inputHeader: "Specify",
                   icon: icons.editPen,
-                  value: allegiesForm.otherAllegies.name,
-                  name: "other",
+                  value: "",
+                  name: "Specify",
+                  valueType: "text",
                   eventType: "input",
                   inputWidth: "82%",
                   required: true,
@@ -704,6 +716,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "Does the woman have any existing chronic conditions?",
             selectedValue: "",
+            class: "bold",
             name: "chronic conditions",
           },
           data: [
@@ -732,6 +745,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            class: "bold",
             name: "chronic conditions",
           },
           data: [
@@ -762,6 +776,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            class: "bold",
             name: "chronic conditions",
           },
           data: [
@@ -793,6 +808,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            class: "bold",
             name: "chronic conditions",
           },
           data: [
@@ -824,6 +840,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            class: "bold",
             name: "chronic conditions",
           },
           data: [
@@ -852,6 +869,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            class: "bold",
             name: "chronic conditions",
           },
           data: [
@@ -882,6 +900,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            class: "bold",
             name: "chronic conditions",
           },
           data: [
@@ -912,6 +931,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            class: "bold",
             name: "chronic conditions",
           },
           data: [
@@ -942,6 +962,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            class: "bold",
             name: "chronic conditions",
           },
           data: [
@@ -972,6 +993,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
+            class: "bold",
             name: "chronic conditions",
           },
           data: [
@@ -1012,12 +1034,13 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
             {
               colData: [
                 {
-                  displayNone: true,
+                  // displayNone: true,
                   inputHeader: "HIV test date",
                   icon: icons.calenderPrimary,
                   value: "",
                   name: "HIV test date",
                   eventType: "blur",
+                  valueType: "text",
                   inputWidth: "89%",
                   required: true,
                   isDatePopover: true,
@@ -1035,6 +1058,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "Is the client on ART?",
             selectedValue: "",
+            class: "bold",
             name: "chronic conditions",
             displayNone: true,
           },
@@ -1066,12 +1090,13 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
             {
               colData: [
                 {
-                  displayNone: true,
+                  //displayNone: true,
                   inputHeader: "Facility for ART",
                   icon: icons.search,
                   value: "",
                   name: "facility for art",
                   popOver: true,
+                  valueType: "text",
                   eventType: "input",
                   required: true,
                   alertsError: false,
@@ -1107,6 +1132,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "Was the hiv test conducted?",
             selectedValue: "",
+            class: "bold",
             name: "hivOption",
           },
           data: [
@@ -1147,7 +1173,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
             {
               colData: [
                 {
-                  displayNone: true,
+                  //  displayNone: true,
                   inputHeader: "HIV test date",
                   icon: icons.calenderPrimary,
                   value: "",
@@ -1166,7 +1192,8 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "Reasons HIV test not done:",
             selectedValue: "",
-            displayNone: true,
+            class: "bold",
+            // displayNone: true,
             name: "hivOutcome",
           },
           data: [
@@ -1203,7 +1230,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
             {
               colData: [
                 {
-                  displayNone: true,
+                  //   displayNone: true,
                   inputHeader: "specify",
                   icon: icons.editPen,
                   value: hivTestForm.reasonsTestNotDone.name,
@@ -1226,7 +1253,8 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
             title: "Select the result of HIV test",
             name: "test2",
             selectedValue: "",
-            displayNone: true,
+            class: "bold",
+            //  displayNone: true,
           },
           data: [
             {
@@ -1266,10 +1294,11 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
         isFinishBtn: false,
         radioBtnContent: {
           header: {
-            displayNone: true,
+            //  displayNone: true,
             name: "test1",
             title: "Is the woman at high risk of HIV?",
             selectedValue: "",
+            class: "bold",
           },
           data: [
             {
@@ -1299,6 +1328,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             title: "Select whether:",
             name: "syphilisOption",
+            class: "bold",
             selectedValue: "",
           },
           data: [
@@ -1331,6 +1361,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
           header: {
             displayNone: true,
             name: "syphilisDetails",
+            class: "bold",
             title: "Select the type of syphilis test that was done",
             selectedValue: "",
           },
@@ -1368,9 +1399,10 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
         radioBtnContent: {
           header: {
             title: "Syphilis test result",
+            class: "bold",
             selectedValue: "",
             name: "syphlisResults",
-            displayNone: true,
+            // displayNone: true,
           },
           data: [
             {
@@ -1396,7 +1428,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
             {
               colData: [
                 {
-                  displayNone: true,
+                  //  displayNone: true,
                   inputHeader: "Syphilis test date",
                   icon: icons.calenderPrimary,
                   value: "",
@@ -1417,7 +1449,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
             {
               colData: [
                 {
-                  displayNone: true,
+                  //  displayNone: true,
                   inputHeader: "Syphilis test date",
                   icon: icons.calenderPrimary,
                   value: "",
@@ -1440,7 +1472,8 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
             title: "Reason syphilis test not done",
             selectedValue: "",
             name: "notDone",
-            displayNone: true,
+            class: "bold",
+            // displayNone: true,
           },
           data: [
             {
@@ -1477,7 +1510,7 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
             {
               colData: [
                 {
-                  displayNone: true,
+                  //  displayNone: true,
                   inputHeader: "specify",
                   icon: icons.editPen,
                   value: syphilisForm.reasonsTestNotDone.value,
@@ -1510,9 +1543,6 @@ export const useMedicalHistoryStore = defineStore("medicalHistoryStore", {
     addSyphilisTest(data: any) {
       this.syphilisTest = data;
     },
-    // addOtherSite(data:any){
-    //     this.otherSite = data
-    // }
   },
-  // persist:true
+   persist:true
 });
