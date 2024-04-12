@@ -1,5 +1,5 @@
 <template>
-    <h6 v-if="inputHeader" :class="bold">{{ inputHeader }}</h6>
+    <h6 v-if="inputHeader">{{ inputHeader }}</h6>
     <VueDatePicker
         @date-update="$emit('update:dateValue', formatDate($event))"
         auto-apply
