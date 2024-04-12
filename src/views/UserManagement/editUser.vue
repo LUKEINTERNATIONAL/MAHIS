@@ -96,7 +96,7 @@
         <ion-accordion-group ref="accordionGroup" class="previousView">
             <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
                 <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Password</ion-label>
+                    <ion-label class="previousLabel">Change Password</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
                     <ion-row>
@@ -323,19 +323,22 @@ function listUpdated2(data: any) {
 }
 
 function userFirstname(items: any) {
-    let _str_: string = ''
-    items.forEach((item: any, index: number) => {
-        _str_+=item.given_name
-    })
-    return _str_
+    let _str_: string = '';
+    const lastIndex = items.length - 1;
+    if (lastIndex >= 0) {
+        _str_ = items[lastIndex].given_name;
+    }
+    return _str_;
 }
 
+
 function userLastname(items: any) {
-    let _str_: string = ''
-    items.forEach((item: any, index: number) => {
-        _str_+=item.family_name
-    })
-    return _str_
+    let _str_: string = '';
+    const lastIndex = items.length - 1;
+    if (lastIndex >= 0) {
+        _str_ = items[lastIndex].family_name;
+    }
+    return _str_;
 }
 
 </script>
