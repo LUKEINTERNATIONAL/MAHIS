@@ -71,6 +71,7 @@ const _search_fields_ = ref([
     {
         value: 'username',
         name: 'username',
+        selected: true
     }
 ]) as any
 const user_id = ref('')
