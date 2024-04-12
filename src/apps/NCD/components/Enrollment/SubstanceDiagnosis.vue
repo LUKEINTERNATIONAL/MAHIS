@@ -63,6 +63,10 @@ export default defineComponent({
                         cardTitle: "Substance use / Consumption",
                         content: this.substance,
                     },
+                    {
+                        cardTitle: "Diagnosis",
+                        content: this.enrollmentDiagnosis,
+                    },
                 ],
             };
         },
@@ -138,6 +142,7 @@ ion-radio {
     color: #636363;
 }
 .checkbox_header {
+    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
