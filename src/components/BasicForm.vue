@@ -188,12 +188,7 @@
                             :checked="al.checked"
                             style="width: 100%"
                             :disabled="al.disabled"
-                            @ionChange="
-                                (value) => {
-                                    al.checked = value.detail.checked;
-                                    $emit('update:inputValue', { al, value });
-                                }
-                            "
+                            @ionChange="handleInput(contentData, al, $event, 'updateCheckbox')"
                             :label-placement="al.labelPlacement || 'end'"
                         >
                             <span style="line-height: 1">
@@ -257,6 +252,7 @@ import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
     getRadioSelectedValue,
+    modifyCheckboxValue,
     modifyRadioValue,
     modifyFieldValue,
     modifyGroupedRadioValue,
@@ -285,6 +281,9 @@ export default defineComponent({
     },
     props: {
         contentData: {
+            default: [] as any,
+        },
+        initialData: {
             default: [] as any,
         },
     },
@@ -328,7 +327,7 @@ export default defineComponent({
             }
 
             if (inputType == "updateRadioBtnContent") {
-                modifyRadioValue(data, col.name, "selectedValue", event.target.value);
+                modifyRadioValue(data, col.name, "selectedValue", event.target.value, this.initialData);
                 this.$emit("update:inputValue", col);
             }
             if (inputType == "updateGroupedRadioBtnContent") {
@@ -339,6 +338,11 @@ export default defineComponent({
             if (inputType == "checkboxInput") {
                 modifyCheckboxInputField(data, col.name, "value", event.target.value);
                 this.$emit("update:inputValue", col);
+            }
+            if (inputType == "updateCheckbox") {
+                console.log("🚀 ~ handleInput ~ updateCheckbox:", this.initialData);
+                modifyCheckboxValue(data, col.name, "checked", event.detail.checked, this.initialData);
+                this.$emit("update:inputValue", { col, event });
             }
         },
         handleSelected(col: any) {
@@ -433,7 +437,6 @@ ion-radio {
     color: #636363;
 }
 .bold {
-    font-family: "Inter";
     font-style: normal;
     font-weight: 600;
     font-size: 16px;

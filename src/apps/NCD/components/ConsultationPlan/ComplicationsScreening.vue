@@ -279,13 +279,11 @@ ion-item.sub_item_body_close {
     --inner-border-width: 0;
 }
 .textSectionFormat {
-    font-family: "Inter";
     font-style: normal;
     font-weight: 600;
     font-size: 16px;
 }
 .due_date {
-    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
     font-size: 14px;

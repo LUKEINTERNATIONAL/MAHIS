@@ -117,7 +117,6 @@ export default defineComponent({
     --ion-background-color: #fff;
 }
 .list_header {
-    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
@@ -127,7 +126,7 @@ export default defineComponent({
     /* Secondary */
     color: #636363;
 }
-ion-item::part(native){
+ion-item::part(native) {
     background: #fff;
 }
 </style>

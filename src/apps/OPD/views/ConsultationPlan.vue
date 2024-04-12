@@ -1,40 +1,40 @@
 <template>
-  <ion-page>
-    <Toolbar />
-    <ion-content :fullscreen="true">
-      <DemographicBar />
-      <Stepper
-        stepperTitle="The consultation plan"
-        :wizardData="wizardData"
-        @updateStatus="markWizard"
-        @finishBtn="saveData()"
-        :StepperData="StepperData"
-      />
-    </ion-content>
-  </ion-page>
+    <ion-page>
+        <Toolbar />
+        <ion-content :fullscreen="true">
+            <DemographicBar />
+            <Stepper
+                stepperTitle="The consultation plan"
+                :wizardData="wizardData"
+                @updateStatus="markWizard"
+                @finishBtn="saveData()"
+                :StepperData="StepperData"
+            />
+        </ion-content>
+    </ion-page>
 </template>
 
 <script lang="ts">
 import {
-  IonContent,
-  IonHeader,
-  IonMenuButton,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  IonButton,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
-  IonAccordion,
-  IonAccordionGroup,
-  IonItem,
-  IonLabel,
-  IonModal,
-  modalController,
-  AccordionGroupCustomEvent,
+    IonContent,
+    IonHeader,
+    IonMenuButton,
+    IonPage,
+    IonTitle,
+    IonToolbar,
+    IonButton,
+    IonCard,
+    IonCardContent,
+    IonCardHeader,
+    IonCardSubtitle,
+    IonCardTitle,
+    IonAccordion,
+    IonAccordionGroup,
+    IonItem,
+    IonLabel,
+    IonModal,
+    modalController,
+    AccordionGroupCustomEvent,
 } from "@ionic/vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
@@ -50,27 +50,20 @@ import { useDiagnosisStore } from "@/stores/DiagnosisStore";
 import { mapState } from "pinia";
 import Stepper from "@/components/Stepper.vue";
 import { Service } from "@/services/service";
-import { LabOrder } from "@/apps/NCD/services/lab_order";
+import { LabOrder } from "@/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
-import { useDispositionStore } from "@/stores/OutcomeStore";
+import { useOutcomeStore } from "@/stores/OutcomeStore";
 import { usePregnancyStore } from "@/apps/OPD/stores/PregnancyStore";
 import { usePresentingComplaintsStore } from "@/apps/OPD/stores/PresentingComplaintsStore";
-import {
-  toastWarning,
-  popoverConfirmation,
-  toastSuccess,
-} from "@/utils/Alerts";
+import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { useOPDDiagnosisStore } from "@/apps/OPD/stores/DiagnosisStore";
 import { usePastMedicalHistoryStore } from "@/apps/OPD/stores/PastMedicalHistoryStore";
 import { Treatment } from "@/apps/NCD/services/treatment";
 import { isEmpty } from "lodash";
 import HisDate from "@/utils/Date";
 import { defineComponent } from "vue";
-import {
-  DRUG_FREQUENCIES,
-  DrugPrescriptionService,
-} from "../../../services/drug_prescription_service";
+import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";
 import {
     modifyRadioValue,
@@ -165,27 +158,27 @@ export default defineComponent({
             StepperData: [
                 {
                     title: "Clinical Assessment",
-                    componet: "ClinicalAssessment",
+                    component: "ClinicalAssessment",
                     value: "1",
                 },
                 {
                     title: "Investigations",
-                    componet: "Investigations",
+                    component: "Investigations",
                     value: "2",
                 },
                 {
                     title: "Diagnosis",
-                    componet: "OPDDiagnosis",
+                    component: "OPDDiagnosis",
                     value: "3",
                 },
                 {
                     title: "Treatment plan",
-                    componet: "OPDTreatmentPlan",
+                    component: "OPDTreatmentPlan",
                     value: "4",
                 },
                 {
                     title: "Outcome",
-                    componet: "OPDOutcome",
+                    component: "OPDOutcome",
                     value: "5",
                 },
             ],
@@ -205,6 +198,8 @@ export default defineComponent({
         ...mapState(useLevelOfConsciousnessStore, ["levelOfConsciousness"]),
     },
     async mounted() {
+        this.investigations;
+        console.log("🚀 ~ mounted ~ this.investigations:", this.investigations);
         this.markWizard();
     },
     watch: {
@@ -236,28 +231,37 @@ export default defineComponent({
         return { chevronBackOutline, checkmark };
     },
 
-  methods: {
-    markWizard() {
-      if (this.vitals.validationStatus) {
-        this.wizardData[0].checked = true;
-        this.wizardData[0].class = "open_step common_step";
-      } else {
-        this.wizardData[0].checked = false;
-      }
+    methods: {
+        markWizard() {
+            // const filteredArray = await this.orders.filter((obj: any) => {
+            //     return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
+            // });
+            // if (filteredArray.length > 0) {
+            //     this.investigations[0].selectedData = filteredArray;
+            // } else {
+            //     this.investigations[0].selectedData = "";
+            // }
 
-      if (this.investigations[0].selectedData.length > 0) {
-        this.wizardData[1].checked = true;
-        this.wizardData[1].class = "open_step common_step";
-      } else {
-        this.wizardData[1].checked = false;
-      }
+            if (this.vitals.validationStatus) {
+                this.wizardData[0].checked = true;
+                this.wizardData[0].class = "open_step common_step";
+            } else {
+                this.wizardData[0].checked = false;
+            }
 
-      if (this.OPDdiagnosis[0].selectedData.length > 0) {
-        this.wizardData[2].checked = true;
-        this.wizardData[2].class = "open_step common_step";
-      } else {
-        this.wizardData[2].checked = false;
-      }
+            if (this.investigations[0].selectedData.length > 0) {
+                this.wizardData[1].checked = true;
+                this.wizardData[1].class = "open_step common_step";
+            } else {
+                this.wizardData[1].checked = false;
+            }
+
+            if (this.OPDdiagnosis[0].selectedData.length > 0) {
+                this.wizardData[2].checked = true;
+                this.wizardData[2].class = "open_step common_step";
+            } else {
+                this.wizardData[2].checked = false;
+            }
 
             if (this.selectedMedicalDrugsList.length > 0) {
                 this.wizardData[4].checked = true;
@@ -329,21 +333,21 @@ export default defineComponent({
             const patientID = this.demographics.patient_id;
             const treatmentInstance = new Treatment();
 
-      if (!isEmpty(this.selectedMedicalAllergiesList)) {
-        const allergies = this.mapToAllergies();
-        treatmentInstance.onSubmitAllergies(patientID, userID, allergies);
-      }
+            if (!isEmpty(this.selectedMedicalAllergiesList)) {
+                const allergies = this.mapToAllergies();
+                treatmentInstance.onSubmitAllergies(patientID, userID, allergies);
+            }
 
-      if (!isEmpty(this.nonPharmalogicalTherapyAndOtherNotes)) {
-        const treatmentNotesTxt = [
-          {
-            concept_id: 2688,
-            obs_datetime: Service.getSessionDate(),
-            value_text: this.nonPharmalogicalTherapyAndOtherNotes,
-          },
-        ];
-        treatmentInstance.onSubmitNotes(patientID, userID, treatmentNotesTxt);
-      }
+            if (!isEmpty(this.nonPharmalogicalTherapyAndOtherNotes)) {
+                const treatmentNotesTxt = [
+                    {
+                        concept_id: 2688,
+                        obs_datetime: Service.getSessionDate(),
+                        value_text: this.nonPharmalogicalTherapyAndOtherNotes,
+                    },
+                ];
+                treatmentInstance.onSubmitNotes(patientID, userID, treatmentNotesTxt);
+            }
 
             if (!isEmpty(this.selectedMedicalDrugsList)) {
                 const drugOrders = this.mapToOrders();
@@ -408,26 +412,22 @@ export default defineComponent({
                 ...(await formatInputFiledData(this.pastMedicalHistory)),
             ];
         },
-         async saveConsciousness() {
-      const data = await formatRadioButtonData(this.levelOfConsciousness);
+        async saveConsciousness() {
+            const data = await formatRadioButtonData(this.levelOfConsciousness);
 
-      console.log({ data });
+            console.log({ data });
 
-      return;
-      const userID: any = Service.getUserID();
-      const consciousness = new ConsciousnessService(
-        this.demographics.patient_id,
-        userID
-      );
-      const encounter = await consciousness.createEncounter();
-      if (!encounter)
-        return toastWarning("Unable to create patient complaints encounter");
+            return;
+            const userID: any = Service.getUserID();
+            const consciousness = new ConsciousnessService(this.demographics.patient_id, userID);
+            const encounter = await consciousness.createEncounter();
+            if (!encounter) return toastWarning("Unable to create patient complaints encounter");
 
-      //   const gcs = this.levelOfConsciousness[0].radioBtnContent.data;
+            //   const gcs = this.levelOfConsciousness[0].radioBtnContent.data;
 
-      const dat = await formatRadioButtonData(this.levelOfConsciousness);
-      //   await consciousness.saveObservationList(gcs);
-    },
+            const dat = await formatRadioButtonData(this.levelOfConsciousness);
+            //   await consciousness.saveObservationList(gcs);
+        },
     },
 });
 </script>

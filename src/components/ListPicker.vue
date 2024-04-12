@@ -1,9 +1,10 @@
 <template>
-    <ion-list>
-        <ion-label v-if="show_label">{{ name_of_list }}</ion-label>
+    <ion-list style="background: none;">
         <ion-row>
-            <ion-item lines="none" class="ItemAl">
-                <div v-for="(item, index) in items_List" :key="index">
+            <ion-label v-if="show_label" :class="disableCls">{{ name_of_list }}: </ion-label>
+            <ion-col style="width: 100%;">
+            <ion-item lines="none" class="ItemAl" style="display: flex; flex-wrap: wrap;">
+                <div v-for="(item, index) in local_itmes_List" :key="index">
                     <ion-button v-if="item.selected" @click="selectAl(item)" class="itemAlBtn">
                         {{ item.name }}
                     <ion-icon slot="end" style="font-size: x-large" :icon="closeOutline"></ion-icon>
@@ -12,8 +13,13 @@
 
             <ion-row>
                 <div>
-                    <ion-button :id="uniqueId" fill="clear" class="itemAlAddBtn" @click="setFocus">
-                        <ion-icon :icon="addOutline"></ion-icon>
+                    <ion-button
+                        :id="uniqueId"
+                        fill="clear" class="itemAlAddBtn"
+                        @click="setFocus"
+                        :disabled="local_disabled"
+                        >
+                            <ion-icon :icon="addOutline"></ion-icon>
                     </ion-button>
                     <ion-popover
                         class="popover-al"
@@ -38,16 +44,20 @@
                 </div>
             </ion-row>
             </ion-item>
+        </ion-col>
         </ion-row>
     </ion-list>
 </template>
 <script setup lang="ts">
 import { IonList, IonLabel, IonRow, IonCol, IonItem, IonButton, IonIcon, IonInput, IonContent } from "@ionic/vue"
 import { closeOutline, addOutline, checkmarkOutline } from "ionicons/icons"
-import { ref, watch } from "vue"
+import { ref, watch, onMounted } from "vue"
 
 const input = ref()
 const itemName = ref("")
+const local_itmes_List = ref([] as any)
+const local_disabled = ref(false)
+const disableCls = ref('')
 
 const props = defineProps<{
     uniqueId: "99"
@@ -59,7 +69,42 @@ const props = defineProps<{
     }],
     multiSelection: false,
     show_label: true,
+    use_internal_filter: true,
+    disabled: false,
 }>()
+
+watch(
+    () => props.items_List,
+    async (newValue) => {
+
+        if (newValue) {
+            local_itmes_List.value = newValue
+        } else {
+            local_itmes_List.value = newValue
+        }
+        
+    }
+)
+watch(
+    () => props.disabled,
+    async (newValue) => {
+        isDisabled()
+    }
+)
+
+onMounted(async () => {
+    local_itmes_List.value = props.items_List
+    isDisabled()
+})
+
+function isDisabled() {
+    local_disabled.value = props.disabled
+    if (props.disabled == true as boolean) {
+        disableCls.value = "ion-lblCls-disabled"
+    } else if (props.disabled == false as boolean) {
+        disableCls.value = "ion-lblCls"
+    }
+}
 
 
 function selectAl(sel_item: any) {
@@ -85,7 +130,6 @@ async function FindItemName(text: any) {
 }
 
 function setFocus() {
-    console.log("sssssss", props.uniqueId)
     input.value.$el.setFocus()
 }
 
@@ -104,17 +148,18 @@ function itemSearchText(searchString: string) {
 }
 
 function itemListFiltered(searchString: string) {
-    const items =  [...props.items_List]
-    const filtered_items = [] as any
-    searchString = searchString ? searchString.toString() : "";
-    items.forEach((item: any) => {
-        if (item.name.toLowerCase().includes(searchString.toLowerCase())) {
-            console.log(item)
-            filtered_items.push(item)
-        }
-    })
-    items_List_copy.value = filtered_items
-    emit("itemListFiltered", filtered_items)
+    if (props.use_internal_filter == true) {
+        const items =  [...props.items_List]
+        const filtered_items = [] as any
+        searchString = searchString ? searchString.toString() : "";
+        items.forEach((item: any) => {
+            if (item.name.toLowerCase().includes(searchString.toLowerCase())) {
+                filtered_items.push(item)
+            }
+        })
+        items_List_copy.value = filtered_items
+        emit("itemListFiltered", filtered_items)
+    }
 }
 
 function dissmissDrugAddField(): void {
@@ -128,11 +173,6 @@ function dissmissDrugAddField(): void {
 <style scoped>
 #container {
     text-align: center;
-
-    position: absolute;
-    left: 0;
-    right: 0;
-    transform: translateY(-50%);
 }
 
 #container strong {
@@ -143,9 +183,7 @@ function dissmissDrugAddField(): void {
 #container p {
     font-size: 16px;
     line-height: 22px;
-
     color: #8c8c8c;
-
     margin: 0;
 }
 
@@ -153,17 +191,20 @@ function dissmissDrugAddField(): void {
     text-decoration: none;
 }
 ion-item.ItemAl {
-    --background: #fff;
+    --background: none !important;
     --border-radius: 5px;
+    display: grid;
 }
 ion-button.itemAlBtn {
-    --background: #fecdca;
-    --color: #b42318;
+    --background: #5cc55e;
+    --color: #006401;
+    font-size: 15px;
+    font-weight: bold;
     text-transform: none;
 }
 .error-label {
-    background: #fecdca;
-    color: #b42318;
+    background: #5cc55e;
+    color: #006401;
     text-transform: none;
     padding: 6%;
     border-radius: 10px;
@@ -178,12 +219,16 @@ ion-icon.icon-al {
     /* margin-left: 40%; */
     font-size: x-large;
     margin-bottom: -5px;
+    font-weight: 530;
+    font-size: 28px
 }
 .item-al {
     cursor: pointer;
     padding: 5px;
     background-color: #ebebeb;
     margin-top: 8px;
+    font-weight: 530;
+    font-size: 15px;
 }
 .item-al:hover {
     background-color: #55515148;
@@ -243,4 +288,21 @@ ion-list.list-al {
 .notes_p {
     margin: 4%;
 }
+.ion-lblCls {
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 3;
+    border-radius: 10%;
+    padding: 4px;
+}
+.ion-lblCls-disabled {
+    font-weight: bold;
+    font-size: 15px;
+    color:#8c8c8c;
+    line-height: 3;
+    border-radius: 10%;
+    padding: 4px;
+}
+
+
 </style>

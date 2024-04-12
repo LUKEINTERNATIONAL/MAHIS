@@ -1,6 +1,11 @@
 <template>
     <div class="modal_wrapper">
-        <basic-form :contentData="pastMedicalHistory" @update:inputValue="handleInputData" @update:selected="handleInputData"></basic-form>
+        <basic-form
+            :contentData="pastMedicalHistory"
+            :initialData="initialData"
+            @update:inputValue="handleInputData"
+            @update:selected="handleInputData"
+        ></basic-form>
     </div>
 </template>
 
@@ -31,10 +36,16 @@ export default defineComponent({
     },
 
     data() {
-        return {};
+        return {
+            initialData: [] as any,
+        };
     },
     computed: {
         ...mapState(usePastMedicalHistoryStore, ["pastMedicalHistory"]),
+    },
+    mounted() {
+        const medicationHistory = usePastMedicalHistoryStore();
+        this.initialData = medicationHistory.getInitial();
     },
     methods: {
         handleInputData(event: any) {
@@ -66,7 +77,6 @@ export default defineComponent({
                     { name: "Rifampicin150mg/Isoniazid75mg/Pyrazinamide 400mg/Ethambutol" },
                 ],
             });
-
             modifyFieldValue(this.pastMedicalHistory, "Current hypertension treatment regimen", "popOverData", {
                 filterData: true,
                 data: [
@@ -77,49 +87,6 @@ export default defineComponent({
                     { name: "Enalapril Maleate 10mg" },
                 ],
             });
-
-            if (event?.al?.name == "TB" && event?.al?.checked) {
-                modifyRadioValue(this.pastMedicalHistory, "TB treatment", "displayNone", false);
-            } else if (event?.al?.name == "TB" && !event?.al?.checked) {
-                modifyRadioValue(this.pastMedicalHistory, "TB treatment", "displayNone", true);
-                modifyRadioValue(this.pastMedicalHistory, "TB treatment", "selectedValue", "");
-                modifyFieldValue(this.pastMedicalHistory, "TB drugs", "displayNone", true);
-            }
-            if (event?.name == "TB treatment" && event?.selectedValue == "Yes") {
-                modifyFieldValue(this.pastMedicalHistory, "TB drugs", "displayNone", false);
-            } else if (event?.name == "TB treatment" && event?.selectedValue == "No") {
-                modifyFieldValue(this.pastMedicalHistory, "TB drugs", "displayNone", true);
-            }
-
-            if (event?.al?.name == "Hypertension" && event?.al?.checked) {
-                modifyRadioValue(this.pastMedicalHistory, "Hypertension medication", "displayNone", false);
-            } else if (event?.al?.name == "Hypertension" && !event?.al?.checked) {
-                modifyRadioValue(this.pastMedicalHistory, "Hypertension medication", "displayNone", true);
-            }
-            if (event?.name === "Hypertension medication" && event?.selectedValue == "Yes") {
-                modifyFieldValue(this.pastMedicalHistory, "Current hypertension treatment regimen", "displayNone", false);
-            } else if (event?.name === "Hypertension medication" && event?.selectedValue == "No") {
-                modifyFieldValue(this.pastMedicalHistory, "Current hypertension treatment regimen", "displayNone", true);
-            }
-
-            if (event?.al?.name == "HIV Positive" && event?.al?.checked) {
-                modifyRadioValue(this.pastMedicalHistory, "HIV status", "displayNone", false);
-            } else if (event?.al?.name == "HIV Positive" && !event?.al?.checked) {
-                modifyRadioValue(this.pastMedicalHistory, "HIV status", "displayNone", true);
-            }
-            if (event?.name === "HIV status" && event?.selectedValue == "Yes") {
-                modifyFieldValue(this.pastMedicalHistory, "ARV start date", "displayNone", false);
-            } else if (event?.name === "HIV status" && event?.selectedValue == "No") {
-                modifyFieldValue(this.pastMedicalHistory, "ARV start date", "displayNone", true);
-            }
-
-            if (event?.al?.name == "Diabetes Mellitus" && event?.al?.checked) {
-                modifyRadioValue(this.pastMedicalHistory, "Diabetes", "displayNone", false);
-                modifyRadioValue(this.pastMedicalHistory, "Controlled by", "displayNone", false);
-            } else if (event?.al?.name == "Diabetes Mellitus" && !event?.al?.checked) {
-                modifyRadioValue(this.pastMedicalHistory, "Diabetes", "displayNone", true);
-                modifyRadioValue(this.pastMedicalHistory, "Controlled by", "displayNone", true);
-            }
         },
     },
 });

@@ -1,15 +1,15 @@
-import { DrugPrescriptionService } from '@/services/drug_prescription_service';
-import { defineStore } from 'pinia'
+import { DrugPrescriptionService } from "@/services/drug_prescription_service";
+import { defineStore } from "pinia";
 
 interface DispensationData {
-    drugPrescriptions: any[]
-    dispensedMedication: any[]
-    payload: {} //{"dispensations":[{"drug_order_id":2399362,"date":"2024-03-27","quantity":"3"}],"program_id":14}
-    saveInitiated: Boolean
-    StepperData: any[]
+    drugPrescriptions: any[];
+    dispensedMedication: any[];
+    payload: {}; //{"dispensations":[{"drug_order_id":2399362,"date":"2024-03-27","quantity":"3"}],"program_id":14}
+    saveInitiated: Boolean;
+    StepperData: any[];
 }
 
-export const useDispensationStore = defineStore('dispensation', {
+export const useDispensationStore = defineStore("dispensation", {
     state: (): DispensationData => ({
         drugPrescriptions: [],
         dispensedMedication: [],
@@ -18,129 +18,126 @@ export const useDispensationStore = defineStore('dispensation', {
         StepperData: [
             {
                 title: "Dispense Medications",
-                componet: "dispensedMedication",
+                component: "dispensedMedication",
                 value: "1",
-            }
-        ]
+            },
+        ],
     }),
     actions: {
         editDispensations() {
-            this.toggleStepperData()
+            this.toggleStepperData();
         },
         getStepperData() {
-            return this.StepperData
+            return this.StepperData;
         },
         toggleStepperData() {
-            if (this.StepperData[0].componet == "dispensedMedication") {
-                this.StepperData.splice(0, 1,
-                    {
-                        title: "Dispensation Summary",
-                        componet: "dispensationSummary",
-                        value: "1",
-                    },)
-                } else {
-                    this.StepperData.splice(0, 1,
-                        {
-                            title: "Dispense Medications",
-                            componet: "dispensedMedication",
-                            value: "1",
-                        },
-                        )
-                    }
+            if (this.StepperData[0].component == "dispensedMedication") {
+                this.StepperData.splice(0, 1, {
+                    title: "Dispensation Summary",
+                    component: "dispensationSummary",
+                    value: "1",
+                });
+            } else {
+                this.StepperData.splice(0, 1, {
+                    title: "Dispense Medications",
+                    component: "dispensedMedication",
+                    value: "1",
+                });
+            }
         },
         isSaveInitiated(bool: boolean): void {
-            this.saveInitiated = bool
+            this.saveInitiated = bool;
         },
         validateInputs() {
             if (this.saveInitiated == false) {
-                return
+                return;
             }
-            let isThereAnError = false
-            this.drugPrescriptions.forEach(Element => {
+            let isThereAnError = false;
+            this.drugPrescriptions.forEach((Element) => {
                 if (Element.other.quantity == 0 && Element.reason == "") {
-                    Element.showValidation = true
-                    isThereAnError = true
+                    Element.showValidation = true;
+                    isThereAnError = true;
                 } else {
-                    Element.showValidation = false
+                    Element.showValidation = false;
                 }
-            })
-            return isThereAnError
+            });
+            return isThereAnError;
         },
         initializeDispensedAmount() {
-            this.drugPrescriptions.forEach(Element => {
-                Element.other.quantity = 0
-            })
+            this.drugPrescriptions.forEach((Element) => {
+                Element.other.quantity = 0;
+            });
         },
         initializeValidationsBoolean() {
-            this.drugPrescriptions.forEach(Element => {
-                Element.showValidation = false
-            })
+            this.drugPrescriptions.forEach((Element) => {
+                Element.showValidation = false;
+            });
         },
         initializeReasonParameter() {
-            this.drugPrescriptions.forEach(Element => {
-                Element.reason = ""
-            })
+            this.drugPrescriptions.forEach((Element) => {
+                Element.reason = "";
+            });
         },
         getValidation(index: number) {
-            return this.drugPrescriptions[index].showValidation
+            return this.drugPrescriptions[index].showValidation;
         },
         setReason(reason: string, index: number) {
-            this.drugPrescriptions[index].reason = reason
+            this.drugPrescriptions[index].reason = reason;
         },
         setDrugPrescriptions(prescriptions: any[]) {
-            this.drugPrescriptions = prescriptions
+            this.drugPrescriptions = prescriptions;
         },
         getDrugPrescriptions() {
-            return this.drugPrescriptions
+            return this.drugPrescriptions;
         },
         updateCheckboxBool(selected: boolean, index: any) {
-            this.drugPrescriptions[index].isSelected = selected
+            this.drugPrescriptions[index].isSelected = selected;
             if (!selected) {
-                this.drugPrescriptions[index].other.quantity = 0
-                this.drugPrescriptions[index].reason = ""
+                this.drugPrescriptions[index].other.quantity = 0;
+                this.drugPrescriptions[index].reason = "";
             }
         },
         getCheckedBool(index: any) {
-            return this.drugPrescriptions[index].isSelected
+            return this.drugPrescriptions[index].isSelected;
         },
         getReason(index: number) {
-            return this.drugPrescriptions[index].reason
+            return this.drugPrescriptions[index].reason;
         },
         getDispensedMedications() {
             return this.dispensedMedication;
         },
         addQuantity(quantity: number, index: number) {
-            this.drugPrescriptions[index].other.quantity = quantity
+            this.drugPrescriptions[index].other.quantity = quantity;
         },
         saveDispensedMedications() {
-            this.dispensedMedication = this.drugPrescriptions
+            this.dispensedMedication = this.drugPrescriptions;
         },
         setDispensedMedicationsPayload() {
             //{"dispensations":[{"drug_order_id":2399362,"date":"2024-03-27","quantity":"3"}],"program_id":14}
             const payloadObject = {
                 dispensations: [] as any[],
-                program_id: 14
-            }
-            const dispensedDrugsWithDetailsArray = [] as any[]
+                program_id: 14,
+            };
+            const dispensedDrugsWithDetailsArray = [] as any[];
 
-            this.dispensedMedication.forEach(Element => {
+            this.dispensedMedication.forEach((Element) => {
                 const dispensedDrugsDetailsObject = {
                     drug_order_id: null,
                     quantity: null,
-                    date: null
-                }
+                    date: null,
+                };
 
-                dispensedDrugsDetailsObject.drug_order_id = Element.other.order_id
-                dispensedDrugsDetailsObject.quantity = Element.other.quantity
-                dispensedDrugsDetailsObject.date = Element.prescription
+                dispensedDrugsDetailsObject.drug_order_id = Element.other.order_id;
+                dispensedDrugsDetailsObject.quantity = Element.other.quantity;
+                dispensedDrugsDetailsObject.date = Element.prescription;
 
-                dispensedDrugsWithDetailsArray.push(dispensedDrugsDetailsObject)
-            })
-            payloadObject.dispensations = dispensedDrugsWithDetailsArray
-            this.payload = payloadObject
+                dispensedDrugsWithDetailsArray.push(dispensedDrugsDetailsObject);
+            });
+            payloadObject.dispensations = dispensedDrugsWithDetailsArray;
+            this.payload = payloadObject;
         },
         getDispensedMedicationsPayload() {
-            return this.payload
-        }
-    }
-})
+            return this.payload;
+        },
+    },
+});
