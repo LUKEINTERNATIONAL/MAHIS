@@ -416,7 +416,7 @@ export default defineComponent({
       return [
         ...(await formatCheckBoxData(this.physicalExam)),
         ...(await formatRadioButtonData(this.physicalExam)),
-        // ...(await formatInputFiledData(this.physicalExam)),
+        ...(await formatInputFiledData(this.physicalExam)),
       ];
     },
   },

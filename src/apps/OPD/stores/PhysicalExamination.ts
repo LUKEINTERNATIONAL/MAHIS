@@ -391,9 +391,9 @@ const initialPhysicalExam= [
             },
             data: [
                 {
-                    name: "Other",
+                    name: "Other ears abnormality",
                     disabled: false,
-                    value: "Other",
+                    value: "Other ears abnormality",
                     labelPlacement: "start",
                     colSize: "9",
                     justify: "space-between",
@@ -637,9 +637,9 @@ const initialPhysicalExam= [
             },
             data: [
                 {
-                    name: "Other",
+                    name: "Other neck abnormality ",
                     disabled: false,
-                    value: "Other",
+                    value: "Other neck abnormality",
                     labelPlacement: "start",
                     colSize: "9",
                     justify: "space-between",
@@ -1736,7 +1736,7 @@ const initialPhysicalExam= [
                             icon: icons.editPen,
                             value: "",
                             valueType:'text',
-                            name: "Other male genital abnormality notes",
+                            name: "Other genital abnormality notes",
                             eventType: "input",
                             inputWidth: "100%",
                             required: true,
