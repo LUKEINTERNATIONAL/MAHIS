@@ -1,8 +1,9 @@
 <template>
-    <ion-list>
-        <ion-label v-if="show_label" :class="disableCls">{{ name_of_list }}</ion-label>
+    <ion-list style="background: none;">
         <ion-row>
-            <ion-item lines="none" class="ItemAl">
+            <ion-label v-if="show_label" :class="disableCls">{{ name_of_list }}: </ion-label>
+            <ion-col style="width: 100%;">
+            <ion-item lines="none" class="ItemAl" style="display: flex; flex-wrap: wrap;">
                 <div v-for="(item, index) in local_itmes_List" :key="index">
                     <ion-button v-if="item.selected" @click="selectAl(item)" class="itemAlBtn">
                         {{ item.name }}
@@ -43,6 +44,7 @@
                 </div>
             </ion-row>
             </ion-item>
+        </ion-col>
         </ion-row>
     </ion-list>
 </template>
@@ -74,10 +76,15 @@ const props = defineProps<{
 watch(
     () => props.items_List,
     async (newValue) => {
-        local_itmes_List.value = newValue
+
+        if (newValue) {
+            local_itmes_List.value = newValue
+        } else {
+            local_itmes_List.value = newValue
+        }
+        
     }
 )
-
 watch(
     () => props.disabled,
     async (newValue) => {
@@ -166,11 +173,6 @@ function dissmissDrugAddField(): void {
 <style scoped>
 #container {
     text-align: center;
-
-    position: absolute;
-    left: 0;
-    right: 0;
-    transform: translateY(-50%);
 }
 
 #container strong {
@@ -181,9 +183,7 @@ function dissmissDrugAddField(): void {
 #container p {
     font-size: 16px;
     line-height: 22px;
-
     color: #8c8c8c;
-
     margin: 0;
 }
 
@@ -191,17 +191,20 @@ function dissmissDrugAddField(): void {
     text-decoration: none;
 }
 ion-item.ItemAl {
-    --background: #fff;
+    --background: none !important;
     --border-radius: 5px;
+    display: grid;
 }
 ion-button.itemAlBtn {
-    --background: #fecdca;
-    --color: #b42318;
+    --background: #5cc55e;
+    --color: #006401;
+    font-size: 15px;
+    font-weight: bold;
     text-transform: none;
 }
 .error-label {
-    background: #fecdca;
-    color: #b42318;
+    background: #5cc55e;
+    color: #006401;
     text-transform: none;
     padding: 6%;
     border-radius: 10px;
@@ -216,12 +219,16 @@ ion-icon.icon-al {
     /* margin-left: 40%; */
     font-size: x-large;
     margin-bottom: -5px;
+    font-weight: 530;
+    font-size: 28px
 }
 .item-al {
     cursor: pointer;
     padding: 5px;
     background-color: #ebebeb;
     margin-top: 8px;
+    font-weight: 530;
+    font-size: 15px;
 }
 .item-al:hover {
     background-color: #55515148;
@@ -283,9 +290,19 @@ ion-list.list-al {
 }
 .ion-lblCls {
     font-weight: bold;
+    font-size: 15px;
+    line-height: 3;
+    border-radius: 10%;
+    padding: 4px;
 }
 .ion-lblCls-disabled {
     font-weight: bold;
-    color:#8c8c8c
+    font-size: 15px;
+    color:#8c8c8c;
+    line-height: 3;
+    border-radius: 10%;
+    padding: 4px;
 }
+
+
 </style>

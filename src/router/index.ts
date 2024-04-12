@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { RouteRecordRaw } from "vue-router";
 import HomePage from "../views/HomePage.vue";
 import Login from "../views/Login.vue";
-import userProfile from  "../views/UserManagement/userProfile.vue"
+import users from  "../views/UserManagement/users.vue"
 import PatientProfile from "../views/PatientProfile.vue";
 import PatientRegistration from "@/views/Registration.vue";
 import { alertController, loadingController, modalController, toastController } from "@ionic/vue";
@@ -40,9 +40,9 @@ const routes: Array<RouteRecordRaw> = [
         props: true,
     },
     {
-        path: "/userProfile",
-        name: "userProfile",
-        component: userProfile,
+        path: "/users",
+        name: "users",
+        component: users,
         props: true,
     },
     ...NCD,

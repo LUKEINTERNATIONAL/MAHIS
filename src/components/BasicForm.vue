@@ -437,7 +437,6 @@ ion-radio {
     color: #636363;
 }
 .bold {
-    font-family: "Inter";
     font-style: normal;
     font-weight: 600;
     font-size: 16px;

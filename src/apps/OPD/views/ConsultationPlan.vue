@@ -78,6 +78,9 @@ import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from 
 import { PatientComplaintsService } from "@/apps/OPD/services/patient_complaints_service";
 import { PatientGeneralConsultationService } from "@/services/patient_general_consultation";
 import { PastMedicalHistory } from "../services/past_medical_history_service";
+import { useLevelOfConsciousnessStore } from "@/apps/OPD/stores/LevelOfConsciousnessStore";
+import { ConsciousnessService } from "@/apps/OPD/services/consciousness_service";
+
 export default defineComponent({
     name: "Home",
     components: {
@@ -192,6 +195,7 @@ export default defineComponent({
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useOPDDiagnosisStore, ["OPDdiagnosis"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
+        ...mapState(useLevelOfConsciousnessStore, ["levelOfConsciousness"]),
     },
     async mounted() {
         this.investigations;
@@ -280,6 +284,7 @@ export default defineComponent({
             await this.saveWomenStatus();
             await this.savePresentingComplaints();
             await this.savePastMedicalHistory();
+            await this.saveConsciousness();
             this.$router.push("patientProfile");
         },
         async savePastMedicalHistory() {
@@ -406,6 +411,22 @@ export default defineComponent({
                 ...(await formatRadioButtonData(this.pastMedicalHistory)),
                 ...(await formatInputFiledData(this.pastMedicalHistory)),
             ];
+        },
+        async saveConsciousness() {
+            const data = await formatRadioButtonData(this.levelOfConsciousness);
+
+            console.log({ data });
+
+            return;
+            const userID: any = Service.getUserID();
+            const consciousness = new ConsciousnessService(this.demographics.patient_id, userID);
+            const encounter = await consciousness.createEncounter();
+            if (!encounter) return toastWarning("Unable to create patient complaints encounter");
+
+            //   const gcs = this.levelOfConsciousness[0].radioBtnContent.data;
+
+            const dat = await formatRadioButtonData(this.levelOfConsciousness);
+            //   await consciousness.saveObservationList(gcs);
         },
     },
 });
