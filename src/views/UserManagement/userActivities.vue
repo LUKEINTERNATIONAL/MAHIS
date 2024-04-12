@@ -43,6 +43,7 @@ import {
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
 import ListPicker from "../../components/ListPicker.vue"
 import { Service } from "@/services/service"
+import { PRIMARY_ACTIVITIES } from "@/apps/NCD/config/programActivities"
 
 const main_program = ref('Manin Framework') as any
 const activities = ref([] as any)
@@ -78,36 +79,38 @@ const knownLitsOfPrograms = ref([
 ])
 
 const props = defineProps<{
-    user_property: string,
     user_programs: any
 }>()
 
 onMounted(async () => {
-    await getActivities(props.user_property)
-    generatedSelected()
-
+    setProgramActivities()
+    await generatedSelected()
 })
 
-async function generatedSelected() {
-    console.log("hhhhh")
-    props.user_programs.forEach((selected: any) => {
-        //console.log(generateKeyAPIRef(selected.name) )
-        const is_P = generateKeyAPIRef(selected.name)
-        let is_P2: any
-        knownLitsOfPrograms.value.forEach(async (program: any) => {
-            is_P2 = generateKeyAPIRef(program)
-            if (is_P.exists == true && is_P2.exists == true) {
-                console.log(is_P.ref_name)
-
-                const activites = await getActivities(is_P.ref_name)
-                
-            }
-        })
-
-
-    })
+function setProgramActivities() {
+    activities.value = PRIMARY_ACTIVITIES
 }
 
+async function generatedSelected() {
+    props.user_programs.forEach(async (selected: any) => {
+        const is_P = generateKeyAPIRef(selected.name)
+        if (is_P.exists == true) {
+                console.log(is_P.ref_name)
+                const data = await getActivities(is_P.ref_name)
+                activities.value.forEach((item: any) => {
+                    data.forEach((datum: any) => {
+                        if (item.name == datum.name) {
+                        item.selected = true
+                    }
+                    })
+                })
+            }
+        // let is_P2: any
+        // knownLitsOfPrograms.value.forEach(async (program: any) => {
+        //     is_P2 = generateKeyAPIRef(program)
+        // })
+    })
+}
 
 function generateKeyAPIRef(program: string) {
     let keyRefAPIRefObj: any
@@ -144,11 +147,12 @@ async function getActivities(property: any) {
     const _temp_activities_ = [] as any
     _activities_.forEach((item: any) => {
         _temp_activities_.push({
-            name: item
+            name: item,
+            selected: true
         })
     })
-    activities.value = _temp_activities_
-    return activities.value
+    // activities.value = _temp_activities_
+    return _temp_activities_
 }
 
 function stringToArray(str: string) {

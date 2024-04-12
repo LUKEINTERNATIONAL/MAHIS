@@ -97,7 +97,6 @@
             <ion-col>
                 <userActivities
                     :user_programs="user_programs"
-                    :user_property="'OPD_activities'"
                 />
             </ion-col>
         </ion-row>
