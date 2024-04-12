@@ -354,6 +354,17 @@ function listUpdated1(data: any) {
 
 function listUpdated2(data: any) {
     user_programs.value = data
+    const j = []
+    user_programs.value.forEach((item: any) => {
+        if (item.selected == true) {
+            j.push(1)
+        }
+    })
+    if (j.length > 0) {
+        show_user_programs.value = true
+    } if (j.length == 0) {
+        show_user_programs.value = false
+    }
 }
 
 function userFirstname(items: any) {
