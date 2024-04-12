@@ -250,7 +250,7 @@ const showRow = (item: ClickRowArgument) => {
   --easy-table-body-even-row-font-color: #fff;
   --easy-table-body-even-row-background-color: #4c5d7a;
 
-  --easy-table-body-row-font-color: #c0c7d2;
+  --easy-table-body-row-font-color: #01060e;
   /* --easy-table-body-row-background-color: #2d3a4f; */
   --easy-table-body-row-height: 50px;
   --easy-table-body-row-font-size: 15px;

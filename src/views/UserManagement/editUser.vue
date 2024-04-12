@@ -75,6 +75,24 @@
             </ion-col>
         </ion-row>
 
+        <ion-row>
+            <ion-col>
+                <ListPicker
+                    :multiSelection="list_picker_prperties[1].multi_Selection"
+                    :show_label="list_picker_prperties[1].show_list_label"
+                    :uniqueId="list_picker_prperties[1].unqueId"
+                    :name_of_list="list_picker_prperties[1].name_of_list"
+                    :choose_place_holder="list_picker_prperties[1].placeHolder"
+                    :items_-list="user_programs"
+                    :use_internal_filter="list_picker_prperties[1].use_internal_filter"
+                    :disabled="list_picker_prperties[1].disabled.value"
+                    @item-list-up-dated="list_picker_prperties[1].listUpdatedFN"
+                    @item-list-filtered="list_picker_prperties[1].listFilteredFN"
+                    @item-search-text="list_picker_prperties[1].searchTextFN"
+                />
+            </ion-col>
+        </ion-row>
+
         <ion-accordion-group ref="accordionGroup" class="previousView">
             <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
                 <ion-item slot="header" color="light">
@@ -138,9 +156,11 @@ import { icons } from "@/utils/svg"
 import DynamicButton from "@/components/DynamicButton.vue"
 import BasicInputField from "@/components/BasicInputField.vue"
 import { UserService } from "@/services/user_service"
+import { ProgramService } from "@/services/program_service"
 
 const toggle_local = ref(true)
 const user_roles = ref([] as any)
+const user_programs = ref([] as any)
 const user_data = ref()
 
 const props = defineProps<{
@@ -148,17 +168,18 @@ const props = defineProps<{
 }>()
 
 onMounted(async () => {
-    getUsers()
+    getUserRoles()
+    getUserPrograms()
 })
 
 // const emit = defineEmits<{
 //     (e: "closePopoover", ObjectsArray: any): void
 // }>()
 
-async function getUsers() {
-    user_data.value = await UserService.getAllRoles()
+async function getUserRoles() {
+    user_roles.value = await UserService.getAllRoles()
     const temp_array = [] as any
-    user_data.value.forEach((item: any) => {
+    user_roles.value.forEach((item: any) => {
         temp_array.push(
             {
                 name: item.role,
@@ -168,6 +189,21 @@ async function getUsers() {
     })
     user_roles.value = temp_array
 }
+
+async function getUserPrograms() {
+    user_programs.value = await ProgramService.getAllPrograms()
+    const temp_array = [] as any
+    user_programs.value.forEach((item: any) => {
+        temp_array.push(
+            {
+                name: item.name,
+                other: item
+            }
+        )
+    })
+    user_programs.value = temp_array
+}
+
 
 const note_properties = [
     {
@@ -211,6 +247,21 @@ const list_picker_prperties = [
         show_error: ref(false),
         error_message: 'please select a User',
         disabled: ref(false) as any,
+    },
+    {
+        multi_Selection: true as any,
+        show_list_label: true as any,
+        unqueId: 'qwerty_8_2' as any,
+        name_of_list: 'Programs' as any,
+        placeHolder: 'Search for programs' as any,
+        items: [],
+        listUpdatedFN: listUpdated2,
+        listFilteredFN: ()=>{},
+        searchTextFN: ()=>{},
+        use_internal_filter: true as any,
+        show_error: ref(false),
+        error_message: 'please select a Program',
+        disabled: ref(false) as any,
     }
 ]
 
@@ -218,6 +269,9 @@ function listUpdated1(data: any) {
     user_roles.value = data
 }
 
+function listUpdated2(data: any) {
+    user_programs.value = data
+}
 
 </script>
 <style src="@vueform/toggle/themes/default.css"></style>
@@ -261,8 +315,8 @@ function listUpdated1(data: any) {
 .toggle-green {
     --toggle-bg-on: #006401;
     --toggle-border-on: #006401;
-    --toggle-width: 9rem;
-    --toggle-height: 2.3rem;
+    --toggle-width: 8rem;
+    --toggle-height: 1.9rem;
     --toggle-border: 0.525rem;
     --toggle-font-size: 1.75rem;
 }
