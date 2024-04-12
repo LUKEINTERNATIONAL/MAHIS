@@ -95,7 +95,10 @@
 
         <ion-row>
             <ion-col>
-                <userActivities/>
+                <userActivities
+                    :user_programs="user_programs"
+                    :user_property="'OPD_activities'"
+                />
             </ion-col>
         </ion-row>
 
@@ -181,8 +184,7 @@ const props = defineProps<{
 onMounted(async () => {
     await getUserRoles()
     await getUserPrograms()
-    await getUserData()
-    
+    await getUserData() 
 })
 
 // const emit = defineEmits<{
@@ -196,6 +198,7 @@ async function getUserData() {
     last_name.value = userLastname(user_data.value.person.names)
     fillUserRoles()
     fillUserPrograms()
+    getAPICounterPart() 
 }
 
 function fillUserRoles() {
@@ -205,6 +208,26 @@ function fillUserRoles() {
                 item.selected = true
             }
         })
+    })
+}
+
+async function generatePropertiesList() {
+    const selectedPrograms = [] as any
+    user_programs.value.forEach((item: any) => {
+        if (item.selected == true) {
+            selectedPrograms.push({item})
+        } 
+    })
+    return selectedPrograms
+}
+
+async function getAPICounterPart() {
+    const selectedPrograms = await generatePropertiesList()
+    console.log(selectedPrograms)
+    selectedPrograms.forEach((item: any, index: number) => {
+        // if
+        console.log("<><.....")
+        console.log(item)
     })
 }
 
@@ -390,10 +413,10 @@ function userLastname(items: any) {
 .toggle-green {
     --toggle-bg-on: #006401;
     --toggle-border-on: #006401;
-    --toggle-width: 8rem;
+    --toggle-width: 5.3rem;
     --toggle-height: 1.9rem;
     --toggle-border: 0.525rem;
-    --toggle-font-size: 1.75rem;
+    --toggle-font-size: 1rem;
 }
 .toggle-container:focus {
     outline: none !important;
