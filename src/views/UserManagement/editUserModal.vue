@@ -16,7 +16,9 @@
                     <ion-row>
                         <!-- <basic-form :contentData="[]"> </basic-form> -->
                         <ion-col>
-                            <editUser/>
+                            <editUser
+                                :toggle="true"
+                            />
                         </ion-col>
                        
                     </ion-row>
