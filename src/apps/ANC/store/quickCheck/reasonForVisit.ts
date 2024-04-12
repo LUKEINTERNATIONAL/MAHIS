@@ -39,72 +39,97 @@ const initialReasonForVisit= [
 
     },
     {
-        selectdData: [],
-        classDash: "dashed_bottom_border",
+        selectedData: [],
+        classDash:'dashed_bottom_border',
+        isFinishBtn: false,
+        sideColSize: 0,
         radioBtnContent: {
             header: {
                 title: "Does the woman had any previous ANC visit at any facility?",
-                selectedValue: "",
-                class:"bold",
                 name: "Previous visits",
-                displayNext:"Yes"
+                selectedValue: "",
+                displayNext: "Yes",
+                class: "bold",
             },
             data: [
                 {
-                    value: "Yes",
                     name: "Yes",
-                    colSize: "2",
+                    value: "Yes",
+                    colSize: 2,
                 },
                 {
-                    value: "No",
                     name: "No",
-                    colSize: "2",
+                    value: "No",
+                    colSize: 2,
                 },
             ],
         },
     },
     {
-        childName:"Previous visits",
-        sectionHeader: "",
-        classDash: "dashed_bottom_border_padding",
+        selectedData: [],
+        classDash:'dashed_bottom_border',
+        isFinishBtn: false,
+        sideColSize: 0,
+        childName: "Previous visits",
         data: {
             rowData: [
                 {
                     colData: [
                         {
                             displayNone: true,
-                            inputHeader: "Number of previous ANC visits",
-                            unit: "",
+                            inputHeader: "Enter number of visits",
+                            class: "bold",
                             icon: icons.editPen,
+                            unit:'Visit(s)',
+                            popOver: true,
+                            value: "",
+                            valueType: "number",
                             name: "Number of previous anc visits",
                             eventType: "input",
-                            required:true,
-                            inputWidth: "55%",
+                            required: true,
+                            alertsError: false,
+                            inputWidth:'55%',
+                            alertsErrorMassage: "",
+                            popOverData: {
+                                filterData: true,
+                                data: [],
+                            },
+                            // id: "",
+                            // idName: "visit",
                         },
+
                     ],
                 },
             ],
         },
     },
+
     {
         childName:"",
         classDash: "dashed_bottom_border",
-        sideColSize:0.000001,
+        sideColSize:0,
         data: {
             rowData: [
                 {
                     colData: [
                         {
-                            displayNone: true,
-                            inputHeader: "Pick the date",
-                            class:'bold',
-                            icon: icons.calenderPrimary,
+                            displayNone:true,
+                            inputHeader: "Start date",
+                            class: "bold",
+                            icon: icons.calendar,
+                            popOver: true,
                             value: "",
-                            valueType:'text',
-                            name: "Visit date",
+                            valueType: "text",
+                            name: "Number of previous anc visits",
                             eventType: "input",
-                            inputWidth: "100%",
                             required: true,
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                            id: "",
+                            idName: "startDate",
+                            inputWidth:'55%',
+                            placeholder: "Pick the date",
+                            isDatePopover: true,
                         },
                     ],
                 },

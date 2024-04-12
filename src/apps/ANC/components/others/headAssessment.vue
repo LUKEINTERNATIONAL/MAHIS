@@ -1,9 +1,10 @@
 <template>
   <div class="container">
     <ion-card class="section">
-        <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">The client is below 19 years, complete the HEADSS assessment</ion-card-title></ion-card-header>
         <ion-card-content>
-          <basic-form :contentData="headssAssesment" ></basic-form>
+          <basic-form :contentData="headssAssesment"
+
+          ></basic-form>
         </ion-card-content>
       </ion-card>
   </div>
@@ -70,6 +71,7 @@ export default defineComponent({
 
   data() {
     return {
+      initialData:[] as any,
       iconsContent: icons,
       vValidations: '' as any,
       hasValidationErrors: [] as any,
@@ -83,6 +85,8 @@ export default defineComponent({
 
   mounted(){
     this.handleHeadAssessment()
+    const headssAssesment=useHeadssAssessmentStore();
+        this.initialData = headssAssesment.getInitial();
   },
   watch:{
       headssAssesment:{

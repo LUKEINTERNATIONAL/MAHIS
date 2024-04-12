@@ -66,6 +66,8 @@ import {useConfirmPregnancyStore} from "@/apps/ANC/store/quickCheck/confirmPregn
 import {ConfirmPregnancyService} from "@/apps/ANC/service/confirm_pregnancy_service";
 import {SpecificHealthConcernsService} from "@/apps/ANC/service/specific_health_concerns_service";
 import {useSpecificHealthConcernsStore} from "@/apps/ANC/store/quickCheck/specificHealthConcerns";
+import {useReasonForVisitStore} from "@/apps/ANC/store/quickCheck/reasonForVisit";
+import {ReasonForVisitService} from "@/apps/ANC/service/reason_for_visit_service";
 export default defineComponent({
   name: "Home",
   components:{
@@ -166,6 +168,7 @@ export default defineComponent({
     ...mapState(useOPDDiagnosisStore, ["OPDdiagnosis"]),
     ...mapState(usePhysicalExaminationStore, ["physicalExam"]),
     ...mapState(useDangerSignsStore,["DangerSigns"]),
+    ...mapState(useReasonForVisitStore,["ReasonForVisit"]),
     ...mapState(useConfirmPregnancyStore,["ConfirmPregnancy"]),
     ...mapState(useSpecificHealthConcernsStore,["HealthConcerns"]),
     ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
@@ -240,6 +243,7 @@ export default defineComponent({
     },
     async saveData() {
       await this.saveDangerSigns();
+      await this.saveReasonForVisit();
       await this.saveConfirmPregnancy();
       await this.saveHealthConcerns();
       this.$router.push("symptomsFollowUp");
@@ -256,6 +260,19 @@ export default defineComponent({
         toastSuccess("Danger signs have been created");
       }
       console.log(await this.buildDangerSigns())
+
+    },
+    async saveReasonForVisit() {
+      if (this.ReasonForVisit.length > 0) {
+        const userID: any = Service.getUserID();
+        const ReasonForVisit = new ReasonForVisitService(this.demographics.patient_id, userID);
+        const encounter = await ReasonForVisit.createEncounter();
+        if (!encounter) return toastWarning("Unable to create patient reason for visit encounter");
+        const patientStatus = await ReasonForVisit.saveObservationList(await this.buildReasonForVisit());
+        if (!patientStatus) return toastWarning("Unable to create patient's reason for visit!");
+        toastSuccess("Reason for visit details have been created");
+      }
+      console.log(await this.buildReasonForVisit())
 
     },
 
@@ -292,14 +309,14 @@ export default defineComponent({
       return [
         ...(await formatCheckBoxData(this.DangerSigns)),
         ...(await formatRadioButtonData(this.DangerSigns)),
-        // ...(await formatInputFiledData(this.physicalExam)),
+        ...(await formatInputFiledData(this.DangerSigns)),
       ];
     },
     async buildConfirmPregnancy() {
       return [
         ...(await formatCheckBoxData(this.ConfirmPregnancy)),
         ...(await formatRadioButtonData(this.ConfirmPregnancy)),
-        // ...(await formatInputFiledData(this.ConfirmPregnancy)),
+        ...(await formatInputFiledData(this.ConfirmPregnancy)),
       ];
     },
 
@@ -307,7 +324,14 @@ export default defineComponent({
       return [
         ...(await formatCheckBoxData(this.HealthConcerns)),
         ...(await formatRadioButtonData(this.HealthConcerns)),
-        // ...(await formatInputFiledData(this.HealthConcerns)),
+        ...(await formatInputFiledData(this.HealthConcerns)),
+      ];
+    },
+    async buildReasonForVisit() {
+      return [
+        ...(await formatCheckBoxData(this.HealthConcerns)),
+        ...(await formatRadioButtonData(this.HealthConcerns)),
+        ...(await formatInputFiledData(this.HealthConcerns)),
       ];
     },
   },

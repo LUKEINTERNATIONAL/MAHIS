@@ -145,12 +145,12 @@ export default defineComponent({
             StepperData: [
                 {
                     title: "Past Obstetric History",
-                    componet: "PastObstetricHistory",
+                    component: "PastObstetricHistory",
                     value: "1",
                 },
                 {
                     title: "Past Medical history",
-                    componet: "MedicalHistory",
+                    component: "MedicalHistory",
                     value: "2",
                     // validation: {
                     //   medicalHistory: (data) => someChecked(data, "Medical history is required"),
@@ -163,17 +163,17 @@ export default defineComponent({
                 },
                 {
                     title: "Current Pregnancy",
-                    componet: "CurrentPregnancies",
+                    component: "CurrentPregnancies",
                     value: "3",
                 },
                 {
                     title: "Medications",
-                    componet: "Medications",
+                    component: "Medications",
                     value: "4",
                 },
                 {
                     title: "Woman behaviour",
-                    componet: "WomanBehaviour",
+                    component: "WomanBehaviour",
                     value: "5",
                 },
             ],

@@ -412,6 +412,7 @@ const initialHealthConcerns=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
+                                valueType:'text',
                                 name: 'Other notes',
                                 required: true,
                                 eventType: 'input',
