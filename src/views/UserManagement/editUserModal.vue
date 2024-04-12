@@ -17,6 +17,7 @@
                         <!-- <basic-form :contentData="[]"> </basic-form> -->
                         <ion-col>
                             <editUser
+                                :user_id="user_id"
                                 :toggle="true"
                             />
                         </ion-col>
@@ -55,6 +56,7 @@ import DynamicButton from "@/components/DynamicButton.vue"
 
 const props = defineProps<{
     is_open: any,
+    user_id: any,
 }>()
 
 const emit = defineEmits<{

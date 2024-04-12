@@ -17,6 +17,7 @@
                 />
                 <editUserModal
                     :is_open="isPopooverOpen"
+                    :user_id="user_id"
                     @close-popoover="isPopooverOpen = false"
                 />
                     </div>
@@ -73,6 +74,7 @@ const _search_fields_ = ref([
         name: 'username',
     }
 ]) as any
+const user_id = ref('')
 
 onMounted(async () => {
     getUsers()
@@ -237,6 +239,7 @@ function listUpdated1(data: any) {
 
 function clickRow(data: any) {
     isPopooverOpen.value = true
+    user_id.value = data.userId
 }
 
 function nav(url: any) {

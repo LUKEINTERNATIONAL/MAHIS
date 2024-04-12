@@ -5,7 +5,7 @@
                 <BasicInputField
                     :placeholder="note_properties[0].placeHolder"
                     :icon="personCircleOutline"
-                    :inputValue="note_properties[0].dataValue.value"
+                    :inputValue="user_name"
                     @update:inputValue="note_properties[0].dataHandler"
                 />
             </ion-col>
@@ -15,18 +15,18 @@
         <ion-row>
             <ion-col>
                 <BasicInputField
-                    :placeholder="note_properties[0].placeHolder"
+                    :placeholder="note_properties[1].placeHolder"
                     :icon="personOutline"
-                    :inputValue="note_properties[0].dataValue.value"
-                    @update:inputValue="note_properties[0].dataHandler"
+                    :inputValue="first_name"
+                    @update:inputValue="note_properties[1].dataHandler"
                 />
             </ion-col>
             <ion-col>
                 <BasicInputField
-                    :placeholder="note_properties[0].placeHolder"
+                    :placeholder="note_properties[2].placeHolder"
                     :icon="peopleOutline"
-                    :inputValue="note_properties[0].dataValue.value"
-                    @update:inputValue="note_properties[0].dataHandler"
+                    :inputValue="last_name"
+                    @update:inputValue="note_properties[2].dataHandler"
                 />
             </ion-col>
         </ion-row>
@@ -162,19 +162,54 @@ const toggle_local = ref(true)
 const user_roles = ref([] as any)
 const user_programs = ref([] as any)
 const user_data = ref()
+const user_name = ref()
+const first_name = ref()
+const last_name = ref()
 
 const props = defineProps<{
     toggle: true,
+    user_id: any,
 }>()
 
 onMounted(async () => {
-    getUserRoles()
-    getUserPrograms()
+    await getUserRoles()
+    await getUserPrograms()
+    await getUserData()
+    
 })
 
 // const emit = defineEmits<{
 //     (e: "closePopoover", ObjectsArray: any): void
 // }>()
+
+async function getUserData() {
+    user_data.value = await UserService.getUserByID(props.user_id)
+    user_name.value = user_data.value.username
+    first_name.value =  userFirstname(user_data.value.person.names)
+    last_name.value = userLastname(user_data.value.person.names)
+    fillUserRoles()
+    fillUserPrograms()
+}
+
+function fillUserRoles() {
+    user_roles.value.forEach((item: any) => {
+        user_data.value.roles.forEach((userR: any) => {
+            if (userR.uuid == item.other.uuid) {
+                item.selected = true
+            }
+        })
+    })
+}
+
+function fillUserPrograms() {
+    user_programs.value.forEach((item: any) => {
+        user_data.value.programs.forEach((userR: any) => {
+            if (userR.uuid == item.other.uuid) {
+                item.selected = true
+            }
+        })
+    })
+}
 
 async function getUserRoles() {
     user_roles.value = await UserService.getAllRoles()
@@ -207,7 +242,21 @@ async function getUserPrograms() {
 
 const note_properties = [
     {
-        placeHolder: 'Reason',
+        placeHolder: 'username',
+        dataHandler: ()=>{},
+        dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'please provide a reason'
+    },
+    {
+        placeHolder: 'firstname',
+        dataHandler: ()=>{},
+        dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'please provide a reason'
+    },
+    {
+        placeHolder: 'lastname',
         dataHandler: ()=>{},
         dataValue: ref(),
         show_error: ref(false),
@@ -271,6 +320,22 @@ function listUpdated1(data: any) {
 
 function listUpdated2(data: any) {
     user_programs.value = data
+}
+
+function userFirstname(items: any) {
+    let _str_: string = ''
+    items.forEach((item: any, index: number) => {
+        _str_+=item.given_name
+    })
+    return _str_
+}
+
+function userLastname(items: any) {
+    let _str_: string = ''
+    items.forEach((item: any, index: number) => {
+        _str_+=item.family_name
+    })
+    return _str_
 }
 
 </script>
