@@ -93,6 +93,12 @@
             </ion-col>
         </ion-row>
 
+        <ion-row>
+            <ion-col>
+                <userActivities/>
+            </ion-col>
+        </ion-row>
+
         <ion-accordion-group ref="accordionGroup" class="previousView">
             <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
                 <ion-item slot="header" color="light">
@@ -141,6 +147,7 @@ import { IonButtons,
 import { IonContent, IonHeader, IonItem, IonCol, IonToolbar, IonMenu, modalController } from "@ionic/vue"
 import Toggle from '@vueform/toggle'
 import ListPicker from "../../components/ListPicker.vue"
+import userActivities from "./userActivities.vue"
 import {
     addOutline,
     pencilOutline,
