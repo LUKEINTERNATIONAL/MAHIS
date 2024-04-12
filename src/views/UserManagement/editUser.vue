@@ -96,6 +96,7 @@
         <ion-row>
             <ion-col>
                 <userActivities
+                v-if="show_user_programs"
                     :user_programs="user_programs"
                 />
             </ion-col>
@@ -174,6 +175,7 @@ const user_data = ref()
 const user_name = ref()
 const first_name = ref()
 const last_name = ref()
+const show_user_programs = ref(false)
 
 const props = defineProps<{
     toggle: true,
@@ -217,6 +219,9 @@ async function generatePropertiesList() {
             selectedPrograms.push({item})
         } 
     })
+    if (selectedPrograms.length > 0) {
+        show_user_programs.value = true
+    }
     return selectedPrograms
 }
 

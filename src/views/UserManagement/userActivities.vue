@@ -45,7 +45,7 @@ import ListPicker from "../../components/ListPicker.vue"
 import { Service } from "@/services/service"
 import { PRIMARY_ACTIVITIES } from "@/apps/NCD/config/programActivities"
 
-const main_program = ref('Manin Framework') as any
+const main_program = ref('') as any
 const activities = ref([] as any)
 
 const knownLitsOfPrograms = ref([
@@ -91,19 +91,37 @@ function setProgramActivities() {
     activities.value = PRIMARY_ACTIVITIES
 }
 
+watch(
+    () => activities.value,
+    async (newValue) => {
+        if (newValue) {
+            activities.value
+        }
+    }
+)
+
 async function generatedSelected() {
     props.user_programs.forEach(async (selected: any) => {
         const is_P = generateKeyAPIRef(selected.name)
         if (is_P.exists == true) {
                 console.log(is_P.ref_name)
+                const data_ = [] as any
                 const data = await getActivities(is_P.ref_name)
                 activities.value.forEach((item: any) => {
                     data.forEach((datum: any) => {
                         if (item.name == datum.name) {
                         item.selected = true
+
+                        data_.push({
+                            name: item.name,
+                            selected: true
+                        })
                     }
                     })
                 })
+                activities.value = []
+                activities.value = data_
+                main_program.value = selected.name
             }
         // let is_P2: any
         // knownLitsOfPrograms.value.forEach(async (program: any) => {
