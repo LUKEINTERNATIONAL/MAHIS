@@ -37,7 +37,7 @@
                             <ion-label>{{ item.title }}</ion-label>
                         </ion-item>
                         <div class="ion-padding" slot="content">
-                            <component :is="item.componet"> </component>
+                            <component :is="item.component"> </component>
                         </div>
                     </ion-accordion>
                 </ion-accordion-group>
@@ -76,20 +76,25 @@ import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import Diagnosis from "@/apps/NCD/components/ConsultationPlan/Diagnosis.vue";
-import Complications from "@/apps/NCD/components/ConsultationPlan/Complications.vue";
 import ConfirmDiagnosis from "@/apps/NCD/components/ConsultationPlan/ConfirmDiagnosis.vue";
 import Outcome from "@/apps/NCD/components/ConsultationPlan/Outcome.vue";
-//import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigations.vue";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
-import Vitals from "@/apps/ANC/components/physical exam/Vitals.vue";
 import Obstetric from "@/apps/LABOUR/components/obstetric details/Obstetric.vue";
 import Labour from "@/apps/LABOUR/components/obstetric details/Labour.vue";
 import QuickCheck from "@/apps/LABOUR/components/physical exam/QuickCheck.vue";
 import PhysicalExamination from "@/apps/LABOUR/components/physical exam/PhysicalExamination.vue";
 import FirstVaginalExamination from "@/apps/LABOUR/components/physical exam/FirstVaginalExamination.vue";
 import PelvicAssessment from "@/apps/LABOUR/components/physical exam/PelvicAssessment.vue";
-import ContinuosMonitoring from "@/apps/LABOUR/components/physical exam/ContinuosMonitoring.vue";
-import PatientReferral from "@/apps/LABOUR/components/physical exam/PatientReferral.vue";
+import SecondStageDelivery from "@/apps/LABOUR/components/delivery details/SecondStageDelivery.vue";
+import ThirdStageDelivery from "@/apps/LABOUR/components/delivery details/ThirdStageDelivery.vue";
+import PatientReferral from "@/apps/LABOUR/components/repeatable things/PatientReferral.vue";
+import end from "@/apps/LABOUR/components/repeatable things/end.vue";
+import ImmidiatePostnatalChecksForChild
+  from "@/apps/LABOUR/components/delivery details/ImmidiatePostnatalChecksForChild.vue";
+import ImmidiatePostnatalChecksForMother
+  from "@/apps/LABOUR/components/delivery details/ImmidiatePostnatalChecksForMother.vue";
+import OtherExams from "@/apps/LABOUR/components/repeatable things/OtherExams.vue";
+import Vitals from "@/apps/LABOUR/components/repeatable things/Vitals.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 export default defineComponent({
@@ -121,7 +126,16 @@ export default defineComponent({
         PelvicAssessment,
         PatientReferral,
         FirstVaginalExamination,
-        ContinuosMonitoring,
+        SecondStageDelivery,
+        ThirdStageDelivery,
+      end,
+      OtherExams,
+      Vitals,
+      ImmidiatePostnatalChecksForChild,
+      ImmidiatePostnatalChecksForMother
+
+
+
     },
     data() {
         return {

@@ -45,7 +45,7 @@ import { defineComponent } from 'vue';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import { icons } from '@/utils/svg';
 import { mapState } from 'pinia'
-import { useDispositionStore } from "@/stores/OutcomeStore"
+import { useOutcomeStore } from "@/stores/OutcomeStore"
 import DispositionModal from '@/components/ProfileModal/NotesModal.vue'
 import { createModal } from '@/utils/Alerts'
 
@@ -61,7 +61,7 @@ export default defineComponent({
     IonToolbar
   },
   computed: {
-        ...mapState(useDispositionStore, ["dispositions"]),
+        ...mapState(useOutcomeStore, ["dispositions"]),
     },
   data() {
     return {

@@ -93,7 +93,7 @@ const drugName = ref("")
 const allergiesList = computed(() => store.medicalAllergiesList)
 
 onMounted(async () => {
-    console.log("")
+    // 
 })
 
 

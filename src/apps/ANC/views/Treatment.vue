@@ -1,25 +1,6 @@
-<template>
-    <ion-page>
-    <Toolbar/>
-    <ion-content :fullscreen="true">
-      <DemographicBar/>
-      <Stepper stepperTitle="Treatment & Prevention" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
-    </ion-content>
-  </ion-page>
-</template>
-
 <script lang="ts">
-import { 
-      IonContent, 
-      IonHeader,
-      IonItem,
-      IonPage,
-      IonList,
-      IonTitle, 
-      IonToolbar, 
-      IonMenu,
-  } from '@ionic/vue';
-import Toolbar from '@/components/Toolbar.vue'
+import { IonContent, IonHeader, IonItem, IonPage, IonList, IonTitle, IonToolbar, IonMenu } from "@ionic/vue";
+import Toolbar from "@/components/Toolbar.vue";
 import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import { defineComponent } from 'vue';
 import BasicInputField from '@/components/BasicInputField.vue';
@@ -41,30 +22,28 @@ import { useImmunizationStore } from '../store/immunizationStore';
 import { useIntimatePartnerStore } from '../store/intimatePartnerStore';
 import { useDewormingStore } from '../store/dewormingStore';
 
-
-
-export default defineComponent ({
-   name : 'treatment',
-   components : {
-  IonContent,
-  IonHeader,
-  IonItem,
-  IonPage,
-  IonList,
-  Toolbar,
-  DemographicBar,
-  IonMenu,
-  IonTitle,
-  IonToolbar,
-  BasicInputField,
-  Stepper,
-  DiagnosisTreatment,
-  MedicationDispensed,
-  DiagnosisCounselling,
-  Immunization,
-  IntimatePartner,
-  Deworming,
-   },
+export default defineComponent({
+    name: "treatment",
+    components: {
+        IonContent,
+        IonHeader,
+        IonItem,
+        IonPage,
+        IonList,
+        Toolbar,
+        DemographicBar,
+        IonMenu,
+        IonTitle,
+        IonToolbar,
+        BasicInputField,
+        Stepper,
+        DiagnosisTreatment,
+        MedicationDispensed,
+        DiagnosisCounselling,
+        Immunization,
+        IntimatePartner,
+        Deworming,
+    },
    data(){
     return {
   iconsContent: icons,
@@ -285,7 +264,4 @@ methods: {
 
 </script>
 
-
-<style scoped>
-
-</style>
+<!-- <style scoped></style> -->

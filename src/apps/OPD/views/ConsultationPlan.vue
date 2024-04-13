@@ -53,7 +53,7 @@ import { Service } from "@/services/service";
 import { LabOrder } from "@/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
-import { useDispositionStore } from "@/stores/OutcomeStore";
+import { useOutcomeStore } from "@/stores/OutcomeStore";
 import { usePregnancyStore } from "@/apps/OPD/stores/PregnancyStore";
 import { usePresentingComplaintsStore } from "@/apps/OPD/stores/PresentingComplaintsStore";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
@@ -78,6 +78,11 @@ import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from 
 import { PatientComplaintsService } from "@/apps/OPD/services/patient_complaints_service";
 import { PatientGeneralConsultationService } from "@/services/patient_general_consultation";
 import { PastMedicalHistory } from "../services/past_medical_history_service";
+import { useLevelOfConsciousnessStore } from "@/apps/OPD/stores/LevelOfConsciousnessStore";
+import { ConsciousnessService } from "@/apps/OPD/services/consciousness_service";
+import { usePhysicalExaminationStore } from "@/apps/OPD/stores/PhysicalExamination";
+import { PhysicalExamService } from "@/apps/OPD/services/physical_exam_service";
+
 export default defineComponent({
     name: "Home",
     components: {
@@ -155,27 +160,27 @@ export default defineComponent({
             StepperData: [
                 {
                     title: "Clinical Assessment",
-                    componet: "ClinicalAssessment",
+                    component: "ClinicalAssessment",
                     value: "1",
                 },
                 {
                     title: "Investigations",
-                    componet: "Investigations",
+                    component: "Investigations",
                     value: "2",
                 },
                 {
                     title: "Diagnosis",
-                    componet: "OPDDiagnosis",
+                    component: "OPDDiagnosis",
                     value: "3",
                 },
                 {
                     title: "Treatment plan",
-                    componet: "OPDTreatmentPlan",
+                    component: "OPDTreatmentPlan",
                     value: "4",
                 },
                 {
                     title: "Outcome",
-                    componet: "OPDOutcome",
+                    component: "OPDOutcome",
                     value: "5",
                 },
             ],
@@ -191,7 +196,9 @@ export default defineComponent({
         ...mapState(useVitalsStore, ["vitals"]),
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useOPDDiagnosisStore, ["OPDdiagnosis"]),
+        ...mapState(usePhysicalExaminationStore, ["physicalExam"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
+        ...mapState(useLevelOfConsciousnessStore, ["levelOfConsciousness"]),
     },
     async mounted() {
         this.investigations;
@@ -280,6 +287,8 @@ export default defineComponent({
             await this.saveWomenStatus();
             await this.savePresentingComplaints();
             await this.savePastMedicalHistory();
+            await this.saveConsciousness();
+            await this.savePhysicalExam();
             this.$router.push("patientProfile");
         },
         async savePastMedicalHistory() {
@@ -305,6 +314,17 @@ export default defineComponent({
                 toastSuccess("Patient complaints has been created");
             }
             this.presentingComplaints[0].selectedData;
+        },
+        async savePhysicalExam() {
+            if (this.physicalExam.length > 0) {
+                const userID: any = Service.getUserID();
+                const PhysicalExam = new PhysicalExamService(this.demographics.patient_id, userID);
+                const encounter = await PhysicalExam.createEncounter();
+                if (!encounter) return toastWarning("Unable to create patient physical examination encounter");
+                const patientStatus = await PhysicalExam.saveObservationList(await this.buildPhysicalExamination());
+                if (!patientStatus) return toastWarning("Unable to create patient physical examination  !");
+                toastSuccess("Physical examination has been created");
+            }
         },
         async saveWomenStatus() {
             const womenStatus = await formatRadioButtonData(this.pregnancy);
@@ -405,6 +425,29 @@ export default defineComponent({
                 ...(await formatCheckBoxData(this.pastMedicalHistory)),
                 ...(await formatRadioButtonData(this.pastMedicalHistory)),
                 ...(await formatInputFiledData(this.pastMedicalHistory)),
+            ];
+        },
+        async saveConsciousness() {
+            const data = await formatRadioButtonData(this.levelOfConsciousness);
+
+            console.log({ data });
+
+            return;
+            const userID: any = Service.getUserID();
+            const consciousness = new ConsciousnessService(this.demographics.patient_id, userID);
+            const encounter = await consciousness.createEncounter();
+            if (!encounter) return toastWarning("Unable to create patient complaints encounter");
+
+            //   const gcs = this.levelOfConsciousness[0].radioBtnContent.data;
+
+            const dat = await formatRadioButtonData(this.levelOfConsciousness);
+            //   await consciousness.saveObservationList(gcs);
+        },
+        async buildPhysicalExamination() {
+            return [
+                ...(await formatCheckBoxData(this.physicalExam)),
+                ...(await formatRadioButtonData(this.physicalExam)),
+                ...(await formatInputFiledData(this.physicalExam)),
             ];
         },
     },
