@@ -4,6 +4,7 @@
     <ion-content :fullscreen="true">
       <DemographicBar />
       <Stepper stepperTitle="Quick check" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
+      <ion-spinner v-if="isLoading" name="lines"></ion-spinner>
     </ion-content>
   </ion-page>
 </template>
@@ -27,6 +28,7 @@ import {
   IonItem,
   IonLabel,
   IonModal,
+    IonSpinner,
   modalController,
   AccordionGroupCustomEvent } from '@ionic/vue';
 import { defineComponent } from 'vue';
@@ -92,6 +94,7 @@ export default defineComponent({
     IonLabel,
     IonModal,
     Stepper,
+    IonSpinner
   },
   data(){
     return {
@@ -156,6 +159,7 @@ export default defineComponent({
       ],
       isOpen: false,
       iconsContent: icons,
+      isLoading: false,
     };
   },
   computed: {
@@ -242,11 +246,13 @@ export default defineComponent({
       });
     },
     async saveData() {
+      this.isLoading = true;
       await this.saveDangerSigns();
       await this.saveReasonForVisit();
       await this.saveConfirmPregnancy();
       await this.saveHealthConcerns();
       this.$router.push("symptomsFollowUp");
+      this.isLoading = false;
     },
 
     async saveDangerSigns() {
