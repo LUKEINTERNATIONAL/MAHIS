@@ -132,32 +132,32 @@ export default defineComponent({
             StepperData: [
                 {
                     title: "Quick check",
-                    component: "QuickCheck",
+                    componet: "QuickCheck",
                     value: "1",
                 },
                 {
                     title: "Physical examination",
-                    component: "PhysicalExamination",
+                    componet: "PhysicalExamination",
                     value: "2",
                 },
                 {
                     title: "First vaginal examination",
-                    component: "FirstVaginalExamination",
+                    componet: "FirstVaginalExamination",
                     value: "3",
                 },
                 {
                     title: "Pelvic assessment",
-                    component: "PelvicAssessment",
+                    componet: "PelvicAssessment",
                     value: "4",
                 },
                 {
                     title: "Continuous monitoring",
-                    component: "ContinuousMonitoring",
+                    componet: "ContinuousMonitoring",
                     value: "5",
                 },
                 {
                     title: "Patient referral",
-                    component: "PatientReferral",
+                    componet: "PatientReferral",
                     value: "6",
                 },
             ],
