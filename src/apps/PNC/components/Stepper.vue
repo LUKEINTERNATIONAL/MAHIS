@@ -79,7 +79,7 @@ import Diagnosis from "@/apps/NCD/components/ConsultationPlan/Diagnosis.vue";
 import Complications from "@/apps/NCD/components/ConsultationPlan/Complications.vue";
 import ConfirmDiagnosis from "@/apps/NCD/components/ConsultationPlan/ConfirmDiagnosis.vue";
 import Outcome from "@/apps/NCD/components/ConsultationPlan/Outcome.vue";
-import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigations.vue";
+//import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigations.vue";
 import Medications from "@/apps/ANC/components/profile/Medications.vue";
 import WomanBehaviour from "@/apps/ANC/components/profile/WomanBehaviour.vue";
 import DangerSigns from "@/apps/ANC/components/quick check/DangerSigns.vue";
@@ -143,7 +143,7 @@ export default defineComponent({
         Complications,
         ConfirmDiagnosis,
         Outcome,
-        Investigations,
+//        Investigations,
         IonModal,
         Medications,
         WomanBehaviour,
