@@ -61,6 +61,7 @@ import { isEmpty } from "lodash";
 import HisDate from "@/utils/Date";
 import { defineComponent } from "vue";
 import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
+import { useGeneralStore } from "@/stores/GeneralStore";
 export default defineComponent({
     name: "Home",
     components: {
@@ -101,6 +102,7 @@ export default defineComponent({
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
+        ...mapState(useGeneralStore, ["saveProgressStatus", "activities"]),
     },
     created() {
         this.getData();
@@ -138,8 +140,9 @@ export default defineComponent({
     },
 
     methods: {
-        getData() {
+        async getData() {
             const steps = ["Vital Signs", "Investigations", "Diagnosis", "Complications Screening", "Treatment Plan", "Next Appointment", "Outcome"];
+            // const steps = this.activities;
             for (let i = 0; i < steps.length; i++) {
                 const title = steps[i];
                 const number = i + 1;

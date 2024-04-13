@@ -92,7 +92,9 @@ export function modifyCheckboxHeader(data: any, headerName: any, element: any, n
 }
 function modifyObjects(data: any[], triggerName: any, initialData: any) {
     data.forEach((item: any, index: number) => {
-        if (item.childName === triggerName) {
+        if (triggerName && item.childName === triggerName) {
+            console.log("🚀 ~ data.forEach ~ triggerName:", item.childName);
+            console.log("🚀 ~ data.forEach ~ triggerName:", triggerName);
             data[index] = _.cloneDeep(initialData[index]);
             if (data[index].radioBtnContent) modifyObjects(data, data[index].radioBtnContent.header.name, initialData);
             if (data[index].data) modifyObjects(data, data[index].data.rowData[0].colData[0].name, initialData);

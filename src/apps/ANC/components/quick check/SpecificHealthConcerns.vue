@@ -2,11 +2,11 @@
   <!--  reason for visit-->
   <div class="container">
     <ion-card class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Specific health concerns</ion-card-title>
-      </ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="HealthConcerns"></basic-form>
+        <basic-form :contentData="HealthConcerns"
+                    :initialData="initialData"
+
+        ></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
@@ -58,6 +58,7 @@ export default defineComponent({
     return {
       iconsContent: icons,
       healthConcern: '',
+      initialData:[] as any
 
     };
   },
@@ -71,6 +72,7 @@ export default defineComponent({
   },
   mounted() {
     const HealthConcerns=useSpecificHealthConcernsStore()
+    this.initialData=HealthConcerns.getInitial();
     this.handleHealthconcerns()
   },
   computed: {
@@ -89,9 +91,9 @@ export default defineComponent({
     }   else {modifyFieldValue(this.HealthConcerns,'Other','displayNone', true)}
 
 
-      const checkBoxes=['Abnorminal varginal discharge','Change in blood pressure-up','Diarrhoea','Vomiting','Genital ulcer',
-                        'Change in blood pressure-down','constipation', 'Contractions','Vaginal bleeding','Intimate partiner violence',
-                          'Flu symptoms','Painful urination','Itchy vulva','Headache','Heartburn','Frequent urination/Polyuria','Injury','Jaundice','Mental health-Depression',
+      const checkBoxes=['Abnormal vaginal discharge','Change in blood pressure-up','Diarrhoea','Vomiting','Genital ulcers',
+                        'Change in blood pressure-down','Constipation', 'Contractions','Vaginal bleeding','Intimate partner violence',
+                          'Flu symptoms','Painful urination','Dyspepsia','Itchy vulva','Headache','Heartburn','Frequent urination/Polyuria','Injury','Jaundice','Mental health-Depression',
                         'Genital warts','Painful intercourse','Other']
       if (getCheckboxSelectedValue(this.HealthConcerns, 'No health concerns')?.checked) {
         checkBoxes.forEach((checkbox) => {

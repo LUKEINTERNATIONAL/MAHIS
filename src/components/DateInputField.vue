@@ -1,5 +1,5 @@
 <template>
-    <h6 v-if="inputHeader" :class="bold">{{ inputHeader }}</h6>
+    <h6 v-if="inputHeader">{{ inputHeader }}</h6>
     <VueDatePicker
         @date-update="$emit('update:dateValue', formatDate($event))"
         auto-apply
@@ -55,6 +55,7 @@ export default defineComponent({
     },
     data() {
         return {
+            bold:'text-bold',
             displayList: [] as any,
             popoverOpen: false,
             event: "" as any,
@@ -155,5 +156,8 @@ export default defineComponent({
 <style scoped>
 h6 {
     margin-top: 0px;
+}
+.text-bold {
+  font-weight: bold;
 }
 </style>
