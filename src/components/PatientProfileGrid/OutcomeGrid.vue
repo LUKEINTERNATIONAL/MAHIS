@@ -47,7 +47,7 @@ import {
 import { defineComponent } from 'vue';
 import { icons } from '@/utils/svg';
 import { mapState } from 'pinia'
-import { useDispositionStore } from "@/stores/OutcomeStore"
+import { useOutcomeStore } from "@/stores/OutcomeStore"
 import DashBox from '../DashBox.vue';
 import { createModal } from '@/utils/Alerts'
 import DispositionModal from '@/components/ProfileModal/OutcomeModal.vue'
@@ -55,7 +55,7 @@ import DispositionModal from '@/components/ProfileModal/OutcomeModal.vue'
 export default defineComponent({
     name: 'Menu',
     computed: {
-        ...mapState(useDispositionStore, ["dispositions"]),
+        ...mapState(useOutcomeStore, ["dispositions"]),
     },
     components: {
         IonContent,

@@ -46,6 +46,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useEnrollementStore, ["familyHistory"]),
+        ...mapState(useEnrollementStore, ["NCDNumber"]),
     },
     watch: {
         personInformation: {
@@ -58,6 +59,8 @@ export default defineComponent({
     },
     async mounted() {
         const j = await ProgramService.getNextSuggestedNCDNumber();
+        modifyFieldValue(this.NCDNumber, "NCDNumber", "value", j.ncd_number.replace(/^\D+|\s/g, ""));
+        modifyFieldValue(this.NCDNumber, "NCDNumber", "leftText", `${j.ncd_number.replace(/\d+/g, "")}-NCD-`);
         this.buidCards();
     },
     methods: {
@@ -69,6 +72,10 @@ export default defineComponent({
                         cardTitle: "Family history",
                         content: this.familyHistory,
                     },
+                    {
+                        cardTitle: "NCD number",
+                        content: this.NCDNumber,
+                    },
                 ],
             };
         },
@@ -78,6 +85,7 @@ export default defineComponent({
         updateEnrollmentStores() {
             const enrollmentStore = useEnrollementStore();
             enrollmentStore.setFamilyHistory(this.familyHistory);
+            enrollmentStore.setNCDNumber(this.NCDNumber);
         },
         testF(data: any) {
             console.log(data);
@@ -131,14 +139,12 @@ ion-radio {
     line-height: 3;
 }
 .small_font {
-    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
     color: #636363;
 }
 .checkbox_header {
-    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
     font-size: 14px;

@@ -1,177 +1,199 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
-
+import _ from "lodash";
+const initialPersonalInformation = [
+    {
+        selectedData: [],
+        isFinishBtn: false,
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "National ID",
+                            iconRight: icons.scannerIcon,
+                            icon: icons.nationalID,
+                            value: "",
+                            name: "nationalID",
+                            eventType: "input",
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                            required: true,
+                            placeholder: "__-__-__-__",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "First name*",
+                            icon: icons.fullName,
+                            value: "",
+                            name: "firstname",
+                            eventType: "input",
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                            required: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Last name*",
+                            icon: icons.fullName,
+                            value: "",
+                            name: "lastname",
+                            eventType: "input",
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                            required: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Middle name",
+                            icon: icons.fullName,
+                            value: "",
+                            name: "middleName",
+                            eventType: "input",
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                            required: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Phone number",
+                            icon: icons.phone,
+                            value: "",
+                            name: "phoneNumber",
+                            eventType: "input",
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                            required: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Date of birth*",
+                            icon: icons.calenderPrimary,
+                            value: "",
+                            name: "birthdate",
+                            eventType: "input",
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                            required: true,
+                            isDatePopover: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        selectedData: [],
+        initial: [],
+        isFinishBtn: false,
+        sideColSize: 1,
+        checkboxBtnContent: {
+            header: {
+                selectedValue: "",
+                name: "Estimate",
+            },
+            data: [
+                {
+                    name: "Estimate Age",
+                    value: "TB",
+                    checked: false,
+                },
+            ],
+        },
+    },
+    {
+        childName: "Estimate Age",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            displayNone: true,
+                            inputHeader: "Estimated age",
+                            icon: icons.calenderPrimary,
+                            value: "",
+                            name: "estimation",
+                            eventType: "input",
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                            required: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        radioBtnContent: {
+            header: {
+                title: "Gender*",
+                selectedValue: "",
+                name: "gender",
+                alertsError: false,
+                alertsErrorMassage: "",
+            },
+            data: [
+                {
+                    name: "Male",
+                    value: "M",
+                    colSize: "4",
+                },
+                {
+                    name: "Female",
+                    value: "F",
+                },
+            ],
+        },
+    },
+] as any;
 export const useRegistrationStore = defineStore("registrationStore", {
     state: () => ({
-        personInformation: [
-            {
-                selectedData: [],
-                isFinishBtn: false,
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "National ID",
-                                    iconRight: icons.scannerIcon,
-                                    icon: icons.nationalID,
-                                    value: "",
-                                    name: "nationalID",
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                    required: true,
-                                    placeholder: "__-__-__-__",
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-            {
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "First name*",
-                                    icon: icons.fullName,
-                                    value: "",
-                                    name: "firstname",
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                    required: true,
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-            {
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Last name*",
-                                    icon: icons.fullName,
-                                    value: "",
-                                    name: "lastname",
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                    required: true,
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-            {
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Middle name",
-                                    icon: icons.fullName,
-                                    value: "",
-                                    name: "middleName",
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                    required: true,
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-            {
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Phone number",
-                                    icon: icons.phone,
-                                    value: "",
-                                    name: "phoneNumber",
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                    required: true,
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-            {
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Date of birth*",
-                                    icon: icons.calenderPrimary,
-                                    value: "",
-                                    name: "birthdate",
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                    required: true,
-                                    isDatePopover: true,
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-            {
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Estimated age",
-                                    icon: icons.calenderPrimary,
-                                    value: "",
-                                    name: "estimation",
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                    required: true,
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-            {
-                radioBtnContent: {
-                    header: {
-                        title: "Gender*",
-                        selectedValue: "",
-                        name: "gender",
-                        alertsError: false,
-                        alertsErrorMassage: "",
-                    },
-                    data: [
-                        {
-                            name: "Male",
-                            value: "M",
-                            colSize: "4",
-                        },
-                        {
-                            name: "Female",
-                            value: "F",
-                        },
-                    ],
-                },
-            },
-        ] as any,
+        personInformation: [...initialPersonalInformation],
         socialHistory: [
             {
                 data: {
@@ -197,11 +219,14 @@ export const useRegistrationStore = defineStore("registrationStore", {
                         },
                     ],
                 },
+            },
+            {
                 radioBtnContent: {
                     header: {
                         title: "Occupation status",
                         name: "occupation",
                         selectedValue: "",
+                        class: "bold",
                     },
                     data: [
                         {
@@ -229,6 +254,7 @@ export const useRegistrationStore = defineStore("registrationStore", {
                         name: "maritalStatus",
                         alertsError: false,
                         alertsErrorMassage: "",
+                        class: "bold",
                     },
                     data: [
                         {
@@ -260,6 +286,7 @@ export const useRegistrationStore = defineStore("registrationStore", {
                         name: "highestLevelOfEducation",
                         alertsError: false,
                         alertsErrorMassage: "",
+                        class: "bold",
                     },
                     data: [
                         {
@@ -281,31 +308,27 @@ export const useRegistrationStore = defineStore("registrationStore", {
                     ],
                 },
             },
-
         ] as any,
         homeLocation: [
             {
                 selectdData: [],
                 isFinishBtn: false,
-                checkboxBtnContent:
-                {
+                checkboxBtnContent: {
                     header: {
-                        title: '',
-                        selectedValue: '',
+                        title: "",
+                        selectedValue: "",
                     },
                     data: [
                         {
-
-                            name: 'Same as current',
-                            value: 'sameas',
-                            labelPlacement: 'start',
-                            colSize: '6',
-                            justify: 'space-between',
-                            checked: false
-                        }
+                            name: "Same as current",
+                            value: "sameas",
+                            labelPlacement: "start",
+                            colSize: "6",
+                            justify: "space-between",
+                            checked: false,
+                        },
                     ],
-                }
-
+                },
             },
             {
                 selectedData: [],
@@ -392,7 +415,6 @@ export const useRegistrationStore = defineStore("registrationStore", {
             },
         ] as any,
         currentLocation: [
-
             {
                 selectedData: [],
                 isFinishBtn: false,
@@ -548,14 +570,13 @@ export const useRegistrationStore = defineStore("registrationStore", {
                                     alertsError: false,
                                     alertsErrorMassage: "",
                                     placeholder: "__-__-__-__",
-                                    displayNone: true
+                                    displayNone: true,
                                 },
                             ],
                         },
                     ],
                 },
             },
-
 
             {
                 selectedData: {},
@@ -677,6 +698,10 @@ export const useRegistrationStore = defineStore("registrationStore", {
         setGuardianInformation(data: any) {
             this.guardianInformation = data;
         },
+        getInitialPersonalInformation() {
+            const data = _.cloneDeep(initialPersonalInformation);
+            return [...data];
+        },
     },
-    persist: false,
+    persist: true,
 });

@@ -1,351 +1,321 @@
-import { defineStore } from "pinia";
-import { icons } from "@/utils/svg";
+import {defineStore} from "pinia";
+import {icons} from "@/utils/svg";
+import _ from "lodash"
 
-export const useDangerSignsStore = defineStore("dangerSignsStore", {
-    state: () => ({
-        DangerSigns: [
-            {
-                selectdData: [],
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "No danger signs",
-                            value: "NoDangerSigns",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
+const initialDangerSigns= [
 
-                        {
-                            name: "Central cyanosis",
-                            value: "CentralCyanosis",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
-            {
-                selectdData: [],
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Pre-term labour",
-                            value: "PreTermLabour",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "Unconscious",
-                            value: "Unconscious",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
-            {
-                selectdData: [],
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Fever",
-                            value: "Fever",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "Imminent delivery",
-                            value: "BleedingDelivery",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
-            {
-                selectdData: [],
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Severe headache",
-                            value: "SevereHeadache",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "Severe vomiting",
-                            value: "SevereVomiting",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
-            {
-                selectdData: [],
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Severe abdominal pain",
-                            value: "SevereAbdominalPain",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "Draining liquor",
-                            value: "DrainingLiquor",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
-            {
-                selectdData: [],
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Respiratory problems",
-                            value: "RespiratoryProblems",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "Convulsion history",
-                            value: "ConvulsionHistory",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
-            {
-                selectdData: [],
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Oedema",
-                            value: "Oedema",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "Epigastric pain",
-                            value: "Epigastric pain",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
-            {
-                selectdData: [],
-                classDash: "",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Bleeding vaginally",
-                            value: "BleedingVaginally",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
+    // {
+    //     selectdData: [],
+    //     sideColSize:0.3,
+    //     classDash: "dashed_bottom_border",
+    //     radioBtnContent: {
+    //         header: {
+    //             selectedValue: "",
+    //             name: "Extremities normal",
+    //             title: "Extremities normal?",
+    //             class:"bold",
+    //             displayNext:"Yes"
+    //             // displayNone: true,
+    //         },
+    //         data: [
+    //             {
+    //                 value: "Yes",
+    //                 name: "Yes",
+    //                 colSize: "2",
+    //             },
+    //             {
+    //                 value: "No",
+    //                 name:"No",
+    //                 colSize: "2",
+    //             },
+    //         ],
+    //     },
+    // },
+    {
 
-                        {
-                            name: "Other",
-                            value: "other",
-                            checked: false,
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                        },
-                    ],
-                },
+        selectdData: [],
+        classDash: "dashed_bottom_border",
+        checkboxBtnContent: {
+            header: {
+                title: "What danger signs does the woman has?",
+                selectedValue: "",
+                class:"bold",
+                name:'Danger signs',
+                // displayNone:true
             },
-            {
-                isFinishBtn: false,
-                sectionHeader: "",
-                classDash: "dashed_bottom_border _padding",
+            data: [
+                {
+                    name: "No danger signs",
+                    value: "No danger signs",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
 
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    displayNone: true,
-                                    inputHeader: "Specify",
-                                    unit: "",
-                                    icon: icons.editPen,
-                                    value: "",
-                                    name: "Other",
-                                    required: true,
-                                    eventType: "input",
-                                    inputWidth: "85%",
-                                },
-                            ],
-                        },
-                    ],
+                {
+                    name: "Central cyanosis",
+                    value: "Central cyanosis",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
                 },
-            },
-        ] as any,
-
-        PreviousVisit: [
-            {
-                classDash: "dashed_bottom_border",
-                radioBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                        name: "Yes",
-                    },
-                    data: [
-                        {
-                            value: "yes",
-                            name: "Yes",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                        {
-                            value: "no",
-                            name: "No",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
-            {
-                sectionHeader: "",
-                classDash: "dashed_bottom_border_padding",
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    displayNone: true,
-                                    inputHeader: "Number of previous ANC visits",
-                                    unit: "",
-                                    icon: "",
-                                    value: "",
-                                    name: "number of previous anc visits",
-                                    eventType: "input",
-                                    inputWidth: "55%",
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-        ] as any,
-        PreviousVisitDate: [
-            {
-                isFinishBtn: false,
-                classDash: "dashed_bottom_border _padding",
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Specify date*",
-                                    value: "",
-                                    name: "ancDate",
-                                    required: true,
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                    isDatePopover: true,
-                                    icon: icons.calenderPrimary,
-                                    placeholder: "Pick the date",
-                                    inputWidth: "55%",
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-        ],
-    }),
-
-    actions: {
-        addDangerSigns(data: any) {
-            this.DangerSigns = data;
-        },
-        setPreviousVisits(data: any) {
-            this.PreviousVisit = data;
-        },
-        setPreviousVisitDate(data: any) {
-            this.PreviousVisitDate = data;
+            ],
         },
     },
-    // persist:true,
+    {
+        selectdData: [],
+        classDash: "dashed_bottom_border",
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name:'Danger signs'
+
+            },
+            data: [
+                {
+                    name: "Pre-term labour",
+                    value: "Pre-term labour",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+                {
+                    name: "Unconscious",
+                    value: "Unconscious",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+            ],
+        },
+    },
+    {
+        selectdData: [],
+        classDash: "dashed_bottom_border",
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name:'Danger signs'
+
+            },
+            data: [
+                {
+                    name: "Fever",
+                    value: "Fever",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+                {
+                    name: "Imminent delivery",
+                    value: "Imminent delivery",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+            ],
+        },
+    },
+    {
+        selectdData: [],
+        classDash: "dashed_bottom_border",
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name:'Danger signs'
+
+            },
+            data: [
+                {
+                    name: "Severe headache",
+                    value: "Severe headache",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+                {
+                    name: "Vomiting",
+                    value: "Vomiting",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+            ],
+        },
+    },
+    {
+        selectdData: [],
+        classDash: "dashed_bottom_border",
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name:'Danger signs'
+
+            },
+            data: [
+                {
+                    name: "Severe abdominal pain",
+                    value: "Severe abdominal pain",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+                {
+                    name: "Draining liquor",
+                    value: "Draining liquor",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+            ],
+        },
+    },
+    {
+        selectdData: [],
+        classDash: "dashed_bottom_border",
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name:'Danger signs'
+
+            },
+            data: [
+                {
+                    name: "Respiratory problems",
+                    value: "Respiratory problems",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+                {
+                    name: "Convulsion history",
+                    value: "Convulsion history",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+            ],
+        },
+    },
+    {
+        selectdData: [],
+        classDash: "dashed_bottom_border",
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name:'Danger signs'
+
+            },
+            data: [
+                {
+                    name: "Oedema",
+                    value: "Oedema",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+                {
+                    name: "Epigastric pain",
+                    value: "Epigastric pain",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+            ],
+        },
+    },
+    {
+        selectdData: [],
+        classDash: "dashed_bottom_border",
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name:'Danger signs'
+
+            },
+            data: [
+                {
+                    name: "Bleeding vaginally",
+                    value: "Bleeding vaginally",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+
+                {
+                    name: "Other",
+                    value: "Other",
+                    checked: false,
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                },
+            ],
+        },
+    },
+
+    {
+        childName:"Other",
+        classDash: "dashed_bottom_border",
+        sideColSize:0.000001,
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            displayNone: true,
+                            inputHeader: "Specify the danger signs",
+                            class:'bold',
+                            icon: icons.editPen,
+                            value: "",
+                            valueType:'text',
+                            name: "Other notes",
+                            eventType: "input",
+                            inputWidth: "100%",
+                            required: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+] as any;
+export const useDangerSignsStore = defineStore("dangerSignsStore", {
+    state: () => ({
+        DangerSigns: [...initialDangerSigns]
+    }),
+    actions: {
+        setDangerSignsStore(data: any) {
+            this.DangerSigns = data;
+
+
+        },
+        getInitial(){
+            const data = _.cloneDeep(initialDangerSigns);
+            return [...data]; // Return a copy of the initial state
+        }
+    },
+    // persist: true,
 });

@@ -1,13 +1,705 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
+import _ from "lodash";
 
+const patientHistory = [
+    {
+        checkboxBtnContent: {
+            header: {
+                name: "Medical history",
+            },
+            data: [
+                {
+                    name: "Cardiovascular disease",
+                    value: "Cardiovascular disease",
+                    example: "eg. heart attack, ischemic heart disease, CCF",
+                    checked: false,
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "Cardiovascular disease",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: "Pick the date",
+                            value: "",
+                            name: "Cardiovascular disease",
+                            eventType: "input",
+                            isDatePopover: true,
+                            displayNone: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        checkboxBtnContent: {
+            header: {
+                name: "Medical history",
+            },
+            data: [
+                {
+                    name: "Retinopathy",
+                    value: "Retinopathy",
+                    checked: false,
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "Retinopathy",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: "Pick the date",
+                            value: "",
+                            name: "Retinopathy",
+                            eventType: "input",
+                            isDatePopover: true,
+                            displayNone: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        checkboxBtnContent: {
+            header: {
+                name: "Medical history",
+            },
+            data: [
+                {
+                    name: "Renal disease",
+                    value: "Renal disease",
+                    checked: false,
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "Renal disease",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: "Pick the date",
+                            value: "",
+                            name: "Renal disease",
+                            eventType: "input",
+                            isDatePopover: true,
+                            displayNone: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        checkboxBtnContent: {
+            header: {
+                name: "Medical history",
+            },
+            data: [
+                {
+                    name: "Stroke/TIA",
+                    value: "Stroke",
+                    checked: false,
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "Stroke/TIA",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: "Pick the date",
+                            value: "",
+                            name: "Stroke/TIA",
+                            eventType: "input",
+                            isDatePopover: true,
+                            displayNone: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        checkboxBtnContent: {
+            header: {
+                name: "Medical history",
+            },
+            data: [
+                {
+                    name: "PVD",
+                    example: "eg. ulcers, gangrene",
+                    value: "PVD",
+                    checked: false,
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "PVD",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: "Pick the date",
+                            value: "",
+                            name: "PVD",
+                            eventType: "input",
+                            isDatePopover: true,
+                            displayNone: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        checkboxBtnContent: {
+            header: {
+                name: "Medical history",
+            },
+            data: [
+                {
+                    name: "Neuropathy",
+                    value: "Suspected neuropathy",
+                    checked: false,
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "Neuropathy",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: "Pick the date",
+                            value: "",
+                            name: "Neuropathy",
+                            eventType: "input",
+                            isDatePopover: true,
+                            displayNone: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        checkboxBtnContent: {
+            header: {
+                name: "Medical history",
+            },
+            data: [
+                {
+                    name: "Sexual dysfunction",
+                    value: "Sexual dysfunction",
+                    checked: false,
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "Sexual dysfunction",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: "Pick the date",
+                            value: "",
+                            name: "Sexual dysfunction",
+                            eventType: "input",
+                            isDatePopover: true,
+                            displayNone: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        checkboxBtnContent: {
+            header: {
+                name: "Medical history",
+            },
+            data: [
+                {
+                    name: "Anxiety",
+                    value: "Anxiety",
+                    checked: false,
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "Anxiety",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: "Pick the date",
+                            value: "",
+                            name: "Anxiety",
+                            eventType: "input",
+                            isDatePopover: true,
+                            displayNone: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        checkboxBtnContent: {
+            header: {
+                name: "Medical history",
+            },
+            data: [
+                {
+                    name: "Depression",
+                    value: "Depression",
+                    checked: false,
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "Depression",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: "Pick the date",
+                            value: "",
+                            name: "Depression",
+                            eventType: "input",
+                            isDatePopover: true,
+                            displayNone: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+];
+const patientHistoryHIV = [
+    {
+        selectedData: [],
+        isFinishBtn: false,
+        radioBtnContent: {
+            header: {
+                title: "HIV",
+                name: "HIV status",
+                selectedValue: "",
+                displayNext: "Reactive",
+            },
+            data: [
+                {
+                    name: "R",
+                    value: "Reactive",
+                    checked: false,
+                },
+                {
+                    name: "NR",
+                    value: "Non-reactive",
+                    checked: false,
+                },
+                {
+                    name: "Unknown",
+                    value: "Unknown",
+                    checked: false,
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "HIV status",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: "Pick the date",
+                            value: "",
+                            name: "HIV status",
+                            eventType: "input",
+                            isDatePopover: true,
+                            displayNone: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    // {
+    //     childName: "HIV status",
+    //     data: {
+    //         rowData: [
+    //             {
+    //                 colData: [
+    //                     {
+    //                         inputHeader: "ART Start Date:",
+    //                         icon: icons.calenderPrimary,
+    //                         value: "",
+    //                         name: "ART_start_date",
+    //                         eventType: "input",
+    //                         isDatePopover: true,
+    //                         displayNone: true,
+    //                     },
+    //                 ],
+    //             },
+    //         ],
+    //     },
+    // },
+    {
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                Name: "Medical history",
+            },
+            data: [
+                {
+                    name: "Use of traditional medicine",
+                    value: "Herbal traditional medications",
+                    checked: false,
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "Use of traditional medicine",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: "Pick the date",
+                            value: "",
+                            name: "traditional medicine",
+                            eventType: "input",
+                            isDatePopover: true,
+                            displayNone: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        selectedData: [],
+        isFinishBtn: false,
+        checkboxBtnContent: {
+            header: {
+                title: "TB",
+                selectedValue: "",
+                name: "Tuberculosis past history",
+            },
+            data: [
+                {
+                    name: "Smear pos",
+                    value: "Smear positive TB",
+                    checked: false,
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "Smear pos",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: "Pick the date",
+                            value: "",
+                            name: "Smear pos",
+                            eventType: "input",
+                            isDatePopover: true,
+                            displayNone: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+
+    {
+        checkboxBtnContent: {
+            header: {
+                selectedValue: "",
+                name: "Tuberculosis past history",
+            },
+            data: [
+                {
+                    name: "Smear neg",
+                    value: "Smear negative TB",
+                    checked: false,
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "Smear neg",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: "Pick the date",
+                            value: "",
+                            name: "Smear neg",
+                            eventType: "input",
+                            isDatePopover: true,
+                            displayNone: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        checkboxBtnContent: {
+            header: {
+                selectedValue: "",
+                name: "Tuberculosis past history",
+            },
+            data: [
+                {
+                    name: "EPTB",
+                    value: "EPTB",
+                    checked: false,
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "EPTB",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: "Pick the date",
+                            value: "",
+                            name: "EPTB",
+                            eventType: "input",
+                            isDatePopover: true,
+                            displayNone: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        checkboxBtnContent: {
+            header: {
+                selectedValue: "",
+                name: "Tuberculosis past history",
+            },
+            data: [
+                {
+                    name: "Never had TB",
+                    value: "Never had TB",
+                    checked: false,
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "Never had TB",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: "Pick the date",
+                            value: "",
+                            name: "Never had TB",
+                            eventType: "input",
+                            isDatePopover: true,
+                            displayNone: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+];
+const enrollmentDiagnosis = [
+    {
+        selectedData: [],
+        isFinishBtn: false,
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+                name: "Primary diagnosis",
+            },
+            data: [
+                {
+                    name: "Type 1 DM",
+                    value: "Type 1 diabetes",
+                    checked: false,
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "Type 1 DM",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: "Pick the date",
+                            value: "",
+                            name: "Type 1 DM",
+                            eventType: "input",
+                            isDatePopover: true,
+                            displayNone: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        selectedData: [],
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+            },
+            data: [
+                {
+                    name: "Type 2 DM",
+                    value: "Type 2 diabetes",
+                    checked: false,
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "Type 2 DM",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: "Pick the date",
+                            value: "",
+                            name: "Type 2 DM",
+                            eventType: "input",
+                            isDatePopover: true,
+                            displayNone: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        selectedData: [],
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+            },
+            data: [
+                {
+                    name: "Hypertension",
+                    value: "Hypertension",
+                    checked: false,
+                },
+            ],
+        },
+    },
+    {
+        sideColSize: 1,
+        childName: "Hypertension",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            icon: icons.calenderPrimary,
+                            placeholder: "Pick the date",
+                            value: "",
+                            name: "Hypertension",
+                            eventType: "input",
+                            isDatePopover: true,
+                            displayNone: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+];
 export const useEnrollementStore = defineStore("enrollementStore", {
     state: () => ({
         substance: [
             {
                 selectedData: [],
                 isFinishBtn: false,
-                classDash: "dashed_bottom_border",
+
                 radioBtnContent: {
                     header: {
                         title: "Smoking",
@@ -54,535 +746,14 @@ export const useEnrollementStore = defineStore("enrollementStore", {
                 },
             },
         ],
-        enrollmentDiagnosis: [
-            {
-                selectedData: [],
-                isFinishBtn: false,
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                        name: "Primary diagnosis",
-                    },
-                    data: [
-                        {
-                            colSize: 4.2,
-                            name: "Type 1 DM",
-                            value: "Type 1 diabetes",
-                            checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Type 1 DM",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
-                        },
-                    ],
-                },
-            },
-            {
-                selectedData: [],
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            colSize: 4.2,
-                            name: "Type 2 DM",
-                            value: "Type 2 diabetes",
-                            checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Type 2 DM",
-                            showDatePopover: false,
-                            eventType: "input",
-                            displayNone: true,
-                        },
-                    ],
-                },
-            },
-
-            {
-                selectedData: [],
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            colSize: 4.2,
-                            name: "Hypertension",
-                            value: "Hypertension",
-                            checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Hypertension",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
-                        },
-                    ],
-                },
-            },
-        ] as any,
-        patientHistoryHIV: [
-            {
-                selectedData: [],
-                isFinishBtn: false,
-                classDash: "dashed_bottom_border",
-                radioBtnContent: {
-                    header: {
-                        title: "HIV",
-                        name: "HIV status",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "R",
-                            value: "Reactive",
-                            checked: false,
-                        },
-                        {
-                            name: "NR",
-                            value: "Non-reactive",
-                            checked: false,
-                        },
-                        {
-                            name: "Unknown",
-                            value: "Unknown",
-                            checked: false,
-                        },
-                    ],
-                },
-            },
-            {
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "ART Start Date:",
-                                    icon: icons.calenderPrimary,
-                                    value: "",
-                                    name: "ART_start_date",
-                                    eventType: "input",
-                                    isDatePopover: true,
-                                    displayNone: true,
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-            {
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                        Name: "Medical history",
-                    },
-                    data: [
-                        {
-                            name: "Use of traditional medicine",
-                            value: "Herbal traditional medications",
-                            checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "traditional medicine",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
-                        },
-                    ],
-                },
-            },
-            {
-                selectedData: [],
-                isFinishBtn: false,
-                checkboxBtnContent: {
-                    header: {
-                        title: "TB",
-                        selectedValue: "",
-                        name: "Tuberculosis past history",
-                    },
-                    data: [
-                        {
-                            colSize: 4.2,
-                            name: "Smear pos",
-                            value: "Smear positive TB",
-                            checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Smear pos",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
-                        },
-                    ],
-                },
-            },
-            {
-                checkboxBtnContent: {
-                    header: {
-                        selectedValue: "",
-                        name: "Tuberculosis past history",
-                    },
-                    data: [
-                        {
-                            colSize: 4.2,
-                            name: "Smear neg",
-                            value: "Smear negative TB",
-                            checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Smear neg",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
-                        },
-                    ],
-                },
-            },
-            {
-                checkboxBtnContent: {
-                    header: {
-                        selectedValue: "",
-                        name: "Tuberculosis past history",
-                    },
-                    data: [
-                        {
-                            colSize: 4.2,
-                            name: "EPTB",
-                            value: "EPTB",
-                            checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            eventType: "input",
-                            name: "EPTB",
-                            isDatePopover: true,
-                            displayNone: true,
-                        },
-                    ],
-                },
-            },
-            {
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        selectedValue: "",
-                        name: "Tuberculosis past history",
-                    },
-                    data: [
-                        {
-                            colSize: 4.8,
-                            name: "Never had TB",
-                            value: "Never had TB",
-                            checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Never had TB",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
-                        },
-                    ],
-                },
-            },
-        ],
-        patientHistory: [
-            {
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        name: "Medical history",
-                    },
-                    data: [
-                        {
-                            name: "Cardiovascular disease",
-                            value: "Cardiovascular disease",
-                            example: "eg. heart attack, ischemic heart disease, CCF",
-                            checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Cardiovascular disease",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
-                        },
-                    ],
-                },
-            },
-            {
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        name: "Medical history",
-                    },
-                    data: [
-                        {
-                            name: "Retinopathy",
-                            value: "Retinopathy",
-                            checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Retinopathy",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
-                        },
-                    ],
-                },
-            },
-            {
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        name: "Medical history",
-                    },
-                    data: [
-                        {
-                            name: "Renal disease",
-                            value: "Renal disease",
-                            checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Renal disease",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
-                        },
-                    ],
-                },
-            },
-            {
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        name: "Medical history",
-                    },
-                    data: [
-                        {
-                            colSize: 4.2,
-                            name: "Stroke/TIA",
-                            value: "Stroke",
-                            checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Stroke/TIA",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
-                        },
-                    ],
-                },
-            },
-
-            {
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        name: "Medical history",
-                    },
-                    data: [
-                        {
-                            name: "PVD",
-                            example: "eg. ulcers, gangrene",
-                            value: "PVD",
-                            checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "PVD",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
-                        },
-                    ],
-                },
-            },
-            {
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        name: "Medical history",
-                    },
-                    data: [
-                        {
-                            name: "Neuropathy",
-                            value: "Suspected neuropathy",
-                            checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Neuropathy",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
-                        },
-                    ],
-                },
-            },
-            {
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        name: "Medical history",
-                    },
-                    data: [
-                        {
-                            name: "Sexual dysfunction",
-                            value: "Sexual dysfunction",
-                            checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Sexual dysfunction",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
-                        },
-                    ],
-                },
-            },
-            {
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        name: "Medical history",
-                    },
-                    data: [
-                        {
-                            colSize: 4.2,
-                            name: "Anxiety",
-                            value: "Anxiety",
-                            checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Anxiety",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
-                        },
-                    ],
-                },
-            },
-            {
-                classDash: "dashed_bottom_border",
-                checkboxBtnContent: {
-                    header: {
-                        name: "Medical history",
-                    },
-                    data: [
-                        {
-                            colSize: 4.2,
-                            name: "Depression",
-                            value: "Depression",
-                            checked: false,
-                        },
-                    ],
-                    inputFields: [
-                        {
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            value: "",
-                            name: "Depression",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
-                        },
-                    ],
-                },
-            },
-        ],
+        enrollmentDiagnosis: [...enrollmentDiagnosis] as any,
+        patientHistoryHIV: [...patientHistoryHIV],
+        patientHistory: [...patientHistory],
         familyHistory: [
             {
                 selectedData: [],
                 isFinishBtn: false,
-                classDash: "dashed_bottom_border",
+
                 radioBtnContent: {
                     header: {
                         title: "Diabetes",
@@ -653,6 +824,18 @@ export const useEnrollementStore = defineStore("enrollementStore", {
         ],
     }),
     actions: {
+        getInitialEnrollmentDiagnosis() {
+            const data = _.cloneDeep(enrollmentDiagnosis);
+            return [...data];
+        },
+        getInitialPatientHistory() {
+            const data = _.cloneDeep(patientHistory);
+            return [...data];
+        },
+        getInitialPatientHistoryHIV() {
+            const data = _.cloneDeep(patientHistoryHIV);
+            return [...data];
+        },
         setSubstance(data: any) {
             this.substance = data;
         },
@@ -672,5 +855,5 @@ export const useEnrollementStore = defineStore("enrollementStore", {
             this.NCDNumber = data;
         },
     },
-    persist: true,
+    // persist: true,
 });

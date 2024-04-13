@@ -1,616 +1,516 @@
-import { defineStore } from "pinia";
-import { icons } from "@/utils/svg";
+import { defineStore } from 'pinia'
+import { icons } from '@/utils/svg'
 
-export const usePhysicalExamStore = defineStore("physicalExamStore", {
+export const usePhysicalExamStore = defineStore('physicalExamStore',{
     state: () => ({
-        physicalExamination: [
+
+        vitals: [
+
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: "dashed_bottom_border _padding",
-                radioBtnContent: {
-                    header: {
-                        title: "Hydration status",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Well hydrated",
-                            value: "well",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Hydration status',
+                            selectedValue: ''
                         },
-                        {
-                            name: "Poorly hydrated",
-                            value: "poorly hydrated",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                    ],
-                },
+                        data:[
+                            {
+                                name: 'Well hydrated',
+                                value: 'well',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Poorly hydrated',
+                                value: 'poorly hydrated',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
             },
 
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: "dashed_bottom_border _padding",
-                radioBtnContent: {
-                    header: {
-                        title: "General condition",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Sick",
-                            value: "sick",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'General condition',
+                            selectedValue: ''
                         },
-                        {
-                            name: "Well",
-                            value: "well",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                    ],
-                },
+                        data:[
+                            {
+                                name: 'Sick',
+                                value: 'sick',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Well',
+                                value: 'well',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
             },
 
             {
                 isFinishBtn: false,
-                sectionHeader: "Height",
-                classDash: "dashed_bottom_border _padding",
+                sectionHeader: '',
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Height',
+                                        unit: 'cm',
+                                        icon: icons.height,
+                                        value: '',
+                                        name: 'Height',
+                                        required: true,
+                                        eventType: 'input',
+                                        placeholder:'Enter height'
+                                    },
+                                    {
+                                        inputHeader: 'Weight',
+                                        unit: 'KG',
+                                        icon: icons.weight,
+                                        value: '',
+                                        name: 'Weight',
+                                        required: true,
+                                        eventType: 'input',
+                                        placeholder:'Enter weight'
+                                    },
 
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "specify",
-                                    unit: "cm",
-                                    icon: icons.editPen,
-                                    value: "",
-                                    name: "otherC",
-                                    required: true,
-                                    eventType: "input",
-                                    inputWidth: "85%",
-                                },
-                            ],
-                        },
-                    ],
-                },
+                                ]
+                            }
+                        ]
+                    },
             },
             {
-                selectdData: [],
                 isFinishBtn: false,
-                classDash: "dashed_bottom_border _padding",
-                radioBtnContent: {
-                    header: {
-                        title: "Palmer pallor?",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Yes",
-                            value: "yes",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "No",
-                            value: "no",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: "dashed_bottom_border _padding",
-                radioBtnContent: {
-                    header: {
-                        title: "Jaundice?",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Yes",
-                            value: "yes",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "No",
-                            value: "no",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: "dashed_bottom_border _padding",
-                radioBtnContent: {
-                    header: {
-                        title: "Haemoglobin low?",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Yes",
-                            value: "yes",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "No",
-                            value: "no",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: "dashed_bottom_border _padding",
-                radioBtnContent: {
-                    header: {
-                        title: "Oedema",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Present",
-                            value: "present",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "Absent",
-                            value: "absent",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: "dashed_bottom_border _padding",
-                radioBtnContent: {
-                    header: {
-                        title: "Lie",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Longitudinal",
-                            value: "longitudinal",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "Transverse",
-                            value: "transverse",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "Oblique",
-                            value: "oblique",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
-            // {
-            //     selectdData: [],
-            //     isFinishBtn: false,
-            //     classDash: 'dashed_bottom_border _padding',
-            //     radioBtnContent:
-            //         {
-            //             header:{
-            //                 title: 'Lie',
-            //                 selectedValue: ''
-            //             },
-            //             data:[
-            //                 {
-            //                     name: 'Longitudinal',
-            //                     value: 'longitudinal',
-            //                     labelPlacement: 'start',
-            //                     colSize: '7',
-            //                     justify: 'space-between',
-            //                 },
-            //                 {
-            //                     name: 'Transverse',
-            //                     value: 'transverse',
-            //                     labelPlacement: 'start',
-            //                     colSize: '7',
-            //                     justify: 'space-between',
-            //                 },
-            //                 {
-            //                     name: 'Oblique',
-            //                     value: 'oblique',
-            //                     labelPlacement: 'start',
-            //                     colSize: '7',
-            //                     justify: 'space-between',
-            //                 },
-            //             ]
-            //         }
-            //
-            // },
-        ] as any,
+                sectionHeader: '',
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Fundal height',
+                                        unit: 'cm',
+                                        icon: icons.height,
+                                        value: '',
+                                        name: 'Weight',
+                                        required: true,
+                                        eventType: 'input',
+                                        placeholder:'Enter the height'
+                                    },
+                                    {
+                                        inputHeader: 'Fundus',
+                                        unit: 'Weeks',
+                                        icon: icons.weight,
+                                        value: '',
+                                        name: 'Fundus',
+                                        required: true,
+                                        eventType: 'input',
+                                        placeholder:'Enter fundus'
+                                    },
 
-        labourDetails: [
+                                ]
+                            }
+                        ]
+                    },
+            },
+            {
+                isFinishBtn: false,
+                sectionHeader: '',
+                classDash: 'dashed_bottom_border _padding',
+
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Fetal heart rate',
+                                        unit: 'BPM',
+                                        icon: icons.bmi,
+                                        value: '',
+                                        name: 'Fetal heart rate',
+                                        required: true,
+                                        eventType: 'input',
+                                        placeholder:'Enter fetal heart rate'
+                                    },
+
+                                ]
+                            }
+                        ]
+                    },
+            },
+            ] as any,
+
+        anaemia:[
             {
                 selectdData: [],
                 isFinishBtn: false,
-                radioBtnContent: {
-                    header: {
-                        title: "Reason for coming to the facility?",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "In labour",
-                            value: "in labour",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Palmer pallor?',
+                            selectedValue: ''
                         },
-                        {
-                            name: "Delivered on the way to facility",
-                            value: "delivered on the way to facility",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "Other",
-                            value: "other",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
-            {
-                classDash: "dashed_bottom_border",
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Specify",
-                                    value: "",
-                                    name: "specify",
-                                    required: true,
-                                    icon: icons.editPen,
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                    inputWidth: "55%",
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
+                        data:[
+                            {
+                                name: 'Yes',
+                                value: 'yes',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'No',
+                                value: 'no',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
 
+            },
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: "dashed_bottom_border",
-                radioBtnContent: {
-                    header: {
-                        title: "Labour onset type?",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Induced",
-                            value: "induced",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Jaundice?',
+                            selectedValue: ''
                         },
-                        {
-                            name: "Spontaneous",
-                            value: "spontaneous",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
+                        data:[
+                            {
+                                name: 'Yes',
+                                value: 'yes',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'No',
+                                value: 'no',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
 
-            {
-                isFinishBtn: false,
-                sectionHeader: "",
-                classDash: "dashed_bottom_border",
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Date of labour onset",
-                                    value: "",
-                                    name: "Date of labour onset",
-                                    required: true,
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                    isDatePopover: true,
-                                    icon: icons.calenderPrimary,
-                                    placeholder: "Select date",
-                                },
-                                {
-                                    inputHeader: "Time of labour",
-                                    value: "",
-                                    name: "Time of labour onset",
-                                    required: true,
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                    isTimePopover: true,
-                                    icon: icons.time,
-                                    placeholder: "Specify time",
-                                },
-                            ],
-                        },
-                    ],
-                },
             },
-
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: "dashed_bottom_border",
-                radioBtnContent: {
-                    header: {
-                        title: "Membranes raptured?",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Yes",
-                            value: "yes",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Haemoglobin low?',
+                            selectedValue: ''
                         },
-                        {
-                            name: "No",
-                            value: "no",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
+                        data:[
+                            {
+                                name: 'Yes',
+                                value: 'yes',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'No',
+                                value: 'no',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
 
-            {
-                classDash: "dashed_bottom_border",
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Date membranes ruptured",
-                                    value: "",
-                                    name: "Date membranes ruptured",
-                                    required: true,
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                    isDatePopover: true,
-                                    icon: icons.calenderPrimary,
-                                    placeholder: "Select date",
-                                },
-                                {
-                                    inputHeader: "Time membranes ruptured",
-                                    value: "",
-                                    name: "Time membranes ruptured",
-                                    required: true,
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                    isTimePopover: true,
-                                    icon: icons.time,
-                                    placeholder: "Specify time",
-                                },
-                            ],
-                        },
-                    ],
-                },
             },
+            ] as any,
 
+            otherphysicalExams:[
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: "dashed_bottom_border",
-                radioBtnContent: {
-                    header: {
-                        title: "Has the woman had food in 4 hrs?",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Yes",
-                            value: "yes",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Oedema',
+                            selectedValue: ''
                         },
-                        {
-                            name: "No",
-                            value: "no",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
+                        data:[
+                            {
+                                name: 'Present',
+                                value: 'present',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Absent',
+                                value: 'absent',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Lie',
+                            selectedValue: ''
                         },
-                    ],
-                },
+                        data:[
+                            {
+                                name: 'Longitudinal',
+                                value: 'longitudinal',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Transverse',
+                                value: 'transverse',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Oblique',
+                                value: 'oblique',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Presentation',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Cephalic',
+                                value: 'Breech',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Face/Brow',
+                                value: 'face',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Footing',
+                                value: 'footing',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Cord',
+                                value: 'cord',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Fetal back/arms/shoulders',
+                                value: 'fetal back',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'No palpable fetal part',
+                                value: 'footing',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Choose position',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Right occiput anterior (ROA)',
+                                value: 'roa',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Left occiput anterior (LOA)',
+                                value: 'loa',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Left occiput transverse (LOT)',
+                                value: 'lot',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Right occiput transverse (ROT)',
+                                value: 'rot',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Left occiput posterior (lop)',
+                                value: 'lop',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Right occiput posterior (rop)',
+                                value: 'rop',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Contractions',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Not felt',
+                                value: 'not felt',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Strong',
+                                value: 'strong',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Moderate',
+                                value: 'moderate',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Mild',
+                                value: 'mild',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Bladder',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Empty',
+                                value: 'empty',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Full',
+                                value: 'full',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
             },
 
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                radioBtnContent: {
-                    header: {
-                        title: "Has the woman had  homemade medicines?",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Yes",
-                            value: "yes",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "No",
-                            value: "no",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
-            {
-                classDash: "dashed_bottom_border",
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Specify",
-                                    value: "",
-                                    name: "specify",
-                                    required: true,
-                                    icon: icons.editPen,
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                    inputWidth: "55%",
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: "dashed_bottom_border",
-                radioBtnContent: {
-                    header: {
-                        title: "Sleep?",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Well",
-                            value: "well",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "Disturbed",
-                            value: "disturbed",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                radioBtnContent: {
-                    header: {
-                        title: "Bleeding?",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Yes",
-                            value: "yes",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                        {
-                            name: "No",
-                            value: "no",
-                            labelPlacement: "start",
-                            colSize: "7",
-                            justify: "space-between",
-                        },
-                    ],
-                },
-            },
-            {
-                classDash: "dashed_bottom_border",
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Amount of bleeding",
-                                    value: "",
-                                    name: "amount of bleeding",
-                                    required: true,
-                                    icon: icons.editPen,
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                    inputWidth: "55%",
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
+
         ] as any,
     }),
-    actions: {
-        setLabourDetails(data: any) {
-            this.labourDetails = data;
-        },
-        setPastProblems(data: any) {
-            // this.pastProblems = data
+    actions:{
+        setLabourVitals(data: any){
+            this.vitals = data
         },
     },
-    persist: true,
-});
+    persist:true,
+
+})
