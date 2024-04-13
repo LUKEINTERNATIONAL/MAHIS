@@ -50,10 +50,10 @@ import { useDiagnosisStore } from "@/stores/DiagnosisStore";
 import { mapState } from "pinia";
 import Stepper from "@/components/Stepper.vue";
 import { Service } from "@/services/service";
-import { LabOrder } from "@/apps/NCD/services/lab_order";
+import { LabOrder } from "@/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
-import { useDispositionStore } from "@/stores/OutcomeStore";
+import { useOutcomeStore } from "@/stores/OutcomeStore";
 import { usePregnancyStore } from "@/apps/OPD/stores/PregnancyStore";
 import { usePresentingComplaintsStore } from "@/apps/OPD/stores/PresentingComplaintsStore";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
@@ -78,8 +78,11 @@ import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from 
 import { PatientComplaintsService } from "@/apps/OPD/services/patient_complaints_service";
 import { PatientGeneralConsultationService } from "@/services/patient_general_consultation";
 import { PastMedicalHistory } from "../services/past_medical_history_service";
-import {PhysicalExamService} from "@/apps/OPD/services/physical_exam_service";
+import { useLevelOfConsciousnessStore } from "@/apps/OPD/stores/LevelOfConsciousnessStore";
+import { ConsciousnessService } from "@/apps/OPD/services/consciousness_service";
 import {usePhysicalExaminationStore} from "@/apps/OPD/stores/PhysicalExamination";
+import {PhysicalExamService} from "@/apps/OPD/services/physical_exam_service";
+
 export default defineComponent({
   name: "Home",
   components: {
@@ -195,8 +198,11 @@ export default defineComponent({
     ...mapState(useOPDDiagnosisStore, ["OPDdiagnosis"]),
     ...mapState(usePhysicalExaminationStore, ["physicalExam"]),
     ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
+    ...mapState(useLevelOfConsciousnessStore, ["levelOfConsciousness"]),
   },
   async mounted() {
+    this.investigations;
+    console.log("🚀 ~ mounted ~ this.investigations:", this.investigations);
     this.markWizard();
   },
   watch: {
@@ -230,6 +236,15 @@ export default defineComponent({
 
   methods: {
     markWizard() {
+      // const filteredArray = await this.orders.filter((obj: any) => {
+      //     return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
+      // });
+      // if (filteredArray.length > 0) {
+      //     this.investigations[0].selectedData = filteredArray;
+      // } else {
+      //     this.investigations[0].selectedData = "";
+      // }
+
       if (this.vitals.validationStatus) {
         this.wizardData[0].checked = true;
         this.wizardData[0].class = "open_step common_step";
@@ -272,6 +287,7 @@ export default defineComponent({
       await this.saveWomenStatus();
       await this.savePresentingComplaints();
       await this.savePastMedicalHistory();
+      await this.saveConsciousness();
       await this.savePhysicalExam();
       this.$router.push("patientProfile");
     },
@@ -309,7 +325,6 @@ export default defineComponent({
         if (!patientStatus) return toastWarning("Unable to create patient physical examination  !");
         toastSuccess("Physical examination has been created");
       }
-      console.log(await this.buildPhysicalExamination())
     },
     async saveWomenStatus() {
       const womenStatus = await formatRadioButtonData(this.pregnancy);
@@ -411,6 +426,22 @@ export default defineComponent({
         ...(await formatRadioButtonData(this.pastMedicalHistory)),
         ...(await formatInputFiledData(this.pastMedicalHistory)),
       ];
+    },
+    async saveConsciousness() {
+      const data = await formatRadioButtonData(this.levelOfConsciousness);
+
+      console.log({ data });
+
+      return;
+      const userID: any = Service.getUserID();
+      const consciousness = new ConsciousnessService(this.demographics.patient_id, userID);
+      const encounter = await consciousness.createEncounter();
+      if (!encounter) return toastWarning("Unable to create patient complaints encounter");
+
+      //   const gcs = this.levelOfConsciousness[0].radioBtnContent.data;
+
+      const dat = await formatRadioButtonData(this.levelOfConsciousness);
+      //   await consciousness.saveObservationList(gcs);
     },
     async buildPhysicalExamination() {
       return [
