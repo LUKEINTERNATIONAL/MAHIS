@@ -2,12 +2,11 @@
   <!--  confirm pregnancy-->
   <div class="container">
     <ion-card class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Has the pregnancy been confirmed?</ion-card-title>
-      </ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="ConfirmPregnancy"></basic-form>
-        <basic-form :contentData="PlannedPregnancy"></basic-form>
+        <basic-form
+            :contentData="ConfirmPregnancy"
+            :initialData="initialData"
+        ></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
@@ -56,15 +55,20 @@ export default defineComponent({
   },
   data() {
     return {
+      initialData:[] as any,
       iconsContent: icons,
       confirmPregnancy: '',
       plannedPregnancy: '',
 
     };
   },
+  mounted() {
+      const ConfirmPregnancy=useConfirmPregnancyStore();
+      this.initialData=ConfirmPregnancy.getInitial();
+  },
   computed: {
     ...mapState(useConfirmPregnancyStore, ["ConfirmPregnancy"]),
-    ...mapState(useConfirmPregnancyStore, ["PlannedPregnancy"])
+
   },
   setup() {
     return { checkmark,pulseOutline };

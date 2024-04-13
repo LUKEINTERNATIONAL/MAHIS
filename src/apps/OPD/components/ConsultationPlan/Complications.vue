@@ -130,7 +130,6 @@ import { mapState } from "pinia";
 import { useComplicationsStore } from "@/stores/ComplicationsStore";
 import BasicForm from "@/components/BasicForm.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
-import Visits from "@/apps/ANC/components/Visits.vue";
 
 export default defineComponent({
     name: "Menu",
