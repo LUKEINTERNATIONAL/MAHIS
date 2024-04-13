@@ -80,6 +80,8 @@ import { PatientGeneralConsultationService } from "@/services/patient_general_co
 import { PastMedicalHistory } from "../services/past_medical_history_service";
 import { useLevelOfConsciousnessStore } from "@/apps/OPD/stores/LevelOfConsciousnessStore";
 import { ConsciousnessService } from "@/apps/OPD/services/consciousness_service";
+import { usePhysicalExaminationStore } from "@/apps/OPD/stores/PhysicalExamination";
+import { PhysicalExamService } from "@/apps/OPD/services/physical_exam_service";
 
 export default defineComponent({
     name: "Home",
@@ -194,6 +196,7 @@ export default defineComponent({
         ...mapState(useVitalsStore, ["vitals"]),
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useOPDDiagnosisStore, ["OPDdiagnosis"]),
+        ...mapState(usePhysicalExaminationStore, ["physicalExam"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
         ...mapState(useLevelOfConsciousnessStore, ["levelOfConsciousness"]),
     },
@@ -285,6 +288,7 @@ export default defineComponent({
             await this.savePresentingComplaints();
             await this.savePastMedicalHistory();
             await this.saveConsciousness();
+            await this.savePhysicalExam();
             this.$router.push("patientProfile");
         },
         async savePastMedicalHistory() {
@@ -310,6 +314,17 @@ export default defineComponent({
                 toastSuccess("Patient complaints has been created");
             }
             this.presentingComplaints[0].selectedData;
+        },
+        async savePhysicalExam() {
+            if (this.physicalExam.length > 0) {
+                const userID: any = Service.getUserID();
+                const PhysicalExam = new PhysicalExamService(this.demographics.patient_id, userID);
+                const encounter = await PhysicalExam.createEncounter();
+                if (!encounter) return toastWarning("Unable to create patient physical examination encounter");
+                const patientStatus = await PhysicalExam.saveObservationList(await this.buildPhysicalExamination());
+                if (!patientStatus) return toastWarning("Unable to create patient physical examination  !");
+                toastSuccess("Physical examination has been created");
+            }
         },
         async saveWomenStatus() {
             const womenStatus = await formatRadioButtonData(this.pregnancy);
@@ -427,6 +442,13 @@ export default defineComponent({
 
             const dat = await formatRadioButtonData(this.levelOfConsciousness);
             //   await consciousness.saveObservationList(gcs);
+        },
+        async buildPhysicalExamination() {
+            return [
+                ...(await formatCheckBoxData(this.physicalExam)),
+                ...(await formatRadioButtonData(this.physicalExam)),
+                ...(await formatInputFiledData(this.physicalExam)),
+            ];
         },
     },
 });
