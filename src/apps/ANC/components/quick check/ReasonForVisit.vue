@@ -2,11 +2,10 @@
   <!--  reason for visit-->
   <div class="container">
     <ion-card class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Reason the woman came to the facility today</ion-card-title>
-      </ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="ReasonForVisit"></basic-form>
+        <basic-form :contentData="ReasonForVisit"
+                    :initialData="initialData"
+        ></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
@@ -35,6 +34,7 @@ import BasicInputField from '@/components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import BasicForm from '@/components/BasicForm.vue'
 import {useReasonForVisitStore} from "@/apps/ANC/store/quickCheck/reasonForVisit";
+import {usePastMedicalHistoryStore} from "@/apps/OPD/stores/PastMedicalHistoryStore";
 
 export default defineComponent({
   name: 'Menu',
@@ -56,11 +56,16 @@ export default defineComponent({
   data() {
     return {
       iconsContent: icons,
+      initialData:[] as any,
 
     };
   },
   computed: {
     ...mapState(useReasonForVisitStore, ["ReasonForVisit"])
+  },
+  mounted() {
+    const ReasonForVisit = useReasonForVisitStore();
+    this.initialData = ReasonForVisit.getInitial();
   },
   setup() {
     return { checkmark,pulseOutline };
