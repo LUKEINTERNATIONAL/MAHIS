@@ -28,8 +28,9 @@ const patientHistory = [
                         {
                             icon: icons.calenderPrimary,
                             placeholder: "Pick the date",
+                            buildConceptIgnore: true,
                             value: "",
-                            name: "Cardiovascular disease",
+                            name: "Cardiovascular disease date",
                             eventType: "input",
                             isDatePopover: true,
                             displayNone: true,
@@ -63,8 +64,9 @@ const patientHistory = [
                         {
                             icon: icons.calenderPrimary,
                             placeholder: "Pick the date",
+                            buildConceptIgnore: true,
                             value: "",
-                            name: "Retinopathy",
+                            name: "Retinopathy date",
                             eventType: "input",
                             isDatePopover: true,
                             displayNone: true,
@@ -98,8 +100,9 @@ const patientHistory = [
                         {
                             icon: icons.calenderPrimary,
                             placeholder: "Pick the date",
+                            buildConceptIgnore: true,
                             value: "",
-                            name: "Renal disease",
+                            name: "Renal disease date",
                             eventType: "input",
                             isDatePopover: true,
                             displayNone: true,
@@ -133,8 +136,9 @@ const patientHistory = [
                         {
                             icon: icons.calenderPrimary,
                             placeholder: "Pick the date",
+                            buildConceptIgnore: true,
                             value: "",
-                            name: "Stroke/TIA",
+                            name: "Stroke/TIA date",
                             eventType: "input",
                             isDatePopover: true,
                             displayNone: true,
@@ -169,8 +173,9 @@ const patientHistory = [
                         {
                             icon: icons.calenderPrimary,
                             placeholder: "Pick the date",
+                            buildConceptIgnore: true,
                             value: "",
-                            name: "PVD",
+                            name: "PVD date",
                             eventType: "input",
                             isDatePopover: true,
                             displayNone: true,
@@ -204,8 +209,9 @@ const patientHistory = [
                         {
                             icon: icons.calenderPrimary,
                             placeholder: "Pick the date",
+                            buildConceptIgnore: true,
                             value: "",
-                            name: "Neuropathy",
+                            name: "Neuropathy date",
                             eventType: "input",
                             isDatePopover: true,
                             displayNone: true,
@@ -239,8 +245,9 @@ const patientHistory = [
                         {
                             icon: icons.calenderPrimary,
                             placeholder: "Pick the date",
+                            buildConceptIgnore: true,
                             value: "",
-                            name: "Sexual dysfunction",
+                            name: "Sexual dysfunction date",
                             eventType: "input",
                             isDatePopover: true,
                             displayNone: true,
@@ -274,8 +281,9 @@ const patientHistory = [
                         {
                             icon: icons.calenderPrimary,
                             placeholder: "Pick the date",
+                            buildConceptIgnore: true,
                             value: "",
-                            name: "Anxiety",
+                            name: "Anxiety date",
                             eventType: "input",
                             isDatePopover: true,
                             displayNone: true,
@@ -309,8 +317,9 @@ const patientHistory = [
                         {
                             icon: icons.calenderPrimary,
                             placeholder: "Pick the date",
+                            buildConceptIgnore: true,
                             value: "",
-                            name: "Depression",
+                            name: "Depression date",
                             eventType: "input",
                             isDatePopover: true,
                             displayNone: true,
@@ -359,10 +368,12 @@ const patientHistoryHIV = [
                 {
                     colData: [
                         {
+                            inputHeader: "ART Start Date:",
                             icon: icons.calenderPrimary,
                             placeholder: "Pick the date",
+                            buildConceptIgnore: true,
                             value: "",
-                            name: "HIV status",
+                            name: "HIV status date",
                             eventType: "input",
                             isDatePopover: true,
                             displayNone: true,
@@ -372,26 +383,6 @@ const patientHistoryHIV = [
             ],
         },
     },
-    // {
-    //     childName: "HIV status",
-    //     data: {
-    //         rowData: [
-    //             {
-    //                 colData: [
-    //                     {
-    //                         inputHeader: "ART Start Date:",
-    //                         icon: icons.calenderPrimary,
-    //                         value: "",
-    //                         name: "ART_start_date",
-    //                         eventType: "input",
-    //                         isDatePopover: true,
-    //                         displayNone: true,
-    //                     },
-    //                 ],
-    //             },
-    //         ],
-    //     },
-    // },
     {
         checkboxBtnContent: {
             header: {
@@ -418,8 +409,9 @@ const patientHistoryHIV = [
                         {
                             icon: icons.calenderPrimary,
                             placeholder: "Pick the date",
+                            buildConceptIgnore: true,
                             value: "",
-                            name: "traditional medicine",
+                            name: "traditional medicine date",
                             eventType: "input",
                             isDatePopover: true,
                             displayNone: true,
@@ -457,8 +449,9 @@ const patientHistoryHIV = [
                         {
                             icon: icons.calenderPrimary,
                             placeholder: "Pick the date",
+                            buildConceptIgnore: true,
                             value: "",
-                            name: "Smear pos",
+                            name: "Smear pos date",
                             eventType: "input",
                             isDatePopover: true,
                             displayNone: true,
@@ -494,8 +487,9 @@ const patientHistoryHIV = [
                         {
                             icon: icons.calenderPrimary,
                             placeholder: "Pick the date",
+                            buildConceptIgnore: true,
                             value: "",
-                            name: "Smear neg",
+                            name: "Smear neg date",
                             eventType: "input",
                             isDatePopover: true,
                             displayNone: true,
@@ -530,8 +524,9 @@ const patientHistoryHIV = [
                         {
                             icon: icons.calenderPrimary,
                             placeholder: "Pick the date",
+                            buildConceptIgnore: true,
                             value: "",
-                            name: "EPTB",
+                            name: "EPTB date",
                             eventType: "input",
                             isDatePopover: true,
                             displayNone: true,
@@ -566,8 +561,9 @@ const patientHistoryHIV = [
                         {
                             icon: icons.calenderPrimary,
                             placeholder: "Pick the date",
+                            buildConceptIgnore: true,
                             value: "",
-                            name: "Never had TB",
+                            name: "Never had TB date",
                             eventType: "input",
                             isDatePopover: true,
                             displayNone: true,
@@ -607,8 +603,9 @@ const enrollmentDiagnosis = [
                         {
                             icon: icons.calenderPrimary,
                             placeholder: "Pick the date",
+                            buildConceptIgnore: true,
                             value: "",
-                            name: "Type 1 DM",
+                            name: "Type 1 DM date",
                             eventType: "input",
                             isDatePopover: true,
                             displayNone: true,
@@ -644,8 +641,9 @@ const enrollmentDiagnosis = [
                         {
                             icon: icons.calenderPrimary,
                             placeholder: "Pick the date",
+                            buildConceptIgnore: true,
                             value: "",
-                            name: "Type 2 DM",
+                            name: "Type 2 DM date",
                             eventType: "input",
                             isDatePopover: true,
                             displayNone: true,
@@ -681,8 +679,9 @@ const enrollmentDiagnosis = [
                         {
                             icon: icons.calenderPrimary,
                             placeholder: "Pick the date",
+                            buildConceptIgnore: true,
                             value: "",
-                            name: "Hypertension",
+                            name: "Hypertension date",
                             eventType: "input",
                             isDatePopover: true,
                             displayNone: true,
@@ -855,5 +854,5 @@ export const useEnrollementStore = defineStore("enrollementStore", {
             this.NCDNumber = data;
         },
     },
-    // persist: true,
+    persist: true,
 });
