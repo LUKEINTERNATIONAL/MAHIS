@@ -45,9 +45,6 @@ export default defineComponent({
         content: {
             default: "" as any,
         },
-        initialData: {
-            default: "" as any,
-        },
         size: {
             default: "" as any,
         },
