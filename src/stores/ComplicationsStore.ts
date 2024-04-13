@@ -229,7 +229,7 @@ export const useComplicationsStore = defineStore("complicationsStore", {
                         {
                             header: {
                                 selectedValue: "",
-                                name: "toenailRight",
+                                name: "toenailLeft",
                             },
                             data: [
                                 {
@@ -414,7 +414,7 @@ export const useComplicationsStore = defineStore("complicationsStore", {
                             header: {
                                 title: "",
                                 selectedValue: "",
-                                name: "activeUlcerLeft",
+                                name: "activeUlcerRight",
                             },
                             data: [
                                 {

@@ -219,11 +219,14 @@ export const useRegistrationStore = defineStore("registrationStore", {
                         },
                     ],
                 },
+            },
+            {
                 radioBtnContent: {
                     header: {
                         title: "Occupation status",
                         name: "occupation",
                         selectedValue: "",
+                        class: "bold",
                     },
                     data: [
                         {
@@ -251,6 +254,7 @@ export const useRegistrationStore = defineStore("registrationStore", {
                         name: "maritalStatus",
                         alertsError: false,
                         alertsErrorMassage: "",
+                        class: "bold",
                     },
                     data: [
                         {
@@ -282,6 +286,7 @@ export const useRegistrationStore = defineStore("registrationStore", {
                         name: "highestLevelOfEducation",
                         alertsError: false,
                         alertsErrorMassage: "",
+                        class: "bold",
                     },
                     data: [
                         {

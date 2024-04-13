@@ -1,10 +1,5 @@
 <template>
-    <basic-card
-        :content="cardData"
-        :initialData="initialPersonalData"
-        @update:selected="handleInputData"
-        @update:inputValue="handleInputData"
-    ></basic-card>
+    <basic-card :content="cardData" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-card>
 </template>
 
 <script lang="ts">
@@ -74,21 +69,20 @@ export default defineComponent({
         },
     },
     mounted() {
-        const personalInformation = useRegistrationStore();
-        this.initialPersonalData = personalInformation.getInitialPersonalInformation();
-        console.log("🚀 ~ mounted ~  this.initialData:", this.initialPersonalData);
         this.updateRegistrationStores();
         this.buidCards();
     },
 
     methods: {
         buidCards() {
+            const personalInformation = useRegistrationStore();
             this.cardData = {
                 mainTitle: "Demographics",
                 cards: [
                     {
                         cardTitle: "Personal information",
                         content: this.personInformation,
+                        initialData: personalInformation.getInitialPersonalInformation(),
                     },
                 ],
             };

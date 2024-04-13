@@ -86,7 +86,7 @@
                 </ion-row>
             </span>
             <span v-if="item.radioBtnContent && !item?.radioBtnContent?.header?.displayNone">
-                <div style="" v-if="item.radioBtnContent?.header" :class="item.radioBtnContent?.header?.class">
+                <div style="font-size: 1rem" v-if="item.radioBtnContent?.header" :class="item.radioBtnContent?.header?.class">
                     {{ item.radioBtnContent?.header.title }}
                 </div>
                 <ion-row class="checkbox_content">
@@ -460,6 +460,10 @@ ion-radio {
 }
 h6 {
     margin-top: 0px;
+}
+ion-radio,
+ion-checkbox {
+    font-size: 1rem;
 }
 </style>
 <style src="vue-multiselect/dist/vue-multiselect.css"></style>

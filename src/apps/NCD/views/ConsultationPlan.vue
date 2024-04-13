@@ -198,32 +198,25 @@ export default defineComponent({
             });
         },
         saveData() {
-            if (this.vitals.validationStatus && this.investigations[0].selectedData.length > 0 && this.diagnosis[0].selectedData.length > 0) {
-                this.saveVitals();
-                this.saveInvestigation();
-                this.saveDiagnosis();
-                this.saveTreatmentPlan();
-                this.saveOutComeStatus();
-                this.$router.push("patientProfile");
-            } else {
-                toastWarning("Please complete all required fields");
-                // this.saveOutComeStatus();
-                // this.saveTreatmentPlan();
-            }
-        },
-        saveInvestigation() {
-            const investigationInstance = new LabOrder();
-            investigationInstance.postActivities(this.demographics.patient_id, this.getFormatedData(this.investigations[0].selectedData));
+            this.saveVitals();
+            this.saveDiagnosis();
+            this.saveTreatmentPlan();
+            this.saveOutComeStatus();
+            this.$router.push("patientProfile");
         },
         saveVitals() {
-            const userID: any = Service.getUserID();
-            const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
-            vitalsInstance.onFinish(this.vitals);
+            if (this.vitals.validationStatus) {
+                const userID: any = Service.getUserID();
+                const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
+                vitalsInstance.onFinish(this.vitals);
+            }
         },
         saveDiagnosis() {
-            const userID: any = Service.getUserID();
-            const diagnosisInstance = new Diagnosis();
-            diagnosisInstance.onSubmit(this.demographics.patient_id, userID, this.getFormatedData(this.diagnosis[0].selectedData));
+            if (this.diagnosis[0].selectedData.length > 0) {
+                const userID: any = Service.getUserID();
+                const diagnosisInstance = new Diagnosis();
+                diagnosisInstance.onSubmit(this.demographics.patient_id, userID, this.getFormatedData(this.diagnosis[0].selectedData));
+            }
         },
         async saveTreatmentPlan() {
             const userID: any = Service.getUserID();

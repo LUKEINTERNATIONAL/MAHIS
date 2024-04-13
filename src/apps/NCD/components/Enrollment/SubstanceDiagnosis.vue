@@ -56,6 +56,7 @@ export default defineComponent({
     },
     methods: {
         buidCards() {
+            const enrollment = useEnrollementStore();
             this.cardData = {
                 mainTitle: "Enrollment",
                 cards: [
@@ -66,6 +67,7 @@ export default defineComponent({
                     {
                         cardTitle: "Diagnosis",
                         content: this.enrollmentDiagnosis,
+                        initialData: enrollment.getInitialEnrollmentDiagnosis(),
                     },
                 ],
             };
