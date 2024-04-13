@@ -7,7 +7,7 @@
                 </div>
                 <basic-form
                     :contentData="card.content"
-                    :initialData="initialData"
+                    :initialData="card.initialData"
                     @update:selected="$emit('update:selected', $event)"
                     @update:inputValue="$emit('update:inputValue', $event)"
                 ></basic-form>
