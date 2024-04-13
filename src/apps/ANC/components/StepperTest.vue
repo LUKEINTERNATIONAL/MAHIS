@@ -80,9 +80,9 @@ import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
-import Vitals from "@/apps/NCD/components/ConsultationPlan/Vitals.vue";
+//import Vitals from "@/apps/NCD/components/ConsultationPlan/Vitals.vue";
 import Diagnosis from "@/apps/NCD/components/ConsultationPlan/Diagnosis.vue";
-import Complications from "@/apps/NCD/components/ConsultationPlan/Complications.vue";
+//import Complications from "@/apps/NCD/components/ConsultationPlan/Complications.vue";
 import ConfirmDiagnosis from "@/apps/NCD/components/ConsultationPlan/ConfirmDiagnosis.vue";
 import Outcome from "@/apps/NCD/components/ConsultationPlan/Outcome.vue";
 //import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigations.vue";
@@ -93,7 +93,7 @@ import DangerSigns from "@/apps/ANC/components/quick check/DangerSigns.vue";
 import ConfirmPregnancy from "@/apps/ANC/components/quick check/ConfirmPregnancy.vue";
 import ReasonForVisit from "@/apps/ANC/components/quick check/ReasonForVisit.vue";
 import SpecificHealthConcerns from "@/apps/ANC/components/quick check/SpecificHealthConcerns.vue";
-import AncVitals from "@/apps/ANC/components/physical exam/AncVitals.vue";
+//import AncVitals from "@/apps/ANC/components/physical exam/AncVitals.vue";
 import FetalAssessment from "@/apps/ANC/components/physical exam/FetalAssessment.vue";
 import FetalPresentation from "@/apps/ANC/components/physical exam/FetalPresentation.vue";
 import MaternalExam from "@/apps/ANC/components/physical exam/MaternalExam.vue";
@@ -145,12 +145,9 @@ export default defineComponent({
         IonAccordionGroup,
         IonItem,
         IonLabel,
-        Vitals,
         Diagnosis,
-        Complications,
         ConfirmDiagnosis,
         Outcome,
-//        Investigations,
         TreatmentPlan,
         IonModal,
         Medications,
@@ -160,7 +157,6 @@ export default defineComponent({
         ReasonForVisit,
         ConfirmPregnancy,
         SpecificHealthConcerns,
-        AncVitals,
         FetalPresentation,
         FetalAssessment,
         MaternalExam,
