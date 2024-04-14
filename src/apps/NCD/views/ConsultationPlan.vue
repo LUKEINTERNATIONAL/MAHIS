@@ -61,6 +61,15 @@ import { isEmpty } from "lodash";
 import HisDate from "@/utils/Date";
 import { defineComponent } from "vue";
 import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
+import { useGeneralStore } from "@/stores/GeneralStore";
+import {
+    modifyRadioValue,
+    getRadioSelectedValue,
+    getCheckboxSelectedValue,
+    modifyWizardData,
+    modifyFieldValue,
+    modifyCheckboxValue,
+} from "@/services/data_helpers";
 export default defineComponent({
     name: "Home",
     components: {
@@ -101,6 +110,7 @@ export default defineComponent({
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
+        ...mapState(useGeneralStore, ["saveProgressStatus", "activities"]),
     },
     created() {
         this.getData();
@@ -138,8 +148,9 @@ export default defineComponent({
     },
 
     methods: {
-        getData() {
+        async getData() {
             const steps = ["Vital Signs", "Investigations", "Diagnosis", "Complications Screening", "Treatment Plan", "Next Appointment", "Outcome"];
+            // const steps = this.activities;
             for (let i = 0; i < steps.length; i++) {
                 const title = steps[i];
                 const number = i + 1;
@@ -162,65 +173,75 @@ export default defineComponent({
         },
         markWizard() {
             if (this.vitals.validationStatus) {
-                this.wizardData[0].checked = true;
-                this.wizardData[0].class = "open_step common_step";
+                modifyWizardData(this.wizardData, "Vital Signs", {
+                    checked: true,
+                    class: "open_step common_step",
+                });
             } else {
-                this.wizardData[0].checked = false;
+                modifyWizardData(this.wizardData, "Vital Signs", {
+                    checked: false,
+                });
             }
 
             if (this.investigations[0].selectedData.length > 0) {
-                this.wizardData[1].checked = true;
-                this.wizardData[1].class = "open_step common_step";
+                modifyWizardData(this.wizardData, "Investigations", {
+                    checked: true,
+                    class: "open_step common_step",
+                });
             } else {
-                this.wizardData[1].checked = false;
+                modifyWizardData(this.wizardData, "Investigations", {
+                    checked: false,
+                });
             }
 
             if (this.diagnosis[0].selectedData.length > 0) {
-                this.wizardData[2].checked = true;
-                this.wizardData[2].class = "open_step common_step";
+                modifyWizardData(this.wizardData, "Diagnosis", {
+                    checked: true,
+                    class: "open_step common_step",
+                });
             } else {
-                this.wizardData[2].checked = false;
+                modifyWizardData(this.wizardData, "Diagnosis", {
+                    checked: false,
+                });
             }
 
             if (this.selectedMedicalDrugsList.length > 0) {
-                this.wizardData[4].checked = true;
-                this.wizardData[4].class = "open_step common_step";
+                modifyWizardData(this.wizardData, "Treatment Plan", {
+                    checked: true,
+                    class: "open_step common_step",
+                });
             } else {
-                this.wizardData[4].checked = false;
+                modifyWizardData(this.wizardData, "Treatment Plan", {
+                    checked: false,
+                });
             }
         },
+
         getFormatedData(data: any) {
             return data.map((item: any) => {
                 return item?.data;
             });
         },
         saveData() {
-            if (this.vitals.validationStatus && this.investigations[0].selectedData.length > 0 && this.diagnosis[0].selectedData.length > 0) {
-                this.saveVitals();
-                this.saveInvestigation();
-                this.saveDiagnosis();
-                this.saveTreatmentPlan();
-                this.saveOutComeStatus();
-                this.$router.push("patientProfile");
-            } else {
-                toastWarning("Please complete all required fields");
-                // this.saveOutComeStatus();
-                // this.saveTreatmentPlan();
-            }
-        },
-        saveInvestigation() {
-            const investigationInstance = new LabOrder();
-            investigationInstance.postActivities(this.demographics.patient_id, this.getFormatedData(this.investigations[0].selectedData));
+            this.saveVitals();
+            this.saveDiagnosis();
+            this.saveTreatmentPlan();
+            this.saveOutComeStatus();
+            this.$router.push("patientProfile");
         },
         saveVitals() {
-            const userID: any = Service.getUserID();
-            const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
-            vitalsInstance.onFinish(this.vitals);
+            if (this.vitals.validationStatus) {
+                const userID: any = Service.getUserID();
+                const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
+                vitalsInstance.onFinish(this.vitals);
+            }
         },
         saveDiagnosis() {
-            const userID: any = Service.getUserID();
-            const diagnosisInstance = new Diagnosis();
-            diagnosisInstance.onSubmit(this.demographics.patient_id, userID, this.getFormatedData(this.diagnosis[0].selectedData));
+            if (this.diagnosis[0].selectedData.length > 0) {
+                const userID: any = Service.getUserID();
+                const diagnosisInstance = new Diagnosis();
+                diagnosisInstance.onSubmit(this.demographics.patient_id, userID, this.getFormatedData(this.diagnosis[0].selectedData));
+            }
         },
         async saveTreatmentPlan() {
             const userID: any = Service.getUserID();

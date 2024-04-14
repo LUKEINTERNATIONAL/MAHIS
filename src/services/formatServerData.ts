@@ -22,7 +22,7 @@ export async function formatInputFiledData(data: any) {
 
         return Promise.all(
             item.data.rowData[0].colData.map(async (element: any) => {
-                if (!element.value) return null;
+                if (!element.value || element.buildConceptIgnore) return null;
 
                 const concept_id = await ConceptService.getConceptID(element.name, true);
                 const obs_datetime = ConceptService.getSessionDate();
@@ -47,13 +47,11 @@ export async function formatCheckBoxData(data: any) {
         if (item?.checkboxBtnContent?.data && item.checkboxBtnContent.data.length > 0) {
             return await Promise.all(
                 item.checkboxBtnContent.data.map(async (checkboxData: any) => {
-                    if (checkboxData.checked) {
+                    if (checkboxData.checked && !checkboxData.buildConceptIgnore) {
                         return {
                             concept_id: await ConceptService.getConceptID(item.checkboxBtnContent.header.name, true),
                             value_coded: await ConceptService.getConceptID(checkboxData.value, true),
-                            obs_datetime: item.checkboxBtnContent.inputFields
-                                ? item.checkboxBtnContent.inputFields[0]?.value || ConceptService.getSessionDate()
-                                : ConceptService.getSessionDate(),
+                            obs_datetime: ConceptService.getSessionDate(),
                         };
                     } else {
                         return null;

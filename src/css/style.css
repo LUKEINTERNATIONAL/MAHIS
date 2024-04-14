@@ -359,7 +359,7 @@ video {
     display: flex;
     justify-content: center;
     padding: 40px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 .no_content {
     justify-content: center;
@@ -370,7 +370,6 @@ video {
 }
 .start_consultation {
     height: 21px;
-    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -381,7 +380,6 @@ video {
     cursor: pointer;
 }
 .no_content_title {
-    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
     font-size: 14px;

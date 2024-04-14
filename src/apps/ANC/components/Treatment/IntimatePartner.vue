@@ -43,7 +43,7 @@
         </ion-card>
 
         <ion-card  class="section">
-            <ion-card-header> <ion-card-title class="sub_item_header">Referrals made as part of first-line support</ion-card-title></ion-card-header>
+            <ion-card-header> <ion-card-title class="sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="referrals"></basic-form>
             </ion-card-content>
@@ -169,7 +169,7 @@ export default defineComponent ({
           modifyFieldValue(this.referrals,'Specify','displayNone',true)
         }
 
-        const checkBoxes=['Care at another facility','Crisis intervention or counselling','Police','Shelter or housing',
+        const checkBoxes=['Care at another facility',"         Care at another facility",'Crisis intervention or counselling','Police','Shelter or housing',
                          'Shelter or housing','Child protection','Livelihood support','Other',]
 
       if (getCheckboxSelectedValue(this.referrals, 'None')?.checked) {

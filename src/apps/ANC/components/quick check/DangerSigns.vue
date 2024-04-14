@@ -2,21 +2,11 @@
   <div class="container">
     <!-- Danger signs -->
     <ion-card  class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Danger signs</ion-card-title>
-      </ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="DangerSigns"></basic-form>
-      </ion-card-content>
-    </ion-card>
+        <basic-form :contentData="DangerSigns"
+                    :initialData="initialData"
 
-    <!-- previous visit -->
-    <ion-card  class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Has the woman had previous ANC visits at another facility?</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <basic-form :contentData="PreviousVisit"></basic-form>
+        ></basic-form>
       </ion-card-content>
     </ion-card>
 
@@ -72,47 +62,36 @@ export default defineComponent({
   },
   data() {
     return {
-      previousVisitDateRef: {},
-      previousVisitInstance: {} as any,
-      previousVisitDateInstance: {} as any,
+      initialData:[]as any,
       iconsContent: icons,
-      currentSection: 0, // Initialize currentSection to 0
 
 
     };
   },
-  created() {
-    this.previousVisitDateRef= {...this.PreviousVisitDate[0],...this.PreviousVisitDate[1]}
-  },
+
   mounted() {
     const DangerSigns =useDangerSignsStore()
-    const PreviousVisit =useDangerSignsStore()
-    this.previousVisitInstance=useDangerSignsStore()
-    this.previousVisitInstance.setPreviousVisitDate([])
-    this.handleNumberOfVisits()
+    this.initialData=DangerSigns.getInitial();
     this.handleDangerSigns()
   },
   watch:{
     PreviousVisit:{
     handler(val){
-      console.log(val)
-      if (val && val[1].data.rowData[0].colData[0].value) {
-        const numberOfvisits = parseInt(val[1].data.rowData[0].colData[0].value)
-        this.previousVisitInstance.setPreviousVisitDate([])
-
-        const visits = []
-        for (let i = 0; i < numberOfvisits; ++i) {
-          const x = JSON.parse(JSON.stringify({...this.previousVisitDateRef, id: i}))
-          x.data.sectionHeader = `Enter the date of (Visit ${i + 1})`;
-          x.data.sectionHeader.id=i
-          x.data.id=i
-          visits.push(x)
-        }
-
-        this.previousVisitDateInstance.setPreviousVisitDate(visits)
-      }
-
-      this.handleNumberOfVisits()
+      // if (val && val[1].data.rowData[0].colData[0].value) {
+      //   const numberOfvisits = parseInt(val[1].data.rowData[0].colData[0].value)
+      //   this.previousVisitInstance.setPreviousVisitDate([])
+      //
+      //   const visits = []
+      //   for (let i = 0; i < numberOfvisits; ++i) {
+      //     const x = JSON.parse(JSON.stringify({...this.previousVisitDateRef, id: i}))
+      //     x.data.sectionHeader = `Enter the date of (Visit ${i + 1})`;
+      //     x.data.sectionHeader.id=i
+      //     x.data.id=i
+      //     visits.push(x)
+      //   }
+      //
+      //   this.previousVisitDateInstance.setPreviousVisitDate(visits)
+      // }
 
 
     },
@@ -127,8 +106,7 @@ export default defineComponent({
   },
   computed: {
     ...mapState(useDangerSignsStore, ["DangerSigns"]),
-    ...mapState(useDangerSignsStore, ["PreviousVisit"]),
-    ...mapState(useDangerSignsStore, ["PreviousVisitDate"]),
+
   },
   setup() {
     return { checkmark,pulseOutline };
@@ -139,14 +117,10 @@ export default defineComponent({
       this.$router.push(url);
     },
     handleDangerSigns(){
-      if(getCheckboxSelectedValue(this.DangerSigns, 'Other')?.value =='other'){
-      modifyFieldValue(this.DangerSigns,'Other','displayNone', false)
-    }   else {modifyFieldValue(this.DangerSigns,'Other','displayNone', true)
 
-      }
       const checkBoxes=['Pre-term labour','Central cyanosis', 'Unconscious', 'Fever', 'Imminent delivery',
                         'Severe headache', 'Severe vomiting','Severe abdominal pain','Draining liquor',
-                        'Respiratory problems','Convulsion history', 'Oedema', 'Epigastric pain', 'Bleeding vaginally', 'Other']
+                        'Respiratory problems','Convulsion history','Vomiting' , 'Oedema', 'Epigastric pain', 'Bleeding vaginally', 'Other']
       if (getCheckboxSelectedValue(this.DangerSigns, 'No danger signs')?.checked) {
         checkBoxes.forEach((checkbox) => {
           modifyCheckboxValue(this.DangerSigns, checkbox, 'checked', false);
@@ -159,25 +133,6 @@ export default defineComponent({
       }
 
       },
-
-    handleNumberOfVisits(){
-      if(getRadioSelectedValue(this.PreviousVisit, 'Yes')=='yes'){
-        modifyFieldValue(this.PreviousVisit,'number of previous anc visits','displayNone', false)
-      }   else {modifyFieldValue(this.PreviousVisit,'number of previous anc visits','displayNone', true)}
-    },
-    //Method for navigating
-    goToNextSection() {
-      if (this.currentSection < 1) {
-        this.currentSection++;
-      }
-    },
-    goToPreviousSection() {
-      if (this.currentSection > 0) {
-        this.currentSection--;
-      }
-    },
-
-
   }
 });
 </script>

@@ -1,37 +1,16 @@
 <template>
   <div class="container">
-    <ion-card v-if="currentSection === 0" class="section">
+    <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
               <basic-form :contentData="iron"></basic-form>
-              <!-- <basic-form :contentData="ironDosage"></basic-form> -->
               <basic-form :contentData="folicAcid"></basic-form>
               <basic-form :contentData="folicAcidReason"></basic-form>
-            </ion-card-content>
-    </ion-card>
-
-    <ion-card v-if="currentSection === 1" class="section">
-            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
-            <ion-card-content>
               <basic-form :contentData="vitaminA"></basic-form>
-              <!-- <basic-form :contentData="vitaminADosage"></basic-form>
-              <basic-form :contentData="vitaminAReason"></basic-form> -->
-            </ion-card-content>
-    </ion-card>
-
-    <ion-card v-if="currentSection === 2" class="section">
-            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
-            <ion-card-content>
               <basic-form :contentData="calcium"></basic-form>
               <basic-form :contentData="calciumReason"></basic-form>
             </ion-card-content>
     </ion-card>
-
-          <!-- Navigation Buttons -->
-    <div class="navigation-buttons">
-      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
-      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
-    </div> 
 
   </div>
 </template>
@@ -92,12 +71,9 @@ export default defineComponent ({
     },
     computed:{
         ...mapState(useMedicationDispensedStore, ["iron"]),
-        // ...mapState(useMedicationDispensedStore, ["ironDosage"]),
         ...mapState(useMedicationDispensedStore, ["folicAcid"]),
         ...mapState(useMedicationDispensedStore, ["folicAcidReason"]),
         ...mapState(useMedicationDispensedStore, ["vitaminA"]),
-        // ...mapState(useMedicationDispensedStore, ["vitaminADosage"]),
-        // ...mapState(useMedicationDispensedStore, ["vitaminAReason"]),
         ...mapState(useMedicationDispensedStore, ["calcium"]),
         ...mapState(useMedicationDispensedStore, ["calciumReason"]),
 
@@ -149,17 +125,6 @@ export default defineComponent ({
       }
     },
     methods :{
-       //Method for navigating sections
-    goToNextSection() {
-      if (this.currentSection < 2) {
-        this.currentSection++;
-      }
-    },
-    goToPreviousSection() {
-      if (this.currentSection > 0) {
-        this.currentSection--;
-      }
-    },
     handleIron(){
       if(getRadioSelectedValue(this.iron,'ironInfo')=='yes'){
         modifyFieldValue(this.iron,'ironNum','displayNone',false)

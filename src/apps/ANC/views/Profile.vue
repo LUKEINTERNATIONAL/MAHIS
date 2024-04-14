@@ -52,9 +52,9 @@ import { useCurrentPregnanciesStore } from "@/apps/ANC/store/profile/CurrentPreg
 import { useMedicationsStore } from "@/apps/ANC/store/profile/MedicationsStore";
 import { useWomanBehaviourStore } from "@/apps/ANC/store/profile/womanBehaviourStore";
 import { Service } from "@/services/service";
-import { ProfileService } from "@/services/anc_profile_service";
+//import { ProfileService } from "@/services/anc_profile_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
-import { formatRadioButtonData } from "@/services/formatServerData";
+import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
 import { Preterms } from "../service/preterm";
 
 // function someChecked(options, errorMassage) {
@@ -152,14 +152,6 @@ export default defineComponent({
                     title: "Past Medical history",
                     component: "MedicalHistory",
                     value: "2",
-                    // validation: {
-                    //   medicalHistory: (data) => someChecked(data, "Medical history is required"),
-                    //   allegy: (data) => someChecked(data, "Allergy is required"),
-                    //   //existingChronicHealthConditions: (data)=>someChecked(data, "Existing chronic conditions is required"),
-                    //   hivTest: (data)=>someChecked(data, "HIV test required"),
-                    //   syphilisTest: (data)=>someChecked(data, "Syphilis test is required")
-
-                    // }
                 },
                 {
                     title: "Current Pregnancy",
@@ -182,39 +174,15 @@ export default defineComponent({
         };
     },
     watch: {
-        medicalHistory(change) {
-            console.log(change);
-        },
+        medicalHistory(change) {},
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
-        ...mapState(useObstreticHistoryStore, ["preterm"]),
-        ...mapState(useObstreticHistoryStore, ["Complications"]),
-    },
-    saveData() {
-        const medicalConditions = [
-            "Auto immune desease",
-            "Asthma",
-            "Diabetes",
-            "Sickle cell",
-            "Anaemia",
-            "Thalassemia",
-            "Gynaecological",
-            "CCF",
-            "RHD",
-            "Gestational diabetes",
-            "pre-existing type 1",
-            "pre-existing type 2",
-            "Epilepsy",
-            "Hypertension",
-            "Kidney",
-            "TB",
-            "Mental  illiness",
-        ];
-        // for (const condition of medicalConditions) {
-        //   const selectedValue = getCheckboxSelectedValue(this.exisitingChronicHealthConditions, condition);
-        //   console.log(selectedValue);
-        // }
+        ...mapState(useObstreticHistoryStore, ["preterm","prevPregnancies","Complications"]),
+        ...mapState(useMedicalHistoryStore,['medicalHistory','allegy','exisitingChronicHealthConditions']),
+        ...mapState(useCurrentPregnanciesStore,['palpation','tetanus','lmnp','ultrasound']),
+        ...mapState(useMedicationsStore,['Medication']),
+        ...mapState(useWomanBehaviourStore,['dailyCaffeineIntake'])
     },
     mounted() {
         // this.markWizard()
@@ -247,7 +215,7 @@ export default defineComponent({
             //     this.wizardData[2].checked = true;
             //     this.wizardData[2].class = 'open_step common_step'
             //   }else{
-            //     this.wizardData[2].checked = false;
+            //     this.wizardData[2].checked = false;  
             //   }
         },
         deleteDisplayData(data: any) {
@@ -256,58 +224,118 @@ export default defineComponent({
                 return item?.data;
             });
         },
-        saveData() {
-            console.log("testing");
-            // const errors = []
-            // this.StepperData.forEach((stepper)=> {
-            //   if (!stepper.validation) return
-            //   Object.keys(stepper.validation).forEach((validationName) => {
-            //     if (typeof stepper.validation[validationName] === 'function') {
-            //       const state = stepper.validation[validationName](this[validationName])
-            //       if (state) errors.push(state)
-            //     }
-            //   })
-            // })
-            // if (errors.length) {
-            //   return alert(errors.join(','))
-            // }
-            this.savePreterm();
-            //  this.$router.push('QuickCheck');
+         async saveData() {
+            this.savePrevPregnancies()
+            this.savePreterm()
+            this.savePastPregnancyComplication()
+            this.savePastSurgeries()
+            this.saveAllergy()
+            this.saveChronicHealthCondition()
+            this.saveCurrentPrengancy()
+            this.saveMedication()
+            this.saveCaffeinIntake()
         },
-        savePrevPregnancies() {},
-
-        // async savePreterm() {
+        async savePrevPregnancies(){
+            console.log(await this.buildPregnancyHistory())
+        },
+        async savePreterm(){
+        // if (this.preterm[0].selectedData.length > 0) {
         //     const userID: any = Service.getUserID();
-        //     const pretermInstance = new ProfileService(this.demographics.patient_id, userID);
-        //     await pretermInstance.createEncounter();
-        //     const data = await this.buildPreterm();
-        //     await pretermInstance.saveObservationList(data);
-        // },
-        // async buildPreterm() {
-        //     const id = await ConceptService.getConceptID(getRadioSelectedValue(this.preterm, "pretermInfo"));
-        //     console.log(id);
-        //     return [
-        //         {
-        //             concept_id: 7141,
-        //             value_coded: id,
-        //             obs_datetime: Service.getSessionDate(),
-        //         },
-        //     ];
-        // },
-
-        async buildPretermData() {
-            return [...(await formatRadioButtonData(this.preterm))];
+        //     const Preterm = new ProfileService(this.demographics.patient_id, userID);
+        //     const encounter = await Preterm.createEncounter();
+        //     if (!encounter) return toastWarning("Unable to create Preterm encounter");
+        //     const patientStatus = await Preterm.saveObservationList(await this.buildPastObstetricHistory());
+        //     if (!patientStatus) return toastWarning("Unable to create Preterm !");
+        //     toastSuccess("Pretermhas been created");
+        // }
+        console.log(await this.buildPreterm())
         },
-        async savePreterm() {
-            const data: any = await this.buildPretermData();
-            console.log("save preterm=====>", data);
-            if (data.length > 0) {
-                const userID: any = Service.getUserID();
-                const pretermInstance = new Preterms();
-                pretermInstance.onSubmit(this.demographics.patient_id, userID, data);
-            }
+        async savePastPregnancyComplication(){
+        // if (this.preterm[0].selectedData.length > 0) {
+        //     const userID: any = Service.getUserID();
+        //     const Preterm = new ProfileService(this.demographics.patient_id, userID);
+        //     const encounter = await Preterm.createEncounter();
+        //     if (!encounter) return toastWarning("Unable to create Preterm encounter");
+        //     const patientStatus = await Preterm.saveObservationList(await this.buildPastObstetricHistory());
+        //     if (!patientStatus) return toastWarning("Unable to create Preterm !");
+        //     toastSuccess("Pretermhas been created");
+        // }
+        console.log(await this.buildPastPregnancyComplication())
         },
-
+        async savePastSurgeries(){
+            console.log(await this.buildPastSurgeries())
+        },
+        async saveAllergy(){
+            console.log(await this.buildAllergy())
+        },
+        async saveChronicHealthCondition(){
+            console.log(await this.buildChronicHealthCondition())
+        },
+        async saveCurrentPrengancy(){
+            console.log(await this.buildCurrentPrengancy())
+        },
+        async saveMedication(){
+            console.log(await this.buildMedication())
+        },
+        async saveCaffeinIntake(){
+            console.log(await this.buildCaffeinIntake())
+        },
+        async buildPregnancyHistory(){
+            return[
+                ...(await formatInputFiledData(this.prevPregnancies))
+            ]
+        },
+        async buildPreterm(){
+            return [
+                ...(await formatRadioButtonData(this.preterm)),       
+            ];
+        },
+        async buildPastPregnancyComplication(){
+            return [
+                ...(await formatCheckBoxData(this.Complications)),
+                ...(await formatInputFiledData(this.Complications))       
+            ];
+        },
+        async buildPastSurgeries(){
+            return[
+                ...(await formatCheckBoxData(this.medicalHistory)),
+                ...(await formatInputFiledData(this.medicalHistory))
+            ]
+        },
+        async buildAllergy(){
+            return[
+                ...(await formatCheckBoxData(this.allegy)),
+                 ...(await formatInputFiledData(this.allegy))
+            ]
+        },
+        async buildChronicHealthCondition(){
+            return[
+                ...(await formatCheckBoxData(this.exisitingChronicHealthConditions)),
+                ...(await formatInputFiledData(this.exisitingChronicHealthConditions))
+            ]
+        },
+        async buildCurrentPrengancy(){
+            return[
+                ...(await formatRadioButtonData(this.palpation)),
+                ...(await formatRadioButtonData(this.tetanus)),
+                ...(await formatRadioButtonData(this.lmnp)),
+                ...(await formatRadioButtonData(this.ultrasound)),
+                ...(await formatInputFiledData(this.ultrasound))
+            ]
+        },
+        async buildMedication(){
+            return[
+                ...(await formatCheckBoxData(this.Medication)),
+                ...(await formatInputFiledData(this.Medication))
+            ]
+        },
+        async buildCaffeinIntake(){
+            return[
+                ...(await formatCheckBoxData(this.dailyCaffeineIntake)),
+                ...(await formatRadioButtonData(this.dailyCaffeineIntake)),
+                ...(await formatRadioButtonData(this.dailyCaffeineIntake)),
+            ]
+        },
         openModal() {
             createModal(SaveProgressModal);
         },

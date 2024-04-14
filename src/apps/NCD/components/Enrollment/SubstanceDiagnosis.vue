@@ -56,12 +56,18 @@ export default defineComponent({
     },
     methods: {
         buidCards() {
+            const enrollment = useEnrollementStore();
             this.cardData = {
                 mainTitle: "Enrollment",
                 cards: [
                     {
                         cardTitle: "Substance use / Consumption",
                         content: this.substance,
+                    },
+                    {
+                        cardTitle: "Diagnosis",
+                        content: this.enrollmentDiagnosis,
+                        initialData: enrollment.getInitialEnrollmentDiagnosis(),
                     },
                 ],
             };
@@ -132,7 +138,6 @@ ion-radio {
     line-height: 3;
 }
 .small_font {
-    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
