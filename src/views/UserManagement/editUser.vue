@@ -1,16 +1,5 @@
 <template>
      <IonCard>
-        <ion-row>
-            <ion-col>
-                <BasicInputField
-                    :placeholder="note_properties[0].placeHolder"
-                    :icon="personCircleOutline"
-                    :inputValue="user_name"
-                    @update:inputValue="note_properties[0].dataHandler"
-                />
-            </ion-col>
-            <ion-col></ion-col>
-        </ion-row>
 
         <ion-row>
             <ion-col>
@@ -30,6 +19,20 @@
                 />
             </ion-col>
         </ion-row>
+        
+        <ion-row>
+            <ion-col>
+                <BasicInputField
+                    :placeholder="note_properties[0].placeHolder"
+                    :icon="personCircleOutline"
+                    :inputValue="user_name"
+                    @update:inputValue="note_properties[0].dataHandler"
+                />
+            </ion-col>
+            <ion-col></ion-col>
+        </ion-row>
+
+
 
         <ion-row>
             <ion-col>
@@ -96,7 +99,8 @@
         <ion-row>
             <ion-col>
                 <userActivities
-                v-if="show_user_programs"
+                    v-if="show_user_programs"
+                    :userId="userId"
                     :user_programs="user_programs"
                 />
             </ion-col>
@@ -175,6 +179,7 @@ const user_data = ref()
 const user_name = ref()
 const first_name = ref()
 const last_name = ref()
+const userId = ref() as any
 const show_user_programs = ref(false)
 
 const props = defineProps<{
@@ -193,6 +198,7 @@ onMounted(async () => {
 // }>()
 
 async function getUserData() {
+    userId.value = props.user_id
     user_data.value = await UserService.getUserByID(props.user_id)
     user_name.value = user_data.value.username
     first_name.value =  userFirstname(user_data.value.person.names)

@@ -1,9 +1,10 @@
 import { TaskInterface } from "@/interfaces/TaskInterface";
 
-export const PRIMARY_ACTIVITIES: TaskInterface[] = [
+["", "", "", "", "", "", ""];
+export const NCD_PRIMARY_ACTIVITIES: TaskInterface[] = [
   {
-    id: 'patient registration',
-    name: 'Patient registration',
+    id: 'Vital Signs',
+    name: 'Vital Signs',
     icon: 'attributes.png'
   },
   {
@@ -12,64 +13,36 @@ export const PRIMARY_ACTIVITIES: TaskInterface[] = [
     icon: 'vitals.png'
   },
   {
-    id: 'presenting complaints',
-    name: 'Presenting complaints',
+    id: 'Investigations',
+    name: 'Investigations',
     icon: 'complaints.png'
   },
   {
-    id: 'hiv status',
-    name: 'HIV STatus',
+    id: 'Diagnosis',
+    name: 'Diagnosis',
     icon: 'aids.png',
-    encounterTypeName: 'update hiv status',
+    encounterTypeName: 'Diagnosis',
     availableOnActivitySelection: false
   },
   {
-    id: 'outpatient diagnosis',
-    name: 'Outpatient diagnosis',
+    id: 'Complications Screening',
+    name: 'Complications Screening',
     icon: 'diagnosis.png'
   },
   {
-    id: 'outcome status',
-    name: 'Outcome status',
+    id: 'Treatment Plan',
+    name: 'Treatment Plan',
     icon: 'outcomes.png',
-    availableOnActivitySelection: false
   },
   {
-    id: 'lab orders',
-    name: 'Lab orders',
-    icon: 'clinical-notes.png',
-    availableOnActivitySelection: false,
-    action: ({patient}: any, router: any) => {
-      router.push(`/los/forms/order/${patient.patient_id}?type=DRAW_SAMPLES`)
-    }
+    id: 'Next Appointment',
+    name: 'Next Appointment',
+    icon: 'clinical-notes.png'
   },
   {
-    id: 'lab results',
-    name: 'Lab results',
+    id: 'Outcome',
+    name: 'Outcome',
     icon: 'enter.png',
-    availableOnActivitySelection: false,
-    action: ({ patient }: any, router: any) => {
-      router.push({ path: `/lab/results/${patient.patient_id}`})
-    },
-  },
-  {
-    id: 'OPD social history',
-    name: 'OPD social history',
-    icon: 'medical-report.png',
-    availableOnActivitySelection: false
-  },
-  {
-    id: 'prescription',
-    name: 'Prescription',
-    encounterTypeName: 'Treatment',
-    icon: 'drugs-given.png'
-  },
-  {
-    id: 'dispensation',
-    name: 'Dispensation',
-    workflowID:"Dispensing",
-    icon: 'dispensing.png',
-    availableOnActivitySelection: false
   },
 ]
 

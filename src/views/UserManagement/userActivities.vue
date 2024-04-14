@@ -43,43 +43,16 @@ import {
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
 import ListPicker from "../../components/ListPicker.vue"
 import { Service } from "@/services/service"
-import { PRIMARY_ACTIVITIES } from "@/apps/NCD/config/programActivities"
+import { NCD_PRIMARY_ACTIVITIES } from "@/apps/NCD/config/programActivities"
+import { OPD_PRIMARY_ACTIVITIES } from "@/apps/OPD/config/programActivities"
+import { UserService } from "@/services/user_service"
 
 const main_program = ref('') as any
 const activities = ref([] as any)
 
-const knownLitsOfPrograms = ref([
-    'HIV PROGRAM',
-    'TB PROGRAM',
-    'VHW PROGRAM',
-    'EARLY INFANT DIAGNOSIS PROGRAM',
-    'MDR-TB PROGRAM',
-    'KAPOSIS SARCOMA PROGRAM',
-    'CHRONIC CARE PROGRAM',
-    'MATERNITY PROGRAM',
-    'ANC PROGRAM',
-    'DIABETES PROGRAM',
-    'OPD Program',
-    'IPD Program',
-    'UNDER 5 PROGRAM',
-    'CIVIL REGISTRATION PROGRAM',
-    'HTC PROGRAM',
-    'ANC CONNECT PROGRAM',
-    'HYPERTENSION PROGRAM',
-    'VMMC PROGRAM',
-    'IPT Program',
-    'Laboratory program',
-    'CxCa program',
-    'Triage Program',
-    'RADIOLOGY PROGRAM',
-    'PATIENT REGISTRATION PROGRAM',
-    'AETC PROGRAM',
-    'SPINE PROGRAM',
-    'NCD PROGRAM'
-])
-
 const props = defineProps<{
-    user_programs: any
+    user_programs: any,
+    userId: any,
 }>()
 
 onMounted(async () => {
@@ -88,7 +61,7 @@ onMounted(async () => {
 })
 
 function setProgramActivities() {
-    activities.value = PRIMARY_ACTIVITIES
+    activities.value = NCD_PRIMARY_ACTIVITIES
 }
 
 watch(
@@ -99,34 +72,38 @@ watch(
         }
     }
 )
-
 async function generatedSelected() {
     props.user_programs.forEach(async (selected: any) => {
         const is_P = generateKeyAPIRef(selected.name)
         if (is_P.exists == true) {
+            try {
                 console.log(is_P.ref_name)
                 const data_ = [] as any
                 const data = await getActivities(is_P.ref_name)
                 activities.value.forEach((item: any) => {
                     data.forEach((datum: any) => {
                         if (item.name == datum.name) {
-                        item.selected = true
-
-                        data_.push({
-                            name: item.name,
-                            selected: true
-                        })
-                    }
+                            data_.push({
+                                name: item.name,
+                                selected: true
+                            })
+                        } else {
+                            data_.push(
+                                {
+                                    name: item.name,
+                                    selected: false
+                                }
+                            )
+                        }
                     })
                 })
                 activities.value = []
                 activities.value = data_
                 main_program.value = selected.name
+            } catch (error) {
+                console.error(error)
             }
-        // let is_P2: any
-        // knownLitsOfPrograms.value.forEach(async (program: any) => {
-        //     is_P2 = generateKeyAPIRef(program)
-        // })
+        }
     })
 }
 
@@ -138,6 +115,13 @@ function generateKeyAPIRef(program: string) {
             exists: true
         } 
     }
+
+    if (checkTextInString('ncd', program) == true) {
+        keyRefAPIRefObj = {
+            ref_name: 'NCD_activities',
+            exists: true
+        } 
+    }
     else {
         keyRefAPIRefObj = {
             ref_name: '',
@@ -145,7 +129,7 @@ function generateKeyAPIRef(program: string) {
         }
     }
     return keyRefAPIRefObj
-} 
+}
 
 function checkTextInString(text: string, string: string | any[]) {
     text = text.toLowerCase();
@@ -159,6 +143,7 @@ function checkTextInString(text: string, string: string | any[]) {
 
 async function getActivities(property: any) {
     const data = await Service.getJson('user_properties', {
+        user_id: props.userId,
         property: property,
     })
     const _activities_ = (stringToArray(data.property_value))
