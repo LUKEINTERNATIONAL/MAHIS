@@ -4,7 +4,7 @@
          <!-- Past Surgeries -->
             <ion-card class="section">
             <ion-card-header>
-                <ion-card-title class="dashed_bottom_border sub_item_header">Does the woman have any past surgeries done?</ion-card-title>
+                <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title>
             </ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="medicalHistory"></basic-form>
@@ -14,7 +14,7 @@
          <!-- Allegies -->
           <ion-card  class="section">
             <ion-card-header>
-                <ion-card-title class="dashed_bottom_border sub_item_header">Does the woman have any allergies?</ion-card-title>
+                <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title>
             </ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="allegy"></basic-form>
@@ -24,7 +24,7 @@
         <!-- Chronical Health conditions -->
             <ion-card class="section">
             <ion-card-header>
-                <ion-card-title class="dashed_bottom_border sub_item_header">Does the woman have any existing chronic conditions?</ion-card-title>
+                <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title>
             </ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="exisitingChronicHealthConditions"></basic-form>
