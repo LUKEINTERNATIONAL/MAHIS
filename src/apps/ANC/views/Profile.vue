@@ -272,7 +272,7 @@ export default defineComponent({
             //   return alert(errors.join(','))
             // }
             this.savePreterm();
-            //  this.$router.push('QuickCheck');
+             this.$router.push('QuickCheck');
         },
         savePrevPregnancies() {},
 
