@@ -5,21 +5,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
   state: () => ({
     prevPregnancies: [
       {
-        selectdData: [],
         isFinishBtn: false,
-        radioBtnContent: {
-          header: {
-            class:'bold',
-            title: "History on previous pregnancies",
-            selectedValue: "",
-          },
-          data: [
-          ],
-        },
-      },
-      {
-        isFinishBtn: false,
-        sideColSize:0.5,
         sectionHeader: "",
         data: {
           rowData: [
@@ -42,7 +28,6 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
         },
       },
       {
-        sideColSize:0.5,
         data: {
           rowData: [
             {
@@ -75,7 +60,6 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
         },
       },
       {
-        sideColSize:0.5,
         classDash: "dashed_bottom_border",
         data: {
           rowData: [
@@ -84,16 +68,17 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
                 {
                   inputHeader: "Live births",
                   value: "",
+                  disabled:true,
                   name: "LiveBirths",
                   required: true,
                   valueType: "text",
-                  icon: icons.editPen,
                   eventType: "input",
                   alertsError: false,
                   alertsErrorMassage: "",
                 },
                 {
                   inputHeader: "Parity",
+                  disabled: true,
                   value: "",
                   name: "Parity",
                   valueType: "text",
@@ -108,7 +93,42 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
         },
       },
     ] as any,
-
+    abnormalities: [
+      {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border",
+        radioBtnContent: {
+          header: {
+            title: "Last live birth had congenital abnormalities?",
+            selectedValue: "",
+          },
+          data: [
+            {
+              name: "Yes",
+              value: "Yes",
+              labelPlacement: "start",
+              colSize: "7",
+              justify: "space-between",
+            },
+            {
+              name: "No",
+              value: "No",
+              labelPlacement: "start",
+              colSize: "7",
+              justify: "space-between",
+            },
+            {
+              name: "Dont know",
+              value: "Dont know",
+              labelPlacement: "start",
+              colSize: "7",
+              justify: "space-between",
+            },
+          ],
+        },
+      },
+    ],
     preterm: [
       {
         selectedData: [],
@@ -148,7 +168,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
         classDash: "dashed_bottom_border",
         radioBtnContent: {
           header: {
-            class:"bold",
+
             title: "Specify mode of delivery",
             selectedValue: "",
             name: "cesareanSec",
@@ -178,6 +198,13 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
             {
               name: "SDV",
               value: "sdv",
+              labelPlacement: "start",
+              colSize: "7",
+              justify: "space-between",
+            },
+            {
+              name: "Other",
+              value: "other",
               labelPlacement: "start",
               colSize: "7",
               justify: "space-between",
@@ -213,11 +240,11 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
           header: {
+            class:"bold",
             title:
               "Does the woman have any complications due to past pregnancies?",
             selectedValue: "",
             name: "Does the woman have any complications due to past pregnancies?",
-            class:'bold',
           },
           data: [
             {
@@ -423,19 +450,18 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
       {
         isFinishBtn: false,
         sectionHeader: "",
-        classDash: "dashed_bottom_border _padding",
-        name: "Does the woman have any complications due to past pregnancies?",
+        classDash: "dashed_bottom_border",
         data: {
           rowData: [
             {
               colData: [
                 {
-                 // displayNone: true,
+                 displayNone: true,
                   inputHeader: "specify",
                   unit: "",
                   icon: icons.editPen,
                   value: "",
-                  name: "other",
+                  name: "Other notes",
                   valueType:'text',
                   required: true,
                   eventType: "input",
@@ -455,7 +481,9 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
     setPreterm(data: any) {
       this.preterm = data;
     },
-
+    setAbnormalities(data: any) {
+      this.abnormalities = data;
+    },
     setModeOfDelivery(data: any) {
       this.modeOfDelivery = data;
     },

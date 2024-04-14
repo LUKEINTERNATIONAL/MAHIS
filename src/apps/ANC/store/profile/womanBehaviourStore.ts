@@ -114,12 +114,12 @@ export const useWomanBehaviourStore = defineStore("womanBehaviourStore", {
             {
               value: "Yes",
               name: "Yes",
-              colSize: "3",
+              colSize: "2.5",
             },
             {
               value: "No",
               name: "No",
-              colSize: "3",
+              colSize: "2.5",
             },
           ],
         },
@@ -137,12 +137,12 @@ export const useWomanBehaviourStore = defineStore("womanBehaviourStore", {
             {
               value: "Yes",
               name: "Yes",
-              colSize: "3",
+              colSize: "2.5",
             },
             {
               value: "No",
               name: "No",
-              colSize: "3",
+              colSize: "2.5",
             },
           ],
         },

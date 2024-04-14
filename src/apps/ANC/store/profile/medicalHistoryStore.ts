@@ -446,6 +446,7 @@ const initialMedicalHistory=[
   },
   {
     childName:'Other',
+    classDash: "dashed_bottom_border",
     data: {
       rowData: [
         {
@@ -689,6 +690,7 @@ const initialAllergies=[
   },
   {
     childName:'Other',
+    classDash: "dashed_bottom_border",
     data: {
       rowData: [
         {
@@ -1013,7 +1015,7 @@ const initialChronicConditions=[
     },
   },
   {
-    sideColSize:0.5,
+    sideColSize:0,
     classDash: "dashed_bottom_border",
     childName:'Other',
     data: {

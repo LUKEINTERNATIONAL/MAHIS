@@ -1,17 +1,17 @@
 <template>
     <div class="container">
         <ion-card class="section">
+            <ion-card-header> <ion-card-title class="sub_item_header">History on previous pregnancies</ion-card-title></ion-card-header>
             <ion-card-content>
               <basic-form :contentData="prevPregnancies"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
             </ion-card-content>
         </ion-card>
 
-        <ion-card  style="margin-left: 20px">
+        <ion-card>
         <ion-card-content>
             <basic-form :contentData="modeOfDelivery" @update:inputValue="handleAlert"></basic-form>
           </ion-card-content>
         </ion-card>
-
         <ion-card class="section">
             <ion-card-content>
                 <basic-form :contentData="preterm"></basic-form>
@@ -43,7 +43,7 @@ IonRadio,
 IonRadioGroup,
         } from '@ionic/vue';
 import BasicForm from '../../../../components/BasicForm.vue';
-import { icons } from '../../../../utils/svg';
+import { icons } from '@/utils/svg';
 import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import { useObstreticHistoryStore} from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
@@ -98,6 +98,7 @@ export default defineComponent({
   computed:{
         ...mapState(useObstreticHistoryStore,["prevPregnancies"]),
         ...mapState(useObstreticHistoryStore,["preterm"]),
+        ...mapState(useObstreticHistoryStore,["abnormalities"]),
         ...mapState(useObstreticHistoryStore,["modeOfDelivery"]),
         ...mapState(useObstreticHistoryStore, ["Complications"]),
         Stillbirths(){ return getFieldValue(this.prevPregnancies, 'Stillbirths','value')},
@@ -158,11 +159,11 @@ export default defineComponent({
     methods:{
       handleOther(){
          
-                  if(getCheckboxSelectedValue(this.Complications,'Other')?.value =='otherInfo'){
+                  if(getCheckboxSelectedValue(this.Complications,'Other')?.value =='other'){
 
-                    modifyFieldValue(this.Complications,'otherC','displayNone',false)
+                    modifyFieldValue(this.Complications,'Other notes','displayNone',false)
                   }else{
-                    modifyFieldValue(this.Complications,'otherC','displayNone',true)
+                    modifyFieldValue(this.Complications,'Other notes','displayNone',true)
                   }
                    const checkBoxes=['Asphyxia','Does not know','Pre-eclampsia',
                                      'Eclampsia','Puerperal Sepsis',
@@ -220,7 +221,7 @@ export default defineComponent({
         const gravidaField = this.prevPregnancies.find((field: any) => field.data.rowData[0].colData[0].name === "Gravida");
 
             const abortionsField = this.prevPregnancies.find((field: any) =>
-                field.data.rowData.length > 1 && field.data.rowData[1].colData[0].name === "Abortions/Miscarriages");
+                field.data.rowData.length > 1 && field.data.rowData[1].colData[0].name === "Abortions");
 
             const stillBirthsField = this.prevPregnancies.find((field: any) =>
                 field.data.rowData.length > 1 && field.data.rowData[1].colData[1].name === "Stillbirths");
