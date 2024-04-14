@@ -3,155 +3,24 @@ import { icons } from '@/utils/svg'
 
 export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
   state: () => ({
-    HeadssAssesment: [
-      {
-        selectdData: [],
-        isFinishBtn: false,
-        classDash: "dashed_bottom_border",
-        radioBtnContent: {
-          header: {
-            title: "Who does the client live with?",
-            selectedValue: "",
-          },
-          data: [
-            {
-              name: "Parents",
-              value: "parents",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-            {
-              name: "Siblings",
-              value: "siblings",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-            {
-              name: "Extended family",
-              value: "extendedFamily",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-            {
-              name: "Partner",
-              value: "partner",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-            {
-              name: "Friend",
-              value: "friend",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-            {
-              name: "No one",
-              value: "noOne",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-            {
-              name: "Other",
-              value: "other",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-          ],
-        },
-      },
-
-      {
-        isFinishBtn: false,
-        sectionHeader: "",
-        classDash: "dashed_bottom_border _padding",
-
-        data: {
-          rowData: [
-            {
-              colData: [
-                {
-                  // displayNone:true,
-                  inputHeader:
-                    "How does the client perceive her home situation?",
-                  unit: "",
-                  icon: icons.editPen,
-                  value: "",
-                  name: "home situation",
-                  required: true,
-                  eventType: "input",
-                  inputWidth: "100%",
-                },
-              ],
-            },
-          ],
-        },
-      },
-      {
-        isFinishBtn: false,
-        sectionHeader: "",
-        classDash: "dashed_bottom_border _padding",
-
-        data: {
-          rowData: [
-            {
-              colData: [
-                {
-                  // displayNone:true,
-                  inputHeader:
-                    "How does she perceive her relationship with her teachers and fellow students/employers and colleagues?",
-                  unit: "",
-                  icon: icons.editPen,
-                  value: "",
-                  name: "perceive relationship",
-                  required: true,
-                  eventType: "input",
-                  inputWidth: "100%",
-                },
-              ],
-            },
-          ],
-        },
-      },
-      {
-        selectdData: [],
-        isFinishBtn: false,
-        classDash: "dashed_bottom_border",
-        radioBtnContent: {
-          header: {
-            title: "Any recent changes in their situation?",
-            selectedValue: "",
-          },
-          data: [
-            {
-              name: "Yes",
-              value: "yes",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-            {
-              name: "No",
-              value: "no",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-          ],
-        },
-      },
-    ],
     prevPregnancies: [
       {
+        selectdData: [],
         isFinishBtn: false,
+        radioBtnContent: {
+          header: {
+            class:'bold',
+            title: "History on previous pregnancies",
+            selectedValue: "",
+          },
+          data: [
+          ],
+        },
+      },
+      {
+        isFinishBtn: false,
+        sideColSize:0.5,
         sectionHeader: "",
-        classDash: "",
         data: {
           rowData: [
             {
@@ -173,6 +42,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
         },
       },
       {
+        sideColSize:0.5,
         data: {
           rowData: [
             {
@@ -181,7 +51,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
                   inputHeader: "Abortions/Miscarriages",
                   value: "",
                   icon: icons.editPen,
-                  name: "Abortions/Miscarriages",
+                  name: "Abortions",
                   required: true,
                   valueType: "text",
                   eventType: "input",
@@ -205,6 +75,8 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
         },
       },
       {
+        sideColSize:0.5,
+        classDash: "dashed_bottom_border",
         data: {
           rowData: [
             {
@@ -212,7 +84,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
                 {
                   inputHeader: "Live births",
                   value: "",
-                  name: "Live Births",
+                  name: "LiveBirths",
                   required: true,
                   valueType: "text",
                   icon: icons.editPen,
@@ -236,42 +108,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
         },
       },
     ] as any,
-    abnormalities: [
-      {
-        selectdData: [],
-        isFinishBtn: false,
-        classDash: "dashed_bottom_border",
-        radioBtnContent: {
-          header: {
-            title: "Last live birth had congenital abnormalities?",
-            selectedValue: "",
-          },
-          data: [
-            {
-              name: "Yes",
-              value: "Yes",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-            {
-              name: "No",
-              value: "No",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-            {
-              name: "Dont know",
-              value: "Dont know",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-          ],
-        },
-      },
-    ],
+
     preterm: [
       {
         selectedData: [],
@@ -279,6 +116,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
         classDash: "dashed_bottom_border",
         radioBtnContent: {
           header: {
+            class:'bold',
             title: "Was last live birth preterm?",
             selectedValue: "",
             name: "Was last live birth preterm?",
@@ -287,23 +125,17 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
             {
               name: "Last live birth was preterm",
               value: "Preterm pregnancy - less than 28 weeks",
-              labelPlacement: "start",
               colSize: "9",
-              justify: "space-between",
             },
             {
               name: "Last live birth was not preterm/ Last live birth was full term",
               value: "Preterm pregnancy - 28 to 34 weeks",
-              labelPlacement: "start",
               colSize: "9",
-              justify: "space-between",
             },
             {
               name: "Last live birth had congenital abnormalities",
               value: "Preterm premature rupture of membranes (PPROM)",
-              labelPlacement: "start",
               colSize: "9",
-              justify: "space-between",
             },
           ],
         },
@@ -316,6 +148,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
         classDash: "dashed_bottom_border",
         radioBtnContent: {
           header: {
+            class:"bold",
             title: "Specify mode of delivery",
             selectedValue: "",
             name: "cesareanSec",
@@ -384,6 +217,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
               "Does the woman have any complications due to past pregnancies?",
             selectedValue: "",
             name: "Does the woman have any complications due to past pregnancies?",
+            class:'bold',
           },
           data: [
             {
@@ -621,9 +455,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
     setPreterm(data: any) {
       this.preterm = data;
     },
-    setAbnormalities(data: any) {
-      this.abnormalities = data;
-    },
+
     setModeOfDelivery(data: any) {
       this.modeOfDelivery = data;
     },
