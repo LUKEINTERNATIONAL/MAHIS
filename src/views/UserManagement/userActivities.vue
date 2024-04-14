@@ -21,9 +21,6 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "vue"
-import { text } from "ionicons/icons"
-import { it } from "date-fns/locale"
-import { property } from "lodash"
 export default defineComponent({
     watch: {},
     name: "xxxComponent",
@@ -74,7 +71,7 @@ watch(
 )
 async function generatedSelected() {
     props.user_programs.forEach(async (selected: any) => {
-        const is_P = generateKeyAPIRef(selected.name)
+        const is_P = await generateKeyAPIRef(selected.name)
         if (is_P.exists == true) {
             try {
                 console.log(is_P.ref_name)
@@ -107,13 +104,32 @@ async function generatedSelected() {
     })
 }
 
-function generateKeyAPIRef(program: string) {
+async function postActivities(_property_: string, selected: string) {
+    const userActivities = {
+        property: _property_,
+        'property_value': selected,
+        user_id: props.userId
+        }
+    const res = await Service.postJson('user_properties', userActivities)
+}
+
+async function postDumbActivities(_property_: string) {
+    const userActivities = {
+        property: _property_,
+        'property_value': "dumb",
+        user_id: props.userId
+        }
+    const res = await Service.postJson('user_properties', userActivities)
+}
+
+async function generateKeyAPIRef(program: string) {
     let keyRefAPIRefObj: any
     if (checkTextInString('opd', program) == true) {
         keyRefAPIRefObj = {
             ref_name: 'OPD_activities',
             exists: true
         } 
+        initiateUserAcytcivities(keyRefAPIRefObj.ref_name)     
     }
 
     if (checkTextInString('ncd', program) == true) {
@@ -121,6 +137,7 @@ function generateKeyAPIRef(program: string) {
             ref_name: 'NCD_activities',
             exists: true
         } 
+        initiateUserAcytcivities(keyRefAPIRefObj.ref_name)     
     }
     else {
         keyRefAPIRefObj = {
@@ -129,6 +146,14 @@ function generateKeyAPIRef(program: string) {
         }
     }
     return keyRefAPIRefObj
+}
+
+async function initiateUserAcytcivities(ref_name: string) {
+    try {
+        await getActivities(ref_name)
+    } catch (error) {
+        await postDumbActivities(ref_name)
+    }
 }
 
 function checkTextInString(text: string, string: string | any[]) {

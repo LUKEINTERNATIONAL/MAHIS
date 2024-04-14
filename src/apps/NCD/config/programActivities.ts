@@ -8,11 +8,6 @@ export const NCD_PRIMARY_ACTIVITIES: TaskInterface[] = [
     icon: 'attributes.png'
   },
   {
-    id: 'vitals',
-    name: 'Vitals',
-    icon: 'vitals.png'
-  },
-  {
     id: 'Investigations',
     name: 'Investigations',
     icon: 'complaints.png'
