@@ -1,4 +1,9 @@
 <template>
+
+        <ion-button @click="saveK">
+            {{ 'QWERTY' }}
+        </ion-button>
+
     <ion-grid>
         <ion-row>
             <ion-col>
@@ -35,7 +40,8 @@ import {
     IonList,
     IonLabel,
     IonRow,
-    IonGrid
+    IonGrid,
+    IonButton
 } from "@ionic/vue"
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
 import ListPicker from "../../components/ListPicker.vue"
@@ -47,6 +53,7 @@ import { UserService } from "@/services/user_service"
 const main_program = ref('') as any
 const activities = ref([] as any)
 const uniqID = ref() as any
+const REF_NAME = ref('') as any
 
 const props = defineProps<{
     user_programs: any,
@@ -54,6 +61,7 @@ const props = defineProps<{
 }>()
 
 onMounted(async () => {
+    activities.value = []
     uniqID.value = generateUniqueId()
     await generatedSelected()
 })
@@ -76,42 +84,40 @@ watch(
         }
     }
 )
-async function generatedSelected() {
-    console.log("jlklk: ",props.user_programs)
 
+async function generatedSelected() {
     const selected = props.user_programs
     const is_P = await generateKeyAPIRef(selected.name)
-    console.log("GGGGGG: ",is_P.activities)
     if (is_P.exists == true) {
         try {
             console.log(is_P.ref_name)
             const data_ = [] as any
             const data = await getActivities(is_P.ref_name)
-            console.log(is_P.activities)
-            is_P.activities.forEach((item: any) => {
-                data.forEach((datum: any) => {
-                    if (item.name == datum.name) {
-                        data_.push({
-                            name: item.name,
-                            selected: true
-                        })
-                    } else {
-                        data_.push(
-                            {
-                                name: item.name,
-                                selected: false
-                            }
-                        )
-                    }
-                })
-            })
-            activities.value = []
-            activities.value = data_
+           activities.value.forEach((item: any) => {
+            data.forEach((datum: any) => {
+                    if (item.name == datum.name) { 
+                        item.selected = true
+                    }})
+           })
         } catch (error) {
             console.error(error)
         }
     }
-    
+}
+
+async function saveK() {
+    let activites_tr = ''
+    activities.value.forEach((item: any, index: number) => {
+        
+        if (item.selected == true) {
+            if (index == 0) {
+                activites_tr+=item.name
+            } else if (index > 0) {
+                activites_tr+=','+item.name
+            }
+        }
+    })
+    await postActivities(REF_NAME.value, activites_tr)
 }
 
 async function postActivities(_property_: string, selected: string) {
@@ -134,7 +140,6 @@ async function postDumbActivities(_property_: string) {
 
 async function generateKeyAPIRef(program: string) {
     main_program.value = program
-    console.log(checkTextInString('opd', program))
     let keyRefAPIRefObj: any
     if (checkTextInString('opd', program) == true) {
         keyRefAPIRefObj = {
@@ -143,6 +148,7 @@ async function generateKeyAPIRef(program: string) {
             activities: OPD_PRIMARY_ACTIVITIES
         } 
         activities.value = OPD_PRIMARY_ACTIVITIES
+        REF_NAME.value = keyRefAPIRefObj.ref_name
         await initiateUserAcytcivities(keyRefAPIRefObj.ref_name)     
     }
 
@@ -153,15 +159,16 @@ async function generateKeyAPIRef(program: string) {
             activities: NCD_PRIMARY_ACTIVITIES,
         }
         activities.value = NCD_PRIMARY_ACTIVITIES
+        REF_NAME.value = keyRefAPIRefObj.ref_name
         await initiateUserAcytcivities(keyRefAPIRefObj.ref_name)     
     }
-    else {
-        keyRefAPIRefObj = {
-            ref_name: '',
-            exists: false,
-            activities: []
-        }
-    }
+    // else {
+    //     keyRefAPIRefObj = {
+    //         ref_name: '',
+    //         exists: false,
+    //         activities: []
+    //     }
+    // }
     return keyRefAPIRefObj
 }
 
