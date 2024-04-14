@@ -14,7 +14,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                         header:{
                             title: 'Any injury present?',
                             selectedValue: '',
-                            name:'Yes',
+                            name:'Injury present',
                         },
                         data:[
                             {
@@ -46,7 +46,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                         header:{
                             title: 'Is there traumatic injury to abdomen?',
                             selectedValue: '',
-                            name:'Yes'
+                            name:'Traumatic injury'
                         },
                         data:[
                             {
@@ -74,6 +74,11 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                 isFinishBtn: false,
                 sectionHeader: '',
                 classDash: '',
+
+                header:{
+                    selectedValue: '',
+                    name:'Other Traumatic injury'
+                },
 
                 data:
                     {
@@ -109,7 +114,8 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                     {
                         header:{
                             title: 'Any other clinical enquiry done?',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name: "Clinical enquiry"
                         },
                         data:[
                             {
@@ -140,7 +146,8 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                     {
                         header:{
                             title: 'Reason clinical enquiry was not done',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'Reason not done'
                         },
                         data:[
                             {
@@ -194,6 +201,12 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                 sectionHeader: '',
                 classDash: '',
 
+                header:{
+                    title: '',
+                    selectedValue: '',
+                    name: "Other reason"
+                },
+
                 data:
                     {
                         rowData:[
@@ -228,7 +241,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                         header:{
                             title: 'Has the woman been subjected to any form of injury?',
                             selectedValue: '',
-                            name:'Yes'
+                            name:'Any form of injury'
                         },
                         data:[
                             {
@@ -256,6 +269,12 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                 isFinishBtn: false,
                 sectionHeader: '',
                 classDash: 'dashed_bottom_border',
+
+                header:{
+                    title: 'Any other clinical enquiry done?',
+                    selectedValue: '',
+                    name: "Clinical enquiry"
+                },
 
                 data:
                     {
@@ -286,7 +305,8 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                     {
                         header:{
                             title: 'Types of IPV',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name: "Types of IPV"
                         },
                         data:[
                             {
@@ -323,6 +343,12 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                 isFinishBtn: false,
                 sectionHeader: '',
                 classDash: '',
+
+                header:{
+                    title: 'Types of IPV',
+                    selectedValue: '',
+                    name: "Other violence"
+                },
 
                 data:
                     {

@@ -10,6 +10,11 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
                 isFinishBtn: false,
                 sectionHeader: "",
 
+                header: {
+                    name:"fundal height",
+                    selectedValue: "",
+                },
+
                 data: {
                     rowData: [
                         {
@@ -39,7 +44,7 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
                     header: {
                         title: "Is number of fetuses known?",
                         selectedValue: "",
-                        name: "Yes",
+                        name: "Fetuses known",
                     },
                     data: [
                         {
@@ -62,6 +67,10 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
             {
                 sectionHeader: "",
                 classDash: "dashed_bottom_border",
+                header: {
+                    name:"Number of Fetuses",
+                    selectedValue: "",
+                },
                 data: {
                     rowData: [
                         {
@@ -88,7 +97,7 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
                     header: {
                         title: "Fetal heartbeat present?",
                         selectedValue: "",
-                        name: "Yes",
+                        name: "Fetal heartbeat",
                     },
                     data: [
                         {
@@ -111,6 +120,10 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
             {
                 sectionHeader: "",
                 classDash: "",
+                header: {
+                    name: "Fetal rate",
+                    selectedValue: "",
+                },
                 data: {
                     rowData: [
                         {
@@ -133,6 +146,10 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
             {
                 sectionHeader: "",
                 classDash: "dashed_bottom_border",
+                header: {
+                    name: "Repeated fetal rate",
+                    selectedValue: "",
+                },
                 data: {
                     rowData: [
                         {

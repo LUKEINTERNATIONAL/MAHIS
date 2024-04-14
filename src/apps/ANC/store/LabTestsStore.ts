@@ -12,7 +12,8 @@ export const useLabTestsStore = defineStore ('labTestsStore', {
                 {
                     header:{
                         title: 'Select whether?',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name: 'Ultrasound scan status',
                     },
                     data:[
                         {
@@ -87,7 +88,8 @@ export const useLabTestsStore = defineStore ('labTestsStore', {
                 {
                     header:{
                         title: 'Reason ultrasound scan not done',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name: 'Reason not done',
                     },
                     data:[
                         {
@@ -112,6 +114,12 @@ export const useLabTestsStore = defineStore ('labTestsStore', {
                 isFinishBtn: false,
                 sectionHeader: '',
                 classDash: 'dashed_bottom_border _padding',
+
+                header:{
+                    title: 'Reason ultrasound scan not done',
+                    selectedValue: '',
+                    name: 'Other reason',
+                },
 
                 data:
                     {

@@ -14,7 +14,7 @@ export const useFetalPresentationStore = defineStore('fetalPresentationStore',{
                         header:{
                             title: '',
                             selectedValue: '',
-                            name:'fetalPresentation'
+                            name:'Fetal Presentation'
                         },
                         data:[
                             {
@@ -67,6 +67,12 @@ export const useFetalPresentationStore = defineStore('fetalPresentationStore',{
                 isFinishBtn: false,
                 sectionHeader: '',
                 classDash: '',
+
+                header:{
+                    title: '',
+                    selectedValue: '',
+                    name:'Fetal Presentation'
+                },
 
                 data:
                     {

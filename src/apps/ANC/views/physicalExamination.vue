@@ -54,6 +54,14 @@ import Stepper from "@/apps/ANC/components/Stepper.vue";
 import { Service } from "@/services/service";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { getCheckboxSelectedValue, getFieldValue } from "@/services/data_helpers";
+import { formatInputFiledData } from "@/services/formatServerData";
+import { formatCheckBoxData } from "@/services/formatServerData";
+import {VitalsInstance, MartenalExamInstance, FetalAssessmentInstance, FetalPresentationInstance, PresentingSignsInstance} from "@/apps/ANC/service/physical_exam"
+import {useMaternalExamStore} from '@/apps/ANC/store/physical exam/MaternalExamStore'
+import { formatRadioButtonData } from "@/services/formatServerData";
+import { useFetalAssessment } from "../store/physical exam/FetalAssessmentStore";
+import { useFetalPresentationStore } from "../store/physical exam/FetalPresantationStore";
+import { usePresentingSigns } from "../store/physical exam/PresentingSignsStore";
 export default defineComponent({
     name: "PhysicalExam",
     components: {
@@ -160,11 +168,12 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
-        ...mapState(useVitalsStore,["vitals"]),
-        ...mapState(useVitalsStore,["respiration"]),
-        ...mapState(useVitalsStore,["preEclampsia"]),
-        ...mapState(useInvestigationStore, ["investigations"]),
-        ...mapState(useDiagnosisStore, ["diagnosis"]),
+        ...mapState(useVitalsStore,["vitals", "respiration", "preEclampsia"]),
+        ...mapState(useMaternalExamStore,["pallor", "breastExam", "vaginalInspection", "cervicalExam", "oedemaPresence"]),
+        ...mapState(useFetalAssessment, ["fetalAssessment"]),
+        ...mapState(useFetalPresentationStore,["fetalPresentation"]),
+        ...mapState(usePresentingSigns,["signsOfInjury", "clinicalEnquiry", "intimateViolence"]),
+
     },
     mounted() {
         this.markWizard();
@@ -230,108 +239,112 @@ export default defineComponent({
         },
         saveData() {
             if (this.vitals) {
-                this.saveVitals()
-                // this.saveInvestigation();
-                // this.saveDiagnosis();
-                // this.saveTreatmentPlan();
-                // this.saveOutComeStatus();
-                this.$router.push("patientProfile");
+                this.saveVitals();
+                this.saveMartenalExam();
+                this.saveFetalAssessment();
+                this.saveFetalPresentation();
+                this.savePresentingSigns();
+
+                this.$router.push("LabTests");
             } else {
                 toastWarning("Please complete all required fields");
-                // this.saveOutComeStatus();
             }
         },
 
-        buildVitals() {
-        this.vitals[0].selectedData = {
-          height: getFieldValue(this.vitals, "Height", "value"),
-          weight: getFieldValue(this.vitals, "Weight", "value"),
-          pregestation_weight: getFieldValue(this.vitals, "PreWeight", "value"),
-          systolic_pressure: getFieldValue(this.vitals, "Systolic", "value"),
-          diastolic_pressure: getFieldValue(this.vitals, "Diastolic", "value"),
-          repeated_systolic_pressure: getFieldValue(this.vitals, "repeatedSystolic", "value"),
-          repeated_diastolic_pressure: getFieldValue(
-          this.vitals,
-          "repeatedDiastolic",
-          "value"
-        ),
-        temperature: getFieldValue(
-          this.vitals,
-          "Temp",
-          "value"
-        ),
-        pulse_rate: getFieldValue(
-          this.vitals,
-          "Pulse",
-          "value"
-        ),
-        oxygen_saturation: getFieldValue(
-          this.vitals,
-          "oxygenSaturation",
-          "value"
-        ),
-        respiratory_rate: getFieldValue(
-          this.vitals,
-          "respiratoryRate",
-          "value"
-        ),
-        respiration_exam: getCheckboxSelectedValue(this.respiration, "respirationExam"),
-        pre_eclampsia: getCheckboxSelectedValue(
-          this.preEclampsia,
-          "preEclampsia"
-        )
-      };
+       async buildVitals() {
+       return [
+         ...(await formatInputFiledData(this.vitals)),
+         ...(await formatCheckBoxData(this.respiration)),
+         ...(await formatCheckBoxData(this.preEclampsia))
+        ]
     },
-        // saveInvestigation() {
-        //     const investigationInstance = new LabOrder();
-        //     investigationInstance.postActivities(this.demographics.patient_id, this.getFormatedData(this.investigations[0].selectedData));
-        // },
-        saveVitals() {
-            this.buildVitals();
-            if (Object.keys(this.vitals[0].selectedData).length === 0)
-            return;
-            const userID: any = Service.getUserID();
-            const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
-            console.log(this.vitals[0].selectedData)
-            vitalsInstance.onFinish(this.vitals[0].selectedData);
+    async buildMartenalExam() {
+        return [
+            ...(await formatRadioButtonData(this.pallor)),
+            ...(await formatCheckBoxData(this.breastExam)),
+            ...(await formatCheckBoxData(this.vaginalInspection)),
+            ...(await formatCheckBoxData(this.cervicalExam)),
+            ...(await formatCheckBoxData(this.oedemaPresence)),
+        ]
+
+    },
+
+    async buildFetalAssessment() {
+        return [
+            ...(await formatInputFiledData(this.fetalAssessment)),
+            ...(await formatRadioButtonData(this.fetalAssessment)),
+        ]
+
+    },
+
+    async buildFetalPresentation() {
+        return [
+        ...(await formatInputFiledData(this.fetalPresentation)),
+        ...(await formatRadioButtonData(this.fetalPresentation)),
+        ]
+
+    },
+
+    async buildPresentingSigns() {
+        return [
+        ...(await formatInputFiledData(this.signsOfInjury)),
+        ...(await formatRadioButtonData(this.signsOfInjury)),
+        ...(await formatRadioButtonData(this.clinicalEnquiry)),
+        ...(await formatInputFiledData(this.clinicalEnquiry)),
+        ...(await formatRadioButtonData(this.intimateViolence)),
+        ...(await formatInputFiledData(this.intimateViolence)),
+
+        
+        ]
+
+    },
+
+
+    async saveVitals() {
+            const data: any = await this.buildVitals();
+            if (data.length > 0) {
+                const userID: any = Service.getUserID();
+                const vitalsInstance = new VitalsInstance();
+                vitalsInstance.push(this.demographics.patient_id, userID, data);
+            }
         },
-        // saveDiagnosis() {
-        //     const userID: any = Service.getUserID();
-        //     const diagnosisInstance = new Diagnosis();
-        //     diagnosisInstance.onSubmit(this.demographics.patient_id, userID, this.getFormatedData(this.diagnosis[0].selectedData));
-        // },
-        // async saveTreatmentPlan() {
-        //     const userID: any = Service.getUserID();
-        //     const patientID = this.demographics.patient_id;
-        //     const treatmentInstance = new Treatment();
+    
+     async saveMartenalExam() {
+            const data: any = await this.buildVitals();
+            if (data.length > 0) {
+                const userID: any = Service.getUserID();
+                const martenalInstance = new MartenalExamInstance();
+                martenalInstance.push(this.demographics.patient_id, userID, data);
+            }
+        },
 
-        //     if (!isEmpty(this.selectedMedicalAllergiesList)) {
-        //         const allergies = this.mapToAllergies();
-        //         treatmentInstance.onSubmitAllergies(patientID, userID, allergies);
-        //     }
+    async saveFetalAssessment() {
+            const data: any = await this.buildFetalAssessment;
+            if (data.length > 0) {
+                const userID: any = Service.getUserID();
+                const fetalAssessmentInstance = new FetalAssessmentInstance();
+                fetalAssessmentInstance.push(this.demographics.patient_id, userID, data);
+            }
+        },
 
-        //     if (!isEmpty(this.nonPharmalogicalTherapyAndOtherNotes)) {
-        //         const treatmentNotesTxt = [
-        //             {
-        //                 concept_id: 2688,
-        //                 obs_datetime: Service.getSessionDate(),
-        //                 value_text: this.nonPharmalogicalTherapyAndOtherNotes,
-        //             },
-        //         ];
-        //         treatmentInstance.onSubmitNotes(patientID, userID, treatmentNotesTxt);
-        //     }
-
-        //     if (!isEmpty(this.selectedMedicalDrugsList)) {
-        //         const drugOrders = this.mapToOrders();
-        //         const prescriptionService = new DrugPrescriptionService(patientID, userID);
-        //         const encounter = await prescriptionService.createEncounter();
-        //         if (!encounter) return toastWarning("Unable to create treatment encounter");
-        //         const drugOrder = await prescriptionService.createDrugOrder(drugOrders);
-        //         if (!drugOrder) return toastWarning("Unable to create drug orders!");
-        //         toastSuccess("Drug order has been created");
-        //     }
-        //     this.$router.push("LabTests");
-        // },
+    async saveFetalPresentation() {
+            const data: any = await this.buildFetalPresentation;
+            if (data.length > 0) {
+                const userID: any = Service.getUserID();
+                const fetalPresentationInstance = new FetalPresentationInstance();
+                fetalPresentationInstance.push(this.demographics.patient_id, userID, data);
+            }
+        },
+        async savePresentingSigns() {
+            const data: any = await this.buildPresentingSigns;
+            if (data.length > 0) {
+                const userID: any = Service.getUserID();
+                const presentingSignsInstance = new PresentingSignsInstance();
+                presentingSignsInstance.push(this.demographics.patient_id, userID, data);
+            }
+        },
+    
+    
 
         openModal() {
             createModal(SaveProgressModal);

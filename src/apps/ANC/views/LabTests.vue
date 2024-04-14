@@ -25,6 +25,12 @@ import { chevronBackOutline, checkmark } from "ionicons/icons";
 import UrineTest from "@/apps/ANC/components/lab_tests/UrineTest.vue";
 import TB from "@/apps/ANC/components/lab_tests/TB.vue";
 import Stepper from "@/apps/ANC/components/Stepper.vue";
+import { useLabTestsStore } from "../store/LabTestsStore";
+import { mapState } from "pinia";
+import { toastWarning } from "@/utils/Alerts";
+import { formatInputFiledData, formatCheckBoxData } from "@/services/formatServerData";
+import { useTBScreeningStore } from "../store/TBScreeningStore";
+import { useUrineTestStore } from "../store/UrineTestStore";
 export default defineComponent({
     name: "Lab",
     components: { IonPage, DemographicBar, Toolbar, IonContent, UltrasoundScan, UrineTest, TB, Stepper },
@@ -78,13 +84,28 @@ export default defineComponent({
         };
     },
     mounted() {},
-    computed: {},
+    computed: {
+        ...mapState(useLabTestsStore, ["reason", "ultrasound", "amniotic", "placenta"]),
+        ...mapState(useTBScreeningStore, ["reasons", "tbTest"]),
+        ...mapState(useUrineTestStore, ["urineTest", "protein", "nitrites", "culture", "gram", "leukocytes", "glucose"]),
+    },
     setup() {
         return { chevronBackOutline, checkmark };
     },
     methods: {
         markWizard() {},
         saveData() {
+            if (this.reason) {
+                // this.saveVitals();
+                // this.saveMartenalExam();
+                // this.saveFetalAssessment();
+                // this.saveFetalPresentation();
+                // this.savePresentingSigns();
+
+                this.$router.push("physicalExamination");
+            } else {
+                toastWarning("Please complete all required fields");
+            }
             // // Simulate saving data
             // this.loading = true; // Show the spinner while data is being saved
             // setTimeout(() => {
@@ -93,8 +114,17 @@ export default defineComponent({
             //   // Redirect to counselling page
             //   this.$router.push('counselling');
             // }, 8000); // Simulate a 2-second delay
-            this.$router.push("Treatment");
         },
+
+        async buildUltrasound() {
+       return [
+         ...(await formatInputFiledData(this.ultrasound)),
+         ...(await formatCheckBoxData(this.reason)),
+         ...(await formatCheckBoxData(this.amniotic)),
+         ...(await formatCheckBoxData(this.placenta))
+        ]
+    },
+
     },
 });
 </script>
