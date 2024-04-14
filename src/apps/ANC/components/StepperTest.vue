@@ -1,30 +1,28 @@
 <template>
     <ion-row>
         <ion-col size="1" size-lg="1"></ion-col>
-        <ion-col size="3" size-lg="3">
-            <ion-card class="wizard_card">
-                <div class="wizard_title">
-                    <strong> {{ stepperTitle }}</strong>
-                </div>
-                <ion-card-content>
-                    <div id="wizard_verticle" class="form_wizard wizard_verticle">
-                        <ul class="list-unstyled wizard_steps anchor">
-                            <li v-for="(item, index) in wizardData" :key="index" :class="item.last_step">
-                                <a class="done" isdone="1" rel="1">
-                                    <span :class="item.class">
-                                        <ion-icon v-if="item.checked" :icon="checkmark" class="checked_step"></ion-icon>
-                                        <span v-if="!item.checked" class="">{{ item.number }} </span>
-                                        <span class="wizard_text">{{ item.title }}</span>
-                                    </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </ion-card-content>
-            </ion-card>
-        </ion-col>
+        <!--        <ion-col size="3" size-lg="3">-->
+        <!--            <ion-card class="wizard_card">-->
+        <!--                <div class="wizard_title"><strong > {{ stepperTitle }}</strong></div>-->
+        <!--                <ion-card-content>-->
+        <!--                    <div id="wizard_verticle" class="form_wizard wizard_verticle">-->
+        <!--                        <ul class="list-unstyled wizard_steps anchor">-->
+        <!--                            <li v-for="(item, index) in wizardData" :key="index" :class="item.last_step">-->
+        <!--                                <a  class="done" isdone="1" rel="1">-->
+        <!--                                    <span :class="item.class">-->
+        <!--                                        <ion-icon v-if="item.checked" :icon="checkmark" class="checked_step"></ion-icon>  -->
+        <!--                                        <span v-if="!item.checked" class="">{{ item.number }} </span>-->
+        <!--                                        <span class="wizard_text">{{ item.title }}</span> -->
+        <!--                                    </span>-->
+        <!--                                </a>-->
+        <!--                            </li>-->
+        <!--                        </ul>-->
+        <!--                    </div>-->
+        <!--                </ion-card-content>-->
+        <!--            </ion-card>-->
+        <!--        </ion-col>-->
 
-        <ion-col size="7" size-lg="7" class="rightCol">
+        <ion-col size="7" size-lg="4" class="rightCol">
             <div class="back_profile" @click="openModal()">
                 <ion-icon style="font-size: 20px" :icon="chevronBackOutline"> </ion-icon>
                 <span style="cursor: pointer"> Back to dashboard</span>
@@ -37,13 +35,20 @@
                             <ion-label>{{ item.title }}</ion-label>
                         </ion-item>
                         <div class="ion-padding" slot="content">
-                            <component :is="item.component"> </component>
+                            <component :is="item.componet"> </component>
                         </div>
                     </ion-accordion>
                 </ion-accordion-group>
                 <div>
                     <hr style="background: rgba(0, 0, 0, 0.13)" />
                     <ion-button class="primary_btn" style="padding-left: 15px" @click="$emit('finishBtn')">Save and proceed</ion-button>
+                </div>
+            </div>
+        </ion-col>
+        <ion-col size="7" class="leftCol">
+            <div class="accordion centered-content">
+                <div class="ion-padding" slot="content">
+                    <component> </component>
                 </div>
             </div>
         </ion-col>
@@ -75,17 +80,20 @@ import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
+//import Vitals from "@/apps/NCD/components/ConsultationPlan/Vitals.vue";
 import Diagnosis from "@/apps/NCD/components/ConsultationPlan/Diagnosis.vue";
-import ComplicationsScreening from "@/apps/NCD/components/ConsultationPlan/ComplicationsScreening.vue";
+//import Complications from "@/apps/NCD/components/ConsultationPlan/Complications.vue";
 import ConfirmDiagnosis from "@/apps/NCD/components/ConsultationPlan/ConfirmDiagnosis.vue";
 import Outcome from "@/apps/NCD/components/ConsultationPlan/Outcome.vue";
-import Investigations from "@/components/Investigations.vue";
+//import Investigations from "@/apps/NCD/components/ConsultationPlan/Investigations.vue";
+import TreatmentPlan from "@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue";
 import Medications from "@/apps/ANC/components/profile/Medications.vue";
 import WomanBehaviour from "@/apps/ANC/components/profile/WomanBehaviour.vue";
 import DangerSigns from "@/apps/ANC/components/quick check/DangerSigns.vue";
 import ConfirmPregnancy from "@/apps/ANC/components/quick check/ConfirmPregnancy.vue";
 import ReasonForVisit from "@/apps/ANC/components/quick check/ReasonForVisit.vue";
 import SpecificHealthConcerns from "@/apps/ANC/components/quick check/SpecificHealthConcerns.vue";
+//import AncVitals from "@/apps/ANC/components/physical exam/AncVitals.vue";
 import FetalAssessment from "@/apps/ANC/components/physical exam/FetalAssessment.vue";
 import FetalPresentation from "@/apps/ANC/components/physical exam/FetalPresentation.vue";
 import MaternalExam from "@/apps/ANC/components/physical exam/MaternalExam.vue";
@@ -96,6 +104,7 @@ import UltrasoundScan from "@/apps/ANC/components/lab_tests/UltrasoundScan.vue";
 import UrineTest from "@/apps/ANC/components/lab_tests/UrineTest.vue";
 import TB from "@/apps/ANC/components/lab_tests/TB.vue";
 import DiagnosisTreatment from "@/apps/ANC/components/Treatment/DiagnosisTreatment.vue";
+import MedicationDispensed from "@/apps/ANC/components/Treatment/MedicationDispensed.vue";
 import DiagnosisCounselling from "@/apps/ANC/components/Treatment/DiagnosisCounselling.vue";
 import Immunization from "@/apps/ANC/components/Treatment/Immunization.vue";
 import IntimatePartner from "@/apps/ANC/components/Treatment/IntimatePartner.vue";
@@ -113,7 +122,6 @@ import PhysiologicalCounseling from "@/apps/ANC/components/counselling/Physiolog
 import DietCounselling from "@/apps/ANC/components/counselling/DietCounselling.vue";
 import Referral from "@/apps/ANC/components/referral/Referral.vue";
 import AncEnd from "@/apps/ANC/components/ancEnd/AncEnd.vue";
-import Vitals from "@/apps/ANC/components/physical exam/Vitals.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 export default defineComponent({
@@ -137,12 +145,10 @@ export default defineComponent({
         IonAccordionGroup,
         IonItem,
         IonLabel,
-        Vitals,
         Diagnosis,
-        ComplicationsScreening,
         ConfirmDiagnosis,
         Outcome,
-//        Investigations,
+        TreatmentPlan,
         IonModal,
         Medications,
         WomanBehaviour,
@@ -185,7 +191,7 @@ export default defineComponent({
     },
     props: {
         wizardData: {
-            default: {} as any,
+            default: [] as any,
         },
         StepperData: {
             default: [] as any,
@@ -301,8 +307,8 @@ ion-accordion.accordion-expanded ion-item[slot="header"] {
 }
 .accordion_group {
     position: fixed;
-    height: 800px;
-    width: 58%;
+    height: 900px;
+    width: 30%;
     overflow-y: auto;
     top: 200px;
 }

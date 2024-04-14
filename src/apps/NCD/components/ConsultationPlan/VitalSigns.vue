@@ -147,7 +147,7 @@ export default defineComponent({
             vitals.icon = BMIService.iconBMI(bmiColor);
             vitals.backgroundColor = bmiColor[0];
             vitals.textColor = bmiColor[1];
-            vitals.index = this.BMI?.index ?? "";
+            vitals.index = "BMI " + this.BMI?.index ?? "";
             vitals.value = this.BMI?.result ?? "";
         },
         async updateBP(systolic: any, diastolic: any) {

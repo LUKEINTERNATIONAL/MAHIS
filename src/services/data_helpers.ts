@@ -111,3 +111,10 @@ function displayObjects(data: any[], triggerName: any) {
         }
     });
 }
+
+export function modifyWizardData(data: any, title: any, changes: any) {
+    const stepToUpdate = data.find((step: any) => step.title === title);
+    if (stepToUpdate) {
+        Object.assign(stepToUpdate, changes);
+    }
+}
