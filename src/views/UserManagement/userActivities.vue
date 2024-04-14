@@ -5,7 +5,7 @@
                 <ListPicker
                     :multiSelection="list_picker_prperties[0].multi_Selection"
                     :show_label="list_picker_prperties[0].show_list_label"
-                    :uniqueId="list_picker_prperties[0].unqueId"
+                    :uniqueId="uniqID"
                     :name_of_list="main_program"
                     :choose_place_holder="list_picker_prperties[0].placeHolder"
                     :items_-list="activities"
@@ -46,6 +46,7 @@ import { UserService } from "@/services/user_service"
 
 const main_program = ref('') as any
 const activities = ref([] as any)
+const uniqID = ref() as any
 
 const props = defineProps<{
     user_programs: any,
@@ -53,12 +54,18 @@ const props = defineProps<{
 }>()
 
 onMounted(async () => {
-    setProgramActivities()
+    uniqID.value = generateUniqueId()
     await generatedSelected()
 })
 
-function setProgramActivities() {
-    activities.value = NCD_PRIMARY_ACTIVITIES
+function generateUniqueId() {
+  let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let id = '';
+  for (let i = 0; i < 16; i++) {
+    let randomIndex = Math.floor(Math.random() * characters.length);
+    id += characters.charAt(randomIndex);
+  }
+  return id;
 }
 
 watch(
@@ -70,38 +77,41 @@ watch(
     }
 )
 async function generatedSelected() {
-    props.user_programs.forEach(async (selected: any) => {
-        const is_P = await generateKeyAPIRef(selected.name)
-        if (is_P.exists == true) {
-            try {
-                console.log(is_P.ref_name)
-                const data_ = [] as any
-                const data = await getActivities(is_P.ref_name)
-                activities.value.forEach((item: any) => {
-                    data.forEach((datum: any) => {
-                        if (item.name == datum.name) {
-                            data_.push({
+    console.log("jlklk: ",props.user_programs)
+
+    const selected = props.user_programs
+    const is_P = await generateKeyAPIRef(selected.name)
+    console.log("GGGGGG: ",is_P.activities)
+    if (is_P.exists == true) {
+        try {
+            console.log(is_P.ref_name)
+            const data_ = [] as any
+            const data = await getActivities(is_P.ref_name)
+            console.log(is_P.activities)
+            is_P.activities.forEach((item: any) => {
+                data.forEach((datum: any) => {
+                    if (item.name == datum.name) {
+                        data_.push({
+                            name: item.name,
+                            selected: true
+                        })
+                    } else {
+                        data_.push(
+                            {
                                 name: item.name,
-                                selected: true
-                            })
-                        } else {
-                            data_.push(
-                                {
-                                    name: item.name,
-                                    selected: false
-                                }
-                            )
-                        }
-                    })
+                                selected: false
+                            }
+                        )
+                    }
                 })
-                activities.value = []
-                activities.value = data_
-                main_program.value = selected.name
-            } catch (error) {
-                console.error(error)
-            }
+            })
+            activities.value = []
+            activities.value = data_
+        } catch (error) {
+            console.error(error)
         }
-    })
+    }
+    
 }
 
 async function postActivities(_property_: string, selected: string) {
@@ -123,26 +133,33 @@ async function postDumbActivities(_property_: string) {
 }
 
 async function generateKeyAPIRef(program: string) {
+    main_program.value = program
+    console.log(checkTextInString('opd', program))
     let keyRefAPIRefObj: any
     if (checkTextInString('opd', program) == true) {
         keyRefAPIRefObj = {
             ref_name: 'OPD_activities',
-            exists: true
+            exists: true,
+            activities: OPD_PRIMARY_ACTIVITIES
         } 
-        initiateUserAcytcivities(keyRefAPIRefObj.ref_name)     
+        activities.value = OPD_PRIMARY_ACTIVITIES
+        await initiateUserAcytcivities(keyRefAPIRefObj.ref_name)     
     }
 
     if (checkTextInString('ncd', program) == true) {
         keyRefAPIRefObj = {
             ref_name: 'NCD_activities',
-            exists: true
-        } 
-        initiateUserAcytcivities(keyRefAPIRefObj.ref_name)     
+            exists: true,
+            activities: NCD_PRIMARY_ACTIVITIES,
+        }
+        activities.value = NCD_PRIMARY_ACTIVITIES
+        await initiateUserAcytcivities(keyRefAPIRefObj.ref_name)     
     }
     else {
         keyRefAPIRefObj = {
             ref_name: '',
-            exists: false
+            exists: false,
+            activities: []
         }
     }
     return keyRefAPIRefObj

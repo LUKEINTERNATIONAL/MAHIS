@@ -19,7 +19,7 @@
                 />
             </ion-col>
         </ion-row>
-        
+
         <ion-row>
             <ion-col>
                 <BasicInputField
@@ -98,11 +98,13 @@
 
         <ion-row>
             <ion-col>
-                <userActivities
-                    v-if="show_user_programs"
-                    :userId="userId"
-                    :user_programs="user_programs"
-                />
+                <div v-for="(item, index) in user_programs.slice().reverse()" :key="index">
+                    <userActivities
+                        v-if="item.selected"
+                        :userId="userId"
+                        :user_programs="item"
+                    />
+                </div>
             </ion-col>
         </ion-row>
 
@@ -272,7 +274,8 @@ async function getUserPrograms() {
         temp_array.push(
             {
                 name: item.name,
-                other: item
+                other: item,
+                selected: false,
             }
         )
     })

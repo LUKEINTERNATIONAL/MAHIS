@@ -8,7 +8,7 @@ export const OPD_PRIMARY_ACTIVITIES: TaskInterface[] = [
   },
   {
     id: 'vitals',
-    name: 'Vitals',
+    name: 'vitals',
     icon: 'vitals.png'
   },
   {
