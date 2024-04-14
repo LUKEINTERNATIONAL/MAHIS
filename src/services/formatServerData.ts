@@ -22,7 +22,7 @@ export async function formatInputFiledData(data: any) {
 
         return Promise.all(
             item.data.rowData[0].colData.map(async (element: any) => {
-                if (!element.value || !element.buildConceptIgnore) return null;
+                if (!element.value || element.buildConceptIgnore) return null;
 
                 const concept_id = await ConceptService.getConceptID(element.name, true);
                 const obs_datetime = ConceptService.getSessionDate();

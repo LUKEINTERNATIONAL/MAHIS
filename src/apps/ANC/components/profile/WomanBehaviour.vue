@@ -1,25 +1,30 @@
 <template>
-  <div class="container">
-    <!-- Caffeine -->
-    <ion-card  class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Daily caffeine use</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <basic-form :contentData="dailyCaffeineIntake"></basic-form>
-      </ion-card-content>
-    </ion-card>
+    <div class="container">
+        <!-- Caffeine -->
+        <ion-card class="section">
+            <ion-card-header>
+                <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="dailyCaffeineIntake"></basic-form>
+            </ion-card-content>
+        </ion-card>
 
-    <!-- tobbaco -->
-    <ion-card  class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Tobacco use</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <basic-form :contentData="Tobacco"></basic-form>
-      </ion-card-content>
-    </ion-card>
-  </div>
+        <!-- tobbaco -->
+        <ion-card class="section">
+            <ion-card-header>
+                <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="Tobacco"></basic-form>
+            </ion-card-content>
+        </ion-card>
+        <!--    &lt;!&ndash; Navigation Buttons &ndash;&gt;-->
+        <!--    <div class="navigation-buttons">-->
+        <!--      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>-->
+        <!--      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>-->
+        <!--    </div>-->
+    </div>
 </template>
 
 

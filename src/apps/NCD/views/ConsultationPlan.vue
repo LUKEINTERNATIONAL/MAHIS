@@ -62,6 +62,14 @@ import HisDate from "@/utils/Date";
 import { defineComponent } from "vue";
 import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
 import { useGeneralStore } from "@/stores/GeneralStore";
+import {
+    modifyRadioValue,
+    getRadioSelectedValue,
+    getCheckboxSelectedValue,
+    modifyWizardData,
+    modifyFieldValue,
+    modifyCheckboxValue,
+} from "@/services/data_helpers";
 export default defineComponent({
     name: "Home",
     components: {
@@ -165,33 +173,50 @@ export default defineComponent({
         },
         markWizard() {
             if (this.vitals.validationStatus) {
-                this.wizardData[0].checked = true;
-                this.wizardData[0].class = "open_step common_step";
+                modifyWizardData(this.wizardData, "Vital Signs", {
+                    checked: true,
+                    class: "open_step common_step",
+                });
             } else {
-                this.wizardData[0].checked = false;
+                modifyWizardData(this.wizardData, "Vital Signs", {
+                    checked: false,
+                });
             }
 
             if (this.investigations[0].selectedData.length > 0) {
-                this.wizardData[1].checked = true;
-                this.wizardData[1].class = "open_step common_step";
+                modifyWizardData(this.wizardData, "Investigations", {
+                    checked: true,
+                    class: "open_step common_step",
+                });
             } else {
-                this.wizardData[1].checked = false;
+                modifyWizardData(this.wizardData, "Investigations", {
+                    checked: false,
+                });
             }
 
             if (this.diagnosis[0].selectedData.length > 0) {
-                this.wizardData[2].checked = true;
-                this.wizardData[2].class = "open_step common_step";
+                modifyWizardData(this.wizardData, "Diagnosis", {
+                    checked: true,
+                    class: "open_step common_step",
+                });
             } else {
-                this.wizardData[2].checked = false;
+                modifyWizardData(this.wizardData, "Diagnosis", {
+                    checked: false,
+                });
             }
 
             if (this.selectedMedicalDrugsList.length > 0) {
-                this.wizardData[4].checked = true;
-                this.wizardData[4].class = "open_step common_step";
+                modifyWizardData(this.wizardData, "Treatment Plan", {
+                    checked: true,
+                    class: "open_step common_step",
+                });
             } else {
-                this.wizardData[4].checked = false;
+                modifyWizardData(this.wizardData, "Treatment Plan", {
+                    checked: false,
+                });
             }
         },
+
         getFormatedData(data: any) {
             return data.map((item: any) => {
                 return item?.data;
