@@ -38,17 +38,18 @@
                 :search-field="searchField"
                 :search-value="searchValue"
                 :loading="pageIsLoading"
+                theme-color="#1d90ff"
                 @click-row="showRow"
             >
 
             <div id="row-clicked"></div>
-
+<!-- 
               <template #loading>
                 <img
                   src="https://i.pinimg.com/originals/94/fd/2b/94fd2bf50097ade743220761f41693d5.gif"
                   style="width: 100px; height: 80px;"
                 />
-              </template>
+              </template> -->
               
               <template #pagination="{ prevPage, nextPage, isFirstPage, isLastPage }">
 
@@ -192,7 +193,7 @@ const dynamic_button_properties = [
 
 const list_picker_prperties = [
     {
-        multi_Selection: false as any,
+        multi_Selection: true as any,
         show_list_label: true as any,
         unqueId: 'qwerty_3' as any,
         name_of_list: 'search field' as any,
