@@ -69,34 +69,34 @@ export default defineComponent({
     return {
       wizardData: [
         {
-          'title': 'Vitals',
-          'class': 'common_step',
-          'checked':'',
-          'icon': false,
-          'disabled':false,
-          'number': 1,
-          'last_step': ''
+          title: 'Vitals',
+          class: 'common_step',
+          checked:'',
+          icon: false,
+          disabled:false,
+          number: 1,
+          last_step: ''
         },
         {
-          'title': 'Other exams',
-          'class': 'common_step',
-          'checked':'',
-          'icon': false,
-          'disabled':false,
-          'number': 2,
-          'last_step': 'last_step'
+          title: 'Other exams',
+          class: 'common_step',
+          checked:'',
+          icon: false,
+          disabled:false,
+          number: 2,
+          last_step: 'last_step'
         },
       ],
       StepperData:[
         {
-          'title': 'Vitals',
-          'componet': 'Vitals',
-          'value': '1'
+          title: 'Vitals',
+          componet: 'Vitals',
+          value: '1'
         },
         {
-          'title': 'Other exams',
-          'componet': 'OtherExams',
-          'value': '2'
+          title: 'Other exams',
+          componet: 'OtherExams',
+          value: '2'
         },
       ],
       isOpen: false,
