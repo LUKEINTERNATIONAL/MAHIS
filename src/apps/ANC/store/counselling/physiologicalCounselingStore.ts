@@ -790,7 +790,7 @@ const initialPhysiologicalCounselling=[
                 },
                 {
                     name: 'Other',
-                    value: 'other',
+                    value: 'Other',
                     colSize: "7",
                 },
             ]

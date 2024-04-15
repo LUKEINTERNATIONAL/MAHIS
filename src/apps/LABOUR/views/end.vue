@@ -63,9 +63,9 @@ export default defineComponent ({
       ],
       StepperData: [
         {
-          'title': 'Labour and delivery end',
-          'componet': 'end',
-          'value': '1'
+          title: 'Labour and delivery end',
+          component: 'end',
+          value: '1'
         },
 
       ],

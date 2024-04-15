@@ -121,11 +121,6 @@ export default defineComponent({
              modifyFieldValue(this.treatment,'Specify','displayNone',true)
           }
         },
-        goToNextSection() {
-      if (this.currentSection < 1) {
-        this.currentSection++;
-      }
-    },
     goToPreviousSection() {
       if (this.currentSection > 0) {
         this.currentSection--;

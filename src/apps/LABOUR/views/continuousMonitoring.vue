@@ -89,14 +89,14 @@ export default defineComponent({
       ],
       StepperData:[
         {
-          'title': 'Vitals',
-          'componet': 'Vitals',
-          'value': '1'
+          title: 'Vitals',
+          component: 'Vitals',
+          value: '1'
         },
         {
-          'title': 'Other exams',
-          'componet': 'OtherExams',
-          'value': '2'
+          title: 'Other exams',
+          component: 'OtherExams',
+          value: '2'
         },
       ],
       isOpen: false,

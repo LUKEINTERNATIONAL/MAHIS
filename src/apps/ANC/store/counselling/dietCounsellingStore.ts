@@ -41,7 +41,7 @@ const initialDietCounselling=[
                 selectedValue: '',
                 name:'Counselling on health eating and keeping physically active was not done',
                 displayNone: true,
-                displayNext:'Other',
+                displayNext:"Other",
                 class:'bold',
             },
             data:[
@@ -51,15 +51,15 @@ const initialDietCounselling=[
                     colSize: "7",
                 },
                 {
-                    name: 'Other',
-                    value: 'other',
+                    name:'Other',
+                    value:'Other',
                     colSize: "7",
                 },
             ]
         }
     },
     {
-        childName:'Reason counselling on health eating and keeping physically active was not done',
+        childName:'Counselling on health eating and keeping physically active was not done',
         classDash: 'dashed_bottom_border',
         sideColSize:0.5,
         data:{

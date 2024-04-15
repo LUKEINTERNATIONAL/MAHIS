@@ -79,9 +79,9 @@ export default defineComponent({
       ],
       StepperData:[
         {
-          'title': 'Referral',
-          'componet': 'PatientReferral',
-          'value': '1'
+          title: 'Referral',
+          component: 'PatientReferral',
+          value: '1'
         },
       ],
       isOpen: false,

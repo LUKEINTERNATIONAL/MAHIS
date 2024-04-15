@@ -27,7 +27,7 @@
         <ion-col size="7" size-lg="7" class="rightCol">
             <div class="back_profile" @click="openModal()">
                 <ion-icon style="font-size: 20px" :icon="chevronBackOutline"> </ion-icon>
-                <span style="cursor: pointer"> Back to dashboard</span>
+                <span style="cursor: pointer"> Back to profile</span>
             </div>
 
             <div class="accordion_group">
@@ -41,9 +41,9 @@
                         </div>
                     </ion-accordion>
                 </ion-accordion-group>
-                <div>
-                    <hr style="background: rgba(0, 0, 0, 0.13)" />
-                    <ion-button class="primary_btn" style="padding-left: 15px" @click="$emit('finishBtn')">Save and proceed</ion-button>
+                <hr style="background: rgba(0, 0, 0, 0.13)" />
+                <div style="float: right">
+                    <DynamicButton name="Finish and Save" iconSlot="end" @click="$emit('finishBtn')" />
                 </div>
             </div>
         </ion-col>
@@ -76,65 +76,73 @@ import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import Diagnosis from "@/apps/NCD/components/ConsultationPlan/Diagnosis.vue";
+import ComplicationsScreening from "@/apps/NCD/components/ConsultationPlan/ComplicationsScreening.vue";
 import ConfirmDiagnosis from "@/apps/NCD/components/ConsultationPlan/ConfirmDiagnosis.vue";
 import Outcome from "@/apps/NCD/components/ConsultationPlan/Outcome.vue";
+import Investigations from "@/components/Investigations.vue";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
+import { createModal } from "@/utils/Alerts";
+import { icons } from "@/utils/svg";
+import DynamicButton from "@/components/DynamicButton.vue";
+import Vitals from "@/apps/LABOUR/components/repeatable things/Vitals.vue";
 import Obstetric from "@/apps/LABOUR/components/obstetric details/Obstetric.vue";
 import Labour from "@/apps/LABOUR/components/obstetric details/Labour.vue";
 import QuickCheck from "@/apps/LABOUR/components/physical exam/QuickCheck.vue";
 import PhysicalExamination from "@/apps/LABOUR/components/physical exam/PhysicalExamination.vue";
-import FirstVaginalExamination from "@/apps/LABOUR/components/physical exam/FirstVaginalExamination.vue";
 import PelvicAssessment from "@/apps/LABOUR/components/physical exam/PelvicAssessment.vue";
+import PatientReferral from "@/apps/LABOUR/components/repeatable things/PatientReferral.vue";
+import FirstVaginalExamination from "@/apps/LABOUR/components/physical exam/FirstVaginalExamination.vue";
 import SecondStageDelivery from "@/apps/LABOUR/components/delivery details/SecondStageDelivery.vue";
 import ThirdStageDelivery from "@/apps/LABOUR/components/delivery details/ThirdStageDelivery.vue";
-import PatientReferral from "@/apps/LABOUR/components/repeatable things/PatientReferral.vue";
 import end from "@/apps/LABOUR/components/repeatable things/end.vue";
+import OtherExams from "@/apps/LABOUR/components/repeatable things/OtherExams.vue";
 import ImmidiatePostnatalChecksForChild
   from "@/apps/LABOUR/components/delivery details/ImmidiatePostnatalChecksForChild.vue";
 import ImmidiatePostnatalChecksForMother
   from "@/apps/LABOUR/components/delivery details/ImmidiatePostnatalChecksForMother.vue";
-import OtherExams from "@/apps/LABOUR/components/repeatable things/OtherExams.vue";
-import Vitals from "@/apps/LABOUR/components/repeatable things/Vitals.vue";
-import { createModal } from "@/utils/Alerts";
-import { icons } from "@/utils/svg";
+
 export default defineComponent({
     name: "Home",
     components: {
-        IonContent,
-        IonHeader,
-        IonMenuButton,
-        IonPage,
-        IonTitle,
-        IonToolbar,
-        Toolbar,
-        ToolbarSearch,
-        IonButton,
-        IonCard,
-        IonCardContent,
-        IonCardHeader,
-        IonCardSubtitle,
-        IonCardTitle,
-        IonAccordion,
-        IonAccordionGroup,
-        IonItem,
-        IonLabel,
-        IonModal,
-        Obstetric,
-        Labour,
-        QuickCheck,
-        PhysicalExamination,
-        PelvicAssessment,
-        PatientReferral,
-        FirstVaginalExamination,
-        SecondStageDelivery,
-        ThirdStageDelivery,
+      IonContent,
+      IonHeader,
+      IonMenuButton,
+      IonPage,
+      IonTitle,
+      IonToolbar,
+      Toolbar,
+      ToolbarSearch,
+      IonButton,
+      IonCard,
+      IonCardContent,
+      IonCardHeader,
+      IonCardSubtitle,
+      IonCardTitle,
+      IonAccordion,
+      IonAccordionGroup,
+      DynamicButton,
+      IonItem,
+      IonLabel,
+      Diagnosis,
+      ComplicationsScreening,
+      ConfirmDiagnosis,
+      Outcome,
+      Investigations,
+      IonModal,
+      Obstetric,
+      Labour,
+      QuickCheck,
+      PhysicalExamination,
+      PelvicAssessment,
+      PatientReferral,
+      FirstVaginalExamination,
+      SecondStageDelivery,
+      ThirdStageDelivery,
       end,
       OtherExams,
       Vitals,
       ImmidiatePostnatalChecksForChild,
       ImmidiatePostnatalChecksForMother
-
-
 
     },
     data() {
@@ -151,13 +159,13 @@ export default defineComponent({
             default: [] as any,
         },
         stepperTitle: {
-            default: "" as any,
+            type: String,
+            default: "",
         },
     },
     setup() {
         return { chevronBackOutline, checkmark };
     },
-
     methods: {
         accordionGroupChange(ev: AccordionGroupCustomEvent) {
             this.wizardData.forEach((item: any) => {
@@ -261,7 +269,7 @@ ion-accordion.accordion-expanded ion-item[slot="header"] {
 }
 .accordion_group {
     position: fixed;
-    height: 800px;
+    height: 700px;
     width: 58%;
     overflow-y: auto;
     top: 200px;
