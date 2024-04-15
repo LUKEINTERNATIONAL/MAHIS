@@ -434,3 +434,10 @@ ion-accordion {
 .bold {
     font-weight: 700;
 }
+.footer2 {
+    color: #000;
+    display: flex;
+    justify-content: right;
+    padding: 5px 0px 5px 0px;
+    margin-right: 40px;
+}

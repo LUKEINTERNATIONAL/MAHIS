@@ -35,18 +35,21 @@
                                 </ion-row>
                             </ion-card-content>
                         </ion-card>
-                        <ion-card class="start_new_co" style="margin-bottom: 20px" @click="handleNCD()">
+
+                        <ion-card class="start_new_co" v-if="programAccess('NCD PROGRAM')" style="margin-bottom: 20px" @click="handleNCD()">
                             {{ NCDProgramActionName }}
                         </ion-card>
-                        <ion-card class="start_new_co" style="margin-bottom: 20px">
+                        <ion-card class="start_new_co" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">
                             <router-link to="/profile">+ Enroll in ANC Program</router-link>
                         </ion-card>
-                        <ion-card class="start_new_co" style="margin-bottom: 20px"> + Enroll in Labour and delivery program </ion-card>
-                        <ion-card class="start_new_co" style="margin-bottom: 20px"> + Enroll in PNC program </ion-card>
-                        <ion-card class="start_new_co" style="margin-bottom: 20px" @click="handleOPD()"> {{ OPDProgramActionName }}</ion-card>
-
-                        <router-link to="/dispensation">
-                            <ion-card class="start_new_co" style="margin-bottom: 20px">+ Dispense Medication </ion-card></router-link
+                        <ion-card class="start_new_co" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">
+                            + Enroll in Labour and delivery program
+                        </ion-card>
+                        <ion-card class="start_new_co" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">
+                            + Enroll in PNC program
+                        </ion-card>
+                        <ion-card class="start_new_co" v-if="programAccess('OPD Program')" style="margin-bottom: 20px" @click="handleOPD()">
+                            {{ OPDProgramActionName }}</ion-card
                         >
 
                         <ion-card style="margin-bottom: 20px; background-color: #fff">
@@ -284,7 +287,15 @@ export default defineComponent({
                 return []; // Return an empty array in case of error
             }
         },
-
+        programAccess(programName: string): boolean {
+            const accessPrograms: any = sessionStorage.getItem("userPrograms");
+            const programs: any = JSON.parse(accessPrograms);
+            if (programs.some((program: any) => program.name === programName)) {
+                return true;
+            } else {
+                return false;
+            }
+        },
         async setNCDValue() {
             const generalStore = useGeneralStore();
             generalStore.setActivity(await this.getUserActivities("NCD_activities"));

@@ -371,13 +371,7 @@ ion-toolbar {
     justify-content: space-between;
     padding: 5px 0px 5px 0px;
 }
-.footer2 {
-    color: #000;
-    display: flex;
-    justify-content: right;
-    padding: 5px 0px 5px 0px;
-    margin-right: 40px;
-}
+
 ion-breadcrumb ion-icon {
     margin-inline: 30px;
 }

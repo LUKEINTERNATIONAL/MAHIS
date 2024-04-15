@@ -259,7 +259,6 @@ export default defineComponent({
             return [
                 ...(await formatRadioButtonData(this.patientHistoryHIV)),
                 ...(await formatRadioButtonData(this.substance)),
-                ...(await formatRadioButtonData(this.patientHistory)),
                 ...(await formatCheckBoxData(this.enrollmentDiagnosis)),
                 ...(await formatCheckBoxData(this.patientHistory)),
                 ...(await formatCheckBoxData(this.patientHistoryHIV)),
