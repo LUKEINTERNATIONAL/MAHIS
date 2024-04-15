@@ -34,7 +34,7 @@
 
 
 
-        <ion-row>
+        <!-- <ion-row>
             <ion-col>
                 <BasicInputField
                     :placeholder="note_properties[0].placeHolder"
@@ -44,7 +44,7 @@
                 />
             </ion-col>
             <ion-col></ion-col>
-        </ion-row>
+        </ion-row> -->
 
         <ion-row>
             <ion-col>
@@ -244,7 +244,10 @@ async function preSaveRoles() {
 }
 
 async function saveRoles(roleNames: any) {
-    UserService.updateUser(userId.value, roleNames)
+    UserService.updateUser(userId.value, {
+        must_append_roles: true,
+        roles: roleNames
+    })
 }
 
 async function preSavePrograms() {
