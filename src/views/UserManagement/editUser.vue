@@ -103,6 +103,7 @@
                         v-if="item.selected"
                         :userId="userId"
                         :user_programs="item"
+                        :action="actionN"
                     />
                 </div>
             </ion-col>
@@ -167,12 +168,13 @@ import {
     personOutline,
     peopleOutline
 } from "ionicons/icons"
-import { ref, onMounted } from "vue"
+import { ref, onMounted, watch } from "vue"
 import { icons } from "@/utils/svg"
 import DynamicButton from "@/components/DynamicButton.vue"
 import BasicInputField from "@/components/BasicInputField.vue"
 import { UserService } from "@/services/user_service"
 import { ProgramService } from "@/services/program_service"
+import { Service } from "@/services/service"
 
 const toggle_local = ref(true)
 const user_roles = ref([] as any)
@@ -183,10 +185,12 @@ const first_name = ref()
 const last_name = ref()
 const userId = ref() as any
 const show_user_programs = ref(false)
+const actionN = ref('')
 
 const props = defineProps<{
     toggle: true,
     user_id: any,
+    action: any
 }>()
 
 onMounted(async () => {
@@ -194,6 +198,19 @@ onMounted(async () => {
     await getUserPrograms()
     await getUserData() 
 })
+
+watch(
+    () => props.action,
+    async (newValue) => {
+        trigerSaveFn()
+    }
+)
+
+function trigerSaveFn() {
+    actionN.value = props.action
+    preSavePrograms()
+    
+}
 
 // const emit = defineEmits<{
 //     (e: "closePopoover", ObjectsArray: any): void
@@ -208,6 +225,29 @@ async function getUserData() {
     fillUserRoles()
     fillUserPrograms()
     getAPICounterPart() 
+}
+
+async function preSavePrograms() {
+    const selectedPrograms: any[] = []
+    const selectedProgramIds: any[] = []
+    user_programs.value.forEach((program: any) => {
+        if (program.selected == true) {
+            selectedPrograms.push(program)
+        }
+    })
+
+    selectedPrograms.forEach((program: any) => {
+        selectedProgramIds.push(program.other.program_id)
+    })
+
+    console.log(selectedProgramIds)
+    if (selectedProgramIds.length > 0) {
+        savePrograms(selectedProgramIds)
+    }
+}
+
+async function savePrograms(programIds: any) {
+    const res = await Service.putJson('users/'+userId.value, programIds)
 }
 
 function fillUserRoles() {

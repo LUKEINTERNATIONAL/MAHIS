@@ -19,6 +19,7 @@
                             <editUser
                                 :user_id="user_id"
                                 :toggle="true"
+                                :action="action"
                             />
                         </ion-col>
                        
@@ -28,7 +29,7 @@
         </ion-content>
         <ion-footer :translucent="true">
             <ion-toolbar>
-                <DynamicButton @click="" name="Save" fill="clear" iconSlot="icon-only" style="float: right" />
+                <DynamicButton @click="saveAction" name="Save" fill="clear" iconSlot="icon-only" style="float: right" />
             </ion-toolbar>
         </ion-footer>
     </ion-modal>
@@ -54,6 +55,8 @@ import { icons } from "@/utils/svg"
 import BasicForm from "@/components/BasicForm.vue"
 import DynamicButton from "@/components/DynamicButton.vue"
 
+const action = ref('') as any
+
 const props = defineProps<{
     is_open: any,
     user_id: any,
@@ -63,8 +66,21 @@ const emit = defineEmits<{
     (e: "closePopoover", ObjectsArray: any): void
 }>()
 
+function saveAction() {
+    action.value = generateRandomStrings(100, 3)
+}
 
+function generateRandomStrings(numStrings: number, stringLength: number): any{
+  const getRandomChar = (type: string) => {
+    const start = type === 'number' ? 48 : type === 'uppercase' ? 65 : 97;
+    return String.fromCharCode(Math.floor(Math.random() * (type === 'number' ? 10 : 26)) + start);
+  };
 
+  return Array.from({ length: numStrings }, () =>
+    Array.from({ length: stringLength }, () => getRandomChar(['number', 'uppercase', 'lowercase'][Math.floor(Math.random() * 3)]))
+      .join('')
+  );
+}
 
 </script>
 <style scoped>

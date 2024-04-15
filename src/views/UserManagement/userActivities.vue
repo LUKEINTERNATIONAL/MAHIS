@@ -1,9 +1,4 @@
 <template>
-
-        <ion-button @click="saveK">
-            {{ 'QWERTY' }}
-        </ion-button>
-
     <ion-grid>
         <ion-row>
             <ion-col>
@@ -58,6 +53,7 @@ const REF_NAME = ref('') as any
 const props = defineProps<{
     user_programs: any,
     userId: any,
+    action: any,
 }>()
 
 onMounted(async () => {
@@ -82,6 +78,13 @@ watch(
         if (newValue) {
             activities.value
         }
+    }
+)
+
+watch(
+    () => props.action,
+    async (newValue) => {
+        saveK()
     }
 )
 
@@ -126,7 +129,11 @@ async function postActivities(_property_: string, selected: string) {
         'property_value': selected,
         user_id: props.userId
         }
-    const res = await Service.postJson('user_properties', userActivities)
+    try {
+        const res = await Service.postJson('user_properties', userActivities)
+    } catch (error) {
+        
+    }
 }
 
 async function postDumbActivities(_property_: string) {
@@ -135,7 +142,11 @@ async function postDumbActivities(_property_: string) {
         'property_value': "dumb",
         user_id: props.userId
         }
-    const res = await Service.postJson('user_properties', userActivities)
+    try {
+        const res = await Service.postJson('user_properties', userActivities)
+    } catch (error) {
+        
+    }
 }
 
 async function generateKeyAPIRef(program: string) {
