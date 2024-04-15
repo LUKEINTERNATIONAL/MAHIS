@@ -1,92 +1,104 @@
 import { defineStore } from "pinia";
 import { icons } from '@/utils/svg';
+import _ from "lodash";
 
-const physiologicalCousellingForm ={
-    counsellingOnHealthEatingYes:{
-        name:"Yes",
-        value:"yes"
+const initialDietCounselling=[
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border',
+        radioBtnContent:{
+            header:{
+                title: 'Counselling  conducted on health eating?',
+                selectedValue: '',
+                class:'bold',
+                name:'Counselling on health eating',
+                displayNext:"No"
+            },
+            data:[
+                {
+                    name: "Yes",
+                    value: "Yes",
+                    colSize: "2.5",
+                },
+                {
+                    name: "No",
+                    value: "No",
+                    colSize: "2.5",
+                },
+            ]
+        }
     },
-        counsellingOnHealthEatingNo:{
-        name:"No",
-        value:"no"
+    {
+        selectdData: [],
+        childName:'Counselling on health eating',
+        classDash: 'dashed_bottom_border',
+        sideColSize:0.5,
+        isFinishBtn: false,
+        radioBtnContent:{
+            header:{
+                title: 'Reason counselling on health eating and keeping physically active was not done?',
+                selectedValue: '',
+                name:'Counselling on health eating and keeping physically active was not done',
+                displayNone: true,
+                displayNext:'Other',
+                class:'bold',
+            },
+            data:[
+                {
+                    name:'Client was referred',
+                    value: 'client was referred',
+                    colSize: "7",
+                },
+                {
+                    name: 'Other',
+                    value: 'other',
+                    colSize: "7",
+                },
+            ]
+        }
     },
-        clientReferredOnHealthEating:{
-        name:"Client was referred",
-        value:"clientReferredOnOnHealthEating"
-    },
-        otherOnHealthEating:{
-        name:'Other On Health Eating',
-        value:'otherOnHealthEating'
-    },
-   
-}
+    {
+        childName:'Reason counselling on health eating and keeping physically active was not done',
+        classDash: 'dashed_bottom_border',
+        sideColSize:0.5,
+        data:{
+            rowData:[
+                {
+                    colData:[
+                        {
+                            displayNone:true,
+                            inputHeader: 'Specify',
+                            icon: icons.editPen,
+                            name: "Other notes",
+                            value: "other notes",
+                            eventType: 'input',
+                            inputWidth: "82%",
+                            required: true
+                        }
 
+                    ]
+                }
+            ],
+
+        }
+
+    },
+
+] as any;
 export const useDietCounsellingStore = defineStore('dietCounsellingStore',{
     state: () =>({
-        dietCounsellingInfo:[
-
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:{
-                    header:{
-                        title: 'Counselling  conducted on health eating?',
-                        selectedValue: ''
-                    },
-                    data:[
-                        {  
-                            name: physiologicalCousellingForm.counsellingOnHealthEatingYes.name,
-                            value: physiologicalCousellingForm.counsellingOnHealthEatingYes.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                        { 
-                            name: physiologicalCousellingForm.counsellingOnHealthEatingNo.name,
-                            value: physiologicalCousellingForm.counsellingOnHealthEatingNo.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                    ]
-                }
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:{
-                    header:{
-                        title: 'Reason couselling on health eating and keeping phyically active was not done?',
-                        selectedValue: '',
-                        displayNone: false,
-                    },
-                    data:[
-                        {  
-                            name: physiologicalCousellingForm.clientReferredOnHealthEating.name,
-                            value: physiologicalCousellingForm.clientReferredOnHealthEating.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                        { 
-                            name: physiologicalCousellingForm.otherOnHealthEating.name,
-                            value: physiologicalCousellingForm.otherOnHealthEating.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                    ]
-                }
-            },
-            
-        ] as any,
+        dietCounsellingInfo:[...initialDietCounselling] as any,
     }),
         actions:{
         addDietCounsellingInfo(data:any){
             this.dietCounsellingInfo = data
-        }
+        },
+
+            getInitial(){
+                const data = _.cloneDeep(initialDietCounselling)
+                return [...data];
+            },
     },
     persist:true
 })

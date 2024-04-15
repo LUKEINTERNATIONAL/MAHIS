@@ -101,34 +101,34 @@ export default defineComponent({
               ],
   StepperData: [
                {
-                    'title': 'Diagnosis and treatment',
-                    'componet': 'DiagnosisTreatment',
-                    'value': '1'
+                    title: 'Diagnosis and treatment',
+                    component: 'DiagnosisTreatment',
+                    value: '1'
                 },
                 {
-                    'title': 'Medication dispensed',
-                    'componet': 'MedicationDispensed',
-                    'value': '2'
+                    title: 'Medication dispensed',
+                    component: 'MedicationDispensed',
+                    value: '2'
                 },
                 {
-                    'title': 'Counselling',
-                    'componet': 'DiagnosisCounselling',
-                    'value': '3'
+                    title: 'Counselling',
+                    component: 'DiagnosisCounselling',
+                    value: '3'
                 },
                 {
-                    'title': 'Immunization',
-                    'componet': 'Immunization',
-                    'value': '4'
+                    title: 'Immunization',
+                    component: 'Immunization',
+                    value: '4'
                 },
                 {
-                    'title': 'Intimate partner',
-                    'componet': 'IntimatePartner',
-                    'value': '5'
+                    title: 'Intimate partner',
+                    component: 'IntimatePartner',
+                    value: '5'
                 },
                 {
-                    'title': 'Deworming and malaria prophylaxis',
-                    'componet': 'Deworming',
-                    'value': '6'
+                    title: 'Deworming and malaria prophylaxis',
+                    component: 'Deworming',
+                    value: '6'
                 },
   ],
 
