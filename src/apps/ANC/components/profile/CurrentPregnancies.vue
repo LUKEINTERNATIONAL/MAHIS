@@ -103,7 +103,8 @@ export default defineComponent({
           LMNP(){ return getRadioSelectedValue(this.lmnp, 'LMNP')},
           lmnpEED(){ return getFieldValue(this.lmnp, 'lmnpEED','value')},
           lmnpGestationAge(){ return getFieldValue(this.lmnp, 'lmnpGestationAge','value')},
-          lmnpDate(){ return getFieldValue(this.lmnp, 'lmnpDate','value')}
+          lmnpDate(){ return getFieldValue(this.lmnp, 'lmnpDate','value')},
+          //edd(){return getFieldValue(this.lmnp,'edd',"value")}
 
   
       },
@@ -118,6 +119,7 @@ export default defineComponent({
         this.handleLMNP()
         this.handleUltrasound()
         this.handleTetanus()
+        this.calculateEDD
   
   
           
@@ -130,7 +132,9 @@ export default defineComponent({
        lmnp:{
          handler( event){
            this.handleInputData(event)
-           this.handleLMNP()},
+           this.handleLMNP()
+           this.calculateEDD(event)
+          },
          deep:true
 
        },
@@ -154,6 +158,7 @@ export default defineComponent({
         async handleInputData(event: any) {
           this.validationRules(event)
           this.calculateGestationAgefromLNMP(event)
+          this.calculateEDD(event)
         },
 
         calculateGestationAgefromLNMP(event: any) {
@@ -168,8 +173,20 @@ export default defineComponent({
             }
           }
         },
+        calculateEDD(event: any) {
+            if (event.name === "lmnpDate") {
+              const lmnpDateValue = Date.parse(getFieldValue(this.lmnp, 'lmnpDate', 'value'));
+              if (!isNaN(lmnpDateValue)) {
+                const currentDate = new Date().getTime();
+                const gestationWeeks = Math.floor((currentDate - lmnpDateValue) / (1000 * 60 * 60 * 24 * 7)); 
+                const estimatedDueDate = new Date(lmnpDateValue + gestationWeeks * 7 * 24 * 60 * 60 * 1000); 
+                modifyFieldValue(this.lmnp, 'Estimated date of delivery', 'value', estimatedDueDate);
+              } else {
+                modifyFieldValue(this.lmnp, 'Estimated date of delivery', 'value', null);
+              }
+            }
 
-
+          },
 
         handleLMNP(){
         },
@@ -209,16 +226,6 @@ export default defineComponent({
           }
 
         },
-
-    eddCalculation(){
-      //   const edd = new Date(lmpDate.getTime() + 280 * 24 * 60 * 60 * 1000);
-      // // Update the EDD value in the store
-      // this.expectedDate = edd.toISOString().split('T')[0];
-
-        // if (this.lnmpDate) {
-        // const eddDate = new Date(this.lnmpDate.getTime() + 280 * 24 * 60 * 60 * 1000);
-        // return eddDate.toDateString();
-      }
     }
    
       },

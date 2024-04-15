@@ -294,6 +294,10 @@ export default defineComponent({
           const gravidaValue= parseInt(getFieldValue(this.prevPregnancies, 'Gravida', 'value'));
           const abortionsValue = parseInt(getFieldValue(this.prevPregnancies, 'Abortions', 'value'));
           if (!isNaN(gravidaValue) && !isNaN(abortionsValue)) {
+            if(abortionsValue >= gravidaValue){
+              console.log("Abortions can't be greater or equal to Gravida")
+              return;
+            }
             const liveBirthsValue = (gravidaValue-1)-abortionsValue
             modifyFieldValue(this.prevPregnancies, 'LiveBirths', 'value', liveBirthsValue);
           } else {

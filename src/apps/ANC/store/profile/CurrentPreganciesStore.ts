@@ -1,16 +1,16 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
 import _, {initial} from "lodash"
-const initialLMNP=[
+const initialLMNP = [
   {
     classDash: "dashed_bottom_border",
     radioBtnContent: {
       header: {
-        class:"bold",
+        class: "bold",
         title: "LNMP Known?",
         selectedValue: "",
         name: "LNMP Known?",
-        displayNext:"Yes"
+        displayNext: "Yes",
       },
       data: [
         {
@@ -27,8 +27,8 @@ const initialLMNP=[
     },
   },
   {
-    sideColSize:0.5,
-    childName:"LNMP Known?",
+    sideColSize: 0.5,
+    childName: "LNMP Known?",
     sectionHeader: "",
     classDash: "dashed_bottom_border",
     data: {
@@ -36,19 +36,19 @@ const initialLMNP=[
         {
           colData: [
             {
-              displayNone:true,
-              class:'bold',
+              displayNone: true,
+              class: "bold",
               inputHeader: "LNMP date*",
               value: "",
               name: "lmnpDate",
               eventType: "input",
               alertsError: false,
-              valueType:'text',
+              valueType: "text",
               alertsErrorMassage: "",
               isDatePopover: true,
               icon: icons.calenderPrimary,
               placeholder: "Pick the date",
-              inputWidth: "55%",
+              inputWidth: "50%",
             },
           ],
         },
@@ -67,9 +67,9 @@ const initialLMNP=[
     ],
   },
   {
-    childName:"LNMP Known?",
+    childName: "LNMP Known?",
     sectionHeader: "",
-    sideColSize:0.5,
+    sideColSize: 0.5,
     classDash: "dashed_bottom_border",
     data: {
       rowData: [
@@ -77,37 +77,50 @@ const initialLMNP=[
           colData: [
             {
               displayNone: true,
-              class:'bold',
+              class: "bold",
               inputHeader: "Gestation age",
               value: "",
               name: "lmnpGestationAge",
               eventType: "input",
-              valueType:"text",
+              valueType: "text",
               alertsError: false,
               alertsErrorMassage: "",
-              inputWidth: "55%",
+              inputWidth: "100%",
               unit: "Weeks",
               disabled: "disabled",
             },
-
+            {
+              // displayNone: true,
+              class: "bold",
+              inputHeader: "EDD",
+              value: "",
+              name: "Estimated date of delivery",
+              eventType: "input",
+              valueType: "text",
+              alertsError: false,
+              icon: icons.calenderPrimary,
+              alertsErrorMassage: "",
+              inputWidth: "100%",
+              disabled: "disabled",
+            },
           ],
         },
       ],
     },
   },
 ] as any;
-const initialUltraSound=[
+const initialUltraSound = [
   {
     selectdData: [],
     isFinishBtn: false,
     classDash: "dashed_bottom_border",
     radioBtnContent: {
       header: {
-        class:"bold",
+        class: "bold",
         title: "Ultrasound done?",
         selectedValue: "",
         name: "Ultrasound done?",
-        displayNext:"Yes"
+        displayNext: "Yes",
       },
       data: [
         {
@@ -124,8 +137,8 @@ const initialUltraSound=[
     },
   },
   {
-    sideColSize:0.5,
-    childName:"Ultrasound done?",
+    sideColSize: 0.5,
+    childName: "Ultrasound done?",
     isFinishBtn: false,
     classDash: "dashed_bottom_border",
     data: {
@@ -133,11 +146,11 @@ const initialUltraSound=[
         {
           colData: [
             {
-              class:"bold",
-              displayNone:true,
+              class: "bold",
+              displayNone: true,
               inputHeader: "Date for ultrasound*",
               value: "",
-              name: "ultrasound delivery date",
+              name: "Ultrasound",
               required: true,
               eventType: "input",
               alertsError: false,
@@ -153,8 +166,8 @@ const initialUltraSound=[
     },
   },
   {
-    sideColSize:0.5,
-    childName:"Ultrasound done?",
+    sideColSize: 0.5,
+    childName: "Ultrasound done?",
     isFinishBtn: false,
     classDash: "dashed_bottom_border",
     data: {
@@ -162,11 +175,11 @@ const initialUltraSound=[
         {
           colData: [
             {
-              class:"bold",
+              class: "bold",
               displayNone: true,
               inputHeader: "Gestation age from ultrasound",
               value: "",
-              name: "Gestation age from ultrasound",
+              name: "specify",
               required: true,
               eventType: "input",
               alertsError: false,
@@ -181,8 +194,8 @@ const initialUltraSound=[
     },
   },
   {
-    sideColSize:0.5,
-    childName:"Ultrasound done?",
+    sideColSize: 0.5,
+    childName: "Ultrasound done?",
     isFinishBtn: false,
     classDash: "dashed_bottom_border",
     data: {
@@ -194,6 +207,7 @@ const initialUltraSound=[
               inputHeader: "LMNP date from ultrasound",
               value: "",
               name: "ultrasound lmnp date",
+              //name:'lmnp date',
               required: true,
               eventType: "input",
               alertsError: false,
@@ -201,7 +215,21 @@ const initialUltraSound=[
               isDatePopover: true,
               icon: icons.calenderPrimary,
               placeholder: "Pick date",
-              inputWidth: "55%",
+              inputWidth: "100%",
+            },
+            {
+              // displayNone: true,
+              inputHeader: "EDD",
+              value: "",
+              name: "Estimated date of delivery",
+              required: true,
+              eventType: "input",
+              alertsError: false,
+              alertsErrorMassage: "",
+              isDatePopover: true,
+              icon: icons.calenderPrimary,
+              placeholder: "Pick date",
+              inputWidth: "100%",
             },
           ],
         },
@@ -214,11 +242,11 @@ const initialUltraSound=[
     classDash: "dashed_bottom_border",
     radioBtnContent: {
       header: {
-        class:"bold",
+        class: "bold",
         title: "Gestation age by Palpation known?",
         selectedValue: "",
         name: "Gestation age by Palpation known",
-        displayNext:"Yes"
+        displayNext: "Yes",
       },
       data: [
         {
@@ -235,28 +263,42 @@ const initialUltraSound=[
     },
   },
   {
-    sideColSize:0.5,
-    childName:"Gestation age by Palpation known",
+    sideColSize: 0.5,
+    childName: "Gestation age by Palpation known",
     isFinishBtn: false,
-    class:"bold",
+    class: "bold",
     classDash: "dashed_bottom_border",
     data: {
       rowData: [
         {
           colData: [
             {
-              displayNone:true,
+              displayNone: true,
               inputHeader: "Enter gestation age by palpation",
               value: "",
-              class:"bold",
-              name: "gestation",
+              class: "bold",
+              name: "Gestation age to be used",
               required: true,
               eventType: "input",
-              valueType:'text',
+              valueType: "text",
               alertsError: false,
               alertsErrorMassage: "",
               icon: icons.editPen,
-              inputWidth: "55%",
+              inputWidth: "100%",
+            },
+            {
+              // displayNone: true,
+              inputHeader: "EDD",
+              value: "",
+              name: "Estimated date of delivery",
+              required: true,
+              eventType: "input",
+              alertsError: false,
+              alertsErrorMassage: "",
+              isDatePopover: true,
+              icon: icons.calenderPrimary,
+              placeholder: "Pick date",
+              inputWidth: "100%",
             },
           ],
         },
@@ -269,7 +311,7 @@ const initialUltraSound=[
     classDash: "dashed_bottom_border",
     radioBtnContent: {
       header: {
-        class:"bold",
+        class: "bold",
         title: "Gestation age to be used",
         selectedValue: "",
         name: "Gestation age to be used",
@@ -547,15 +589,15 @@ export const useCurrentPregnanciesStore = defineStore("currentPregnanciesStore",
     tetanus: [...initialTetenus] as any,
   }),
   actions: {
-    setTetanus(data: any) {
-      this.tetanus = data;
-    },
-    setLMNP(data: any) {
-      this.lmnp = data;
-    },
-    setUltrasound(data: any) {
-      this.ultrasound = data;
-    },
+    // setTetanus(data: any) {
+    //   this.tetanus = data;
+    // },
+    // setLMNP(data: any) {
+    //   this.lmnp = data;
+    // },
+    // setUltrasound(data: any) {
+    //   this.ultrasound = data;
+    // },
     getInitial(){
       const data = _.cloneDeep(initialLMNP);
       return [...data]; // Return a copy of the initial state
@@ -569,5 +611,5 @@ export const useCurrentPregnanciesStore = defineStore("currentPregnanciesStore",
       return [...data]; // Return a copy of the initial state
     }
   },
-   persist:true,
+  // persist:true,
 });

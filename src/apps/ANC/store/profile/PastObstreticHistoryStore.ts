@@ -491,5 +491,5 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
       this.Complications = data;
     },
   },
-  // persist:true,
+   persist:true,
 });
