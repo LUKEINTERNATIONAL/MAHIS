@@ -231,7 +231,6 @@ function clickRow(data: any) {
 }
 
 const showRow = (item: ClickRowArgument) => {
-  console.log(item)
   clickRow(item)
 }
 </script>

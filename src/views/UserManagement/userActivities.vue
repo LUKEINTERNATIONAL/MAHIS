@@ -91,20 +91,20 @@ watch(
 async function generatedSelected() {
     const selected = props.user_programs
     const is_P = await generateKeyAPIRef(selected.name)
-    if (is_P.exists == true) {
-        try {
+    try {
+        if (is_P.exists == true) {
             console.log(is_P.ref_name)
             const data_ = [] as any
             const data = await getActivities(is_P.ref_name)
-           activities.value.forEach((item: any) => {
-            data.forEach((datum: any) => {
+            activities.value.forEach((item: any) => {
+                data.forEach((datum: any) => {
                     if (item.name == datum.name) { 
                         item.selected = true
                     }})
-           })
-        } catch (error) {
-            console.error(error)
+            })
         }
+    } catch (error) {
+        //console.error(error)
     }
 }
 

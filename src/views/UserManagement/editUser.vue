@@ -209,7 +209,7 @@ watch(
 function trigerSaveFn() {
     actionN.value = props.action
     preSavePrograms()
-    
+    preSaveRoles()
 }
 
 // const emit = defineEmits<{
@@ -225,6 +225,26 @@ async function getUserData() {
     fillUserRoles()
     fillUserPrograms()
     getAPICounterPart() 
+}
+
+async function preSaveRoles() {
+    const selectedRoles: any[] = []
+    const selectedRoleNames: any[] = []
+    user_roles.value.forEach((role: any) => {
+        if (role.selected == true) {
+            selectedRoles.push(role)
+        }
+    })
+
+    selectedRoles.forEach((role: any) => {
+        selectedRoleNames.push(role.other.role)
+    })
+
+    saveRoles(selectedRoleNames)
+}
+
+async function saveRoles(roleNames: any) {
+    UserService.updateUser(userId.value, roleNames)
 }
 
 async function preSavePrograms() {
@@ -247,11 +267,9 @@ async function preSavePrograms() {
 }
 
 async function savePrograms(programIds: any) {
-    try {
-        const res = await Service.putJson('users/'+userId.value, programIds)
-    } catch (error) {
-        
-    }
+    UserService.updateUser(userId.value, {
+        programs: programIds
+    })
 }
 
 function fillUserRoles() {
@@ -324,6 +342,10 @@ async function getUserPrograms() {
         )
     })
     user_programs.value = temp_array
+}
+
+async function setSelectedUserPrograms() {
+
 }
 
 
