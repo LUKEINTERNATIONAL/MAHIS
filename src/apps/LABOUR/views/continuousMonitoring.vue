@@ -37,8 +37,10 @@ import SaveProgressModal from '@/components/SaveProgressModal.vue'
 import { createModal } from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
 import Stepper from "@/apps/LABOUR/components/Stepper.vue";
-import { mapState } from 'pinia';
+import { mapState,} from 'pinia';
 import {getCheckboxSelectedValue} from "@/services/data_helpers";
+import { formatInputFiledData } from '@/services/formatServerData';
+import { useVitalsStore } from '../stores/repeatable things/vitals';
 
 export default defineComponent({
   name: "obstetricDetails",
@@ -107,8 +109,7 @@ export default defineComponent({
 
   },
   computed:{
-
-
+      ...mapState(useVitalsStore,['vitals'])
   },
   mounted(){
      this.markWizard()
@@ -155,8 +156,22 @@ export default defineComponent({
       });
     },
     saveData(){
-
+      this.saveVitals()
     },
+    async saveVitals(){
+      console.log( await this.buildVitals())
+    },
+   async buildVitals(){
+    return[
+      ...(await formatInputFiledData(this.vitals))
+    ];
+   },
+        //     async buildMedication(){
+        //     return[
+        //         ...(await formatCheckBoxData(this.Medication)),
+        //         ...(await formatInputFiledData(this.Medication))
+        //     ]
+        // },
 
     openModal(){
       createModal(SaveProgressModal)
