@@ -247,7 +247,11 @@ async function preSavePrograms() {
 }
 
 async function savePrograms(programIds: any) {
-    const res = await Service.putJson('users/'+userId.value, programIds)
+    try {
+        const res = await Service.putJson('users/'+userId.value, programIds)
+    } catch (error) {
+        
+    }
 }
 
 function fillUserRoles() {
