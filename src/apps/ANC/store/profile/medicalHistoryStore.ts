@@ -29,7 +29,7 @@ const medicalHistoryForm = {
   },
   otherSurgerirs: {
     name: "Other",
-    value: "other",
+    value: "",
   },
 };
 
@@ -455,7 +455,7 @@ const initialMedicalHistory=[
               displayNone: true,
               inputHeader: "Specify",
               icon: icons.editPen,
-              value: medicalHistoryForm.otherSurgerirs.name,
+              value: "",
               name: "Other notes",
               valueType: "text",
               eventType: "input",
