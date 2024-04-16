@@ -35,7 +35,7 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
       },
       {
         selectdData: [],
-       // classDash: "dashed_bottom_border",
+        // classDash: "dashed_bottom_border",
         checkboxBtnContent: {
           header: {
             title: "Reason for referring mother",
@@ -67,7 +67,7 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
       },
       {
         selectdData: [],
-      //  classDash: "dashed_bottom_border",
+        //  classDash: "dashed_bottom_border",
         checkboxBtnContent: {
           header: {
             title: "",
@@ -98,7 +98,7 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
       },
 
       {
-      //  classDash: "dashed_bottom_border",
+        //  classDash: "dashed_bottom_border",
         checkboxBtnContent: {
           header: {
             title: "",
@@ -128,7 +128,7 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
         },
       },
       {
-      //  classDash: "dashed_bottom_border",
+        //  classDash: "dashed_bottom_border",
         checkboxBtnContent: {
           header: {
             title: "",
@@ -159,7 +159,7 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
       },
 
       {
-      //  classDash: "dashed_bottom_border",
+        //  classDash: "dashed_bottom_border",
         checkboxBtnContent: {
           header: {
             title: "",
@@ -190,7 +190,7 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
       },
 
       {
-      //  classDash: "dashed_bottom_border",
+        //  classDash: "dashed_bottom_border",
         checkboxBtnContent: {
           header: {
             title: "",
@@ -220,7 +220,7 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
         },
       },
       {
-      //  classDash: "dashed_bottom_border",
+        //  classDash: "dashed_bottom_border",
         checkboxBtnContent: {
           header: {
             title: "",
@@ -239,7 +239,7 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
             },
             {
               name: "Other",
-              value: "other",
+              value: "others",
               displayNone: true,
               checked: false,
               labelPlacement: "start",
@@ -252,7 +252,7 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
 
       {
         sectionHeader: "",
-     //   classDash: "dashed_bottom_border _padding",
+        //   classDash: "dashed_bottom_border _padding",
         data: {
           rowData: [
             {
@@ -260,6 +260,7 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
                 {
                   inputHeader: "Specify",
                   unit: "",
+                  displayNone: true,
                   icon: icons.editPen,
                   value: "",
                   valueType: "text",
@@ -273,8 +274,7 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
       },
       {
         sectionHeader: "",
-     //   classDash: "dashed_bottom_border _padding",
-
+        //   classDash: "dashed_bottom_border _padding",
         data: {
           rowData: [
             {
@@ -284,6 +284,7 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
                   unit: "",
                   icon: icons.editPen,
                   value: " ",
+                  displayNone: true,
                   valueType: "text",
                   name: "treatment given before referral",
                   eventType: "input",
@@ -301,6 +302,7 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
           header: {
             title: "Reason for referring baby",
             selectedValue: "",
+            name: "Baby identifier",
           },
           data: [
             {
@@ -329,6 +331,7 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Baby identifier",
           },
           data: [
             {
@@ -357,6 +360,7 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
           header: {
             title: "",
             selectedValue: "",
+            name: "Baby identifier",
           },
           data: [
             {
@@ -368,8 +372,8 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
               justify: "space-between",
             },
             {
-              name: "Other",
-              value: "other",
+              name: "Other reason",
+              value: "other reason",
               checked: false,
               labelPlacement: "start",
               colSize: "6",

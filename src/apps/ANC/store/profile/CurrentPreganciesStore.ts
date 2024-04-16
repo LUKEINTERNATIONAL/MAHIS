@@ -98,7 +98,7 @@ const initialLMNP = [
               eventType: "input",
               valueType: "text",
               alertsError: false,
-              icon: icons.calenderPrimary,
+              // icon: icons.calenderPrimary,
               alertsErrorMassage: "",
               inputWidth: "100%",
               disabled: "disabled",

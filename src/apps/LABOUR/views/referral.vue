@@ -40,7 +40,7 @@ import Stepper from "@/apps/LABOUR/components/Stepper.vue";
 import { mapState } from 'pinia';
 import { useLabourReferralStore} from "@/apps/LABOUR/stores/repeatable things/referral"
 import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from '@/services/formatServerData';
-import { getCheckboxInputField, getCheckboxSelectedValue, getRadioSelectedValue, modifyCheckboxValue } from '@/services/data_helpers';
+import { getCheckboxInputField, getCheckboxSelectedValue, getRadioSelectedValue, modifyCheckboxInputField, modifyCheckboxValue, modifyFieldValue } from '@/services/data_helpers';
 export default defineComponent({
   name: "referral",
   components:{
@@ -98,6 +98,7 @@ export default defineComponent({
   mounted(){
      this.markWizard()
      this.handleMother()
+     this.handleOtherMother()
 
   },
 
@@ -105,6 +106,7 @@ export default defineComponent({
     labourReferral:{
       handler(){
         this.handleMother()
+        this.handleOtherMother()
       },
       deep:true
     }
@@ -179,6 +181,7 @@ export default defineComponent({
           modifyCheckboxValue(this.labourReferral, "Placenta abruption" ,'displayNone',false);
           modifyCheckboxValue(this.labourReferral, "Symphysiotomy" ,'displayNone',false);
           modifyCheckboxValue(this.labourReferral, "Other" ,'displayNone',false);
+          modifyFieldValue(this.labourReferral,"treatment given before referral" ,'displayNone',false)
 
       }else{
          modifyCheckboxValue(this.labourReferral, "Danger sign present" ,'displayNone',true);
@@ -194,11 +197,43 @@ export default defineComponent({
           modifyCheckboxValue(this.labourReferral, "Severe anaemia" ,'displayNone',true);
           modifyCheckboxValue(this.labourReferral, "Placenta abruption" ,'displayNone',true);
           modifyCheckboxValue(this.labourReferral, "Symphysiotomy" ,'displayNone',true);
-          modifyCheckboxValue(this.labourReferral, "Other" ,'displayNone',true);
+          modifyCheckboxValue(this.labourReferral, "Others" ,'displayNone',true);
+          modifyFieldValue(this.labourReferral,"treatment given before referral" ,'displayNone',true)
       }
     },
     handleOtherMother(){
-      if(getCheckboxSelectedValue(this.labourReferral,"Other")?.value =='other'){}
+      if(getCheckboxSelectedValue(this.labourReferral,"Other")?.value =='others'){
+        modifyFieldValue(this.labourReferral,"specify" ,'displayNone',false)
+      }else{
+        modifyFieldValue(this.labourReferral,"specify" ,'displayNone',true)
+      }
+    },
+    handleBaby(){
+          if(getRadioSelectedValue(this.labourReferral,'referred')=='mother'){
+          modifyCheckboxValue(this.labourReferral, "Premature labour" ,'displayNone',false);
+          modifyCheckboxValue(this.labourReferral, "Placenta previa" ,'displayNone',false);
+          modifyCheckboxValue(this.labourReferral, "Severe anaemia" ,'displayNone',false);
+          modifyCheckboxValue(this.labourReferral, "Placenta abruption" ,'displayNone',false);
+          modifyCheckboxValue(this.labourReferral, "Symphysiotomy" ,'displayNone',false);
+          modifyCheckboxValue(this.labourReferral, "Other" ,'displayNone',false);
+          modifyFieldValue(this.labourReferral,"treatment given to baby before referral" ,'displayNone',false)
+
+      }else{
+         modifyCheckboxValue(this.labourReferral, "Danger sign present" ,'displayNone',true);
+         modifyCheckboxValue(this.labourReferral, "Antepartum haemorrhage" ,'displayNone',true);
+          modifyCheckboxValue(this.labourReferral, "Severe anaemia" ,'displayNone',true);
+          modifyCheckboxValue(this.labourReferral, "Placenta abruption" ,'displayNone',true);
+          modifyCheckboxValue(this.labourReferral, "Symphysiotomy" ,'displayNone',true);
+          modifyCheckboxValue(this.labourReferral, "Others" ,'displayNone',true);
+          modifyFieldValue(this.labourReferral,"treatment given to baby before referral" ,'displayNone',true)
+      }
+    },
+    handleOtherBaby(){
+      if(getCheckboxSelectedValue(this.labourReferral,"Other reason")?.value =='other reason'){
+        modifyFieldValue(this.labourReferral,"specify" ,'displayNone',false)
+      }else{
+        modifyFieldValue(this.labourReferral,"specify" ,'displayNone',true)
+      }
     },
     openModal(){
       createModal(SaveProgressModal)
