@@ -162,8 +162,8 @@ export default defineComponent({
         },
         async saveData() {
           await this.saveBehaviourCounselling();
-          // await this.savePhysiologicalCounselling()
-          // await  this.saveDietCounselling()
+          await this.savePhysiologicalCounselling()
+          await  this.saveDietCounselling()
 
         },
       async saveBehaviourCounselling() {
@@ -189,7 +189,7 @@ export default defineComponent({
           if (!patientStatus) return toastWarning("Unable to create patient physiological counselling details!");
           toastSuccess("Physiological counselling details have been created");
         }
-        console.log(await this.buildBehaviourCounselling())
+        console.log(await this.buildPhysiologicalCounselling())
 
       },
       async saveDietCounselling() {
