@@ -360,35 +360,35 @@ const patientHistoryHIV = [
             ],
         },
     },
-    {
-        sideColSize: 1,
-        childName: "HIV status",
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "ART Start Date:",
-                            icon: icons.calenderPrimary,
-                            placeholder: "Pick the date",
-                            buildConceptIgnore: true,
-                            value: "",
-                            name: "HIV status date",
-                            eventType: "input",
-                            isDatePopover: true,
-                            displayNone: true,
-                        },
-                    ],
-                },
-            ],
-        },
-    },
+    // {
+    //     sideColSize: 1,
+    //     childName: "HIV status",
+    //     data: {
+    //         rowData: [
+    //             {
+    //                 colData: [
+    //                     {
+    //                         inputHeader: "ART Start Date:",
+    //                         icon: icons.calenderPrimary,
+    //                         placeholder: "Pick the date",
+    //                         buildConceptIgnore: true,
+    //                         value: "",
+    //                         name: "HIV status date",
+    //                         eventType: "input",
+    //                         isDatePopover: true,
+    //                         displayNone: true,
+    //                     },
+    //                 ],
+    //             },
+    //         ],
+    //     },
+    // },
     {
         checkboxBtnContent: {
             header: {
                 title: "",
                 selectedValue: "",
-                Name: "Medical history",
+                name: "Medical history",
             },
             data: [
                 {
@@ -621,6 +621,7 @@ const enrollmentDiagnosis = [
             header: {
                 title: "",
                 selectedValue: "",
+                name: "Primary diagnosis",
             },
             data: [
                 {
@@ -659,6 +660,7 @@ const enrollmentDiagnosis = [
             header: {
                 title: "",
                 selectedValue: "",
+                name: "Primary diagnosis",
             },
             data: [
                 {

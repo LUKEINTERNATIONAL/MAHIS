@@ -138,6 +138,8 @@ import {
 } from "@/services/data_helpers";
 import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServerData";
 import { IdentifierService } from "@/services/identifier_service";
+import { resetPatientData } from "@/services/reset_data";
+import { useGeneralStore } from "@/stores/GeneralStore";
 
 export default defineComponent({
     name: "Home",
@@ -226,6 +228,11 @@ export default defineComponent({
                 await this.saveEnrollment();
                 const patient = new PatientService();
                 patient.createNcdNumber(formattedNCDNumber);
+                const demographicsStore = useDemographicsStore();
+                demographicsStore.setPatient(await PatientService.findByID(this.demographics.patient_id));
+                const generalStore = useGeneralStore();
+                generalStore.setSaveProgressStatus("");
+                resetPatientData();
                 this.$router.push("consultationPlan");
             }
         },
@@ -259,7 +266,6 @@ export default defineComponent({
             return [
                 ...(await formatRadioButtonData(this.patientHistoryHIV)),
                 ...(await formatRadioButtonData(this.substance)),
-                ...(await formatRadioButtonData(this.patientHistory)),
                 ...(await formatCheckBoxData(this.enrollmentDiagnosis)),
                 ...(await formatCheckBoxData(this.patientHistory)),
                 ...(await formatCheckBoxData(this.patientHistoryHIV)),
