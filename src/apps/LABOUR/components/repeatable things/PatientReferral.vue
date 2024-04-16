@@ -3,7 +3,7 @@
     <ion-card class="section">
       <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Referral</ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="referral"></basic-form>
+        <basic-form :contentData="labourReferral"></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
@@ -36,7 +36,7 @@ import {
   getFieldValue,
 } from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
-import {useReferralStore} from "@/apps/LABOUR/stores/repeatable things/referral";
+import {useLabourReferralStore} from "@/apps/LABOUR/stores/repeatable things/referral";
 export default defineComponent({
   name: "FirstVaginalExamination",
   components:{
@@ -68,7 +68,7 @@ export default defineComponent({
     };
   },
   computed:{
-    ...mapState(useReferralStore,["referral"]),
+    ...mapState(useLabourReferralStore,["labourReferral"]),
   },
   mounted(){
   },

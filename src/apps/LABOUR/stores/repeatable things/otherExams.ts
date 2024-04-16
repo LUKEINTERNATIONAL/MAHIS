@@ -12,6 +12,7 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
           header: {
             title: "Liquor",
             selectedValue: "",
+            class: "bold",
             name: "Liquor",
           },
           data: [
@@ -62,6 +63,7 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
           header: {
             title: "Moulding *",
             selectedValue: "",
+            class: "bold",
             name: "Moulding",
           },
           data: [
@@ -97,6 +99,7 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
           header: {
             title: "Caput",
             selectedValue: "",
+            class: "bold",
             name: "Caput",
           },
           data: [
@@ -139,6 +142,7 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
           header: {
             title: "Station",
             selectedValue: "",
+            class: "bold",
             name: "Station",
           },
           data: [
@@ -220,7 +224,7 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
                   inputHeader: "Cervix dilation",
                   unit: "cm",
                   icon: icons.editPen,
-                  valueType:"text",
+                  valueType: "text",
                   value: "",
                   name: "cervix dilation",
                   required: true,
@@ -241,6 +245,7 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
           header: {
             title: "Descent",
             selectedValue: "",
+            class: "bold",
             name: "Descent",
           },
           data: [
@@ -322,6 +327,7 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
           header: {
             title: "Severity of contractions",
             selectedValue: "",
+            class: "bold",
             name: "Severity of contractions",
           },
           data: [
@@ -367,6 +373,7 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
           header: {
             title: "Has the woman urinated?",
             selectedValue: "",
+            class: "bold",
             name: "woman urinated",
           },
           data: [
@@ -470,6 +477,7 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
           header: {
             title: "Fully dilated?",
             selectedValue: "",
+            class: "bold",
             name: "Fully dilated",
           },
           data: [

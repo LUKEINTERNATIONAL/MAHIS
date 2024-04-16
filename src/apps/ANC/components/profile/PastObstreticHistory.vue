@@ -111,7 +111,7 @@ export default defineComponent({
     },
     mounted(){
       this.prevPregnanciesInstance = useObstreticHistoryStore()
-      this.prevPregnanciesInstance.setModeOfDelivery([])
+      // this.prevPregnanciesInstance.setModeOfDelivery([])
       this.handleOther()
       this.handleDynamic()
       this.validaterowData({})
@@ -123,17 +123,17 @@ export default defineComponent({
           handler(val) {
             if (val && val[2].data.rowData[0].colData[0].value) {
               const liveBirths = parseInt(val[2].data.rowData[0].colData[0].value)
-              this.prevPregnanciesInstance.setModeOfDelivery([])
-              const births = []
-              for (let i = 0; i < liveBirths; ++i) {
-                const x = JSON.parse(JSON.stringify({...this.modeOfDelieveryRef, id: i}))
-                x.radioBtnContent.header.title = `Specify mode of delivery (Child ${i + 1})`;
-                x.radioBtnContent.header.id=i
-                x.data.id=i
-                births.push(x)
-              }
+              // this.prevPregnanciesInstance.setModeOfDelivery([])
+              // const births = []
+              // for (let i = 0; i < liveBirths; ++i) {
+              //   const x = JSON.parse(JSON.stringify({...this.modeOfDelieveryRef, id: i}))
+              //   x.radioBtnContent.header.title = `Specify mode of delivery (Child ${i + 1})`;
+              //   x.radioBtnContent.header.id=i
+              //   x.data.id=i
+              //   births.push(x)
+              // }
 
-              this.prevPregnanciesInstance.setModeOfDelivery(births)
+              this.prevPregnanciesInstance.setModeOfDelivery(liveBirths)
             }
 
           },

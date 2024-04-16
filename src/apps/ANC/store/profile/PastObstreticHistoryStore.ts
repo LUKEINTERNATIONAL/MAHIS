@@ -163,56 +163,6 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
     ],
     modeOfDelivery: [
       {
-        selectdData: [],
-        isFinishBtn: false,
-        classDash: "dashed_bottom_border",
-        radioBtnContent: {
-          header: {
-
-            title: "Specify mode of delivery",
-            selectedValue: "",
-            name: "cesareanSec",
-          },
-          data: [
-            {
-              name: "Cesarean section",
-              value: "cesarean",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-            {
-              name: "Vacuum",
-              value: "vacuum",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-            {
-              name: "Breach",
-              value: "breach",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-            {
-              name: "SDV",
-              value: "sdv",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-            {
-              name: "Other",
-              value: "other",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-          ],
-        },
-      },
-      {
         data: {
           rowData: [
             {
@@ -484,12 +434,68 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
     setAbnormalities(data: any) {
       this.abnormalities = data;
     },
-    setModeOfDelivery(data: any) {
-      this.modeOfDelivery = data;
+    setModeOfDelivery(number:number) {
+      for (let i=0; i<number; i++){
+        this.modeOfDelivery.push(getRadioButton(i))
+      } 
     },
     setComplications(data: any) {
       this.Complications = data;
     },
+  
   },
    persist:true,
 });
+
+
+const getRadioButton = (number:number)=>{
+  return  {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border",
+        radioBtnContent: {
+          header: {
+            title: "Specify mode of delivery",
+            selectedValue: "",
+            name:`cesareanSec ${number}`,
+          },
+          data: [
+            {
+              name: "Cesarean section",
+              value: "cesarean",
+              labelPlacement: "start",
+              colSize: "7",
+              justify: "space-between",
+            },
+            {
+              name: "Vacuum",
+              value: "vacuum",
+              labelPlacement: "start",
+              colSize: "7",
+              justify: "space-between",
+            },
+            {
+              name: "Breach",
+              value: "breach",
+              labelPlacement: "start",
+              colSize: "7",
+              justify: "space-between",
+            },
+            {
+              name: "SDV",
+              value: "sdv",
+              labelPlacement: "start",
+              colSize: "7",
+              justify: "space-between",
+            },
+            {
+              name: "Other",
+              value: "other",
+              labelPlacement: "start",
+              colSize: "7",
+              justify: "space-between",
+            },
+          ],
+        },
+      }
+}

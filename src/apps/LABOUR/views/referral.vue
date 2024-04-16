@@ -32,12 +32,15 @@ import { defineComponent } from 'vue';
 import Toolbar from "@/apps/LABOUR/components/Toolbar.vue";
 import ToolbarSearch from "@/apps/LABOUR/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/LABOUR/components/DemographicBar.vue";
-import { chevronBackOutline,checkmark } from 'ionicons/icons';
+import { chevronBackOutline,checkmark, checkbox } from 'ionicons/icons';
 import SaveProgressModal from '@/components/SaveProgressModal.vue'
 import { createModal } from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
 import Stepper from "@/apps/LABOUR/components/Stepper.vue";
 import { mapState } from 'pinia';
+import { useLabourReferralStore} from "@/apps/LABOUR/stores/repeatable things/referral"
+import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from '@/services/formatServerData';
+import { getCheckboxInputField, getCheckboxSelectedValue, getRadioSelectedValue, modifyCheckboxValue } from '@/services/data_helpers';
 export default defineComponent({
   name: "referral",
   components:{
@@ -88,16 +91,23 @@ export default defineComponent({
       iconsContent: icons,
     };
   },
-  watch: {
-
-  },
   computed:{
-
-
+          //  ...mapState(useDemographicsStore, ["demographics"]),
+      ...mapState(useLabourReferralStore,['labourReferral'])
   },
   mounted(){
      this.markWizard()
+     this.handleMother()
 
+  },
+
+  watch:{
+    labourReferral:{
+      handler(){
+        this.handleMother()
+      },
+      deep:true
+    }
   },
 
   setup() {
@@ -140,9 +150,56 @@ export default defineComponent({
       });
     },
     saveData(){
-
+      this.saveReferal();
+    },
+    async saveReferal(){
+      console.log(await this.buildReferal())
+    },
+    async buildReferal(){
+      return[
+        ...(await formatRadioButtonData(this.labourReferral)),
+        ...(await formatCheckBoxData(this.labourReferral)),
+        ...(await formatInputFiledData(this.labourReferral)),
+      ]
     },
 
+    handleMother(){
+      if(getRadioSelectedValue(this.labourReferral,'referred')=='mother'){
+         modifyCheckboxValue(this.labourReferral, "Danger sign present" ,'displayNone',false);
+         modifyCheckboxValue(this.labourReferral, "Antepartum haemorrhage" ,'displayNone',false);
+
+          modifyCheckboxValue(this.labourReferral, "pre-eclampsia" ,'displayNone',false);
+          modifyCheckboxValue(this.labourReferral, "Sepsis" ,'displayNone',false);
+          modifyCheckboxValue(this.labourReferral, "Retained placenta" ,'displayNone',false);
+          modifyCheckboxValue(this.labourReferral, "Perineal tear (2nd, 3rd or 4th degree" ,'displayNone',false);
+          modifyCheckboxValue(this.labourReferral, "Obstructed/prolonged labour" ,'displayNone',false);
+          modifyCheckboxValue(this.labourReferral, "Premature labour" ,'displayNone',false);
+          modifyCheckboxValue(this.labourReferral, "Placenta previa" ,'displayNone',false);
+          modifyCheckboxValue(this.labourReferral, "Severe anaemia" ,'displayNone',false);
+          modifyCheckboxValue(this.labourReferral, "Placenta abruption" ,'displayNone',false);
+          modifyCheckboxValue(this.labourReferral, "Symphysiotomy" ,'displayNone',false);
+          modifyCheckboxValue(this.labourReferral, "Other" ,'displayNone',false);
+
+      }else{
+         modifyCheckboxValue(this.labourReferral, "Danger sign present" ,'displayNone',true);
+         modifyCheckboxValue(this.labourReferral, "Antepartum haemorrhage" ,'displayNone',true);
+
+         modifyCheckboxValue(this.labourReferral, "pre-eclampsia" ,'displayNone',true);
+          modifyCheckboxValue(this.labourReferral, "Sepsis" ,'displayNone',true);
+          modifyCheckboxValue(this.labourReferral, "Retained placenta" ,'displayNone',true);
+          modifyCheckboxValue(this.labourReferral, "Perineal tear (2nd, 3rd or 4th degree" ,'displayNone',true);
+          modifyCheckboxValue(this.labourReferral, "Obstructed/prolonged labour" ,'displayNone',true);
+          modifyCheckboxValue(this.labourReferral, "Premature labour" ,'displayNone',true);
+          modifyCheckboxValue(this.labourReferral, "Placenta previa" ,'displayNone',true);
+          modifyCheckboxValue(this.labourReferral, "Severe anaemia" ,'displayNone',true);
+          modifyCheckboxValue(this.labourReferral, "Placenta abruption" ,'displayNone',true);
+          modifyCheckboxValue(this.labourReferral, "Symphysiotomy" ,'displayNone',true);
+          modifyCheckboxValue(this.labourReferral, "Other" ,'displayNone',true);
+      }
+    },
+    handleOtherMother(){
+      if(getCheckboxSelectedValue(this.labourReferral,"Other")?.value =='other'){}
+    },
     openModal(){
       createModal(SaveProgressModal)
     }

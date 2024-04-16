@@ -287,7 +287,6 @@ const initialUltraSound = [
               inputWidth: "100%",
             },
             {
-              // displayNone: true,
               inputHeader: "EDD",
               value: "",
               name: "Estimated date of delivery",
