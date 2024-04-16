@@ -245,7 +245,7 @@ const initialUltraSound = [
         class: "bold",
         title: "Gestation age by Palpation known?",
         selectedValue: "",
-        name: "Gestation age by Palpation known",
+        name: "Gestation",
         displayNext: "Yes",
       },
       data: [
@@ -264,7 +264,7 @@ const initialUltraSound = [
   },
   {
     sideColSize: 0.5,
-    childName: "Gestation age by Palpation known",
+    childName: "Gestation",
     isFinishBtn: false,
     class: "bold",
     classDash: "dashed_bottom_border",
