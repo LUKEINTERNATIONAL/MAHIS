@@ -220,6 +220,7 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
                   inputHeader: "Cervix dilation",
                   unit: "cm",
                   icon: icons.editPen,
+                  valueType:"text",
                   value: "",
                   name: "cervix dilation",
                   required: true,
@@ -240,6 +241,7 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
           header: {
             title: "Descent",
             selectedValue: "",
+            name: "Descent",
           },
           data: [
             {
@@ -299,6 +301,7 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
                   inputHeader: "Contractions",
                   unit: "",
                   icon: icons.editPen,
+                  valueType: "text",
                   value: "",
                   name: "contractions",
                   required: true,
@@ -396,6 +399,7 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
                   inputHeader: "Amount of urine",
                   unit: "",
                   icon: icons.editPen,
+                  valueType: "text",
                   value: "",
                   name: "amount of urine",
                   required: true,
@@ -420,6 +424,7 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
                   inputHeader: "Color of urine",
                   unit: "",
                   icon: icons.editPen,
+                  valueType: "text",
                   value: "",
                   name: "color of urine",
                   required: true,
@@ -444,6 +449,7 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
                   inputHeader: "Odour of urine",
                   unit: "",
                   icon: icons.editPen,
+                  valueType: "text",
                   value: "",
                   name: "Odour",
                   required: true,
@@ -464,6 +470,7 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
           header: {
             title: "Fully dilated?",
             selectedValue: "",
+            name: "Fully dilated",
           },
           data: [
             {
@@ -498,6 +505,7 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
                   value: "",
                   name: "Time fully dilated",
                   required: true,
+                  valueType: "text",
                   eventType: "input",
                   placeholder: "",
                   inputWidth: "55%",
@@ -517,5 +525,5 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
       this.urine = data;
     },
   },
-  //persist: true,
+  persist: true,
 });

@@ -198,5 +198,5 @@ export const useVitalsStore = defineStore("vitalsStore", {
       this.vitals = data;
     },
   },
-  // persist: true,
+   persist: true,
 });
