@@ -12,62 +12,60 @@ import ANCHome from "@/apps/ANC/views/ANCHome.vue";
 
 
 export default [
-
   {
-    path: '/profile',
-    name: 'profile',
-    component: Profile
+    path: "/profile",
+    name: "profile",
+    component: Profile,
   },
   {
-    path: '/quickCheck',
-    name:'quickCheck',
-    component: QuickCheck
+    path: "/quickCheck",
+    name: "quickCheck",
+    component: QuickCheck,
   },
   {
-    path: '/headssAssessment',
-    name:'headsAssessment',
-    component: headssAssessment
+    path: "/headssAssessment",
+    name: "headsAssessment",
+    component: headssAssessment,
   },
   {
-    path: '/physicalExamination',
-    name: 'physicalExamination',
-    component: physicalExamination
+    path: "/physicalExamination",
+    name: "physicalExamination",
+    component: physicalExamination,
   },
   {
-
-    path: '/symptomsFollowUp',
-    name: 'symptomsFollowUp',
-    component: symptomsFollowUp
+    path: "/symptomsFollowUp",
+    name: "symptomsFollowUp",
+    component: symptomsFollowUp,
   },
   {
-    path: '/counselling',
-    name: 'counselling',
-    component: counselling
+    path: "/counselling",
+    name: "counselling",
+    component: counselling,
   },
   {
-    path: '/referral',
-    name: 'referral',
-    component: Referral
+    path: "/referral",
+    name: "referral",
+    component: Referral,
   },
   {
-    path: '/ancEnd',
-    name: 'ancEnd',
-    component: ancEnd
+    path: "/ancEnd",
+    name: "ancEnd",
+    component: ancEnd,
   },
   {
-    path: '/treatment',
-    name: 'treatment',
+    path: "/treatment",
+    name: "treatment",
     component: Treatment
   },
   {
-    path: '/labTests',
-    name: 'labTests',
-    component: LabTests
+    path: "/labTests",
+    name: "labTests",
+    component: LabTests,
   },
   {
-    path: '/ANCHome',
-    name: 'ANCHome',
-    component: ANCHome
+    path: "/ANCHome",
+    name: "ANCHome",
+    component: ANCHome,
   },
-]
+];
 

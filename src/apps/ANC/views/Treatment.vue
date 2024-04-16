@@ -1,3 +1,12 @@
+<template>
+    <ion-page>
+        <Toolbar />
+        <ion-content :fullscreen="true">
+            <DemographicBar />
+            <Stepper stepperTitle="Treament and Diagnosis" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData" />
+        </ion-content>
+    </ion-page>
+</template>
 <script lang="ts">
 import { IonContent, IonHeader, IonItem, IonPage, IonList, IonTitle, IonToolbar, IonMenu } from "@ionic/vue";
 import Toolbar from "@/components/Toolbar.vue";
@@ -23,7 +32,7 @@ import { useIntimatePartnerStore } from '../store/intimatePartnerStore';
 import { useDewormingStore } from '../store/dewormingStore';
 
 export default defineComponent({
-    name: "treatment",
+    name: "Treatment",
     components: {
         IonContent,
         IonHeader,
@@ -46,56 +55,54 @@ export default defineComponent({
     },
    data(){
     return {
-  iconsContent: icons,
-  isOpen: false,
   wizardData: [
                {
-                    'title': 'Diagnosis and treatment',
-                    'class': 'common_step',
-                    'checked':false,
-                    'disabled':false,
-                    'number': 1,
-                    'last_step': ''
+                    title: 'Diagnosis and treatment',
+                    class: 'common_step',
+                    checked:false,
+                    disabled:false,
+                    number: 1,
+                    last_step: ''
                 },
                 {
-                    'title': 'Medication dispensed',
-                    'class': 'common_step',
-                    'checked':false,
-                    'disabled':false,
-                    'number': 2,
-                    'last_step': ''
+                    title: 'Medication dispensed',
+                    class: 'common_step',
+                    checked:false,
+                    disabled:false,
+                    number: 2,
+                    last_step: ''
                 },
                 {
-                    'title': 'Counselling',
-                    'class': 'common_step',
-                    'checked':false,
-                    'disabled':false,
-                    'number': 3,
-                    'last_step': ''
+                    title: 'Counselling',
+                    class: 'common_step',
+                    checked:false,
+                    disabled:false,
+                    number: 3,
+                    last_step: ''
                 },
                 {
-                    'title': 'Immunization',
-                    'class': 'common_step',
-                    'checked':false,
-                    'disabled':false,
-                    'number': 4,
-                    'last_step': ''
+                    title: 'Immunization',
+                    class: 'common_step',
+                    checked:false,
+                    disabled:false,
+                    number: 4,
+                    last_step: ''
                 },
                 {
-                    'title': 'Intimate Partner',
-                    'class': 'common_step',
-                    'checked':false,
-                    'disabled':false,
-                    'number':5,
-                    'last_step': ''
+                    title: 'Intimate Partner',
+                    class: 'common_step',
+                    checked:false,
+                    disabled:false,
+                    number:5,
+                    last_step: ''
                 },
                 {
-                    'title': 'Deworming and malaria prophylaxis',
-                    'class': 'common_step',
-                    'checked':false,
-                    'disabled':false,
-                    'number':6,
-                    'last_step': 'last_step'
+                    title: 'Deworming and malaria prophylaxis',
+                    class: 'common_step',
+                    checked:false,
+                    disabled:false,
+                    number:6,
+                    last_step: 'last_step'
                 },
 
               ],
@@ -131,6 +138,9 @@ export default defineComponent({
                     value: '6'
                 },
   ],
+    isOpen: false,
+    iconsContent: icons,
+    //isLoading: false,
 
     }
    },
@@ -142,7 +152,7 @@ computed:{
                                   "hyper","hiv","hepatitisB","hepatitisC",
                                   "syphilis","syphilisTesting","tbScreening",
                                   "GDM","diabetes","anaemia","hypertensionReason"]),
-  ...mapState(useMedicationDispensedStore, ["iron",'calciumReason']),
+  ...mapState(useMedicationDispensedStore, ["iron",'calcium']),
   ...mapState(useDiagnosisCounsellingStore, ["preEclampsia","preEclampsiaCounselling",
                                              "aspirin","gdm","gdmCounselling","hivRisk",
                                             "prEp","seekingCare","dangerSigns","ancContact",
@@ -151,7 +161,7 @@ computed:{
   ...mapState(useImmunizationStore,['ttDoses','HepBCounselling','HepB1','HepB2','HepB3','hepBReason']),
   ...mapState( useIntimatePartnerStore,['ipv','additionalCare','safety_assessment','physical_violence','beaten_pregnant',
                                  'woman_threatened','constant_jealous','strangling','murder_threat','referrals']),
-  ...mapState(useDewormingStore,['treatment','malaria','malariaReason'])
+  ...mapState(useDewormingStore,['treatment','malaria'])
 },
 
 methods: {
@@ -206,7 +216,7 @@ methods: {
   async buildMedicationDispensed(){
     return[
        ...(await formatRadioButtonData(this.iron)),
-       ...(await formatRadioButtonData(this.calciumReason)),
+       ...(await formatRadioButtonData(this.calcium)),
     ]
   },  
    async buildCouselling(){
@@ -256,7 +266,7 @@ methods: {
     return[
        ...(await formatRadioButtonData(this.treatment)),
        ...(await formatRadioButtonData(this.malaria)),
-       ...(await formatRadioButtonData(this.malariaReason)),
+
     ]
   },
 }
@@ -264,4 +274,4 @@ methods: {
 
 </script>
 
-<!-- <style scoped></style> -->
+<style scoped></style>

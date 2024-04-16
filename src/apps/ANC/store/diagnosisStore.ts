@@ -13,7 +13,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
             title: "Reason counselling on hypertension not provided",
             selectedValue: "",
             class: "bold",
-            name: "hypReasons",
+            name: "hypertension",
           },
           data: [
             {
@@ -46,7 +46,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
                   displayNone: true,
                   inputHeader: "specify",
                   value: "",
-                  name: "hypertensionCounselling",
+                  name: "other",
                   icon: icons.editPen,
                   required: true,
                   eventType: "input",
@@ -74,7 +74,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
             title: "Reason counselling on Hepatitis B not provided",
             selectedValue: "",
             class: "bold",
-            name: "hepatitisB",
+            name: "hepatitis B",
           },
           data: [
             {
@@ -107,7 +107,8 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
                   displayNone: true,
                   inputHeader: "specify",
                   value: "",
-                  name: "hypertensionCounselling",
+                  valueType:'text',
+                  name: "hepatitis B",
                   icon: icons.editPen,
                   required: true,
                   eventType: "input",
