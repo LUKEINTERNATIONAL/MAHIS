@@ -42,7 +42,7 @@ const initialBehaviourInfo=[
                 selectedValue: '',
                 name:'Counselling on caffeine not done',
                 displayNone:true,
-                displayNext:"Other reason"
+                displayNext:"Other"
             },
             data:[
                 {
@@ -51,8 +51,8 @@ const initialBehaviourInfo=[
                     colSize: "7",
                 },
                 {
-                    name: 'Other reason',
-                    value: 'Other reason',
+                    name: 'Other',
+                    value: 'Other',
                     colSize: "7",
                 },
             ]
@@ -71,7 +71,8 @@ const initialBehaviourInfo=[
                             inputHeader: 'Specify',
                             icon: icons.editPen,
                             name: 'Other notes',
-                            value: 'Other notes',
+                            inputType:"text",
+                            value: '',
                             eventType: 'input',
                             inputWidth: "82%",
                             required: true
@@ -151,8 +152,9 @@ const initialBehaviourInfo=[
                             displayNone:true,
                             inputHeader: 'Specify',
                             icon: icons.editPen,
-                            name: 'Other notes',
-                            value: 'Other notes',
+                            inputType:"text",
+                            name: 'Other tobacco not done notes',
+                            value: '',
                             eventType: 'input',
                             inputWidth: "82%",
                             required: true
@@ -232,8 +234,9 @@ const initialBehaviourInfo=[
                             displayNone:true,
                             inputHeader: 'Other (specify)',
                             icon: icons.editPen,
-                            name: 'Other notes',
-                            value: 'Other notes',
+                            name: 'Other second hand smoke not done notes',
+                            inputType:"text",
+                            value: '',
                             eventType: 'input',
                             inputWidth: "82%",
                             required: true
@@ -314,8 +317,9 @@ const initialBehaviourInfo=[
                             displayNone:true,
                             inputHeader: 'Specify',
                             icon: icons.editPen,
-                            name: 'Other notes',
-                            value: 'Other notes',
+                            name: 'Other condom use not done notes',
+                            value: '',
+                            inputType:"text",
                             eventType: 'input',
                             inputWidth: "82%",
                             required: true
@@ -396,8 +400,9 @@ const initialBehaviourInfo=[
                             displayNone:true,
                             inputHeader: 'Other (specify)',
                             icon: icons.editPen,
-                            name: 'Other notes',
-                            value: 'Other notes',
+                            name: 'Other alcohol/substance not done',
+                            inputType:"text",
+                            value: '',
                             eventType: 'input',
                             inputWidth: "82%",
                             required: true
