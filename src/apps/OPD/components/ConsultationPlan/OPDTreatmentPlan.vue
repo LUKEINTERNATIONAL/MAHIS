@@ -109,8 +109,8 @@
                         </ion-content>
                     </ion-popover>
                 </ion-col>
-                <ion-col>
-                <ListPicker style="margin-top: -2%;"
+                <ion-col style="margin-top: -27px;">
+                <ListPicker
                     :multiSelection="multi_Selection"
                     :uniqueId="uniqueId"
                     :name_of_list="name_of_list"
