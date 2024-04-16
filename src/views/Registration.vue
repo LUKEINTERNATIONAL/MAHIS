@@ -291,6 +291,7 @@ export default defineComponent({
         },
         openNewPage(url: any, item: any) {
             const demographicsStore = useDemographicsStore();
+            demographicsStore.setPatient(item);
             demographicsStore.setDemographics({
                 name: item.person.names[0].given_name + " " + item.person.names[0].family_name,
                 mrn: this.patientIdentifier(item),
