@@ -245,7 +245,7 @@ async function preSaveRoles() {
 
 async function saveRoles(roleNames: any) {
     UserService.updateUser(userId.value, {
-        must_append_roles: true,
+        must_append_roles: false,
         roles: roleNames
     })
 }
