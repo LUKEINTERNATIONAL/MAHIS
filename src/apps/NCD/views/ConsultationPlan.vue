@@ -62,6 +62,7 @@ import HisDate from "@/utils/Date";
 import { defineComponent } from "vue";
 import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
 import { useGeneralStore } from "@/stores/GeneralStore";
+import { resetPatientData } from "@/services/reset_data";
 import {
     modifyRadioValue,
     getRadioSelectedValue,
@@ -222,21 +223,22 @@ export default defineComponent({
                 return item?.data;
             });
         },
-        saveData() {
-            this.saveVitals();
-            this.saveDiagnosis();
-            this.saveTreatmentPlan();
-            this.saveOutComeStatus();
+        async saveData() {
+            await this.saveVitals();
+            await this.saveDiagnosis();
+            await this.saveTreatmentPlan();
+            await this.saveOutComeStatus();
+            resetPatientData();
             this.$router.push("patientProfile");
         },
-        saveVitals() {
+        async saveVitals() {
             if (this.vitals.validationStatus) {
                 const userID: any = Service.getUserID();
                 const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
                 vitalsInstance.onFinish(this.vitals);
             }
         },
-        saveDiagnosis() {
+        async saveDiagnosis() {
             if (this.diagnosis[0].selectedData.length > 0) {
                 const userID: any = Service.getUserID();
                 const diagnosisInstance = new Diagnosis();

@@ -291,6 +291,7 @@ export default defineComponent({
         },
         openNewPage(url: any, item: any) {
             const demographicsStore = useDemographicsStore();
+            demographicsStore.setPatient(item);
             demographicsStore.setDemographics({
                 name: item.person.names[0].given_name + " " + item.person.names[0].family_name,
                 mrn: this.patientIdentifier(item),
@@ -371,13 +372,7 @@ ion-toolbar {
     justify-content: space-between;
     padding: 5px 0px 5px 0px;
 }
-.footer2 {
-    color: #000;
-    display: flex;
-    justify-content: right;
-    padding: 5px 0px 5px 0px;
-    margin-right: 40px;
-}
+
 ion-breadcrumb ion-icon {
     margin-inline: 30px;
 }
