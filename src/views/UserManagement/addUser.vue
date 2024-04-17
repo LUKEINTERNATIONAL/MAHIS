@@ -29,6 +29,34 @@
             </ion-col>
             <ion-col></ion-col>
     </ion-row>
+
+    <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Password</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <ion-row>
+                        <ion-col>
+                            <BasicInputField
+                                :placeholder="note_properties[0].placeHolder"
+                                :icon="keyOutline"
+                                :inputValue="note_properties[0].dataValue.value"
+                                @update:inputValue="note_properties[0].dataHandler"
+                            />
+                        </ion-col>
+                        <ion-col>
+                            <BasicInputField
+                                :placeholder="note_properties[0].placeHolder"
+                                :icon="keyOutline"
+                                :inputValue="note_properties[0].dataValue.value"
+                                @update:inputValue="note_properties[0].dataHandler"
+                            />
+                        </ion-col>
+                    </ion-row>
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue"
@@ -38,9 +66,23 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
-import { IonContent, IonHeader, IonItem, IonCol, IonToolbar, IonMenu, modalController } from "@ionic/vue"
+import { IonContent, IonHeader, IonItem, IonCol, IonToolbar, IonMenu, IonAccordionGroup, IonAccordion, AccordionGroupCustomEvent } from "@ionic/vue"
 import BasicInputField from "@/components/BasicInputField.vue"
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
+import {
+    addOutline,
+    pencilOutline,
+    removeOutline,
+    personCircleOutline,
+    keyOutline,
+    transgenderOutline,
+    personOutline,
+    peopleOutline
+} from "ionicons/icons"
+
+const user_name = ref()
+const first_name = ref()
+const last_name = ref()
 
 const note_properties = [
     {
