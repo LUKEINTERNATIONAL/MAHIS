@@ -1,25 +1,26 @@
 <template>
     <div class="container">
         <ion-card class="section">
-            <ion-card-header> <ion-card-title class="sub_item_header">History on previous pregnancies</ion-card-title></ion-card-header>
+            <ion-card-header> <ion-card-title class="sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
               <basic-form :contentData="prevPregnancies"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+              <basic-form :contentData="modeOfDelivery" @update:inputValue="handleAlert"></basic-form>
+             <basic-form :contentData="preterm"></basic-form>
+            <basic-form :contentData="Complications"></basic-form>
+
             </ion-card-content>
         </ion-card>
 
         <ion-card>
         <ion-card-content>
-            <basic-form :contentData="modeOfDelivery" @update:inputValue="handleAlert"></basic-form>
           </ion-card-content>
         </ion-card>
         <ion-card class="section">
             <ion-card-content>
-                <basic-form :contentData="preterm"></basic-form>
             </ion-card-content>
         </ion-card>
         <ion-card class="section">
             <ion-card-content>
-                <basic-form :contentData="Complications"></basic-form>
             </ion-card-content>
         </ion-card>
     </div>

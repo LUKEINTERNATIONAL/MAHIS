@@ -60,7 +60,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
         },
       },
       {
-        classDash: "dashed_bottom_border",
+        classDash: "dashed_bottom_border _padding",
         data: {
           rowData: [
             {
@@ -68,7 +68,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
                 {
                   inputHeader: "Live births",
                   value: "",
-                  disabled:true,
+                  disabled: true,
                   name: "LiveBirths",
                   required: true,
                   valueType: "text",
@@ -97,7 +97,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
       {
         selectdData: [],
         isFinishBtn: false,
-        classDash: "dashed_bottom_border",
+        classDash: "dashed_bottom_border _padding",
         radioBtnContent: {
           header: {
             title: "Last live birth had congenital abnormalities?",
@@ -133,10 +133,10 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
       {
         selectedData: [],
         isFinishBtn: false,
-        classDash: "dashed_bottom_border",
+        classDash: "dashed_bottom_border _padding",
         radioBtnContent: {
           header: {
-            class:'bold',
+            class: "bold",
             title: "Was last live birth preterm?",
             selectedValue: "",
             name: "Was last live birth preterm?",
@@ -190,7 +190,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
           header: {
-            class:"bold",
+            class: "bold",
             title:
               "Does the woman have any complications due to past pregnancies?",
             selectedValue: "",
@@ -406,13 +406,13 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
             {
               colData: [
                 {
-                 displayNone: true,
+                  displayNone: true,
                   inputHeader: "specify",
                   unit: "",
                   icon: icons.editPen,
                   value: "",
                   name: "Other notes",
-                  valueType:'text',
+                  valueType: "text",
                   required: true,
                   eventType: "input",
                   inputWidth: "85%",
@@ -434,17 +434,16 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
     setAbnormalities(data: any) {
       this.abnormalities = data;
     },
-    setModeOfDelivery(number:number) {
-      for (let i=0; i<number; i++){
-        this.modeOfDelivery.push(getRadioButton(i))
-      } 
+    setModeOfDelivery(number: number) {
+      for (let i = 0; i < number; i++) {
+        this.modeOfDelivery.push(getRadioButton(i));
+      }
     },
     setComplications(data: any) {
       this.Complications = data;
     },
-  
   },
-   persist:true,
+  // persist: true,
 });
 
 

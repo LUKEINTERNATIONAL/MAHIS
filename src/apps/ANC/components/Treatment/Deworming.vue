@@ -13,7 +13,6 @@
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="malaria"></basic-form>
-                <basic-form :contentData="malariaReason"></basic-form>
             </ion-card-content>
     </ion-card>
 
@@ -92,8 +91,7 @@ export default defineComponent({
             this.handlepreventive()
             this.handleNoPreventative()
             this.handleOther()
-            this.handleMalria()
-            this.handleOtherMalaria()
+
           },
           deep:true
         },
