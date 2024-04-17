@@ -120,7 +120,14 @@ async function saveK() {
             }
         }
     })
-    await postActivities(REF_NAME.value, activites_tr)
+    await postActivities(REF_NAME.value, removeLeadingComma(activites_tr))
+}
+
+function removeLeadingComma(str: string) {
+    if (str.startsWith(',')) {
+        return str.substring(1);
+    }
+    return str;
 }
 
 async function postActivities(_property_: string, selected: string) {
