@@ -1,7 +1,6 @@
 <template>
         <ion-card style="margin-top: 0px;">
           <ion-row>
-
             <ion-col>
               <ListPicker
                   :multiSelection="list_picker_prperties[0].multi_Selection"
@@ -18,19 +17,35 @@
               />
             </ion-col>
             
-            <ion-col>
-                <BasicInputField
-                style="margin: 1%;"
-                :placeholder="note_properties[0].placeHolder"
-                :icon="searchOutline"
-                :inputValue="note_properties[0].dataValue.value"
-                @update:inputValue="note_properties[0].dataHandler"
-            />
+            <ion-col style="margin-top: 20px;">
+                <ion-row>
+                  <ion-col size="9">
+                    <BasicInputField
+                      :placeholder="note_properties[0].placeHolder"
+                      :icon="searchOutline"
+                      :inputValue="note_properties[0].dataValue.value"
+                      @update:inputValue="note_properties[0].dataHandler"
+                    />
+                  </ion-col>
+                  <ion-col>
+                    <dynamic-button
+                      class="btn-cls-2"
+                        v-if="dynamic_button_properties[2].addItemButton"
+                            :name="dynamic_button_properties[2].name"
+                            :fill="dynamic_button_properties[2].btnFill"
+                            :icon="personAddOutline"
+                            @clicked:btn=""
+                            :color="'secondary'"
+                      />
+                  </ion-col>
+                </ion-row>
            
             </ion-col>
           </ion-row>
+        </ion-card>
 
-            <EasyDataTable
+        <ion-card style="margin-top: 0px;">
+          <EasyDataTable
                 table-class-name="customize-table"
                 :headers="headers"
                 :items="items_local"
@@ -55,14 +70,14 @@
 
                 <ion-row class="spc_btwn" v-if="dynamic_button_properties[0].showAddItemButton">
                   <dynamic-button
-                  class="btn-cls"
-                    v-if="dynamic_button_properties[0].addItemButton"
-                        :name="dynamic_button_properties[0].name"
-                        :fill="dynamic_button_properties[0].btnFill"
-                        :icon="returnUpBackOutline"
-                        @clicked:btn="prevPage"
-                        :color="''"
-                  />
+                    class="btn-cls"
+                      v-if="dynamic_button_properties[0].addItemButton"
+                          :name="dynamic_button_properties[0].name"
+                          :fill="dynamic_button_properties[0].btnFill"
+                          :icon="returnUpBackOutline"
+                          @clicked:btn="prevPage"
+                          :color="''"
+                    />
 
                   <dynamic-button
                   class="btn-cls"
@@ -77,6 +92,7 @@
               </template>
           </EasyDataTable>
         </ion-card>
+        
   </template>
   
   <script setup lang="ts">
@@ -91,7 +107,8 @@
     pencilOutline,
     searchOutline,
     returnUpBackOutline,
-    returnUpForwardOutline
+    returnUpForwardOutline,
+    personAddOutline
     
 } from "ionicons/icons"
 
@@ -201,6 +218,14 @@ const dynamic_button_properties = [
         btnFill: 'clear',
         fn: ()=>{},
     },
+    {
+        showAddItemButton: true,
+        addItemButton: true,
+        name: "ADD USER",
+        btnFill: 'fill',
+        fn: ()=>{},
+    },
+    
   ]
 
 const list_picker_prperties = [
@@ -306,6 +331,12 @@ const showRow = (item: ClickRowArgument) => {
   font-size: 30px;
   font-weight: 400;
   color: #c0c7d2 !important;
+}
+
+.btn-cls-2 {
+  font-size: 30px;
+  font-weight: 400;
+  color: #1d1d16 !important;
 }
 
 </style>
