@@ -48,7 +48,7 @@ const initialLMNP = [
               isDatePopover: true,
               icon: icons.calenderPrimary,
               placeholder: "Pick the date",
-              inputWidth: "50%",
+              inputWidth: "100%",
             },
           ],
         },
@@ -98,7 +98,6 @@ const initialLMNP = [
               eventType: "input",
               valueType: "text",
               alertsError: false,
-              icon: icons.calenderPrimary,
               alertsErrorMassage: "",
               inputWidth: "100%",
               disabled: "disabled",
@@ -158,25 +157,10 @@ const initialUltraSound = [
               isDatePopover: true,
               icon: icons.calenderPrimary,
               placeholder: "Pick the date",
-              inputWidth: "55%",
+              inputWidth: "100%",
             },
-          ],
-        },
-      ],
-    },
-  },
-  {
-    sideColSize: 0.5,
-    childName: "Ultrasound done?",
-    isFinishBtn: false,
-    classDash: "dashed_bottom_border",
-    data: {
-      rowData: [
-        {
-          colData: [
             {
               class: "bold",
-              displayNone: true,
               inputHeader: "Gestation age from ultrasound",
               value: "",
               name: "specify",
@@ -186,13 +170,14 @@ const initialUltraSound = [
               alertsErrorMassage: "",
               icon: icons.editPen,
               placeholder: "",
-              inputWidth: "55%",
+              inputWidth: "100%",
             },
           ],
         },
       ],
     },
   },
+
   {
     sideColSize: 0.5,
     childName: "Ultrasound done?",
@@ -207,7 +192,6 @@ const initialUltraSound = [
               inputHeader: "LMNP date from ultrasound",
               value: "",
               name: "ultrasound lmnp date",
-              //name:'lmnp date',
               required: true,
               eventType: "input",
               alertsError: false,
@@ -237,6 +221,34 @@ const initialUltraSound = [
     },
   },
   {
+    sideColSize: 0.5,
+    childName: "Ultrasound done?",
+    isFinishBtn: false,
+    classDash: "dashed_bottom_border",
+    data: {
+      rowData: [
+        {
+          colData: [
+            // {
+            //   class: "bold",
+            //   displayNone: true,
+            //   inputHeader: "Gestation age from ultrasound",
+            //   value: "",
+            //   name: "specify",
+            //   required: true,
+            //   eventType: "input",
+            //   alertsError: false,
+            //   alertsErrorMassage: "",
+            //   icon: icons.editPen,
+            //   placeholder: "",
+            //   inputWidth: "100%",
+            // },
+          ],
+        },
+      ],
+    },
+  },
+  {
     selectdData: [],
     isFinishBtn: false,
     classDash: "dashed_bottom_border",
@@ -245,7 +257,7 @@ const initialUltraSound = [
         class: "bold",
         title: "Gestation age by Palpation known?",
         selectedValue: "",
-        name: "Gestation age by Palpation known",
+        name: "Gestation",
         displayNext: "Yes",
       },
       data: [
@@ -264,7 +276,7 @@ const initialUltraSound = [
   },
   {
     sideColSize: 0.5,
-    childName: "Gestation age by Palpation known",
+    childName: "Gestation",
     isFinishBtn: false,
     class: "bold",
     classDash: "dashed_bottom_border",
@@ -287,7 +299,6 @@ const initialUltraSound = [
               inputWidth: "100%",
             },
             {
-              // displayNone: true,
               inputHeader: "EDD",
               value: "",
               name: "Estimated date of delivery",
@@ -336,14 +347,14 @@ const initialUltraSound = [
     },
   },
 ] as any;
-const initialTetenus=[
+const initialTetenus = [
   {
     selectdData: [],
     isFinishBtn: false,
     classDash: "dashed_bottom_border",
     radioBtnContent: {
       header: {
-        class:"bold",
+        class: "bold",
         title: "The woman received tetanus doses for immunization?",
         selectedValue: "",
         name: "The woman received tetanus doses for immunization?",
@@ -375,7 +386,7 @@ const initialTetenus=[
   {
     isFinishBtn: false,
     classDash: "",
-    sideColSize:0.5,
+    sideColSize: 0.5,
     data: {
       rowData: [
         {
@@ -408,18 +419,16 @@ const initialTetenus=[
               alertsError: false,
               alertsErrorMassage: "",
             },
-
           ],
         },
       ],
     },
   },
 
-
   {
     isFinishBtn: false,
     classDash: "",
-    sideColSize:0.5,
+    sideColSize: 0.5,
     data: {
       rowData: [
         {
@@ -459,7 +468,7 @@ const initialTetenus=[
   },
 
   {
-    sideColSize:0.5,
+    sideColSize: 0.5,
     isFinishBtn: false,
     classDash: "dashed_bottom_border",
     data: {
@@ -476,7 +485,7 @@ const initialTetenus=[
               placeholder: "Pick the date",
               required: true,
               eventType: "input",
-              inputWidth: "50%",
+              inputWidth: "100%",
               alertsError: false,
               alertsErrorMassage: "",
             },
@@ -487,7 +496,7 @@ const initialTetenus=[
   },
   {
     isFinishBtn: false,
-    sideColSize:0.5,
+    sideColSize: 0.5,
     classDash: "dashed_bottom_border",
     data: {
       rowData: [
@@ -495,11 +504,54 @@ const initialTetenus=[
           colData: [
             {
               displayNone: true,
-              inputHeader: "Number of under immunised doses",
+              inputHeader: "TTV 1 immunisation date",
               value: "",
               name: "immunised doses",
-              icon: icons.editPen,
+              isDatePopover: true,
+              icon: icons.calenderPrimary,
               placeholder: "",
+              required: true,
+              eventType: "input",
+              inputWidth: "100%",
+              alertsError: false,
+              alertsErrorMassage: "",
+            },
+            {
+              //displayNone: true,
+              inputHeader: "TTV 2 immunisation date",
+              value: "",
+              name: "underimmunised1",
+              isDatePopover: true,
+              icon: icons.calenderPrimary,
+              placeholder: "Pick the date",
+              required: true,
+              eventType: "input",
+              inputWidth: "100%",
+              alertsError: false,
+              alertsErrorMassage: "",
+            },
+            {
+              // displayNone: true,
+              inputHeader: "TTV 3 immunisation date",
+              value: "",
+              name: "immunised doses",
+              isDatePopover: true,
+              icon: icons.calenderPrimary,
+              placeholder: "",
+              required: true,
+              eventType: "input",
+              inputWidth: "100%",
+              alertsError: false,
+              alertsErrorMassage: "",
+            },
+            {
+              //displayNone: true,
+              inputHeader: "TTV 4 immunisation date",
+              value: "",
+              name: "underimmunised3",
+              isDatePopover: true,
+              icon: icons.calenderPrimary,
+              placeholder: "Pick the date",
               required: true,
               eventType: "input",
               inputWidth: "100%",
@@ -511,15 +563,56 @@ const initialTetenus=[
       ],
     },
   },
+  {
+    isFinishBtn: false,
+    sideColSize: 0.5,
+    classDash: "dashed_bottom_border",
+    data: {
+      rowData: [
+        {
+          colData: [
+            // {
+            //   displayNone: true,
+            //   inputHeader: "TTV 3 immunisation date",
+            //   value: "",
+            //   name: "immunised doses",
+            //   isDatePopover: true,
+            //   icon: icons.calenderPrimary,
+            //   placeholder: "",
+            //   required: true,
+            //   eventType: "input",
+            //   inputWidth: "100%",
+            //   alertsError: false,
+            //   alertsErrorMassage: "",
+            // },
+            // {
+            //   //displayNone: true,
+            //   inputHeader: "TTV 4 immunisation date",
+            //   value: "",
+            //   name: "underimmunised3",
+            //   isDatePopover: true,
+            //   icon: icons.calenderPrimary,
+            //   placeholder: "Pick the date",
+            //   required: true,
+            //   eventType: "input",
+            //   inputWidth: "100%",
+            //   alertsError: false,
+            //   alertsErrorMassage: "",
+            // },
+          ],
+        },
+      ],
+    },
+  },
 
   {
-    sideColSize:0.5,
+    sideColSize: 0.5,
     selectdData: [],
     isFinishBtn: false,
     classDash: "dashed_bottom_border",
     radioBtnContent: {
       header: {
-        class:"bold",
+        class: "bold",
         title: "Reason Tetanus toxoid (TT) was not conducted",
         name: "Reason Tetanus toxoid (TT) was not conducted",
         selectedValue: "",
@@ -556,7 +649,7 @@ const initialTetenus=[
   },
   {
     classDash: "dashed_bottom_border",
-    sideColSize:0.5,
+    sideColSize: 0.5,
     isFinishBtn: false,
     sectionHeader: "",
     data: {
@@ -580,7 +673,7 @@ const initialTetenus=[
       ],
     },
   },
-    ] as any;
+] as any;
 export const useCurrentPregnanciesStore = defineStore("currentPregnanciesStore", {
   state: () => ({
     palpation: [] as any,

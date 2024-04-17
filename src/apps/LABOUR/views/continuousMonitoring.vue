@@ -37,8 +37,11 @@ import SaveProgressModal from '@/components/SaveProgressModal.vue'
 import { createModal } from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
 import Stepper from "@/apps/LABOUR/components/Stepper.vue";
-import { mapState } from 'pinia';
+import { mapState,} from 'pinia';
 import {getCheckboxSelectedValue} from "@/services/data_helpers";
+import { formatInputFiledData, formatRadioButtonData } from '@/services/formatServerData';
+import { useVitalsStore } from '../stores/repeatable things/vitals';
+import { useOtherExamsStore } from '../stores/repeatable things/otherExams';
 
 export default defineComponent({
   name: "obstetricDetails",
@@ -107,8 +110,8 @@ export default defineComponent({
 
   },
   computed:{
-
-
+      ...mapState(useVitalsStore,['vitals']),
+      ...mapState(useOtherExamsStore ,['otherExams','urine'])
   },
   mounted(){
      this.markWizard()
@@ -155,9 +158,28 @@ export default defineComponent({
       });
     },
     saveData(){
-
+      this.saveVitals()
+      this.saveOtherExams()      
     },
-
+    async saveVitals(){
+      console.log( await this.buildVitals())
+    },
+    async saveOtherExams(){
+      console.log(await this.buildOtherExams())
+    },
+   async buildVitals(){
+    return[
+      ...(await formatInputFiledData(this.vitals))
+    ];
+   },
+   async buildOtherExams(){
+      return[
+     ...(await formatRadioButtonData(this.otherExams)),
+     ...(await formatInputFiledData(this.otherExams)),
+     ...(await formatRadioButtonData(this.urine)),
+     ...(await formatInputFiledData(this.urine))
+      ]
+   },
     openModal(){
       createModal(SaveProgressModal)
     }

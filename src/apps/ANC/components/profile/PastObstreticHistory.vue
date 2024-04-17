@@ -1,25 +1,26 @@
 <template>
     <div class="container">
         <ion-card class="section">
-            <ion-card-header> <ion-card-title class="sub_item_header">History on previous pregnancies</ion-card-title></ion-card-header>
+            <ion-card-header> <ion-card-title class="sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
               <basic-form :contentData="prevPregnancies"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+              <basic-form :contentData="modeOfDelivery" @update:inputValue="handleAlert"></basic-form>
+             <basic-form :contentData="preterm"></basic-form>
+            <basic-form :contentData="Complications"></basic-form>
+
             </ion-card-content>
         </ion-card>
 
         <ion-card>
         <ion-card-content>
-            <basic-form :contentData="modeOfDelivery" @update:inputValue="handleAlert"></basic-form>
           </ion-card-content>
         </ion-card>
         <ion-card class="section">
             <ion-card-content>
-                <basic-form :contentData="preterm"></basic-form>
             </ion-card-content>
         </ion-card>
         <ion-card class="section">
             <ion-card-content>
-                <basic-form :contentData="Complications"></basic-form>
             </ion-card-content>
         </ion-card>
     </div>
@@ -111,7 +112,7 @@ export default defineComponent({
     },
     mounted(){
       this.prevPregnanciesInstance = useObstreticHistoryStore()
-      this.prevPregnanciesInstance.setModeOfDelivery([])
+      // this.prevPregnanciesInstance.setModeOfDelivery([])
       this.handleOther()
       this.handleDynamic()
       this.validaterowData({})
@@ -119,21 +120,19 @@ export default defineComponent({
     },
     watch:{
       prevPregnancies: {
-        
           handler(val) {
             if (val && val[2].data.rowData[0].colData[0].value) {
               const liveBirths = parseInt(val[2].data.rowData[0].colData[0].value)
-              this.prevPregnanciesInstance.setModeOfDelivery([])
-              const births = []
-              for (let i = 0; i < liveBirths; ++i) {
-                const x = JSON.parse(JSON.stringify({...this.modeOfDelieveryRef, id: i}))
-                x.radioBtnContent.header.title = `Specify mode of delivery (Child ${i + 1})`;
-                x.radioBtnContent.header.id=i
-                x.data.id=i
-                births.push(x)
-              }
-
-              this.prevPregnanciesInstance.setModeOfDelivery(births)
+              // this.prevPregnanciesInstance.setModeOfDelivery([])
+              // const births = []
+              // for (let i = 0; i < liveBirths; ++i) {
+              //   const x = JSON.parse(JSON.stringify({...this.modeOfDelieveryRef, id: i}))
+              //   x.radioBtnContent.header.title = `Specify mode of delivery (Child ${i + 1})`;
+              //   x.radioBtnContent.header.id=i
+              //   x.data.id=i
+              //   births.push(x)
+              // }
+              this.prevPregnanciesInstance.setModeOfDelivery(liveBirths)
             }
 
           },
@@ -143,6 +142,7 @@ export default defineComponent({
       modeOfDelivery:{
         handler(){
            this.handleDynamic()  
+           this.prevPregnanciesInstance.checkChanges()
         },
         deep:true
       },
@@ -186,7 +186,6 @@ export default defineComponent({
       },
 
       handleDynamic(){
-
                 if(getRadioSelectedValue(this.modeOfDelivery,'cesareanSec')=='cesarean'){
                   modifyFieldValue(this.modeOfDelivery,'Specify','displayNone',false)
                 }else{

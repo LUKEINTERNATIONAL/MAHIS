@@ -136,7 +136,7 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
             selectedValue: "",
             class: "bold",
             name: "aspirin not prescribed",
-            //displayNone: true,
+            displayNone: true,
           },
           data: [
             {
@@ -803,5 +803,5 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
       this.breastFeeding = data;
     },
   },
-  // persist:true
+  persist:true
 });

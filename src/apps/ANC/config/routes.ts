@@ -69,5 +69,10 @@ export default [
     name: 'labTests',
     component: LabTests
   },
-]
+  {
+    path: "/ANCHome",
+    name: "ANCHome",
+    component: ANCHome,
+  },
+];
 

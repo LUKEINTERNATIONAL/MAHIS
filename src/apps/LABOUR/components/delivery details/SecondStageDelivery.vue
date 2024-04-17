@@ -55,7 +55,7 @@ import {
   getFieldValue,
 } from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
-import {useReferralStore} from "@/apps/LABOUR/stores/repeatable things/referral";
+//import {useReferralStore} from "@/apps/LABOUR/stores/repeatable things/referral";
 import {useEndLabourStore} from "@/apps/LABOUR/stores/repeatable things/labourAndDeliveryEnd";
 import {useSecondStageOfLabourStore} from "@/apps/LABOUR/stores/delivery details/secondStageDelivery";
 export default defineComponent({

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
+import { getRadioSelectedValue, modifyFieldValue } from '@/services/data_helpers';
 
 export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
   state: () => ({
@@ -60,7 +61,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
         },
       },
       {
-        classDash: "dashed_bottom_border",
+        classDash: "dashed_bottom_border _padding",
         data: {
           rowData: [
             {
@@ -68,7 +69,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
                 {
                   inputHeader: "Live births",
                   value: "",
-                  disabled:true,
+                  disabled: true,
                   name: "LiveBirths",
                   required: true,
                   valueType: "text",
@@ -97,7 +98,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
       {
         selectdData: [],
         isFinishBtn: false,
-        classDash: "dashed_bottom_border",
+        classDash: "dashed_bottom_border _padding",
         radioBtnContent: {
           header: {
             title: "Last live birth had congenital abnormalities?",
@@ -133,10 +134,10 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
       {
         selectedData: [],
         isFinishBtn: false,
-        classDash: "dashed_bottom_border",
+        classDash: "dashed_bottom_border _padding",
         radioBtnContent: {
           header: {
-            class:'bold',
+            class: "bold",
             title: "Was last live birth preterm?",
             selectedValue: "",
             name: "Was last live birth preterm?",
@@ -162,76 +163,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
       },
     ],
     modeOfDelivery: [
-      {
-        selectdData: [],
-        isFinishBtn: false,
-        classDash: "dashed_bottom_border",
-        radioBtnContent: {
-          header: {
-
-            title: "Specify mode of delivery",
-            selectedValue: "",
-            name: "cesareanSec",
-          },
-          data: [
-            {
-              name: "Cesarean section",
-              value: "cesarean",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-            {
-              name: "Vacuum",
-              value: "vacuum",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-            {
-              name: "Breach",
-              value: "breach",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-            {
-              name: "SDV",
-              value: "sdv",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-            {
-              name: "Other",
-              value: "other",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-          ],
-        },
-      },
-      {
-        data: {
-          rowData: [
-            {
-              colData: [
-                {
-                  displayNone: true,
-                  inputHeader: "specify",
-                  icon: icons.editPen,
-                  value: "",
-                  name: "Specify",
-                  eventType: "input",
-                  inputWidth: "82%",
-                  required: true,
-                },
-              ],
-            },
-          ],
-        },
-      },
+      
     ] as any,
 
     Complications: [
@@ -240,7 +172,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
           header: {
-            class:"bold",
+            class: "bold",
             title:
               "Does the woman have any complications due to past pregnancies?",
             selectedValue: "",
@@ -456,13 +388,13 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
             {
               colData: [
                 {
-                 displayNone: true,
+                  displayNone: true,
                   inputHeader: "specify",
                   unit: "",
                   icon: icons.editPen,
                   value: "",
                   name: "Other notes",
-                  valueType:'text',
+                  valueType: "text",
                   required: true,
                   eventType: "input",
                   inputWidth: "85%",
@@ -484,12 +416,113 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
     setAbnormalities(data: any) {
       this.abnormalities = data;
     },
-    setModeOfDelivery(data: any) {
-      this.modeOfDelivery = data;
+    setModeOfDelivery(number: number) {
+      for (let i = 0; i < number; i++) {
+        const inputs =getRadioButton(i)
+        this.modeOfDelivery.push(inputs[0])
+        this.modeOfDelivery.push(inputs[1])
+      }
+    },
+
+    checkChanges(){
+      const number = this.modeOfDelivery.length /2;
+    for (let i = 0; i < number; i++) {
+      const value=getRadioSelectedValue(this.modeOfDelivery, `cesareanSec ${i}`)
+        if(value=='other'){
+          modifyFieldValue(
+            this.modeOfDelivery,
+            `Specify ${i}`,
+            "displayNone",
+            false
+          );
+        } else {
+           modifyFieldValue(
+             this.modeOfDelivery,
+             `Specify ${i}`,
+             "displayNone",
+             true
+           );
+        }
+    }
     },
     setComplications(data: any) {
       this.Complications = data;
     },
   },
-   persist:true,
+  // persist: true,
 });
+
+
+const getRadioButton = (number:number)=>{
+  return [
+    {
+      selectdData: [],
+      isFinishBtn: false,
+      classDash: "dashed_bottom_border",
+      radioBtnContent: {
+        header: {
+          title: "Specify mode of delivery",
+          selectedValue: "",
+          name: `cesareanSec ${number}`,
+        },
+        data: [
+          {
+            name: "Cesarean section",
+            value: "cesarean",
+            labelPlacement: "start",
+            colSize: "7",
+            justify: "space-between",
+          },
+          {
+            name: "Vacuum",
+            value: "vacuum",
+            labelPlacement: "start",
+            colSize: "7",
+            justify: "space-between",
+          },
+          {
+            name: "Breach",
+            value: "breach",
+            labelPlacement: "start",
+            colSize: "7",
+            justify: "space-between",
+          },
+          {
+            name: "SDV",
+            value: "sdv",
+            labelPlacement: "start",
+            colSize: "7",
+            justify: "space-between",
+          },
+          {
+            name: "Other",
+            value: "other",
+            labelPlacement: "start",
+            colSize: "7",
+            justify: "space-between",
+          },
+        ],
+      },
+    },
+    {
+      data: {
+        rowData: [
+          {
+            colData: [
+              {
+                displayNone: true,
+                inputHeader: `specify ${number}`,
+                icon: icons.editPen,
+                value: "",
+                name: `Specify ${number}`,
+                eventType: "input",
+                inputWidth: "82%",
+                required: true,
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ];
+}

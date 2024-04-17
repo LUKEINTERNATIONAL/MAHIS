@@ -1026,6 +1026,7 @@ const initialChronicConditions=[
               displayNone:true,
               inputHeader: "Specify other chronic conditions",
               icon: icons.editPen,
+              valueType:'text',
               value: diabetesForm.otherDiabetis.name,
               name: "Other notes",
               eventType: "input",
