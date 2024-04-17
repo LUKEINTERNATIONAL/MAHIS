@@ -176,7 +176,7 @@ import { UserService } from "@/services/user_service"
 import { ProgramService } from "@/services/program_service"
 import { Service } from "@/services/service"
 
-const toggle_local = ref(true)
+const toggle_local = ref(false)
 const user_roles = ref([] as any)
 const user_programs = ref([] as any)
 const user_data = ref()
@@ -206,15 +206,31 @@ watch(
     }
 )
 
+async function getUserStatus() {
+    const deactivated_on = user_data.value.deactivated_on
+    if (deactivated_on == null) {
+        toggle_local.value = true
+    } else if (deactivated_on != null) {
+        toggle_local.value = false
+    }
+}
+
+async function trigerSaveStatusFn() {
+    if (toggle_local.value == false) {
+        UserService.deactivateUser(userId.value)
+    }
+    if (toggle_local.value == true) {
+        UserService.activateUser(userId.value)
+    }
+}
+
 function trigerSaveFn() {
     actionN.value = props.action
     preSavePrograms()
     preSaveRoles()
+    trigerSaveStatusFn()
 }
 
-// const emit = defineEmits<{
-//     (e: "closePopoover", ObjectsArray: any): void
-// }>()
 
 async function getUserData() {
     userId.value = props.user_id
@@ -225,6 +241,7 @@ async function getUserData() {
     fillUserRoles()
     fillUserPrograms()
     getAPICounterPart() 
+    getUserStatus()
 }
 
 async function preSaveRoles() {
