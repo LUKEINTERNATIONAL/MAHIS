@@ -218,6 +218,17 @@ export default defineComponent({
                     checked: false,
                 });
             }
+
+            if (this.dispositions.length > 0) {
+                modifyWizardData(this.wizardData, "Outcome", {
+                    checked: true,
+                    class: "open_step common_step",
+                });
+            } else {
+                modifyWizardData(this.wizardData, "Outcome", {
+                    checked: false,
+                });
+            }
         },
 
         getFormatedData(data: any) {
