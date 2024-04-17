@@ -68,6 +68,11 @@ const emit = defineEmits<{
 
 function saveAction() {
     action.value = generateRandomStrings(100, 3)
+    closeModal()
+}
+
+function closeModal() {
+    modalController.dismiss()
 }
 
 function generateRandomStrings(numStrings: number, stringLength: number): any{

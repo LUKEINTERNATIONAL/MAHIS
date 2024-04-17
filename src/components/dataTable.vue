@@ -38,7 +38,7 @@
                 :search-field="searchField"
                 :search-value="searchValue"
                 :loading="pageIsLoading"
-                theme-color="#1d90ff"
+                :body-row-class-name="getBodyRowClassName"
                 @click-row="showRow"
             >
 
@@ -80,7 +80,7 @@
   </template>
   
   <script setup lang="ts">
-  import type { Header, Item } from "vue3-easy-data-table"
+  import type { Header, Item, BodyRowClassNameFunction, HeaderItemClassNameFunction, BodyItemClassNameFunction } from "vue3-easy-data-table"
   import { IonRow, IonCard, IonCol, IonButton, IonLabel } from "@ionic/vue"
   import { ref, watch, computed, onMounted, onUpdated } from "vue"
   import BasicInputField from "@/components/BasicInputField.vue"
@@ -97,6 +97,18 @@
 
   const searchField = ref("username")
   const searchValue = ref("")
+
+  const getBodyRowClassName: BodyRowClassNameFunction = (item: Item, rowNumber: number): string => {
+    console.log("wwwww",rowNumber)
+    let cls = rowNumber % 2 === 0 ? "even-row" : "odd-row"
+    return cls
+  }
+
+  const bodyRowClassNameFunction: BodyRowClassNameFunction = (item: Item, rowNumber: number): string => {
+    if (item.score < 60) return 'fail-row'
+    return 'pass-row'
+  }
+
 
   const searchFieldS = ref([]) as any
   const pageIsLoading = ref(true)
@@ -235,15 +247,15 @@ const showRow = (item: ClickRowArgument) => {
   clickRow(item)
 }
 </script>
-<style scoped>
+<style>
   .customize-table {
   /* --easy-table-border: 1px solid #445269; */
-  --easy-table-row-border: 1px solid #445269;
+  --easy-table-row-border: 1px solid #d7dce4;
 
   --easy-table-header-font-size: 14px;
   --easy-table-header-height: 50px;
   --easy-table-header-font-color: #c1cad4;
-  --easy-table-header-background-color: #006401;
+  --easy-table-header-background-color: #575151bd;
 
   --easy-table-header-item-padding: 10px 15px;
 
@@ -256,11 +268,11 @@ const showRow = (item: ClickRowArgument) => {
   --easy-table-body-row-font-size: 15px;
 
   /* --easy-table-body-row-hover-font-color: #2d3a4f; */
-  --easy-table-body-row-hover-background-color: #eee;
+  --easy-table-body-row-hover-background-color: #756e6e;
 
   --easy-table-body-item-padding: 10px 15px;
 
-  --easy-table-footer-background-color: #1e8635;
+  --easy-table-footer-background-color: #575151bd;
   --easy-table-footer-font-color: #c0c7d2;
   --easy-table-footer-font-size: 14px;
   --easy-table-footer-padding: 0px 10px;
@@ -278,6 +290,17 @@ const showRow = (item: ClickRowArgument) => {
 
   --easy-table-loading-mask-background-color: #2d3a4f;
 }
+
+.even-row {
+  --easy-table-body-row-background-color: #f5f5f5;
+  --easy-table-body-row-font-color: #333;
+}
+
+.odd-row {
+  --easy-table-body-row-background-color: #e0e0e0;
+  --easy-table-body-row-font-color: #333;
+}
+
 
 .btn-cls {
   font-size: 30px;
