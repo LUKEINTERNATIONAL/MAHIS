@@ -79,17 +79,17 @@ const initialSecondStageDetails=[
                     },
                     {
                         name: 'Live preterm',
-                        value: 'live preterm',
+                        value: 'Live preterm',
                         colSize: '5',
                     },
                     {
                         name: 'Macerated stillbirth',
-                        value: 'macerated stillbirth',
+                        value: 'Macerated stillbirth',
                         colSize: '5',
                     },
                     {
                         name: 'Fresh stillbirth',
-                        value: 'fresh stillbirth',
+                        value: 'Fresh stillbirth',
                         colSize: '5',
                     },
 
@@ -98,6 +98,7 @@ const initialSecondStageDetails=[
 
     },
     {
+        sideColSize:1,
         childName:'Baby general condition at birth',
         selectdData: [],
         isFinishBtn: false,
@@ -105,7 +106,7 @@ const initialSecondStageDetails=[
         radioBtnContent:
             {
                 header:{
-                    title: 'Number of babies',
+                    title: 'Baby details',
                     class:'bold',
                     selectedValue: '',
                     displayNone:true,
@@ -117,34 +118,35 @@ const initialSecondStageDetails=[
             }
 
     },
+    // {
+    //     childName:'Baby general condition at birth',
+    //     isFinishBtn: false,
+    //     data:
+    //         {
+    //             rowData:[
+    //                 {
+    //                     colData: [
+    //                         {
+    //                             displayNone:true,
+    //                             inputHeader: '',
+    //                             unit: 'Babies',
+    //                             icon: icons.editPen,
+    //                             value: '',
+    //                             name: 'Number of babies',
+    //                             required: true,
+    //                             eventType: 'input',
+    //                             placeholder:'',
+    //                             inputWidth:''
+    //
+    //                         },
+    //
+    //                     ]
+    //                 }
+    //             ]
+    //         },
+    // },
     {
-        childName:'Baby general condition at birth',
-        isFinishBtn: false,
-        data:
-            {
-                rowData:[
-                    {
-                        colData: [
-                            {
-                                displayNone:true,
-                                inputHeader: '',
-                                unit: 'Babies',
-                                icon: icons.editPen,
-                                value: '',
-                                name: 'Number of babies',
-                                required: true,
-                                eventType: 'input',
-                                placeholder:'',
-                                inputWidth:'50%'
-
-                            },
-
-                        ]
-                    }
-                ]
-            },
-    },
-    {
+        sideColSize:1,
         childName:'Baby general condition at birth',
         isFinishBtn: false,
         data:
@@ -165,7 +167,6 @@ const initialSecondStageDetails=[
 
                             },
                             {
-                                displayNone:true,
                                 inputHeader: 'Last name',
                                 unit: '',
                                 icon: icons.editPen,
@@ -183,6 +184,7 @@ const initialSecondStageDetails=[
             },
     },
     {
+        sideColSize:1,
         childName:'Baby general condition at birth',
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
@@ -204,7 +206,6 @@ const initialSecondStageDetails=[
 
                             },
                             {
-                                displayNone:true,
                                 inputHeader: 'APGAR score at 5 minutes',
                                 unit: '',
                                 icon: icons.editPen,
@@ -225,6 +226,7 @@ const initialSecondStageDetails=[
 
 
     {
+        sideColSize:1,
         childName:'Baby general condition at birth',
         selectdData: [],
         isFinishBtn: false,
@@ -236,6 +238,7 @@ const initialSecondStageDetails=[
                     selectedValue: '',
                     class:'bold',
                     displayNone:true,
+                    name:"Sex"
                 },
                 data:[
                     {
@@ -252,7 +255,9 @@ const initialSecondStageDetails=[
             }
 
     },
-    {        childName:'Baby general condition at birth',
+    {          sideColSize:1,
+
+        childName:'Baby general condition at birth',
         selectdData: [],
         isFinishBtn: false,
         classDash: '',
@@ -262,7 +267,8 @@ const initialSecondStageDetails=[
                     displayNone:true,
                     title: 'Newborn vitals',
                     class:'bold',
-                    selectedValue: ''
+                    selectedValue: '',
+                    name:"vitals"
                 },
                 data:[
 
@@ -272,6 +278,7 @@ const initialSecondStageDetails=[
 
     },
     {
+        sideColSize:1,
         childName:'Baby general condition at birth',
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
@@ -286,31 +293,29 @@ const initialSecondStageDetails=[
                                 unit: 'grams',
                                 icon: icons.weight,
                                 value: '',
-                                name: 'Baby weight',
+                                name: 'Weight',
                                 required: true,
                                 eventType: 'input',
                                 placeholder:''
 
                             },
                             {
-                                displayNone:true,
                                 inputHeader: 'Baby height',
                                 unit: 'cm',
                                 icon: icons.height,
                                 value: '',
-                                name: 'Baby height',
+                                name: 'Height',
                                 required: true,
                                 eventType: 'input',
                                 placeholder:''
 
                             },
                             {
-                                displayNone:true,
                                 inputHeader: 'Baby circumference',
                                 unit: 'cm',
                                 icon: icons.height,
                                 value: '',
-                                name: 'Baby circumference',
+                                name: 'Circumference',
                                 required: true,
                                 eventType: 'input',
                                 placeholder:''
@@ -324,6 +329,7 @@ const initialSecondStageDetails=[
     },
 
     {
+        sideColSize:1,
         childName:'Baby general condition at birth',
         selectdData: [],
         isFinishBtn: false,
@@ -335,6 +341,7 @@ const initialSecondStageDetails=[
                     selectedValue: '',
                     class:'bold',
                     displayNone:true,
+                    name:"Tetracycline eye ointment given"
                 },
                 data:[
                     {
@@ -352,6 +359,7 @@ const initialSecondStageDetails=[
 
     },
     {
+        sideColSize:1,
         childName:'Baby general condition at birth',
         selectdData: [],
         isFinishBtn: false,
@@ -363,6 +371,7 @@ const initialSecondStageDetails=[
                     selectedValue: '',
                     class:'bold',
                     displayNone:true,
+                    name:"Chlorhexidine"
                 },
                 data:[
                     {
@@ -379,9 +388,11 @@ const initialSecondStageDetails=[
             }
 
     },
-] as any;
-const initialNewbornComplications=[
+
     {
+        sideColSize:1,
+
+        childName:'Baby general condition at birth',
         selectdData: [],
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
@@ -390,7 +401,9 @@ const initialNewbornComplications=[
                     title: 'Any Newborn complications?',
                     selectedValue: '',
                     class:'bold',
-                    name:'Newborn complications'
+                    name:'Newborn baby complications',
+                    displayNone:true,
+
                 },
                 data:[
 
@@ -415,6 +428,9 @@ const initialNewbornComplications=[
 
     },
     {
+        sideColSize:1,
+
+        childName:'Baby general condition at birth',
         selectdData: [],
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
@@ -422,7 +438,9 @@ const initialNewbornComplications=[
                 header:{
                     title: '',
                     selectedValue: '',
-                    name:'Newborn complications'
+                    name:'Newborn baby complications',
+                    displayNone:true,
+
                 },
                 data:[
 
@@ -436,7 +454,7 @@ const initialNewbornComplications=[
                     },
                     {
                         name: 'Congenital abnormalities',
-                        value: 'congenital abnormalities',
+                        value: 'Congenital abnormalities',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',
@@ -448,27 +466,31 @@ const initialNewbornComplications=[
     },
 
     {
+        sideColSize:1,
+        childName:'Baby general condition at birth',
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
                 header:{
                     title: '',
                     selectedValue: '',
-                    name:'Newborn complications'
+                    name:'Newborn baby complications',
+                    displayNone:true,
+
 
                 },
                 data:[
                     {
                         name: 'Asphyxia',
-                        value: 'asphyxia',
+                        value: 'Asphyxia',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',
                         justify: 'space-between',
                     },
                     {
-                        name: 'Other complications',
-                        value: 'Other complications',
+                        name: 'Child ever had any other complications?',
+                        value: 'Child ever had any other complications?',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',
@@ -481,7 +503,8 @@ const initialNewbornComplications=[
     },
 
     {
-        childName:'Other complications',
+        sideColSize:1,
+        childName:'Child ever had any other complications?',
         isFinishBtn: false,
         sectionHeader: '',
         classDash: 'dashed_bottom_border _padding',
@@ -493,7 +516,7 @@ const initialNewbornComplications=[
                         colData: [
                             {
                                 displayNone:true,
-                                inputHeader: 'specify',
+                                inputHeader: 'Specify',
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
@@ -509,6 +532,8 @@ const initialNewbornComplications=[
             },
     },
     {
+        sideColSize:1,
+        childName:'Asphyxia',
         selectdData: [],
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
@@ -517,8 +542,11 @@ const initialNewbornComplications=[
                 header:{
                     title: 'Was resuscitation attempted?',
                     selectedValue: '',
-                    name:'Resuscitation attempted',
+                    name:'Resuscitation attempt',
                     class:'bold',
+                    displayNext:"Yes",
+                    displayNone:true,
+
                 },
                 data:[
                     {
@@ -536,6 +564,8 @@ const initialNewbornComplications=[
 
     },
     {
+        sideColSize:1,
+        childName:'Resuscitation attempted',
         selectdData: [],
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
@@ -543,22 +573,26 @@ const initialNewbornComplications=[
             {
                 header:{
                     title: 'Type of resuscitation?',
-                    selectedValue: ''
+                    selectedValue: '',
+                    displayNone:true,
+                    class:'bold',
+                    name:"Type of resuscitation"
+
                 },
                 data:[
                     {
                         name: 'Drying only',
-                        value: 'drying only',
+                        value: 'Drying only',
                         colSize: '7',
                     },
                     {
                         name: 'Clearing airway',
-                        value: 'clearing airway',
+                        value: 'Clearing airway',
                         colSize: '7',
                     },
                     {
                         name: 'Bag and mask',
-                        value: 'bag and mask',
+                        value: 'Bag and mask',
                         colSize: '7',
                     },
                 ]
@@ -566,6 +600,8 @@ const initialNewbornComplications=[
 
     },
     {
+        sideColSize:1,
+        childName:'Baby general condition at birth',
         selectdData: [],
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
@@ -573,7 +609,10 @@ const initialNewbornComplications=[
                 header:{
                     title: 'Select the management given to newborn',
                     selectedValue: '',
-                    class:'bold'
+                    class:'bold',
+                    displayNone:true,
+                    name:"Management to newborn"
+
                 },
                 data:[
 
@@ -590,19 +629,25 @@ const initialNewbornComplications=[
 
     },
     {
+        sideColSize:1,
+        childName:'Baby general condition at birth',
         selectdData: [],
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
                 header:{
                     title: '',
-                    selectedValue: ''
+                    selectedValue: '',
+                    displayNone:true,
+                    name:"Management to newborn"
+
+
                 },
                 data:[
 
                     {
                         name: 'Kangaroo mother care',
-                        value: 'kangaroo mother care',
+                        value: 'Kangaroo mother care',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',
@@ -614,17 +659,23 @@ const initialNewbornComplications=[
     },
 
     {
+        sideColSize:1,
+        childName:'Baby general condition at birth',
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
                 header:{
                     title: '',
-                    selectedValue: ''
+                    selectedValue: '',
+                    displayNone:true,
+                    name:"Management to newborn"
+
+
                 },
                 data:[
                     {
                         name: 'Antibiotics',
-                        value: 'antibiotics',
+                        value: 'Antibiotics',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',
@@ -646,6 +697,8 @@ const initialNewbornComplications=[
 
 
     {
+        sideColSize:1,
+        childName:'Other',
         isFinishBtn: false,
         sectionHeader: '',
         classDash: 'dashed_bottom_border _padding',
@@ -656,11 +709,12 @@ const initialNewbornComplications=[
                     {
                         colData: [
                             {
+                                displayNone:true,
                                 inputHeader: 'Specify',
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
-                                name: 'Other',
+                                name: 'Other notes',
                                 required: true,
                                 eventType: 'input',
                                 inputWidth: "85%",
@@ -671,9 +725,10 @@ const initialNewbornComplications=[
                 ]
             },
     },
-
     {
         selectdData: [],
+        sideColSize:1,
+        childName:'Baby general condition at birth',
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
         radioBtnContent:
@@ -681,7 +736,9 @@ const initialNewbornComplications=[
                 header:{
                     title: 'Oxytocin 10 UI given?',
                     selectedValue: '',
-                    class:'Bold'
+                    class:'bold',
+                    displayNone:true,
+                    name:"Oxytocin 10 UI given"
                 },
                 data:[
                     {
@@ -700,15 +757,18 @@ const initialNewbornComplications=[
     },
     {
         selectdData: [],
+        sideColSize:1,
         isFinishBtn: false,
+        childName:'Baby general condition at birth',
         classDash: 'dashed_bottom_border _padding',
         radioBtnContent:
             {
                 header:{
                     title: 'Vitamin K given?',
                     selectedValue: '',
-                    name:'Vitamin K',
-                    class:'bold'
+                    name:'Vitamin K given',
+                    class:'bold',
+                    displayNone:true
                 },
                 data:[
                     {
@@ -726,6 +786,64 @@ const initialNewbornComplications=[
 
     },
 
+
+] as any;
+const initialNewbornComplications=[
+
+
+    // {
+    //     selectdData: [],
+    //     isFinishBtn: false,
+    //     radioBtnContent:
+    //         {
+    //             header:{
+    //                 title: 'Place of delivery',
+    //                 selectedValue: '',
+    //                 class:'bold'
+    //             },
+    //             data:[
+    //                 {
+    //                     name: 'This facility',
+    //                     value: 'This facility',
+    //                     colSize: '5',
+    //                 },
+    //                 {
+    //                     name: 'In-transit',
+    //                     value: 'in-transit',
+    //                     colSize: '5',
+    //                 },
+    //
+    //             ]
+    //         }
+    //
+    // },
+    // {
+    //     selectdData: [],
+    //     isFinishBtn: false,
+    //     classDash: 'dashed_bottom_border _padding',
+    //     radioBtnContent:
+    //         {
+    //             header:{
+    //                 title: '',
+    //                 selectedValue: '',
+    //                 class:'bold'
+    //             },
+    //             data:[
+    //                 {
+    //                     name: 'Home/TBA',
+    //                     value: 'Home/tba',
+    //                     colSize: '5',
+    //                 },
+    //                 {
+    //                     name: 'Other facility',
+    //                     value: 'Other facility',
+    //                     colSize: '5',
+    //                 },
+    //             ]
+    //         }
+    //
+    // },
+
     {
         selectdData: [],
         isFinishBtn: false,
@@ -733,9 +851,11 @@ const initialNewbornComplications=[
         radioBtnContent:
             {
                 header:{
+                    class:"bold",
                     title: 'Place of delivery',
+                    name:'Place of delivery',
                     selectedValue: '',
-                    class:'bold'
+                    displayNext:"Other"
                 },
                 data:[
                     {
@@ -744,25 +864,25 @@ const initialNewbornComplications=[
                         colSize: '5',
                     },
                     {
-                        name: 'In-transit',
-                        value: 'in-transit',
+                        name: 'In transit',
+                        value: 'In transit',
                         colSize: '5',
                     },
                     {
-                        name: 'Home/TBA',
-                        value: 'Home/tba',
+                        name: 'Home',
+                        value: 'Home',
                         colSize: '5',
                     },
+
                     {
                         name: 'Other facility',
                         value: 'Other facility',
-                        colSize: '5',
+                        colSize: '7',
                     },
                 ]
             }
 
     },
-
     {
         selectdData: [],
         isFinishBtn: false,
@@ -783,24 +903,24 @@ const initialNewbornComplications=[
                         colSize: '6',
                     },
                     {
-                        name: ' Vacuum Extraction (VE)',
-                        value: 'no',
+                        name: 'Vacuum Extraction (VE)',
+                        value: 'Vacuum Extraction',
                         colSize: '6',
                     },
                     {
                         name: 'Breech (BR)',
-                        value: 'breech',
+                        value: 'Breech',
                         colSize: '6',
                     },
                     {
                         name: 'Caesarean section',
-                        value: 'caesarean section',
+                        value: 'Caesarean section',
                         colSize: '6',
                     },
                     {
                         name: 'Other',
                         value: 'Other',
-                        colSize: '7',
+                        colSize: '6',
                     },
                 ]
             }
@@ -824,7 +944,7 @@ const initialNewbornComplications=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
-                                name: 'Other',
+                                name: 'Other notes',
                                 required: true,
                                 eventType: 'input',
                                 inputWidth: "85%",
@@ -860,7 +980,7 @@ const initialNewbornComplications=[
                     },
                     {
                         name: 'Traditional birth attendant (TBA)',
-                        value: 'home/tba',
+                        value: 'tba',
                         colSize: '12',
                     },
 
@@ -906,13 +1026,14 @@ const initialObstetricDetails=[
                 header:{
                     title: 'Any obstetric complications?',
                     selectedValue: '',
-                    name:'Obstetric complications?'
+                    name:'Obstetric complications',
+                    class:'bold'
                 },
                 data:[
 
                     {
                         name: 'None',
-                        value: 'none',
+                        value: 'None',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',
@@ -943,8 +1064,8 @@ const initialObstetricDetails=[
                 data:[
 
                     {
-                        name: '(Pre)-Eclampsia',
-                        value: 'pre-eclampsia',
+                        name: 'Pre-Eclampsia',
+                        value: 'Pre-Eclampsia',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',
@@ -1031,7 +1152,7 @@ const initialObstetricDetails=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
-                                name: 'other',
+                                name: 'Other notes',
                                 required: true,
                                 eventType: 'input',
                                 inputWidth: "85%",
@@ -1051,7 +1172,8 @@ const initialObstetricDetails=[
                 header:{
                     title: 'Obstetric care provided',
                     selectedValue: '',
-                    class:'bold'
+                    class:'bold',
+                    name:"Obstetric care"
                 },
                 data:[
 
@@ -1295,7 +1417,7 @@ const initialObstetricDetails=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
-                                name: 'Other',
+                                name: 'Other notes',
                                 required: true,
                                 eventType: 'input',
                                 inputWidth: "85%",
@@ -1315,7 +1437,8 @@ const initialObstetricDetails=[
             {
                 header:{
                     title: 'Dexamethasone?',
-                    selectedValue: ''
+                    selectedValue: '',
+                    name:"Dexamethasone"
                 },
                 data:[
                     {

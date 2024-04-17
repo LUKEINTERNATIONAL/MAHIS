@@ -88,12 +88,12 @@ export default defineComponent({
       ],
       StepperData:[
         {
-          title: 'Immediate postnatal delivery for mother',
+          title: 'Immediate postnatal check for mother',
           component: 'ImmidiatePostnatalChecksForMother',
           value: '1'
         },
         {
-          title: 'Immediate postnatal delivery for child',
+          title: 'Immediate postnatal check for child',
           component: 'ImmidiatePostnatalChecksForChild',
           value: '2'
         },

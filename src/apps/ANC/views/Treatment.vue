@@ -1,3 +1,12 @@
+<template>
+  <ion-page>
+    <Toolbar />
+    <ion-content :fullscreen="true">
+      <DemographicBar />
+      <Stepper stepperTitle="Treatment" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData" />
+    </ion-content>
+  </ion-page>
+</template>
 <script lang="ts">
 import { IonContent, IonHeader, IonItem, IonPage, IonList, IonTitle, IonToolbar, IonMenu } from "@ionic/vue";
 import Toolbar from "@/components/Toolbar.vue";
