@@ -169,12 +169,9 @@ import {
     peopleOutline
 } from "ionicons/icons"
 import { ref, onMounted, watch } from "vue"
-import { icons } from "@/utils/svg"
-import DynamicButton from "@/components/DynamicButton.vue"
 import BasicInputField from "@/components/BasicInputField.vue"
 import { UserService } from "@/services/user_service"
 import { ProgramService } from "@/services/program_service"
-import { Service } from "@/services/service"
 
 const toggle_local = ref(false)
 const user_roles = ref([] as any)
