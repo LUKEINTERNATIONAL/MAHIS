@@ -120,7 +120,6 @@ export default defineComponent({
     },
     watch:{
       prevPregnancies: {
-        
           handler(val) {
             if (val && val[2].data.rowData[0].colData[0].value) {
               const liveBirths = parseInt(val[2].data.rowData[0].colData[0].value)
@@ -133,7 +132,6 @@ export default defineComponent({
               //   x.data.id=i
               //   births.push(x)
               // }
-
               this.prevPregnanciesInstance.setModeOfDelivery(liveBirths)
             }
 
@@ -144,6 +142,7 @@ export default defineComponent({
       modeOfDelivery:{
         handler(){
            this.handleDynamic()  
+           this.prevPregnanciesInstance.checkChanges()
         },
         deep:true
       },
@@ -187,7 +186,6 @@ export default defineComponent({
       },
 
       handleDynamic(){
-
                 if(getRadioSelectedValue(this.modeOfDelivery,'cesareanSec')=='cesarean'){
                   modifyFieldValue(this.modeOfDelivery,'Specify','displayNone',false)
                 }else{

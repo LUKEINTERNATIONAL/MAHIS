@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
+import { getRadioSelectedValue, modifyFieldValue } from '@/services/data_helpers';
 
 export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
   state: () => ({
@@ -162,26 +163,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
       },
     ],
     modeOfDelivery: [
-      {
-        data: {
-          rowData: [
-            {
-              colData: [
-                {
-                  displayNone: true,
-                  inputHeader: "specify",
-                  icon: icons.editPen,
-                  value: "",
-                  name: "Specify",
-                  eventType: "input",
-                  inputWidth: "82%",
-                  required: true,
-                },
-              ],
-            },
-          ],
-        },
-      },
+      
     ] as any,
 
     Complications: [
@@ -436,8 +418,32 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
     },
     setModeOfDelivery(number: number) {
       for (let i = 0; i < number; i++) {
-        this.modeOfDelivery.push(getRadioButton(i));
+        const inputs =getRadioButton(i)
+        this.modeOfDelivery.push(inputs[0])
+        this.modeOfDelivery.push(inputs[1])
       }
+    },
+
+    checkChanges(){
+      const number = this.modeOfDelivery.length /2;
+    for (let i = 0; i < number; i++) {
+      const value=getRadioSelectedValue(this.modeOfDelivery, `cesareanSec ${i}`)
+        if(value=='other'){
+          modifyFieldValue(
+            this.modeOfDelivery,
+            `Specify ${i}`,
+            "displayNone",
+            false
+          );
+        } else {
+           modifyFieldValue(
+             this.modeOfDelivery,
+             `Specify ${i}`,
+             "displayNone",
+             true
+           );
+        }
+    }
     },
     setComplications(data: any) {
       this.Complications = data;
@@ -448,53 +454,75 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
 
 
 const getRadioButton = (number:number)=>{
-  return  {
-        selectdData: [],
-        isFinishBtn: false,
-        classDash: "dashed_bottom_border",
-        radioBtnContent: {
-          header: {
-            title: "Specify mode of delivery",
-            selectedValue: "",
-            name:`cesareanSec ${number}`,
-          },
-          data: [
-            {
-              name: "Cesarean section",
-              value: "cesarean",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-            {
-              name: "Vacuum",
-              value: "vacuum",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-            {
-              name: "Breach",
-              value: "breach",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-            {
-              name: "SDV",
-              value: "sdv",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-            {
-              name: "Other",
-              value: "other",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-          ],
+  return [
+    {
+      selectdData: [],
+      isFinishBtn: false,
+      classDash: "dashed_bottom_border",
+      radioBtnContent: {
+        header: {
+          title: "Specify mode of delivery",
+          selectedValue: "",
+          name: `cesareanSec ${number}`,
         },
-      }
+        data: [
+          {
+            name: "Cesarean section",
+            value: "cesarean",
+            labelPlacement: "start",
+            colSize: "7",
+            justify: "space-between",
+          },
+          {
+            name: "Vacuum",
+            value: "vacuum",
+            labelPlacement: "start",
+            colSize: "7",
+            justify: "space-between",
+          },
+          {
+            name: "Breach",
+            value: "breach",
+            labelPlacement: "start",
+            colSize: "7",
+            justify: "space-between",
+          },
+          {
+            name: "SDV",
+            value: "sdv",
+            labelPlacement: "start",
+            colSize: "7",
+            justify: "space-between",
+          },
+          {
+            name: "Other",
+            value: "other",
+            labelPlacement: "start",
+            colSize: "7",
+            justify: "space-between",
+          },
+        ],
+      },
+    },
+    {
+      data: {
+        rowData: [
+          {
+            colData: [
+              {
+                displayNone: true,
+                inputHeader: `specify ${number}`,
+                icon: icons.editPen,
+                value: "",
+                name: `Specify ${number}`,
+                eventType: "input",
+                inputWidth: "82%",
+                required: true,
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ];
 }
