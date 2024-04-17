@@ -1,3 +1,4 @@
+// this data table need disintegration
 <template>
         <ion-card style="margin-top: 0px;">
           <ion-row>
@@ -34,7 +35,7 @@
                             :name="dynamic_button_properties[2].name"
                             :fill="dynamic_button_properties[2].btnFill"
                             :icon="personAddOutline"
-                            @clicked:btn=""
+                            @clicked:btn="OpenAddUserModal"
                             :color="'secondary'"
                       />
                   </ion-col>
@@ -92,6 +93,12 @@
               </template>
           </EasyDataTable>
         </ion-card>
+
+        <addUserModal
+            :is_open="isPopooverOpen"
+            :user_id="user_id"
+            @close-popoover="isPopooverOpen = false"
+        />
         
   </template>
   
@@ -102,6 +109,7 @@
   import BasicInputField from "@/components/BasicInputField.vue"
   import ListPicker from "./ListPicker.vue"
   import DynamicButton from "@/components/DynamicButton.vue"
+  import addUserModal from "../views/UserManagement/addUserModal.vue"
   import {
     addOutline,
     pencilOutline,
@@ -129,6 +137,8 @@
 
   const searchFieldS = ref([]) as any
   const pageIsLoading = ref(true)
+  const isPopooverOpen = ref(false)
+  const user_id = ref('')
 
   const headers = ref<Header[]>( [] )
   const items_local = ref<Item[]>([])
@@ -202,6 +212,11 @@ const note_properties = [
         error_message: 'please provide a reason'
     },
 ]
+
+function OpenAddUserModal() {
+    isPopooverOpen.value = true
+    user_id.value = ''
+}
 
 const dynamic_button_properties = [
     {

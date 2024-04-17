@@ -1,5 +1,5 @@
 <template>
-     <IonCard>
+    
 
         <ion-row>
             <ion-col>
@@ -136,7 +136,6 @@
                 </div>
             </ion-accordion>
         </ion-accordion-group>
-     </IonCard>
 </template>
 
 <script lang="ts">

@@ -40,6 +40,7 @@ export default defineComponent({
 <script setup lang="ts">
 import { IonContent, IonHeader, IonItem, IonCol, IonToolbar, IonMenu, modalController } from "@ionic/vue"
 import BasicInputField from "@/components/BasicInputField.vue"
+import { ref, watch, computed, onMounted, onUpdated } from "vue"
 
 const note_properties = [
     {
