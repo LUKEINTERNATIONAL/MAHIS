@@ -113,9 +113,17 @@ export default defineComponent({
             }
             if (inputData?.col?.name == "Blood Pressure Not Done" && inputData.col.checked) {
                 modifyCheckboxInputField(this.vitals, "Blood Pressure Reason", "displayNone", false);
+                modifyFieldValue(this.vitals, "Systolic", "disabled", true);
+                modifyFieldValue(this.vitals, "Diastolic", "disabled", true);
+                modifyFieldValue(this.vitals, "Systolic", "value", "");
+                modifyFieldValue(this.vitals, "Diastolic", "value", "");
                 this.validationStatus.bloodPressure = false;
             } else if (inputData?.col?.name == "Blood Pressure Not Done") {
                 modifyCheckboxInputField(this.vitals, "Blood Pressure Reason", "displayNone", true);
+                modifyFieldValue(this.vitals, "Systolic", "disabled", false);
+                modifyFieldValue(this.vitals, "Diastolic", "disabled", false);
+                modifyFieldValue(this.vitals, "Systolic", "value", "");
+                modifyFieldValue(this.vitals, "Diastolic", "value", "");
                 this.validationStatus.bloodPressure = true;
             }
         },
