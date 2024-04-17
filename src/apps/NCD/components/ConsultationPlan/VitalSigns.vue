@@ -33,6 +33,14 @@ import BasicForm from "@/components/BasicForm.vue";
 import { Service } from "@/services/service";
 import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
 import { PatientService } from "@/services/patient_service";
+import {
+    modifyCheckboxInputField,
+    getCheckboxSelectedValue,
+    getRadioSelectedValue,
+    getFieldValue,
+    modifyRadioValue,
+    modifyFieldValue,
+} from "@/services/data_helpers";
 
 export default defineComponent({
     components: {
@@ -56,6 +64,7 @@ export default defineComponent({
             vValidations: "" as any,
             hasValidationErrors: [] as any,
             vitalsInstance: {} as any,
+            validationStatus: { heightWeight: false, bloodPressure: false } as any,
         };
     },
     computed: {
@@ -88,44 +97,69 @@ export default defineComponent({
             const vitalsStore = useVitalsStore();
             vitalsStore.setVitals(this.vitals);
         },
+        validationController(inputData: any) {
+            if (inputData?.col?.name == "Height And Weight Not Done" && inputData.col.checked) {
+                modifyCheckboxInputField(this.vitals, "Height Weight Reason", "displayNone", false);
+                modifyFieldValue(this.vitals, "Height", "disabled", true);
+                modifyFieldValue(this.vitals, "Weight", "disabled", true);
+                modifyFieldValue(this.vitals, "Height", "value", "");
+                modifyFieldValue(this.vitals, "Weight", "value", "");
+                this.validationStatus.heightWeight = false;
+            } else if (inputData?.col?.name == "Height And Weight Not Done") {
+                modifyCheckboxInputField(this.vitals, "Height Weight Reason", "displayNone", true);
+                modifyFieldValue(this.vitals, "Height", "disabled", false);
+                modifyFieldValue(this.vitals, "Weight", "disabled", false);
+                this.validationStatus.heightWeight = true;
+            }
+            if (inputData?.col?.name == "Blood Pressure Not Done" && inputData.col.checked) {
+                modifyCheckboxInputField(this.vitals, "Blood Pressure Reason", "displayNone", false);
+                this.validationStatus.bloodPressure = false;
+            } else if (inputData?.col?.name == "Blood Pressure Not Done") {
+                modifyCheckboxInputField(this.vitals, "Blood Pressure Reason", "displayNone", true);
+                this.validationStatus.bloodPressure = true;
+            }
+        },
         async validaterowData(inputData: any) {
+            this.validationController(inputData);
             this.hasValidationErrors = [];
 
             this.vitals.forEach((section: any, sectionIndex: any) => {
-                section.data.rowData.forEach((col: any, colIndex: any) => {
-                    if (col.colData[0].inputHeader == "Systolic Pressure*") {
-                        const isSystolicValid =
-                            this.vitalsInstance.validator(col.colData[0]) == null && this.vitalsInstance.validator(col.colData[1]) == null;
-                        this.BPStatus = isSystolicValid ? this.getBloodPressureStatus(col.colData[0].value, col.colData[1].value) : {};
-                        this.updateBP(col.colData[0].value, col.colData[1].value);
-                    }
-
-                    if (col.colData[0].inputHeader == "Height*") {
-                        const isHeightValid =
-                            this.vitalsInstance.validator(col.colData[0]) == null && this.vitalsInstance.validator(col.colData[1]) == null;
-                        this.BMI = isHeightValid ? this.setBMI(col.colData[1].value, col.colData[0].value) : {};
-                        this.updateBMI();
-                    }
-
-                    col.colData.some((input: any, inputIndex: any) => {
-                        const validateResult = this.vitalsInstance.validator(input);
-                        if (validateResult?.length > 0) {
-                            this.hasValidationErrors.push("false");
-                            if (input.inputHeader === inputData.inputHeader) {
-                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsError = true;
-                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage =
-                                    validateResult.flat(Infinity)[0];
-                                return true;
-                            }
-                        } else {
-                            this.hasValidationErrors.push("true");
-                            this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsError = false;
-                            this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
+                if (section?.data?.rowData) {
+                    section?.data?.rowData.forEach((col: any, colIndex: any) => {
+                        if (col.colData[0].inputHeader == "Systolic Pressure*") {
+                            const isSystolicValid =
+                                this.vitalsInstance.validator(col.colData[0]) == null && this.vitalsInstance.validator(col.colData[1]) == null;
+                            this.BPStatus = isSystolicValid ? this.getBloodPressureStatus(col.colData[0].value, col.colData[1].value) : {};
+                            this.updateBP(col.colData[0].value, col.colData[1].value);
                         }
 
-                        return false;
+                        if (col.colData[0].inputHeader == "Height*") {
+                            const isHeightValid =
+                                this.vitalsInstance.validator(col.colData[0]) == null && this.vitalsInstance.validator(col.colData[1]) == null;
+                            this.BMI = isHeightValid ? this.setBMI(col.colData[1].value, col.colData[0].value) : {};
+                            this.updateBMI();
+                        }
+
+                        col.colData.some((input: any, inputIndex: any) => {
+                            const validateResult = this.vitalsInstance.validator(input);
+                            if (validateResult?.length > 0) {
+                                this.hasValidationErrors.push("false");
+                                if (input.inputHeader === inputData.inputHeader) {
+                                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsError = true;
+                                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage =
+                                        validateResult.flat(Infinity)[0];
+                                    return true;
+                                }
+                            } else {
+                                this.hasValidationErrors.push("true");
+                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsError = false;
+                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
+                            }
+
+                            return false;
+                        });
                     });
-                });
+                }
             });
 
             this.vitals.validationStatus = !this.hasValidationErrors.includes("false");
@@ -151,7 +185,7 @@ export default defineComponent({
             vitals.value = this.BMI?.result ?? "";
         },
         async updateBP(systolic: any, diastolic: any) {
-            const vitals = this.vitals[1].alerts[0];
+            const vitals = this.vitals[2]?.alerts[0] ?? [];
             const bpColor = this.BPStatus?.colors ?? [];
             vitals.icon = iconBloodPressure(bpColor);
             vitals.backgroundColor = bpColor[0];

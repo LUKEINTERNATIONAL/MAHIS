@@ -51,7 +51,7 @@
         </div>
         <div
             class="no_content"
-            v-if="clinicalNotes.length == 0 && !vitals[0].alerts[0].backgroundColor && !vitals[1].data.rowData[0].colData[0].value"
+            v-if="clinicalNotes.length == 0 && !vitals[0].alerts[0].backgroundColor && !vitals[2].data.rowData[0].colData[0].value"
         >
             <div>
                 <div class="no_content_title">No notes added today.</div>
@@ -105,7 +105,6 @@ export default defineComponent({
         };
     },
     async mounted() {
-        console.log(this.vitals[1].data.rowData[0].colData[0].value);
         this.weight = (await ObservationService.getFirstObs(this.demographics.patient_id, "weight")) || "";
         this.Height = (await ObservationService.getFirstObs(this.demographics.patient_id, "Height")) || "";
         this.Systolic = (await ObservationService.getFirstObs(this.demographics.patient_id, "Systolic")) || "";

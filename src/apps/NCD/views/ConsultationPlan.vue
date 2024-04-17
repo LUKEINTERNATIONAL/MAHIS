@@ -150,8 +150,8 @@ export default defineComponent({
 
     methods: {
         async getData() {
-            const steps = ["Vital Signs", "Investigations", "Diagnosis", "Complications Screening", "Treatment Plan", "Next Appointment", "Outcome"];
-            // const steps = this.activities;
+            // const steps = ["Vital Signs", "Investigations", "Diagnosis", "Complications Screening", "Treatment Plan", "Next Appointment", "Outcome"];
+            const steps = this.activities;
             for (let i = 0; i < steps.length; i++) {
                 const title = steps[i];
                 const number = i + 1;
