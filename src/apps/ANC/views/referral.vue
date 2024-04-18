@@ -84,7 +84,7 @@ export default defineComponent ({
       //   // Redirect to counselling page
       //   this.$router.push('counselling');
       // }, 8000); // Simulate a 2-second delay
-      this.$router.push("Treatment");
+      this.$router.push("ANCHome");
     },
   },
 });
