@@ -9,6 +9,7 @@ import physicalExamination from "@/apps/ANC/views/physicalExamination.vue";
 import headssAssessment from "@/apps/ANC/views/headssAssessment.vue";
 import ANCTreatment from "@/apps/ANC/views/ANCTreatment.vue";
 import referral from "@/apps/ANC/views/referral.vue";
+import ANCreferral from "@/apps/ANC/views/ANCreferral.vue";
 
 
 export default [
@@ -68,6 +69,11 @@ export default [
     path: '/labTests',
     name: 'labTests',
     component: LabTests
+  },
+  {
+    path: '/ancReferral',
+    name: 'ancReferral',
+    component: ANCreferral
   },
 
 ];

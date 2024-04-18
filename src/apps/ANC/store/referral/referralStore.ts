@@ -77,27 +77,25 @@ export const useReferralStore = defineStore('referralStore',{
                     header:{
                         title: 'Referral for urgent care',
                         selectedValue: '',
+                        class:"bold",
                         name:'referalOption'
                     },
                     data:[
                         {  
                             name: referralForm.referralForUrgentCareYes.name,
                             value: referralForm.referralForUrgentCareYes.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "2.5",
                         },
                         { 
                             name: referralForm.referralForUrgentCareNo.name,
                             value: referralForm.referralForUrgentCareNo.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "2.5",
                         },
                     ]
                 }
             },
             {
+
                 selectdData: [],
                 isFinishBtn: false,
                 radioBtnContent:{
@@ -105,6 +103,7 @@ export const useReferralStore = defineStore('referralStore',{
                         title: 'Reason for referral',
                         selectedValue: '',
                         displayNone: true,
+                        class:"bold",
                         name:"referralOutcome",
                     },
                     data:[
@@ -112,14 +111,14 @@ export const useReferralStore = defineStore('referralStore',{
                             name: referralForm.referralScreeningDiagnostics.name,
                             value: referralForm.referralScreeningDiagnostics.value,
                             labelPlacement:'start',
-                            colSize: "7",
+                            colSize: "2.5",
                             justify:"space-between" 
                         },
                         { 
                             name: referralForm.referralGeneralServices.name,
                             value: referralForm.referralGeneralServices.value,
                             labelPlacement:'start',
-                            colSize: "7",
+                            colSize: "2.5",
                             justify:"space-between" 
                         },
                     ]
@@ -132,22 +131,19 @@ export const useReferralStore = defineStore('referralStore',{
                 radioBtnContent:{
                     header:{
                         title: 'Any treatment given before referral',
+                        class:"bold",
                         selectedValue: ''
                     },
                     data:[
                         {  
                             name: referralForm.treatmentBeforeReferralYes.name,
                             value: referralForm.treatmentBeforeReferralYes.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "2.5",
                         },
                         { 
                             name: referralForm.treatmentBeforeReferralNo.name,
                             value: referralForm.treatmentBeforeReferralNo.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "2.5",
                         },
                     ]
                 }
@@ -169,7 +165,6 @@ export const useReferralStore = defineStore('referralStore',{
                                     name: referralForm.dateScheduledReferral.name,
                                     value: referralForm.dateScheduledReferral.value,
                                     eventType: 'input',
-                                    inputWidth: "300px",
                                     required: true,
                                     isDatePopover: true
                                 },
@@ -178,7 +173,6 @@ export const useReferralStore = defineStore('referralStore',{
                                     name: referralForm.timeScheduledReferral.name,
                                     value: referralForm.timeScheduledReferral.value,
                                     eventType: 'input',
-                                    inputWidth: "300px",
                                     required: true
                                 }
                                 
@@ -204,7 +198,6 @@ export const useReferralStore = defineStore('referralStore',{
                                     name: referralForm.locationOfreferral.name,
                                     value: referralForm.locationOfreferral.value,
                                     eventType: 'input',
-                                    inputWidth: "300px",
                                     required: true
                                 },
                                 
@@ -231,7 +224,6 @@ export const useReferralStore = defineStore('referralStore',{
                                     name: referralForm.dateReferralMade.name,
                                     value: referralForm.dateReferralMade.value,
                                     eventType: 'input',
-                                    inputWidth: "300px",
                                     required: true,
                                     isDatePopover: true
                                 },
@@ -240,7 +232,6 @@ export const useReferralStore = defineStore('referralStore',{
                                     name: referralForm.timeReferralMade.name,
                                     value: referralForm.timeReferralMade.value,
                                     eventType: 'input',
-                                    inputWidth: "300px",
                                     required: true
                                 }
                                 
@@ -266,7 +257,6 @@ export const useReferralStore = defineStore('referralStore',{
                                     name: referralForm.providerFacility.name,
                                     value: referralForm.providerFacility.value,
                                     eventType: 'input',
-                                    inputWidth: "300px",
                                     required: true
                                 },
                                     {
@@ -275,27 +265,8 @@ export const useReferralStore = defineStore('referralStore',{
                                     name: referralForm.providerPhoneNumber.name,
                                     value: referralForm.providerPhoneNumber.value,
                                     eventType: 'input',
-                                    inputWidth: "300px",
                                     required: true
                                 },
-                                    {
-                                    inputHeader: 'Referral notes',
-                                    icon: icons.editPen,
-                                    name: referralForm.referralNotes.name,
-                                    value: referralForm.referralNotes.value,
-                                    eventType: 'input',
-                                    inputWidth: "300px",
-                                    required: true
-                                },
-                                    {
-                                    inputHeader: 'Client history summary',
-                                    icon: icons.editPen,
-                                    name: referralForm.clientHistorySummary.name,
-                                    value: referralForm.clientHistorySummary.value,
-                                    eventType: 'input',
-                                    inputWidth: "300px",
-                                    required: true
-                                }
                                 
                             ]
                         }
@@ -304,8 +275,42 @@ export const useReferralStore = defineStore('referralStore',{
                 }
                     
             },
-            
-           
+
+            {
+                classDash: 'dashed_bottom_border',
+                header:{
+                    title: 'Provider who made the referral',
+                    selectedValue: ''
+                },
+                data:{
+                    rowData:[
+                        {
+                            colData:[
+                                {
+                                    inputHeader: 'Referral notes',
+                                    icon: icons.editPen,
+                                    name: referralForm.referralNotes.name,
+                                    value: referralForm.referralNotes.value,
+                                    eventType: 'input',
+                                    required: true
+                                },
+                                {
+                                    inputHeader: 'Client history summary',
+                                    icon: icons.editPen,
+                                    name: referralForm.clientHistorySummary.name,
+                                    value: referralForm.clientHistorySummary.value,
+                                    eventType: 'input',
+                                    required: true
+                                }
+
+                            ]
+                        }
+                    ],
+
+                }
+
+            },
+
         ] as any,
     }),
         actions:{
