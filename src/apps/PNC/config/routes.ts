@@ -4,6 +4,7 @@ import postnatalBabyStatus from "@/apps/PNC/views/postnatalBabyStatus.vue";
 import postnatalVisit from "@/apps/PNC/views/postnatalVisit.vue";
 import dischargeWoman from "@/apps/PNC/views/dischargeWoman.vue";
 import pncEnd from "@/apps/PNC/views/pncEnd.vue";
+import home from "@/apps/PNC/views/home.vue";
 
 export default [
     {
@@ -31,6 +32,11 @@ export default [
         path: '/pnc/pncEnd',
         name: 'pncEnd',
         component: pncEnd
+    },
+    {
+        path: '/pnc/home',
+        name: 'home',
+        component: home
     },
 
 

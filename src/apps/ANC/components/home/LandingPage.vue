@@ -6,7 +6,6 @@
             <ion-card color="secondary">
     <ion-card-header>
       <ion-card-title>Profile</ion-card-title>
-     
     </ion-card-header>
 
     <ion-card-content>   

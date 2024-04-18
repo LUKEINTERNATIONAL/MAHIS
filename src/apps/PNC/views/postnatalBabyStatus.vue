@@ -140,6 +140,7 @@ export default defineComponent({
       });
     },
     saveData(){
+      this.$router.push("home");
 
     },
 

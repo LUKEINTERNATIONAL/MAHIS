@@ -158,8 +158,10 @@ export default defineComponent({
       });
     },
     saveData(){
-      this.saveVitals()
-      this.saveOtherExams()      
+      this.$router.push("labourHome");
+
+      // this.saveVitals()
+      // this.saveOtherExams()
     },
     async saveVitals(){
       console.log( await this.buildVitals())
