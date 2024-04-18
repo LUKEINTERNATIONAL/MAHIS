@@ -63,6 +63,8 @@ import { defineComponent } from "vue";
 import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import { resetPatientData } from "@/services/reset_data";
+import { PatientReferralService } from '@/services/patient_referral_service'
+import { PatientAdmitService } from '@/services/patient_admit_service'
 import {
     modifyRadioValue,
     getRadioSelectedValue,
@@ -98,7 +100,6 @@ export default defineComponent({
     },
     data() {
         return {
-            dispositions: "" as any,
             wizardData: [] as any,
             StepperData: [] as any,
             isOpen: false,
@@ -112,6 +113,7 @@ export default defineComponent({
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
         ...mapState(useGeneralStore, ["saveProgressStatus", "activities"]),
+        ...mapState(useOutcomeStore, ["dispositions"]),
     },
     created() {
         this.getData();
@@ -222,6 +224,17 @@ export default defineComponent({
                     checked: false,
                 });
             }
+
+            if (this.dispositions.length > 0) {
+                modifyWizardData(this.wizardData, "Outcome", {
+                    checked: true,
+                    class: "open_step common_step",
+                });
+            } else {
+                modifyWizardData(this.wizardData, "Outcome", {
+                    checked: false,
+                });
+            }
         },
 
         getFormatedData(data: any) {
@@ -286,16 +299,48 @@ export default defineComponent({
         },
 
         async saveOutComeStatus() {
-            // const userID: any = Service.getUserID()
-            // const patientID = this.demographics.patient_id
-            // if (!isEmpty(this.dispositions)) {
-            //     for (let key in this.dispositions) {
-            //         if (this.dispositions[key].type == 'Admit') {
-            //             console.log(this.dispositions[key])
-            //         } else {
-            //         }
-            //     }
-            // }
+            const userID: any = Service.getUserID()
+            const patientID = this.demographics.patient_id
+
+            
+            if (!isEmpty(this.dispositions)) {
+                this.dispositions.forEach(async (disposition: any) => {
+
+                    if (disposition.type == 'Admitted for short stay') {
+
+                        const prePayload = 
+                        {
+                            obs_datetime: disposition.date.year+'-'+disposition.date.month+'-'+disposition.date.day,
+                            concept_id:  disposition.concept_id,
+                            value_text: disposition.name,
+                        } as any
+                        
+                        const admissionOutcome = new PatientAdmitService(patientID, userID)
+                        const obs = await admissionOutcome.buildValueText('Admit to ward', prePayload.value_text)
+                        obs.obs_datetime = prePayload.obs_datetime
+                        obs.value_text = prePayload.value_text
+                        await admissionOutcome.createEncounter()
+                        await admissionOutcome.saveObservationList([obs] as any)
+                        
+                    } 
+                    if (disposition.type == 'Referred out') {
+                        const prePayload = 
+                        {
+                            obs_datetime: disposition.date.year+'-'+disposition.date.month+'-'+disposition.date.day,
+                            concept_id:  disposition.concept_id,
+                            value_text: disposition.name,
+                            location_id: disposition.other.location_id
+                        } as any
+                        
+                        const referralOutcome = new PatientReferralService(patientID, userID)
+                        const obs = await referralOutcome.buildValueText('Referred', prePayload.value_text)
+                        obs.obs_datetime = prePayload.obs_datetime
+                        obs.value_text = prePayload.location_id
+                        await referralOutcome.createEncounter()
+                        await referralOutcome.saveObservationList([obs] as any)
+                    }
+                }) 
+            }
         },
         openModal() {
             createModal(SaveProgressModal);

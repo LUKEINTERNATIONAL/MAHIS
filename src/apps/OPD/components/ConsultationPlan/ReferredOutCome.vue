@@ -162,7 +162,7 @@ async function findWardName(data: any) {
         if (!uniqueLocations.has(item.location_id)) {
             uniqueLocations.add(item.location_id)
             if (isEmpty(item.name) == false) {
-                FacilityData.value.push({name: item.name,selected: false})
+                FacilityData.value.push({name: item.name,selected: false, other: item})
             }
         }
     })
@@ -220,6 +220,7 @@ function saveDataToStores() {
         type: 'Referred out',
         date: date_properties[0].dataValue,
         reason: note_properties[0].dataValue,
+        other: temp_data_v[0].other
         // dataItem: refDataItem.value,
     }
 
