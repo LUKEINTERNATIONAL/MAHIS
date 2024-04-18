@@ -1,40 +1,5 @@
 import { defineStore } from "pinia";
 
-const ipvForm ={
-    ongoingStress:{
-        name:"Ongoing stress",
-        value: "ongoingStress"
-    },
-        injuryToAbdomen:{
-        name:"Injury to abdomen",
-        value: "injuryToAbdomen"
-    },  
-        womanHusbandIntrusiveDuringConsultations:{
-        name:"Partner's intrusive during consultations",
-        value: "womanHusbandIntrusiveDuringConsultations"
-    },
-        misuseOfAlcohol:{
-        name:"Misuse of alcohol",
-        value: "misuseOfAlcohol"
-    },  
-       unspecifiedHarmfulBehaviours:{
-        name:"Unspecified harmful behaviours",
-        value: "unspecifiedHarmfulBehaviours"
-    },
-        thoughtsOfSelfHarm:{
-        name:"Thoughts of self-harm",
-        value: "thoughtsOfSelfHarm"
-    },
-       unwantedPregnancies:{
-        name:"Unwanted Pregnancies",
-        value: "unwantedPregnancies"
-       },
-        misuseOfDrugs:{
-        name:"Misuse of drugs",
-        value: "misuseOfDrugs"
-       }
-}
-
 export const useIpvStore = defineStore('ipvStore',{
     state: ()=>({
         ipv:[

@@ -2,22 +2,6 @@
     <ion-grid>
        <ion-row>
         <ion-col>
-<<<<<<< HEAD
-=======
-            <router-link to="/profile">
-            <ion-card color="secondary">
-    <ion-card-header>
-      <ion-card-title>Profile</ion-card-title>
-    </ion-card-header>
-
-    <ion-card-content>   
-      <img src="../../public/icons/girl.png" alt="Profile Icon"/> 
-    </ion-card-content>
-  </ion-card>
-</router-link>
-        </ion-col>
-        <ion-col>
->>>>>>> f04755f4fb731c32e5b7ab84da0d5bc3f8ca1dad
             <router-link to="/quickCheck">
             <ion-card color="secondary">
     <ion-card-header>
