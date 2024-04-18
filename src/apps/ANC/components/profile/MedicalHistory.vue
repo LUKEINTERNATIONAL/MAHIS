@@ -3,31 +3,31 @@
     <div class="container">
          <!-- Past Surgeries -->
             <ion-card class="section">
-            <ion-card-header>
-                <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title>
-            </ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="medicalHistory"></basic-form>
+                <basic-form
+                    :contentData="medicalHistory"
+                    :initialData="initialData"
+                ></basic-form>
             </ion-card-content>
             </ion-card>
 
          <!-- Allegies -->
           <ion-card  class="section">
-            <ion-card-header>
-                <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title>
-            </ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="allegy"></basic-form>
+                <basic-form
+                    :contentData="allegy"
+                    :initialData="initialData1"
+                ></basic-form>
             </ion-card-content>
             </ion-card>
 
         <!-- Chronical Health conditions -->
             <ion-card class="section">
-            <ion-card-header>
-                <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title>
-            </ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="exisitingChronicHealthConditions"></basic-form>
+                <basic-form
+                    :contentData="exisitingChronicHealthConditions"
+                    :initialData="initialData2"
+                ></basic-form>
             </ion-card-content>
             </ion-card>
 
@@ -116,7 +116,10 @@ export default defineComponent({
     },
     data(){
         return{
-            currentSection: 0
+            currentSection: 0,
+            initialData:[] as any,
+            initialData1:[] as any,
+            initialData2:[] as any,
         }
     },
     mounted(){
@@ -131,6 +134,9 @@ export default defineComponent({
         const syphilisTest = useMedicalHistoryStore()
         const  hKTMI = useMedicalHistoryStore()
         const  otherSite = useMedicalHistoryStore()
+        this.initialData=medicalHistory.getInitial()
+        this.initialData1=allegy.getInitial1()
+        this.initialData2=exisitingChronicHealthConditions.getInitial2()
         this.handleHivResults()
         this.handleSyphilis()
         this.handleSurgries()
@@ -209,14 +215,11 @@ export default defineComponent({
          {
            modifyFieldValue(this.exisitingChronicHealthConditions,'HIV test date', 'displayNone', false)
            modifyRadioValue(this.exisitingChronicHealthConditions, 'Is client on ART','displayNone', false)
-           modifyFieldValue(this.exisitingChronicHealthConditions,'facility for art', 'displayNone', false)
 
 
          }else {
            modifyFieldValue(this.exisitingChronicHealthConditions,'HIV test date', 'displayNone', true)
            modifyRadioValue(this.exisitingChronicHealthConditions, 'Is client on ART','displayNone', true)
-           modifyFieldValue(this.exisitingChronicHealthConditions,'facility for art', 'displayNone', true)
-
          }
       },
         handleHivResults(){
@@ -253,11 +256,6 @@ export default defineComponent({
 
         },
         handleSurgries(){
-            if(getCheckboxSelectedValue(this.medicalHistory,'Other')?.value == 'otherSurguries'){
-                modifyFieldValue(this.medicalHistory,'specify','displayNone',false)
-            }else{
-                modifyFieldValue(this.medicalHistory,'specify','displayNone',true)
-            }
             const checkBoxes=["Dilation and currettage","Myomectomy","Removal of ovarian cystst",
                               "Oophorectomy","Salpingectomy","Cervical cone", "Other",]
 
@@ -276,11 +274,7 @@ export default defineComponent({
         },
 
         handleAllergies(){
-            if(getCheckboxSelectedValue(this.allegy,'Other')?.value =='otherAllergies'){
-                modifyFieldValue(this.allegy,'other',"displayNone",false)
-            }else{
-                modifyFieldValue(this.allegy,'other',"displayNone",true)
-            }
+
             const checkBoxes = ['Other','PrEP(TDF)','Albendazole','Aluminium-hydroxide',
                                  'Calcium','Chamomile','Folic-acid','Ginger','Fish',
                                 'Iron','sulfadoxine-pyrimethamine','Mebendazole','Penicillin'];
@@ -298,11 +292,7 @@ export default defineComponent({
 
         },
         handleChronicCondition(){
-            if(getCheckboxSelectedValue(this.exisitingChronicHealthConditions,'Other')?.value =='other'){
-                modifyFieldValue(this.exisitingChronicHealthConditions,'Specify',"displayNone",false)
-            }else{
-                modifyFieldValue(this.exisitingChronicHealthConditions,'Specify',"displayNone",true)
-            }
+
             const checkBoxes=["Auto immune desease","Asthma","Sickle cell","Anemia", "HIV positive",
                              "Thalassemia","Gynaecological","CCF","RHD","Gestational diabetes",
                              "pre-existing type 1","pre-existing type 2","Epilespy","Hypertension","Kidney","TB","Mental  illiness","Other"]

@@ -120,6 +120,13 @@ import DynamicButton from "@/components/DynamicButton.vue";
 import Vitals from "@/apps/ANC/components/physical exam/Vitals.vue";
 import PastObstetricHistory from "@/apps/ANC/components/profile/PastObstreticHistory.vue";
 import HeadAssessment from "@/apps/ANC/components/others/headAssessment.vue";
+import ANCDiagnosis from "@/apps/ANC/components/ANCtreatment/ANCDiagnosis.vue";
+import ANCTreatment from "@/apps/ANC/components/ANCtreatment/ANCTreatment.vue";
+import ANCDiagnosisCounselling from "@/apps/ANC/components/ANCtreatment/ANCDiagnosisCounselling.vue";
+import ANCImmunization from "@/apps/ANC/components/ANCtreatment/ANCImmunization.vue";
+import ANCIntimatePartner from "@/apps/ANC/components/ANCtreatment/ANCIntimatePartner.vue";
+import ANCMedicationDispensed from "@/apps/ANC/components/ANCtreatment/ANCMedicationDispensed.vue";
+import ANCDeworming from "@/apps/ANC/components/ANCtreatment/ANCDeworming.vue";
 
 export default defineComponent({
     name: "Home",
@@ -183,7 +190,14 @@ export default defineComponent({
       Immunization,
       IntimatePartner,
       Deworming,
-      HeadAssessment
+      HeadAssessment,
+      ANCTreatment,
+      ANCDiagnosis,
+      ANCDiagnosisCounselling,
+      ANCImmunization,
+      ANCIntimatePartner,
+      ANCMedicationDispensed,
+      ANCDeworming,
     },
     data() {
         return {

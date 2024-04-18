@@ -8,18 +8,18 @@
                         <ion-card style="margin-bottom: 20px; background-color: #fff">
                             <div class="p_name_image">
                                 <div class="first_letter">
-                                    {{ demographics.name.charAt(0) }}
+                                    {{ demographics?.name.charAt(0) }}
                                 </div>
-                                <div class="p_name">{{ demographics.name }}</div>
+                                <div class="p_name">{{ demographics?.name }}</div>
                             </div>
                             <ion-card-content>
                                 <ion-row>
                                     <ion-col size="4">MRN</ion-col>
-                                    <ion-col>{{ demographics.mrn }}</ion-col>
+                                    <ion-col>{{ demographics?.mrn }}</ion-col>
                                 </ion-row>
                                 <ion-row>
                                     <ion-col size="4">Gendar</ion-col>
-                                    <ion-col>{{ covertGender(demographics.gender) }}</ion-col>
+                                    <ion-col>{{ covertGender(demographics?.gender) }}</ion-col>
                                 </ion-row>
                                 <ion-row>
                                     <ion-col size="4">Age</ion-col>
@@ -35,18 +35,21 @@
                                 </ion-row>
                             </ion-card-content>
                         </ion-card>
-                        <ion-card class="start_new_co" style="margin-bottom: 20px" @click="handleNCD()">
+
+                        <ion-card class="start_new_co" v-if="programAccess('NCD PROGRAM')" style="margin-bottom: 20px" @click="handleNCD()">
                             {{ NCDProgramActionName }}
                         </ion-card>
-                        <ion-card class="start_new_co" style="margin-bottom: 20px">
+                        <ion-card class="start_new_co" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">
                             <router-link to="/profile">+ Enroll in ANC Program</router-link>
                         </ion-card>
-                        <ion-card class="start_new_co" style="margin-bottom: 20px"> + Enroll in Labour and delivery program </ion-card>
-                        <ion-card class="start_new_co" style="margin-bottom: 20px"> + Enroll in PNC program </ion-card>
-                        <ion-card class="start_new_co" style="margin-bottom: 20px" @click="handleOPD()"> {{ OPDProgramActionName }}</ion-card>
-
-                        <router-link to="/dispensation">
-                            <ion-card class="start_new_co" style="margin-bottom: 20px">+ Dispense Medication </ion-card></router-link
+                        <ion-card class="start_new_co" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">
+                            + Enroll in Labour and delivery program
+                        </ion-card>
+                        <ion-card class="start_new_co" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">
+                            + Enroll in PNC program
+                        </ion-card>
+                        <ion-card class="start_new_co" v-if="programAccess('OPD Program')" style="margin-bottom: 20px" @click="handleOPD()">
+                            {{ OPDProgramActionName }}</ion-card
                         >
 
                         <ion-card style="margin-bottom: 20px; background-color: #fff">
@@ -284,12 +287,21 @@ export default defineComponent({
                 return []; // Return an empty array in case of error
             }
         },
-
+        programAccess(programName: string): boolean {
+            const accessPrograms: any = sessionStorage.getItem("userPrograms");
+            const programs: any = JSON.parse(accessPrograms);
+            if (programs.some((program: any) => program.name === programName)) {
+                return true;
+            } else {
+                return false;
+            }
+        },
         async setNCDValue() {
             const generalStore = useGeneralStore();
             generalStore.setActivity(await this.getUserActivities("NCD_activities"));
             sessionStorage.setItem("app", JSON.stringify({ programID: 32, applicationName: "NCD" }));
             const patient = new PatientService();
+            console.log("🚀 ~ setNCDValue ~ patient:", patient.getNcdNumber());
             if (patient.getNcdNumber() != "Unknown") {
                 if (this.saveProgressStatus) {
                     this.NCDProgramActionName = "+ Continue NCD consultation";
@@ -335,7 +347,7 @@ export default defineComponent({
             return ["Male", "M"].includes(gender) ? "Male" : ["Female", "F"].includes(gender) ? "Female" : "";
         },
         formatBirthdate() {
-            return HisDate.getBirthdateAge(this.demographics.birthdate);
+            return HisDate.getBirthdateAge(this.demographics?.birthdate);
         },
     },
 });

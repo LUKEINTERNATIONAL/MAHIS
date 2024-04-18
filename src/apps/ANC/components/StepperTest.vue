@@ -124,6 +124,11 @@ import Referral from "@/apps/ANC/components/referral/Referral.vue";
 import AncEnd from "@/apps/ANC/components/ancEnd/AncEnd.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
+import ANCDiagnosisTreatment from "@/apps/ANC/components/ANCtreatment/ANCDiagnosis.vue";
+import ANCImmunization from "@/apps/ANC/components/ANCtreatment/ANCImmunization.vue";
+import ANCIntimatePartner from "@/apps/ANC/components/ANCtreatment/ANCIntimatePartner.vue";
+import ANCMedicationDispensed from "@/apps/ANC/components/ANCtreatment/ANCMedicationDispensed.vue";
+import ANCDiagnosisCounselling from "@/apps/ANC/components/ANCtreatment/ANCDiagnosisCounselling.vue";
 export default defineComponent({
     name: "Home",
     components: {
@@ -147,9 +152,8 @@ export default defineComponent({
         IonLabel,
         Diagnosis,
         ConfirmDiagnosis,
-        Outcome,
-        TreatmentPlan,
         IonModal,
+      MedicationDispensed,
         Medications,
         WomanBehaviour,
         MedicalHistory,
@@ -182,6 +186,12 @@ export default defineComponent({
         Immunization,
         IntimatePartner,
         Deworming,
+
+      ANCDiagnosisTreatment,
+      ANCDiagnosisCounselling,
+      ANCImmunization,
+      ANCIntimatePartner,
+      ANCMedicationDispensed
     },
     data() {
         return {

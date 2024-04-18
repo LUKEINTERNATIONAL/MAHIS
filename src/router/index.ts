@@ -2,9 +2,10 @@ import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { RouteRecordRaw } from "vue-router";
 import HomePage from "../views/HomePage.vue";
 import Login from "../views/Login.vue";
-import users from  "../views/UserManagement/users.vue"
+import users from "../views/UserManagement/users.vue";
 import PatientProfile from "../views/PatientProfile.vue";
 import PatientRegistration from "@/views/Registration.vue";
+import setSessionDate from "@/views/Configurations/SessionDate.vue";
 import { alertController, loadingController, modalController, toastController } from "@ionic/vue";
 
 import NCD from "@/apps/NCD/config/routes";
@@ -32,6 +33,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/patientProfile",
         name: "patientProfile",
         component: PatientProfile,
+    },
+    {
+        path: "/setSessionDate",
+        name: "setSessionDate",
+        component: setSessionDate,
     },
     {
         path: "/registration/:registrationType",

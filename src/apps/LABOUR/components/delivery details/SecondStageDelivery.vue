@@ -1,27 +1,28 @@
 <template>
   <div class="container">
     <ion-card class="section">
-      <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="secondStageDetails" ></basic-form>
+        <basic-form
+            :contentData="secondStageDetails"
+            :initialData="initialData"
+        ></basic-form>
       </ion-card-content>
     </ion-card>
     <ion-card class="section">
-      <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="newbornComplications" ></basic-form>
+        <basic-form
+            :contentData="newbornComplications"
+            :initialData1="initialData1"
+        ></basic-form>
       </ion-card-content>
     </ion-card>
     <ion-card class="section">
-      <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="secondStageDetails" ></basic-form>
-      </ion-card-content>
-    </ion-card>
-    <ion-card class="section">
-      <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
-      <ion-card-content>
-        <basic-form :contentData="obstetricComplications" ></basic-form>
+        <basic-form
+            :contentData="obstetricComplications"
+            :initialData2="initialData2"
+
+        ></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
@@ -54,7 +55,7 @@ import {
   getFieldValue,
 } from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
-import {useReferralStore} from "@/apps/LABOUR/stores/repeatable things/referral";
+//import {useReferralStore} from "@/apps/LABOUR/stores/repeatable things/referral";
 import {useEndLabourStore} from "@/apps/LABOUR/stores/repeatable things/labourAndDeliveryEnd";
 import {useSecondStageOfLabourStore} from "@/apps/LABOUR/stores/delivery details/secondStageDelivery";
 export default defineComponent({
@@ -84,6 +85,9 @@ export default defineComponent({
       vValidations: '' as any,
       hasValidationErrors: [] as any,
       inputField: '' as any,
+      initialData:[] as any,
+      initialData1:[] as any,
+      initialData2:[] as any,
 
     };
   },
@@ -94,6 +98,12 @@ export default defineComponent({
     ...mapState(useSecondStageOfLabourStore,["obstetricComplications"]),
   },
   mounted(){
+    const secondStageDetails=useSecondStageOfLabourStore()
+    const newbornComplications=useSecondStageOfLabourStore()
+    const obstetricComplications=useSecondStageOfLabourStore()
+    this.initialData=secondStageDetails.getInitial()
+    this.initialData1=newbornComplications.getInitial1()
+    this.initialData2=obstetricComplications.getInitial2()
   },
   watch:{
   },

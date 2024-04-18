@@ -3,12 +3,12 @@ import counselling from '../views/counselling.vue';
 import ancEnd from '../views/ancEnd.vue';
 import Profile from '../views/Profile.vue';
 import QuickCheck from '@/apps/ANC/views/QuickCheck.vue';
-import Treatment from '../views/Treatment.vue'
+import Treatment from "@/apps/ANC/views/Treatment.vue";
 import LabTests from '../views/LabTests.vue';
 import referral from '../views/referral.vue';
 import physicalExamination from "@/apps/ANC/views/physicalExamination.vue";
 import headssAssessment from "@/apps/ANC/views/headssAssessment.vue";
-import ANCHome from "@/apps/ANC/views/ANCHome.vue";
+import ANCTreatment from "@/apps/ANC/views/ANCTreatment.vue";
 
 
 export default [
@@ -60,14 +60,19 @@ export default [
     component: Treatment
   },
   {
+    path: '/ANCtreatment',
+    name: 'ANCTreatment',
+    component: ANCTreatment
+  },
+  {
     path: '/labTests',
     name: 'labTests',
     component: LabTests
   },
   {
-    path: '/ANCHome',
-    name: 'ANCHome',
-    component: ANCHome
+    path: "/ANCHome",
+    name: "ANCHome",
+    component: ANCHome,
   },
-]
+];
 

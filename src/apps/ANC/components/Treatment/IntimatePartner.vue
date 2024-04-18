@@ -122,6 +122,7 @@ export default defineComponent ({
         this.handleIntimate()
         this.handleOtherIpv()
         this.handleReferal()
+        this.handleOtherReferal()
     },
     watch:{
       ipv:{
@@ -134,42 +135,28 @@ export default defineComponent ({
       referrals:{
         handler(){
           this.handleReferal()
+          this.handleOtherReferal()
         },deep:true
       }
     },
     methods :{
-        goToNextSection() {
-      if (this.currentSection < 5) {
-        this.currentSection++;
-      }
-    },
-    goToPreviousSection() {
-      if (this.currentSection > 0) {
-        this.currentSection--;
-      }
-    },
       handleIntimate(){
         if(getRadioSelectedValue(this.ipv,'intimateInfo')=='no'){
-          modifyRadioValue(this.ipv,'reasonIPV','displayNone',false)
+          modifyRadioValue(this.ipv,'IPV firstline support','displayNone',false)
         }else{
-          modifyRadioValue(this.ipv,'reasonIPV','displayNone',true)
+          modifyRadioValue(this.ipv,'IPV firstline support','displayNone',true)
         }
       },
       handleOtherIpv(){
-        if(getRadioSelectedValue(this.ipv,'reasonIPV')=='other'){
+        if(getRadioSelectedValue(this.ipv,'IPV firstline support')=='other'){
           modifyFieldValue(this.ipv,'other','displayNone',false)
         }else{
            modifyFieldValue(this.ipv,'other','displayNone',true)
         }
       },
       handleReferal(){
-        if(getCheckboxSelectedValue(this.referrals,'Other')?.value =='other'){
-          modifyFieldValue(this.referrals,'Specify','displayNone',false)
-        }else{
-          modifyFieldValue(this.referrals,'Specify','displayNone',true)
-        }
 
-        const checkBoxes=['Care at another facility',"         Care at another facility",'Crisis intervention or counselling','Police','Shelter or housing',
+        const checkBoxes=['Care at another facility',"Care at another facility",'Crisis intervention or counselling','Police','Shelter or housing',
                          'Shelter or housing','Child protection','Livelihood support','Other',]
 
       if (getCheckboxSelectedValue(this.referrals, 'None')?.checked) {
@@ -182,6 +169,13 @@ export default defineComponent ({
             modifyCheckboxValue(this.referrals, checkbox, 'disabled', false);
         });
     }
+      },
+      handleOtherReferal(){
+        if(getCheckboxSelectedValue(this.referrals,'first-line support')?.value =='other'){
+          modifyFieldValue(this.referrals,'Specify','displayNone',false)
+        }else{
+          modifyFieldValue(this.referrals,'Specify','displayNone',true)
+        }
       },
     }
 

@@ -106,7 +106,7 @@ export const useImmunizationStore = defineStore("immunizationStore", {
             {
               colData: [
                 {
-                  //displayNone: true,
+                  displayNone: true,
                   inputHeader: "Hep B-1 Date",
                   value: "",
                   name: "hepb1 Date",
@@ -165,7 +165,7 @@ export const useImmunizationStore = defineStore("immunizationStore", {
             {
               colData: [
                 {
-                  //displayNone: true,
+                  displayNone: true,
                   inputHeader: "Hep B-2 Date",
                   value: "",
                   name: "Hep B-2 Date",
@@ -225,7 +225,7 @@ export const useImmunizationStore = defineStore("immunizationStore", {
             {
               colData: [
                 {
-                  //displayNone: true,
+                  displayNone: true,
                   inputHeader: "Hep B-3 Date",
                   value: "",
                   name: "hep3Date",

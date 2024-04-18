@@ -56,6 +56,7 @@ import { Service } from "@/services/service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
 import { Preterms } from "../service/preterm";
+import { PastObstetricHistoryService } from "@/services/anc_profile_service";
 
 // function someChecked(options, errorMassage) {
 //   if (!options.filter(v => v.checkboxBtnContent).some(v => v.checkboxBtnContent.data.some(d => d.checked))) {
@@ -193,30 +194,6 @@ export default defineComponent({
 
     methods: {
         markWizard() {
-            //   if(this.medications.validationStatus){
-            //     this.wizardData[0].checked = true;
-            //     this.wizardData[0].class = 'open_step common_step'
-            //   }else{
-            //     this.wizardData[0].checked = false;
-            //   }
-            //   if(this.medicalHistory[0].selectdData.length > 0){
-            //     this.wizardData[1].checked = true;
-            //     this.wizardData[1].class = 'open_step common_step'
-            //   }else{
-            //     this.wizardData[1].checked = false;
-            //   }
-            //   if(this.womanBehaviour[0].selectdData.length > 0){
-            //     this.wizardData[2].checked = true;
-            //     this.wizardData[2].class = 'open_step common_step'
-            //   }else{
-            //     this.wizardData[2].checked = false;
-            //   }
-            //   if(this.medications[0].selectdData.length > 0){
-            //     this.wizardData[2].checked = true;
-            //     this.wizardData[2].class = 'open_step common_step'
-            //   }else{
-            //     this.wizardData[2].checked = false;  
-            //   }
         },
         deleteDisplayData(data: any) {
             return data.map((item: any) => {
@@ -236,15 +213,24 @@ export default defineComponent({
             this.saveCaffeinIntake()
         },
         async savePrevPregnancies(){
+        // if (this.prevPregnancies[0].selectedData.length > 0) {
+        //     const userID: any = Service.getUserID();
+        //     const PrevPregnancies = new PastObstetricHistoryService(this.demographics.patient_id, userID);
+        //     const encounter = await PrevPregnancies.createEncounter();
+        //     if (!encounter) return toastWarning("Unable to create Pregnancies encounter");
+        //     const patientStatus = await PrevPregnancies.saveObservationList(await this.buildPregnancyHistory());
+        //     if (!patientStatus) return toastWarning("Unable to create Pregnancies!");
+        //     toastSuccess("Prev Pregnancies has been created");
+        // }
             console.log(await this.buildPregnancyHistory())
         },
-        async savePreterm(){
+        async savePreterm(){    
         // if (this.preterm[0].selectedData.length > 0) {
         //     const userID: any = Service.getUserID();
-        //     const Preterm = new ProfileService(this.demographics.patient_id, userID);
+        //     const Preterm = new PastObstetricHistoryService(this.demographics.patient_id, userID);
         //     const encounter = await Preterm.createEncounter();
         //     if (!encounter) return toastWarning("Unable to create Preterm encounter");
-        //     const patientStatus = await Preterm.saveObservationList(await this.buildPastObstetricHistory());
+        //     const patientStatus = await Preterm.saveObservationList(await this.buildPreterm());
         //     if (!patientStatus) return toastWarning("Unable to create Preterm !");
         //     toastSuccess("Pretermhas been created");
         // }

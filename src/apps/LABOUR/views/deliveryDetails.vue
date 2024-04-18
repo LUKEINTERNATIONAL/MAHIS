@@ -88,14 +88,14 @@ export default defineComponent({
       ],
       StepperData:[
         {
-          'title': 'Second stage of labour',
-          'componet': 'SecondStageDelivery',
-          'value': '1'
+          title: 'Second stage of labour',
+          component: 'SecondStageDelivery',
+          value: '1'
         },
         {
-          'title': 'Third stage of labour',
-          'componet': 'ThirdStageDelivery',
-          'value': '2'
+          title: 'Third stage of labour',
+          component: 'ThirdStageDelivery',
+          value: '2'
         },
       ],
       isOpen: false,

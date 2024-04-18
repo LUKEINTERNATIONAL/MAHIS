@@ -184,7 +184,13 @@ export default defineComponent({
                 patient_id: item.patient_id,
             });
             resetPatientData();
-            this.$router.push(url);
+            const roleData: any = sessionStorage.getItem("userRoles");
+            const roles: any = JSON.parse(roleData);
+            if (roles.some((role: any) => role.role === "Pharmacist")) {
+                this.$router.push("dispensation");
+            } else {
+                this.$router.push(url);
+            }
         },
 
         openPopover(e: any) {

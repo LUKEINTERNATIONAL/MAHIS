@@ -1,1021 +1,839 @@
 import { defineStore } from "pinia"
 import { icons } from '@/utils/svg';
 
-const physiologicalCousellingForm ={
-    cousellingOnNonPharmacologicalYes:{
-        name:"Yes",
-        value:"yes"
+const initialPhysiologicalCounselling=[
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border',
+        radioBtnContent:{
+            header:{
+                class:"bold",
+                title: 'Counselling conducted on non-pharmacological measures to reduce nausea and vomiting?',
+                selectedValue: '',
+                name:'Counselling on non-pharmacological measures',
+                displayNext:'No'
+            },
+            data:[
+                {
+                    name: "Yes",
+                    value: "Yes",
+                    colSize: "2.5",
+                },
+                {
+                    name: "No",
+                    value: "No",
+                    colSize: "2.5",
+                },
+            ]
+        }
     },
-        cousellingOnNonPharmacologicalNo:{
-        name:"No",
-        value:"noPharmacological"
+    {
+        selectdData: [],
+        classDash: 'dashed_bottom_border',
+        childName:'Counselling on non-pharmacological measures',
+        sideColSize:0.5,
+        isFinishBtn: false,
+        radioBtnContent:{
+            header:{
+                class:'bold',
+                title: 'Reason counselling on non-pharmacological measures to reduce nausea and vomiting not conducted?',
+                selectedValue: '',
+                name:'Counselling on non-pharmacological measures not done',
+                displayNone:'true',
+                displayNext:"Other"
+            },
+            data:[
+                {
+                    name:'Client was referred',
+                    value: 'client was referred',
+                    colSize: "7",
+                },
+                {
+                    name: 'Other',
+                    value: 'Other',
+                    colSize: "7",
+                },
+            ]
+        }
     },
-        clientReferredOnNonPharmacological:{
-        name:"Client was referred",
-        value:"clientReferredOnNonPharmacological"
+    {
+        childName:'Counselling on non-pharmacological measures not done',
+        classDash: 'dashed_bottom_border',
+        sideColSize:0.5,
+        data:{
+            rowData:[
+                {
+                    colData:[
+                        {
+                            displayNone:true,
+                            inputHeader: 'Specify',
+                            icon: icons.editPen,
+                            name: "Other notes",
+                            value: "other notes",
+                            eventType: 'input',
+                            inputWidth: "82%",
+                            required: true
+                        }
+
+                    ]
+                }
+            ],
+
+        }
+
     },
-        otherOnNonPharmacological:{
-        name:'Other',
-        value:'otherOnNonPharmacological'
+    //break
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border',
+        radioBtnContent:{
+            header:{
+                class:'bold',
+                title: 'Counselling conducted on pharmacological treatment for nausea and vomiting?',
+                selectedValue: '',
+                name:'Counselling on pharmacological treatment',
+                displayNext:"No"
+            },
+            data:[
+                {
+                    name: "Yes",
+                    value: "Yes",
+                    colSize: "2.5",
+                },
+                {
+                    name: "No",
+                    value: "No",
+                    colSize: "2.5",
+                },
+            ]
+        }
     },
-        specifyOnNonPharmacological:{
-        name:"SpecifyNonP",
-        value:""
+    {
+        childName:'Counselling on pharmacological treatment',
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border',
+        sideColSize:0.5,
+        radioBtnContent:{
+            header:{
+                class:'bold',
+                title: 'Reason counselling on pharmacological was not conducted?',
+                selectedValue: '',
+                name:'Counselling on pharmacological treatment not done',
+                displayNone:true,
+                displayNext:'Other'
+            },
+            data:[
+                {
+                    name:'Client was referred',
+                    value: 'client was referred',
+                    colSize: "7",
+                },
+                {
+                    name: 'Other',
+                    value: 'Other',
+                    colSize: "7",
+                },
+            ]
+        }
     },
-        cousellingOnPharmacologicalTreatmentYes:{
-        name:"Yes",
-        value:"yes"
+    {
+        childName:'Counselling on pharmacological treatment not done',
+        classDash: 'dashed_bottom_border',
+        sideColSize:0.5,
+        data:{
+            rowData:[
+                {
+                    colData:[
+                        {
+                            displayNone:true,
+                            inputHeader: 'Specify',
+                            icon: icons.editPen,
+                            name: "Other notes",
+                            value: "other notes",
+                            eventType: 'input',
+                            inputWidth: "82%",
+                            required: true
+                        }
+
+                    ]
+                }
+            ],
+
+        }
+
     },
-        cousellingOnPharmacologicalTreatmentNo:{
-        name:"No",
-        value:"noPharmacologicalTreatment"
+    //break
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border',
+        radioBtnContent:{
+            header:{
+                class:'bold',
+                title: 'Counselling  conducted on diet and lifestyle?',
+                selectedValue: '',
+                name:'Counselling on diet',
+                displayNext:"No",
+            },
+            data:[
+                {
+                    name: "Yes",
+                    value: "Yes",
+                    colSize: "2.5",
+                },
+                {
+                    name: "No",
+                    value: "No",
+                    colSize: "2.5",
+                },
+            ]
+        }
     },
-        clientReferredOnPharmacologicalTreatment:{
-        name:"Client was referred",
-        value:"clientReferredOnPharmacologicalTreatment"
+    {
+        childName:'Counselling on diet',
+        selectdData: [],
+        classDash: 'dashed_bottom_border',
+        sideColSize:0.5,
+        isFinishBtn: false,
+        radioBtnContent:{
+            header:{
+                title: 'Reason counselling on diet and lifestyle was not conducted?',
+                selectedValue: '',
+                class:'bold',
+                name:'Counselling on diet not done',
+                displayNone:true,
+                displayNext:"Other"
+            },
+            data:[
+                {
+                    name:'Client was referred',
+                    value: 'client was referred',
+                    colSize: "7",
+                },
+                {
+                    name: 'Other',
+                    value: 'Other',
+                    colSize: "7",
+                },
+            ]
+        }
     },
-        otherOnPharmacologicalTreatment:{
-        name:'Other',
-        value:'otherOnPharmacologicalTreatment'
+    {
+        childName:"Counselling on diet not done",
+        classDash: 'dashed_bottom_border',
+        sideColSize:0.5,
+        data:{
+            rowData:[
+                {
+                    colData:[
+                        {
+                            displayNone:true,
+                            inputHeader: 'Specify',
+                            icon: icons.editPen,
+                            name: "Other notes",
+                            value: "Other notes",
+                            eventType: 'input',
+                            inputWidth: "82%",
+                            required: true
+                        }
+
+                    ]
+                }
+            ],
+
+        }
+
     },
-        specifyOnPharmacologicalTreatment:{
-        name:"SpecifyPT",
-        value:""
+    //break
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border',
+        radioBtnContent:{
+            header:{
+                title: 'Counselling  conducted on antacid?',
+                selectedValue: '',
+                name:'Counselling on antacid',
+                class:"bold",
+                displayNext:'No'
+            },
+            data:[
+                {
+                    name: "Yes",
+                    value: "Yes",
+                    colSize: "2.5",
+                },
+                {
+                    name: "No",
+                    value: "No",
+                    colSize: "2.5",
+                },
+            ]
+        }
     },
-        cousellingOnDietLifestyleYes:{
-        name:"Yes",
-        value:"yes"
+    {
+        childName: 'Counselling on antacid',
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border',
+        sideColSize:0.5,
+        radioBtnContent:{
+            header:{
+                title: 'Reason counselling on antacid was not done?',
+                selectedValue: '',
+                name:'Counselling on antacid not done',
+                displayNone:true,
+                displayNext:'Other'
+            },
+            data:[
+                {
+                    name:'Client was referred',
+                    value: 'client was referred',
+                    colSize: "7",
+                },
+                {
+                    name: 'Other',
+                    value: 'Other',
+                    colSize: "7",
+                },
+            ]
+        }
     },
-        cousellingOnDietLifestyleNo:{
-        name:"no",
-        value:"noDiet"
+    {
+        childName:'Counselling on antacid not done',
+        classDash: 'dashed_bottom_border',
+        sideColSize:0.5,
+        data:{
+            rowData:[
+                {
+                    colData:[
+                        {
+                            displayNone:true,
+                            inputHeader: 'Specify',
+                            icon: icons.editPen,
+                            name: "Other notes",
+                            value: "other notes",
+                            eventType: 'input',
+                            inputWidth: "82%",
+                            required: true
+                        }
+
+                    ]
+                }
+            ],
+
+        }
+
     },
-        clientReferredOnDietLifestyle:{
-        name:"Client was referred",
-        value:"clientReferredOnDietLifestyle"
+    //break
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border',
+        radioBtnContent:{
+            header:{
+                title: 'Counselling  conducted on symptoms of leg craps?',
+                selectedValue: '',
+                name:"Counselling on leg craps",
+                class:'bold',
+                displayNext:'No'
+            },
+            data:[
+                {
+                    name: "Yes",
+                    value: "Yes",
+                    colSize: "2.5",
+                },
+                {
+                    name: "No",
+                    value: "No",
+                    colSize: "2.5",
+                },
+            ]
+        }
     },
-        otherOnDietLifestyle:{
-        name:'Other',
-        value:'otherOnDietLifestyle'
+    {
+        childName:'Counselling on leg craps',
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border',
+        sideColSize:0.5,
+        radioBtnContent:{
+            header:{
+                title: 'Reason counselling on  assumptions for leg craps was not done?',
+                selectedValue: '',
+                name:'Counselling on leg craps not done',
+                displayNone:true,
+                class:'bold',
+                displayNext:'Other'
+            },
+            data:[
+                {
+                    name:'Client was referred',
+                    value: 'client was referred',
+                    colSize: "7",
+                },
+                {
+                    name: 'Other',
+                    value: 'Other',
+                    colSize: "7",
+                },
+            ]
+        }
     },
-        specifyOnDietLifestyle:{
-        name:"SpecifyL",
-        value:""
+    {
+        childName:'Counselling on leg craps not done',
+        classDash: 'dashed_bottom_border',
+        sideColSize:0.5,
+        data:{
+            rowData:[
+                {
+                    colData:[
+                        {
+                            displayNone:true,
+                            inputHeader: 'Specify',
+                            icon: icons.editPen,
+                            name: "Other notes",
+                            value: "other notes",
+                            eventType: 'input',
+                            inputWidth: "82%",
+                            required: true
+                        }
+
+                    ]
+                }
+            ],
+
+        }
+
     },
-        cousellingOnAntacidYes:{
-        name:"Yes",
-        value:"yes"
+    //break
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border',
+        radioBtnContent:{
+            header:{
+                title: 'Counselling  conducted on the use magnesium and calcium to relieve leg cramps?',
+                selectedValue: '',
+                name:"Counselling on the use magnesium and calcium",
+                class:'bold',
+                displayNext:'No'
+            },
+            data:[
+                {
+                    name: "Yes",
+                    value: "Yes",
+                    colSize: "2.5",
+                },
+                {
+                    name: "No",
+                    value: "No",
+                    colSize: "2.5",
+                },
+            ]
+        }
     },
-        cousellingOnAntacidNo:{
-        name:"No",
-        value:"noAntacid"
+    {
+        childName:'Counselling on the use magnesium and calcium',
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border',
+        sideColSize:0.5,
+        radioBtnContent:{
+            header:{
+                title: 'Reason counselling on  use of magnesium and calcium to relieve leg cramps was not done?',
+                selectedValue: '',
+                name:'Counselling on use magnesium and calcium not done',
+                displayNone:true,
+                class:'bold',
+                displayNext:'Other'
+            },
+            data:[
+                {
+                    name:'Client was referred',
+                    value: 'client was referred',
+                    colSize: "7",
+                },
+                {
+                    name: 'Other',
+                    value: 'Other',
+                    colSize: "7",
+                },
+            ]
+        }
     },
-        clientReferredOnAntacid:{
-        name:"Client was referred",
-        value:"clientReferredOnAntacid"
+    {
+        childName:'Counselling on use magnesium and calcium not done',
+        classDash: 'dashed_bottom_border',
+        sideColSize:0.5,
+        data:{
+            rowData:[
+                {
+                    colData:[
+                        {
+                            displayNone:true,
+                            inputHeader: 'Specify',
+                            icon: icons.editPen,
+                            name: "Other notes",
+                            value: "other notes",
+                            eventType: 'input',
+                            inputWidth: "82%",
+                            required: true
+                        }
+
+                    ]
+                }
+            ],
+
+        }
+
     },
-        otherOnAntacid:{
-        name:'Other',
-        value:'otherOnAntacid'
+    //break
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border',
+        radioBtnContent:{
+            header:{
+                title: 'Counselling  conducted on dietary modifications to relieve constipation?',
+                selectedValue: '',
+                name:'Counselling on dietary modifications',
+                class:'bold',
+                displayNext:'No'
+            },
+            data:[
+                {
+                    name: "Yes",
+                    value: "Yes",
+                    colSize: "2.5",
+                },
+                {
+                    name: "No",
+                    value: "No",
+                    colSize: "2.5",
+                },
+            ]
+        }
     },
-        specifyOnAntacid:{
-        name:"SpecifyAcid",
-        value:""
+    {
+        selectdData: [],
+        childName: 'Counselling on dietary modifications',
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border',
+        sideColSize:0.5,
+        radioBtnContent:{
+            header:{
+                title: 'Reason counselling on  dietary modifications to relieve constipation was not done?',
+                selectedValue: '',
+                name:'Counselling on dietary modifications not done',
+                displayNone:true,
+                class:'bold',
+                displayNext:'Other'
+            },
+            data:[
+                {
+                    name:'Client was referred',
+                    value: 'client was referred',
+                    colSize: "7",
+                },
+                {
+                    name: 'Other',
+                    value: 'Other',
+                    colSize: "7",
+                },
+            ]
+        }
     },
-        cousellingOnLegCrapsYes:{
-        name:"Yes",
-        value:"yes"
+    {
+        childName:'Counselling on dietary modifications not done',
+        classDash: 'dashed_bottom_border',
+        sideColSize:0.5,
+        data:{
+            rowData:[
+                {
+                    colData:[
+                        {
+                            displayNone:true,
+                            inputHeader: 'Specify',
+                            icon: icons.editPen,
+                            name: "Other notes",
+                            value: "other notes",
+                            eventType: 'input',
+                            inputWidth: "82%",
+                            required: true
+                        }
+
+                    ]
+                }
+            ],
+
+        }
+
     },
-       cousellingOnLegCrapsNo:{
-        name:"No",
-        value:"noLegCrap"
+    //break
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border',
+        radioBtnContent:{
+            header:{
+                title: 'Counselling  conducted on the use of wheat?',
+                selectedValue: '',
+                name:'Counselling on wheat',
+                class:'bold',
+                displayNext:'No'
+            },
+            data:[
+                {
+                    name: "Yes",
+                    value: "Yes",
+                    colSize: "2.5",
+                },
+                {
+                    name: "No",
+                    value: "No",
+                    colSize: "2.5",
+                },
+            ]
+        }
     },
-        clientReferredOnLegCraps:{
-        name:"Client was referred",
-        value:"clientReferredOnLegCraps"
+    {
+        childName:'Counselling on wheat',
+        selectdData: [],
+        classDash: 'dashed_bottom_border',
+        sideColSize:0.5,
+        isFinishBtn: false,
+        radioBtnContent:{
+            header:{
+                title: 'Reason counselling on  the use of wheat was not done?',
+                selectedValue: '',
+                name:'Counselling on wheat not done',
+                displayNone: true,
+                class:'bold',
+                displayNext:"Other"
+            },
+            data:[
+                {
+                    name:'Client was referred',
+                    value: 'client was referred',
+                    colSize: "7",
+                },
+                {
+                    name: 'Other',
+                    value: 'Other',
+                    colSize: "7",
+                },
+            ]
+        }
     },
-        otherOnLegCraps:{
-        name:'Other',
-        value:'otherOnLegCraps'
-    },
-        specifyOnLegCraps:{
-        name:"SpecifyLC",
-        value:""
-    },
-        cousellingOnUseMagnesiumCalciumOnLegCrapsYes:{
-        name:"Yes",
-        value:"yes"
-    },
-        cousellingOnUseMagnesiumCalciumOnLegCrapsNo:{
-        name:"No",
-        value:"noMagnesiumCalcium"
-    },
-        clientReferredOnUseMagnesiumCalciumOnLegCraps:{
-        name:"Client was referred",
-        value:"clientReferredOnUseMagnesiumCalciumOnLegCraps"
-    },
-        otherOnUseMagnesiumCalciumOnLegCraps:{
-        name:'Other',
-        value:'otherOnUseMagnesiumCalciumOnLegCraps'
-    },
-        specifyOnUseMagnesiumCalciumOnLegCraps:{
-        name:"SpecifyCraps",
-        value:""
+    {
+        childName:'Counselling on wheat not done',
+        classDash: 'dashed_bottom_border',
+        sideColSize:0.5,
+        data:{
+            rowData:[
+                {
+                    colData:[
+                        {
+                            displayNone:true,
+                            inputHeader: 'Specify',
+                            icon: icons.editPen,
+                            name: "Other notes",
+                            value: "other notes",
+                            eventType: 'input',
+                            inputWidth: "82%",
+                            required: true
+                        }
+
+                    ]
+                }
+            ],
+
+        }
+
     },
 
-        cousellingOnDietaryOnConstipationYes:{
-        name:"Yes",
-        value:"yes"
-    },
-        cousellingOnDietaryOnConstipationNo:{
-        name:"No",
-        value:"noConstipation"
-    },
-        clientReferredOnDietaryOnConstipation:{
-        name:"Client was referred",
-        value:"clientReferredOnDietaryOnConstipation"
-    },
-        otherOnDietaryOnConstipation:{
-        name:'Other',
-        value:'otherOnDietaryOnConstipation'
-    },
-        specifyOnDietaryOnConstipation:{
-        name:"SpecifyConstipation",
-        value:""
-    },
-        cousellingOnUseOfWheatYes:{
-        name:"Yes",
-        value:"yes"
-    },
-        cousellingOnUseOfWheatNo:{
-        name:"No",
-        value:"noWheat"
-    },
-        clientReferredOnUseOfWheat:{
-        name:"Client was referred",
-        value:"clientReferredOnUseOfWheat"
-    },
-        otherOnUseOfWheat:{
-        name:'Other',
-        value:'otherOnUseOfWheat'
-    },
-        specifyOnDietaryOnUseOfWheat:{
-        name:"useWheat",
-        value:""
-    },
-        cousellingOnRegularExerciseYes:{
-        name:"Yes",
-        value:"yes"
-    },
-        cousellingOnRegularExerciseNo:{
-        name:"No",
-        value:"noExercise"
-    },
-        clientReferredOnRegularExercise:{
-        name:"Client was referred",
-        value:"clientReferredOnRegularExercise"
-    },
-        otherOnRegularExercise:{
-        name:'Other',
-        value:'otherOnRegularExercise'
-    },
-        specifyOnRegularExercise:{
-        name:"specifyExercise",
-        value:""
-    },
-        cousellingOnVaricoseVeinsandOedemaYes:{
-        name:"Yes",
-        value:"yes"
-    },
-        cousellingOnVaricoseVeinsandOedemaNo:{
-        name:"No",
-        value:"noOedema"
-    },
-        clientReferredOnVaricoseVeinsandOedema:{
-        name:"Client was referred",
-        value:"clientReferredOnVaricoseVeinsandOedema"
-    },
-        otherOnVaricoseVeinsandOedema:{
-        name:'other',
-        value:'otherOnVaricoseVeinsandOedema'
-    },
-        specifyOnVaricoseVeinsandOedema:{
-        name:"VeinsaOedema",
-        value:""
-    },
-   
-}
+    //break
 
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border',
+        radioBtnContent:{
+            header:{
+                title: 'Counselling  conducted on regular exercise?',
+                selectedValue: '',
+                name:'Counselling on regular exercises',
+                class:'bold',
+                displayNone:'No'
+            },
+            data:[
+                {
+                    name: "Yes",
+                    value: "Yes",
+                    colSize: "2.5",
+                },
+                {
+                    name: "No",
+                    value: "No",
+                    colSize: "2.5",
+                },
+            ]
+        }
+    },
+    {
+        childName: 'Counselling on regular exercises',
+        selectdData: [],
+        classDash: 'dashed_bottom_border',
+        sideColSize:0.5,
+        isFinishBtn: false,
+        radioBtnContent:{
+            header:{
+                title: 'Reason counselling on regular exercise was not done?',
+                selectedValue: '',
+                class:'bold',
+                name:'Counselling on regular exercises not done',
+                displayNone:'Other'
+            },
+            data:[
+                {
+                    name:'Client was referred',
+                    value: 'client was referred',
+                    colSize: "7",
+                },
+                {
+                    name: 'Other',
+                    value: 'other',
+                    colSize: "7",
+                },
+            ]
+        }
+    },
+    {
+        childName:'Counselling on regular exercises not done',
+        classDash: 'dashed_bottom_border',
+        sideColSize:0.5,
+        data:{
+            rowData:[
+                {
+                    colData:[
+                        {
+                            displayNone:true,
+                            inputHeader: 'Specify',
+                            icon: icons.editPen,
+                            name: "Other notes",
+                            value: "other notes",
+                            eventType: 'input',
+                            inputWidth: "82%",
+                            required: true
+                        }
+
+                    ]
+                }
+            ],
+
+        }
+
+    },
+
+    //break
+
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border',
+        radioBtnContent:{
+            header:{
+                title: 'Counselling  conducted on  varicose veins and  oedema?',
+                selectedValue: '',
+                class:'bold',
+                name:'Counselling on  varicose veins and  oedema',
+                displayNext:"No"
+            },
+            data:[
+                {
+                    name: "Yes",
+                    value: "Yes",
+                    colSize: "2.5",
+                },
+                {
+                    name: "No",
+                    value: "No",
+                    colSize: "2.5",
+                },
+            ]
+        }
+    },
+    {
+        childName: 'Counselling on  varicose veins and  oedema',
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border',
+        sideColSize:0.5,
+        radioBtnContent:{
+            header:{
+                title: 'Reason counselling for varicose veins and oedema was not done?',
+                selectedValue: '',
+                name:'Counselling on  varicose veins and  oedema not done',
+                displayNone:true,
+                displayNext:'Other'
+            },
+            data:[
+                {
+                    name:'Client was referred',
+                    value: 'client was referred',
+                    colSize: "7",
+                },
+                {
+                    name: 'Other',
+                    value: 'Other',
+                    colSize: "7",
+                },
+            ]
+        }
+    },
+    {
+        childName:'Counselling on  varicose veins and  oedema not done',
+        classDash: 'dashed_bottom_border',
+        sideColSize:0.5,
+        data:{
+            rowData:[
+                {
+                    colData:[
+                        {
+                            displayNone:true,
+                            inputHeader: 'Specify',
+                            icon: icons.editPen,
+                            name: "Other notes",
+                            value: "other notes",
+                            eventType: 'input',
+                            inputWidth: "82%",
+                            required: true
+                        }
+
+                    ]
+                }
+            ],
+
+        }
+
+    },
+] as any;
 export const usePhysiologicalCounselingStore = defineStore('physiologicalCounselingStore',{
     state: () =>({
-        physiologicalCounselingInfo:[
-
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:{
-                    header:{
-                        title: 'Counselling conducted on non-pharmacological measures to reduce nausea and vomiting?',
-                        selectedValue: '',
-                        name:'nonPharmacological'
-                    },
-                    data:[
-                        {  
-                            name: physiologicalCousellingForm.cousellingOnNonPharmacologicalYes.name,
-                            value: physiologicalCousellingForm.cousellingOnNonPharmacologicalYes.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                        { 
-                            name: physiologicalCousellingForm.cousellingOnNonPharmacologicalNo.name,
-                            value: physiologicalCousellingForm.cousellingOnNonPharmacologicalNo.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                    ]
-                }
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                radioBtnContent:{
-                    header:{
-                        title: 'Reason counselling on non-pharmacological measures to reduce nausea and vomiting not conducted',
-                        selectedValue: '',
-                        name:'reasonNonPharmacological',
-                        displayNone:'true'
-                    },
-                    data:[
-                        {  
-                            name: physiologicalCousellingForm.clientReferredOnNonPharmacological.name,
-                            value: physiologicalCousellingForm.clientReferredOnNonPharmacological.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                        { 
-                            name: physiologicalCousellingForm.otherOnNonPharmacological.name,
-                            value: physiologicalCousellingForm.otherOnNonPharmacological.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                    ]
-                }
-            },
-            {   
-                data:{ 
-                    rowData:[
-                        {
-                            colData:[
-                                {   
-                                    displayNone:true,
-                                    inputHeader: 'Other (specify)',
-                                    icon: icons.editPen,
-                                    name: physiologicalCousellingForm.specifyOnNonPharmacological.name,
-                                    value: physiologicalCousellingForm.specifyOnNonPharmacological.value,
-                                    eventType: 'input',
-                                    inputWidth: "82%",
-                                    required: true
-                                }
-                                
-                            ]
-                        }
-                    ],
-                    
-                }
-                    
-            },
-            //break
-             {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:{
-                    header:{
-                        title: 'Counselling conducted on pharmacological treatment for nausea and vomiting?',
-                        selectedValue: '',
-                        name:'nauseaVomiting'
-                    },
-                    data:[
-                        {  
-                            name: physiologicalCousellingForm.cousellingOnPharmacologicalTreatmentYes.name,
-                            value: physiologicalCousellingForm.cousellingOnPharmacologicalTreatmentYes.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                        { 
-                            name: physiologicalCousellingForm.cousellingOnPharmacologicalTreatmentNo.name,
-                            value: physiologicalCousellingForm.cousellingOnPharmacologicalTreatmentNo.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                    ]
-                }
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                radioBtnContent:{
-                    header:{
-                        title: 'Reason couselling on pharmalogical was not conducted?',
-                        selectedValue: '',
-                        name:'reasonNauseaVomiting',
-                        displayNone:true
-                    },
-                    data:[
-                        {  
-                            name: physiologicalCousellingForm.clientReferredOnPharmacologicalTreatment.name,
-                            value: physiologicalCousellingForm.clientReferredOnPharmacologicalTreatment.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                        { 
-                            name: physiologicalCousellingForm.otherOnPharmacologicalTreatment.name,
-                            value: physiologicalCousellingForm.otherOnPharmacologicalTreatment.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                    ]
-                }
-            },
-            {   
-                data:{ 
-                    rowData:[
-                        {
-                            colData:[
-                                { 
-                                    displaNone:true,
-                                    inputHeader: 'Other (specify)',
-                                    icon: icons.editPen,
-                                    name: physiologicalCousellingForm.specifyOnPharmacologicalTreatment.name,
-                                    value: physiologicalCousellingForm.specifyOnPharmacologicalTreatment.value,
-                                    eventType: 'input',
-                                    inputWidth: "82%",
-                                    required: true
-                                }
-                                
-                            ]
-                        }
-                    ],
-                    
-                }
-                    
-            },
-            //break
-                         {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:{
-                    header:{
-                        title: 'Counselling  conducted on diet and lifestyle?',
-                        selectedValue: '',
-                        name:'diet'
-                    },
-                    data:[
-                        {  
-                            name: physiologicalCousellingForm.cousellingOnDietLifestyleYes.name,
-                            value: physiologicalCousellingForm.cousellingOnDietLifestyleYes.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                        { 
-                            name: physiologicalCousellingForm.cousellingOnDietLifestyleNo.name,
-                            value: physiologicalCousellingForm.cousellingOnDietLifestyleNo.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                    ]
-                }
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                radioBtnContent:{
-                    header:{
-                        title: 'Reason couselling on diet and lifestyle was not conducted?',
-                        selectedValue: '',
-                        name:'reasonDiet',
-                        displayNone:'true',
-                    },
-                    data:[
-                        {  
-                            name: physiologicalCousellingForm.clientReferredOnDietLifestyle.name,
-                            value: physiologicalCousellingForm.clientReferredOnDietLifestyle.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                        { 
-                            name: physiologicalCousellingForm.otherOnDietLifestyle.name,
-                            value: physiologicalCousellingForm.otherOnDietLifestyle.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                    ]
-                }
-            },
-            {   
-                data:{ 
-                    rowData:[
-                        {
-                            colData:[
-                                {   
-                                    displayNone:true,
-                                    inputHeader: 'Specify',
-                                    icon: icons.editPen,
-                                    name: physiologicalCousellingForm.specifyOnDietLifestyle.name,
-                                    value: physiologicalCousellingForm.specifyOnDietLifestyle.value,
-                                    eventType: 'input',
-                                    inputWidth: "82%",
-                                    required: true
-                                }
-                                
-                            ]
-                        }
-                    ],
-                    
-                }
-                    
-            },
-            //break
-                                     {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:{
-                    header:{
-                        title: 'Counselling  conducted on antacid?',
-                        selectedValue: '',
-                        name:'antacid'
-                    },
-                    data:[
-                        {  
-                            name: physiologicalCousellingForm.cousellingOnAntacidYes.name,
-                            value: physiologicalCousellingForm.cousellingOnAntacidYes.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                        { 
-                            name: physiologicalCousellingForm.cousellingOnAntacidNo.name,
-                            value: physiologicalCousellingForm.cousellingOnAntacidNo.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                    ]
-                }
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                radioBtnContent:{
-                    header:{
-                        title: 'Reason couselling on antacid was not done?',
-                        selectedValue: '',
-                        name:'counsellingAntacid',
-                        displayNone:true
-                    },
-                    data:[
-                        {  
-                            name: physiologicalCousellingForm.clientReferredOnAntacid.name,
-                            value: physiologicalCousellingForm.clientReferredOnAntacid.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                        { 
-                            name: physiologicalCousellingForm.otherOnAntacid.name,
-                            value: physiologicalCousellingForm.otherOnAntacid.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                    ]
-                }
-            },
-            {   
-                data:{ 
-                    rowData:[
-                        {
-                            colData:[
-                                {
-                                    inputHeader: 'Specify',
-                                    icon: icons.editPen,
-                                    name: physiologicalCousellingForm.specifyOnAntacid.name,
-                                    value: physiologicalCousellingForm.specifyOnAntacid.value,
-                                    eventType: 'input',
-                                    inputWidth: "82%",
-                                    required: true
-                                }
-                                
-                            ]
-                        }
-                    ],
-                    
-                }
-                    
-            },
-            //break
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:{
-                    header:{
-                        title: 'Counselling  conducted on symptoms of leg craps?',
-                        selectedValue: '',
-                        name:"legCraps"
-                    },
-                    data:[
-                        {  
-                            name: physiologicalCousellingForm.cousellingOnLegCrapsYes.name,
-                            value: physiologicalCousellingForm.cousellingOnLegCrapsYes.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                        { 
-                            name: physiologicalCousellingForm.cousellingOnLegCrapsNo.name,
-                            value: physiologicalCousellingForm.cousellingOnLegCrapsNo.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                    ]
-                }
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                radioBtnContent:{
-                    header:{
-                        title: 'Reason couselling on  sysmptions for leg craps was not done?',
-                        selectedValue: '',
-                        name:'reasonsLegCraps',
-                        displayNone:true
-                    },
-                    data:[
-                        {  
-                            name: physiologicalCousellingForm.clientReferredOnLegCraps.name,
-                            value: physiologicalCousellingForm.clientReferredOnLegCraps.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                        { 
-                            name: physiologicalCousellingForm.otherOnLegCraps.name,
-                            value: physiologicalCousellingForm.otherOnLegCraps.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                    ]
-                }
-            },
-            {   
-                data:{ 
-                    rowData:[
-                        {
-                            colData:[
-                                {   
-                                    displayNone:'true',
-                                    inputHeader: 'Specify',
-                                    icon: icons.editPen,
-                                    name: physiologicalCousellingForm.specifyOnLegCraps.name,
-                                    value: physiologicalCousellingForm.specifyOnLegCraps.value,
-                                    eventType: 'input',
-                                    inputWidth: "82%",
-                                    required: true
-                                }
-                                
-                            ]
-                        }
-                    ],
-                    
-                }
-                    
-            },
-            //break
-              {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:{
-                    header:{
-                        title: 'Counselling  conducted on the use magnesium and calcium to relieve leg cramps?',
-                        selectedValue: '',
-                        name:"useOfMagnesium"
-                    },
-                    data:[
-                        {  
-                            name: physiologicalCousellingForm.cousellingOnUseMagnesiumCalciumOnLegCrapsYes.name,
-                            value: physiologicalCousellingForm.cousellingOnUseMagnesiumCalciumOnLegCrapsYes.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                        { 
-                            name: physiologicalCousellingForm.cousellingOnUseMagnesiumCalciumOnLegCrapsNo.name,
-                            value: physiologicalCousellingForm.cousellingOnUseMagnesiumCalciumOnLegCrapsNo.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                    ]
-                }
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                radioBtnContent:{
-                    header:{
-                        title: 'Reason couselling on  use of magnesium and calcium to relieve leg cramps was not done?',
-                        selectedValue: '',
-                        name:'reasonOnUseofMagnesium',
-                        displayNone:true,
-                    },
-                    data:[
-                        {  
-                            name: physiologicalCousellingForm.clientReferredOnUseMagnesiumCalciumOnLegCraps.name,
-                            value: physiologicalCousellingForm.clientReferredOnUseMagnesiumCalciumOnLegCraps.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                        { 
-                            name: physiologicalCousellingForm.otherOnUseMagnesiumCalciumOnLegCraps.name,
-                            value: physiologicalCousellingForm.otherOnUseMagnesiumCalciumOnLegCraps.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                    ]
-                }
-            },
-            {   
-                data:{ 
-                    rowData:[
-                        {
-                            colData:[
-                                {   
-                                    displaNone:true,
-                                    inputHeader: 'specify',
-                                    icon: icons.editPen,
-                                    name: physiologicalCousellingForm.specifyOnUseMagnesiumCalciumOnLegCraps.name,
-                                    value: physiologicalCousellingForm.specifyOnUseMagnesiumCalciumOnLegCraps.value,
-                                    eventType: 'input',
-                                    inputWidth: "82%",
-                                    required: true
-                                }
-                                
-                            ]
-                        }
-                    ],
-                    
-                }
-                    
-            },
-            //break
-                          {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:{
-                    header:{
-                        title: 'Counselling  conducted on dietary modifications to relieve constipation?',
-                        selectedValue: '',
-                        name:'constipattion'
-                    },
-                    data:[
-                        {  
-                            name: physiologicalCousellingForm.cousellingOnDietaryOnConstipationYes.name,
-                            value: physiologicalCousellingForm.cousellingOnDietaryOnConstipationYes.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                        { 
-                            name: physiologicalCousellingForm.cousellingOnDietaryOnConstipationNo.name,
-                            value: physiologicalCousellingForm.cousellingOnDietaryOnConstipationNo.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                    ]
-                }
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                radioBtnContent:{
-                    header:{
-                        title: 'Reason couselling on  dietary modifications to relieve constipation was not done?',
-                        selectedValue: '',
-                        name:'reasonConstipation',
-                        displayNone:true
-                    },
-                    data:[
-                        {  
-                            name: physiologicalCousellingForm.clientReferredOnDietaryOnConstipation.name,
-                            value: physiologicalCousellingForm.clientReferredOnDietaryOnConstipation.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                        { 
-                            name: physiologicalCousellingForm.otherOnDietaryOnConstipation.name,
-                            value: physiologicalCousellingForm.otherOnDietaryOnConstipation.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                    ]
-                }
-            },
-            {   
-                data:{ 
-                    rowData:[
-                        {
-                            colData:[
-                                {
-                                    inputHeader: 'Specify',
-                                    icon: icons.editPen,
-                                    name: physiologicalCousellingForm.specifyOnDietaryOnConstipation.name,
-                                    value: physiologicalCousellingForm.specifyOnDietaryOnConstipation.value,
-                                    eventType: 'input',
-                                    inputWidth: "82%",
-                                    required: true
-                                }
-                                
-                            ]
-                        }
-                    ],
-                    
-                }
-                    
-            },
-            //break
-                                      {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:{
-                    header:{
-                        title: 'Counselling  conducted on the use of wheat?',
-                        selectedValue: '',
-                        name:'useWheat'
-                    },
-                    data:[
-                        {  
-                            name: physiologicalCousellingForm.cousellingOnUseOfWheatYes.name,
-                            value: physiologicalCousellingForm.cousellingOnUseOfWheatYes.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                        { 
-                            name: physiologicalCousellingForm.cousellingOnUseOfWheatNo.name,
-                            value: physiologicalCousellingForm.cousellingOnUseOfWheatNo.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                    ]
-                }
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                radioBtnContent:{
-                    header:{
-                        title: 'Reason couselling on  the use of wheat was not done?',
-                        selectedValue: '',
-                        name:'counsellingWheat',
-                        displayNone: true
-                    },
-                    data:[
-                        {  
-                            name: physiologicalCousellingForm.clientReferredOnUseOfWheat.name,
-                            value: physiologicalCousellingForm.clientReferredOnUseOfWheat.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                        { 
-                            name: physiologicalCousellingForm.otherOnUseOfWheat.name,
-                            value: physiologicalCousellingForm.otherOnUseOfWheat.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                    ]
-                }
-            },
-            {   
-                data:{ 
-                    rowData:[
-                        {
-                            colData:[
-                                {   
-                                    displayNone:true,
-                                    inputHeader: 'specify',
-                                    icon: icons.editPen,
-                                    name: physiologicalCousellingForm.specifyOnDietaryOnUseOfWheat.name,
-                                    value: physiologicalCousellingForm.specifyOnDietaryOnUseOfWheat.value,
-                                    eventType: 'input',
-                                    inputWidth: "82%",
-                                    required: true
-                                }
-                                
-                            ]
-                        }
-                    ],
-                    
-                }
-                    
-            },
-
-            //break
-
-           {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:{
-                    header:{
-                        title: 'Counselling  conducted on regular exercise?',
-                        selectedValue: '',
-                        name:'excersise'
-                    },
-                    data:[
-                        {  
-                            name: physiologicalCousellingForm.cousellingOnRegularExerciseYes.name,
-                            value: physiologicalCousellingForm.cousellingOnRegularExerciseYes.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                        { 
-                            name: physiologicalCousellingForm.cousellingOnRegularExerciseNo.name,
-                            value: physiologicalCousellingForm.cousellingOnRegularExerciseNo.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                    ]
-                }
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                radioBtnContent:{
-                    header:{
-                        title: 'Reason couselling on regular exercise was not done?',
-                        selectedValue: '',
-                        name:'counsellingExcerise'
-                    },
-                    data:[
-                        {  
-                            name: physiologicalCousellingForm.clientReferredOnRegularExercise.name,
-                            value: physiologicalCousellingForm.clientReferredOnRegularExercise.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                        { 
-                            name: physiologicalCousellingForm.otherOnRegularExercise.name,
-                            value: physiologicalCousellingForm.otherOnRegularExercise.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                    ]
-                }
-            },
-            {   
-                data:{ 
-                    rowData:[
-                        {
-                            colData:[
-                                {   
-                                    displayNone:true,
-                                    inputHeader: 'Specify',
-                                    icon: icons.editPen,
-                                    name: physiologicalCousellingForm.specifyOnRegularExercise.name,
-                                    value: physiologicalCousellingForm.specifyOnRegularExercise.value,
-                                    eventType: 'input',
-                                    inputWidth: "82%",
-                                    required: true
-                                }
-                                
-                            ]
-                        }
-                    ],
-                    
-                }
-                    
-            },
-
-            //break
-
-           {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border',
-                radioBtnContent:{
-                    header:{
-                        title: 'Counselling  conducted on  varicose veins and  oedema?',
-                        selectedValue: '',
-                        name:'oedema'
-                    },
-                    data:[
-                        {  
-                            name: physiologicalCousellingForm.cousellingOnVaricoseVeinsandOedemaYes.name,
-                            value: physiologicalCousellingForm.cousellingOnVaricoseVeinsandOedemaYes.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                        { 
-                            name: physiologicalCousellingForm.cousellingOnVaricoseVeinsandOedemaNo.name,
-                            value: physiologicalCousellingForm.cousellingOnVaricoseVeinsandOedemaNo.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                    ]
-                }
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                radioBtnContent:{
-                    header:{
-                        title: 'Reason couselling for varicose veins and oedema was not done?',
-                        selectedValue: '',
-                        name:'counsellingOedema',
-                        displayNone:true
-                    },
-                    data:[
-                        {  
-                            name: physiologicalCousellingForm.clientReferredOnVaricoseVeinsandOedema.name,
-                            value: physiologicalCousellingForm.clientReferredOnVaricoseVeinsandOedema.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                        { 
-                            name: physiologicalCousellingForm.otherOnVaricoseVeinsandOedema.name,
-                            value: physiologicalCousellingForm.otherOnVaricoseVeinsandOedema.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                    ]
-                }
-            },
-            {   
-                data:{ 
-                    rowData:[
-                        {
-                            colData:[
-                                {   
-                                    displayNone:true,
-                                    inputHeader: 'Specify',
-                                    icon: icons.editPen,
-                                    name: physiologicalCousellingForm.specifyOnVaricoseVeinsandOedema.name,
-                                    value: physiologicalCousellingForm.specifyOnVaricoseVeinsandOedema.value,
-                                    eventType: 'input',
-                                    inputWidth: "82%",
-                                    required: true
-                                }
-                                
-                            ]
-                        }
-                    ],
-                    
-                }
-                    
-            },
-            
-        ] as any,
+        physiologicalCounselingInfo:[...initialPhysiologicalCounselling] as any,
     }),
         actions:{
         addPhysiologicalCounselingInfo(data:any){
             this.physiologicalCounselingInfo = data
+        },
+        getInitial(){
+            const data=[...initialPhysiologicalCounselling]
+            return [...data]
         }
     },
     persist:true

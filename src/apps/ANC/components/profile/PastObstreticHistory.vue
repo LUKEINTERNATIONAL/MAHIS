@@ -1,32 +1,26 @@
 <template>
     <div class="container">
         <ion-card class="section">
-            <ion-card-header> <ion-card-title class="sub_item_header">History on previous pregnancies</ion-card-title></ion-card-header>
+            <ion-card-header> <ion-card-title class="sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
               <basic-form :contentData="prevPregnancies"  @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+              <basic-form :contentData="modeOfDelivery" @update:inputValue="handleAlert"></basic-form>
+             <basic-form :contentData="preterm"></basic-form>
+            <basic-form :contentData="Complications"></basic-form>
+
             </ion-card-content>
         </ion-card>
 
-        <ion-card  style="margin-left: 20px">
+        <ion-card>
         <ion-card-content>
-            <basic-form :contentData="modeOfDelivery" @update:inputValue="handleAlert"></basic-form>
           </ion-card-content>
         </ion-card>
-
         <ion-card class="section">
-            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-                <basic-form :contentData="preterm"></basic-form>
             </ion-card-content>
         </ion-card>
         <ion-card class="section">
-            <ion-card-header>
-                <ion-card-title class="sub_item_header"
-                    ></ion-card-title
-                ></ion-card-header
-            >
             <ion-card-content>
-                <basic-form :contentData="Complications"></basic-form>
             </ion-card-content>
         </ion-card>
     </div>
@@ -50,7 +44,7 @@ IonRadio,
 IonRadioGroup,
         } from '@ionic/vue';
 import BasicForm from '../../../../components/BasicForm.vue';
-import { icons } from '../../../../utils/svg';
+import { icons } from '@/utils/svg';
 import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import { useObstreticHistoryStore} from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
@@ -118,7 +112,7 @@ export default defineComponent({
     },
     mounted(){
       this.prevPregnanciesInstance = useObstreticHistoryStore()
-      this.prevPregnanciesInstance.setModeOfDelivery([])
+      // this.prevPregnanciesInstance.setModeOfDelivery([])
       this.handleOther()
       this.handleDynamic()
       this.validaterowData({})
@@ -126,21 +120,19 @@ export default defineComponent({
     },
     watch:{
       prevPregnancies: {
-        
           handler(val) {
             if (val && val[2].data.rowData[0].colData[0].value) {
               const liveBirths = parseInt(val[2].data.rowData[0].colData[0].value)
-              this.prevPregnanciesInstance.setModeOfDelivery([])
-              const births = []
-              for (let i = 0; i < liveBirths; ++i) {
-                const x = JSON.parse(JSON.stringify({...this.modeOfDelieveryRef, id: i}))
-                x.radioBtnContent.header.title = `Specify mode of delivery (Child ${i + 1})`;
-                x.radioBtnContent.header.id=i
-                x.data.id=i
-                births.push(x)
-              }
-
-              this.prevPregnanciesInstance.setModeOfDelivery(births)
+              // this.prevPregnanciesInstance.setModeOfDelivery([])
+              // const births = []
+              // for (let i = 0; i < liveBirths; ++i) {
+              //   const x = JSON.parse(JSON.stringify({...this.modeOfDelieveryRef, id: i}))
+              //   x.radioBtnContent.header.title = `Specify mode of delivery (Child ${i + 1})`;
+              //   x.radioBtnContent.header.id=i
+              //   x.data.id=i
+              //   births.push(x)
+              // }
+              this.prevPregnanciesInstance.setModeOfDelivery(liveBirths)
             }
 
           },
@@ -150,6 +142,7 @@ export default defineComponent({
       modeOfDelivery:{
         handler(){
            this.handleDynamic()  
+           this.prevPregnanciesInstance.checkChanges()
         },
         deep:true
       },
@@ -166,11 +159,11 @@ export default defineComponent({
     methods:{
       handleOther(){
          
-                  if(getCheckboxSelectedValue(this.Complications,'Other')?.value =='otherInfo'){
+                  if(getCheckboxSelectedValue(this.Complications,'Other')?.value =='other'){
 
-                    modifyFieldValue(this.Complications,'otherC','displayNone',false)
+                    modifyFieldValue(this.Complications,'Other notes','displayNone',false)
                   }else{
-                    modifyFieldValue(this.Complications,'otherC','displayNone',true)
+                    modifyFieldValue(this.Complications,'Other notes','displayNone',true)
                   }
                    const checkBoxes=['Asphyxia','Does not know','Pre-eclampsia',
                                      'Eclampsia','Puerperal Sepsis',
@@ -193,7 +186,6 @@ export default defineComponent({
       },
 
       handleDynamic(){
-
                 if(getRadioSelectedValue(this.modeOfDelivery,'cesareanSec')=='cesarean'){
                   modifyFieldValue(this.modeOfDelivery,'Specify','displayNone',false)
                 }else{
@@ -228,7 +220,7 @@ export default defineComponent({
         const gravidaField = this.prevPregnancies.find((field: any) => field.data.rowData[0].colData[0].name === "Gravida");
 
             const abortionsField = this.prevPregnancies.find((field: any) =>
-                field.data.rowData.length > 1 && field.data.rowData[1].colData[0].name === "Abortions/Miscarriages");
+                field.data.rowData.length > 1 && field.data.rowData[1].colData[0].name === "Abortions");
 
             const stillBirthsField = this.prevPregnancies.find((field: any) =>
                 field.data.rowData.length > 1 && field.data.rowData[1].colData[1].name === "Stillbirths");
@@ -301,6 +293,10 @@ export default defineComponent({
           const gravidaValue= parseInt(getFieldValue(this.prevPregnancies, 'Gravida', 'value'));
           const abortionsValue = parseInt(getFieldValue(this.prevPregnancies, 'Abortions', 'value'));
           if (!isNaN(gravidaValue) && !isNaN(abortionsValue)) {
+            if(abortionsValue >= gravidaValue){
+              console.log("Abortions can't be greater or equal to Gravida")
+              return;
+            }
             const liveBirthsValue = (gravidaValue-1)-abortionsValue
             modifyFieldValue(this.prevPregnancies, 'LiveBirths', 'value', liveBirthsValue);
           } else {
