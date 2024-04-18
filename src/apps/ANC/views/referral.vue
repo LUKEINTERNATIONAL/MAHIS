@@ -1,25 +1,20 @@
 <template>
   <ion-page>
-    <Toolbar/>
+    <Toolbar />
     <ion-content :fullscreen="true">
-      <DemographicBar/>
-      <Stepper stepperTitle="Referral" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
+      <DemographicBar />
+      <Stepper
+          stepper-title="Lab test and imaging"
+          :wizardData="wizardData"
+          @updateStatus="markWizard"
+          @finishBtn="saveData()"
+          :StepperData="StepperData"
+      ></Stepper>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import {
-  IonContent,
-  IonHeader,
-  IonItem,
-  IonPage,
-  IonList,
-  IonTitle,
-  IonToolbar,
-  IonMenu,
-} from '@ionic/vue';
-import Toolbar from '@/components/Toolbar.vue'
 import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import { defineComponent } from 'vue';
 import BasicInputField from '@/components/BasicInputField.vue';
@@ -76,20 +71,21 @@ export default defineComponent ({
   setup () {
     return {chevronBackOutline, checkmark}
   },
-
   methods: {
-    markWizard(){},
-    saveData(){
-
-      this.$router.push('counselling');
-
+    markWizard() {},
+    saveData() {
+      // // Simulate saving data
+      // this.loading = true; // Show the spinner while data is being saved
+      // setTimeout(() => {
+      //   // After some time (simulating a server request), hide the spinner
+      //   this.loading = false;
+      //   // Redirect to counselling page
+      //   this.$router.push('counselling');
+      // }, 8000); // Simulate a 2-second delay
+      this.$router.push("Treatment");
     },
-  }
-})
-
+  },
+});
 </script>
 
-
-<style scoped>
-
-</style>
+<style scoped></style>

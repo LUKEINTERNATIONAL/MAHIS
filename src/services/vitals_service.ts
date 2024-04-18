@@ -13,10 +13,10 @@ export class VitalsService extends AppEncounterService {
         // Process other vitals using Promise.all
         const promises = await Promise.all(
             vitals.flatMap((section: any) =>
-                section.data.rowData.flat().map(async (item: any) => {
+                section?.data?.rowData.flat().map(async (item: any) => {
                     item.colData.flat().map(async (item: any) => {
                         if (item.value) {
-                            const obs = await this.appEncounterServiceInstance.buildValueNumber(item.name, item.value);
+                            const obs = await this.appEncounterServiceInstance.buildValueNumber(item.name, parseInt(item.value));
                             labelsAndValues.push(obs);
                         }
                     });
@@ -107,8 +107,10 @@ export class VitalsService extends AppEncounterService {
             {
                 name: "Weight*",
                 validator: (val: any) => {
-                    const minErrors = this.checkMinMax(val, 2.0, 250.0);
-                    return this.mergeErrors([minErrors]);
+                    const errors = [];
+                    errors.push(this.isNotEmptyandNumber(val));
+                    errors.push(this.checkMinMax(val, 2.0, 250.0));
+                    return this.mergeErrors(errors);
                 },
             },
             {
@@ -154,8 +156,10 @@ export class VitalsService extends AppEncounterService {
             {
                 name: "Pulse rate*",
                 validator: (val: any) => {
-                    const minErrors = this.checkMinMax(val, 60, 120);
-                    return this.mergeErrors([minErrors]);
+                    const errors = [];
+                    errors.push(this.isNotEmptyandNumber(val));
+                    errors.push(this.checkMinMax(val, 60, 120));
+                    return this.mergeErrors(errors);
                 },
             },
         ];

@@ -79,9 +79,9 @@ export default defineComponent({
       ],
       StepperData:[
         {
-          'title': 'Postnatal ward routine monitoring and management',
-          'componet': 'PostnatalWardMonitoring',
-          'value': '1'
+          title: 'Postnatal ward routine monitoring and management',
+          component: 'PostnatalWardMonitoring',
+          value: '1'
         },
       ],
       isOpen: false,

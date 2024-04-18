@@ -79,9 +79,9 @@ export default defineComponent({
       ],
       StepperData:[
         {
-          'title': 'Postnatal status of the baby',
-          'componet': 'BabyStatus',
-          'value': '1'
+          title: 'Postnatal status of the baby',
+          component: 'BabyStatus',
+          value: '1'
         },
       ],
       isOpen: false,

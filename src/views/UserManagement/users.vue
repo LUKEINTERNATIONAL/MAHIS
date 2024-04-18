@@ -4,10 +4,15 @@
         <ion-content :fullscreen="true">
             <div id="" style="margin-top: 30px;">
 
-                <div class="back_profile" @click="nav('patientProfile')">
-                    <ion-icon style="font-size: 20px" :icon="chevronBackOutline"> </ion-icon>
-                    <span style="cursor: pointer"> Back to profile</span>
-                </div>
+                <ion-row>
+                    <ion-col>
+                        <div class="back_profile" @click="nav('patientProfile')">
+                            <ion-icon style="font-size: 20px" :icon="chevronBackOutline"> </ion-icon>
+                            <span style="cursor: pointer"> Back to profile</span>
+                        </div>
+                    </ion-col>
+                </ion-row>
+
 
                 <dataTable
                     :colums="data_table_properties[0].columns"

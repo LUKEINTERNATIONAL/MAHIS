@@ -88,14 +88,14 @@ export default defineComponent({
       ],
       StepperData:[
         {
-          'title': 'PNC visit for mother',
-          'componet': 'VisitForMother',
-          'value': '1'
+          title: 'PNC visit for mother',
+          component: 'VisitForMother',
+          value: '1'
         },
         {
-          'title': 'PNC visit for baby',
-          'componet': 'VisitForBaby',
-          'value': '2'
+          title: 'PNC visit for baby',
+          component: 'VisitForBaby',
+          value: '2'
         },
       ],
       isOpen: false,

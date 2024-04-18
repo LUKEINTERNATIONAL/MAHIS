@@ -113,7 +113,6 @@ import PhysiologicalCounseling from "@/apps/ANC/components/counselling/Physiolog
 import DietCounselling from "@/apps/ANC/components/counselling/DietCounselling.vue";
 import Referral from "@/apps/ANC/components/referral/Referral.vue";
 import AncEnd from "@/apps/ANC/components/ancEnd/AncEnd.vue";
-import OPDOutcome from "@/apps/OPD/components/ConsultationPlan/OPDOutcome.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import DynamicButton from "@/components/DynamicButton.vue";
@@ -154,7 +153,6 @@ export default defineComponent({
       Diagnosis,
       ComplicationsScreening,
       ConfirmDiagnosis,
-      Outcome,
       Investigations,
       IonModal,
       Medications,
@@ -196,7 +194,6 @@ export default defineComponent({
       ANCDiagnosisCounselling,
       ANCImmunization,
       ANCIntimatePartner,
-      ANCMedicationDispensed,
       ANCDeworming,
     },
     data() {

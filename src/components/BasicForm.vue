@@ -37,6 +37,8 @@
                             @clicked:inputValue="handleInput(contentData, col, $event, 'clickedInput')"
                             :popOverData="col.popOverData"
                             @setPopoverValue="handleInput(contentData, col, $event, 'setPopoverValue')"
+                            @handleInnerActionBtnPropetiesFn="$emit('click:innerBtn', col)"
+                            :InnerActionBtnPropeties="col.InnerBtn"
                         />
                         <div v-if="col.isMultiSelect">
                             <h6 v-if="col.inputHeader">{{ col.inputHeader }}</h6>
@@ -206,6 +208,7 @@
                         :key="checkboxInputIndex"
                     >
                         <DateInputField
+                            v-if="!checkboxInput.isMultiSelect"
                             :inputHeader="checkboxInput.inputHeader"
                             :sectionHeaderFontWeight="checkboxInput.sectionHeaderFontWeight"
                             :unit="checkboxInput.unit"
@@ -218,6 +221,24 @@
                             :eventType="checkboxInput.eventType"
                             @update:dateValue="handleInput(contentData, checkboxInput, $event, 'updateDate')"
                         />
+                        <div v-if="checkboxInput.isMultiSelect">
+                            <h6 v-if="checkboxInput.inputHeader">{{ checkboxInput.inputHeader }}</h6>
+                            <VueMultiselect
+                                v-if="checkboxInput.isMultiSelect"
+                                v-model="checkboxInput.value"
+                                @update:model-value="handleInput(contentData, checkboxInput, $event, 'updateMultiselect')"
+                                :close-on-select="true"
+                                openDirection="bottom"
+                                tag-placeholder=""
+                                placeholder=""
+                                selectLabel=""
+                                label="name"
+                                :searchable="true"
+                                @search-change="$emit('search-change', $event)"
+                                track-by="id"
+                                :options="checkboxInput.multiSelectData"
+                            />
+                        </div>
                         <div class="alerts_error" v-if="checkboxInput.alertsError">
                             {{ checkboxInput.alertsErrorMassage }}
                         </div>

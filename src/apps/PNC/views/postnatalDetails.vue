@@ -97,19 +97,19 @@ export default defineComponent({
       ],
       StepperData:[
         {
-          'title': 'Obstetric details',
-          'componet': 'ObstetricDetails',
-          'value': '1'
+          title: 'Obstetric details',
+          component: 'ObstetricDetails',
+          value: '1'
         },
         {
-          'title': 'Delivery details',
-          'componet': 'DeliveryDetails',
-          'value': '2'
+          title: 'Delivery details',
+          component: 'DeliveryDetails',
+          value: '2'
         },
         {
-          'title': 'HIV status and treatment',
-          'componet': 'HIVStatusAndTreatment',
-          'value': '3'
+          title: 'HIV status and treatment',
+          component: 'HIVStatusAndTreatment',
+          value: '3'
         },
       ],
       isOpen: false,

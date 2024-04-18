@@ -83,7 +83,7 @@
                             </ion-accordion>
                             <ion-accordion value="second">
                                 <ion-item slot="header">
-                                    <ion-label class="header">User Management</ion-label>
+                                    <ion-label @click="navigationMenu('users')" class="header">User Management</ion-label>
                                 </ion-item>
                             </ion-accordion>
                         </ion-accordion-group>

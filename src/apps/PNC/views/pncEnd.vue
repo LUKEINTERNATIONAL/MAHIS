@@ -79,9 +79,9 @@ export default defineComponent({
       ],
       StepperData:[
         {
-          'title': 'End PNC',
-          'componet': 'PNCEnd',
-          'value': '1'
+          title: 'End PNC',
+          component: 'PNCEnd',
+          value: '1'
         },
       ],
       isOpen: false,

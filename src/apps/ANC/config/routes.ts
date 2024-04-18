@@ -5,11 +5,12 @@ import Profile from '../views/Profile.vue';
 import QuickCheck from '@/apps/ANC/views/QuickCheck.vue';
 import Treatment from "@/apps/ANC/views/Treatment.vue";
 import LabTests from '../views/LabTests.vue';
-import referral from '../views/referral.vue';
 import physicalExamination from "@/apps/ANC/views/physicalExamination.vue";
 import headssAssessment from "@/apps/ANC/views/headssAssessment.vue";
 import ANCTreatment from "@/apps/ANC/views/ANCTreatment.vue";
 import ANCHome from '../views/ANCHome.vue';
+import referral from "@/apps/ANC/views/referral.vue";
+import ANCreferral from "@/apps/ANC/views/ANCreferral.vue";
 
 
 export default [
@@ -71,9 +72,9 @@ export default [
     component: LabTests
   },
   // {
-  //   path: "/ANCHome",
-  //   name: "ANCHome",
-  //   component: ANCHome,
+  //   path: '/ancReferral',
+  //   name: 'ancReferral',
+  //   component: ANCreferral
   // },
   {
     path: '/ANChome',
@@ -81,5 +82,6 @@ export default [
     component: ANCHome
 
   }
+
 ];
 

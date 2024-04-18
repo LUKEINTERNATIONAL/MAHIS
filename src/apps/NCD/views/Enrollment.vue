@@ -3,6 +3,9 @@
         <Toolbar />
         <ion-content>
             <div class="container">
+                <div style="display: flex; align-items: center" @click="nav('patientProfile')">
+                    <DynamicButton fill="clear" name="Back to profile" iconSlot="start" :icon="iconsContent.arrowLeft" />
+                </div>
                 <div class="title">
                     <div class="demographics_title">Enrollment</div>
                 </div>
@@ -188,6 +191,7 @@ export default defineComponent({
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useConfigurationStore, ["enrollmentDisplayType"]),
+        ...mapState(useGeneralStore, ["saveProgressStatus", "activities"]),
         ...mapState(useEnrollementStore, ["NCDNumber", "enrollmentDiagnosis", "substance", "patientHistoryHIV", "patientHistory"]),
     },
     async mounted() {
@@ -233,7 +237,11 @@ export default defineComponent({
                 const generalStore = useGeneralStore();
                 generalStore.setSaveProgressStatus("");
                 resetPatientData();
-                this.$router.push("consultationPlan");
+                if (this.activities.length == 0) {
+                    this.$router.push("patientProfile");
+                } else {
+                    this.$router.push("consultationPlan");
+                }
             }
         },
         openModal() {

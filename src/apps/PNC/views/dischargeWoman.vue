@@ -79,9 +79,9 @@ export default defineComponent({
       ],
       StepperData:[
         {
-          'title': 'Discharge woman',
-          'componet': 'DischargeWoman',
-          'value': '1'
+          title: 'Discharge woman',
+          component: 'DischargeWoman',
+          value: '1'
         },
       ],
       isOpen: false,
