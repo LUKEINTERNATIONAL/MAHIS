@@ -97,20 +97,20 @@
                         </ion-content>
                     </ion-popover>
                 </ion-col>
-                <ion-col style="margin-top: -27px;">
-                <ListPicker
-                    :multiSelection="multi_Selection"
-                    :uniqueId="uniqueId"
-                    :name_of_list="name_of_list"
-                    :choose_place_holder="list_place_holder"
-                    :use_internal_filter="true"
-                    :items_-list="route_list"
-                    :show_label="show_list_label"
-                    :disabled="false"
-                    @item-list-up-dated="routeListUpdated"
-                    @item-list-filtered="routeListFiltred"
-                />
-                </ion-col>
+                <!-- <ion-col style="margin-top: -27px;">
+                    <ListPicker
+                        :multiSelection="multi_Selection"
+                        :uniqueId="uniqueId"
+                        :name_of_list="name_of_list"
+                        :choose_place_holder="list_place_holder"
+                        :use_internal_filter="true"
+                        :items_-list="route_list"
+                        :show_label="show_list_label"
+                        :disabled="false"
+                        @item-list-up-dated="routeListUpdated"
+                        @item-list-filtered="routeListFiltred"
+                    />
+                </ion-col> -->
                 <ion-col>
                     <ion-item class="input_item">
                         <ion-input placeholder="Dose" v-model="dose" fill="outline"></ion-input>

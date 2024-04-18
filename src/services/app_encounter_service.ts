@@ -88,7 +88,6 @@ export class AppEncounterService extends ObservationService {
     }
 
     async saveObservationList(obs: Array<ObsValue>) {
-        console.log(this.encounterID)
         return ObservationService.saveObsArray(this.encounterID, obs)
     }
 

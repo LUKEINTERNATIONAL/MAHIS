@@ -178,6 +178,7 @@ async function findWardName(data: any) {
         const _item_ = {
             name: item.name,
             selected: false,
+            other: item
         }
         WardsData.value.push(_item_)
     })
@@ -227,6 +228,7 @@ function saveDataToStores() {
         type: 'Admitted for short stay',
         date: date_properties[0].dataValue,
         reason: note_properties[0].dataValue,
+        other: temp_data_v[0].other
         // dataItem: refDataItem.value,
     }
 
