@@ -150,13 +150,13 @@ export default defineComponent ({
     },
       handleIntimate(){
         if(getRadioSelectedValue(this.ipv,'intimateInfo')=='no'){
-          modifyRadioValue(this.ipv,'reasonIPV','displayNone',false)
+          modifyRadioValue(this.ipv,'IPV firstline support','displayNone',false)
         }else{
-          modifyRadioValue(this.ipv,'reasonIPV','displayNone',true)
+          modifyRadioValue(this.ipv,'IPV firstline support','displayNone',true)
         }
       },
       handleOtherIpv(){
-        if(getRadioSelectedValue(this.ipv,'reasonIPV')=='other'){
+        if(getRadioSelectedValue(this.ipv,'IPV firstline support')=='other'){
           modifyFieldValue(this.ipv,'other','displayNone',false)
         }else{
            modifyFieldValue(this.ipv,'other','displayNone',true)

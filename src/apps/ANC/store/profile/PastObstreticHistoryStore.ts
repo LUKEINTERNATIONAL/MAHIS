@@ -417,6 +417,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
       this.abnormalities = data;
     },
     setModeOfDelivery(number: number) {
+      this.modeOfDelivery=[]
       for (let i = 0; i < number; i++) {
         const inputs =getRadioButton(i)
         this.modeOfDelivery.push(inputs[0])
@@ -428,7 +429,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
       const number = this.modeOfDelivery.length /2;
     for (let i = 0; i < number; i++) {
       const value=getRadioSelectedValue(this.modeOfDelivery, `cesareanSec ${i}`)
-        if(value=='other'){
+        if(value=='Other'){
           modifyFieldValue(
             this.modeOfDelivery,
             `Specify ${i}`,
@@ -466,7 +467,7 @@ const getRadioButton = (number:number)=>{
           selectedValue: "",
           name: `cesareanSec ${number}`,
           class:"bold",
-          displayNext:"Other"
+          //displayNext:"Other"
         },
         data: [
           {
@@ -498,7 +499,7 @@ const getRadioButton = (number:number)=>{
       },
     },
     {
-      childName:`cesareanSec ${number}`,
+      //childName:`cesareanSec ${number}`,
       data: {
         rowData: [
           {

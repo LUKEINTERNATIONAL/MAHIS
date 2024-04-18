@@ -30,6 +30,10 @@ import { useDiagnosisCounsellingStore } from '../store/diagnosisCounsellingStore
 import { useImmunizationStore } from '../store/immunizationStore';
 import { useIntimatePartnerStore } from '../store/intimatePartnerStore';
 import { useDewormingStore } from '../store/dewormingStore';
+import { Service } from "@/services/service";
+import { ImmunizationService } from "@/services/anc_treatment_service";
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import { toastSuccess, toastWarning } from "@/utils/Alerts";
 
 export default defineComponent({
     name: "Treatment",
@@ -147,7 +151,8 @@ export default defineComponent({
 setup () {
   return {chevronBackOutline, checkmark}
 },
-computed:{        
+computed:{   
+  ...mapState(useDemographicsStore, ["demographics"]),     
   ...mapState(useDiagnosisStore, ["diagnoses","hypertension","preEclampsia",
                                   "hyper","hiv","hepatitisB","hepatitisC",
                                   "syphilis","syphilisTesting","tbScreening",
@@ -166,16 +171,16 @@ computed:{
 
 methods: {
   markWizard(){},
-  saveData(){
-    this.saveDiagnosis();
-    this.saveMedicationDispensed();
-    this.saveCouselling();
-    this.saveImmunisation();
-    this.saveIntimatePartner();
-    this.saveDeworming();
-    //this.$router.push('counselling');
+  async saveData(){
+      this.saveDiagnosis();
+      this.saveMedicationDispensed();
+      this.saveCouselling();
+      this.saveImmunisation();
+      this.saveIntimatePartner();
+      this.saveDeworming();
+      //this.$router.push('counselling');
 
-  },
+    },
   async saveDiagnosis(){
     console.log(await this.buildDiagnosis())
   },
@@ -186,6 +191,15 @@ methods: {
     console.log(await this.buildCouselling())
   },
   async saveImmunisation(){
+      if (this.HepB1.length > 0) {
+      const userID: any = Service.getUserID();
+      const Immunisation = new ImmunizationService(this.demographics.patient_id, userID);
+      const encounter = await Immunisation.createEncounter();
+      if (!encounter) return toastWarning("Unable to create immunisation encounter");
+      const patientStatus = await Immunisation.saveObservationList(await this.buildImmunisation());
+      if (!patientStatus) return toastWarning("Unable to create Immunisation!");
+      toastSuccess("Immunisation has been created");
+  }
     console.log(await this.buildImmunisation())
   },
   async saveIntimatePartner(){
@@ -243,6 +257,7 @@ methods: {
        ...(await formatRadioButtonData(this.ttDoses)),
        ...(await formatRadioButtonData(this.HepBCounselling)),
        ...(await formatRadioButtonData(this.HepB1)),
+       ...(await formatInputFiledData(this.HepB1)),
        ...(await formatRadioButtonData(this.HepB2)),
        ...(await formatRadioButtonData(this.HepB3)),
        ...(await formatRadioButtonData(this.hepBReason)),
