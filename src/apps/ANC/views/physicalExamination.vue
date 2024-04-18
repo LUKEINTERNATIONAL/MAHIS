@@ -244,8 +244,8 @@ export default defineComponent({
                 this.saveFetalAssessment();
                 this.saveFetalPresentation();
                 this.savePresentingSigns();
-
-                this.$router.push("LabTests");
+                this.$router.push("ANChome");
+                toastSuccess("Physical examination data saved successfully");
             } else {
                 toastWarning("Please complete all required fields");
             }

@@ -107,6 +107,9 @@ export default defineComponent({
 
     methods: {
         markWizard() {},
+        async saveData() {
+      this.$router.push("ANCHome");
+    },
         getFormatedData(data: any) {
             return data.map((item: any) => {
                 return item?.data;

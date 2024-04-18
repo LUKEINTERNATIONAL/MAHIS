@@ -201,6 +201,7 @@ export default defineComponent({
                 return item?.data;
             });
         },
+       
          async saveData() {
             this.savePrevPregnancies()
             this.savePreterm()
@@ -211,6 +212,8 @@ export default defineComponent({
             this.saveCurrentPrengancy()
             this.saveMedication()
             this.saveCaffeinIntake()
+            toastSuccess("Profile data saved successfully")
+            this.$router.push("headssAssessment");
         },
         async savePrevPregnancies(){
         // if (this.prevPregnancies[0].selectedData.length > 0) {

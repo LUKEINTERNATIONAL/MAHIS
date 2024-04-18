@@ -214,7 +214,8 @@ export default defineComponent({
             this.saveCurrentPhysiologicalSymptoms(),
             this.saveIPV(),
             this.saveFetalMovement(),
-            this.$router.push("physicalExamination");
+            this.$router.push("ANChome");
+            toastSuccess("Symptoms and follow up data saved successfully");
         },
         async buildMedicalFollowUp() {
        return [

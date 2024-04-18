@@ -44,10 +44,12 @@
                         </ion-card>
 
                         <ion-card class="start_new_co"  v-if="demographics.gender === 'F'"style="margin-bottom: 20px">
-                            + Enroll in Labour and delivery program
+                            <router-link to="/labour/labourHome">+ Enroll in Labour and delivery program</router-link>
                         </ion-card>
                         <ion-card class="start_new_co"  v-if="demographics.gender === 'F'" style="margin-bottom: 20px">
-                            + Enroll in PNC program
+                           
+                            <router-link to="/pnc/Home"> + Enroll in PNC program</router-link>
+
                         </ion-card>
                         <ion-card class="start_new_co" v-if="programAccess('OPD Program')" style="margin-bottom: 20px" @click="handleOPD()">
                             {{ OPDProgramActionName }}</ion-card

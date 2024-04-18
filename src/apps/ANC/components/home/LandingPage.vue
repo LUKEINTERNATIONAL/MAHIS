@@ -2,19 +2,6 @@
     <ion-grid>
        <ion-row>
         <ion-col>
-            <router-link to="/profile">
-            <ion-card color="secondary">
-    <ion-card-header>
-      <ion-card-title>Profile</ion-card-title>
-    </ion-card-header>
-
-    <ion-card-content>   
-      <img src="../../public/icons/girl.png" alt="Profile Icon"/> 
-    </ion-card-content>
-  </ion-card>
-</router-link>
-        </ion-col>
-        <ion-col>
             <router-link to="/quickCheck">
             <ion-card color="secondary">
     <ion-card-header>
@@ -28,6 +15,7 @@
         </ion-col>
 
         <ion-col>
+            <router-link to="/symptomsFollowUp">
             <ion-card color="secondary">
     <ion-card-header>
       <ion-card-title>Symptoms and follow up</ion-card-title>
@@ -36,8 +24,10 @@
 
     <ion-card-content>  <img src="../../public/icons/symptom.png" alt="Profile Icon"/></ion-card-content>
   </ion-card>
+</router-link>
         </ion-col>
         <ion-col>
+            <router-link to="/labTests">
             <ion-card color="secondary">
     <ion-card-header>
       <ion-card-title>Lab tests and imaging</ion-card-title>
@@ -46,12 +36,12 @@
 
     <ion-card-content>  <img src="../../public/icons/candidate.png" alt="Profile Icon"/> </ion-card-content>
   </ion-card>
+</router-link>
         </ion-col>
-     
-       
        </ion-row>
        <ion-row>
         <ion-col>
+            <router-link to="/physicalExamination">
             <ion-card color="secondary">
     <ion-card-header>
       <ion-card-title>Physical Examination</ion-card-title>
@@ -60,8 +50,10 @@
 
     <ion-card-content>  <img src="../../public/icons/heart.png" alt="Profile Icon"/></ion-card-content>
   </ion-card>
+</router-link>
         </ion-col>
         <ion-col>
+            <router-link to="/counselling">
             <ion-card color="secondary">
     <ion-card-header>
       <ion-card-title>Counselling</ion-card-title>
@@ -70,8 +62,10 @@
 
     <ion-card-content>  <img src="../../public/icons/conversation.png" alt="Profile Icon"/> </ion-card-content>
   </ion-card>
+  </router-link>
         </ion-col>
         <ion-col>
+            <router-link to="/ANCtreatment">
             <ion-card color="secondary">
     <ion-card-header>
       <ion-card-title>Treatment and prevention</ion-card-title>
@@ -80,7 +74,12 @@
 
     <ion-card-content>  <img src="../../public/icons/patient.png" alt="Profile Icon"/></ion-card-content>
   </ion-card>
+</router-link>
         </ion-col>
+ 
+       </ion-row>
+
+       <ion-row>
         <ion-col>
             <router-link to="ANCreferral">
             <ion-card color="secondary">
@@ -93,10 +92,8 @@
   </ion-card>
 </router-link>
         </ion-col>
-       </ion-row>
-
-       <ion-row>
         <ion-col>
+            <router-link to="/ancEnd">
             <ion-card color="secondary">
     <ion-card-header>
       <ion-card-title>ANC End</ion-card-title>
@@ -105,6 +102,7 @@
 
     <ion-card-content>  <img src="../../public/icons/bed.png" alt="Profile Icon"/> </ion-card-content>
   </ion-card>
+   </router-link>
         </ion-col>
         <ion-col>
             <ion-card color="secondary">
@@ -196,6 +194,7 @@ export default defineComponent({
 ion-grid {
 text-align: center;
 position: absolute;
+margin-left: 10em;
 left: 0;
 right: 0;
 top: 50%;

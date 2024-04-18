@@ -103,8 +103,8 @@ export default defineComponent({
                this.saveUltrasound();
                this.saveUrineTest();
                this.saveTBscreening();
-
-                this.$router.push("physicalExamination");
+            this.$router.push("ANChome");
+                toastSuccess("Lab tests data saved successfully");
             } else {
                 toastWarning("Please complete all required fields");
             }

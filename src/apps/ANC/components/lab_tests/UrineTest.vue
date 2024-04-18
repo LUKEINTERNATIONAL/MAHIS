@@ -111,7 +111,7 @@ export default defineComponent({
     },
     methods:{
       handleTest(){
-        if(getRadioSelectedValue(this.urineTest,'urineInfo')=='conducted'){
+        if(getRadioSelectedValue(this.urineTest,'Urine test status')=='conducted'){
           modifyRadioValue(this.urineTest,'conductedInfo','displayNone',false)
         }else{
           modifyRadioValue(this.urineTest,'conductedInfo','displayNone',true)
@@ -119,21 +119,21 @@ export default defineComponent({
 
       },
       handleDate(){
-        if(getRadioSelectedValue(this.urineTest,'urineInfo')=='conducted'){
+        if(getRadioSelectedValue(this.urineTest,'Urine test status')=='conducted'){
           modifyFieldValue(this.urineTest,'UTD','displayNone',false)
         }else{
            modifyFieldValue(this.urineTest,'UTD','displayNone',true)
         }
       },
       handleTestNotDone(){
-        if(getRadioSelectedValue(this.urineTest,'urineInfo')=='notDone'){
+        if(getRadioSelectedValue(this.urineTest,'Urine test status')=='notDone'){
           modifyCheckboxInputField(this.urineTest,'','displayNone',false)
         }else{
           modifyCheckboxInputField(this.urineTest,'','displayNone',true)
         }
       },
       handleOtherNotDone(){
-        if(getCheckboxSelectedValue(this.urineTest,'Other')=='other'){
+        if(getCheckboxSelectedValue(this.urineTest,'Other reason')=='other'){
           modifyFieldValue(this.urineTest,'Other','displayNone',false)
         }else{
            modifyFieldValue(this.urineTest,'Other','displayNone',true)
