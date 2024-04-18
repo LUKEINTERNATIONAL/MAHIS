@@ -456,62 +456,56 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
 const getRadioButton = (number:number)=>{
   return [
     {
-      selectdData: [],
+      sideColSide:1
+,      selectdData: [],
       isFinishBtn: false,
       classDash: "dashed_bottom_border",
       radioBtnContent: {
         header: {
-          title: "Specify mode of delivery",
+          title: `Specify mode of delivery for child ${number+1}`,
           selectedValue: "",
           name: `cesareanSec ${number}`,
+          class:"bold",
+          displayNext:"Other"
         },
         data: [
           {
             name: "Cesarean section",
             value: "cesarean",
-            labelPlacement: "start",
-            colSize: "7",
-            justify: "space-between",
+            colSize: "4.1",
           },
           {
             name: "Vacuum",
             value: "vacuum",
-            labelPlacement: "start",
-            colSize: "7",
-            justify: "space-between",
+            colSize: "4.1",
           },
           {
             name: "Breach",
             value: "breach",
-            labelPlacement: "start",
-            colSize: "7",
-            justify: "space-between",
+            colSize: "4.1",
           },
           {
             name: "SDV",
             value: "sdv",
-            labelPlacement: "start",
-            colSize: "7",
-            justify: "space-between",
+            colSize: "4.1",
           },
           {
             name: "Other",
-            value: "other",
-            labelPlacement: "start",
-            colSize: "7",
-            justify: "space-between",
+            value: "Other",
+            colSize: "4.1",
           },
         ],
       },
     },
     {
+      childName:`cesareanSec ${number}`,
       data: {
         rowData: [
           {
             colData: [
               {
                 displayNone: true,
-                inputHeader: `specify ${number}`,
+                inputHeader: `specify  for child ${number+1}`,
                 icon: icons.editPen,
                 value: "",
                 name: `Specify ${number}`,
