@@ -27,10 +27,13 @@ import TB from "@/apps/ANC/components/lab_tests/TB.vue";
 import Stepper from "@/apps/ANC/components/Stepper.vue";
 import { useLabTestsStore } from "../store/LabTestsStore";
 import { mapState } from "pinia";
-import { toastWarning } from "@/utils/Alerts";
-import { formatInputFiledData, formatCheckBoxData } from "@/services/formatServerData";
+import { toastSuccess, toastWarning } from "@/utils/Alerts";
+import { formatInputFiledData, formatCheckBoxData, formatRadioButtonData } from "@/services/formatServerData";
 import { useTBScreeningStore } from "../store/TBScreeningStore";
 import { useUrineTestStore } from "../store/UrineTestStore";
+import { Service } from "@/services/service";
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import {TBScreeningInstance, UltrasoundInstance, UrineTestInstance} from "@/apps/ANC/service/labtests_service"
 export default defineComponent({
     name: "Lab",
     components: { IonPage, DemographicBar, Toolbar, IonContent, UltrasoundScan, UrineTest, TB, Stepper },
@@ -85,6 +88,7 @@ export default defineComponent({
     },
     mounted() {},
     computed: {
+        ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useLabTestsStore, ["reason", "ultrasound", "amniotic", "placenta"]),
         ...mapState(useTBScreeningStore, ["reasons", "tbTest"]),
         ...mapState(useUrineTestStore, ["urineTest", "protein", "nitrites", "culture", "gram", "leukocytes", "glucose"]),
@@ -95,12 +99,10 @@ export default defineComponent({
     methods: {
         markWizard() {},
         saveData() {
-            if (this.reason) {
-                // this.saveVitals();
-                // this.saveMartenalExam();
-                // this.saveFetalAssessment();
-                // this.saveFetalPresentation();
-                // this.savePresentingSigns();
+            if (this.ultrasound) {
+               this.saveUltrasound();
+               this.saveUrineTest();
+               this.saveTBscreening();
 
                 this.$router.push("physicalExamination");
             } else {
@@ -118,11 +120,81 @@ export default defineComponent({
 
         async buildUltrasound() {
        return [
+         ...(await formatRadioButtonData(this.ultrasound)),
          ...(await formatInputFiledData(this.ultrasound)),
-         ...(await formatCheckBoxData(this.reason)),
-         ...(await formatCheckBoxData(this.amniotic)),
-         ...(await formatCheckBoxData(this.placenta))
+         ...(await formatRadioButtonData(this.reason)),
+         ...(await formatInputFiledData(this.reason)),
+         ...(await formatRadioButtonData(this.amniotic)),
+         ...(await formatRadioButtonData(this.placenta)),
         ]
+    },
+
+    async buildTBscreening() {
+       return [
+         ...(await formatRadioButtonData(this.tbTest)),
+         ...(await formatInputFiledData(this.tbTest)),
+         ...(await formatCheckBoxData(this.reasons)),
+         ...(await formatInputFiledData(this.reasons)),
+ 
+        ]
+    },
+
+    async buildUrineTest() {
+       return [
+         ...(await formatInputFiledData(this.urineTest)),
+         ...(await formatRadioButtonData(this.urineTest)),
+         ...(await formatCheckBoxData(this.urineTest)),
+         ...(await formatRadioButtonData(this.culture)),
+         ...(await formatRadioButtonData(this.gram)),
+         ...(await formatRadioButtonData(this.nitrites)),
+         ...(await formatRadioButtonData(this.leukocytes)),
+         ...(await formatRadioButtonData(this.protein)),
+         ...(await formatRadioButtonData(this.glucose)),
+        ]
+    },
+
+    async saveUltrasound () {
+        const data: any = await this.buildUltrasound();
+        if (data.length > 0) {
+            const userID: any = Service.getUserID();
+            const ultrasoundInstance = new UltrasoundInstance();
+            ultrasoundInstance.push(this.demographics.patient_id, userID, data)
+            toastSuccess("Ultrasound scan data saved successfully");
+        }
+
+        else {
+            toastWarning("Could not find concepts");
+        }
+
+
+    },
+
+    async saveTBscreening () {
+        const data: any = await this.buildTBscreening();
+        if (data.length > 0) {
+            const userID: any = Service.getUserID();
+            const tbscreeningInstance = new TBScreeningInstance();
+            tbscreeningInstance.push(this.demographics.patient_id, userID, data);
+            toastSuccess("TB screening data saved successfully");
+        }
+
+        else {
+            toastWarning("Could not find concepts");
+        }
+
+    },
+    async saveUrineTest () {
+        const data: any = await this.buildUrineTest();
+        if (data.length > 0) {
+            const userID: any = Service.getUserID();
+            const urineTestInstance = new UrineTestInstance();
+            urineTestInstance.push(this.demographics.patient_id, userID, data);
+            toastSuccess("Urine Test data saved successfully");
+        }
+
+        else {
+            toastWarning("Could not find concepts");
+        }
     },
 
     },

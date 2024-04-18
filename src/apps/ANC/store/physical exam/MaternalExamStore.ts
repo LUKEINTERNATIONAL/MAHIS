@@ -11,7 +11,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                         header:{
                             title: '',
                             selectedValue: '',
-                            name:'pallor'
+                            name:'Pallor?'
                         },
                         data:[
                             {
@@ -35,346 +35,159 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
 
             },
         ],
-        respiration: [
-            {
-                isFinishBtn: false,
-                sectionHeader: '',
-                classDash:'dashed_bottom_border',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                value: 'RespirationNotDone',
-                                name: 'Not done',
-                                labelPlacement: 'start',
-                                colSize: '12',
-                                justify: 'space-between'
+        // vulvaInspection: [
 
-                            },
-                            {
-                                value: 'NormalExamResult',
-                                name: 'Normal exam result',
-                                labelPlacement: 'start',
-                                colSize: '12',
-                                justify: 'space-between'
+        //     {
+        //         selectdData: [],
+        //         classDash:'dashed_bottom_border',
+        //         checkboxBtnContent:
+        //             {
+        //                 header:{
+        //                     title: '',
+        //                     selectedValue: '',
+        //                     name: 'Vaginal inspection'
+        //                 },
+        //                 data:[
+        //                     {
+        //                         name: 'Abdominal exam not done',
+        //                         value: 'No Abdominal Result Conducted',
+        //                         checked: false,
+        //                         labelPlacement: 'start',
+        //                         colSize: '6',
+        //                         justify: 'space-between'
 
-                            },
-                            {
-                                value: 'RespiratoryDistress',
-                                name: 'Respiratory distress',
-                                labelPlacement: 'start',
-                                colSize: '12',
-                                justify: 'space-between'
+        //                     },
+        //                     {
+        //                         name: 'Normal abdominal exam result',
+        //                         value: 'NormalAbdominalResult',
+        //                         checked: false,
+        //                         labelPlacement: 'start',
+        //                         colSize: '6',
+        //                         justify: 'space-between'
 
-                            },
+        //                     },
+        //                 ]
+        //             }
 
-                            {
-                                value: 'Cough',
-                                name: 'Cough',
-                                labelPlacement: 'start',
-                                colSize: '12',
-                                justify: 'space-between'
+        //     },
+        //     {
+        //         selectdData: [],
+        //         classDash:'dashed_bottom_border',
+        //         checkboxBtnContent:
+        //             {
+        //                 header:{
+        //                     title: '',
+        //                     selectedValue: ''
+        //                 },
+        //                 data:[
+        //                     {
+        //                         name: 'Mass/tumour',
+        //                         value: 'Mass',
+        //                         checked: false,
+        //                         labelPlacement: 'start',
+        //                         colSize: '6',
+        //                         justify: 'space-between'
 
-                            },
-                            {
-                                value: 'RapidBreathing',
-                                name: 'Rapid breathing',
-                                labelPlacement: 'start',
-                                colSize: '12',
-                                justify: 'space-between'
+        //                     },
+        //                     {
+        //                         name: 'Pain on superficial palpation',
+        //                         value: 'PainOnSuperficialPalpation',
+        //                         checked: false,
+        //                         labelPlacement: 'start',
+        //                         colSize: '6',
+        //                         justify: 'space-between'
 
-                            },
-                            {
-                                value: 'SlowBreathing',
-                                name: 'Slow breathing',
-                                labelPlacement: 'start',
-                                colSize: '12',
-                                justify: 'space-between'
+        //                     },
+        //                 ]
+        //             }
 
-                            },
-                            {
-                                value: 'Wheezing',
-                                name: 'Wheezing',
-                                labelPlacement: 'start',
-                                colSize: '12',
-                                justify: 'space-between'
+        //     },
+        //     {
+        //         selectdData: [],
+        //         classDash:'dashed_bottom_border',
+        //         checkboxBtnContent:
+        //             {
+        //                 header:{
+        //                     title: '',
+        //                     selectedValue: ''
+        //                 },
+        //                 data:[
+        //                     {
+        //                         name: 'Pain on deep palpation',
+        //                         value: 'Pain on deep palpation',
+        //                         checked: false,
+        //                         labelPlacement: 'start',
+        //                         colSize: '6',
+        //                         justify: 'space-between'
 
-                            },
-                            {
-                                value: 'Rales',
-                                name: 'Rales',
-                                labelPlacement: 'start',
-                                colSize: '12',
-                                justify: 'space-between'
+        //                     },
+        //                     {
+        //                         name: 'Painful decompression',
+        //                         value: 'Painful decomppression',
+        //                         checked: false,
+        //                         labelPlacement: 'start',
+        //                         colSize: '6',
+        //                         justify: 'space-between'
 
-                            },
-                            {
-                                value: 'Other result',
-                                name: 'Rales',
-                                labelPlacement: 'start',
-                                colSize: '12',
-                                justify: 'space-between'
+        //                     },
+        //                 ]
+        //             }
 
-                            },
-                        ]
-                    }
+        //     },
+        //     {
+        //         selectdData: [],
+        //         classDash:'dashed_bottom_border',
+        //         checkboxBtnContent:
+        //             {
+        //                 header:{
+        //                     title: '',
+        //                     selectedValue: ''
+        //                 },
+        //                 data:[
+        //                     {
+        //                         name: 'Other',
+        //                         value: 'other',
+        //                         checked: false,
+        //                         labelPlacement: 'start',
+        //                         colSize: '6',
+        //                         justify: 'space-between'
 
-            },
-            {
-                isFinishBtn: false,
-                sectionHeader: '',
-                classDash: '',
+        //                     },
+        //                 ]
+        //             }
 
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'Specify',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'Other',
-                                        required: true,
-                                        eventType: 'input',
-                                        inputWidth: "100%",
-                                        
-                                    },
+        //     },
+        //     {
+        //         isFinishBtn: false,
+        //         sectionHeader: '',
+        //         classDash: '',
 
-                                ],
-
-                            },
-                        ]
-                    },
-            },
-
-        ],
-
-        temperature: [
-
-            {
-                sectionHeader: '',
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'First temperature',
-                                        unit: 'C',
-                                        icon: icons.temprature,
-                                        value: '',
-                                        name: 'FirstTemp',
-                                        eventType: 'input'
-                                    },
-                                    {
-                                        inputHeader: 'Second Temperature',
-                                        unit: 'C',
-                                        icon: icons.temprature,
-                                        value: '',
-                                        name: 'SecondTemp',
-                                        eventType: 'input'
-                                    }
-                                ]
-                            },
-                        ]
-                    },
-
-            }
-
-        ],
-        pulse: [
-
-            {
-                sectionHeader: '',
-                classDash:'dashed_bottom_border',
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData:
-                                    [
-                                        {
-                                            inputHeader: 'Pulse rate',
-                                            unit: 'BMP',
-                                            icon: icons.respiratory,
-                                            value: '',
-                                            name: 'FirstRespiratory',
-                                            eventType: 'input'
-                                        },
-                                        {
-                                            inputHeader: 'Second pulse rate',
-                                            unit: 'BMP',
-                                            icon: icons.respiratory,
-                                            value: '',
-                                            name: 'SecondRespiratory',
-                                            eventType: 'input'
-                                        },
-                                    ]
-                            }
-                        ]
-                    },
-
-            }
-
-        ],
-        vulvaInspection: [
-
-            {
-                selectdData: [],
-                classDash:'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Abdominal exam not done',
-                                value: 'NoAbdominalResultConducted',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between'
-
-                            },
-                            {
-                                name: 'Normal abdominal exam result',
-                                value: 'NormalAbdominalResult',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between'
-
-                            },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                classDash:'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Mass/tumour',
-                                value: 'Mass',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between'
-
-                            },
-                            {
-                                name: 'Pain on superficial palpation',
-                                value: 'PainOnSuperficialPalpation',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between'
-
-                            },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                classDash:'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Pain on deep palpation',
-                                value: 'Pain on deep palpation',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between'
-
-                            },
-                            {
-                                name: 'Painful decompression',
-                                value: 'Painful decomppression',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between'
-
-                            },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                classDash:'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Other',
-                                value: 'other',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between'
-
-                            },
-                        ]
-                    }
-
-            },
-            {
-                isFinishBtn: false,
-                sectionHeader: '',
-                classDash: '',
-
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'Specify',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'Other',
-                                        required: true,
-                                        eventType: 'input',
-                                        inputWidth: "90%",
+        //         data:
+        //             {
+        //                 rowData:[
+        //                     {
+        //                         colData: [
+        //                             {
+        //                                 inputHeader: 'Specify',
+        //                                 unit: '',
+        //                                 icon: icons.editPen,
+        //                                 value: '',
+        //                                 name: 'Other',
+        //                                 required: true,
+        //                                 eventType: 'input',
+        //                                 inputWidth: "90%",
                                        
-                                    },
+        //                             },
 
-                                ],
+        //                         ],
 
-                            },
-                        ]
-                    },
-            },
+        //                     },
+        //                 ]
+        //             },
+        //     },
 
 
-        ],
+        // ],
         breastExam: [
 
             {
@@ -384,12 +197,13 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name: 'Breast exam'
                         },
                         data:[
                             {
                                 name: 'No breast exam conducted',
-                                value: 'NoBreastExamConducted',
+                                value: 'Exam not done',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -398,7 +212,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                             },
                             {
                                 name: 'Normal breast exam result',
-                                value: 'NormalBreastExamResult',
+                                value: 'Normal exam',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -416,7 +230,8 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name: 'Breast exam'
                         },
                         data:[
                             {
@@ -448,7 +263,8 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name: 'Breast exam'
                         },
                         data:[
                             {
@@ -480,12 +296,13 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name: 'Breast exam'
                         },
                         data:[
                             {
                                 name: 'Local pain',
-                                value: 'LocalPain',
+                                value: 'Local pain',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -494,7 +311,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                             },
                             {
                                 name: 'Increased temperature',
-                                value: 'IncreasedTemperature',
+                                value: 'Increased temperature',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -512,12 +329,13 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name: 'Breast exam'
                         },
                         data:[
                             {
                                 name: 'Epigastric pain',
-                                value: 'EpigastricPain',
+                                value: 'Epigastric Pain symptom',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -526,7 +344,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                             },
                             {
                                 name: 'Other breast exams',
-                                value: 'other breast exams',
+                                value: 'Other',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -552,7 +370,8 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Other',
+                                        name: 'Other general exam findings',
+                                        valueType: 'text',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "90%",
@@ -576,7 +395,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                         header:{
                             title: '',
                             selectedValue: '',
-                            name:'Yes'
+                            name:'Cervical exam'
                         },
                         data:[
                             {
@@ -612,7 +431,8 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                                         unit: 'cm',
                                         icon:'',
                                         value: '',
-                                        name: ' cervical dilation',
+                                        name: ' Cervical dilation',
+                                        valueType:'number',
                                         eventType: 'input',
                                         inputWidth: '56%'
                                     },
@@ -634,12 +454,13 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name: 'Vaginal inspection'
                         },
                         data:[
                             {
                                 name: 'No vaginal exam done',
-                                value: 'no vaginal exam done',
+                                value: 'Exam not done',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -648,7 +469,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                             },
                             {
                                 name: 'Normal vaginal exam result',
-                                value: 'NormalBreastExamResult',
+                                value: 'Normal exam',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -666,7 +487,8 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name: 'Vaginal inspection'
                         },
                         data:[
                             {
@@ -698,12 +520,13 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name: 'Vaginal inspection'
                         },
                         data:[
                             {
                                 name: 'Abnormal discharge',
-                                value: 'abnormal discharge',
+                                value: 'Abnormal vaginal discharges',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -730,12 +553,13 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name: 'Vaginal inspection'
                         },
                         data:[
                             {
                                 name: 'Ulcers',
-                                value: 'Ulcers',
+                                value: 'Genital sores',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -744,7 +568,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                             },
                             {
                                 name: 'Warts',
-                                value: 'Warts',
+                                value: 'Vulva warts',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -762,12 +586,13 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name: 'Vaginal inspection'
                         },
                         data:[
                             {
                                 name: 'Vesicles',
-                                value: 'vesicles',
+                                value: 'Vesicles',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -776,7 +601,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                             },
                             {
                                 name: 'Bleeding',
-                                value: 'bleeding',
+                                value: 'Bleeding',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -799,7 +624,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                         data:[
                             {
                                 name: 'Other',
-                                value: 'other',
+                                value: 'Other',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -826,7 +651,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Other',
+                                        name: 'Other general exam findings',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "90%",
@@ -851,7 +676,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                         header:{
                             title: 'Is oedema present?',
                             selectedValue: '',
-                            name:'Yes'
+                            name:'Oedema'
                         },
                         data:[
                             {
@@ -883,7 +708,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                         header:{
                             title: 'Select the type of Oedema the woman has?',
                             selectedValue: '',
-                            name:'types of oedema',
+                            name:'Oedema types', //logic
                             displayNone:true,
                         },
                         data:[
@@ -932,13 +757,13 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                         header:{
                             title: 'Severity of Oedema?',
                             selectedValue: '',
-                            name:'severity of oedema',
+                            name:'Oedema severity',
 
                         },
                         data:[
                             {
                                 value: '+',
-                                name: '+',
+                                name: 'Positive',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between'
@@ -946,7 +771,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                             },
                             {
                                 value: '++',
-                                name: '++',
+                                name: 'Moderately positive',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between'

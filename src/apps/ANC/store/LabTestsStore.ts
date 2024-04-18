@@ -13,33 +13,33 @@ export const useLabTestsStore = defineStore ('labTestsStore', {
                     header:{
                         title: 'Select whether?',
                         selectedValue: '',
-                        name: 'Ultrasound scan status',
+                        name: 'Ultrasound scan status?',
                     },
                     data:[
                         {
                             name: 'Ultrasound scan required',
-                            value: 'required',
+                            value: 'Scan required',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'Ultrasound scan ordered',
-                            value: 'ordered',
+                            value: 'Scan ordered',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'Ultrasound scan conducted',
-                            value: 'conducted',
+                            value: 'Scan conducted',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'Ultrasound scan not done',
-                            value: 'Not done',
+                            value: 'NOT done',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
@@ -58,7 +58,8 @@ export const useLabTestsStore = defineStore ('labTestsStore', {
                                 {
                                     inputHeader: 'Ultrasound Scan Date',
                                     value: '',
-                                    name: 'scan',
+                                    name: 'Scan date',
+                                    valueType: 'date',
                                     required: true,
                                     eventType: 'input',
                                     alertsError: false,
@@ -94,14 +95,14 @@ export const useLabTestsStore = defineStore ('labTestsStore', {
                     data:[
                         {
                             name: 'Machine not functioning',
-                            value: 'required',
+                            value: 'Machine not functioning',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'Technician not available',
-                            value: 'ordered',
+                            value: 'Technician not available',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
@@ -131,7 +132,7 @@ export const useLabTestsStore = defineStore ('labTestsStore', {
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Other',
+                                        name: 'Other (specify)',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "85%",
@@ -152,26 +153,27 @@ export const useLabTestsStore = defineStore ('labTestsStore', {
                 {
                     header:{
                         title: 'Amniotic fluid level detected during ultrasound',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name: 'Amniotic fluid level'
                     },
                     data:[
                         {
                             name: 'Normal amniotic fluid level',
-                            value: 'normal',
+                            value: 'Normal level',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'Reduced amniotic fluid level',
-                            value: 'reduced',
+                            value: 'Reduced level',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'Increased amniotic fluid level',
-                            value: 'increased',
+                            value: 'Increased level',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
@@ -191,40 +193,41 @@ export const useLabTestsStore = defineStore ('labTestsStore', {
                 {
                     header:{
                         title: 'Location of the placenta detected during the ultrasound',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name: 'Placenta location',
                     },
                     data:[
                         {
                             name: 'Praevia',
-                            value: 'praevia',
+                            value: 'Praevia',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'Low',
-                            value: 'low',
+                            value: 'Low',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'Anterior',
-                            value: 'anterior',
+                            value: 'Anterior',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'Posterior',
-                            value: 'posterior',
+                            value: 'Posterior',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'Right side',
-                            value: 'right',
+                            value: 'Right side',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',

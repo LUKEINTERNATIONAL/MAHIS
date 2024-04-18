@@ -1,68 +1,6 @@
 import { radio } from "ionicons/icons";
 import { defineStore } from "pinia";
 
-const trailForm = {
-
-    takingCalciumSuplimentsYes:{
-        name:"Yes",
-        value:"yes"
-    },
-
-    takingCalciumSuplimentsNo:{
-        name:"No",
-        value:"no"
-    },
-        sideEffectsCalciumSuplimentsYes:{
-        name:"Yes",
-        value:"yes"
-    },
-        sideEffectsCalciumSuplimentsNo:{
-        name:"No",
-        value:"no"
-    },
-        ifaTabletsYes:{
-        name:"Yes",
-        value:"yes"
-    },
-        ifaTabletsNo:{
-        name:"No",
-        value:"no"
-    },
-        sideEfffectsifaSuplimeYes:{
-        name:"Yes",
-        value:"yes"
-    },
-        sideEfffectsifaSuplimeNo:{
-        name:"No",
-        value:"no"
-    },
-        takingAspirinTabletsYes:{
-        name:"Yes",
-        value:"yes"
-    },
-        takingAspirinTabletsNo:{
-        name:"No",
-        value:"no"
-    },
-        takingVitaminAsupplementsYes:{
-        name:"Yes",
-        value:"yes"
-    },
-        takingVitaminAsupplementsNo:{
-        name:"No",
-        value:"no"
-    },
-        takingPenicillinTreatmentForSyphilisYes:{
-        name:"Yes",
-        value:"yes"
-    },
-        takingPenicillinTreatmentForSyphilisNo:{
-        name:"No",
-        value:"no"
-    },
-
-}
-
 export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
     state: () => ({
         trial:[
@@ -75,18 +13,19 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
                     header:{
                         selectedValue:'',
                         radioTitle:['Yes','No'],
+                        name: "Taking Calcium Suppliments",
                     },
                     data:[
                         {
                             name: 'Taking Calcium Suppliments',
-                            value: trailForm.takingCalciumSuplimentsYes.value,
+                            value: 'Yes',
                             labelPlacement:'start',
                             colSize: "9.7",
                             justify:"space-between",
                             
                         },
                         {
-                            value: trailForm.takingCalciumSuplimentsNo.value,
+                            value: 'No',
                             labelPlacement:'start',
                             colSize: "2",
                             justify:"end" 
@@ -101,19 +40,20 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
                 radioBtnContent:{
 
                     header:{
-                        selectedValue:''
+                        selectedValue:'',
+                        name: 'Side-effects from calcium supplements',
                     },
                     data:[
                         {
                             name: 'Has side-effects from calcium supplements',
-                            value: trailForm.sideEffectsCalciumSuplimentsYes.value,
+                            value: 'Yes',
                             labelPlacement:'start',
                             colSize: "9.7",
                             justify:"space-between",                            
                             
                         },
                         {
-                            value: trailForm.sideEffectsCalciumSuplimentsNo.value,
+                            value: 'No',
                             labelPlacement:'start',
                             colSize: "2",
                             justify:"end" 
@@ -130,12 +70,13 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
                     header:{
                         
                         selectedValue:'',
+                        name:'Taking iron and folic acid tablets',
                         
                     },
                     data:[
                         {
                             name: 'Taking iron and folic acid (IFA) tablets',
-                            value: trailForm.ifaTabletsYes.value,
+                            value: 'Yes',
                             labelPlacement:'start',
                             colSize: "9.7",
                             justify:"space-between",
@@ -143,7 +84,7 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
                         },
                         {
     
-                            value: trailForm.ifaTabletsNo.value,
+                            value: 'No',
                             labelPlacement:'start',
                             colSize: "2",
                              justify:"end" 
@@ -158,19 +99,20 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
                 radioBtnContent:{
 
                     header:{
-                        selectedValue:''
+                        selectedValue:'',
+                        name:'Side-effects from iron and folic acid supplements',
                     },
                     data:[
                         {
                             name: 'Has side-effects from iron and folic acid supplements',
-                            value: trailForm.sideEfffectsifaSuplimeYes.value,
+                            value: 'Yes',
                             labelPlacement:'start',
                             colSize: "9.7",
                             justify:"space-between",
                         },
                         {
        
-                            value: trailForm.sideEfffectsifaSuplimeNo.value,
+                            value:"No",
                             labelPlacement:'start',
                             colSize: "2",
                             justify:"end" 
@@ -185,19 +127,20 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
                 radioBtnContent:{
 
                     header:{
-                        selectedValue:''
+                        selectedValue:'',
+                        name:'Taking aspirin tablets',
                     },
                     data:[
                         {
                             name: 'Taking aspirin tablets',
-                            value: trailForm.takingAspirinTabletsYes.value,
+                            value: 'Yes',
                             labelPlacement:'start',
                             colSize: "9.7",
                             justify:"space-between", 
                         },
                         {
                             
-                            value: trailForm.takingAspirinTabletsNo.value,
+                            value: 'No',
                             labelPlacement:'start',
                             colSize: "2",
                             justify:"end" 
@@ -212,12 +155,13 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
                 radioBtnContent:{
 
                     header:{
-                        selectedValue:''
+                        selectedValue:'',
+                        name:'Taking vitamin A supplements',
                     },
                     data:[
                         {
                             name: 'Taking vitamin A supplements',
-                            value: trailForm.takingVitaminAsupplementsYes.value,
+                            value: 'Yes',
                             labelPlacement:'start',
                             colSize: "9.7",
                             justify:"space-between",
@@ -225,7 +169,7 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
                         },
                         {
 
-                            value: trailForm.takingVitaminAsupplementsNo.value,
+                            value: 'No',
                             labelPlacement:'start',
                             colSize: "2",
                             justify:"end" 
@@ -240,12 +184,13 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
                 radioBtnContent:{
 
                     header:{
-                        selectedValue:''
+                        selectedValue:'',
+                        name:'Taking penicillin treatment'
                     },
                     data:[
                         {
                             name: 'Taking penicillin treatment for syphilis',
-                            value: trailForm.takingPenicillinTreatmentForSyphilisYes.value,
+                            value: 'Yes',
                             labelPlacement:'start',
                             colSize: "9.7",
                             justify:"space-between",
@@ -253,7 +198,7 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
                         },
                         {
                          
-                            value: trailForm.takingPenicillinTreatmentForSyphilisNo.value,
+                            value: 'No',
                             labelPlacement:'start',
                             colSize: "2",
                             justify:"end" 

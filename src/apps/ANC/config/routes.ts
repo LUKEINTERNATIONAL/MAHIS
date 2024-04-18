@@ -5,7 +5,7 @@ import Profile from '../views/Profile.vue';
 import QuickCheck from '@/apps/ANC/views/QuickCheck.vue';
 import Treatment from '../views/Treatment.vue'
 import LabTests from '../views/LabTests.vue';
-import Referral from "@/apps/ANC/views/referral.vue";
+import referral from '../views/referral.vue';
 import physicalExamination from "@/apps/ANC/views/physicalExamination.vue";
 import headssAssessment from "@/apps/ANC/views/headssAssessment.vue";
 import ANCHome from "@/apps/ANC/views/ANCHome.vue";
@@ -47,7 +47,7 @@ export default [
   {
     path: '/referral',
     name: 'referral',
-    component: Referral
+    component: referral
   },
   {
     path: '/ancEnd',

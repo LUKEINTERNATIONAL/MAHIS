@@ -77,7 +77,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
 
                 header:{
                     selectedValue: '',
-                    name:'Other Traumatic injury'
+                    name:'Other'
                 },
 
                 data:
@@ -90,7 +90,8 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Other',
+                                        name: 'Other (specify)',
+                                        valueType: 'text',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "55%",
@@ -151,7 +152,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                         },
                         data:[
                             {
-                                value: 'client referred',
+                                value: 'Client referred',
                                 name: 'Client was referred',
                                 labelPlacement: 'start',
                                 colSize: '7',
@@ -159,7 +160,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
 
                             },
                             {
-                                value: 'trained provider unavailable',
+                                value: 'Trained provider unavailable',
                                 name: 'Trained provider unavailable',
                                 labelPlacement: 'start',
                                 colSize: '7',
@@ -167,7 +168,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
 
                             },
                             {
-                                value: 'private or safe space unavailable',
+                                value: 'Safe space unavailable',
                                 name: 'Private or safe space unavailable',
                                 labelPlacement: 'start',
                                 colSize: '7',
@@ -175,7 +176,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
 
                             },
                             {
-                                value: 'confidentiality could not be assured',
+                                value: 'Confidentiality not assured',
                                 name: 'Confidentiality could not be assured',
                                 labelPlacement: 'start',
                                 colSize: '7',
@@ -183,7 +184,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
 
                             },
                             {
-                                value: 'other',
+                                value: 'Other',
                                 name: 'Other reason',
                                 labelPlacement: 'start',
                                 colSize: '7',
@@ -204,7 +205,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                 header:{
                     title: '',
                     selectedValue: '',
-                    name: "Other reason"
+                    name: "Other"
                 },
 
                 data:
@@ -217,7 +218,8 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Other',
+                                        name: 'Other (specify)',
+                                        valueType: 'text',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "55%",
@@ -241,7 +243,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                         header:{
                             title: 'Has the woman been subjected to any form of injury?',
                             selectedValue: '',
-                            name:'Any form of injury'
+                            name:'Injury present'
                         },
                         data:[
                             {
@@ -286,7 +288,8 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Other',
+                                        name: 'Other (specify)',
+                                        valueType: 'text',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "55%",
@@ -306,11 +309,11 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                         header:{
                             title: 'Types of IPV',
                             selectedValue: '',
-                            name: "Types of IPV"
+                            name: "Intimate partner violence"
                         },
                         data:[
                             {
-                                value: 'physical violence',
+                                value: 'Physical violence (IPV)',
                                 name: 'Physical violence',
                                 labelPlacement: 'start',
                                 colSize: '7',
@@ -318,7 +321,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
 
                             },
                             {
-                                value: 'sexual violence',
+                                value: 'Sexual violence',
                                 name: 'Sexual violence',
                                 labelPlacement: 'start',
                                 colSize: '7',
@@ -326,7 +329,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
 
                             },
                             {
-                                value: 'psychological/emotional abuse',
+                                value: 'Psychological abuse',
                                 name: 'Psychological/emotional abuse',
                                 labelPlacement: 'start',
                                 colSize: '7',
@@ -347,7 +350,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                 header:{
                     title: 'Types of IPV',
                     selectedValue: '',
-                    name: "Other violence"
+                    name: "Other"
                 },
 
                 data:
@@ -360,9 +363,10 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Other',
+                                        name: 'Other (specify)',
                                         required: true,
                                         eventType: 'input',
+                                        valueType:'text',
                                         inputWidth: "55%",
                                         displayNone:true
                                         
@@ -378,7 +382,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
 
     }),
     actions:{
-        setVitals(data: any){
+        setClinicalEnquiry(data: any){
             this.clinicalEnquiry = data
         }
     },

@@ -306,6 +306,10 @@ export default defineComponent({
                 const userID: any = Service.getUserID();
                 const vitalsInstance = new VitalsInstance();
                 vitalsInstance.push(this.demographics.patient_id, userID, data);
+                toastSuccess("Vitals saved successfully");
+            }
+            else {
+                toastWarning ("could not find other concepts")
             }
         },
     
@@ -315,6 +319,11 @@ export default defineComponent({
                 const userID: any = Service.getUserID();
                 const martenalInstance = new MartenalExamInstance();
                 martenalInstance.push(this.demographics.patient_id, userID, data);
+                toastSuccess("Martenal exam saved successfully");
+            }
+
+            else {
+                toastWarning("could not find other concepts")
             }
         },
 
@@ -324,6 +333,11 @@ export default defineComponent({
                 const userID: any = Service.getUserID();
                 const fetalAssessmentInstance = new FetalAssessmentInstance();
                 fetalAssessmentInstance.push(this.demographics.patient_id, userID, data);
+                toastSuccess("Fetal assessment saved successfully")
+            }
+
+            else {
+                toastWarning("could not find other concepts")
             }
         },
 
@@ -333,6 +347,10 @@ export default defineComponent({
                 const userID: any = Service.getUserID();
                 const fetalPresentationInstance = new FetalPresentationInstance();
                 fetalPresentationInstance.push(this.demographics.patient_id, userID, data);
+                toastSuccess("Fetal presentation saved successfully")
+            }
+            else {
+                toastWarning("could not find other concepts")
             }
         },
         async savePresentingSigns() {
@@ -341,7 +359,12 @@ export default defineComponent({
                 const userID: any = Service.getUserID();
                 const presentingSignsInstance = new PresentingSignsInstance();
                 presentingSignsInstance.push(this.demographics.patient_id, userID, data);
+                toastSuccess("Presenting signs saved successfully")
             }
+            else {
+                toastWarning("could not find other concepts")
+            }
+
         },
     
     

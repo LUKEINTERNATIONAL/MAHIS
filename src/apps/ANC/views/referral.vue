@@ -23,7 +23,7 @@ import Toolbar from '@/components/Toolbar.vue'
 import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import { defineComponent } from 'vue';
 import BasicInputField from '@/components/BasicInputField.vue';
-import Stepper from '@/components/Stepper.vue';
+import Stepper from "@/apps/ANC/components/Stepper.vue";
 import { icons } from '@/utils/svg';
 import { chevronBackOutline, checkmark } from 'ionicons/icons';
 import Referral from "@/apps/ANC/components/referral/Referral.vue";
@@ -31,7 +31,7 @@ import Referral from "@/apps/ANC/components/referral/Referral.vue";
 
 
 export default defineComponent ({
-  name : 'treatment',
+  name : "Home",
   components : {
     IonContent,
     IonHeader,
@@ -52,22 +52,21 @@ export default defineComponent ({
       iconsContent: icons,
       isOpen: false,
       wizardData: [
-
         {
-          'title': 'Referral',
-          'class': 'common_step',
-          'checked':false,
-          'disabled':false,
-          'number':1,
-          'last_step': 'last_step'
+          title: 'Referral',
+          class: 'common_step',
+          checked:"",
+          disabled:false,
+          number:1,
+          last_step: 'last_step'
         },
 
       ],
       StepperData: [
         {
-          'title': 'Referral',
-          'componet': 'Referral',
-          'value': '1'
+          title: 'Referral',
+          component: 'Referral',
+          value: '1'
         },
 
       ],

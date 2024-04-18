@@ -13,26 +13,26 @@ export const useTBScreeningStore = defineStore('TBScreeningStore',{
                     header:{
                         title: 'Select whether:',
                         selectedValue: '',
-                        name:'tbConducted'
+                        name:'TB screening status'
                     },
                     data:[
                         {
                             name: 'TB screening conducted',
-                            value: 'conducted',
+                            value: 'Screening conducted',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'TB screening ordered',
-                            value: 'ordered',
+                            value: 'Screening ordered',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'TB screening not done',
-                            value: 'not done',
+                            value: 'Screening not done',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
@@ -53,7 +53,7 @@ export const useTBScreeningStore = defineStore('TBScreeningStore',{
                     header:{
                         title: 'TB screening results:',
                         selectedValue: '',
-                        name:'results',
+                        name:'TB screening results',
                         displayNone:true,
                     },
                     data:[
@@ -73,14 +73,14 @@ export const useTBScreeningStore = defineStore('TBScreeningStore',{
                         },
                         {
                             name: 'Inconclusive',
-                            value: 'inconclusive',
+                            value: 'Inconclusive',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'Incomplete (symptoms only)',
-                            value: 'inconclusive',
+                            value: 'Incomplete',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
@@ -93,14 +93,20 @@ export const useTBScreeningStore = defineStore('TBScreeningStore',{
                 classDash: 'dashed_bottom_border _padding',
                 data:
                 { 
+                    header: {
+                        selectedValue: '',
+                        name:'Screening date',
+
+                    },
                     rowData:[
                         {
                             colData: [
                                 {   
-                                    dsiplayNone:true,
+                                    displayNone:true,
                                     inputHeader: 'TB screening date',
                                     value: '',
-                                    name: 'UTD',
+                                    name: 'Screening date',
+                                    valueType: 'date',
                                     required: true,
                                     eventType: 'input',
                                     alertsError: false,
@@ -129,13 +135,14 @@ export const useTBScreeningStore = defineStore('TBScreeningStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'Reason not done'
                         },
                         data:[
 
                             {
                                 name: 'Sputum smear not available',
-                                value: 'value',
+                                value: 'Sputum smear not available',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -143,7 +150,7 @@ export const useTBScreeningStore = defineStore('TBScreeningStore',{
                             },
                             {
                                 name: 'Sputum culture not available',
-                                value: 'value',
+                                value: 'Sputum culture not available',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -160,12 +167,13 @@ export const useTBScreeningStore = defineStore('TBScreeningStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name: 'Reason not done'
                         },
                         data:[
                             {
                                 name: 'GeneXpert machine not available',
-                                value: 'value',
+                                value: 'GeneXpert machine not available',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -173,7 +181,7 @@ export const useTBScreeningStore = defineStore('TBScreeningStore',{
                             },
                             {
                                 name: 'X-ray machine not available',
-                                value: 'value',
+                                value: 'X-ray machine not available',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -190,12 +198,13 @@ export const useTBScreeningStore = defineStore('TBScreeningStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name: 'Reason not done'
                         },
                         data:[
                             {
                                 name: 'No sputum testing supplies available',
-                                value: 'value',
+                                value: 'No sputum testing supplies available',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -203,7 +212,7 @@ export const useTBScreeningStore = defineStore('TBScreeningStore',{
                             },
                             {
                                 name: 'Machine not functioning',
-                                value: 'value',
+                                value: 'Machine not functioning',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -221,12 +230,14 @@ export const useTBScreeningStore = defineStore('TBScreeningStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name: "Reason not done"
+
                         },
                         data:[
                             {
                                 name: 'Technician not available',
-                                value: 'value',
+                                value: 'Technician not available   s',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -234,7 +245,7 @@ export const useTBScreeningStore = defineStore('TBScreeningStore',{
                             },
                             {
                                 name: 'Other',
-                                value: 'other',
+                                value: 'Other',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -251,6 +262,11 @@ export const useTBScreeningStore = defineStore('TBScreeningStore',{
 
                 data:
                     {
+                        header: {
+                            selectedValue:"",
+                            name:'Other'
+
+                        },
                         rowData:[
                             {
                                 colData: [
@@ -260,7 +276,7 @@ export const useTBScreeningStore = defineStore('TBScreeningStore',{
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Other',
+                                        name: 'Other (specify)',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "85%",

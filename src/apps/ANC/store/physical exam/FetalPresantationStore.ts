@@ -14,11 +14,11 @@ export const useFetalPresentationStore = defineStore('fetalPresentationStore',{
                         header:{
                             title: '',
                             selectedValue: '',
-                            name:'Fetal Presentation'
+                            name:'Fetal presentation'
                         },
                         data:[
                             {
-                                value: 'unknown',
+                                value: 'Unknown presentation',
                                 name: 'Unknown',
                                 labelPlacement: 'start',
                                 colSize: '7',
@@ -26,7 +26,7 @@ export const useFetalPresentationStore = defineStore('fetalPresentationStore',{
 
                             },
                             {
-                                value: 'cephalic',
+                                value: 'Cephalic',
                                 name: 'Cephalic',
                                 labelPlacement: 'start',
                                 colSize: '7',
@@ -34,7 +34,7 @@ export const useFetalPresentationStore = defineStore('fetalPresentationStore',{
 
                             },
                             {
-                                value: 'pelvic',
+                                value: 'Pelvic',
                                 name: 'Pelvic',
                                 labelPlacement: 'start',
                                 colSize: '7',
@@ -42,7 +42,7 @@ export const useFetalPresentationStore = defineStore('fetalPresentationStore',{
 
                             },
                             {
-                                value: 'transverse',
+                                value: 'Transverse',
                                 name: 'Transverse',
                                 labelPlacement: 'start',
                                 colSize: '7',
@@ -84,7 +84,7 @@ export const useFetalPresentationStore = defineStore('fetalPresentationStore',{
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Other fetal presentation',
+                                        name: 'Other (specify)',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "55%",
