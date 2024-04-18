@@ -1,75 +1,6 @@
 import { defineStore } from "pinia";
 
 
-const persistentBehaviourForm={
-
-    highCaffaineIntakeYes:{
-        name:"Yes",
-        value:"yes"
-    },
-        highCaffaineIntakeNo:{
-        name:"No",
-        value:"no"
-    },    
-    tobaccoUseYes:{
-        name:"Yes",
-        value:"yes"
-    },
-    tobaccoUseNo:{
-        name:"No",
-        value:"no"
-    },
-        recentlyQuitTobaccoProductsYes:{
-        name:"Yes",
-        value:"yes"
-    },
-        recentlyQuitTobaccoProductsNo:{
-        name:"No",
-        value:"no"
-    },
-        exposureToSecondHandSmokeYes:{
-        name:"Yes",
-        value:"yes"
-    },
-        exposureToSecondHandSmokeNo:{
-        name:"No",
-        value:"no"
-    },
-        condomUseDuringSexYes:{
-        name:"Yes",
-        value:"yes"
-    },
-        condomUseDuringSexNo:{
-        name:"No",
-        value:"no"
-    },
-        alcoholUseYes:{
-        name:"Yes",
-        value:"yes"
-    },
-        alcoholUseNo:{
-        name:"No",
-        value:"no"
-    },
-        substanceUseYes:{
-        name:"Yes",
-        value:"yes"
-    },
-        substanceUseNo:{
-        name:"No",
-        value:"no"
-    },
-        noPersistentBehaviourYes:{
-        name:"Yes",
-        value:"yes"
-    },
-        noPersistentBehaviourNo:{
-        name:"no",
-        value:"no"
-    },
-       
-};
-
 export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourStore',{
     state: ()=>({
         persistentBehaviour:[
@@ -83,18 +14,19 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
                        
                         selectedValue:'',
                         radioTitle:['Yes','No'],
+                        name:'High caffeine intake'
                     },
                     data:[
                         {
                             name: 'High caffeine intake',
-                            value: persistentBehaviourForm.highCaffaineIntakeYes.value,
+                            value: 'Yes',
                             labelPlacement:'start',
                             colSize: "9.7",
                             justify:"space-between" 
                         },
                         {
       
-                            value: persistentBehaviourForm.highCaffaineIntakeNo.value,
+                            value: 'No',
                             labelPlacement:'start',
                             colSize: "2",
                             justify:"end" 
@@ -110,19 +42,20 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
 
                     header:{
                         
-                        selectedValue:''
+                        selectedValue:'',
+                        name:'Tobacco use',
                     },
                     data:[
                         {
                             name: 'Tobacco use',
-                            value: persistentBehaviourForm.tobaccoUseYes.value,
+                            value: 'Yes',
                             labelPlacement:'start',
                             colSize: "9.7",
                             justify:"space-between" 
                         },
                         {
         
-                            value: persistentBehaviourForm.tobaccoUseNo.value,
+                            value: 'No',
                             labelPlacement:'start',
                             colSize: "2",
                             justify:"end" 
@@ -138,18 +71,19 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
 
                     header:{
                         
-                        selectedValue:''
+                        selectedValue:'',
+                        name:'Recently quit tobacco products',
                     },
                     data:[
                         {
                             name: 'Recently quit tobacco products',
-                            value: persistentBehaviourForm.recentlyQuitTobaccoProductsYes.value,
+                            value: 'Yes',
                             labelPlacement:'start',
                             colSize: "9.7",
                             justify:"space-between" 
                         },
                         {
-                            value: persistentBehaviourForm.recentlyQuitTobaccoProductsNo.value,
+                            value: 'No',
                             labelPlacement:'start',
                             colSize: "2",
                             justify:"end" 
@@ -165,19 +99,20 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
 
                     header:{
                         
-                        selectedValue:''
+                        selectedValue:'',
+                        name:'Exposure to second-hand smoke',
                     },
                     data:[
                         {
                             name: 'Exposure to second-hand smoke',
-                            value: persistentBehaviourForm.exposureToSecondHandSmokeYes.value,
+                            value: 'Yes',
                             labelPlacement:'start',
                             colSize: "9.7",
                             justify:"space-between" 
                         },
                         {
                             
-                            value: persistentBehaviourForm.exposureToSecondHandSmokeNo.value,
+                            value: 'No',
                             labelPlacement:'start',
                             colSize: "2",
                             justify:"end" 
@@ -193,19 +128,20 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
 
                     header:{
                         
-                        selectedValue:''
+                        selectedValue:'',
+                        name:'Condom use'
                     },
                     data:[
                         {
                             name: 'Condom use during sex',
-                            value: persistentBehaviourForm.condomUseDuringSexYes.value,
+                            value: 'Yes',
                             labelPlacement:'start',
                             colSize: "9.7",
                             justify:"space-between" 
                         },
                         {
             
-                            value: persistentBehaviourForm.condomUseDuringSexNo.value,
+                            value: 'No',
                             labelPlacement:'start',
                             colSize: "2",
                             justify:"end" 
@@ -221,19 +157,20 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
 
                     header:{
                         
-                        selectedValue:''
+                        selectedValue:'',
+                        name:'Alcohol use',
                     },
                     data:[
                         {
                             name: 'Alcohol use',
-                            value: persistentBehaviourForm.alcoholUseYes.value,
+                            value: 'Yes',
                             labelPlacement:'start',
                             colSize: "9.7",
                             justify:"space-between" 
                         },
                         {
                             
-                            value: persistentBehaviourForm.alcoholUseNo.value,
+                            value: 'No',
                             labelPlacement:'start',
                             colSize: "2",
                             justify:"end" 
@@ -249,19 +186,20 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
 
                     header:{
                         
-                        selectedValue:''
+                        selectedValue:'',
+                        name:'Substance use',
                     },
                     data:[
                         {
                             name: 'Substance use',
-                            value: persistentBehaviourForm.substanceUseYes.value,
+                            value: 'Yes',
                             labelPlacement:'start',
                             colSize: "9.7",
                             justify:"space-between" 
                         },
                         {
                            
-                            value: persistentBehaviourForm.substanceUseNo.value,
+                            value: 'No',
                             labelPlacement:'start',
                             colSize: "2",
                             justify:"end" 
@@ -277,19 +215,20 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
 
                     header:{
                         
-                        selectedValue:''
+                        selectedValue:'',
+                        name:'No persistent behaviours',
                     },
                     data:[
                         {
                             name: 'No persistent behaviours',
-                            value: persistentBehaviourForm.noPersistentBehaviourYes.value,
+                            value: 'Yes',
                             labelPlacement:'start',
                             colSize: "9.7",
                             justify:"space-between" 
                         },
                         {
                             
-                            value: persistentBehaviourForm.noPersistentBehaviourNo.value,
+                            value: 'No',
                             labelPlacement:'start',
                             colSize: "2",
                             justify:"end" 

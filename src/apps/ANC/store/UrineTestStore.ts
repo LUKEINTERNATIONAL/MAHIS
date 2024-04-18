@@ -13,26 +13,26 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                     header:{
                         title: 'Select whether:',
                         selectedValue: '',
-                        name:'urineInfo',
+                        name:'Urine test status',
                     },
                     data:[
                         {
                             name: 'Urine test conducted',
-                            value: 'conducted',
+                            value: 'Test conducted',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'Urine test ordered',
-                            value: 'ordered',
+                            value: 'Test ordered',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'Urine test not done',
-                            value: 'notDone',
+                            value: 'Test not done',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
@@ -50,27 +50,27 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                         title: 'Select the urine test conducted:',
                         selectedValue: '',
                         displayNone:true,
-                        name:'conductedInfo',
+                        name:'Urine test',
                            
                     },
                     data:[
                         {
                             name: 'Midstream urine culture (recommended)',
-                            value: 'culture',
+                            value: 'Midstream urine culture',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'Midstream urine gram-staining',
-                            value: 'gram',
+                            value: 'Midstream urine gram-staining',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
                         },
                         {
                             name: 'Urine dipstick',
-                            value: 'dipstick',
+                            value: 'Urine dipstick',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
@@ -82,7 +82,11 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                 isFinishBtn: false,
                 classDash: 'dashed_bottom_border _padding',
                 data:
-                { 
+                {      header: {
+                    selectedValue: '',
+                    name: 'Date' 
+
+                },
                     rowData:[
                         {
                             colData: [
@@ -90,7 +94,8 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                                     displayNone:true,
                                     inputHeader: 'Urine Test Date',
                                     value: '',
-                                    name: 'UTD',
+                                    name: 'Urine test date',
+                                    valueType: "date",
                                     required: true,
                                     eventType: 'input',
                                     alertsError: false,
@@ -126,26 +131,26 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                         title: '',
                         selectedValue: '',
                         // displayNone:true,
-                        // name:'reason'
+                         name:'Reason not done'
                     },
                     data:[
                         {   
                             name: 'Machine not functioning',
-                            value: 'required',
+                            value: 'Machine not functioning',
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                         },
                         {
                             name: 'Technician not available',
-                            value: 'ordered',
+                            value: 'Technician not available',
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                         },
                         {
                             name: 'Other',
-                            value: 'other',
+                            value: 'Other',
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
@@ -161,6 +166,10 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
 
                 data:
                     {
+                        header:{
+                            selectedValue: '',
+                            name:'Other',
+                        },
                         rowData:[
                             {
                                 colData: [
@@ -170,7 +179,7 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Other',
+                                        name: 'Other (specify)',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "85%",
@@ -191,7 +200,8 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                 {
                     header:{
                         title: 'Midstream urine culture',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name: 'Midstream urine culture result'
                     },
                     data:[
                         {
@@ -202,8 +212,8 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                             justify: 'space-between',
                         },
                         {
-                            name: 'Positive -Group B Streptococcus (GBS)',
-                            value: 'gbs',
+                            name: 'Positive-Group B Streptococcus (GBS)',
+                            value: 'Positive-Group B Streptococcus',
                             labelPlacement: 'start',
                             colSize: '7',
                             justify: 'space-between',
@@ -229,7 +239,8 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                 {
                     header:{
                         title: 'Midstream urine gram-staining',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name: 'Midstream urine gram-staining result'
                     },
                     data:[
                         {
@@ -260,7 +271,8 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                 {
                     header:{
                         title: 'Dipstick test result - nitrites',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name: 'Nitrites dipstick test result'
                     },
                     data:[
                         {
@@ -312,7 +324,8 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                 {
                     header:{
                         title: 'Dipstick test result - leukocytes',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name: 'Leukocytes dipstick test result'
                     },
                     data:[
                         {
@@ -364,7 +377,8 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                 {
                     header:{
                         title: 'Dipstick test result - protein',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name: 'Protein dipstick test result'
                     },
                     data:[
                         {
@@ -416,7 +430,8 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                 {
                     header:{
                         title: 'Dipstick test result - glucose',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name: 'Glucose dipstick test result'
                     },
                     data:[
                         {

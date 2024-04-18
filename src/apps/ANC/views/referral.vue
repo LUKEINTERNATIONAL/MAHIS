@@ -16,71 +16,62 @@
 
 <script lang="ts">
 import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
-import Toolbar from "@/components/Toolbar.vue";
-import { IonContent, IonPage } from "@ionic/vue";
-import { defineComponent } from "vue";
-import UltrasoundScan from "@/apps/ANC/components/lab_tests/UltrasoundScan.vue";
-import { icons } from "@/utils/svg";
-import { chevronBackOutline, checkmark } from "ionicons/icons";
-import UrineTest from "@/apps/ANC/components/lab_tests/UrineTest.vue";
-import TB from "@/apps/ANC/components/lab_tests/TB.vue";
+import { defineComponent } from 'vue';
+import BasicInputField from '@/components/BasicInputField.vue';
 import Stepper from "@/apps/ANC/components/Stepper.vue";
-export default defineComponent({
-  name: "Lab",
-  components: { IonPage, DemographicBar, Toolbar, IonContent, UltrasoundScan, UrineTest, TB, Stepper },
-  data() {
+import { icons } from '@/utils/svg';
+import { chevronBackOutline, checkmark } from 'ionicons/icons';
+import Referral from "@/apps/ANC/components/referral/Referral.vue";
+import { IonContent, IonHeader, IonItem, IonPage, IonList, IonMenu, IonTitle,IonToolbar } from "@ionic/vue";
+import Toolbar from "../components/Toolbar.vue";
+
+
+
+export default defineComponent ({
+  name : "Home",
+  components : {
+    IonContent,
+    IonHeader,
+    IonItem,
+    IonPage,
+    IonList,
+    Toolbar,
+    DemographicBar,
+    IonMenu,
+    IonTitle,
+    IonToolbar,
+    BasicInputField,
+    Stepper,
+    Referral
+  },
+  data(){
     return {
       iconsContent: icons,
       isOpen: false,
       wizardData: [
         {
-          title: "Ultrasound Scan",
-          class: "common_step",
-          checked: false,
-          disabled: false,
-          number: 1,
-          last_step: "",
+          title: 'Referral',
+          class: 'common_step',
+          checked:"",
+          disabled:false,
+          number:1,
+          last_step: 'last_step'
         },
-        {
-          title: "Urine test",
-          class: "common_step",
-          checked: false,
-          disabled: false,
-          number: 2,
-          last_step: "",
-        },
-        {
-          title: "TB Screening",
-          class: "common_step",
-          checked: false,
-          disabled: false,
-          number: 3,
-          last_step: "last_step",
-        },
+
       ],
       StepperData: [
         {
-          title: "Ultrasound Scan",
-          component: "UltrasoundScan",
-          value: "1",
+          title: 'Referral',
+          component: 'Referral',
+          value: '1'
         },
-        {
-          title: "Urine test",
-          component: "UrineTest",
-          value: "2",
-        },
-        {
-          title: "TB Screening",
-          component: "TB",
-          value: "3",
-        },
+
       ],
-    };
+
+    }
   },
-  mounted() {},
-  computed: {},
-  setup() {
-    return { chevronBackOutline, checkmark };
+  setup () {
+    return {chevronBackOutline, checkmark}
   },
   methods: {
     markWizard() {},

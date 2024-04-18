@@ -10,6 +10,11 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
                 isFinishBtn: false,
                 sectionHeader: "",
 
+                header: {
+                    name:"Symphysis-fundal height",
+                    selectedValue: "",
+                },
+
                 data: {
                     rowData: [
                         {
@@ -19,7 +24,8 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
                                     unit: "cm",
                                     icon: icons.height,
                                     value: "",
-                                    name: "Height",
+                                    name: "Symphysis-fundal height",
+                                    valueType: "number",
                                     required: true,
                                     eventType: "input",
                                     alertsError: false,
@@ -39,7 +45,7 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
                     header: {
                         title: "Is number of fetuses known?",
                         selectedValue: "",
-                        name: "Yes",
+                        name: "Number of fetuses known",
                     },
                     data: [
                         {
@@ -62,6 +68,10 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
             {
                 sectionHeader: "",
                 classDash: "dashed_bottom_border",
+                header: {
+                    name:"Number of Fetuses",
+                    selectedValue: "",
+                },
                 data: {
                     rowData: [
                         {
@@ -72,7 +82,8 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
                                     unit: "",
                                     icon: "",
                                     value: "",
-                                    name: "number of fetuses",
+                                    name: "Number of fetuses",
+                                    valueType: "number",
                                     eventType: "input",
                                     inputWidth: "55%",
                                 },
@@ -88,7 +99,7 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
                     header: {
                         title: "Fetal heartbeat present?",
                         selectedValue: "",
-                        name: "Yes",
+                        name: "Fetal heartbeat",
                     },
                     data: [
                         {
@@ -111,6 +122,10 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
             {
                 sectionHeader: "",
                 classDash: "",
+                header: {
+                    name: "Fetal heart rate",
+                    selectedValue: "",
+                },
                 data: {
                     rowData: [
                         {
@@ -121,7 +136,8 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
                                     unit: "BMP",
                                     icon: icons.systolicPressure,
                                     value: "",
-                                    name: "fetal rate",
+                                    name: "Fetal heart rate",
+                                    valueType: "number",
                                     eventType: "input",
                                     inputWidth: "55%",
                                 },
@@ -133,6 +149,10 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
             {
                 sectionHeader: "",
                 classDash: "dashed_bottom_border",
+                header: {
+                    name: "Repeated fetal rate",
+                    selectedValue: "",
+                },
                 data: {
                     rowData: [
                         {
@@ -143,7 +163,8 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
                                     unit: "BMP",
                                     icon: icons.systolicPressure,
                                     value: "",
-                                    name: "second fetal rate",
+                                    name: "Repeated fetal rate",
+                                    valueType: "number",
                                     eventType: "input",
                                     inputWidth: "55%",
                                 },
@@ -155,8 +176,8 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
         ],
     }),
     actions: {
-        setVitals(data: any) {
-            // this.vitals = data
+        setFetalAssessment(data: any) {
+             this.fetalAssessment = data
         },
     },
     persist: true,

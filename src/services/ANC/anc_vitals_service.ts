@@ -35,7 +35,7 @@ export class VitalsService extends AppEncounterService {
     async onFinish(vitals: any) {
         const encounter = await this.appEncounterServiceInstance.createEncounter();
 
-        if (!encounter) return toastWarning("Unable to create treatment encounter");
+        if (!encounter) return toastWarning("Unable to create encounter");
 
         const obs: any = await this.mapObs(vitals);
         const observations = await this.appEncounterServiceInstance.saveObservationList(obs);
