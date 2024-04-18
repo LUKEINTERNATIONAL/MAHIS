@@ -78,13 +78,13 @@ export const useImmunizationStore = defineStore("immunizationStore", {
           data: [
             {
               name: "Yes",
-              value: "yes",
+              value: "Yes",
 
               colSize: "2.5",
             },
             {
               name: "No",
-              value: "no",
+              value: "No",
 
               colSize: "2.5",
             },
@@ -349,5 +349,5 @@ export const useImmunizationStore = defineStore("immunizationStore", {
       this.hepBReason = data;
     },
   },
-   persist: true,
+  // persist: true,
 });
