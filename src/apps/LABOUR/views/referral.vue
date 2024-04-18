@@ -152,6 +152,7 @@ export default defineComponent({
       });
     },
     saveData(){
+      this.$router.push("labourHome");
       this.saveReferal();
     },
     async saveReferal(){

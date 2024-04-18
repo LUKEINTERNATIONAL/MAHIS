@@ -13,7 +13,6 @@
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="malaria"></basic-form>
-                <basic-form :contentData="malariaReason"></basic-form>
             </ion-card-content>
     </ion-card>
 
@@ -77,48 +76,70 @@ export default defineComponent({
         //  ...mapState(useDewormingStore,["treatmentType"]),
         //  ...mapState(useDewormingStore,["treatmentReason"]),
          ...mapState(useDewormingStore,["malaria"]),
-         ...mapState(useDewormingStore,["malariaReason"]),
+       
       },
       mounted(){
          this.handlepreventive()
          this.handleNoPreventative()
          this.handleOther()
+         this.handleMalariaPreventive()
       },
       setup() {
         return { checkmark,pulseOutline };
       },
       watch:{
-        treatment:{
-          handler(){
-            this.handlepreventive()
-            this.handleNoPreventative()
-            this.handleOther()
+          treatment:{
+            handler(){
+              this.handlepreventive()
+              this.handleNoPreventative()
+              this.handleOther()
+            },
+            deep:true
           },
-          deep:true
-        }
+          malaria:{
+              handler(){
+                this.handleMalariaPreventive()
+                this.handleOtherMalaria()
+              },
+              deep:true
+            },
       },
       methods:{
         handlepreventive(){
-          if(getRadioSelectedValue(this.treatment,'preventive')=='yes'){
-            modifyRadioValue(this.treatment,'treatInfo','displayNone',false)
+          if(getRadioSelectedValue(this.treatment,'antihelminthic treatment')=='yes'){
+            modifyRadioValue(this.treatment,'antihelminthic treatment provided','displayNone',false)
           }else{
-            modifyRadioValue(this.treatment,'treatInfo','displayNone',true)
+            modifyRadioValue(this.treatment,'antihelminthic treatment provided','displayNone',true)
           }
-          console.log(getRadioSelectedValue(this.treatment,'preventive'))
+          
          
         },
         handleNoPreventative(){
-          if(getRadioSelectedValue(this.treatment,'preventive')=='no'){
-            modifyRadioValue(this.treatment,'reason','displayNone',false)
+          if(getRadioSelectedValue(this.treatment,'antihelminthic treatment')=='no'){
+            modifyRadioValue(this.treatment,'no preventative treatment provided','displayNone',false)
           }else{
-             modifyRadioValue(this.treatment,'reason','displayNone',true)
+             modifyRadioValue(this.treatment,'no preventative treatment provided','displayNone',true)
           }
         },
         handleOther(){
-          if(getRadioSelectedValue(this.treatment,'reason',)=='other'){
+          if(getRadioSelectedValue(this.treatment,'no preventative treatment provided',)=='other'){
             modifyFieldValue(this.treatment,'Specify','displayNone',false)
           }else{
              modifyFieldValue(this.treatment,'Specify','displayNone',true)
+          }
+        },
+        handleMalariaPreventive(){
+          if(getRadioSelectedValue(this.malaria,' counselling on malaria prevention')=='no'){
+            modifyRadioValue(this.malaria,'counselling on malaria prevention','displayNone',false)
+          }else{
+            modifyRadioValue(this.malaria,'counselling on malaria prevention','displayNone',true)
+          }   
+        },
+        handleOtherMalaria(){
+          if(getRadioSelectedValue(this.malaria,'counselling on malaria prevention',)=='other'){
+            modifyFieldValue(this.malaria,'other','displayNone',false)
+          }else{
+             modifyFieldValue(this.malaria,'other','displayNone',true)
           }
         },
     goToPreviousSection() {

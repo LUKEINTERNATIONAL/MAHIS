@@ -228,15 +228,15 @@ export default defineComponent({
             console.log(await this.buildPregnancyHistory())
         },
         async savePreterm(){    
-        // if (this.preterm[0].selectedData.length > 0) {
-        //     const userID: any = Service.getUserID();
-        //     const Preterm = new PastObstetricHistoryService(this.demographics.patient_id, userID);
-        //     const encounter = await Preterm.createEncounter();
-        //     if (!encounter) return toastWarning("Unable to create Preterm encounter");
-        //     const patientStatus = await Preterm.saveObservationList(await this.buildPreterm());
-        //     if (!patientStatus) return toastWarning("Unable to create Preterm !");
-        //     toastSuccess("Pretermhas been created");
-        // }
+        if (this.preterm.length > 0) {
+            const userID: any = Service.getUserID();
+            const Preterm = new PastObstetricHistoryService(this.demographics.patient_id, userID);
+            const encounter = await Preterm.createEncounter();
+            if (!encounter) return toastWarning("Unable to create profile encounter");
+            const patientStatus = await Preterm.saveObservationList(await this.buildPreterm());
+            if (!patientStatus) return toastWarning("Unable to create Profile!");
+            toastSuccess("Profile has been created");
+        }
         console.log(await this.buildPreterm())
         },
         async savePastPregnancyComplication(){

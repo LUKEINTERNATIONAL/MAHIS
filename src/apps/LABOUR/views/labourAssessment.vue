@@ -216,10 +216,12 @@ export default defineComponent({
             //       if (state) errors.push(state)
             //     }
             //   })
-            // })
-            if (errors.length) {
-                return alert(errors.join(","));
-            }
+            // // })
+            // if (errors.length) {
+            //     return alert(errors.join(","));
+            // }
+          this.$router.push("labourHome");
+
         },
 
         openModal() {
