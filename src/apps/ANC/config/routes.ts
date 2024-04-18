@@ -71,11 +71,11 @@ export default [
     name: 'labTests',
     component: LabTests
   },
-  // {
-  //   path: '/ancReferral',
-  //   name: 'ancReferral',
-  //   component: ANCreferral
-  // },
+  {
+    path: '/ancReferral',
+    name: 'ancReferral',
+    component: ANCreferral
+  },
   {
     path: '/ANChome',
     name:'ANCHome',

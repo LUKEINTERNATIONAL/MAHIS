@@ -83,6 +83,7 @@
   </ion-card>
         </ion-col>
         <ion-col>
+            <router-link to="ANCreferral">
             <ion-card color="secondary">
     <ion-card-header>
       <ion-card-title>Referral</ion-card-title>
@@ -91,6 +92,7 @@
 
     <ion-card-content>  <img src="../../public/icons/hospital.png" alt="Profile Icon"/> </ion-card-content>
   </ion-card>
+</router-link>
         </ion-col>
        </ion-row>
 

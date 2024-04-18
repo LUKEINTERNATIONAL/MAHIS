@@ -22,6 +22,8 @@ import Stepper from "@/apps/ANC/components/Stepper.vue";
 import { icons } from '@/utils/svg';
 import { chevronBackOutline, checkmark } from 'ionicons/icons';
 import Referral from "@/apps/ANC/components/referral/Referral.vue";
+import { IonContent, IonHeader, IonItem, IonPage, IonList, IonMenu, IonTitle,IonToolbar } from "@ionic/vue";
+import Toolbar from "../components/Toolbar.vue";
 
 
 
