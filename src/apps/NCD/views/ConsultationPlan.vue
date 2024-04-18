@@ -176,6 +176,7 @@ export default defineComponent({
             }
         },
         markWizard() {
+            console.log("ddddddd");
             const generalStore = useGeneralStore();
             generalStore.setSaveProgressStatus("");
             if (this.vitals.validationStatus) {

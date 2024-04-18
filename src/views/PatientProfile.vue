@@ -324,6 +324,8 @@ export default defineComponent({
                             this.NCDProgramActionName = "+ Edit NCD consultation";
                         } else this.NCDProgramActionName = "+ Start new NCD consultation";
                     }
+                    const generalStore = useGeneralStore();
+                    generalStore.setSaveProgressStatus("");
                     this.url = "consultationPlan";
                 }
             } else {

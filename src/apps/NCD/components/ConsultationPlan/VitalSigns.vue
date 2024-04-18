@@ -34,6 +34,7 @@ import { Service } from "@/services/service";
 import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
 import { ObservationService } from "@/services/observation_service";
 import { PatientService } from "@/services/patient_service";
+import { useGeneralStore } from "@/stores/GeneralStore";
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -71,6 +72,11 @@ export default defineComponent({
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useVitalsStore, ["vitals"]),
+        ...mapState(useGeneralStore, ["saveProgressStatus", "activities"]),
+    },
+    async serverPrefetch() {
+        // Call updateVitalsStores when the component is activated
+        this.updateVitalsStores();
     },
     async mounted() {
         const array = ["Height", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
@@ -100,6 +106,12 @@ export default defineComponent({
     },
     watch: {
         vitals: {
+            handler() {
+                this.updateVitalsStores();
+            },
+            deep: true,
+        },
+        saveProgressStatus: {
             handler() {
                 this.updateVitalsStores();
             },
