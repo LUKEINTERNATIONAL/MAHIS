@@ -464,6 +464,10 @@ export const useRegistrationStore = defineStore("registrationStore", {
                                     id: "",
                                     idName: "district_id",
                                     displayNone: true,
+                                    InnerActionBtnPropeties: {
+                                        name: "+ Add",
+                                        show: true,
+                                    },
                                 },
                             ],
                         },

@@ -32,6 +32,7 @@ import { VitalsService } from "@/services/vitals_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { Service } from "@/services/service";
 import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
+import { ObservationService } from "@/services/observation_service";
 import { PatientService } from "@/services/patient_service";
 import {
     modifyCheckboxInputField,
@@ -71,7 +72,27 @@ export default defineComponent({
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useVitalsStore, ["vitals"]),
     },
-    mounted() {
+    async mounted() {
+        const array = ["Height", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
+
+        // An array to store all promises
+        const promises = array.map(async (item: any) => {
+            if (
+                HisDate.toStandardHisFormat(await ObservationService.getFirstObsDatetime(this.demographics.patient_id, item)) == HisDate.currentDate()
+            ) {
+                modifyFieldValue(
+                    this.vitals,
+                    item,
+                    "value",
+                    await ObservationService.getFirstValueNumber(this.demographics.patient_id, item, HisDate.currentDate())
+                );
+            }
+        });
+
+        // Wait for all promises to resolve
+        await Promise.all(promises);
+
+        // After all async operations are finished
         const userID: any = Service.getUserID();
         this.vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
         this.updateVitalsStores();
@@ -94,6 +115,7 @@ export default defineComponent({
             this.$router.push(url);
         },
         updateVitalsStores() {
+            console.log("ppppppp");
             const vitalsStore = useVitalsStore();
             vitalsStore.setVitals(this.vitals);
         },
@@ -102,6 +124,8 @@ export default defineComponent({
                 modifyCheckboxInputField(this.vitals, "Height Weight Reason", "displayNone", false);
                 modifyFieldValue(this.vitals, "Height", "disabled", true);
                 modifyFieldValue(this.vitals, "Weight", "disabled", true);
+                modifyFieldValue(this.vitals, "Height", "inputHeader", "Height");
+                modifyFieldValue(this.vitals, "Weight", "inputHeader", "Weight");
                 modifyFieldValue(this.vitals, "Height", "value", "");
                 modifyFieldValue(this.vitals, "Weight", "value", "");
                 this.validationStatus.heightWeight = false;
@@ -109,12 +133,16 @@ export default defineComponent({
                 modifyCheckboxInputField(this.vitals, "Height Weight Reason", "displayNone", true);
                 modifyFieldValue(this.vitals, "Height", "disabled", false);
                 modifyFieldValue(this.vitals, "Weight", "disabled", false);
+                modifyFieldValue(this.vitals, "Height", "inputHeader", "Height*");
+                modifyFieldValue(this.vitals, "Weight", "inputHeader", "Weight*");
                 this.validationStatus.heightWeight = true;
             }
             if (inputData?.col?.name == "Blood Pressure Not Done" && inputData.col.checked) {
                 modifyCheckboxInputField(this.vitals, "Blood Pressure Reason", "displayNone", false);
                 modifyFieldValue(this.vitals, "Systolic", "disabled", true);
                 modifyFieldValue(this.vitals, "Diastolic", "disabled", true);
+                modifyFieldValue(this.vitals, "Systolic", "inputHeader", "Systolic Pressure");
+                modifyFieldValue(this.vitals, "Diastolic", "inputHeader", "Diastolic pressure");
                 modifyFieldValue(this.vitals, "Systolic", "value", "");
                 modifyFieldValue(this.vitals, "Diastolic", "value", "");
                 this.validationStatus.bloodPressure = false;
@@ -122,8 +150,23 @@ export default defineComponent({
                 modifyCheckboxInputField(this.vitals, "Blood Pressure Reason", "displayNone", true);
                 modifyFieldValue(this.vitals, "Systolic", "disabled", false);
                 modifyFieldValue(this.vitals, "Diastolic", "disabled", false);
+                modifyFieldValue(this.vitals, "Systolic", "inputHeader", "Systolic Pressure*");
+                modifyFieldValue(this.vitals, "Diastolic", "inputHeader", "Diastolic pressure*");
                 modifyFieldValue(this.vitals, "Systolic", "value", "");
                 modifyFieldValue(this.vitals, "Diastolic", "value", "");
+                this.validationStatus.bloodPressure = true;
+            }
+            if (inputData?.col?.name == "Pulse Rate Not Done" && inputData.col.checked) {
+                modifyCheckboxInputField(this.vitals, "Pulse Rate Reason", "displayNone", false);
+                modifyFieldValue(this.vitals, "Pulse", "disabled", true);
+                modifyFieldValue(this.vitals, "Pulse", "inputHeader", "Pulse rate");
+                modifyFieldValue(this.vitals, "Pulse", "value", "");
+                this.validationStatus.bloodPressure = false;
+            } else if (inputData?.col?.name == "Pulse Rate Not Done") {
+                modifyCheckboxInputField(this.vitals, "Pulse Rate Reason", "displayNone", true);
+                modifyFieldValue(this.vitals, "Pulse", "disabled", false);
+                modifyFieldValue(this.vitals, "Pulse", "inputHeader", "Pulse rate*");
+                modifyFieldValue(this.vitals, "Pulse", "value", "");
                 this.validationStatus.bloodPressure = true;
             }
         },

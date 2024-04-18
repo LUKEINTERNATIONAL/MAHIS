@@ -117,6 +117,9 @@ export default defineComponent({
         this.getData();
     },
     mounted() {
+        if (this.activities.length == 0) {
+            this.$router.push("patientProfile");
+        }
         this.markWizard();
     },
     watch: {
@@ -173,6 +176,8 @@ export default defineComponent({
             }
         },
         markWizard() {
+            const generalStore = useGeneralStore();
+            generalStore.setSaveProgressStatus("");
             if (this.vitals.validationStatus) {
                 modifyWizardData(this.wizardData, "Vital Signs", {
                     checked: true,
@@ -229,6 +234,8 @@ export default defineComponent({
             await this.saveTreatmentPlan();
             await this.saveOutComeStatus();
             resetPatientData();
+            const generalStore = useGeneralStore();
+            generalStore.setSaveProgressStatus(false);
             this.$router.push("patientProfile");
         },
         async saveVitals() {

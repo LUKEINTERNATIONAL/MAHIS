@@ -219,7 +219,7 @@ export const useVitalsStore = defineStore("vitalsStore", {
                                     eventType: "input",
                                 },
                                 {
-                                    inputHeader: "Pulse rate",
+                                    inputHeader: "Pulse rate*",
                                     unit: "BMP",
                                     icon: icons.pulse,
                                     value: "",
@@ -254,6 +254,58 @@ export const useVitalsStore = defineStore("vitalsStore", {
                     name: "vitals",
                 },
             },
+
+            {
+                classDash: "dashed_bottom_border",
+                selectedData: [],
+                sideColSize: 3.8,
+                checkboxBtnContent: {
+                    header: {
+                        title: "",
+                        selectedValue: "",
+                        name: "Primary diagnosis",
+                    },
+                    data: [
+                        {
+                            colSize: "5.8",
+                            name: "Pulse Rate Not Done",
+                            value: "Pulse Rate Not Done",
+                            checked: false,
+                        },
+                    ],
+                    inputFields: [
+                        {
+                            inputHeader: "Specify Reason*",
+                            icon: icons.search,
+                            isMultiSelect: true,
+                            popOver: true,
+                            value: "",
+                            name: "Pulse Rate Reason",
+                            multiSelectData: [
+                                {
+                                    id: 1,
+                                    name: "Patient uncooperative",
+                                },
+                                {
+                                    id: 2,
+                                    name: "Patient uncooperative",
+                                },
+                                {
+                                    id: 3,
+                                    name: "Machine not working",
+                                },
+                            ],
+                            eventType: "input",
+                            required: true,
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                            id: "",
+                            idName: "district_id",
+                            displayNone: true,
+                        },
+                    ],
+                },
+            },
         ] as any,
     }),
     actions: {
@@ -261,5 +313,5 @@ export const useVitalsStore = defineStore("vitalsStore", {
             this.vitals = data;
         },
     },
-    // persist: true,
+    persist: true,
 });

@@ -37,6 +37,8 @@
                             @clicked:inputValue="handleInput(contentData, col, $event, 'clickedInput')"
                             :popOverData="col.popOverData"
                             @setPopoverValue="handleInput(contentData, col, $event, 'setPopoverValue')"
+                            @handleInnerActionBtnPropetiesFn="$emit('click:innerBtn', col)"
+                            :InnerActionBtnPropeties="col.InnerBtn"
                         />
                         <div v-if="col.isMultiSelect">
                             <h6 v-if="col.inputHeader">{{ col.inputHeader }}</h6>
