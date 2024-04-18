@@ -1,7 +1,7 @@
+// this data table need disintegration
 <template>
         <ion-card style="margin-top: 0px;">
           <ion-row>
-
             <ion-col>
               <ListPicker
                   :multiSelection="list_picker_prperties[0].multi_Selection"
@@ -18,19 +18,35 @@
               />
             </ion-col>
             
-            <ion-col>
-                <BasicInputField
-                style="margin: 1%;"
-                :placeholder="note_properties[0].placeHolder"
-                :icon="searchOutline"
-                :inputValue="note_properties[0].dataValue.value"
-                @update:inputValue="note_properties[0].dataHandler"
-            />
+            <ion-col style="margin-top: 20px;">
+                <ion-row>
+                  <ion-col size="9">
+                    <BasicInputField
+                      :placeholder="note_properties[0].placeHolder"
+                      :icon="searchOutline"
+                      :inputValue="note_properties[0].dataValue.value"
+                      @update:inputValue="note_properties[0].dataHandler"
+                    />
+                  </ion-col>
+                  <ion-col>
+                    <dynamic-button
+                      class="btn-cls-2"
+                        v-if="dynamic_button_properties[2].addItemButton"
+                            :name="dynamic_button_properties[2].name"
+                            :fill="dynamic_button_properties[2].btnFill"
+                            :icon="personAddOutline"
+                            @clicked:btn="OpenAddUserModal"
+                            :color="'secondary'"
+                      />
+                  </ion-col>
+                </ion-row>
            
             </ion-col>
           </ion-row>
+        </ion-card>
 
-            <EasyDataTable
+        <ion-card style="margin-top: 0px;">
+          <EasyDataTable
                 table-class-name="customize-table"
                 :headers="headers"
                 :items="items_local"
@@ -38,7 +54,7 @@
                 :search-field="searchField"
                 :search-value="searchValue"
                 :loading="pageIsLoading"
-                theme-color="#1d90ff"
+                :body-row-class-name="getBodyRowClassName"
                 @click-row="showRow"
             >
 
@@ -55,14 +71,14 @@
 
                 <ion-row class="spc_btwn" v-if="dynamic_button_properties[0].showAddItemButton">
                   <dynamic-button
-                  class="btn-cls"
-                    v-if="dynamic_button_properties[0].addItemButton"
-                        :name="dynamic_button_properties[0].name"
-                        :fill="dynamic_button_properties[0].btnFill"
-                        :icon="returnUpBackOutline"
-                        @clicked:btn="prevPage"
-                        :color="''"
-                  />
+                    class="btn-cls"
+                      v-if="dynamic_button_properties[0].addItemButton"
+                          :name="dynamic_button_properties[0].name"
+                          :fill="dynamic_button_properties[0].btnFill"
+                          :icon="returnUpBackOutline"
+                          @clicked:btn="prevPage"
+                          :color="''"
+                    />
 
                   <dynamic-button
                   class="btn-cls"
@@ -77,29 +93,52 @@
               </template>
           </EasyDataTable>
         </ion-card>
+
+        <addUserModal
+            :is_open="isPopooverOpen"
+            :user_id="user_id"
+            @close-popoover="isPopooverOpen = false"
+        />
+        
   </template>
   
   <script setup lang="ts">
-  import type { Header, Item } from "vue3-easy-data-table"
+  import type { Header, Item, BodyRowClassNameFunction, HeaderItemClassNameFunction, BodyItemClassNameFunction } from "vue3-easy-data-table"
   import { IonRow, IonCard, IonCol, IonButton, IonLabel } from "@ionic/vue"
   import { ref, watch, computed, onMounted, onUpdated } from "vue"
   import BasicInputField from "@/components/BasicInputField.vue"
   import ListPicker from "./ListPicker.vue"
   import DynamicButton from "@/components/DynamicButton.vue"
+  import addUserModal from "../views/UserManagement/addUserModal.vue"
   import {
     addOutline,
     pencilOutline,
     searchOutline,
     returnUpBackOutline,
-    returnUpForwardOutline
+    returnUpForwardOutline,
+    personAddOutline
     
 } from "ionicons/icons"
 
   const searchField = ref("username")
   const searchValue = ref("")
 
+  const getBodyRowClassName: BodyRowClassNameFunction = (item: Item, rowNumber: number): string => {
+    console.log("wwwww",rowNumber)
+    let cls = rowNumber % 2 === 0 ? "even-row" : "odd-row"
+    return cls
+  }
+
+  const bodyRowClassNameFunction: BodyRowClassNameFunction = (item: Item, rowNumber: number): string => {
+    if (item.score < 60) return 'fail-row'
+    return 'pass-row'
+  }
+
+
   const searchFieldS = ref([]) as any
   const pageIsLoading = ref(true)
+  const isPopooverOpen = ref(false)
+  const user_id = ref('')
 
   const headers = ref<Header[]>( [] )
   const items_local = ref<Item[]>([])
@@ -174,6 +213,11 @@ const note_properties = [
     },
 ]
 
+function OpenAddUserModal() {
+    isPopooverOpen.value = true
+    user_id.value = ''
+}
+
 const dynamic_button_properties = [
     {
         showAddItemButton: true,
@@ -189,6 +233,14 @@ const dynamic_button_properties = [
         btnFill: 'clear',
         fn: ()=>{},
     },
+    {
+        showAddItemButton: true,
+        addItemButton: true,
+        name: "ADD USER",
+        btnFill: 'fill',
+        fn: ()=>{},
+    },
+    
   ]
 
 const list_picker_prperties = [
@@ -235,15 +287,15 @@ const showRow = (item: ClickRowArgument) => {
   clickRow(item)
 }
 </script>
-<style scoped>
+<style>
   .customize-table {
   /* --easy-table-border: 1px solid #445269; */
-  --easy-table-row-border: 1px solid #445269;
+  --easy-table-row-border: 1px solid #d7dce4;
 
   --easy-table-header-font-size: 14px;
   --easy-table-header-height: 50px;
   --easy-table-header-font-color: #c1cad4;
-  --easy-table-header-background-color: #006401;
+  --easy-table-header-background-color: #575151bd;
 
   --easy-table-header-item-padding: 10px 15px;
 
@@ -256,11 +308,11 @@ const showRow = (item: ClickRowArgument) => {
   --easy-table-body-row-font-size: 15px;
 
   /* --easy-table-body-row-hover-font-color: #2d3a4f; */
-  --easy-table-body-row-hover-background-color: #eee;
+  --easy-table-body-row-hover-background-color: #756e6e;
 
   --easy-table-body-item-padding: 10px 15px;
 
-  --easy-table-footer-background-color: #1e8635;
+  --easy-table-footer-background-color: #575151bd;
   --easy-table-footer-font-color: #c0c7d2;
   --easy-table-footer-font-size: 14px;
   --easy-table-footer-padding: 0px 10px;
@@ -279,10 +331,27 @@ const showRow = (item: ClickRowArgument) => {
   --easy-table-loading-mask-background-color: #2d3a4f;
 }
 
+.even-row {
+  --easy-table-body-row-background-color: #f5f5f5;
+  --easy-table-body-row-font-color: #333;
+}
+
+.odd-row {
+  --easy-table-body-row-background-color: #e0e0e0;
+  --easy-table-body-row-font-color: #333;
+}
+
+
 .btn-cls {
   font-size: 30px;
   font-weight: 400;
   color: #c0c7d2 !important;
+}
+
+.btn-cls-2 {
+  font-size: 30px;
+  font-weight: 400;
+  color: #1d1d16 !important;
 }
 
 </style>

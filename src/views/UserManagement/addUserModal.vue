@@ -3,7 +3,7 @@
         <ion-header>
             <ion-toolbar>
                 <ion-title
-                    ><b>User Details Proile</b></ion-title
+                    ><b>Add User Details</b></ion-title
                 >
                 <ion-buttons slot="end">
                     <ion-button @click="$emit('closePopoover', false)">Close</ion-button>
@@ -16,9 +16,8 @@
                     <ion-row>
                         <!-- <basic-form :contentData="[]"> </basic-form> -->
                         <ion-col>
-                            <editUser
+                            <adduser
                                 :user_id="user_id"
-                                :toggle="true"
                                 :action="action"
                             />
                         </ion-col>
@@ -47,7 +46,7 @@ export default defineComponent({
 <script setup lang="ts">
 import { IonButtons, IonButton, IonModal, IonAvatar, IonImg, IonLabel, IonPage, IonFooter } from "@ionic/vue"
 import { IonContent, IonHeader, IonItem, IonCol, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue"
-import editUser from "./editUser.vue"
+import adduser from "./addUser.vue"
 import { checkmark, pulseOutline } from "ionicons/icons"
 import { ref } from "vue"
 import { icons } from "@/utils/svg"

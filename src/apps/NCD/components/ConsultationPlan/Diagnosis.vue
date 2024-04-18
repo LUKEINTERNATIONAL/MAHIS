@@ -2,7 +2,13 @@
     <DashBox :status="no_item" :content="'No Diagnosis added'" />
 
     <span v-if="display_item">
-        <list :listData="diagnosis[0].selectedData" @clicked:edit="editDiagnosis($event)" @clicked:delete="deleteDiagnosis"> </list>
+        <list
+            classNames="dashed_bottom_border"
+            :listData="diagnosis[0].selectedData"
+            @clicked:edit="editDiagnosis($event)"
+            @clicked:delete="deleteDiagnosis"
+        >
+        </list>
     </span>
 
     <ion-row v-if="search_item">

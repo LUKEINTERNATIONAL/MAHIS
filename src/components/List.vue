@@ -1,5 +1,5 @@
 <template>
-    <ion-row class="dashed_bottom_border" v-for="(item, index) in listData" :key="index">
+    <ion-row :class="classNames" v-for="(item, index) in listData" :key="index">
         <ion-col :size="item.containSize || 8 / item.display.length" v-for="(value, index2) in item.display" :key="index2" :class="item.class">
             <ion-item class="item_no_border list_header" :style="item.minHeight" v-if="item.header">
                 <span>{{ value }}</span>
@@ -85,6 +85,9 @@ export default defineComponent({
         listData: {
             default: [] as any,
         },
+        classNames: {
+            default: "dashed_bottom_border white" as any,
+        },
     },
     methods: {
         isArray(value: any) {
@@ -126,7 +129,7 @@ export default defineComponent({
     /* Secondary */
     color: #636363;
 }
-ion-item::part(native) {
+.white ion-item::part(native) {
     background: #fff;
 }
 </style>

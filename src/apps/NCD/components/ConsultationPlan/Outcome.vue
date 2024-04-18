@@ -38,7 +38,7 @@
             </ion-row>
         </div>
 
-        <AdmittedforShortStayOutcomef
+        <AdmittedforShortStayOutcome
             v-if="show_admitted_options"
             @data-saved="dataSavedTrigFn"
         />
@@ -98,7 +98,7 @@ import DynamicDispositionList from "@/components/DynamicDispositionList.vue"
 import { useOutcomeStore } from "@/stores/OutcomeStore"
 import deadOutcome from "@/apps/OPD/components/ConsultationPlan/DeadOutcome.vue"
 import ListPicker from "@/components/ListPicker.vue"
-import AdmittedforShortStayOutcomef from "@/apps/OPD/components/ConsultationPlan/AdmittedforShortStayOutcome.vue"
+import AdmittedforShortStayOutcome from "@/apps/OPD/components/ConsultationPlan/AdmittedforShortStayOutcome.vue"
 import ReferredOutCome from '@/apps/OPD/components/ConsultationPlan/ReferredOutCome.vue'
 
 const initialMsg = ref("No outcome created yet");
