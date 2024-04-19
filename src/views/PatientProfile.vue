@@ -43,7 +43,7 @@
                                 <router-link to="/profile">+ Enroll in ANC Program</router-link>
                         </ion-card>
 
-                        <ion-card class="start_new_co"  v-if="demographics.gender === 'F'"style="margin-bottom: 20px">
+                        <ion-card class="start_new_co"  v-if="demographics.gender === 'F'" style="margin-bottom: 20px">
                             + Enroll in Labour and delivery program
                         </ion-card>
                         <ion-card class="start_new_co"  v-if="demographics.gender === 'F'" style="margin-bottom: 20px">

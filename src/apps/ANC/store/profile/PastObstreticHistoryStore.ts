@@ -162,9 +162,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
         },
       },
     ],
-    modeOfDelivery: [
-      
-    ] as any,
+    modeOfDelivery: [] as any,
 
     Complications: [
       {
@@ -195,14 +193,6 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
               colSize: "6",
               justify: "space-between",
             },
-            // {
-            //   name: "Pre-eclampsia",
-            //   value: "pre-eclampsia",
-            //   checked: false,
-            //   labelPlacement: "start",
-            //   colSize: "6",
-            //   justify: "space-between",
-            // },
           ],
         },
       },
@@ -463,7 +453,7 @@ const getRadioButton = (number:number)=>{
       classDash: "dashed_bottom_border",
       radioBtnContent: {
         header: {
-          title: `Specify mode of delivery for child ${number+1}`,
+          title: `Specify mode of delivery (child ${number+1})`,
           selectedValue: "",
           name: `cesareanSec ${number}`,
           class:"bold",
