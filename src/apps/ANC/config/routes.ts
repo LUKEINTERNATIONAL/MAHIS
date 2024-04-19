@@ -56,11 +56,11 @@ export default [
     name: 'ancEnd',
     component: ancEnd
   },
-  {
-    path: '/treatment',
-    name: 'treatment',
-    component: Treatment
-  },
+  // {
+  //   path: '/treatment',
+  //   name: 'treatment',
+  //   component: Treatment
+  // },
   {
     path: '/ANCtreatment',
     name: 'ANCTreatment',

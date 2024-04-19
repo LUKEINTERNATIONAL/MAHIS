@@ -62,7 +62,7 @@ const initialExamsAfterDelivery=[
                                 unit: 'mmHg',
                                 icon: icons.systolicPressure,
                                 value: '',
-                                name: 'Systolic',
+                                name: 'Systolic blood pressure',
                                 required: true,
                                 eventType: 'input'
                             },
@@ -71,7 +71,7 @@ const initialExamsAfterDelivery=[
                                 unit: 'mmHg',
                                 icon: icons.diastolicPressure,
                                 value: '',
-                                name: 'Diastolic',
+                                name: 'Diastolic blood pressure',
                                 required: true,
                                 eventType: 'input'
                             }
@@ -84,7 +84,7 @@ const initialExamsAfterDelivery=[
                                 unit: 'mmHg',
                                 icon: icons.systolicPressure,
                                 value: '',
-                                name: 'Second systolic',
+                                name: 'Repeated systolic blood pressure',
                                 required: true,
                                 eventType: 'input'
                             },
@@ -93,7 +93,7 @@ const initialExamsAfterDelivery=[
                                 unit: 'mmHg',
                                 icon: icons.diastolicPressure,
                                 value: '',
-                                name: 'Second diastolic',
+                                name: 'Repeated diastolic blood pressure',
                                 required: true,
                                 eventType: 'input'
                             }
@@ -123,7 +123,7 @@ const initialExamsAfterDelivery=[
                                 unit: 'C',
                                 icon: icons.temprature,
                                 value: '',
-                                name: 'Temp',
+                                name: 'Temperature (c)',
                                 eventType: 'input'
                             },
                         ],
@@ -142,7 +142,7 @@ const initialExamsAfterDelivery=[
                     title: 'Uterus',
                     selectedValue: '',
                     class:"bold",
-                    name:"Uterus"
+                    name:"Raptured Uterus"
 
                 },
                 data:[
@@ -207,7 +207,7 @@ const initialExamsAfterDelivery=[
                     title: 'Has the woman urinated?',
                     selectedValue: '',
                     class:"bold",
-                    name:"Woman urinated",
+                    name:"woman urinated",
                     displayNext:"Yes"
                 },
                 data:[
@@ -265,7 +265,7 @@ const initialExamsAfterDelivery=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
-                                name: 'Odour',
+                                name: 'Odour of urine',
                                 required: true,
                                 eventType: 'input',
                                 placeholder:'',

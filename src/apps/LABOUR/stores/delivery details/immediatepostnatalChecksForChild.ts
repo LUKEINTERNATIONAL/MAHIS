@@ -34,7 +34,7 @@ const initialExamsAfterDeliveryForChild=[
                                 unit: 'BMP',
                                 icon: icons.respiratory,
                                 value: '',
-                                name: 'respiration rate',
+                                name: 'Respiration rate',
                                 eventType: 'input'
                             },
                             {
@@ -42,7 +42,7 @@ const initialExamsAfterDeliveryForChild=[
                                 unit: 'C',
                                 icon: icons.temprature,
                                 value: '',
-                                name: 'Temp',
+                                name: 'Temperature (c)',
                                 eventType: 'input'
                             },
                         ],
@@ -190,17 +190,17 @@ const initialExamsAfterDeliveryForChild=[
 export const useImmediatePostnatalChecksForChildStore = defineStore('immediatePostnatalChecksForChildStore',{
     state: () => ({
 
-        examsAfterDelivery: [...initialExamsAfterDeliveryForChild] as any,
+        examsAfterDeliveryForChild: [...initialExamsAfterDeliveryForChild] as any,
     }),
     actions:{
         setExamsAfterDelivery(data: any){
-            this.examsAfterDelivery = data
+            this.examsAfterDeliveryForChild = data
         },
         getInitial(){
             const data=[...initialExamsAfterDeliveryForChild]
             return [...data]
         }
     },
-    persist:true,
+    // persist:true,
 
 })

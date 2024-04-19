@@ -394,7 +394,6 @@ const initialSecondStageDetails=[
 
         childName:'Baby general condition at birth',
         selectdData: [],
-        classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
                 header:{
@@ -432,7 +431,6 @@ const initialSecondStageDetails=[
 
         childName:'Baby general condition at birth',
         selectdData: [],
-        classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
                 header:{
@@ -467,8 +465,8 @@ const initialSecondStageDetails=[
 
     {
         sideColSize:1,
+        classDash: 'dashed_bottom_border _padding',
         childName:'Baby general condition at birth',
-        classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
                 header:{
@@ -489,8 +487,8 @@ const initialSecondStageDetails=[
                         justify: 'space-between',
                     },
                     {
-                        name: 'Child ever had any other complications?',
-                        value: 'Child ever had any other complications?',
+                        name: 'Other complications',
+                        value: 'Other complications',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',
@@ -504,7 +502,7 @@ const initialSecondStageDetails=[
 
     {
         sideColSize:1,
-        childName:'Child ever had any other complications?',
+        childName:'Other complications',
         isFinishBtn: false,
         sectionHeader: '',
         classDash: 'dashed_bottom_border _padding',
@@ -565,7 +563,7 @@ const initialSecondStageDetails=[
     },
     {
         sideColSize:1,
-        childName:'Resuscitation attempted',
+        childName:'Resuscitation attempt',
         selectdData: [],
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
@@ -603,7 +601,6 @@ const initialSecondStageDetails=[
         sideColSize:1,
         childName:'Baby general condition at birth',
         selectdData: [],
-        classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
                 header:{
@@ -632,7 +629,6 @@ const initialSecondStageDetails=[
         sideColSize:1,
         childName:'Baby general condition at birth',
         selectdData: [],
-        classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
                 header:{
@@ -661,7 +657,6 @@ const initialSecondStageDetails=[
     {
         sideColSize:1,
         childName:'Baby general condition at birth',
-        classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
                 header:{
@@ -681,6 +676,26 @@ const initialSecondStageDetails=[
                         colSize: '6',
                         justify: 'space-between',
                     },
+
+                ]
+            }
+
+    },
+    {
+        sideColSize:1,
+        classDash: 'dashed_bottom_border _padding',
+        childName:'Baby general condition at birth',
+        checkboxBtnContent:
+            {
+                header:{
+                    title: '',
+                    selectedValue: '',
+                    displayNone:true,
+                    name:"Management to newborn"
+
+
+                },
+                data:[
                     {
                         name: 'Other',
                         value: 'Other',
@@ -694,7 +709,6 @@ const initialSecondStageDetails=[
             }
 
     },
-
 
     {
         sideColSize:1,
@@ -1020,7 +1034,6 @@ const initialNewbornComplications=[
 const initialObstetricDetails=[
     {
         selectdData: [],
-        classDash: 'dashed_bottom_border _padding',
         checkboxBtnContent:
             {
                 header:{
@@ -1054,7 +1067,6 @@ const initialObstetricDetails=[
     },
     {
         selectdData: [],
-        classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
                 header:{
@@ -1085,7 +1097,6 @@ const initialObstetricDetails=[
     },
 
     {
-        classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
                 header:{
@@ -1115,7 +1126,7 @@ const initialObstetricDetails=[
 
     },
     {
-        classDash: 'dashed_bottom_border',
+        classDash: 'dashed_bottom_border _padding',
         checkboxBtnContent:
             {
                 header:{
@@ -1166,7 +1177,6 @@ const initialObstetricDetails=[
 
     {
         selectdData: [],
-        classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
                 header:{
@@ -1190,12 +1200,13 @@ const initialObstetricDetails=[
     },
     {
         selectdData: [],
-        classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
                 header:{
                     title: '',
-                    selectedValue: ''
+                    selectedValue: '',
+                    name:"Obstetric care"
+
                 },
                 data:[
 
@@ -1212,12 +1223,13 @@ const initialObstetricDetails=[
     },
     {
         selectdData: [],
-        classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
                 header:{
                     title: '',
-                    selectedValue: ''
+                    selectedValue: '',
+                    name:"Obstetric care"
+
                 },
                 data:[
 
@@ -1239,7 +1251,9 @@ const initialObstetricDetails=[
             {
                 header:{
                     title: '',
-                    selectedValue: ''
+                    selectedValue: '',
+                    name:"Obstetric care"
+
                 },
                 data:[
 
@@ -1256,12 +1270,13 @@ const initialObstetricDetails=[
 
 
     {
-        classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
                 header:{
                     title: '',
-                    selectedValue: ''
+                    selectedValue: '',
+                    name:"Obstetric care"
+
                 },
                 data:[
                     {
@@ -1277,12 +1292,13 @@ const initialObstetricDetails=[
 
     },
     {
-        classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
                 header:{
                     title: '',
-                    selectedValue: ''
+                    selectedValue: '',
+                    name:"Obstetric care"
+
                 },
                 data:[
 
@@ -1298,12 +1314,13 @@ const initialObstetricDetails=[
 
     },
     {
-        classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
                 header:{
                     title: '',
-                    selectedValue: ''
+                    selectedValue: '',
+                    name:"Obstetric care"
+
                 },
                 data:[
 
@@ -1319,12 +1336,13 @@ const initialObstetricDetails=[
 
     },
     {
-        classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
                 header:{
                     title: '',
-                    selectedValue: ''
+                    selectedValue: '',
+                    name:"Obstetric care"
+
                 },
                 data:[
 
@@ -1340,12 +1358,13 @@ const initialObstetricDetails=[
 
     },
     {
-        classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
                 header:{
                     title: '',
-                    selectedValue: ''
+                    selectedValue: '',
+                    name:"Obstetric care"
+
                 },
                 data:[
 
@@ -1361,12 +1380,13 @@ const initialObstetricDetails=[
 
     },
     {
-        classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
                 header:{
                     title: '',
-                    selectedValue: ''
+                    selectedValue: '',
+                    name:"Obstetric care"
+
                 },
                 data:[
 
@@ -1382,12 +1402,14 @@ const initialObstetricDetails=[
 
     },
     {
-        classDash: 'dashed_bottom_border',
+        classDash: 'dashed_bottom_border _padding',
         checkboxBtnContent:
             {
                 header:{
                     title: '',
-                    selectedValue: ''
+                    selectedValue: '',
+                    name:"Obstetric care"
+
                 },
                 data:[
                     {
@@ -1438,7 +1460,8 @@ const initialObstetricDetails=[
                 header:{
                     title: 'Dexamethasone?',
                     selectedValue: '',
-                    name:"Dexamethasone"
+                    name:"Dexamethasone",
+                    class:"bold"
                 },
                 data:[
                     {

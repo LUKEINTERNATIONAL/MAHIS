@@ -33,11 +33,12 @@ const initialPlacentaExamination=[
                                 inputHeader: '',
                                 unit: '',
                                 icon: icons.time,
-                                value: '',
-                                name: 'time of delivery',
+                                valueType: 'text',
+                                name: 'Time of delivery',
                                 required: true,
                                 eventType: 'input',
-                                placeholder:'Pick time'
+                                placeholder:'Pick time',
+                                timePopover: true
 
                             },
                             {
@@ -45,7 +46,7 @@ const initialPlacentaExamination=[
                                 unit: '',
                                 icon: icons.calenderPrimary,
                                 value: '',
-                                name: 'date of delivery',
+                                name: 'Date of delivery',
                                 required: true,
                                 datePopover:true,
                                 eventType: 'input',
@@ -106,7 +107,7 @@ const initialPlacentaExamination=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
-                                name: 'Other',
+                                name: 'Other mode of delivery notes',
                                 required: true,
                                 eventType: 'input',
                                 placeholder:''
@@ -443,11 +444,11 @@ const initialPlacentaExamination=[
                         colData: [
                             {
                                 displayNone:true,
-                                inputHeader: 'Specify tears',
+                                inputHeader: 'Specify',
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
-                                name: 'Other tears',
+                                name: 'Other perineum condition',
                                 required: true,
                                 eventType: 'input',
                                 placeholder:''

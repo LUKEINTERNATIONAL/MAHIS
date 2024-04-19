@@ -1,11 +1,10 @@
 <template>
   <div class="container">
     <ion-card class="section">
-      <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
       <ion-card-content>
         <basic-form
-            :contentData="deliveryDetails"
-            :initialData="initialData"
+            :contentData="obstetricComplications"
+            :initialData2="initialData2"
 
         ></basic-form>
       </ion-card-content>
@@ -34,11 +33,17 @@ import { icons } from '../../../../utils/svg';
 import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import { checkmark, pulseOutline } from 'ionicons/icons';
+import {
+  dynamicValue,
+  getCheckboxSelectedValue,
+  getFieldValue,
+} from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
-import {useDeliveryDetailsStore} from "@/apps/PNC/stores/postnatal details/DeliveryDetails";
-import {useObstetricDetailsStore} from "@/apps/PNC/stores/postnatal details/ObstetricDetails";
+//import {useReferralStore} from "@/apps/LABOUR/stores/repeatable things/referral";
+import {useEndLabourStore} from "@/apps/LABOUR/stores/repeatable things/labourAndDeliveryEnd";
+import {useSecondStageOfLabourStore} from "@/apps/LABOUR/stores/delivery details/secondStageDelivery";
 export default defineComponent({
-  name: "DeliveryDetails",
+  name: "SecondStageDelivery",
   components:{
     BasicCard,
     IonContent,
@@ -65,14 +70,24 @@ export default defineComponent({
       hasValidationErrors: [] as any,
       inputField: '' as any,
       initialData:[] as any,
+      initialData1:[] as any,
+      initialData2:[] as any,
 
     };
   },
   computed:{
-    ...mapState(useDeliveryDetailsStore,["deliveryDetails"]),
+    ...mapState(useSecondStageOfLabourStore,["secondStageDetails"]),
+    ...mapState(useSecondStageOfLabourStore,["newbornComplications"]),
+    ...mapState(useSecondStageOfLabourStore,["secondStageDetails"]),
+    ...mapState(useSecondStageOfLabourStore,["obstetricComplications"]),
   },
   mounted(){
-
+    const secondStageDetails=useSecondStageOfLabourStore()
+    const newbornComplications=useSecondStageOfLabourStore()
+    const obstetricComplications=useSecondStageOfLabourStore()
+    this.initialData=secondStageDetails.getInitial()
+    this.initialData1=newbornComplications.getInitial1()
+    this.initialData2=obstetricComplications.getInitial2()
   },
   watch:{
   },
@@ -121,4 +136,4 @@ ion-card {
   font-size: 14px;
 }
 
-</style>yle>
+</style>
