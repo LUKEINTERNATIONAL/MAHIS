@@ -17,6 +17,8 @@
                                 placeholder="Enter Username"
                                 class="input-fields"
                                 required
+                                ><ion-label slot="end">
+                                    <ion-icon :icon="person" @click="togglePasswordVisibility"></ion-icon> </ion-label
                             ></ion-input>
                             <ion-input
                                 v-model="password"
@@ -28,10 +30,15 @@
                                 placeholder="Enter Password"
                                 class="input-fields"
                                 required
-                            ></ion-input>
+                            >
+                                <ion-label slot="end">
+                                    <ion-icon :icon="eye" @click="togglePasswordVisibility"></ion-icon>
+                                </ion-label>
+                            </ion-input>
                         </span>
-                        <ion-icon :icon="eye" @click="togglePasswordVisibility" class="password-toggle"></ion-icon>
+
                         <ion-button
+                            expand="block"
                             style="--background: var(--ion-color-primary); font-size: var(--ion-button-font)"
                             @click="doLogin"
                             class="login-button"
@@ -70,7 +77,7 @@ import {
 import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
-import { eye } from "ionicons/icons";
+import { eye, person } from "ionicons/icons";
 import { AuthService, InvalidCredentialsError } from "@/services/auth_service";
 import { toastWarning, toastDanger } from "@/utils/Alerts";
 import img from "@/utils/Img";
@@ -113,7 +120,7 @@ export default defineComponent({
         },
     },
     setup() {
-        return { eye };
+        return { eye, person };
     },
     created() {
         this.auth = new AuthService();
@@ -126,9 +133,9 @@ export default defineComponent({
                     if (this.auth.versionLockingIsEnabled()) {
                         await this.auth.validateIfCorrectAPIVersion();
                     }
-                    if (!(await this.auth.checkTimeIntegrity())) {
-                        throw "Local date does not match API date. Please Update your device's date";
-                    }
+                    // if (!(await this.auth.checkTimeIntegrity())) {
+                    //     throw "Local date does not match API date. Please Update your device's date";
+                    // }
                     await this.auth.login(this.password);
                     this.auth.startSession();
                     this.$router.push("/home");
@@ -200,6 +207,3 @@ export default defineComponent({
     margin: auto;
 }
 </style>
-
-
-
