@@ -1,144 +1,146 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
 
+const initialHIVStatusAndTreatment =[
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'HIV status of woman',
+                    selectedValue: '',
+                    class:'bold',
+                    name:'HIV status'
+                },
+                data:[
+                    {
+                        name: 'Positive',
+                        value: 'positive',
+                        colSize: '5',
+
+                    },
+                    {
+                        name: 'Negative',
+                        value: 'negative',
+                        colSize: '5',
+
+                    },
+                    {
+                        name: 'Unknown',
+                        value: 'unknown',
+                        colSize: '5',
+
+                    },
+                ]
+            }
+
+    },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'New HIV test result in postnatal',
+                    selectedValue: '',
+                    class:'bold',
+                    name:'New HIV status'
+                },
+                data:[
+                    {
+                        name: 'Positive',
+                        value: 'positive',
+                        colSize: '5'
+                    },
+                    {
+                        name: 'Negative',
+                        value: 'negative',
+                        colSize: '5'
+
+                    },
+                    {
+                        name: 'Not done',
+                        value: 'not done',
+                        colSize: '5'
+
+                    },
+                ]
+            }
+
+    },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Has the woman been started on ART treatment?',
+                    selectedValue: '',
+                    class:'bold',
+                    name:'Woman been started on ART treatment',
+                    displayNext:'Yes'
+                },
+                data:[
+                    {
+                        name: 'Yes',
+                        value: 'Yes',
+                        colSize: '2.5'
+                    },
+                    {
+                        name: 'No',
+                        value: 'No',
+                        colSize: '2.5'
+
+                    },
+                ]
+            }
+
+    },
+    {
+        isFinishBtn: false,
+        childName:'Woman been started on ART treatment',
+        sectionHeader: '',
+        classDash: 'dashed_bottom_border _padding',
+        data:
+            {
+                rowData:[
+                    {
+                        colData: [
+                            {
+                                displayNone:true,
+                                inputHeader: 'ART clinic number',
+                                unit: '',
+                                icon: icons.editPen,
+                                value: '',
+                                valueType:"text",
+                                name: 'ART clinic registration number',
+                                required: true,
+                                eventType: 'input',
+                                inputWidth: "",
+                            },
+
+                        ]
+                    }
+                ]
+            },
+    },
+] as any;
 export const useHIVStatusAndTreatmentStore = defineStore('hivStatusAndTreatmentStore',{
     state: () => ({
-        hivStatusAndTreatment: [
-
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'HIV status of woman',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Positive',
-                                value: 'positive',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Negative',
-                                value: 'negative',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Unknown',
-                                value: 'unknown',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'New HIV test result in postnatal',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Positive',
-                                value: 'positive',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Negative',
-                                value: 'negative',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Not done',
-                                value: 'not done',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Has the woman been started on ART treatment?',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Yes',
-                                value: 'yes',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'No',
-                                value: 'no',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                isFinishBtn: false,
-                sectionHeader: '',
-                classDash: 'dashed_bottom_border _padding',
-
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'ART clinic registration number',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'art clinic registration number',
-                                        required: true,
-                                        eventType: 'input',
-                                        inputWidth: "",
-                                    },
-
-                                ]
-                            }
-                        ]
-                    },
-            },
-
-        ] as any,
+        hivStatusAndTreatment: [...initialHIVStatusAndTreatment] as any,
     }),
     actions:{
         setHIVStatusANDTreatment(data: any){
             this.hivStatusAndTreatment = data
         },
+        getInitial(){
+            const data=[...initialHIVStatusAndTreatment]
+            return [...data]
+        }
 
 
     },

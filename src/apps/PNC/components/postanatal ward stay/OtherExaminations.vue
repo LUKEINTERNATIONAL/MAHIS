@@ -1,10 +1,9 @@
 <template>
   <div class="container">
     <ion-card class="section">
-      <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
       <ion-card-content>
         <basic-form
-            :contentData="deliveryDetails"
+            :contentData="otherExams"
             :initialData="initialData"
         ></basic-form>
       </ion-card-content>
@@ -34,7 +33,7 @@ import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import BasicCard from "@/components/BasicCard.vue";
-import {useDeliveryDetailsStore} from "@/apps/PNC/stores/postnatal details/DeliveryDetails";
+import {usePostnatalWardStayStore} from "@/apps/PNC/stores/postnatal ward stay/PostnatalWardMonitoring";
 export default defineComponent({
   name: "DeliveryDetails",
   components:{
@@ -67,11 +66,11 @@ export default defineComponent({
     };
   },
   computed:{
-    ...mapState(useDeliveryDetailsStore,["deliveryDetails"]),
+    ...mapState(usePostnatalWardStayStore,["otherExams"]),
   },
   mounted(){
-   const deliveryDetails=useDeliveryDetailsStore()
-    this.initialData=deliveryDetails.getInitial()
+    const otherExams=usePostnatalWardStayStore()
+    this.initialData=otherExams.getInitial2()
   },
   watch:{
   },
