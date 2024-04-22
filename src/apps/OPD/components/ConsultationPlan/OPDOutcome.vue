@@ -30,7 +30,6 @@
                         @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
                         @item-list-filtered="list_picker_prperties[0].listFilteredFN"
                     />
-
                     <div>
                         <ion-label v-if="show_error_msg_for_ref_type" class="error-label">{{ refTypErrMsg }}</ion-label>
                     </div>

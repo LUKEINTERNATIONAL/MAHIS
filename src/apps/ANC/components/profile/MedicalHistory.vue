@@ -27,6 +27,8 @@
                 <basic-form
                     :contentData="exisitingChronicHealthConditions"
                     :initialData="initialData2"
+                    @update:selected="handleInputData"
+                    @update:inputValue="handleInputData"
                 ></basic-form>
             </ion-card-content>
             </ion-card>
@@ -120,6 +122,19 @@ export default defineComponent({
             initialData:[] as any,
             initialData1:[] as any,
             initialData2:[] as any,
+
+            //art data
+            no_item: false,
+            search_item: false,
+            display_item: false,
+            addItemButton: true,
+            selectedText: "" as any,
+            conditionStatus: "" as any,
+            data: [] as any,
+            facilityData: [] as any,
+            popoverOpen: false,
+            event: "" as any,
+            selectedCondition: "" as any,
         }
     },
     mounted(){
@@ -207,8 +222,15 @@ export default defineComponent({
 
     },
     methods:{
-
-
+        async handleInputData(col:any){
+            if(col.inputHeader  == "Facility for ART"){
+                this.facilityData = await this.getFacility(col.value);
+                this.exisitingChronicHealthConditions[0].data.rowData[0].coloData[0].popOverData.data = this.facilityData;
+            }
+        },
+        async getFacility(value:any){
+            return;
+        },
         // displaying other input fields when hiv positive is checked
       handleHIVPositive(){
          if(getCheckboxSelectedValue(this.exisitingChronicHealthConditions,'HIV positive')?.value=='hiv positive')
