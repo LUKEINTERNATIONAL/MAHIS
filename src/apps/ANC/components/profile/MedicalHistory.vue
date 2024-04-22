@@ -87,6 +87,7 @@
  import BasicInputField from "@/components/BasicInputField.vue";
  import {useMedicalHistoryStore} from "@/apps/ANC/store/profile/medicalHistoryStore";
  import BasicForm from '@/components/BasicForm.vue';
+import { LocationService } from "@/services/location_service"
 import { modifyRadioValue,
     getRadioSelectedValue,
     getCheckboxSelectedValue,
@@ -225,11 +226,14 @@ export default defineComponent({
         async handleInputData(col:any){
             if(col.inputHeader  == "Facility for ART"){
                 this.facilityData = await this.getFacility(col.value);
-                this.exisitingChronicHealthConditions[0].data.rowData[0].coloData[0].popOverData.data = this.facilityData;
+                console.log("<========>",this.exisitingChronicHealthConditions[0].data.rowData[0])
+                this.exisitingChronicHealthConditions[0].data.rowData[0].colData[0].popOverData.data = this.facilityData;
+
             }
         },
         async getFacility(value:any){
-            return;
+           const data = await LocationService.getFacilities({ name: value })
+            return data
         },
         // displaying other input fields when hiv positive is checked
       handleHIVPositive(){
