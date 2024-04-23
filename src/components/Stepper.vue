@@ -1,7 +1,6 @@
 <template>
     <ion-row>
-        <ion-col size="1" size-lg="1"></ion-col>
-        <ion-col size="3" size-lg="3">
+        <ion-col size="3" class="wizard_content">
             <ion-card class="wizard_card">
                 <div class="wizard_title">
                     <strong> {{ stepperTitle }}</strong>
@@ -24,7 +23,7 @@
             </ion-card>
         </ion-col>
 
-        <ion-col size="7" size-lg="7" class="rightCol">
+        <ion-col class="rightCol">
             <div class="back_profile" @click="openModal()">
                 <ion-icon style="font-size: 20px" :icon="chevronBackOutline"> </ion-icon>
                 <span style="cursor: pointer"> Back to profile</span>
@@ -127,6 +126,7 @@ import PhysiologicalCounseling from "@/apps/ANC/components/counselling/Physiolog
 import DietCounselling from "@/apps/ANC/components/counselling/DietCounselling.vue";
 import Referral from "@/apps/ANC/components/referral/Referral.vue";
 import AncEnd from "@/apps/ANC/components/ancEnd/AncEnd.vue";
+import ImmunizationServices from "@/apps/Immunization/components/Enrollment/ImmunizationServices.vue";
 import OPDOutcome from "@/apps/OPD/components/ConsultationPlan/OPDOutcome.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
@@ -204,6 +204,7 @@ export default defineComponent({
         OPDTreatmentPlan,
         OPDOutcome,
         DynamicButton,
+        ImmunizationServices,
     },
     data() {
         return {

@@ -1,7 +1,15 @@
 .search-input-mobile {
     display: none;
 }
-
+.accordion_group[data-v-49d2667a] {
+    width: 58vw;
+}
+.wizard_content {
+    margin-left: 9vw;
+}
+.second_bar_list.mobile {
+    display: none;
+}
 @media (max-width: 900px) {
     .search-input-desktop {
         display: none;
@@ -20,5 +28,18 @@
     }
     .content_manager {
         display: block;
+    }
+    .wizard_content {
+        display: none;
+    }
+    .accordion_group[data-v-49d2667a] {
+        width: 94vw;
+        margin-left: 1.5vw;
+    }
+    .second_bar_list.desktop {
+        display: none;
+    }
+    .second_bar_list.mobile {
+        display: flex;
     }
 }
