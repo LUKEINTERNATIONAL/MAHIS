@@ -119,6 +119,17 @@ export default defineComponent({
 
     },
     watch:{
+      LiveBirths:{
+
+
+        handler(val){
+
+          console.log({val})
+         if(val == 0 || !val){
+           this.prevPregnanciesInstance.setModeOfDelivery(0)
+         }
+        }
+      },
       prevPregnancies: {
           handler(val) {
             if (val && val[2].data.rowData[0].colData[0].value) {
