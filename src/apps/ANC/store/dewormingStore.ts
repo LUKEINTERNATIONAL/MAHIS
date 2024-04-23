@@ -226,5 +226,5 @@ export const useDewormingStore = defineStore("dewormingStore", {
     //   this.malariaReason = data;
     // },
   },
-  //persist: true,
+  persist: true,
 });

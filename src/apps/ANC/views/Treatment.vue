@@ -31,7 +31,7 @@ import { useImmunizationStore } from '../store/immunizationStore';
 import { useIntimatePartnerStore } from '../store/intimatePartnerStore';
 import { useDewormingStore } from '../store/dewormingStore';
 import { Service } from "@/services/service";
-import { ImmunizationService } from "@/services/anc_treatment_service";
+import { DiagnosisTreatmentService, ImmunizationService, MedicationDispensedService } from "@/services/anc_treatment_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
 
@@ -182,9 +182,27 @@ methods: {
 
     },
   async saveDiagnosis(){
+  //     if (this.diagnoses.length > 0) {
+  //     const userID: any = Service.getUserID();
+  //     const Immunisation = new ImmunizationService(this.demographics.patient_id, userID);
+  //     const encounter = await Immunisation.createEncounter();
+  //     if (!encounter) return toastWarning("Unable to create Diagnosis encounter");
+  //     const patientStatus = await Immunisation.saveObservationList(await this.buildDiagnosis());
+  //     if (!patientStatus) return toastWarning("Unable to create Diagnosis!");
+  //     toastSuccess("Diagnosis has been created");
+  // }
     console.log(await this.buildDiagnosis())
   },
   async saveMedicationDispensed(){
+  //     if (this.HepB1.length > 0) {
+  //     const userID: any = Service.getUserID();
+  //     const Immunisation = new MedicationDispensedService(this.demographics.patient_id, userID);
+  //     const encounter = await Immunisation.createEncounter();
+  //     if (!encounter) return toastWarning("Unable to create immunisation encounter");
+  //     const patientStatus = await Immunisation.saveObservationList(await this.buildMedicationDispensed());
+  //     if (!patientStatus) return toastWarning("Unable to create Immunisation!");
+  //     toastSuccess("Immunisation has been created");
+  // }
     console.log(await this.buildMedicationDispensed())
   },
   async saveCouselling(){
@@ -195,10 +213,10 @@ methods: {
       const userID: any = Service.getUserID();
       const Immunisation = new ImmunizationService(this.demographics.patient_id, userID);
       const encounter = await Immunisation.createEncounter();
-      if (!encounter) return toastWarning("Unable to create immunisation encounter");
+      if (!encounter) return toastWarning("Unable to create Treatment encounter");
       const patientStatus = await Immunisation.saveObservationList(await this.buildImmunisation());
-      if (!patientStatus) return toastWarning("Unable to create Immunisation!");
-      toastSuccess("Immunisation has been created");
+      if (!patientStatus) return toastWarning("Unable to create Treament!");
+      toastSuccess("Treatment has been created");
   }
     console.log(await this.buildImmunisation())
   },

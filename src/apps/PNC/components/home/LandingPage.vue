@@ -8,7 +8,7 @@
               <ion-card-title>Postnatal details</ion-card-title>
             </ion-card-header>
             <ion-card-content>
-              <img src="../../public/icons/symptom.png" alt="Profile Icon"/>
+              <img src="../../public/icons/checkup.png" alt="Profile Icon"/>
             </ion-card-content>
           </ion-card>
         </router-link>

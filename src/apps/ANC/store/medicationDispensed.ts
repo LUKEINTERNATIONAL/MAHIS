@@ -20,16 +20,16 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
             {
               name: "Yes",
               value: "yes",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+             
+              colSize: "2.5",
+              
             },
             {
               name: "No",
               value: "no",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+             
+              colSize: "2.5",
+              
             },
           ],
         },
@@ -109,16 +109,16 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
             {
               name: "Yes",
               value: "yes",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+              
+              colSize: "2.5",
+              
             },
             {
               name: "No",
               value: "no",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+              
+              colSize: "2.5",
+              
             },
           ],
         },
@@ -232,16 +232,16 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
             {
               name: "Yes",
               value: "yes",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+              
+              colSize: "2.5",
+              
             },
             {
               name: "No",
               value: "no",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+              
+              colSize: "2.5",
+              
             },
           ],
         },
@@ -365,16 +365,16 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
             {
               name: "Yes",
               value: "yes",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+              
+              colSize: "2.5",
+              
             },
             {
               name: "No",
               value: "no",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+              
+              colSize: "2.5",
+              
             },
           ],
         },
@@ -509,5 +509,5 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
     //   this.calciumReason = data;
     // },
   },
-   persist: true,
+  // persist: true,
 });

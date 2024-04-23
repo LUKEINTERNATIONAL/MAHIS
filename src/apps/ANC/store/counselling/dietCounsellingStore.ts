@@ -72,7 +72,7 @@ const initialDietCounselling=[
                             icon: icons.editPen,
                             valueType:'text',
                             name: "Other notes",
-                            value: "other notes",
+                            value: "Other notes",
                             eventType: 'input',
                             inputWidth: "82%",
                             required: true

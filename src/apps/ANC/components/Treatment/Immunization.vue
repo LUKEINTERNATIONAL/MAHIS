@@ -113,7 +113,7 @@ export default defineComponent ({
 
     methods :{
       handleB1(){
-        if(getRadioSelectedValue(this.HepB1,'Hepatitis B-1')=='yes'){
+        if(getRadioSelectedValue(this.HepB1,'Hepatitis B-1')=='Yes'){
           modifyFieldValue(this.HepB1,'hepb1 Date','displayNone',false)
         }else{
           modifyFieldValue(this.HepB1,'hepb1 Date','displayNone',true)
@@ -128,9 +128,9 @@ export default defineComponent ({
       },
       handleB3(){
         if(getRadioSelectedValue(this.HepB3,'Hepatitis B-3')=='yes'){
-          modifyFieldValue(this.HepB3,'Hep B-3 Date','displayNone',false)
+          modifyFieldValue(this.HepB3,'hep3Date','displayNone',false)
         }else{
-          modifyFieldValue(this.HepB3,'Hep B-3 Date','displayNone',true)
+          modifyFieldValue(this.HepB3,'hep3Date','displayNone',true)
         }
       },
       handelHepreason(){
