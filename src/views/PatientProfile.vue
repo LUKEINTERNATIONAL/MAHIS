@@ -39,14 +39,14 @@
                         <ion-card class="start_new_co" v-if="programAccess('NCD PROGRAM')" style="margin-bottom: 20px" @click="handleNCD()">
                             {{ NCDProgramActionName }}
                         </ion-card>
-                        <ion-card class="start_new_co" v-if="demographics.gender === 'F'" style="margin-bottom: 20px">
+                        <ion-card class="start_new_co"  style="margin-bottom: 20px">
                                 <router-link to="/profile">+ Enroll in ANC Program</router-link>
                         </ion-card>
 
-                        <ion-card class="start_new_co"  v-if="demographics.gender === 'F'"style="margin-bottom: 20px">
+                        <ion-card class="start_new_co"  style="margin-bottom: 20px">
                             <router-link to="/labour/labourHome">+ Enroll in Labour and delivery program</router-link>
                         </ion-card>
-                        <ion-card class="start_new_co"  v-if="demographics.gender === 'F'" style="margin-bottom: 20px">
+                        <ion-card class="start_new_co" style="margin-bottom: 20px">
                            
                             <router-link to="/pnc/Home"> + Enroll in PNC program</router-link>
 

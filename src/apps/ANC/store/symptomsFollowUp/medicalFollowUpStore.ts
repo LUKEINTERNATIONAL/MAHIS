@@ -14,6 +14,7 @@ export const useMedicalFollowUpStore = defineStore('medicalFollowUpStore',{
                         selectedValue:'',
                         radioTitle:['Yes','No'],
                         name: "Taking Calcium Suppliments",
+                        
                     },
                     data:[
                         {

@@ -24,6 +24,13 @@ import { chevronBackOutline, checkmark } from 'ionicons/icons';
 import Referral from "@/apps/ANC/components/referral/Referral.vue";
 import { IonContent, IonHeader, IonItem, IonPage, IonList, IonMenu, IonTitle,IonToolbar } from "@ionic/vue";
 import Toolbar from "../components/Toolbar.vue";
+import { useReferralStore } from "../store/referral/referralStore";
+import { mapState } from "pinia";
+import { formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
+import { Service } from "@/services/service";
+import { toastSuccess, toastWarning } from "@/utils/Alerts";
+import {ReferralInstance} from '@/apps/ANC/service/referral_service'
+import { useDemographicsStore } from "@/stores/DemographicStore";
 
 
 
@@ -73,18 +80,35 @@ export default defineComponent ({
   setup () {
     return {chevronBackOutline, checkmark}
   },
+  computed:{
+        ...mapState(useReferralStore,["referralInfo"]),
+        ...mapState(useDemographicsStore, ["demographics"]),
+    },
   methods: {
     markWizard() {},
     saveData() {
-      // // Simulate saving data
-      // this.loading = true; // Show the spinner while data is being saved
-      // setTimeout(() => {
-      //   // After some time (simulating a server request), hide the spinner
-      //   this.loading = false;
-      //   // Redirect to counselling page
-      //   this.$router.push('counselling');
-      // }, 8000); // Simulate a 2-second delay
+      this.saveReferral
       this.$router.push("ANCHome");
+    },
+    async buildReferral() {
+       return [
+         ...(await formatRadioButtonData(this.referralInfo)),
+         ...(await formatInputFiledData(this.referralInfo))
+        ]
+    },
+
+    async saveReferral () {
+        const data: any = await this.buildReferral();
+        if (data.length > 0) {
+            const userID: any = Service.getUserID();
+            const referralInstance = new ReferralInstance();
+            referralInstance.push(this.demographics.patient_id, userID, data);
+            toastSuccess("Referral data saved successfully");
+        }
+
+        else {
+            toastWarning("Could not find all concepts");
+        }
     },
   },
 });
