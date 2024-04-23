@@ -163,7 +163,6 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
       },
     ],
     modeOfDelivery: [] as any,
-
     Complications: [
       {
         selectdData: [],
@@ -440,7 +439,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
       this.Complications = data;
     },
   },
-  // persist: true,
+  persist: true,
 });
 
 
