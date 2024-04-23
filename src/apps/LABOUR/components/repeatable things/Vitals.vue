@@ -30,11 +30,7 @@ import { icons } from '../../../../utils/svg';
 import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import { checkmark, pulseOutline } from 'ionicons/icons';
-import {
-  dynamicValue,
-  getCheckboxSelectedValue,
-  getFieldValue,
-} from '@/services/data_helpers';
+import {dynamicValue,getCheckboxSelectedValue,getFieldValue,} from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
 import {useVitalsStore} from "@/apps/LABOUR/stores/repeatable things/vitals";
 export default defineComponent({

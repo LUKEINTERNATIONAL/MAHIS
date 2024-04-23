@@ -123,8 +123,6 @@ export default defineComponent({
 
 
         handler(val){
-
-          console.log({val})
          if(val == 0 || !val){
            this.prevPregnanciesInstance.setModeOfDelivery(0)
          }
