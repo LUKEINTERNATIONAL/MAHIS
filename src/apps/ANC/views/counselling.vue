@@ -202,7 +202,7 @@ export default defineComponent({
           if (!patientStatus) return toastWarning("Unable to create patient diet counselling details!");
           toastSuccess("Diet counselling details have been created");
         }
-        console.log(await this.buildBehaviourCounselling())
+        console.log(await this.buildDietCounselling())
 
       },
       async buildBehaviourCounselling() {

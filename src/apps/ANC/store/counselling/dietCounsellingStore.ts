@@ -70,6 +70,7 @@ const initialDietCounselling=[
                             displayNone:true,
                             inputHeader: 'Specify',
                             icon: icons.editPen,
+                            valueType:'text',
                             name: "Other notes",
                             value: "other notes",
                             eventType: 'input',
