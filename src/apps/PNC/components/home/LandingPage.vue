@@ -17,7 +17,7 @@
         <router-link to="/pnc/postnatalWardMonitoring">
           <ion-card color="secondary" class="card">
             <ion-card-header>
-              <ion-card-title>Ward monitoring</ion-card-title>
+              <ion-card-title>Postnatal ward monitoring for mother</ion-card-title>
             </ion-card-header>
             <ion-card-content>
               <img src="../../public/icons/bed.png" alt="Profile Icon"/>
@@ -29,7 +29,7 @@
         <router-link to="/pnc/babyStatus">
           <ion-card color="secondary" class="card">
             <ion-card-header>
-              <ion-card-title>Postnatal baby status</ion-card-title>
+              <ion-card-title>Postnatal ward monitoring for baby</ion-card-title>
             </ion-card-header>
             <ion-card-content>
               <img src="../../public/icons/hospital.png" alt="Profile Icon"/>
@@ -53,7 +53,7 @@
         <router-link to="/pnc/postnatalVisit">
           <ion-card color="secondary" class="card">
             <ion-card-header>
-              <ion-card-title>postnatal visit</ion-card-title>
+              <ion-card-title>Postnatal visit</ion-card-title>
             </ion-card-header>
             <ion-card-content>
               <img src="../../public/icons/icons8-physical-therapy-48.png" alt="Profile Icon"/>

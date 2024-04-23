@@ -775,7 +775,7 @@ const initialVisitForMother=[
                     {
                         name: 'Not breastfeeding',
                         value: 'Not breastfeeding',
-                        colSize: '4',
+                        colSize: '5',
 
                     },
                 ]

@@ -34,10 +34,16 @@ import ToolbarSearch from "@/apps/PNC/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/PNC/components/DemographicBar.vue";
 import { chevronBackOutline,checkmark } from 'ionicons/icons';
 import SaveProgressModal from '@/components/SaveProgressModal.vue'
-import { createModal } from '@/utils/Alerts'
+import {createModal, toastSuccess, toastWarning} from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
 import Stepper from "@/apps/PNC/components/Stepper.vue";
 import { mapState } from 'pinia';
+import {Service} from "@/services/service";
+import {VisitForBabyService} from "@/apps/PNC/Services/visit_for_baby_service";
+import {formatCheckBoxData, formatInputFiledData, formatRadioButtonData} from "@/services/formatServerData";
+import {useDemographicsStore} from "@/stores/DemographicStore";
+import {usePNCEndStore} from "@/apps/PNC/stores/others/pncEnd";
+import {PNCEndService} from "@/apps/PNC/Services/pnc_end_service";
 export default defineComponent({
   name: "pncEnd",
   components:{
@@ -91,8 +97,14 @@ export default defineComponent({
   watch: {
 
   },
+  getFormatedData(data: any) {
+    return data.map((item: any) => {
+      return item?.data;
+    });
+  },
   computed:{
-
+...mapState(useDemographicsStore,["demographics"]),
+    ...mapState(usePNCEndStore,["pncEnd"])
 
   },
 
@@ -140,9 +152,31 @@ export default defineComponent({
         return item?.data;
       });
     },
-    saveData(){
+    async saveData(){
+      await this.savePNCEnd()
       this.$router.push("home");
 
+    },
+    async savePNCEnd() {
+      if (this.pncEnd>0) {
+        const userID: any = Service.getUserID();
+        const  pncEnd= new PNCEndService(this.demographics.patient_id, userID);
+        const encounter = await pncEnd.createEncounter();
+        if (!encounter) return toastWarning("Unable to create PNC end encounter");
+        const patientStatus = await pncEnd.saveObservationList(await this.buildPNCEnd());
+        if (!patientStatus) return toastWarning("Unable to create PNC program end details!");
+        toastSuccess("End details details for PNC program have been created");
+      }
+      console.log(await this.buildPNCEnd())
+
+    },
+    async buildPNCEnd() {
+      return [
+
+        ...(await formatCheckBoxData(this.pncEnd)),
+        ...(await formatRadioButtonData(this.pncEnd)),
+        ...(await formatInputFiledData(this.pncEnd)),
+      ];
     },
 
     openModal(){

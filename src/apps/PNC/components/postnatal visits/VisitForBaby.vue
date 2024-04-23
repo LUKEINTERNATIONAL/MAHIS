@@ -3,12 +3,10 @@
     <ion-card class="section">
       <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="visitForBaby" ></basic-form>
-      </ion-card-content>
-    </ion-card> <ion-card class="section">
-      <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Whats danger signs available to the baby</ion-card-title></ion-card-header>
-      <ion-card-content>
-        <basic-form :contentData="dangerSigns" ></basic-form>
+        <basic-form :contentData="visitForBaby"
+                    :initialData="initialData"
+
+        ></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
@@ -39,6 +37,7 @@ import BasicCard from "@/components/BasicCard.vue";
 import {useDeliveryDetailsStore} from "@/apps/PNC/stores/postnatal details/DeliveryDetails";
 import {useDischargeWomanStore} from "@/apps/PNC/stores/others/DischargeWoman";
 import {useVisitForBabyStore} from "@/apps/PNC/stores/postnatal visits/VisitForBaby";
+import {useVisitForMotherStore} from "@/apps/PNC/stores/postnatal visits/VisitForMother";
 export default defineComponent({
   name: "VisitForBaby",
   components:{
@@ -66,14 +65,17 @@ export default defineComponent({
       vValidations: '' as any,
       hasValidationErrors: [] as any,
       inputField: '' as any,
+      initialData:[] as any,
+
 
     };
   },
   computed:{
     ...mapState(useVisitForBabyStore,["visitForBaby"]),
-    ...mapState(useVisitForBabyStore,["dangerSigns"]),
   },
   mounted(){
+    const visitForBaby=useVisitForMotherStore()
+    this.initialData=visitForBaby.getInitial()
   },
   watch:{
   },
