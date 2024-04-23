@@ -57,6 +57,7 @@ import BasicInputField from "@/components/BasicInputField.vue"
 import { VitalsService } from "@/services/vitals_service";
 import BasicForm from '@/components/BasicForm.vue';
 import { Service } from "@/services/service";
+import { getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from '@/services/data_helpers';
 
 export default defineComponent({
   components:{
@@ -89,15 +90,27 @@ export default defineComponent({
     ...mapState(usePresentingSigns,["intimateViolence"]),
   },
   mounted(){
-
+    this.handleClinicalEnquiry()
   },
   watch: {
-
+    clinicalEnquiry:{
+      handler(){
+        this.handleClinicalEnquiry();
+      },
+      deep:true
+    }
   },
   setup() {
     return { checkmark,pulseOutline };
   },
   methods:{
+    
+    handleClinicalEnquiry(){
+      if(getRadioSelectedValue(this.clinicalEnquiry, 'Clinical enquiry')=='yes'){
+        modifyRadioValue(this.clinicalEnquiry,'Reason not done','displayNone', false)
+      }   else {modifyRadioValue(this.clinicalEnquiry,'Reason not done','displayNone', true)}
+    },
+
     navigationMenu(url: any){
       menuController.close()
       this.$router.push(url);

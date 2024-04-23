@@ -366,8 +366,6 @@ export default defineComponent({
             }
 
         },
-    
-    
 
         openModal() {
             createModal(SaveProgressModal);

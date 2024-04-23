@@ -195,10 +195,52 @@ ion-grid {
 text-align: center;
 position: absolute;
 margin-left: 10em;
-left: 0;
-right: 0;
+width: 100%;
 top: 50%;
 transform: translateY(-50%);
+}
+
+@media (max-width: 768px) { 
+  ion-grid {
+    margin-left: 0; 
+  }
+  ion-row {
+    flex-direction: column;
+    align-items: center;
+  }
+ ion-card{
+    width: 90%;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) { 
+    ion-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+ion-row {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+ion-card {
+  width: 100%;
+  max-width: 300px;
+  margin: 10px;
+}
+
+img {
+  width: 70%;
+  max-width: 70px;
+  height: auto;
+}
+  
 }
 
 .section {

@@ -148,6 +148,7 @@ export const usePresentingSigns = defineStore('presentingSigns',{
                         header:{
                             title: 'Reason clinical enquiry was not done',
                             selectedValue: '',
+                            displayNone: true,
                             name:'Reason not done'
                         },
                         data:[

@@ -69,7 +69,7 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
                 sectionHeader: "",
                 classDash: "dashed_bottom_border",
                 header: {
-                    name:"Number of Fetuses",
+                  
                     selectedValue: "",
                 },
                 data: {
@@ -123,7 +123,7 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
                 sectionHeader: "",
                 classDash: "",
                 header: {
-                    name: "Fetal heart rate",
+                    
                     selectedValue: "",
                 },
                 data: {
@@ -150,7 +150,6 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
                 sectionHeader: "",
                 classDash: "dashed_bottom_border",
                 header: {
-                    name: "Repeated fetal rate",
                     selectedValue: "",
                 },
                 data: {

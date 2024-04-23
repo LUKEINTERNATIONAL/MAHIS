@@ -35,159 +35,6 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
 
             },
         ],
-        // vulvaInspection: [
-
-        //     {
-        //         selectdData: [],
-        //         classDash:'dashed_bottom_border',
-        //         checkboxBtnContent:
-        //             {
-        //                 header:{
-        //                     title: '',
-        //                     selectedValue: '',
-        //                     name: 'Vaginal inspection'
-        //                 },
-        //                 data:[
-        //                     {
-        //                         name: 'Abdominal exam not done',
-        //                         value: 'No Abdominal Result Conducted',
-        //                         checked: false,
-        //                         labelPlacement: 'start',
-        //                         colSize: '6',
-        //                         justify: 'space-between'
-
-        //                     },
-        //                     {
-        //                         name: 'Normal abdominal exam result',
-        //                         value: 'NormalAbdominalResult',
-        //                         checked: false,
-        //                         labelPlacement: 'start',
-        //                         colSize: '6',
-        //                         justify: 'space-between'
-
-        //                     },
-        //                 ]
-        //             }
-
-        //     },
-        //     {
-        //         selectdData: [],
-        //         classDash:'dashed_bottom_border',
-        //         checkboxBtnContent:
-        //             {
-        //                 header:{
-        //                     title: '',
-        //                     selectedValue: ''
-        //                 },
-        //                 data:[
-        //                     {
-        //                         name: 'Mass/tumour',
-        //                         value: 'Mass',
-        //                         checked: false,
-        //                         labelPlacement: 'start',
-        //                         colSize: '6',
-        //                         justify: 'space-between'
-
-        //                     },
-        //                     {
-        //                         name: 'Pain on superficial palpation',
-        //                         value: 'PainOnSuperficialPalpation',
-        //                         checked: false,
-        //                         labelPlacement: 'start',
-        //                         colSize: '6',
-        //                         justify: 'space-between'
-
-        //                     },
-        //                 ]
-        //             }
-
-        //     },
-        //     {
-        //         selectdData: [],
-        //         classDash:'dashed_bottom_border',
-        //         checkboxBtnContent:
-        //             {
-        //                 header:{
-        //                     title: '',
-        //                     selectedValue: ''
-        //                 },
-        //                 data:[
-        //                     {
-        //                         name: 'Pain on deep palpation',
-        //                         value: 'Pain on deep palpation',
-        //                         checked: false,
-        //                         labelPlacement: 'start',
-        //                         colSize: '6',
-        //                         justify: 'space-between'
-
-        //                     },
-        //                     {
-        //                         name: 'Painful decompression',
-        //                         value: 'Painful decomppression',
-        //                         checked: false,
-        //                         labelPlacement: 'start',
-        //                         colSize: '6',
-        //                         justify: 'space-between'
-
-        //                     },
-        //                 ]
-        //             }
-
-        //     },
-        //     {
-        //         selectdData: [],
-        //         classDash:'dashed_bottom_border',
-        //         checkboxBtnContent:
-        //             {
-        //                 header:{
-        //                     title: '',
-        //                     selectedValue: ''
-        //                 },
-        //                 data:[
-        //                     {
-        //                         name: 'Other',
-        //                         value: 'other',
-        //                         checked: false,
-        //                         labelPlacement: 'start',
-        //                         colSize: '6',
-        //                         justify: 'space-between'
-
-        //                     },
-        //                 ]
-        //             }
-
-        //     },
-        //     {
-        //         isFinishBtn: false,
-        //         sectionHeader: '',
-        //         classDash: '',
-
-        //         data:
-        //             {
-        //                 rowData:[
-        //                     {
-        //                         colData: [
-        //                             {
-        //                                 inputHeader: 'Specify',
-        //                                 unit: '',
-        //                                 icon: icons.editPen,
-        //                                 value: '',
-        //                                 name: 'Other',
-        //                                 required: true,
-        //                                 eventType: 'input',
-        //                                 inputWidth: "90%",
-                                       
-        //                             },
-
-        //                         ],
-
-        //                     },
-        //                 ]
-        //             },
-        //     },
-
-
-        // ],
         breastExam: [
 
             {
@@ -431,7 +278,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                                         unit: 'cm',
                                         icon:'',
                                         value: '',
-                                        name: ' Cervical dilation',
+                                        name: 'Cervical dilation',
                                         valueType:'number',
                                         eventType: 'input',
                                         inputWidth: '56%'
@@ -444,7 +291,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
 
             }
 
-        ],
+        ] as any,
         vaginalInspection: [
 
             {
@@ -670,12 +517,13 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
         oedemaPresence: [
             {
                 selectdData: [],
-                classDash: 'dashed_bottom_border',
+                classDash: 'dashed_bottom_border _padding',
                 radioBtnContent:
                     {
                         header:{
                             title: 'Is oedema present?',
                             selectedValue: '',
+                            class: 'bold',
                             name:'Oedema'
                         },
                         data:[
@@ -702,13 +550,14 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
             },
             {
                 selectdData: [],
-                classDash: '',
+                classDash: 'dashed_bottom_border _padding',
                 radioBtnContent:
                     {
                         header:{
                             title: 'Select the type of Oedema the woman has?',
                             selectedValue: '',
-                            name:'Oedema types', //logic
+                            name:'Oedema types', 
+                            class:'bold',
                             displayNone:true,
                         },
                         data:[
@@ -758,12 +607,13 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                             title: 'Severity of Oedema?',
                             selectedValue: '',
                             name:'Oedema severity',
+                            displayNone:true,
 
                         },
                         data:[
                             {
                                 value: '+',
-                                name: 'Positive',
+                                name: '+',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between'
@@ -771,7 +621,7 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
                             },
                             {
                                 value: '++',
-                                name: 'Moderately positive',
+                                name: '++',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between'
@@ -805,7 +655,8 @@ export const useMaternalExamStore = defineStore('maternalExamStore',{
     actions:{
         setMaternalExam(data: any){
             this.breastExam = data
-        }
+        },
+      
     },
     persist:true,
 
