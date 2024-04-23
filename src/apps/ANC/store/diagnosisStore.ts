@@ -794,5 +794,5 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
       this.anaemia = data;
     },
   },
-  // persist: true,
+   persist: true,
 });
