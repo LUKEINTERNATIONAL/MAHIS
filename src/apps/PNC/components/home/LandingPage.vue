@@ -62,18 +62,6 @@
         </router-link>
       </ion-col>
       <ion-col size="12" size-md="6" size-lg="4">
-        <router-link to="/labour/continuousMonitoring">
-          <ion-card color="secondary" class="card">
-            <ion-card-header>
-              <ion-card-title>Continuous monitoring</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <img src="../../public/icons/heart.png" alt="Profile Icon"/>
-            </ion-card-content>
-          </ion-card>
-        </router-link>
-      </ion-col>
-      <ion-col size="12" size-md="6" size-lg="4">
         <router-link to="/pnc/pncEnd">
           <ion-card color="secondary" class="card">
             <ion-card-header>

@@ -3,7 +3,11 @@
     <ion-card class="section">
     <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
     <ion-card-content>
-      <basic-form :contentData="visitForMother" ></basic-form>
+      <basic-form
+          :contentData="visitForMother"
+          :initialData="initialData"
+
+      ></basic-form>
     </ion-card-content>
   </ion-card>
   </div>
@@ -62,6 +66,7 @@ export default defineComponent({
       vValidations: '' as any,
       hasValidationErrors: [] as any,
       inputField: '' as any,
+      initialData:[] as any,
 
     };
   },
@@ -69,6 +74,8 @@ export default defineComponent({
     ...mapState(useVisitForMotherStore,["visitForMother"]),
   },
   mounted(){
+    const visitForMother=useVisitForMotherStore()
+    this.initialData=visitForMother.getInitial()
   },
   watch:{
   },

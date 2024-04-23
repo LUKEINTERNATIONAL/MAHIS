@@ -1,774 +1,800 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
 
+const initialVisitForMother=[
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'What is the status of the mother?',
+                    selectedValue: '',
+                    name:'Status of the mother',
+                    class:'bold'
+                },
+                data:[
+                    {
+                        name: 'Alive',
+                        value: 'Alive',
+                        colSize: '4',
+
+                    },
+                    {
+                        name: 'Dead',
+                        value: 'Dead',
+                        colSize: '4',
+
+                    },
+                ]
+            }
+
+    },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Is the postnatal check within?',
+                    selectedValue: '',
+                    class:'bold',
+                    name:'Postnatal check period'
+                },
+                data:[
+                    {
+                        name: 'Up to 48 hrs or before discharge',
+                        value: 'up to 48 hrs or before discharge',
+                        colSize: '7',
+                    },
+                    {
+                        name: '3-7 days',
+                        value: '3 to 7 days',
+                        colSize: '7',
+
+                    },
+                    {
+                        name: '8-42 days',
+                        value: '8 to 42 days',
+                        colSize: '7',
+
+                    },
+                ]
+            }
+
+    },
+    {
+        selectdData: [],
+        classDash: 'dashed_bottom_border',
+        checkboxBtnContent:
+            {
+                header:{
+                    title: 'Does the woman have any of the danger signs?',
+                    selectedValue: '',
+                    name:'Danger signs',
+                    class:'bold'
+                },
+                data:[
+
+                    {
+                        name: 'None',
+                        value: 'none',
+                        checked: false,
+                        labelPlacement: 'start',
+                        colSize: '6',
+                        justify: 'space-between',
+                    },
+                    {
+                        name: 'Sepsis',
+                        value: 'sepsis',
+                        checked: false,
+                        labelPlacement: 'start',
+                        colSize: '6',
+                        justify: 'space-between',
+                    },
+                ]
+            }
+
+    },
+    {
+        selectdData: [],
+        classDash: 'dashed_bottom_border',
+        checkboxBtnContent:
+            {
+                header:{
+                    title: '',
+                    selectedValue: '',
+                    name:'Danger signs',
+
+                },
+                data:[
+
+                    {
+                        name: 'Anemia',
+                        value: 'anemia',
+                        checked: false,
+                        labelPlacement: 'start',
+                        colSize: '6',
+                        justify: 'space-between',
+                    },
+                    {
+                        name: 'Postpartum hemorrhage',
+                        value: 'postpartum hemorrhage',
+                        checked: false,
+                        labelPlacement: 'start',
+                        colSize: '6',
+                        justify: 'space-between',
+                    },
+                ]
+            }
+
+    },
+
+    {
+        classDash: 'dashed_bottom_border',
+        checkboxBtnContent:
+            {
+                header:{
+                    title: '',
+                    selectedValue: '',
+                    name:'Danger signs',
+
+                },
+                data:[
+                    {
+                        name: 'Severe pre-eclampsia',
+                        value: 'severe pre-eclampsia',
+                        checked: false,
+                        labelPlacement: 'start',
+                        colSize: '6',
+                        justify: 'space-between',
+                    },
+                    {
+                        name: 'Pre-eclampsia',
+                        value: 'pre-eclampsia',
+                        checked: false,
+                        labelPlacement: 'start',
+                        colSize: '6',
+                        justify: 'space-between',
+                    },
+
+                ]
+            }
+
+    },
+    {
+        classDash: 'dashed_bottom_border',
+        checkboxBtnContent:
+            {
+                header:{
+                    title: '',
+                    selectedValue: '',
+                    name:'Danger signs',
+
+                },
+                data:[
+                    {
+                        name: 'Breast engorgement',
+                        value: 'breast engorgement',
+                        checked: false,
+                        labelPlacement: 'start',
+                        colSize: '6',
+                        justify: 'space-between',
+                    },
+                    {
+                        name: 'Other danger signs',
+                        value: 'Other danger signs',
+                        checked: false,
+                        labelPlacement: 'start',
+                        colSize: '6',
+                        justify: 'space-between',
+                    },
+
+                ]
+            }
+
+    },
+
+    {
+        childName:'Other danger signs',
+        isFinishBtn: false,
+        sectionHeader: '',
+        classDash: 'dashed_bottom_border _padding',
+
+        data:
+            {
+                rowData:[
+                    {
+                        colData: [
+                            {
+                                displayNone:true,
+                                inputHeader: 'Specify',
+                                unit: '',
+                                icon: icons.editPen,
+                                value: '',
+                                name: 'Other danger signs notes',
+                                required: true,
+                                eventType: 'input',
+                                inputWidth: "85%",
+                            },
+
+                        ]
+                    }
+                ]
+            },
+    },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Status of uterus',
+                    selectedValue: '',
+                    class:'bold',
+                    name:'Status of uterus',
+                    displayNext:"Other"
+                },
+                data:[
+                    {
+                        name: 'Involuted',
+                        value: 'involuted',
+                        colSize: '4',
+
+                    },
+                    {
+                        name: 'Sub-involuted',
+                        value: 'sub-involuted',
+                        colSize: '4',
+
+                    },
+                    {
+                        name: 'Other',
+                        value: 'Other',
+                        colSize: '5',
+
+                    },
+                ]
+            }
+
+    },
+    {
+        childName:'Status of uterus',
+        isFinishBtn: false,
+        sectionHeader: '',
+        classDash: 'dashed_bottom_border _padding',
+
+        data:
+            {
+                rowData:[
+                    {
+                        colData: [
+                            {
+                                displayNone:true,
+                                inputHeader: 'Specify',
+                                unit: '',
+                                icon: icons.editPen,
+                                value: '',
+                                name: 'Other status of uterus notes',
+                                required: true,
+                                eventType: 'input',
+                                inputWidth: "",
+                            },
+
+                        ]
+                    }
+                ]
+            },
+    },
+
+    {
+        selectdData: [],
+        childName:'Status of uterus',
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Was the intervention given?',
+                    selectedValue: '',
+                    name:'Intervention on uterus problem',
+                    class:'bold',
+                    displayNone:true,
+                    displayNext:'Yes'
+                },
+                data:[
+                    {
+                        name: 'Yes',
+                        value: 'Yes',
+                        colSize: '2.5',
+
+                    },
+                    {
+                        name: 'No',
+                        value: 'No',
+                        colSize: '2.5',
+
+                    },
+                ]
+            }
+
+    },
+    {
+        isFinishBtn: false,
+        sectionHeader: '',
+        childName:'Intervention on uterus problem',
+        classDash: 'dashed_bottom_border _padding',
+
+        data:
+            {
+                rowData:[
+                    {
+                        colData: [
+                            {
+                                displayNone:true,
+                                inputHeader: 'Describe the intervention given?',
+                                unit: '',
+                                icon: icons.editPen,
+                                value: '',
+                                valueType:'text',
+                                name: 'describe the intervention which was provided',
+                                required: true,
+                                eventType: 'input',
+                                inputWidth: "",
+                            },
+
+                        ]
+                    }
+                ]
+            },
+    },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Status of lochia',
+                    selectedValue: '',
+                    class:'bold',
+                    name:'Status of lochia',
+                    displayNext:'Other',
+                },
+                data:[
+                    {
+                        name: 'Mild',
+                        value: 'mild',
+                        colSize: '4',
+
+                    },
+                    {
+                        name: 'Moderate',
+                        value: 'moderate',
+                        colSize: '4',
+
+                    },
+                    {
+                        name: 'Heavy',
+                        value: 'heavy',
+                        colSize: '4',
+
+                    },
+                    {
+                        name: 'Offensive',
+                        value: 'offensive',
+                        colSize: '4',
+
+                    },
+                    {
+                        name: 'Other',
+                        value: 'other',
+                        colSize: '4',
+
+                    },
+                ]
+            }
+
+    },
+    {
+        isFinishBtn: false,
+        ChildName:'Status of lochia',
+        sectionHeader: '',
+        classDash: 'dashed_bottom_border _padding',
+
+        data:
+            {
+                rowData:[
+                    {
+                        colData: [
+                            {
+                                displayNone:true,
+                                inputHeader: 'Specify',
+                                unit: '',
+                                icon: icons.editPen,
+                                value: '',
+                                valueType:'text',
+                                name: 'Other status of lochia notes',
+                                required: true,
+                                eventType: 'input',
+                                inputWidth: "",
+                            },
+
+                        ]
+                    }
+                ]
+            },
+    },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Was the intervention given?',
+                    selectedValue: '',
+                    name:"Intervention on lochia",
+                    class:'bold',
+                    displayNext:'Yes'
+                },
+                data:[
+                    {
+                        name: 'Yes',
+                        value: 'Yes',
+                        colSize: '2.5',
+
+                    },
+                    {
+                        name: 'No',
+                        value: 'No',
+                        colSize: '2.5',
+
+                    },
+                ]
+            }
+
+    },
+    {
+        isFinishBtn: false,
+        childName:'Intervention on lochia',
+        sectionHeader: '',
+        classDash: 'dashed_bottom_border _padding',
+
+        data:
+            {
+                rowData:[
+                    {
+                        colData: [
+                            {
+                                displayNone:true,
+                                inputHeader: 'Describe the intervention given?',
+                                unit: '',
+                                icon: icons.editPen,
+                                value: '',
+                                valueType:'text',
+                                name: 'Intervention on lochia notes',
+                                required: true,
+                                eventType: 'input',
+                                inputWidth: "",
+                            },
+
+                        ]
+                    }
+                ]
+            },
+    },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Episiotomy/tear present?',
+                    selectedValue: '',
+                    class:'bold',
+                    name:'Episiotomy/tear present',
+                    displayNext:'Yes'
+                },
+                data:[
+                    {
+                        name: 'Yes',
+                        value: 'Yes',
+                        colSize: '2.5',
+
+                    },
+                    {
+                        name: 'No',
+                        value: 'No',
+                        colSize: '2.5',
+
+                    },
+                ]
+            }
+
+    },
+    {
+        selectdData: [],
+        childName:'Episiotomy/tear present',
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Condition of episiotomy/tear?',
+                    selectedValue: '',
+                    name:'Condition of episiotomy/tear',
+                    class:'bold',
+                    displayNone:true,
+                },
+                data:[
+                    {
+                        name: 'Intact',
+                        value: 'intact',
+                        colSize: '4',
+
+                    },
+                    {
+                        name: 'Gaped',
+                        value: 'gaped',
+                        colSize: '4',
+
+                    },
+                    {
+                        name: 'Infected',
+                        value: 'infected',
+                        colSize: '4',
+
+                    },
+                    {
+                        name: 'Infected and gaped',
+                        value: 'infected and gaped',
+                        colSize: '4',
+
+                    },
+                ]
+            }
+
+    },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Was the intervention given?',
+                    selectedValue: '',
+                    class:'bold',
+                    name:'Intervention on condition of episiotomy/tear',
+                    displayNext:'Yes'
+                },
+                data:[
+                    {
+                        name: 'Yes',
+                        value: 'Yes',
+                        colSize: '2.5',
+
+                    },
+                    {
+                        name: 'No',
+                        value: 'No',
+                        colSize: '2.5',
+
+                    },
+                ]
+            }
+
+    },
+    {
+        childName:'Intervention on condition of episiotomy/tear',
+        isFinishBtn: false,
+        sectionHeader: '',
+        classDash: 'dashed_bottom_border _padding',
+        data:
+            {
+                rowData:[
+                    {
+                        colData: [
+                            {
+                                displayNone:true,
+                                inputHeader: 'Describe the intervention given?',
+                                unit: '',
+                                icon: icons.editPen,
+                                value: '',
+                                valueType:'text',
+                                name: 'Describe the intervention which was provided',
+                                required: true,
+                                eventType: 'input',
+                                inputWidth: "",
+                            },
+
+                        ]
+                    }
+                ]
+            },
+    },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Vitamin A supplementation given?',
+                    selectedValue: '',
+                    name:'Vitamin A supplementation',
+                    displayNext:'Yes'
+                },
+                data:[
+                    {
+                        name: 'Yes',
+                        value: 'Yes',
+                        colSize: '2.5',
+                    },
+                    {
+                        name: 'No',
+                        value: 'No',
+                        colSize: '2.5',
+
+                    },
+                ]
+            }
+
+    },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        childName: 'Vitamin A supplementation',
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Counselling on family planning done?',
+                    selectedValue: '',
+                    name:'Counselling on family planning',
+                    class:'bold',
+                    displayNone:true,
+                    displayNext:'Yes'
+                },
+                data:[
+                    {
+                        name: 'Yes',
+                        value: 'Yes',
+                        colSize: '2.5',
+
+                    },
+                    {
+                        name: 'No',
+                        value: 'No',
+                        colSize: '2.5',
+
+                    },
+                ]
+            }
+
+    },
+
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        childName: 'Counselling on family planning',
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Postpartum family planning method chosen',
+                    selectedValue: '',
+                    name:'Postpartum family planning method',
+                    class:'bold',
+                    displayNone:true,
+                },
+                data:[
+                    {
+                        name: 'Intrauterine contraceptive device',
+                        value: 'IUCD',
+                        colSize: '4',
+
+                    },
+                    {
+                        name: 'Bilateral tubal ligation',
+                        value: 'BTL',
+                        colSize: '4',
+
+                    },
+                    {
+                        name: 'Oral contraceptive',
+                        value: 'Oral contraceptive',
+                        colSize: '4',
+
+                    },
+                    {
+                        name: 'Injectable',
+                        value: 'Injectable',
+                        colSize: '4',
+
+                    },
+                    {
+                        name: 'Implant',
+                        value: 'Implant',
+                        colSize: '4',
+
+                    },
+                    {
+                        name: 'IUD',
+                        value: 'IUD',
+                        colSize: '4',
+
+                    },
+                    {
+                        name: 'Y7',
+                        value: 'Y7',
+                        colSize: '4',
+
+                    },
+                    {
+                        name: 'None',
+                        value: 'none',
+                        colSize: '4',
+
+                    },
+                ]
+            }
+
+    },
+
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Breast feeding?',
+                    selectedValue: '',
+                    name:'Breast feeding',
+                    class:'bold'
+                },
+                data:[
+                    {
+                        name: 'Exclusive',
+                        value: 'Exclusive',
+                        colSize: '4',
+
+                    },
+                    {
+                        name: 'Non exclusive',
+                        value: 'Non exclusive',
+                        colSize: '4',
+
+                    },
+                    {
+                        name: 'Not breastfeeding',
+                        value: 'Not breastfeeding',
+                        colSize: '4',
+
+                    },
+                ]
+            }
+
+    },
+] as any;
 export const useVisitForMotherStore = defineStore('visitForMotherStore',{
     state: () => ({
-        visitForMother: [
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'What is the status of the mother?',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Alive',
-                                value: 'alive',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Dead',
-                                value: 'dead',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Is the postnatal check within?',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Up to 48 hrs or before discharge',
-                                value: 'up to 48 hrs or before discharge',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: '3-7 days',
-                                value: '3 to 7 days',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: '8-42 days',
-                                value: '8 to 42 days',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: 'Does the woman have any of the danger signs?',
-                            selectedValue: ''
-                        },
-                        data:[
-
-                            {
-                                name: 'None',
-                                value: 'none',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Sepsis',
-                                value: 'sepsis',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-
-                            {
-                                name: 'Anemia',
-                                value: 'anemia',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Postpartum hemorrhage',
-                                value: 'postpartum hemorrhage',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-
-            {
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Severe pre-eclampsia',
-                                value: 'severe pre-eclampsia',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Pre-eclampsia',
-                                value: 'pre-eclampsia',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-
-                        ]
-                    }
-
-            },
-            {
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Breast engorgement',
-                                value: 'breast engorgement',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Other',
-                                value: 'other',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-
-                        ]
-                    }
-
-            },
-
-            {
-                isFinishBtn: false,
-                sectionHeader: '',
-                classDash: 'dashed_bottom_border _padding',
-
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'specify',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'otherC',
-                                        required: true,
-                                        eventType: 'input',
-                                        inputWidth: "85%",
-                                    },
-
-                                ]
-                            }
-                        ]
-                    },
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Status of uterus',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Involuted',
-                                value: 'involuted',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Sub-involuted',
-                                value: 'sub-involuted',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Other',
-                                value: 'other',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                isFinishBtn: false,
-                sectionHeader: '',
-                classDash: 'dashed_bottom_border _padding',
-
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'Specify',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'other',
-                                        required: true,
-                                        eventType: 'input',
-                                        inputWidth: "",
-                                    },
-
-                                ]
-                            }
-                        ]
-                    },
-            },
-
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Was the intervention given?',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Yes',
-                                value: 'yes',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'No',
-                                value: 'no',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                isFinishBtn: false,
-                sectionHeader: '',
-                classDash: 'dashed_bottom_border _padding',
-
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'Describe the intervention given?',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'describe the intervention which was provided',
-                                        required: true,
-                                        eventType: 'input',
-                                        inputWidth: "",
-                                    },
-
-                                ]
-                            }
-                        ]
-                    },
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Status of lochia',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Mild',
-                                value: 'mild',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Moderate',
-                                value: 'moderate',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Heavy',
-                                value: 'heavy',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Offensive',
-                                value: 'offensive',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Other',
-                                value: 'other',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                isFinishBtn: false,
-                sectionHeader: '',
-                classDash: 'dashed_bottom_border _padding',
-
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'Specify',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'other',
-                                        required: true,
-                                        eventType: 'input',
-                                        inputWidth: "",
-                                    },
-
-                                ]
-                            }
-                        ]
-                    },
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Was the intervention given?',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Yes',
-                                value: 'yes',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'No',
-                                value: 'no',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                isFinishBtn: false,
-                sectionHeader: '',
-                classDash: 'dashed_bottom_border _padding',
-
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'Describe the intervention given?',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'describe the intervention which was provided',
-                                        required: true,
-                                        eventType: 'input',
-                                        inputWidth: "",
-                                    },
-
-                                ]
-                            }
-                        ]
-                    },
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Episiotomy/tear present?',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Yes',
-                                value: 'yes',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'No',
-                                value: 'no',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Condition of episiotomy/tear?',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Intact',
-                                value: 'intact',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Gaped',
-                                value: 'gaped',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Infected',
-                                value: 'infected',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Infected and gaped',
-                                value: 'infected and gaped',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Was the intervention given?',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Yes',
-                                value: 'yes',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'No',
-                                value: 'no',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                isFinishBtn: false,
-                sectionHeader: '',
-                classDash: 'dashed_bottom_border _padding',
-
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'Describe the intervention given?',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'describe the intervention which was provided',
-                                        required: true,
-                                        eventType: 'input',
-                                        inputWidth: "",
-                                    },
-
-                                ]
-                            }
-                        ]
-                    },
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Vitamin A supplementation given?',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Yes',
-                                value: 'yes',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'No',
-                                value: 'no',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Counselling on family planning done?',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Yes',
-                                value: 'yes',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'No',
-                                value: 'no',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Postpartum family planning method chosen',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Intrauterine contraceptive device IUCD',
-                                value: 'iucd',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Bilateral tubal ligation (BTL)',
-                                value: 'btl',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Oral contraceptive',
-                                value: 'oral contraceptive',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Injectable',
-                                value: 'injectable',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Implant',
-                                value: 'implant',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'IUD',
-                                value: 'iud',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Y7',
-                                value: 'y7',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'None',
-                                value: 'none',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Breast feeding?',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Exclusive',
-                                value: 'exclusive',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Non exclusive',
-                                value: 'non exclusive',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Not breastfeeding',
-                                value: 'not breastfeeding',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-
-        ] as any,
+        visitForMother: [...initialVisitForMother] as any,
     }),
     actions:{
         setPNCVisitForMother(data: any){
             this.visitForMother = data
         },
+        getInitial(){
+            const data=[...initialVisitForMother]
+            return[...data]
+        }
 
 
     },
