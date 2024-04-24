@@ -4,10 +4,15 @@
         <ion-content :fullscreen="true">
             <div id="" style="margin-top: 30px;">
 
-                <div class="back_profile" @click="nav('patientProfile')">
-                    <ion-icon style="font-size: 20px" :icon="chevronBackOutline"> </ion-icon>
-                    <span style="cursor: pointer"> Back to profile</span>
-                </div>
+                <ion-row>
+                    <ion-col>
+                        <div class="back_profile" @click="nav('patientProfile')">
+                            <ion-icon style="font-size: 20px" :icon="chevronBackOutline"> </ion-icon>
+                            <span style="cursor: pointer"> Back to profile</span>
+                        </div>
+                    </ion-col>
+                </ion-row>
+
 
                 <dataTable
                     :colums="data_table_properties[0].columns"
@@ -17,13 +22,13 @@
                 />
                 <editUserModal
                     :is_open="isPopooverOpen"
+                    :user_id="user_id"
                     @close-popoover="isPopooverOpen = false"
                 />
                     </div>
                 </ion-content>
     </ion-page>
 </template>
-<!-- @click="nav(' -->
 <script lang="ts">
 import { defineComponent } from "vue"
 import { text } from "ionicons/icons"
@@ -52,7 +57,7 @@ import {
     IonAccordion,
     IonAccordionGroup,
     AccordionGroupCustomEvent,
-} from "@ionic/vue";
+} from "@ionic/vue"
 import Toolbar from '@/components/Toolbar.vue'
 import ToolbarSearch from '@/components/ToolbarSearch.vue'
 import BasicInputField from "@/components/BasicInputField.vue"
@@ -71,8 +76,10 @@ const _search_fields_ = ref([
     {
         value: 'username',
         name: 'username',
+        selected: true
     }
 ]) as any
+const user_id = ref('')
 
 onMounted(async () => {
     getUsers()
@@ -133,19 +140,22 @@ function userRolesStr(items: any) {
 }
 
 function userFirstname(items: any) {
-    let _str_: string = ''
-    items.forEach((item: any, index: number) => {
-        _str_+=item.given_name
-    })
-    return _str_
+    let _str_: string = '';
+    const lastIndex = items.length - 1;
+    if (lastIndex >= 0) {
+        _str_ = items[lastIndex].given_name;
+    }
+    return _str_;
 }
 
+
 function userLastname(items: any) {
-    let _str_: string = ''
-    items.forEach((item: any, index: number) => {
-        _str_+=item.family_name
-    })
-    return _str_
+    let _str_: string = '';
+    const lastIndex = items.length - 1;
+    if (lastIndex >= 0) {
+        _str_ = items[lastIndex].family_name;
+    }
+    return _str_;
 }
 
 
@@ -237,6 +247,7 @@ function listUpdated1(data: any) {
 
 function clickRow(data: any) {
     isPopooverOpen.value = true
+    user_id.value = data.userId
 }
 
 function nav(url: any) {

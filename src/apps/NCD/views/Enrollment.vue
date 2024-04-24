@@ -3,6 +3,9 @@
         <Toolbar />
         <ion-content>
             <div class="container">
+                <div style="display: flex; align-items: center" @click="nav('patientProfile')">
+                    <DynamicButton fill="clear" name="Back to profile" iconSlot="start" :icon="iconsContent.arrowLeft" />
+                </div>
                 <div class="title">
                     <div class="demographics_title">Enrollment</div>
                 </div>
@@ -138,6 +141,8 @@ import {
 } from "@/services/data_helpers";
 import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServerData";
 import { IdentifierService } from "@/services/identifier_service";
+import { resetPatientData } from "@/services/reset_data";
+import { useGeneralStore } from "@/stores/GeneralStore";
 
 export default defineComponent({
     name: "Home",
@@ -186,6 +191,7 @@ export default defineComponent({
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useConfigurationStore, ["enrollmentDisplayType"]),
+        ...mapState(useGeneralStore, ["saveProgressStatus", "activities"]),
         ...mapState(useEnrollementStore, ["NCDNumber", "enrollmentDiagnosis", "substance", "patientHistoryHIV", "patientHistory"]),
     },
     async mounted() {
@@ -226,7 +232,16 @@ export default defineComponent({
                 await this.saveEnrollment();
                 const patient = new PatientService();
                 patient.createNcdNumber(formattedNCDNumber);
-                this.$router.push("consultationPlan");
+                const demographicsStore = useDemographicsStore();
+                demographicsStore.setPatient(await PatientService.findByID(this.demographics.patient_id));
+                const generalStore = useGeneralStore();
+                generalStore.setSaveProgressStatus("");
+                resetPatientData();
+                if (this.activities.length == 0) {
+                    this.$router.push("patientProfile");
+                } else {
+                    this.$router.push("consultationPlan");
+                }
             }
         },
         openModal() {
@@ -259,7 +274,6 @@ export default defineComponent({
             return [
                 ...(await formatRadioButtonData(this.patientHistoryHIV)),
                 ...(await formatRadioButtonData(this.substance)),
-                ...(await formatRadioButtonData(this.patientHistory)),
                 ...(await formatCheckBoxData(this.enrollmentDiagnosis)),
                 ...(await formatCheckBoxData(this.patientHistory)),
                 ...(await formatCheckBoxData(this.patientHistoryHIV)),

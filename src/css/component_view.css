@@ -1,0 +1,24 @@
+.search-input-mobile {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .search-input-desktop {
+        display: none;
+    }
+    .search-input-mobile {
+        display: block;
+    }
+    .mobile-component-view {
+        display: block;
+    }
+    .searchField {
+        width: 100vw;
+    }
+    .search_card {
+        width: 93vw;
+    }
+    .content_manager {
+        display: block;
+    }
+}

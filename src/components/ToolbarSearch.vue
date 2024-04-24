@@ -10,7 +10,7 @@
     >
         <ion-content class="search_card">
             <ion-row class="search_header">
-                <ion-col>Diabete clinic No. </ion-col>
+                <ion-col>Patient No. </ion-col>
                 <ion-col>Fullname</ion-col>
                 <ion-col>Birthdate</ion-col>
                 <ion-col style="max-width: 70px">Gender</ion-col>
@@ -24,7 +24,7 @@
                 <ion-col style="max-width: 30px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
             </ion-row>
             <ion-row>
-                <ion-col size="4">
+                <ion-col size="5">
                     <DynButton :icon="add" :name="'Add Patient'" :fill="'clear'" @click="openCheckPaitentNationalIDModal" />
                 </ion-col>
             </ion-row>
@@ -184,7 +184,13 @@ export default defineComponent({
                 patient_id: item.patient_id,
             });
             resetPatientData();
-            this.$router.push(url);
+            const roleData: any = sessionStorage.getItem("userRoles");
+            const roles: any = JSON.parse(roleData);
+            if (roles.some((role: any) => role.role === "Pharmacist")) {
+                this.$router.push("dispensation");
+            } else {
+                this.$router.push(url);
+            }
         },
 
         openPopover(e: any) {
@@ -202,13 +208,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.searchField {
-    --border-radius: 4px;
-    --box-shadow: inset 0 -3em 3em #fff, 0 0 0 2px white, 0.3em 0.3em 1em rgba(44, 44, 44, 0.6);
-    width: 42vw;
-    padding: 10px;
-    text-align: left;
-}
 .second_bar_list {
     list-style: none;
     justify-content: space-between;
@@ -224,12 +223,6 @@ export default defineComponent({
 }
 li {
     margin-right: 40px;
-}
-.search_card {
-    width: 40vw;
-    --padding: 5px;
-    --background: #fff;
-    left: 10px;
 }
 .search_header {
     border-bottom: 1px solid;
@@ -271,8 +264,12 @@ ion-col {
     color: var(--ion-hover) !important;
 }
 ion-popover {
-    --width: 41.5vw;
-    top: 7px;
+    --width: 60vw;
+}
+@media (max-width: 900px) {
+    ion-popover {
+        --width: 97vw;
+    }
 }
 </style>
 <style>

@@ -2,18 +2,18 @@ import {LocationService} from "@/services/location_service"
 import { PatientAdmitService } from '@/services/patient_admit_service'
 import { PatientReferralService } from '@/services/patient_referral_service'
 
-export class OutCome {
-    async onSubmitAdmission(patientID: any, providerID: any, admissionData: any) {
-        const admissionService = new PatientAdmitService(patientID, providerID)
-        await admissionService.createEncounter()
-        await admissionService.saveObservationList(admissionData)
-    }
+export class OutCome extends PatientReferralService {
+    // async onSubmitAdmission(patientID: any, providerID: any, admissionData: any) {
+    //     const admissionService = new PatientAdmitService(patientID, providerID)
+    //     await admissionService.createEncounter()
+    //     await admissionService.saveObservationList(admissionData)
+    // }
 
-    async onSubmitReferral(patientID: any, providerID: any, referralData: any) {
-        const referralService = new PatientReferralService(patientID, providerID)
-        await referralService.createEncounter()
-        await referralService.saveObservationList(referralData)
-    }
+    // async onSubmitReferral(patientID: any, providerID: any, referralData: any) {
+    //     const referralService = new PatientReferralService(patientID, providerID)
+    //     await referralService.createEncounter()
+    //     await referralService.saveObservationList(referralData)
+    // }
 }
 
 export async function getSpecialistClinics(): Promise<[]> {

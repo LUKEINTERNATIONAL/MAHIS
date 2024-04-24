@@ -142,7 +142,7 @@ export default defineComponent({
         ComplicationsScreening,
         ConfirmDiagnosis,
         Outcome,
-        Investigations,
+//        Investigations,
         IonModal,
         Medications,
         WomanBehaviour,

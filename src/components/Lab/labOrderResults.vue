@@ -55,6 +55,7 @@ import { PatientLabResultService } from "@/services/patient_lab_result_service";
 import LabModal from "@/components/Lab/LabModal.vue";
 import LabViewResultsModal from "@/components/Lab/LabViewResultsModal.vue";
 import labOrderResults from "@/components/Lab/labOrderResults.vue";
+import { useInvestigationStore } from "@/stores/InvestigationStore";
 
 export default defineComponent({
     name: "Menu",
@@ -77,6 +78,7 @@ export default defineComponent({
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useLabResultsStore, ["labResults"]),
+        ...mapState(useInvestigationStore, ["investigations"]),
     },
     props: {
         propOrders: {
@@ -139,6 +141,18 @@ export default defineComponent({
             this.openModal = false;
             this.orders = await OrderService.getOrders(this.demographics.patient_id);
             this.setListData(this.orders);
+            this.updateInvestigationWizard();
+        },
+        async updateInvestigationWizard() {
+            this.orders = await OrderService.getOrders(this.demographics.patient_id);
+            const filteredArray = await this.orders.filter((obj: any) => {
+                return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
+            });
+            if (filteredArray.length > 0) {
+                this.investigations[0].selectedData = filteredArray;
+            } else {
+                this.investigations[0].selectedData = "";
+            }
         },
         dismiss() {
             modalController.dismiss();

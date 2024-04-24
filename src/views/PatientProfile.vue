@@ -8,18 +8,18 @@
                         <ion-card style="margin-bottom: 20px; background-color: #fff">
                             <div class="p_name_image">
                                 <div class="first_letter">
-                                    {{ demographics.name.charAt(0) }}
+                                    {{ demographics?.name.charAt(0) }}
                                 </div>
-                                <div class="p_name">{{ demographics.name }}</div>
+                                <div class="p_name">{{ demographics?.name }}</div>
                             </div>
                             <ion-card-content>
                                 <ion-row>
                                     <ion-col size="4">MRN</ion-col>
-                                    <ion-col>{{ demographics.mrn }}</ion-col>
+                                    <ion-col>{{ demographics?.mrn }}</ion-col>
                                 </ion-row>
                                 <ion-row>
                                     <ion-col size="4">Gendar</ion-col>
-                                    <ion-col>{{ covertGender(demographics.gender) }}</ion-col>
+                                    <ion-col>{{ covertGender(demographics?.gender) }}</ion-col>
                                 </ion-row>
                                 <ion-row>
                                     <ion-col size="4">Age</ion-col>
@@ -35,18 +35,21 @@
                                 </ion-row>
                             </ion-card-content>
                         </ion-card>
-                        <ion-card class="start_new_co" style="margin-bottom: 20px" @click="handleNCD()">
+
+                        <ion-card class="start_new_co" v-if="programAccess('NCD PROGRAM')" style="margin-bottom: 20px" @click="handleNCD()">
                             {{ NCDProgramActionName }}
                         </ion-card>
-                        <ion-card class="start_new_co" style="margin-bottom: 20px">
+                        <ion-card class="start_new_co" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">
                             <router-link to="/profile">+ Enroll in ANC Program</router-link>
                         </ion-card>
-                        <ion-card class="start_new_co" style="margin-bottom: 20px"> + Enroll in Labour and delivery program </ion-card>
-                        <ion-card class="start_new_co" style="margin-bottom: 20px"> + Enroll in PNC program </ion-card>
-                        <ion-card class="start_new_co" style="margin-bottom: 20px" @click="handleOPD()"> {{ OPDProgramActionName }}</ion-card>
-
-                        <router-link to="/dispensation">
-                            <ion-card class="start_new_co" style="margin-bottom: 20px">+ Dispense Medication </ion-card></router-link
+                        <ion-card class="start_new_co" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">
+                            + Enroll in Labour and delivery program
+                        </ion-card>
+                        <ion-card class="start_new_co" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">
+                            + Enroll in PNC program
+                        </ion-card>
+                        <ion-card class="start_new_co" v-if="programAccess('OPD Program')" style="margin-bottom: 20px" @click="handleOPD()">
+                            {{ OPDProgramActionName }}</ion-card
                         >
 
                         <ion-card style="margin-bottom: 20px; background-color: #fff">
@@ -137,13 +140,8 @@
             </div>
 
             <ion-popover trigger="open-dates-trigger" trigger-action="click" :show-backdrop="false" size="auto">
-                <ul style="list-style: none; line-height: 50px">
-                    <li>Today</li>
-                    <li>Novermber,2023</li>
-                    <li>14th Oct, 2023</li>
-                    <li>October, 2023</li>
-                    <li>14th Oct, 2023</li>
-                    <li>1September, 2023</li>
+                <ul style="list-style: none; line-height: 50px" v-for="(item, index) in visits" :key="index">
+                    <li>{{ convertToDisplayDate(item) }}</li>
                 </ul>
             </ion-popover>
         </ion-content>
@@ -196,6 +194,16 @@ import { useEnrollementStore } from "@/stores/EnrollmentStore";
 import { PatientService } from "@/services/patient_service";
 import { UserService } from "@/services/user_service";
 import { Service } from "@/services/service";
+import { ObservationService } from "@/services/observation_service";
+import { useVitalsStore } from "@/stores/VitalsStore";
+import {
+    modifyCheckboxInputField,
+    getCheckboxSelectedValue,
+    getRadioSelectedValue,
+    getFieldValue,
+    modifyRadioValue,
+    modifyFieldValue,
+} from "@/services/data_helpers";
 
 import { ref } from "vue";
 export default defineComponent({
@@ -235,6 +243,7 @@ export default defineComponent({
             url: "" as any,
             NCDProgramActionName: "+ Enroll in NCD Program" as any,
             OPDProgramActionName: "+ Start New OPD consultation" as any,
+            visits: [] as any,
         };
     },
     computed: {
@@ -242,6 +251,7 @@ export default defineComponent({
         ...mapState(useTreatmentPlanStore, ["selectedMedicalAllergiesList"]),
         ...mapState(useEnrollementStore, ["NCDNumber"]),
         ...mapState(useGeneralStore, ["saveProgressStatus", "activities"]),
+        ...mapState(useVitalsStore, ["vitals"]),
     },
     mounted() {
         this.setNCDValue();
@@ -267,6 +277,9 @@ export default defineComponent({
     },
 
     methods: {
+        convertToDisplayDate(date: any) {
+            return HisDate.toStandardHisDisplayFormat(date);
+        },
         async getUserActivities(activities: any) {
             try {
                 const userID = Service.getUserID();
@@ -284,19 +297,37 @@ export default defineComponent({
                 return []; // Return an empty array in case of error
             }
         },
-
+        programAccess(programName: string): boolean {
+            const accessPrograms: any = sessionStorage.getItem("userPrograms");
+            const programs: any = JSON.parse(accessPrograms);
+            if (programs.some((program: any) => program.name === programName)) {
+                return true;
+            } else {
+                return false;
+            }
+        },
         async setNCDValue() {
             const generalStore = useGeneralStore();
             generalStore.setActivity(await this.getUserActivities("NCD_activities"));
             sessionStorage.setItem("app", JSON.stringify({ programID: 32, applicationName: "NCD" }));
             const patient = new PatientService();
+            this.visits = await PatientService.getPatientVisits(patient.getID(), false);
             if (patient.getNcdNumber() != "Unknown") {
-                if (this.saveProgressStatus) {
-                    this.NCDProgramActionName = "+ Continue NCD consultation";
+                if (this.activities.length == 0) {
+                    this.url = "NCDEnrollment";
+                    this.NCDProgramActionName = "+ Edit NCD Enrollment";
                 } else {
-                    this.NCDProgramActionName = "+ Start new NCD consultation";
+                    if (this.saveProgressStatus) {
+                        this.NCDProgramActionName = "+ Continue NCD consultation";
+                    } else {
+                        if (this.visits.includes(HisDate.currentDate())) {
+                            this.NCDProgramActionName = "+ Edit NCD consultation";
+                        } else this.NCDProgramActionName = "+ Start new NCD consultation";
+                    }
+                    const generalStore = useGeneralStore();
+                    generalStore.setSaveProgressStatus("");
+                    this.url = "consultationPlan";
                 }
-                this.url = "consultationPlan";
             } else {
                 this.url = "NCDEnrollment";
                 this.NCDProgramActionName = "+ Enroll in NCD Program";
@@ -327,6 +358,27 @@ export default defineComponent({
             this.setNCDValue();
             this.$router.push(this.url);
         },
+        async updateNCDData() {
+            const array = ["Height", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
+
+            // An array to store all promises
+            const promises = array.map(async (item: any) => {
+                if (
+                    HisDate.toStandardHisFormat(await ObservationService.getFirstObsDatetime(this.demographics.patient_id, item)) ==
+                    HisDate.currentDate()
+                ) {
+                    modifyFieldValue(
+                        this.vitals,
+                        item,
+                        "value",
+                        await ObservationService.getFirstValueNumber(this.demographics.patient_id, item, HisDate.currentDate())
+                    );
+                }
+            });
+
+            // Wait for all promises to resolve
+            await Promise.all(promises);
+        },
         handleOPD() {
             this.setOPDValue();
             this.$router.push(this.url);
@@ -335,7 +387,7 @@ export default defineComponent({
             return ["Male", "M"].includes(gender) ? "Male" : ["Female", "F"].includes(gender) ? "Female" : "";
         },
         formatBirthdate() {
-            return HisDate.getBirthdateAge(this.demographics.birthdate);
+            return HisDate.getBirthdateAge(this.demographics?.birthdate);
         },
     },
 });
