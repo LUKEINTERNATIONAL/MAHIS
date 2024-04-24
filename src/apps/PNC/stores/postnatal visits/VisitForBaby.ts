@@ -12,7 +12,7 @@ const initialVisitForBaby=[
                 header:{
                     title: 'What is the status of the baby?',
                     selectedValue: '',
-                    name:'Status of the baby',
+                    name:'Status of baby',
                     displayNext:"",
                     class:"bold",
                     displayNone:'',
@@ -44,7 +44,7 @@ const initialVisitForBaby=[
                     {
                         colData: [
                             {
-                                inputHeader: 'current weight',
+                                inputHeader: 'Current weight',
                                 unit: 'kg',
                                 icon: icons.weight,
                                 value: '',
@@ -77,7 +77,7 @@ const initialVisitForBaby=[
                 },
                 data:[
                     {
-                        name: 'Up to 48 hrs before discharge',
+                        name: 'Up to 48 hrs or before discharge',
                         value: 'up to 48 hrs before discharge',
                         colSize: '7',
                     },
@@ -341,7 +341,7 @@ const initialVisitForBaby=[
                 data:[
                     {
                         name: 'Eye discharge',
-                        value: 'eye discharge',
+                        value: 'Eye discharge',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',
@@ -349,7 +349,7 @@ const initialVisitForBaby=[
                     },
                     {
                         name: 'Signs of cord infection',
-                        value: 'signs of cord infection',
+                        value: 'Signs of cord infection',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',
@@ -403,8 +403,8 @@ const initialVisitForBaby=[
                 },
                 data:[
                     {
-                        name: 'Other',
-                        value: 'other',
+                        name: 'Other danger signs',
+                        value: 'Other danger signs',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',
@@ -415,7 +415,7 @@ const initialVisitForBaby=[
 
     },
     {
-        childName:"Other",
+        childName:"Other danger signs",
         isFinishBtn: false,
         sectionHeader: '',
         classDash: 'dashed_bottom_border _padding',
@@ -427,7 +427,7 @@ const initialVisitForBaby=[
                         colData: [
                             {
                                 displayNone:true,
-                                inputHeader: 'specify',
+                                inputHeader: 'Specify',
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
@@ -547,7 +547,7 @@ const initialVisitForBaby=[
                                 icon: icons.editPen,
                                 value: '',
                                 valueType:'text',
-                                name: 'Why baby not on neverapine notes',
+                                name: 'Neverapine not started notes',
                                 required: true,
                                 eventType: 'input',
                                 inputWidth: "",
