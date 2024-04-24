@@ -38,6 +38,9 @@ import { createModal } from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
 import Stepper from "@/apps/LABOUR/components/Stepper.vue";
 import { mapState } from 'pinia';
+import { useSecondStageOfLabourStore } from '../stores/delivery details/secondStageDelivery';
+import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from '@/services/formatServerData';
+import { useThirdStageOfLabour } from '../stores/delivery details/thirdStageDelivery';
 export default defineComponent({
   name: "deliveryDetails",
   components:{
@@ -106,8 +109,8 @@ export default defineComponent({
 
   },
   computed:{
-
-
+    ...mapState(useSecondStageOfLabourStore,["secondStageDetails","newbornComplications","secondStageDetails","obstetricComplications"]),
+    ...mapState(useThirdStageOfLabour,['placentaExamination'])
   },
   mounted(){
     this.markWizard()
@@ -154,10 +157,36 @@ export default defineComponent({
       });
     },
     saveData(){
-      this.$router.push("labourHome");
-
+      //this.$router.push("labourHome");
+      this.saveSecondStageDetails()
+      this.saveThirdStageDetails()
     },
-
+    async saveSecondStageDetails(){
+      console.log( await this.buildSecondStageDetails())
+    },
+    async saveThirdStageDetails(){
+      console.log( await this.buildThirdStageDetails())
+    },
+    async buildSecondStageDetails(){
+      return[
+        ...(await formatRadioButtonData(this.secondStageDetails)),
+        ...(await formatInputFiledData(this.secondStageDetails)),
+        ...(await formatCheckBoxData(this.secondStageDetails)),
+        ...(await formatRadioButtonData(this.newbornComplications)),
+        ...(await formatInputFiledData(this.newbornComplications)),
+        ...(await formatCheckBoxData(this.obstetricComplications)),
+        ...(await formatInputFiledData(this.obstetricComplications)),
+        ...(await formatRadioButtonData(this.obstetricComplications)),
+        ...(await formatCheckBoxData(this.obstetricComplications)),
+      ]
+    },
+    async buildThirdStageDetails(){
+      return[
+        ...(await formatRadioButtonData(this.placentaExamination)),
+        ...(await formatInputFiledData(this.placentaExamination)),
+        ...(await formatCheckBoxData(this.placentaExamination)),
+      ]
+    },
     openModal(){
       createModal(SaveProgressModal)
     }

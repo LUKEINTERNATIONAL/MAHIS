@@ -53,6 +53,8 @@ import {
   dynamicValue,
   getCheckboxSelectedValue,
   getFieldValue,
+  getRadioSelectedValue,
+  modifyFieldValue,
 } from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
 //import {useReferralStore} from "@/apps/LABOUR/stores/repeatable things/referral";
@@ -104,13 +106,29 @@ export default defineComponent({
     this.initialData=secondStageDetails.getInitial()
     this.initialData1=newbornComplications.getInitial1()
     this.initialData2=obstetricComplications.getInitial2()
+    this. handleModeOfDeliver()
   },
   watch:{
+    newbornComplications:{
+      handler(){
+        this.handleModeOfDeliver()
+      },
+      deep:true
+    }
   },
   setup() {
     return { checkmark,pulseOutline };
   },
-  methods: {}
+
+  methods: {
+    handleModeOfDeliver(){
+      // if(getRadioSelectedValue(this.newbornComplications,'Mode of delivery')=='other'){
+      //   modifyFieldValue(this.newbornComplications,'Other notes','displayNone',false)
+      // }else{
+      //    modifyFieldValue(this.newbornComplications,'Other notes','displayNone',true)
+      // }
+    },
+  }
 });
 
 </script>

@@ -38,6 +38,9 @@ import { createModal } from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
 import Stepper from "@/apps/LABOUR/components/Stepper.vue";
 import { mapState } from 'pinia';
+import { useImmediatePostnatalChecksForMotherStore } from '../stores/delivery details/immediatepostnatalChecksForMother';
+import { formatInputFiledData, formatRadioButtonData } from '@/services/formatServerData';
+import { useImmediatePostnatalChecksForChildStore } from '../stores/delivery details/immediatepostnatalChecksForChild';
 export default defineComponent({
   name: "postnatalChecks",
   components:{
@@ -104,8 +107,8 @@ export default defineComponent({
   },
 
   computed:{
-
-
+    ...mapState(useImmediatePostnatalChecksForMotherStore,['examsAfterDelivery']),
+     ...mapState(useImmediatePostnatalChecksForChildStore,['examsAfterDeliveryforChild']),
   },
   mounted(){
     this.markWizard()
@@ -154,8 +157,27 @@ export default defineComponent({
       });
     },
     saveData(){
-      this.$router.push("labourHome");
-
+     // this.$router.push("labourHome");
+     this.saveMotherChecks();
+     this.saveChildChecks();
+    },
+    async saveMotherChecks(){
+      console.log(await this.buildMotherChecks())
+    },
+    async saveChildChecks(){
+      console.log(await this.buildChildChecks())
+    },
+    async  buildMotherChecks(){
+     return[
+     ...(await formatRadioButtonData(this.examsAfterDelivery)),
+     ...(await formatInputFiledData(this.examsAfterDelivery)),
+      ]
+    },
+    async  buildChildChecks(){
+     return[
+     ...(await formatRadioButtonData(this.examsAfterDeliveryforChild)),
+     ...(await formatInputFiledData(this.examsAfterDeliveryforChild)),
+      ]
     },
 
     openModal(){

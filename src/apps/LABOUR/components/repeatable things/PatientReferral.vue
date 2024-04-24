@@ -76,12 +76,16 @@ export default defineComponent({
   mounted(){
      this.handleMother()
      this.handleOtherMother()
+     this.handleBaby()
+     this. handleOtherBaby()
   },
   watch:{
     labourReferral:{
       handler(){
         this.handleMother()
         this.handleOtherMother()
+        this.handleBaby()
+        this. handleOtherBaby()
       },
       deep:true
     }
@@ -106,7 +110,7 @@ export default defineComponent({
           modifyCheckboxValue(this.labourReferral, "Placenta abruption" ,'displayNone',false);
           modifyCheckboxValue(this.labourReferral, "Symphysiotomy" ,'displayNone',false);
           modifyCheckboxValue(this.labourReferral, "Other" ,'displayNone',false);
-          modifyFieldValue(this.labourReferral,"treatment given before referral" ,'displayNone',false)
+        //  modifyFieldValue(this.labourReferral,"treatment given before referral" ,'displayNone',false)
 
       }else{
          modifyCheckboxValue(this.labourReferral, "Danger sign present" ,'displayNone',true);
@@ -122,8 +126,8 @@ export default defineComponent({
           modifyCheckboxValue(this.labourReferral, "Severe anaemia" ,'displayNone',true);
           modifyCheckboxValue(this.labourReferral, "Placenta abruption" ,'displayNone',true);
           modifyCheckboxValue(this.labourReferral, "Symphysiotomy" ,'displayNone',true);
-          modifyCheckboxValue(this.labourReferral, "others" ,'displayNone',true);
-          modifyFieldValue(this.labourReferral,"treatment given before referral" ,'displayNone',true)
+          modifyCheckboxValue(this.labourReferral, "Others" ,'displayNone',true);
+        //  modifyFieldValue(this.labourReferral,"treatment given before referral" ,'displayNone',true)
       }
     },
     handleOtherMother(){
@@ -134,30 +138,38 @@ export default defineComponent({
       }
     },
  handleBaby(){
-          if(getRadioSelectedValue(this.labourReferral,'referred')=='mother'){
-          modifyCheckboxValue(this.labourReferral, "Premature labour" ,'displayNone',false);
-          modifyCheckboxValue(this.labourReferral, "Placenta previa" ,'displayNone',false);
-          modifyCheckboxValue(this.labourReferral, "Severe anaemia" ,'displayNone',false);
-          modifyCheckboxValue(this.labourReferral, "Placenta abruption" ,'displayNone',false);
-          modifyCheckboxValue(this.labourReferral, "Symphysiotomy" ,'displayNone',false);
-          modifyCheckboxValue(this.labourReferral, "Other" ,'displayNone',false);
+          if(getRadioSelectedValue(this.labourReferral,'referred')=='baby'){
+          modifyCheckboxValue(this.labourReferral, "Asphyxia" ,'displayNone',false);
+          modifyCheckboxValue(this.labourReferral, "Preterm" ,'displayNone',false);
+          modifyCheckboxValue(this.labourReferral, "Under weight" ,'displayNone',false);
+          modifyCheckboxValue(this.labourReferral, "Congenital abnormalities" ,'displayNone',false);
+          modifyCheckboxValue(this.labourReferral, "Sepsi" ,'displayNone',false);
+          modifyCheckboxValue(this.labourReferral, "Other reason" ,'displayNone',false);
           modifyFieldValue(this.labourReferral,"treatment given to baby before referral" ,'displayNone',false)
+          modifyFieldValue(this.labourReferral,"Time of referral" ,'displayNone',false)
+          modifyFieldValue(this.labourReferral,"Date of referral" ,'displayNone',false)
+          modifyFieldValue(this.labourReferral,"Provider who made referral" ,'displayNone',false)
+          modifyFieldValue(this.labourReferral,"Phone number for provider" ,'displayNone',false)
 
       }else{
-         modifyCheckboxValue(this.labourReferral, "Danger sign present" ,'displayNone',true);
-         modifyCheckboxValue(this.labourReferral, "Antepartum haemorrhage" ,'displayNone',true);
-          modifyCheckboxValue(this.labourReferral, "Severe anaemia" ,'displayNone',true);
-          modifyCheckboxValue(this.labourReferral, "Placenta abruption" ,'displayNone',true);
-          modifyCheckboxValue(this.labourReferral, "Symphysiotomy" ,'displayNone',true);
-          modifyCheckboxValue(this.labourReferral, "Others" ,'displayNone',true);
-          modifyFieldValue(this.labourReferral,"treatment given to baby before referral" ,'displayNone',true)
+          modifyCheckboxValue(this.labourReferral, "Asphyxia" ,'displayNone',true);
+          modifyCheckboxValue(this.labourReferral, "Preterm" ,'displayNone',true);
+          modifyCheckboxValue(this.labourReferral, "Under weight" ,'displayNone',true);
+          modifyCheckboxValue(this.labourReferral, "Congenital abnormalities" ,'displayNone',true);
+          modifyCheckboxValue(this.labourReferral, "Sepsi" ,'displayNone',true);
+          modifyCheckboxValue(this.labourReferral, "Other reason" ,'displayNone',true);
+           modifyFieldValue(this.labourReferral,"treatment given to baby before referral" ,'displayNone',true)
+          modifyFieldValue(this.labourReferral,"Time of referral" ,'displayNone',true)
+          modifyFieldValue(this.labourReferral,"Date of referral" ,'displayNone',true)
+          modifyFieldValue(this.labourReferral,"Provider who made referral" ,'displayNone',true)
+          modifyFieldValue(this.labourReferral,"Phone number for provider" ,'displayNone',true)
       }
     },
   handleOtherBaby(){
       if(getCheckboxSelectedValue(this.labourReferral,"Other reason")?.value =='other reason'){
-        modifyFieldValue(this.labourReferral,"specify" ,'displayNone',false)
+        modifyFieldValue(this.labourReferral,"other" ,'displayNone',false)
       }else{
-        modifyFieldValue(this.labourReferral,"specify" ,'displayNone',true)
+        modifyFieldValue(this.labourReferral,"other" ,'displayNone',true)
       }
     },
   }
