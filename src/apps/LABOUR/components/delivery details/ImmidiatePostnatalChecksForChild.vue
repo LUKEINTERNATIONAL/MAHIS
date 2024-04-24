@@ -1,9 +1,12 @@
 <template>
   <div class="container">
     <ion-card class="section">
-      <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Vitals</ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="examsAfterDelivery" ></basic-form>
+        <basic-form
+            :contentData="examsAfterDeliveryForChild"
+            :initialData="initialData"
+
+        ></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
@@ -36,11 +39,12 @@ import {
   getFieldValue,
 } from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
-import {useReferralStore} from "@/apps/LABOUR/stores/repeatable things/referral";
+//import {useReferralStore} from "@/apps/LABOUR/stores/repeatable things/referral";
 import {useEndLabourStore} from "@/apps/LABOUR/stores/repeatable things/labourAndDeliveryEnd";
 import {
   useImmediatePostnatalChecksForChildStore
 } from "@/apps/LABOUR/stores/delivery details/immediatepostnatalChecksForChild";
+
 export default defineComponent({
   name: "immidiatePostnatalChecksForChild",
   components:{
@@ -68,13 +72,17 @@ export default defineComponent({
       vValidations: '' as any,
       hasValidationErrors: [] as any,
       inputField: '' as any,
+      initialData:[] as any
+
 
     };
   },
   computed:{
-    ...mapState(useImmediatePostnatalChecksForChildStore,["examsAfterDelivery"]),
+    ...mapState(useImmediatePostnatalChecksForChildStore,["examsAfterDeliveryForChild"]),
   },
   mounted(){
+    const examsAfterDelivery=useImmediatePostnatalChecksForChildStore()
+    this.initialData=examsAfterDelivery.getInitial()
   },
   watch:{
   },

@@ -45,14 +45,15 @@
                         >
                             {{ NCDUserAction.actionName }}
                         </ion-card>
-                        <ion-card class="start_new_co" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">
+                        <ion-card class="start_new_co" v-if="demographics.gender === 'F'" style="margin-bottom: 20px">
                             <router-link to="/profile">+ Enroll in ANC Program</router-link>
                         </ion-card>
-                        <ion-card class="start_new_co" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">
-                            + Enroll in Labour and delivery program
+
+                        <ion-card class="start_new_co" style="margin-bottom: 20px">
+                            <router-link to="/labour/labourHome">+ Enroll in Labour and delivery program</router-link>
                         </ion-card>
-                        <ion-card class="start_new_co" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">
-                            + Enroll in PNC program
+                        <ion-card class="start_new_co" style="margin-bottom: 20px">
+                            <router-link to="/pnc/Home"> + Enroll in PNC program</router-link>
                         </ion-card>
                         <ion-card
                             class="start_new_co"
@@ -249,6 +250,8 @@ import {
     modifyRadioValue,
     modifyFieldValue,
 } from "@/services/data_helpers";
+import { toastWarning } from "@/utils/Alerts";
+
 import { ref } from "vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 export default defineComponent({

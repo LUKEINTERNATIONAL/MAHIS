@@ -19,7 +19,8 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'full name of the baby',
+                                        valueType:'text',
+                                        name: 'Full name of the baby',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: '',
@@ -39,22 +40,22 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                     {
                         header:{
                             title: 'Baby sex?',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'Sex',
+                            class:'bold'
                         },
                         data:[
                             {
                                 name: 'Male',
-                                value: 'male',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'Male',
+                                colSize: '2.5',
+
                             },
                             {
-                                name: 'female',
-                                value: 'female',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                name: 'Female',
+                                value: 'Female',
+                                colSize: '2.5',
+
                             },
 
                         ]
@@ -76,7 +77,7 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                                         unit: 'kg',
                                         icon: icons.weight,
                                         value: '',
-                                        name: 'Birth weight',
+                                        name: 'Weight',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: '',
@@ -85,6 +86,7 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                                         inputHeader: 'current weight',
                                         unit: 'kg',
                                         icon: icons.weight,
+                                        valueType:'text',
                                         value: '',
                                         name: 'Current weight',
                                         required: true,
@@ -105,22 +107,23 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                     {
                         header:{
                             title: 'Is the birth weight low?',
+                            class:'bold',
+                            name:'Low birth weight',
                             selectedValue: ''
                         },
                         data:[
                             {
                                 name: 'Yes',
-                                value: 'yes',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'Yes',
+                                colSize: '2.5',
+
+
                             },
                             {
                                 name: 'No',
-                                value: 'no',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'No',
+                                colSize: '2.5',
+
                             },
                         ]
                     }
@@ -134,22 +137,22 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                     {
                         header:{
                             title: 'Prematurity/Kangaroo?',
-                            selectedValue: ''
+                            selectedValue: '',
+                            class:'bold',
+                            name:'Prematurity/Kangaroo',
                         },
                         data:[
                             {
                                 name: 'Yes',
-                                value: 'yes',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'Yes',
+                                colSize: '2.5',
+
                             },
                             {
                                 name: 'No',
-                                value: 'no',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'No',
+                                colSize: '2.5',
+
                             },
                         ]
                     }
@@ -163,23 +166,23 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Condition at birth',
-                            selectedValue: ''
+                            title: 'What is the condition at birth?',
+                            name:'Birth condition',
+                            selectedValue: '',
+                            class:'bold'
                         },
                         data:[
                             {
-                                name: 'Well',
-                                value: 'well',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                name: 'Very well',
+                                value: 'Very well',
+                                colSize: '4',
+
                             },
                             {
                                 name: 'Asphyxia',
-                                value: 'asphyxia',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'Asphyxia',
+                                colSize: '4',
+
                             },
                         ]
                     }
@@ -193,22 +196,22 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                     {
                         header:{
                             title: 'Resuscitation tempted',
-                            selectedValue: ''
+                            selectedValue: '',
+                            class:'bold',
+                            name:'Resuscitation attempt'
                         },
                         data:[
                             {
                                 name: 'Yes',
-                                value: 'yes',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'Yes',
+                                colSize: '2.5',
+
                             },
                             {
                                 name: 'No',
-                                value: 'no',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'No',
+                                colSize: '2.5',
+
                             },
                         ]
                     }
@@ -222,22 +225,23 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                     {
                         header:{
                             title: 'What is the status of the baby?',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'Status of the baby',
+                            class:'bold',
+
                         },
                         data:[
                             {
                                 name: 'Alive',
-                                value: 'alive',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'Alive',
+                                colSize: '2.5',
+
                             },
                             {
                                 name: 'Dead',
-                                value: 'dead',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'Dead',
+                                colSize: '2.5',
+
                             },
                         ]
                     }
@@ -251,29 +255,28 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                     {
                         header:{
                             title: 'Is the visit within',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'Is the visit within',
+                            class:'bold'
                         },
                         data:[
                             {
                                 name: '48 hrs before discharge',
                                 value: '48 hrs before discharge',
-                                labelPlacement: 'start',
                                 colSize: '7',
-                                justify: 'space-between',
+
                             },
                             {
                                 name: '2-7 days',
                                 value: '2-7 days',
-                                labelPlacement: 'start',
                                 colSize: '7',
-                                justify: 'space-between',
+
                             },
                             {
                                 name: '8-42 days',
                                 value: '8-42 days',
-                                labelPlacement: 'start',
                                 colSize: '7',
-                                justify: 'space-between',
+
                             },
                         ]
                     }
@@ -286,8 +289,10 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                 checkboxBtnContent:
                     {
                         header:{
-                            title: 'What immunisation has been given?',
-                            selectedValue: ''
+                            title: 'What type immunisation has been given?',
+                            selectedValue: '',
+                            name:'Immunisation given',
+                            class:'bold'
                         },
                         data:[
 
@@ -299,20 +304,6 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                                 colSize: '6',
                                 justify: 'space-between',
                             },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
                             {
                                 name: 'Polio',
                                 value: 'polio',
@@ -325,6 +316,7 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                     }
 
             },
+
             {
                 isFinishBtn: false,
                 sectionHeader: '',
@@ -340,6 +332,7 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                                         unit: '',
                                         icon: icons.calenderPrimary,
                                         value: '',
+                                        valueType:'text',
                                         name: 'Date BCG given',
                                         required: true,
                                         eventType: 'input',
@@ -357,7 +350,6 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                 isFinishBtn: false,
                 sectionHeader: '',
                 classDash: 'dashed_bottom_border _padding',
-
                 data:
                     {
                         rowData:[
@@ -368,6 +360,7 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                                         unit: '',
                                         icon: icons.calenderPrimary,
                                         value: '',
+                                        valueType:'text',
                                         name: 'Date polio given',
                                         required: true,
                                         eventType: 'input',
@@ -389,22 +382,21 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                     {
                         header:{
                             title: 'Tetracycline eye ointment  given?',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'Tetracycline eye ointment',
+                            class:'bold'
                         },
                         data:[
                             {
                                 name: 'Yes',
-                                value: 'yes',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'Yes',
+                                colSize: '2.5',
                             },
                             {
                                 name: 'No',
-                                value: 'no',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'No',
+                                colSize: '2.5',
+
                             },
                         ]
                     }
@@ -418,22 +410,21 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                     {
                         header:{
                             title: 'Cord care (Chlorhexidine) used?',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'Cord care',
+                            class:'bold'
                         },
                         data:[
                             {
                                 name: 'Yes',
-                                value: 'yes',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'Yes',
+                                colSize: '2.5',
+
                             },
                             {
                                 name: 'No',
-                                value: 'no',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'No',
+                                colSize: '2.5',
                             },
                         ]
                     }
@@ -447,22 +438,22 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                     {
                         header:{
                             title: 'Vitamin K given?',
-                            selectedValue: ''
+                            selectedValue: '',
+                            class:'bold',
+                            name:'Vitamin K given'
                         },
                         data:[
                             {
                                 name: 'Yes',
-                                value: 'yes',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'Yes',
+                                colSize: '2.5',
+
                             },
                             {
                                 name: 'No',
-                                value: 'no',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'No',
+                                colSize: '2.5',
+
                             },
                         ]
                     }
@@ -478,8 +469,10 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                 checkboxBtnContent:
                     {
                         header:{
-                            title: '',
-                            selectedValue: ''
+                            title: 'Danger signs',
+                            selectedValue: '',
+                            name:'Danger signs',
+                            class:'bold'
                         },
                         data:[
 
@@ -510,7 +503,9 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'Danger signs',
+
                         },
                         data:[
 
@@ -541,7 +536,9 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'Danger signs',
+
                         },
                         data:[
                             {
@@ -571,7 +568,9 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'Danger signs',
+
                         },
                         data:[
                             {
@@ -602,7 +601,9 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'Danger signs',
+
                         },
                         data:[
                             {
@@ -632,7 +633,9 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'Danger signs',
+
                         },
                         data:[
                             {
@@ -661,12 +664,14 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                     {
                         header:{
                             title: '',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'Danger signs',
+
                         },
                         data:[
                             {
-                                name: 'Other',
-                                value: 'other',
+                                name: 'Other danger signs',
+                                value: 'Other danger signs',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -691,7 +696,8 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'otherC',
+                                        valueType:'text',
+                                        name: 'Other danger signs notes',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "85%",
@@ -717,7 +723,7 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Describe the intervention',
+                                        name: 'Intervention notes',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "",
@@ -736,22 +742,22 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                     {
                         header:{
                             title: 'Nevirapine given?',
-                            selectedValue: ''
+                            selectedValue: '',
+                            class:'bold',
+                            name:'Nevirapine given'
                         },
                         data:[
                             {
                                 name: 'Yes',
-                                value: 'yes',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'Yes',
+                                colSize: '2.5',
+
                             },
                             {
                                 name: 'No',
-                                value: 'no',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'No',
+                                colSize: '2.5',
+
                             },
                         ]
                     }
@@ -765,22 +771,22 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                     {
                         header:{
                             title: 'Cotrimoxazole prophylaxis?',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'Cotrimoxazole prophylaxis',
+                            class:'bold'
                         },
                         data:[
                             {
                                 name: 'Yes',
-                                value: 'yes',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'Yes',
+                                colSize: '2.5',
+
                             },
                             {
                                 name: 'No',
-                                value: 'no',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'No',
+                                colSize: '2.5',
+
                             },
                         ]
                     }

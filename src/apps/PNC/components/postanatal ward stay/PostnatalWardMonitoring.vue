@@ -1,53 +1,71 @@
 <template>
-  <div class="container">
-    <ion-card class="section">
-      <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Danger signs</ion-card-title></ion-card-header>
-      <ion-card-content>
-        <basic-form :contentData="dangerSigns" ></basic-form>
-      </ion-card-content>
-    </ion-card>
-    <ion-card class="section">
-    <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">vitals</ion-card-title></ion-card-header>
-    <ion-card-content>
-      <basic-form :contentData="vitals" ></basic-form>
-    </ion-card-content>
-  </ion-card>
-    <ion-card class="section">
-      <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Other ward routine examinations</ion-card-title></ion-card-header>
-      <ion-card-content>
-        <basic-form :contentData="otherExams" ></basic-form>
-      </ion-card-content>
-    </ion-card>
-  </div>
+  <ion-row>
+    <ion-accordion-group ref="accordionGroup" class="previousView">
+      <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+        <ion-item slot="header" color="light">
+          <ion-label class="previousLabel">Danger signs</ion-label>
+        </ion-item>
+        <div class="ion-padding" slot="content">
+          <DangerSigns/>
+        </div>
+      </ion-accordion>
+    </ion-accordion-group>
+    <ion-accordion-group ref="accordionGroup" class="previousView">
+      <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+        <ion-item slot="header" color="light">
+          <ion-label class="previousLabel">Vitals</ion-label>
+        </ion-item>
+        <div class="ion-padding" slot="content">
+          <Vitals/>
+        </div>
+      </ion-accordion>
+    </ion-accordion-group>
+
+    <ion-accordion-group ref="accordionGroup" class="previousView">
+      <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+        <ion-item slot="header" color="light">
+          <ion-label class="previousLabel">Other examinations</ion-label>
+        </ion-item>
+        <div class="ion-padding" slot="content">
+          <OtherExaminations/>
+        </div>
+      </ion-accordion>
+    </ion-accordion-group>
+  </ion-row>
 </template>
+
 <script lang="ts">
-import {defineComponent} from 'vue';
+import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, IonInput, IonPopover } from "@ionic/vue";
+import { defineComponent, ref } from "vue";
+import { build, checkmark, pulseOutline } from "ionicons/icons";
+import { icons } from "@/utils/svg";
+import { OrderService } from "@/services/order_service";
+import DashBox from "@/components/DashBox.vue";
+import SelectionPopover from "@/components/SelectionPopover.vue";
+import BasicInputField from "@/components/BasicInputField.vue";
+import { useInvestigationStore } from "@/stores/InvestigationStore";
+import { mapState } from "pinia";
+import { toastWarning, popoverConfirmation } from "@/utils/Alerts";
+import BasicForm from "@/components/BasicForm.vue";
+import List from "@/components/List.vue";
+import DynamicButton from "@/components/DynamicButton.vue";
+import labOrderResults from "@/components/Lab/labOrderResults.vue";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 import {
-  IonContent,
-  IonHeader,
-  IonItem,
-  IonList,
-  IonTitle,
-  IonToolbar,
-  IonMenu,
-  IonToggle,
-  IonSelectOption,
-  IonInput,
-  IonSelect,
-  IonRadio,
-  IonRadioGroup,
-} from '@ionic/vue';
-import BasicForm from '../../../../components/BasicForm.vue';
-import { icons } from '../../../../utils/svg';
-import BasicInputField from '../../../../components/BasicInputField.vue';
-import { mapState } from 'pinia';
-import { checkmark, pulseOutline } from 'ionicons/icons';
-import BasicCard from "@/components/BasicCard.vue";
-import {usePostnatalWardStayStore} from "@/apps/PNC/stores/postnatal ward stay/PostnatalWardMonitoring";
+  modifyCheckboxInputField,
+  getCheckboxSelectedValue,
+  getRadioSelectedValue,
+  getFieldValue,
+  modifyRadioValue,
+  modifyFieldValue,
+} from "@/services/data_helpers";
+import DangerSigns from "@/apps/PNC/components/postanatal ward stay/DangerSigns.vue";
+import Vitals from "@/apps/PNC/components/postanatal ward stay/Vitals.vue";
+import OtherExaminations from "@/apps/PNC/components/postanatal ward stay/OtherExaminations.vue";
+
 export default defineComponent({
-  name: "DeliveryDetails",
-  components:{
-    BasicCard,
+  name: "Menu",
+  components: {
     IonContent,
     IonHeader,
     IonItem,
@@ -55,77 +73,134 @@ export default defineComponent({
     IonMenu,
     IonTitle,
     IonToolbar,
-    IonToggle,
-    IonSelect,
-    IonSelectOption,
     IonInput,
+    IonPopover,
+    DashBox,
+    SelectionPopover,
     BasicInputField,
     BasicForm,
-    IonRadio,
-    IonRadioGroup
+    List,
+    DynamicButton,
+    labOrderResults,
+   DangerSigns,
+    Vitals,
+    OtherExaminations
   },
-
   data() {
     return {
       iconsContent: icons,
-      vValidations: '' as any,
-      hasValidationErrors: [] as any,
-      inputField: '' as any,
-
+      no_item: false,
+      search_item: false,
+      display_item: false,
+      addItemButton: true,
+      selectedText: "" as any,
+      testResult: "" as any,
+      test: "" as any,
+      orders: "" as any,
+      filteredSpecimen: "" as any,
+      labOrders: "" as any,
+      testData: [] as any,
+      popoverOpen: false,
+      levelOfConsciousnessStatus: false,
+      presentingComplaintsStatus: false,
+      pregnancyBreastfeedingStatus: false,
+      pastMedicalHistory: false,
+      allergiesStatus: false,
+      physicalExamination: false,
+      event: "" as any,
+      specimen: "" as any,
+      radiologyOrdersStatus: false,
+      otherOrdersStatus: false,
     };
   },
-  computed:{
-    ...mapState(usePostnatalWardStayStore,["dangerSigns"]),
-    ...mapState(usePostnatalWardStayStore,["vitals"]),
-    ...mapState(usePostnatalWardStayStore,["otherExams"]),
-  },
-  mounted(){
-  },
-  watch:{
-  },
   setup() {
-    return { checkmark,pulseOutline };
+    return { checkmark, pulseOutline };
   },
-  methods: {}
-});
+  computed: {
+    ...mapState(useInvestigationStore, ["investigations"]),
+    ...mapState(useDemographicsStore, ["demographics"]),
+    inputFields() {
+      return this.investigations[0].data.rowData[0].colData;
+    },
+  },
+  watch: {
+    investigations: {
+      handler() {
+      },
+      deep: true,
+    },
+  },
+  async mounted() {
+  },
+  methods: {
 
+  },
+});
 </script>
 
 <style scoped>
-.container {
+#container {
+  text-align: center;
+
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#container strong {
+  font-size: 20px;
+  line-height: 26px;
+}
+
+#container p {
+  font-size: 16px;
+  line-height: 22px;
+
+  color: #8c8c8c;
+
+  margin: 0;
+}
+
+#container a {
+  text-decoration: none;
+}
+
+.action_buttons {
+  color: var(--ion-color-primary);
   display: flex;
-  flex-direction: column;
   align-items: center;
+  float: right;
+  max-width: 70px;
 }
 
-.section {
-  width: 100%;
-  max-width: 1300px;
-  margin-bottom: 20px;
+.modify_buttons {
+  padding-left: 20px;
 }
 
-ion-card {
-  box-shadow:none;
-  background-color:inherit;
-  width: 100%;
-  color: black;
+.item_no_border {
+  --border-color: transparent;
 }
 
-.navigation-buttons {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 500px;
+.search_result {
+  padding: 10px;
+}
+.action_buttons {
+  opacity: 0; /* Initially hide the action buttons */
+  transition: opacity 0.3s; /* Add a smooth transition effect */
 }
 
-@media (max-width: 1500px) {
-  .container {
-    padding: 10px;
-  }
+.dashed_bottom_border:hover .action_buttons {
+  opacity: 1; /* Show the action buttons when the row is hovered over */
 }
-.sub_item_header{
-  font-weight: bold;
-  font-size: 14px;
+.dashed_bottom_border {
+  font-weight: 700;
 }
-
-</style>yle>
+.sub_item_body {
+  margin-left: 45px;
+}
+.presentingComplaint {
+  margin-top: 10px;
+}
+</style>

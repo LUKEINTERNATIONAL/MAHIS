@@ -19,16 +19,14 @@ export const useImmunizationStore = defineStore("immunizationStore", {
             {
               name: "Yes",
               value: "yes",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+
+              colSize: "2.5",
             },
             {
               name: "No",
               value: "no",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+
+              colSize: "2.5",
             },
           ],
         },
@@ -51,16 +49,14 @@ export const useImmunizationStore = defineStore("immunizationStore", {
             {
               name: "Yes",
               value: "yes",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+
+              colSize: "2.5",
             },
             {
               name: "No",
               value: "no",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+
+              colSize: "2.5",
             },
           ],
         },
@@ -70,7 +66,8 @@ export const useImmunizationStore = defineStore("immunizationStore", {
       {
         selectdData: [],
         isFinishBtn: false,
-        classDash: "",
+        // classDash: "",
+        classDash: "dashed_bottom_border _padding",
         radioBtnContent: {
           header: {
             title: "Hepatitis B-1",
@@ -81,17 +78,15 @@ export const useImmunizationStore = defineStore("immunizationStore", {
           data: [
             {
               name: "Yes",
-              value: "yes",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+              value: "Yes",
+
+              colSize: "2.5",
             },
             {
               name: "No",
-              value: "no",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+              value: "No",
+
+              colSize: "2.5",
             },
           ],
         },
@@ -106,9 +101,10 @@ export const useImmunizationStore = defineStore("immunizationStore", {
             {
               colData: [
                 {
-                  //displayNone: true,
+                  displayNone: true,
                   inputHeader: "Hep B-1 Date",
                   value: "",
+                  valueType: "text",
                   name: "hepb1 Date",
                   isDatePopover: true,
                   icon: icons.calenderPrimary,
@@ -129,7 +125,7 @@ export const useImmunizationStore = defineStore("immunizationStore", {
       {
         selectdData: [],
         isFinishBtn: false,
-        classDash: "",
+        classDash: "dashed_bottom_border _padding",
         radioBtnContent: {
           header: {
             title: "Hepatitis B-2",
@@ -141,16 +137,14 @@ export const useImmunizationStore = defineStore("immunizationStore", {
             {
               name: "Yes",
               value: "yes",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+
+              colSize: "2.5",
             },
             {
               name: "No",
               value: "no",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+
+              colSize: "2.5",
             },
           ],
         },
@@ -165,9 +159,10 @@ export const useImmunizationStore = defineStore("immunizationStore", {
             {
               colData: [
                 {
-                  //displayNone: true,
+                  displayNone: true,
                   inputHeader: "Hep B-2 Date",
                   value: "",
+                  valueType: "text",
                   name: "Hep B-2 Date",
                   isDatePopover: true,
                   icon: icons.calenderPrimary,
@@ -189,7 +184,7 @@ export const useImmunizationStore = defineStore("immunizationStore", {
       {
         selectdData: [],
         isFinishBtn: false,
-        classDash: "",
+        classDash: "dashed_bottom_border _padding",
         radioBtnContent: {
           header: {
             title: "Hepatitis B-3",
@@ -201,16 +196,14 @@ export const useImmunizationStore = defineStore("immunizationStore", {
             {
               name: "Yes",
               value: "yes",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+
+              colSize: "2.5",
             },
             {
               name: "No",
               value: "no",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+
+              colSize: "2.5",
             },
           ],
         },
@@ -225,10 +218,11 @@ export const useImmunizationStore = defineStore("immunizationStore", {
             {
               colData: [
                 {
-                  //displayNone: true,
+                  displayNone: true,
                   inputHeader: "Hep B-3 Date",
                   value: "",
                   name: "hep3Date",
+                  valueType: "text",
                   isDatePopover: true,
                   icon: icons.calenderPrimary,
                   placeholder: "Pick the date",
@@ -249,7 +243,7 @@ export const useImmunizationStore = defineStore("immunizationStore", {
       {
         selectdData: [],
         isFinishBtn: false,
-        classDash: "",
+        classDash: "dashed_bottom_border _padding",
         radioBtnContent: {
           header: {
             title: "Reason Hepatitis B vaccination not conducted",
@@ -261,37 +255,32 @@ export const useImmunizationStore = defineStore("immunizationStore", {
             {
               name: "Stockout",
               value: "stockout",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+
+              colSize: "5",
             },
             {
               name: "Client is ill",
               value: "client is ill",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+
+              colSize: "5",
             },
             {
               name: "Client refused",
               value: "client refused",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+
+              colSize: "5",
             },
             {
               name: "Allergy to vaccinate",
               value: "allergy to vaccinate",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+
+              colSize: "5",
             },
             {
               name: "Other",
               value: "other",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+
+              colSize: "5",
             },
           ],
         },
@@ -306,12 +295,13 @@ export const useImmunizationStore = defineStore("immunizationStore", {
             {
               colData: [
                 {
-                  //displayNone: true,
+                  displayNone: true,
                   inputHeader: "specify",
                   value: "",
                   name: "Specify",
                   icon: icons.editPen,
                   required: true,
+                  valueType: "text",
                   eventType: "input",
                   inputWidth: "85%",
                   alertsError: false,
@@ -359,5 +349,5 @@ export const useImmunizationStore = defineStore("immunizationStore", {
       this.hepBReason = data;
     },
   },
-  persist: true,
+   persist: true,
 });

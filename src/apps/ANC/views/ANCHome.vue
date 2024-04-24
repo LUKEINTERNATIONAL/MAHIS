@@ -1,56 +1,96 @@
 <template>
-  <ion-row class="card-row">
-    <ion-col v-for="(card, index) in cards" :key="index" size="4">
-      <ion-card :color="card.color" @click="handleCardClick(card.url)">
-        <ion-card-header>
-          <ion-card-title>{{ card.title }}</ion-card-title>
-          <ion-card-subtitle>{{ card.subtitle }}</ion-card-subtitle>
-        </ion-card-header>
-        <ion-card-content>
-          {{ card.content }}
-          <ion-icon v-if="card.submitted" name="checkmark-circle" class="tick-icon"></ion-icon>
-        </ion-card-content>
-      </ion-card>
-    </ion-col>
-  </ion-row>
+    <ion-page>
+        <Toolbar />
+        <ion-content :fullscreen="true">
+            <DemographicBar />
+           <div class = "container"><LandingPage/></div>
+        </ion-content>
+    </ion-page>
 </template>
 
 <script lang="ts">
-import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/vue';
 import { defineComponent } from 'vue';
+import { 
+            IonContent, 
+            IonHeader,
+            IonItem,
+            IonList,
+            IonPage,
+            IonTitle, 
+            IonToolbar, 
+            IonMenu,
+            menuController,
+            IonToggle,
+            IonSelectOption,
+            IonInput,
+            IonSelect,
+            IonRadio,
+            IonRadioGroup
+        } from '@ionic/vue';
+
+import { mapState } from 'pinia';
+import BasicForm from '../../../components/BasicForm.vue';
+import { checkmark, pulseOutline } from 'ionicons/icons';
+import { icons } from '../../../utils/svg' 
+import Toolbar from '../components/Toolbar.vue';
+import DemographicBar from '../components/DemographicBar.vue';
+import LandingPage from '../components/home/LandingPage.vue';
+
 
 export default defineComponent({
-  components: { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle },
-  data() {
-    return {
-      cards: [
-        { color: "primary", title: "Card Title", subtitle: "Card Subtitle", content: "Card Content", url: "/mahis/profile", submitted: false },
-        { color: "secondary", title: "Card Title", subtitle: "Card Subtitle", content: "Card Content", url: "https://example.com", submitted: false },
-        { color: "tertiary", title: "Card Title", subtitle: "Card Subtitle", content: "Card Content", url: "https://example.com", submitted: false },
-        // Add more cards as needed
-      ]
-    };
-  },
-  methods: {
-    handleCardClick(url: string) {
-      window.open(url, "_blank");
-      // Optionally, mark the card as submitted
-      // Example: this.cards[index].submitted = true;
+    name:"TB screening",
+    components:{   
+            IonContent, 
+            IonHeader,
+            IonItem,
+            IonList,
+            IonTitle, 
+            IonToolbar, 
+            IonMenu,
+            menuController,
+            IonToggle,
+            IonSelectOption,
+            IonInput,
+            IonSelect,
+            BasicForm,
+            IonRadio,
+            IonPage,
+            IonRadioGroup,
+        LandingPage,
+    Toolbar,DemographicBar},
+    data(){
+        return {
+            iconsContent: icons,
+          labTestsInstance: {} as any,
+          currentSection: 0, // Initialize currentSection to 0
+        }
+    },
+    computed:{
+       
+
+    },
+    mounted(){},
+    watch:{
+    },
+    setup(){
+        return { checkmark,pulseOutline };
+    },
+    methods:{
+   
     }
-  }
-});
+})
+
+
 </script>
 
 <style scoped>
-.card-row {
-  margin-bottom: 20px;
-}
+.container{
+    text-align: center;
 
-ion-card {
-  cursor: pointer;
-}
-
-.tick-icon {
-  color: green;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
 }
 </style>

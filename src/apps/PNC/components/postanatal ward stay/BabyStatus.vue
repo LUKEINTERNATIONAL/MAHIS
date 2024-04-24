@@ -6,7 +6,6 @@
         <basic-form :contentData="babyStatusDetails" ></basic-form>
       </ion-card-content>
     </ion-card> <ion-card class="section">
-      <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">What danger signs available to the baby</ion-card-title></ion-card-header>
       <ion-card-content>
         <basic-form :contentData="dangerSigns" ></basic-form>
       </ion-card-content>

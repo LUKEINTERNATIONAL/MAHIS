@@ -1,10 +1,11 @@
 import obstetricDetails from "@/apps/LABOUR/views/obstetricDetails.vue";
-import physicalExam from "@/apps/LABOUR/views/physicalExam.vue";
 import continuousMonitoring from "@/apps/LABOUR/views/continuousMonitoring.vue";
 import referral from "@/apps/LABOUR/views/referral.vue";
 import deliveryDetails from "@/apps/LABOUR/views/deliveryDetails.vue";
 import postnatalChecks from "@/apps/LABOUR/views/postnatalChecks.vue";
 import end from "@/apps/LABOUR/views/end.vue";
+import labourAssessment from "@/apps/LABOUR/views/labourAssessment.vue";
+import labourHome from "@/apps/LABOUR/views/labourHome.vue";
 
 export default [
     {
@@ -13,9 +14,9 @@ export default [
         component: obstetricDetails
     },
     {
-        path: '/labour/physicalExam',
-        name: 'physicalExam',
-        component: physicalExam
+        path: '/labour/labourAssessment',
+        name: 'labourAssessment',
+        component: labourAssessment
     },
     {
         path: '/labour/continuousMonitoring',
@@ -42,6 +43,11 @@ export default [
         path: '/labour/end',
         name: 'end',
         component: end
+    },
+    {
+        path: '/labour/labourHome',
+        name: 'end',
+        component: labourHome
     },
 
 ]

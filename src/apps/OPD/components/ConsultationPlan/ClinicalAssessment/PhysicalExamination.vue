@@ -42,7 +42,7 @@ import {
 } from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
 import {usePhysicalExaminationStore} from "@/apps/OPD/stores/PhysicalExamination";
-import physicalExam from "@/apps/LABOUR/views/physicalExam.vue";
+import physicalExam from "@/apps/LABOUR/views/labourAssessment.vue";
 
 export default defineComponent({
   name: "immidiatePostnatalChecksForChild",

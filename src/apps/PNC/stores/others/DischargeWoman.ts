@@ -12,29 +12,34 @@ export const useDischargeWomanStore = defineStore('dischargeWomanStore',{
                     {
                         header:{
                             title: 'What is the discharge status of the woman?',
-                            selectedValue: ''
+                            selectedValue: '',
+                            class:'bold',
+                            name:'Discharge status of woman'
                         },
                         data:[
                             {
                                 name: 'Discharged alive',
-                                value: 'discharged alive',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'Discharged alive',
+                                colSize: '5',
+
                             },
                             {
                                 name: 'Absconded',
-                                value: 'absconded',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'Absconded',
+                                colSize: '5',
+
                             },
                             {
                                 name: 'Referred out',
-                                value: 'referred out',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'Referred out',
+                                colSize: '5',
+
+                            },
+                            {
+                                name: 'Death',
+                                value: 'Death',
+                                colSize: '5',
+
                             },
                         ]
                     }
@@ -48,22 +53,22 @@ export const useDischargeWomanStore = defineStore('dischargeWomanStore',{
                     {
                         header:{
                             title: 'Postpartum family planning counselling done?',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'Postpartum family planning counselling',
+                            class:'bold'
                         },
                         data:[
                             {
                                 name: 'Yes',
-                                value: 'yes',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'Yes',
+                                colSize: '2.5',
+
                             },
                             {
                                 name: 'No',
-                                value: 'no',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'No',
+                                colSize: '2.5',
+
                             },
                         ]
                     }
@@ -77,22 +82,22 @@ export const useDischargeWomanStore = defineStore('dischargeWomanStore',{
                     {
                         header:{
                             title: 'Postpartum family planning methods provided?',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'Postpartum family planning methods provided',
+                            class:'bold'
                         },
                         data:[
                             {
                                 name: 'Yes',
-                                value: 'yes',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'Yes',
+                                colSize: '2.5',
+
                             },
                             {
                                 name: 'No',
-                                value: 'no',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'No',
+                                colSize: '2.5',
+
                             },
                         ]
                     }
@@ -105,23 +110,23 @@ export const useDischargeWomanStore = defineStore('dischargeWomanStore',{
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Select the method',
-                            selectedValue: ''
+                            title: 'Select the method provided',
+                            selectedValue: '',
+                            name:'Postpartum family planning method',
+                            class:'bold'
                         },
                         data:[
                             {
                                 name: 'IUCD',
-                                value: 'iucd',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'IUCD',
+                                colSize: '3',
+
                             },
                             {
                                 name: 'BTL',
-                                value: 'btl',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'BTL',
+                                colSize: '3',
+
                             },
                         ]
                     }
@@ -143,7 +148,7 @@ export const useDischargeWomanStore = defineStore('dischargeWomanStore',{
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Specify cause of death',
+                                        name: 'Cause of death notes',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: '',

@@ -18,7 +18,7 @@ import { mapState } from 'pinia';
 
 
 export default defineComponent({
-    name:"Persistent Behaviour",
+    name:"Referral",
     components:{
         IonItem,
         IonList,

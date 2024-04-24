@@ -213,15 +213,15 @@ export default defineComponent({
 
         handleOtherAndNoRespirationDone() {
             if (getCheckboxSelectedValue(this.respiration, "Other")?.value == "other") {
-                modifyFieldValue(this.respiration, "OtherRespiration", "displayNone", false);
+                modifyFieldValue(this.respiration, "Specify", "displayNone", false);
             } else {
-                modifyFieldValue(this.respiration, "OtherRespiration", "displayNone", true);
+                modifyFieldValue(this.respiration, "Specify", "displayNone", true);
             }
 
             const checkBoxes = [
                 "Normal exam",
                 "Cough",
-                " Rapid breathing",
+                "Rapid breathing",
                 "Slow breathing",
                 "Rapid breathing",
                 "Wheezing",

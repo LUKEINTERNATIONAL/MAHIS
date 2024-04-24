@@ -34,10 +34,16 @@ import ToolbarSearch from "@/apps/PNC/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/PNC/components/DemographicBar.vue";
 import { chevronBackOutline,checkmark } from 'ionicons/icons';
 import SaveProgressModal from '@/components/SaveProgressModal.vue'
-import { createModal } from '@/utils/Alerts'
+import {createModal, toastSuccess, toastWarning} from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
 import Stepper from "@/apps/PNC/components/Stepper.vue";
 import { mapState } from 'pinia';
+import {Service} from "@/services/service";
+import {BabyMonitoringService} from "@/apps/PNC/Services/baby_monitoring_service";
+import {formatCheckBoxData, formatInputFiledData, formatRadioButtonData} from "@/services/formatServerData";
+import {useDemographicsStore} from "@/stores/DemographicStore";
+import {useDischargeWomanStore} from "@/apps/PNC/stores/others/DischargeWoman";
+import {DischargeWomanService} from "@/apps/PNC/Services/discharge_woman_service";
 export default defineComponent({
   name: "dischargeWoman",
   components:{
@@ -79,9 +85,9 @@ export default defineComponent({
       ],
       StepperData:[
         {
-          'title': 'Discharge woman',
-          'componet': 'DischargeWoman',
-          'value': '1'
+          title: 'Discharge woman',
+          component: 'DischargeWoman',
+          value: '1'
         },
       ],
       isOpen: false,
@@ -91,8 +97,14 @@ export default defineComponent({
   watch: {
 
   },
+  getFormatedData(data: any) {
+    return data.map((item: any) => {
+      return item?.data;
+    });
+  },
   computed:{
-
+...mapState(useDemographicsStore,["demographics"]),
+    ...mapState(useDischargeWomanStore,["dischargeWoman"])
 
   },
   mounted(){
@@ -139,9 +151,33 @@ export default defineComponent({
         return item?.data;
       });
     },
-    saveData(){
+    async saveData(){
+      await this.saveDischargeWoman()
+      this.$router.push("home");
 
     },
+    async saveDischargeWoman() {
+      if (this.dischargeWoman>0) {
+        const userID: any = Service.getUserID();
+        const  dischargeWoman= new DischargeWomanService(this.demographics.patient_id, userID);
+        const encounter = await dischargeWoman.createEncounter();
+        if (!encounter) return toastWarning("Unable to create discharge woman encounter");
+        const patientStatus = await dischargeWoman.saveObservationList(await this.buildDischargeWoman());
+        if (!patientStatus) return toastWarning("Unable to create discharge woman details!");
+        toastSuccess("Discharge woman details have been created");
+      }
+      console.log(await this.buildDischargeWoman())
+
+    },
+    async buildDischargeWoman() {
+      return [
+
+        ...(await formatCheckBoxData(this.dischargeWoman)),
+        ...(await formatRadioButtonData(this.dischargeWoman)),
+        ...(await formatInputFiledData(this.dischargeWoman)),
+      ];
+    },
+
 
     openModal(){
       createModal(SaveProgressModal)

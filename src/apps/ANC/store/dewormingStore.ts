@@ -7,7 +7,7 @@ export const useDewormingStore = defineStore("dewormingStore", {
       {
         selectdData: [],
         isFinishBtn: false,
-        classDash: "dashed_bottom_border _padding",
+       // classDash: "dashed_bottom_border _padding",
         radioBtnContent: {
           header: {
             title: "Was preventative antihelminthic treatment provided?",
@@ -19,16 +19,14 @@ export const useDewormingStore = defineStore("dewormingStore", {
             {
               name: "Yes",
               value: "yes",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+              colSize: "2.5",
+              
             },
             {
               name: "No",
               value: "no",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+              colSize: "2.5",
+              
             },
           ],
         },
@@ -45,7 +43,7 @@ export const useDewormingStore = defineStore("dewormingStore", {
             selectedValue: "",
             class: "bold",
             name: "antihelminthic treatment provided",
-            //displayNone: true,
+            displayNone: true,
           },
           data: [
             {
@@ -78,7 +76,7 @@ export const useDewormingStore = defineStore("dewormingStore", {
             selectedValue: "",
             class: "bold",
             name: "no preventative treatment provided",
-            //displayNone: true,
+            displayNone: true,
           },
           data: [
             {
@@ -107,7 +105,7 @@ export const useDewormingStore = defineStore("dewormingStore", {
             {
               colData: [
                 {
-                  //displayNone: true,
+                  displayNone: true,
                   inputHeader: "specify",
                   value: "",
                   name: "Specify",
@@ -132,32 +130,25 @@ export const useDewormingStore = defineStore("dewormingStore", {
         classDash: "dashed_bottom_border _padding",
         radioBtnContent: {
           header: {
-            title: "Was preventative antihelminthic treatment provided?",
+            title: "Was counselling on malaria prevention conducted",
             selectedValue: "",
             class: "bold",
-            name: " preventative antihelminthic treatment",
+            name: " counselling on malaria prevention",
           },
           data: [
             {
               name: "Yes",
               value: "yes",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+              colSize: "2.5",
             },
             {
               name: "No",
               value: "no",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+              colSize: "2.5",
             },
           ],
         },
       },
-    ],
-
-    malariaReason: [
       {
         selectdData: [],
         isFinishBtn: false,
@@ -169,6 +160,7 @@ export const useDewormingStore = defineStore("dewormingStore", {
             selectedValue: "",
             class: "bold",
             name: "counselling on malaria prevention",
+            displayNone: true,
           },
           data: [
             {
@@ -198,6 +190,8 @@ export const useDewormingStore = defineStore("dewormingStore", {
             {
               colData: [
                 {
+                  displayNone: true,
+                  valueType: "text",
                   inputHeader: "Other (Specify)",
                   value: "",
                   name: "other",
@@ -228,9 +222,9 @@ export const useDewormingStore = defineStore("dewormingStore", {
     setMalaria(data: any) {
       this.malaria = data;
     },
-    setMalariaReason(data: any) {
-      this.malariaReason = data;
-    },
+    // setMalariaReason(data: any) {
+    //   this.malariaReason = data;
+    // },
   },
-  //persist: true,
+  persist: true,
 });

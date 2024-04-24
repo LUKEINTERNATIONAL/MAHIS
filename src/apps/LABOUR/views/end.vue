@@ -26,6 +26,7 @@ import Stepper from "@/apps/LABOUR/components/Stepper.vue";
 import { icons } from '@/utils/svg';
 import { chevronBackOutline, checkmark } from 'ionicons/icons';
 import Toolbar from "@/apps/ANC/components/Toolbar.vue";
+import end from "@/apps/LABOUR/components/repeatable things/end.vue";
 
 
 
@@ -44,6 +45,7 @@ export default defineComponent ({
     IonToolbar,
     BasicInputField,
     Stepper,
+    end
   },
   data(){
     return {
@@ -63,9 +65,9 @@ export default defineComponent ({
       ],
       StepperData: [
         {
-          'title': 'Labour and delivery end',
-          'componet': 'end',
-          'value': '1'
+          title: 'Labour and delivery end',
+          component: 'end',
+          value: '1'
         },
 
       ],
@@ -80,7 +82,8 @@ export default defineComponent ({
     markWizard(){},
     saveData(){
 
-      this.$router.push('counselling');
+      this.$router.push("labourHome");
+
 
     },
   }

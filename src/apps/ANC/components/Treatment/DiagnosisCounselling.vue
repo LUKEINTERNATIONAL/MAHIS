@@ -174,21 +174,21 @@ export default defineComponent({
       },
       methods:{
         handleAsprin(){
-          if(getRadioSelectedValue(this.aspirin,'asprinInfo')=='yes'){
-            modifyFieldValue(this.aspirin,'amount','displayNone',false)
+          if(getRadioSelectedValue(this.aspirin,'Aspirin provided')=='yes'){
+            modifyFieldValue(this.aspirin,'Amount of daily aspirin provided','displayNone',false)
           }else{
-            modifyFieldValue(this.aspirin,'amount','displayNone',true)
+            modifyFieldValue(this.aspirin,'Amount of daily aspirin provided','displayNone',true)
           }
         },
         handleAsprinNotProided(){
-          if(getRadioSelectedValue(this.aspirin,'asprinInfo')=='no'){
-            modifyRadioValue(this.aspirin,'reasonNotProvided','displayNone',false)
+          if(getRadioSelectedValue(this.aspirin,'Aspirin provided')=='no'){
+            modifyRadioValue(this.aspirin,'aspirin not prescribed','displayNone',false)
           }else{
-            modifyRadioValue(this.aspirin,'reasonNotProvided','displayNone',true)
+            modifyRadioValue(this.aspirin,'aspirin not prescribed','displayNone',true)
           }
         },
         handleOtherNoAsprin(){
-          if(getRadioSelectedValue(this.aspirin,'reasonNotProvided')=='other'){
+          if(getRadioSelectedValue(this.aspirin,'aspirin not prescribed')=='other'){
             modifyFieldValue(this.aspirin,'Specify','displayNone',false)
           }else{
              modifyFieldValue(this.aspirin,'Specify','displayNone',true)
@@ -196,28 +196,28 @@ export default defineComponent({
           console.log(getRadioSelectedValue(this.aspirin,'Other'))
         },
         handlePrep(){
-          if(getRadioSelectedValue(this.prEp,'prepInfo')=='yes'){
-            modifyFieldValue(this.prEp,'PreP','displayNone',false)
+          if(getRadioSelectedValue(this.prEp,'PrEp for HIV prevention')=='yes'){
+            modifyFieldValue(this.prEp,'Amount of PrEp provided','displayNone',false)
           }else{
-            modifyFieldValue(this.prEp,'PreP','displayNone',true)
+            modifyFieldValue(this.prEp,'Amount of PrEp provided','displayNone',true)
           }
         },
         handlePrepNotProvided(){
-          if(getRadioSelectedValue(this.prEp,'prepInfo')=='no'){
-            modifyRadioValue(this.prEp,'reasonPrep','displayNone',false)
+          if(getRadioSelectedValue(this.prEp,'PrEp for HIV prevention')=='no'){
+            modifyRadioValue(this.prEp,'PrEp for HIV prevention was not provided','displayNone',false)
           }else{
-            modifyRadioValue(this.prEp,'reasonPrep','displayNone',true)
+            modifyRadioValue(this.prEp,'PrEp for HIV prevention was not provided','displayNone',true)
           }
         },
         handleOtherPrep(){
-          if(getRadioSelectedValue(this.prEp,'reasonPrep')=='other'){
+          if(getRadioSelectedValue(this.prEp,'PrEp for HIV prevention was not provided')=='other'){
             modifyFieldValue(this.prEp,'Specify','displayNone',false)
           }else{
             modifyFieldValue(this.prEp,'Specify','displayNone',true)
           }
         },
         handleBirthPlace(){
-          if(getRadioSelectedValue(this.birthPlace,'birthPlace')=='other'){
+          if(getRadioSelectedValue(this.birthPlace,'birth Place')=='other'){
             modifyFieldValue(this.birthPlace,'Specify','displayNone',false)
           }else{
             modifyFieldValue(this.birthPlace,'Specify','displayNone',true)

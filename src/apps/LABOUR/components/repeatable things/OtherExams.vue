@@ -84,7 +84,9 @@ export default defineComponent({
   setup() {
     return { checkmark,pulseOutline };
   },
-  methods: {}
+  methods: {
+
+  }
 });
 
 </script>
