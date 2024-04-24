@@ -7,7 +7,7 @@
                     <DynamicButton fill="clear" name="Back to profile" iconSlot="start" :icon="iconsContent.arrowLeft" />
                 </div>
                 <div class="title">
-                    <div class="demographics_title">Enrollment</div>
+                    <div class="demographics_title">Child Enrollment</div>
                 </div>
                 <div class="icon_div">
                     <ion-icon :class="iconListStatus" :icon="list" @click="setDisplayType('list')"></ion-icon>
@@ -19,64 +19,15 @@
                     ></ion-icon>
                 </div>
             </div>
-            <div v-if="enrollmentDisplayType == 'grid'">
-                <ion-row class="card_row" v-if="enrollmentDisplayType == 'grid'">
-                    <ion-col size="6">
-                        <PatientHistory />
-                    </ion-col>
-                    <ion-col size="6">
-                        <SubstanceDiagnosis />
-                        <FamilyHistoryNCDNumber />
-                    </ion-col>
+            <div>
+                <ion-row class="card_row">
+                    <ChildEnrollment />
                 </ion-row>
             </div>
-            <div v-if="enrollmentDisplayType == 'list'">
-                <div v-if="currentStep == 'Substance & Diagnosis'">
-                    <SubstanceDiagnosis />
-                </div>
-                <div v-if="currentStep == 'Patient History'">
-                    <div style="display: flex; justify-content: center">
-                        <div><PatientHistory /></div>
-                    </div>
-                </div>
-                <div v-if="currentStep == 'Family History and NCDNumber'">
-                    <FamilyHistoryNCDNumber />
-                </div>
-            </div>
         </ion-content>
-        <div class="footer2" v-if="enrollmentDisplayType == 'grid'">
+        <div class="footer2">
             <DynamicButton name="Save" iconSlot="end" :icon="iconsContent.saveWhite" @click="saveData()" />
         </div>
-        <ion-footer v-if="enrollmentDisplayType == 'list'">
-            <div class="footer position_content">
-                <DynamicButton name="Previous" :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
-                <ion-breadcrumbs class="breadcrumbs">
-                    <ion-breadcrumb @click="setCurrentStep('Substance & Diagnosis')" :class="{ active: currentStep === 'Substance & Diagnosis' }">
-                        <span class="breadcrumb-text">Substance & Diagnosis</span>
-                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
-                    </ion-breadcrumb>
-                    <ion-breadcrumb @click="setCurrentStep('Patient History')" :class="{ active: currentStep === 'Patient History' }">
-                        <span class="breadcrumb-text">Patient History</span>
-                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
-                    </ion-breadcrumb>
-                    <ion-breadcrumb
-                        @click="setCurrentStep('Family History and NCDNumber')"
-                        :class="{ active: currentStep === 'Family History and NCDNumber' }"
-                    >
-                        <span class="breadcrumb-text">Family History and NCDNumber</span>
-                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
-                    </ion-breadcrumb>
-                </ion-breadcrumbs>
-                <DynamicButton
-                    v-if="currentStep == 'Family History and NCDNumber'"
-                    name="Save"
-                    iconSlot="end"
-                    :icon="iconsContent.saveWhite"
-                    @click="saveData()"
-                />
-                <DynamicButton v-else name="Next" iconSlot="end" :icon="iconsContent.arrowRightWhite" @click="nextStep" />
-            </div>
-        </ion-footer>
     </ion-page>
 </template>
 
@@ -121,7 +72,7 @@ import { LabOrder } from "@/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";
-import PatientHistory from "@/apps/NCD/components/Enrollment/PatientHistory.vue";
+import ChildEnrollment from "@/apps/Immunization/components/Enrollment/ChildEnrollment.vue";
 import SubstanceDiagnosis from "@/apps/NCD/components/Enrollment/SubstanceDiagnosis.vue";
 import FamilyHistoryNCDNumber from "@/apps/NCD/components/Enrollment/FamilyHistoryNCDNumber.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
@@ -143,7 +94,6 @@ import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServ
 import { IdentifierService } from "@/services/identifier_service";
 import { resetPatientData } from "@/services/reset_data";
 import { useGeneralStore } from "@/stores/GeneralStore";
-import { UserService } from "@/services/user_service";
 
 export default defineComponent({
     name: "Home",
@@ -169,7 +119,7 @@ export default defineComponent({
         IonLabel,
         IonModal,
         Stepper,
-        PatientHistory,
+        ChildEnrollment,
         SubstanceDiagnosis,
         FamilyHistoryNCDNumber,
         DynamicButton,
@@ -224,25 +174,27 @@ export default defineComponent({
         },
 
         async saveNcdNumber() {
-            const NCDNumber = getFieldValue(this.NCDNumber, "NCDNumber", "value");
-            const sitePrefix = await GlobalPropertyService.get("site_prefix");
-            const formattedNCDNumber = sitePrefix + "-NCD-" + NCDNumber;
-            const exists = await IdentifierService.ncdNumberExists(formattedNCDNumber);
-            if (exists) toastWarning("NCD number already exists", 5000);
-            else {
-                const patient = new PatientService();
-                patient.createNcdNumber(formattedNCDNumber);
-                const demographicsStore = useDemographicsStore();
-                demographicsStore.setPatient(await PatientService.findByID(this.demographics.patient_id));
-                await this.saveEnrollment();
-                resetPatientData();
-                await UserService.setProgramUserActions();
-                if (this.activities.length == 0) {
-                    this.$router.push("patientProfile");
-                } else {
-                    this.$router.push("consultationPlan");
-                }
-            }
+            // const NCDNumber = getFieldValue(this.NCDNumber, "NCDNumber", "value");
+            // const sitePrefix = await GlobalPropertyService.get("site_prefix");
+            // const formattedNCDNumber = sitePrefix + "-NCD-" + NCDNumber;
+            // const exists = await IdentifierService.ncdNumberExists(formattedNCDNumber);
+            // if (exists) toastWarning("NCD number already exists", 5000);
+            // else {
+            //     await this.saveEnrollment();
+            //     const patient = new PatientService();
+            //     patient.createNcdNumber(formattedNCDNumber);
+            //     const demographicsStore = useDemographicsStore();
+            //     demographicsStore.setPatient(await PatientService.findByID(this.demographics.patient_id));
+            //     const generalStore = useGeneralStore();
+            //     generalStore.setSaveProgressStatus("");
+            //     resetPatientData();
+            //     if (this.activities.length == 0) {
+            //         this.$router.push("patientProfile");
+            //     } else {
+            //         this.$router.push("consultationPlan");
+            //     }
+            // }
+            this.$router.push("immunizationConsultation");
         },
         openModal() {
             createModal(SaveProgressModal);
@@ -281,6 +233,7 @@ export default defineComponent({
         },
         async saveEnrollment() {
             const data: any = await this.buildEnrollmentData();
+            console.log("🚀 ~ saveEnrollment ~ data:", data);
             if (data.length > 0) {
                 const userID: any = Service.getUserID();
                 const diagnosisInstance = new Diagnosis();

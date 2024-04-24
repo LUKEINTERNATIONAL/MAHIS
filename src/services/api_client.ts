@@ -16,8 +16,8 @@ const ApiClient = (() => {
     }
 
     async function getFileConfig(): Promise<Config> {
-        // const response = await fetch("/mahis/config.json");
-        const response = await fetch("/config.json");
+        const response = await fetch("/mahis/config.json");
+        // const response = await fetch("/config.json");
         if (!response.ok) {
             throw "Unable to retrieve configuration file/ Invalid config.json";
         }
@@ -109,7 +109,6 @@ const ApiClient = (() => {
         }
 
         const url = await expandPath(uri);
-        console.log("🚀 ~ execFetch ~ url:", url);
 
         try {
             EventBus.emit(ApiBusEvents.BEFORE_API_REQUEST, uri);

@@ -358,7 +358,7 @@ video {
 .registration_ion_card {
     display: flex;
     justify-content: center;
-    padding: 40px;
+    padding: 3vw;
     margin-bottom: 20px;
 }
 .no_content {

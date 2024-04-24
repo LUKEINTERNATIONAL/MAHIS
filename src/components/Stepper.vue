@@ -1,7 +1,7 @@
 <template>
     <ion-row>
-        <ion-col size="1" size-lg="1"></ion-col>
-        <ion-col size="3" size-lg="3">
+        <ion-col size-xl="1" class="displayNoneMobile"> </ion-col>
+        <ion-col size-md="4" size-xl="2.5" size-sm="0" size-lg="4" class="displayNoneMobile">
             <ion-card class="wizard_card">
                 <div class="wizard_title">
                     <strong> {{ stepperTitle }}</strong>
@@ -23,8 +23,9 @@
                 </ion-card-content>
             </ion-card>
         </ion-col>
+        <ion-col size-md="0.6" size-xl="0.8" class="displayNoneMobile"> </ion-col>
 
-        <ion-col size="7" size-lg="7" class="rightCol">
+        <ion-col size-sm="12" size-xl="7" size-md="7.2" size-lg="7" class="">
             <div class="back_profile" @click="openModal()">
                 <ion-icon style="font-size: 20px" :icon="chevronBackOutline"> </ion-icon>
                 <span style="cursor: pointer"> Back to profile</span>
@@ -127,6 +128,7 @@ import PhysiologicalCounseling from "@/apps/ANC/components/counselling/Physiolog
 import DietCounselling from "@/apps/ANC/components/counselling/DietCounselling.vue";
 import Referral from "@/apps/ANC/components/referral/Referral.vue";
 import AncEnd from "@/apps/ANC/components/ancEnd/AncEnd.vue";
+import ImmunizationServices from "@/apps/Immunization/components/ImmunizationServices.vue";
 import OPDOutcome from "@/apps/OPD/components/ConsultationPlan/OPDOutcome.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
@@ -204,6 +206,7 @@ export default defineComponent({
         OPDTreatmentPlan,
         OPDOutcome,
         DynamicButton,
+        ImmunizationServices,
     },
     data() {
         return {
@@ -313,24 +316,24 @@ ion-accordion.accordion-expanded ion-item[slot="header"] {
     align-items: center;
     font-weight: 400;
     font-size: 14px;
-    position: fixed;
+    /* position: fixed; */
     z-index: 1000;
 }
 .wizard_card {
-    position: fixed;
+    /* position: fixed; */
     width: 100%;
-    max-width: 300px;
+    /* max-width: 300px; */
     background-color: #fff;
-    top: 150px;
+    /* top: 150px; */
 }
 .rightCol {
     top: 100px;
     width: 90%;
 }
 .accordion_group {
-    position: fixed;
+    /* position: fixed; */
     height: 700px;
-    width: 58%;
+    /* width: 58%; */
     overflow-y: auto;
     top: 200px;
 }

@@ -65,7 +65,6 @@ import { useGeneralStore } from "@/stores/GeneralStore";
 import { resetPatientData } from "@/services/reset_data";
 import { PatientReferralService } from "@/services/patient_referral_service";
 import { PatientAdmitService } from "@/services/patient_admit_service";
-import { UserService } from "@/services/user_service";
 import {
     modifyRadioValue,
     getRadioSelectedValue,
@@ -156,8 +155,8 @@ export default defineComponent({
 
     methods: {
         async getData() {
-            // const steps = ["Vital Signs", "Investigations", "Diagnosis", "Complications Screening", "Treatment Plan", "Next Appointment", "Outcome"];
-            const [{ NCD_activities: steps }] = this.activities;
+            const steps = ["Immunization Services", "Investigations", "Diagnosis", "Treatment Plan", "Next Appointment", "Outcome"];
+            // const steps = this.activities;
             for (let i = 0; i < steps.length; i++) {
                 const title = steps[i];
                 const number = i + 1;
@@ -246,7 +245,6 @@ export default defineComponent({
             await this.saveTreatmentPlan();
             await this.saveOutComeStatus();
             resetPatientData();
-            await UserService.setProgramUserActions();
             this.$router.push("patientProfile");
         },
         async saveVitals() {

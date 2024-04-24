@@ -128,6 +128,7 @@ import { toastSuccess, toastWarning } from "@/utils/Alerts";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import HisDate from "@/utils/Date";
 import { useConfigurationStore } from "@/stores/ConfigurationStore";
+import { UserService } from "@/services/user_service";
 import { isEmpty } from "lodash";
 
 export default defineComponent({
@@ -227,8 +228,9 @@ export default defineComponent({
         async findPatient(patientID: any) {
             this.openNewPage("/patientProfile", await PatientService.findByID(patientID));
         },
-        saveData() {
-            this.createPatient();
+        async saveData() {
+            await this.createPatient();
+            await UserService.setProgramUserActions();
         },
         async validations(data: any, fields: any) {
             if (this.nationalID != "") {
