@@ -3,7 +3,10 @@
     <ion-card class="section">
       <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="examsAfterDelivery" ></basic-form>
+        <basic-form
+            :contentData="examsAfterDelivery"
+            :initialData="initialData"
+        ></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
@@ -36,7 +39,7 @@ import {
   getFieldValue,
 } from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
-import {useReferralStore} from "@/apps/LABOUR/stores/repeatable things/referral";
+//import {useReferralStore} from "@/apps/LABOUR/stores/repeatable things/referral";
 import {useEndLabourStore} from "@/apps/LABOUR/stores/repeatable things/labourAndDeliveryEnd";
 import {
   useImmediatePostnatalChecksForMotherStore
@@ -68,6 +71,7 @@ export default defineComponent({
       vValidations: '' as any,
       hasValidationErrors: [] as any,
       inputField: '' as any,
+      initialData:[] as any
 
     };
   },
@@ -75,6 +79,8 @@ export default defineComponent({
     ...mapState(useImmediatePostnatalChecksForMotherStore,["examsAfterDelivery"]),
   },
   mounted(){
+    const examsAfterDelivery=useImmediatePostnatalChecksForMotherStore()
+    this.initialData=examsAfterDelivery.getInitial()
   },
   watch:{
   },

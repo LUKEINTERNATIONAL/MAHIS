@@ -1,37 +1,41 @@
 <template>
   <ion-page>
-    <Toolbar/>
+    <Toolbar />
     <ion-content :fullscreen="true">
-      <DemographicBar/>
-      <Stepper stepperTitle="Referral" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
+      <DemographicBar />
+      <Stepper
+          stepper-title="Lab test and imaging"
+          :wizardData="wizardData"
+          @updateStatus="markWizard"
+          @finishBtn="saveData()"
+          :StepperData="StepperData"
+      ></Stepper>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import {
-  IonContent,
-  IonHeader,
-  IonItem,
-  IonPage,
-  IonList,
-  IonTitle,
-  IonToolbar,
-  IonMenu,
-} from '@ionic/vue';
-import Toolbar from '@/components/Toolbar.vue'
 import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import { defineComponent } from 'vue';
 import BasicInputField from '@/components/BasicInputField.vue';
-import Stepper from '@/components/Stepper.vue';
+import Stepper from "@/apps/ANC/components/Stepper.vue";
 import { icons } from '@/utils/svg';
 import { chevronBackOutline, checkmark } from 'ionicons/icons';
 import Referral from "@/apps/ANC/components/referral/Referral.vue";
+import { IonContent, IonHeader, IonItem, IonPage, IonList, IonMenu, IonTitle,IonToolbar } from "@ionic/vue";
+import Toolbar from "../components/Toolbar.vue";
+import { useReferralStore } from "../store/referral/referralStore";
+import { mapState } from "pinia";
+import { formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
+import { Service } from "@/services/service";
+import { toastSuccess, toastWarning } from "@/utils/Alerts";
+import {ReferralInstance} from '@/apps/ANC/service/referral_service'
+import { useDemographicsStore } from "@/stores/DemographicStore";
 
 
 
 export default defineComponent ({
-  name : 'treatment',
+  name : "Home",
   components : {
     IonContent,
     IonHeader,
@@ -52,22 +56,21 @@ export default defineComponent ({
       iconsContent: icons,
       isOpen: false,
       wizardData: [
-
         {
-          'title': 'Referral',
-          'class': 'common_step',
-          'checked':false,
-          'disabled':false,
-          'number':1,
-          'last_step': 'last_step'
+          title: 'Referral',
+          class: 'common_step',
+          checked:"",
+          disabled:false,
+          number:1,
+          last_step: 'last_step'
         },
 
       ],
       StepperData: [
         {
-          'title': 'Referral',
-          'componet': 'Referral',
-          'value': '1'
+          title: 'Referral',
+          component: 'Referral',
+          value: '1'
         },
 
       ],
@@ -77,20 +80,38 @@ export default defineComponent ({
   setup () {
     return {chevronBackOutline, checkmark}
   },
-
-  methods: {
-    markWizard(){},
-    saveData(){
-
-      this.$router.push('counselling');
-
+  computed:{
+        ...mapState(useReferralStore,["referralInfo"]),
+        ...mapState(useDemographicsStore, ["demographics"]),
     },
-  }
-})
+  methods: {
+    markWizard() {},
+    saveData() {
+      this.saveReferral
+      this.$router.push("ANCHome");
+    },
+    async buildReferral() {
+       return [
+         ...(await formatRadioButtonData(this.referralInfo)),
+         ...(await formatInputFiledData(this.referralInfo))
+        ]
+    },
 
+    async saveReferral () {
+        const data: any = await this.buildReferral();
+        if (data.length > 0) {
+            const userID: any = Service.getUserID();
+            const referralInstance = new ReferralInstance();
+            referralInstance.push(this.demographics.patient_id, userID, data);
+            toastSuccess("Referral data saved successfully");
+        }
+
+        else {
+            toastWarning("Could not find all concepts");
+        }
+    },
+  },
+});
 </script>
 
-
-<style scoped>
-
-</style>
+<style scoped></style>

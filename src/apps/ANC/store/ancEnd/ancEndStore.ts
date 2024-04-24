@@ -1,113 +1,6 @@
 import { defineStore } from "pinia";
 import { icons } from '@/utils/svg';
 
-const ancEndForm ={
-        Inlabour:{
-        name:"In labour",
-        value:"Inlabour"
-    },
-        liveBirth:{
-        name:"Live birth",
-        value:"liveBirth"
-    },
-       stillbirth:{
-        name:"Stillbirth",
-        value:"stillbirth"
-    },
-        miscarriage:{
-        name:'Miscarriage',
-        value:'miscarriage'
-    },
-        abortion:{
-        name:"Abortion",
-        value:"abortion"
-    },
-        death:{
-        name:"Death",
-        value:"death"
-    },
-        lostFollowUp:{
-        name:"Lost to follow up",
-        value:"lostFollowUp"
-    },
-        timeScheduledReferral:{
-        name:"time scheduled referral",
-        value:"timeScheduledReferral"
-    },
-        movedAway:{
-        name:"Moved away",
-        value:" movedAway"
-    },
-        falsePregnancy:{
-        name:"False pregnancy",
-        value:"falsePregnancy"
-    },
-        wrongEntry:{
-        name:"Wrong entry",
-        value:"wrongEntry"
-    },
-        otherOnClosingANC:{
-        name:"Other",
-        value:"otherOnClosingANC"
-    },
-    specifyOnAncClosing:{
-        name:"SpecifyAnC",
-        value:""
-    },
-        dateofDelivery:{
-        name:"DateD",
-        value:"dateofDelivery"
-    },
-        timeOfDelivery:{
-        name:"Time of delivery",
-        value:"timeOfDelivery"
-    },
-        home:{
-        name:"Home",
-        value:"home"
-    },
-       healthCareFacility:{
-        name:"Health-care facility",
-        value:"healthCareFacility"
-    },
-        otherOnPlaceDelivery:{
-        name:"Other",
-        value:"otherOnPlaceDelivery"
-    },
-        specifyOnPlaceDelivery:{
-        name:"Specify",
-        value:""
-    },
-       pretermDeathYes:{
-        name:"Yes",
-        value:"no"
-    },
-        pretermDeathNo:{
-        name:"No",
-        value:"no"
-    },
-        normal:{
-        name:"Normal",
-        value:"normal"
-    },
-        forceps:{
-        name:"Forceps",
-        value:"forceps"
-    },
-        vacuum:{
-        name:"Vacuum",
-        value:"vacuum"
-    },
-        cSection:{
-        name:"C-section",
-        value:"cSection"
-    },
-        weight:{
-        name:"Weight",
-        value:"weight"
-    },
-   
-}
 
 export const useAncEndStore = defineStore('ancEndStore',{
     state: () =>({
@@ -120,89 +13,82 @@ export const useAncEndStore = defineStore('ancEndStore',{
                     header:{
                         title: '',
                         selectedValue: '',
-                        name:'otherEnd'
+                        name:'Reason for closing ANC'
                     },
                     data:[
                         {
-                            name: ancEndForm.Inlabour.name,
-                            value: ancEndForm.Inlabour.value,
+                            name: "In labour",
+                            value: "In labour",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 
                         },
                         {
-                            name: ancEndForm.liveBirth.name,
-                            value: ancEndForm.liveBirth.value,
+                            name: "Live birth",
+                            value: "Live birth",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 
                         },
                         {
-                            name:  ancEndForm.stillbirth.name,
-                            value: ancEndForm.stillbirth.value,
+                            name: "Stillbirth",
+                            value: "Stillbirth",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 
                         },
                         {
-                            name: ancEndForm.miscarriage.name,
-                            value: ancEndForm.miscarriage.value,
+                            name: "Miscarriage",
+                            value:"Miscarraige",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 
                         },
                                                 {
-                            name: ancEndForm.abortion.name,
-                            value: ancEndForm.abortion.value,
+                            name: "Abortion",
+                            value: "Abortion",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 
                         },
                         {
-                            name:  ancEndForm.death.name,
-                            value: ancEndForm.death.value,
+                            name: "Death",
+                            value: "Death",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 
                         },
                         {
-                            name: ancEndForm.miscarriage.name,
-                            value: ancEndForm.miscarriage.value,
+                            name: "Lost to follow up",
+                            value: "Lost to follow up",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 
                         },
                         {
-                            name: ancEndForm.lostFollowUp.name,
-                            value: ancEndForm.lostFollowUp.value,
+                            name:  "Moved away",
+                            value: "Moved away",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 
                         },
                         {
-                            name:  ancEndForm.movedAway.name,
-                            value: ancEndForm.movedAway.value,
+                            name: "False pregnancy",
+                            value: "False pregnancy",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 
                         },
                         {
-                            name: ancEndForm.falsePregnancy.name,
-                            value: ancEndForm.falsePregnancy.value,
+                            name:"Wrong entry",
+                            value: "Wrong entry",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 
                         },
                         {
-                            name: ancEndForm.wrongEntry.name,
-                            value: ancEndForm.wrongEntry.value,
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
-                        },
-                        {
-                            name:  ancEndForm.otherOnClosingANC.name,
-                            value: ancEndForm.otherOnClosingANC.value,
+                            name:  "Other",
+                            value: "Other",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 
@@ -219,8 +105,8 @@ export const useAncEndStore = defineStore('ancEndStore',{
                                             displayNone:true,
                                             inputHeader: 'Specify',
                                             icon: icons.editPen,
-                                            value: ancEndForm.specifyOnAncClosing.value,
-                                            name: ancEndForm.specifyOnAncClosing.name,
+                                            value: "Other (specify)",
+                                            name: "Other (specify)",
                                             eventType: 'input',
                                             inputWidth: "82%",
                                             required: true
@@ -240,7 +126,7 @@ export const useAncEndStore = defineStore('ancEndStore',{
                             colData:[
                                 {    
                                     displayNone:true,
-                                    inputHeader: 'Death Date',
+                                    inputHeader: 'Date of death',
                                     icon: icons.calendar,
                                     name: "DeathDate",
                                     eventType: 'input',
@@ -310,7 +196,8 @@ export const useAncEndStore = defineStore('ancEndStore',{
           
                header:{
                         title: 'Date of delivery',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:"Date of delivery"
                     },
                           
                 data:{ 
@@ -321,8 +208,8 @@ export const useAncEndStore = defineStore('ancEndStore',{
                                     displayNone:true,
                                     inputHeader: 'Date',
                                     icon: icons.calenderPrimary,
-                                    value: ancEndForm.dateofDelivery.value,
-                                    name: ancEndForm.dateofDelivery.name,
+                                    value: "Date of delivery",
+                                    name: "Date of delivery",
                                     eventType: 'input',
                                     inputWidth: "82%",
                                     required: true,
@@ -343,27 +230,27 @@ export const useAncEndStore = defineStore('ancEndStore',{
                     header:{
                         title: 'Place of delivery',
                         selectedValue: '',
-                        name:'placeDelivery',
+                        name:'Place of Delivery',
                         displayNone:true
                     },
                     data:[
                         {
-                            name: ancEndForm.home.name,
-                            value: ancEndForm.home.value,
+                            name: "Home",
+                            value: "Home",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 
                         },
                         {
-                            name: ancEndForm.healthCareFacility.name,
-                            value: ancEndForm.healthCareFacility.value,
+                            name: "Health-care facility",
+                            value: "Health-care facility",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 
                         },
                         {
-                            name:  ancEndForm.otherOnPlaceDelivery.name,
-                            value: ancEndForm.otherOnPlaceDelivery.value,
+                            name:  "Other",
+                            value: "Other",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 
@@ -371,29 +258,30 @@ export const useAncEndStore = defineStore('ancEndStore',{
                     ]
                 }
             },
-                {    
-                        data:{ 
-                            rowData:[
-                                {
-                                    colData:[
-                                        {   
-                                            displayNone:true,
-                                            inputHeader: 'specify',
-                                            icon: icons.editPen,
-                                            value: ancEndForm.specifyOnPlaceDelivery.value,
-                                            name: ancEndForm.specifyOnPlaceDelivery.name,
-                                            eventType: 'input',
-                                            inputWidth: "82%",
-                                            required: true
-                                        }
+                // {    
+                //         data:{ 
+                //             rowData:[
+                //                 {
+                //                     colData:[
+                //                         {   
+                //                             displayNone:true,
+                //                             inputHeader: 'specify',
+                //                             icon: icons.editPen,
+                //                             value: "",
+                //                             name: "Other (specify)",
+                //                             valueType: "text",
+                //                             eventType: 'input',
+                //                             inputWidth: "82%",
+                //                             required: true
+                //                         }
                                         
-                                    ]
-                                }
-                            ],
+                //                     ]
+                //                 }
+                //             ],
                             
-                        }
+                //         }
                     
-                    },
+                //     },
 
             {
                 selectdData: [],
@@ -403,20 +291,20 @@ export const useAncEndStore = defineStore('ancEndStore',{
                     header:{
                         title: 'Preterm birth',
                         selectedValue: '',
-                        name:'preterm',
+                        name:'Preterm',
                         diplayNone:true,
                     },
                     data:[
                         {
-                            name: ancEndForm.pretermDeathYes.name,
-                            value: ancEndForm.pretermDeathYes.value,
+                            name: "Yes",
+                            value: "Yes",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 
                         },
                         {
-                            name:  ancEndForm.pretermDeathNo.name,
-                            value: ancEndForm.pretermDeathNo.value,
+                            name:  "No",
+                            value: "No",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 
@@ -432,34 +320,34 @@ export const useAncEndStore = defineStore('ancEndStore',{
                     header:{
                         title: 'Mode of delivery',
                         selectedValue: '',
-                        name:'deliveryMode',
+                        name:'Mode of delivery',
                         displayNone:true,
                     },
                     data:[
                         {
-                            name: ancEndForm.normal.name,
-                            value: ancEndForm.normal.value,
+                            name: "Normal",
+                            value: "Normal",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 
                         },
                         {
-                            name:  ancEndForm.forceps.name,
-                            value: ancEndForm.forceps.value,
+                            name: "Forceps",
+                            value: "Forceps",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 
                         },
                         {
-                            name: ancEndForm.vacuum.name,
-                            value: ancEndForm.vacuum.value,
+                            name: "Vacuum",
+                            value: "Vacuum",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 
                         },
                         {
-                            name:  ancEndForm.cSection.name,
-                            value: ancEndForm.cSection.value,
+                            name: "C-section",
+                            value: "C-section",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 
@@ -476,9 +364,10 @@ export const useAncEndStore = defineStore('ancEndStore',{
                             {   displayNone:true,
                                 inputHeader: 'Weight',
                                 icon: icons.weight,
-                                value: ancEndForm.weight.value,
-                                name: ancEndForm.weight.name,
+                                value: "Weight",
+                                name: "Weight",
                                 eventType: 'input',
+                                valueType:"number",
                                 inputWidth: "82%",
                                 required: true
                             }
@@ -494,9 +383,9 @@ export const useAncEndStore = defineStore('ancEndStore',{
             ]as any,            
     }),
         actions:{
-        addAncInfo(data:any){
-            this.ancInfo = data
-        }
+        // addAncInfo(data:any){
+        //     this.ancInfo = data
+        // }
     },
     persist:true
 })

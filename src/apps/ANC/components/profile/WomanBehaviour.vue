@@ -2,9 +2,6 @@
     <div class="container">
         <!-- Caffeine -->
         <ion-card class="section">
-            <ion-card-header>
-                <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title>
-            </ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="dailyCaffeineIntake"></basic-form>
             </ion-card-content>
@@ -12,9 +9,6 @@
 
         <!-- tobbaco -->
         <ion-card class="section">
-            <ion-card-header>
-                <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title>
-            </ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="Tobacco"></basic-form>
             </ion-card-content>

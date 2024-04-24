@@ -93,8 +93,14 @@ export default defineComponent ({
   methods: {
     markWizard(){},
     saveData(){
+      if (this.headssAssesment.length > 0) {
       this.saveHeadssAssesment();
-      // this.$router.push('quickCheck');
+      this.$router.push('ANCHome');
+      toastSuccess("HEADSS assessment details have been created");
+      }
+      else {
+        return toastWarning("fill the form!")
+      }
 
     },
     async saveHeadssAssesment() {

@@ -63,9 +63,9 @@ export default defineComponent ({
       ],
       StepperData: [
         {
-          'title': 'Labour and delivery end',
-          'componet': 'end',
-          'value': '1'
+          title: 'Labour and delivery end',
+          component: 'end',
+          value: '1'
         },
 
       ],
@@ -80,7 +80,8 @@ export default defineComponent ({
     markWizard(){},
     saveData(){
 
-      this.$router.push('counselling');
+      this.$router.push("labourHome");
+
 
     },
   }

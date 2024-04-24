@@ -113,28 +113,28 @@ export default defineComponent ({
 
     methods :{
       handleB1(){
-        if(getRadioSelectedValue(this.HepB1,'b1')=='yes'){
-          modifyFieldValue(this.HepB1,'hep1Date','displayNone',false)
+        if(getRadioSelectedValue(this.HepB1,'Hepatitis B-1')=='Yes'){
+          modifyFieldValue(this.HepB1,'hepb1 Date','displayNone',false)
         }else{
-          modifyFieldValue(this.HepB1,'hep1Date','displayNone',true)
+          modifyFieldValue(this.HepB1,'hepb1 Date','displayNone',true)
         }
       },
       handleB2(){
-        if(getRadioSelectedValue(this.HepB2,'b2')=='yes'){
-          modifyFieldValue(this.HepB2,'hep2Date','displayNone',false)
+        if(getRadioSelectedValue(this.HepB2,'Hepatitis B-2')=='yes'){
+          modifyFieldValue(this.HepB2,'Hep B-2 Date','displayNone',false)
         }else{
-          modifyFieldValue(this.HepB2,'hep2Date','displayNone',true)
+          modifyFieldValue(this.HepB2,'Hep B-2 Date','displayNone',true)
         }
       },
       handleB3(){
-        if(getRadioSelectedValue(this.HepB3,'b3')=='yes'){
+        if(getRadioSelectedValue(this.HepB3,'Hepatitis B-3')=='yes'){
           modifyFieldValue(this.HepB3,'hep3Date','displayNone',false)
         }else{
           modifyFieldValue(this.HepB3,'hep3Date','displayNone',true)
         }
       },
       handelHepreason(){
-        if(getRadioSelectedValue(this.hepBReason,'HepatitisB')=='other'){
+        if(getRadioSelectedValue(this.hepBReason,'Hepatitis B')=='other'){
           modifyFieldValue(this.hepBReason,'Specify','displayNone',false)
         }else{
            modifyFieldValue(this.hepBReason,'Specify','displayNone',true)
@@ -149,16 +149,6 @@ export default defineComponent ({
       //   console.log(getRadioSelectedValue(this.HepB3,'b3'))
       // },
     //Method for navigating sections
-    goToNextSection() {
-      if (this.currentSection < 2) {
-        this.currentSection++;
-      }
-    },
-    goToPreviousSection() {
-      if (this.currentSection > 0) {
-        this.currentSection--;
-      }
-    },
 
     }
 

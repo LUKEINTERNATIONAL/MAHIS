@@ -116,10 +116,10 @@ export default defineComponent({
   },
   mounted(){
     const userID: any  = Service.getUserID()
-    const breastExam=useMaternalExamStore()
-    const oedemaPresence=useMaternalExamStore()
-    const vaginalInspection=useMaternalExamStore()
-    const cervicalExam=useMaternalExamStore()
+    // const breastExam=useMaternalExamStore()
+    // const oedemaPresence=useMaternalExamStore()
+    // const vaginalInspection=useMaternalExamStore()
+    // const cervicalExam=useMaternalExamStore()
     this.handleBreastExams()
     this.handleVaginalInspection()
     this.handleCervicalExam()
@@ -198,14 +198,18 @@ export default defineComponent({
       }
     },
     handleCervicalExam(){
-      if(getRadioSelectedValue(this.cervicalExam, 'Yes')=='yes'){
-        modifyFieldValue(this.cervicalExam,'cervical dilation','displayNone', false)
-      }   else {modifyFieldValue(this.cervicalExam,'cervical dilation','displayNone', true)}
+      if(getRadioSelectedValue(this.cervicalExam, 'Cervical exam')=='yes'){
+        modifyFieldValue(this.cervicalExam,'Cervical dilation','displayNone', false)
+      } else {modifyFieldValue(this.cervicalExam,'Cervical dilation','displayNone', true)}
     },
     handleOedema(){
-        if(getRadioSelectedValue(this.oedemaPresence, 'Yes')=='yes'){
-          modifyRadioValue(this.oedemaPresence, 'types of oedema', 'displayNone', false)
-        } else { modifyRadioValue(this.oedemaPresence, 'types of oedema', 'displayNone', true)}
+        if(getRadioSelectedValue(this.oedemaPresence, 'Oedema')=='yes'){
+          modifyRadioValue(this.oedemaPresence, 'Oedema types', 'displayNone', false)
+          modifyRadioValue(this.oedemaPresence, 'Oedema severity', 'displayNone', false)
+        
+        } else {
+           modifyRadioValue(this.oedemaPresence, 'Oedema types', 'displayNone', true)
+           modifyRadioValue(this.oedemaPresence, 'Oedema severity', 'displayNone', true)}
     },
 
     //Method for navigating

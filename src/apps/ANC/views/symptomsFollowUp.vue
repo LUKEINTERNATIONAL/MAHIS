@@ -55,6 +55,14 @@ import { LabOrder } from "@/apps/NCD/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";
+import { useMedicalFollowUpStore } from "../store/symptomsFollowUp/medicalFollowUpStore";
+import { usePersistentBehaviourStore } from "../store/symptomsFollowUp/persistentBehaviourStore";
+import { usePersistentSymptomsStore } from "../store/symptomsFollowUp/persistentSymptomsStore";
+import { useIpvStore } from "../store/symptomsFollowUp/ipvStore";
+import { useCurrentPhysiologicalSymptomsStore } from "../store/symptomsFollowUp/currentPhysiologicalSymptomsStore";
+import { useFatalMovementStore } from "../store/symptomsFollowUp/fatalMovementStore";
+import { formatCheckBoxData, formatRadioButtonData } from "@/services/formatServerData";
+import {CurrentPhysiologicalSymptomsInstance, FetalMovementInstance, IntimatePartnerInstance, MedicalFollowUpInstance, PersistentBehavioursInstance, PersistentSymptomsInstance} from '@/apps/ANC/service/symptoms_follow_up_service';
 export default defineComponent({
     name: "Home",
     components: {
@@ -162,10 +170,10 @@ export default defineComponent({
                 {
                     title: "Intimate partner violence(IPV)",
                     component: "Ipv",
-                    value: "5",
+                    value: "5", 
                 },
                 {
-                    title: "Fatal Movement",
+                    title: "Fetal Movement",
                     component: "FatalMovement",
                     value: "6",
                 },
@@ -173,6 +181,17 @@ export default defineComponent({
             isOpen: false,
             iconsContent: icons,
         };
+    },
+    computed: {
+        ...mapState(useMedicalFollowUpStore,["trial"]),
+        ...mapState(usePersistentBehaviourStore,["persistentBehaviour"]),
+        ...mapState(usePersistentSymptomsStore,["persistentSymptom"]),
+        ...mapState(useCurrentPhysiologicalSymptomsStore,["physiologicalSymptoms"]),
+        ...mapState(useIpvStore,["ipv"]),
+        ...mapState(useFatalMovementStore,["fatalMovement"]),
+        ...mapState(useDemographicsStore, ["demographics"]),
+
+
     },
     mounted() {
         this.markWizard();
@@ -189,8 +208,134 @@ export default defineComponent({
             });
         },
         saveData() {
-            this.$router.push("physicalExamination");
+            this.saveMedicalFollowUp(),
+            this.savePersistentBehaviours(),
+            this.savePersistentSymptoms(),
+            this.saveCurrentPhysiologicalSymptoms(),
+            this.saveIPV(),
+            this.saveFetalMovement(),
+            this.$router.push("ANChome");
+            toastSuccess("Symptoms and follow up data saved successfully");
         },
+        async buildMedicalFollowUp() {
+       return [
+         ...(await formatRadioButtonData(this.trial)),
+
+        ]
+    },
+    async buildPersistentBehaviours() {
+       return [
+         ...(await formatRadioButtonData(this.persistentBehaviour)),
+   
+        ]
+    },
+    async buildPersistentSymptoms() {
+       return [
+         ...(await formatCheckBoxData(this.persistentSymptom)),
+     
+        ]
+    },
+    async buildCurrentPhysiologicalSymptoms() {
+       return [
+         ...(await formatCheckBoxData(this.physiologicalSymptoms)),
+
+        ]
+    },
+    async buildIPV() {
+       return [
+         ...(await formatCheckBoxData(this.ipv)),
+        ]
+    },
+    async buildFetalMovement() {
+       return [
+         ...(await formatRadioButtonData(this.fatalMovement)),
+        ]
+    },
+
+    async saveMedicalFollowUp () {
+        const data: any = await this.buildMedicalFollowUp();
+        if (data.length > 0) {
+            const userID: any = Service.getUserID();
+            const medicalFollowUpInstance = new MedicalFollowUpInstance();
+            medicalFollowUpInstance.push(this.demographics.patient_id, userID, data);
+            toastSuccess("Medical follow-up data saved successfully");
+        }
+
+        else {
+            toastWarning("Could not find all concepts");
+        }
+    },
+
+    async savePersistentBehaviours () {
+        const data: any = await this.buildPersistentBehaviours();
+        if (data.length > 0) {
+            const userID: any = Service.getUserID();
+            const medicalFollowUpInstance = new PersistentBehavioursInstance();
+            medicalFollowUpInstance.push(this.demographics.patient_id, userID, data);
+            toastSuccess("Persistent Behaviours data saved successfully");
+        }
+
+        else {
+            toastWarning("Could not find all concepts");
+        }
+    },
+
+    async savePersistentSymptoms () {
+        const data: any = await this.buildPersistentSymptoms();
+        if (data.length > 0) {
+            const userID: any = Service.getUserID();
+            const persistentSymptomsInstance = new PersistentSymptomsInstance();
+            persistentSymptomsInstance.push(this.demographics.patient_id, userID, data);
+            toastSuccess("Persistent Symptoms data saved successfully");
+        }
+
+        else {
+            toastWarning("Could not find all concepts");
+        }
+    },
+
+    async saveCurrentPhysiologicalSymptoms () {
+        const data: any = await this.buildCurrentPhysiologicalSymptoms();
+        if (data.length > 0) {
+            const userID: any = Service.getUserID();
+            const currentPhysiologicalSymptomsInstance = new CurrentPhysiologicalSymptomsInstance();
+            currentPhysiologicalSymptomsInstance.push(this.demographics.patient_id, userID, data);
+            toastSuccess("Current Physiological Symptoms data saved successfully");
+        }
+
+        else {
+            toastWarning("Could not find all concepts");
+        }
+    },
+
+    async saveIPV () {
+        const data: any = await this.buildIPV();
+        if (data.length > 0) {
+            const userID: any = Service.getUserID();
+            const IPVInstance = new IntimatePartnerInstance();
+            IPVInstance.push(this.demographics.patient_id, userID, data);
+            toastSuccess("Current IPV data saved successfully");
+        }
+
+        else {
+            toastWarning("Could not find all concepts");
+        }
+    },
+
+    async saveFetalMovement () {
+        const data: any = await this.buildFetalMovement();
+        if (data.length > 0) {
+            const userID: any = Service.getUserID();
+            const fetalMovementInstance = new FetalMovementInstance();
+            fetalMovementInstance.push(this.demographics.patient_id, userID, data);
+            toastSuccess("Current Fetal movement data saved successfully");
+        }
+
+        else {
+            toastWarning("Could not find all concepts");
+        }
+    }
+    
     },
 });
 </script>

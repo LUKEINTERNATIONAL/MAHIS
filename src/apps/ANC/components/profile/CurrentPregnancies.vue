@@ -1,20 +1,27 @@
 <template>
 <div class="container">
   <ion-card  class="section">
-            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-              <basic-form :contentData="lmnp" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
-              <basic-form :contentData="ultrasound" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+              <basic-form :contentData="lmnp"
+                          @update:selected="handleInputData"
+                          @update:inputValue="handleInputData"
+                          :initialData="initialData"
+              ></basic-form>
+              <basic-form :contentData="ultrasound"
+                          @update:selected="handleInputData"
+                          @update:inputValue="handleInputData"
+                          :initialData="initialData1"
+              ></basic-form>
               <basic-form :contentData="palpation" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+              <basic-form :contentData="tetanus"
+                          @update:selected="handleInputData"
+                          @update:inputValue="handleInputData"
+                          :initialData="initialData2"
+              ></basic-form>
 
             </ion-card-content>
     </ion-card>
-    <ion-card  class="section">
-            <ion-card-header> <ion-card-title class=" sub_item_header"></ion-card-title></ion-card-header>
-            <ion-card-content>
-              <basic-form :contentData="tetanus"></basic-form>
-            </ion-card-content>
-    </ion-card>
+
 </div>
 </template>
 
@@ -81,8 +88,9 @@ export default defineComponent({
           currentPregnanciesInstance: {} as any,
           inputField: '' as any,
           setName: '' as any,
-          currentSection: 0,
-         
+          initialData:[] as any,
+          initialData1:[] as any,
+          initialData2:[] as any,
       };
     },
     computed:{
@@ -95,15 +103,23 @@ export default defineComponent({
           LMNP(){ return getRadioSelectedValue(this.lmnp, 'LMNP')},
           lmnpEED(){ return getFieldValue(this.lmnp, 'lmnpEED','value')},
           lmnpGestationAge(){ return getFieldValue(this.lmnp, 'lmnpGestationAge','value')},
-          lmnpDate(){ return getFieldValue(this.lmnp, 'lmnpDate','value')}
+          lmnpDate(){ return getFieldValue(this.lmnp, 'lmnpDate','value')},
+          //edd(){return getFieldValue(this.lmnp,'edd',"value")}
 
   
       },
       mounted(){
         const palpation = useCurrentPregnanciesStore()
+        const lnmp=useCurrentPregnanciesStore()
+        const ultrasound=useCurrentPregnanciesStore()
+        const tetanus=useCurrentPregnanciesStore()
+        this.initialData = lnmp.getInitial();
+        this.initialData1 = ultrasound.getInitial1();
+        this.initialData2 = tetanus.getInitial2();
         this.handleLMNP()
         this.handleUltrasound()
         this.handleTetanus()
+        this.calculateEDD
   
   
           
@@ -116,7 +132,9 @@ export default defineComponent({
        lmnp:{
          handler( event){
            this.handleInputData(event)
-           this.handleLMNP()},
+           this.handleLMNP()
+           this.calculateEDD(event)
+          },
          deep:true
 
        },
@@ -140,6 +158,7 @@ export default defineComponent({
         async handleInputData(event: any) {
           this.validationRules(event)
           this.calculateGestationAgefromLNMP(event)
+          this.calculateEDD(event)
         },
 
         calculateGestationAgefromLNMP(event: any) {
@@ -154,35 +173,28 @@ export default defineComponent({
             }
           }
         },
-
-
-
+        calculateEDD(event: any) {
+            if (event.name === "lmnpDate") {
+              const lmnpDateValue = Date.parse(getFieldValue(this.lmnp, 'lmnpDate', 'value'));
+              if (!isNaN(lmnpDateValue)) {
+                const currentDate = new Date().getTime();
+                const gestationWeeks = Math.floor((currentDate - lmnpDateValue) / (1000 * 60 * 60 * 24 * 7)); 
+                const estimatedDueDate = new Date(lmnpDateValue + gestationWeeks * 7 * 24 * 60 * 60 * 1000); 
+                modifyFieldValue(this.lmnp, 'Estimated date of delivery', 'value', estimatedDueDate);
+              } else {
+                modifyFieldValue(this.lmnp, 'Estimated date of delivery', 'value', null);
+              }
+            }
+       
+          },
         handleLMNP(){
-          if(getRadioSelectedValue(this.lmnp, 'Yes')=='yes'){
-            modifyFieldValue(this.lmnp,'lmnpDate','displayNone', false)
-            modifyFieldValue(this.lmnp,'lmnpGestationAge','displayNone', false)
-          }   else {
-            modifyFieldValue(this.lmnp,'lmnpDate','displayNone', true)
-            modifyFieldValue(this.lmnp,'lmnpGestationAge','displayNone', true)
-          }
         },
 
         handleUltrasound(){
-          if(getRadioSelectedValue(this.ultrasound, 'Yes')=='yes'){
-            modifyFieldValue(this.ultrasound,'ultrasound delivery date','displayNone', false)
-            modifyFieldValue(this.ultrasound,'gestation age from ultrasound','displayNone', false)
-            modifyFieldValue(this.ultrasound,'ultrasound lmnp date','displayNone', false)
-          }
-          else
-          {
-            modifyFieldValue(this.ultrasound,'ultrasound delivery date','displayNone', true)
-            modifyFieldValue(this.ultrasound,'gestation age from ultrasound','displayNone', true)
-            modifyFieldValue(this.ultrasound,'ultrasound lmnp date','displayNone', true)
-          }
         },
 
         handleTetanus(){
-          if(getRadioSelectedValue(this.tetanus, 'Tetanus doses')=='fully immunised'){
+          if(getRadioSelectedValue(this.tetanus, 'The woman received tetanus doses for immunization?')=='fully immunised'){
             modifyFieldValue(this.tetanus,'tt1Date','displayNone', false)
             modifyFieldValue(this.tetanus,'tt2Date','displayNone', false)
             modifyFieldValue(this.tetanus,'tt3Date','displayNone', false)
@@ -198,31 +210,21 @@ export default defineComponent({
             modifyFieldValue(this.tetanus,'tt5Date','displayNone', true)
           }
 
-          if(getRadioSelectedValue(this.tetanus, 'Tetanus doses')=='under immunised'){
-            modifyFieldValue(this.tetanus,'number of under immunised doses','displayNone', false)
-          }   else {modifyFieldValue(this.tetanus,'number of under immunised doses','displayNone', true)}
+          if(getRadioSelectedValue(this.tetanus, 'The woman received tetanus doses for immunization?')=='under immunised'){
+            modifyFieldValue(this.tetanus,'immunised doses','displayNone', false)
+          }   else {modifyFieldValue(this.tetanus,'immunised doses','displayNone', true)}
 
-          if(getRadioSelectedValue(this.tetanus, 'Reasons for no tetanus doses')=='other'){
-            modifyFieldValue(this.tetanus,'Other','displayNone', false)
-          }   else {modifyFieldValue(this.tetanus,'Other','displayNone', true)}
 
-          if(getRadioSelectedValue(this.tetanus,'Tetanus doses') == 'no doses'){
-            modifyRadioValue(this.tetanus,'Reasons for no tetanus doses','displayNone',false)
+          if(getRadioSelectedValue(this.tetanus,'The woman received tetanus doses for immunization?') == 'no doses'){
+            modifyRadioValue(this.tetanus,'Reason Tetanus toxoid (TT) was not conducted','displayNone',false)
+            if(getRadioSelectedValue(this.tetanus, 'Reason Tetanus toxoid (TT) was not conducted')=='other'){
+              modifyFieldValue(this.tetanus,'Other','displayNone', false)
+            }   else {modifyFieldValue(this.tetanus,'Other','displayNone', true)}
           }else{
-            modifyRadioValue(this.tetanus,'Reasons for no tetanus doses','displayNone',true)
+            modifyRadioValue(this.tetanus,'Reason Tetanus toxoid (TT) was not conducted','displayNone',true)
           }
 
         },
-
-    eddCalculation(){
-      //   const edd = new Date(lmpDate.getTime() + 280 * 24 * 60 * 60 * 1000);
-      // // Update the EDD value in the store
-      // this.expectedDate = edd.toISOString().split('T')[0];
-
-        // if (this.lnmpDate) {
-        // const eddDate = new Date(this.lnmpDate.getTime() + 280 * 24 * 60 * 60 * 1000);
-        // return eddDate.toDateString();
-      }
     }
    
       },

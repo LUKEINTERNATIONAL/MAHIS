@@ -1,10 +1,19 @@
+<template>
+    <ion-page>
+        <Toolbar />
+        <ion-content :fullscreen="true">
+            <DemographicBar />
+            <Stepper stepperTitle="Treament and Diagnosis" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData" />
+        </ion-content>
+    </ion-page>
+</template>
 <script lang="ts">
 import { IonContent, IonHeader, IonItem, IonPage, IonList, IonTitle, IonToolbar, IonMenu } from "@ionic/vue";
 import Toolbar from "@/components/Toolbar.vue";
 import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import { defineComponent } from 'vue';
 import BasicInputField from '@/components/BasicInputField.vue';
-import Stepper from '@/components/Stepper.vue';
+import Stepper from "@/apps/ANC/components/Stepper.vue";
 import DiagnosisTreatment from '../components/Treatment/DiagnosisTreatment.vue';
 import MedicationDispensed from '@/apps/ANC/components/Treatment/MedicationDispensed.vue'
 import { icons } from '@/utils/svg';
@@ -21,9 +30,13 @@ import { useDiagnosisCounsellingStore } from '../store/diagnosisCounsellingStore
 import { useImmunizationStore } from '../store/immunizationStore';
 import { useIntimatePartnerStore } from '../store/intimatePartnerStore';
 import { useDewormingStore } from '../store/dewormingStore';
+import { Service } from "@/services/service";
+import { DiagnosisTreatmentService, ImmunizationService, MedicationDispensedService } from "@/services/anc_treatment_service";
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import { toastSuccess, toastWarning } from "@/utils/Alerts";
 
 export default defineComponent({
-    name: "treatment",
+    name: "Treatment",
     components: {
         IonContent,
         IonHeader,
@@ -46,103 +59,105 @@ export default defineComponent({
     },
    data(){
     return {
-  iconsContent: icons,
-  isOpen: false,
   wizardData: [
                {
-                    'title': 'Diagnosis and treatment',
-                    'class': 'common_step',
-                    'checked':false,
-                    'disabled':false,
-                    'number': 1,
-                    'last_step': ''
+                    title: 'Diagnosis and treatment',
+                    class: 'common_step',
+                    checked:false,
+                    disabled:false,
+                    number: 1,
+                    last_step: ''
                 },
                 {
-                    'title': 'Medication dispensed',
-                    'class': 'common_step',
-                    'checked':false,
-                    'disabled':false,
-                    'number': 2,
-                    'last_step': ''
+                    title: 'Medication dispensed',
+                    class: 'common_step',
+                    checked:false,
+                    disabled:false,
+                    number: 2,
+                    last_step: ''
                 },
                 {
-                    'title': 'Counselling',
-                    'class': 'common_step',
-                    'checked':false,
-                    'disabled':false,
-                    'number': 3,
-                    'last_step': ''
+                    title: 'Counselling',
+                    class: 'common_step',
+                    checked:false,
+                    disabled:false,
+                    number: 3,
+                    last_step: ''
                 },
                 {
-                    'title': 'Immunization',
-                    'class': 'common_step',
-                    'checked':false,
-                    'disabled':false,
-                    'number': 4,
-                    'last_step': ''
+                    title: 'Immunization',
+                    class: 'common_step',
+                    checked:false,
+                    disabled:false,
+                    number: 4,
+                    last_step: ''
                 },
                 {
-                    'title': 'Intimate Partner',
-                    'class': 'common_step',
-                    'checked':false,
-                    'disabled':false,
-                    'number':5,
-                    'last_step': ''
+                    title: 'Intimate Partner',
+                    class: 'common_step',
+                    checked:false,
+                    disabled:false,
+                    number:5,
+                    last_step: ''
                 },
                 {
-                    'title': 'Deworming and malaria prophylaxis',
-                    'class': 'common_step',
-                    'checked':false,
-                    'disabled':false,
-                    'number':6,
-                    'last_step': 'last_step'
-                },      
-  
+                    title: 'Deworming and malaria prophylaxis',
+                    class: 'common_step',
+                    checked:false,
+                    disabled:false,
+                    number:6,
+                    last_step: 'last_step'
+                },
+
               ],
   StepperData: [
                {
-                    'title': 'Diagnosis and treatment',
-                    'componet': 'DiagnosisTreatment',
-                    'value': '1'
+                    title: 'Diagnosis and treatment',
+                    component: 'DiagnosisTreatment',
+                    value: '1'
                 },
                 {
-                    'title': 'Medication dispensed',
-                    'componet': 'MedicationDispensed',
-                    'value': '2'
+                    title: 'Medication dispensed',
+                    component: 'MedicationDispensed',
+                    value: '2'
                 },
                 {
-                    'title': 'Counselling',
-                    'componet': 'DiagnosisCounselling',
-                    'value': '3'
+                    title: 'Counselling',
+                    component: 'DiagnosisCounselling',
+                    value: '3'
                 },
                 {
-                    'title': 'Immunization',
-                    'componet': 'Immunization',
-                    'value': '4'
+                    title: 'Immunization',
+                    component: 'Immunization',
+                    value: '4'
                 },
                 {
-                    'title': 'Intimate partner',
-                    'componet': 'IntimatePartner',
-                    'value': '5'
+                    title: 'Intimate partner',
+                    component: 'IntimatePartner',
+                    value: '5'
                 },
                 {
-                    'title': 'Deworming and malaria prophylaxis',
-                    'componet': 'Deworming',
-                    'value': '6'
+                    title: 'Deworming and malaria prophylaxis',
+                    component: 'Deworming',
+                    value: '6'
                 },
   ],
+    isOpen: false,
+    iconsContent: icons,
+    //isLoading: false,
 
     }
    },
 setup () {
   return {chevronBackOutline, checkmark}
 },
-computed:{        
+computed:{   
+  ...mapState(useDemographicsStore, ["demographics"]),     
   ...mapState(useDiagnosisStore, ["diagnoses","hypertension","preEclampsia",
                                   "hyper","hiv","hepatitisB","hepatitisC",
                                   "syphilis","syphilisTesting","tbScreening",
                                   "GDM","diabetes","anaemia","hypertensionReason"]),
-  ...mapState(useMedicationDispensedStore, ["iron",'calciumReason']),
+  ...mapState(useMedicationDispensedStore, ["iron",'calcium']),
   ...mapState(useDiagnosisCounsellingStore, ["preEclampsia","preEclampsiaCounselling",
                                              "aspirin","gdm","gdmCounselling","hivRisk",
                                             "prEp","seekingCare","dangerSigns","ancContact",
@@ -151,31 +166,58 @@ computed:{
   ...mapState(useImmunizationStore,['ttDoses','HepBCounselling','HepB1','HepB2','HepB3','hepBReason']),
   ...mapState( useIntimatePartnerStore,['ipv','additionalCare','safety_assessment','physical_violence','beaten_pregnant',
                                  'woman_threatened','constant_jealous','strangling','murder_threat','referrals']),
-  ...mapState(useDewormingStore,['treatment','malaria','malariaReason'])
+  ...mapState(useDewormingStore,['treatment','malaria'])
 },
 
 methods: {
   markWizard(){},
-  saveData(){
-    this.saveDiagnosis();
-    this.saveMedicationDispensed();
-    this.saveCouselling();
-    this.saveImmunisation();
-    this.saveIntimatePartner();
-    this.saveDeworming();
-    //this.$router.push('counselling');
+  async saveData(){
+      this.saveDiagnosis();
+      this.saveMedicationDispensed();
+      this.saveCouselling();
+      this.saveImmunisation();
+      this.saveIntimatePartner();
+      this.saveDeworming();
+      //this.$router.push('counselling');
 
-  },
+    },
   async saveDiagnosis(){
+  //     if (this.diagnoses.length > 0) {
+  //     const userID: any = Service.getUserID();
+  //     const Immunisation = new ImmunizationService(this.demographics.patient_id, userID);
+  //     const encounter = await Immunisation.createEncounter();
+  //     if (!encounter) return toastWarning("Unable to create Diagnosis encounter");
+  //     const patientStatus = await Immunisation.saveObservationList(await this.buildDiagnosis());
+  //     if (!patientStatus) return toastWarning("Unable to create Diagnosis!");
+  //     toastSuccess("Diagnosis has been created");
+  // }
     console.log(await this.buildDiagnosis())
   },
   async saveMedicationDispensed(){
+  //     if (this.HepB1.length > 0) {
+  //     const userID: any = Service.getUserID();
+  //     const Immunisation = new MedicationDispensedService(this.demographics.patient_id, userID);
+  //     const encounter = await Immunisation.createEncounter();
+  //     if (!encounter) return toastWarning("Unable to create immunisation encounter");
+  //     const patientStatus = await Immunisation.saveObservationList(await this.buildMedicationDispensed());
+  //     if (!patientStatus) return toastWarning("Unable to create Immunisation!");
+  //     toastSuccess("Immunisation has been created");
+  // }
     console.log(await this.buildMedicationDispensed())
   },
   async saveCouselling(){
     console.log(await this.buildCouselling())
   },
   async saveImmunisation(){
+      if (this.HepB1.length > 0) {
+      const userID: any = Service.getUserID();
+      const Immunisation = new ImmunizationService(this.demographics.patient_id, userID);
+      const encounter = await Immunisation.createEncounter();
+      if (!encounter) return toastWarning("Unable to create Treatment encounter");
+      const patientStatus = await Immunisation.saveObservationList(await this.buildImmunisation());
+      if (!patientStatus) return toastWarning("Unable to create Treament!");
+      toastSuccess("Treatment has been created");
+  }
     console.log(await this.buildImmunisation())
   },
   async saveIntimatePartner(){
@@ -206,7 +248,7 @@ methods: {
   async buildMedicationDispensed(){
     return[
        ...(await formatRadioButtonData(this.iron)),
-       ...(await formatRadioButtonData(this.calciumReason)),
+       ...(await formatRadioButtonData(this.calcium)),
     ]
   },  
    async buildCouselling(){
@@ -233,6 +275,7 @@ methods: {
        ...(await formatRadioButtonData(this.ttDoses)),
        ...(await formatRadioButtonData(this.HepBCounselling)),
        ...(await formatRadioButtonData(this.HepB1)),
+       ...(await formatInputFiledData(this.HepB1)),
        ...(await formatRadioButtonData(this.HepB2)),
        ...(await formatRadioButtonData(this.HepB3)),
        ...(await formatRadioButtonData(this.hepBReason)),
@@ -256,7 +299,7 @@ methods: {
     return[
        ...(await formatRadioButtonData(this.treatment)),
        ...(await formatRadioButtonData(this.malaria)),
-       ...(await formatRadioButtonData(this.malariaReason)),
+
     ]
   },
 }
@@ -264,4 +307,4 @@ methods: {
 
 </script>
 
-<!-- <style scoped></style> -->
+<style scoped></style>
