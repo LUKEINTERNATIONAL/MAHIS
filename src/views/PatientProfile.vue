@@ -36,8 +36,13 @@
                             </ion-card-content>
                         </ion-card>
 
-                        <ion-card class="start_new_co" v-if="programAccess('NCD PROGRAM')" style="margin-bottom: 20px" @click="handleNCD()">
-                            {{ NCDProgramActionName }}
+                        <ion-card
+                            class="start_new_co"
+                            v-if="programAccess('NCD PROGRAM')"
+                            style="margin-bottom: 20px"
+                            @click="nav(NCDUserAction.url)"
+                        >
+                            {{ NCDUserAction.actionName }}
                         </ion-card>
                         <ion-card class="start_new_co" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">
                             <router-link to="/profile">+ Enroll in ANC Program</router-link>
@@ -204,7 +209,6 @@ import {
     modifyRadioValue,
     modifyFieldValue,
 } from "@/services/data_helpers";
-
 import { ref } from "vue";
 export default defineComponent({
     components: {
@@ -244,26 +248,28 @@ export default defineComponent({
             NCDProgramActionName: "+ Enroll in NCD Program" as any,
             OPDProgramActionName: "+ Start New OPD consultation" as any,
             visits: [] as any,
+            NCDUserAction: [] as any,
         };
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics", "patient"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalAllergiesList"]),
         ...mapState(useEnrollementStore, ["NCDNumber"]),
-        ...mapState(useGeneralStore, ["saveProgressStatus", "activities"]),
+        ...mapState(useGeneralStore, ["activities", "userActions"]),
         ...mapState(useVitalsStore, ["vitals"]),
     },
-    mounted() {
+    async mounted() {
+        await UserService.setProgramUserActions();
         this.setNCDValue();
     },
     watch: {
-        saveProgressStatus: {
+        demographics: {
             handler() {
                 this.setNCDValue();
             },
             deep: true,
         },
-        demographics: {
+        userActions: {
             handler() {
                 this.setNCDValue();
             },
@@ -280,23 +286,6 @@ export default defineComponent({
         convertToDisplayDate(date: any) {
             return HisDate.toStandardHisDisplayFormat(date);
         },
-        async getUserActivities(activities: any) {
-            try {
-                const userID = Service.getUserID();
-                const userData = await UserService.getJson("user_properties", {
-                    user_id: userID,
-                    property: activities,
-                });
-                if (userData.property_value) {
-                    return userData.property_value.split(",");
-                } else {
-                    return []; // Return an empty array if property_value is not available
-                }
-            } catch (error) {
-                console.error("Error fetching user activities:", error);
-                return []; // Return an empty array in case of error
-            }
-        },
         programAccess(programName: string): boolean {
             const accessPrograms: any = sessionStorage.getItem("userPrograms");
             const programs: any = JSON.parse(accessPrograms);
@@ -307,37 +296,38 @@ export default defineComponent({
             }
         },
         async setNCDValue() {
-            const generalStore = useGeneralStore();
-            generalStore.setActivity(await this.getUserActivities("NCD_activities"));
+            console.log("🚀 ~ setNCDValue ~ NCDUserAction:", this.userActions);
+            await UserService.setUserActivities();
             sessionStorage.setItem("app", JSON.stringify({ programID: 32, applicationName: "NCD" }));
-            const patient = new PatientService();
-            this.visits = await PatientService.getPatientVisits(patient.getID(), false);
-            if (patient.getNcdNumber() != "Unknown") {
-                if (this.activities.length == 0) {
-                    this.url = "NCDEnrollment";
-                    this.NCDProgramActionName = "+ Edit NCD Enrollment";
-                } else {
-                    if (this.saveProgressStatus) {
-                        this.NCDProgramActionName = "+ Continue NCD consultation";
-                    } else {
-                        if (this.visits.includes(HisDate.currentDate())) {
-                            this.NCDProgramActionName = "+ Edit NCD consultation";
-                        } else this.NCDProgramActionName = "+ Start new NCD consultation";
-                    }
-                    const generalStore = useGeneralStore();
-                    generalStore.setSaveProgressStatus("");
-                    this.url = "consultationPlan";
-                }
-            } else {
-                this.url = "NCDEnrollment";
-                this.NCDProgramActionName = "+ Enroll in NCD Program";
-            }
+            if (this.userActions.length > 0) [{ NCDUserAction: this.NCDUserAction }] = this.userActions;
+            // const patient = new PatientService();
+            // this.visits = await PatientService.getPatientVisits(patient.getID(), false);
+            // if (patient.getNcdNumber() != "Unknown") {
+            //     if (this.activities.length == 0) {
+            //         this.url = "NCDEnrollment";
+            //         this.NCDProgramActionName = "+ Edit NCD Enrollment";
+            //     } else {
+            //         if (this.saveProgressStatus) {
+            //             this.NCDProgramActionName = "+ Continue NCD consultation";
+            //         } else {
+            //             if (this.visits.includes(HisDate.currentDate())) {
+            //                 this.NCDProgramActionName = "+ Edit NCD consultation";
+            //             } else this.NCDProgramActionName = "+ Start new NCD consultation";
+            //         }
+            //         const generalStore = useGeneralStore();
+            //         generalStore.setSaveProgressStatus("");
+            //         this.url = "consultationPlan";
+            //     }
+            // } else {
+            //     this.url = "NCDEnrollment";
+            //     this.NCDProgramActionName = "+ Enroll in NCD Program";
+            // }
         },
         setOPDValue() {
             sessionStorage.setItem("app", JSON.stringify({ programID: 14, applicationName: "OPD" }));
             const patient = new PatientService();
             if (patient.getNcdNumber() != "Unknown") {
-                if (this.saveProgressStatus) {
+                if (sessionStorage.getItem("saveProgressStatus") == "true") {
                     this.OPDProgramActionName = "+ Continue OPD consultation";
                 } else {
                     this.OPDProgramActionName = "+ Start new OPD consultation";
@@ -354,9 +344,8 @@ export default defineComponent({
         dismiss() {
             modalController.dismiss();
         },
-        handleNCD() {
-            this.setNCDValue();
-            this.$router.push(this.url);
+        nav(url: any) {
+            this.$router.push(url);
         },
         async updateNCDData() {
             const array = ["Height", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];

@@ -63,8 +63,9 @@ import { defineComponent } from "vue";
 import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import { resetPatientData } from "@/services/reset_data";
-import { PatientReferralService } from '@/services/patient_referral_service'
-import { PatientAdmitService } from '@/services/patient_admit_service'
+import { PatientReferralService } from "@/services/patient_referral_service";
+import { PatientAdmitService } from "@/services/patient_admit_service";
+import { UserService } from "@/services/user_service";
 import {
     modifyRadioValue,
     getRadioSelectedValue,
@@ -112,7 +113,7 @@ export default defineComponent({
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
-        ...mapState(useGeneralStore, ["saveProgressStatus", "activities"]),
+        ...mapState(useGeneralStore, ["activities"]),
         ...mapState(useOutcomeStore, ["dispositions"]),
     },
     created() {
@@ -156,7 +157,7 @@ export default defineComponent({
     methods: {
         async getData() {
             // const steps = ["Vital Signs", "Investigations", "Diagnosis", "Complications Screening", "Treatment Plan", "Next Appointment", "Outcome"];
-            const steps = this.activities;
+            const [{ NCD_activities: steps }] = this.activities;
             for (let i = 0; i < steps.length; i++) {
                 const title = steps[i];
                 const number = i + 1;
@@ -178,9 +179,6 @@ export default defineComponent({
             }
         },
         markWizard() {
-            console.log("ddddddd");
-            const generalStore = useGeneralStore();
-            generalStore.setSaveProgressStatus("");
             if (this.vitals.validationStatus) {
                 modifyWizardData(this.wizardData, "Vital Signs", {
                     checked: true,
@@ -248,8 +246,7 @@ export default defineComponent({
             await this.saveTreatmentPlan();
             await this.saveOutComeStatus();
             resetPatientData();
-            const generalStore = useGeneralStore();
-            generalStore.setSaveProgressStatus(false);
+            await UserService.setProgramUserActions();
             this.$router.push("patientProfile");
         },
         async saveVitals() {
@@ -299,47 +296,41 @@ export default defineComponent({
         },
 
         async saveOutComeStatus() {
-            const userID: any = Service.getUserID()
-            const patientID = this.demographics.patient_id
+            const userID: any = Service.getUserID();
+            const patientID = this.demographics.patient_id;
 
-            
             if (!isEmpty(this.dispositions)) {
                 this.dispositions.forEach(async (disposition: any) => {
-
-                    if (disposition.type == 'Admitted for short stay') {
-
-                        const prePayload = 
-                        {
-                            obs_datetime: disposition.date.year+'-'+disposition.date.month+'-'+disposition.date.day,
-                            concept_id:  disposition.concept_id,
+                    if (disposition.type == "Admitted for short stay") {
+                        const prePayload = {
+                            obs_datetime: disposition.date.year + "-" + disposition.date.month + "-" + disposition.date.day,
+                            concept_id: disposition.concept_id,
                             value_text: disposition.name,
-                        } as any
-                        
-                        const admissionOutcome = new PatientAdmitService(patientID, userID)
-                        const obs = await admissionOutcome.buildValueText('Admit to ward', prePayload.value_text)
-                        obs.obs_datetime = prePayload.obs_datetime
-                        obs.value_text = prePayload.value_text
-                        await admissionOutcome.createEncounter()
-                        await admissionOutcome.saveObservationList([obs] as any)
-                        
-                    } 
-                    if (disposition.type == 'Referred out') {
-                        const prePayload = 
-                        {
-                            obs_datetime: disposition.date.year+'-'+disposition.date.month+'-'+disposition.date.day,
-                            concept_id:  disposition.concept_id,
-                            value_text: disposition.name,
-                            location_id: disposition.other.location_id
-                        } as any
-                        
-                        const referralOutcome = new PatientReferralService(patientID, userID)
-                        const obs = await referralOutcome.buildValueText('Referred', prePayload.value_text)
-                        obs.obs_datetime = prePayload.obs_datetime
-                        obs.value_text = prePayload.location_id
-                        await referralOutcome.createEncounter()
-                        await referralOutcome.saveObservationList([obs] as any)
+                        } as any;
+
+                        const admissionOutcome = new PatientAdmitService(patientID, userID);
+                        const obs = await admissionOutcome.buildValueText("Admit to ward", prePayload.value_text);
+                        obs.obs_datetime = prePayload.obs_datetime;
+                        obs.value_text = prePayload.value_text;
+                        await admissionOutcome.createEncounter();
+                        await admissionOutcome.saveObservationList([obs] as any);
                     }
-                }) 
+                    if (disposition.type == "Referred out") {
+                        const prePayload = {
+                            obs_datetime: disposition.date.year + "-" + disposition.date.month + "-" + disposition.date.day,
+                            concept_id: disposition.concept_id,
+                            value_text: disposition.name,
+                            location_id: disposition.other.location_id,
+                        } as any;
+
+                        const referralOutcome = new PatientReferralService(patientID, userID);
+                        const obs = await referralOutcome.buildValueText("Referred", prePayload.value_text);
+                        obs.obs_datetime = prePayload.obs_datetime;
+                        obs.value_text = prePayload.location_id;
+                        await referralOutcome.createEncounter();
+                        await referralOutcome.saveObservationList([obs] as any);
+                    }
+                });
             }
         },
         openModal() {

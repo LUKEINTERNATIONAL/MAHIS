@@ -64,6 +64,7 @@ import CheckPatientNationalID from "@/components/CheckPatientNationalID.vue";
 import { resetPatientData } from "@/services/reset_data";
 import { mapState } from "pinia";
 import Validation from "@/validations/StandardValidations";
+import { UserService } from "@/services/user_service";
 
 export default defineComponent({
     name: "Home",
@@ -188,6 +189,7 @@ export default defineComponent({
             const userProgramsData: any = sessionStorage.getItem("userPrograms");
             const userPrograms: any = JSON.parse(userProgramsData);
             const roles: any = JSON.parse(roleData);
+            UserService.setProgramUserActions();
             if (userPrograms.some((userProgram: any) => userProgram.name === "IMMUNIZATION PROGRAM")) {
                 this.$router.push("immunizationEnrollment");
             } else if (roles.some((role: any) => role.role === "Pharmacist")) {

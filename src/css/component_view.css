@@ -5,41 +5,60 @@
     width: 58vw;
 }
 .wizard_content {
-    margin-left: 9vw;
+    margin-left: 9%;
 }
 .second_bar_list.mobile {
     display: none;
 }
-@media (max-width: 900px) {
+@media (max-width: 1350px) {
+    .wizard_content {
+        margin-left: 0px !important;
+    }
+    .accordion_group {
+        width: 60vw !important;
+        margin-left: 10vw !important;
+    }
+    .back_profile {
+        margin-left: 10vw !important;
+    }
+}
+@media (max-width: 950px) {
     .search-input-desktop {
-        display: none;
+        display: none !important;
     }
     .search-input-mobile {
-        display: block;
+        display: block !important;
     }
     .mobile-component-view {
-        display: block;
+        display: block !important;
     }
     .searchField {
-        width: 100vw;
+        width: 100vw !important;
     }
     .search_card {
-        width: 93vw;
+        width: 93vw !important;
     }
     .content_manager {
-        display: block;
+        display: block !important;
     }
     .wizard_content {
-        display: none;
+        display: none !important;
     }
-    .accordion_group[data-v-49d2667a] {
-        width: 94vw;
-        margin-left: 1.5vw;
+    .accordion_group {
+        width: 94vw !important;
+        margin-left: 1.5vw !important;
+        top: 230px !important;
     }
     .second_bar_list.desktop {
-        display: none;
+        display: none !important;
     }
     .second_bar_list.mobile {
-        display: flex;
+        display: flex !important;
+    }
+    .rightCol {
+        top: 80px !important;
+    }
+    .back_profile {
+        margin-left: 2vw !important;
     }
 }

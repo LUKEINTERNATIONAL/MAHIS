@@ -6,7 +6,7 @@
                     <ion-label class="previousLabel">Birth</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
-                    <PastMedicalHistory />
+                    <BirthImmunization />
                 </div>
             </ion-accordion>
         </ion-accordion-group>
@@ -16,7 +16,7 @@
                     <ion-label class="previousLabel">6 Weeks</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
-                    <PastMedicalHistory />
+                    <sixWeeksImmunization />
                 </div>
             </ion-accordion>
         </ion-accordion-group>
@@ -26,7 +26,7 @@
                     <ion-label class="previousLabel">10 Weeks</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
-                    <PastMedicalHistory />
+                    <tenWeeksImmunization />
                 </div>
             </ion-accordion>
         </ion-accordion-group>
@@ -36,7 +36,7 @@
                     <ion-label class="previousLabel">14 Weeks</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
-                    <PastMedicalHistory />
+                    <fourteenWeeksImmunization />
                 </div>
             </ion-accordion>
         </ion-accordion-group>
@@ -46,7 +46,7 @@
                     <ion-label class="previousLabel">5 - 22 Months</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
-                    <PastMedicalHistory />
+                    <fiveToTwentyTwoImmunization />
                 </div>
             </ion-accordion>
         </ion-accordion-group>
@@ -72,7 +72,11 @@ import labOrderResults from "@/components/Lab/labOrderResults.vue";
 import { LabOrder } from "@/services/lab_order";
 import Allergies from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/Allergies.vue";
 import LevelOfConsciousness from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/LevelOfConsciousness.vue";
-import PastMedicalHistory from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PastMedicalHistory.vue";
+import BirthImmunization from "@/apps/Immunization/components/ImmunizationServices/BirthImmunization.vue";
+import fiveToTwentyTwoImmunization from "@/apps/Immunization/components/ImmunizationServices/fiveToTwentyTwoImmunization.vue";
+import fourteenWeeksImmunization from "@/apps/Immunization/components/ImmunizationServices/fourteenWeeksImmunization.vue";
+import sixWeeksImmunization from "@/apps/Immunization/components/ImmunizationServices/sixWeeksImmunization.vue";
+import tenWeeksImmunization from "@/apps/Immunization/components/ImmunizationServices/tenWeeksImmunization.vue";
 import PhysicalExamination from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PhysicalExamination.vue";
 import PregnancyBreastfeeding from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PregnancyBreastfeeding.vue";
 import PresentingComplaints from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PresentingComplaints.vue";
@@ -109,7 +113,11 @@ export default defineComponent({
         labOrderResults,
         Allergies,
         LevelOfConsciousness,
-        PastMedicalHistory,
+        BirthImmunization,
+        fiveToTwentyTwoImmunization,
+        fourteenWeeksImmunization,
+        sixWeeksImmunization,
+        tenWeeksImmunization,
         PhysicalExamination,
         PregnancyBreastfeeding,
         PresentingComplaints,

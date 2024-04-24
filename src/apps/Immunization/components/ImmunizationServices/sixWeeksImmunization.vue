@@ -1,7 +1,7 @@
 <template>
     <div class="modal_wrapper">
         <basic-form
-            :contentData="birthImmunization"
+            :contentData="sixWeeksImmunization"
             :initialData="initialData"
             @update:inputValue="handleInputData"
             @update:selected="handleInputData"
@@ -41,7 +41,7 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useImmunizationStore, ["birthImmunization"]),
+        ...mapState(useImmunizationStore, ["sixWeeksImmunization"]),
     },
     mounted() {
         const medicationHistory = useImmunizationStore();
@@ -49,7 +49,7 @@ export default defineComponent({
     },
     methods: {
         handleInputData(event: any) {
-            modifyFieldValue(this.birthImmunization, "Current hypertension treatment regimen", "popOverData", {
+            modifyFieldValue(this.sixWeeksImmunization, "Current hypertension treatment regimen", "popOverData", {
                 filterData: true,
                 data: [
                     { name: "Captopril 12.5mg" },

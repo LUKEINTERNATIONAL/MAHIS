@@ -112,7 +112,7 @@ export default defineComponent({
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
-        ...mapState(useGeneralStore, ["saveProgressStatus", "activities"]),
+        ...mapState(useGeneralStore, ["activities"]),
         ...mapState(useOutcomeStore, ["dispositions"]),
     },
     created() {
@@ -178,8 +178,6 @@ export default defineComponent({
             }
         },
         markWizard() {
-            const generalStore = useGeneralStore();
-            generalStore.setSaveProgressStatus("");
             if (this.vitals.validationStatus) {
                 modifyWizardData(this.wizardData, "Vital Signs", {
                     checked: true,
@@ -247,8 +245,6 @@ export default defineComponent({
             await this.saveTreatmentPlan();
             await this.saveOutComeStatus();
             resetPatientData();
-            const generalStore = useGeneralStore();
-            generalStore.setSaveProgressStatus(false);
             this.$router.push("patientProfile");
         },
         async saveVitals() {

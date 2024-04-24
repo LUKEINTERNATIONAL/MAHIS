@@ -109,7 +109,6 @@ const ApiClient = (() => {
         }
 
         const url = await expandPath(uri);
-        console.log("🚀 ~ execFetch ~ url:", url);
 
         try {
             EventBus.emit(ApiBusEvents.BEFORE_API_REQUEST, uri);
