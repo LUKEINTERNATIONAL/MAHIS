@@ -235,8 +235,8 @@ const initialVisitForMother=[
                     title: 'Status of uterus',
                     selectedValue: '',
                     class:'bold',
-                    name:'Status of uterus',
-                    displayNext:"Other"
+                    name:'Status of Uterus',
+                    displayNext:"Other status"
                 },
                 data:[
                     {
@@ -252,8 +252,8 @@ const initialVisitForMother=[
 
                     },
                     {
-                        name: 'Other',
-                        value: 'Other',
+                        name: 'Other status',
+                        value: 'Other status',
                         colSize: '5',
 
                     },
@@ -278,7 +278,8 @@ const initialVisitForMother=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
-                                name: 'Other status of uterus notes',
+                                valueType:'text',
+                                name: 'Status of uterus notes',
                                 required: true,
                                 eventType: 'input',
                                 inputWidth: "",
@@ -340,7 +341,7 @@ const initialVisitForMother=[
                                 icon: icons.editPen,
                                 value: '',
                                 valueType:'text',
-                                name: 'describe the intervention which was provided',
+                                name: 'Intervention provided notes',
                                 required: true,
                                 eventType: 'input',
                                 inputWidth: "",
@@ -384,14 +385,14 @@ const initialVisitForMother=[
 
                     },
                     {
-                        name: 'Offensive',
-                        value: 'offensive',
+                        name: 'Offensive smell',
+                        value: 'offensive smell',
                         colSize: '4',
 
                     },
                     {
-                        name: 'Other',
-                        value: 'other',
+                        name: 'Other status',
+                        value: 'other status',
                         colSize: '4',
 
                     },
@@ -417,7 +418,7 @@ const initialVisitForMother=[
                                 icon: icons.editPen,
                                 value: '',
                                 valueType:'text',
-                                name: 'Other status of lochia notes',
+                                name: 'Status of lochia notes',
                                 required: true,
                                 eventType: 'input',
                                 inputWidth: "",
@@ -497,7 +498,7 @@ const initialVisitForMother=[
                     title: 'Episiotomy/tear present?',
                     selectedValue: '',
                     class:'bold',
-                    name:'Episiotomy/tear present',
+                    name:'Episiotomy/tear',
                     displayNext:'Yes'
                 },
                 data:[
@@ -607,7 +608,7 @@ const initialVisitForMother=[
                                 icon: icons.editPen,
                                 value: '',
                                 valueType:'text',
-                                name: 'Describe the intervention which was provided',
+                                name: 'Intervention on episiotomy/tear notes',
                                 required: true,
                                 eventType: 'input',
                                 inputWidth: "",
@@ -713,20 +714,20 @@ const initialVisitForMother=[
 
                     },
                     {
-                        name: 'Injectable',
-                        value: 'Injectable',
+                        name: 'Injectable contraceptives',
+                        value: 'Injectable contraceptives',
                         colSize: '4',
 
                     },
                     {
-                        name: 'Implant',
-                        value: 'Implant',
+                        name: 'Contraceptive implant',
+                        value: 'Contraceptive implant',
                         colSize: '4',
 
                     },
                     {
-                        name: 'IUD',
-                        value: 'IUD',
+                        name: 'Intrauterine device (IUD)',
+                        value: 'Intrauterine device (IUD)',
                         colSize: '4',
 
                     },
@@ -761,8 +762,8 @@ const initialVisitForMother=[
                 },
                 data:[
                     {
-                        name: 'Exclusive',
-                        value: 'Exclusive',
+                        name: 'Breastfed exclusively',
+                        value: 'Breastfed exclusively',
                         colSize: '4',
 
                     },

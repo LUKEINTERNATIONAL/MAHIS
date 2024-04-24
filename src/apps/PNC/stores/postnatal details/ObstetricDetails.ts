@@ -92,7 +92,7 @@ const initialObstetricDetails=[
                 data:[
 
                     {
-                        name: '(Pre)-Eclampsia',
+                        name: 'Pre-Eclampsia',
                         value: 'pre-eclampsia',
                         checked: false,
                         labelPlacement: 'start',

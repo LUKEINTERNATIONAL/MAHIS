@@ -146,8 +146,8 @@ const initialDangerSigns=[
                 },
                 data:[
                     {
-                        name: 'Severe vomiting',
-                        value: 'severe vomiting',
+                        name: 'Other danger signs',
+                        value: 'Other danger signs',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',
@@ -156,30 +156,6 @@ const initialDangerSigns=[
                     {
                         name: 'No danger signs',
                         value: 'no danger signs',
-                        checked: false,
-                        labelPlacement: 'start',
-                        colSize: '6',
-                        justify: 'space-between',
-                    },
-                ]
-            }
-
-    },
-
-    {
-        classDash: 'dashed_bottom_border',
-        checkboxBtnContent:
-            {
-                header:{
-                    title: '',
-                    selectedValue: '',
-                    name:'Danger signs'
-
-                },
-                data:[
-                    {
-                        name: 'Other danger signs',
-                        value: 'Other danger signs',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',
@@ -234,7 +210,8 @@ const initialVitals =[
                                 unit: 'mmHg',
                                 icon: icons.systolicPressure,
                                 value: '',
-                                name: 'Systolic',
+                                valueType:'text',
+                                name: 'Systolic blood pressure',
                                 required: true,
                                 eventType: 'input'
                             },
@@ -243,19 +220,12 @@ const initialVitals =[
                                 unit: 'mmHg',
                                 icon: icons.diastolicPressure,
                                 value: '',
-                                name: 'Diastolic',
+                                valueType:'text',
+                                name: 'Diastolic blood pressure',
                                 required: true,
                                 eventType: 'input'
                             }
                         ],
-                        btns:[
-                            {
-                                name: "Save",
-                                fill: "clear",
-                                btn_col_size: 3,
-                                icon: icons.plus
-                            }
-                        ]
                     },
                 ]
             },
@@ -289,18 +259,11 @@ const initialVitals =[
                                 unit: 'BMP',
                                 icon: icons.pulse,
                                 value: '',
+                                valueType:'text',
                                 name: 'Pulse',
                                 eventType: 'input'
                             }
                         ],
-                        btns:[
-                            {
-                                name: "Save",
-                                fill: "clear",
-                                btn_col_size: 3,
-                                icon: icons.plus
-                            }
-                        ]
                     },
 
                 ]
@@ -323,18 +286,11 @@ const initialVitals =[
                                 unit: 'C',
                                 icon: icons.temprature,
                                 value: '',
+                                valueType:'text',
                                 name: 'Temp',
                                 eventType: 'input'
                             },
                         ],
-                        btns:[
-                            {
-                                name: "Save",
-                                fill: "clear",
-                                btn_col_size: 3,
-                                icon: icons.plus
-                            }
-                        ]
                     },
 
                 ]
@@ -356,19 +312,13 @@ const initialVitals =[
                                 inputHeader: 'Respiratory rate',
                                 unit: 'BMP',
                                 icon: icons.respiratory,
+                                valueType:'text',
                                 value: '',
                                 name: 'Respiratory rate',
                                 eventType: 'input'
                             },
                         ],
-                        btns:[
-                            {
-                                name: "Save",
-                                fill: "clear",
-                                btn_col_size: 3,
-                                icon: icons.plus
-                            }
-                        ]
+
                     },
                 ]
             },
@@ -394,14 +344,6 @@ const initialVitals =[
                                 eventType: 'input'
                             },
                         ],
-                        btns:[
-                            {
-                                name: "Save",
-                                fill: "clear",
-                                btn_col_size: 3,
-                                icon: icons.plus
-                            }
-                        ]
                     },
                 ]
             },
@@ -422,7 +364,7 @@ const initialOtherexams=[
                     title: 'Status of uterus',
                     selectedValue: '',
                     name:"Status of uterus",
-                    displayNext:'Yes',
+                    displayNext:'Other status',
                     class:'bold'
                 },
                 data:[
@@ -439,8 +381,8 @@ const initialOtherexams=[
 
                     },
                     {
-                        name: 'Other',
-                        value: 'other',
+                        name: 'Other status',
+                        value: 'Other status',
                         colSize: '5',
 
                     },
@@ -466,7 +408,7 @@ const initialOtherexams=[
                                 icon: icons.editPen,
                                 value: '',
                                 valueType:'text',
-                                name: '',
+                                name: 'Status of uterus notes',
                                 required: true,
                                 eventType: 'input',
                                 inputWidth: "",
@@ -546,7 +488,7 @@ const initialOtherexams=[
                     selectedValue: '',
                     name:'Status of lochia',
                     class:'bold',
-                    displayNext:"Other",
+                    displayNext:"Other status",
 
                 },
                 data:[
@@ -569,14 +511,14 @@ const initialOtherexams=[
 
                     },
                     {
-                        name: 'Offensive',
-                        value: 'offensive',
+                        name: 'Offensive smell',
+                        value: 'Offensive smell',
                         colSize: '5',
 
                     },
                     {
-                        name: 'Other',
-                        value: 'Other',
+                        name: 'Other status',
+                        value: 'Other status',
                         colSize: '5',
 
                     },
@@ -602,7 +544,7 @@ const initialOtherexams=[
                                 icon: icons.editPen,
                                 value: '',
                                 valueType:'text',
-                                name: 'Other',
+                                name: 'Status of lochia notes',
                                 required: true,
                                 eventType: 'input',
                                 inputWidth: "",
@@ -960,7 +902,7 @@ const initialOtherexams=[
                                 icon: icons.editPen,
                                 valueType:'',
                                 value: '',
-                                name: 'Other postnatal complications',
+                                name: 'Other postnatal complications notes',
                                 required: true,
                                 eventType: 'input',
                                 inputWidth: "",

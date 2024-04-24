@@ -148,7 +148,7 @@ export const useDischargeWomanStore = defineStore('dischargeWomanStore',{
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Specify cause of death',
+                                        name: 'Cause of death notes',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: '',

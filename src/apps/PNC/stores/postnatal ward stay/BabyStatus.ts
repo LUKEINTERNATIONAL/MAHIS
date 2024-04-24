@@ -20,7 +20,7 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                                         icon: icons.editPen,
                                         value: '',
                                         valueType:'text',
-                                        name: 'full name of the baby',
+                                        name: 'Full name of the baby',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: '',
@@ -173,8 +173,8 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                         },
                         data:[
                             {
-                                name: 'Well',
-                                value: 'Well',
+                                name: 'Very well',
+                                value: 'Very well',
                                 colSize: '4',
 
                             },
@@ -670,8 +670,8 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                         },
                         data:[
                             {
-                                name: 'Other',
-                                value: 'other',
+                                name: 'Other danger signs',
+                                value: 'Other danger signs',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -696,7 +696,8 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'otherC',
+                                        valueType:'text',
+                                        name: 'Other danger signs notes',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "85%",
@@ -722,7 +723,7 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',
-                                        name: 'Describe the intervention',
+                                        name: 'Intervention notes',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "",
@@ -748,13 +749,13 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
                         data:[
                             {
                                 name: 'Yes',
-                                value: 'yes',
+                                value: 'Yes',
                                 colSize: '2.5',
 
                             },
                             {
                                 name: 'No',
-                                value: 'no',
+                                value: 'No',
                                 colSize: '2.5',
 
                             },
