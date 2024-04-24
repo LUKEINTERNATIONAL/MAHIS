@@ -221,7 +221,6 @@ export default defineComponent({
         },
         async saveData() {
             await this.saveNcdNumber();
-            await UserService.setProgramUserActions();
         },
 
         async saveNcdNumber() {
@@ -231,12 +230,13 @@ export default defineComponent({
             const exists = await IdentifierService.ncdNumberExists(formattedNCDNumber);
             if (exists) toastWarning("NCD number already exists", 5000);
             else {
-                await this.saveEnrollment();
                 const patient = new PatientService();
                 patient.createNcdNumber(formattedNCDNumber);
                 const demographicsStore = useDemographicsStore();
                 demographicsStore.setPatient(await PatientService.findByID(this.demographics.patient_id));
+                await this.saveEnrollment();
                 resetPatientData();
+                await UserService.setProgramUserActions();
                 if (this.activities.length == 0) {
                     this.$router.push("patientProfile");
                 } else {

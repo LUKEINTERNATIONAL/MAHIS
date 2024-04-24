@@ -75,7 +75,7 @@ export default defineComponent({
     margin: 0;
     border-radius: unset;
     margin-bottom: 20px;
-    position: fixed;
+    /* position: fixed; */
     width: 100%;
     z-index: 1000;
 }

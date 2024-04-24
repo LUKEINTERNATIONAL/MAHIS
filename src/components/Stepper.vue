@@ -1,6 +1,7 @@
 <template>
     <ion-row>
-        <ion-col size="3" class="wizard_content">
+        <ion-col size-xl="1" class="displayNoneMobile"> </ion-col>
+        <ion-col size-md="4" size-xl="2.5" size-sm="0" size-lg="4" class="displayNoneMobile">
             <ion-card class="wizard_card">
                 <div class="wizard_title">
                     <strong> {{ stepperTitle }}</strong>
@@ -22,8 +23,9 @@
                 </ion-card-content>
             </ion-card>
         </ion-col>
+        <ion-col size-md="0.6" size-xl="0.8" class="displayNoneMobile"> </ion-col>
 
-        <ion-col class="rightCol">
+        <ion-col size-sm="12" size-xl="7" size-md="7.2" size-lg="7" class="">
             <div class="back_profile" @click="openModal()">
                 <ion-icon style="font-size: 20px" :icon="chevronBackOutline"> </ion-icon>
                 <span style="cursor: pointer"> Back to profile</span>
@@ -314,24 +316,24 @@ ion-accordion.accordion-expanded ion-item[slot="header"] {
     align-items: center;
     font-weight: 400;
     font-size: 14px;
-    position: fixed;
+    /* position: fixed; */
     z-index: 1000;
 }
 .wizard_card {
-    position: fixed;
+    /* position: fixed; */
     width: 100%;
-    max-width: 300px;
+    /* max-width: 300px; */
     background-color: #fff;
-    top: 150px;
+    /* top: 150px; */
 }
 .rightCol {
     top: 100px;
     width: 90%;
 }
 .accordion_group {
-    position: fixed;
+    /* position: fixed; */
     height: 700px;
-    width: 58%;
+    /* width: 58%; */
     overflow-y: auto;
     top: 200px;
 }
