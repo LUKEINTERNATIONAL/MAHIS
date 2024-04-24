@@ -1,7 +1,11 @@
 <template>
     <ion-list>    
         <div class="sub_item_body">
-            <BasicForm :contentData="behaviourInfo" />
+            <BasicForm
+                :contentData="behaviourInfo"
+                :initialData="initialData"
+
+            />
         </div>
         <ion-item class="sub_item_body_close"/>
     </ion-list>
@@ -30,34 +34,21 @@ export default defineComponent({
         BasicInputField,
         BasicForm
     },
-
+data(vm) {
+    return{
+      initialData:[] as any,
+    }
+},
     mounted(){
         const  behaviourInfo =useBehaviourCousellingStore()
-        this.handleCaffeine()
-        this.handleOtherCaffeine()
-        this.handleTobacco()
-        this.handleOtherTobacco()
-        this.handleSecondHandSmoke()
-        this.handleOtherSecondHandSmoke()
-        this.handleCondomUse()
-        this. handleOtherCondom()
-        this.handleSubstanceUse()
-        this.handleOtherOnSubstance()
+      this.initialData=behaviourInfo.getInitial()
+
     },
 
     watch:{
         behaviourInfo:{
             handler(){
-                this.handleCaffeine()
-                this.handleOtherCaffeine()
-                this.handleTobacco()
-                this.handleOtherTobacco()
-                this.handleSecondHandSmoke()
-                this.handleOtherSecondHandSmoke()
-                this.handleCondomUse()
-                this.handleOtherCondom()
-                this.handleSubstanceUse()
-                this.handleOtherOnSubstance()
+
             },
             deep:true
         }
@@ -66,77 +57,7 @@ export default defineComponent({
         ...mapState(useBehaviourCousellingStore,["behaviourInfo"]),
     },
     methods:{
-        handleCaffeine(){
-            if(getRadioSelectedValue(this.behaviourInfo,'caffeine')=='no'){
-                modifyRadioValue(this.behaviourInfo,'reasons','displayNone',false)
-            }else{
-                 modifyRadioValue(this.behaviourInfo,'reasons','displayNone',true)
-            }
-            //console.log(getRadioSelectedValue(this.behaviourInfo,'caffeine'))
-        },
-        handleOtherCaffeine(){
-            if(getRadioSelectedValue(this.behaviourInfo,'reasons')=='otherOnCaffeine'){
-                modifyFieldValue(this.behaviourInfo,'specifyC','displayNone',false)
-            }else{
-                 modifyFieldValue(this.behaviourInfo,'specifyC','displayNone',true)
-            }
-        },
-        handleTobacco(){
-            if(getRadioSelectedValue(this.behaviourInfo,'Counsellingtobacco')=='noOnTobacco'){
-                modifyRadioValue(this.behaviourInfo,'reasonsOnTobacco','displayNone',false)
-            }else{
-                modifyRadioValue(this.behaviourInfo,'reasonsOnTobacco','dispalayNone',true)
-            }
-        },
-        handleOtherTobacco(){
-            if(getRadioSelectedValue(this.behaviourInfo,'reasonsOnTobacco')=='otherOnTobacco'){
-                modifyFieldValue(this.behaviourInfo,'SpecifyT','displayNone',false)
-            }else{
-                modifyFieldValue(this.behaviourInfo,'SpecifyT','displayNone',true)
-            }
-        },
-        handleSecondHandSmoke(){
-            if(getRadioSelectedValue(this.behaviourInfo,'secondHandSmoke')=='noSecondHandTobacco'){
-                modifyRadioValue(this.behaviourInfo,'reasonsOnSecondHandSmoke','displayNone',false)
-            }else{
-                modifyRadioValue(this.behaviourInfo,'reasonsOnSecondHandSmoke','displayNone',true)
-            }
-        },
-        handleOtherSecondHandSmoke(){
-            if(getRadioSelectedValue(this.behaviourInfo,'reasonsOnSecondHandSmoke')=='otherOnSecondHandTobacco'){
-                modifyFieldValue(this.behaviourInfo,'SpecifyST','displayNone',false)
-            }else{
-                modifyFieldValue(this.behaviourInfo,'SpecifyST','displayNone',true)
-            }
-        },
-        handleCondomUse(){
-            if(getRadioSelectedValue(this.behaviourInfo,'condomUse')=='noCondomUse'){
-                modifyRadioValue(this.behaviourInfo,'reasonsOnCondom','displayNone',false)
-            }else{
-                modifyRadioValue(this.behaviourInfo,'reasonsOnCondom','displayNone',true)
-            }
-        },
-        handleOtherCondom(){
-            if(getRadioSelectedValue(this.behaviourInfo,'reasonsOnCondom')=='otherOnCondomUse'){
-                modifyFieldValue(this.behaviourInfo,'SpecifyC','displayNone',false)
-            }else{
-                  modifyFieldValue(this.behaviourInfo,'SpecifyC','displayNone',true)
-            }
-        },
-        handleSubstanceUse(){
-            if(getRadioSelectedValue(this.behaviourInfo,'alcohol')=='noOnSubstanceUse'){
-                modifyRadioValue(this.behaviourInfo,'reasonsOnSubstance','displayNone',false)
-            }else{
-                modifyRadioValue(this.behaviourInfo,'reasonsOnSubstance','displayNone',true)
-            }
-        },
-        handleOtherOnSubstance(){
-            if(getRadioSelectedValue(this.behaviourInfo,'reasonsOnSubstance')=='otherOnSubstanceUse'){
-                modifyFieldValue(this.behaviourInfo,'SpecifySU','displayNone',false)
-            }else{
-                 modifyFieldValue(this.behaviourInfo,'SpecifySU','displayNone',true)
-            }
-        }
+
 
     }
 })

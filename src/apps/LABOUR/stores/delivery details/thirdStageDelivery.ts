@@ -1,447 +1,499 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
 
+const initialPlacentaExamination=[
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: '',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Time and date of delivery',
+                    class:'bold',
+                    selectedValue: ''
+                },
+                data:[
+
+
+                ]
+            }
+
+    },
+    {
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+
+        data:
+            {
+                rowData:[
+                    {
+                        colData: [
+                            {
+                                inputHeader: '',
+                                unit: '',
+                                icon: icons.time,
+                                valueType: 'text',
+                                name: 'Time of delivery',
+                                required: true,
+                                eventType: 'input',
+                                placeholder:'Pick time',
+                                timePopover: true
+
+                            },
+                            {
+                                inputHeader: '',
+                                unit: '',
+                                icon: icons.calenderPrimary,
+                                value: '',
+                                name: 'Date of delivery',
+                                required: true,
+                                datePopover:true,
+                                eventType: 'input',
+                                placeholder:'Pick date'
+                            },
+
+                        ]
+                    }
+                ]
+            },
+    },
+
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Mode of delivery',
+                    selectedValue: '',
+                    class:"bold",
+                    name:'Mode of delivery',
+                    displayNext:"Other"
+                },
+                data:[
+                    {
+                        name: 'Controlled cord traction',
+                        value: 'Controlled cord traction',
+                        colSize: '5',
+                    },
+                    {
+                        name: 'Manual removal',
+                        value: 'Manual removal',
+                        colSize: '5',
+                    },
+
+                    {
+                        name: 'Other',
+                        value: 'Other',
+                        colSize: '5',
+                    },
+                ]
+            }
+
+    },
+    {        classDash: 'dashed_bottom_border _padding',
+        childName:'Mode of delivery',
+        isFinishBtn: false,
+        data:
+            {
+                rowData:[
+                    {
+                        colData: [
+                            {
+                                displayNone:true,
+                                inputHeader: 'Specify',
+                                unit: '',
+                                icon: icons.editPen,
+                                value: '',
+                                name: 'Other mode of delivery notes',
+                                required: true,
+                                eventType: 'input',
+                                placeholder:''
+
+                            },
+
+                        ]
+                    }
+                ]
+            },
+    },
+
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Placenta',
+                    selectedValue: '',
+                    class:"bold",
+                    name:"Placenta"
+                },
+                data:[
+                    {
+                        name: 'Complete',
+                        value: 'Complete',
+                        colSize: '4',
+                    },
+                    {
+                        name: 'Incomplete',
+                        value: 'Incomplete',
+                        colSize: '4',
+                    },
+
+                ]
+            }
+
+    },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Membranes',
+                    selectedValue: '',
+                    class:"bold",
+                    name:"Membranes"
+                },
+                data:[
+                    {
+                        name: 'Complete',
+                        value: 'Complete',
+                        colSize: '4',
+                    },
+                    {
+                        name: 'Incomplete',
+                        value: 'Incomplete',
+                        colSize: '4',
+                    },
+
+                ]
+            }
+
+    },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Placenta and Cord weight',
+                    selectedValue: '',
+                    class:"bold",
+                    name:""
+                },
+                data:[
+
+
+                ]
+            }
+
+    },
+
+    {
+        classDash: 'dashed_bottom_border _padding',
+        isFinishBtn: false,
+        data:
+            {
+                rowData:[
+                    {
+                        colData: [
+                            {
+                                inputHeader: '',
+                                unit: '',
+                                icon: icons.editPen,
+                                value: '',
+                                name: 'Placenta weight',
+                                required: true,
+                                eventType: 'input',
+                                placeholder:''
+
+                            },
+                            {
+                                inputHeader: '',
+                                unit: '',
+                                icon: icons.editPen,
+                                value: '',
+                                name: 'Cord weight',
+                                required: true,
+                                eventType: 'input',
+                                placeholder:''
+
+                            },
+
+                        ]
+                    }
+                ]
+            },
+    },
+
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Cord insertion',
+                    selectedValue: '',
+                    class:"bold",
+                },
+                data:[
+                    {
+                        name: 'Central',
+                        value: 'central',
+                        colSize: '4',
+                    },
+                    {
+                        name: 'Lateral',
+                        value: 'lateral',
+                        colSize: '4',
+                    },
+
+                ]
+            }
+
+    },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Number of vessels',
+                    selectedValue: '',
+                    class:"bold",
+                    name:""
+                },
+                data:[
+
+
+                ]
+            }
+
+    },
+    {
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+
+        data:
+            {
+                rowData:[
+                    {
+                        colData: [
+                            {
+                                inputHeader: '',
+                                unit: '',
+                                icon: icons.editPen,
+                                value: '',
+                                name: 'Number of vessels',
+                                required: true,
+                                eventType: 'input',
+                                placeholder:''
+
+                            },
+
+                        ]
+                    }
+                ]
+            },
+    },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Placenta condition',
+                    selectedValue: '',
+                    class:"bold",
+                    name:"Placenta condition",
+                    displayNext:'Unhealthy'
+
+                },
+                data:[
+                    {
+                        name: 'Healthy',
+                        value: 'Healthy',
+                        colSize: '4',
+                    },
+                    {
+                        name: 'Unhealthy',
+                        value: 'Unhealthy',
+                        colSize: '4',
+                    },
+
+                ]
+            }
+
+    },
+    {
+        childName:'Unhealthy',
+        isFinishBtn: false,
+        data:
+            {
+                rowData:[
+                    {
+                        colData: [
+                            {
+                                displayNone:true,
+                                inputHeader: 'Abnormalities',
+                                unit: '',
+                                icon: icons.editPen,
+                                value: '',
+                                name: 'Placenta abnormalities',
+                                required: true,
+                                eventType: 'input',
+                                placeholder:''
+
+                            },
+
+                        ]
+                    }
+                ]
+            },
+    },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Cervix',
+                    selectedValue: '',
+                    class:"bold",
+                    name:"Cervix",
+
+                },
+                data:[
+                    {
+                        name: 'Intact',
+                        value: 'Intact',
+                        colSize: '4',
+                    },
+                    {
+                        name: 'Tears',
+                        value: 'Tears',
+                        colSize: '4',
+                    },
+
+                ]
+            }
+
+    },
+
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Perineum',
+                    selectedValue: '',
+                    class:"bold",
+                    name:"Perineum",
+                    displayNext:'Other'
+                },
+                data:[
+                    {
+                        name: 'Intact',
+                        value: 'Intact',
+                        colSize: '4.000001',
+                    },
+                    {
+                        name: 'Tears',
+                        value: 'Tears',
+                        colSize: '4.000001',
+                    },
+                    {
+                        name: 'Episiotomy',
+                        value: 'episiotomy',
+                        colSize: '4.000001',
+                    },
+                    {
+                        name: 'Lacerations',
+                        value: 'lacerations',
+                        colSize: '4.00001',
+                    },
+                    {
+                        name: 'Other',
+                        value: 'Other',
+                        colSize: '4.000001',
+                    },
+
+                ]
+            }
+
+    },
+    {
+        classDash: 'dashed_bottom_border _padding',
+        childName:"Perineum",
+        isFinishBtn: false,
+        data:
+            {
+                rowData:[
+                    {
+                        colData: [
+                            {
+                                displayNone:true,
+                                inputHeader: 'Specify',
+                                unit: '',
+                                icon: icons.editPen,
+                                value: '',
+                                name: 'Other perineum condition',
+                                required: true,
+                                eventType: 'input',
+                                placeholder:''
+
+                            },
+
+                        ]
+                    }
+                ]
+            },
+    },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Repair done for Tears/Episiotomy',
+                    selectedValue: '',
+                    class:"bold",
+                    name:"Perineum",
+                },
+                data:[
+                    {
+                        name: 'Yes',
+                        value: 'Yes',
+                        colSize: '2.5',
+                    },
+                    {
+                        name: 'No',
+                        value: 'No',
+                        colSize: '2.5',
+                    },
+
+                ]
+            }
+
+    },
+
+] as any;
 export const useThirdStageOfLabour = defineStore('thirdStageOfLabour',{
     state: () => ({
 
-        placentaExamination: [
-            {
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'Time of delivery',
-                                        unit: '',
-                                        icon: icons.time,
-                                        value: '',
-                                        name: 'time of delivery',
-                                        required: true,
-                                        eventType: 'input',
-                                        placeholder:'Pick time'
-
-                                    },
-                                    {
-                                        inputHeader: 'Date of delivery',
-                                        unit: '',
-                                        icon: icons.calenderPrimary,
-                                        value: '',
-                                        name: 'date of delivery',
-                                        required: true,
-                                        datePopover:true,
-                                        eventType: 'input',
-                                        placeholder:'Pick date'
-                                    },
-
-                                ]
-                            }
-                        ]
-                    },
-            },
-
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Mode of delivery',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Controlled cord traction',
-                                value: 'controlled cord traction',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Manual removal',
-                                value: 'manual removal',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-
-                            {
-                                name: 'Other',
-                                value: 'other',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                isFinishBtn: false,
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'Specify',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'Other',
-                                        required: true,
-                                        eventType: 'input',
-                                        placeholder:''
-
-                                    },
-
-                                ]
-                            }
-                        ]
-                    },
-            },
-
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Placenta',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Complete',
-                                value: 'complete',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Incomplete',
-                                value: 'incomplete',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Membranes',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Complete',
-                                value: 'complete',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Incomplete',
-                                value: 'incomplete',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-
-                        ]
-                    }
-
-            },
-
-            {
-                isFinishBtn: false,
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'Placenta weight',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'Placenta weight',
-                                        required: true,
-                                        eventType: 'input',
-                                        placeholder:''
-
-                                    },
-                                    {
-                                        inputHeader: 'Cord weight',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'Cord weight',
-                                        required: true,
-                                        eventType: 'input',
-                                        placeholder:''
-
-                                    },
-
-                                ]
-                            }
-                        ]
-                    },
-            },
-
-
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Cord insertion',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Central',
-                                value: 'central',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Lateral',
-                                value: 'lateral',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-
-                        ]
-                    }
-
-            },
-            {
-                isFinishBtn: false,
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'Number of vessels',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'Number of vessels',
-                                        required: true,
-                                        eventType: 'input',
-                                        placeholder:''
-
-                                    },
-
-                                ]
-                            }
-                        ]
-                    },
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Placenta condition',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Healthy',
-                                value: 'healthy',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Unhealthy',
-                                value: 'unhealthy',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-
-                        ]
-                    }
-
-            },
-            {
-                isFinishBtn: false,
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'Abnormalities',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'Abnormalities',
-                                        required: true,
-                                        eventType: 'input',
-                                        placeholder:''
-
-                                    },
-
-                                ]
-                            }
-                        ]
-                    },
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Cervix',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Intact',
-                                value: 'intact',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Tears',
-                                value: 'tears',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-
-                        ]
-                    }
-
-            },
-
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Perineum',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Intact',
-                                value: 'intact',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Tears',
-                                value: 'tears',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Episiotomy',
-                                value: 'episiotomy',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Lacerations',
-                                value: 'lacerations',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-
-                        ]
-                    }
-
-            },
-            {
-                isFinishBtn: false,
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'Specify tears',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'Specify tears',
-                                        required: true,
-                                        eventType: 'input',
-                                        placeholder:''
-
-                                    },
-
-                                ]
-                            }
-                        ]
-                    },
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Repair done for Tears/Episiotomy',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Yes',
-                                value: 'yes',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'No',
-                                value: 'no',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-
-                        ]
-                    }
-
-            },
-
-        ] as any,
+        placentaExamination: [...initialPlacentaExamination] as any,
 
 
     }),
@@ -449,6 +501,10 @@ export const useThirdStageOfLabour = defineStore('thirdStageOfLabour',{
         setPlacentaExamnianation(data: any){
             this.placentaExamination = data
         },
+        getInitial(){
+            const data=[...initialPlacentaExamination]
+            return [...data]
+        }
     },
     persist:true,
 

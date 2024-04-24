@@ -34,10 +34,17 @@ import ToolbarSearch from "@/apps/PNC/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/PNC/components/DemographicBar.vue";
 import { chevronBackOutline,checkmark } from 'ionicons/icons';
 import SaveProgressModal from '@/components/SaveProgressModal.vue'
-import { createModal } from '@/utils/Alerts'
+import {createModal, toastSuccess, toastWarning} from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
 import Stepper from "@/apps/PNC/components/Stepper.vue";
 import { mapState } from 'pinia';
+import {Service} from "@/services/service";
+import {HIVStatusAndTreatmentService} from "@/apps/PNC/Services/hiv_status_and_treatment_service";
+import {formatCheckBoxData, formatInputFiledData, formatRadioButtonData} from "@/services/formatServerData";
+import {useDemographicsStore} from "@/stores/DemographicStore";
+import {useDangerSignsStore} from "@/apps/ANC/store/Tempo";
+import {usePostnatalWardStayStore} from "@/apps/PNC/stores/postnatal ward stay/PostnatalWardMonitoring";
+import {PostnatalWardStayService} from "@/apps/PNC/Services/postnatal_wardstay_service";
 export default defineComponent({
   name: "postnatalWardMonitoring",
   components:{
@@ -79,9 +86,9 @@ export default defineComponent({
       ],
       StepperData:[
         {
-          'title': 'Postnatal ward routine monitoring and management',
-          'componet': 'PostnatalWardMonitoring',
-          'value': '1'
+          title: 'Postnatal ward routine monitoring and management',
+          component: 'PostnatalWardMonitoring',
+          value: '1'
         },
       ],
       isOpen: false,
@@ -91,8 +98,14 @@ export default defineComponent({
   watch: {
 
   },
+  getFormatedData(data: any) {
+    return data.map((item: any) => {
+      return item?.data;
+    });
+  },
   computed:{
-
+...mapState(useDemographicsStore,["demographics"]),
+    ...mapState(usePostnatalWardStayStore,["dangerSigns","vitals","otherExams"])
 
   },
   mounted(){
@@ -139,8 +152,36 @@ export default defineComponent({
         return item?.data;
       });
     },
-    saveData(){
+   async saveData(){
+      await this.saveWardMonitoring()
+      this.$router.push("home");
 
+    },
+    async saveWardMonitoring() {
+      if (this.dangerSigns.length > 0 && this.vitals>0 && this.otherExams>0) {
+        const userID: any = Service.getUserID();
+        const  wardMonitoring= new PostnatalWardStayService(this.demographics.patient_id, userID);
+        const encounter = await wardMonitoring.createEncounter();
+        if (!encounter) return toastWarning("Unable to create patient postnatal ward stay encounter");
+        const patientStatus = await wardMonitoring.saveObservationList(await this.buildWardStayMonitoring());
+        if (!patientStatus) return toastWarning("Unable to create patient routine monitoring details!");
+        toastSuccess("Ward stay details have been created");
+      }
+      console.log(await this.buildWardStayMonitoring())
+
+    },
+    async buildWardStayMonitoring() {
+      return [
+        ...(await formatCheckBoxData(this.dangerSigns)),
+        ...(await formatCheckBoxData(this.vitals)),
+        ...(await formatCheckBoxData(this.otherExams)),
+        ...(await formatRadioButtonData(this.dangerSigns)),
+        ...(await formatRadioButtonData(this.vitals)),
+        ...(await formatRadioButtonData(this.otherExams)),
+        ...(await formatInputFiledData(this.dangerSigns)),
+        ...(await formatInputFiledData(this.vitals)),
+        ...(await formatInputFiledData(this.otherExams)),
+      ];
     },
 
     openModal(){

@@ -12,29 +12,28 @@ export const usePNCEndStore = defineStore('pncEndStore',{
                     {
                         header:{
                             title: 'Reason for ending PNC?',
-                            selectedValue: ''
+                            selectedValue: '',
+                            name:'Reason for ending PNC',
+                            class:'bold',
                         },
                         data:[
                             {
                                 name: 'Refer',
-                                value: 'refer',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'Refer',
+                                colSize: '8',
+
                             },
                             {
                                 name: 'Discharge home',
-                                value: 'discharge home',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'Discharge home',
+                                colSize: '8',
+
                             },
                             {
                                 name: 'Death mother',
-                                value: 'death mother',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                value: 'Death mother',
+                                colSize: '5',
+
                             },
                         ]
                     }

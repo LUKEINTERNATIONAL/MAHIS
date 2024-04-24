@@ -4,7 +4,7 @@
         <ion-content :fullscreen="true">
             <DemographicBar />
             <Stepper
-                stepperTitle="Physical Examination"
+                stepperTitle="Labour assessment"
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 @finishBtn="saveData()"
@@ -108,58 +108,31 @@ export default defineComponent({
                     icon: false,
                     disabled: false,
                     number: 4,
-                    last_step: "",
-                },
-                {
-                    title: "Continuous assessment",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 5,
-                    last_step: "",
-                },
-                {
-                    title: "Patient referral",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 6,
                     last_step: "last_step",
                 },
             ],
             StepperData: [
                 {
                     title: "Quick check",
-                    componet: "QuickCheck",
+                    component: "QuickCheck",
                     value: "1",
                 },
                 {
                     title: "Physical examination",
-                    componet: "PhysicalExamination",
+                    component: "PhysicalExamination",
                     value: "2",
                 },
                 {
                     title: "First vaginal examination",
-                    componet: "FirstVaginalExamination",
+                    component: "FirstVaginalExamination",
                     value: "3",
                 },
                 {
                     title: "Pelvic assessment",
-                    componet: "PelvicAssessment",
+                    component: "PelvicAssessment",
                     value: "4",
                 },
-                {
-                    title: "Continuous monitoring",
-                    componet: "ContinuousMonitoring",
-                    value: "5",
-                },
-                {
-                    title: "Patient referral",
-                    componet: "PatientReferral",
-                    value: "6",
-                },
+
             ],
             isOpen: false,
             iconsContent: icons,
@@ -243,10 +216,12 @@ export default defineComponent({
             //       if (state) errors.push(state)
             //     }
             //   })
-            // })
-            if (errors.length) {
-                return alert(errors.join(","));
-            }
+            // // })
+            // if (errors.length) {
+            //     return alert(errors.join(","));
+            // }
+          this.$router.push("labourHome");
+
         },
 
         openModal() {

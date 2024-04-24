@@ -33,7 +33,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
                                 colData: [
 
                                     {
-                                        inputHeader: 'Pre-gestaion weight',
+                                        inputHeader: 'Pre-gestation weight',
                                         unit: 'kg',
                                         icon: icons.weight,
                                         value: '',
@@ -626,7 +626,7 @@ export const useAncVitalsStore = defineStore('ancVitalsStore',{
         },
         setHeightWeight(data: any){
             this.heightWeight = data
-        }
+        },
     },
     persist:true,
 

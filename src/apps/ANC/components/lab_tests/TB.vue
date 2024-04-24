@@ -47,7 +47,8 @@ import { modifyRadioValue,
     getCheckboxSelectedValue,
     getFieldValue,
     modifyFieldValue,
-    modifyCheckboxValue} from '@/services/data_helpers'
+    modifyCheckboxValue,
+modifyCheckboxHeader} from '@/services/data_helpers'
 
 export default defineComponent({
     name:"TB screening",
@@ -82,9 +83,9 @@ export default defineComponent({
 
     },
     mounted(){
-        const tbScreening = useTBScreeningStore()
         this.handleResults()
         this.handleDate()
+        this.handleNotDone()
         this.handleOther()
     },
     watch:{
@@ -92,15 +93,12 @@ export default defineComponent({
         handler(){
           this.handleResults()
           this.handleDate()
-        },
-        deep:true
-      },
-      reasons:{
-        handler(){
+          this.handleNotDone()
           this.handleOther()
         },
         deep:true
-      }
+      },
+
     },
     setup(){
         return { checkmark,pulseOutline };
@@ -119,25 +117,32 @@ export default defineComponent({
     },
 
     handleResults(){
-      if(getRadioSelectedValue(this.tbTest,'tbConducted')=='conducted'){
-        modifyRadioValue(this.tbTest,'results','displayNone',false)
+      if(getRadioSelectedValue(this.tbTest,'TB screening status')=='Screening conducted'){
+        modifyRadioValue(this.tbTest,'TB screening results','displayNone',false)
       }else{
-        modifyRadioValue(this.tbTest,'results','displayNone',true)
+        modifyRadioValue(this.tbTest,'TB screening results','displayNone',true)
       }
-      console.log(getRadioSelectedValue(this.tbTest,'tbConducted'))
     },
     handleDate(){
-      if(getRadioSelectedValue(this.tbTest,'tbConducted')=='conducted'){
-        modifyFieldValue(this.tbTest,'UTD','displayNone',false)
+      if(getRadioSelectedValue(this.tbTest,'TB screening status')=='Screening conducted'){
+        modifyFieldValue(this.tbTest,'Screening date','displayNone',false)
       }else{
-        modifyFieldValue(this.tbTest,'UTD','displayNone',true)
+        modifyFieldValue(this.tbTest,'Screening date','displayNone',true)
       }
     },
-    handleOther(){
-      if(getCheckboxSelectedValue(this.reasons,'Other')=='other'){
-        modifyFieldValue(this.reasons,'Other','displayNone',false)
+    handleNotDone(){
+      if(getRadioSelectedValue(this.tbTest,'TB screening status')=='Screening not done'){
+        modifyCheckboxHeader(this.reasons,'Reason not done','displayNone',false)
       }else{
-        modifyFieldValue(this.reasons,'Other','displayNone',true)
+        modifyCheckboxHeader(this.reasons,'Reason not done','displayNone',true)
+      }
+    },
+
+    handleOther(){
+      if(getCheckboxSelectedValue(this.reasons,'Other')=='Other'){
+        modifyFieldValue(this.reasons,'Other (specify)','displayNone',false)
+      }else{
+        modifyFieldValue(this.reasons,'Other (specify)','displayNone',true)
       }
     },
     }

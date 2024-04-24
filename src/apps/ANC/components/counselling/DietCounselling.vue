@@ -1,7 +1,9 @@
 <template>
     <ion-list>    
         <div class="sub_item_body">
-            <BasicForm :contentData="dietCounsellingInfo"/>
+            <BasicForm :contentData="dietCounsellingInfo"
+                        :initialData="initialData"
+            />
         </div>
     </ion-list>
 </template>
@@ -14,6 +16,7 @@ import { mapState } from 'pinia';
  import {useDietCounsellingStore} from "@/apps/ANC/store/counselling/dietCounsellingStore";
  import BasicForm from '@/components/BasicForm.vue';
  import { modifyFieldValue} from '@/services/data_helpers'
+ import {initial} from "lodash";
 
 
 export default defineComponent({
@@ -24,21 +27,18 @@ export default defineComponent({
         BasicInputField,
         BasicForm
     },
-        methods:{
-    handleHivResults(name: any) {
-      if (name === 'yes') {
-        const data = this.dietCounsellingInfo;
-        modifyFieldValue(data, 'selectedValue', 'displayNone', true);
-        useDietCounsellingStore().addDietCounsellingInfo(data);
-      } else {
-        const data = this.dietCounsellingInfo;
-        modifyFieldValue(data, 'selectedValue', 'displayNone', false);
-        useDietCounsellingStore().addDietCounsellingInfo(data);
+
+  data(vm) {
+      return{
+        initialData:[] as any,
       }
-    }
+  },
+        methods:{
+
     },
     mounted(){
         const  dietCounsellingInfo =useDietCounsellingStore()
+        this.initialData=dietCounsellingInfo.getInitial()
     },
       computed:{
         ...mapState(useDietCounsellingStore,["dietCounsellingInfo"]),

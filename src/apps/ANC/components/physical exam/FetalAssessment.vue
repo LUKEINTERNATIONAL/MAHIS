@@ -46,7 +46,6 @@ export default defineComponent({
         return {
             iconsContent: icons,
             vValidations: "" as any,
-            PreviousVisit: "" as any,
             hasValidationErrors: [] as any,
         };
     },
@@ -55,11 +54,13 @@ export default defineComponent({
     },
     mounted() {
         this.handleFetalAssessment();
+        this.handleFetalRate()
     },
     watch: {
         fetalAssessment: {
             handler() {
                 this.handleFetalAssessment();
+                this.handleFetalRate()
             },
             deep: true,
         },
@@ -73,10 +74,19 @@ export default defineComponent({
             this.$router.push(url);
         },
         handleFetalAssessment() {
-            if (getRadioSelectedValue(this.PreviousVisit, "Yes") == "yes") {
-                modifyFieldValue(this.PreviousVisit, "number of fetuses", "displayNone", false);
+            if (getRadioSelectedValue(this.fetalAssessment, "Number of fetuses known") == "yes") {
+                modifyFieldValue(this.fetalAssessment, "Number of fetuses", "displayNone", false);
             } else {
-                modifyFieldValue(this.PreviousVisit, "number of fetuses", "displayNone", true);
+                modifyFieldValue(this.fetalAssessment, "Number of fetuses", "displayNone", true);
+            }
+        },
+        handleFetalRate() {
+            if (getRadioSelectedValue(this.fetalAssessment, "Fetal heartbeat") == "yes") {
+                modifyFieldValue(this.fetalAssessment, "Fetal heart rate", "displayNone", false);
+                modifyFieldValue(this.fetalAssessment, "Repeated fetal rate", "displayNone", false);
+            } else {
+                modifyFieldValue(this.fetalAssessment, "Fetal heart rate", "displayNone", false);
+                modifyFieldValue(this.fetalAssessment, "Repeated fetal rate", "displayNone", false);
             }
         },
     },
