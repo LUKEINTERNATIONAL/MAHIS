@@ -164,8 +164,8 @@ const initialObstetricDetails=[
                         justify: 'space-between',
                     },
                     {
-                        name: 'Obstructed/prolonged labour',
-                        value: 'prolonged labour',
+                        name: 'Obstructed or prolonged labour',
+                        value: 'Obstructed or prolonged labour',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',
@@ -357,7 +357,7 @@ const initialObstetricDetails=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
-                                valueType:true,
+                                valueType:'text',
                                 name: 'Other problems notes',
                                 required: true,
                                 eventType: 'input',
@@ -385,6 +385,6 @@ export const useObstetricDetailsStore = defineStore('obstetricDetails',{
 
 
     },
-    // persist:true,
+    persist:true,
 
 })

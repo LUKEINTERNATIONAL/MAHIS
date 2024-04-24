@@ -20,7 +20,7 @@ const initialDeliveryDetails=[
                                 valueType:'text',
                                 eventType: 'input',
                                 alertsError: false,
-                                calenderPopover:true,
+                                isDatePopover: true,
                                 alertsErrorMassage: '',
                                 placeholder:'Pick date'
                             },
@@ -50,18 +50,18 @@ const initialDeliveryDetails=[
                 },
                 data:[
                     {
-                        name: 'Spontaneous Vertex Delivery (SVD)',
+                        name: 'Spontaneous Vertex Delivery',
                         value: 'Spontaneous vertex delivery',
                         colSize: '5',
                     },
                     {
-                        name: 'Vacuum Extraction (VE)',
-                        value: 'Vacuum Extraction',
+                        name: 'Vacuum extraction delivery',
+                        value: 'Vacuum extraction delivery',
                         colSize: '5',
                     },
                     {
-                        name: 'Breech (BR)',
-                        value: 'Breech',
+                        name: 'Breech delivery',
+                        value: 'Breech delivery',
                         colSize: '5',
                     },
                     {
@@ -95,6 +95,7 @@ const initialDeliveryDetails=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
+                                valueType:'text',
                                 name: 'Other mode of delivery notes',
                                 required: true,
                                 eventType: 'input',
@@ -298,7 +299,7 @@ const initialDeliveryDetails=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
-                                valueText:'text',
+                                valueType:'text',
                                 name: 'Last name',
                                 required: true,
                                 eventType: 'input',
@@ -335,6 +336,7 @@ const initialDeliveryDetails=[
                                 unit: 'cm',
                                 icon: icons.editPen,
                                 value: '',
+                                valueType:'text',
                                 name: 'Height',
                                 required: true,
                                 eventType: 'input',
@@ -414,7 +416,7 @@ const initialDeliveryDetails=[
                 header:{
                     title: '',
                     selectedValue: '',
-                    name:'Newborn complications'
+                    name:'Newborn baby complications'
 
                 },
                 data:[
@@ -447,7 +449,7 @@ const initialDeliveryDetails=[
                 header:{
                     title: '',
                     selectedValue: '',
-                    name:'Newborn complications'
+                    name:'Newborn baby complications'
 
                 },
                 data:[
@@ -489,6 +491,7 @@ const initialDeliveryDetails=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
+                                valueType:'text',
                                 name: 'Other complications notes',
                                 required: true,
                                 eventType: 'input',
@@ -562,7 +565,7 @@ const initialDeliveryDetails=[
                     },
                     {
                         name: 'Bag and mask',
-                        value: 'clearing airway',
+                        value: 'Bag and mask',
                         colSize: '5',
 
                     },

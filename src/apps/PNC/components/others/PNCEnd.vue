@@ -3,7 +3,10 @@
     <ion-card class="section">
       <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="pncEnd" ></basic-form>
+        <basic-form
+            :contentData="pncEnd"
+            :initialData="initialData"
+        ></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
@@ -60,6 +63,7 @@ export default defineComponent({
       vValidations: '' as any,
       hasValidationErrors: [] as any,
       inputField: '' as any,
+      initialData:[] as any,
 
     };
   },
@@ -67,6 +71,8 @@ export default defineComponent({
     ...mapState(usePNCEndStore,["pncEnd"]),
   },
   mounted(){
+    const pncEnd=usePNCEndStore();
+    this.initialData=pncEnd.getInitial()
   },
   watch:{
   },

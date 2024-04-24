@@ -49,8 +49,8 @@ const initialDangerSigns=[
                 data:[
 
                     {
-                        name: 'Pre-term labour',
-                        value: 'value',
+                        name: 'Preterm labour',
+                        value: 'Preterm labour',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',
@@ -340,7 +340,8 @@ const initialVitals =[
                                 unit: 'BMP',
                                 icon: icons.respiratory,
                                 value: '',
-                                name: 'Respiratory rate',
+                                valueType:"text",
+                                name: 'Fetal heart rate',
                                 eventType: 'input'
                             },
                         ],
@@ -900,7 +901,7 @@ const initialOtherexams=[
                                 inputHeader: 'Specify',
                                 unit: 'text',
                                 icon: icons.editPen,
-                                valueType:'',
+                                valueType:'text',
                                 value: '',
                                 name: 'Other postnatal complications notes',
                                 required: true,
@@ -987,8 +988,8 @@ const initialOtherexams=[
                 },
                 data:[
                     {
-                        name: 'Exclusive',
-                        value: 'exclusive',
+                        name: 'Breastfed exclusively',
+                        value: 'Breastfed exclusively',
                         colSize: '5',
 
                     },
@@ -1037,6 +1038,6 @@ export const usePostnatalWardStayStore = defineStore('postnatalWardStayStore',{
             return [...data]
         },
     },
-    persist:true,
+    // persist:true,
 
 })

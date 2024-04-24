@@ -165,7 +165,7 @@ export default defineComponent({
         if (!encounter) return toastWarning("Unable to create PNC end encounter");
         const patientStatus = await pncEnd.saveObservationList(await this.buildPNCEnd());
         if (!patientStatus) return toastWarning("Unable to create PNC program end details!");
-        toastSuccess("End details details for PNC program have been created");
+        toastSuccess("End details for PNC program have been created");
       }
       console.log(await this.buildPNCEnd())
 
@@ -173,9 +173,7 @@ export default defineComponent({
     async buildPNCEnd() {
       return [
 
-        ...(await formatCheckBoxData(this.pncEnd)),
         ...(await formatRadioButtonData(this.pncEnd)),
-        ...(await formatInputFiledData(this.pncEnd)),
       ];
     },
 

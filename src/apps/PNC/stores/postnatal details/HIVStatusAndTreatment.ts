@@ -62,8 +62,8 @@ const initialHIVStatusAndTreatment =[
 
                     },
                     {
-                        name: 'Test not done',
-                        value: 'Test not done',
+                        name: 'HIV test not done',
+                        value: 'HIV test not done',
                         colSize: '5'
 
                     },

@@ -152,7 +152,7 @@ export default defineComponent({
     },
     async saveData(){
       await this.saveBabyMonitoring()
-      this.$router.push("home");
+      // this.$router.push("home");
 
     },
     async saveBabyMonitoring() {
