@@ -228,7 +228,7 @@ const initialBabyStatusDetails=[
                 header:{
                     title: 'What is the status of the baby?',
                     selectedValue: '',
-                    name:'Status of the baby',
+                    name:'Status of baby',
                     class:'bold',
 
                 },
@@ -263,8 +263,8 @@ const initialBabyStatusDetails=[
                 },
                 data:[
                     {
-                        name: '48 hrs before discharge',
-                        value: '48 hrs before discharge',
+                        name: 'Up to 48 hrs or before discharge',
+                        value: 'Up to 48 hrs or before discharge',
                         colSize: '7',
 
                     },
@@ -320,6 +320,7 @@ const initialBabyStatusDetails=[
     },
 
     {
+        childName:'BCG',
         isFinishBtn: false,
         sectionHeader: '',
         classDash: 'dashed_bottom_border _padding',
@@ -330,6 +331,7 @@ const initialBabyStatusDetails=[
                     {
                         colData: [
                             {
+                                displayNone:true,
                                 inputHeader: 'Date BCG given',
                                 unit: '',
                                 icon: icons.calenderPrimary,
@@ -340,7 +342,8 @@ const initialBabyStatusDetails=[
                                 eventType: 'input',
                                 datePopover:true,
                                 inputWidth: '',
-                                placeholder:'Pick holder'
+                                placeholder:'Pick holder',
+                                isDatePopover:true,
                             },
 
                         ]
@@ -349,6 +352,7 @@ const initialBabyStatusDetails=[
             },
     },
     {
+        childName:'Polio',
         isFinishBtn: false,
         sectionHeader: '',
         classDash: 'dashed_bottom_border _padding',
@@ -358,6 +362,7 @@ const initialBabyStatusDetails=[
                     {
                         colData: [
                             {
+                                displayNone:true,
                                 inputHeader: 'Date polio given',
                                 unit: '',
                                 icon: icons.calenderPrimary,
@@ -368,7 +373,9 @@ const initialBabyStatusDetails=[
                                 eventType: 'input',
                                 datePopover:true,
                                 inputWidth: '',
-                                placeholder:'Pick holder'
+                                placeholder:'Pick holder',
+                                isDatePopover:true,
+
                             },
 
                         ]
@@ -461,9 +468,6 @@ const initialBabyStatusDetails=[
             }
 
     },
-] as any;
-
-const initialDangerSigns=[
     {
         selectdData: [],
         classDash: 'dashed_bottom_border',
@@ -683,6 +687,7 @@ const initialDangerSigns=[
 
     },
     {
+        childName:'Other danger signs',
         isFinishBtn: false,
         sectionHeader: '',
         classDash: 'dashed_bottom_border _padding',
@@ -693,6 +698,7 @@ const initialDangerSigns=[
                     {
                         colData: [
                             {
+                                displayNone:true,
                                 inputHeader: 'specify',
                                 unit: '',
                                 icon: icons.editPen,
@@ -701,7 +707,7 @@ const initialDangerSigns=[
                                 name: 'Other danger signs notes',
                                 required: true,
                                 eventType: 'input',
-                                inputWidth: "85%",
+                                inputWidth: "100%",
                             },
 
                         ]
@@ -710,6 +716,7 @@ const initialDangerSigns=[
             },
     },
     {
+        childName:'None',
         isFinishBtn: false,
         sectionHeader: '',
         classDash: 'dashed_bottom_border _padding',
@@ -720,10 +727,12 @@ const initialDangerSigns=[
                     {
                         colData: [
                             {
+                                displayNone:false,
                                 inputHeader: 'Describe the intervention',
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
+                                valueType:'text',
                                 name: 'Intervention notes',
                                 required: true,
                                 eventType: 'input',
@@ -793,6 +802,10 @@ const initialDangerSigns=[
             }
 
     }
+] as any;
+
+const initialDangerSigns=[
+
 ] as any
 export const useBabyStatusStore = defineStore('babyStatusStore',{
     state: () => ({
@@ -812,7 +825,7 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
             return[...data]
         } ,
         getInitial1(){
-            const data=[...initialBabyStatusDetails]
+            const data=[...initialDangerSigns]
             return[...data]
         }
 

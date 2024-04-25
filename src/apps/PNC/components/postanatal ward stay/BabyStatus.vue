@@ -3,11 +3,18 @@
     <ion-card class="section">
       <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="babyStatusDetails" ></basic-form>
+        <basic-form
+            :contentData="babyStatusDetails"
+            :initialData="initialData"
+        ></basic-form>
       </ion-card-content>
     </ion-card> <ion-card class="section">
       <ion-card-content>
-        <basic-form :contentData="dangerSigns" ></basic-form>
+        <basic-form
+            :contentData="dangerSigns"
+            :initialData="initialData1"
+
+        ></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
@@ -65,6 +72,8 @@ export default defineComponent({
       vValidations: '' as any,
       hasValidationErrors: [] as any,
       inputField: '' as any,
+      initialData:[] as any,
+      initialData1:[] as any
 
     };
   },
@@ -73,6 +82,10 @@ export default defineComponent({
     ...mapState(useBabyStatusStore,["dangerSigns"]),
   },
   mounted(){
+    const babyStatusDetails=useBabyStatusStore()
+    const dangerSigns=useBabyStatusStore()
+    this.initialData=babyStatusDetails.getInitial()
+    this.initialData1=dangerSigns.getInitial1()
   },
   watch:{
   },

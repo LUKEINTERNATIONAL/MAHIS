@@ -12,7 +12,8 @@ const initialVisitForMother=[
                     title: 'What is the status of the mother?',
                     selectedValue: '',
                     name:'Status of the mother',
-                    class:'bold'
+                    class:'bold',
+                    displayNext:"Alive"
                 },
                 data:[
                     {
@@ -32,6 +33,7 @@ const initialVisitForMother=[
 
     },
     {
+        childName: 'Status of the mother',
         selectdData: [],
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
@@ -41,7 +43,8 @@ const initialVisitForMother=[
                     title: 'Is the postnatal check within?',
                     selectedValue: '',
                     class:'bold',
-                    name:'Postnatal check period'
+                    name:'Postnatal check period',
+                    displayNone:true
                 },
                 data:[
                     {
@@ -51,13 +54,13 @@ const initialVisitForMother=[
                     },
                     {
                         name: '3-7 days',
-                        value: '3 to 7 days',
+                        value: '3-7 days',
                         colSize: '7',
 
                     },
                     {
                         name: '8-42 days',
-                        value: '8 to 42 days',
+                        value: '8-42 days',
                         colSize: '7',
 
                     },
@@ -66,6 +69,7 @@ const initialVisitForMother=[
 
     },
     {
+        childName: 'Status of the mother',
         selectdData: [],
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
@@ -74,7 +78,8 @@ const initialVisitForMother=[
                     title: 'Does the woman have any of the danger signs?',
                     selectedValue: '',
                     name:'Danger signs',
-                    class:'bold'
+                    class:'bold',
+                    displayNone:true
                 },
                 data:[
 
@@ -99,6 +104,7 @@ const initialVisitForMother=[
 
     },
     {
+        childName: 'Status of the mother',
         selectdData: [],
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
@@ -107,6 +113,7 @@ const initialVisitForMother=[
                     title: '',
                     selectedValue: '',
                     name:'Danger signs',
+                    displayNone:true
 
                 },
                 data:[
@@ -133,6 +140,7 @@ const initialVisitForMother=[
     },
 
     {
+        childName: 'Status of the mother',
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
@@ -140,6 +148,7 @@ const initialVisitForMother=[
                     title: '',
                     selectedValue: '',
                     name:'Danger signs',
+                    displayNone:true
 
                 },
                 data:[
@@ -165,6 +174,7 @@ const initialVisitForMother=[
 
     },
     {
+        childName: 'Status of the mother',
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
@@ -172,6 +182,7 @@ const initialVisitForMother=[
                     title: '',
                     selectedValue: '',
                     name:'Danger signs',
+                    displayNone:true
 
                 },
                 data:[
@@ -214,6 +225,7 @@ const initialVisitForMother=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
+                                valueType:'text',
                                 name: 'Other danger signs notes',
                                 required: true,
                                 eventType: 'input',
@@ -226,6 +238,7 @@ const initialVisitForMother=[
             },
     },
     {
+        childName: 'Status of the mother',
         selectdData: [],
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
@@ -236,7 +249,8 @@ const initialVisitForMother=[
                     selectedValue: '',
                     class:'bold',
                     name:'Status of Uterus',
-                    displayNext:"Other status"
+                    displayNext:"Other status",
+                    displayNone:true
                 },
                 data:[
                     {
@@ -262,7 +276,7 @@ const initialVisitForMother=[
 
     },
     {
-        childName:'Status of uterus',
+        childName:'Status of Uterus',
         isFinishBtn: false,
         sectionHeader: '',
         classDash: 'dashed_bottom_border _padding',
@@ -303,8 +317,8 @@ const initialVisitForMother=[
                     selectedValue: '',
                     name:'Intervention on uterus problem',
                     class:'bold',
+                    displayNext:'Yes',
                     displayNone:true,
-                    displayNext:'Yes'
                 },
                 data:[
                     {
@@ -353,6 +367,7 @@ const initialVisitForMother=[
             },
     },
     {
+        childName: 'Status of the mother',
         selectdData: [],
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
@@ -363,7 +378,8 @@ const initialVisitForMother=[
                     selectedValue: '',
                     class:'bold',
                     name:'Status of lochia',
-                    displayNext:'Other',
+                    displayNext:'Other status',
+                    displayNone:true
                 },
                 data:[
                     {
@@ -392,7 +408,7 @@ const initialVisitForMother=[
                     },
                     {
                         name: 'Other status',
-                        value: 'other status',
+                        value: 'Other status',
                         colSize: '4',
 
                     },
@@ -430,6 +446,7 @@ const initialVisitForMother=[
             },
     },
     {
+        childName: 'Status of the mother',
         selectdData: [],
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
@@ -440,7 +457,8 @@ const initialVisitForMother=[
                     selectedValue: '',
                     name:"Intervention on lochia",
                     class:'bold',
-                    displayNext:'Yes'
+                    displayNext:'Yes',
+                    displayNone:true
                 },
                 data:[
                     {
@@ -489,6 +507,7 @@ const initialVisitForMother=[
             },
     },
     {
+        childName: 'Status of the mother',
         selectdData: [],
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
@@ -499,7 +518,8 @@ const initialVisitForMother=[
                     selectedValue: '',
                     class:'bold',
                     name:'Episiotomy/tear',
-                    displayNext:'Yes'
+                    displayNext:'Yes',
+                    displayNone:true
                 },
                 data:[
                     {
@@ -520,7 +540,7 @@ const initialVisitForMother=[
     },
     {
         selectdData: [],
-        childName:'Episiotomy/tear present',
+        childName:'Episiotomy/tear',
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
         radioBtnContent:
@@ -562,6 +582,7 @@ const initialVisitForMother=[
 
     },
     {
+        childName:'Episiotomy/tear',
         selectdData: [],
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
@@ -572,7 +593,8 @@ const initialVisitForMother=[
                     selectedValue: '',
                     class:'bold',
                     name:'Intervention on condition of episiotomy/tear',
-                    displayNext:'Yes'
+                    displayNext:'Yes',
+                    displayNone:true,
                 },
                 data:[
                     {
@@ -608,7 +630,7 @@ const initialVisitForMother=[
                                 icon: icons.editPen,
                                 value: '',
                                 valueType:'text',
-                                name: 'Intervention on episiotomy/tear notes',
+                                name: 'Other notes',
                                 required: true,
                                 eventType: 'input',
                                 inputWidth: "",
@@ -621,6 +643,7 @@ const initialVisitForMother=[
     },
     {
         selectdData: [],
+        childName: 'Status of the mother',
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
         radioBtnContent:
@@ -629,7 +652,8 @@ const initialVisitForMother=[
                     title: 'Vitamin A supplementation given?',
                     selectedValue: '',
                     name:'Vitamin A supplementation',
-                    displayNext:'Yes'
+                    class:'bold',
+                    displayNone:true
                 },
                 data:[
                     {
@@ -650,7 +674,7 @@ const initialVisitForMother=[
     {
         selectdData: [],
         isFinishBtn: false,
-        childName: 'Vitamin A supplementation',
+        childName: 'Status of the mother',
         classDash: 'dashed_bottom_border _padding',
         radioBtnContent:
             {
@@ -708,8 +732,8 @@ const initialVisitForMother=[
 
                     },
                     {
-                        name: 'Oral contraceptive',
-                        value: 'Oral contraceptive',
+                        name: 'Oral contraception',
+                        value: 'Oral contraception',
                         colSize: '4',
 
                     },
@@ -750,6 +774,7 @@ const initialVisitForMother=[
 
     {
         selectdData: [],
+        childName: 'Status of the mother',
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
         radioBtnContent:
@@ -758,7 +783,8 @@ const initialVisitForMother=[
                     title: 'Breast feeding?',
                     selectedValue: '',
                     name:'Breast feeding',
-                    class:'bold'
+                    class:'bold',
+                    displayNone:true
                 },
                 data:[
                     {
