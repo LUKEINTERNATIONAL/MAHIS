@@ -1,7 +1,7 @@
 <template>
     <ion-list>
         <ion-row>
-            <ion-col>
+            <ion-col class="lsp-cls-1">
                 <ListPicker
                     :multiSelection="list_picker_prperties[0].multi_Selection"
                     :show_label="list_picker_prperties[0].show_list_label"
@@ -24,7 +24,7 @@
 
         <ion-row>
             <ion-col>
-                <div style="margin-top: 7%;">
+                <div>
                     <DatePicker
                         :place_holder="date_properties[0].placeHolder"
                         @date-up-dated="date_properties[0].dataHandler"
@@ -276,4 +276,12 @@ const dynamic_button_properties = [
     .spc_btwn {
         margin-top: 2%;
     }
+    .aro-cls-1 {
+        margin: -1.3%;
+        margin-left: 0%;
+    }
+    .lsp-cls-1 {
+        margin: -15px; margin-left: 0px;
+    }
+    
 </style>

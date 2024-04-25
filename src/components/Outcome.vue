@@ -16,7 +16,7 @@
 
         <div v-if="showAddItemButton" class="aro-cls-1">
             <ion-row>
-                <ion-col>
+                <ion-col style="margin: -20px; margin-left: 0px;">
                     <ListPicker
                         :multiSelection="list_picker_prperties[0].multi_Selection"
                         :show_label="list_picker_prperties[0].show_list_label"
@@ -283,9 +283,5 @@ function dataSavedTrigFn() {
         margin-top: 7px;
         display: flex;
         text-align: center;
-    }
-    .aro-cls-1 {
-        margin: -1.3%;
-        margin-left: 0%;
     }
 </style>

@@ -1,8 +1,8 @@
 <template>
     <ion-list>
         <ion-row>
-            <ion-col>
-                <ListPicker
+            <ion-col class="lsp-cls-1">
+                <ListPicker class="aro-cls-1"
                     :multiSelection="list_picker_prperties[0].multi_Selection"
                     :show_label="list_picker_prperties[0].show_list_label"
                     :uniqueId="list_picker_prperties[0].unqueId"
@@ -19,8 +19,11 @@
                     <ion-label v-if="list_picker_prperties[0].show_error.value" class="error-label">{{ list_picker_prperties[0].error_message }}</ion-label>
                 </div>
             </ion-col>
+        </ion-row>
+
+        <ion-row>
             <ion-col>
-                <div style="margin-top: 7%;">
+                <div>
                     <DatePicker
                         :place_holder="date_properties[0].placeHolder"
                         @date-up-dated="date_properties[0].dataHandler"
@@ -271,5 +274,8 @@ function validateDate() {
 }
 .spc_btwn {
     margin-top: 2%;
+}
+.lsp-cls-1 {
+    margin: -15px; margin-left: 0px;
 }
 </style>
