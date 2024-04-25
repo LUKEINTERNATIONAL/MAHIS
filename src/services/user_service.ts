@@ -118,7 +118,6 @@ export class UserService extends Service {
         sessionStorage.setItem("app", JSON.stringify({ programID: 32, applicationName: "NCD" }));
         const patient = new PatientService();
         const visits = await PatientService.getPatientVisits(patient.getID(), false);
-        console.log("🚀 ~ UserService ~ setNCDValue ~ visits:", visits);
         const activities = await this.getUserActivities("NCD_activities");
         let url = "";
         let NCDProgramActionName = "";

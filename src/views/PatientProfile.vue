@@ -153,18 +153,16 @@
                 </ion-row>
             </div>
 
-            <ion-popover trigger="open-dates-trigger" trigger-action="click" :show-backdrop="false" size="auto">
-                <ul style="list-style: none; line-height: 50px" v-for="(item, index) in visits" :key="index">
-                    <li>NCD consultation</li>
-                    <li>OPD consultation</li>
-                    <li>Immunization consultation</li>
-                </ul>
-            </ion-popover>
-            <div class="displayNoneDesktop flex-item">
-                <DynamicButton fill="outline" name="Templates/Forms" iconSlot="statransparentrt" :icon="chevronBackOutline" />
-                <DynamicButton fill="outline" iconSlot="" id="programList" :icon="iconsContent.plus" />
-            </div>
-            <ion-popover trigger="programList" trigger-action="click" :show-backdrop="false" size="auto">
+            <ion-popover
+                mobilePopover
+                trigger="programList"
+                trigger-action="click"
+                :show-backdrop="false"
+                size="auto"
+                :dismiss-on-select="true"
+                alignment="center"
+                class="displayNoneDesktop"
+            >
                 <ul style="list-style: none; line-height: 50px">
                     <li class="listPrograma" v-if="programAccess('NCD PROGRAM')" style="margin-bottom: 20px" @click="nav(NCDUserAction.url)">
                         {{ NCDUserAction.actionName }}
@@ -189,6 +187,22 @@
                     </li>
                 </ul>
             </ion-popover>
+            <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="displayNoneDesktop">
+                <ion-fab-button color="tertiary">
+                    <ion-icon :icon="chevronUpCircle"></ion-icon>
+                </ion-fab-button>
+                <ion-fab-list side="top">
+                    <ion-fab-button data-desc="Templates/Forms">
+                        <ion-icon :icon="document"></ion-icon>
+                    </ion-fab-button>
+                    <ion-fab-button data-desc="Print Out & Other">
+                        <ion-icon :icon="medkit"></ion-icon>
+                    </ion-fab-button>
+                    <ion-fab-button data-desc="Apps" id="programList">
+                        <ion-icon :icon="grid"></ion-icon>
+                    </ion-fab-button>
+                </ion-fab-list>
+            </ion-fab>
         </ion-content>
     </ion-page>
 </template>
@@ -216,9 +230,23 @@ import {
     IonCol,
     IonGrid,
     IonIcon,
+    IonFab,
+    IonFabButton,
+    IonFabList,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
-import { chevronBackOutline, checkmark, gridOutline } from "ionicons/icons";
+import {
+    medkit,
+    chevronBackOutline,
+    checkmark,
+    grid,
+    chevronDownCircle,
+    chevronForwardCircle,
+    chevronUpCircle,
+    colorPalette,
+    document,
+    globe,
+} from "ionicons/icons";
 import { modalController } from "@ionic/vue";
 import { icons } from "@/utils/svg";
 
@@ -285,6 +313,9 @@ export default defineComponent({
         IonGrid,
         IonIcon,
         DynamicButton,
+        IonFab,
+        IonFabButton,
+        IonFabList,
     },
     data() {
         return {
@@ -325,7 +356,18 @@ export default defineComponent({
     setup() {
         const modal = ref();
 
-        return { chevronBackOutline, checkmark, gridOutline };
+        return {
+            chevronBackOutline,
+            checkmark,
+            grid,
+            chevronDownCircle,
+            chevronForwardCircle,
+            chevronUpCircle,
+            colorPalette,
+            document,
+            globe,
+            medkit,
+        };
     },
 
     methods: {
@@ -342,7 +384,6 @@ export default defineComponent({
             }
         },
         async setNCDValue() {
-            console.log("🚀 ~ setNCDValue ~ NCDUserAction:", this.userActions);
             await UserService.setUserActivities();
             sessionStorage.setItem("app", JSON.stringify({ programID: 32, applicationName: "NCD" }));
             if (this.userActions.length > 0) [{ NCDUserAction: this.NCDUserAction }] = this.userActions;
@@ -407,12 +448,21 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.flex-item {
-    position: fixed;
-    bottom: 50px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
+ion-fab-button[data-desc] {
+    position: relative;
+}
+
+ion-fab-button[data-desc]::after {
+    position: absolute;
+    content: attr(data-desc);
+    z-index: 1;
+    right: 50px;
+    bottom: 7px;
+    color: var(--ion-color-contrast, rgb(112, 109, 109));
+    background-color: var(--ion-color-base, #fff);
+    padding: 5px 10px;
+    border-radius: 10px;
+    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
 }
 #container {
     text-align: center;
