@@ -370,7 +370,7 @@ const list_picker_prperties = [
     {
         multi_Selection: false as any,
         show_list_label: true as any,
-        unqueId: 'qwerty1' as any,
+        unqueId: 'qwerty1hjkn' as any,
         name_of_list: 'How did it occur?' as any,
         placeHolder: 'Choose one' as any,
         items: causesOfDeath.value,
@@ -480,7 +480,7 @@ function listUpdated2(data: any) {
             temP_AA.value = false
             return
         } else if (index == 3 && datum.selected == false) {
-            resetSelectionForCausesOfDeath()
+            //resetSelectionForCausesOfDeath()
             temP_AA.value = true
         }
     })
