@@ -40,7 +40,7 @@ import { icons } from "@/utils/svg";
 import { mapState } from "pinia";
 import Stepper from "@/apps/ANC/components/Stepper.vue";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
-import PastObstreticHistory from "../components/profile/PastObstreticHistory.vue";
+import PastObstreticHistory from "@/apps/ANC/components/profile/PastObstreticHistory.vue";
 import CurrentPregnancies from "../components/profile/CurrentPregnancies.vue";
 import Medications from "../components/profile/Medications.vue";
 import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue";
@@ -146,7 +146,7 @@ export default defineComponent({
             StepperData: [
                 {
                     title: "Past Obstetric History",
-                    component: "PastObstetricHistory",
+                    component: "PastObstreticHistory",
                     value: "1",
                 },
                 {
@@ -201,6 +201,7 @@ export default defineComponent({
                 return item?.data;
             });
         },
+       
          async saveData() {
             this.savePrevPregnancies()
             this.savePreterm()
@@ -211,6 +212,8 @@ export default defineComponent({
             this.saveCurrentPrengancy()
             this.saveMedication()
             this.saveCaffeinIntake()
+            toastSuccess("Profile data saved successfully")
+            this.$router.push("headssAssessment");
         },
         async savePrevPregnancies(){
         // if (this.prevPregnancies[0].selectedData.length > 0) {

@@ -134,8 +134,10 @@ export const useTBScreeningStore = defineStore('TBScreeningStore',{
                 checkboxBtnContent:
                     {
                         header:{
-                            title: '',
+                            title: 'Reasons TB Screeening not done',
                             selectedValue: '',
+                            class:'bold',
+                            displayNone:true,
                             name:'Reason not done'
                         },
                         data:[
@@ -168,6 +170,7 @@ export const useTBScreeningStore = defineStore('TBScreeningStore',{
                         header:{
                             title: '',
                             selectedValue: '',
+                            displayNone:true,
                             name: 'Reason not done'
                         },
                         data:[
@@ -199,7 +202,8 @@ export const useTBScreeningStore = defineStore('TBScreeningStore',{
                         header:{
                             title: '',
                             selectedValue: '',
-                            name: 'Reason not done'
+                            name: 'Reason not done',
+                            displayNone:true,
                         },
                         data:[
                             {
@@ -231,13 +235,14 @@ export const useTBScreeningStore = defineStore('TBScreeningStore',{
                         header:{
                             title: '',
                             selectedValue: '',
+                            displayNone:true,
                             name: "Reason not done"
 
                         },
                         data:[
                             {
                                 name: 'Technician not available',
-                                value: 'Technician not available   s',
+                                value: 'Technician not available',
                                 checked: false,
                                 labelPlacement: 'start',
                                 colSize: '6',
@@ -264,7 +269,7 @@ export const useTBScreeningStore = defineStore('TBScreeningStore',{
                     {
                         header: {
                             selectedValue:"",
-                            name:'Other'
+                          
 
                         },
                         rowData:[

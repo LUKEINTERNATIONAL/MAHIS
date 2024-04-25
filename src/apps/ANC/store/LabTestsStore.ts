@@ -13,7 +13,7 @@ export const useLabTestsStore = defineStore ('labTestsStore', {
                     header:{
                         title: 'Select whether?',
                         selectedValue: '',
-                        name: 'Ultrasound scan status?',
+                        name: 'Ultrasound scan status',
                     },
                     data:[
                         {
@@ -50,6 +50,9 @@ export const useLabTestsStore = defineStore ('labTestsStore', {
             },
             {
                 classDash:'dashed_bottom_border _padding',
+                header : {
+                    name: 'Scan date'
+                },
                 data:
                 { 
                     rowData:[
@@ -57,6 +60,7 @@ export const useLabTestsStore = defineStore ('labTestsStore', {
                             colData: [
                                 {
                                     inputHeader: 'Ultrasound Scan Date',
+                                    displayNone: true,
                                     value: '',
                                     name: 'Scan date',
                                     valueType: 'date',
@@ -84,12 +88,14 @@ export const useLabTestsStore = defineStore ('labTestsStore', {
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: '',
+                classDash: 'dashed_bottom_border _padding',
                 radioBtnContent:
                 {
                     header:{
                         title: 'Reason ultrasound scan not done',
                         selectedValue: '',
+                        displayNone: true,
+                        class: 'bold',
                         name: 'Reason not done',
                     },
                     data:[
@@ -129,6 +135,7 @@ export const useLabTestsStore = defineStore ('labTestsStore', {
                                 colData: [
                                     {
                                         inputHeader: 'Other (specify)',
+                                        displayNone: true,
                                         unit: '',
                                         icon: icons.editPen,
                                         value: '',

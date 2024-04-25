@@ -88,9 +88,9 @@ export default defineComponent({
       this.$router.push(url);
     },
     handleFetalPresentation(){
-      if(getRadioSelectedValue(this.fetalPresentation, 'fetalPresentation')=='other'){
-        modifyFieldValue(this.fetalPresentation,'Other fetal presentation','displayNone', false)
-      }   else {modifyFieldValue(this.fetalPresentation,'Other fetal presentation','displayNone', true)}
+      if(getRadioSelectedValue(this.fetalPresentation, 'Fetal presentation')=='other'){
+        modifyFieldValue(this.fetalPresentation,'Other (specify)','displayNone', false)
+      }   else {modifyFieldValue(this.fetalPresentation,'Other (specify)','displayNone', true)}
     },
 
   }

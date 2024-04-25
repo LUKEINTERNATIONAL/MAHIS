@@ -201,10 +201,67 @@ export default defineComponent({
      ...(await formatInputFiledData(this.examsAfterDeliveryforChild)),
       ]
     },
+    //
+    // async saveConfirmPregnancy() {
+    //   if (this.ConfirmPregnancy.length > 0) {
+    //     const userID: any = Service.getUserID();
+    //     const ConfirmPregnancy = new ConfirmPregnancyService(this.demographics.patient_id, userID);
+    //     const encounter = await ConfirmPregnancy.createEncounter();
+    //     if (!encounter) return toastWarning("Unable to create patient pregnancy confirmation encounter");
+    //     const patientStatus = await ConfirmPregnancy.saveObservationList(await this.buildConfirmPregnancy());
+    //     if (!patientStatus) return toastWarning("Unable to create patient pregnancy confirmation details!");
+    //     toastSuccess("Pregnancy confirmation details have been created");
+    //   }
+    //   console.log(await this.buildConfirmPregnancy())
+    // },
+    // async saveHealthConcerns() {
+    //   if (this.HealthConcerns.length > 0) {
+    //     const userID: any = Service.getUserID();
+    //     const HealthConcerns = new SpecificHealthConcernsService(this.demographics.patient_id, userID);
+    //     const encounter = await HealthConcerns.createEncounter();
+    //     if (!encounter) return toastWarning("Unable to create patient health concerns encounter");
+    //     const patientStatus = await HealthConcerns.saveObservationList(await this.buildHealthConcerns());
+    //     if (!patientStatus) return toastWarning("Unable to create patient health concerns!");
+    //     toastSuccess("Patient's specific health concerns have been created");
+    //   }
+    //   console.log(await this.buildHealthConcerns())
+    // },
 
-    openModal(){
-      createModal(SaveProgressModal)
-    }
+    openModal() {
+      createModal(SaveProgressModal);
+    },
+
+    // async buildChecksForChild() {
+    //   return [
+    //     ...(await formatCheckBoxData(this.examsAfterDeliveryForChild)),
+    //     ...(await formatRadioButtonData(this.examsAfterDeliveryForChild)),
+    //     ...(await formatInputFiledData(this.examsAfterDeliveryForChild)),
+    //   ];
+    // },
+    // async buildChecksForMother() {
+    //   return [
+    //     ...(await formatCheckBoxData(this.examsAfterDelivery)),
+    //     ...(await formatRadioButtonData(this.examsAfterDelivery)),
+    //     ...(await formatInputFiledData(this.examsAfterDelivery)),
+    //   ];
+    // },
+    //
+    // async buildHealthConcerns() {
+    //   return [
+    //     ...(await formatCheckBoxData(this.HealthConcerns)),
+    //     ...(await formatRadioButtonData(this.HealthConcerns)),
+    //     ...(await formatInputFiledData(this.HealthConcerns)),
+    //   ];
+    // },
+    // async buildReasonForVisit() {
+    //   return [
+    //     ...(await formatCheckBoxData(this.HealthConcerns)),
+    //     ...(await formatRadioButtonData(this.HealthConcerns)),
+    //     ...(await formatInputFiledData(this.HealthConcerns)),
+    //   ];
+    // },
+
+
   }
 })
 </script>

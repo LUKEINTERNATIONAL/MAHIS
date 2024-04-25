@@ -1,69 +1,6 @@
 import { defineStore } from "pinia"
 import { icons } from '@/utils/svg';
 
-const referralForm ={
-        referralForUrgentCareYes:{
-        name:"Yes",
-        value:"yes"
-    },
-        referralForUrgentCareNo:{
-        name:"No",
-        value:"no"
-    },
-        referralScreeningDiagnostics:{
-        name:"Referral for screening including diagnostics",
-        value:"referralScreeningDiagnostics"
-    },
-        referralGeneralServices:{
-        name:'Referral for other general services',
-        value:'referralGeneralServices'
-    },
-        treatmentBeforeReferralYes:{
-        name:"Yes",
-        value:"yes"
-    },
-        treatmentBeforeReferralNo:{
-        name:"No",
-        value:"no"
-    },
-        dateScheduledReferral:{
-        name:"Date scheduled referral",
-        value:""
-    },
-        timeScheduledReferral:{
-        name:"time scheduled referral",
-        value:""
-    },
-        locationOfreferral:{
-        name:"Location of referral",
-        value:""
-    },
-        dateReferralMade:{
-        name:"Date referral was made",
-        value:""
-    },
-        timeReferralMade:{
-        name:"time referral made",
-        value:""
-    },
-        providerFacility:{
-        name:"Provider’s facility",
-        value:""
-    },
-        providerPhoneNumber:{
-        name:"Provider’s phone number",
-        value:""
-    },
-        referralNotes:{
-        name:"Referral notes*",
-        value:""
-    },
-        clientHistorySummary:{
-        name:"Client history summary",
-        value:""
-    },
-   
-}
 
 export const useReferralStore = defineStore('referralStore',{
     state: () =>({
@@ -78,17 +15,17 @@ export const useReferralStore = defineStore('referralStore',{
                         title: 'Referral for urgent care',
                         selectedValue: '',
                         class:"bold",
-                        name:'referalOption'
+                        name:'referral for urgent care'
                     },
                     data:[
                         {  
-                            name: referralForm.referralForUrgentCareYes.name,
-                            value: referralForm.referralForUrgentCareYes.value,
+                            name: 'Yes',
+                            value: 'Yes',
                             colSize: "2.5",
                         },
                         { 
-                            name: referralForm.referralForUrgentCareNo.name,
-                            value: referralForm.referralForUrgentCareNo.value,
+                            name: 'No',
+                            value: 'No',
                             colSize: "2.5",
                         },
                     ]
@@ -104,21 +41,21 @@ export const useReferralStore = defineStore('referralStore',{
                         selectedValue: '',
                         displayNone: true,
                         class:"bold",
-                        name:"referralOutcome",
+                        name:"Reason for referral",
                     },
                     data:[
                         {  
-                            name: referralForm.referralScreeningDiagnostics.name,
-                            value: referralForm.referralScreeningDiagnostics.value,
+                            name: "Referral for screening including diagnostics",
+                            value: "Referral for screening ",
                             labelPlacement:'start',
-                            colSize: "2.5",
+                            colSize: "7",
                             justify:"space-between" 
                         },
                         { 
-                            name: referralForm.referralGeneralServices.name,
-                            value: referralForm.referralGeneralServices.value,
+                            name: 'Referral for other general services',
+                            value: 'Referral for other general services',
                             labelPlacement:'start',
-                            colSize: "2.5",
+                            colSize: "7",
                             justify:"space-between" 
                         },
                     ]
@@ -136,13 +73,13 @@ export const useReferralStore = defineStore('referralStore',{
                     },
                     data:[
                         {  
-                            name: referralForm.treatmentBeforeReferralYes.name,
-                            value: referralForm.treatmentBeforeReferralYes.value,
+                            name: 'Yes',
+                            value: 'Yes',
                             colSize: "2.5",
                         },
                         { 
-                            name: referralForm.treatmentBeforeReferralNo.name,
-                            value: referralForm.treatmentBeforeReferralNo.value,
+                            name: "No",
+                            value: "No",
                             colSize: "2.5",
                         },
                     ]
@@ -162,16 +99,18 @@ export const useReferralStore = defineStore('referralStore',{
                                 {
                                     inputHeader: 'Date',
                                     icon: icons.calenderPrimary,
-                                    name: referralForm.dateScheduledReferral.name,
-                                    value: referralForm.dateScheduledReferral.value,
+                                    name: "Date scheduled referral",
+                                    value: "Date scheduled referral",
                                     eventType: 'input',
+                                    valueType: 'date',
                                     required: true,
                                     isDatePopover: true
                                 },
                                     {
                                     inputHeader: 'Time',
-                                    name: referralForm.timeScheduledReferral.name,
-                                    value: referralForm.timeScheduledReferral.value,
+                                    name: 'Time scheduled referral',
+                                    value: "Time scheduled referral",
+                                    valueType: "date",
                                     eventType: 'input',
                                     required: true
                                 }
@@ -195,9 +134,10 @@ export const useReferralStore = defineStore('referralStore',{
                             colData:[
                                 {
                                     inputHeader: 'Location',
-                                    name: referralForm.locationOfreferral.name,
-                                    value: referralForm.locationOfreferral.value,
+                                    name: "Location of referral",
+                                    value: "Location of referral",
                                     eventType: 'input',
+                                    valueType: 'text',
                                     required: true
                                 },
                                 
@@ -221,17 +161,19 @@ export const useReferralStore = defineStore('referralStore',{
                                 {
                                     inputHeader: 'Date',
                                     icon: icons.calenderPrimary,
-                                    name: referralForm.dateReferralMade.name,
-                                    value: referralForm.dateReferralMade.value,
+                                    name: "Date referral was made",
+                                    value: "Date referral was made",
                                     eventType: 'input',
+                                    valueType:'date',
                                     required: true,
                                     isDatePopover: true
                                 },
                                     {
                                     inputHeader: 'Time',
-                                    name: referralForm.timeReferralMade.name,
-                                    value: referralForm.timeReferralMade.value,
+                                    name: "Time referral made",
+                                    value: "Time referral made",
                                     eventType: 'input',
+                                    valueType:'text',
                                     required: true
                                 }
                                 
@@ -254,16 +196,17 @@ export const useReferralStore = defineStore('referralStore',{
                             colData:[
                                 {
                                     inputHeader: 'Provider’s facility',
-                                    name: referralForm.providerFacility.name,
-                                    value: referralForm.providerFacility.value,
+                                    name: 'Provider’s facility',
+                                    value: 'Provider’s facility',
                                     eventType: 'input',
+                                    valueType:'text',
                                     required: true
                                 },
                                     {
                                     inputHeader: 'Provider’s phone number',
                                     icon: icons.editPen,
-                                    name: referralForm.providerPhoneNumber.name,
-                                    value: referralForm.providerPhoneNumber.value,
+                                    name: 'Provider’s phone number',
+                                    value: 'Provider’s phone number',
                                     eventType: 'input',
                                     required: true
                                 },
@@ -289,16 +232,16 @@ export const useReferralStore = defineStore('referralStore',{
                                 {
                                     inputHeader: 'Referral notes',
                                     icon: icons.editPen,
-                                    name: referralForm.referralNotes.name,
-                                    value: referralForm.referralNotes.value,
+                                    name: 'Referral notes',
+                                    value:'Referral notes',
                                     eventType: 'input',
                                     required: true
                                 },
                                 {
                                     inputHeader: 'Client history summary',
                                     icon: icons.editPen,
-                                    name: referralForm.clientHistorySummary.name,
-                                    value: referralForm.clientHistorySummary.value,
+                                    name: 'Client history summary',
+                                    value: 'Client history summary',
                                     eventType: 'input',
                                     required: true
                                 }

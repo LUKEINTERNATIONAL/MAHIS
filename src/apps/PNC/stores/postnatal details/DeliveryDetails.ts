@@ -1,570 +1,589 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
 
-export const useDeliveryDetailsStore = defineStore('deliveryDetailsStore',{
-    state: () => ({
-        deliveryDetails: [
+const initialDeliveryDetails=[
+    {
+        isFinishBtn: false,
+        sectionHeader: '',
+        classDash: '',
+        data:
             {
-                isFinishBtn: false,
-                sectionHeader: '',
-                classDash: '',
-                data:
+                rowData:[
                     {
-                        rowData:[
+                        colData: [
                             {
-                                colData: [
-                                    {
-                                        inputHeader: 'Date of delivery',
-                                        value: '',
-                                        name: 'Date of delivery',
-                                        icon: icons.calenderPrimary,
-                                        required: true,
-                                        eventType: 'input',
-                                        alertsError: false,
-                                        calenderPopover:true,
-                                        alertsErrorMassage: '',
-                                        placeholder:'Pick date'
-                                    },
-
-                                ],
-
+                                inputHeader: 'Date of delivery',
+                                value: '',
+                                name: 'Date of delivery',
+                                icon: icons.calenderPrimary,
+                                required: true,
+                                valueType:'text',
+                                eventType: 'input',
+                                alertsError: false,
+                                calenderPopover:true,
+                                alertsErrorMassage: '',
+                                placeholder:'Pick date'
                             },
 
                         ],
 
                     },
 
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Mode of delivery',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Spontaneous Vertex Delivery (SVD)',
-                                value: 'spontaneous vertex delivery',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: ' Vacuum Extraction (VE)',
-                                value: 'no',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Breech (BR)',
-                                value: 'breech',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Caesarean section',
-                                value: 'caesarean section',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Other',
-                                value: 'other',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
+                ],
 
             },
+
+    },
+
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
             {
-                isFinishBtn: false,
-                sectionHeader: '',
-                classDash: 'dashed_bottom_border _padding',
-
-                data:
+                header:{
+                    title: 'Mode of delivery',
+                    selectedValue: '',
+                    class:"bold",
+                    name:"Mode of delivery",
+                    displayNext:"Other mode of delivery"
+                },
+                data:[
                     {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'specify',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'other',
-                                        required: true,
-                                        eventType: 'input',
-                                        inputWidth: "",
-                                    },
-
-                                ]
-                            }
-                        ]
+                        name: 'Spontaneous Vertex Delivery (SVD)',
+                        value: 'Spontaneous vertex delivery',
+                        colSize: '5',
                     },
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
                     {
-                        header:{
-                            title: 'Place of delivery',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'This facility',
-                                value: 'this facility',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'In transit',
-                                value: 'in transit',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Other facility',
-                                value: 'other facility',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Home/TBA',
-                                value: 'home/tba',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Staff conducting delivery',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'MD/CO/MA/Nurse midwife/CMA',
-                                value: 'md/co/ma/nurse midwife/cma',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'PA/WA/HSA/Other/None',
-                                value: 'pa/wa/hsa/other/none',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'What was the outcome of the delivery?',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Live birth',
-                                value: 'live birth',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Neonatal death',
-                                value: 'neonatal death',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Still birth',
-                                value: 'still birth',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                    {
-                        header:{
-                            title: 'Type of still birth?',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Macerated still birth',
-                                value: 'macerated still birth',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Fresh still birth',
-                                value: 'fresh still birth',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                isFinishBtn: false,
-                sectionHeader: '',
-                classDash: 'dashed_bottom_border _padding',
-
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'Total number of babies',
-                                        unit: 'baby',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'Total number of babies',
-                                        required: true,
-                                        eventType: 'input',
-                                        inputWidth: '',
-                                    },
-
-                                ]
-                            }
-                        ]
+                        name: 'Vacuum Extraction (VE)',
+                        value: 'Vacuum Extraction',
+                        colSize: '5',
                     },
-            },
-            {
-                isFinishBtn: false,
-                sectionHeader: '',
-                classDash: 'dashed_bottom_border _padding',
-
-                data:
                     {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'First name',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'first name',
-                                        required: true,
-                                        eventType: 'input',
-                                        inputWidth: '',
-                                    },
-                                    {
-                                        inputHeader: 'Last name',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'last name',
-                                        required: true,
-                                        eventType: 'input',
-                                        inputWidth: '',
-                                    },
-
-                                ]
-                            }
-                        ]
+                        name: 'Breech (BR)',
+                        value: 'Breech',
+                        colSize: '5',
                     },
-            },
-            {
-                isFinishBtn: false,
-                sectionHeader: '',
-                classDash: 'dashed_bottom_border _padding',
-
-                data:
                     {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'Birth weight',
-                                        unit: 'gm',
-                                        icon: icons.weight,
-                                        value: '',
-                                        name: 'birth weight',
-                                        required: true,
-                                        eventType: 'input',
-                                        inputWidth: '',
-                                    },
-                                    {
-                                        inputHeader: 'Birth length',
-                                        unit: 'cm',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'birth length',
-                                        required: true,
-                                        eventType: 'input',
-                                        inputWidth: '',
-                                    },
-
-                                ]
-                            }
-                        ]
+                        name: 'Caesarean section',
+                        value: 'Caesarean section',
+                        colSize: '5',
                     },
-            },
-            {
-                isFinishBtn: false,
-                sectionHeader: '',
-                classDash: 'dashed_bottom_border _padding',
-
-                data:
                     {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'APGAR score at 5 minutes',
-                                        unit: '',
-                                        icon: icons.weight,
-                                        value: '',
-                                        name: 'apgar score at 5 minutes',
-                                        required: true,
-                                        eventType: 'input',
-                                        inputWidth: '',
-                                    },
-                                ]
-                            }
-                        ]
+                        name: 'Other mode of delivery',
+                        value: 'Other mode of delivery',
+                        colSize: '5',
                     },
-            },
+                ]
+            }
 
+    },
+    {
+        childName:'Mode of delivery',
+        isFinishBtn: false,
+        sectionHeader: '',
+        classDash: 'dashed_bottom_border _padding',
+
+        data:
             {
-                selectdData: [],
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
+                rowData:[
                     {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-
+                        colData: [
                             {
-                                name: 'None',
-                                value: 'none',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Prematurity',
-                                value: 'prematurity',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-            {
-                selectdData: [],
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-
-                            {
-                                name: 'Sepsis',
-                                value: 'sepsis',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Congenital abnormalities',
-                                value: 'congenital abnormalities',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                        ]
-                    }
-
-            },
-
-            {
-                classDash: 'dashed_bottom_border',
-                checkboxBtnContent:
-                    {
-                        header:{
-                            title: '',
-                            selectedValue: ''
-                        },
-                        data:[
-                            {
-                                name: 'Asphyxia',
-                                value: 'asphyxia',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Other',
-                                value: 'other',
-                                checked: false,
-                                labelPlacement: 'start',
-                                colSize: '6',
-                                justify: 'space-between',
+                                displayNone:true,
+                                inputHeader: 'Specify',
+                                unit: '',
+                                icon: icons.editPen,
+                                value: '',
+                                name: 'Other mode of delivery notes',
+                                required: true,
+                                eventType: 'input',
+                                inputWidth: "",
                             },
 
                         ]
                     }
-
+                ]
             },
+    },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
             {
-                isFinishBtn: false,
-                sectionHeader: '',
-                classDash: 'dashed_bottom_border _padding',
-
-                data:
+                header:{
+                    title: 'Place of delivery',
+                    selectedValue: '',
+                    name:'Place of delivery',
+                    class:'bold'
+                },
+                data:[
                     {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'Specify',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'other',
-                                        required: true,
-                                        eventType: 'input',
-                                        inputWidth: "",
-                                    },
+                        name: 'This facility',
+                        value: 'this facility',
+                        colSize: '5',
 
-                                ]
-                            }
-                        ]
                     },
-            },
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
                     {
-                        header:{
-                            title: 'Was resuscitation attempted?',
-                            selectedValue: ''
-                        },
-                        data:[
+                        name: 'In transit',
+                        value: 'in transit',
+                        colSize: '5',
+
+                    },
+                    {
+                        name: 'Other facility',
+                        value: 'other facility',
+                        colSize: '5',
+
+                    },
+                    {
+                        name: 'Home or TBA',
+                        value: 'home/tba',
+                        colSize: '5',
+
+                    },
+                ]
+            }
+
+    },
+
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Staff conducting delivery',
+                    selectedValue: '',
+                    class:'bold',
+                    name:'Staff conducting delivery'
+                },
+                data:[
+                    {
+                        name: 'MD/CO/MA/Nurse midwife/CMA',
+                        value: 'md/co/ma/nurse midwife/cma',
+                        colSize: '7',
+
+                    },
+                    {
+                        name: 'PA/WA/HSA/Other/None',
+                        value: 'pa/wa/hsa/other/none',
+                        colSize: '7',
+
+                    },
+                ]
+            }
+
+    },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'What was the outcome of the delivery?',
+                    selectedValue: '',
+                    class:'bold',
+                    name:'Outcome of the delivery',
+                    displayNext:'Stillbirths'
+                },
+                data:[
+                    {
+                        name: 'Live births',
+                        value: 'live births',
+                        colSize: '7',
+
+                    },
+                    {
+                        name: 'Neonatal death',
+                        value: 'neonatal death',
+                        colSize: '7',
+
+                    },
+                    {
+                        name: 'Stillbirths',
+                        value: 'Stillbirths',
+                        colSize: '7',
+
+                    },
+                ]
+            }
+
+    },
+    {
+        childName: 'Outcome of the delivery',
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Type of still birth?',
+                    selectedValue: '',
+                    class:'bold',
+                    name:'Type of still birth',
+                    displayNone:true
+
+                },
+                data:[
+                    {
+                        name: 'Macerated still birth',
+                        value: 'macerated still birth',
+                        colSize: '7',
+
+                    },
+                    {
+                        name: 'Fresh still birth',
+                        value: 'fresh still birth',
+                        colSize: '7',
+
+                    },
+                ]
+            }
+
+    },
+    {
+        isFinishBtn: false,
+        sectionHeader: '',
+        classDash: 'dashed_bottom_border _padding',
+
+        data:
+            {
+                rowData:[
+                    {
+                        colData: [
                             {
-                                name: 'Yes',
-                                value: 'yes',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                inputHeader: 'Total number of babies',
+                                unit: 'baby',
+                                icon: icons.editPen,
+                                value: '',
+                                valueType:'text',
+                                name: 'Number of babies',
+                                required: true,
+                                eventType: 'input',
+                                inputWidth: '',
+                            },
+
+                        ]
+                    }
+                ]
+            },
+    },
+    {
+        isFinishBtn: false,
+        sectionHeader: '',
+        classDash: 'dashed_bottom_border _padding',
+
+        data:
+            {
+                rowData:[
+                    {
+                        colData: [
+                            {
+                                inputHeader: 'First name',
+                                unit: '',
+                                icon: icons.editPen,
+                                value: '',
+                                valueType:'text',
+                                name: 'First name',
+                                required: true,
+                                eventType: 'input',
+                                inputWidth: '',
                             },
                             {
-                                name: 'No',
-                                value: 'no',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                inputHeader: 'Last name',
+                                unit: '',
+                                icon: icons.editPen,
+                                value: '',
+                                valueText:'text',
+                                name: 'Last name',
+                                required: true,
+                                eventType: 'input',
+                                inputWidth: '',
+                            },
+
+                        ]
+                    }
+                ]
+            },
+    },
+    {
+        isFinishBtn: false,
+        sectionHeader: '',
+        classDash: 'dashed_bottom_border _padding',
+        data:
+            {
+                rowData:[
+                    {
+                        colData: [
+                            {
+                                inputHeader: 'Birth weight',
+                                unit: 'gm',
+                                icon: icons.weight,
+                                value: '',
+                                valueType:'text',
+                                name: 'Weight',
+                                required: true,
+                                eventType: 'input',
+                                inputWidth: '',
+                            },
+                            {
+                                inputHeader: 'Birth height',
+                                unit: 'cm',
+                                icon: icons.editPen,
+                                value: '',
+                                name: 'Height',
+                                required: true,
+                                eventType: 'input',
+                                inputWidth: '',
+                            },
+
+                        ]
+                    }
+                ]
+            },
+    },
+    {
+        isFinishBtn: false,
+        sectionHeader: '',
+        classDash: 'dashed_bottom_border _padding',
+
+        data:
+            {
+                rowData:[
+                    {
+                        colData: [
+                            {
+                                inputHeader: 'APGAR score at 5 minutes',
+                                unit: '',
+                                icon: icons.weight,
+                                value: '',
+                                valueType:'text',
+                                name: 'Apgar score at 5 minutes',
+                                required: true,
+                                eventType: 'input',
+                                inputWidth: '',
                             },
                         ]
                     }
-
+                ]
             },
+    },
+
+    {
+        selectdData: [],
+        classDash: 'dashed_bottom_border',
+        checkboxBtnContent:
             {
-                selectdData: [],
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
+                header:{
+                    title: 'Newborn complications',
+                    selectedValue: '',
+                    class:'bold',
+                    name:'Newborn baby complications'
+                },
+                data:[
+
                     {
-                        header:{
-                            title: 'Type of resuscitation',
-                            selectedValue: ''
-                        },
-                        data:[
+                        name: 'None',
+                        value: 'none',
+                        checked: false,
+                        labelPlacement: 'start',
+                        colSize: '6',
+                        justify: 'space-between',
+                    },
+                    {
+                        name: 'Prematurity',
+                        value: 'prematurity',
+                        checked: false,
+                        labelPlacement: 'start',
+                        colSize: '6',
+                        justify: 'space-between',
+                    },
+                ]
+            }
+
+    },
+    {
+        selectdData: [],
+        classDash: 'dashed_bottom_border',
+        checkboxBtnContent:
+            {
+                header:{
+                    title: '',
+                    selectedValue: '',
+                    name:'Newborn complications'
+
+                },
+                data:[
+
+                    {
+                        name: 'Sepsis',
+                        value: 'sepsis',
+                        checked: false,
+                        labelPlacement: 'start',
+                        colSize: '6',
+                        justify: 'space-between',
+                    },
+                    {
+                        name: 'Congenital abnormalities',
+                        value: 'congenital abnormalities',
+                        checked: false,
+                        labelPlacement: 'start',
+                        colSize: '6',
+                        justify: 'space-between',
+                    },
+                ]
+            }
+
+    },
+
+    {
+        classDash: 'dashed_bottom_border',
+        checkboxBtnContent:
+            {
+                header:{
+                    title: '',
+                    selectedValue: '',
+                    name:'Newborn complications'
+
+                },
+                data:[
+                    {
+                        name: 'Asphyxia',
+                        value: 'Asphyxia',
+                        checked: false,
+                        labelPlacement: 'start',
+                        colSize: '6',
+                        justify: 'space-between',
+                    },
+                    {
+                        name: 'Other complications',
+                        value: 'Other complications',
+                        checked: false,
+                        labelPlacement: 'start',
+                        colSize: '6',
+                        justify: 'space-between',
+                    },
+
+                ]
+            }
+
+    },
+    {
+        childName:'Other complications',
+        isFinishBtn: false,
+        sectionHeader: '',
+        classDash: 'dashed_bottom_border _padding',
+
+        data:
+            {
+                rowData:[
+                    {
+                        colData: [
                             {
-                                name: 'Drying only',
-                                value: 'drying only',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
+                                displayNone:true,
+                                inputHeader: 'Specify',
+                                unit: '',
+                                icon: icons.editPen,
+                                value: '',
+                                name: 'Other complications notes',
+                                required: true,
+                                eventType: 'input',
+                                inputWidth: "",
                             },
-                            {
-                                name: 'Clearing airway',
-                                value: 'clearing airway',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Bag and mask',
-                                value: 'clearing airway',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
+
                         ]
                     }
-
+                ]
             },
+    },
+    {
+        childName:'Asphyxia',
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Was resuscitation attempted?',
+                    selectedValue: '',
+                    class:'bold',
+                    name:'Resuscitation attempt',
+                    displayNext:'Yes',
+                    displayNone:true
 
+                },
+                data:[
+                    {
+                        name: 'Yes',
+                        value: 'Yes',
+                        colSize: '2.5',
 
-        ] as any,
+                    },
+                    {
+                        name: 'No',
+                        value: 'No',
+                        colSize: '2.5',
+
+                    },
+                ]
+            }
+
+    },
+    {
+        childName:"Resuscitation attempt",
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'Type of resuscitation',
+                    selectedValue: '',
+                    class:'bold',
+                    name:'Type of Resuscitation',
+                    displayNone:true
+                },
+                data:[
+                    {
+                        name: 'Drying only',
+                        value: 'drying only',
+                        colSize: '5',
+
+                    },
+                    {
+                        name: 'Clearing airway',
+                        value: 'clearing airway',
+                        colSize: '5',
+
+                    },
+                    {
+                        name: 'Bag and mask',
+                        value: 'clearing airway',
+                        colSize: '5',
+
+                    },
+                ]
+            }
+
+    },
+
+] as any;
+export const useDeliveryDetailsStore = defineStore('deliveryDetailsStore',{
+    state: () => ({
+        deliveryDetails: [...initialDeliveryDetails] as any,
     }),
     actions:{
         setDeliveryDetails(data: any){
             this.deliveryDetails = data
         },
+        getInitial(){
+            const data = [...initialDeliveryDetails]
+            return [...data]
+        }
 
 
     },

@@ -43,12 +43,14 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
             },
                         {
                 selectdData: [],
-                isFinishBtn: false,   
+                isFinishBtn: false,  
+                classDash: 'dashed_bottom_border _padding', 
                 radioBtnContent:
                 {
                     header:{
                         title: 'Select the urine test conducted:',
                         selectedValue: '',
+                        class: 'bold',
                         displayNone:true,
                         name:'Urine test',
                            
@@ -115,23 +117,19 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                 },
                         
             },
-        // ] as any,
-        // // testType:[
-
-        // // ] as any,
-        //  reason:[
             {
                 selectdData: [],
                 isFinishBtn: false,
                  sectionHeader: '',
-                classDash: '',
+                classDash: 'dashed_bottom_border _padding',
                 checkboxBtnContent:
                 {
                     header:{
-                        title: '',
+                        title: 'Reason Urine test not done',
                         selectedValue: '',
-                        // displayNone:true,
-                         name:'Reason not done'
+                        displayNone: true,
+                        class:'bold',
+                        name:'Reason not done'
                     },
                     data:[
                         {   
@@ -168,7 +166,7 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                     {
                         header:{
                             selectedValue: '',
-                            name:'Other',
+                            
                         },
                         rowData:[
                             {
@@ -180,6 +178,7 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                                         icon: icons.editPen,
                                         value: '',
                                         name: 'Other (specify)',
+                                        valueType: 'text',
                                         required: true,
                                         eventType: 'input',
                                         inputWidth: "85%",
@@ -199,8 +198,10 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                 radioBtnContent:
                 {
                     header:{
-                        title: 'Midstream urine culture',
+                        title: 'Midstream urine culture result',
                         selectedValue: '',
+                        displayNone: true,
+                        class:'bold',
                         name: 'Midstream urine culture result'
                     },
                     data:[
@@ -238,8 +239,10 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                 radioBtnContent:
                 {
                     header:{
-                        title: 'Midstream urine gram-staining',
+                        title: 'Midstream urine gram-staining result',
                         selectedValue: '',
+                        displayNone: true,
+                        class: 'bold',
                         name: 'Midstream urine gram-staining result'
                     },
                     data:[
@@ -272,6 +275,8 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                     header:{
                         title: 'Dipstick test result - nitrites',
                         selectedValue: '',
+                        displayNone: true,
+                        class: 'bold',
                         name: 'Nitrites dipstick test result'
                     },
                     data:[
@@ -325,6 +330,8 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                     header:{
                         title: 'Dipstick test result - leukocytes',
                         selectedValue: '',
+                        displayNone: true,
+                        class: 'bold',
                         name: 'Leukocytes dipstick test result'
                     },
                     data:[
@@ -378,6 +385,8 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                     header:{
                         title: 'Dipstick test result - protein',
                         selectedValue: '',
+                        displayNone: true,
+                        class: 'bold',
                         name: 'Protein dipstick test result'
                     },
                     data:[
@@ -431,6 +440,8 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
                     header:{
                         title: 'Dipstick test result - glucose',
                         selectedValue: '',
+                        displayNone: true,
+                        class: 'bold',
                         name: 'Glucose dipstick test result'
                     },
                     data:[

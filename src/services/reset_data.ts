@@ -12,6 +12,7 @@ import { useRegistrationStore } from "@/stores/RegistrationStore";
 import { useGeneralStore } from "@/stores/GeneralStore";
 
 export function resetPatientData() {
+    sessionStorage.setItem("saveProgressStatus", "false");
     const vitals = useVitalsStore();
     const investigations = useInvestigationStore();
     const outcome = useOutcomeStore();

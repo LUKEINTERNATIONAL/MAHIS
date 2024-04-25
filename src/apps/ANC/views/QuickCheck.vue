@@ -251,7 +251,7 @@ export default defineComponent({
       await this.saveReasonForVisit();
       await this.saveConfirmPregnancy();
       await this.saveHealthConcerns();
-      this.$router.push("symptomsFollowUp");
+      this.$router.push("ANCHome");
       this.isLoading = false;
     },
 

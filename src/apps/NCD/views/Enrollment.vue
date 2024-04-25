@@ -143,6 +143,7 @@ import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServ
 import { IdentifierService } from "@/services/identifier_service";
 import { resetPatientData } from "@/services/reset_data";
 import { useGeneralStore } from "@/stores/GeneralStore";
+import { UserService } from "@/services/user_service";
 
 export default defineComponent({
     name: "Home",
@@ -191,7 +192,7 @@ export default defineComponent({
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useConfigurationStore, ["enrollmentDisplayType"]),
-        ...mapState(useGeneralStore, ["saveProgressStatus", "activities"]),
+        ...mapState(useGeneralStore, ["activities"]),
         ...mapState(useEnrollementStore, ["NCDNumber", "enrollmentDiagnosis", "substance", "patientHistoryHIV", "patientHistory"]),
     },
     async mounted() {
@@ -229,14 +230,13 @@ export default defineComponent({
             const exists = await IdentifierService.ncdNumberExists(formattedNCDNumber);
             if (exists) toastWarning("NCD number already exists", 5000);
             else {
-                await this.saveEnrollment();
                 const patient = new PatientService();
                 patient.createNcdNumber(formattedNCDNumber);
                 const demographicsStore = useDemographicsStore();
                 demographicsStore.setPatient(await PatientService.findByID(this.demographics.patient_id));
-                const generalStore = useGeneralStore();
-                generalStore.setSaveProgressStatus("");
+                await this.saveEnrollment();
                 resetPatientData();
+                await UserService.setProgramUserActions();
                 if (this.activities.length == 0) {
                     this.$router.push("patientProfile");
                 } else {
@@ -281,7 +281,6 @@ export default defineComponent({
         },
         async saveEnrollment() {
             const data: any = await this.buildEnrollmentData();
-            console.log("🚀 ~ saveEnrollment ~ data:", data);
             if (data.length > 0) {
                 const userID: any = Service.getUserID();
                 const diagnosisInstance = new Diagnosis();

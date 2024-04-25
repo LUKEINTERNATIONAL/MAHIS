@@ -40,6 +40,7 @@ import { mapState } from 'pinia';
 import BasicForm from '@/components/BasicForm.vue';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import { icons } from '../../../../utils/svg'; 
+import { getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from '@/services/data_helpers';
 
 export default defineComponent({
     name:"Ultrasound",
@@ -65,7 +66,22 @@ export default defineComponent({
           labTestsInstance: {} as any,
           currentSection: 0, 
          
+         
         }
+    },
+    mounted(){
+        this.handleUltraDate()
+        this.handleReason()
+    },
+    watch:{
+        ultrasound:{
+            handler(){
+                this.handleUltraDate()
+                this.handleReason()
+            },
+            deep:true
+        },
+
     },
     computed:{
         ...mapState(useLabTestsStore, ["reason"]),
@@ -73,24 +89,31 @@ export default defineComponent({
         ...mapState(useLabTestsStore, ["amniotic"]),
         ...mapState(useLabTestsStore, ["placenta"]),
     },
-    mounted(){
-        const labTests = useLabTestsStore()
-    },
+  
     setup(){
         return { checkmark,pulseOutline };
     },
     methods:{
-               //Method for navigating sections
-    goToNextSection() {
-      if (this.currentSection < 1) {
-        this.currentSection++;
-      }
-    },
-    goToPreviousSection() {
-      if (this.currentSection > 0) {
-        this.currentSection--;
-      }
-    },
+      handleUltraDate(){
+         const scanRequired = getRadioSelectedValue(this.ultrasound, 'Ultrasound scan status') == 'Scan required';
+         const scanOrdered = getRadioSelectedValue(this.ultrasound, 'Ultrasound scan status') == 'Scan ordered';
+         const scanConducted = getRadioSelectedValue(this.ultrasound, 'Ultrasound scan status') == 'Scan conducted';
+
+            if(scanRequired || scanOrdered || scanConducted){
+              modifyFieldValue(this.ultrasound,'Scan date','displayNone',false)
+            }else{
+                modifyFieldValue(this.ultrasound,'Scan date','displayNone',true)
+            }
+        },
+
+        handleReason(){
+            if(getRadioSelectedValue(this.ultrasound, 'Ultrasound scan status') == 'NOT done'){
+              modifyRadioValue(this.reason,'Reason not done','displayNone',false)
+            }else{
+              modifyRadioValue(this.reason,'Reason not done','displayNone',true)
+            }
+        },
+      
    
     }
 })
