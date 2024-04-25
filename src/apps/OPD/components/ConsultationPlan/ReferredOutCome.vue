@@ -20,6 +20,9 @@
                     <ion-label v-if="list_picker_prperties[0].show_error.value" class="error-label">{{ list_picker_prperties[0].error_message }}</ion-label>
                 </div>
             </ion-col>
+        </ion-row>
+
+        <ion-row>
             <ion-col>
                 <div style="margin-top: 7%;">
                     <DatePicker
