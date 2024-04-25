@@ -34,13 +34,16 @@ import ToolbarSearch from "@/apps/LABOUR/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/LABOUR/components/DemographicBar.vue";
 import { chevronBackOutline,checkmark, checkbox } from 'ionicons/icons';
 import SaveProgressModal from '@/components/SaveProgressModal.vue'
-import { createModal } from '@/utils/Alerts'
+import { createModal, toastSuccess, toastWarning } from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
 import Stepper from "@/apps/LABOUR/components/Stepper.vue";
 import { mapState } from 'pinia';
 import { useLabourReferralStore} from "@/apps/LABOUR/stores/repeatable things/referral"
 import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from '@/services/formatServerData';
 import { getCheckboxInputField, getCheckboxSelectedValue, getRadioSelectedValue, modifyCheckboxInputField, modifyCheckboxValue, modifyFieldValue } from '@/services/data_helpers';
+import { Service } from '@/services/service';
+import { useDemographicsStore } from '@/stores/DemographicStore';
+import { ReferralService } from "@/services/LABOUR/referral_service";
 export default defineComponent({
   name: "referral",
   components:{
@@ -92,7 +95,7 @@ export default defineComponent({
     };
   },
   computed:{
-          //  ...mapState(useDemographicsStore, ["demographics"]),
+      ...mapState(useDemographicsStore, ["demographics"]),
       ...mapState(useLabourReferralStore,['labourReferral'])
   },
   mounted(){
@@ -140,10 +143,19 @@ export default defineComponent({
       });
     },
     saveData(){
-      this.$router.push("labourHome");
+
       this.saveReferal();
     },
     async saveReferal(){
+      if (this.labourReferral.length > 0) {
+        const userID: any = Service.getUserID();
+        const Referal = new  ReferralService (this.demographics.patient_id, userID);
+        const encounter = await Referal.createEncounter();
+        if (!encounter) return toastWarning("Unable to create Referal encounter");
+        const patientStatus = await Referal.saveObservationList(await this.buildReferal());
+        if (!patientStatus) return toastWarning("Unable to create Referal !");
+        toastSuccess("Referal has been created");
+    }
       console.log(await this.buildReferal())
     },
     async buildReferal(){

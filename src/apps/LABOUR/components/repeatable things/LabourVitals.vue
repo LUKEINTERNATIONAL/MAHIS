@@ -32,7 +32,7 @@ import { mapState } from 'pinia';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import {dynamicValue,getCheckboxSelectedValue,getFieldValue,} from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
-import {useVitalsStore} from "@/apps/LABOUR/stores/repeatable things/vitals";
+import {useLabourVitalsStore} from "@/apps/LABOUR/stores/repeatable things/vitals";
 export default defineComponent({
   name: "FirstVaginalExamination",
   components:{
@@ -64,7 +64,7 @@ export default defineComponent({
     };
   },
   computed:{
-    ...mapState(useVitalsStore,["vitals"]),
+    ...mapState(useLabourVitalsStore ,["vitals"]),
   },
   mounted(){
   },

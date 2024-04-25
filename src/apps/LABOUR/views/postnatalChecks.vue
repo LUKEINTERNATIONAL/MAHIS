@@ -34,13 +34,16 @@ import ToolbarSearch from "@/apps/LABOUR/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/LABOUR/components/DemographicBar.vue";
 import { chevronBackOutline,checkmark } from 'ionicons/icons';
 import SaveProgressModal from '@/components/SaveProgressModal.vue'
-import { createModal } from '@/utils/Alerts'
+import { createModal, toastSuccess, toastWarning } from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
 import Stepper from "@/apps/LABOUR/components/Stepper.vue";
 import { mapState } from 'pinia';
 import { useImmediatePostnatalChecksForMotherStore } from '../stores/delivery details/immediatepostnatalChecksForMother';
 import { formatInputFiledData, formatRadioButtonData } from '@/services/formatServerData';
 import { useImmediatePostnatalChecksForChildStore } from '../stores/delivery details/immediatepostnatalChecksForChild';
+import { useDemographicsStore } from '@/stores/DemographicStore';
+import { Service } from '@/services/service';
+import {ChildService, MotherService} from "@/services/LABOUR/postnatal_checks_service";
 export default defineComponent({
   name: "postnatalChecks",
   components:{
@@ -107,6 +110,7 @@ export default defineComponent({
   },
 
   computed:{
+     ...mapState(useDemographicsStore, ["demographics"]),
     ...mapState(useImmediatePostnatalChecksForMotherStore,['examsAfterDelivery']),
      ...mapState(useImmediatePostnatalChecksForChildStore,['examsAfterDeliveryforChild']),
   },
@@ -162,10 +166,28 @@ export default defineComponent({
      this.saveChildChecks();
     },
     async saveMotherChecks(){
-      console.log(await this.buildMotherChecks())
+      if (this.examsAfterDelivery.length > 0) {
+          const userID: any = Service.getUserID();
+          const Mother = new  MotherService(this.demographics.patient_id, userID);
+          const encounter = await Mother.createEncounter();
+          if (!encounter) return toastWarning("Unable to create Mother encounter");
+          const patientStatus = await Mother.saveObservationList(await this.buildMotherChecks());
+          if (!patientStatus) return toastWarning("Unable to create Mother !");
+          toastSuccess("Mother  has been created");
+      }
+     // console.log(await this.buildMotherChecks())
     },
     async saveChildChecks(){
-      console.log(await this.buildChildChecks())
+      if (this.examsAfterDeliveryforChild.length > 0) {
+          const userID: any = Service.getUserID();
+          const Child = new  ChildService(this.demographics.patient_id, userID);
+          const encounter = await Child.createEncounter();
+          if (!encounter) return toastWarning("Unable to create Child encounter");
+          const patientStatus = await Child.saveObservationList(await this.buildMotherChecks());
+          if (!patientStatus) return toastWarning("Unable to create Child !");
+          toastSuccess("Child has been created");
+      }
+     // console.log(await this.buildChildChecks())
     },
     async  buildMotherChecks(){
      return[

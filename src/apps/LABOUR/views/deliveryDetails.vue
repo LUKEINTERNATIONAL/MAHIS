@@ -34,13 +34,16 @@ import ToolbarSearch from "@/apps/LABOUR/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/LABOUR/components/DemographicBar.vue";
 import { chevronBackOutline,checkmark } from 'ionicons/icons';
 import SaveProgressModal from '@/components/SaveProgressModal.vue'
-import { createModal } from '@/utils/Alerts'
+import { createModal, toastSuccess, toastWarning } from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
 import Stepper from "@/apps/LABOUR/components/Stepper.vue";
 import { mapState } from 'pinia';
 import { useSecondStageOfLabourStore } from '../stores/delivery details/secondStageDelivery';
 import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from '@/services/formatServerData';
 import { useThirdStageOfLabour } from '../stores/delivery details/thirdStageDelivery';
+import { useDemographicsStore } from '@/stores/DemographicStore';
+import { SecondStageService, ThirdStageService } from "@/services/LABOUR/Second_stage_of_labour_service";
+import { Service } from '@/services/service';
 export default defineComponent({
   name: "deliveryDetails",
   components:{
@@ -109,6 +112,7 @@ export default defineComponent({
 
   },
   computed:{
+    ...mapState(useDemographicsStore, ["demographics"]),
     ...mapState(useSecondStageOfLabourStore,["secondStageDetails","newbornComplications","secondStageDetails","obstetricComplications"]),
     ...mapState(useThirdStageOfLabour,['placentaExamination'])
   },
@@ -162,9 +166,27 @@ export default defineComponent({
       this.saveThirdStageDetails()
     },
     async saveSecondStageDetails(){
-      console.log( await this.buildSecondStageDetails())
+    if (this.secondStageDetails.length > 0) {
+        const userID: any = Service.getUserID();
+        const SecondStage = new  SecondStageService(this.demographics.patient_id, userID);
+        const encounter = await SecondStage.createEncounter();
+        if (!encounter) return toastWarning("Unable to create SecondStage encounter");
+        const patientStatus = await SecondStage.saveObservationList(await this.buildSecondStageDetails());
+        if (!patientStatus) return toastWarning("Unable to create SecondStage !");
+        toastSuccess("SecondStage has been created");
+    }
+     // console.log( await this.buildSecondStageDetails())
     },
     async saveThirdStageDetails(){
+      if (this.placentaExamination.length > 0) {
+        const userID: any = Service.getUserID();
+        const ThirdStage = new  ThirdStageService(this.demographics.patient_id, userID);
+        const encounter = await ThirdStage.createEncounter();
+        if (!encounter) return toastWarning("Unable to create ThirdStage encounter");
+        const patientStatus = await ThirdStage.saveObservationList(await this.buildThirdStageDetails());
+        if (!patientStatus) return toastWarning("Unable to create ThirdStage !");
+        toastSuccess("ThirdStage has been created");
+    }
       console.log( await this.buildThirdStageDetails())
     },
     async buildSecondStageDetails(){
@@ -197,3 +219,4 @@ export default defineComponent({
 <style scoped>
 
 </style>
+@/services/LABOUR/Second_stage_of_labour_service

@@ -532,5 +532,5 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
       this.urine = data;
     },
   },
-  persist: true,
+  //persist: true,
 });

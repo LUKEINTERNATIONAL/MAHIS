@@ -136,15 +136,15 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
             name: "referring mother",
           },
           data: [
-            {
-              name: "Perineal tear (2nd, 3rd or 4th degree",
-              value: "postpartum haemorrhage",
-              displayNone: true,
-              checked: false,
-              labelPlacement: "start",
-              colSize: "6",
-              justify: "space-between",
-            },
+            // {
+            //   name: "Perineal tear (2nd, 3rd or 4th degree",
+            //   value: "postpartum haemorrhage",
+            //   displayNone: true,
+            //   checked: false,
+            //   labelPlacement: "start",
+            //   colSize: "6",
+            //   justify: "space-between",
+            // },
             {
               name: "Obstructed/prolonged labour",
               value: "Obstructed/prolonged labour",
