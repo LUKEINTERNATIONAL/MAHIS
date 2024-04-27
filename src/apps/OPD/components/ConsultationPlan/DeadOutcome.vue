@@ -31,6 +31,10 @@
                     :place_holder="time_properties[0].placeHolder"
                     @time-up-dated="time_properties[0].dataHandler"
                 />
+
+                <div>
+                    <ion-label v-if="time_properties[0].show_error.value" class="error-label">{{ time_properties[0].error_message }}</ion-label>
+                </div>
             </ion-col>
             <ion-col></ion-col>
         </ion-row>
@@ -42,6 +46,8 @@
                     :icon="personCircleOutline"
                     :inputValue="note_properties[1].dataValue.value"
                 />
+
+                
             </ion-col>
             <ion-col>
                 <ion-checkbox 
