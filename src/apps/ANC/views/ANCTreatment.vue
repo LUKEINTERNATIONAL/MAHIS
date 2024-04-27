@@ -10,6 +10,7 @@
 <script lang="ts">
 import { IonContent, IonHeader, IonItem, IonPage, IonList, IonTitle, IonToolbar, IonMenu } from "@ionic/vue";
 import Toolbar from "@/components/Toolbar.vue";
+import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import { defineComponent } from 'vue';
 import BasicInputField from '@/components/BasicInputField.vue';

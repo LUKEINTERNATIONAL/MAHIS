@@ -25,7 +25,8 @@ import BasicInputField from '@/components/BasicInputField.vue';
 import Stepper from "@/apps/LABOUR/components/Stepper.vue";
 import { icons } from '@/utils/svg';
 import { chevronBackOutline, checkmark } from 'ionicons/icons';
-import Toolbar from "@/apps/ANC/components/Toolbar.vue";
+import Toolbar from "@/components/Toolbar.vue";
+import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import end from "@/apps/LABOUR/components/repeatable things/end.vue";
 
 

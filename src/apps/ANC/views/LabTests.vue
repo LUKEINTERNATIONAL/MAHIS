@@ -17,6 +17,7 @@
 <script lang="ts">
 import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import Toolbar from "@/components/Toolbar.vue";
+import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import { IonContent, IonPage } from "@ionic/vue";
 import { defineComponent } from "vue";
 import UltrasoundScan from "@/apps/ANC/components/lab_tests/UltrasoundScan.vue";
