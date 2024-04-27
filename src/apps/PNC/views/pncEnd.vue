@@ -103,7 +103,7 @@ export default defineComponent({
     });
   },
   computed:{
-...mapState(useDemographicsStore,["demographics"]),
+    ...mapState(useDemographicsStore,["demographics"]),
     ...mapState(usePNCEndStore,["pncEnd"])
 
   },
@@ -158,7 +158,7 @@ export default defineComponent({
 
     },
     async savePNCEnd() {
-      if (this.pncEnd>0) {
+      if (this.pncEnd.length>0) {
         const userID: any = Service.getUserID();
         const  pncEnd= new PNCEndService(this.demographics.patient_id, userID);
         const encounter = await pncEnd.createEncounter();

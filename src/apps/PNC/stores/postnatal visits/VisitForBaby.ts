@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
+import _ from "lodash";
 
 
 const initialVisitForBaby=[
@@ -572,11 +573,11 @@ export const useVisitForBabyStore = defineStore('visitForBabyStore',{
             this.visitForBaby = data
         },
         getInitial(){
-            const data=[...initialVisitForBaby]
-            return [...data]
+            const data=_.cloneDeep(initialVisitForBaby);
+            return [...data];
         }
 
     },
-    // persist:true,
+    persist:true,
 
 })

@@ -157,7 +157,7 @@ export default defineComponent({
 
     },
     async saveDischargeWoman() {
-      if (this.dischargeWoman>0) {
+      if (this.dischargeWoman.length>0) {
         const userID: any = Service.getUserID();
         const  dischargeWoman= new DischargeWomanService(this.demographics.patient_id, userID);
         const encounter = await dischargeWoman.createEncounter();

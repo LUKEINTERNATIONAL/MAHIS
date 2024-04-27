@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
+import _ from "lodash";
 
-const initialDangerSigns=[
+const initialWardDangerSigns=[
     {
         selectdData: [],
         classDash: 'dashed_bottom_border',
@@ -1013,7 +1014,7 @@ const initialOtherexams=[
 ] as any;
 export const usePostnatalWardStayStore = defineStore('postnatalWardStayStore',{
     state: () => ({
-        dangerSigns: [...initialDangerSigns] as any,
+        dangerSigns: [...initialWardDangerSigns] as any,
 
         vitals: [...initialVitals] as any,
 
@@ -1028,16 +1029,16 @@ export const usePostnatalWardStayStore = defineStore('postnatalWardStayStore',{
             this.otherExams = data
         },
         getInitial(){
-            const data=[...initialDangerSigns]
-            return [...data]
+            const data=_.cloneDeep(initialWardDangerSigns);
+            return [...data];
         },getInitial1(){
-            const data=[...initialVitals]
-            return [...data]
+            const data=_.cloneDeep(initialVitals);
+            return [...data];
         },getInitial2(){
-            const data=[...initialOtherexams]
-            return [...data]
+            const data=_.cloneDeep(initialOtherexams);
+            return [...data];
         },
     },
-    // persist:true,
+    persist:true,
 
 })

@@ -70,7 +70,7 @@ export default defineComponent({
   },
   mounted(){
     const dangerSigns=usePostnatalWardStayStore()
-    this.initialData=dangerSigns.getInitial1()
+    this.initialData=dangerSigns.getInitial()
   },
   watch:{
   },

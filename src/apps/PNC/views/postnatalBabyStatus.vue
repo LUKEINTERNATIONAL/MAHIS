@@ -156,7 +156,7 @@ export default defineComponent({
 
     },
     async saveBabyMonitoring() {
-      if (this.babyStatusDetails>0) {
+      if (this.babyStatusDetails.length>0) {
         const userID: any = Service.getUserID();
         const  babyStatusDetails= new BabyMonitoringService(this.demographics.patient_id, userID);
         const encounter = await babyStatusDetails.createEncounter();

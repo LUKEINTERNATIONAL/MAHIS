@@ -158,7 +158,7 @@ export default defineComponent({
 
     },
     async saveWardMonitoring() {
-      if (this.dangerSigns.length > 0 && this.vitals>0 && this.otherExams>0) {
+      if (this.dangerSigns.length > 0 && this.vitals.length>0 && this.otherExams.length>0) {
         const userID: any = Service.getUserID();
         const  wardMonitoring= new PostnatalWardStayService(this.demographics.patient_id, userID);
         const encounter = await wardMonitoring.createEncounter();

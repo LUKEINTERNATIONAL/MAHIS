@@ -176,7 +176,7 @@ export default defineComponent({
     },
 
     async saveVisitForMother() {
-      if (this.visitForMother>0) {
+      if (this.visitForMother.length>0) {
         const userID: any = Service.getUserID();
         const  visitForMother= new VisitForMotherService(this.demographics.patient_id, userID);
         const encounter = await visitForMother.createEncounter();
@@ -189,7 +189,7 @@ export default defineComponent({
 
     },
     async saveVisitForBaby() {
-      if (this.visitForBaby>0) {
+      if (this.visitForBaby.length>0) {
         const userID: any = Service.getUserID();
         const  visitForMother= new VisitForBabyService(this.demographics.patient_id, userID);
         const encounter = await visitForMother.createEncounter();

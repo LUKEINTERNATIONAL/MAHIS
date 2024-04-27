@@ -48,6 +48,7 @@ import {useDeliveryDetailsStore} from "@/apps/PNC/stores/postnatal details/Deliv
 import {DeliveryDetailsService} from "@/apps/PNC/Services/delivery_details_service";
 import {useHIVStatusAndTreatmentStore} from "@/apps/PNC/stores/postnatal details/HIVStatusAndTreatment";
 import {HIVStatusAndTreatmentService} from "@/apps/PNC/Services/hiv_status_and_treatment_service";
+import {modifyWizardData} from "@/services/data_helpers";
 export default defineComponent({
   name: "postnatalDetails",
   components:{
@@ -127,6 +128,18 @@ export default defineComponent({
     };
   },
   watch: {
+    obstetricDetails:{
+      handler(){
+        this.markWizard();
+      },
+      deep:true,
+    },
+    deliveryDetails:{
+      handler(){
+        this.markWizard();
+      },
+      deep:true,
+    }
 
   },
   getFormatedData(data: any) {
@@ -152,20 +165,34 @@ export default defineComponent({
   },
 
   methods:{
-    markWizard(){
-      //   if(this.medications.validationStatus){
-      //     this.wizardData[0].checked = true;
-      //     this.wizardData[0].class = 'open_step common_step'
-      //   }else{
-      //     this.wizardData[0].checked = false;
-      //   }
+    markWizard: function () {
+      // if (this.obstetricDetails[0].selectedData.length > 0) {
+      //   modifyWizardData(this.wizardData, "Obstetric details",{
+      //     checked:true,
+      //     class:'open_step common_step'
+      //       });
+      // } else {
+      //   modifyWizardData(this.wizardData, "Obstetric details", {
+      //     checked: false,
+      //   });
+      // }
+      // if (this.deliveryDetails[0].selectedData.length > 0) {
+      //   modifyWizardData(this.wizardData, "Obstetric details",{
+      //     checked:true,
+      //     class:'open_step common_step'
+      //   });
+      // } else {
+      //   modifyWizardData(this.wizardData, "Obstetric details", {
+      //     checked: false,
+      //   });
+      // }
 
-      //   if(this.medicalHistory[0].selectdData.length > 0){
-      //     this.wizardData[1].checked = true;
-      //     this.wizardData[1].class = 'open_step common_step'
-      //   }else{
-      //     this.wizardData[1].checked = false;
-      //   }
+      // if(this.deliveryDetails[0].selectdData.length > 0){
+      //   this.wizardData[1].checked = true;
+      //   this.wizardData[1].class = 'open_step common_step'
+      // }else{
+      //   this.wizardData[1].checked = false;
+      // }
 
       //   if(this.womanBehaviour[0].selectdData.length > 0){
       //     this.wizardData[2].checked = true;

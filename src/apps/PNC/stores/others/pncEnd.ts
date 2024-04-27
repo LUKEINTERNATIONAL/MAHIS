@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
+import _ from "lodash";
 
 const initialPNCEnd=[
     {
@@ -47,8 +48,8 @@ export const usePNCEndStore = defineStore('pncEndStore',{
             this.pncEnd = data
         },
         getInitial(){
-            const data=[...initialPNCEnd]
-            return [...data]
+            const data=_.cloneDeep(initialPNCEnd);
+            return [...data];
         }
 
 

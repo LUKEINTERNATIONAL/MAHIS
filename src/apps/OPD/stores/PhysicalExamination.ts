@@ -637,7 +637,7 @@ const initialPhysicalExam= [
             },
             data: [
                 {
-                    name: "Other neck abnormality ",
+                    name: "Other neck abnormality",
                     disabled: false,
                     value: "Other neck abnormality",
                     labelPlacement: "start",
@@ -1054,7 +1054,6 @@ const initialPhysicalExam= [
         sideColSize:1,
         childName:"Abdominal inspection normal",
         isFinishBtn: false,
-        classDash: "dashed_bottom_border",
         checkboxBtnContent: {
             header: {
                 title: "What are the abnormalities after Abdominal inspection?",
@@ -1208,7 +1207,7 @@ const initialPhysicalExam= [
         sideColSize:1,
         childName:"Abdominal auscultation normal",
         isFinishBtn: false,
-        classDash: "dashed_bottom_border",
+        classDash: "",
         checkboxBtnContent: {
             header: {
                 title: "What are the abdominal auscultation abnormalities?",
@@ -1374,7 +1373,7 @@ const initialPhysicalExam= [
         sideColSize:1,
         childName: "Abdominal palpation normal",
         isFinishBtn: false,
-        classDash: "dashed_bottom_border",
+        classDash: "",
         checkboxBtnContent: {
             header: {
                 title: "What are the abdominal palpation abnormalities?",
@@ -1779,7 +1778,7 @@ const initialPhysicalExam= [
         sideColSize:1,
         isFinishBtn: false,
         childName:"Extremities normal",
-        classDash: "dashed_bottom_border",
+        classDash: "",
         checkboxBtnContent: {
             header: {
                 title: "What are the abnormalities for extremities?",

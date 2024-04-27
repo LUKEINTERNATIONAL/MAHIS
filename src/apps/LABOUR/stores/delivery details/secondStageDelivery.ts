@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
+import _ from "lodash";
 
 
 const initialSecondStageDetails=[
@@ -1500,15 +1501,15 @@ export const useSecondStageOfLabourStore = defineStore('secondStageOfLabourStore
             this.obstetricComplications = data
         },
         getInitial(){
-            const data=[...initialSecondStageDetails]
+            const data=_.cloneDeep(initialSecondStageDetails)
             return [...data]
         },
         getInitial1(){
-            const data=[...initialNewbornComplications]
+            const data=_.cloneDeep(initialNewbornComplications)
             return [...data]
         },
         getInitial2(){
-            const data=[...initialObstetricDetails]
+            const data=_.cloneDeep(initialObstetricDetails)
             return [...data]
         }
     },

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
+import _ from "lodash";
 
 const initialHIVStatusAndTreatment =[
     {
@@ -138,12 +139,12 @@ export const useHIVStatusAndTreatmentStore = defineStore('hivStatusAndTreatmentS
             this.hivStatusAndTreatment = data
         },
         getInitial(){
-            const data=[...initialHIVStatusAndTreatment]
-            return [...data]
+            const data=_.cloneDeep(initialHIVStatusAndTreatment);
+            return [...data];
         }
 
 
     },
-    // persist:true,
+    persist:true,
 
 })
