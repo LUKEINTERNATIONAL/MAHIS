@@ -165,7 +165,7 @@ export default defineComponent({
         if (!encounter) return toastWarning("Unable to create patient postnatal ward stay encounter");
         const patientStatus = await wardMonitoring.saveObservationList(await this.buildWardStayMonitoring());
         if (!patientStatus) return toastWarning("Unable to create patient routine monitoring details!");
-        toastSuccess("Ward stay details have been created");
+        toastSuccess("Ward  details have been created");
       }
       console.log(await this.buildWardStayMonitoring())
 
