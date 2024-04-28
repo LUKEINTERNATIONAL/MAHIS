@@ -35,6 +35,7 @@ const initialExamsAfterDeliveryForChild=[
                                 unit: 'BMP',
                                 icon: icons.respiratory,
                                 value: '',
+                                valueType:'text',
                                 name: 'Respiration rate',
                                 eventType: 'input'
                             },
@@ -43,6 +44,7 @@ const initialExamsAfterDeliveryForChild=[
                                 unit: 'C',
                                 icon: icons.temprature,
                                 value: '',
+                                valueType:'text',
                                 name: 'Temperature (c)',
                                 eventType: 'input'
                             },
@@ -202,6 +204,6 @@ export const useImmediatePostnatalChecksForChildStore = defineStore('immediatePo
             return [...data]
         }
     },
-    // persist:true,
+    persist:true,
 
 })

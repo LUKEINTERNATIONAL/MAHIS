@@ -63,6 +63,7 @@ const initialExamsAfterDelivery=[
                                 unit: 'mmHg',
                                 icon: icons.systolicPressure,
                                 value: '',
+                                valueType:'text',
                                 name: 'Systolic blood pressure',
                                 required: true,
                                 eventType: 'input'
@@ -72,6 +73,7 @@ const initialExamsAfterDelivery=[
                                 unit: 'mmHg',
                                 icon: icons.diastolicPressure,
                                 value: '',
+                                valueType:'text',
                                 name: 'Diastolic blood pressure',
                                 required: true,
                                 eventType: 'input'
@@ -85,6 +87,7 @@ const initialExamsAfterDelivery=[
                                 unit: 'mmHg',
                                 icon: icons.systolicPressure,
                                 value: '',
+                                valueType:'text',
                                 name: 'Repeated systolic blood pressure',
                                 required: true,
                                 eventType: 'input'
@@ -94,6 +97,7 @@ const initialExamsAfterDelivery=[
                                 unit: 'mmHg',
                                 icon: icons.diastolicPressure,
                                 value: '',
+                                valueType:'text',
                                 name: 'Repeated diastolic blood pressure',
                                 required: true,
                                 eventType: 'input'
@@ -116,6 +120,7 @@ const initialExamsAfterDelivery=[
                                 unit: 'BMP',
                                 icon: icons.pulse,
                                 value: '',
+                                valueType:'text',
                                 name: 'Pulse',
                                 eventType: 'input'
                             },
@@ -124,6 +129,7 @@ const initialExamsAfterDelivery=[
                                 unit: 'C',
                                 icon: icons.temprature,
                                 value: '',
+                                valueType:'text',
                                 name: 'Temperature (c)',
                                 eventType: 'input'
                             },
@@ -208,7 +214,7 @@ const initialExamsAfterDelivery=[
                     title: 'Has the woman urinated?',
                     selectedValue: '',
                     class:"bold",
-                    name:"woman urinated",
+                    name:"Woman urinated",
                     displayNext:"Yes"
                 },
                 data:[
@@ -241,6 +247,7 @@ const initialExamsAfterDelivery=[
                                 unit: 'ml',
                                 icon: icons.editPen,
                                 value: '',
+                                valueType:'text',
                                 name: 'amount of urine',
                                 required: true,
                                 eventType: 'input',
@@ -253,6 +260,7 @@ const initialExamsAfterDelivery=[
                                 unit: 'colour',
                                 icon: icons.editPen,
                                 value: '',
+                                valueType:'text',
                                 name: 'color of urine',
                                 required: true,
                                 eventType: 'input',
@@ -266,6 +274,7 @@ const initialExamsAfterDelivery=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
+                                valueType:'text',
                                 name: 'Odour of urine',
                                 required: true,
                                 eventType: 'input',
@@ -279,7 +288,7 @@ const initialExamsAfterDelivery=[
                 ]
             },
     },
-]
+] as any;
 export const useImmediatePostnatalChecksForMotherStore = defineStore('immediatePostnatalChecksForMotherStore',{
     state: () => ({
 
