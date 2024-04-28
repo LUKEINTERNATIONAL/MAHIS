@@ -26,8 +26,8 @@
             <ion-col>
                 <ion-item>
                     <div class="dates_title">
-                        <div>Medication run out date</div>
-                        <div class="sub_data">20 June 2024</div>
+                        <div>Next Vaccination date</div>
+                        <div class="sub_data">20 June 2024 - 27 June 2024</div>
                     </div>
                 </ion-item>
                 <ion-item>
@@ -61,7 +61,7 @@ import { ref } from "vue";
 import { icons } from "@/utils/svg";
 
 import { createModal } from "@/utils/Alerts";
-import BasicInputField from "../../../../components/BasicInputField.vue";
+import BasicInputField from "@/components/BasicInputField.vue";
 import HisDate from "@/utils/Date";
 import { useNextAppointmentStore } from "@/stores/NextAppointmentStore";
 import { mapState } from "pinia";

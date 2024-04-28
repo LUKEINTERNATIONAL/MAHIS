@@ -1,5 +1,5 @@
 <template>
-    <basic-card :content="cardData" @update:inputValue="handleInputData"></basic-card>
+    <basic-card :content="cardData"></basic-card>
 </template>
 
 <script lang="ts">
@@ -13,8 +13,16 @@ import { useEnrollementStore } from "@/stores/EnrollmentStore";
 import { mapState } from "pinia";
 import BasicForm from "@/components/BasicForm.vue";
 import BasicCard from "@/components/BasicCard.vue";
-import { modifyCheckboxInputField, getCheckboxSelectedValue, getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
-
+import { ProgramService } from "@/services/program_service";
+import {
+    modifyRadioValue,
+    getRadioSelectedValue,
+    getCheckboxSelectedValue,
+    getFieldValue,
+    modifyFieldValue,
+    modifyCheckboxValue,
+} from "@/services/data_helpers";
+import { journalOutline } from "ionicons/icons";
 export default defineComponent({
     name: "Menu",
     components: {
@@ -37,8 +45,7 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useEnrollementStore, ["substance"]),
-        ...mapState(useEnrollementStore, ["enrollmentDiagnosis"]),
+        ...mapState(useEnrollementStore, ["familyHistory"]),
     },
     watch: {
         personInformation: {
@@ -49,25 +56,17 @@ export default defineComponent({
             deep: true,
         },
     },
-
-    mounted() {
-        this.updateEnrollmentStores();
+    async mounted() {
         this.buidCards();
     },
     methods: {
         buidCards() {
-            const enrollment = useEnrollementStore();
             this.cardData = {
                 mainTitle: "Enrollment",
                 cards: [
                     {
-                        cardTitle: "Substance use / Consumption",
-                        content: this.substance,
-                    },
-                    {
-                        cardTitle: "Diagnosis",
-                        content: this.enrollmentDiagnosis,
-                        initialData: enrollment.getInitialEnrollmentDiagnosis(),
+                        cardTitle: "Family history",
+                        content: this.familyHistory,
                     },
                 ],
             };
@@ -77,17 +76,10 @@ export default defineComponent({
         },
         updateEnrollmentStores() {
             const enrollmentStore = useEnrollementStore();
-            enrollmentStore.setSubstance(this.substance);
-            enrollmentStore.setDiagnosis(this.enrollmentDiagnosis);
+            enrollmentStore.setFamilyHistory(this.familyHistory);
         },
-
         testF(data: any) {
             console.log(data);
-        },
-        async handleInputData(event: any) {
-            if (event?.value?.detail?.checked) {
-                modifyCheckboxInputField(this.enrollmentDiagnosis, event?.al?.name, "displayNone", false);
-            } else modifyCheckboxInputField(this.enrollmentDiagnosis, event?.al?.name, "displayNone", true);
         },
     },
 });
@@ -144,7 +136,6 @@ ion-radio {
     color: #636363;
 }
 .checkbox_header {
-    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
     font-size: 14px;

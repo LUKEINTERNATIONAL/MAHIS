@@ -7,7 +7,7 @@
                     <DynamicButton fill="clear" name="Back to profile" iconSlot="start" :icon="iconsContent.arrowLeft" />
                 </div>
                 <div class="title">
-                    <div class="demographics_title">Child Enrollment</div>
+                    <div class="demographics_title">Birth Registration</div>
                 </div>
                 <div class="icon_div">
                     <ion-icon :class="iconListStatus" :icon="list" @click="setDisplayType('list')"></ion-icon>
@@ -21,7 +21,7 @@
             </div>
             <div>
                 <ion-row class="card_row">
-                    <ChildEnrollment />
+                    <basic-card :content="cardData" @update:inputValue="handleInputData"></basic-card>
                 </ion-row>
             </div>
         </ion-content>
@@ -72,9 +72,8 @@ import { LabOrder } from "@/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";
-import ChildEnrollment from "@/apps/Immunization/components/Enrollment/ChildEnrollment.vue";
-import SubstanceDiagnosis from "@/apps/NCD/components/Enrollment/SubstanceDiagnosis.vue";
-import FamilyHistoryNCDNumber from "@/apps/NCD/components/Enrollment/FamilyHistoryNCDNumber.vue";
+import SubstanceDiagnosis from "@/apps/NCD/components/Enrollment/Diagnosis.vue";
+import FamilyHistoryNCDNumber from "@/apps/NCD/components/Enrollment/NCDNumber.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import { useConfigurationStore } from "@/stores/ConfigurationStore";
 import { arrowForwardCircle, grid, list } from "ionicons/icons";
@@ -94,6 +93,8 @@ import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServ
 import { IdentifierService } from "@/services/identifier_service";
 import { resetPatientData } from "@/services/reset_data";
 import { useGeneralStore } from "@/stores/GeneralStore";
+import { useBirthRegistrationStore } from "@/apps/Immunization/stores/BirthRegistrationStore";
+import BasicCard from "@/components/BasicCard.vue";
 
 export default defineComponent({
     name: "Home",
@@ -119,10 +120,10 @@ export default defineComponent({
         IonLabel,
         IonModal,
         Stepper,
-        ChildEnrollment,
         SubstanceDiagnosis,
         FamilyHistoryNCDNumber,
         DynamicButton,
+        BasicCard,
     },
     data() {
         return {
@@ -134,6 +135,7 @@ export default defineComponent({
             isOpen: false,
             iconListStatus: "active_icon",
             iconGridStatus: "inactive_icon",
+            cardData: {} as any,
         };
     },
     computed: {
@@ -144,9 +146,12 @@ export default defineComponent({
         ...mapState(useConfigurationStore, ["enrollmentDisplayType"]),
         ...mapState(useGeneralStore, ["activities"]),
         ...mapState(useEnrollementStore, ["NCDNumber", "enrollmentDiagnosis", "substance", "patientHistoryHIV", "patientHistory"]),
+        ...mapState(useBirthRegistrationStore, ["birthRegistration"]),
     },
     async mounted() {
         this.setDisplayType(this.enrollmentDisplayType);
+        this.updateEnrollmentStores();
+        this.buidCards();
     },
 
     setup() {
@@ -239,6 +244,25 @@ export default defineComponent({
                 const diagnosisInstance = new Diagnosis();
                 diagnosisInstance.onSubmit(this.demographics.patient_id, userID, data);
             }
+        },
+        buidCards() {
+            const enrollment = useBirthRegistrationStore();
+            this.cardData = {
+                mainTitle: "Child Enrollment",
+                cards: [
+                    {
+                        content: this.birthRegistration,
+                        initialData: enrollment.getInitialBirthRegistration(),
+                    },
+                ],
+            };
+        },
+        updateEnrollmentStores() {
+            const enrollmentStore = useBirthRegistrationStore();
+            enrollmentStore.setBirthRegistration(this.birthRegistration);
+        },
+        async handleInputData(event: any) {
+            console.log(event.al);
         },
     },
 });
@@ -380,3 +404,4 @@ ion-footer {
     justify-content: center;
 }
 </style>
+@/apps/Immunization/stores/BirthRegistrationStore

@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
 import _ from "lodash";
-const initialEnrollment = [
+const initialBirthRegistration = [
     {
         selectedData: [],
         isFinishBtn: false,
@@ -236,16 +236,16 @@ const initialEnrollment = [
         },
     },
 ] as any;
-export const useImmunizationEnrollmentStore = defineStore("immunizationEnrollmentStore", {
+export const useBirthRegistrationStore = defineStore("birthRegistrationStore", {
     state: () => ({
-        immunizationEnrollment: [...initialEnrollment],
+        birthRegistration: [...initialBirthRegistration],
     }),
     actions: {
-        setImmunizationEnrollment(data: any) {
-            this.immunizationEnrollment = data;
+        setBirthRegistration(data: any) {
+            this.birthRegistration = data;
         },
-        getInitialImmunizationEnrollment() {
-            const data = _.cloneDeep(initialEnrollment);
+        getInitialBirthRegistration() {
+            const data = _.cloneDeep(initialBirthRegistration);
             return [...data];
         },
     },

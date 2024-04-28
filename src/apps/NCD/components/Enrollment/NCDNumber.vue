@@ -1,5 +1,5 @@
 <template>
-    <basic-card :content="cardData" @update:inputValue="handleInputData"></basic-card>
+    <basic-card :content="cardData"></basic-card>
 </template>
 
 <script lang="ts">
@@ -13,8 +13,16 @@ import { useEnrollementStore } from "@/stores/EnrollmentStore";
 import { mapState } from "pinia";
 import BasicForm from "@/components/BasicForm.vue";
 import BasicCard from "@/components/BasicCard.vue";
-import { modifyCheckboxInputField, getCheckboxSelectedValue, getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
-
+import { ProgramService } from "@/services/program_service";
+import {
+    modifyRadioValue,
+    getRadioSelectedValue,
+    getCheckboxSelectedValue,
+    getFieldValue,
+    modifyFieldValue,
+    modifyCheckboxValue,
+} from "@/services/data_helpers";
+import { journalOutline } from "ionicons/icons";
 export default defineComponent({
     name: "Menu",
     components: {
@@ -37,7 +45,7 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useEnrollementStore, ["patientHistory"]),
+        ...mapState(useEnrollementStore, ["NCDNumber"]),
     },
     watch: {
         personInformation: {
@@ -48,20 +56,20 @@ export default defineComponent({
             deep: true,
         },
     },
-    mounted() {
-        this.updateEnrollmentStores();
+    async mounted() {
+        const j = await ProgramService.getNextSuggestedNCDNumber();
+        modifyFieldValue(this.NCDNumber, "NCDNumber", "value", j.ncd_number.replace(/^\D+|\s/g, ""));
+        modifyFieldValue(this.NCDNumber, "NCDNumber", "leftText", `${j.ncd_number.replace(/\d+/g, "")}-NCD-`);
         this.buidCards();
     },
     methods: {
         buidCards() {
-            const enrollment = useEnrollementStore();
             this.cardData = {
                 mainTitle: "Enrollment",
                 cards: [
                     {
-                        cardTitle: "Patient history & Complications ",
-                        content: this.patientHistory,
-                        initialData: enrollment.getInitialPatientHistory(),
+                        cardTitle: "NCD number",
+                        content: this.NCDNumber,
                     },
                 ],
             };
@@ -71,13 +79,10 @@ export default defineComponent({
         },
         updateEnrollmentStores() {
             const enrollmentStore = useEnrollementStore();
-            enrollmentStore.setPatientHistory(this.patientHistory);
+            enrollmentStore.setNCDNumber(this.NCDNumber);
         },
-        async handleInputData(event: any) {
-            if (event.al) {
-                if (event.value.detail.checked) modifyCheckboxInputField(this.patientHistory, event.al.name, "displayNone", false);
-                else modifyCheckboxInputField(this.patientHistory, event.al.name, "displayNone", true);
-            }
+        testF(data: any) {
+            console.log(data);
         },
     },
 });
@@ -128,14 +133,12 @@ ion-radio {
     line-height: 3;
 }
 .small_font {
-    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
     color: #636363;
 }
 .checkbox_header {
-    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
