@@ -1,7 +1,6 @@
 <template>
     <ion-row>
-        <ion-col size-xl="1" class="displayNoneMobile"> </ion-col>
-        <ion-col size-md="4" size-xl="2.5" size-sm="0" size-lg="4" class="displayNoneMobile">
+        <ion-col size-md="4" size-xl="2.5" size-sm="0" size-lg="4" offset-sm="0" offset-md="0.4" offset-xl="0.8" class="displayNoneMobile">
             <ion-card class="wizard_card">
                 <div class="wizard_title">
                     <strong> {{ stepperTitle }}</strong>
@@ -23,9 +22,8 @@
                 </ion-card-content>
             </ion-card>
         </ion-col>
-        <ion-col size-md="0.6" size-xl="0.8" class="displayNoneMobile"> </ion-col>
 
-        <ion-col size-sm="12" size-xl="7" size-md="7.2" size-lg="7" class="">
+        <ion-col size-sm="12" size-xl="7" size-md="7.2" size-lg="7" offset-sm="0" offset-md="0.4" offset-xl="0.8" class="">
             <div class="back_profile" @click="openModal()">
                 <ion-icon style="font-size: 20px" :icon="chevronBackOutline"> </ion-icon>
                 <span style="cursor: pointer"> Back to profile</span>
@@ -89,10 +87,13 @@ import OPDDiagnosis from "@/apps/OPD/components/ConsultationPlan/OPDDiagnosis.vu
 import ComplicationsScreening from "@/apps/NCD/components/ConsultationPlan/ComplicationsScreening.vue";
 import ConfirmDiagnosis from "@/apps/NCD/components/ConsultationPlan/ConfirmDiagnosis.vue";
 import Outcome from "@/apps/NCD/components/ConsultationPlan/Outcome.vue";
+import ChangeStatus from "@/apps/Immunization/components/ConsultationPlan/ChangeStatus.vue";
+import GrowthMonitor from "@/apps/Immunization/components/ConsultationPlan/GrowthMonitor.vue";
 import Investigations from "@/components/Investigations.vue";
 import TreatmentPlan from "@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue";
 import OPDTreatmentPlan from "@/apps/OPD/components/ConsultationPlan/OPDTreatmentPlan.vue";
 import NextAppointment from "@/apps/NCD/components/ConsultationPlan/NextAppointment.vue";
+import ImmunizationNextAppointment from "@/apps/Immunization/components/ImmunizationNextAppointment.vue";
 
 import Medications from "@/apps/ANC/components/profile/Medications.vue";
 import WomanBehaviour from "@/apps/ANC/components/profile/WomanBehaviour.vue";
@@ -128,7 +129,7 @@ import PhysiologicalCounseling from "@/apps/ANC/components/counselling/Physiolog
 import DietCounselling from "@/apps/ANC/components/counselling/DietCounselling.vue";
 import Referral from "@/apps/ANC/components/referral/Referral.vue";
 import AncEnd from "@/apps/ANC/components/ancEnd/AncEnd.vue";
-import ImmunizationServices from "@/apps/Immunization/components/ImmunizationServices.vue";
+import ImmunizationServices from "@/apps/Immunization/components/ConsultationPlan/ImmunizationServices.vue";
 import OPDOutcome from "@/apps/OPD/components/ConsultationPlan/OPDOutcome.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
@@ -207,6 +208,9 @@ export default defineComponent({
         OPDOutcome,
         DynamicButton,
         ImmunizationServices,
+        ChangeStatus,
+        ImmunizationNextAppointment,
+        GrowthMonitor,
     },
     data() {
         return {

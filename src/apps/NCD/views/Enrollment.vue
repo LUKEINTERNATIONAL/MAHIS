@@ -21,12 +21,17 @@
             </div>
             <div v-if="enrollmentDisplayType == 'grid'">
                 <ion-row class="card_row" v-if="enrollmentDisplayType == 'grid'">
-                    <ion-col size="6">
+                    <ion-col size-sm="12" size-md="12" size-lg="6" size-xl="4">
                         <PatientHistory />
                     </ion-col>
-                    <ion-col size="6">
-                        <SubstanceDiagnosis />
-                        <FamilyHistoryNCDNumber />
+                    <ion-col size-sm="12" size-md="12" size-lg="6" size-xl="4">
+                        <PatientHistoryHIV />
+                        <FamilyHistory />
+                    </ion-col>
+                    <ion-col size-sm="12" size-md="12" size-lg="6" size-xl="4">
+                        <EnrollmentDiagnosis />
+                        <Substance />
+                        <NCDNumber />
                     </ion-col>
                 </ion-row>
             </div>
@@ -122,8 +127,11 @@ import { VitalsService } from "@/services/vitals_service";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";
 import PatientHistory from "@/apps/NCD/components/Enrollment/PatientHistory.vue";
-import SubstanceDiagnosis from "@/apps/NCD/components/Enrollment/SubstanceDiagnosis.vue";
-import FamilyHistoryNCDNumber from "@/apps/NCD/components/Enrollment/FamilyHistoryNCDNumber.vue";
+import PatientHistoryHIV from "@/apps/NCD/components/Enrollment/PatientHistoryHIV.vue";
+import EnrollmentDiagnosis from "@/apps/NCD/components/Enrollment/Diagnosis.vue";
+import Substance from "@/apps/NCD/components/Enrollment/Substance.vue";
+import NCDNumber from "@/apps/NCD/components/Enrollment/NCDNumber.vue";
+import FamilyHistory from "@/apps/NCD/components/Enrollment/FamilyHistory.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import { useConfigurationStore } from "@/stores/ConfigurationStore";
 import { arrowForwardCircle, grid, list } from "ionicons/icons";
@@ -170,8 +178,11 @@ export default defineComponent({
         IonModal,
         Stepper,
         PatientHistory,
-        SubstanceDiagnosis,
-        FamilyHistoryNCDNumber,
+        PatientHistoryHIV,
+        EnrollmentDiagnosis,
+        Substance,
+        NCDNumber,
+        FamilyHistory,
         DynamicButton,
     },
     data() {

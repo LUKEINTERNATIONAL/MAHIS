@@ -4,9 +4,13 @@
             <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
                 <ion-item slot="header" color="light">
                     <ion-label class="previousLabel">Birth</ion-label>
+                    <div class="due_date">2023-04-13</div>
+                    <div>
+                        <DynamicButton color="danger" name="Overdue" size="small" />
+                    </div>
                 </ion-item>
                 <div class="ion-padding" slot="content">
-                    <BirthImmunization />
+                    <basic-form :contentData="birthImmunization" @update:inputValue="handleInputData" @update:selected="handleInputData"></basic-form>
                 </div>
             </ion-accordion>
         </ion-accordion-group>
@@ -16,17 +20,25 @@
                     <ion-label class="previousLabel">6 Weeks</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
-                    <sixWeeksImmunization />
+                    <basic-form
+                        :contentData="sixWeeksImmunization"
+                        @update:inputValue="handleInputData"
+                        @update:selected="handleInputData"
+                    ></basic-form>
                 </div>
             </ion-accordion>
         </ion-accordion-group>
-        <ion-accordion-group ref="accordionGroup" class="previousView" v-if="checkPatient()">
+        <ion-accordion-group ref="accordionGroup" class="previousView">
             <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
                 <ion-item slot="header" color="light">
                     <ion-label class="previousLabel">10 Weeks</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
-                    <tenWeeksImmunization />
+                    <basic-form
+                        :contentData="tenWeeksImmunization"
+                        @update:inputValue="handleInputData"
+                        @update:selected="handleInputData"
+                    ></basic-form>
                 </div>
             </ion-accordion>
         </ion-accordion-group>
@@ -36,7 +48,11 @@
                     <ion-label class="previousLabel">14 Weeks</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
-                    <fourteenWeeksImmunization />
+                    <basic-form
+                        :contentData="fourteenWeeksImmunization"
+                        @update:inputValue="handleInputData"
+                        @update:selected="handleInputData"
+                    ></basic-form>
                 </div>
             </ion-accordion>
         </ion-accordion-group>
@@ -46,7 +62,81 @@
                     <ion-label class="previousLabel">5 - 22 Months</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
-                    <fiveToTwentyTwoImmunization />
+                    <basic-form
+                        :contentData="fiveToTwentyTwoImmunization"
+                        @update:inputValue="handleInputData"
+                        @update:selected="handleInputData"
+                    ></basic-form>
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel"> 1 Year - 5 Years</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <basic-form
+                        :contentData="oneYearToFiveYearsImmunization"
+                        @update:inputValue="handleInputData"
+                        @update:selected="handleInputData"
+                    ></basic-form>
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">9 - 14 Years For Girls</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <basic-form
+                        :contentData="nineToFourteenYearsImmunization"
+                        @update:inputValue="handleInputData"
+                        @update:selected="handleInputData"
+                    ></basic-form>
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">12 Years Above</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <basic-form
+                        :contentData="twelveYearsAboveImmunization"
+                        @update:inputValue="handleInputData"
+                        @update:selected="handleInputData"
+                    ></basic-form>
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">15 Years (for pregnant women and women of childbearing age up to 45 years )</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <basic-form
+                        :contentData="fifteenYearsImmunization"
+                        @update:inputValue="handleInputData"
+                        @update:selected="handleInputData"
+                    ></basic-form>
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">18 Years Above</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <basic-form
+                        :contentData="eighteenYearsAboveImmunization"
+                        @update:inputValue="handleInputData"
+                        @update:selected="handleInputData"
+                    ></basic-form>
                 </div>
             </ion-accordion>
         </ion-accordion-group>
@@ -72,15 +162,11 @@ import labOrderResults from "@/components/Lab/labOrderResults.vue";
 import { LabOrder } from "@/services/lab_order";
 import Allergies from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/Allergies.vue";
 import LevelOfConsciousness from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/LevelOfConsciousness.vue";
-import BirthImmunization from "@/apps/Immunization/components/ImmunizationServices/BirthImmunization.vue";
-import fiveToTwentyTwoImmunization from "@/apps/Immunization/components/ImmunizationServices/fiveToTwentyTwoImmunization.vue";
-import fourteenWeeksImmunization from "@/apps/Immunization/components/ImmunizationServices/fourteenWeeksImmunization.vue";
-import sixWeeksImmunization from "@/apps/Immunization/components/ImmunizationServices/sixWeeksImmunization.vue";
-import tenWeeksImmunization from "@/apps/Immunization/components/ImmunizationServices/tenWeeksImmunization.vue";
 import PhysicalExamination from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PhysicalExamination.vue";
 import PregnancyBreastfeeding from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PregnancyBreastfeeding.vue";
 import PresentingComplaints from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PresentingComplaints.vue";
 import { useDemographicsStore } from "@/stores/DemographicStore";
+import { useImmunizationStore } from "@/apps/Immunization/stores/ImmunizationStore";
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -113,11 +199,6 @@ export default defineComponent({
         labOrderResults,
         Allergies,
         LevelOfConsciousness,
-        BirthImmunization,
-        fiveToTwentyTwoImmunization,
-        fourteenWeeksImmunization,
-        sixWeeksImmunization,
-        tenWeeksImmunization,
         PhysicalExamination,
         PregnancyBreastfeeding,
         PresentingComplaints,
@@ -155,6 +236,18 @@ export default defineComponent({
     computed: {
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useImmunizationStore, [
+            "birthImmunization",
+            "sixWeeksImmunization",
+            "tenWeeksImmunization",
+            "fourteenWeeksImmunization",
+            "fiveToTwentyTwoImmunization",
+            "nineToFourteenYearsImmunization",
+            "twelveYearsAboveImmunization",
+            "fifteenYearsImmunization",
+            "eighteenYearsAboveImmunization",
+            "oneYearToFiveYearsImmunization",
+        ]),
         inputFields() {
             return this.investigations[0].data.rowData[0].colData;
         },
@@ -398,5 +491,12 @@ export default defineComponent({
 }
 .presentingComplaint {
     margin-top: 10px;
+}
+.previousLabel {
+    max-width: max-content;
+    margin-right: 15px;
+}
+.due_date {
+    margin-right: 5px;
 }
 </style>

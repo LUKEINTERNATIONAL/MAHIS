@@ -71,8 +71,8 @@ export const useImmunizationStore = defineStore("ImmunizationStore", {
                     },
                     data: [
                         {
-                            name: "Penta 1",
-                            value: "Penta 1",
+                            name: "Pentavalent 1",
+                            value: "Pentavalent 1",
                             checked: false,
                         },
                     ],
@@ -145,8 +145,8 @@ export const useImmunizationStore = defineStore("ImmunizationStore", {
                     },
                     data: [
                         {
-                            name: "Penta 2",
-                            value: "Penta 2",
+                            name: "Pentavalent 2",
+                            value: "Pentavalent 2",
                             checked: false,
                         },
                     ],
@@ -219,8 +219,8 @@ export const useImmunizationStore = defineStore("ImmunizationStore", {
                     },
                     data: [
                         {
-                            name: "Penta 3",
-                            value: "Penta 3",
+                            name: "Pentavalent 3",
+                            value: "Pentavalent 3",
                             checked: false,
                         },
                     ],
@@ -307,6 +307,24 @@ export const useImmunizationStore = defineStore("ImmunizationStore", {
                 isFinishBtn: false,
                 checkboxBtnContent: {
                     header: {
+                        class: "bold",
+                        selectedValue: "",
+                        name: "birth immunization",
+                    },
+                    data: [
+                        {
+                            name: "vitamin A",
+                            value: "vitamin A",
+                            checked: false,
+                        },
+                    ],
+                },
+            },
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                checkboxBtnContent: {
+                    header: {
                         title: "7 Months",
                         class: "bold",
                         selectedValue: "",
@@ -345,6 +363,25 @@ export const useImmunizationStore = defineStore("ImmunizationStore", {
                 isFinishBtn: false,
                 checkboxBtnContent: {
                     header: {
+                        title: "9 months – under 15 years",
+                        class: "bold",
+                        selectedValue: "",
+                        name: "birth immunization",
+                    },
+                    data: [
+                        {
+                            name: "TCV",
+                            value: "TCV",
+                            checked: false,
+                        },
+                    ],
+                },
+            },
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                checkboxBtnContent: {
+                    header: {
                         title: "15 Months",
                         class: "bold",
                         selectedValue: "",
@@ -373,6 +410,352 @@ export const useImmunizationStore = defineStore("ImmunizationStore", {
                         {
                             name: "Malaria Vaccine 4",
                             value: "Malaria Vaccine 4",
+                            checked: false,
+                        },
+                    ],
+                },
+            },
+        ] as any,
+        oneYearToFiveYearsImmunization: [
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                checkboxBtnContent: {
+                    header: {
+                        title: "1 Year",
+                        class: "bold",
+                        selectedValue: "",
+                        name: "birth immunization",
+                    },
+                    data: [
+                        {
+                            name: "vitamin A",
+                            value: "vitamin A",
+                            checked: false,
+                        },
+                    ],
+                },
+            },
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                checkboxBtnContent: {
+                    header: {
+                        title: "1 Year 6 Months",
+                        class: "bold",
+                        selectedValue: "",
+                        name: "birth immunization",
+                    },
+                    data: [
+                        {
+                            name: "vitamin A",
+                            value: "vitamin A",
+                            checked: false,
+                        },
+                    ],
+                },
+            },
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                checkboxBtnContent: {
+                    header: {
+                        title: "2 Years",
+                        class: "bold",
+                        selectedValue: "",
+                        name: "birth immunization",
+                    },
+                    data: [
+                        {
+                            name: "vitamin A",
+                            value: "vitamin A",
+                            checked: false,
+                        },
+                    ],
+                },
+            },
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                checkboxBtnContent: {
+                    header: {
+                        title: "2 Years 6 Months",
+                        class: "bold",
+                        selectedValue: "",
+                        name: "birth immunization",
+                    },
+                    data: [
+                        {
+                            name: "vitamin A",
+                            value: "vitamin A",
+                            checked: false,
+                        },
+                    ],
+                },
+            },
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                checkboxBtnContent: {
+                    header: {
+                        title: "3 Years",
+                        class: "bold",
+                        selectedValue: "",
+                        name: "birth immunization",
+                    },
+                    data: [
+                        {
+                            name: "vitamin A",
+                            value: "vitamin A",
+                            checked: false,
+                        },
+                    ],
+                },
+            },
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                checkboxBtnContent: {
+                    header: {
+                        title: "3 Year 6 Months",
+                        class: "bold",
+                        selectedValue: "",
+                        name: "birth immunization",
+                    },
+                    data: [
+                        {
+                            name: "vitamin A",
+                            value: "vitamin A",
+                            checked: false,
+                        },
+                    ],
+                },
+            },
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                checkboxBtnContent: {
+                    header: {
+                        title: "4 Years",
+                        class: "bold",
+                        selectedValue: "",
+                        name: "birth immunization",
+                    },
+                    data: [
+                        {
+                            name: "vitamin A",
+                            value: "vitamin A",
+                            checked: false,
+                        },
+                    ],
+                },
+            },
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                checkboxBtnContent: {
+                    header: {
+                        title: "4 Years 6 Month",
+                        class: "bold",
+                        selectedValue: "",
+                        name: "birth immunization",
+                    },
+                    data: [
+                        {
+                            name: "vitamin A",
+                            value: "vitamin A",
+                            checked: false,
+                        },
+                    ],
+                },
+            },
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                checkboxBtnContent: {
+                    header: {
+                        title: "5 Years",
+                        class: "bold",
+                        selectedValue: "",
+                        name: "birth immunization",
+                    },
+                    data: [
+                        {
+                            name: "vitamin A",
+                            value: "vitamin A",
+                            checked: false,
+                        },
+                    ],
+                },
+            },
+        ] as any,
+        nineToFourteenYearsImmunization: [
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                checkboxBtnContent: {
+                    header: {
+                        title: "1st Dose",
+                        class: "bold",
+                        selectedValue: "",
+                        name: "moreThan5",
+                    },
+                    data: [
+                        {
+                            name: "HPV1",
+                            value: "HPV1",
+                            checked: false,
+                        },
+                    ],
+                },
+            },
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                checkboxBtnContent: {
+                    header: {
+                        title: "2nd dose after 6 months",
+                        class: "bold",
+                        selectedValue: "",
+                        name: "moreThan5",
+                    },
+                    data: [
+                        {
+                            name: "HPV2",
+                            value: "HPV2",
+                            checked: false,
+                        },
+                    ],
+                },
+            },
+        ] as any,
+        twelveYearsAboveImmunization: [
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                checkboxBtnContent: {
+                    header: {
+                        selectedValue: "",
+                        name: "moreThan5",
+                    },
+                    data: [
+                        {
+                            name: "Pfizer",
+                            value: "Pfizer",
+                            checked: false,
+                        },
+                    ],
+                },
+            },
+        ] as any,
+        fifteenYearsImmunization: [
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                checkboxBtnContent: {
+                    header: {
+                        title: "1st Dose",
+                        class: "bold",
+                        selectedValue: "",
+                        name: "moreThan5",
+                    },
+                    data: [
+                        {
+                            name: "TD",
+                            value: "TD",
+                            checked: false,
+                        },
+                    ],
+                },
+            },
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                checkboxBtnContent: {
+                    header: {
+                        title: "2nd after 4 weeks",
+                        class: "bold",
+                        selectedValue: "",
+                        name: "moreThan5",
+                    },
+                    data: [
+                        {
+                            name: "TD",
+                            value: "TD",
+                            checked: false,
+                        },
+                    ],
+                },
+            },
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                checkboxBtnContent: {
+                    header: {
+                        title: "3rd after 6 months",
+                        class: "bold",
+                        selectedValue: "",
+                        name: "moreThan5",
+                    },
+                    data: [
+                        {
+                            name: "TD",
+                            value: "TD",
+                            checked: false,
+                        },
+                    ],
+                },
+            },
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                checkboxBtnContent: {
+                    header: {
+                        title: "4th after 5 years",
+                        class: "bold",
+                        selectedValue: "",
+                        name: "moreThan5",
+                    },
+                    data: [
+                        {
+                            name: "TD",
+                            value: "TD",
+                            checked: false,
+                        },
+                    ],
+                },
+            },
+        ] as any,
+        eighteenYearsAboveImmunization: [
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                checkboxBtnContent: {
+                    header: {
+                        selectedValue: "",
+                        name: "moreThan5",
+                    },
+                    data: [
+                        {
+                            name: "AstraZeneca",
+                            value: "AstraZeneca",
+                            checked: false,
+                        },
+                    ],
+                },
+            },
+            {
+                selectedData: [],
+                isFinishBtn: false,
+                checkboxBtnContent: {
+                    header: {
+                        selectedValue: "",
+                        name: "moreThan5",
+                    },
+                    data: [
+                        {
+                            name: "Janssen (Johnson & Johnson)",
+                            value: "Janssen (Johnson & Johnson)",
                             checked: false,
                         },
                     ],

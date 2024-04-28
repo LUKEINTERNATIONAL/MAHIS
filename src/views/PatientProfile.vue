@@ -58,7 +58,7 @@
                         <ion-card
                             class="start_new_co"
                             v-if="programAccess('IMMUNIZATION PROGRAM')"
-                            @click="nav('immunizationEnrollment')"
+                            @click="nav('birthRegistration')"
                             style="margin-bottom: 20px"
                         >
                             + Enroll in Immunization program
@@ -177,7 +177,7 @@
                     <li
                         class="listPrograma"
                         v-if="programAccess('IMMUNIZATION PROGRAM')"
-                        @click="nav('immunizationEnrollment')"
+                        @click="nav('birthRegistration')"
                         style="margin-bottom: 20px"
                     >
                         + Enroll in Immunization program
@@ -188,7 +188,7 @@
                 </ul>
             </ion-popover>
             <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="displayNoneDesktop">
-                <ion-fab-button color="tertiary">
+                <ion-fab-button color="primary">
                     <ion-icon :icon="chevronUpCircle"></ion-icon>
                 </ion-fab-button>
                 <ion-fab-list side="top">

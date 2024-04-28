@@ -1,11 +1,6 @@
 <template>
     <div class="modal_wrapper">
-        <basic-form
-            :contentData="sixWeeksImmunization"
-            :initialData="initialData"
-            @update:inputValue="handleInputData"
-            @update:selected="handleInputData"
-        ></basic-form>
+        <basic-form :contentData="changeStatus" @update:inputValue="handleInputData" @update:selected="handleInputData"></basic-form>
     </div>
 </template>
 
@@ -13,7 +8,7 @@
 import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue";
 import { defineComponent } from "vue";
 import BasicForm from "@/components/BasicForm.vue";
-import { useImmunizationStore } from "@/apps/Immunization/stores/ImmunizationStore";
+import { useChangeStatusStore } from "@/apps/Immunization/stores/ChangeStatusStore";
 import { mapState } from "pinia";
 import {
     modifyCheckboxInputField,
@@ -41,25 +36,14 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useImmunizationStore, ["sixWeeksImmunization"]),
+        ...mapState(useChangeStatusStore, ["changeStatus"]),
     },
     mounted() {
-        const medicationHistory = useImmunizationStore();
+        const medicationHistory = useChangeStatusStore();
         // this.initialData = medicationHistory.getInitial();
     },
     methods: {
-        handleInputData(event: any) {
-            modifyFieldValue(this.sixWeeksImmunization, "Current hypertension treatment regimen", "popOverData", {
-                filterData: true,
-                data: [
-                    { name: "Captopril 12.5mg" },
-                    { name: "Aspirin 75mg" },
-                    { name: "Hydrochlorothiazide 25mg" },
-                    { name: "Enalapril Meleate 5mg" },
-                    { name: "Enalapril Maleate 10mg" },
-                ],
-            });
-        },
+        handleInputData(event: any) {},
     },
 });
 </script>
