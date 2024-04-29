@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
+import _ from "lodash";
 
 const initialPlacentaExamination=[
     {
@@ -38,7 +39,7 @@ const initialPlacentaExamination=[
                                 required: true,
                                 eventType: 'input',
                                 placeholder:'Pick time',
-                                timePopover: true
+                                isTimePopover: true
 
                             },
                             {
@@ -46,11 +47,12 @@ const initialPlacentaExamination=[
                                 unit: '',
                                 icon: icons.calenderPrimary,
                                 value: '',
+                                valueType: 'text',
                                 name: 'Date of delivery',
                                 required: true,
-                                datePopover:true,
                                 eventType: 'input',
-                                placeholder:'Pick date'
+                                placeholder:'Pick date',
+                                isDatePopover:true,
                             },
 
                         ]
@@ -107,6 +109,7 @@ const initialPlacentaExamination=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
+                                valueType:'text',
                                 name: 'Other mode of delivery notes',
                                 required: true,
                                 eventType: 'input',
@@ -208,6 +211,7 @@ const initialPlacentaExamination=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
+                                valueType:'text',
                                 name: 'Placenta weight',
                                 required: true,
                                 eventType: 'input',
@@ -219,6 +223,7 @@ const initialPlacentaExamination=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
+                                valueType:'text',
                                 name: 'Cord weight',
                                 required: true,
                                 eventType: 'input',
@@ -242,6 +247,7 @@ const initialPlacentaExamination=[
                     title: 'Cord insertion',
                     selectedValue: '',
                     class:"bold",
+                    name:'Cord insertion'
                 },
                 data:[
                     {
@@ -291,6 +297,7 @@ const initialPlacentaExamination=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
+                                valueType:'text',
                                 name: 'Number of vessels',
                                 required: true,
                                 eventType: 'input',
@@ -448,6 +455,7 @@ const initialPlacentaExamination=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
+                                valueType:'text',
                                 name: 'Other perineum condition',
                                 required: true,
                                 eventType: 'input',
@@ -470,7 +478,7 @@ const initialPlacentaExamination=[
                     title: 'Repair done for Tears/Episiotomy',
                     selectedValue: '',
                     class:"bold",
-                    name:"Perineum",
+                    name:"Repair done for Tears/Episiotomy",
                 },
                 data:[
                     {
@@ -502,7 +510,7 @@ export const useThirdStageOfLabour = defineStore('thirdStageOfLabour',{
             this.placentaExamination = data
         },
         getInitial(){
-            const data=[...initialPlacentaExamination]
+            const data=_.cloneDeep(initialPlacentaExamination)
             return [...data]
         }
     },

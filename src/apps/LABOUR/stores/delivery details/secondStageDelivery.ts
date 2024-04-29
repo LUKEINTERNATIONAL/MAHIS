@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
+import _ from "lodash";
 
 
 const initialSecondStageDetails=[
@@ -34,10 +35,12 @@ const initialSecondStageDetails=[
                                 unit: '',
                                 icon: icons.time,
                                 value: '',
+                                valueType:'text',
                                 name: 'Time of delivery',
                                 required: true,
                                 eventType: 'input',
-                                placeholder:'Pick time'
+                                placeholder:'Pick time',
+                                // isDatePopover:true,
 
                             },
                             {
@@ -45,11 +48,13 @@ const initialSecondStageDetails=[
                                 unit: '',
                                 icon: icons.calenderPrimary,
                                 value: '',
+                                valueType:'text',
                                 name: 'Date of delivery',
                                 required: true,
                                 datePopover:true,
                                 eventType: 'input',
-                                placeholder:'Pick date'
+                                placeholder:'Pick date',
+                                isDatePopover: true,
                             },
 
                         ]
@@ -160,6 +165,7 @@ const initialSecondStageDetails=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
+                                valueType:'text',
                                 name: 'First name',
                                 required: true,
                                 eventType: 'input',
@@ -171,6 +177,7 @@ const initialSecondStageDetails=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
+                                valueType:'text',
                                 name: 'Last name',
                                 required: true,
                                 eventType: 'input',
@@ -198,6 +205,7 @@ const initialSecondStageDetails=[
                                 inputHeader: 'APGAR score at 1 minute',
                                 unit: '',
                                 icon: icons.editPen,
+                                valueType:'text',
                                 value: '',
                                 name: 'Apgar score at 1 minute',
                                 required: true,
@@ -210,6 +218,7 @@ const initialSecondStageDetails=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
+                                valueType:'text',
                                 name: 'Apgar score at 5 minutes',
                                 required: true,
                                 eventType: 'input',
@@ -292,6 +301,7 @@ const initialSecondStageDetails=[
                                 inputHeader: 'Baby weight',
                                 unit: 'grams',
                                 icon: icons.weight,
+                                valueType:'text',
                                 value: '',
                                 name: 'Weight',
                                 required: true,
@@ -304,6 +314,7 @@ const initialSecondStageDetails=[
                                 unit: 'cm',
                                 icon: icons.height,
                                 value: '',
+                                valueType:'text',
                                 name: 'Height',
                                 required: true,
                                 eventType: 'input',
@@ -315,6 +326,7 @@ const initialSecondStageDetails=[
                                 unit: 'cm',
                                 icon: icons.height,
                                 value: '',
+                                valueType:'text',
                                 name: 'Circumference',
                                 required: true,
                                 eventType: 'input',
@@ -518,6 +530,7 @@ const initialSecondStageDetails=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
+                                valueType:'text',
                                 name: 'Other notes',
                                 required: true,
                                 eventType: 'input',
@@ -728,6 +741,7 @@ const initialSecondStageDetails=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
+                                valueType:'text',
                                 name: 'Other notes',
                                 required: true,
                                 eventType: 'input',
@@ -869,7 +883,6 @@ const initialNewbornComplications=[
                     title: 'Place of delivery',
                     name:'Place of delivery',
                     selectedValue: '',
-                    displayNext:"Other"
                 },
                 data:[
                     {
@@ -908,17 +921,17 @@ const initialNewbornComplications=[
                     title: 'Mode of delivery',
                     name:'Mode of delivery',
                     selectedValue: '',
-                    displayNext:"Other"
+                    displayNext:"Other mode of delivery"
                 },
                 data:[
                     {
-                        name: 'Spontaneous Vertex Delivery (SVD)',
-                        value: 'spontaneous vertex delivery',
+                        name: 'Spontaneous Vertex Delivery',
+                        value: 'Spontaneous Vertex Delivery',
                         colSize: '6',
                     },
                     {
-                        name: 'Vacuum Extraction (VE)',
-                        value: 'Vacuum Extraction',
+                        name: 'Vacuum extraction delivery',
+                        value: 'Vacuum extraction delivery',
                         colSize: '6',
                     },
                     {
@@ -932,8 +945,8 @@ const initialNewbornComplications=[
                         colSize: '6',
                     },
                     {
-                        name: 'Other',
-                        value: 'Other',
+                        name: 'Other mode of delivery',
+                        value: 'Other mode of delivery',
                         colSize: '6',
                     },
                 ]
@@ -943,7 +956,7 @@ const initialNewbornComplications=[
     {
 
         isFinishBtn: false,
-        childName:'mode of delivery',
+        childName:'Mode of delivery',
         sectionHeader: '',
         classDash: 'dashed_bottom_border _padding',
 
@@ -984,17 +997,17 @@ const initialNewbornComplications=[
                 data:[
                     {
                         name: 'Skilled health worker (Nurse midwife/community midwife assistant/medical assistant/clinical technician/medical doctor',
-                        value: 'skilled health worker',
+                        value: 'Skilled health worker (Nurse midwife/community midwife assistant/medical assistant/clinical technician/medical doctor',
                         colSize: '12',
                     },
                     {
                         name: 'Unskilled (Patient attendant/ ward attendant/ health surveillance assistant/other/none',
-                        value: 'unskilled',
+                        value: 'Unskilled (Patient attendant/ ward attendant/ health surveillance assistant/other/none',
                         colSize: '12',
                     },
                     {
                         name: 'Traditional birth attendant (TBA)',
-                        value: 'tba',
+                        value: 'Traditional birth attendant (TBA)',
                         colSize: '12',
                     },
 
@@ -1016,7 +1029,8 @@ const initialNewbornComplications=[
                                 inputHeader: 'Estimated blood loss',
                                 unit: 'ml',
                                 icon: icons.editPen,
-                                value: 'estimated blood loss',
+                                valueType:'text',
+                                value: '',
                                 name: 'Estimated blood loss',
                                 required: true,
                                 eventType: 'input',
@@ -1071,7 +1085,9 @@ const initialObstetricDetails=[
             {
                 header:{
                     title: '',
-                    selectedValue: ''
+                    selectedValue: '',
+                    name:'Obstetric complications',
+
                 },
                 data:[
 
@@ -1085,7 +1101,7 @@ const initialObstetricDetails=[
                     },
                     {
                         name: 'Sepsis',
-                        value: 'sepsis',
+                        value: 'Sepsis',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',
@@ -1101,7 +1117,9 @@ const initialObstetricDetails=[
             {
                 header:{
                     title: '',
-                    selectedValue: ''
+                    selectedValue: '',
+                    name:'Obstetric complications',
+
                 },
                 data:[
                     {
@@ -1131,12 +1149,14 @@ const initialObstetricDetails=[
             {
                 header:{
                     title: '',
-                    selectedValue: ''
+                    selectedValue: '',
+                    name:'Obstetric complications',
+
                 },
                 data:[
                     {
-                        name: 'Other',
-                        value: 'other',
+                        name: 'Other complications',
+                        value: 'Other complications',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',
@@ -1149,6 +1169,7 @@ const initialObstetricDetails=[
     },
 
     {
+        childName:'Other complications',
         isFinishBtn: false,
         sectionHeader: '',
         classDash: 'dashed_bottom_border _padding',
@@ -1159,10 +1180,12 @@ const initialObstetricDetails=[
                     {
                         colData: [
                             {
-                                inputHeader: 'specify',
+                                displayNone:true,
+                                inputHeader: 'Specify',
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
+                                valueType:'text',
                                 name: 'Other notes',
                                 required: true,
                                 eventType: 'input',
@@ -1326,7 +1349,7 @@ const initialObstetricDetails=[
 
                     {
                         name: 'Non-pneumatic Anti-shock Garment (NASG)',
-                        value: 'non-pneumatic Anti-shock Garment',
+                        value: 'Non-pneumatic Anti-shock Garment (NASG)',
                         checked: false,
                         colSize: '8',
                     },
@@ -1413,8 +1436,8 @@ const initialObstetricDetails=[
                 },
                 data:[
                     {
-                        name: 'Other',
-                        value: 'Other',
+                        name: 'Other care',
+                        value: 'Other care',
                         checked: false,
                         colSize: '8',
                     },
@@ -1425,6 +1448,7 @@ const initialObstetricDetails=[
     },
 
     {
+        childName:'Other care',
         isFinishBtn: false,
         sectionHeader: '',
         classDash: 'dashed_bottom_border _padding',
@@ -1435,10 +1459,12 @@ const initialObstetricDetails=[
                     {
                         colData: [
                             {
+                                displayNone:true,
                                 inputHeader: 'Specify',
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
+                                valueType:'text',
                                 name: 'Other notes',
                                 required: true,
                                 eventType: 'input',
@@ -1500,18 +1526,18 @@ export const useSecondStageOfLabourStore = defineStore('secondStageOfLabourStore
             this.obstetricComplications = data
         },
         getInitial(){
-            const data=[...initialSecondStageDetails]
+            const data=_.cloneDeep(initialSecondStageDetails)
             return [...data]
         },
         getInitial1(){
-            const data=[...initialNewbornComplications]
+            const data=_.cloneDeep(initialNewbornComplications)
             return [...data]
         },
         getInitial2(){
-            const data=[...initialObstetricDetails]
+            const data=_.cloneDeep(initialObstetricDetails)
             return [...data]
         }
     },
-    persist:true,
+    // persist:true,
 
 })
