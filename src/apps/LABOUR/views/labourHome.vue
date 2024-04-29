@@ -31,8 +31,9 @@ import {
 import { mapState } from 'pinia';
 import BasicForm from '../../../components/BasicForm.vue';
 import { checkmark, pulseOutline } from 'ionicons/icons';
-import { icons } from '../../../utils/svg' 
-import Toolbar from '../components/Toolbar.vue';
+import { icons } from '../../../utils/svg'
+import Toolbar from "@/components/Toolbar.vue";
+import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from '../components/DemographicBar.vue';
 import LandingPage from "@/apps/LABOUR/components/home/LandingPage.vue";
 

@@ -29,14 +29,14 @@ import {
   IonModal,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
-import Toolbar from "@/apps/PNC/components/Toolbar.vue";
-import ToolbarSearch from "@/apps/PNC/components/ToolbarSearch.vue";
+import Toolbar from "@/components/Toolbar.vue";
+import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/PNC/components/DemographicBar.vue";
 import { chevronBackOutline,checkmark } from 'ionicons/icons';
 import SaveProgressModal from '@/components/SaveProgressModal.vue'
 import {createModal, toastSuccess, toastWarning} from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
-import Stepper from "@/apps/PNC/components/Stepper.vue";
+import Stepper from "@/components/Stepper.vue";
 import { mapState } from 'pinia';
 import {Service} from "@/services/service";
 import {HIVStatusAndTreatmentService} from "@/apps/PNC/Services/hiv_status_and_treatment_service";
@@ -158,14 +158,14 @@ export default defineComponent({
 
     },
     async saveWardMonitoring() {
-      if (this.dangerSigns.length > 0 && this.vitals>0 && this.otherExams>0) {
+      if (this.dangerSigns.length > 0 && this.vitals.length>0 && this.otherExams.length>0) {
         const userID: any = Service.getUserID();
         const  wardMonitoring= new PostnatalWardStayService(this.demographics.patient_id, userID);
         const encounter = await wardMonitoring.createEncounter();
         if (!encounter) return toastWarning("Unable to create patient postnatal ward stay encounter");
         const patientStatus = await wardMonitoring.saveObservationList(await this.buildWardStayMonitoring());
         if (!patientStatus) return toastWarning("Unable to create patient routine monitoring details!");
-        toastSuccess("Ward stay details have been created");
+        toastSuccess("Ward  details have been created");
       }
       console.log(await this.buildWardStayMonitoring())
 

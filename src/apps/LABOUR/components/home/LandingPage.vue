@@ -74,7 +74,7 @@
         </router-link>
       </ion-col>
       <ion-col size="12" size-md="6" size-lg="4">
-        <router-link to="/">
+        <router-link to="/labour/end">
           <ion-card color="secondary" class="card">
             <ion-card-header>
               <ion-card-title>End labour program</ion-card-title>

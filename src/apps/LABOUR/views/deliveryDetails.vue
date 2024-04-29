@@ -29,15 +29,22 @@ import {
   IonModal,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
-import Toolbar from "@/apps/LABOUR/components/Toolbar.vue";
-import ToolbarSearch from "@/apps/LABOUR/components/ToolbarSearch.vue";
+import Toolbar from "@/components/Toolbar.vue";
+import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/LABOUR/components/DemographicBar.vue";
 import { chevronBackOutline,checkmark } from 'ionicons/icons';
 import SaveProgressModal from '@/components/SaveProgressModal.vue'
-import { createModal } from '@/utils/Alerts'
+import {createModal, toastSuccess, toastWarning} from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
-import Stepper from "@/apps/LABOUR/components/Stepper.vue";
+import Stepper from "@/components/Stepper.vue";
 import { mapState } from 'pinia';
+import {Service} from "@/services/service";
+import {PNCVisitService} from "@/apps/PNC/Services/pnc_visit_service";
+import {formatCheckBoxData, formatInputFiledData, formatRadioButtonData} from "@/services/formatServerData";
+import {useDemographicsStore} from "@/stores/DemographicStore";
+import {useSecondStageOfLabourStore} from "@/apps/LABOUR/stores/delivery details/secondStageDelivery";
+import {SecondStageDeliveryService} from "@/apps/LABOUR/services/labour_delivery_details_service";
+import {useThirdStageOfLabour} from "@/apps/LABOUR/stores/delivery details/thirdStageDelivery";
 export default defineComponent({
   name: "deliveryDetails",
   components:{
@@ -106,12 +113,19 @@ export default defineComponent({
 
   },
   computed:{
-
+  ...mapState(useDemographicsStore,["demographics"]),
+    ...mapState(useThirdStageOfLabour,["placentaExamination"]),
+  ...mapState(useSecondStageOfLabourStore,["secondStageDetails","newbornComplications","obstetricComplications"])
 
   },
   mounted(){
     this.markWizard()
 
+  },
+  getFormatedData(data: any) {
+    return data.map((item: any) => {
+      return item?.data;
+    });
   },
 
   setup() {
@@ -153,10 +167,43 @@ export default defineComponent({
         return item?.data;
       });
     },
-    saveData(){
+   async saveData(){
+      await this.saveSecondStageLabour()
       this.$router.push("labourHome");
 
     },
+    async saveSecondStageLabour() {
+      if (this.secondStageDetails.length>0 && this.newbornComplications.length>0 && this.obstetricComplications.length>0 && this.obstetricComplications.length>0) {
+        const userID: any = Service.getUserID();
+        const  secondStageDelivery= new SecondStageDeliveryService(this.demographics.patient_id, userID);
+        const encounter = await secondStageDelivery.createEncounter();
+        if (!encounter) return toastWarning("Unable to create Second stage and Third stage of labour encounter");
+        const patientStatus = await secondStageDelivery.saveObservationList(await this.buildSecondStageOfLabour());
+        if (!patientStatus) return toastWarning("Unable to create patient second stage and third stage of labour details!");
+        toastSuccess("Second stage and Third stage  of labour  details have been created");
+      }
+      console.log(await this.buildSecondStageOfLabour())
+
+    },
+
+    async buildSecondStageOfLabour() {
+      return [
+
+        ...(await formatCheckBoxData(this.secondStageDetails)),
+        ...(await formatRadioButtonData(this.secondStageDetails)),
+        ...(await formatInputFiledData(this.secondStageDetails)),
+        ...(await formatCheckBoxData(this.obstetricComplications)),
+        ...(await formatRadioButtonData(this.obstetricComplications)),
+        ...(await formatInputFiledData(this.obstetricComplications)),
+        ...(await formatCheckBoxData(this.newbornComplications)),
+        ...(await formatRadioButtonData(this.newbornComplications)),
+        ...(await formatInputFiledData(this.newbornComplications)),
+        ...(await formatCheckBoxData(this.placentaExamination)),
+        ...(await formatRadioButtonData(this.placentaExamination)),
+        ...(await formatInputFiledData(this.placentaExamination)),
+      ];
+    },
+
 
     openModal(){
       createModal(SaveProgressModal)

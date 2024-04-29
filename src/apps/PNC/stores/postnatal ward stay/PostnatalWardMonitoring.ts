@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
+import _ from "lodash";
 
-const initialDangerSigns=[
+const initialWardDangerSigns=[
     {
         selectdData: [],
         classDash: 'dashed_bottom_border',
@@ -49,8 +50,8 @@ const initialDangerSigns=[
                 data:[
 
                     {
-                        name: 'Pre-term labour',
-                        value: 'value',
+                        name: 'Preterm labour',
+                        value: 'Preterm labour',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',
@@ -340,7 +341,8 @@ const initialVitals =[
                                 unit: 'BMP',
                                 icon: icons.respiratory,
                                 value: '',
-                                name: 'Respiratory rate',
+                                valueType:"text",
+                                name: 'Fetal heart rate',
                                 eventType: 'input'
                             },
                         ],
@@ -900,7 +902,7 @@ const initialOtherexams=[
                                 inputHeader: 'Specify',
                                 unit: 'text',
                                 icon: icons.editPen,
-                                valueType:'',
+                                valueType:'text',
                                 value: '',
                                 name: 'Other postnatal complications notes',
                                 required: true,
@@ -987,8 +989,8 @@ const initialOtherexams=[
                 },
                 data:[
                     {
-                        name: 'Exclusive',
-                        value: 'exclusive',
+                        name: 'Breastfed exclusively',
+                        value: 'Breastfed exclusively',
                         colSize: '5',
 
                     },
@@ -1012,7 +1014,7 @@ const initialOtherexams=[
 ] as any;
 export const usePostnatalWardStayStore = defineStore('postnatalWardStayStore',{
     state: () => ({
-        dangerSigns: [...initialDangerSigns] as any,
+        dangerSigns: [...initialWardDangerSigns] as any,
 
         vitals: [...initialVitals] as any,
 
@@ -1027,14 +1029,14 @@ export const usePostnatalWardStayStore = defineStore('postnatalWardStayStore',{
             this.otherExams = data
         },
         getInitial(){
-            const data=[...initialDangerSigns]
-            return [...data]
+            const data=_.cloneDeep(initialWardDangerSigns);
+            return [...data];
         },getInitial1(){
-            const data=[...initialVitals]
-            return [...data]
+            const data=_.cloneDeep(initialVitals);
+            return [...data];
         },getInitial2(){
-            const data=[...initialOtherexams]
-            return [...data]
+            const data=_.cloneDeep(initialOtherexams);
+            return [...data];
         },
     },
     persist:true,

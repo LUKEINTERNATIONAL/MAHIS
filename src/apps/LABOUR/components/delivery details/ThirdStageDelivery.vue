@@ -94,7 +94,7 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Adds a box shadow with reduced intensity */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0); /* Adds a box shadow with reduced intensity */
 }
 
 .section {
