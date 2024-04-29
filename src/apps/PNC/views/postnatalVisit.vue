@@ -36,7 +36,7 @@ import { chevronBackOutline,checkmark } from 'ionicons/icons';
 import SaveProgressModal from '@/components/SaveProgressModal.vue'
 import {createModal, toastSuccess, toastWarning} from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
-import Stepper from "@/apps/PNC/components/Stepper.vue";
+import Stepper from "@/components/Stepper.vue";
 import { mapState } from 'pinia';
 import {useDemographicsStore} from "@/stores/DemographicStore";
 import {useVisitForMotherStore} from "@/apps/PNC/stores/postnatal visits/VisitForMother";

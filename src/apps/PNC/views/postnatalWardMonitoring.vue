@@ -36,7 +36,7 @@ import { chevronBackOutline,checkmark } from 'ionicons/icons';
 import SaveProgressModal from '@/components/SaveProgressModal.vue'
 import {createModal, toastSuccess, toastWarning} from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
-import Stepper from "@/apps/PNC/components/Stepper.vue";
+import Stepper from "@/components/Stepper.vue";
 import { mapState } from 'pinia';
 import {Service} from "@/services/service";
 import {HIVStatusAndTreatmentService} from "@/apps/PNC/Services/hiv_status_and_treatment_service";

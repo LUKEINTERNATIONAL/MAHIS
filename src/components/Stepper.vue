@@ -1,6 +1,6 @@
 <template>
     <ion-row>
-        <ion-col size-md="4" size-xl="2.5" size-sm="0" size-lg="4" offset-sm="0" offset-md="0.4" offset-xl="0.8" class="displayNoneMobile">
+        <ion-col size-md="4" size-xl="2.5" size-sm="0" size-lg="4" offset-sm="0" offset-md="0.4" offset-xl="0.8" class="displayNoneMobile" style="margin-top: 75px;">
             <ion-card class="wizard_card">
                 <div class="wizard_title">
                     <strong> {{ stepperTitle }}</strong>
@@ -23,7 +23,7 @@
             </ion-card>
         </ion-col>
 
-        <ion-col size-sm="12" size-xl="7" size-md="7.2" size-lg="7" offset-sm="0" offset-md="0.4" offset-xl="0.8" class="">
+      <ion-col size-sm="12" size-xl="7" size-md="7.2" size-lg="7" offset-sm="0" offset-md="0.4" offset-xl="0.8" class="" style="margin-top: 75px;">
             <div class="back_profile" @click="openModal()">
                 <ion-icon style="font-size: 20px" :icon="chevronBackOutline"> </ion-icon>
                 <span style="cursor: pointer"> Back to profile</span>
@@ -134,6 +134,38 @@ import OPDOutcome from "@/apps/OPD/components/ConsultationPlan/OPDOutcome.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import DynamicButton from "@/components/DynamicButton.vue";
+import HeadAssessment from "@/apps/ANC/components/others/headAssessment.vue";
+import ANCTreatment from "@/apps/ANC/components/ANCtreatment/ANCTreatment.vue";
+import ANCDiagnosis from "@/apps/ANC/components/ANCtreatment/ANCDiagnosis.vue";
+import ANCDiagnosisCounselling from "@/apps/ANC/components/ANCtreatment/ANCDiagnosisCounselling.vue";
+import ANCImmunization from "@/apps/ANC/components/ANCtreatment/ANCImmunization.vue";
+import ANCIntimatePartner from "@/apps/ANC/components/ANCtreatment/ANCIntimatePartner.vue";
+import ANCDeworming from "@/apps/ANC/components/ANCtreatment/ANCDeworming.vue";
+import ANCMedicationDispensed from "@/apps/ANC/components/ANCtreatment/ANCMedicationDispensed.vue";
+import DischargeWoman from "@/apps/PNC/components/others/DischargeWoman.vue";
+import PNCEnd from "@/apps/PNC/components/others/PNCEnd.vue";
+import BabyStatus from "@/apps/PNC/components/postanatal ward stay/BabyStatus.vue";
+import PostnatalWardMonitoring from "@/apps/PNC/components/postanatal ward stay/PostnatalWardMonitoring.vue";
+import DeliveryDetails from "@/apps/PNC/components/postnatal details/DeliveryDetails.vue";
+import HIVStatusAndTreatment from "@/apps/PNC/components/postnatal details/HIVStatusAndTreatment.vue";
+import ObstetricDetails from "@/apps/PNC/components/postnatal details/ObstetricDetails.vue";
+import VisitForMother from "@/apps/PNC/components/postnatal visits/VisitForMother.vue";
+import VisitForBaby from "@/apps/PNC/components/postnatal visits/VisitForBaby.vue";
+import Labour from "@/apps/LABOUR/components/obstetric details/Labour.vue";
+import QuickCheck from "@/apps/LABOUR/components/physical exam/QuickCheck.vue";
+import PhysicalExamination from "@/apps/LABOUR/components/physical exam/PhysicalExamination.vue";
+import PelvicAssessment from "@/apps/LABOUR/components/physical exam/PelvicAssessment.vue";
+import PatientReferral from "@/apps/LABOUR/components/repeatable things/PatientReferral.vue";
+import FirstVaginalExamination from "@/apps/LABOUR/components/physical exam/FirstVaginalExamination.vue";
+import SecondStageDelivery from "@/apps/LABOUR/components/delivery details/SecondStageDelivery.vue";
+import ThirdStageDelivery from "@/apps/LABOUR/components/delivery details/ThirdStageDelivery.vue";
+import end from "@/apps/LABOUR/components/repeatable things/end.vue";
+import OtherExams from "@/apps/LABOUR/components/repeatable things/OtherExams.vue";
+import Vitals from "@/apps/LABOUR/components/repeatable things/Vitals.vue";
+import ImmidiatePostnatalChecksForChild
+  from "@/apps/LABOUR/components/delivery details/ImmidiatePostnatalChecksForChild.vue";
+import ImmidiatePostnatalChecksForMother
+  from "@/apps/LABOUR/components/delivery details/ImmidiatePostnatalChecksForMother.vue";
 
 export default defineComponent({
     name: "Home",
@@ -211,6 +243,37 @@ export default defineComponent({
         ChangeStatus,
         ImmunizationNextAppointment,
         GrowthMonitor,
+      HeadAssessment,
+      ANCTreatment,
+      ANCDiagnosis,
+      ANCDiagnosisCounselling,
+      ANCImmunization,
+      ANCIntimatePartner,
+      ANCDeworming,
+      ANCMedicationDispensed,
+      DischargeWoman,
+      PNCEnd,
+      BabyStatus,
+      PostnatalWardMonitoring,
+      DeliveryDetails,
+      HIVStatusAndTreatment,
+      ObstetricDetails,
+      VisitForMother,
+      VisitForBaby,
+      Labour,
+      QuickCheck,
+      PhysicalExamination,
+      PelvicAssessment,
+      PatientReferral,
+      FirstVaginalExamination,
+      SecondStageDelivery,
+      ThirdStageDelivery,
+      end,
+      OtherExams,
+      Vitals,
+      ImmidiatePostnatalChecksForChild,
+      ImmidiatePostnatalChecksForMother
+
     },
     data() {
         return {

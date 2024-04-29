@@ -14,7 +14,7 @@ import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import { defineComponent } from 'vue';
 import BasicInputField from '@/components/BasicInputField.vue';
-import Stepper from "@/apps/ANC/components/Stepper.vue";
+import Stepper from "@/components/Stepper.vue";
 import DiagnosisTreatment from '../components/Treatment/DiagnosisTreatment.vue';
 import MedicationDispensed from '@/apps/ANC/components/Treatment/MedicationDispensed.vue'
 import { icons } from '@/utils/svg';
