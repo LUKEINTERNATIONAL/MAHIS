@@ -40,6 +40,8 @@ import {
   dynamicValue,
   getCheckboxSelectedValue,
   getFieldValue,
+  getRadioSelectedValue,
+  modifyFieldValue,
 } from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
 import { useOtherExamsStore} from "@/apps/LABOUR/stores/repeatable things/otherExams";
@@ -78,14 +80,54 @@ export default defineComponent({
     ...mapState(useOtherExamsStore,["urine"]),
   },
   mounted(){
+    this.handleUrine()
+    this. handleUrineColor()
+    this.handleUrineColorOdour()
+    this.handleDilated()
   },
   watch:{
+    urine:{
+      handler(){
+        this.handleUrine()
+        this. handleUrineColor()
+        this.handleUrineColorOdour()
+        this.handleDilated()
+      },
+      deep:true
+    }
   },
   setup() {
     return { checkmark,pulseOutline };
   },
   methods: {
-
+    handleUrine(){
+      if(getRadioSelectedValue(this.urine,'woman urinated')=='yes'){
+        modifyFieldValue(this.urine,'amount of urine','displayNone',false)
+      }else{
+        modifyFieldValue(this.urine,'amount of urine','displayNone',true)
+      }
+    },
+    handleUrineColor(){
+      if(getRadioSelectedValue(this.urine,'woman urinated')=='yes'){
+        modifyFieldValue(this.urine,'color of urine','displayNone',false)
+      }else{
+        modifyFieldValue(this.urine,'color of urine','displayNone',true)
+      }
+    },
+    handleUrineColorOdour(){
+      if(getRadioSelectedValue(this.urine,'woman urinated')=='yes'){
+        modifyFieldValue(this.urine,'Odour','displayNone',false)
+      }else{
+        modifyFieldValue(this.urine,'Odour','displayNone',true)
+      }
+    },
+    handleDilated(){
+      if(getRadioSelectedValue(this.urine,'Fully dilated')=='yes'){
+        modifyFieldValue(this.urine,'Time fully dilated','displayNone',false)
+      }else{
+        modifyFieldValue(this.urine,'Time fully dilated','displayNone',true)
+      }
+    },
   }
 });
 
