@@ -21,7 +21,8 @@
                 />
 
                 <div>
-                    <ion-label v-if="date_properties[0].show_error.value" class="error-label">{{ date_properties[0].error_message }}</ion-label>
+                    <ion-label v-if="date_properties[0].show_error.value" class="error-label">
+                        {{ date_properties[0].error_message }}</ion-label>
                 </div>
             </ion-col>
         </ion-row>
@@ -47,7 +48,11 @@
                     :inputValue="note_properties[1].dataValue.value"
                 />
 
-                
+                <div>
+                    <ion-label v-if="note_properties[1].show_error.value" class="error-label">
+                        {{ note_properties[1].error_message }}
+                    </ion-label>
+                </div>
             </ion-col>
             <ion-col>
                 <ion-checkbox 
@@ -68,6 +73,8 @@
                     :icon="phonePortraitOutline"
                     :inputValue="phone_number_value"
                 />
+
+
             </ion-col>
             <ion-col></ion-col>
         </ion-row>
@@ -78,12 +85,24 @@
                     :place_holder="date_properties[1].placeHolder"
                     @time-up-dated="date_properties[1].dataHandler"
                 />
+
+                <div>
+                    <ion-label v-if="date_properties[1].show_error.value" class="error-label">
+                        {{ date_properties[1].error_message }}
+                    </ion-label>
+                </div>
             </ion-col>
             <ion-col>
                 <TimePicker
                     :place_holder="time_properties[1].placeHolder"
                     @time-up-dated="time_properties[1].dataHandler"
                 />
+
+                <div>
+                    <ion-label v-if="time_properties[1].show_error.value" class="error-label">
+                        {{ time_properties[1].error_message }}
+                    </ion-label>
+                </div>
             </ion-col>
         </ion-row>
 
@@ -101,6 +120,12 @@
                     @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
                     @item-list-filtered="list_picker_prperties[0].listFilteredFN"
                 />
+
+                <div>
+                    <ion-label v-if="list_picker_prperties[0].show_error.value" class="error-label">
+                        {{ list_picker_prperties[0].error_message }}
+                    </ion-label>
+                </div>
             </ion-col>
 
             <ion-col>
@@ -116,6 +141,12 @@
                     @item-list-up-dated="list_picker_prperties[1].listUpdatedFN"
                     @item-list-filtered="list_picker_prperties[1].listFilteredFN"
                 />
+
+                <div>
+                    <ion-label v-if="list_picker_prperties[1].show_error.value" class="error-label">
+                        {{ list_picker_prperties[1].error_message }}
+                    </ion-label>
+                </div>
             </ion-col>
         </ion-row>
 
@@ -127,6 +158,12 @@
                     :inputValue="note_properties[5].dataValue.value"
                     :disabled="temP_AA"
                 />
+
+                <div>
+                    <ion-label v-if="note_properties[5].show_error.value" class="error-label">
+                        {{ note_properties[5].error_message }}
+                    </ion-label>
+                </div>
             </ion-col>
         </ion-row>
 
@@ -136,6 +173,12 @@
                     :place_holder="time_properties[2].placeHolder"
                     @time-up-dated="time_properties[2].dataHandler"
                 />
+
+                <div>
+                    <ion-label v-if="time_properties[2].show_error.value" class="error-label">
+                        {{ time_properties[2].error_message }}
+                    </ion-label>
+                </div>
             </ion-col>
             
             <ion-col>
@@ -144,6 +187,13 @@
                     :icon="personCircleOutline"
                     :inputValue="note_properties[2].dataValue.value"
                 />
+
+                
+                <div>
+                    <ion-label v-if="note_properties[2].show_error.value" class="error-label">
+                        {{ note_properties[2].error_message }}
+                    </ion-label>
+                </div>
             </ion-col>
 
         </ion-row>
@@ -155,6 +205,12 @@
                     :icon="medicalOutline"
                     :inputValue="note_properties[3].dataValue.value"
                 />
+
+                <div>
+                    <ion-label v-if="note_properties[3].show_error.value" class="error-label">
+                        {{ note_properties[3].error_message }}
+                    </ion-label>
+                </div>
             </ion-col>
 
             <ion-col>
@@ -163,6 +219,12 @@
                     :icon="pencilOutline"
                     :inputValue="note_properties[4].dataValue.value"
                 />
+
+                <div>
+                    <ion-label v-if="note_properties[4].show_error.value" class="error-label">
+                        {{ note_properties[4].error_message }}
+                    </ion-label>
+                </div>
             </ion-col>
         </ion-row>
 
@@ -307,6 +369,8 @@ const note_properties = [
         placeHolder: 'Enter name of person confirming death',
         dataHandler: notesUpDated_fn3,
         dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'error',
     },
     {
         placeHolder:'Enter position of the person confirming death',
@@ -378,6 +442,8 @@ const list_picker_prperties = [
         listFilteredFN: ()=>{},
         use_internal_filter: true as any,
         disabled: ref(false) as any,
+        show_error: ref(false),
+        error_message: 'error',
     },
     {
         multi_Selection: false as any,
@@ -390,6 +456,8 @@ const list_picker_prperties = [
         listFilteredFN: ()=>{},
         use_internal_filter: true as any,
         disabled: temP_A.value,
+        show_error: ref(false),
+        error_message: 'error',
     },
 ]
 
@@ -516,24 +584,48 @@ function checkPatient() {
 }
 
 function validateForm() {
-    validatePlaceOfDeath()
-    validateDateOfDeath()
+    areFieldsValid(note_properties)
+    areFieldsValid(date_properties)
+    areFieldsValid(time_properties)
+    isItemSeleted(list_picker_prperties[0])
+    isItemSeleted(list_picker_prperties[1])
 }
 
-function validatePlaceOfDeath() {
-    if (note_properties[0].dataValue.value == "" || note_properties[0].dataValue.value === undefined) {
-        note_properties[0].show_error.value = true
-    } else {
-        note_properties[0].show_error.value = false
+function areFieldsValid(propoerties_array: any) {
+    let found_ivalid_entry = 0
+    propoerties_array.forEach((property: any) => {
+        if (property.dataValue.value == "" || property.dataValue.value === undefined) {
+            property.show_error.value = true
+            found_ivalid_entry++
+        } else {
+            property.show_error.value = false
+        }
+    })
+
+    if (found_ivalid_entry > 0) {
+        return false
+    } else if (found_ivalid_entry == 0) {
+        return true
     }
 }
 
-function validateDateOfDeath() {
-    if (date_properties[0].dataValue.value === undefined || date_properties[0].dataValue.value == "") {
-        date_properties[0].show_error.value = true 
+function validateListPicker(list: any) {
+}
+
+function isItemSeleted(propoerties_item: any) {
+    const temp_data_v = []
+    propoerties_item.items.forEach((item: any) => {
+        if (item.selected == true) {
+            temp_data_v.push(item)
+        }
+    })
+    if (temp_data_v.length > 0) {
+        propoerties_item.show_error.value = false 
     } else {
-        date_properties[0].show_error.value = false
+        propoerties_item.show_error.value = true
     }
+
+    return propoerties_item.show_error.value
 }
 
 </script>
