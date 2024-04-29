@@ -30,15 +30,15 @@ import {
 } from "@ionic/vue";
 import { ConceptService } from "@/services/concept_service";
 import { defineComponent } from "vue";
-import Toolbar from "@/apps/ANC/components/Toolbar.vue";
-import ToolbarSearch from "@/apps/ANC/components/ToolbarSearch.vue";
+import Toolbar from "@/components/Toolbar.vue";
+import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import { mapState } from "pinia";
-import Stepper from "@/apps/ANC/components/Stepper.vue";
+import Stepper from "@/components/Stepper.vue";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import PastObstreticHistory from "@/apps/ANC/components/profile/PastObstreticHistory.vue";
 import CurrentPregnancies from "../components/profile/CurrentPregnancies.vue";

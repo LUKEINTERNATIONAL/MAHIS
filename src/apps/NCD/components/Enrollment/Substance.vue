@@ -37,7 +37,7 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useEnrollementStore, ["patientHistory"]),
+        ...mapState(useEnrollementStore, ["substance"]),
     },
     watch: {
         personInformation: {
@@ -48,6 +48,7 @@ export default defineComponent({
             deep: true,
         },
     },
+
     mounted() {
         this.updateEnrollmentStores();
         this.buidCards();
@@ -59,9 +60,8 @@ export default defineComponent({
                 mainTitle: "Enrollment",
                 cards: [
                     {
-                        cardTitle: "Patient history & Complications ",
-                        content: this.patientHistory,
-                        initialData: enrollment.getInitialPatientHistory(),
+                        cardTitle: "Substance use / Consumption",
+                        content: this.substance,
                     },
                 ],
             };
@@ -71,14 +71,13 @@ export default defineComponent({
         },
         updateEnrollmentStores() {
             const enrollmentStore = useEnrollementStore();
-            enrollmentStore.setPatientHistory(this.patientHistory);
+            enrollmentStore.setSubstance(this.substance);
         },
-        async handleInputData(event: any) {
-            if (event.al) {
-                if (event.value.detail.checked) modifyCheckboxInputField(this.patientHistory, event.al.name, "displayNone", false);
-                else modifyCheckboxInputField(this.patientHistory, event.al.name, "displayNone", true);
-            }
+
+        testF(data: any) {
+            console.log(data);
         },
+        async handleInputData(event: any) {},
     },
 });
 </script>
@@ -128,7 +127,6 @@ ion-radio {
     line-height: 3;
 }
 .small_font {
-    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
     font-size: 12px;

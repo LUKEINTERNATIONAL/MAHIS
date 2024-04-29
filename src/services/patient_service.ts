@@ -154,6 +154,10 @@ export class PatientService extends Service {
         const age = this.getAge();
         return this.isFemale() && age >= 12 && age <= 50;
     }
+    isUnderFive() {
+        const age = this.getAge();
+        return age <= 5;
+    }
 
     async getInitialObs(concept: string, attr = "value_numeric") {
         try {

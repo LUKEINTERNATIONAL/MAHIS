@@ -33,14 +33,14 @@
             </div>
             <div class="center_content" v-if="registrationType == 'manual' && registrationDisplayType == 'grid'">
                 <ion-row v-if="registrationDisplayType == 'grid'">
-                    <ion-col size="4">
+                    <ion-col size-sm="12" size-md="6" size-lg="4">
                         <PersonalInformation />
                     </ion-col>
-                    <ion-col size="4">
-                        <CurrentLocation />
+                    <ion-col size-sm="12" size-md="6" size-lg="4">
                         <SocialHistory />
+                        <CurrentLocation />
                     </ion-col>
-                    <ion-col size="4">
+                    <ion-col size-sm="12" size-md="6" size-lg="4" class="regDisplayFlex">
                         <HomeLocation />
                         <GuardianInformation />
                     </ion-col>
@@ -226,7 +226,10 @@ export default defineComponent({
             }
         },
         async findPatient(patientID: any) {
-            this.openNewPage("/patientProfile", await PatientService.findByID(patientID));
+            const patientData = await PatientService.findByID(patientID);
+            const patient = new PatientService();
+            if (await patient.isUnderFive()) this.openNewPage("/birthRegistration", patientData);
+            else this.openNewPage("/patientProfile", patientData);
         },
         async saveData() {
             await this.createPatient();

@@ -1,10 +1,10 @@
-import Enrollment from "@/apps/Immunization/views/Enrollment.vue";
+import BirthRegistration from "@/apps/Immunization/views/BirthRegistration.vue";
 import consultationPlan from "@/apps/Immunization/views/consultationPlan.vue";
 export default [
     {
-        path: "/immunizationEnrollment",
-        name: "immunizationEnrollment",
-        component: Enrollment,
+        path: "/birthRegistration",
+        name: "birthRegistration",
+        component: BirthRegistration,
     },
     {
         path: "/immunizationConsultation",

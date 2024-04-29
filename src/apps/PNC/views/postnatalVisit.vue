@@ -29,23 +29,21 @@ import {
   IonModal,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
-import Toolbar from "@/apps/PNC/components/Toolbar.vue";
-import ToolbarSearch from "@/apps/PNC/components/ToolbarSearch.vue";
+import Toolbar from "@/components/Toolbar.vue";
+import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/PNC/components/DemographicBar.vue";
 import { chevronBackOutline,checkmark } from 'ionicons/icons';
 import SaveProgressModal from '@/components/SaveProgressModal.vue'
 import {createModal, toastSuccess, toastWarning} from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
-import Stepper from "@/apps/PNC/components/Stepper.vue";
+import Stepper from "@/components/Stepper.vue";
 import { mapState } from 'pinia';
 import {useDemographicsStore} from "@/stores/DemographicStore";
 import {useVisitForMotherStore} from "@/apps/PNC/stores/postnatal visits/VisitForMother";
 import {useVisitForBabyStore} from "@/apps/PNC/stores/postnatal visits/VisitForBaby";
 import {Service} from "@/services/service";
-import {BabyMonitoringService} from "@/apps/PNC/Services/baby_monitoring_service";
 import {formatCheckBoxData, formatInputFiledData, formatRadioButtonData} from "@/services/formatServerData";
-import {VisitForMotherService} from "@/apps/PNC/Services/visit_for_mother_service";
-import {VisitForBabyService} from "@/apps/PNC/Services/visit_for_baby_service";
+import {PNCVisitService} from "@/apps/PNC/Services/pnc_visit_service";
 export default defineComponent({
   name: "postnatalVisit",
   components:{
@@ -169,55 +167,38 @@ export default defineComponent({
       });
     },
    async saveData(){
-      await this.saveVisitForMother()
-      await this.saveVisitForBaby()
+      await this.savePNCVisit()
       this.$router.push("home");
 
     },
 
-    async saveVisitForMother() {
-      if (this.visitForMother>0) {
+    async savePNCVisit() {
+      if (this.visitForMother.length>0 && this.visitForBaby.length>0) {
         const userID: any = Service.getUserID();
-        const  visitForMother= new VisitForMotherService(this.demographics.patient_id, userID);
-        const encounter = await visitForMother.createEncounter();
-        if (!encounter) return toastWarning("Unable to create visit for mother encounter");
-        const patientStatus = await visitForMother.saveObservationList(await this.buildVisitForMother());
+        const  pncVisit= new PNCVisitService(this.demographics.patient_id, userID);
+        const encounter = await pncVisit.createEncounter();
+        if (!encounter) return toastWarning("Unable to create PNC visit encounter");
+        const patientStatus = await pncVisit.saveObservationList(await this.buildPNCVisit());
         if (!patientStatus) return toastWarning("Unable to create patient PNC visit details!");
-        toastSuccess("PNC visit details for mother have been created");
+        toastSuccess("PNC visit details for mother and baby have been created");
       }
-      console.log(await this.buildVisitForMother())
+      console.log(await this.buildPNCVisit())
 
     },
-    async saveVisitForBaby() {
-      if (this.visitForBaby>0) {
-        const userID: any = Service.getUserID();
-        const  visitForMother= new VisitForBabyService(this.demographics.patient_id, userID);
-        const encounter = await visitForMother.createEncounter();
-        if (!encounter) return toastWarning("Unable to create visit for baby encounter");
-        const patientStatus = await visitForMother.saveObservationList(await this.buildVisitForBaby());
-        if (!patientStatus) return toastWarning("Unable to create PNC visit details for baby!");
-        toastSuccess("PNC visit details for baby have been created");
-      }
-      console.log(await this.buildVisitForBaby())
 
-    },
-    async buildVisitForMother() {
+    async buildPNCVisit() {
       return [
 
         ...(await formatCheckBoxData(this.visitForMother)),
         ...(await formatRadioButtonData(this.visitForMother)),
         ...(await formatInputFiledData(this.visitForMother)),
-      ];
-    },
-
-    async buildVisitForBaby() {
-      return [
-
         ...(await formatCheckBoxData(this.visitForBaby)),
         ...(await formatRadioButtonData(this.visitForBaby)),
         ...(await formatInputFiledData(this.visitForBaby)),
       ];
     },
+
+
 
 
     openModal(){

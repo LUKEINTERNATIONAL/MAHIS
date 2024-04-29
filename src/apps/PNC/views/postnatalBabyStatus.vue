@@ -29,14 +29,14 @@ import {
   IonModal,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
-import Toolbar from "@/apps/PNC/components/Toolbar.vue";
-import ToolbarSearch from "@/apps/PNC/components/ToolbarSearch.vue";
+import Toolbar from "@/components/Toolbar.vue";
+import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/PNC/components/DemographicBar.vue";
 import { chevronBackOutline,checkmark } from 'ionicons/icons';
 import SaveProgressModal from '@/components/SaveProgressModal.vue'
 import {createModal, toastSuccess, toastWarning} from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
-import Stepper from "@/apps/PNC/components/Stepper.vue";
+import Stepper from "@/components/Stepper.vue";
 import { mapState } from 'pinia';
 import {Service} from "@/services/service";
 import {PostnatalWardStayService} from "@/apps/PNC/Services/postnatal_wardstay_service";
@@ -156,7 +156,7 @@ export default defineComponent({
 
     },
     async saveBabyMonitoring() {
-      if (this.babyStatusDetails>0) {
+      if (this.babyStatusDetails.length>0) {
         const userID: any = Service.getUserID();
         const  babyStatusDetails= new BabyMonitoringService(this.demographics.patient_id, userID);
         const encounter = await babyStatusDetails.createEncounter();

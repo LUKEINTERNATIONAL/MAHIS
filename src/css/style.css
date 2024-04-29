@@ -299,7 +299,7 @@ ion-toast.custom-toast::part(container) {
     margin-top: 20px;
 }
 .content_width {
-    max-width: 1520px;
+    max-width: 1620px;
 }
 .small-modal {
     --border-radius: 16px;
@@ -314,7 +314,7 @@ ion-button {
     text-transform: none;
 }
 .nationalIDModal {
-    --width: 50vw;
+    /* --width: 50vw; */
     --border-radius: 16px;
 }
 
@@ -449,8 +449,11 @@ ion-accordion {
     text-align: left;
 }
 .search_card {
-    width: 60vw;
+    width: 59vw;
     --padding: 5px;
     --background: #fff;
     left: 10px;
+}
+ion-modal {
+    --height: none;
 }

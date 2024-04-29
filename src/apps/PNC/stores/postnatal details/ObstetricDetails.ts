@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
+import _ from "lodash";
 
 const initialObstetricDetails=[
     {
@@ -164,8 +165,8 @@ const initialObstetricDetails=[
                         justify: 'space-between',
                     },
                     {
-                        name: 'Obstructed/prolonged labour',
-                        value: 'prolonged labour',
+                        name: 'Obstructed or prolonged labour',
+                        value: 'Obstructed or prolonged labour',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',
@@ -357,7 +358,7 @@ const initialObstetricDetails=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
-                                valueType:true,
+                                valueType:'text',
                                 name: 'Other problems notes',
                                 required: true,
                                 eventType: 'input',
@@ -379,12 +380,12 @@ export const useObstetricDetailsStore = defineStore('obstetricDetails',{
             this.obstetricDetails = data
         },
         getInitial(){
-            const data=[...initialObstetricDetails]
-            return [...data]
+            const data=_.cloneDeep(initialObstetricDetails);
+            return [...data];
         }
 
 
     },
-    // persist:true,
+    persist:true,
 
 })
