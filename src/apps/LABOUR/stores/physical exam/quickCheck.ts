@@ -7,11 +7,43 @@ export const useQuickCheckStore = defineStore('labourDetailsStore',{
         pastProblems: [
             {
                 selectdData: [],
+                isFinishBtn: false,
+                classDash:"dashed_bottom_border _padding",
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'What is the reason for coming to the facility?',
+                            class: 'bold',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'In labour',
+                                value: 'In labour',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Delivered on the way to the facility',
+                                value: 'Delivered',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+
+            {
+                selectdData: [],
                 classDash: 'dashed_bottom_border',
                 checkboxBtnContent:
                     {
                         header:{
-                            title: '',
+                            title: 'Danger signs',
+                            class: 'bold',
                             selectedValue: ''
                         },
                         data:[
@@ -160,7 +192,7 @@ export const useQuickCheckStore = defineStore('labourDetailsStore',{
             },
 
             {
-                classDash: 'dashed_bottom_border',
+                classDash: '',
                 checkboxBtnContent:
                     {
                         header:{
@@ -213,20 +245,224 @@ export const useQuickCheckStore = defineStore('labourDetailsStore',{
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Eclampsia/Pre-Eclampsia?',
+                            title: 'Labour onset type',
                             selectedValue: ''
                         },
                         data:[
                             {
-                                name: 'Well',
+                                name: 'Spontaneous',
                                 value: 'well',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Disturbed',
+                                name: 'Induced',
                                 value: 'disturbed',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                isFinishBtn: false,
+                sectionHeader: 'Date and Time of onset of labour',
+                classDash: 'dashed_bottom_border _padding',
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Time of onset of labour',
+                                        value: '',
+                                        name: 'Time',
+                                        icon: icons.time,
+                                        required: true,
+                                        eventType: 'input',
+                                        isDatePopover: true,
+                                        alertsError: false,
+                                        alertsErrorMassage: ''
+                                        
+                                    },
+                                    {
+                                        inputHeader: 'Date of onset of labour',
+                                        value: '',
+                                        name: 'Date',
+                                        icon: icons.calendar,
+                                        required: true,
+                                        isDatePopover: true,
+                                        eventType: 'input',
+                                        alertsError: false,
+                                        alertsErrorMassage: ''
+                                    },
+
+                                ],
+
+                            },
+
+                        ],
+
+                    },
+
+            },
+
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Membranes ruptured?',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Yes',
+                                value: 'Yes',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'No',
+                                value: 'No',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+
+            {
+                isFinishBtn: false,
+                sectionHeader: 'Date and Time membranes ruptured',
+                classDash: 'dashed_bottom_border _padding',
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        inputHeader: 'Time membranes ruptured',
+                                        value: '',
+                                        name: 'Time',
+                                        icon: icons.time,
+                                        required: true,
+                                        eventType: 'input',
+                                        isDatePopover: true,
+                                        alertsError: false,
+                                        alertsErrorMassage: ''
+                                        
+                                    },
+                                    {
+                                        inputHeader: 'Date membranes ruptured',
+                                        value: '',
+                                        name: 'Date',
+                                        icon: icons.calendar,
+                                        required: true,
+                                        isDatePopover: true,
+                                        eventType: 'input',
+                                        alertsError: false,
+                                        alertsErrorMassage: ''
+                                    },
+
+                                ],
+
+                            },
+
+                        ],
+
+                    },
+
+            },
+
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Has she had food in 4 hours? ',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Yes',
+                                value: 'Yes',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'No',
+                                value: 'No',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Homemade medicines taken?',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Yes',
+                                value: 'Yes',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'No',
+                                value: 'No',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border _padding',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Sleep',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Well',
+                                value: 'Well',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Disturbed',
+                                value: 'Disturbed',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',

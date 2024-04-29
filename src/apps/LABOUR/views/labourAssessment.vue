@@ -40,11 +40,20 @@ import ToolbarSearch from "@/apps/LABOUR/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/LABOUR/components/DemographicBar.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
-import { createModal } from "@/utils/Alerts";
+import { createModal, toastSuccess, toastWarning } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import Stepper from "@/apps/LABOUR/components/Stepper.vue";
 import { mapState } from "pinia";
 import { getCheckboxSelectedValue } from "@/services/data_helpers";
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import { useObstreticHistoryStore } from "../stores/obstetric details/obstetric";
+import { useQuickCheckStore } from "../stores/physical exam/quickCheck";
+import { usePhysicalExamStore } from "../stores/physical exam/physicalExamination";
+import { usefirstVaginalExaminationStore } from "../stores/physical exam/firstVaginalExamination";
+import { usePelvicAssessmentStore } from "../stores/physical exam/pelvicAssessment";
+import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
+import { Service } from "@/services/service";
+import {QuickCheckInstance,PhysicalExamInstance, VaginalExamInstance, PelvicAssessmentInstance } from '@/apps/LABOUR/services/labour_assesment_service';
 
 export default defineComponent({
     name: "obstetricDetails",
@@ -143,7 +152,17 @@ export default defineComponent({
             console.log(change);
         },
     },
-    computed: {},
+    computed: { 
+         ...mapState(useDemographicsStore, ["demographics"]),
+         ...mapState(useQuickCheckStore,["pastProblems"]),
+         ...mapState(usePhysicalExamStore,["vitals"]),
+         ...mapState(usePhysicalExamStore,["anaemia"]),
+         ...mapState(usePhysicalExamStore,["otherphysicalExams"]),
+         ...mapState(usefirstVaginalExaminationStore,["firstVaginalExamination"]),
+         ...mapState(usePelvicAssessmentStore,["pelvicAssessment"]),
+
+         
+    },
     saveData() {
         const medicalConditions = [
             "Auto immune desease",
@@ -223,6 +242,94 @@ export default defineComponent({
           this.$router.push("labourHome");
 
         },
+
+        async buildQuickCheck() {
+       return [
+          ...(await formatInputFiledData(this.pastProblems)),
+          ...(await formatRadioButtonData(this.pastProblems)),
+          ...(await formatCheckBoxData(this.pastProblems)),
+        ]
+    },
+
+    async buildPhysicalExamination() {
+       return [
+          ...(await formatInputFiledData(this.vitals)),
+          ...(await formatRadioButtonData(this.vitals)),
+          ...(await formatRadioButtonData(this.anaemia)),
+          ...(await formatRadioButtonData(this.otherphysicalExams)),
+          
+        ]
+    },
+
+    async buildFirstVaginalExamination() {
+       return [
+          ...(await formatInputFiledData(this.firstVaginalExamination)),
+          ...(await formatRadioButtonData(this.firstVaginalExamination)),
+        ]
+    },
+
+    async buildPelvicAssessment() {
+       return [
+          ...(await formatInputFiledData(this.pelvicAssessment)),
+          ...(await formatRadioButtonData(this.pelvicAssessment)),
+        ]
+    },
+
+    async saveQuickCheck () {
+        const data: any = await this.buildQuickCheck();
+        if (data.length > 0) {
+            const userID: any = Service.getUserID();
+            const quickCheckInstance = new QuickCheckInstance();
+            quickCheckInstance.push(this.demographics.patient_id, userID, data)
+            toastSuccess("Quick check data saved successfully");
+        }
+
+        else {
+            toastWarning("Could not find concepts");
+        }
+    },
+
+    async savePhysicalExamInstance () {
+        const data: any = await this.buildPhysicalExamination();
+        if (data.length > 0) {
+            const userID: any = Service.getUserID();
+            const physicalExamInstance = new PhysicalExamInstance();
+            physicalExamInstance.push(this.demographics.patient_id, userID, data)
+            toastSuccess("Physical examination data saved successfully");
+        }
+
+        else {
+            toastWarning("Could not find concepts");
+        }
+    },
+
+    async saveVaginalExamInstance () {
+        const data: any = await this.buildFirstVaginalExamination();
+        if (data.length > 0) {
+            const userID: any = Service.getUserID();
+            const vaginalExamInstance = new VaginalExamInstance();
+            vaginalExamInstance.push(this.demographics.patient_id, userID, data)
+            toastSuccess("First Vaginal Examination data saved successfully");
+        }
+
+        else {
+            toastWarning("Could not find concepts");
+        }
+    },
+
+    async savePelvicAssessmentInstance () {
+        const data: any = await this.buildPelvicAssessment();
+        if (data.length > 0) {
+            const userID: any = Service.getUserID();
+            const pelvicAssessmentInstance = new PelvicAssessmentInstance();
+            pelvicAssessmentInstance.push(this.demographics.patient_id, userID, data)
+            toastSuccess("Pelvic Assessment data saved successfully");
+        }
+
+        else {
+            toastWarning("Could not find concepts");
+        }
+    },
 
         openModal() {
             createModal(SaveProgressModal);

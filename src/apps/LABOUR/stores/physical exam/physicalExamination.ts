@@ -103,40 +103,6 @@ export const usePhysicalExamStore = defineStore('physicalExamStore',{
             {
                 isFinishBtn: false,
                 sectionHeader: '',
-                data:
-                    {
-                        rowData:[
-                            {
-                                colData: [
-                                    {
-                                        inputHeader: 'Fundal height',
-                                        unit: 'cm',
-                                        icon: icons.height,
-                                        value: '',
-                                        name: 'Weight',
-                                        required: true,
-                                        eventType: 'input',
-                                        placeholder:'Enter the height'
-                                    },
-                                    {
-                                        inputHeader: 'Fundus',
-                                        unit: 'Weeks',
-                                        icon: icons.weight,
-                                        value: '',
-                                        name: 'Fundus',
-                                        required: true,
-                                        eventType: 'input',
-                                        placeholder:'Enter fundus'
-                                    },
-
-                                ]
-                            }
-                        ]
-                    },
-            },
-            {
-                isFinishBtn: false,
-                sectionHeader: '',
                 classDash: 'dashed_bottom_border _padding',
 
                 data:
