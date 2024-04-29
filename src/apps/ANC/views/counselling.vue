@@ -164,6 +164,8 @@ export default defineComponent({
           await this.saveBehaviourCounselling();
           await this.savePhysiologicalCounselling()
           await  this.saveDietCounselling()
+          this.$router.push("ANChome");
+
 
         },
       async saveBehaviourCounselling() {
