@@ -9,7 +9,7 @@ import { icons } from "@/utils/svg";
 
 import DispositionModal from "@/components/ProfileModal/OutcomeModal.vue";
 import { createModal } from "@/utils/Alerts";
-import { useImmunizationEnrollmentStore } from "@/apps/Immunization/stores/EnrollmentStore";
+import { useEnrollementStore } from "@/stores/EnrollmentStore";
 import { mapState } from "pinia";
 import BasicForm from "@/components/BasicForm.vue";
 import BasicCard from "@/components/BasicCard.vue";
@@ -37,13 +37,19 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useImmunizationEnrollmentStore, ["immunizationEnrollment"]),
+        ...mapState(useEnrollementStore, ["patientHistoryHIV"]),
     },
     watch: {
-        immunizationEnrollment: {
+        personInformation: {
             handler() {
                 this.updateEnrollmentStores();
                 this.buidCards();
+            },
+            deep: true,
+        },
+        patientHistoryHIV: {
+            handler() {
+                this.controllFields();
             },
             deep: true,
         },
@@ -54,13 +60,14 @@ export default defineComponent({
     },
     methods: {
         buidCards() {
-            const enrollment = useImmunizationEnrollmentStore();
+            const enrollment = useEnrollementStore();
             this.cardData = {
-                mainTitle: "Child Enrollment",
+                mainTitle: "Enrollment",
                 cards: [
                     {
-                        content: this.immunizationEnrollment,
-                        initialData: enrollment.getInitialImmunizationEnrollment(),
+                        cardTitle: "Patient history & Complications ",
+                        content: this.patientHistoryHIV,
+                        initialData: enrollment.getInitialPatientHistoryHIV(),
                     },
                 ],
             };
@@ -69,11 +76,22 @@ export default defineComponent({
             createModal(DispositionModal);
         },
         updateEnrollmentStores() {
-            const enrollmentStore = useImmunizationEnrollmentStore();
-            enrollmentStore.setImmunizationEnrollment(this.immunizationEnrollment);
+            const enrollmentStore = useEnrollementStore();
+            enrollmentStore.setPatientHistoryHIV(this.patientHistoryHIV);
+        },
+        controllFields() {
+            if (getRadioSelectedValue(this.patientHistoryHIV, "HIV") == "R") {
+                modifyFieldValue(this.patientHistoryHIV, "ART_start_date", "displayNone", false);
+            } else {
+                modifyFieldValue(this.patientHistoryHIV, "ART_start_date", "displayNone", true);
+            }
         },
         async handleInputData(event: any) {
             console.log(event.al);
+            if (event.al) {
+                if (event.value.detail.checked) modifyCheckboxInputField(this.patientHistoryHIV, event.al.name, "displayNone", false);
+                else modifyCheckboxInputField(this.patientHistoryHIV, event.al.name, "displayNone", true);
+            }
         },
     },
 });

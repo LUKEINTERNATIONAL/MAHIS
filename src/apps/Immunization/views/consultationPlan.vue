@@ -155,7 +155,7 @@ export default defineComponent({
 
     methods: {
         async getData() {
-            const steps = ["Immunization Services", "Investigations", "Diagnosis", "Treatment Plan", "Next Appointment", "Outcome"];
+            const steps = ["Growth Monitor", "Immunization Services", "Next Appointment", "Change Status"];
             // const steps = this.activities;
             for (let i = 0; i < steps.length; i++) {
                 const title = steps[i];
@@ -169,10 +169,11 @@ export default defineComponent({
                     number,
                     last_step: i === steps.length - 1 ? "last_step" : "",
                 });
-
+                let component = title;
+                if (title == "Next Appointment") component = "Immunization Next Appointment";
                 this.StepperData.push({
                     title,
-                    component: title.replace(/\s+/g, ""),
+                    component: component.replace(/\s+/g, ""),
                     value: number.toString(),
                 });
             }

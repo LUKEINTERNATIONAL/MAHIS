@@ -1,9 +1,6 @@
 .search-input-mobile {
     display: none;
 }
-.accordion_group[data-v-49d2667a] {
-    /* width: 58vw; */
-}
 .wizard_content {
     margin-left: 9%;
 }
@@ -13,6 +10,14 @@
 .displayNoneDesktop {
     display: none !important;
 }
+.nationalIDCard {
+    padding: 90px 0px 90px 0px;
+    width: 500px;
+    margin-inline: 5px;
+    font-weight: 500;
+    font-size: 14px;
+    text-align: center;
+}
 @media (max-width: 1350px) {
     .wizard_content {
         margin-left: 0px !important;
@@ -21,8 +26,19 @@
         --width: 60vw !important;
     }
 }
-
-@media (max-width: 767px) {
+@media (max-width: 991px) {
+    .regDisplayFlex {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+@media (max-width: 768px) {
+    .content_manager {
+        /* margin-top: 65px; */
+    }
+    .regDisplayFlex {
+        display: inline;
+    }
     .large-modal {
         --width: 80vw !important;
     }
@@ -72,15 +88,41 @@
     .back_profile {
         margin-left: 2vw !important;
     }
+    .nationalIDCard {
+        width: 100%;
+    }
+    .nationalIDModal {
+        --width: 80vw;
+    }
 }
 @media (max-width: 602px) {
     ion-popover[mobilePopover] {
         --offset-x: 35%;
+    }
+    .nationalIDCard {
+        width: 100%;
+    }
+    .nationalIDModal {
+        --width: 90vw;
     }
 }
 
 @media (max-width: 503px) {
     ion-popover[mobilePopover] {
         --offset-x: 18%;
+    }
+    .nationalIDModal {
+        --width: 90vw;
+    }
+    .nationalIDCard {
+        width: 100%;
+    }
+    .dp__cell_inner {
+        padding-left: unset;
+        padding-right: unset;
+    }
+    .dp__calendar_header_item {
+        padding-left: unset;
+        padding-right: unset;
     }
 }

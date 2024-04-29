@@ -31,7 +31,7 @@
       </div>
 
       <div class="accordion_group">
-        <ion-accordion-group @ionChange="accordionGroupChange($event)">
+        <ion-accordion-group @ionChange="accordionGroupChange($event)" :value="['1']">
           <ion-accordion v-for="(item, index) in StepperData" :key="index" :value="item.value">
             <ion-item slot="header">
               <ion-label>{{ item.title }}</ion-label>
