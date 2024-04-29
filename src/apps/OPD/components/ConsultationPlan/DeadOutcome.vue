@@ -54,6 +54,7 @@
                     :value="checkbox_properties[0].value"
                     alignment="start"
                     class="ion-lblCls"
+                    :disabled="checkbox_properties[0].disable_checkbox.value"
                     > 
                         {{ checkbox_properties[0].lblTxt }}
                     </ion-checkbox>
@@ -227,6 +228,10 @@ const isClientFemale = ref(true)
 const temP_A = ref(true as any)
 const temP_AA = ref(true as any)
 
+onMounted(async () => {
+    checkPatient()
+})
+
 const time_properties = [
     {
         placeHolder: {default: 'Enter time of death if known'} as any,
@@ -279,6 +284,7 @@ const checkbox_properties = [
     {
         lblTxt: 'Was the individual pregnant at the time of death?',
         value: ref(false),
+        disable_checkbox: ref(true),
     }
 ]
 
@@ -500,7 +506,13 @@ function iweFn(data: any) {
 
 function checkPatient() {
     const patient = new PatientService()
-    return patient.isChildBearing()
+    const isChildBearing = patient.isChildBearing as any
+    if (isChildBearing == true) {
+        checkbox_properties[0].disable_checkbox.value = false
+    }
+    if (isChildBearing == false) {
+        checkbox_properties[0].disable_checkbox.value = true
+    }
 }
 
 function validateForm() {
