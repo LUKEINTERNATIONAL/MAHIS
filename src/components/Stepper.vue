@@ -1,6 +1,6 @@
 <template>
     <ion-row>
-        <ion-col size-md="4" size-xl="2.5" size-sm="0" size-lg="4" offset-sm="0" offset-md="0.4" offset-xl="0.8" class="displayNoneMobile" style="margin-top: 75px;">
+        <ion-col size-md="4" size-xl="2.5" size-sm="0" size-lg="4" offset-sm="0" offset-md="0.4" offset-xl="0.8" class="displayNoneMobile" >
             <ion-card class="wizard_card">
                 <div class="wizard_title">
                     <strong> {{ stepperTitle }}</strong>
@@ -23,7 +23,7 @@
             </ion-card>
         </ion-col>
 
-      <ion-col size-sm="12" size-xl="7" size-md="7.2" size-lg="7" offset-sm="0" offset-md="0.4" offset-xl="0.8" class="" style="margin-top: 75px;">
+      <ion-col size-sm="12" size-xl="7" size-md="7.2" size-lg="7" offset-sm="0" offset-md="0.4" offset-xl="0.8" class="">
             <div class="back_profile" @click="openModal()">
                 <ion-icon style="font-size: 20px" :icon="chevronBackOutline"> </ion-icon>
                 <span style="cursor: pointer"> Back to profile</span>
