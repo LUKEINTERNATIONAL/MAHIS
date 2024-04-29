@@ -227,9 +227,7 @@ export default defineComponent({
         },
         async findPatient(patientID: any) {
             const patientData = await PatientService.findByID(patientID);
-            const patient = new PatientService();
-            if (await patient.isUnderFive()) this.openNewPage("/birthRegistration", patientData);
-            else this.openNewPage("/patientProfile", patientData);
+            this.openNewPage(patientData);
         },
         async saveData() {
             await this.createPatient();
@@ -294,7 +292,7 @@ export default defineComponent({
             const selectedID = getFieldValue(this.guardianInformation, "relationship", "selectedID");
             if (selectedID) await RelationsService.createRelation(patientID, guardianID, selectedID);
         },
-        openNewPage(url: any, item: any) {
+        async openNewPage(item: any) {
             const demographicsStore = useDemographicsStore();
             demographicsStore.setPatient(item);
             demographicsStore.setDemographics({
@@ -305,7 +303,10 @@ export default defineComponent({
                 gender: item.person.gender,
                 patient_id: item.patient_id,
             });
-            resetPatientData();
+            await resetPatientData();
+            let url = "/patientProfile";
+            const patient = new PatientService();
+            if (await patient.isUnderFive()) url = "/birthRegistration";
             this.$router.push(url);
         },
         patientIdentifier(item: any) {
