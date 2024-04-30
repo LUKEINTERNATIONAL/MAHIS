@@ -40,20 +40,19 @@ export default defineComponent({
         ...mapState(useEnrollementStore, ["patientHistory"]),
     },
     watch: {
-        personInformation: {
+        patientHistory: {
             handler() {
-                this.updateEnrollmentStores();
-                this.buidCards();
+                this.buildCards();
             },
             deep: true,
         },
     },
     mounted() {
         this.updateEnrollmentStores();
-        this.buidCards();
+        this.buildCards();
     },
     methods: {
-        buidCards() {
+        buildCards() {
             const enrollment = useEnrollementStore();
             this.cardData = {
                 mainTitle: "Enrollment",

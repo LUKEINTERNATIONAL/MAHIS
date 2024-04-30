@@ -11,7 +11,7 @@ import { useNextAppointmentStore } from "@/stores/NextAppointmentStore";
 import { useRegistrationStore } from "@/stores/RegistrationStore";
 import { useGeneralStore } from "@/stores/GeneralStore";
 
-export function resetPatientData() {
+export async function resetPatientData() {
     sessionStorage.setItem("saveProgressStatus", "false");
     const vitals = useVitalsStore();
     const investigations = useInvestigationStore();
@@ -24,8 +24,19 @@ export function resetPatientData() {
     const nextAppointment = useNextAppointmentStore();
     const registration = useRegistrationStore();
 
-    vitals.$reset();
-    registration.$reset();
+    vitals.setVitals(vitals.getInitialSocialHistory());
+    registration.setPersonalInformation(registration.getInitialPersonalInformation());
+    registration.setSocialHistory(registration.getInitialSocialHistory());
+    registration.setHomeLocation(registration.getInitialHomeLocation());
+    registration.setCurrentLocation(registration.getInitialCurrentLocation());
+    registration.setGuardianInformation(registration.getInitialGuardianInformation());
+
+    enrollement.setDiagnosis(enrollement.getInitialEnrollmentDiagnosis());
+    enrollement.setPatientHistory(enrollement.getInitialPatientHistory());
+    enrollement.setSubstance(enrollement.getInitialSubstance());
+    enrollement.setPatientHistory(enrollement.getInitialFamilyHistory());
+    enrollement.setNCDNumber(enrollement.getInitialNCDNumber());
+    enrollement.setPatientHistoryHIV(enrollement.getInitialPatientHistoryHIV());
     investigations.$reset();
     outcome.$reset();
     medications.$reset();
