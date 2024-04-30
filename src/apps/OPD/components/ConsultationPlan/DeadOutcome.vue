@@ -84,7 +84,7 @@
             <ion-col>
                 <DatePicker
                     :place_holder="date_properties[1].placeHolder"
-                    @time-up-dated="date_properties[1].dataHandler"
+                    @date-up-dated="date_properties[1].dataHandler"
                 />
 
                 <div>
@@ -255,7 +255,7 @@
 
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from "vue"
 export default defineComponent({
     name: "xxxComponent",
 });
@@ -287,7 +287,8 @@ import {
     medicalOutline,
     pencilOutline,
     removeOutline
-} from "ionicons/icons";
+} from "ionicons/icons"
+import _ from "lodash"
 
 const phone_number_value = ref()
 const phone_number_place_holder = ref('gurdian phone number')
@@ -302,6 +303,7 @@ onMounted(async () => {
 const time_properties = [
     {
         placeHolder: {default: 'Enter time of death if known'} as any,
+        property_name: 'timeOfDeath',
         dataHandler: timeUpdate_fn1,
         dataValue: ref(),
         show_error: ref(false),
@@ -311,6 +313,7 @@ const time_properties = [
     },
     {
         placeHolder: {default: 'Enter time arrived'} as any,
+        property_name: 'timeArrived',
         dataHandler: timeUpdate_fn2,
         dataValue: ref(),
         show_error: ref(false),
@@ -320,6 +323,7 @@ const time_properties = [
     },
     {
         placeHolder: {default: 'Enter time confirming death'} as any,
+        property_name: 'timeOfDeathConfirmation',
         dataHandler: timeUpdate_fn3,
         dataValue: ref(),
         show_error: ref(false),
@@ -332,6 +336,7 @@ const time_properties = [
 const date_properties = [
     {
         placeHolder: {default: 'Enter date of death'} as any,
+        property_name: 'dateOfDeath',
         dataHandler: dateUpdate_fn1,
         dataValue: ref(),
         show_error: ref(false),
@@ -341,6 +346,7 @@ const date_properties = [
     },
     {
         placeHolder: {default: 'Enter date arrived'} as any,
+        property_name: 'dateArrived',
         dataHandler: dateUpdate_fn2,
         dataValue: ref(),
         show_error: ref(false),
@@ -350,6 +356,7 @@ const date_properties = [
     },
     {
         placeHolder: {default: 'Enter date confirming death'} as any,
+        property_name: 'dateOfDeathConfirmation',
         dataHandler: dateUpdate_fn3,
         dataValue: ref(),
         show_error: ref(false),
@@ -370,6 +377,7 @@ const checkbox_properties = [
 const note_properties = [
     {
         placeHolder: 'Enter place of death',
+        property_name: 'placeOfDeath',
         dataHandler: notesUpDated_fn1,
         dataValue: ref(),
         show_error: ref(false) as any,
@@ -379,6 +387,7 @@ const note_properties = [
     },
     {
         placeHolder: 'Enter name of guardian',
+        property_name: 'nameOfGuardian',
         dataHandler: notesUpDated_fn2,
         dataValue: ref(),
         show_error: ref(false),
@@ -388,6 +397,7 @@ const note_properties = [
     },
     {
         placeHolder: 'Enter name of person confirming death',
+        property_name: 'nameOfPersonConfirmindDeath',
         dataHandler: notesUpDated_fn3,
         dataValue: ref(),
         show_error: ref(false),
@@ -397,6 +407,7 @@ const note_properties = [
     },
     {
         placeHolder:'Enter position of the person confirming death',
+        property_name: 'positionOfthePersonConfirmingDeath',
         dataHandler: notesUpDated_fn4,
         dataValue: ref(),
         show_error: ref(false),
@@ -406,6 +417,7 @@ const note_properties = [
     },
     {
         placeHolder: 'Enter medical council registration number of the person confirming death',
+        property_name: 'medicalConcilRegistrationNumberOfThePersonConfirmingDeath',
         dataHandler: notesUpDated_fn5,
         dataValue: ref(),
         show_error: ref(false),
@@ -415,6 +427,7 @@ const note_properties = [
     },
     {
         placeHolder: 'Other (specify)',
+        property_name: 'otherNotes',
         dataHandler: notesUpDated_fn6,
         dataValue: ref(),
         show_error: ref(false),
@@ -525,11 +538,26 @@ function dateUpdate_fn1(data: any) {
 }
 
 function dateUpdate_fn2(data: any) {
-    date_properties[1].dataValue.value = data
+    const date_data = {
+        day: data.value.day,
+        month: data.value.month,
+        year: data.value.year,
+        formattedDate: data.formattedDate
+    }
+    date_properties[1].dataValue.value = date_data
+    console.log(date_properties[2].dataValue.value)
 }
 
 function dateUpdate_fn3(data: any) {
-    date_properties[2].dataValue.value = data
+    const date_data = {
+        day: data.value.day,
+        month: data.value.month,
+        year: data.value.year,
+        formattedDate: data.formattedDate
+    }
+    date_properties[2].dataValue.value = date_data
+
+    console.log(date_properties[2].dataValue.value)
 }
 
 function notesUpDated_fn1(event: any) {
@@ -620,6 +648,23 @@ function validateForm() {
     areFieldsValid(time_properties)
     isItemSeleted(list_picker_prperties[0])
     isItemSeleted(list_picker_prperties[1])
+
+    const payload = _.merge(
+        getFieldsValuesObj(note_properties),
+        getFieldsValuesObj(date_properties),
+        getFieldsValuesObj(time_properties),
+    )
+
+    console.log(payload)
+}
+
+function getFieldsValuesObj(properties_array: any[]) {
+    let resultObject: { [key: string]: any } = {}; // Define an index signature for dynamic property names
+
+    properties_array.forEach((property: any) => {
+        resultObject[property.property_name] = property.dataValue.value; // Assuming each property has a 'property_name' and a 'value'
+    })
+    return resultObject;
 }
 
 function areFieldsValid(propoerties_array: any) {
