@@ -40,9 +40,8 @@ export default defineComponent({
         ...mapState(useEnrollementStore, ["patientHistory"]),
     },
     watch: {
-        personInformation: {
+        patientHistory: {
             handler() {
-                this.updateEnrollmentStores();
                 this.buildCards();
             },
             deep: true,

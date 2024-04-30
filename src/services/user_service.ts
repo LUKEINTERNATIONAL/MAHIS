@@ -5,6 +5,9 @@ import { useGeneralStore } from "@/stores/GeneralStore";
 import { PatientService } from "@/services/patient_service";
 import HisDate from "@/utils/Date";
 import { Program } from "../interfaces/program";
+import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
+import { ProgramService } from "@/services/program_service";
+import { useEnrollementStore } from "@/stores/EnrollmentStore";
 
 export class UserService extends Service {
     constructor() {
@@ -123,7 +126,8 @@ export class UserService extends Service {
         let NCDProgramActionName = "";
         if (patient.getNcdNumber() != "Unknown") {
             if (activities.length == 0) {
-                url = "NCDEnrollment";
+                this.setNCDNumber();
+                url = "patientProfile";
                 NCDProgramActionName = "+ Edit NCD Enrollment";
             } else {
                 if (sessionStorage.getItem("saveProgressStatus") == "true") {
@@ -134,6 +138,7 @@ export class UserService extends Service {
                 url = "consultationPlan";
             }
         } else {
+            this.setNCDNumber();
             url = "NCDEnrollment";
             NCDProgramActionName = "+ Enroll in NCD Program";
         }
@@ -144,6 +149,12 @@ export class UserService extends Service {
                 url: url,
             },
         };
+    }
+    static async setNCDNumber() {
+        const j = await ProgramService.getNextSuggestedNCDNumber();
+        const NCDNumber = useEnrollementStore();
+        modifyFieldValue(NCDNumber.$state.NCDNumber, "NCDNumber", "value", j.ncd_number.replace(/^\D+|\s/g, ""));
+        modifyFieldValue(NCDNumber.$state.NCDNumber, "NCDNumber", "leftText", `${j.ncd_number.replace(/\d+/g, "")}-NCD-`);
     }
     static async setProgramUserActions() {
         const actions = await this.setNCDValue();

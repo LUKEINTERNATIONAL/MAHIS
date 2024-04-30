@@ -694,135 +694,138 @@ const enrollmentDiagnosis = [
         },
     },
 ];
+const initialSubstance = [
+    {
+        selectedData: [],
+        isFinishBtn: false,
+
+        radioBtnContent: {
+            header: {
+                title: "Smoking",
+                name: "Smoking history",
+                selectedValue: "",
+            },
+            data: [
+                {
+                    name: "Smoking",
+                    value: "Smoking",
+                },
+                {
+                    name: "Never",
+                    value: "Never",
+                },
+                {
+                    name: "Stopped",
+                    value: "Stopped",
+                },
+            ],
+        },
+    },
+    {
+        radioBtnContent: {
+            header: {
+                title: "Drinking alcohol",
+                name: "Does the patient drink alcohol?",
+                selectedValue: "",
+            },
+            data: [
+                {
+                    name: "Drinking",
+                    value: "Drinking",
+                },
+                {
+                    name: "Never",
+                    value: "Never",
+                },
+                {
+                    name: "Stopped",
+                    value: "Stopped",
+                },
+            ],
+        },
+    },
+];
+const initialFamilyHistory = [
+    {
+        selectedData: [],
+        isFinishBtn: false,
+
+        radioBtnContent: {
+            header: {
+                title: "Diabetes",
+                name: "Diabetes family history",
+                selectedValue: "",
+            },
+            data: [
+                {
+                    name: "Yes",
+                    value: "Yes",
+                },
+                {
+                    name: "No",
+                    value: "No",
+                },
+                {
+                    name: "Unknown",
+                    value: "Unknown",
+                },
+            ],
+        },
+    },
+    {
+        radioBtnContent: {
+            header: {
+                title: "Hypertension",
+                name: "Does the family have a history of hypertension?",
+                selectedValue: "",
+            },
+            data: [
+                {
+                    name: "Yes",
+                    value: "Yes",
+                },
+                {
+                    name: "No",
+                    value: "No",
+                },
+                {
+                    name: "Unknown",
+                    value: "Unknown",
+                },
+            ],
+        },
+    },
+];
+const initialNCDNumber = [
+    {
+        selectedData: [],
+        isFinishBtn: false,
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            iconRight: icons.editStarts,
+                            leftText: "",
+                            value: "",
+                            name: "NCDNumber",
+                            placeholder: "__-__-__-__",
+                            eventType: "input",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+];
 export const useEnrollementStore = defineStore("enrollementStore", {
     state: () => ({
-        substance: [
-            {
-                selectedData: [],
-                isFinishBtn: false,
-
-                radioBtnContent: {
-                    header: {
-                        title: "Smoking",
-                        name: "Smoking history",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Smoking",
-                            value: "Smoking",
-                        },
-                        {
-                            name: "Never",
-                            value: "Never",
-                        },
-                        {
-                            name: "Stopped",
-                            value: "Stopped",
-                        },
-                    ],
-                },
-            },
-            {
-                radioBtnContent: {
-                    header: {
-                        title: "Drinking alcohol",
-                        name: "Does the patient drink alcohol?",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Drinking",
-                            value: "Drinking",
-                        },
-                        {
-                            name: "Never",
-                            value: "Never",
-                        },
-                        {
-                            name: "Stopped",
-                            value: "Stopped",
-                        },
-                    ],
-                },
-            },
-        ],
+        substance: [...initialSubstance],
         enrollmentDiagnosis: [...enrollmentDiagnosis] as any,
         patientHistoryHIV: [...patientHistoryHIV],
         patientHistory: [...patientHistory],
-        familyHistory: [
-            {
-                selectedData: [],
-                isFinishBtn: false,
-
-                radioBtnContent: {
-                    header: {
-                        title: "Diabetes",
-                        name: "Diabetes family history",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Yes",
-                            value: "Yes",
-                        },
-                        {
-                            name: "No",
-                            value: "No",
-                        },
-                        {
-                            name: "Unknown",
-                            value: "Unknown",
-                        },
-                    ],
-                },
-            },
-            {
-                radioBtnContent: {
-                    header: {
-                        title: "Hypertension",
-                        name: "Does the family have a history of hypertension?",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Yes",
-                            value: "Yes",
-                        },
-                        {
-                            name: "No",
-                            value: "No",
-                        },
-                        {
-                            name: "Unknown",
-                            value: "Unknown",
-                        },
-                    ],
-                },
-            },
-        ],
-        NCDNumber: [
-            {
-                selectedData: [],
-                isFinishBtn: false,
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    iconRight: icons.editStarts,
-                                    leftText: "",
-                                    value: "",
-                                    name: "NCDNumber",
-                                    placeholder: "__-__-__-__",
-                                    eventType: "input",
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-        ],
+        familyHistory: [...initialFamilyHistory],
+        NCDNumber: [...initialNCDNumber],
     }),
     actions: {
         getInitialEnrollmentDiagnosis() {
@@ -831,6 +834,18 @@ export const useEnrollementStore = defineStore("enrollementStore", {
         },
         getInitialPatientHistory() {
             const data = _.cloneDeep(patientHistory);
+            return [...data];
+        },
+        getInitialSubstance() {
+            const data = _.cloneDeep(initialSubstance);
+            return [...data];
+        },
+        getInitialFamilyHistory() {
+            const data = _.cloneDeep(initialFamilyHistory);
+            return [...data];
+        },
+        getInitialNCDNumber() {
+            const data = _.cloneDeep(initialNCDNumber);
             return [...data];
         },
         getInitialPatientHistoryHIV() {

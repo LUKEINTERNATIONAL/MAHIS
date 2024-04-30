@@ -24,13 +24,19 @@ export async function resetPatientData() {
     const nextAppointment = useNextAppointmentStore();
     const registration = useRegistrationStore();
 
-    vitals.$reset();
+    vitals.setVitals(vitals.getInitialSocialHistory());
     registration.setPersonalInformation(registration.getInitialPersonalInformation());
-    registration.setCurrentLocation(registration.getInitialSocialHistory());
-    registration.setCurrentLocation(registration.getInitialHomeLocation());
+    registration.setSocialHistory(registration.getInitialSocialHistory());
+    registration.setHomeLocation(registration.getInitialHomeLocation());
     registration.setCurrentLocation(registration.getInitialCurrentLocation());
-    registration.setCurrentLocation(registration.getInitialGuardianInformation());
+    registration.setGuardianInformation(registration.getInitialGuardianInformation());
 
+    enrollement.setDiagnosis(enrollement.getInitialEnrollmentDiagnosis());
+    enrollement.setPatientHistory(enrollement.getInitialPatientHistory());
+    enrollement.setSubstance(enrollement.getInitialSubstance());
+    enrollement.setPatientHistory(enrollement.getInitialFamilyHistory());
+    enrollement.setNCDNumber(enrollement.getInitialNCDNumber());
+    enrollement.setPatientHistoryHIV(enrollement.getInitialPatientHistoryHIV());
     investigations.$reset();
     outcome.$reset();
     medications.$reset();

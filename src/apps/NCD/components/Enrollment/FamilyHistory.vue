@@ -48,9 +48,8 @@ export default defineComponent({
         ...mapState(useEnrollementStore, ["familyHistory"]),
     },
     watch: {
-        personInformation: {
+        familyHistory: {
             handler() {
-                this.updateEnrollmentStores();
                 this.buildCards();
             },
             deep: true,

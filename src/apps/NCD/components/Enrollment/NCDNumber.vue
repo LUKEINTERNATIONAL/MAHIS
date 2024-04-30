@@ -48,9 +48,8 @@ export default defineComponent({
         ...mapState(useEnrollementStore, ["NCDNumber"]),
     },
     watch: {
-        personInformation: {
+        NCDNumber: {
             handler() {
-                this.updateEnrollmentStores();
                 this.buildCards();
             },
             deep: true,

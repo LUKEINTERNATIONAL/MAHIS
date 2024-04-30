@@ -53,6 +53,14 @@ export default defineComponent({
             ],
         };
     },
+    watch: {
+        socialHistory: {
+            handler() {
+                this.buildCards();
+            },
+            deep: true,
+        },
+    },
     computed: {
         ...mapState(useRegistrationStore, ["socialHistory"]),
         maritalStatus() {
