@@ -33,14 +33,14 @@
             </div>
             <div class="center_content" v-if="registrationType == 'manual' && registrationDisplayType == 'grid'">
                 <ion-row v-if="registrationDisplayType == 'grid'">
-                    <ion-col size="4">
+                    <ion-col size-sm="12" size-md="6" size-lg="4">
                         <PersonalInformation />
                     </ion-col>
-                    <ion-col size="4">
-                        <CurrentLocation />
+                    <ion-col size-sm="12" size-md="6" size-lg="4">
                         <SocialHistory />
+                        <CurrentLocation />
                     </ion-col>
-                    <ion-col size="4">
+                    <ion-col size-sm="12" size-md="6" size-lg="4" class="regDisplayFlex">
                         <HomeLocation />
                         <GuardianInformation />
                     </ion-col>
@@ -128,6 +128,7 @@ import { toastSuccess, toastWarning } from "@/utils/Alerts";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import HisDate from "@/utils/Date";
 import { useConfigurationStore } from "@/stores/ConfigurationStore";
+import { UserService } from "@/services/user_service";
 import { isEmpty } from "lodash";
 
 export default defineComponent({
@@ -225,10 +226,12 @@ export default defineComponent({
             }
         },
         async findPatient(patientID: any) {
-            this.openNewPage("/patientProfile", await PatientService.findByID(patientID));
+            const patientData = await PatientService.findByID(patientID);
+            this.openNewPage(patientData);
         },
-        saveData() {
-            this.createPatient();
+        async saveData() {
+            await this.createPatient();
+            await UserService.setProgramUserActions();
         },
         async validations(data: any, fields: any) {
             if (this.nationalID != "") {
@@ -289,7 +292,7 @@ export default defineComponent({
             const selectedID = getFieldValue(this.guardianInformation, "relationship", "selectedID");
             if (selectedID) await RelationsService.createRelation(patientID, guardianID, selectedID);
         },
-        openNewPage(url: any, item: any) {
+        async openNewPage(item: any) {
             const demographicsStore = useDemographicsStore();
             demographicsStore.setPatient(item);
             demographicsStore.setDemographics({
@@ -300,7 +303,10 @@ export default defineComponent({
                 gender: item.person.gender,
                 patient_id: item.patient_id,
             });
-            resetPatientData();
+            await resetPatientData();
+            let url = "/patientProfile";
+            const patient = new PatientService();
+            if (await patient.isUnderFive()) url = "/birthRegistration";
             this.$router.push(url);
         },
         patientIdentifier(item: any) {

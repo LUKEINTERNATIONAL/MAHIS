@@ -76,6 +76,9 @@ export default defineComponent({
     methods: {
         buidCards() {
             const personalInformation = useRegistrationStore();
+            console.log("🚀 ~ buidCards ~ personInformation tttttt:", this.personInformation);
+            console.log("🚀 ~ buidCards ~ personalInformation:", personalInformation.getInitialPersonalInformation());
+            personalInformation.$reset();
             this.cardData = {
                 mainTitle: "Demographics",
                 cards: [

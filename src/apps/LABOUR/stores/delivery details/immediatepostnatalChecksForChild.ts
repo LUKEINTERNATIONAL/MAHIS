@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
+import _ from "lodash";
 
 const initialExamsAfterDeliveryForChild=[
 
@@ -34,6 +35,7 @@ const initialExamsAfterDeliveryForChild=[
                                 unit: 'BMP',
                                 icon: icons.respiratory,
                                 value: '',
+                                valueType:'text',
                                 name: 'Respiration rate',
                                 eventType: 'input'
                             },
@@ -42,6 +44,7 @@ const initialExamsAfterDeliveryForChild=[
                                 unit: 'C',
                                 icon: icons.temprature,
                                 value: '',
+                                valueType:'text',
                                 name: 'Temperature (c)',
                                 eventType: 'input'
                             },
@@ -197,10 +200,10 @@ export const useImmediatePostnatalChecksForChildStore = defineStore('immediatePo
             this.examsAfterDeliveryForChild = data
         },
         getInitial(){
-            const data=[...initialExamsAfterDeliveryForChild]
+            const data=_.cloneDeep(initialExamsAfterDeliveryForChild)
             return [...data]
         }
     },
-    // persist:true,
+    persist:true,
 
 })

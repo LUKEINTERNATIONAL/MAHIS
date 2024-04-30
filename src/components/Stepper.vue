@@ -1,7 +1,6 @@
 <template>
     <ion-row>
-        <ion-col size="1" size-lg="1"></ion-col>
-        <ion-col size="3" size-lg="3">
+        <ion-col size-md="4" size-xl="2.5" size-sm="0" size-lg="4" offset-sm="0" offset-md="0.4" offset-xl="0.8" class="displayNoneMobile" >
             <ion-card class="wizard_card">
                 <div class="wizard_title">
                     <strong> {{ stepperTitle }}</strong>
@@ -24,7 +23,7 @@
             </ion-card>
         </ion-col>
 
-        <ion-col size="7" size-lg="7" class="rightCol">
+      <ion-col size-sm="12" size-xl="7" size-md="7.2" size-lg="7" offset-sm="0" offset-md="0.4" offset-xl="0.8" class="">
             <div class="back_profile" @click="openModal()">
                 <ion-icon style="font-size: 20px" :icon="chevronBackOutline"> </ion-icon>
                 <span style="cursor: pointer"> Back to profile</span>
@@ -88,10 +87,13 @@ import OPDDiagnosis from "@/apps/OPD/components/ConsultationPlan/OPDDiagnosis.vu
 import ComplicationsScreening from "@/apps/NCD/components/ConsultationPlan/ComplicationsScreening.vue";
 import ConfirmDiagnosis from "@/apps/NCD/components/ConsultationPlan/ConfirmDiagnosis.vue";
 import Outcome from "@/apps/NCD/components/ConsultationPlan/Outcome.vue";
+import ChangeStatus from "@/apps/Immunization/components/ConsultationPlan/ChangeStatus.vue";
+import GrowthMonitor from "@/apps/Immunization/components/ConsultationPlan/GrowthMonitor.vue";
 import Investigations from "@/components/Investigations.vue";
 import TreatmentPlan from "@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue";
 import OPDTreatmentPlan from "@/apps/OPD/components/ConsultationPlan/OPDTreatmentPlan.vue";
 import NextAppointment from "@/apps/NCD/components/ConsultationPlan/NextAppointment.vue";
+import ImmunizationNextAppointment from "@/apps/Immunization/components/ImmunizationNextAppointment.vue";
 
 import Medications from "@/apps/ANC/components/profile/Medications.vue";
 import WomanBehaviour from "@/apps/ANC/components/profile/WomanBehaviour.vue";
@@ -127,10 +129,43 @@ import PhysiologicalCounseling from "@/apps/ANC/components/counselling/Physiolog
 import DietCounselling from "@/apps/ANC/components/counselling/DietCounselling.vue";
 import Referral from "@/apps/ANC/components/referral/Referral.vue";
 import AncEnd from "@/apps/ANC/components/ancEnd/AncEnd.vue";
+import ImmunizationServices from "@/apps/Immunization/components/ConsultationPlan/ImmunizationServices.vue";
 import OPDOutcome from "@/apps/OPD/components/ConsultationPlan/OPDOutcome.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import DynamicButton from "@/components/DynamicButton.vue";
+import HeadAssessment from "@/apps/ANC/components/others/headAssessment.vue";
+import ANCTreatment from "@/apps/ANC/components/ANCtreatment/ANCTreatment.vue";
+import ANCDiagnosis from "@/apps/ANC/components/ANCtreatment/ANCDiagnosis.vue";
+import ANCDiagnosisCounselling from "@/apps/ANC/components/ANCtreatment/ANCDiagnosisCounselling.vue";
+import ANCImmunization from "@/apps/ANC/components/ANCtreatment/ANCImmunization.vue";
+import ANCIntimatePartner from "@/apps/ANC/components/ANCtreatment/ANCIntimatePartner.vue";
+import ANCDeworming from "@/apps/ANC/components/ANCtreatment/ANCDeworming.vue";
+import ANCMedicationDispensed from "@/apps/ANC/components/ANCtreatment/ANCMedicationDispensed.vue";
+import DischargeWoman from "@/apps/PNC/components/others/DischargeWoman.vue";
+import PNCEnd from "@/apps/PNC/components/others/PNCEnd.vue";
+import BabyStatus from "@/apps/PNC/components/postanatal ward stay/BabyStatus.vue";
+import PostnatalWardMonitoring from "@/apps/PNC/components/postanatal ward stay/PostnatalWardMonitoring.vue";
+import DeliveryDetails from "@/apps/PNC/components/postnatal details/DeliveryDetails.vue";
+import HIVStatusAndTreatment from "@/apps/PNC/components/postnatal details/HIVStatusAndTreatment.vue";
+import ObstetricDetails from "@/apps/PNC/components/postnatal details/ObstetricDetails.vue";
+import VisitForMother from "@/apps/PNC/components/postnatal visits/VisitForMother.vue";
+import VisitForBaby from "@/apps/PNC/components/postnatal visits/VisitForBaby.vue";
+import Labour from "@/apps/LABOUR/components/obstetric details/Labour.vue";
+import QuickCheck from "@/apps/LABOUR/components/physical exam/QuickCheck.vue";
+import PhysicalExamination from "@/apps/LABOUR/components/physical exam/PhysicalExamination.vue";
+import PelvicAssessment from "@/apps/LABOUR/components/physical exam/PelvicAssessment.vue";
+import PatientReferral from "@/apps/LABOUR/components/repeatable things/PatientReferral.vue";
+import FirstVaginalExamination from "@/apps/LABOUR/components/physical exam/FirstVaginalExamination.vue";
+import SecondStageDelivery from "@/apps/LABOUR/components/delivery details/SecondStageDelivery.vue";
+import ThirdStageDelivery from "@/apps/LABOUR/components/delivery details/ThirdStageDelivery.vue";
+import end from "@/apps/LABOUR/components/repeatable things/end.vue";
+import OtherExams from "@/apps/LABOUR/components/repeatable things/OtherExams.vue";
+import LabourVitals from "@/apps/LABOUR/components/repeatable things/LabourVitals.vue";
+import ImmidiatePostnatalChecksForChild
+  from "@/apps/LABOUR/components/delivery details/ImmidiatePostnatalChecksForChild.vue";
+import ImmidiatePostnatalChecksForMother
+  from "@/apps/LABOUR/components/delivery details/ImmidiatePostnatalChecksForMother.vue";
 
 export default defineComponent({
     name: "Home",
@@ -204,6 +239,41 @@ export default defineComponent({
         OPDTreatmentPlan,
         OPDOutcome,
         DynamicButton,
+        ImmunizationServices,
+        ChangeStatus,
+        ImmunizationNextAppointment,
+        GrowthMonitor,
+      HeadAssessment,
+      ANCTreatment,
+      ANCDiagnosis,
+      ANCDiagnosisCounselling,
+      ANCImmunization,
+      ANCIntimatePartner,
+      ANCDeworming,
+      ANCMedicationDispensed,
+      DischargeWoman,
+      PNCEnd,
+      BabyStatus,
+      PostnatalWardMonitoring,
+      DeliveryDetails,
+      HIVStatusAndTreatment,
+      ObstetricDetails,
+      VisitForMother,
+      VisitForBaby,
+      Labour,
+      QuickCheck,
+      PhysicalExamination,
+      PelvicAssessment,
+      PatientReferral,
+      FirstVaginalExamination,
+      SecondStageDelivery,
+      ThirdStageDelivery,
+      end,
+      OtherExams,
+      LabourVitals,
+      ImmidiatePostnatalChecksForChild,
+      ImmidiatePostnatalChecksForMother
+
     },
     data() {
         return {
@@ -313,24 +383,24 @@ ion-accordion.accordion-expanded ion-item[slot="header"] {
     align-items: center;
     font-weight: 400;
     font-size: 14px;
-    position: fixed;
+    /* position: fixed; */
     z-index: 1000;
 }
 .wizard_card {
-    position: fixed;
+    /* position: fixed; */
     width: 100%;
-    max-width: 300px;
+    /* max-width: 300px; */
     background-color: #fff;
-    top: 150px;
+    /* top: 150px; */
 }
 .rightCol {
     top: 100px;
     width: 90%;
 }
 .accordion_group {
-    position: fixed;
+    /* position: fixed; */
     height: 700px;
-    width: 58%;
+    /* width: 58%; */
     overflow-y: auto;
     top: 200px;
 }

@@ -2,9 +2,10 @@
     <ion-page>
         <Toolbar />
         <ion-content :fullscreen="true">
+            <DemographicBar class="displayNoneDesktop" />
             <div class="content_manager">
                 <ion-row class="content_width">
-                    <ion-col size="3" size-lg="3">
+                    <ion-col size="3" size-lg="3" size-md="4" class="displayNoneMobile">
                         <ion-card style="margin-bottom: 20px; background-color: #fff">
                             <div class="p_name_image">
                                 <div class="first_letter">
@@ -36,20 +37,31 @@
                             </ion-card-content>
                         </ion-card>
 
-                        <ion-card class="start_new_co" v-if="programAccess('NCD PROGRAM')" style="margin-bottom: 20px" @click="handleNCD()">
-                            {{ NCDProgramActionName }}
+                        <ion-card
+                            class="start_new_co"
+                            v-if="programAccess('NCD PROGRAM')"
+                            style="margin-bottom: 20px"
+                            @click="nav(NCDUserAction.url)"
+                        >
+                            {{ NCDUserAction.actionName }}
                         </ion-card>
                         <ion-card class="start_new_co" v-if="demographics.gender === 'F'" style="margin-bottom: 20px">
-                                <router-link to="/profile">+ Enroll in ANC Program</router-link>
+                            <router-link to="/profile">+ Enroll in ANC Program</router-link>
                         </ion-card>
 
-                        <ion-card class="start_new_co"  style="margin-bottom: 20px">
+                        <ion-card class="start_new_co" style="margin-bottom: 20px">
                             <router-link to="/labour/labourHome">+ Enroll in Labour and delivery program</router-link>
                         </ion-card>
                         <ion-card class="start_new_co" style="margin-bottom: 20px">
-
                             <router-link to="/pnc/Home"> + Enroll in PNC program</router-link>
-
+                        </ion-card>
+                        <ion-card
+                            class="start_new_co"
+                            v-if="programAccess('IMMUNIZATION PROGRAM')"
+                            @click="nav('birthRegistration')"
+                            style="margin-bottom: 20px"
+                        >
+                            + Enroll in Immunization program
                         </ion-card>
                         <ion-card class="start_new_co" v-if="programAccess('OPD Program')" style="margin-bottom: 20px" @click="handleOPD()">
                             {{ OPDProgramActionName }}</ion-card
@@ -105,8 +117,7 @@
                             </ion-accordion-group>
                         </ion-card>
                     </ion-col>
-
-                    <ion-col size="9" size-lg="9">
+                    <ion-col size-sm="12" size-md="8" size-lg="9">
                         <ion-card style="background-color: #fff">
                             <div class="p_dash_header">
                                 <div class="p_title">Consultation Overview</div>
@@ -142,11 +153,56 @@
                 </ion-row>
             </div>
 
-            <ion-popover trigger="open-dates-trigger" trigger-action="click" :show-backdrop="false" size="auto">
-                <ul style="list-style: none; line-height: 50px" v-for="(item, index) in visits" :key="index">
-                    <li>{{ convertToDisplayDate(item) }}</li>
+            <ion-popover
+                mobilePopover
+                trigger="programList"
+                trigger-action="click"
+                :show-backdrop="false"
+                size="auto"
+                :dismiss-on-select="true"
+                alignment="center"
+                class="displayNoneDesktop"
+            >
+                <ul style="list-style: none; line-height: 50px">
+                    <li class="listPrograma" v-if="programAccess('NCD PROGRAM')" style="margin-bottom: 20px" @click="nav(NCDUserAction.url)">
+                        {{ NCDUserAction.actionName }}
+                    </li>
+                    <li class="listPrograma" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">
+                        <router-link to="/profile">+ Enroll in ANC Program</router-link>
+                    </li>
+                    <li class="listPrograma" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">
+                        + Enroll in Labour and delivery program
+                    </li>
+                    <li class="listPrograma" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">+ Enroll in PNC program</li>
+                    <li
+                        class="listPrograma"
+                        v-if="programAccess('IMMUNIZATION PROGRAM')"
+                        @click="nav('birthRegistration')"
+                        style="margin-bottom: 20px"
+                    >
+                        + Enroll in Immunization program
+                    </li>
+                    <li class="listPrograma" v-if="programAccess('OPD Program')" style="margin-bottom: 20px" @click="handleOPD()">
+                        {{ OPDProgramActionName }}
+                    </li>
                 </ul>
             </ion-popover>
+            <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="displayNoneDesktop">
+                <ion-fab-button color="primary">
+                    <ion-icon :icon="chevronUpCircle"></ion-icon>
+                </ion-fab-button>
+                <ion-fab-list side="top">
+                    <ion-fab-button data-desc="Templates/Forms">
+                        <ion-icon :icon="document"></ion-icon>
+                    </ion-fab-button>
+                    <ion-fab-button data-desc="Print Out & Other">
+                        <ion-icon :icon="medkit"></ion-icon>
+                    </ion-fab-button>
+                    <ion-fab-button data-desc="Apps" id="programList">
+                        <ion-icon :icon="grid"></ion-icon>
+                    </ion-fab-button>
+                </ion-fab-list>
+            </ion-fab>
         </ion-content>
     </ion-page>
 </template>
@@ -173,9 +229,24 @@ import {
     IonRow,
     IonCol,
     IonGrid,
+    IonIcon,
+    IonFab,
+    IonFabButton,
+    IonFabList,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
-import { chevronBackOutline, checkmark } from "ionicons/icons";
+import {
+    medkit,
+    chevronBackOutline,
+    checkmark,
+    grid,
+    chevronDownCircle,
+    chevronForwardCircle,
+    chevronUpCircle,
+    colorPalette,
+    document,
+    globe,
+} from "ionicons/icons";
 import { modalController } from "@ionic/vue";
 import { icons } from "@/utils/svg";
 
@@ -210,6 +281,7 @@ import {
 import { toastWarning } from "@/utils/Alerts";
 
 import { ref } from "vue";
+import DynamicButton from "@/components/DynamicButton.vue";
 export default defineComponent({
     components: {
         IonContent,
@@ -239,6 +311,11 @@ export default defineComponent({
         IonRow,
         IonCol,
         IonGrid,
+        IonIcon,
+        DynamicButton,
+        IonFab,
+        IonFabButton,
+        IonFabList,
     },
     data() {
         return {
@@ -248,26 +325,28 @@ export default defineComponent({
             NCDProgramActionName: "+ Enroll in NCD Program" as any,
             OPDProgramActionName: "+ Start New OPD consultation" as any,
             visits: [] as any,
+            NCDUserAction: [] as any,
         };
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics", "patient"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalAllergiesList"]),
         ...mapState(useEnrollementStore, ["NCDNumber"]),
-        ...mapState(useGeneralStore, ["saveProgressStatus", "activities"]),
+        ...mapState(useGeneralStore, ["activities", "userActions"]),
         ...mapState(useVitalsStore, ["vitals"]),
     },
-    mounted() {
+    async mounted() {
+        await UserService.setProgramUserActions();
         this.setNCDValue();
     },
     watch: {
-        saveProgressStatus: {
+        demographics: {
             handler() {
                 this.setNCDValue();
             },
             deep: true,
         },
-        demographics: {
+        userActions: {
             handler() {
                 this.setNCDValue();
             },
@@ -277,29 +356,23 @@ export default defineComponent({
     setup() {
         const modal = ref();
 
-        return { chevronBackOutline, checkmark };
+        return {
+            chevronBackOutline,
+            checkmark,
+            grid,
+            chevronDownCircle,
+            chevronForwardCircle,
+            chevronUpCircle,
+            colorPalette,
+            document,
+            globe,
+            medkit,
+        };
     },
 
     methods: {
         convertToDisplayDate(date: any) {
             return HisDate.toStandardHisDisplayFormat(date);
-        },
-        async getUserActivities(activities: any) {
-            try {
-                const userID = Service.getUserID();
-                const userData = await UserService.getJson("user_properties", {
-                    user_id: userID,
-                    property: activities,
-                });
-                if (userData.property_value) {
-                    return userData.property_value.split(",");
-                } else {
-                    return []; // Return an empty array if property_value is not available
-                }
-            } catch (error) {
-                console.error("Error fetching user activities:", error);
-                return []; // Return an empty array in case of error
-            }
         },
         programAccess(programName: string): boolean {
             const accessPrograms: any = sessionStorage.getItem("userPrograms");
@@ -311,37 +384,15 @@ export default defineComponent({
             }
         },
         async setNCDValue() {
-            const generalStore = useGeneralStore();
-            generalStore.setActivity(await this.getUserActivities("NCD_activities"));
+            await UserService.setUserActivities();
             sessionStorage.setItem("app", JSON.stringify({ programID: 32, applicationName: "NCD" }));
-            const patient = new PatientService();
-            this.visits = await PatientService.getPatientVisits(patient.getID(), false);
-            if (patient.getNcdNumber() != "Unknown") {
-                if (this.activities.length == 0) {
-                    this.url = "NCDEnrollment";
-                    this.NCDProgramActionName = "+ Edit NCD Enrollment";
-                } else {
-                    if (this.saveProgressStatus) {
-                        this.NCDProgramActionName = "+ Continue NCD consultation";
-                    } else {
-                        if (this.visits.includes(HisDate.currentDate())) {
-                            this.NCDProgramActionName = "+ Edit NCD consultation";
-                        } else this.NCDProgramActionName = "+ Start new NCD consultation";
-                    }
-                    const generalStore = useGeneralStore();
-                    generalStore.setSaveProgressStatus("");
-                    this.url = "consultationPlan";
-                }
-            } else {
-                this.url = "NCDEnrollment";
-                this.NCDProgramActionName = "+ Enroll in NCD Program";
-            }
+            if (this.userActions.length > 0) [{ NCDUserAction: this.NCDUserAction }] = this.userActions;
         },
         setOPDValue() {
             sessionStorage.setItem("app", JSON.stringify({ programID: 14, applicationName: "OPD" }));
             const patient = new PatientService();
             if (patient.getNcdNumber() != "Unknown") {
-                if (this.saveProgressStatus) {
+                if (sessionStorage.getItem("saveProgressStatus") == "true") {
                     this.OPDProgramActionName = "+ Continue OPD consultation";
                 } else {
                     this.OPDProgramActionName = "+ Start new OPD consultation";
@@ -358,9 +409,8 @@ export default defineComponent({
         dismiss() {
             modalController.dismiss();
         },
-        handleNCD() {
-            this.setNCDValue();
-            this.$router.push(this.url);
+        nav(url: any) {
+            this.$router.push(url);
         },
         async updateNCDData() {
             const array = ["Height", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
@@ -398,6 +448,22 @@ export default defineComponent({
 </script>
 
 <style scoped>
+ion-fab-button[data-desc] {
+    position: relative;
+}
+
+ion-fab-button[data-desc]::after {
+    position: absolute;
+    content: attr(data-desc);
+    z-index: 1;
+    right: 50px;
+    bottom: 7px;
+    color: var(--ion-color-contrast, rgb(112, 109, 109));
+    background-color: var(--ion-color-base, #fff);
+    padding: 5px 10px;
+    border-radius: 10px;
+    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
+}
 #container {
     text-align: center;
 

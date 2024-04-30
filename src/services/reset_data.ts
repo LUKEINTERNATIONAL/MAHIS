@@ -11,7 +11,8 @@ import { useNextAppointmentStore } from "@/stores/NextAppointmentStore";
 import { useRegistrationStore } from "@/stores/RegistrationStore";
 import { useGeneralStore } from "@/stores/GeneralStore";
 
-export function resetPatientData() {
+export async function resetPatientData() {
+    sessionStorage.setItem("saveProgressStatus", "false");
     const vitals = useVitalsStore();
     const investigations = useInvestigationStore();
     const outcome = useOutcomeStore();
@@ -24,6 +25,7 @@ export function resetPatientData() {
     const registration = useRegistrationStore();
 
     vitals.$reset();
+    registration.$state;
     registration.$reset();
     investigations.$reset();
     outcome.$reset();

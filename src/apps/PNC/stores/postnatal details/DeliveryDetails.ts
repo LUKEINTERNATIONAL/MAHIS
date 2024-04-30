@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
+import _ from "lodash";
 
 const initialDeliveryDetails=[
     {
@@ -20,7 +21,7 @@ const initialDeliveryDetails=[
                                 valueType:'text',
                                 eventType: 'input',
                                 alertsError: false,
-                                calenderPopover:true,
+                                isDatePopover: true,
                                 alertsErrorMassage: '',
                                 placeholder:'Pick date'
                             },
@@ -46,22 +47,22 @@ const initialDeliveryDetails=[
                     selectedValue: '',
                     class:"bold",
                     name:"Mode of delivery",
-                    displayNext:"Other"
+                    displayNext:"Other mode of delivery"
                 },
                 data:[
                     {
-                        name: 'Spontaneous Vertex Delivery (SVD)',
-                        value: 'spontaneous vertex delivery',
+                        name: 'Spontaneous Vertex Delivery',
+                        value: 'Spontaneous vertex delivery',
                         colSize: '5',
                     },
                     {
-                        name: ' Vacuum Extraction (VE)',
-                        value: 'Vacuum Extraction',
+                        name: 'Vacuum extraction delivery',
+                        value: 'Vacuum extraction delivery',
                         colSize: '5',
                     },
                     {
-                        name: 'Breech (BR)',
-                        value: 'Breech',
+                        name: 'Breech delivery',
+                        value: 'Breech delivery',
                         colSize: '5',
                     },
                     {
@@ -70,8 +71,8 @@ const initialDeliveryDetails=[
                         colSize: '5',
                     },
                     {
-                        name: 'Other',
-                        value: 'Other',
+                        name: 'Other mode of delivery',
+                        value: 'Other mode of delivery',
                         colSize: '5',
                     },
                 ]
@@ -95,6 +96,7 @@ const initialDeliveryDetails=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
+                                valueType:'text',
                                 name: 'Other mode of delivery notes',
                                 required: true,
                                 eventType: 'input',
@@ -188,12 +190,12 @@ const initialDeliveryDetails=[
                     selectedValue: '',
                     class:'bold',
                     name:'Outcome of the delivery',
-                    displayNext:'Stillbirth'
+                    displayNext:'Stillbirths'
                 },
                 data:[
                     {
-                        name: 'Live birth',
-                        value: 'live birth',
+                        name: 'Live births',
+                        value: 'live births',
                         colSize: '7',
 
                     },
@@ -204,8 +206,8 @@ const initialDeliveryDetails=[
 
                     },
                     {
-                        name: 'Stillbirth',
-                        value: 'Stillbirth',
+                        name: 'Stillbirths',
+                        value: 'Stillbirths',
                         colSize: '7',
 
                     },
@@ -261,7 +263,7 @@ const initialDeliveryDetails=[
                                 icon: icons.editPen,
                                 value: '',
                                 valueType:'text',
-                                name: 'Total number of babies',
+                                name: 'Number of babies',
                                 required: true,
                                 eventType: 'input',
                                 inputWidth: '',
@@ -283,23 +285,23 @@ const initialDeliveryDetails=[
                     {
                         colData: [
                             {
-                                inputHeader: 'Firstname',
+                                inputHeader: 'First name',
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
                                 valueType:'text',
-                                name: 'Firstname',
+                                name: 'First name',
                                 required: true,
                                 eventType: 'input',
                                 inputWidth: '',
                             },
                             {
-                                inputHeader: 'Lastname',
+                                inputHeader: 'Last name',
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
-                                valueText:'text',
-                                name: 'Lastname',
+                                valueType:'text',
+                                name: 'Last name',
                                 required: true,
                                 eventType: 'input',
                                 inputWidth: '',
@@ -325,17 +327,18 @@ const initialDeliveryDetails=[
                                 icon: icons.weight,
                                 value: '',
                                 valueType:'text',
-                                name: 'Birth weight',
+                                name: 'Weight',
                                 required: true,
                                 eventType: 'input',
                                 inputWidth: '',
                             },
                             {
-                                inputHeader: 'Birth length',
+                                inputHeader: 'Birth height',
                                 unit: 'cm',
                                 icon: icons.editPen,
                                 value: '',
-                                name: 'Birth length',
+                                valueType:'text',
+                                name: 'Height',
                                 required: true,
                                 eventType: 'input',
                                 inputWidth: '',
@@ -361,7 +364,8 @@ const initialDeliveryDetails=[
                                 unit: '',
                                 icon: icons.weight,
                                 value: '',
-                                name: 'apgar score at 5 minutes',
+                                valueType:'text',
+                                name: 'Apgar score at 5 minutes',
                                 required: true,
                                 eventType: 'input',
                                 inputWidth: '',
@@ -381,7 +385,7 @@ const initialDeliveryDetails=[
                     title: 'Newborn complications',
                     selectedValue: '',
                     class:'bold',
-                    name:'Newborn complications'
+                    name:'Newborn baby complications'
                 },
                 data:[
 
@@ -413,7 +417,7 @@ const initialDeliveryDetails=[
                 header:{
                     title: '',
                     selectedValue: '',
-                    name:'Newborn complications'
+                    name:'Newborn baby complications'
 
                 },
                 data:[
@@ -446,7 +450,7 @@ const initialDeliveryDetails=[
                 header:{
                     title: '',
                     selectedValue: '',
-                    name:'Newborn complications'
+                    name:'Newborn baby complications'
 
                 },
                 data:[
@@ -488,6 +492,7 @@ const initialDeliveryDetails=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
+                                valueType:'text',
                                 name: 'Other complications notes',
                                 required: true,
                                 eventType: 'input',
@@ -561,7 +566,7 @@ const initialDeliveryDetails=[
                     },
                     {
                         name: 'Bag and mask',
-                        value: 'clearing airway',
+                        value: 'Bag and mask',
                         colSize: '5',
 
                     },
@@ -580,8 +585,8 @@ export const useDeliveryDetailsStore = defineStore('deliveryDetailsStore',{
             this.deliveryDetails = data
         },
         getInitial(){
-            const data = [...initialDeliveryDetails]
-            return [...data]
+            const data =_.cloneDeep(initialDeliveryDetails);
+            return [...data];
         }
 
 

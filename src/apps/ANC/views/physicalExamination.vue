@@ -37,7 +37,7 @@ import {
     AccordionGroupCustomEvent,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
-import Toolbar from "@/apps/ANC/components/Toolbar.vue";
+import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/components/DemographicBar.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
@@ -50,7 +50,7 @@ import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useInvestigationStore } from "@/stores/InvestigationStore";
 import { useDiagnosisStore } from "@/stores/DiagnosisStore";
 import { mapState } from "pinia";
-import Stepper from "@/apps/ANC/components/Stepper.vue";
+import Stepper from "@/components/Stepper.vue";
 import { Service } from "@/services/service";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { getCheckboxSelectedValue, getFieldValue } from "@/services/data_helpers";

@@ -57,6 +57,7 @@ import { PatientService } from "@/services/patient_service";
 import { checkmark, add, search } from "ionicons/icons";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
+import { useGeneralStore } from "@/stores/GeneralStore";
 import { useVitalsStore } from "@/stores/VitalsStore";
 import DynButton from "@/components/DynamicButton.vue";
 import { createModal, toastWarning } from "@/utils/Alerts";
@@ -64,6 +65,7 @@ import CheckPatientNationalID from "@/components/CheckPatientNationalID.vue";
 import { resetPatientData } from "@/services/reset_data";
 import { mapState } from "pinia";
 import Validation from "@/validations/StandardValidations";
+import { UserService } from "@/services/user_service";
 
 export default defineComponent({
     name: "Home",
@@ -94,6 +96,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useGlobalPropertyStore, ["globalPropertyStore"]),
+        ...mapState(useGeneralStore, ["activities", "userActions"]),
     },
     methods: {
         async handleInput(ev: any) {
@@ -185,9 +188,24 @@ export default defineComponent({
             });
             resetPatientData();
             const roleData: any = sessionStorage.getItem("userRoles");
+            const userProgramsData: any = sessionStorage.getItem("userPrograms");
+            const userPrograms: any = JSON.parse(userProgramsData);
             const roles: any = JSON.parse(roleData);
-            if (roles.some((role: any) => role.role === "Pharmacist")) {
-                this.$router.push("dispensation");
+            UserService.setProgramUserActions();
+            if (userPrograms.length == 1) {
+                let NCDUserAction: any = "";
+                if (this.userActions.length > 0) [{ NCDUserAction: NCDUserAction }] = this.userActions;
+                if (NCDUserAction && userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "NCD PROGRAM")) {
+                    this.$router.push(NCDUserAction.url);
+                } else if (userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "OPD PROGRAM")) {
+                    this.$router.push("OPDvitals");
+                } else if (userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "IMMUNIZATION PROGRAM")) {
+                    this.$router.push("birthRegistration");
+                } else if (roles.some((role: any) => role.role === "Pharmacist")) {
+                    this.$router.push("dispensation");
+                } else {
+                    this.$router.push(url);
+                }
             } else {
                 this.$router.push(url);
             }

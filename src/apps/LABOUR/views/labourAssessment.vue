@@ -35,14 +35,14 @@ import {
     IonModal,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
-import Toolbar from "@/apps/LABOUR/components/Toolbar.vue";
-import ToolbarSearch from "@/apps/LABOUR/components/ToolbarSearch.vue";
+import Toolbar from "@/components/Toolbar.vue";
+import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/LABOUR/components/DemographicBar.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
-import Stepper from "@/apps/LABOUR/components/Stepper.vue";
+import Stepper from "@/components/Stepper.vue";
 import { mapState } from "pinia";
 import { getCheckboxSelectedValue } from "@/services/data_helpers";
 

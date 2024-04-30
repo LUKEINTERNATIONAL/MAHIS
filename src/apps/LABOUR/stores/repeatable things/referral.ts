@@ -136,15 +136,15 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
             name: "referring mother",
           },
           data: [
-            {
-              name: "Perineal tear (2nd, 3rd or 4th degree",
-              value: "postpartum haemorrhage",
-              displayNone: true,
-              checked: false,
-              labelPlacement: "start",
-              colSize: "6",
-              justify: "space-between",
-            },
+            // {
+            //   name: "Perineal tear (2nd, 3rd or 4th degree",
+            //   value: "postpartum haemorrhage",
+            //   displayNone: true,
+            //   checked: false,
+            //   labelPlacement: "start",
+            //   colSize: "6",
+            //   justify: "space-between",
+            // },
             {
               name: "Obstructed/prolonged labour",
               value: "Obstructed/prolonged labour",
@@ -258,7 +258,7 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
             {
               colData: [
                 {
-                  inputHeader: "Specify",
+                //  inputHeader: "Specify",
                   unit: "",
                   displayNone: true,
                   icon: icons.editPen,
@@ -297,10 +297,11 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
 
       {
         selectdData: [],
-        classDash: "dashed_bottom_border",
+        //classDash: "dashed_bottom_border",
         checkboxBtnContent: {
           header: {
             title: "Reason for referring baby",
+            class:'bold',
             selectedValue: "",
             name: "Baby identifier",
           },
@@ -308,6 +309,7 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
             {
               name: "Asphyxia",
               value: "asphyxia",
+              displayNone: true,
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -316,6 +318,7 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
             {
               name: "Preterm",
               value: "preterm",
+              displayNone: true,
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -326,7 +329,7 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
       },
       {
         selectdData: [],
-        classDash: "dashed_bottom_border",
+        //classDash: "dashed_bottom_border",
         checkboxBtnContent: {
           header: {
             title: "",
@@ -337,6 +340,7 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
             {
               name: "Under weight",
               value: "under weight",
+              displayNone: true,
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -345,6 +349,7 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
             {
               name: "Congenital abnormalities",
               value: "congenital abnormalities",
+              displayNone: true,
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -355,7 +360,7 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
       },
 
       {
-        classDash: "dashed_bottom_border",
+        //classDash: "dashed_bottom_border",
         checkboxBtnContent: {
           header: {
             title: "",
@@ -364,8 +369,9 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
           },
           data: [
             {
-              name: "Sepsis",
-              value: "sepsis",
+              name: "Sepsi",
+              value: "sepsi",
+              displayNone: true,
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -374,6 +380,7 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
             {
               name: "Other reason",
               value: "other reason",
+              displayNone: true,
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -391,12 +398,13 @@ export const useLabourReferralStore = defineStore("labourReferralStore", {
             {
               colData: [
                 {
+                  displayNone:true,
                   inputHeader: "Specify",
                   unit: "",
                   icon: icons.editPen,
                   value: "",
                   valueType: "text",
-                  name: "specify",
+                  name: "other",
                   eventType: "input",
                 },
               ],

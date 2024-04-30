@@ -1,5 +1,5 @@
 <template>
-    <basic-card :content="cardData"></basic-card>
+    <basic-card :content="cardData" @update:inputValue="handleInputData"></basic-card>
 </template>
 
 <script lang="ts">
@@ -13,16 +13,8 @@ import { useEnrollementStore } from "@/stores/EnrollmentStore";
 import { mapState } from "pinia";
 import BasicForm from "@/components/BasicForm.vue";
 import BasicCard from "@/components/BasicCard.vue";
-import { ProgramService } from "@/services/program_service";
-import {
-    modifyRadioValue,
-    getRadioSelectedValue,
-    getCheckboxSelectedValue,
-    getFieldValue,
-    modifyFieldValue,
-    modifyCheckboxValue,
-} from "@/services/data_helpers";
-import { journalOutline } from "ionicons/icons";
+import { modifyCheckboxInputField, getCheckboxSelectedValue, getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
+
 export default defineComponent({
     name: "Menu",
     components: {
@@ -45,8 +37,7 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useEnrollementStore, ["familyHistory"]),
-        ...mapState(useEnrollementStore, ["NCDNumber"]),
+        ...mapState(useEnrollementStore, ["patientHistoryHIV"]),
     },
     watch: {
         personInformation: {
@@ -56,25 +47,27 @@ export default defineComponent({
             },
             deep: true,
         },
+        patientHistoryHIV: {
+            handler() {
+                this.controllFields();
+            },
+            deep: true,
+        },
     },
-    async mounted() {
-        const j = await ProgramService.getNextSuggestedNCDNumber();
-        modifyFieldValue(this.NCDNumber, "NCDNumber", "value", j.ncd_number.replace(/^\D+|\s/g, ""));
-        modifyFieldValue(this.NCDNumber, "NCDNumber", "leftText", `${j.ncd_number.replace(/\d+/g, "")}-NCD-`);
+    mounted() {
+        this.updateEnrollmentStores();
         this.buidCards();
     },
     methods: {
         buidCards() {
+            const enrollment = useEnrollementStore();
             this.cardData = {
                 mainTitle: "Enrollment",
                 cards: [
                     {
-                        cardTitle: "Family history",
-                        content: this.familyHistory,
-                    },
-                    {
-                        cardTitle: "NCD number",
-                        content: this.NCDNumber,
+                        cardTitle: "Patient history & Complications ",
+                        content: this.patientHistoryHIV,
+                        initialData: enrollment.getInitialPatientHistoryHIV(),
                     },
                 ],
             };
@@ -84,11 +77,21 @@ export default defineComponent({
         },
         updateEnrollmentStores() {
             const enrollmentStore = useEnrollementStore();
-            enrollmentStore.setFamilyHistory(this.familyHistory);
-            enrollmentStore.setNCDNumber(this.NCDNumber);
+            enrollmentStore.setPatientHistoryHIV(this.patientHistoryHIV);
         },
-        testF(data: any) {
-            console.log(data);
+        controllFields() {
+            if (getRadioSelectedValue(this.patientHistoryHIV, "HIV") == "R") {
+                modifyFieldValue(this.patientHistoryHIV, "ART_start_date", "displayNone", false);
+            } else {
+                modifyFieldValue(this.patientHistoryHIV, "ART_start_date", "displayNone", true);
+            }
+        },
+        async handleInputData(event: any) {
+            console.log(event.al);
+            if (event.al) {
+                if (event.value.detail.checked) modifyCheckboxInputField(this.patientHistoryHIV, event.al.name, "displayNone", false);
+                else modifyCheckboxInputField(this.patientHistoryHIV, event.al.name, "displayNone", true);
+            }
         },
     },
 });
@@ -139,12 +142,14 @@ ion-radio {
     line-height: 3;
 }
 .small_font {
+    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
     color: #636363;
 }
 .checkbox_header {
+    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
     font-size: 14px;

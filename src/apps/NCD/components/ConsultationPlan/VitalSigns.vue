@@ -72,7 +72,7 @@ export default defineComponent({
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useVitalsStore, ["vitals"]),
-        ...mapState(useGeneralStore, ["saveProgressStatus", "activities"]),
+        ...mapState(useGeneralStore, ["activities"]),
     },
     async serverPrefetch() {
         // Call updateVitalsStores when the component is activated
@@ -111,12 +111,6 @@ export default defineComponent({
             },
             deep: true,
         },
-        saveProgressStatus: {
-            handler() {
-                this.updateVitalsStores();
-            },
-            deep: true,
-        },
     },
     setup() {
         return { checkmark, pulseOutline };
@@ -127,7 +121,6 @@ export default defineComponent({
             this.$router.push(url);
         },
         updateVitalsStores() {
-            console.log("ppppppp");
             const vitalsStore = useVitalsStore();
             vitalsStore.setVitals(this.vitals);
         },

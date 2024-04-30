@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
+import _ from "lodash";
 
 
 const initialVisitForBaby=[
@@ -12,7 +13,7 @@ const initialVisitForBaby=[
                 header:{
                     title: 'What is the status of the baby?',
                     selectedValue: '',
-                    name:'Status of the baby',
+                    name:'Status of baby',
                     displayNext:"",
                     class:"bold",
                     displayNone:'',
@@ -44,7 +45,7 @@ const initialVisitForBaby=[
                     {
                         colData: [
                             {
-                                inputHeader: 'current weight',
+                                inputHeader: 'Current weight',
                                 unit: 'kg',
                                 icon: icons.weight,
                                 value: '',
@@ -77,18 +78,18 @@ const initialVisitForBaby=[
                 },
                 data:[
                     {
-                        name: 'Up to 48 hrs before discharge',
-                        value: 'up to 48 hrs before discharge',
+                        name: 'Up to 48 hrs or before discharge',
+                        value: 'Up to 48 hrs or before discharge',
                         colSize: '7',
                     },
                     {
-                        name: '2-7 days',
-                        value: '2 to 7 days',
+                        name: '3-7 days',
+                        value: '3-7 days',
                         colSize: '7',
                     },
                     {
                         name: '8-42 days',
-                        value: '8 to 42 days',
+                        value: '8-42 days',
                         colSize: '7',
                     },
                 ]
@@ -155,7 +156,8 @@ const initialVisitForBaby=[
                                 eventType: 'input',
                                 datePopover:true,
                                 inputWidth: '',
-                                placeholder:'Pick holder'
+                                placeholder:'Pick holder',
+                                isDatePopover:true
                             },
 
                         ]
@@ -186,7 +188,9 @@ const initialVisitForBaby=[
                                 eventType: 'input',
                                 datePopover:true,
                                 inputWidth: '',
-                                placeholder:'Pick holder'
+                                placeholder:'Pick holder',
+                                isDatePopover:true
+
                             },
 
                         ]
@@ -341,7 +345,7 @@ const initialVisitForBaby=[
                 data:[
                     {
                         name: 'Eye discharge',
-                        value: 'eye discharge',
+                        value: 'Eye discharge',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',
@@ -349,7 +353,7 @@ const initialVisitForBaby=[
                     },
                     {
                         name: 'Signs of cord infection',
-                        value: 'signs of cord infection',
+                        value: 'Signs of cord infection',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',
@@ -403,8 +407,8 @@ const initialVisitForBaby=[
                 },
                 data:[
                     {
-                        name: 'Other',
-                        value: 'other',
+                        name: 'Other danger signs',
+                        value: 'Other danger signs',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',
@@ -415,7 +419,7 @@ const initialVisitForBaby=[
 
     },
     {
-        childName:"Other",
+        childName:"Other danger signs",
         isFinishBtn: false,
         sectionHeader: '',
         classDash: 'dashed_bottom_border _padding',
@@ -427,7 +431,7 @@ const initialVisitForBaby=[
                         colData: [
                             {
                                 displayNone:true,
-                                inputHeader: 'specify',
+                                inputHeader: 'Specify',
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
@@ -507,7 +511,7 @@ const initialVisitForBaby=[
         radioBtnContent:
             {
                 header:{
-                    title: 'Is the baby started nevirapine?',
+                    title: 'Has the baby started nevirapine?',
                     selectedValue: '',
                     name:'Nevirapine started',
                     class:"bold",
@@ -531,7 +535,7 @@ const initialVisitForBaby=[
 
     },
     {
-        ChildName:'Nevirapine started',
+        childName:'Nevirapine started',
         isFinishBtn: false,
         sectionHeader: '',
         classDash: 'dashed_bottom_border _padding',
@@ -547,7 +551,7 @@ const initialVisitForBaby=[
                                 icon: icons.editPen,
                                 value: '',
                                 valueType:'text',
-                                name: 'Why baby not on neverapine notes',
+                                name: 'Neverapine not started notes',
                                 required: true,
                                 eventType: 'input',
                                 inputWidth: "",
@@ -569,8 +573,8 @@ export const useVisitForBabyStore = defineStore('visitForBabyStore',{
             this.visitForBaby = data
         },
         getInitial(){
-            const data=[...initialVisitForBaby]
-            return [...data]
+            const data=_.cloneDeep(initialVisitForBaby);
+            return [...data];
         }
 
     },
