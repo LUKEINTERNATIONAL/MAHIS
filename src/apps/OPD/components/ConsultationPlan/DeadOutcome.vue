@@ -649,6 +649,8 @@ function areFieldsValid(propoerties_array: any) {
                 if (isInputValid(property.dataValue.value) == true) {
                     property.show_error.value = false
                 }
+            } else {
+                property.show_error.value = false
             }
         }
         else {
