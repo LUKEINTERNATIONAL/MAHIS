@@ -305,14 +305,18 @@ const time_properties = [
         dataHandler: timeUpdate_fn1,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'error',
+        error_message: 'Time required',
+        type: 'time',
+        skip_validation: false,
     },
     {
         placeHolder: {default: 'Enter time arrived'} as any,
         dataHandler: timeUpdate_fn2,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'error',
+        error_message: 'Time required',
+        type: 'time',
+        skip_validation: false,
     },
     {
         placeHolder: {default: 'Enter time confirming death'} as any,
@@ -320,6 +324,8 @@ const time_properties = [
         dataValue: ref(),
         show_error: ref(false),
         error_message: 'error',
+        error_message: 'Time required',
+        skip_validation: false,
     }, 
 ]
 
@@ -329,21 +335,27 @@ const date_properties = [
         dataHandler: dateUpdate_fn1,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'error',
+        error_message: 'Date required',
+        type: 'date',
+        skip_validation: false,
     },
     {
         placeHolder: {default: 'Enter date arrived'} as any,
         dataHandler: dateUpdate_fn2,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'error'
+        error_message: 'Date required',
+        type: 'date',
+        skip_validation: false,
     },
     {
         placeHolder: {default: 'Enter date confirming death'} as any,
         dataHandler: dateUpdate_fn3,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'error',
+        error_message: 'Date required',
+        type: 'date',
+        skip_validation: false,
     }, 
 ]
 
@@ -361,43 +373,55 @@ const note_properties = [
         dataHandler: notesUpDated_fn1,
         dataValue: ref(),
         show_error: ref(false) as any,
-        error_message: 'error',
+        error_message: 'Input required, Only letters are allowed',
+        type: 'text',
+        skip_validation: false,
     },
     {
         placeHolder: 'Enter name of guardian',
         dataHandler: notesUpDated_fn2,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'error',
+        error_message: 'Input required, Only letters are allowed',
+        type: 'text',
+        skip_validation: false,
     },
     {
         placeHolder: 'Enter name of person confirming death',
         dataHandler: notesUpDated_fn3,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'error',
+        error_message: 'Input required, Only letters are allowed',
+        type: 'text',
+        skip_validation: false,
     },
     {
         placeHolder:'Enter position of the person confirming death',
         dataHandler: notesUpDated_fn4,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'error',
+        error_message: 'Input required, Only letters are allowed',
+        type: 'text',
+        skip_validation: false,
     },
     {
         placeHolder: 'Enter medical council registration number of the person confirming death',
         dataHandler: notesUpDated_fn5,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'error',
+        error_message: 'Input required, Only letters and numbers are allowed',
+        type: 'alphanumeric',
+        skip_validation: false,
     },
     {
         placeHolder: 'Other (specify)',
         dataHandler: notesUpDated_fn6,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'error',
-        dissabled: temP_AA.value
+        error_message: 'Input required, Only letters are allowed',
+        dissabled: temP_AA.value,
+        type: 'text',
+        skip_validation: true,
     }, 
 ]
 
@@ -448,7 +472,7 @@ const list_picker_prperties = [
         use_internal_filter: true as any,
         disabled: ref(false) as any,
         show_error: ref(false),
-        error_message: 'error',
+        error_message: 'selection required',
     },
     {
         multi_Selection: false as any,
@@ -462,7 +486,7 @@ const list_picker_prperties = [
         use_internal_filter: true as any,
         disabled: temP_A.value,
         show_error: ref(false),
-        error_message: 'error',
+        error_message: 'selection required',
     },
 ]
 
@@ -578,9 +602,6 @@ function listUpdated2(data: any) {
     causesOfDeath.value = data
 }
 
-function iweFn(data: any) {
-
-}
 
 function checkPatient() {
     const patient = new PatientService()
@@ -595,19 +616,42 @@ function checkPatient() {
 
 function validateForm() {
     areFieldsValid(note_properties)
-    // areFieldsValid(date_properties)
-    // areFieldsValid(time_properties)
-    // isItemSeleted(list_picker_prperties[0])
-    // isItemSeleted(list_picker_prperties[1])
+    areFieldsValid(date_properties)
+    areFieldsValid(time_properties)
+    isItemSeleted(list_picker_prperties[0])
+    isItemSeleted(list_picker_prperties[1])
 }
 
 function areFieldsValid(propoerties_array: any) {
     let found_ivalid_entry = 0
     propoerties_array.forEach((property: any) => {
+        if (property.skip_validation == true) {
+            return true
+        }
         if (property.dataValue.value == "" || property.dataValue.value === undefined) {
             property.show_error.value = true
             found_ivalid_entry++
-        } else {
+        } else if (property.dataValue.value != "" || property.dataValue.value != undefined) {
+            if (property.type == "text") {
+                if (isInputTextValid(property.dataValue.value) == false) {
+                    property.show_error.value = true
+                    found_ivalid_entry++
+                }
+                if (isInputTextValid(property.dataValue.value) == true) {
+                    property.show_error.value = false
+                }
+            }
+            if (property.type == "alphanumeric") {
+                if (isInputValid(property.dataValue.value) == false) {
+                    property.show_error.value = true
+                    found_ivalid_entry++
+                }
+                if (isInputValid(property.dataValue.value) == true) {
+                    property.show_error.value = false
+                }
+            }
+        }
+        else {
             property.show_error.value = false
         }
     })
@@ -617,6 +661,18 @@ function areFieldsValid(propoerties_array: any) {
     } else if (found_ivalid_entry == 0) {
         return true
     }
+}
+
+function isInputTextValid(txt: string): boolean {
+    const trimmedText = txt.trim()
+    const regex = /^[a-zA-Z\s\t]*$/
+    return regex.test(trimmedText)
+}
+
+function isInputValid(txt: string): boolean{
+    const trimmedText = txt.trim()
+    const regex = /^[a-zA-Z0-9\s\t]*$/
+    return regex.test(trimmedText)
 }
 
 function isItemSeleted(propoerties_item: any) {
