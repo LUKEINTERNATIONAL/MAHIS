@@ -478,6 +478,7 @@ const list_picker_prperties = [
         show_list_label: true as any,
         unqueId: 'qwerty' as any,
         name_of_list: 'Manner of death ' as any,
+        property_name: 'mannerOfDeath',
         placeHolder: 'Choose one' as any,
         items: mannerOfDeath.value,
         listUpdatedFN: listUpdated1,
@@ -492,6 +493,7 @@ const list_picker_prperties = [
         show_list_label: true as any,
         unqueId: 'qwerty1hjkn' as any,
         name_of_list: 'How did it occur?' as any,
+        property_name: 'howDiditOccur',
         placeHolder: 'Choose one' as any,
         items: causesOfDeath.value,
         listUpdatedFN: listUpdated2,
@@ -653,6 +655,8 @@ function validateForm() {
         getFieldsValuesObj(note_properties),
         getFieldsValuesObj(date_properties),
         getFieldsValuesObj(time_properties),
+        getItemSeletedObj(list_picker_prperties[0]),
+        getItemSeletedObj(list_picker_prperties[1])
     )
 
     console.log(payload)
@@ -736,6 +740,25 @@ function isItemSeleted(propoerties_item: any) {
     }
 
     return propoerties_item.show_error.value
+}
+
+function getItemSeletedObj(propoerties_item: any) {
+    const temp_data_v: any[] = []
+    let resultObject: { [key: string]: any } = {};
+    propoerties_item.items.forEach((item: any) => {
+        if (item.selected == true) {
+            temp_data_v.push({
+                property_name: propoerties_item.property_name,
+                name: item.name
+            })
+        }
+    })
+    if (temp_data_v.length > 0) {
+        resultObject[temp_data_v[0].property_name] = temp_data_v[0].name
+        return resultObject
+    } else {
+        return resultObject
+    }
 }
 
 </script>
