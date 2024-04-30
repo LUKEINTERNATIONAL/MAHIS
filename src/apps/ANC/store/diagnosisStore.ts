@@ -7,7 +7,6 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
       {
         selectdData: [],
         isFinishBtn: false,
-        classDash: "dashed_bottom_border",
         radioBtnContent: {
           header: {
             title: "Counselling conducted on hypertension?",
@@ -34,14 +33,13 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
       {
         selectdData: [],
         isFinishBtn: false,
-        classDash: "",
         radioBtnContent: {
           header: {
             title: "Reason counselling on hypertension not provided",
             selectedValue: "",
             class: "bold",
             name: "hypertension",
-            //displayNone: true,
+            displayNone: true,
           },
           data: [
             {
@@ -64,7 +62,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
       {
         isFinishBtn: false,
         sectionHeader: "",
-        classDash: "dashed_bottom_border _padding",
+        // classDash: "dashed_bottom_border _padding",
 
         data: {
           rowData: [

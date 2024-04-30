@@ -143,6 +143,7 @@ export default defineComponent ({
       this.handleasbReason()
       this.handleOtherasb()
       this. handleNone()
+      this.handleHyper()
     },
     watch:{
       diagnoses:{
@@ -166,6 +167,7 @@ export default defineComponent ({
       hepatitisReason:{
         handler(){
           this.handleHperB()
+          this.handleHyper()
         },
         deep:true
       },
@@ -187,6 +189,13 @@ export default defineComponent ({
     goToPreviousSection() {
       if (this.currentSection > 0) {
         this.currentSection--;
+      }
+    },
+    handleHyper(){
+      if(getRadioSelectedValue(this.hypertensionReason,'Counselling on hypertension')=='No'){
+        modifyRadioValue(this.hypertensionReason,'hypertension','displayNone',false)
+      }else{
+        modifyRadioValue(this.hypertensionReason,'hypertension','displayNone',true)
       }
     },
     handleHyperOther(){

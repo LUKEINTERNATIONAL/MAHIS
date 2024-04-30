@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
 
-export const useVitalsStore = defineStore("vitalsStore", {
+export const useLabourVitalsStore = defineStore("labourVitalsStore", {
   state: () => ({
     vitals: [
       {
@@ -30,14 +30,6 @@ export const useVitalsStore = defineStore("vitalsStore", {
                   name: "Diastolic",
                   required: true,
                   eventType: "input",
-                },
-              ],
-              btns: [
-                {
-                  name: "Save",
-                  fill: "clear",
-                  btn_col_size: 3,
-                  icon: icons.plus,
                 },
               ],
             },
@@ -77,14 +69,6 @@ export const useVitalsStore = defineStore("vitalsStore", {
                   eventType: "input",
                 },
               ],
-              btns: [
-                {
-                  name: "Save",
-                  fill: "clear",
-                  btn_col_size: 3,
-                  icon: icons.plus,
-                },
-              ],
             },
           ],
         },
@@ -110,14 +94,7 @@ export const useVitalsStore = defineStore("vitalsStore", {
                   eventType: "input",
                 },
               ],
-              btns: [
-                {
-                  name: "Save",
-                  fill: "clear",
-                  btn_col_size: 3,
-                  icon: icons.plus,
-                },
-              ],
+
             },
           ],
         },
@@ -143,14 +120,7 @@ export const useVitalsStore = defineStore("vitalsStore", {
                   eventType: "input",
                 },
               ],
-              btns: [
-                {
-                  name: "Save",
-                  fill: "clear",
-                  btn_col_size: 3,
-                  icon: icons.plus,
-                },
-              ],
+
             },
           ],
         },
@@ -176,14 +146,6 @@ export const useVitalsStore = defineStore("vitalsStore", {
                   eventType: "input",
                 },
               ],
-              btns: [
-                {
-                  name: "Save",
-                  fill: "clear",
-                  btn_col_size: 3,
-                  icon: icons.plus,
-                },
-              ],
             },
           ],
         },
@@ -198,5 +160,5 @@ export const useVitalsStore = defineStore("vitalsStore", {
       this.vitals = data;
     },
   },
-   persist: true,
+  // persist: true,
 });
