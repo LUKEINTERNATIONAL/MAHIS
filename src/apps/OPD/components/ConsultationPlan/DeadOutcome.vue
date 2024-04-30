@@ -46,6 +46,7 @@
                     :placeholder="note_properties[1].placeHolder"
                     :icon="personCircleOutline"
                     :inputValue="note_properties[1].dataValue.value"
+                    @update:inputValue="note_properties[1].dataHandler"
                 />
 
                 <div>
@@ -157,6 +158,7 @@
                     :icon="pencilOutline"
                     :inputValue="note_properties[5].dataValue.value"
                     :disabled="temP_AA"
+                    @update:inputValue="note_properties[5].dataHandler"
                 />
 
                 <div>
@@ -186,6 +188,7 @@
                     :placeholder="note_properties[2].placeHolder"
                     :icon="personCircleOutline"
                     :inputValue="note_properties[2].dataValue.value"
+                    @update:inputValue="note_properties[2].dataHandler"
                 />
 
                 
@@ -204,6 +207,7 @@
                     :placeholder="note_properties[3].placeHolder"
                     :icon="medicalOutline"
                     :inputValue="note_properties[3].dataValue.value"
+                    @update:inputValue="note_properties[3].dataHandler"
                 />
 
                 <div>
@@ -218,6 +222,7 @@
                     :placeholder="note_properties[4].placeHolder"
                     :icon="pencilOutline"
                     :inputValue="note_properties[4].dataValue.value"
+                    @update:inputValue="note_properties[4].dataHandler"
                 />
 
                 <div>
@@ -507,24 +512,29 @@ function notesUpDated_fn1(event: any) {
     const reason = event.target.value
     note_properties[0].dataValue.value = reason
 }
-function notesUpDated_fn2(data: any) {
-    note_properties[1].dataValue.value = data
+function notesUpDated_fn2(event: any) {
+    const input = event.target.value
+    note_properties[1].dataValue.value = input
 }
 
-function notesUpDated_fn3(data: any) {
-    note_properties[2].dataValue.value = data
+function notesUpDated_fn3(event: any) {
+    const input = event.target.value
+    note_properties[2].dataValue.value = input
 }
 
-function notesUpDated_fn4(data: any) {
-    note_properties[3].dataValue.value = data
+function notesUpDated_fn4(event: any) {
+    const input = event.target.value
+    note_properties[3].dataValue.value = input
 }
 
-function notesUpDated_fn5(data: any) {
-    note_properties[4].dataValue.value = data
+function notesUpDated_fn5(event: any) {
+    const input = event.target.value
+    note_properties[4].dataValue.value = input
 }
 
-function notesUpDated_fn6(data: any) {
-    note_properties[5].dataValue.value = data
+function notesUpDated_fn6(event: any) {
+    const input = event.target.value
+    note_properties[5].dataValue.value = input
 }
 
 function listUpdated1(data: any) {
@@ -585,10 +595,10 @@ function checkPatient() {
 
 function validateForm() {
     areFieldsValid(note_properties)
-    areFieldsValid(date_properties)
-    areFieldsValid(time_properties)
-    isItemSeleted(list_picker_prperties[0])
-    isItemSeleted(list_picker_prperties[1])
+    // areFieldsValid(date_properties)
+    // areFieldsValid(time_properties)
+    // isItemSeleted(list_picker_prperties[0])
+    // isItemSeleted(list_picker_prperties[1])
 }
 
 function areFieldsValid(propoerties_array: any) {
@@ -607,9 +617,6 @@ function areFieldsValid(propoerties_array: any) {
     } else if (found_ivalid_entry == 0) {
         return true
     }
-}
-
-function validateListPicker(list: any) {
 }
 
 function isItemSeleted(propoerties_item: any) {
