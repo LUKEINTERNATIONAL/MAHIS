@@ -25,8 +25,12 @@ export async function resetPatientData() {
     const registration = useRegistrationStore();
 
     vitals.$reset();
-    registration.$state;
-    registration.$reset();
+    registration.setPersonalInformation(registration.getInitialPersonalInformation());
+    registration.setCurrentLocation(registration.getInitialSocialHistory());
+    registration.setCurrentLocation(registration.getInitialHomeLocation());
+    registration.setCurrentLocation(registration.getInitialCurrentLocation());
+    registration.setCurrentLocation(registration.getInitialGuardianInformation());
+
     investigations.$reset();
     outcome.$reset();
     medications.$reset();

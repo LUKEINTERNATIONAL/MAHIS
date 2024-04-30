@@ -1,9 +1,5 @@
 <template>
-    <basic-card
-        :content="cardData"
-        @update:selected="handleInputData"
-        @update:inputValue="handleInputData"
-    ></basic-card>
+    <basic-card :content="cardData" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-card>
 </template>
 
 <script lang="ts">
@@ -71,10 +67,10 @@ export default defineComponent({
     },
     async mounted() {
         this.updateRegistrationStores();
-        this.buidCards();
+        this.buildCards();
     },
     methods: {
-        buidCards() {
+        buildCards() {
             this.cardData = {
                 mainTitle: "Demographics",
                 cards: [

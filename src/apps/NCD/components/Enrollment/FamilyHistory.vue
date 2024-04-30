@@ -51,16 +51,16 @@ export default defineComponent({
         personInformation: {
             handler() {
                 this.updateEnrollmentStores();
-                this.buidCards();
+                this.buildCards();
             },
             deep: true,
         },
     },
     async mounted() {
-        this.buidCards();
+        this.buildCards();
     },
     methods: {
-        buidCards() {
+        buildCards() {
             this.cardData = {
                 mainTitle: "Enrollment",
                 cards: [
