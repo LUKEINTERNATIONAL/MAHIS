@@ -3,58 +3,15 @@ import { icons } from "@/utils/svg";
 import _ from "lodash";
 const initialBirthRegistration = [
     {
-        selectedData: [],
-        isFinishBtn: false,
         data: {
             rowData: [
                 {
                     colData: [
                         {
-                            inputHeader: "Child's MER ID",
-                            icon: icons.nationalID,
-                            value: "",
-                            name: "nationalID",
-                            eventType: "input",
-                            alertsError: false,
-                            alertsErrorMassage: "",
-                            required: true,
-                            placeholder: "",
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Child's NRB birth registration",
+                            inputHeader: "Birth certificate number",
                             icon: icons.fullName,
                             value: "",
                             name: "firstname",
-                            eventType: "input",
-                            alertsError: false,
-                            alertsErrorMassage: "",
-                            required: true,
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Child's Registration Number",
-                            icon: icons.fullName,
-                            value: "",
-                            name: "lastname",
                             eventType: "input",
                             alertsError: false,
                             alertsErrorMassage: "",

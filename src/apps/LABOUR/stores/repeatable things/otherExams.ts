@@ -380,16 +380,14 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
             {
               name: "Yes",
               value: "yes",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+              colSize: "2.5",
+              
             },
             {
               name: "No",
               value: "no",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+              colSize: "2.5",
+              
             },
           ],
         },
@@ -403,6 +401,7 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
             {
               colData: [
                 {
+                  displayNone: true,
                   inputHeader: "Amount of urine",
                   unit: "",
                   icon: icons.editPen,
@@ -428,6 +427,7 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
             {
               colData: [
                 {
+                  displayNone: true,
                   inputHeader: "Color of urine",
                   unit: "",
                   icon: icons.editPen,
@@ -453,6 +453,7 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
             {
               colData: [
                 {
+                  displayNone: true,
                   inputHeader: "Odour of urine",
                   unit: "",
                   icon: icons.editPen,
@@ -484,16 +485,14 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
             {
               name: "Yes",
               value: "yes",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+              colSize: "2.5",
+              
             },
             {
               name: "No",
-              value: "no",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+              value: "no",  
+              colSize: "2.5",
+              
             },
           ],
         },
@@ -533,5 +532,5 @@ export const useOtherExamsStore = defineStore("otherExamsStore", {
       this.urine = data;
     },
   },
-  persist: true,
+  //persist: true,
 });
