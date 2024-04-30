@@ -34,14 +34,18 @@ import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/LABOUR/components/DemographicBar.vue";
 import { chevronBackOutline,checkmark } from 'ionicons/icons';
 import SaveProgressModal from '@/components/SaveProgressModal.vue'
-import { createModal } from '@/utils/Alerts'
+import { createModal, toastSuccess, toastWarning } from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
 import Stepper from "@/components/Stepper.vue";
 import { mapState,} from 'pinia';
 import {getCheckboxSelectedValue} from "@/services/data_helpers";
 import { formatInputFiledData, formatRadioButtonData } from '@/services/formatServerData';
-import { useVitalsStore } from '../stores/repeatable things/vitals';
+// import { useLabourVitalsStore } from '../stores/repeatable things/vitals';
 import { useOtherExamsStore } from '../stores/repeatable things/otherExams';
+import { useLabourVitalsStore } from '../stores/repeatable things/vitals';
+import { Service } from '@/services/service';
+import { useDemographicsStore } from '@/stores/DemographicStore';
+import { ContinuousMonitoringVitalsService,OtherExamsService } from "@/services/LABOUR/continuous_monitoring_service";
 
 export default defineComponent({
   name: "obstetricDetails",
@@ -93,7 +97,7 @@ export default defineComponent({
       StepperData:[
         {
           title: 'Vitals',
-          component: 'Vitals',
+          component: 'LabourVitals',
           value: '1'
         },
         {
@@ -110,7 +114,8 @@ export default defineComponent({
 
   },
   computed:{
-      ...mapState(useVitalsStore,['vitals']),
+      ...mapState(useDemographicsStore, ["demographics"]),
+      ...mapState(useLabourVitalsStore ,['vitals']),
       ...mapState(useOtherExamsStore ,['otherExams','urine'])
   },
   mounted(){
@@ -158,16 +163,34 @@ export default defineComponent({
       });
     },
     saveData(){
-      this.$router.push("labourHome");
+      //this.$router.push("labourHome");
 
-      // this.saveVitals()
-      // this.saveOtherExams()
+      this.saveVitals()
+      this.saveOtherExams()
     },
     async saveVitals(){
-      console.log( await this.buildVitals())
+        if (this.vitals.length > 0) {
+            const userID: any = Service.getUserID();
+            const Monitoring = new  ContinuousMonitoringVitalsService(this.demographics.patient_id, userID);
+            const encounter = await Monitoring.createEncounter();
+            if (!encounter) return toastWarning("Unable to create Vitals encounter");
+            const patientStatus = await Monitoring.saveObservationList(await this.buildVitals());
+            if (!patientStatus) return toastWarning("Unable to create Vitals !");
+            toastSuccess("Vitals  has been created");
+        }
+      //console.log( await this.buildVitals())
     },
     async saveOtherExams(){
-      console.log(await this.buildOtherExams())
+    if (this.otherExams.length > 0) {
+        const userID: any = Service.getUserID();
+        const otherExams = new  OtherExamsService(this.demographics.patient_id, userID);
+        const encounter = await otherExams.createEncounter();
+        if (!encounter) return toastWarning("Unable to create Other Exams encounter");
+        const patientStatus = await otherExams.saveObservationList(await this.buildOtherExams());
+        if (!patientStatus) return toastWarning("Unable to create Other Exams !");
+        toastSuccess("Other Exams  has been created");
+    }
+     // console.log(await this.buildOtherExams())
     },
    async buildVitals(){
     return[

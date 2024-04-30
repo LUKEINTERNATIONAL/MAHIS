@@ -54,15 +54,15 @@ import { useDemographicsStore } from "@/stores/DemographicStore";
 import {
   modifyCheckboxInputField,
   getCheckboxSelectedValue,
-  getRadioSelectedValue,
+  //getRadioSelectedValue,
   getFieldValue,
-  modifyRadioValue,
+  getRadioSelectedValue,
   modifyFieldValue,
-} from "@/services/data_helpers";
-import OtherDeliveryDetails from "./OtherDeliveryDetails.vue";
-import DeliveryNewbornDetails from "@/apps/LABOUR/components/delivery details/DeliveryNewbornDetails.vue";
-import ObstetricComplications from "@/apps/LABOUR/components/delivery details/ObstetricComplications.vue";
-
+} from '@/services/data_helpers';
+import BasicCard from "@/components/BasicCard.vue";
+//import {useReferralStore} from "@/apps/LABOUR/stores/repeatable things/referral";
+import {useEndLabourStore} from "@/apps/LABOUR/stores/repeatable things/labourAndDeliveryEnd";
+import {useSecondStageOfLabourStore} from "@/apps/LABOUR/stores/delivery details/secondStageDelivery";
 export default defineComponent({
   name: "Menu",
   components: {
@@ -82,9 +82,9 @@ export default defineComponent({
     List,
     DynamicButton,
     labOrderResults,
-    DeliveryNewbornDetails,
-    OtherDeliveryDetails,
-    ObstetricComplications
+    // DeliveryNewbornDetails,
+    // OtherDeliveryDetails,
+    // ObstetricComplications
   },
   data() {
     return {
@@ -113,29 +113,46 @@ export default defineComponent({
       otherOrdersStatus: false,
     };
   },
+  computed:{
+    ...mapState(useSecondStageOfLabourStore,["secondStageDetails"]),
+    ...mapState(useSecondStageOfLabourStore,["newbornComplications"]),
+    ...mapState(useSecondStageOfLabourStore,["secondStageDetails"]),
+    ...mapState(useSecondStageOfLabourStore,["obstetricComplications"]),
+  },
+  mounted(){
+    const secondStageDetails=useSecondStageOfLabourStore()
+    const newbornComplications=useSecondStageOfLabourStore()
+    const obstetricComplications=useSecondStageOfLabourStore()
+    // this.initialData=secondStageDetails.getInitial()
+    // this.initialData1=newbornComplications.getInitial1()
+    // this.initialData2=obstetricComplications.getInitial2()
+    this. handleModeOfDeliver()
+  },
+  watch:{
+    newbornComplications:{
+      handler(){
+        this.handleModeOfDeliver()
+      },
+      deep:true
+    }
+  },
   setup() {
     return { checkmark, pulseOutline };
   },
-  computed: {
-    ...mapState(useInvestigationStore, ["investigations"]),
-    ...mapState(useDemographicsStore, ["demographics"]),
-    inputFields() {
-      return this.investigations[0].data.rowData[0].colData;
-    },
-  },
-  watch: {
-    investigations: {
-      handler() {
-      },
-      deep: true,
-    },
-  },
-  async mounted() {
-  },
-  methods: {
 
-  },
+  methods: {
+    handleModeOfDeliver(){
+      // if(getRadioSelectedValue(this.newbornComplications,'Mode of delivery')=='other'){
+      //   modifyFieldValue(this.newbornComplications,'Other notes','displayNone',false)
+      // }else{
+      //    modifyFieldValue(this.newbornComplications,'Other notes','displayNone',true)
+      // }
+    },
+  }
 });
+
+//   },
+// });
 </script>
 
 <style scoped>
