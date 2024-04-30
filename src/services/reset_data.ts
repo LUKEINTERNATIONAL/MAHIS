@@ -10,6 +10,12 @@ import { useEnrollementStore } from "@/stores/EnrollmentStore";
 import { useNextAppointmentStore } from "@/stores/NextAppointmentStore";
 import { useRegistrationStore } from "@/stores/RegistrationStore";
 import { useGeneralStore } from "@/stores/GeneralStore";
+import { useObstreticHistoryStore } from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
+import { useMedicalHistoryStore } from "@/apps/ANC/store/profile/medicalHistoryStore";
+import { useWomanBehaviourStore } from "@/apps/ANC/store/profile/womanBehaviourStore";
+import { useCurrentPregnanciesStore } from "@/apps/ANC/store/profile/CurrentPreganciesStore";
+import { useMedicationStore } from "@/apps/ANC/store/profile/MedicationStore";
+//import { useMedicationsStore } from "@/apps/ANC/store/profile/MedicationsStore";
 
 export async function resetPatientData() {
     sessionStorage.setItem("saveProgressStatus", "false");
@@ -23,6 +29,12 @@ export async function resetPatientData() {
     const enrollement = useEnrollementStore();
     const nextAppointment = useNextAppointmentStore();
     const registration = useRegistrationStore();
+
+    const obstreticHistory = useObstreticHistoryStore();
+    const medicalHistory = useMedicalHistoryStore();
+    const medic = useMedicationStore();
+    const womanBehavior = useWomanBehaviourStore();
+    const curretPregnancy = useCurrentPregnanciesStore();
 
     vitals.setVitals(vitals.getInitialSocialHistory());
     registration.setPersonalInformation(registration.getInitialPersonalInformation());
@@ -45,6 +57,14 @@ export async function resetPatientData() {
     general.$reset();
     enrollement.$reset();
     nextAppointment.$reset();
+
+    //ANC profile
+
+    obstreticHistory.$reset();
+    medicalHistory.$reset();
+    medic.$reset()
+    womanBehavior.$reset();
+    curretPregnancy.$reset();
 }
 
 export function resetDemographics() {
