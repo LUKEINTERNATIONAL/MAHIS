@@ -213,7 +213,7 @@ export default defineComponent({
             this.saveMedication()
             this.saveCaffeinIntake()
             toastSuccess("Profile data saved successfully")
-            this.$router.push("headssAssessment");
+           // this.$router.push("headssAssessment");
         },
         async savePrevPregnancies(){
         // if (this.prevPregnancies[0].selectedData.length > 0) {
