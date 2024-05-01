@@ -17,6 +17,14 @@ const props = defineProps<{
     labels: any,
 }>()
 
+const emit = defineEmits<{
+    (e: "selectionEvent", ObjectsArray: any): void
+}>()
+
+function selectionEvent() {
+    emit("selectionEvent", selectedOption.value)
+}
+
 const options = ref({
     'label': placeholder,    
     options:[] as any
@@ -30,6 +38,13 @@ watch(
     () => props.labels,
     async (newValue) => {
         populateOptions()
+    }
+)
+
+watch(
+    () => selectedOption,
+    async (newValue) => {
+        selectionEvent()
     }
 )
 

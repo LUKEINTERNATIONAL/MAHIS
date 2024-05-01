@@ -94,6 +94,7 @@ const labels = [
     'Male',
     'Female',
 ]
+const sselectionListSelectedValue = ref()
 
 const note_properties = [
     {
@@ -132,6 +133,10 @@ const note_properties = [
         error_message: 'Input required, Only letters are allowed',
     },
 ]
+
+function sselectionListUpdated(data: any) {
+    sselectionListSelectedValue.value = data
+}
 </script>
 <style scoped>
 </style>
