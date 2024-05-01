@@ -50,6 +50,7 @@ import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";
 import { formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
 import { useAncEndStore } from "../store/ancEnd/ancEndStore";
+import { resetPatientData } from "@/services/reset_data";
 export default defineComponent({
     name: "Home",
     components: {
@@ -114,6 +115,7 @@ export default defineComponent({
         markWizard() {},
         async saveData() {
       this.saveAncEnd;
+      resetPatientData();
       this.$router.push("ANCHome");
     },
 

@@ -45,6 +45,7 @@ import { icons } from "@/utils/svg";
 import Stepper from "@/components/Stepper.vue";
 import { mapState } from "pinia";
 import { getCheckboxSelectedValue } from "@/services/data_helpers";
+import { resetPatientData } from "@/services/reset_data";
 
 export default defineComponent({
     name: "obstetricDetails",
@@ -191,6 +192,7 @@ export default defineComponent({
             // if (errors.length) {
             //     return alert(errors.join(","));
             // }
+          resetPatientData();
           this.$router.push("labourHome");
 
         },

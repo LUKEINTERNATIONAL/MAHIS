@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
 
-export const useQuickCheckStore = defineStore('labourDetailsStore',{
+export const useLabourQuickCheckStore = defineStore('labourDetailsStore',{
     state: () => ({
 
         pastProblems: [

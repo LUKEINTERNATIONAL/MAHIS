@@ -52,6 +52,7 @@ import {
 } from "@/apps/LABOUR/stores/delivery details/immediatepostnatalChecksForMother";
 import {useDemographicsStore} from "@/stores/DemographicStore";
 import {ImmediatePostnatalChecksForChildService} from "@/apps/LABOUR/services/immediate_postnatal_checks_for_child";
+import { resetPatientData } from '@/services/reset_data';
 export default defineComponent({
   name: "postnatalChecks",
   components:{
@@ -176,6 +177,8 @@ export default defineComponent({
     },
     async saveData() {
       await this.savePostnatalChecks();
+      toastSuccess("Immediate postnatal checks data saved successfully")
+      resetPatientData();
       // this.$router.push("labourHome");
     },
 

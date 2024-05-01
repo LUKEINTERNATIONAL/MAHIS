@@ -33,9 +33,10 @@ import {DangerSignsService} from "@/apps/ANC/service/danger_signs_service";
 import {toastSuccess, toastWarning} from "@/utils/Alerts";
 import {formatCheckBoxData, formatInputFiledData, formatRadioButtonData} from "@/services/formatServerData";
 import {mapState} from "pinia";
-import {useHeadssAssessmentStore} from "@/apps/ANC/store/others/headsAssessment";
+import {useHeadssAssessmentStore} from "@/apps/ANC/store/others/headsAssessmentStore";
 import {useDemographicsStore} from "@/stores/DemographicStore";
 import {HeadssAssessmentService} from "@/apps/ANC/service/headss_assessment_service";
+import { resetPatientData } from '@/services/reset_data';
 
 
 
@@ -96,6 +97,7 @@ export default defineComponent ({
     saveData(){
       if (this.headssAssesment.length > 0) {
       this.saveHeadssAssesment();
+      resetPatientData();
       this.$router.push('ANCHome');
       toastSuccess("HEADSS assessment details have been created");
       }
@@ -132,4 +134,4 @@ export default defineComponent ({
 
 <style scoped>
 
-</style>
+</style>@/apps/ANC/store/others/headsAssessmentStore

@@ -46,6 +46,7 @@ import {PostnatalDetailsService} from "@/apps/PNC/Services/postnatal_details_ser
 import {useDeliveryDetailsStore} from "@/apps/PNC/stores/postnatal details/DeliveryDetails";
 import {useHIVStatusAndTreatmentStore} from "@/apps/PNC/stores/postnatal details/HIVStatusAndTreatment";
 import {modifyWizardData} from "@/services/data_helpers";
+import { resetPatientData } from '@/services/reset_data';
 export default defineComponent({
   name: "postnatalDetails",
   components:{
@@ -212,6 +213,8 @@ export default defineComponent({
     },
     async saveData(){
       await this.savePostnatalDetails()
+      //toastSuccess("Postnatal details data saved successfully")
+      resetPatientData();
       this.$router.push("home");
 
     },

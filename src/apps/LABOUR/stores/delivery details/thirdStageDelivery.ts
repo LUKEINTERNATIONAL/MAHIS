@@ -498,7 +498,7 @@ const initialPlacentaExamination=[
     },
 
 ] as any;
-export const useThirdStageOfLabour = defineStore('thirdStageOfLabour',{
+export const useThirdStageOfLabourStore = defineStore('thirdStageOfLabour',{
     state: () => ({
 
         placentaExamination: [...initialPlacentaExamination] as any,

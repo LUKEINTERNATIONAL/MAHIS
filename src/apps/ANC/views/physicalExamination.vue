@@ -62,6 +62,7 @@ import { formatRadioButtonData } from "@/services/formatServerData";
 import { useFetalAssessment } from "../store/physical exam/FetalAssessmentStore";
 import { useFetalPresentationStore } from "../store/physical exam/FetalPresantationStore";
 import { usePresentingSigns } from "../store/physical exam/PresentingSignsStore";
+import { resetPatientData } from "@/services/reset_data";
 export default defineComponent({
     name: "PhysicalExam",
     components: {
@@ -244,6 +245,7 @@ export default defineComponent({
                 this.saveFetalAssessment();
                 this.saveFetalPresentation();
                 this.savePresentingSigns();
+                resetPatientData();
                 this.$router.push("ANChome");
                 toastSuccess("Physical examination data saved successfully");
             } else {

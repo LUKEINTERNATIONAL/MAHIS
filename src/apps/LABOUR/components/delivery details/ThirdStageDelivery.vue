@@ -41,7 +41,7 @@ import {
 import BasicCard from "@/components/BasicCard.vue";
 //import {useReferralStore} from "@/apps/LABOUR/stores/repeatable things/referral";
 import {useEndLabourStore} from "@/apps/LABOUR/stores/repeatable things/labourAndDeliveryEnd";
-import {useThirdStageOfLabour} from "@/apps/LABOUR/stores/delivery details/thirdStageDelivery";
+import {useThirdStageOfLabourStore} from "@/apps/LABOUR/stores/delivery details/thirdStageDelivery";
 export default defineComponent({
   name: "ThirdStageOfDelivery",
   components:{
@@ -74,10 +74,10 @@ export default defineComponent({
     };
   },
   computed:{
-    ...mapState(useThirdStageOfLabour,["placentaExamination"]),
+    ...mapState(useThirdStageOfLabourStore,["placentaExamination"]),
   },
   mounted(){
-    const placentaExamination=useThirdStageOfLabour()
+    const placentaExamination=useThirdStageOfLabourStore()
     this.initialData=placentaExamination.getInitial()
   },
   watch:{
