@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
 
-export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
+export const useLabourObstreticHistoryStore = defineStore('obstreticHistoryStore',{
     state: () => ({
         prevPregnancies: [
             {

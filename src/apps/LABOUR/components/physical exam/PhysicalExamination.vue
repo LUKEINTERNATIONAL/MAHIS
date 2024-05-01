@@ -48,7 +48,7 @@ import {
   getFieldValue,
 } from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
-import {usePhysicalExamStore} from "@/apps/LABOUR/stores/physical exam/physicalExamination";
+import {useLabourPhysicalExamStore} from "@/apps/LABOUR/stores/physical exam/physicalExamination";
 export default defineComponent({
   name: "History",
   components:{
@@ -79,9 +79,9 @@ export default defineComponent({
     };
   },
   computed:{
-    ...mapState(usePhysicalExamStore,["vitals"]),
-    ...mapState(usePhysicalExamStore,["anaemia"]),
-    ...mapState(usePhysicalExamStore,["otherphysicalExams"]),
+    ...mapState(useLabourPhysicalExamStore,["vitals"]),
+    ...mapState(useLabourPhysicalExamStore,["anaemia"]),
+    ...mapState(useLabourPhysicalExamStore,["otherphysicalExams"]),
   },
   mounted(){
   },

@@ -19,7 +19,7 @@ import { useAncEndStore } from "@/apps/ANC/store/ancEnd/ancEndStore";
 import { useBehaviourCousellingStore } from "@/apps/ANC/store/counselling/behaviourCousellingStore";
 import { useDietCounsellingStore } from "@/apps/ANC/store/counselling/dietCounsellingStore";
 import { usePhysiologicalCounselingStore } from "@/apps/ANC/store/counselling/physiologicalCounselingStore";
-import { useHeadssAssessmentStore } from "@/apps/ANC/store/others/headsAssessment";
+import { useHeadssAssessmentStore } from "@/apps/ANC/store/others/headsAssessmentStore";
 import { useAncVitalsStore } from "@/apps/ANC/store/physical exam/AncVitalsStore";
 import { useFetalAssessment } from "@/apps/ANC/store/physical exam/FetalAssessmentStore";
 import { useFetalPresentationStore } from "@/apps/ANC/store/physical exam/FetalPresantationStore";
@@ -27,7 +27,7 @@ import { usePresentingSigns } from "@/apps/ANC/store/physical exam/PresentingSig
 import { useMaternalExamStore } from "@/apps/ANC/store/physical exam/MaternalExamStore";
 import { useSpecificHealthConcernsStore } from "@/apps/ANC/store/quickCheck/specificHealthConcerns";
 import { useReasonForVisitStore } from "@/apps/ANC/store/quickCheck/reasonForVisit";
-import { useDangerSignsStore } from "@/apps/ANC/store/Tempo";
+//import { useDangerSignsStore } from "@/apps/ANC/store/Tempo";
 import { useConfirmPregnancyStore } from "@/apps/ANC/store/quickCheck/confirmPregnancy";
 import { useReferralStore } from "@/apps/ANC/store/referral/referralStore";
 import { useIpvStore } from "@/apps/ANC/store/symptomsFollowUp/ipvStore";
@@ -46,6 +46,26 @@ import { useLabTestsStore } from "@/apps/ANC/store/LabTestsStore";
 import { useMedicationDispensedStore } from "@/apps/ANC/store/medicationDispensed";
 import { useTBScreeningStore } from "@/apps/ANC/store/TBScreeningStore";
 import { useUrineTestStore } from "@/apps/ANC/store/UrineTestStore";
+import { useLabourObstreticHistoryStore } from "@/apps/LABOUR/stores/obstetric details/obstetric";
+import { useLabourDetailsStore } from "@/apps/LABOUR/stores/obstetric details/labour";
+import { useLabourQuickCheckStore } from "@/apps/LABOUR/stores/physical exam/quickCheck";
+import { useLabourPhysicalExamStore } from "@/apps/LABOUR/stores/physical exam/physicalExamination";
+import { usefirstVaginalExaminationStore } from "@/apps/LABOUR/stores/physical exam/firstVaginalExamination";
+import { usePelvicAssessmentStore } from "@/apps/LABOUR/stores/physical exam/pelvicAssessment";
+import { useEndLabourStore } from "@/apps/LABOUR/stores/repeatable things/labourAndDeliveryEnd";
+import { useLabourVitalsStore } from "@/apps/LABOUR/stores/repeatable things/vitals";
+import { useOtherExamsStore } from "@/apps/LABOUR/stores/repeatable things/otherExams";
+import { useLabourReferralStore } from "@/apps/LABOUR/stores/repeatable things/referral";
+import { useSecondStageOfLabourStore } from "@/apps/LABOUR/stores/delivery details/secondStageDelivery";
+import { useThirdStageOfLabourStore } from "@/apps/LABOUR/stores/delivery details/thirdStageDelivery";
+import { useImmediatePostnatalChecksForMotherStore } from "@/apps/LABOUR/stores/delivery details/immediatepostnatalChecksForMother";
+import { useImmediatePostnatalChecksForChildStore } from "@/apps/LABOUR/stores/delivery details/immediatepostnatalChecksForChild";
+import { useObstetricDetailsStore } from "@/apps/PNC/stores/postnatal details/ObstetricDetails";
+import { useDeliveryDetailsStore } from "@/apps/PNC/stores/postnatal details/DeliveryDetails";
+import { useHIVStatusAndTreatmentStore } from "@/apps/PNC/stores/postnatal details/HIVStatusAndTreatment";
+import { usePostnatalWardStayStore } from "@/apps/PNC/stores/postnatal ward stay/PostnatalWardMonitoring";
+import { useBabyStatusStore } from "@/apps/PNC/stores/postnatal ward stay/BabyStatus";
+import { useDangerSignsStore } from "@/apps/ANC/store/quickCheck/dangerSigns";
 //import { useMedicationsStore } from "@/apps/ANC/store/profile/MedicationsStore";
 
 export async function resetPatientData() {
@@ -98,6 +118,28 @@ export async function resetPatientData() {
     const ANCmedicationDispensed = useMedicationDispensedStore();
     const ANCtbScreening = useTBScreeningStore();
     const ANCurineTest = useUrineTestStore();
+    const exa = useHeadssAssessmentStore();
+
+    const LabourObstreticHistory = useLabourObstreticHistoryStore();
+    const LabourDetails = useLabourDetailsStore();
+    const LabouruickCheckStore = useLabourQuickCheckStore();
+    const LabourPhysicalExam = useLabourPhysicalExamStore();
+    const LabourVaginalExamination = usefirstVaginalExaminationStore();
+    const LabourPelvicAssessment = usePelvicAssessmentStore();
+    const LabourVitals = useLabourVitalsStore();
+    const LabourOtherExams = useOtherExamsStore();
+    const LabourReferral = useLabourReferralStore();
+    const LabourSecondStage = useSecondStageOfLabourStore();
+    const LabourThirdStage = useThirdStageOfLabourStore();
+    const LabourChecksForMother = useImmediatePostnatalChecksForMotherStore();
+    const LabourChecksForChild = useImmediatePostnatalChecksForChildStore();
+    const LabourEnd = useEndLabourStore()
+
+    const PNCObstetricDetails = useObstetricDetailsStore();
+    const PNCDeliveryDetails = useDeliveryDetailsStore();
+    const PNCHIVStatusAndTreatment = useHIVStatusAndTreatmentStore();
+    const PNCPostnatalWard = usePostnatalWardStayStore();
+    const PNCBabyStatus = useBabyStatusStore();
 
     vitals.setVitals(vitals.getInitialSocialHistory());
     registration.setPersonalInformation(registration.getInitialPersonalInformation());
@@ -161,6 +203,29 @@ export async function resetPatientData() {
     ANCmedicationDispensed.$reset();
     ANCtbScreening.$reset();
     ANCurineTest.$reset();
+
+    LabourObstreticHistory.$reset();
+    LabourDetails.$reset();
+    LabouruickCheckStore.$reset();
+    LabourPhysicalExam.$reset();
+    LabourVaginalExamination.$reset();
+    LabourPelvicAssessment.$reset();
+    LabourVitals.$reset();
+    LabourOtherExams.$reset();
+    LabourReferral.$reset();
+    LabourSecondStage.$reset();
+    LabourThirdStage.$reset();
+    LabourChecksForMother.$reset();
+    LabourChecksForChild.$reset();
+    LabourEnd.$reset();
+
+    PNCObstetricDetails.$reset();
+    PNCDeliveryDetails.$reset();
+    PNCHIVStatusAndTreatment.$reset();
+    PNCPostnatalWard.$reset();
+    PNCBabyStatus.$reset();
+
+    
  
 
 }

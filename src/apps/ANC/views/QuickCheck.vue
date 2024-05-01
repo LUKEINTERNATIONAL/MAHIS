@@ -254,7 +254,7 @@ export default defineComponent({
       await this.saveHealthConcerns();
       resetPatientData();
       this.$router.push("ANCHome");
-      this.isLoading = false;
+      //this.isLoading = false;
     },
 
     async saveDangerSigns() {

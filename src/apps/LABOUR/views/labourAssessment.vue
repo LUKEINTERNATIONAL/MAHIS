@@ -220,6 +220,7 @@ export default defineComponent({
             // if (errors.length) {
             //     return alert(errors.join(","));
             // }
+          resetPatientData();
           this.$router.push("labourHome");
 
         },
