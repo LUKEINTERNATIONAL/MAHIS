@@ -8,7 +8,6 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
-import "vue-select/dist/vue-select.css";
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
 
 const selectedOption = ref(null)

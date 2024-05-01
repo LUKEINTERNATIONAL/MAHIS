@@ -2,7 +2,6 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import Vue3EasyDataTable from "vue3-easy-data-table";
-import "vue3-easy-data-table/dist/style.css";
 import vSelect from "vue-select";
 
 import { IonicVue } from "@ionic/vue";
@@ -12,6 +11,8 @@ import piniaPluginPersistedState from "pinia-plugin-persistedstate";
 import VueDatePicker from "@vuepic/vue-datepicker";
 
 import "@vuepic/vue-datepicker/dist/main.css";
+import "vue3-easy-data-table/dist/style.css";
+import "vue-select/dist/vue-select.css";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/vue/css/core.css";
