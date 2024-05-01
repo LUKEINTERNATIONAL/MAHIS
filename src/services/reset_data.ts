@@ -123,11 +123,44 @@ export async function resetPatientData() {
 
   
 
-     ANCobstreticHistory.$reset();
-     ANCmedicalHistory.$reset();
-     ANCmedic.$reset();
-     ANCwomanBehavior.$reset();
-     ANCcurretPregnancy.$reset();
+    ANCobstreticHistory.$reset();
+    ANCmedicalHistory.$reset();
+    ANCmedic.$reset();
+    ANCwomanBehavior.$reset();
+    ANCcurretPregnancy.$reset();
+    ancEnd.$reset();
+    ANCbehaviourCounselling.$reset();
+    ANCdietCounselling.$reset();
+    ANCwomanBehavior.$reset();
+    ANCphysCounselling.$reset();
+    heads.$reset();
+    ANCancvitals.$reset();
+    ANCfatalAssment.$reset();
+    ANCfatalPres.$reset();
+    ANCpresSigns.$reset();
+    ANCmaternalExam.$reset();
+    ANCspecifidHealthConditions.$reset();
+    ANCvisits.$reset();
+    ANCdangerSigns.$reset();
+    ANCpregnancy.$reset();
+    ANCreferal.$reset();
+    ANCstore.$reset();
+    ANCfatalMovement.$reset();
+    ANCcurrentPhysiological.$reset();
+    ANCmedicalFollowUp.$reset();
+    ANCpersistent.$reset();
+    ANCpersistentSymptoms.$reset();
+    ANCwomenBehavior.$reset();
+    ANCmedication.$reset();
+    ANCdiagnosisCounselling.$reset();
+    ANCdeworming.$reset();
+    ANCdiagnosis.$reset();
+    ANCimmunisation.$reset();
+    ANCintimatePartner.$reset();
+    ANCLabTest.$reset();
+    ANCmedicationDispensed.$reset();
+    ANCtbScreening.$reset();
+    ANCurineTest.$reset();
  
 
 }

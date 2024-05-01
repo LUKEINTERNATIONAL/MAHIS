@@ -180,6 +180,7 @@ methods: {
       this.saveImmunisation();
       this.saveIntimatePartner();
       this.saveDeworming();
+      toastSuccess("Treament and Diagnosis saved successfully")
        resetPatientData();
       //this.$router.push('counselling');
 
