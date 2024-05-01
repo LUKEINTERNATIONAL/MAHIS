@@ -45,6 +45,7 @@ import { icons } from "@/utils/svg";
 import Stepper from "@/components/Stepper.vue";
 import { mapState } from "pinia";
 import { getCheckboxSelectedValue } from "@/services/data_helpers";
+import { resetPatientData } from "@/services/reset_data";
 
 export default defineComponent({
     name: "obstetricDetails",
