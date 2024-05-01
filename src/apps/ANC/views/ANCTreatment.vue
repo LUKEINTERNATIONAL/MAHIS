@@ -35,6 +35,7 @@ import { Service } from "@/services/service";
 import { ImmunizationService } from "@/services/anc_treatment_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
+import { resetPatientData } from "@/services/reset_data";
 
 export default defineComponent({
     name: "Treatment",
@@ -179,6 +180,7 @@ methods: {
       this.saveImmunisation();
       this.saveIntimatePartner();
       this.saveDeworming();
+       resetPatientData();
       //this.$router.push('counselling');
 
     },

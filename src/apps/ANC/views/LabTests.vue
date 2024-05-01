@@ -35,6 +35,7 @@ import { useUrineTestStore } from "../store/UrineTestStore";
 import { Service } from "@/services/service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import {TBScreeningInstance, UltrasoundInstance, UrineTestInstance} from "@/apps/ANC/service/labtests_service"
+import { resetPatientData } from "@/services/reset_data";
 export default defineComponent({
     name: "Lab",
     components: { IonPage, DemographicBar, Toolbar, IonContent, UltrasoundScan, UrineTest, TB, Stepper },
@@ -104,6 +105,7 @@ export default defineComponent({
                this.saveUltrasound();
                this.saveUrineTest();
                this.saveTBscreening();
+                resetPatientData();
             this.$router.push("ANChome");
                 toastSuccess("Lab tests data saved successfully");
             } else {

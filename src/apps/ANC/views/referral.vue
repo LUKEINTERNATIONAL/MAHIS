@@ -32,6 +32,7 @@ import { Service } from "@/services/service";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
 import {ReferralInstance} from '@/apps/ANC/service/referral_service'
 import { useDemographicsStore } from "@/stores/DemographicStore";
+import { resetPatientData } from "@/services/reset_data";
 
 
 
@@ -89,6 +90,7 @@ export default defineComponent ({
     markWizard() {},
     saveData() {
       this.saveReferral
+      resetPatientData();
       this.$router.push("ANCHome");
     },
     async buildReferral() {

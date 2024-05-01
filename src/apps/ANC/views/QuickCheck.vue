@@ -70,6 +70,7 @@ import {SpecificHealthConcernsService} from "@/apps/ANC/service/specific_health_
 import {useSpecificHealthConcernsStore} from "@/apps/ANC/store/quickCheck/specificHealthConcerns";
 import {useReasonForVisitStore} from "@/apps/ANC/store/quickCheck/reasonForVisit";
 import {ReasonForVisitService} from "@/apps/ANC/service/reason_for_visit_service";
+import { resetPatientData } from '@/services/reset_data';
 export default defineComponent({
   name: "Home",
   components:{
@@ -251,6 +252,7 @@ export default defineComponent({
       await this.saveReasonForVisit();
       await this.saveConfirmPregnancy();
       await this.saveHealthConcerns();
+      resetPatientData();
       this.$router.push("ANCHome");
       this.isLoading = false;
     },

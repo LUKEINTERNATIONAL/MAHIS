@@ -36,6 +36,7 @@ import {mapState} from "pinia";
 import {useHeadssAssessmentStore} from "@/apps/ANC/store/others/headsAssessment";
 import {useDemographicsStore} from "@/stores/DemographicStore";
 import {HeadssAssessmentService} from "@/apps/ANC/service/headss_assessment_service";
+import { resetPatientData } from '@/services/reset_data';
 
 
 
@@ -96,6 +97,7 @@ export default defineComponent ({
     saveData(){
       if (this.headssAssesment.length > 0) {
       this.saveHeadssAssesment();
+      resetPatientData();
       this.$router.push('ANCHome');
       toastSuccess("HEADSS assessment details have been created");
       }

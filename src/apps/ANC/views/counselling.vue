@@ -61,6 +61,7 @@ import {BehaviourCounsellingService} from "@/apps/ANC/service/behaviour_counsell
 import {formatCheckBoxData, formatInputFiledData, formatRadioButtonData} from "@/services/formatServerData";
 import {PhysiologicalCounsellingService} from "@/apps/ANC/service/physiological_counselling_service";
 import {DietCounsellingService} from "@/apps/ANC/service/diet_counselling_service";
+import { resetPatientData } from "@/services/reset_data";
 export default defineComponent({
     name: "Home",
     components: {
@@ -162,6 +163,7 @@ export default defineComponent({
           await this.saveBehaviourCounselling();
           await this.savePhysiologicalCounselling()
           await  this.saveDietCounselling()
+          resetPatientData();
           this.$router.push("ANChome");
 
 
