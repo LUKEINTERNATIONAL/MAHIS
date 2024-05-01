@@ -32,7 +32,7 @@
 
     <ion-row>
         <ion-col>
-            <sselectionList/>
+            <sselectionList :labels="labels"/>
         </ion-col>
         <ion-col></ion-col>
     </ion-row>
@@ -90,6 +90,10 @@ import {
 const user_name = ref()
 const first_name = ref()
 const last_name = ref()
+const labels = [
+    'Male',
+    'Female',
+]
 
 const note_properties = [
     {

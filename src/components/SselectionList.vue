@@ -11,15 +11,35 @@ export default defineComponent({
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
 
 const selectedOption = ref(null)
-const placeholder = ref('iwe')
+const placeholder = ref('MF')
+
+const props = defineProps<{
+    labels: any,
+}>()
+
 const options = ref({
     'label': placeholder,    
-    options:[
-                { value: 'option1', label: 'Option 1' },
-                { value: 'option2', label: 'Option 2' },
-                { value: 'option3', label: 'Option 3' },
-                
-            ]})
+    options:[] as any
+})
+
+onMounted(async () => {
+    populateOptions()
+})
+
+watch(
+    () => props.labels,
+    async (newValue) => {
+        populateOptions()
+    }
+)
+
+function populateOptions() {
+    props.labels.forEach((label: any, index: number) => {
+        const option_value = 'option_'+(index++)
+        const option = { value: option_value, label: label }
+        options.value.options.push(option)
+    })
+}
 
 </script>
 <style scoped>
@@ -38,5 +58,13 @@ const options = ref({
 
     --vs-dropdown-option--active-bg: #664cc3;
     --vs-dropdown-option--active-color: #eeeeee;
+    }
+
+    .vs__clear {
+        margin-top: -12px;
+    }
+
+    .v-select, .v-select * {
+        font-size: 25px;
     }
 </style>
