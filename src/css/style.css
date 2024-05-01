@@ -410,9 +410,9 @@ ion-accordion {
     position: fixed;
     width: 300px;
 }
-#null-0 {
+/* #null-0 {
     display: none;
-}
+} */
 
 .multiselect__input,
 .multiselect__single {

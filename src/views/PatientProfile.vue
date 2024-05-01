@@ -409,7 +409,8 @@ export default defineComponent({
         dismiss() {
             modalController.dismiss();
         },
-        nav(url: any) {
+        async nav(url: any) {
+            await UserService.setProgramUserActions();
             this.$router.push(url);
         },
         async updateNCDData() {

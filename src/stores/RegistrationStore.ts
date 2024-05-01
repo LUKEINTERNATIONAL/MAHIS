@@ -191,500 +191,504 @@ const initialPersonalInformation = [
         },
     },
 ] as any;
+const initialSocialHistory = [
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Religion",
+                            popOver: true,
+                            icon: icons.search,
+                            value: "",
+                            name: "religion",
+                            placeholder: "eg. Christian",
+                            eventType: "input",
+                            popOverData: {
+                                filterData: true,
+                                data: [],
+                            },
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        radioBtnContent: {
+            header: {
+                title: "Occupation status",
+                name: "occupation",
+                selectedValue: "",
+                class: "bold",
+            },
+            data: [
+                {
+                    name: "Employed",
+                    value: "employed",
+                },
+                {
+                    name: "Unemployed",
+                    value: "unemployed",
+                },
+                {
+                    name: "Other",
+                    value: "Other",
+                },
+            ],
+        },
+    },
+    {
+        selectedData: [],
+        isFinishBtn: false,
+        radioBtnContent: {
+            header: {
+                title: "Marital status",
+                selectedValue: "",
+                name: "maritalStatus",
+                alertsError: false,
+                alertsErrorMassage: "",
+                class: "bold",
+            },
+            data: [
+                {
+                    name: "Single",
+                    value: "single",
+                },
+                {
+                    name: "Married",
+                    value: "married",
+                },
+                {
+                    name: "Widow",
+                    value: "widow",
+                },
+                {
+                    name: "Divorced",
+                    value: "divorced",
+                },
+            ],
+        },
+    },
+    {
+        selectedData: [],
+        isFinishBtn: false,
+        radioBtnContent: {
+            header: {
+                title: "Highest Level Of Education",
+                selectedValue: "",
+                name: "highestLevelOfEducation",
+                alertsError: false,
+                alertsErrorMassage: "",
+                class: "bold",
+            },
+            data: [
+                {
+                    name: "No education",
+                    value: "No education",
+                },
+                {
+                    name: "Primary school",
+                    value: "primary school",
+                },
+                {
+                    name: "Secondary school",
+                    value: "secondary school",
+                },
+                {
+                    name: "Tertiary education",
+                    value: "tertiary education",
+                },
+            ],
+        },
+    },
+] as any;
+const initialHomeLocation = [
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        checkboxBtnContent: {
+            header: {
+                title: "",
+                selectedValue: "",
+            },
+            data: [
+                {
+                    name: "Same as current",
+                    value: "sameas",
+                    labelPlacement: "start",
+                    colSize: "6",
+                    justify: "space-between",
+                    checked: false,
+                },
+            ],
+        },
+    },
+    {
+        selectedData: [],
+        isFinishBtn: false,
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Home district",
+                            popOver: true,
+                            icon: icons.search,
+                            value: "",
+                            name: "homeDistrict",
+                            setName: "homeLocation",
+                            eventType: "input",
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                            popOverData: {
+                                filterData: true,
+                                data: [],
+                            },
+                            id: "",
+                            idName: "district_id",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Home traditional authority",
+                            icon: icons.search,
+                            value: "",
+                            name: "homeTraditionalAuthority",
+                            setName: "homeLocation",
+                            eventType: "input",
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                            popOverData: {
+                                filterData: false,
+                                data: [],
+                            },
+                            id: "",
+                            idName: "district_id",
+                            displayNone: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Home village",
+                            icon: icons.search,
+                            value: "",
+                            name: "homeVillage",
+                            setName: "homeLocation",
+                            eventType: "input",
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                            popOverData: {
+                                filterData: true,
+                                data: [],
+                            },
+                            id: "",
+                            idName: "traditional_authority_id",
+                            displayNone: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+] as any;
+const initialCurrentLocation = [
+    {
+        selectedData: [],
+        isFinishBtn: false,
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Current district",
+                            icon: icons.search,
+                            value: "",
+                            name: "currentDistrict",
+                            setName: "currentLocation",
+                            eventType: "input",
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                            popOverData: {
+                                filterData: true,
+                                data: [],
+                            },
+                            id: "",
+                            idName: "district_id",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Current traditional authority",
+                            icon: icons.search,
+                            value: "",
+                            name: "currentTraditionalAuthority",
+                            setName: "currentLocation",
+                            eventType: "input",
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                            popOverData: {
+                                filterData: false,
+                                data: [],
+                            },
+                            id: "",
+                            idName: "district_id",
+                            displayNone: true,
+                            InnerActionBtnPropeties: {
+                                name: "+ Add",
+                                show: true,
+                            },
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Current village",
+                            icon: icons.search,
+                            value: "",
+                            name: "currentVillage",
+                            setName: "currentLocation",
+                            eventType: "input",
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                            popOverData: {
+                                filterData: true,
+                                data: [],
+                            },
+                            id: "",
+                            idName: "traditional_authority_id",
+                            displayNone: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Closest landmark/Plotnumber",
+                            icon: icons.search,
+                            name: "closestLandmark",
+                            value: "",
+                            eventType: "input",
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                            popOverData: {
+                                filterData: true,
+                                data: [
+                                    {
+                                        name: "Catholic Church",
+                                    },
+                                    {
+                                        name: "CCAP",
+                                    },
+                                    {
+                                        name: "Seventh Day",
+                                    },
+                                    {
+                                        name: "Mosque",
+                                    },
+                                    {
+                                        name: "Primary School",
+                                    },
+                                    {
+                                        name: "Borehole",
+                                    },
+                                    {
+                                        name: "Secondary School",
+                                    },
+                                    {
+                                        name: "College",
+                                    },
+                                    {
+                                        name: "Market",
+                                    },
+                                    {
+                                        name: "Football Ground",
+                                    },
+                                ],
+                            },
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+] as any;
+const initialGuardianInformation = [
+    {
+        selectedData: {},
+        isFinishBtn: false,
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Guardian National ID",
+                            iconRight: icons.scannerIcon,
+                            icon: icons.nationalID,
+                            value: "",
+                            name: "guardianNationalID",
+                            eventType: "input",
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                            placeholder: "__-__-__-__",
+                            displayNone: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+
+    {
+        selectedData: {},
+        isFinishBtn: false,
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "First name",
+                            //icon: icons.fullName,
+                            value: "",
+                            name: "guardianFirstname",
+                            eventType: "input",
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Last name",
+                            icon: icons.fullName,
+                            value: "",
+                            name: "guardianLastname",
+                            eventType: "input",
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Middle name",
+                            icon: icons.fullName,
+                            value: "",
+                            name: "guardianMiddleName",
+                            eventType: "input",
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Phone number",
+                            icon: icons.phone,
+                            value: "",
+                            name: "guardianPhoneNumber",
+                            eventType: "input",
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Relationship to patient",
+                            icon: icons.search,
+                            value: "",
+                            name: "relationship",
+                            eventType: "input",
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                            selectedID: "",
+                            popOverData: {
+                                filterData: false,
+                                data: [],
+                            },
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+] as any;
 export const useRegistrationStore = defineStore("registrationStore", {
     state: () => ({
         personInformation: [...initialPersonalInformation],
-        socialHistory: [
-            {
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Religion",
-                                    popOver: true,
-                                    icon: icons.search,
-                                    value: "",
-                                    name: "religion",
-                                    placeholder: "eg. Christian",
-                                    eventType: "input",
-                                    popOverData: {
-                                        filterData: true,
-                                        data: [],
-                                    },
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-            {
-                radioBtnContent: {
-                    header: {
-                        title: "Occupation status",
-                        name: "occupation",
-                        selectedValue: "",
-                        class: "bold",
-                    },
-                    data: [
-                        {
-                            name: "Employed",
-                            value: "employed",
-                        },
-                        {
-                            name: "Unemployed",
-                            value: "unemployed",
-                        },
-                        {
-                            name: "Other",
-                            value: "Other",
-                        },
-                    ],
-                },
-            },
-            {
-                selectedData: [],
-                isFinishBtn: false,
-                radioBtnContent: {
-                    header: {
-                        title: "Marital status",
-                        selectedValue: "",
-                        name: "maritalStatus",
-                        alertsError: false,
-                        alertsErrorMassage: "",
-                        class: "bold",
-                    },
-                    data: [
-                        {
-                            name: "Single",
-                            value: "single",
-                        },
-                        {
-                            name: "Married",
-                            value: "married",
-                        },
-                        {
-                            name: "Widow",
-                            value: "widow",
-                        },
-                        {
-                            name: "Divorced",
-                            value: "divorced",
-                        },
-                    ],
-                },
-            },
-            {
-                selectedData: [],
-                isFinishBtn: false,
-                radioBtnContent: {
-                    header: {
-                        title: "Highest Level Of Education",
-                        selectedValue: "",
-                        name: "highestLevelOfEducation",
-                        alertsError: false,
-                        alertsErrorMassage: "",
-                        class: "bold",
-                    },
-                    data: [
-                        {
-                            name: "No education",
-                            value: "No education",
-                        },
-                        {
-                            name: "Primary school",
-                            value: "primary school",
-                        },
-                        {
-                            name: "Secondary school",
-                            value: "secondary school",
-                        },
-                        {
-                            name: "Tertiary education",
-                            value: "tertiary education",
-                        },
-                    ],
-                },
-            },
-        ] as any,
-        homeLocation: [
-            {
-                selectdData: [],
-                isFinishBtn: false,
-                checkboxBtnContent: {
-                    header: {
-                        title: "",
-                        selectedValue: "",
-                    },
-                    data: [
-                        {
-                            name: "Same as current",
-                            value: "sameas",
-                            labelPlacement: "start",
-                            colSize: "6",
-                            justify: "space-between",
-                            checked: false,
-                        },
-                    ],
-                },
-            },
-            {
-                selectedData: [],
-                isFinishBtn: false,
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Home district",
-                                    popOver: true,
-                                    icon: icons.search,
-                                    value: "",
-                                    name: "homeDistrict",
-                                    setName: "homeLocation",
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                    popOverData: {
-                                        filterData: true,
-                                        data: [],
-                                    },
-                                    id: "",
-                                    idName: "district_id",
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-            {
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Home traditional authority",
-                                    icon: icons.search,
-                                    value: "",
-                                    name: "homeTraditionalAuthority",
-                                    setName: "homeLocation",
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                    popOverData: {
-                                        filterData: false,
-                                        data: [],
-                                    },
-                                    id: "",
-                                    idName: "district_id",
-                                    displayNone: true,
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-            {
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Home village",
-                                    icon: icons.search,
-                                    value: "",
-                                    name: "homeVillage",
-                                    setName: "homeLocation",
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                    popOverData: {
-                                        filterData: true,
-                                        data: [],
-                                    },
-                                    id: "",
-                                    idName: "traditional_authority_id",
-                                    displayNone: true,
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-        ] as any,
-        currentLocation: [
-            {
-                selectedData: [],
-                isFinishBtn: false,
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Current district",
-                                    icon: icons.search,
-                                    value: "",
-                                    name: "currentDistrict",
-                                    setName: "currentLocation",
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                    popOverData: {
-                                        filterData: true,
-                                        data: [],
-                                    },
-                                    id: "",
-                                    idName: "district_id",
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-            {
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Current traditional authority",
-                                    icon: icons.search,
-                                    value: "",
-                                    name: "currentTraditionalAuthority",
-                                    setName: "currentLocation",
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                    popOverData: {
-                                        filterData: false,
-                                        data: [],
-                                    },
-                                    id: "",
-                                    idName: "district_id",
-                                    displayNone: true,
-                                    InnerActionBtnPropeties: {
-                                        name: "+ Add",
-                                        show: true,
-                                    },
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-            {
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Current village",
-                                    icon: icons.search,
-                                    value: "",
-                                    name: "currentVillage",
-                                    setName: "currentLocation",
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                    popOverData: {
-                                        filterData: true,
-                                        data: [],
-                                    },
-                                    id: "",
-                                    idName: "traditional_authority_id",
-                                    displayNone: true,
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-            {
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Closest landmark/Plotnumber",
-                                    icon: icons.search,
-                                    name: "closestLandmark",
-                                    value: "",
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                    popOverData: {
-                                        filterData: true,
-                                        data: [
-                                            {
-                                                name: "Catholic Church",
-                                            },
-                                            {
-                                                name: "CCAP",
-                                            },
-                                            {
-                                                name: "Seventh Day",
-                                            },
-                                            {
-                                                name: "Mosque",
-                                            },
-                                            {
-                                                name: "Primary School",
-                                            },
-                                            {
-                                                name: "Borehole",
-                                            },
-                                            {
-                                                name: "Secondary School",
-                                            },
-                                            {
-                                                name: "College",
-                                            },
-                                            {
-                                                name: "Market",
-                                            },
-                                            {
-                                                name: "Football Ground",
-                                            },
-                                        ],
-                                    },
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-        ] as any,
-        guardianInformation: [
-            {
-                selectedData: {},
-                isFinishBtn: false,
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Guardian National ID",
-                                    iconRight: icons.scannerIcon,
-                                    icon: icons.nationalID,
-                                    value: "",
-                                    name: "guardianNationalID",
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                    placeholder: "__-__-__-__",
-                                    displayNone: true,
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-
-            {
-                selectedData: {},
-                isFinishBtn: false,
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "First name",
-                                    //icon: icons.fullName,
-                                    value: "",
-                                    name: "guardianFirstname",
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-            {
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Last name",
-                                    icon: icons.fullName,
-                                    value: "",
-                                    name: "guardianLastname",
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-            {
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Middle name",
-                                    icon: icons.fullName,
-                                    value: "",
-                                    name: "guardianMiddleName",
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-            {
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Phone number",
-                                    icon: icons.phone,
-                                    value: "",
-                                    name: "guardianPhoneNumber",
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-            {
-                data: {
-                    rowData: [
-                        {
-                            colData: [
-                                {
-                                    inputHeader: "Relationship to patient",
-                                    icon: icons.search,
-                                    value: "",
-                                    name: "relationship",
-                                    eventType: "input",
-                                    alertsError: false,
-                                    alertsErrorMassage: "",
-                                    selectedID: "",
-                                    popOverData: {
-                                        filterData: false,
-                                        data: [],
-                                    },
-                                },
-                            ],
-                        },
-                    ],
-                },
-            },
-        ] as any,
+        socialHistory: [...initialSocialHistory],
+        homeLocation: [...initialHomeLocation],
+        currentLocation: [...initialCurrentLocation],
+        guardianInformation: [...initialGuardianInformation],
     }),
     actions: {
         setPersonalInformation(data: any) {
@@ -704,6 +708,22 @@ export const useRegistrationStore = defineStore("registrationStore", {
         },
         getInitialPersonalInformation() {
             const data = _.cloneDeep(initialPersonalInformation);
+            return [...data];
+        },
+        getInitialSocialHistory() {
+            const data = _.cloneDeep(initialSocialHistory);
+            return [...data];
+        },
+        getInitialHomeLocation() {
+            const data = _.cloneDeep(initialHomeLocation);
+            return [...data];
+        },
+        getInitialCurrentLocation() {
+            const data = _.cloneDeep(initialCurrentLocation);
+            return [...data];
+        },
+        getInitialGuardianInformation() {
+            const data = _.cloneDeep(initialGuardianInformation);
             return [...data];
         },
     },

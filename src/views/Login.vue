@@ -17,8 +17,7 @@
                                 placeholder="Enter Username"
                                 class="input-fields"
                                 required
-                                ><ion-label slot="end">
-                                    <ion-icon :icon="person" @click="togglePasswordVisibility"></ion-icon> </ion-label
+                                ><ion-label slot="end"> <ion-icon :icon="person" @click="togglePasswordVisibility"></ion-icon> </ion-label
                             ></ion-input>
                             <ion-input
                                 v-model="password"
@@ -35,6 +34,23 @@
                                     <ion-icon :icon="eye" @click="togglePasswordVisibility"></ion-icon>
                                 </ion-label>
                             </ion-input>
+                            <VueMultiselect
+                                v-model="program"
+                                @update:model-value="handleInput($event)"
+                                :multiple="false"
+                                :taggable="false"
+                                :hide-selected="true"
+                                :close-on-select="true"
+                                openDirection="bottom"
+                                tag-placeholder=" Select Program"
+                                placeholder=""
+                                selectLabel=""
+                                label="name"
+                                :searchable="true"
+                                @search-change="$emit('search-change', $event)"
+                                track-by="program_id"
+                                :options="multiSelectData"
+                            />
                         </span>
 
                         <ion-button
@@ -81,6 +97,8 @@ import { eye, person } from "ionicons/icons";
 import { AuthService, InvalidCredentialsError } from "@/services/auth_service";
 import { toastWarning, toastDanger } from "@/utils/Alerts";
 import img from "@/utils/Img";
+import VueMultiselect from "vue-multiselect";
+import { ProgramService } from "@/services/program_service";
 
 export default defineComponent({
     name: "Home",
@@ -105,12 +123,15 @@ export default defineComponent({
         IonLabel,
         IonInput,
         IonImg,
+        VueMultiselect,
     },
     data: function () {
         return {
+            multiSelectData: [] as any,
             auth: {} as any,
             password: "" as any,
             username: "" as any,
+            program: "" as any,
             togglePasswordVisibility: false,
         };
     },
@@ -125,7 +146,14 @@ export default defineComponent({
     created() {
         this.auth = new AuthService();
     },
+    mounted() {
+        this.getPrograms();
+    },
     methods: {
+        async getPrograms() {
+            this.multiSelectData = await ProgramService.getAllPrograms();
+            console.log("🚀 ~ getPrograms ~ this.multiSelectData :", this.multiSelectData);
+        },
         doLogin: async function () {
             if (this.username && this.password) {
                 this.auth.setUsername(this.username);
@@ -150,6 +178,7 @@ export default defineComponent({
                 toastWarning("Complete form to log in");
             }
         },
+        handleInput(event: any) {},
     },
     togglePasswordVisibility() {
         if (!this.togglePasswordVisibility) return true;
@@ -164,9 +193,11 @@ export default defineComponent({
 }
 
 .login-container {
-    max-width: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    margin: 0 auto;
+    height: 90vh;
 }
 
 .login-title {
@@ -190,6 +221,7 @@ export default defineComponent({
 
 .login-button {
     color: #ffffff;
+    margin-top: 30px;
 }
 
 .signup-link {
@@ -205,5 +237,9 @@ export default defineComponent({
 .login_img {
     width: 90px;
     margin: auto;
+}
+.multiselect__content-wrapper {
+    position: unset !important;
+    width: inherit !important;
 }
 </style>
