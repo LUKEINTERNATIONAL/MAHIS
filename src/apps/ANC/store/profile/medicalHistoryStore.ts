@@ -12,8 +12,8 @@ const medicalHistoryForm = {
     value: "myomectomy",
   },
   removalOfOvarianCystst: {
-    name: "Removal of ovarian cystst",
-    value: "removal of ovarian cystst",
+    name: "Removal of ovarian cyst",
+    value: "Removal of ovarian cyst",
   },
   Oophorectomy: {
     name: "Oophorectomy",
@@ -67,7 +67,7 @@ const allegiesForm = {
     value: "iron",
   },
   malariaMedication: {
-    name: "sulfadoxine-pyrimethamine",
+    name: "Sulfadoxine-Pyrimethamine",
     value: "sulfadoxine-pyrimethamine",
   },
   mebendazole: {
@@ -364,7 +364,7 @@ const initialMedicalHistory=[
         title: "",
         selectedValue: "",
         class: "bold",
-        name: "Does the woman have any past surgeries done?",
+        name: "Past surgeries done?",
       },
       data: [
         {

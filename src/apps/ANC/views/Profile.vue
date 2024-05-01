@@ -151,7 +151,7 @@ export default defineComponent({
                     value: "1",
                 },
                 {
-                    title: "Past Medical history",
+                    title: "Past Medical History",
                     component: "MedicalHistory",
                     value: "2",
                 },
