@@ -32,7 +32,7 @@
 
     <ion-row>
         <ion-col>
-            <sselectionList :labels="labels"/>
+            <sselectionList :labels="labels" @selection-event="sselectionListUpdated"/>
         </ion-col>
         <ion-col></ion-col>
     </ion-row>
