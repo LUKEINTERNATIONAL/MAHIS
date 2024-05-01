@@ -3,6 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import Vue3EasyDataTable from "vue3-easy-data-table";
 import "vue3-easy-data-table/dist/style.css";
+import vSelect from "vue-select";
 
 import { IonicVue } from "@ionic/vue";
 import { createPinia } from "pinia";
@@ -42,6 +43,7 @@ const app = createApp(App).use(IonicVue).use(router).use(pinia);
 
 app.component("VueDatePicker", VueDatePicker);
 app.component("EasyDataTable", Vue3EasyDataTable);
+app.component("v-select", vSelect);
 pinia.use(piniaPluginPersistedState);
 DataTable.use(DataTablesCore);
 router.isReady().then(() => {
