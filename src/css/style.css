@@ -426,6 +426,10 @@ ion-accordion {
 .multiselect__select::before {
     top: 95%;
 }
+.multiselect__placeholder {
+    padding-top: 9px;
+    padding-left: 10px;
+}
 .custom_card {
     border-radius: 5px;
     background-color: rgb(255, 255, 255);

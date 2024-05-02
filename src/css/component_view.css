@@ -18,6 +18,7 @@
     font-size: 14px;
     text-align: center;
 }
+
 @media (max-width: 1350px) {
     .wizard_content {
         margin-left: 0px !important;
@@ -33,9 +34,6 @@
     }
 }
 @media (max-width: 768px) {
-    .content_manager {
-        /* margin-top: 65px; */
-    }
     .regDisplayFlex {
         display: inline;
     }
@@ -96,6 +94,12 @@
     }
 }
 @media (max-width: 602px) {
+    .login-page {
+        --ion-background-color: #ffffff;
+    }
+    ion-card {
+        box-shadow: unset;
+    }
     ion-popover[mobilePopover] {
         --offset-x: 35%;
     }
