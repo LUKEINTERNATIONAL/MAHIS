@@ -151,10 +151,6 @@ function trigerSaveFn() {
     const _isSSelectionValid_ = isSSelectionValid()
     const _ValidatePassword_ = ValidatePassword()
 
-    console.log(_areFieldsValid_)
-    console.log(_isSSelectionValid_)
-    console.log(_ValidatePassword_)
-
     if (_areFieldsValid_ == true && _ValidatePassword_ == true && _isSSelectionValid_ == true) {
         const payload = getFieldsValuesObj(input_properties)
     
@@ -296,7 +292,6 @@ const isSSelection_properties = [
         dataValue: ref(),
         show_error: ref(false),
         error_message: 'Please make a selection',
-
     }
 ]
 
@@ -324,7 +319,6 @@ function passwordInputUpDated_fn2(event: any) {
     const input = event.target.value
     password_input_properties[1].dataValue.value = input
 }
-
 
 </script>
 <style scoped>
