@@ -1,37 +1,15 @@
 <template>
   <div class="container">
-    <ion-card v-if="currentSection === 0" class="section">
+    <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
               <basic-form :contentData="iron"></basic-form>
-              <!-- <basic-form :contentData="ironDosage"></basic-form> -->
               <basic-form :contentData="folicAcid"></basic-form>
               <basic-form :contentData="folicAcidReason"></basic-form>
-            </ion-card-content>
-    </ion-card>
-
-    <ion-card v-if="currentSection === 1" class="section">
-            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
-            <ion-card-content>
               <basic-form :contentData="vitaminA"></basic-form>
-              <!-- <basic-form :contentData="vitaminADosage"></basic-form>
-              <basic-form :contentData="vitaminAReason"></basic-form> -->
-            </ion-card-content>
-    </ion-card>
-
-    <ion-card v-if="currentSection === 2" class="section">
-            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
-            <ion-card-content>
               <basic-form :contentData="calcium"></basic-form>
-              <basic-form :contentData="calciumReason"></basic-form>
             </ion-card-content>
     </ion-card>
-
-          <!-- Navigation Buttons -->
-    <div class="navigation-buttons">
-      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>
-      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>
-    </div> 
 
   </div>
 </template>
@@ -92,14 +70,10 @@ export default defineComponent ({
     },
     computed:{
         ...mapState(useMedicationDispensedStore, ["iron"]),
-        // ...mapState(useMedicationDispensedStore, ["ironDosage"]),
         ...mapState(useMedicationDispensedStore, ["folicAcid"]),
         ...mapState(useMedicationDispensedStore, ["folicAcidReason"]),
         ...mapState(useMedicationDispensedStore, ["vitaminA"]),
-        // ...mapState(useMedicationDispensedStore, ["vitaminADosage"]),
-        // ...mapState(useMedicationDispensedStore, ["vitaminAReason"]),
         ...mapState(useMedicationDispensedStore, ["calcium"]),
-        ...mapState(useMedicationDispensedStore, ["calciumReason"]),
 
     },
     mounted(){
@@ -111,6 +85,8 @@ export default defineComponent ({
       this.handleVitaminA()
       this.handleVitaminNo()
       this.handleVitaminOther()
+      this.handleNoCalcium()
+      this.handleOtherCalcium()
       
     },
     watch:{
@@ -136,6 +112,8 @@ export default defineComponent ({
       calcium:{
         handler(){
           this.handleCalcium()
+          this.handleNoCalcium()
+          this.handleOtherCalcium()
         },
         deep:true
       },
@@ -149,69 +127,72 @@ export default defineComponent ({
       }
     },
     methods :{
-       //Method for navigating sections
-    goToNextSection() {
-      if (this.currentSection < 2) {
-        this.currentSection++;
-      }
-    },
-    goToPreviousSection() {
-      if (this.currentSection > 0) {
-        this.currentSection--;
-      }
-    },
     handleIron(){
-      if(getRadioSelectedValue(this.iron,'ironInfo')=='yes'){
-        modifyFieldValue(this.iron,'ironNum','displayNone',false)
+      if(getRadioSelectedValue(this.iron,'Iron prescription')=='yes'){
+        modifyFieldValue(this.iron,'iron Amount','displayNone',false)
       }else{
-        modifyFieldValue(this.iron,'ironNum','displayNone',true)
+        modifyFieldValue(this.iron,'iron Amount','displayNone',true)
       }
     },
     handleTypeIron(){
-      if(getRadioSelectedValue(this.iron,'ironInfo')=='yes'){
-        modifyRadioValue(this.iron,'ironType','displayNone',false)
+      if(getRadioSelectedValue(this.iron,'Iron prescription')=='yes'){
+        modifyRadioValue(this.iron,'Type of Iron supplement dosage','displayNone',false)
       }else{
-        modifyRadioValue(this.iron,'ironType','displayNone',true)
+        modifyRadioValue(this.iron,'Type of Iron supplement dosage','displayNone',true)
       }
     },
     handleAcid(){
-      if(getRadioSelectedValue(this.folicAcid,'folicAcidInfo')=='yes'){
-        modifyFieldValue(this.folicAcid,'iron','displayNone',false)
+      if(getRadioSelectedValue(this.folicAcid,'Folic acid')=='yes'){
+        modifyFieldValue(this.folicAcid,'Amount of Folic acid','displayNone',false)
       }else{
-         modifyFieldValue(this.folicAcid,'iron','displayNone',true)
+         modifyFieldValue(this.folicAcid,'Amount of Folic acid','displayNone',true)
       }
     },
     handleFolicIron(){
-      if(getRadioSelectedValue(this.folicAcidReason,'reasonIrobFolic')=='other'){
+      if(getRadioSelectedValue(this.folicAcidReason,'Iron and folic acid not prescribed')=='other'){
         modifyFieldValue(this.folicAcidReason,'Other','displayNone',false)
       }else{
          modifyFieldValue(this.folicAcidReason,'Other','displayNone',true)
       }
     },
     handleCalcium(){
-      if(getRadioSelectedValue(this.calcium,'calciumInfo')=='yes'){
-        modifyFieldValue(this.calcium,'calciumField','displayNone',false)
+      if(getRadioSelectedValue(this.calcium,'Daily calcium prescription')=='yes'){
+        modifyFieldValue(this.calcium,'calcium supplements','displayNone',false)
       }else{
-        modifyFieldValue(this.calcium,'calciumField','displayNone',true)
+        modifyFieldValue(this.calcium,'calcium supplements','displayNone',true)
+      }
+    },
+    handleNoCalcium(){
+      if(getRadioSelectedValue(this.calcium,'Daily calcium prescription')=='no'){
+        modifyRadioValue(this.calcium,'calcium supplements not prescribed','displayNone',false)
+      }else{
+        modifyRadioValue(this.calcium,'calcium supplements not prescribed','displayNone',true)
+      }
+    },
+      handleOtherCalcium(){
+      if(getRadioSelectedValue(this.calcium,'calcium supplements not prescribed')=='other'){
+        modifyFieldValue(this.calcium,'Other','displayNone',false)
+      }else{
+        modifyFieldValue(this.calcium,'Other','displayNone',true)
       }
     },
     handleVitaminA(){
-      if(getRadioSelectedValue(this.vitaminA,'vitaminInfo')=='yes'){
-        modifyRadioValue(this.vitaminA,'typeVitamin','displayNone',false)
+      if(getRadioSelectedValue(this.vitaminA,'Vitamin A prescription')=='yes'){
+        modifyRadioValue(this.vitaminA,'Type of Vitamin A dosage','displayNone',false)
       }else{
-        modifyRadioValue(this.vitaminA,'typeVitamin','displayNone',true)
+        modifyRadioValue(this.vitaminA,'Type of Vitamin A dosage','displayNone',true)
       }
       
     },
     handleVitaminNo(){
-      if(getRadioSelectedValue(this.vitaminA,'vitaminInfo')=='no'){
-        modifyRadioValue(this.vitaminA,'vitaminReason','displayNone',false)
+      if(getRadioSelectedValue(this.vitaminA,'Vitamin A prescription')=='no'){
+        modifyRadioValue(this.vitaminA,'vitamin A not prescribed','displayNone',false)
       }else{
-        modifyRadioValue(this.vitaminA,'vitaminReason','displayNone',true)
+        modifyRadioValue(this.vitaminA,'vitamin A not prescribed','displayNone',true)
       }
     },
     handleVitaminOther(){
-      if(getRadioSelectedValue(this.vitaminA,'vitaminReason')=='other'){
+      if(getRadioSelectedValue(this.vitaminA,'vitamin A not prescribed')=='other'){
         modifyFieldValue(this.vitaminA,'Other','displayNone',false)
       }else{
         modifyFieldValue(this.vitaminA,'Other','displayNone',true)

@@ -10,7 +10,7 @@
     >
         <ion-content class="search_card">
             <ion-row class="search_header">
-                <ion-col>Diabete clinic No. </ion-col>
+                <ion-col>Patient No. </ion-col>
                 <ion-col>Fullname</ion-col>
                 <ion-col>Birthdate</ion-col>
                 <ion-col style="max-width: 70px">Gender</ion-col>
@@ -24,7 +24,7 @@
                 <ion-col style="max-width: 30px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
             </ion-row>
             <ion-row>
-                <ion-col size="4">
+                <ion-col size="5">
                     <DynButton :icon="add" :name="'Add Patient'" :fill="'clear'" @click="openCheckPaitentNationalIDModal" />
                 </ion-col>
             </ion-row>
@@ -57,6 +57,7 @@ import { PatientService } from "@/services/patient_service";
 import { checkmark, add, search } from "ionicons/icons";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useGlobalPropertyStore } from "@/stores/GlobalPropertyStore";
+import { useGeneralStore } from "@/stores/GeneralStore";
 import { useVitalsStore } from "@/stores/VitalsStore";
 import DynButton from "@/components/DynamicButton.vue";
 import { createModal, toastWarning } from "@/utils/Alerts";
@@ -64,6 +65,7 @@ import CheckPatientNationalID from "@/components/CheckPatientNationalID.vue";
 import { resetPatientData } from "@/services/reset_data";
 import { mapState } from "pinia";
 import Validation from "@/validations/StandardValidations";
+import { UserService } from "@/services/user_service";
 
 export default defineComponent({
     name: "Home",
@@ -94,6 +96,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useGlobalPropertyStore, ["globalPropertyStore"]),
+        ...mapState(useGeneralStore, ["activities", "userActions"]),
     },
     methods: {
         async handleInput(ev: any) {
@@ -184,7 +187,28 @@ export default defineComponent({
                 patient_id: item.patient_id,
             });
             resetPatientData();
-            this.$router.push(url);
+            const roleData: any = sessionStorage.getItem("userRoles");
+            const userProgramsData: any = sessionStorage.getItem("userPrograms");
+            const userPrograms: any = JSON.parse(userProgramsData);
+            const roles: any = JSON.parse(roleData);
+            UserService.setProgramUserActions();
+            if (userPrograms.length == 1) {
+                let NCDUserAction: any = "";
+                if (this.userActions.length > 0) [{ NCDUserAction: NCDUserAction }] = this.userActions;
+                if (NCDUserAction && userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "NCD PROGRAM")) {
+                    this.$router.push(NCDUserAction.url);
+                } else if (userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "OPD PROGRAM")) {
+                    this.$router.push("OPDvitals");
+                } else if (userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "IMMUNIZATION PROGRAM")) {
+                    this.$router.push("birthRegistration");
+                } else if (roles.some((role: any) => role.role === "Pharmacist")) {
+                    this.$router.push("dispensation");
+                } else {
+                    this.$router.push(url);
+                }
+            } else {
+                this.$router.push(url);
+            }
         },
 
         openPopover(e: any) {
@@ -202,13 +226,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.searchField {
-    --border-radius: 4px;
-    --box-shadow: inset 0 -3em 3em #fff, 0 0 0 2px white, 0.3em 0.3em 1em rgba(44, 44, 44, 0.6);
-    width: 42vw;
-    padding: 10px;
-    text-align: left;
-}
 .second_bar_list {
     list-style: none;
     justify-content: space-between;
@@ -224,12 +241,6 @@ export default defineComponent({
 }
 li {
     margin-right: 40px;
-}
-.search_card {
-    width: 40vw;
-    --padding: 5px;
-    --background: #fff;
-    left: 10px;
 }
 .search_header {
     border-bottom: 1px solid;
@@ -271,8 +282,12 @@ ion-col {
     color: var(--ion-hover) !important;
 }
 ion-popover {
-    --width: 41.5vw;
-    top: 7px;
+    --width: 60vw;
+}
+@media (max-width: 900px) {
+    ion-popover {
+        --width: 97vw;
+    }
 }
 </style>
 <style>

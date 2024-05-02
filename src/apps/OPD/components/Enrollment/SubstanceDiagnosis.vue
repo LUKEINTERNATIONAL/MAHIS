@@ -44,7 +44,7 @@ export default defineComponent({
         personInformation: {
             handler() {
                 this.updateEnrollmentStores();
-                this.buidCards();
+                this.buildCards();
             },
             deep: true,
         },
@@ -52,10 +52,10 @@ export default defineComponent({
 
     mounted() {
         this.updateEnrollmentStores();
-        this.buidCards();
+        this.buildCards();
     },
     methods: {
-        buidCards() {
+        buildCards() {
             this.cardData = {
                 mainTitle: "Enrollment",
                 cards: [
@@ -136,14 +136,12 @@ ion-radio {
     line-height: 3;
 }
 .small_font {
-    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
     color: #636363;
 }
 .checkbox_header {
-    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
     font-size: 14px;

@@ -3,17 +3,7 @@
 </template>
 
 <script lang="ts">
-import {
-    IonContent,
-    IonHeader,
-    IonItem,
-    IonList,
-    IonTitle,
-    IonToolbar,
-    IonMenu,
-    modalController,
-    IonCheckbox,
-} from "@ionic/vue";
+import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController, IonCheckbox } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { icons } from "@/utils/svg";
 
@@ -62,29 +52,19 @@ export default defineComponent({
         personInformation: {
             handler() {
                 this.updateEnrollmentStores();
-                this.buidCards();
+                this.buildCards();
             },
             deep: true,
         },
     },
     async mounted() {
         const j = await ProgramService.getNextSuggestedNCDNumber();
-        modifyFieldValue(
-            this.NCDNumber,
-            "NCDNumber",
-            "value",
-            j.ncd_number.replace(/^\D+|\s/g, "")
-        );
-        modifyFieldValue(
-            this.NCDNumber,
-            "NCDNumber",
-            "leftText",
-            `${j.ncd_number.replace(/\d+/g, "")}-NCD-`
-        );
-        this.buidCards();
+        modifyFieldValue(this.NCDNumber, "NCDNumber", "value", j.ncd_number.replace(/^\D+|\s/g, ""));
+        modifyFieldValue(this.NCDNumber, "NCDNumber", "leftText", `${j.ncd_number.replace(/\d+/g, "")}-NCD-`);
+        this.buildCards();
     },
     methods: {
-        buidCards() {
+        buildCards() {
             this.cardData = {
                 mainTitle: "Enrollment",
                 cards: [
@@ -159,14 +139,12 @@ ion-radio {
     line-height: 3;
 }
 .small_font {
-    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
     font-size: 12px;
     color: #636363;
 }
 .checkbox_header {
-    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
     font-size: 14px;

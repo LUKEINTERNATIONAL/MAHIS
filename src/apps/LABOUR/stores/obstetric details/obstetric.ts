@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
 
-export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
+export const useLabourObstreticHistoryStore = defineStore('obstreticHistoryStore',{
     state: () => ({
         prevPregnancies: [
             {
@@ -136,7 +136,6 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                     ]
                 }
             },
-
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -144,27 +143,20 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                 radioBtnContent:
                     {
                         header:{
-                            title: 'VDRL results',
+                            title: 'Dexamethasone given',
                             selectedValue: ''
                         },
                         data:[
                             {
-                                name: 'Positive',
-                                value: 'vdrlpositive',
+                                name: 'Yes',
+                                value: 'yesdexa',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'Negative',
-                                value: 'vdrlnegative',
-                                labelPlacement: 'start',
-                                colSize: '7',
-                                justify: 'space-between',
-                            },
-                            {
-                                name: 'Unknown',
-                                value: 'vdrlunknown',
+                                name: 'No',
+                                value: 'nodexa',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
@@ -173,6 +165,8 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                     }
 
             },
+
+
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -297,8 +291,6 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                     }
 
             },
-
-
             {
                 selectdData: [],
                 isFinishBtn: false,
@@ -306,20 +298,27 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
                 radioBtnContent:
                     {
                         header:{
-                            title: 'Dexamethasone given',
+                            title: 'VDRL results',
                             selectedValue: ''
                         },
                         data:[
                             {
-                                name: 'Yes',
-                                value: 'yesdexa',
+                                name: 'Positive',
+                                value: 'vdrlpositive',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
                             },
                             {
-                                name: 'No',
-                                value: 'nodexa',
+                                name: 'Negative',
+                                value: 'vdrlnegative',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Unknown',
+                                value: 'vdrlunknown',
                                 labelPlacement: 'start',
                                 colSize: '7',
                                 justify: 'space-between',
@@ -330,25 +329,314 @@ export const useObstreticHistoryStore = defineStore('obstreticHistoryStore',{
             },
 
         ] as any,
+
+        pastProblems: [
+            {
+                selectdData: [],
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+
+                            {
+                                name: 'Obstructed labour',
+                                value: 'obstructed labour',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Breech',
+                                value: 'breech',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                selectdData: [],
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+
+                            {
+                                name: 'Pre-eclampsia',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Eclampsia',
+                                value: 'value',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+
+            {
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Twins',
+                                value: 'twins',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Vacuum extraction',
+                                value: 'vacuum extraction',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+
+                        ]
+                    }
+
+            },
+            {
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'CPD',
+                                value: 'cpd',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Prolonged labour',
+                                value: 'prolonged labour',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+
+                        ]
+                    }
+
+            },
+
+            {
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Caesarean section',
+                                value: 'caesarian section',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Anaemia',
+                                value: 'anaemia',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+
+            {
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Retained placenta',
+                                value: 'retained placenta',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'APH',
+                                value: 'aph',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                classDash: 'dashed_bottom_border',
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'PPH',
+                                value: 'pph',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Preterm labour',
+                                value: 'preterm labour',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+            {
+                checkboxBtnContent:
+                    {
+                        header:{
+                            title: '',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'None',
+                                value: 'none',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Other',
+                                value: 'otherInfo',
+                                checked: false,
+                                labelPlacement: 'start',
+                                colSize: '6',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+
+            {
+                isFinishBtn: false,
+                sectionHeader: '',
+                classDash: 'dashed_bottom_border _padding',
+
+                data:
+                    {
+                        rowData:[
+                            {
+                                colData: [
+                                    {
+                                        displayNone:true,
+                                        inputHeader: 'specify',
+                                        unit: '',
+                                        icon: icons.editPen,
+                                        value: '',
+                                        name: 'otherC',
+                                        required: true,
+                                        eventType: 'input',
+                                        inputWidth: "85%",
+                                    },
+
+                                ]
+                            }
+                        ]
+                    },
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: 'dashed_bottom_border',
+                radioBtnContent:
+                    {
+                        header:{
+                            title: 'Eclampsia/Pre-Eclampsia?',
+                            selectedValue: ''
+                        },
+                        data:[
+                            {
+                                name: 'Well',
+                                value: 'well',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                            {
+                                name: 'Disturbed',
+                                value: 'disturbed',
+                                labelPlacement: 'start',
+                                colSize: '7',
+                                justify: 'space-between',
+                            },
+                        ]
+                    }
+
+            },
+        ] as any,
     }),
     actions:{
         setPrevPregnancies(data: any){
             this.prevPregnancies = data
         },
-        // setPreterm(data: any){
-        //     this.preterm = data
-        // },
-        // setAbnormalities(data: any){
-        //     this.abnormalities = data
-        // },
-        // setModeOfDelivery(data:any) {
-        //     this.modeOfDelivery = data
-        // },
-        // setComplications(data:any) {
-        //     this.Complications = data
-        // },
+
 
     },
-    // persist:true,
+    persist:true,
 
 })

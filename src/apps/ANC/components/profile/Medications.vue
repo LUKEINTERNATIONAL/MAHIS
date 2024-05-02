@@ -2,11 +2,11 @@
   <!--  medications-->
   <div class="container">
     <ion-card class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Which medications is the woman currently prescribed?</ion-card-title>
-      </ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="Medication"></basic-form>
+        <basic-form
+            :contentData="Medication"
+            :initialData="initialData"
+        ></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
@@ -34,7 +34,7 @@ import { icons } from '@/utils/svg';
 import BasicInputField from '@/components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import BasicForm from '@/components/BasicForm.vue'
-import {useMedicationsStore} from "@/apps/ANC/store/profile/MedicationsStore";
+import {useMedicationStore} from "@/apps/ANC/store/profile/MedicationStore";
 import { modifyRadioValue,
     getRadioSelectedValue,
     getCheckboxSelectedValue,
@@ -63,10 +63,13 @@ export default defineComponent({
   data() {
     return {
       iconsContent: icons,
+      initialData:[] as any,
     };
   },
   mounted(){
     this. handleOther()
+    const Medications=useMedicationStore()
+    this.initialData=Medications.getInitial()
   },
   watch:{
      Medication:{
@@ -78,7 +81,7 @@ export default defineComponent({
    
   },
   computed: {
-    ...mapState(useMedicationsStore, ["Medication"])
+    ...mapState(useMedicationStore, ["Medication"])
   },
   setup() {
     return { checkmark,pulseOutline };
@@ -89,11 +92,6 @@ export default defineComponent({
       this.$router.push(url);
     },
     handleOther(){
-      if(getCheckboxSelectedValue(this.Medication,'Other')?.value =='otherMedications'){
-        modifyFieldValue(this.Medication,'Other','displayNone',false)
-      }else{
-        modifyFieldValue(this.Medication,'Other','displayNone',true)
-      }
       const checkBoxes=['Oral PreP for HIV','Analgesic','Anti-consulsive',
                         'Anti-TB','Antihelmintic','Antimarials','Antitussive',
                         'Aspirin','Calcium','Doxylamine','Hematinic','Iron',
@@ -153,3 +151,4 @@ ion-card {
   background-color:inherit;
 }
 </style>
+@/apps/ANC/store/profile/MedicationStore

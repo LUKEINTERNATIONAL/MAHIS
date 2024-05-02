@@ -1,40 +1,5 @@
 import { defineStore } from "pinia";
 
-const physiologicalSymptomsForm ={
-    abnormalPulseRate:{
-        name:"Abnormal pulse rate",
-        value: "abnormalPulseRate"
-    },
-        coughLasting:{
-        name:"Cough lasting more than 3 weeks",
-        value: "coughLasting"
-    },  
-        painLowBack:{
-        name:"Pain – Low back",
-        value: "painLowBack"
-    },
-        constipation:{
-        name:"Constipation",
-        value: "constipation"
-    },  
-       headache:{
-        name:"Headache",
-        value: "headache"
-    },
-        heartburn:{
-        name:"Heartburn",
-        value: "heartburn"
-    },
-       painLeg:{
-        name:"Pain-Leg",
-        value: "painLeg"
-       },
-        painPelvic:{
-        name:"Pain-pelvic",
-        value: "painPelvic"
-       }
-}
-
 export const useCurrentPhysiologicalSymptomsStore = defineStore('currentPhysiologicalSymptomsStore',{
     state: ()=>({
         physiologicalSymptoms:[
@@ -46,20 +11,21 @@ export const useCurrentPhysiologicalSymptomsStore = defineStore('currentPhysiolo
                 {
                     header:{
                         title: '',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'Physiological symptom',
                     },
                     data:[
                         {
-                            name: physiologicalSymptomsForm.abnormalPulseRate.name,
-                            value: physiologicalSymptomsForm.abnormalPulseRate.value,
+                            name: 'Abnormal pulse rate',
+                            value: 'Abnormal pulse rate',
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
                         },
                                                 {
-                            name: physiologicalSymptomsForm.coughLasting.name,
-                            value: physiologicalSymptomsForm.coughLasting.value,
+                            name: "Cough lasting more than 3 weeks",
+                            value: "Cough lasting more than three weeks",
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
@@ -78,20 +44,21 @@ export const useCurrentPhysiologicalSymptomsStore = defineStore('currentPhysiolo
                 {
                     header:{
                         title: '',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'Physiological symptom',
                     },
                     data:[
                         {
-                            name: physiologicalSymptomsForm.painLowBack.name,
-                            value: physiologicalSymptomsForm.painLowBack.value,
+                            name: 'Pain - Low back',
+                            value: 'Pain - Low back',
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
                         },
                         {
-                            name: physiologicalSymptomsForm.constipation.name,
-                            value: physiologicalSymptomsForm.constipation.value,
+                            name: 'Constipation',
+                            value: 'Constipation',
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
@@ -110,20 +77,21 @@ export const useCurrentPhysiologicalSymptomsStore = defineStore('currentPhysiolo
                 {
                     header:{
                         title: '',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'Physiological symptom',
                     },
                     data:[
                         {
-                            name: physiologicalSymptomsForm.headache.name,
-                            value: physiologicalSymptomsForm.headache.value,
+                            name: 'Headache',
+                            value: 'Headache',
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
                         },
                             {
-                            name: physiologicalSymptomsForm.heartburn.name,
-                            value: physiologicalSymptomsForm.heartburn.value,
+                            name: 'Heartburn',
+                            value: "Heartburn",
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
@@ -142,20 +110,21 @@ export const useCurrentPhysiologicalSymptomsStore = defineStore('currentPhysiolo
                 {
                     header:{
                         title: '',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'Physiological symptom',
                     },
                     data:[
                         {
-                            name: physiologicalSymptomsForm.painLeg.name,
-                            value: physiologicalSymptomsForm.painLeg.value,
+                            name: 'Pain-Leg',
+                            value: 'Pain-Leg',
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
                         },
                         {
-                            name: physiologicalSymptomsForm.painPelvic.name,
-                            value: physiologicalSymptomsForm.painPelvic.value,
+                            name: 'Pain-pelvic',
+                            value: 'Pelvic pain',
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
@@ -174,12 +143,13 @@ export const useCurrentPhysiologicalSymptomsStore = defineStore('currentPhysiolo
                 {
                     header:{
                         title: '',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'Physiological symptom',
                     },
                     data:[
                         {
                             name: "None",
-                            value: 'none',
+                            value: 'None',
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',

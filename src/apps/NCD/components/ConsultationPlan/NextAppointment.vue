@@ -1,8 +1,16 @@
 <template>
     <div class="card_content">
         <ion-row>
-            <ion-col>
-                <VueDatePicker class="calender" @date-update="handleDateUpdate" v-model="date" inline auto-apply :enable-time-picker="false">
+            <ion-col size-sm="12" size-md="12" size-lg="12" size-xl="8">
+                <VueDatePicker
+                    class="calender"
+                    @date-update="handleDateUpdate"
+                    v-model="date"
+                    :min-date="minDate"
+                    inline
+                    auto-apply
+                    :enable-time-picker="false"
+                >
                     <template #day="{ day }">
                         <template v-if="day === tomorrow">
                             <p>
@@ -15,7 +23,7 @@
                     </template>
                 </VueDatePicker>
             </ion-col>
-            <ion-col size="3.7">
+            <ion-col>
                 <ion-item>
                     <div class="dates_title">
                         <div>Medication run out date</div>
@@ -83,6 +91,7 @@ export default defineComponent({
             appointment: "" as any,
             drugRunoutDate: "" as any,
             nextAppointmentDate: "" as any,
+            minDate: new Date(),
         };
     },
     computed: {

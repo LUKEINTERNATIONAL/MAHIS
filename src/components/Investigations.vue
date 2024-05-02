@@ -142,22 +142,27 @@ export default defineComponent({
     async mounted() {
         this.updateInvestigationsStores();
         this.setDashedBox();
-        this.orders = await OrderService.getOrders(this.demographics.patient_id);
-        const filteredArray = await this.orders.filter((obj: any) => {
-            return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
-        });
-        if (filteredArray.length > 0) {
-            this.investigations[0].selectedData = filteredArray;
-        } else {
-            this.investigations[0].selectedData = "";
-        }
+        this.updateInvestigationWizard();
         this.labOrders = await OrderService.getTestTypes();
     },
+
     methods: {
         toggleLabOrderStatus() {
             this.labOrderStatus = !this.labOrderStatus;
         },
-        updateInvestigationsStores() {
+        async updateInvestigationWizard() {
+            this.orders = await OrderService.getOrders(this.demographics.patient_id);
+            const filteredArray = await this.orders.filter((obj: any) => {
+                return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
+            });
+            if (filteredArray.length > 0) {
+                this.investigations[0].selectedData = filteredArray;
+            } else {
+                this.investigations[0].selectedData = "";
+            }
+        },
+        async updateInvestigationsStores() {
+            await this.updateInvestigationWizard();
             const investigationsStore = useInvestigationStore();
             investigationsStore.setInvestigations(this.investigations);
         },
@@ -222,6 +227,7 @@ export default defineComponent({
                 this.display_item = true;
                 this.addItemButton = true;
             }
+            this.updateInvestigationWizard();
             this.investigations[0].data.rowData[0].colData[0].popOverData.data = [];
         },
         async saveTest() {
@@ -235,7 +241,6 @@ export default defineComponent({
                     specimenConcept: await ConceptService.getConceptID(this.inputFields[1].value, true),
                 },
             ]);
-            console.log(this.inputFields[1].value);
             this.orders = await OrderService.getOrders(this.demographics.patient_id);
         },
 
@@ -265,25 +270,6 @@ export default defineComponent({
             } else {
                 this.investigations[0].data.rowData[0].colData[1].value = value.name;
             }
-            this.updateInvestigationsStores();
-        },
-        async openDeletePopover(e: any) {
-            const deleteConfirmed = await popoverConfirmation(`Do you want to delete ${e[1]} ?`, e[0]);
-            if (deleteConfirmed) {
-                this.deleteTest(e[1]);
-            }
-        },
-        deleteTest(test: any) {
-            this.investigations[0].selectedData = this.investigations[0].selectedData.filter((item: any) => item.display[0] !== test);
-            this.updateInvestigationsStores();
-        },
-        editTest(test: any) {
-            this.deleteTest(test[0]);
-            this.selectedText = test[0];
-            this.investigations[0].data.rowData[0].colData[0].value = test[0];
-            this.investigations[0].data.rowData[0].colData[1].value = test[1];
-            this.addItemButton = false;
-            this.search_item = true;
             this.updateInvestigationsStores();
         },
         setDashedBox() {

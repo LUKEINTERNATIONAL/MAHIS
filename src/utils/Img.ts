@@ -1,3 +1,4 @@
 export default function img(name: string) {
-    return `/mahis/images/${name}`;
+    return `/images/${name}`;
+    // return `/mahis/images/${name}`;
 }

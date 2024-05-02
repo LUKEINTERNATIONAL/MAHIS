@@ -25,26 +25,27 @@ export const useFatalMovementStore =  defineStore('fatalMovementStore',{
                 radioBtnContent:{
                     header:{
                         title: '',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:"Fetal movement"
                     },
                     data:[
                         {
-                            name: fatalForm.normalFetalMovement.name,
-                            value: fatalForm.normalFetalMovement.value,
+                            name: "Normal fetal movement",
+                            value: "Normal fetal movement",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 
                         },
                         {
-                            name: fatalForm.reducedPoorFetalMovement.name,
-                            value: fatalForm.reducedPoorFetalMovement.value,
+                            name: "Reduced or poor fetal movement",
+                            value: "Poor fetal movement",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 
                         },
                         {
-                            name: fatalForm.noFetalMovement.name,
-                            value: fatalForm.noFetalMovement.value,
+                            name: "No fetal movement",
+                            value: "No fetal movements",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 

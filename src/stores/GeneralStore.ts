@@ -1,14 +1,17 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
-export const useGeneralStore = defineStore('generalStore',{
+export const useGeneralStore = defineStore("generalStore", {
     state: () => ({
-        saveProgressStatus: false
+        activities: [] as any,
+        userActions: [] as any,
     }),
-    actions:{
-        setSaveProgressStatus(data: any){
-            this.saveProgressStatus = data
-        }
+    actions: {
+        setActivity(data: any) {
+            this.activities = data;
+        },
+        setUserActions(data: any) {
+            this.userActions = data;
+        },
     },
-    persist:true,
-
-})
+    persist: true,
+});

@@ -1,36 +1,5 @@
 import { defineStore } from "pinia";
 
-const persistentForm ={
-    breadingDifficulty:{
-        name:"Breathing difficulty",
-        value: "breadingDifficulty"
-    },
-        legCramps:{
-        name:"Leg cramps",
-        value: "legCramps"
-    },  
-        visualDisturbance:{
-        name:"Visual disturbance",
-        value: "visualDisturbance"
-    },
-        constipation:{
-        name:"Constipation",
-        value: "constipation"
-    },  
-       headache:{
-        name:"Headache",
-        value: "headache"
-    },
-        heartburn:{
-        name:"Heartburn",
-        value: "heartburn"
-    },
-       painLeg:{
-        name:"Pain-Leg",
-        value: "painLeg"
-       }
-}
-
 export const usePersistentSymptomsStore = defineStore('persistentSymptomsStore',{
     state: ()=>({
         persistentSymptom:[
@@ -42,20 +11,21 @@ export const usePersistentSymptomsStore = defineStore('persistentSymptomsStore',
                 {
                     header:{
                         title: '',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name: 'Persistent Symptom',
                     },
                     data:[
                         {
-                            name: persistentForm.breadingDifficulty.name,
-                            value: persistentForm.breadingDifficulty.value,
+                            name: 'Breathing difficulty',
+                            value: 'Breathing difficulty',
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
                         },
                         {
-                            name: persistentForm.legCramps.name,
-                            value: persistentForm.legCramps.value,
+                            name: 'Leg cramps',
+                            value: 'Leg cramps',
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
@@ -74,20 +44,21 @@ export const usePersistentSymptomsStore = defineStore('persistentSymptomsStore',
                 {
                     header:{
                         title: '',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name: 'Persistent Symptom',
                     },
                     data:[
                         {
-                            name: persistentForm.visualDisturbance.name,
-                            value: persistentForm.visualDisturbance.value,
+                            name: 'Visual disturbance',
+                            value: 'Visual disturbance',
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
                         },
                         {
-                            name: persistentForm.constipation.name,
-                            value: persistentForm.constipation.value,
+                            name: 'Constipation',
+                            value: 'Constipation',
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
@@ -106,20 +77,21 @@ export const usePersistentSymptomsStore = defineStore('persistentSymptomsStore',
                 {
                     header:{
                         title: '',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name: 'Persistent Symptom',
                     },
                     data:[
                         {
-                            name: persistentForm.headache.name,
-                            value: persistentForm.headache.value,
+                            name: 'Headache',
+                            value: 'Headache',
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
                             checked: false
                         },
                         {
-                            name: persistentForm.heartburn.name,
-                            value: persistentForm.heartburn.value,
+                            name: 'Heartburn',
+                            value: 'Heartburn',
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
@@ -138,12 +110,13 @@ export const usePersistentSymptomsStore = defineStore('persistentSymptomsStore',
                 {
                     header:{
                         title: '',
-                        selectedValue: ''
+                        selectedValue: '',
+                        name: 'Persistent Symptom',
                     },
                     data:[
                         {
-                            name: persistentForm.painLeg.name,
-                            value: persistentForm.painLeg.value,
+                            name: 'Pain-Leg',
+                            value: 'Pain-Leg',
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',
@@ -151,7 +124,7 @@ export const usePersistentSymptomsStore = defineStore('persistentSymptomsStore',
                         },
                         {
                             name: "None",
-                            value: 'none',
+                            value: 'None',
                             labelPlacement: 'start',
                             colSize: '6',
                             justify: 'space-between',

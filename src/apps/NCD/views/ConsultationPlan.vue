@@ -53,7 +53,7 @@ import { Service } from "@/services/service";
 import { LabOrder } from "@/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
-import { useDispositionStore } from "@/stores/OutcomeStore";
+import { useOutcomeStore } from "@/stores/OutcomeStore";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";
 import { Treatment } from "@/apps/NCD/services/treatment";
@@ -61,6 +61,19 @@ import { isEmpty } from "lodash";
 import HisDate from "@/utils/Date";
 import { defineComponent } from "vue";
 import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
+import { useGeneralStore } from "@/stores/GeneralStore";
+import { resetPatientData } from "@/services/reset_data";
+import { PatientReferralService } from "@/services/patient_referral_service";
+import { PatientAdmitService } from "@/services/patient_admit_service";
+import { UserService } from "@/services/user_service";
+import {
+    modifyRadioValue,
+    getRadioSelectedValue,
+    getCheckboxSelectedValue,
+    modifyWizardData,
+    modifyFieldValue,
+    modifyCheckboxValue,
+} from "@/services/data_helpers";
 export default defineComponent({
     name: "Home",
     components: {
@@ -88,108 +101,8 @@ export default defineComponent({
     },
     data() {
         return {
-            dispositions: "" as any,
-            wizardData: [
-                {
-                    title: "Vital Signs",
-                    class: "common_step",
-                    checked: false,
-                    disabled: false,
-                    number: 1,
-                    last_step: "",
-                },
-                {
-                    title: "Investigations",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 2,
-                    last_step: "",
-                },
-                {
-                    title: "Diagnosis",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 3,
-                    last_step: "",
-                },
-                {
-                    title: "Complications Screening",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 4,
-                    last_step: "",
-                },
-                {
-                    title: "Treatment",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 5,
-                    last_step: "",
-                },
-                {
-                    title: "Next Appointment",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 6,
-                    last_step: "",
-                },
-                {
-                    title: "Outcome",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 7,
-                    last_step: "last_step",
-                },
-            ],
-            StepperData: [
-                {
-                    title: "Vital Signs",
-                    componet: "Vitals",
-                    value: "1",
-                },
-                {
-                    title: "Investigations",
-                    componet: "Investigations",
-                    value: "2",
-                },
-                {
-                    title: "Diagnosis",
-                    componet: "Diagnosis",
-                    value: "3",
-                },
-                {
-                    title: "Complications Screening",
-                    componet: "Complications",
-                    value: "4",
-                },
-                {
-                    title: "Treatment plan",
-                    componet: "TreatmentPlan",
-                    value: "5",
-                },
-                {
-                    title: "Next Appointment",
-                    componet: "NextAppointment",
-                    value: "6",
-                },
-                {
-                    title: "Outcome",
-                    componet: "Outcome",
-                    value: "7",
-                },
-            ],
+            wizardData: [] as any,
+            StepperData: [] as any,
             isOpen: false,
             iconsContent: icons,
         };
@@ -200,8 +113,16 @@ export default defineComponent({
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
+        ...mapState(useGeneralStore, ["activities"]),
+        ...mapState(useOutcomeStore, ["dispositions"]),
+    },
+    created() {
+        this.getData();
     },
     mounted() {
+        if (this.activities.length == 0) {
+            this.$router.push("patientProfile");
+        }
         this.markWizard();
     },
     watch: {
@@ -234,66 +155,113 @@ export default defineComponent({
     },
 
     methods: {
+        async getData() {
+            // const steps = ["Vital Signs", "Investigations", "Diagnosis", "Complications Screening", "Treatment Plan", "Next Appointment", "Outcome"];
+            const [{ NCD_activities: steps }] = this.activities;
+            for (let i = 0; i < steps.length; i++) {
+                const title = steps[i];
+                const number = i + 1;
+
+                this.wizardData.push({
+                    title,
+                    class: "common_step",
+                    checked: i === 0 ? false : "",
+                    disabled: false,
+                    number,
+                    last_step: i === steps.length - 1 ? "last_step" : "",
+                });
+
+                this.StepperData.push({
+                    title,
+                    component: title.replace(/\s+/g, ""),
+                    value: number.toString(),
+                });
+            }
+        },
         markWizard() {
             if (this.vitals.validationStatus) {
-                this.wizardData[0].checked = true;
-                this.wizardData[0].class = "open_step common_step";
+                modifyWizardData(this.wizardData, "Vital Signs", {
+                    checked: true,
+                    class: "open_step common_step",
+                });
             } else {
-                this.wizardData[0].checked = false;
+                modifyWizardData(this.wizardData, "Vital Signs", {
+                    checked: false,
+                });
             }
 
             if (this.investigations[0].selectedData.length > 0) {
-                this.wizardData[1].checked = true;
-                this.wizardData[1].class = "open_step common_step";
+                modifyWizardData(this.wizardData, "Investigations", {
+                    checked: true,
+                    class: "open_step common_step",
+                });
             } else {
-                this.wizardData[1].checked = false;
+                modifyWizardData(this.wizardData, "Investigations", {
+                    checked: false,
+                });
             }
 
             if (this.diagnosis[0].selectedData.length > 0) {
-                this.wizardData[2].checked = true;
-                this.wizardData[2].class = "open_step common_step";
+                modifyWizardData(this.wizardData, "Diagnosis", {
+                    checked: true,
+                    class: "open_step common_step",
+                });
             } else {
-                this.wizardData[2].checked = false;
+                modifyWizardData(this.wizardData, "Diagnosis", {
+                    checked: false,
+                });
             }
 
             if (this.selectedMedicalDrugsList.length > 0) {
-                this.wizardData[4].checked = true;
-                this.wizardData[4].class = "open_step common_step";
+                modifyWizardData(this.wizardData, "Treatment Plan", {
+                    checked: true,
+                    class: "open_step common_step",
+                });
             } else {
-                this.wizardData[4].checked = false;
+                modifyWizardData(this.wizardData, "Treatment Plan", {
+                    checked: false,
+                });
+            }
+
+            if (this.dispositions.length > 0) {
+                modifyWizardData(this.wizardData, "Outcome", {
+                    checked: true,
+                    class: "open_step common_step",
+                });
+            } else {
+                modifyWizardData(this.wizardData, "Outcome", {
+                    checked: false,
+                });
             }
         },
+
         getFormatedData(data: any) {
             return data.map((item: any) => {
                 return item?.data;
             });
         },
-        saveData() {
-            if (this.vitals.validationStatus && this.investigations[0].selectedData.length > 0 && this.diagnosis[0].selectedData.length > 0) {
-                this.saveVitals();
-                this.saveInvestigation();
-                this.saveDiagnosis();
-                this.saveTreatmentPlan();
-                this.saveOutComeStatus();
-                this.$router.push("patientProfile");
-            } else {
-                toastWarning("Please complete all required fields");
-                this.saveOutComeStatus();
+        async saveData() {
+            await this.saveVitals();
+            await this.saveDiagnosis();
+            await this.saveTreatmentPlan();
+            await this.saveOutComeStatus();
+            resetPatientData();
+            await UserService.setProgramUserActions();
+            this.$router.push("patientProfile");
+        },
+        async saveVitals() {
+            if (this.vitals.validationStatus) {
+                const userID: any = Service.getUserID();
+                const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
+                vitalsInstance.onFinish(this.vitals);
             }
         },
-        saveInvestigation() {
-            const investigationInstance = new LabOrder();
-            investigationInstance.postActivities(this.demographics.patient_id, this.getFormatedData(this.investigations[0].selectedData));
-        },
-        saveVitals() {
-            const userID: any = Service.getUserID();
-            const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
-            vitalsInstance.onFinish(this.vitals);
-        },
-        saveDiagnosis() {
-            const userID: any = Service.getUserID();
-            const diagnosisInstance = new Diagnosis();
-            diagnosisInstance.onSubmit(this.demographics.patient_id, userID, this.getFormatedData(this.diagnosis[0].selectedData));
+        async saveDiagnosis() {
+            if (this.diagnosis[0].selectedData.length > 0) {
+                const userID: any = Service.getUserID();
+                const diagnosisInstance = new Diagnosis();
+                diagnosisInstance.onSubmit(this.demographics.patient_id, userID, this.getFormatedData(this.diagnosis[0].selectedData));
+            }
         },
         async saveTreatmentPlan() {
             const userID: any = Service.getUserID();
@@ -328,16 +296,42 @@ export default defineComponent({
         },
 
         async saveOutComeStatus() {
-            // const userID: any = Service.getUserID()
-            // const patientID = this.demographics.patient_id
-            // if (!isEmpty(this.dispositions)) {
-            //     for (let key in this.dispositions) {
-            //         if (this.dispositions[key].type == 'Admit') {
-            //             console.log(this.dispositions[key])
-            //         } else {
-            //         }
-            //     }
-            // }
+            const userID: any = Service.getUserID();
+            const patientID = this.demographics.patient_id;
+
+            if (!isEmpty(this.dispositions)) {
+                this.dispositions.forEach(async (disposition: any) => {
+                    if (disposition.type == "Admitted for short stay") {
+                        const prePayload = {
+                            obs_datetime: disposition.date.year + "-" + disposition.date.month + "-" + disposition.date.day,
+                            concept_id: disposition.concept_id,
+                            value_text: disposition.name,
+                        } as any;
+
+                        const admissionOutcome = new PatientAdmitService(patientID, userID);
+                        const obs = await admissionOutcome.buildValueText("Admit to ward", prePayload.value_text);
+                        obs.obs_datetime = prePayload.obs_datetime;
+                        obs.value_text = prePayload.value_text;
+                        await admissionOutcome.createEncounter();
+                        await admissionOutcome.saveObservationList([obs] as any);
+                    }
+                    if (disposition.type == "Referred out") {
+                        const prePayload = {
+                            obs_datetime: disposition.date.year + "-" + disposition.date.month + "-" + disposition.date.day,
+                            concept_id: disposition.concept_id,
+                            value_text: disposition.name,
+                            location_id: disposition.other.location_id,
+                        } as any;
+
+                        const referralOutcome = new PatientReferralService(patientID, userID);
+                        const obs = await referralOutcome.buildValueText("Referred", prePayload.value_text);
+                        obs.obs_datetime = prePayload.obs_datetime;
+                        obs.value_text = prePayload.location_id;
+                        await referralOutcome.createEncounter();
+                        await referralOutcome.saveObservationList([obs] as any);
+                    }
+                });
+            }
         },
         openModal() {
             createModal(SaveProgressModal);

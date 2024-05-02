@@ -3,6 +3,9 @@
         <Toolbar />
         <ion-content>
             <div class="container">
+                <div style="display: flex; align-items: center" @click="nav('patientProfile')">
+                    <DynamicButton fill="clear" name="Back to profile" iconSlot="start" :icon="iconsContent.arrowLeft" />
+                </div>
                 <div class="title">
                     <div class="demographics_title">Enrollment</div>
                 </div>
@@ -18,12 +21,17 @@
             </div>
             <div v-if="enrollmentDisplayType == 'grid'">
                 <ion-row class="card_row" v-if="enrollmentDisplayType == 'grid'">
-                    <ion-col size="6">
+                    <ion-col size-sm="12" size-md="12" size-lg="6" size-xl="4">
                         <PatientHistory />
                     </ion-col>
-                    <ion-col size="6">
-                        <SubstanceDiagnosis />
-                        <FamilyHistoryNCDNumber />
+                    <ion-col size-sm="12" size-md="12" size-lg="6" size-xl="4">
+                        <PatientHistoryHIV />
+                        <FamilyHistory />
+                    </ion-col>
+                    <ion-col size-sm="12" size-md="12" size-lg="6" size-xl="4">
+                        <EnrollmentDiagnosis />
+                        <Substance />
+                        <NCDNumber />
                     </ion-col>
                 </ion-row>
             </div>
@@ -119,8 +127,11 @@ import { VitalsService } from "@/services/vitals_service";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";
 import PatientHistory from "@/apps/NCD/components/Enrollment/PatientHistory.vue";
-import SubstanceDiagnosis from "@/apps/NCD/components/Enrollment/SubstanceDiagnosis.vue";
-import FamilyHistoryNCDNumber from "@/apps/NCD/components/Enrollment/FamilyHistoryNCDNumber.vue";
+import PatientHistoryHIV from "@/apps/NCD/components/Enrollment/PatientHistoryHIV.vue";
+import EnrollmentDiagnosis from "@/apps/NCD/components/Enrollment/Diagnosis.vue";
+import Substance from "@/apps/NCD/components/Enrollment/Substance.vue";
+import NCDNumber from "@/apps/NCD/components/Enrollment/NCDNumber.vue";
+import FamilyHistory from "@/apps/NCD/components/Enrollment/FamilyHistory.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import { useConfigurationStore } from "@/stores/ConfigurationStore";
 import { arrowForwardCircle, grid, list } from "ionicons/icons";
@@ -138,6 +149,9 @@ import {
 } from "@/services/data_helpers";
 import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServerData";
 import { IdentifierService } from "@/services/identifier_service";
+import { resetPatientData } from "@/services/reset_data";
+import { useGeneralStore } from "@/stores/GeneralStore";
+import { UserService } from "@/services/user_service";
 
 export default defineComponent({
     name: "Home",
@@ -164,8 +178,11 @@ export default defineComponent({
         IonModal,
         Stepper,
         PatientHistory,
-        SubstanceDiagnosis,
-        FamilyHistoryNCDNumber,
+        PatientHistoryHIV,
+        EnrollmentDiagnosis,
+        Substance,
+        NCDNumber,
+        FamilyHistory,
         DynamicButton,
     },
     data() {
@@ -186,6 +203,7 @@ export default defineComponent({
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useConfigurationStore, ["enrollmentDisplayType"]),
+        ...mapState(useGeneralStore, ["activities"]),
         ...mapState(useEnrollementStore, ["NCDNumber", "enrollmentDiagnosis", "substance", "patientHistoryHIV", "patientHistory"]),
     },
     async mounted() {
@@ -223,10 +241,18 @@ export default defineComponent({
             const exists = await IdentifierService.ncdNumberExists(formattedNCDNumber);
             if (exists) toastWarning("NCD number already exists", 5000);
             else {
-                await this.saveEnrollment();
                 const patient = new PatientService();
                 patient.createNcdNumber(formattedNCDNumber);
-                this.$router.push("consultationPlan");
+                const demographicsStore = useDemographicsStore();
+                demographicsStore.setPatient(await PatientService.findByID(this.demographics.patient_id));
+                await this.saveEnrollment();
+                resetPatientData();
+                await UserService.setProgramUserActions();
+                if (this.activities.length == 0) {
+                    this.$router.push("patientProfile");
+                } else {
+                    this.$router.push("consultationPlan");
+                }
             }
         },
         openModal() {
@@ -259,7 +285,6 @@ export default defineComponent({
             return [
                 ...(await formatRadioButtonData(this.patientHistoryHIV)),
                 ...(await formatRadioButtonData(this.substance)),
-                ...(await formatRadioButtonData(this.patientHistory)),
                 ...(await formatCheckBoxData(this.enrollmentDiagnosis)),
                 ...(await formatCheckBoxData(this.patientHistory)),
                 ...(await formatCheckBoxData(this.patientHistoryHIV)),
@@ -267,7 +292,6 @@ export default defineComponent({
         },
         async saveEnrollment() {
             const data: any = await this.buildEnrollmentData();
-            console.log("🚀 ~ saveEnrollment ~ data:", data);
             if (data.length > 0) {
                 const userID: any = Service.getUserID();
                 const diagnosisInstance = new Diagnosis();

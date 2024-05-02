@@ -1,10 +1,5 @@
 <template>
-    <basic-card
-        :content="cardData"
-        :initialData="initialPersonalData"
-        @update:selected="handleInputData"
-        @update:inputValue="handleInputData"
-    ></basic-card>
+    <basic-card :content="cardData" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-card>
 </template>
 
 <script lang="ts">
@@ -42,6 +37,14 @@ export default defineComponent({
             initialPersonalData: [] as any,
         };
     },
+    watch: {
+        personInformation: {
+            handler() {
+                this.buildCards();
+            },
+            deep: true,
+        },
+    },
     computed: {
         ...mapState(useRegistrationStore, ["personInformation"]),
         ...mapState(useRegistrationStore, ["guardianInformation"]),
@@ -73,22 +76,21 @@ export default defineComponent({
             return getFieldValue(this.personInformation, "phoneNumber", "value");
         },
     },
-    mounted() {
-        const personalInformation = useRegistrationStore();
-        this.initialPersonalData = personalInformation.getInitialPersonalInformation();
-        console.log("🚀 ~ mounted ~  this.initialData:", this.initialPersonalData);
+    async mounted() {
         this.updateRegistrationStores();
-        this.buidCards();
+        this.buildCards();
     },
 
     methods: {
-        buidCards() {
+        buildCards() {
+            const personalInformation = useRegistrationStore();
             this.cardData = {
                 mainTitle: "Demographics",
                 cards: [
                     {
                         cardTitle: "Personal information",
                         content: this.personInformation,
+                        initialData: personalInformation.getInitialPersonalInformation(),
                     },
                 ],
             };
@@ -96,7 +98,7 @@ export default defineComponent({
         openModal() {
             createModal(DispositionModal);
         },
-        updateRegistrationStores() {
+        async updateRegistrationStores() {
             const registrationStore = useRegistrationStore();
             registrationStore.setPersonalInformation(this.personInformation);
         },

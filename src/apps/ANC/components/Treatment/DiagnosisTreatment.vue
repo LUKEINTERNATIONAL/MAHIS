@@ -143,6 +143,7 @@ export default defineComponent ({
       this.handleasbReason()
       this.handleOtherasb()
       this. handleNone()
+      this.handleHyper()
     },
     watch:{
       diagnoses:{
@@ -166,6 +167,7 @@ export default defineComponent ({
       hepatitisReason:{
         handler(){
           this.handleHperB()
+          this.handleHyper()
         },
         deep:true
       },
@@ -189,18 +191,25 @@ export default defineComponent ({
         this.currentSection--;
       }
     },
-    handleHyperOther(){
-      if(getRadioSelectedValue(this.hypertensionReason,'hypReasons')=='other'){
-        modifyFieldValue(this.hypertensionReason,'hypertensionCounselling','displayNone',false)
+    handleHyper(){
+      if(getRadioSelectedValue(this.hypertensionReason,'Counselling on hypertension')=='No'){
+        modifyRadioValue(this.hypertensionReason,'hypertension','displayNone',false)
       }else{
-        modifyFieldValue(this.hypertensionReason,'hypertensionCounselling','displayNone',true)
+        modifyRadioValue(this.hypertensionReason,'hypertension','displayNone',true)
+      }
+    },
+    handleHyperOther(){
+      if(getRadioSelectedValue(this.hypertensionReason,'hypertension')=='other'){
+        modifyFieldValue(this.hypertensionReason,'other','displayNone',false)
+      }else{
+        modifyFieldValue(this.hypertensionReason,'other','displayNone',true)
       }
     },
     handledeHiv(){
-      if(getRadioSelectedValue(this.hiv,'hiv')=='other'){
-        modifyFieldValue(this.hiv,'hivCounselling','displayNone',false)
+      if(getRadioSelectedValue(this.hiv,'counselling on HIV not provided')=='other'){
+        modifyFieldValue(this.hiv,'hiv Counselling','displayNone',false)
       }else{
-         modifyFieldValue(this.hiv,'hivCounselling','displayNone',true)
+         modifyFieldValue(this.hiv,'hiv Counselling','displayNone',true)
       }
     },
     handleCounselHiv(){
@@ -211,10 +220,10 @@ export default defineComponent ({
       }
     },
     handleHperB(){
-      if(getRadioSelectedValue(this.hepatitisReason,'hepatitisB')=='other'){
-        modifyFieldValue(this.hepatitisReason,'hypertensionCounselling','displayNone',false)
+      if(getRadioSelectedValue(this.hepatitisReason,'hepatitis B')=='other'){
+        modifyFieldValue(this.hepatitisReason,'hepatitis B','displayNone',false)
       }else{
-         modifyFieldValue(this.hepatitisReason,'hypertensionCounselling','displayNone',true)
+         modifyFieldValue(this.hepatitisReason,'hepatitis B','displayNone',true)
       }
     },
     handleasbReason(){

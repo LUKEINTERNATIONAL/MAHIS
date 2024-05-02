@@ -66,7 +66,7 @@ export class AuthService {
             this.systemVersion = await this.getApiVersion();
             this.coreVersion = this.getHeadVersion();
         } else {
-            throw "Unable to login";
+            throw "Unable to login" + response;
         }
     }
 

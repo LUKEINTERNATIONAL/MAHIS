@@ -30,17 +30,17 @@ import {
 } from "@ionic/vue";
 import { ConceptService } from "@/services/concept_service";
 import { defineComponent } from "vue";
-import Toolbar from "@/apps/ANC/components/Toolbar.vue";
-import ToolbarSearch from "@/apps/ANC/components/ToolbarSearch.vue";
+import Toolbar from "@/components/Toolbar.vue";
+import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import { mapState } from "pinia";
-import Stepper from "@/apps/ANC/components/Stepper.vue";
+import Stepper from "@/components/Stepper.vue";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
-import PastObstreticHistory from "../components/profile/PastObstreticHistory.vue";
+import PastObstreticHistory from "@/apps/ANC/components/profile/PastObstreticHistory.vue";
 import CurrentPregnancies from "../components/profile/CurrentPregnancies.vue";
 import Medications from "../components/profile/Medications.vue";
 import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue";
@@ -49,13 +49,15 @@ import { getCheckboxSelectedValue, getRadioSelectedValue } from "@/services/data
 import { useMedicalHistoryStore } from "@/apps/ANC/store/profile/medicalHistoryStore";
 import { useObstreticHistoryStore } from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
 import { useCurrentPregnanciesStore } from "@/apps/ANC/store/profile/CurrentPreganciesStore";
-import { useMedicationsStore } from "@/apps/ANC/store/profile/MedicationsStore";
+import { useMedicationStore } from "@/apps/ANC/store/profile/MedicationStore";
 import { useWomanBehaviourStore } from "@/apps/ANC/store/profile/womanBehaviourStore";
 import { Service } from "@/services/service";
-import { ProfileService } from "@/services/anc_profile_service";
+//import { ProfileService } from "@/services/anc_profile_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
-import { formatRadioButtonData } from "@/services/formatServerData";
+import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
 import { Preterms } from "../service/preterm";
+import { currentPregnancyService, MedicalHistoryService, PastObstetricHistoryService } from "@/services/anc_profile_service";
+import { resetPatientData } from "@/services/reset_data";
 
 // function someChecked(options, errorMassage) {
 //   if (!options.filter(v => v.checkboxBtnContent).some(v => v.checkboxBtnContent.data.some(d => d.checked))) {
@@ -145,35 +147,27 @@ export default defineComponent({
             StepperData: [
                 {
                     title: "Past Obstetric History",
-                    componet: "PastObstetricHistory",
+                    component: "PastObstreticHistory",
                     value: "1",
                 },
                 {
-                    title: "Past Medical history",
-                    componet: "MedicalHistory",
+                    title: "Past Medical History",
+                    component: "MedicalHistory",
                     value: "2",
-                    // validation: {
-                    //   medicalHistory: (data) => someChecked(data, "Medical history is required"),
-                    //   allegy: (data) => someChecked(data, "Allergy is required"),
-                    //   //existingChronicHealthConditions: (data)=>someChecked(data, "Existing chronic conditions is required"),
-                    //   hivTest: (data)=>someChecked(data, "HIV test required"),
-                    //   syphilisTest: (data)=>someChecked(data, "Syphilis test is required")
-
-                    // }
                 },
                 {
                     title: "Current Pregnancy",
-                    componet: "CurrentPregnancies",
+                    component: "CurrentPregnancies",
                     value: "3",
                 },
                 {
                     title: "Medications",
-                    componet: "Medications",
+                    component: "Medications",
                     value: "4",
                 },
                 {
                     title: "Woman behaviour",
-                    componet: "WomanBehaviour",
+                    component: "WomanBehaviour",
                     value: "5",
                 },
             ],
@@ -182,39 +176,15 @@ export default defineComponent({
         };
     },
     watch: {
-        medicalHistory(change) {
-            console.log(change);
-        },
+        medicalHistory(change) {},
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
-        ...mapState(useObstreticHistoryStore, ["preterm"]),
-        ...mapState(useObstreticHistoryStore, ["Complications"]),
-    },
-    saveData() {
-        const medicalConditions = [
-            "Auto immune desease",
-            "Asthma",
-            "Diabetes",
-            "Sickle cell",
-            "Anaemia",
-            "Thalassemia",
-            "Gynaecological",
-            "CCF",
-            "RHD",
-            "Gestational diabetes",
-            "pre-existing type 1",
-            "pre-existing type 2",
-            "Epilepsy",
-            "Hypertension",
-            "Kidney",
-            "TB",
-            "Mental  illiness",
-        ];
-        // for (const condition of medicalConditions) {
-        //   const selectedValue = getCheckboxSelectedValue(this.exisitingChronicHealthConditions, condition);
-        //   console.log(selectedValue);
-        // }
+        ...mapState(useObstreticHistoryStore, ["preterm","prevPregnancies","Complications"]),
+        ...mapState(useMedicalHistoryStore,['medicalHistory','allegy','exisitingChronicHealthConditions']),
+        ...mapState(useCurrentPregnanciesStore,['palpation','tetanus','lmnp','ultrasound']),
+        ...mapState(useMedicationStore,['Medication']),
+        ...mapState(useWomanBehaviourStore,['dailyCaffeineIntake'])
     },
     mounted() {
         // this.markWizard()
@@ -225,30 +195,6 @@ export default defineComponent({
 
     methods: {
         markWizard() {
-            //   if(this.medications.validationStatus){
-            //     this.wizardData[0].checked = true;
-            //     this.wizardData[0].class = 'open_step common_step'
-            //   }else{
-            //     this.wizardData[0].checked = false;
-            //   }
-            //   if(this.medicalHistory[0].selectdData.length > 0){
-            //     this.wizardData[1].checked = true;
-            //     this.wizardData[1].class = 'open_step common_step'
-            //   }else{
-            //     this.wizardData[1].checked = false;
-            //   }
-            //   if(this.womanBehaviour[0].selectdData.length > 0){
-            //     this.wizardData[2].checked = true;
-            //     this.wizardData[2].class = 'open_step common_step'
-            //   }else{
-            //     this.wizardData[2].checked = false;
-            //   }
-            //   if(this.medications[0].selectdData.length > 0){
-            //     this.wizardData[2].checked = true;
-            //     this.wizardData[2].class = 'open_step common_step'
-            //   }else{
-            //     this.wizardData[2].checked = false;  
-            //   }
         },
         deleteDisplayData(data: any) {
             return data.map((item: any) => {
@@ -256,64 +202,185 @@ export default defineComponent({
                 return item?.data;
             });
         },
-        saveData() {
-            console.log('testing')
-            // const errors = []
-            // this.StepperData.forEach((stepper)=> {
-            //   if (!stepper.validation) return
-            //   Object.keys(stepper.validation).forEach((validationName) => {
-            //     if (typeof stepper.validation[validationName] === 'function') {
-            //       const state = stepper.validation[validationName](this[validationName])
-            //       if (state) errors.push(state)
-            //     }
-            //   })
-            // })
-            // if (errors.length) {
-            //   return alert(errors.join(','))
-            // }
-            this.savePreterm();
-            //  this.$router.push('QuickCheck');
+       
+         async saveData() {
+            this.savePrevPregnancies()
+            this.savePreterm()
+            this.savePastPregnancyComplication()
+            this.savePastSurgeries()
+            this.saveAllergy()
+            this.saveChronicHealthCondition()
+            this.saveCurrentPrengancy()
+            this.saveMedication()
+            this.saveCaffeinIntake()
+            toastSuccess("Profile data saved successfully")
+            resetPatientData();
+            //this.$router.push("headssAssessment");
         },
-        savePrevPregnancies() {},
-
-        // async savePreterm() {
+        async savePrevPregnancies(){
+        // if (this.prevPregnancies[0].selectedData.length > 0) {
         //     const userID: any = Service.getUserID();
-        //     const pretermInstance = new ProfileService(this.demographics.patient_id, userID);
-        //     await pretermInstance.createEncounter();
-        //     const data = await this.buildPreterm();
-        //     await pretermInstance.saveObservationList(data);
-        // },
-        // async buildPreterm() {
-        //     const id = await ConceptService.getConceptID(getRadioSelectedValue(this.preterm, "pretermInfo"));
-        //     console.log(id);
-        //     return [
-        //         {
-        //             concept_id: 7141,
-        //             value_coded: id,
-        //             obs_datetime: Service.getSessionDate(),
-        //         },
-        //     ];
-        // },
-
-        async buildPretermData() {
-
+        //     const PrevPregnancies = new PastObstetricHistoryService(this.demographics.patient_id, userID);
+        //     const encounter = await PrevPregnancies.createEncounter();
+        //     if (!encounter) return toastWarning("Unable to create Pregnancies encounter");
+        //     const patientStatus = await PrevPregnancies.saveObservationList(await this.buildPregnancyHistory());
+        //     if (!patientStatus) return toastWarning("Unable to create Pregnancies!");
+        //     toastSuccess("Prev Pregnancies has been created");
+        // }
+            console.log(await this.buildPregnancyHistory())
+        },
+        async savePreterm(){    
+        if (this.preterm.length > 0) {
+            const userID: any = Service.getUserID();
+            const Preterm = new PastObstetricHistoryService(this.demographics.patient_id, userID);
+            const encounter = await Preterm.createEncounter();
+            if (!encounter) return toastWarning("Unable to create profile encounter");
+            const patientStatus = await Preterm.saveObservationList(await this.buildPreterm());
+            if (!patientStatus) return toastWarning("Unable to create Profile!");
+            toastSuccess("Profile has been created");
+        }
+        //console.log(await this.buildPreterm())
+        },
+        async savePastPregnancyComplication(){
+        if (this.Complications.length > 0) {
+            const userID: any = Service.getUserID();
+            const complication = new PastObstetricHistoryService(this.demographics.patient_id, userID);
+            const encounter = await complication.createEncounter();
+            if (!encounter) return toastWarning("Unable to create complications encounter");
+            const patientStatus = await complication.saveObservationList(await this.buildPastPregnancyComplication());
+            if (!patientStatus) return toastWarning("Unable to create Complications!");
+            toastSuccess("Complications has been created");
+        }
+        //console.log(await this.buildPastPregnancyComplication())
+        },
+        async savePastSurgeries(){
+            if (this.medicalHistory.length > 0) {
+            const userID: any = Service.getUserID();
+            const MedicalHistory = new  MedicalHistoryService(this.demographics.patient_id, userID);
+            const encounter = await MedicalHistory.createEncounter();
+            if (!encounter) return toastWarning("Unable to create past surgery encounter");
+            const patientStatus = await MedicalHistory.saveObservationList(await this.buildPastSurgeries());
+            if (!patientStatus) return toastWarning("Unable to create Past surgeries!");
+            toastSuccess("Past surgeries has been created");
+        }
+          //  console.log(await this.buildPastSurgeries())
+        },
+        async saveAllergy(){
+        if (this.allegy.length > 0) {
+            const userID: any = Service.getUserID();
+            const MedicalHistory = new  MedicalHistoryService(this.demographics.patient_id, userID);
+            const encounter = await MedicalHistory.createEncounter();
+            if (!encounter) return toastWarning("Unable to create allergy encounter");
+            const patientStatus = await MedicalHistory.saveObservationList(await this.buildAllergy());
+            if (!patientStatus) return toastWarning("Unable to create Allergies!");
+            toastSuccess("Past Allergies has been created");
+        }
+            //console.log(await this.buildAllergy())
+        },
+        async saveChronicHealthCondition(){
+        if (this.exisitingChronicHealthConditions.length > 0) {
+            const userID: any = Service.getUserID();
+            const healthCondition = new  MedicalHistoryService(this.demographics.patient_id, userID);
+            const encounter = await healthCondition.createEncounter();
+            if (!encounter) return toastWarning("Unable to create Chronic Health Condition encounter");
+            const patientStatus = await healthCondition.saveObservationList(await this.buildChronicHealthCondition());
+            if (!patientStatus) return toastWarning("Unable to create Chronic Health Condition!");
+            toastSuccess("Chronic Health Condition has been created");
+        }
+           // console.log(await this.buildChronicHealthCondition())
+        },
+        async saveCurrentPrengancy(){
+            if (this.lmnp.length > 0) {
+            const userID: any = Service.getUserID();
+            const Lmnp = new  currentPregnancyService(this.demographics.patient_id, userID);
+            const encounter = await Lmnp.createEncounter();
+            if (!encounter) return toastWarning("Unable to create Lmnp encounter");
+            const patientStatus = await Lmnp.saveObservationList(await this.buildCurrentPrengancy());
+            if (!patientStatus) return toastWarning("Unable to create Lmnp!");
+            toastSuccess("Lmnp has been created");
+        }
+            console.log(await this.buildCurrentPrengancy())
+        },
+        async saveMedication(){
+        if (this.Medication.length > 0) {
+            const userID: any = Service.getUserID();
+            const Medications = new  MedicalHistoryService(this.demographics.patient_id, userID);
+            const encounter = await Medications.createEncounter();
+            if (!encounter) return toastWarning("Unable to create Medications encounter");
+            const patientStatus = await Medications.saveObservationList(await this.buildMedication());
+            if (!patientStatus) return toastWarning("Unable to create Medications!");
+            toastSuccess("Medications has been created");
+        }
+            //console.log(await this.buildMedication())
+        },
+        async saveCaffeinIntake(){
+        if (this.dailyCaffeineIntake.length > 0) {
+            const userID: any = Service.getUserID();
+            const caffeineIntake = new  MedicalHistoryService(this.demographics.patient_id, userID);
+            const encounter = await caffeineIntake.createEncounter();
+            if (!encounter) return toastWarning("Unable to create daily caffeine intake encounter");
+            const patientStatus = await caffeineIntake.saveObservationList(await this.buildCaffeinIntake());
+            if (!patientStatus) return toastWarning("Unable to create Daily Caffeine Intake!");
+            toastSuccess("Daily Caffeine Intake has been created");
+        }
+           // console.log(await this.buildCaffeinIntake())
+        },
+        async buildPregnancyHistory(){
+            return[
+                ...(await formatInputFiledData(this.prevPregnancies))
+            ]
+        },
+        async buildPreterm(){
             return [
-                ...(await formatRadioButtonData(this.preterm)),
-                
+                ...(await formatRadioButtonData(this.preterm)),       
             ];
         },
-        async savePreterm() {
-            const data: any = await this.buildPretermData();
-               console.log("save preterm=====>",data)
-            if (data.length > 0) {
-                const userID: any = Service.getUserID();
-                const pretermInstance = new Preterms();
-                pretermInstance.onSubmit(this.demographics.patient_id, userID, data);
-            }
-         
-           
+        async buildPastPregnancyComplication(){
+            return [
+                ...(await formatCheckBoxData(this.Complications)),
+                ...(await formatInputFiledData(this.Complications))       
+            ];
         },
-
+        async buildPastSurgeries(){
+            return[
+                ...(await formatCheckBoxData(this.medicalHistory)),
+                ...(await formatInputFiledData(this.medicalHistory))
+            ]
+        },
+        async buildAllergy(){
+            return[
+                ...(await formatCheckBoxData(this.allegy)),
+                 ...(await formatInputFiledData(this.allegy))
+            ]
+        },
+        async buildChronicHealthCondition(){
+            return[
+                ...(await formatCheckBoxData(this.exisitingChronicHealthConditions)),
+                ...(await formatInputFiledData(this.exisitingChronicHealthConditions))
+            ]
+        },
+        async buildCurrentPrengancy(){
+            return[
+                ...(await formatRadioButtonData(this.palpation)),
+                ...(await formatRadioButtonData(this.tetanus)),
+                ...(await formatRadioButtonData(this.lmnp)),
+                ...(await formatRadioButtonData(this.ultrasound)),
+                ...(await formatInputFiledData(this.ultrasound))
+            ]
+        },
+        async buildMedication(){
+            return[
+                ...(await formatCheckBoxData(this.Medication)),
+                ...(await formatInputFiledData(this.Medication))
+            ]
+        },
+        async buildCaffeinIntake(){
+            return[
+                ...(await formatCheckBoxData(this.dailyCaffeineIntake)),
+                ...(await formatRadioButtonData(this.dailyCaffeineIntake)),
+                ...(await formatRadioButtonData(this.dailyCaffeineIntake)),
+            ]
+        },
         openModal() {
             createModal(SaveProgressModal);
         },
@@ -322,3 +389,4 @@ export default defineComponent({
 </script>
 
 <style scoped></style>
+@/apps/ANC/store/profile/MedicationStore

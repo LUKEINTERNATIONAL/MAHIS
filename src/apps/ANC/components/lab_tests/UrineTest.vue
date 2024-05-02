@@ -4,8 +4,6 @@
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="urineTest"></basic-form>
-                <!-- <basic-form :contentData="testType"></basic-form> -->
-                 <!-- <basic-form :contentData="reason"></basic-form> -->
                   <basic-form :contentData="culture"></basic-form>
                    <basic-form :contentData="gram"></basic-form>
                    <basic-form :contentData="nitrites"></basic-form>
@@ -48,7 +46,8 @@ import { modifyRadioValue,
     getFieldValue,
     modifyFieldValue,
     modifyCheckboxInputField,
-    modifyCheckboxValue} from '@/services/data_helpers'
+    modifyCheckboxValue,
+modifyCheckboxHeader} from '@/services/data_helpers'
 
 export default defineComponent({
     name:"UrineTest",
@@ -77,8 +76,6 @@ export default defineComponent({
         }
     },
     computed:{
-        // ...mapState(useUrineTestStore, ["reason"]),
-        // ...mapState(useUrineTestStore, ["testType"]),
         ...mapState(useUrineTestStore, ["urineTest"]),
         ...mapState(useUrineTestStore, ["protein"]),
         ...mapState(useUrineTestStore, ["nitrites"]),
@@ -89,19 +86,24 @@ export default defineComponent({
 
     },
     mounted(){
-        const urineTests = useUrineTestStore()
-        this.handleTest()
-        this. handleDate()
+        // this.handleTest()
+        // this. handleDate()
         this.handleTestNotDone()
         this.handleOtherNotDone()
+        this.handleTypeofTest()
+        this.handleFirstTest()
+        this.handleThirdTest()
     },
-    watch:{
+    watch:{ 
       urineTest:{
         handler(){
-          this.handleTest()
-          this. handleDate()
+          // this.handleTest()
+          // this. handleDate()
           this.handleTestNotDone()
           this.handleOtherNotDone()
+          this.handleTypeofTest()
+          this.handleFirstTest()
+          this.handleThirdTest()
         },
         deep:true
       }
@@ -110,35 +112,70 @@ export default defineComponent({
         return { checkmark,pulseOutline };
     },
     methods:{
-      handleTest(){
-        if(getRadioSelectedValue(this.urineTest,'urineInfo')=='conducted'){
-          modifyRadioValue(this.urineTest,'conductedInfo','displayNone',false)
-        }else{
-          modifyRadioValue(this.urineTest,'conductedInfo','displayNone',true)
-        }
+      // handleTest(){
+      //   if(getRadioSelectedValue(this.urineTest,'Urine test status')=='conducted'){
+      //     modifyRadioValue(this.urineTest,'conductedInfo','displayNone',false)
+      //   }else{
+      //     modifyRadioValue(this.urineTest,'conductedInfo','displayNone',true)
+      //   }
 
-      },
-      handleDate(){
-        if(getRadioSelectedValue(this.urineTest,'urineInfo')=='conducted'){
-          modifyFieldValue(this.urineTest,'UTD','displayNone',false)
-        }else{
-           modifyFieldValue(this.urineTest,'UTD','displayNone',true)
-        }
-      },
+      // },
+      // handleDate(){
+      //   if(getRadioSelectedValue(this.urineTest,'Urine test status')=='conducted'){
+      //     modifyFieldValue(this.urineTest,'UTD','displayNone',false)
+      //   }else{
+      //      modifyFieldValue(this.urineTest,'UTD','displayNone',true)
+      //   }
+      // },
       handleTestNotDone(){
-        if(getRadioSelectedValue(this.urineTest,'urineInfo')=='notDone'){
-          modifyCheckboxInputField(this.urineTest,'','displayNone',false)
+        if(getRadioSelectedValue(this.urineTest,'Urine test status')== 'Test not done'){
+          modifyCheckboxHeader(this.urineTest,'Reason not done','displayNone',false)
         }else{
-          modifyCheckboxInputField(this.urineTest,'','displayNone',true)
-        }
+          modifyCheckboxHeader(this.urineTest,'Reason not done','displayNone',true)
+      }
       },
       handleOtherNotDone(){
-        if(getCheckboxSelectedValue(this.urineTest,'Other')=='other'){
-          modifyFieldValue(this.urineTest,'Other','displayNone',false)
+        if(getCheckboxSelectedValue(this.urineTest,'Reason not done')=='Other'){
+          modifyFieldValue(this.urineTest,'Other (specify)','displayNone',false)
         }else{
-           modifyFieldValue(this.urineTest,'Other','displayNone',true)
+           modifyFieldValue(this.urineTest,'Other (specify)','displayNone',true)
         }
       },
+      handleTypeofTest(){
+        if(getRadioSelectedValue(this.urineTest,'Urine test status')== 'Test conducted'){
+          modifyRadioValue(this.urineTest,'Urine test','displayNone',false)
+        }else{
+          modifyRadioValue(this.urineTest,'Urine test','displayNone',true)
+      }
+      },
+      handleFirstTest(){
+        if(getRadioSelectedValue(this.urineTest,'Urine test')== 'Midstream urine culture'){
+          modifyRadioValue(this.culture,'Midstream urine culture result','displayNone',false)
+        }else{
+          modifyRadioValue(this.culture,'Midstream urine culture result','displayNone',true)
+      }
+      },
+      handleSecondTest(){
+        if(getRadioSelectedValue(this.urineTest,'Urine test')== 'Midstream urine gram-staining'){
+          modifyRadioValue(this.gram,'Midstream urine gram-staining result','displayNone',false)
+        }else{
+          modifyRadioValue(this.gram,'Midstream urine gram-staining result','displayNone',true)
+      }
+      },
+      handleThirdTest(){
+        if(getRadioSelectedValue(this.urineTest,'Urine test')== 'Urine dipstick'){
+          modifyRadioValue(this.nitrites,'Nitrites dipstick test result','displayNone',false);
+          modifyRadioValue(this.protein, 'Protein dipstick test result', 'displayNone',false);
+          modifyRadioValue(this.leukocytes, 'Leukocytes dipstick test result', 'displayNone',false);
+          modifyRadioValue(this.glucose, 'Glucose dipstick test result', 'displayNone',false);
+        }else{
+          modifyRadioValue(this.nitrites,'Nitrites dipstick test result','displayNone',true);
+          modifyRadioValue(this.protein, 'Protein dipstick test result', 'displayNone',true);
+          modifyRadioValue(this.leukocytes, 'Leukocytes dipstick test result', 'displayNone',true);
+          modifyRadioValue(this.glucose, 'Glucose dipstick test result', 'displayNone',true);
+      }
+      }
+     
     }
     
 })

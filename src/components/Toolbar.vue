@@ -3,8 +3,8 @@
         <div class="content_manager" style="margin-top: unset">
             <ion-toolbar class="content_width primary_color_background">
                 <ion-menu-button slot="start" />
-                <ion-title style="cursor: pointer" @click="nav('/home')"><b>MaHIS</b></ion-title>
-                <ion-buttons slot="end" style="max-width: 600px">
+                <ion-title style="cursor: pointer" @click="nav('/home')"><b>MaHIS</b> <small>(V1.0.0)</small></ion-title>
+                <ion-buttons slot="end" class="search-input-desktop" style="max-width: 800px">
                     <ToolbarSearch />
                 </ion-buttons>
                 <div class="notifaction_person" slot="end">
@@ -25,6 +25,10 @@
                     </ion-content>
                 </ion-popover>
             </ion-toolbar>
+
+            <ion-buttons slot="end" class="search-input-mobile" style="max-width: 600px">
+                <ToolbarSearch />
+            </ion-buttons>
         </div>
     </ion-header>
 </template>

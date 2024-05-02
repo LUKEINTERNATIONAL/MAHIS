@@ -37,6 +37,8 @@
                             @clicked:inputValue="handleInput(contentData, col, $event, 'clickedInput')"
                             :popOverData="col.popOverData"
                             @setPopoverValue="handleInput(contentData, col, $event, 'setPopoverValue')"
+                            @handleInnerActionBtnPropetiesFn="$emit('click:innerBtn', col)"
+                            :InnerActionBtnPropeties="col.InnerBtn"
                         />
                         <div v-if="col.isMultiSelect">
                             <h6 v-if="col.inputHeader">{{ col.inputHeader }}</h6>
@@ -73,6 +75,8 @@
                             :inputWidth="col.inputWidth"
                             :inputValue="col.value"
                             :eventType="col.eventType"
+                            :minDate="col.minDate"
+                            :maxDate="col.maxDate"
                             @update:dateValue="handleInput(contentData, col, $event, 'updateDate')"
                         />
 
@@ -86,7 +90,7 @@
                 </ion-row>
             </span>
             <span v-if="item.radioBtnContent && !item?.radioBtnContent?.header?.displayNone">
-                <div style="" v-if="item.radioBtnContent?.header" :class="item.radioBtnContent?.header?.class">
+                <div style="font-size: 1rem" v-if="item.radioBtnContent?.header" :class="item.radioBtnContent?.header?.class">
                     {{ item.radioBtnContent?.header.title }}
                 </div>
                 <ion-row class="checkbox_content">
@@ -206,6 +210,7 @@
                         :key="checkboxInputIndex"
                     >
                         <DateInputField
+                            v-if="!checkboxInput.isMultiSelect"
                             :inputHeader="checkboxInput.inputHeader"
                             :sectionHeaderFontWeight="checkboxInput.sectionHeaderFontWeight"
                             :unit="checkboxInput.unit"
@@ -216,8 +221,28 @@
                             :inputWidth="checkboxInput.inputWidth"
                             :inputValue="checkboxInput.value"
                             :eventType="checkboxInput.eventType"
+                            :minDate="checkboxInput.minDate"
+                            :maxDate="checkboxInput.maxDate"
                             @update:dateValue="handleInput(contentData, checkboxInput, $event, 'updateDate')"
                         />
+                        <div v-if="checkboxInput.isMultiSelect">
+                            <h6 v-if="checkboxInput.inputHeader">{{ checkboxInput.inputHeader }}</h6>
+                            <VueMultiselect
+                                v-if="checkboxInput.isMultiSelect"
+                                v-model="checkboxInput.value"
+                                @update:model-value="handleInput(contentData, checkboxInput, $event, 'updateMultiselect')"
+                                :close-on-select="true"
+                                openDirection="bottom"
+                                tag-placeholder=""
+                                placeholder=""
+                                selectLabel=""
+                                label="name"
+                                :searchable="true"
+                                @search-change="$emit('search-change', $event)"
+                                track-by="id"
+                                :options="checkboxInput.multiSelectData"
+                            />
+                        </div>
                         <div class="alerts_error" v-if="checkboxInput.alertsError">
                             {{ checkboxInput.alertsErrorMassage }}
                         </div>
@@ -437,7 +462,6 @@ ion-radio {
     color: #636363;
 }
 .bold {
-    font-family: "Inter";
     font-style: normal;
     font-weight: 600;
     font-size: 16px;
@@ -461,6 +485,10 @@ ion-radio {
 }
 h6 {
     margin-top: 0px;
+}
+ion-radio,
+ion-checkbox {
+    font-size: 1rem;
 }
 </style>
 <style src="vue-multiselect/dist/vue-multiselect.css"></style>

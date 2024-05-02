@@ -33,9 +33,20 @@ export default defineComponent({
         BasicInputField,
         BasicForm
     },
+    data() {
+    return {
+      
+      currentSection: 0, // Initialize currentSection to 0
+      vValidations: '' as any,
+      hasValidationErrors: [] as any,
+    };
+  },
+    computed:{
+        ...mapState(useAncEndStore,["ancInfo"]),
+    },
 
     mounted(){
-        const  ancInfo =useAncEndStore()
+        // const  ancInfo =useAncEndStore()
         this.handleOther()
         this.handledeath()
         this.handleDeathDate()
@@ -44,7 +55,7 @@ export default defineComponent({
         this.handlePlaceDelivery()
         this.handleOtherPlaceDelivery()
         this.handlePretermBirth()
-        this. handleModeDelivery()
+        this.handleModeDelivery()
         this.handleWeight()
     },
     watch:{
@@ -58,82 +69,79 @@ export default defineComponent({
                 this.handlePlaceDelivery()
                 this.handleOtherPlaceDelivery()
                 this.handlePretermBirth()
-                this. handleModeDelivery()
+                this.handleModeDelivery()
                 this.handleWeight()
             },
             deep:true
         }
     },
-      computed:{
-        ...mapState(useAncEndStore,["ancInfo"]),
-    },
+  
     methods:{
         handleOther(){
-            if(getRadioSelectedValue(this.ancInfo,'otherEnd')=='otherOnClosingANC'){
-                modifyFieldValue(this.ancInfo,'SpecifyAnC','displayNone',false)
+            if(getRadioSelectedValue(this.ancInfo,'Reason for closing ANC')=='Other'){
+                modifyFieldValue(this.ancInfo,'Other (specify)','displayNone',false)
             }else{
-                modifyFieldValue(this.ancInfo,'SpecifyAnC','displayNone',true)
+                modifyFieldValue(this.ancInfo,'Other (specify)','displayNone',true)
             }
-            console.log(getRadioSelectedValue(this.ancInfo,'otherEnd'))
         },
         handledeath(){
-            if(getRadioSelectedValue(this.ancInfo,'otherEnd')=='death'){
+            if(getRadioSelectedValue(this.ancInfo,'Reason for closing ANC')=='Death'){
                 modifyFieldValue(this.ancInfo,'DeathDate','displayNone',false)
             }else{
                 modifyFieldValue(this.ancInfo,'DeathDate','displayNone',true)
             }
         },
         handleDeathDate(){
-            if(getRadioSelectedValue(this.ancInfo,'otherEnd')=='death'){
+            if(getRadioSelectedValue(this.ancInfo,'Reason for closing ANC')=='Death'){
                 modifyFieldValue(this.ancInfo,'DeathCause','displayNone',false)
             }else{
                 modifyFieldValue(this.ancInfo,'DeathCause','displayNone',true)
             }
         },
         handleRecordNotViewed(){
-            if(getRadioSelectedValue(this.ancInfo,'otherEnd')=='death'){
-                modifyRadioValue(this.ancInfo,'recordViewed','displayNonne',false)
+            if(getRadioSelectedValue(this.ancInfo,'Reason for closing ANC')=='Death'){
+                modifyRadioValue(this.ancInfo,'recordViewed','displayNone',false)
             }else{
-                modifyRadioValue(this.ancInfo,'recordViewed','displayNonne',true)
+                modifyRadioValue(this.ancInfo,'recordViewed','displayNone',true)
             }
         },
         handleDeliverDate(){
-            if(getRadioSelectedValue(this.ancInfo,'otherEnd')=='liveBirth'){
-                modifyFieldValue(this.ancInfo,'DateD','displayNone',false)
+            if(getRadioSelectedValue(this.ancInfo,'Reason for closing ANC')=='Live birth'){
+                modifyFieldValue(this.ancInfo,'Date of delivery','displayNone',false)
             }else{
-                modifyFieldValue(this.ancInfo,'DateD','displayNone',true)
+                modifyFieldValue(this.ancInfo,'Date of delivery','displayNone',true)
             }
         },
         handlePlaceDelivery(){
-            if(getRadioSelectedValue(this.ancInfo,'otherEnd')=='liveBirth'){
-                modifyRadioValue(this.ancInfo,'placeDelivery','displayNone',false)
+            if(getRadioSelectedValue(this.ancInfo,'Reason for closing ANC')=='Live birth'){
+                modifyRadioValue(this.ancInfo,'Place of Delivery','displayNone',false)
             }else{
-                modifyRadioValue(this.ancInfo,'placeDelivery','displayNone',true)
+                modifyRadioValue(this.ancInfo,'Place of Delivery','displayNone',true)
             }
         },
         handleOtherPlaceDelivery(){
-            if(getRadioSelectedValue(this.ancInfo,'placeDelivery')=='otherOnPlaceDelivery'){
-                modifyFieldValue(this.ancInfo,'Specify','displayNone',false)
+            if(getRadioSelectedValue(this.ancInfo,'Place of Delivery')=='Other'){
+                modifyFieldValue(this.ancInfo,'Other (specify)','displayNone',false)
             }else{
-                 modifyFieldValue(this.ancInfo,'Specify','displayNone',true)
+                 modifyFieldValue(this.ancInfo,'Other (specify)','displayNone',true)
             }
         },
         handlePretermBirth(){
-               if(getRadioSelectedValue(this.ancInfo,'otherEnd')=='liveBirth'){
-                modifyRadioValue(this.ancInfo,'preterm','displayNone',false)
+               if(getRadioSelectedValue(this.ancInfo,'Reason for closing ANC')=='Live birth'){
+                modifyRadioValue(this.ancInfo,'Preterm','displayNone',false)
             }else{
-                modifyRadioValue(this.ancInfo,'preterm','displayNone',true)
+                modifyRadioValue(this.ancInfo,'Preterm','displayNone',true)
             }
         },
         handleModeDelivery(){
-           if(getRadioSelectedValue(this.ancInfo,'otherEnd')=='liveBirth'){
-                modifyRadioValue(this.ancInfo,'deliveryMode','displayNone',false)
+           if(getRadioSelectedValue(this.ancInfo,'Reason for closing ANC')=='Live birth'){
+                modifyRadioValue(this.ancInfo,'Mode of delivery','displayNone',false)
             }else{
-                modifyRadioValue(this.ancInfo,'deliveryMode','displayNone',true)
+                modifyRadioValue(this.ancInfo,'Mode of delivery','displayNone',true)
             }
         },
         handleWeight(){
-            if(getRadioSelectedValue(this.ancInfo,'otherEnd')=='liveBirth'){
+            if(getRadioSelectedValue(this.ancInfo,'Reason for closing ANC')=='Live birth'){
                 modifyFieldValue(this.ancInfo,'Weight','displayNone',false)
             }else{
                  modifyFieldValue(this.ancInfo,'Weight','displayNone',true)

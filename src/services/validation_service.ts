@@ -1,9 +1,4 @@
-import {
-    modifyFieldValue,
-    modifyRadioValue,
-    modifyCheckboxValue,
-    modifyCheckboxInputField,
-} from "@/services/data_helpers";
+import { modifyFieldValue, modifyRadioValue, modifyCheckboxValue, modifyCheckboxInputField } from "@/services/data_helpers";
 import Validation from "@/validations/StandardValidations";
 
 export function validateField(data: any, fieldName: string, value: any) {
@@ -11,12 +6,13 @@ export function validateField(data: any, fieldName: string, value: any) {
         nationalID: () => Validation.isMWNationalID(value),
         firstname: () => Validation.isName(value),
         lastname: () => Validation.isName(value),
+        middleName: () => Validation.isNameEmpty(value),
         birthdate: () => Validation.required(value),
         gender: () => Validation.required(value),
         phoneNumber: () => Validation.isMWPhoneNumber(value),
         estimation: () => Validation.isEstimationDate(value),
         guardianFirstname: () => Validation.isName(value),
-        guardianMiddleName: () => Validation.isName(value),
+        guardianMiddleName: () => Validation.isNameEmpty(value),
         guardianLastname: () => Validation.isName(value),
         guardianPhoneNumber: () => Validation.isMWPhoneNumber(value),
     };

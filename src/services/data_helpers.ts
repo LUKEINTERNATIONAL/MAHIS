@@ -91,11 +91,13 @@ export function modifyCheckboxHeader(data: any, headerName: any, element: any, n
     });
 }
 function modifyObjects(data: any[], triggerName: any, initialData: any) {
+    console.log("🚀 ~ data.forEach ~ triggerName:", triggerName);
     data.forEach((item: any, index: number) => {
-        if (item.childName === triggerName) {
+        if (triggerName && item.childName === triggerName) {
             data[index] = _.cloneDeep(initialData[index]);
             if (data[index].radioBtnContent) modifyObjects(data, data[index].radioBtnContent.header.name, initialData);
             if (data[index].data) modifyObjects(data, data[index].data.rowData[0].colData[0].name, initialData);
+            if (data[index].checkboxBtnContent) modifyObjects(data, data[index].checkboxBtnContent.header.name, initialData);
         }
     });
 }
@@ -105,6 +107,14 @@ function displayObjects(data: any[], triggerName: any) {
         if (item.childName === triggerName) {
             if (data[index].radioBtnContent) data[index].radioBtnContent.header.displayNone = false;
             if (data[index].data) data[index].data.rowData[0].colData[0].displayNone = false;
+            if (data[index].checkboxBtnContent) data[index].checkboxBtnContent.header.displayNone = false;
         }
     });
+}
+
+export function modifyWizardData(data: any, title: any, changes: any) {
+    const stepToUpdate = data.find((step: any) => step.title === title);
+    if (stepToUpdate) {
+        Object.assign(stepToUpdate, changes);
+    }
 }

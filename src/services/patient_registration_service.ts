@@ -4,6 +4,7 @@ import { Person } from "@/interfaces/person";
 import { PersonService } from "@/services/person_service";
 import { PersonAttributeService } from "@/services/person_attributes_service";
 import { PatientPrintoutService } from "@/services/patient_printout_service";
+import { resetPatientData } from "@/services/reset_data";
 
 export class PatientRegistrationService extends Service {
     personId: number;

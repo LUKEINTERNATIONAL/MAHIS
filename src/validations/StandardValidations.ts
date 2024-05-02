@@ -53,6 +53,10 @@ function isName(value: any): null | string {
     const validation = /^(?=.{2,100}$)[a-z!A-Z]+(?:['_.\-!\][a-z]+[a-z!A-Z])*$/;
     return !value || !value.match(validation) ? "Invalid name Input" : null;
 }
+function isNameEmpty(value: any): null | string {
+    const validation = /^(?=.{2,100}$)[a-z!A-Z]+(?:['_.\-!\][a-z]+[a-z!A-Z])*$/;
+    return !isEmpty(value) && !value.match(validation) ? "Invalid name Input" : null;
+}
 
 function isNumber(val: any) {
     return isNaN(parseInt(val)) ? "Value must be a number" : null;
@@ -117,6 +121,7 @@ export default {
     required,
     isMWPhoneNumber,
     isName,
+    isNameEmpty,
     isNumber,
     hasLengthRangeOf,
     rangeOf,

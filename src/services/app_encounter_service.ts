@@ -10,7 +10,7 @@ export class AppEncounterService extends ObservationService {
     providerID: number;
     patientID: number;
     date: string;
-    constructor(patientID: number, encounterTypeID: number, providerID=-1) {
+    constructor(patientID: number, encounterTypeID: number, providerID = -1) {
         super()
         this.encounterTypeID = encounterTypeID
         this.patientID = patientID
@@ -40,7 +40,7 @@ export class AppEncounterService extends ObservationService {
         return AppEncounterService.getFirstValueCoded(this.patientID, conceptName, this.date)
     }
 
-    getFirstValueNumber(conceptName: string) { 
+    getFirstValueNumber(conceptName: string) {
         return AppEncounterService.getFirstValueNumber(this.patientID, conceptName, this.date)
     }
 
@@ -72,7 +72,7 @@ export class AppEncounterService extends ObservationService {
         return AppEncounterService.buildValueCodedFromConceptId(conceptName, value, this.date)
     }
 
-    buildValueNumber(conceptName: string, value: number, modifier=null, orderId: number | null = null) {
+    buildValueNumber(conceptName: string, value: number, modifier = null, orderId: number | null = null) {
         return AppEncounterService.buildValueNumber(conceptName, value, modifier, orderId, this.date)
     }
 
@@ -86,15 +86,14 @@ export class AppEncounterService extends ObservationService {
             'value_text': 'Estimated'
         })
     }
-   
+
     async saveObservationList(obs: Array<ObsValue>) {
-        console.log(this.encounterID)
         return ObservationService.saveObsArray(this.encounterID, obs)
     }
 
     async saveValueTextObs(conceptName: string, value: string) {
         const obs: ObsValue = await ObservationService.buildValueText(
-            conceptName, 
+            conceptName,
             value
         )
         return this.saveObs(obs)
@@ -102,13 +101,13 @@ export class AppEncounterService extends ObservationService {
 
     async saveValueCodedObs(conceptName: string, value: string) {
         const obs: ObsValue = await ObservationService.buildValueCoded(
-            conceptName, 
+            conceptName,
             value
         )
         return this.saveObs(obs)
     }
 
-    async saveValueNumericObs(conceptName: string, value: number, modifier=null) {
+    async saveValueNumericObs(conceptName: string, value: number, modifier = null) {
         const obs: ObsValue = await ObservationService.buildValueNumber(
             conceptName, value, modifier
         )
@@ -116,13 +115,13 @@ export class AppEncounterService extends ObservationService {
     }
 
     async saveValueDatetimeObs(conceptName: string, value: string) {
-        const obs = await  ObservationService.buildValueDate(
+        const obs = await ObservationService.buildValueDate(
             conceptName, value, ObservationService.getSessionDate()
         )
         return this.saveObs(obs)
     }
 
-    async createEncounter():  Promise<Encounter | undefined>  {
+    async createEncounter(): Promise<Encounter | undefined> {
         const payload: any = {
             'encounter_type_id': this.encounterTypeID,
             'patient_id': this.patientID,
@@ -134,9 +133,9 @@ export class AppEncounterService extends ObservationService {
         const encounter = await EncounterService.create(payload)
         if (encounter) {
             this.encounterID = encounter.encounter_id
-            await this.saveValueTextObs('Workstation location', ObservationService.getUserLocation()||'Unknown')
+            await this.saveValueTextObs('Workstation location', ObservationService.getUserLocation() || 'Unknown')
             return encounter
-        } 
+        }
     }
 
     saveObs(obs: ObsValue) {

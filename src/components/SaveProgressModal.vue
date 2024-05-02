@@ -35,6 +35,7 @@ import { icons } from "@/utils/svg";
 import { resetPatientData } from "@/services/reset_data";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import { mapState } from "pinia";
+import { UserService } from "@/services/user_service";
 
 export default defineComponent({
     name: "Menu",
@@ -55,21 +56,18 @@ export default defineComponent({
     setup() {
         return { checkmark, pulseOutline };
     },
-    computed: {
-        ...mapState(useGeneralStore, ["saveProgressStatus"]),
-    },
     methods: {
         dismiss() {
             modalController.dismiss();
         },
         nav(url: any, action: any) {
-            const demographicsStore = useGeneralStore();
             if (action == "not_save") {
                 resetPatientData();
-                demographicsStore.setSaveProgressStatus(false);
+                sessionStorage.setItem("saveProgressStatus", "false");
             } else {
-                demographicsStore.setSaveProgressStatus(true);
+                sessionStorage.setItem("saveProgressStatus", "true");
             }
+            UserService.setProgramUserActions();
             this.dismiss();
             this.$router.push(url);
         },
