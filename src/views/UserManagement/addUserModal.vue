@@ -67,7 +67,7 @@ const emit = defineEmits<{
 
 function saveAction() {
     action.value = generateRandomStrings(100, 3)
-    closeModal()
+    // closeModal()
 }
 
 function closeModal() {

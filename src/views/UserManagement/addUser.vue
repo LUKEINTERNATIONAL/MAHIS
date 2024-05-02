@@ -2,30 +2,48 @@
     <ion-row>
         <ion-col>
             <BasicInputField
-                :placeholder="note_properties[1].placeHolder"
+                :placeholder="input_properties[1].placeHolder"
                 :icon="personOutline"
                 :inputValue="first_name"
-                @update:inputValue="note_properties[1].dataHandler"
+                @update:inputValue="input_properties[1].dataHandler"
             />
+
+            <div>
+                <ion-label v-if="input_properties[1].show_error.value" class="error-label">
+                    {{ input_properties[1].error_message }}
+                </ion-label>
+            </div>
         </ion-col>
         <ion-col>
             <BasicInputField
-                :placeholder="note_properties[4].placeHolder"
+                :placeholder="input_properties[2].placeHolder"
                 :icon="peopleOutline"
                 :inputValue="last_name"
-                @update:inputValue="note_properties[4].dataHandler"
+                @update:inputValue="input_properties[2].dataHandler"
             />
+
+            <div>
+                <ion-label v-if="input_properties[2].show_error.value" class="error-label">
+                    {{ input_properties[2].error_message }}
+                </ion-label>
+            </div>
         </ion-col>
     </ion-row>
 
     <ion-row>
             <ion-col>
                 <BasicInputField
-                    :placeholder="note_properties[0].placeHolder"
+                    :placeholder="input_properties[0].placeHolder"
                     :icon="personCircleOutline"
                     :inputValue="user_name"
-                    @update:inputValue="note_properties[0].dataHandler"
+                    @update:inputValue="input_properties[0].dataHandler"
                 />
+
+                <div>
+                    <ion-label v-if="input_properties[0].show_error.value" class="error-label">
+                        {{ input_properties[0].error_message }}
+                    </ion-label>
+                </div>
             </ion-col>
             <ion-col></ion-col>
     </ion-row>
@@ -33,6 +51,12 @@
     <ion-row>
         <ion-col>
             <sselectionList :labels="labels" @selection-event="sselectionListUpdated"/>
+
+            <!-- <div>
+                <ion-label v-if="note_properties[4].show_error.value" class="error-label">
+                    {{ note_properties[4].error_message }}
+                </ion-label>
+            </div> -->
         </ion-col>
         <ion-col></ion-col>
     </ion-row>
@@ -40,22 +64,33 @@
     <ion-row>
         <ion-col>
             <BasicInputField
-                :placeholder="note_properties[2].placeHolder"
+                :placeholder="password_input_properties[0].placeHolder"
                 :icon="keyOutline"
-                :inputValue="note_properties[2].dataValue.value"
-                @update:inputValue="note_properties[2].dataHandler"
+                :inputValue="password_input_properties[0].dataValue.value"
+                @update:inputValue="password_input_properties[0].dataHandler"
             />
+
+            <div>
+                <ion-label v-if="password_input_properties[0].show_error.value" class="error-label">
+                    {{ password_input_properties[0].error_message }}
+                </ion-label>
+            </div>
         </ion-col>
         <ion-col>
             <BasicInputField
-                :placeholder="note_properties[3].placeHolder"
+                :placeholder="password_input_properties[1].placeHolder"
                 :icon="keyOutline"
-                :inputValue="note_properties[3].dataValue.value"
-                @update:inputValue="note_properties[3].dataHandler"
+                :inputValue="password_input_properties[1].dataValue.value"
+                @update:inputValue="password_input_properties[1].dataHandler"
             />
+
+            <div>
+                <ion-label v-if="password_input_properties[1].show_error.value" class="error-label">
+                    {{ password_input_properties[1].error_message }}
+                </ion-label>
+            </div>
         </ion-col>
     </ion-row>
-
 
 
     <ion-accordion-group ref="accordionGroup" class="previousView">
@@ -75,6 +110,8 @@ export default defineComponent({
 import { IonContent, IonHeader, IonItem, IonCol, IonToolbar, IonMenu, IonAccordionGroup, IonAccordion, AccordionGroupCustomEvent } from "@ionic/vue"
 import BasicInputField from "@/components/BasicInputField.vue"
 import sselectionList from "@/components/SselectionList.vue"
+import { areFieldsValid, getFieldsValuesObj, isPasswordValid } from "@/utils/GeneralUti"
+import _ from "lodash"
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
 import {
     addOutline,
@@ -96,21 +133,59 @@ const labels = [
 ]
 const sselectionListSelectedValue = ref()
 
-const note_properties = [
+const props = defineProps<{
+    action: any
+}>()
+
+watch(
+    () => props.action,
+    async (newValue) => {
+        trigerSaveFn()
+    }
+)
+
+function trigerSaveFn() {
+    console.log(sselectionListSelectedValue.value)
+    areFieldsValid(input_properties)
+    const payload = getFieldsValuesObj(input_properties)
+    console.log(payload)
+}
+
+function ValidatePassword() {
+
+}
+
+const input_properties = [
     {
         placeHolder: 'username',
-        dataHandler: ()=>{},
+        property_name: 'username',
+        dataHandler: inputUpDated_fn1,
         dataValue: ref(),
         show_error: ref(false),
         error_message: 'Input required, Only letters are allowed',
+        type: 'text',
     },
     {
         placeHolder: 'firstname',
-        dataHandler: ()=>{},
+        property_name: 'firstname',
+        dataHandler: inputUpDated_fn2,
         dataValue: ref(),
         show_error: ref(false),
         error_message: 'Input required, Only letters are allowed',
+        type: 'text',
     },
+    {
+        placeHolder: 'last name',
+        property_name: 'last_name',
+        dataHandler: inputUpDated_fn3,
+        dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'Input required, Only letters are allowed',
+        type: 'text',
+    },
+]
+
+const password_input_properties = [
     {
         placeHolder: 'new password',
         dataHandler: ()=>{},
@@ -125,18 +200,36 @@ const note_properties = [
         show_error: ref(false),
         error_message: 'Input required, Only letters are allowed',
     },
-    {
-        placeHolder: 'last name',
-        dataHandler: ()=>{},
-        dataValue: ref(),
-        show_error: ref(false),
-        error_message: 'Input required, Only letters are allowed',
-    },
 ]
 
 function sselectionListUpdated(data: any) {
-    sselectionListSelectedValue.value = data
+    sselectionListSelectedValue.value = data.label 
 }
+
+function inputUpDated_fn1(event: any) {
+    const reason = event.target.value
+    input_properties[0].dataValue.value = reason
+}
+function inputUpDated_fn2(event: any) {
+    const reason = event.target.value
+    input_properties[1].dataValue.value = reason
+}
+function inputUpDated_fn3(event: any) {
+    const reason = event.target.value
+    input_properties[2].dataValue.value = reason
+}
+
+
 </script>
 <style scoped>
+   .error-label {
+        background: #fecdca;
+        color: #b42318;
+        text-transform: none;
+        padding: 6%;
+        border-radius: 10px;
+        margin-top: 7px;
+        display: flex;
+        text-align: center;
+    }
 </style>

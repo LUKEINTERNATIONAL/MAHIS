@@ -42,7 +42,7 @@ watch(
 )
 
 watch(
-    () => selectedOption,
+    () => selectedOption.value,
     async (newValue) => {
         selectionEvent()
     }
