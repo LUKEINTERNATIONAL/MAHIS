@@ -45,7 +45,8 @@ const initialReasonForVisit= [
                 title: "Does the woman had any previous ANC visit?",
                 class:'bold',
                 selectedValue: "",
-                name:'Previous visits'
+                name:'Previous visits',
+                displayNext:"Yes"
             },
             data: [
                 {

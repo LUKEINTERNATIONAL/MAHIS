@@ -45,8 +45,8 @@ const initialDangerSigns= [
             },
             data: [
                 {
-                    name: "No danger signs",
-                    value: "No danger signs",
+                    name: "None",
+                    value: "None",
                     checked: false,
                     labelPlacement: "start",
                     colSize: "6",
