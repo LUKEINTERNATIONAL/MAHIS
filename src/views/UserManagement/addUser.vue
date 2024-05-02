@@ -148,11 +148,47 @@ function trigerSaveFn() {
     console.log(sselectionListSelectedValue.value)
     areFieldsValid(input_properties)
     const payload = getFieldsValuesObj(input_properties)
+    ValidatePassword()
     console.log(payload)
 }
 
-function ValidatePassword() {
+function ValidatePassword(): boolean {
+    let is_valid = false
+    let error_found = false
 
+    if (password_input_properties[0].dataValue.value == undefined || password_input_properties[0].dataValue.value == "") {
+        password_input_properties[0].show_error.value = true
+        error_found = true
+    }
+
+    if (password_input_properties[1].dataValue.value == undefined || password_input_properties[1].dataValue.value == "") {
+        password_input_properties[1].show_error.value = true
+        error_found = true
+    }
+
+    if (error_found == true) {
+        return is_valid
+    }
+
+    const is_password1_valid = isPasswordValid(password_input_properties[0].dataValue.value)
+    const is_password2_valid = isPasswordValid(password_input_properties[1].dataValue.value)
+
+    if (is_password1_valid == false) {
+        password_input_properties[0].show_error.value = true
+    }
+
+    if (is_password2_valid == false) {
+        password_input_properties[1].show_error.value = true
+    }
+
+    if (is_password1_valid == true && is_password2_valid == true) {
+        if (password_input_properties[0].dataValue.value === password_input_properties[1].dataValue.value) {
+            password_input_properties[0].show_error.value = false
+            password_input_properties[1].show_error.value = false
+            is_valid = true
+        }
+    }
+    return is_valid
 }
 
 const input_properties = [
@@ -188,14 +224,14 @@ const input_properties = [
 const password_input_properties = [
     {
         placeHolder: 'new password',
-        dataHandler: ()=>{},
+        dataHandler: passwordInputUpDated_fn1,
         dataValue: ref(),
         show_error: ref(false),
         error_message: 'Input required, Only letters are allowed',
     },
     {
         placeHolder: 'confirm password',
-        dataHandler: ()=>{},
+        dataHandler: passwordInputUpDated_fn2,
         dataValue: ref(),
         show_error: ref(false),
         error_message: 'Input required, Only letters are allowed',
@@ -207,16 +243,24 @@ function sselectionListUpdated(data: any) {
 }
 
 function inputUpDated_fn1(event: any) {
-    const reason = event.target.value
-    input_properties[0].dataValue.value = reason
+    const input = event.target.value
+    input_properties[0].dataValue.value = input
 }
 function inputUpDated_fn2(event: any) {
-    const reason = event.target.value
-    input_properties[1].dataValue.value = reason
+    const input = event.target.value
+    input_properties[1].dataValue.value = input
 }
 function inputUpDated_fn3(event: any) {
-    const reason = event.target.value
-    input_properties[2].dataValue.value = reason
+    const input = event.target.value
+    input_properties[2].dataValue.value = input
+}
+function passwordInputUpDated_fn1(event: any) {
+    const input = event.target.value
+    password_input_properties[0].dataValue.value = input
+}
+function passwordInputUpDated_fn2(event: any) {
+    const input = event.target.value
+    password_input_properties[1].dataValue.value = input
 }
 
 
