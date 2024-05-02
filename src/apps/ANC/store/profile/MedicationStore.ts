@@ -449,7 +449,7 @@ const initialMedications=[
 },
 },
 ] as any;
-export const useMedicationsStore = defineStore("medicationsStore", {
+export const useMedicationStore = defineStore("medicationsStore", {
   state: () => ({
     Medication: [...initialMedications] as any,
   }),

@@ -49,7 +49,7 @@ import { getCheckboxSelectedValue, getRadioSelectedValue } from "@/services/data
 import { useMedicalHistoryStore } from "@/apps/ANC/store/profile/medicalHistoryStore";
 import { useObstreticHistoryStore } from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
 import { useCurrentPregnanciesStore } from "@/apps/ANC/store/profile/CurrentPreganciesStore";
-import { useMedicationsStore } from "@/apps/ANC/store/profile/MedicationsStore";
+import { useMedicationStore } from "@/apps/ANC/store/profile/MedicationStore";
 import { useWomanBehaviourStore } from "@/apps/ANC/store/profile/womanBehaviourStore";
 import { Service } from "@/services/service";
 //import { ProfileService } from "@/services/anc_profile_service";
@@ -57,6 +57,7 @@ import { useDemographicsStore } from "@/stores/DemographicStore";
 import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
 import { Preterms } from "../service/preterm";
 import { currentPregnancyService, MedicalHistoryService, PastObstetricHistoryService } from "@/services/anc_profile_service";
+import { resetPatientData } from "@/services/reset_data";
 
 // function someChecked(options, errorMassage) {
 //   if (!options.filter(v => v.checkboxBtnContent).some(v => v.checkboxBtnContent.data.some(d => d.checked))) {
@@ -150,7 +151,7 @@ export default defineComponent({
                     value: "1",
                 },
                 {
-                    title: "Past Medical history",
+                    title: "Past Medical History",
                     component: "MedicalHistory",
                     value: "2",
                 },
@@ -182,7 +183,7 @@ export default defineComponent({
         ...mapState(useObstreticHistoryStore, ["preterm","prevPregnancies","Complications"]),
         ...mapState(useMedicalHistoryStore,['medicalHistory','allegy','exisitingChronicHealthConditions']),
         ...mapState(useCurrentPregnanciesStore,['palpation','tetanus','lmnp','ultrasound']),
-        ...mapState(useMedicationsStore,['Medication']),
+        ...mapState(useMedicationStore,['Medication']),
         ...mapState(useWomanBehaviourStore,['dailyCaffeineIntake'])
     },
     mounted() {
@@ -213,7 +214,8 @@ export default defineComponent({
             this.saveMedication()
             this.saveCaffeinIntake()
             toastSuccess("Profile data saved successfully")
-            this.$router.push("headssAssessment");
+            resetPatientData();
+            //this.$router.push("headssAssessment");
         },
         async savePrevPregnancies(){
         // if (this.prevPregnancies[0].selectedData.length > 0) {
@@ -387,3 +389,4 @@ export default defineComponent({
 </script>
 
 <style scoped></style>
+@/apps/ANC/store/profile/MedicationStore

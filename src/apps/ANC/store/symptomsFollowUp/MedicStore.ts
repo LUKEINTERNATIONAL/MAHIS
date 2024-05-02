@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg';
 
-export const useMedicationsStore = defineStore('medicationsStore',{
+export const useMedicStore = defineStore('medicStore',{
     state: () => ({
         Medication:[
             {

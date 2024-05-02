@@ -6,10 +6,11 @@ export const useWomanBehaviourStore = defineStore("womanBehaviourStore", {
     dailyCaffeineIntake: [
       {
         selectdData: [],
+        // sideColSize: 0.5,
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
           header: {
-            class:"bold",
+            class: "bold",
             title: "Daily caffeine use",
             selectedValue: "",
             name: "Daily caffeine use",
@@ -19,7 +20,9 @@ export const useWomanBehaviourStore = defineStore("womanBehaviourStore", {
               name: "More than 2 cups of coffee",
               value: "more than 2 cups of coffee",
               checked: false,
-              colSize: "9",
+              labelPlacement: "start",
+              colSize: "7",
+              justify: "space-between",
             },
           ],
         },
@@ -38,7 +41,9 @@ export const useWomanBehaviourStore = defineStore("womanBehaviourStore", {
               name: "More than 4 cups of tea",
               value: "more than 4 cups of tea",
               checked: false,
-              colSize: "9",
+              labelPlacement: "start",
+              colSize: "7",
+              justify: "space-between",
             },
           ],
         },
@@ -56,7 +61,9 @@ export const useWomanBehaviourStore = defineStore("womanBehaviourStore", {
               name: "More than 12 bars of chocolate",
               value: "more than 12 bars of chocolate",
               checked: false,
-              colSize: "9",
+              labelPlacement: "start",
+              colSize: "7",
+              justify: "space-between",
             },
           ],
         },
@@ -75,7 +82,9 @@ export const useWomanBehaviourStore = defineStore("womanBehaviourStore", {
               name: "More than one bottle of soda, energy, soft drink",
               value: "more than one bottle of soda, energy, soft drink",
               checked: false,
-              colSize: "9",
+              labelPlacement: "start",
+              colSize: "7",
+              justify: "space-between",
             },
           ],
         },
@@ -94,7 +103,9 @@ export const useWomanBehaviourStore = defineStore("womanBehaviourStore", {
               name: "None",
               value: "none",
               checked: false,
-              colSize: "9",
+              labelPlacement: "start",
+              colSize: "7",
+              justify: "space-between",
             },
           ],
         },
@@ -105,7 +116,7 @@ export const useWomanBehaviourStore = defineStore("womanBehaviourStore", {
         classDash: "dashed_bottom_border",
         radioBtnContent: {
           header: {
-            class:"bold",
+            class: "bold",
             title: "Recently quit tobacco products",
             selectedValue: "",
             name: "Recently quit tobacco products",
@@ -128,7 +139,7 @@ export const useWomanBehaviourStore = defineStore("womanBehaviourStore", {
         classDash: "dashed_bottom_border",
         radioBtnContent: {
           header: {
-            class:"bold",
+            class: "bold",
             title: "Exposure to second hand smoke",
             selectedValue: "",
             name: "Exposure to second hand smoke",
@@ -154,5 +165,5 @@ export const useWomanBehaviourStore = defineStore("womanBehaviourStore", {
       this.dailyCaffeineIntake = data;
     },
   },
-  persist: true,
+  // persist: true,
 });

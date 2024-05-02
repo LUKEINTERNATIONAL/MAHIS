@@ -63,6 +63,7 @@ import { useCurrentPhysiologicalSymptomsStore } from "../store/symptomsFollowUp/
 import { useFatalMovementStore } from "../store/symptomsFollowUp/fatalMovementStore";
 import { formatCheckBoxData, formatRadioButtonData } from "@/services/formatServerData";
 import {CurrentPhysiologicalSymptomsInstance, FetalMovementInstance, IntimatePartnerInstance, MedicalFollowUpInstance, PersistentBehavioursInstance, PersistentSymptomsInstance} from '@/apps/ANC/service/symptoms_follow_up_service';
+import { resetPatientData } from "@/services/reset_data";
 export default defineComponent({
     name: "Home",
     components: {
@@ -214,6 +215,7 @@ export default defineComponent({
             this.saveCurrentPhysiologicalSymptoms(),
             this.saveIPV(),
             this.saveFetalMovement(),
+            resetPatientData();
             this.$router.push("ANChome");
             toastSuccess("Symptoms and follow up data saved successfully");
         },
