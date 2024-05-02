@@ -147,11 +147,19 @@ watch(
 )
 
 function trigerSaveFn() {
-    areFieldsValid(input_properties)
-    isSSelectionValid()
-    const payload = getFieldsValuesObj(input_properties)
-    ValidatePassword()
-    console.log(payload)
+    const _areFieldsValid_ = areFieldsValid(input_properties)
+    const _isSSelectionValid_ = isSSelectionValid()
+    const _ValidatePassword_ = ValidatePassword()
+
+    console.log(_areFieldsValid_)
+    console.log(_isSSelectionValid_)
+    console.log(_ValidatePassword_)
+
+    if (_areFieldsValid_ == true && _ValidatePassword_ == true && _isSSelectionValid_ == true) {
+        const payload = getFieldsValuesObj(input_properties)
+    
+        console.log(payload)
+    }
 }
 
 function isSSelectionValid() {
