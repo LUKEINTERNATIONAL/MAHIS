@@ -34,7 +34,7 @@ import { icons } from '@/utils/svg';
 import BasicInputField from '@/components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import BasicForm from '@/components/BasicForm.vue'
-import {useMedicationsStore} from "@/apps/ANC/store/profile/MedicationsStore";
+import {useMedicationStore} from "@/apps/ANC/store/profile/MedicationStore";
 import { modifyRadioValue,
     getRadioSelectedValue,
     getCheckboxSelectedValue,
@@ -68,7 +68,7 @@ export default defineComponent({
   },
   mounted(){
     this. handleOther()
-    const Medications=useMedicationsStore()
+    const Medications=useMedicationStore()
     this.initialData=Medications.getInitial()
   },
   watch:{
@@ -81,7 +81,7 @@ export default defineComponent({
    
   },
   computed: {
-    ...mapState(useMedicationsStore, ["Medication"])
+    ...mapState(useMedicationStore, ["Medication"])
   },
   setup() {
     return { checkmark,pulseOutline };
@@ -151,3 +151,4 @@ ion-card {
   background-color:inherit;
 }
 </style>
+@/apps/ANC/store/profile/MedicationStore

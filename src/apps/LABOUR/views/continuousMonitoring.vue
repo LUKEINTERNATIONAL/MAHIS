@@ -46,6 +46,7 @@ import { useLabourVitalsStore } from '../stores/repeatable things/vitals';
 import { Service } from '@/services/service';
 import { useDemographicsStore } from '@/stores/DemographicStore';
 import { ContinuousMonitoringVitalsService,OtherExamsService } from "@/services/LABOUR/continuous_monitoring_service";
+import { resetPatientData } from '@/services/reset_data';
 
 export default defineComponent({
   name: "obstetricDetails",
@@ -164,9 +165,10 @@ export default defineComponent({
     },
     saveData(){
       //this.$router.push("labourHome");
-
       this.saveVitals()
       this.saveOtherExams()
+      toastSuccess("Continuous monitoring data saved successfully")
+      resetPatientData();
     },
     async saveVitals(){
         if (this.vitals.length > 0) {

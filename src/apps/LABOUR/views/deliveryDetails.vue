@@ -44,7 +44,8 @@ import {formatCheckBoxData, formatInputFiledData, formatRadioButtonData} from "@
 import {useDemographicsStore} from "@/stores/DemographicStore";
 import {useSecondStageOfLabourStore} from "@/apps/LABOUR/stores/delivery details/secondStageDelivery";
 import {SecondStageDeliveryService} from "@/apps/LABOUR/services/labour_delivery_details_service";
-import {useThirdStageOfLabour} from "@/apps/LABOUR/stores/delivery details/thirdStageDelivery";
+import {useThirdStageOfLabourStore} from "@/apps/LABOUR/stores/delivery details/thirdStageDelivery";
+import { resetPatientData } from '@/services/reset_data';
 export default defineComponent({
   name: "deliveryDetails",
   components:{
@@ -114,7 +115,7 @@ export default defineComponent({
   },
   computed:{
   ...mapState(useDemographicsStore,["demographics"]),
-    ...mapState(useThirdStageOfLabour,["placentaExamination"]),
+    ...mapState(useThirdStageOfLabourStore,["placentaExamination"]),
   ...mapState(useSecondStageOfLabourStore,["secondStageDetails","newbornComplications","obstetricComplications"])
 
   },
@@ -169,7 +170,9 @@ export default defineComponent({
     },
    async saveData(){
       await this.saveSecondStageLabour()
-      this.$router.push("labourHome");
+      toastSuccess("Delivery details data saved successfully")
+      resetPatientData();
+      //this.$router.push("labourHome");
 
     },
     async saveSecondStageLabour() {
