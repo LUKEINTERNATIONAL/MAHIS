@@ -50,13 +50,16 @@
 
     <ion-row>
         <ion-col>
-            <sselectionList :labels="labels" @selection-event="sselectionListUpdated"/>
+            <sselectionList
+                :labels="isSSelection_properties[0].labels"
+                @selection-event="isSSelection_properties[0].dataHandler"
+            />
 
-            <!-- <div>
-                <ion-label v-if="note_properties[4].show_error.value" class="error-label">
-                    {{ note_properties[4].error_message }}
+            <div>
+                <ion-label v-if="isSSelection_properties[0].show_error.value" class="error-label">
+                    {{ isSSelection_properties[0].error_message }}
                 </ion-label>
-            </div> -->
+            </div>
         </ion-col>
         <ion-col></ion-col>
     </ion-row>
@@ -127,11 +130,6 @@ import {
 const user_name = ref()
 const first_name = ref()
 const last_name = ref()
-const labels = [
-    'Male',
-    'Female',
-]
-const sselectionListSelectedValue = ref()
 const passwordErrorMsgs = [
     'Input must be at least 4 characters long, containing only letters, numbers, and symbols',
     'Password does not match'
@@ -149,11 +147,23 @@ watch(
 )
 
 function trigerSaveFn() {
-    console.log(sselectionListSelectedValue.value)
     areFieldsValid(input_properties)
+    isSSelectionValid()
     const payload = getFieldsValuesObj(input_properties)
     ValidatePassword()
     console.log(payload)
+}
+
+function isSSelectionValid() {
+    let is_valid = false
+    if (isSSelection_properties[0].dataValue.value == undefined) {
+        isSSelection_properties[0].show_error.value = true
+    }
+    if (isSSelection_properties[0].dataValue.value != undefined) {
+        isSSelection_properties[0].show_error.value = false
+        is_valid = true
+    }
+    return is_valid
 }
 
 function ValidatePassword(): boolean {
@@ -271,8 +281,19 @@ const password_input_properties = [
     },
 ]
 
+const isSSelection_properties = [
+    {
+        labels: ['Male','Female',],
+        dataHandler: sselectionListUpdated,
+        dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'Please make a selection',
+
+    }
+]
+
 function sselectionListUpdated(data: any) {
-    sselectionListSelectedValue.value = data.label 
+    isSSelection_properties[0].dataValue.value = data.label 
 }
 
 function inputUpDated_fn1(event: any) {
