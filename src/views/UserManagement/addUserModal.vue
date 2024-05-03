@@ -19,6 +19,7 @@
                             <adduser
                                 :user_id="user_id"
                                 :action="action"
+                                @save-event="closeModalAndOpenEditUser"
                             />
                         </ion-col>
                        
@@ -32,6 +33,12 @@
             </ion-toolbar>
         </ion-footer>
     </ion-modal>
+
+    <editUserModal
+        :is_open="isPopooverOpen"
+        :user_id="user_id"
+        @close-popoover="isPopooverOpen = false"
+    />
 </template>
 
 <script lang="ts">
@@ -53,8 +60,11 @@ import { icons } from "@/utils/svg"
 
 import BasicForm from "@/components/BasicForm.vue"
 import DynamicButton from "@/components/DynamicButton.vue"
+import editUserModal from "./editUserModal.vue"
 
 const action = ref('') as any
+const isPopooverOpen = ref(false)
+const user_id = ref(1) as any
 
 const props = defineProps<{
     is_open: any,
@@ -72,6 +82,11 @@ function saveAction() {
 
 function closeModal() {
     modalController.dismiss()
+}
+
+function closeModalAndOpenEditUser() {
+    modalController.dismiss()
+    isPopooverOpen.value = true
 }
 
 function generateRandomStrings(numStrings: number, stringLength: number): any{
