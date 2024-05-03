@@ -44,6 +44,7 @@ import {formatCheckBoxData, formatInputFiledData, formatRadioButtonData} from "@
 import {useDemographicsStore} from "@/stores/DemographicStore";
 import {useBabyStatusStore} from "@/apps/PNC/stores/postnatal ward stay/BabyStatus";
 import {BabyMonitoringService} from "@/apps/PNC/Services/baby_monitoring_service";
+import { resetPatientData } from '@/services/reset_data';
 export default defineComponent({
   name: "postnatalBabyStatus",
   components:{
@@ -152,6 +153,7 @@ export default defineComponent({
     },
     async saveData(){
       await this.saveBabyMonitoring()
+      resetPatientData();
       this.$router.push("home");
 
     },

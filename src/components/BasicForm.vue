@@ -75,6 +75,8 @@
                             :inputWidth="col.inputWidth"
                             :inputValue="col.value"
                             :eventType="col.eventType"
+                            :minDate="col.minDate"
+                            :maxDate="col.maxDate"
                             @update:dateValue="handleInput(contentData, col, $event, 'updateDate')"
                         />
 
@@ -219,6 +221,8 @@
                             :inputWidth="checkboxInput.inputWidth"
                             :inputValue="checkboxInput.value"
                             :eventType="checkboxInput.eventType"
+                            :minDate="checkboxInput.minDate"
+                            :maxDate="checkboxInput.maxDate"
                             @update:dateValue="handleInput(contentData, checkboxInput, $event, 'updateDate')"
                         />
                         <div v-if="checkboxInput.isMultiSelect">

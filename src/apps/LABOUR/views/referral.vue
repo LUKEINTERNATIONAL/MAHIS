@@ -3,7 +3,7 @@
     <Toolbar />
     <ion-content :fullscreen="true">
       <DemographicBar />
-      <Stepper stepperTitle="Patient referral" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()"  :StepperData="StepperData"/>
+      <Stepper stepperTitle="Patient Referral" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()"  :StepperData="StepperData"/>
     </ion-content>
   </ion-page>
 </template>
@@ -44,6 +44,7 @@ import { getCheckboxInputField, getCheckboxSelectedValue, getRadioSelectedValue,
 import { Service } from '@/services/service';
 import { useDemographicsStore } from '@/stores/DemographicStore';
 import { ReferralService } from "@/services/LABOUR/referral_service";
+import { resetPatientData } from '@/services/reset_data';
 export default defineComponent({
   name: "referral",
   components:{
@@ -145,6 +146,8 @@ export default defineComponent({
     saveData(){
 
       this.saveReferal();
+            toastSuccess("Patient referral saved successfully")
+            resetPatientData();
     },
     async saveReferal(){
       if (this.labourReferral.length > 0) {

@@ -203,6 +203,19 @@ export default defineComponent({
     mounted() {
         this.setIconClass();
     },
+    watch: {
+        personInformation: {
+            handler() {
+                const data = useRegistrationStore();
+                data.setPersonalInformation(this.personInformation);
+                data.setSocialHistory(this.socialHistory);
+                data.setHomeLocation(this.homeLocation);
+                data.setCurrentLocation(this.currentLocation);
+                data.setGuardianInformation(this.guardianInformation);
+            },
+            deep: true,
+        },
+    },
     setup() {
         return { arrowForwardCircle, grid, list };
     },
@@ -283,7 +296,6 @@ export default defineComponent({
             } else return false;
         },
         async createGuardian(patientID: any) {
-            console.log(this.guardianInformation[0].selectedData);
             if (Object.keys(this.guardianInformation[0].selectedData).length === 0) return;
             getFieldValue(this.guardianInformation, "relationship", "selectedID");
             const guardian: any = new PatientRegistrationService();
@@ -293,6 +305,7 @@ export default defineComponent({
             if (selectedID) await RelationsService.createRelation(patientID, guardianID, selectedID);
         },
         async openNewPage(item: any) {
+            await resetPatientData();
             const demographicsStore = useDemographicsStore();
             demographicsStore.setPatient(item);
             demographicsStore.setDemographics({
@@ -303,7 +316,6 @@ export default defineComponent({
                 gender: item.person.gender,
                 patient_id: item.patient_id,
             });
-            await resetPatientData();
             let url = "/patientProfile";
             const patient = new PatientService();
             if (await patient.isUnderFive()) url = "/birthRegistration";

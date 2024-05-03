@@ -45,6 +45,7 @@ import {useDemographicsStore} from "@/stores/DemographicStore";
 import {useDangerSignsStore} from "@/apps/ANC/store/Tempo";
 import {usePostnatalWardStayStore} from "@/apps/PNC/stores/postnatal ward stay/PostnatalWardMonitoring";
 import {PostnatalWardStayService} from "@/apps/PNC/Services/postnatal_wardstay_service";
+import { resetPatientData } from '@/services/reset_data';
 export default defineComponent({
   name: "postnatalWardMonitoring",
   components:{
@@ -154,7 +155,9 @@ export default defineComponent({
     },
    async saveData(){
       await this.saveWardMonitoring()
-      this.$router.push("home");
+      toastSuccess("Postnatal ward stay data saved successfully")
+      resetPatientData();
+     // this.$router.push("home");
 
     },
     async saveWardMonitoring() {

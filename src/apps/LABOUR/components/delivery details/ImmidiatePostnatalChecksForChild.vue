@@ -3,7 +3,7 @@
     <ion-card class="section">
       <ion-card-content>
         <basic-form
-            :contentData="examsAfterDeliveryforChild"
+            :contentData="examsAfterDeliveryForChild"
             :initialData="initialData"
 
         ></basic-form>
@@ -78,7 +78,7 @@ export default defineComponent({
     };
   },
   computed:{
-    ...mapState(useImmediatePostnatalChecksForChildStore,["examsAfterDeliveryforChild"]),
+    ...mapState(useImmediatePostnatalChecksForChildStore,["examsAfterDeliveryForChild"])
   },
   mounted(){
     const examsAfterDelivery=useImmediatePostnatalChecksForChildStore()

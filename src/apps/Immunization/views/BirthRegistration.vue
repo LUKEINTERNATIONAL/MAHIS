@@ -151,7 +151,7 @@ export default defineComponent({
     async mounted() {
         this.setDisplayType(this.enrollmentDisplayType);
         this.updateEnrollmentStores();
-        this.buidCards();
+        this.buildCards();
     },
 
     setup() {
@@ -245,7 +245,7 @@ export default defineComponent({
                 diagnosisInstance.onSubmit(this.demographics.patient_id, userID, data);
             }
         },
-        buidCards() {
+        buildCards() {
             const enrollment = useBirthRegistrationStore();
             this.cardData = {
                 mainTitle: "Child Enrollment",

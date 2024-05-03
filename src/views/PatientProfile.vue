@@ -187,6 +187,11 @@
                     </li>
                 </ul>
             </ion-popover>
+            <ion-popover trigger="open-dates-trigger" trigger-action="click" :show-backdrop="false" size="auto">
+                <ul style="list-style: none; line-height: 50px" v-for="(item, index) in visits" :key="index">
+                    <li>{{ convertToDisplayDate(item) }}</li>
+                </ul>
+            </ion-popover>
             <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="displayNoneDesktop">
                 <ion-fab-button color="primary">
                     <ion-icon :icon="chevronUpCircle"></ion-icon>
@@ -336,6 +341,8 @@ export default defineComponent({
         ...mapState(useVitalsStore, ["vitals"]),
     },
     async mounted() {
+        const patient = new PatientService();
+        this.visits = await PatientService.getPatientVisits(patient.getID(), false);
         await UserService.setProgramUserActions();
         this.setNCDValue();
     },
@@ -409,7 +416,8 @@ export default defineComponent({
         dismiss() {
             modalController.dismiss();
         },
-        nav(url: any) {
+        async nav(url: any) {
+            await UserService.setProgramUserActions();
             this.$router.push(url);
         },
         async updateNCDData() {

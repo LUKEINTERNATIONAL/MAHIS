@@ -37,6 +37,14 @@ export default defineComponent({
             initialPersonalData: [] as any,
         };
     },
+    watch: {
+        personInformation: {
+            handler() {
+                this.buildCards();
+            },
+            deep: true,
+        },
+    },
     computed: {
         ...mapState(useRegistrationStore, ["personInformation"]),
         ...mapState(useRegistrationStore, ["guardianInformation"]),
@@ -68,17 +76,14 @@ export default defineComponent({
             return getFieldValue(this.personInformation, "phoneNumber", "value");
         },
     },
-    mounted() {
+    async mounted() {
         this.updateRegistrationStores();
-        this.buidCards();
+        this.buildCards();
     },
 
     methods: {
-        buidCards() {
+        buildCards() {
             const personalInformation = useRegistrationStore();
-            console.log("🚀 ~ buidCards ~ personInformation tttttt:", this.personInformation);
-            console.log("🚀 ~ buidCards ~ personalInformation:", personalInformation.getInitialPersonalInformation());
-            personalInformation.$reset();
             this.cardData = {
                 mainTitle: "Demographics",
                 cards: [
@@ -93,7 +98,7 @@ export default defineComponent({
         openModal() {
             createModal(DispositionModal);
         },
-        updateRegistrationStores() {
+        async updateRegistrationStores() {
             const registrationStore = useRegistrationStore();
             registrationStore.setPersonalInformation(this.personInformation);
         },

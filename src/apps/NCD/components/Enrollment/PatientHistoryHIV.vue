@@ -40,26 +40,20 @@ export default defineComponent({
         ...mapState(useEnrollementStore, ["patientHistoryHIV"]),
     },
     watch: {
-        personInformation: {
-            handler() {
-                this.updateEnrollmentStores();
-                this.buidCards();
-            },
-            deep: true,
-        },
         patientHistoryHIV: {
             handler() {
                 this.controllFields();
+                this.buildCards();
             },
             deep: true,
         },
     },
     mounted() {
         this.updateEnrollmentStores();
-        this.buidCards();
+        this.buildCards();
     },
     methods: {
-        buidCards() {
+        buildCards() {
             const enrollment = useEnrollementStore();
             this.cardData = {
                 mainTitle: "Enrollment",

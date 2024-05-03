@@ -410,9 +410,9 @@ ion-accordion {
     position: fixed;
     width: 300px;
 }
-#null-0 {
+/* #null-0 {
     display: none;
-}
+} */
 
 .multiselect__input,
 .multiselect__single {
@@ -425,6 +425,10 @@ ion-accordion {
 }
 .multiselect__select::before {
     top: 95%;
+}
+.multiselect__placeholder {
+    padding-top: 9px;
+    padding-left: 10px;
 }
 .custom_card {
     border-radius: 5px;
