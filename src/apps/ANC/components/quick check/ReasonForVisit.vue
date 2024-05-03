@@ -35,6 +35,7 @@ import { mapState } from 'pinia';
 import BasicForm from '@/components/BasicForm.vue'
 import {useReasonForVisitStore} from "@/apps/ANC/store/quickCheck/reasonForVisit";
 import {usePastMedicalHistoryStore} from "@/apps/OPD/stores/PastMedicalHistoryStore";
+import {getRadioSelectedValue, modifyGroupedRadioValue, modifyRadioValue} from "@/services/data_helpers";
 
 export default defineComponent({
   name: 'Menu',
@@ -66,6 +67,15 @@ export default defineComponent({
   mounted() {
     const ReasonForVisit = useReasonForVisitStore();
     this.initialData = ReasonForVisit.getInitial();
+    this.handleReasonVisit()
+  },
+  watch:{
+    ReasonForVisit:{
+      handler(){
+        this.handleReasonVisit()
+      },
+      deep:true
+    }
   },
   setup() {
     return { checkmark,pulseOutline };
@@ -75,6 +85,17 @@ export default defineComponent({
       menuController.close()
       this.$router.push(url);
     },
+    handleReasonVisit(){
+      if (getRadioSelectedValue(this.ReasonForVisit, 'Reason for visit') == 'First antenatal care contact') {
+        modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', true);
+        modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'selectedValue', '');
+
+      } else {
+        modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', false);
+        // modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'selectedValue', '');
+
+      }
+    }
   }
 });
 </script>
@@ -109,7 +130,8 @@ export default defineComponent({
   font-size: medium;
 }
 ion-card {
-  box-shadow:none;
-  background-color:inherit;
+
+  width: 100%;
+  color: black;
 }
 </style>

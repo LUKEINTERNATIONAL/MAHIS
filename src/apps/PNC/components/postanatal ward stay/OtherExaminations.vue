@@ -72,9 +72,15 @@ export default defineComponent({
   mounted(){
     const otherExams=usePostnatalWardStayStore()
     this.initialData=otherExams.getInitial2()
+    this.handleOtherExaminations()
   },
   watch:{
-
+   otherExams:{
+     handler(){
+       this.handleOtherExaminations()
+     },
+     deep:true
+   },
   },
   setup() {
     return { checkmark,pulseOutline };

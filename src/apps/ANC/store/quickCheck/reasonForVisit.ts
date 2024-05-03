@@ -10,7 +10,8 @@ const initialReasonForVisit= [
                     class:'bold',
                     title: 'Reason the woman came to the facility today',
                     selectedValue: '',
-                    name:'Reason for visit'
+                    name:'Reason for visit',
+                    displayNext:'First antenatal care contact'
                 },
                 data:[
                     {
@@ -46,7 +47,7 @@ const initialReasonForVisit= [
                 class:'bold',
                 selectedValue: "",
                 name:'Previous visits',
-                displayNext:"Yes"
+                displayNext:"Yes",
             },
             data: [
                 {
@@ -127,14 +128,56 @@ const initialReasonForVisit= [
     // },
 
 ] as any;
+
+const getVisitDateField=(number:number)=>{
+    return [
+        {
+            childName:"",
+            classDash: "dashed_bottom_border",
+            sideColSize:1,
+            data: {
+                rowData: [
+                    {
+                        colData: [
+                            {
+                                inputHeader: `Date for ANC visit ${number+1}`,
+                                class: "bold",
+                                icon: icons.calendar,
+                                popOver: true,
+                                value: "",
+                                valueType: "text",
+                                name: `Last ANC Visit Date ${number}`,
+                                eventType: "input",
+                                required: true,
+                                alertsError: false,
+                                alertsErrorMassage: "",
+                                id: "",
+                                idName: "startDate",
+                                inputWidth:'100%',
+                                placeholder: "Pick the date",
+                                isDatePopover: true,
+                            },
+                        ],
+                    },
+                ],
+            },
+        },
+    ]
+}
 export const useReasonForVisitStore = defineStore('reasonForVisitStore',{
     state: () => ({
         ReasonForVisit:[...initialReasonForVisit]
     }),
     actions:{
-        setReasonForVisit(data: any){
-            this.ReasonForVisit = data
+        setReasonForVisit(number: number){
+            this.ReasonForVisit = []
+            for (let i = 0; i < number; i++) {
+                const inputs =getVisitDateField(i)
+                this.ReasonForVisit.push(inputs[0])
+                this.ReasonForVisit.push(inputs[1])
+            }
         },
+
         getInitial(){
             const data = _.cloneDeep(initialReasonForVisit);
             return [...data];
