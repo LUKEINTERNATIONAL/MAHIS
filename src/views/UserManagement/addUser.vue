@@ -145,13 +145,6 @@
             </div>
         </ion-col>
     </ion-row>
-
-
-    <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
-
-            </ion-accordion>
-        </ion-accordion-group>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue"
