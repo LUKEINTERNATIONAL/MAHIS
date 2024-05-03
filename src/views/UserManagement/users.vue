@@ -23,7 +23,7 @@
                 <editUserModal
                     :is_open="isPopooverOpen"
                     :user_id="user_id"
-                    @close-popoover="isPopooverOpen = false"
+                    @close-popoover="modalClosed"
                 />
                     </div>
                 </ion-content>
@@ -84,6 +84,11 @@ const user_id = ref('')
 onMounted(async () => {
     getUsers()
 })
+
+function modalClosed() {
+    isPopooverOpen.value = false
+    getUsers()
+}
 
 async function getUsers() {
     user_data.value = await UserService.getAllUsers()

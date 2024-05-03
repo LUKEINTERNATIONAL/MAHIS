@@ -64,7 +64,7 @@ import editUserModal from "./editUserModal.vue"
 
 const action = ref('') as any
 const isPopooverOpen = ref(false)
-const user_id = ref(1) as any
+const user_id = ref() as any
 
 const props = defineProps<{
     is_open: any,
@@ -83,7 +83,8 @@ function closeModal() {
     modalController.dismiss()
 }
 
-function closeModalAndOpenEditUser() {
+function closeModalAndOpenEditUser(data: any) {
+    user_id.value = data
     isPopooverOpen.value = true
     closeModal()
 }

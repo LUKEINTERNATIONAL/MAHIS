@@ -205,7 +205,6 @@ watch(
 )
 
 async function trigerSaveFn() {
-    saveEvent()
     const _isRoleSelected_ = isRoleSelected()
     const _isProgramSelected_ = isProgramSelected()
     const _areFieldsValid_ = areFieldsValid(input_properties)
@@ -226,7 +225,12 @@ async function trigerSaveFn() {
         }
 
         try {
-            const response = await UserService.createUser(payload)
+            const { user } = await UserService.createUser(payload)
+            if (user) {
+                console.log(user.user_id)
+                console.log(user)
+                saveEvent(user.user_id)
+            }
         } catch (error) {
             //console.error(error)
             toastDanger("User already exists", 8000)
@@ -238,8 +242,8 @@ const emit = defineEmits<{
     (e: "saveEvent", ObjectsArray: any): void
 }>()
 
-function saveEvent() {
-    emit("saveEvent", {saved: true})
+function saveEvent(user_id: any) {
+    emit("saveEvent", user_id)
 }
 
 async function getUserRoles() {
