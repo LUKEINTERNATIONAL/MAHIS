@@ -77,7 +77,6 @@ const emit = defineEmits<{
 
 function saveAction() {
     action.value = generateRandomStrings(100, 3)
-    // closeModal()
 }
 
 function closeModal() {
@@ -85,8 +84,8 @@ function closeModal() {
 }
 
 function closeModalAndOpenEditUser() {
-    modalController.dismiss()
     isPopooverOpen.value = true
+    closeModal()
 }
 
 function generateRandomStrings(numStrings: number, stringLength: number): any{
