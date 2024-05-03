@@ -163,27 +163,27 @@ export default defineComponent({
 
          
     },
-    saveData() {
-        const medicalConditions = [
-            "Auto immune desease",
-            "Asthma",
-            "Diabetes",
-            "Sickle cell",
-            "Anaemia",
-            "Thalassemia",
-            "Gynaecological",
-            "CCF",
-            "RHD",
-            "Gestational diabetes",
-            "pre-existing type 1",
-            "pre-existing type 2",
-            "Epilepsy",
-            "Hypertension",
-            "Kidney",
-            "TB",
-            "Mental  illiness",
-        ];
-    },
+    // saveData() {
+    //     const medicalConditions = [
+    //         "Auto immune desease",
+    //         "Asthma",
+    //         "Diabetes",
+    //         "Sickle cell",
+    //         "Anaemia",
+    //         "Thalassemia",
+    //         "Gynaecological",
+    //         "CCF",
+    //         "RHD",
+    //         "Gestational diabetes",
+    //         "pre-existing type 1",
+    //         "pre-existing type 2",
+    //         "Epilepsy",
+    //         "Hypertension",
+    //         "Kidney",
+    //         "TB",
+    //         "Mental  illiness",
+    //     ];
+    // },
     mounted() {
         // this.markWizard()
     },
@@ -239,6 +239,10 @@ export default defineComponent({
             // if (errors.length) {
             //     return alert(errors.join(","));
             // }
+          this.saveQuickCheck();
+          this.saveVaginalExamInstance();
+          this.savePhysicalExamInstance();
+          this.savePelvicAssessmentInstance();
           this.$router.push("labourHome");
 
         },

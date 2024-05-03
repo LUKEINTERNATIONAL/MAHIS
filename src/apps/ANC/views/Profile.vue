@@ -40,11 +40,11 @@ import { icons } from "@/utils/svg";
 import { mapState } from "pinia";
 import Stepper from "@/apps/ANC/components/Stepper.vue";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
-import PastObstreticHistory from "../components/Profile/PastObstreticHistory.vue";
-import CurrentPregnancies from "../components/Profile/CurrentPregnancies.vue";
-import Medications from "../components/Profile/Medications.vue";
-import MedicalHistory from "@/apps/ANC/components/Profile/MedicalHistory.vue";
-import WomanBehaviour from "../components/Profile/WomanBehaviour.vue";
+import PastObstreticHistory from "../components/profile/PastObstreticHistory.vue";
+import CurrentPregnancies from "../components/profile/CurrentPregnancies.vue";
+import Medications from "../components/profile/Medications.vue";
+import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue";
+import WomanBehaviour from "../components/profile/WomanBehaviour.vue";
 import { getCheckboxSelectedValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { useMedicalHistoryStore } from "@/apps/ANC/store/profile/medicalHistoryStore";
 import { useObstreticHistoryStore } from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
@@ -203,6 +203,7 @@ export default defineComponent({
         },
        
          async saveData() {
+            
             this.savePrevPregnancies()
             this.savePreterm()
             this.savePastPregnancyComplication()
@@ -213,8 +214,41 @@ export default defineComponent({
             this.saveMedication()
             this.saveCaffeinIntake()
             toastSuccess("Profile data saved successfully")
-            this.$router.push("headssAssessment");
+            
+            this.handleNavigation();
+            
         },
+        handleNavigation() {
+      if (!this.demographics) {
+        console.warn('Demographics data not available yet. Skipping navigation.');
+        return;
+      }
+
+      const birthdate = new Date(this.demographics.birthdate);
+      const today = new Date();
+
+      const age = this.calculateAge(birthdate, today);
+
+      if (age >= 19) {
+        this.$router.push('ANCHome');
+      } else {
+        this.$router.push('headssAssessment'); 
+      }
+    },
+
+    calculateAge(birthdate, today) {
+    const birthYear = birthdate.getFullYear();
+    const currentYear = today.getFullYear();
+    let age = currentYear - birthYear;
+
+ 
+  if (today.getMonth() < birthdate.getMonth() ||
+      (today.getMonth() === birthdate.getMonth() && today.getDate() < birthdate.getDate())) {
+    age--;
+  }
+
+  return age;
+},
         async savePrevPregnancies(){
         // if (this.prevPregnancies[0].selectedData.length > 0) {
         //     const userID: any = Service.getUserID();

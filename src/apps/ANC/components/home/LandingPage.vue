@@ -190,7 +190,7 @@ export default defineComponent({
 
 </script>
 
-<style scoped>
+<!-- <style scoped>
 ion-grid {
 text-align: center;
 position: absolute;
@@ -200,7 +200,7 @@ top: 50%;
 transform: translateY(-50%);
 }
 
-@media (max-width: 768px) { 
+/* @media (max-width: 780px) { 
   ion-grid {
     margin-left: 0; 
   }
@@ -211,37 +211,7 @@ transform: translateY(-50%);
  ion-card{
     width: 90%;
   }
-}
-
-@media (min-width: 768px) and (max-width: 991px) { 
-    ion-grid {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-}
-
-ion-row {
-  width: 100%;
-  max-width: 1200px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-ion-card {
-  width: 100%;
-  max-width: 300px;
-  margin: 10px;
-}
-
-img {
-  width: 70%;
-  max-width: 70px;
-  height: auto;
-}
-  
-}
+} */
 
 .section {
   width: 100%;
@@ -285,5 +255,56 @@ img {
 .sub_item_header{
   font-weight: bold;
   font-size: medium;
+}
+</style> -->
+
+<style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.section {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card {
+  width: 100%;
+  max-width: 300px;
+  margin: 10px;
+}
+
+.card:hover {
+  animation: bounce 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+@keyframes bounce {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0px); }
+}
+
+img {
+  width: 70%;
+  max-width: 70px;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .section {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card {
+    width: 90%;
+  }
 }
 </style>
