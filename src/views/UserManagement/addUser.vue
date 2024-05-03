@@ -221,6 +221,7 @@ async function trigerSaveFn() {
             password: password_input_properties[0].dataValue.value,
             programs: selectedProgramIds,
             roles: selectedRoleNames,
+            gender: isSSelection_properties[0].dataValue.value
         }
 
         try {
