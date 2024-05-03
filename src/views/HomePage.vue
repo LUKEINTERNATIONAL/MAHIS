@@ -14,7 +14,7 @@
                 </div>
             </div>
         </ion-content>
-        <ion-content>
+        <ion-content v-if="programID() == 33">
             <div class="total">
                 <div class="totalNumber">3,764</div>
                 <div class="totalText">Children & Adults vaccinated this year!</div>
@@ -34,11 +34,26 @@
                 <div class="clientSeen">
                     <div class="clientSeenTitle">Clients you have seen today.</div>
                     <div class="clientSeenBoxes">
-                        <div class="clientSeenBox"></div>
-                        <div class="clientSeenBox"></div>
-                        <div class="clientSeenBox"></div>
-                        <div class="clientSeenBox"></div>
+                        <div class="clientSeenBox">
+                            <div class="clientSeenBoxText">New</div>
+                            <div class="clientSeenBoxNumber">15</div>
+                        </div>
+                        <div class="clientSeenBoxChild clientSeenBox">
+                            <div class="clientSeenBoxText">Children</div>
+                            <div class="clientSeenBoxNumber">63</div>
+                        </div>
+                        <div class="clientSeenBoxMen clientSeenBox">
+                            <div class="clientSeenBoxText">Women</div>
+                            <div class="clientSeenBoxNumber">59</div>
+                        </div>
+                        <div class="clientSeenBoxWomen clientSeenBox">
+                            <div class="clientSeenBoxText">Men</div>
+                            <div class="clientSeenBoxNumber">27</div>
+                        </div>
                     </div>
+                </div>
+                <div>
+                    <ImmunizationTrendsGraph />
                 </div>
             </div>
         </ion-content>
@@ -52,6 +67,7 @@ import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import { Service } from "@/services/service";
 import img from "@/utils/Img";
+import ImmunizationTrendsGraph from "@/apps/Immunization/components/ImmunizationTrendsGraph.vue";
 export default defineComponent({
     name: "Home",
     components: {
@@ -65,6 +81,7 @@ export default defineComponent({
         ToolbarSearch,
         IonRow,
         IonCol,
+        ImmunizationTrendsGraph,
     },
     mounted() {
         this.setView();
@@ -130,8 +147,9 @@ export default defineComponent({
     position: absolute;
     width: 251px;
     height: 128px;
-    left: 90px;
     top: 25px;
+    left: 50%;
+    transform: translate(-50%, 10%);
     text-align: center;
     background: rgba(237, 235, 238, 0.95);
     opacity: 0.8;
@@ -215,7 +233,7 @@ export default defineComponent({
     color: #ff6378;
 }
 .clientSeen {
-    height: 139px;
+    height: 120px;
     margin-top: 15px;
     background: #ddeedd;
 }
@@ -227,18 +245,46 @@ export default defineComponent({
     font-size: 16px;
     color: #2d3648;
 }
+.clientSeenBoxChild {
+    background: #2d3648 !important;
+}
+.clientSeenBoxMen {
+    background: #004d4d !important;
+}
+.clientSeenBoxWomen {
+    background: #556080 !important;
+}
 .clientSeenBox {
     width: 68px;
     height: 68px;
-    left: 18px;
-    top: 485px;
-
     background: #006401;
     border-radius: 7px;
+    padding-top: 8px;
 }
 .clientSeenBoxes {
     display: flex;
     justify-content: space-around;
     margin-top: 10px;
+}
+.clientSeenBoxText {
+    /* text-md */
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 150%;
+    align-items: center;
+    text-align: center;
+
+    /* White */
+    color: #ffffff;
+}
+.clientSeenBoxNumber {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 29px;
+    text-align: center;
+
+    color: #ffffff;
 }
 </style>
