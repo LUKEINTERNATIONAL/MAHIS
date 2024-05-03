@@ -35,7 +35,12 @@ import { mapState } from 'pinia';
 import BasicForm from '@/components/BasicForm.vue'
 import {useReasonForVisitStore} from "@/apps/ANC/store/quickCheck/reasonForVisit";
 import {usePastMedicalHistoryStore} from "@/apps/OPD/stores/PastMedicalHistoryStore";
-import {getRadioSelectedValue, modifyGroupedRadioValue, modifyRadioValue} from "@/services/data_helpers";
+import {
+  getRadioSelectedValue,
+  modifyCheckboxHeader, modifyCheckboxValue,
+  modifyGroupedRadioValue,
+  modifyRadioValue
+} from "@/services/data_helpers";
 
 export default defineComponent({
   name: 'Menu',
@@ -67,12 +72,14 @@ export default defineComponent({
   mounted() {
     const ReasonForVisit = useReasonForVisitStore();
     this.initialData = ReasonForVisit.getInitial();
-    this.handleReasonVisit()
+    this.handleFirstAntenalVisit();
+    this.handleSpecificConcernsVisit()
   },
   watch:{
     ReasonForVisit:{
       handler(){
-        this.handleReasonVisit()
+        this.handleFirstAntenalVisit()
+        this.handleSpecificConcernsVisit()
       },
       deep:true
     }
@@ -85,17 +92,29 @@ export default defineComponent({
       menuController.close()
       this.$router.push(url);
     },
-    handleReasonVisit(){
+    handleFirstAntenalVisit(){
       if (getRadioSelectedValue(this.ReasonForVisit, 'Reason for visit') == 'First antenatal care contact') {
-        modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', true);
-        modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'selectedValue', '');
+        modifyCheckboxHeader(this.ReasonForVisit, 'Danger signs', 'displayNone', false);
+        // modifyCheckboxHeader(this.ReasonForVisit, 'Previous visits', 'selectedValue', '');
 
       } else {
-        modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', false);
-        // modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'selectedValue', '');
+        modifyCheckboxHeader(this.ReasonForVisit, 'Danger signs', 'displayNone', true);
+        modifyCheckboxValue(this.ReasonForVisit, 'Danger signs', 'selectedValue', '');
 
       }
-    }
+    },
+    handleSpecificConcernsVisit(){
+      // if (getRadioSelectedValue(this.ReasonForVisit, 'Reason for visit') == 'Specific complaint related to antenatal care') {
+      //   modifyCheckboxHeader(this.ReasonForVisit, 'Danger signs', 'displayNone', false);
+      //   // modifyCheckboxHeader(this.ReasonForVisit, 'Previous visits', 'selectedValue', '');
+      //
+      // } else {
+      //   modifyCheckboxHeader(this.ReasonForVisit, 'Danger signs', 'displayNone', true);
+      //   modifyCheckboxValue(this.ReasonForVisit, 'Danger signs', 'selectedValue', '');
+      //
+      // }
+    },
+
   }
 });
 </script>

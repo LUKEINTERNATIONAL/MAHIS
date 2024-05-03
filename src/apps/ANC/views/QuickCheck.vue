@@ -101,7 +101,7 @@ export default defineComponent({
     return {
       wizardData: [
         {
-          'title': 'Danger signs',
+          'title': 'Confirm pregnancy',
           'class': 'common_step',
           'checked':false,
           'disabled':false,
@@ -115,31 +115,31 @@ export default defineComponent({
           'icon': false,
           'disabled':false,
           'number': 2,
-          'last_step': ''
+          'last_step':'last_step'
         },
-        {
-          'title': 'Confirm pregnancy',
-          'class': 'common_step',
-          'checked':'',
-          'icon': false,
-          'disabled':false,
-          'number': 3,
-          'last_step': ''
-        },
-        {
-          'title': 'Specific health concerns',
-          'class': 'common_step',
-          'checked':'',
-          'icon': false,
-          'disabled':false,
-          'number': 4,
-          'last_step': 'last_step'
-        },
+        // {
+        //   'title': 'Confirm pregnancy',
+        //   'class': 'common_step',
+        //   'checked':'',
+        //   'icon': false,
+        //   'disabled':false,
+        //   'number': 3,
+        //   'last_step': ''
+        // },
+        // {
+        //   'title': 'Specific health concerns',
+        //   'class': 'common_step',
+        //   'checked':'',
+        //   'icon': false,
+        //   'disabled':false,
+        //   'number': 4,
+        //   'last_step': 'last_step'
+        // },
       ],
       StepperData:[
         {
-          title: 'Danger signs',
-          component: 'DangerSigns',
+          title: 'Confirm pregnancy',
+          component: 'ConfirmPregnancy',
           value: '1'
         },
         {
@@ -147,16 +147,16 @@ export default defineComponent({
           component: 'ReasonForVisit',
           value: '2',
         },
-        {
-          title: 'Confirm pregnancy',
-          component: 'ConfirmPregnancy',
-          value: '3',
-        },
-        {
-          title: 'Specific health concerns',
-          component: 'SpecificHealthConcerns',
-          value: '4',
-        },
+        // {
+        //   title: 'Confirm pregnancy',
+        //   component: 'ConfirmPregnancy',
+        //   value: '3',
+        // },
+        // {
+        //   title: 'Specific health concerns',
+        //   component: 'SpecificHealthConcerns',
+        //   value: '4',
+        // },
       ],
       isOpen: false,
       iconsContent: icons,
