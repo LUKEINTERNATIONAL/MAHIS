@@ -93,24 +93,24 @@ export default defineComponent({
       this.$router.push(url);
     },
     handleFirstAntenalVisit(){
-      if (getRadioSelectedValue(this.ReasonForVisit, 'Reason for visit') == 'First antenatal care contact') {
-        modifyCheckboxHeader(this.ReasonForVisit, 'Danger signs', 'displayNone', false);
-        // modifyCheckboxHeader(this.ReasonForVisit, 'Previous visits', 'selectedValue', '');
-
-      } else {
-        modifyCheckboxHeader(this.ReasonForVisit, 'Danger signs', 'displayNone', true);
-        modifyCheckboxValue(this.ReasonForVisit, 'Danger signs', 'selectedValue', '');
-
-      }
-    },
-    handleSpecificConcernsVisit(){
-      // if (getRadioSelectedValue(this.ReasonForVisit, 'Reason for visit') == 'Specific complaint related to antenatal care') {
+      // if (getRadioSelectedValue(this.ReasonForVisit, 'Reason for visit') == 'First antenatal care contact') {
       //   modifyCheckboxHeader(this.ReasonForVisit, 'Danger signs', 'displayNone', false);
       //   // modifyCheckboxHeader(this.ReasonForVisit, 'Previous visits', 'selectedValue', '');
       //
       // } else {
       //   modifyCheckboxHeader(this.ReasonForVisit, 'Danger signs', 'displayNone', true);
       //   modifyCheckboxValue(this.ReasonForVisit, 'Danger signs', 'selectedValue', '');
+      //
+      // }
+    },
+    handleSpecificConcernsVisit(){
+      // if (getRadioSelectedValue(this.ReasonForVisit, 'Reason for visit') == 'Specific complaint related to antenatal care') {
+      //   modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', false);
+      //   // modifyCheckboxHeader(this.ReasonForVisit, 'Previous visits', 'selectedValue', '');
+      //
+      // } else {
+      //   modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
+      //   modifyCheckboxValue(this.ReasonForVisit, 'Specific health concerns', 'selectedValue', '');
       //
       // }
     },

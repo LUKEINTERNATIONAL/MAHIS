@@ -50,7 +50,7 @@ const initialReasonForVisit= [
                 selectedValue: "",
                 class:"bold",
                 name:'Danger signs',
-                displayNone:true
+                // displayNone:true
             },
             data: [
                 {
@@ -81,7 +81,7 @@ const initialReasonForVisit= [
             header: {
                 title: "",
                 selectedValue: "",
-                displayNone:true,
+                // displayNone:true,
                 name:'Danger signs'
 
             },
@@ -114,7 +114,7 @@ const initialReasonForVisit= [
             header: {
                 title: "",
                 selectedValue: "",
-                displayNone:true,
+                // displayNone:true,
                 name:'Danger signs'
 
             },
@@ -147,7 +147,7 @@ const initialReasonForVisit= [
             header: {
                 title: "",
                 selectedValue: "",
-                displayNone:true,
+                // displayNone:true,
                 name:'Danger signs'
 
             },
@@ -180,7 +180,7 @@ const initialReasonForVisit= [
             header: {
                 title: "",
                 selectedValue: "",
-                displayNone:true,
+                // displayNone:true,
                 name:'Danger signs'
 
             },
@@ -213,7 +213,7 @@ const initialReasonForVisit= [
             header: {
                 title: "",
                 selectedValue: "",
-                displayNone:true,
+                // displayNone:true,
                 name:'Danger signs'
 
             },
@@ -279,7 +279,7 @@ const initialReasonForVisit= [
             header: {
                 title: "",
                 selectedValue: "",
-                displayNone:true,
+                // displayNone:true,
                 name:'Danger signs'
 
             },
@@ -339,7 +339,7 @@ const initialReasonForVisit= [
 {
     header:{
         class:'bold',
-            title: 'The woman has danger signs, what action would you like to take?',
+            title: 'What action would you like to take?',
             selectedValue: '',
             name:'Action for danger signs',
             displayNext:'Proceed with the visit'
