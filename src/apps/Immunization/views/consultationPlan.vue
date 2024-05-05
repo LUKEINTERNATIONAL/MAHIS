@@ -77,29 +77,79 @@
                     </div>
                 </div>
             </div>
-            <div class="graphBtn">
-                <div class="dueAlert">
-                    <div>
-                        <ion-button class="btnText btnTextWeight" size="small" fill="solid" color="danger">
-                            <ion-icon slot="start" size="large" :icon="iconsContent.alertDangerRed"></ion-icon>
-                            <b> at 6 weeks overdue</b>
-                        </ion-button>
+
+            <div>
+                <div class="graphBtn">
+                    <div class="dueAlert">
+                        <div>
+                            <ion-button class="btnText btnTextWeight" size="small" fill="solid" color="danger">
+                                <ion-icon slot="start" size="small" :icon="iconsContent.alertDangerRed"></ion-icon>
+                                <b> at 6 weeks overdue</b>
+                            </ion-button>
+                        </div>
+                        <div class="dueAlertText">4 vaccines missed!</div>
                     </div>
-                    <div class="dueAlertText">4 vaccines missed!</div>
                 </div>
-            </div>
-            <div class="vaccinesTitle">
-                <div style="width: 370px; display: flex; justify-content: space-between; align-content: center">
-                    <div class="vaccinesTitleText">Administer Vaccines</div>
-                    <div class="vaccinesTitleDate">Todays Date: <b>06 Jul 2024 </b></div>
+                <div class="vaccinesTitle">
+                    <div style="width: 370px; display: flex; justify-content: space-between; align-content: center">
+                        <div class="vaccinesTitleText">Administer Vaccines</div>
+                        <div class="vaccinesTitleDate">Todays Date: <b>06 Jul 2024 </b></div>
+                    </div>
                 </div>
-            </div>
-            <div class="milestone">
-                <div style="width: 130px; display: flex; justify-content: space-between; align-content: center">
-                    <ion-icon size="small" :icon="iconsContent.calendar"></ion-icon>
-                    <div>at 10 Weeks</div>
+                <div class="milestone">
+                    <div style="width: 120px; display: flex; justify-content: space-between; align-content: center">
+                        <ion-icon size="small" :icon="iconsContent.calendar"></ion-icon>
+                        <div>at <span style="color: #b54708"> 10 Weeks</span></div>
+                    </div>
+                    <div class="vaccinesTitleDate">(Swipe left or right for other milestones)</div>
                 </div>
-                <div class="vaccinesTitleDate">(Swipe left or right for other milestones)</div>
+                <!--Vaccine Card-->
+                <div class="vaccinesList">
+                    <ion-row>
+                        <ion-col size="2">
+                            <ion-button fill="clear" class="arrowBtns">
+                                <ion-icon size="large" :icon="iconsContent.backBlueArrow"></ion-icon>
+                            </ion-button>
+                        </ion-col>
+                        <ion-col size="3.9">
+                            <ion-button fill="solid" color="success">
+                                <ion-icon slot="start" :icon="iconsContent.greenInjection"></ion-icon>
+                                OPV 2
+                                <ion-icon slot="end" :icon="iconsContent.greenTickCheckbox"></ion-icon>
+                            </ion-button>
+                        </ion-col>
+                        <ion-col size="3.9" offset="0.1">
+                            <ion-button fill="solid" color="success">
+                                <ion-icon slot="start" :icon="iconsContent.greenInjection"></ion-icon>
+                                OPV 2
+                                <ion-icon slot="end" :icon="iconsContent.greenTickCheckbox"></ion-icon>
+                            </ion-button>
+                        </ion-col>
+                        <ion-col size="2">
+                            <ion-button fill="clear" class="arrowBtns">
+                                <ion-icon size="large" :icon="iconsContent.forwardBlueArrow"></ion-icon>
+                            </ion-button>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col size="2"> </ion-col>
+                        <ion-col size="3.9">
+                            <ion-button fill="solid" color="medium">
+                                <ion-icon slot="start" :icon="iconsContent.whiteInjection"></ion-icon>
+                                OPV 2
+                                <ion-icon slot="end" :icon="iconsContent.whiteCheckbox"></ion-icon>
+                            </ion-button>
+                        </ion-col>
+                        <ion-col size="3.9" offset="0.1">
+                            <ion-button fill="solid" color="medium">
+                                <ion-icon slot="start" :icon="iconsContent.whiteInjection"></ion-icon>
+                                OPV 2
+                                <ion-icon slot="end" :icon="iconsContent.whiteCheckbox"></ion-icon>
+                            </ion-button>
+                        </ion-col>
+                        <ion-col size="2"> </ion-col>
+                    </ion-row>
+                </div>
             </div>
         </ion-content>
     </ion-page>
@@ -613,10 +663,10 @@ export default defineComponent({
     color: #b42318;
     padding: 10px;
 }
-ion-button {
+/* ion-button {
     --padding-top: 0;
     --padding-bottom: 0;
-}
+} */
 .vaccinesTitle {
     display: flex;
     justify-content: space-around;
@@ -639,5 +689,13 @@ ion-button {
     justify-content: space-between;
     padding-left: 15px;
     padding-right: 15px;
+}
+
+.arrowBtns {
+    position: absolute;
+    top: 30px;
+}
+.vaccinesList {
+    margin-top: 8px;
 }
 </style>
