@@ -411,7 +411,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
       for (let i = 0; i < number; i++) {
         const value = getRadioSelectedValue(
           this.modeOfDelivery,
-          `cesareanSec ${i}`
+          `Mode of delivery ${i}`
         );
         if (value == "Other") {
           modifyFieldValue(
@@ -441,32 +441,32 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
 const getRadioButton = (number:number)=>{
   return [
     {
-      sideColSide:1
-,      selectdData: [],
+      sideColSide: 1,
+      selectdData: [],
       isFinishBtn: false,
       classDash: "dashed_bottom_border",
       radioBtnContent: {
         header: {
-          title: `Specify mode of delivery (child ${number+1})`,
+          title: `Specify mode of delivery (child ${number + 1})`,
           selectedValue: "",
-          name: `cesareanSec ${number}`,
-          class:"bold",
+          name: `Mode of delivery ${number}`,
+          class: "bold",
           //displayNext:"Other"
         },
         data: [
           {
-            name: "Cesarean section",
-            value: "cesarean",
+            name: "Caesarean section",
+            value: "caesarean section",
             colSize: "4.1",
           },
           {
-            name: "Vacuum",
-            value: "vacuum",
+            name: "Vacuum extraction delivery",
+            value: "vacuum extraction delivery",
             colSize: "4.1",
           },
           {
-            name: "Breach",
-            value: "breach",
+            name: "Breech delivery",
+            value: "breech delivery",
             colSize: "4.1",
           },
           {
@@ -490,7 +490,7 @@ const getRadioButton = (number:number)=>{
             colData: [
               {
                 displayNone: true,
-                inputHeader: `specify  for child ${number+1}`,
+                inputHeader: `specify  for child ${number + 1}`,
                 icon: icons.editPen,
                 value: "",
                 name: `Specify ${number}`,

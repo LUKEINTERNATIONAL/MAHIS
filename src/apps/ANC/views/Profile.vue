@@ -236,14 +236,15 @@ export default defineComponent({
             for (let i = 0; i < number; i++) {
                 const value = getRadioSelectedValue(
                 this.modeOfDelivery,
-                `cesareanSec ${i}`
+                `Mode of delivery ${i}`
                 );
                 const other = getFieldValue(this.modeOfDelivery,`Specify ${i}`,'value')
-                children.push({concept:"cesareanSec",value,other})
+                children.push({concept:"Mode of delivery",value,other})
 
-                const concept_id = await ConceptService.getConceptID("cesareanSec", true);
+                const concept_id = await ConceptService.getConceptID("Mode of delivery", true);
                 console.log(";;;;;;;;",concept_id)
                 const concept_other = await ConceptService.getConceptID("other", true);
+                console.log(";;;;;;;;",concept_other)
                 const obs_datetime = ConceptService.getSessionDate();
                  const obs:any = children.map(child=>{
                     return {
