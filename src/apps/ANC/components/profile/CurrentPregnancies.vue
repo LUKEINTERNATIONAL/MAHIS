@@ -116,7 +116,7 @@ export default defineComponent({
         this.initialData = lnmp.getInitial();
         this.initialData1 = ultrasound.getInitial1();
         this.initialData2 = tetanus.getInitial2();
-        this.handleLMNP()
+        //this.handleLMNP()
         this.handleUltrasound()
         this.handleTetanus()
         this.calculateEDD
@@ -132,7 +132,7 @@ export default defineComponent({
        lmnp:{
          handler( event){
            this.handleInputData(event)
-           this.handleLMNP()
+           //this.handleLMNP()
            this.calculateEDD(event)
           },
          deep:true
@@ -159,36 +159,60 @@ export default defineComponent({
           this.validationRules(event)
           this.calculateGestationAgefromLNMP(event)
           this.calculateEDD(event)
+          this.calculateLNMPFromGestationAge(event)
         },
-
         calculateGestationAgefromLNMP(event: any) {
-          if (event.name == "lmnpDate") {
-            const lmnpDateValue = Date.parse(getFieldValue(this.lmnp, 'lmnpDate', 'value'));
-            if (!isNaN(lmnpDateValue)) {
-              const currentDate = new Date().getTime(); // current date in milliseconds
-              const lmnpGestationAge = Math.floor((currentDate - lmnpDateValue) / (1000 * 60 * 60 * 24 * 7)); // calculate gestation age in weeks
-              modifyFieldValue(this.lmnp, 'lmnpGestationAge', 'value', lmnpGestationAge);
-            } else {
-              modifyFieldValue(this.lmnp, 'lmnpGestationAge', 'value', null);
-            }
-          }
+              if (event.name == "lmnpDate") {
+                  const lmnpDateValue = Date.parse(getFieldValue(this.lmnp, 'lmnpDate', 'value'));
+                  if (!isNaN(lmnpDateValue)) {
+                      const currentDate = new Date().getTime();
+                      const gestationalAgeInDays = (currentDate - lmnpDateValue) / (1000 * 60 * 60 * 24);
+                      const gestationalAgeInWeeks = Math.floor(gestationalAgeInDays / 7);
+                      modifyFieldValue(this.lmnp, 'lmnpGestationAge', 'value', gestationalAgeInWeeks);
+                  } else {
+                      modifyFieldValue(this.lmnp, 'lmnpGestationAge', 'value', null);
+                  }
+              }
         },
         calculateEDD(event: any) {
-            if (event.name === "lmnpDate") {
-              const lmnpDateValue = Date.parse(getFieldValue(this.lmnp, 'lmnpDate', 'value'));
-              if (!isNaN(lmnpDateValue)) {
-                const currentDate = new Date().getTime();
-                const gestationWeeks = Math.floor((currentDate - lmnpDateValue) / (1000 * 60 * 60 * 24 * 7)); 
-                const estimatedDueDate = new Date(lmnpDateValue + gestationWeeks * 7 * 24 * 60 * 60 * 1000); 
-                modifyFieldValue(this.lmnp, 'Estimated date of delivery', 'value', estimatedDueDate);
-              } else {
-                modifyFieldValue(this.lmnp, 'Estimated date of delivery', 'value', null);
-              }
-            }
+                if (event.name === "lmnpDate") {
+                    const lmnpDateValue = Date.parse(getFieldValue(this.lmnp, 'lmnpDate', 'value'));
+                    if (!isNaN(lmnpDateValue)) {
+                        const eddDateValue = new Date(lmnpDateValue + 40 * 7 * 24 * 60 * 60 * 1000); 
+                        modifyFieldValue(this.lmnp, 'Estimated date of delivery', 'value', eddDateValue);
+                    } else {
+                        modifyFieldValue(this.lmnp, 'Estimated date of delivery', 'value', null);
+                    }
+                }
        
           },
-        handleLMNP(){
+          calculateLNMPFromGestationAge(event: any) {
+            if (event.name == "specify") {
+                const gestationalAgeInWeeks = parseInt(getFieldValue(this.ultrasound, 'specify', 'value'));
+                if (!isNaN(gestationalAgeInWeeks)) {
+                    const currentDate = new Date().getTime();
+                    const lmnpDateValue = currentDate - (gestationalAgeInWeeks * 7 * 24 * 60 * 60 * 1000);
+                    const lmnpDate = new Date(lmnpDateValue);
+                    modifyFieldValue(this.ultrasound, 'Estimated date of delivery', 'value', lmnpDate);
+                } else {
+                    modifyFieldValue(this.ultrasound, 'Estimated date of delivery', 'value', null);
+                }
+            }
+          },
+
+     calculateEDDFromLNMP(event: any) {
+          // if (event.name === "lmnpDate") {
+          //     const lmnpDateValue = Date.parse(getFieldValue(this.lmnp, 'lmnpDate', 'value'));
+          //     if (!isNaN(lmnpDateValue)) {
+          //         const eddDateValue = new Date(lmnpDateValue + 40 * 7 * 24 * 60 * 60 * 1000); 
+          //         modifyFieldValue(this.lmnp, 'Estimated date of delivery', 'value', eddDateValue);
+          //     } else {
+          //         modifyFieldValue(this.lmnp, 'Estimated date of delivery', 'value', null);
+          //     }
+          // }
         },
+
+        calculateEddUltrasound(event:any){},
 
         handleUltrasound(){
         },

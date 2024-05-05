@@ -43,6 +43,8 @@ const initialLMNP = [
               name: "lmnpDate",
               eventType: "input",
               alertsError: false,
+              minDate:'2023-01-01',
+              maxDate:'2060-01-01',
               valueType: "text",
               alertsErrorMassage: "",
               isDatePopover: true,
@@ -150,6 +152,8 @@ const initialUltraSound = [
               inputHeader: "Date for ultrasound*",
               value: "",
               name: "Ultrasound",
+              minDate: "2023-01-01",
+              maxDate: "2060-01-01",
               required: true,
               eventType: "input",
               alertsError: false,
@@ -704,5 +708,5 @@ export const useCurrentPregnanciesStore = defineStore("currentPregnanciesStore",
       return [...data]; // Return a copy of the initial state
     }
   },
-   persist:true,
+  // persist:true,
 });
