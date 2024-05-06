@@ -4,7 +4,7 @@
         <ion-content class="ion-padding pim-cls-1">
             <div class="modal_wrapper">
                 <div class="center text_12">
-                   
+                        <h4>Personal Information</h4>
                         <ion-row>
                             <ion-col>
                                 <ion-row>
@@ -67,6 +67,57 @@
                             </ion-col>
 
                             <ion-col></ion-col>
+                        </ion-row>
+
+                        <hr class="dashed-hr">
+
+                        <h4>Gurdian Information</h4>
+                        <ion-row>
+                            <ion-col>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-label class="lbl-tl">Full Name:</ion-label>
+                                    </ion-col>
+                                    <ion-col>
+                                        <ion-label class="lbl-ct">Jane Doe</ion-label>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-col>
+
+                            <ion-col>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-label class="lbl-tl">Age</ion-label>
+                                    </ion-col>
+                                    <ion-col>
+                                        <ion-label class="lbl-ct">42</ion-label>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-col> 
+                        </ion-row>
+
+                        <ion-row>
+                            <ion-col>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-label class="lbl-tl">Relationship:</ion-label>
+                                    </ion-col>
+                                    <ion-col>
+                                        <ion-label class="lbl-ct">Mother</ion-label>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-col>
+
+                            <ion-col>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-label class="lbl-tl">Contacts</ion-label>
+                                    </ion-col>
+                                    <ion-col>
+                                        <ion-label class="lbl-ct">0999526423</ion-label>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-col> 
                         </ion-row>
 
                         <hr class="dashed-hr">
