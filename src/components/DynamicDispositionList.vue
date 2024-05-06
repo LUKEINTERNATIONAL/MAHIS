@@ -9,7 +9,7 @@
         </ion-col>
 
         <ion-col class="col-st2">
-            <ion-label class="truncate-text" style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;"><span class="spaceBetween"></span> {{ (item as any).name }} <span class="spaceBetween"></span>{{ (item as any).reason }}<span class="spaceBetween"></span>{{ (item as any).date }}</ion-label>
+            <ion-label class="truncate-text" style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;"><span class="spaceBetween"></span> {{ (item as any).name }} <span class="spaceBetween"></span>{{ (item as any).reason }}<span class="spaceBetween"></span>{{ fomartDate((item as any).date) }}</ion-label>
         </ion-col>
 
         <ion-col class="action_buttons">
@@ -85,6 +85,12 @@ export default defineComponent({
                 this.$emit('update:removeItem', index)
             }
         },
+        fomartDate(date: any) {
+            const year = date.year;
+            const month = (date.month < 10 ? '0' : '') + date.month;
+            const day = (date.day < 10 ? '0' : '') + date.day;
+            return year + '-' + month + '-' + day;
+        }
     }
 })
 </script>

@@ -1,8 +1,8 @@
 <template>
     <ion-list>
         <ion-row>
-            <ion-col>
-                <ListPicker
+            <ion-col class="lsp-cls-1">
+                <ListPicker class="aro-cls-1"
                     :multiSelection="list_picker_prperties[0].multi_Selection"
                     :show_label="list_picker_prperties[0].show_list_label"
                     :uniqueId="list_picker_prperties[0].unqueId"
@@ -15,12 +15,15 @@
                     @item-list-filtered="list_picker_prperties[0].listFilteredFN"
                 />
 
-                <div>
+                <div style="margin-bottom: 15px;">
                     <ion-label v-if="list_picker_prperties[0].show_error.value" class="error-label">{{ list_picker_prperties[0].error_message }}</ion-label>
                 </div>
             </ion-col>
+        </ion-row>
+
+        <ion-row>
             <ion-col>
-                <div style="margin-top: 7%;">
+                <div>
                     <DatePicker
                         :place_holder="date_properties[0].placeHolder"
                         @date-up-dated="date_properties[0].dataHandler"
@@ -29,6 +32,21 @@
                     <div>
                         <ion-label v-if="date_properties[0].show_error.value" class="error-label">{{ date_properties[0].error_message }}</ion-label>
                     </div>
+                </div>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col>
+                <div>
+                    <TimePicker
+                    :place_holder="time_properties[0].placeHolder"
+                    @time-up-dated="time_properties[0].dataHandler"
+                />
+
+                <div>
+                    <ion-label v-if="time_properties[0].show_error.value" class="error-label">{{ time_properties[0].error_message }}</ion-label>
+                </div>
                 </div>
             </ion-col>
         </ion-row>
@@ -86,6 +104,7 @@ import {
 } from "ionicons/icons";
 import ListPicker from "@/components/ListPicker.vue"
 import DatePicker from "@/components/DatePicker.vue"
+import TimePicker from "@/components/TimePicker.vue"
 import BasicInputField from "@/components/BasicInputField.vue"
 import { useOutcomeStore } from "@/stores/OutcomeStore"
 import { getSpecialistClinics, getFacilityWards } from "@/apps/OPD/services/outcome"
@@ -137,6 +156,20 @@ const date_properties = [
         error_message: 'please provide date'
     }
 ]
+
+const time_properties = [
+    {
+        placeHolder: {default: 'Enter time of admission'} as any,
+        dataHandler: timeUpdate_fn1,
+        dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'error',
+    },
+]
+
+function timeUpdate_fn1(data: any) {
+    time_properties[0].dataValue.value = data
+}
 
 function dateUpdate_fn1(data: any) {
     const date_data = {
@@ -192,7 +225,8 @@ function validateForm() {
     validateWard()
     validateNotes()
     validateDate()
-    if (date_properties[0].show_error.value == false && note_properties[0].show_error.value == false && list_picker_prperties[0].show_error.value == false) {
+    validateTime()
+    if (date_properties[0].show_error.value == false && time_properties[0].show_error.value == false && note_properties[0].show_error.value == false && list_picker_prperties[0].show_error.value == false) {
         saveDataToStores()
     } else {
         toastWarning("Please enter correct data values", 4000)
@@ -227,6 +261,7 @@ function saveDataToStores() {
         name: temp_data_v[0].name,
         type: 'Admitted for short stay',
         date: date_properties[0].dataValue,
+        time: time_properties[0].dataValue,
         reason: note_properties[0].dataValue,
         other: temp_data_v[0].other
         // dataItem: refDataItem.value,
@@ -256,6 +291,15 @@ function validateDate() {
         date_properties[0].show_error.value = false
     }
 }
+
+function validateTime() {
+    console.log(time_properties[0].dataValue.value)
+    if (time_properties[0].dataValue.value === undefined || date_properties[0].dataValue.value == "") {
+        time_properties[0].show_error.value = true 
+    } else {
+        time_properties[0].show_error.value = false
+    }
+}
 </script>
 
 <style scoped>
@@ -271,5 +315,8 @@ function validateDate() {
 }
 .spc_btwn {
     margin-top: 2%;
+}
+.lsp-cls-1 {
+    margin: -15px; margin-left: 0px;
 }
 </style>
