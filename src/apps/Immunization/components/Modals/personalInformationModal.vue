@@ -1,6 +1,5 @@
 <template>
         <ion-modal class="pim-cls-1" :is-open="is_open" :show-backdrop="true" @didDismiss="$emit('closePopoover', false)" :keyboard-close="false">
-
         <ion-content class="ion-padding pim-cls-1">
             <div class="modal_wrapper">
                 <div class="center text_12">
