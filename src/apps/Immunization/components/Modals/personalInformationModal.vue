@@ -151,7 +151,7 @@
                             <ion-col></ion-col>
                         </ion-row>
 
-                        <hr class="dashed-hr">
+                        <hr class="dashed-hr" style="margin-bottom: 0px !important;">
 
                         
                     
