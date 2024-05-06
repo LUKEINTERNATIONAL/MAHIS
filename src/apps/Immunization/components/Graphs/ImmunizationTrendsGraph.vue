@@ -1,7 +1,8 @@
 <template>
     <div class="modal_wrapper">
         <div class="immunizationGraph">
-            <ApexChart ref="chart" width="360" height="260" type="bar" :options="chatOptions" :series="series"></ApexChart>
+            <div class="immunizationGraphText">Immunization Graphs</div>
+            <ApexChart width="100%" height="252" type="bar" :options="options" :series="series"></ApexChart>
         </div>
     </div>
 </template>
@@ -13,10 +14,12 @@ import { checkmark, pulseOutline } from "ionicons/icons";
 import { ref } from "vue";
 import { icons } from "@/utils/svg";
 import ApexChart from "vue3-apexcharts";
+import List from "@/components/List.vue";
 import { ObservationService } from "@/services/observation_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { mapState } from "pinia";
 import HisDate from "@/utils/Date";
+import { iconGraph, iconList } from "@/utils/SvgDynamicColor";
 
 export default defineComponent({
     name: "Menu",
@@ -29,6 +32,7 @@ export default defineComponent({
         IonTitle,
         IonToolbar,
         ApexChart,
+        List,
     },
 
     computed: {
@@ -38,15 +42,18 @@ export default defineComponent({
         return {
             valueNumericArray: [] as any,
             obsDatetime: [] as any,
+            graphIcon: iconGraph(["#006401"]),
+            listIcon: iconList(["#636363"]),
+            displayGraph: true,
             weight: [] as any,
             height: [] as any,
-            dates: ["Jan", "Feb", "Mach", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "oct", "Nov", "Dec"] as any,
+            BMI: [] as any,
             iconBg: {} as any,
             activeWeight: [] as any,
             activeHeight: [] as any,
             activeBMI: [] as any,
             list: [] as any,
-            chatOptions: {
+            options: {
                 chart: {
                     id: "immunization",
                 },
@@ -74,13 +81,13 @@ export default defineComponent({
                     forceNiceScale: true,
                 },
                 xaxis: {
-                    categories: ["Jan", "Feb", "Mach", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "oct", "Nov", "Dec"],
+                    categories: [],
                 },
             } as any,
             series: [
                 {
-                    name: "Total",
-                    data: [] as any,
+                    name: "",
+                    data: [],
                 },
             ],
         };
@@ -88,32 +95,69 @@ export default defineComponent({
     setup() {
         return { checkmark, pulseOutline };
     },
-    chatOptions: {
-        handler() {
-            this.setData();
-        },
-        deep: true,
-    },
     async mounted() {
+        this.weight = await ObservationService.getAll(this.demographics.patient_id, "weight");
+        this.height = await ObservationService.getAll(this.demographics.patient_id, "Height");
+        this.BMI = await ObservationService.getAll(this.demographics.patient_id, "BMI");
         this.setData();
         this.iconBg.graph = "iconBg";
     },
     methods: {
+        dismiss() {
+            modalController.dismiss();
+        },
+        handleIcon() {},
+        toggleDisplay(status: any) {
+            this.displayGraph = status;
+            if (this.displayGraph) {
+                this.graphIcon = iconGraph(["#006401"]);
+                this.listIcon = iconList(["#636363"]);
+                this.iconBg.graph = "iconBg";
+                this.iconBg.list = "";
+            } else {
+                this.graphIcon = iconGraph(["#636363"]);
+                this.listIcon = iconList(["#006401"]);
+                this.iconBg.graph = "";
+                this.iconBg.list = "iconBg";
+            }
+        },
+        setActivClass(active: any) {
+            this.activeHeight = "";
+            this.activeBMI = "";
+            this.activeWeight = "";
+            if (active == "height") this.activeHeight = "_active";
+            else if (active == "weight") this.activeWeight = "_active";
+            else if (active == "BMI") this.activeBMI = "_active";
+        },
         setData() {
             this.series[0].data = ["10", "20", "50", "60", "90", "109", "20", "10", "50", "150", "90", "40"];
             this.series[0].name = "Total";
-            this.chatOptions.xaxis = {
-                categories: ["Jan", "Feb", "Mach", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "oct", "Nov", "Dec"],
+            this.options = {
+                ...this.options,
+                ...{
+                    xaxis: {
+                        categories: ["Jan", "Feb", "Mach", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "oct", "Nov", "Dec"],
+                    },
+                },
             };
-            // {
-            //     ...this.chatOptions,
-            //     ...{
-            //         xaxis: {
-            //             categories: ["Jan", "Feb", "Mach", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "oct", "Nov", "Dec"],
-            //         },
-            //     },
-            // };
-            // this.$refs.chart;
+        },
+        setListData(data: any) {
+            this.list = [];
+            this.list.push({
+                actionBtn: false,
+                class: "col_background",
+                header: true,
+                minHeight: "--min-height: 25px;",
+                display: ["Date", "Measure"],
+            });
+            data.forEach((item: any) => {
+                this.list.push({
+                    actionBtn: false,
+                    minHeight: "--min-height: 25px;",
+                    class: "col_background",
+                    display: [HisDate.toStandardHisFormat(item.obs_datetime), item.value_numeric],
+                });
+            });
         },
     },
 });

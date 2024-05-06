@@ -461,3 +461,7 @@ ion-accordion {
 ion-modal {
     --height: none;
 }
+.apexcharts-zoomin-icon,
+.apexcharts-zoomout-icon {
+    display: none;
+}
