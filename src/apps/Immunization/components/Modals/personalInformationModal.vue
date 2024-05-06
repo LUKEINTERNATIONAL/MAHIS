@@ -122,6 +122,37 @@
 
                         <hr class="dashed-hr">
 
+                        <h4>Demographics Information</h4>
+                        <ion-row>
+                            <ion-col>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-label class="lbl-tl">Full Name:</ion-label>
+                                    </ion-col>
+                                    <ion-col>
+                                        <ion-label class="lbl-ct">Jane Doe</ion-label>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-col>
+                            <ion-col></ion-col>
+                        </ion-row>
+
+                        <ion-row>
+                            <ion-col>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-label class="lbl-tl">Relationship:</ion-label>
+                                    </ion-col>
+                                    <ion-col>
+                                        <ion-label class="lbl-ct">Mother</ion-label>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-col>
+                            <ion-col></ion-col>
+                        </ion-row>
+
+                        <hr class="dashed-hr">
+
                         
                     
                 </div>
@@ -159,6 +190,7 @@ const props = defineProps<{
     }
     .lbl-ct {
         white-space: nowrap;
+        color: #08475E;
     }
     pim-cls-1 {
         --background: #ffff;
@@ -171,13 +203,15 @@ const props = defineProps<{
     }
     ion-modal {
         --width: 94%;
-        --height: 50%;
+        --height: 70%;
         --border-radius: 10px;
-
     }
     .dashed-hr {
         border: none;
         border-top: 2px dashed #B3B3B3;
         margin: 20px 0; /* Adjust as needed */
+    }
+    .modal_wrapper {
+    padding: 0px 19px;
     }
 </style>
