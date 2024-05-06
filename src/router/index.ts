@@ -14,7 +14,7 @@ import ANC from "@/apps/ANC/config/routes";
 import LABOUR from "@/apps/LABOUR/config/routes";
 import PNC from "@/apps/PNC/config/routes";
 import Immunization from "@/apps/Immunization/config/routes";
-
+import Mockmodals from "@/apps/Immunization/components/mockmodals.vue";
 const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
@@ -39,6 +39,12 @@ const routes: Array<RouteRecordRaw> = [
         path: "/setSessionDate",
         name: "setSessionDate",
         component: setSessionDate,
+    },
+    {
+        path: "/mockmodals",
+        name: "Mockmodals",
+        component: Mockmodals,
+        props: true,
     },
     {
         path: "/registration/:registrationType",
