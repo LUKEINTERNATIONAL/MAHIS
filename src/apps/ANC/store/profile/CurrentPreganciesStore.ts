@@ -198,11 +198,14 @@ const initialUltraSound = [
               name: "ultrasound lmnp date",
               required: true,
               eventType: "input",
+              minDate: "2023-01-01",
+              maxDate: "2060-01-01",
               alertsError: false,
               alertsErrorMassage: "",
-              isDatePopover: true,
+              //isDatePopover: true,
               icon: icons.calenderPrimary,
               placeholder: "Pick date",
+              disabled: "disabled",
               inputWidth: "100%",
             },
             {
@@ -214,9 +217,12 @@ const initialUltraSound = [
               eventType: "input",
               alertsError: false,
               alertsErrorMassage: "",
-              isDatePopover: true,
+              minDate: "2023-01-01",
+              maxDate: "2060-01-01",
+              //isDatePopover: true,
               icon: icons.calenderPrimary,
               placeholder: "Pick date",
+              disabled: "disabled",
               inputWidth: "100%",
             },
           ],
@@ -305,12 +311,13 @@ const initialUltraSound = [
             {
               inputHeader: "EDD",
               value: "",
-              name: "Estimated date of delivery",
+              name: "date of delivery",
               required: true,
               eventType: "input",
               alertsError: false,
               alertsErrorMassage: "",
-              isDatePopover: true,
+              //isDatePopover: true,
+              disabled: "disabled",
               icon: icons.calenderPrimary,
               placeholder: "Pick date",
               inputWidth: "100%",
@@ -388,6 +395,42 @@ const initialTetenus = [
     },
   },
   {
+    selectdData: [],
+    isFinishBtn: false,
+   // classDash: "dashed_bottom_border",
+    radioBtnContent: {
+      header: {
+        class: "bold",
+        title: "Number of tetanus doses for immunization",
+        selectedValue: "",
+        displayNone: true,
+        name: "Number of tetanus doses",
+      },
+      data: [
+        {
+          name: "1",
+          value: "1",
+          colSize: "5",
+        },
+        {
+          name: "2",
+          value: "2",
+          colSize: "5",
+        },
+        {
+          name: "3",
+          value: "3",
+          colSize: "5",
+        },
+        {
+          name: "4",
+          value: "4",
+          colSize: "5",
+        },
+      ],
+    },
+  },
+  {
     isFinishBtn: false,
     classDash: "",
     sideColSize: 0.5,
@@ -399,7 +442,34 @@ const initialTetenus = [
               displayNone: true,
               inputHeader: "TTV 1 immunisation date",
               value: "",
-              name: "tt1Date",
+              name: "tt6Date",
+              isDatePopover: true,
+              icon: icons.calenderPrimary,
+              placeholder: "Pick the date",
+              required: true,
+              eventType: "input",
+              inputWidth: "",
+              alertsError: false,
+              alertsErrorMassage: "",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    isFinishBtn: false,
+    classDash: "",
+    sideColSize: 0.5,
+    data: {
+      rowData: [
+        {
+          colData: [
+            {
+              displayNone: true,
+              inputHeader: "TTV 1 immunisation date",
+              value: "",
+              name: "tt7Date",
               isDatePopover: true,
               icon: icons.calenderPrimary,
               placeholder: "Pick the date",
@@ -413,7 +483,7 @@ const initialTetenus = [
               displayNone: true,
               inputHeader: "TTV 2 immunisation date",
               value: "",
-              name: "tt2Date",
+              name: "tt8Date",
               isDatePopover: true,
               icon: icons.calenderPrimary,
               placeholder: "Pick the date",
@@ -430,18 +500,32 @@ const initialTetenus = [
   },
 
   {
-    isFinishBtn: false,
-    classDash: "",
     sideColSize: 0.5,
+    isFinishBtn: false,
+    //classDash: "dashed_bottom_border",
     data: {
       rowData: [
         {
           colData: [
             {
               displayNone: true,
-              inputHeader: "TTV 3 immunisation date",
+              inputHeader: "TTV 1 immunisation date",
               value: "",
-              name: "tt3Date",
+              name: "tt9Date",
+              isDatePopover: true,
+              icon: icons.calenderPrimary,
+              placeholder: "Pick the date",
+              required: true,
+              eventType: "input",
+              inputWidth: "100%",
+              alertsError: false,
+              alertsErrorMassage: "",
+            },
+            {
+              displayNone: true,
+              inputHeader: "TTV 2 immunisation date",
+              value: "",
+              name: "tt10Date",
               isDatePopover: true,
               icon: icons.calenderPrimary,
               placeholder: "Pick the date",
@@ -453,6 +537,75 @@ const initialTetenus = [
             },
             {
               displayNone: true,
+              inputHeader: "TTV 3 immunisation date",
+              value: "",
+              name: "tt11Date",
+              isDatePopover: true,
+              icon: icons.calenderPrimary,
+              placeholder: "Pick the date",
+              required: true,
+              eventType: "input",
+              inputWidth: "",
+              alertsError: false,
+              alertsErrorMassage: "",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    isFinishBtn: false,
+    sideColSize: 0.5,
+    //classDash: "dashed_bottom_border",
+    data: {
+      rowData: [
+        {
+          colData: [
+            {
+              displayNone: true,
+              inputHeader: "TTV 1 immunisation date",
+              value: "",
+              name: "tt1Date",
+              isDatePopover: true,
+              icon: icons.calenderPrimary,
+              placeholder: "",
+              required: true,
+              eventType: "input",
+              inputWidth: "100%",
+              alertsError: false,
+              alertsErrorMassage: "",
+            },
+            {
+              //displayNone: true,
+              inputHeader: "TTV 2 immunisation date",
+              value: "",
+              name: "tt2Date",
+              isDatePopover: true,
+              icon: icons.calenderPrimary,
+              placeholder: "Pick the date",
+              required: true,
+              eventType: "input",
+              inputWidth: "100%",
+              alertsError: false,
+              alertsErrorMassage: "",
+            },
+            {
+              // displayNone: true,
+              inputHeader: "TTV 3 immunisation date",
+              value: "",
+              name: "tt3Date",
+              isDatePopover: true,
+              icon: icons.calenderPrimary,
+              placeholder: "",
+              required: true,
+              eventType: "input",
+              inputWidth: "100%",
+              alertsError: false,
+              alertsErrorMassage: "",
+            },
+            {
+              //displayNone: true,
               inputHeader: "TTV 4 immunisation date",
               value: "",
               name: "tt4Date",
@@ -461,24 +614,10 @@ const initialTetenus = [
               placeholder: "Pick the date",
               required: true,
               eventType: "input",
-              inputWidth: "",
+              inputWidth: "100%",
               alertsError: false,
               alertsErrorMassage: "",
             },
-          ],
-        },
-      ],
-    },
-  },
-
-  {
-    sideColSize: 0.5,
-    isFinishBtn: false,
-    classDash: "dashed_bottom_border",
-    data: {
-      rowData: [
-        {
-          colData: [
             {
               displayNone: true,
               inputHeader: "TTV 5 immunisation date",
@@ -501,7 +640,7 @@ const initialTetenus = [
   {
     isFinishBtn: false,
     sideColSize: 0.5,
-    classDash: "dashed_bottom_border",
+    //classDash: "dashed_bottom_border",
     data: {
       rowData: [
         {
@@ -510,7 +649,7 @@ const initialTetenus = [
               displayNone: true,
               inputHeader: "TTV 1 immunisation date",
               value: "",
-              name: "immunised doses",
+              name: "12",
               isDatePopover: true,
               icon: icons.calenderPrimary,
               placeholder: "",
@@ -524,7 +663,7 @@ const initialTetenus = [
               //displayNone: true,
               inputHeader: "TTV 2 immunisation date",
               value: "",
-              name: "underimmunised1",
+              name: "13",
               isDatePopover: true,
               icon: icons.calenderPrimary,
               placeholder: "Pick the date",
@@ -538,7 +677,7 @@ const initialTetenus = [
               // displayNone: true,
               inputHeader: "TTV 3 immunisation date",
               value: "",
-              name: "immunised doses",
+              name: "14",
               isDatePopover: true,
               icon: icons.calenderPrimary,
               placeholder: "",
@@ -552,7 +691,7 @@ const initialTetenus = [
               //displayNone: true,
               inputHeader: "TTV 4 immunisation date",
               value: "",
-              name: "underimmunised3",
+              name: "15",
               isDatePopover: true,
               icon: icons.calenderPrimary,
               placeholder: "Pick the date",
@@ -570,7 +709,7 @@ const initialTetenus = [
   {
     isFinishBtn: false,
     sideColSize: 0.5,
-    classDash: "dashed_bottom_border",
+    //classDash: "dashed_bottom_border",
     data: {
       rowData: [
         {
@@ -613,7 +752,7 @@ const initialTetenus = [
     sideColSize: 0.5,
     selectdData: [],
     isFinishBtn: false,
-    classDash: "dashed_bottom_border",
+    //classDash: "dashed_bottom_border",
     radioBtnContent: {
       header: {
         class: "bold",
