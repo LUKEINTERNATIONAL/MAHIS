@@ -127,10 +127,10 @@
                             <ion-col>
                                 <ion-row>
                                     <ion-col>
-                                        <ion-label class="lbl-tl">Full Name:</ion-label>
+                                        <ion-label class="lbl-tl">Current Address:</ion-label>
                                     </ion-col>
                                     <ion-col>
-                                        <ion-label class="lbl-ct">Jane Doe</ion-label>
+                                        <ion-label class="lbl-ct">Kaluluma, Side B</ion-label>
                                     </ion-col>
                                 </ion-row>
                             </ion-col>
@@ -141,10 +141,10 @@
                             <ion-col>
                                 <ion-row>
                                     <ion-col>
-                                        <ion-label class="lbl-tl">Relationship:</ion-label>
+                                        <ion-label class="lbl-tl">District(s):</ion-label>
                                     </ion-col>
                                     <ion-col>
-                                        <ion-label class="lbl-ct">Mother</ion-label>
+                                        <ion-label class="lbl-ct">Mzimba</ion-label>
                                     </ion-col>
                                 </ion-row>
                             </ion-col>
@@ -161,7 +161,7 @@
 
         </ion-content>
         <ion-footer :translucent="true" class="ion-no-border">
-                <DynamicButton @click="" name="Edit Info" fill="solid" iconSlot="icon-only" style="float: right; margin: 2%;" />
+                <DynamicButton @click="" name="Edit Info" fill="solid" :icon="createOutline" style="float: right; margin: 2%;" />
         </ion-footer>
     </ion-modal>
 </template>
@@ -175,6 +175,9 @@ export default defineComponent({
 <script setup lang="ts">
 import { IonContent, IonButton, IonModal, IonRow, IonCol, IonAvatar, IonImg, IonLabel, IonPage, IonFooter } from "@ionic/vue"
 import DynamicButton from "@/components/DynamicButton.vue"
+import {
+    createOutline  
+} from "ionicons/icons"
 
 const props = defineProps<{
     is_open: any,
