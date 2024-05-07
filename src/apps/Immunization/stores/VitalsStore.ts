@@ -54,7 +54,7 @@ const initialVitals = [
         },
     },
 ] as any;
-export const useVitalsStore = defineStore("vitalsStore", {
+export const useVitalsStore = defineStore("vitalsWeightHeightStore", {
     state: () => ({
         vitals: [...initialVitals] as any,
     }),

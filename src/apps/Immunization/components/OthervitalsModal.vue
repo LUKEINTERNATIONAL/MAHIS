@@ -377,9 +377,4 @@ h5 {
     border-top: 1px solid #ccc;
     line-height: 60px;
 }
-.large-modal {
-    --border-radius: 16px;
-    --width: 35vw;
-    --height: 530px !important;
-}
 </style>

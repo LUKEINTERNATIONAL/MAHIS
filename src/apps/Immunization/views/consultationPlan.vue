@@ -12,7 +12,7 @@
                     <ion-col size="9">
                         <div class="demographicsFirstRow">
                             <div class="name">Godfrey Zuluful</div>
-                            <div class="name"><ion-icon :icon="ellipsisVerticalSharp"></ion-icon></div>
+                            <div class="name" @click="openPIM()"><ion-icon :icon="ellipsisVerticalSharp"></ion-icon></div>
                         </div>
                         <div class="demographicsOtherRow">
                             <div class="demographicsText">Male <span class="dot">.</span> 37 years old <span class="dot">.</span> 19 April 2024</div>
@@ -62,7 +62,7 @@
                 <div class="graphBtn" style="margin-bottom: 5px">
                     <div class="weightHeightGraphBtns">
                         <div>
-                            <ion-button class="btnText" fill="solid">
+                            <ion-button class="btnText" fill="solid" @click="openWH()">
                                 Enter Weight/Height <ion-icon slot="end" size="small" :icon="iconsContent.whiteHeightWeight"></ion-icon>
                             </ion-button>
                         </div>
@@ -253,6 +253,8 @@ import DynamicButton from "@/components/DynamicButton.vue";
 import WeightHeightChart from "@/apps/Immunization/components/Graphs/WeightHeightChart.vue";
 import { createModal } from "@/utils/Alerts";
 import OtherVitals from "@/apps/Immunization/components/OthervitalsModal.vue";
+import personalInformationModal from "@/apps/Immunization/components/Modals/personalInformationModal.vue";
+import weightAndHeight from "@/apps/Immunization/components/Modals/weightAndHeight.vue";
 import {
     modifyRadioValue,
     getRadioSelectedValue,
@@ -346,6 +348,12 @@ export default defineComponent({
     methods: {
         openVitalsModal() {
             createModal(OtherVitals, { class: "otherVitalsModal" });
+        },
+        openPIM() {
+            createModal(personalInformationModal, { class: "otherVitalsModal" });
+        },
+        openWH() {
+            createModal(weightAndHeight, { class: "otherVitalsModal" });
         },
         async getData() {
             const steps = ["Growth Monitor", "Immunization Services", "Next Appointment", "Change Status"];
