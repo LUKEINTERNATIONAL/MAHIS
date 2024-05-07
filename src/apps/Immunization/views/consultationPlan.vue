@@ -174,7 +174,7 @@
                     <div class="lastVaccineTitle">
                         <div class="lastVaccineText">Last vaccines given</div>
                         <div class="seeFullList">
-                            <ion-button class="btnText btnTextWeight" size="small" fill="clear" color="tertiary">
+                            <ion-button @click="openVH()" class="btnText btnTextWeight" size="small" fill="clear" color="tertiary">
                                 <span>See full History</span>
                             </ion-button>
                         </div>
@@ -253,6 +253,7 @@ import DynamicButton from "@/components/DynamicButton.vue";
 import WeightHeightChart from "@/apps/Immunization/components/Graphs/WeightHeightChart.vue";
 import { createModal } from "@/utils/Alerts";
 import OtherVitals from "@/apps/Immunization/components/OthervitalsModal.vue";
+import vaccinationHistory from "@/apps/Immunization/components/Modals/vaccinationHistoryModal.vue"
 import personalInformationModal from "@/apps/Immunization/components/Modals/personalInformationModal.vue";
 import weightAndHeight from "@/apps/Immunization/components/Modals/weightAndHeight.vue";
 import {
@@ -347,13 +348,16 @@ export default defineComponent({
 
     methods: {
         openVitalsModal() {
-            createModal(OtherVitals, { class: "otherVitalsModal" });
+            createModal(OtherVitals, { class: "otherVitalsModal" })
         },
         openPIM() {
-            createModal(personalInformationModal, { class: "otherVitalsModal" });
+            createModal(personalInformationModal, { class: "otherVitalsModal" })
         },
         openWH() {
-            createModal(weightAndHeight, { class: "otherVitalsModal" });
+            createModal(weightAndHeight, { class: "otherVitalsModal" })
+        },
+        openVH() {
+            createModal(vaccinationHistory, { class: "otherVitalsModal" })
         },
         async getData() {
             const steps = ["Growth Monitor", "Immunization Services", "Next Appointment", "Change Status"];

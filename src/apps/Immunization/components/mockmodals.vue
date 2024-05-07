@@ -13,20 +13,6 @@
         :color="''"
     />
 
-    <weightAndHeight
-        :person_id="pId"
-        :is_open="showWH"
-        @close-popoover="showWH = false"
-    />
-
-    <dynamic-button
-        :name="'Weight and Height'"
-        :fill="'fill'"
-        :icon="personAddOutline"
-        @click="openWH()"
-        :color="''"
-    />
-
     
 </template>
 <script lang="ts">
@@ -37,8 +23,7 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
-import personalInformationModal from "./Modals/personalInformationModal.vue"
-import weightAndHeight from "./Modals/weightAndHeight.vue"
+
 import DynamicButton from "@/components/DynamicButton.vue"
 import { ref } from "vue"
 import {
