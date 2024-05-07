@@ -93,6 +93,7 @@ export default defineComponent({
         modeOfDeliveryInstance: {} as any,
         currentSection: 0,
         inputField: '' as any,
+        
 
     };
   },
@@ -299,6 +300,7 @@ export default defineComponent({
       },
       calculateLiveBirths(event:any){
         if (event.name === 'Gravida' || event.name === 'Abortions') {
+          let errorMessage: any = "";
           const gravidaValue= parseInt(getFieldValue(this.prevPregnancies, 'Gravida', 'value'));
           const abortionsValue = parseInt(getFieldValue(this.prevPregnancies, 'Abortions', 'value'));
           if (!isNaN(gravidaValue) && !isNaN(abortionsValue)) {
