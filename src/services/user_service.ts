@@ -118,7 +118,7 @@ export class UserService extends Service {
     }
     static async setNCDValue() {
         await this.setUserActivities();
-        sessionStorage.setItem("app", JSON.stringify({ programID: 32, applicationName: "NCD" }));
+        // sessionStorage.setItem("app", JSON.stringify({ programID: 32, applicationName: "NCD" }));
         const patient = new PatientService();
         const visits = await PatientService.getPatientVisits(patient.getID(), false);
         const activities = await this.getUserActivities("NCD_activities");

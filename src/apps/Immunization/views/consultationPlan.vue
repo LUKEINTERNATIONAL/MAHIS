@@ -1,15 +1,156 @@
 <template>
     <ion-page>
         <Toolbar />
-        <ion-content :fullscreen="true">
-            <DemographicBar />
-            <Stepper
-                stepperTitle="The consultation plan"
-                :wizardData="wizardData"
-                @updateStatus="markWizard"
-                @finishBtn="saveData()"
-                :StepperData="StepperData"
-            />
+        <ion-content :fullscreen="true" style="--background: #fff">
+            <div class="demographics">
+                <ion-row>
+                    <ion-col size="3">
+                        <div class="initialsBox">
+                            <div class="initialsText">GZ</div>
+                        </div>
+                    </ion-col>
+                    <ion-col size="9">
+                        <div class="demographicsFirstRow">
+                            <div class="name">Godfrey Zuluful</div>
+                            <div class="name"><ion-icon :icon="ellipsisVerticalSharp"></ion-icon></div>
+                        </div>
+                        <div class="demographicsOtherRow">
+                            <div class="demographicsText">Male <span class="dot">.</span> 37 years old <span class="dot">.</span> 19 April 2024</div>
+                        </div>
+                        <div class="demographicsOtherRow">
+                            <div class="demographicsText">Current Address:</div>
+                            <div class="demographicsText mediumFontColor">Kaluluma, Side B</div>
+                        </div>
+                        <div class="demographicsOtherRow">
+                            <div class="demographicsText smallFont">
+                                MRN: <span class="mediumFontColor">17000031AJ</span> <span class="dot">.</span> Outcome:
+                                <span class="outcomeStatus">Active</span>
+                            </div>
+                        </div>
+                    </ion-col>
+                </ion-row>
+            </div>
+            <div class="graphSection">
+                <div class="graphBtn">
+                    <div class="weightHeightGraphBtns">
+                        <div>
+                            <ion-button class="btnText btnTextWeight" size="small" fill="outline">
+                                Weight/Age Graph <ion-icon slot="end" size="small" :icon="iconsContent.networkBarDark"></ion-icon>
+                            </ion-button>
+                        </div>
+                        <div>
+                            <ion-button class="btnText" size="small" fill="solid">
+                                Height/Age Graph
+                                <ion-icon slot="end" size="small" :icon="iconsContent.networkBarLight"></ion-icon>
+                            </ion-button>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <WeightHeightChart />
+                </div>
+                <div class="graphBtn">
+                    <div class="weightHeightGraphBtns">
+                        <div>
+                            <ion-button class="btnText btnTextWeight" size="small" fill="solid" color="warning">
+                                Current Height: <b>94 Cm </b>
+                            </ion-button>
+                        </div>
+                        <div>
+                            <ion-button class="btnText" size="small" fill="solid" color="success"> Current Weight: <b>22 Kg</b> </ion-button>
+                        </div>
+                    </div>
+                </div>
+                <div class="graphBtn" style="margin-bottom: 5px">
+                    <div class="weightHeightGraphBtns">
+                        <div>
+                            <ion-button class="btnText" fill="solid">
+                                Enter Weight/Height <ion-icon slot="end" size="small" :icon="iconsContent.whiteHeightWeight"></ion-icon>
+                            </ion-button>
+                        </div>
+                        <div>
+                            <ion-button class="btnText" fill="solid">
+                                Enter Other Vitals
+                                <ion-icon slot="end" size="small" :icon="iconsContent.whiteVitals"></ion-icon>
+                            </ion-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="graphBtn">
+                    <div class="dueAlert">
+                        <div>
+                            <ion-button class="btnText btnTextWeight" size="small" fill="solid" color="danger">
+                                <ion-icon slot="start" size="small" :icon="iconsContent.alertDangerRed"></ion-icon>
+                                <b> at 6 weeks overdue</b>
+                            </ion-button>
+                        </div>
+                        <div class="dueAlertText">4 vaccines missed!</div>
+                    </div>
+                </div>
+                <div class="vaccinesTitle">
+                    <div style="width: 370px; display: flex; justify-content: space-between; align-content: center">
+                        <div class="vaccinesTitleText">Administer Vaccines</div>
+                        <div class="vaccinesTitleDate">Todays Date: <b>06 Jul 2024 </b></div>
+                    </div>
+                </div>
+                <div class="milestone">
+                    <div style="width: 120px; display: flex; justify-content: space-between; align-content: center">
+                        <ion-icon size="small" :icon="iconsContent.calendar"></ion-icon>
+                        <div>at <span style="color: #b54708"> 10 Weeks</span></div>
+                    </div>
+                    <div class="vaccinesTitleDate">(Swipe left or right for other milestones)</div>
+                </div>
+                <!--Vaccine Card-->
+                <div class="vaccinesList">
+                    <ion-row>
+                        <ion-col size="2">
+                            <ion-button fill="clear" class="arrowBtns">
+                                <ion-icon size="large" :icon="iconsContent.backBlueArrow"></ion-icon>
+                            </ion-button>
+                        </ion-col>
+                        <ion-col size="3.9">
+                            <ion-button fill="solid" color="success">
+                                <ion-icon slot="start" :icon="iconsContent.greenInjection"></ion-icon>
+                                OPV 2
+                                <ion-icon slot="end" :icon="iconsContent.greenTickCheckbox"></ion-icon>
+                            </ion-button>
+                        </ion-col>
+                        <ion-col size="3.9" offset="0.1">
+                            <ion-button fill="solid" color="success">
+                                <ion-icon slot="start" :icon="iconsContent.greenInjection"></ion-icon>
+                                OPV 2
+                                <ion-icon slot="end" :icon="iconsContent.greenTickCheckbox"></ion-icon>
+                            </ion-button>
+                        </ion-col>
+                        <ion-col size="2">
+                            <ion-button fill="clear" class="arrowBtns">
+                                <ion-icon size="large" :icon="iconsContent.forwardBlueArrow"></ion-icon>
+                            </ion-button>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col size="2"> </ion-col>
+                        <ion-col size="3.9">
+                            <ion-button fill="solid" color="medium">
+                                <ion-icon slot="start" :icon="iconsContent.whiteInjection"></ion-icon>
+                                OPV 2
+                                <ion-icon slot="end" :icon="iconsContent.whiteCheckbox"></ion-icon>
+                            </ion-button>
+                        </ion-col>
+                        <ion-col size="3.9" offset="0.1">
+                            <ion-button fill="solid" color="medium">
+                                <ion-icon slot="start" :icon="iconsContent.whiteInjection"></ion-icon>
+                                OPV 2
+                                <ion-icon slot="end" :icon="iconsContent.whiteCheckbox"></ion-icon>
+                            </ion-button>
+                        </ion-col>
+                        <ion-col size="2"> </ion-col>
+                    </ion-row>
+                </div>
+            </div>
         </ion-content>
     </ion-page>
 </template>
@@ -39,7 +180,7 @@ import {
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/components/DemographicBar.vue";
-import { chevronBackOutline, checkmark } from "ionicons/icons";
+import { chevronBackOutline, checkmark, ellipsisVerticalSharp } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
@@ -65,6 +206,8 @@ import { useGeneralStore } from "@/stores/GeneralStore";
 import { resetPatientData } from "@/services/reset_data";
 import { PatientReferralService } from "@/services/patient_referral_service";
 import { PatientAdmitService } from "@/services/patient_admit_service";
+import DynamicButton from "@/components/DynamicButton.vue";
+import WeightHeightChart from "@/apps/Immunization/components/Graphs/WeightHeightChart.vue";
 import {
     modifyRadioValue,
     getRadioSelectedValue,
@@ -97,6 +240,8 @@ export default defineComponent({
         IonLabel,
         IonModal,
         Stepper,
+        DynamicButton,
+        WeightHeightChart,
     },
     data() {
         return {
@@ -150,7 +295,7 @@ export default defineComponent({
         },
     },
     setup() {
-        return { chevronBackOutline, checkmark };
+        return { chevronBackOutline, checkmark, ellipsisVerticalSharp };
     },
 
     methods: {
@@ -369,4 +514,188 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.demographics {
+    box-sizing: border-box;
+    width: 95vw;
+    height: 92px;
+    left: calc(50% - 461px / 2 + 27.5px);
+    margin-top: 10px;
+    background: #ffffff;
+    border: 1px solid #d9d9d9;
+    border-radius: 7px;
+}
+.demographicsFirstRow {
+    /* _Input dropdown menu item */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 5px;
+    gap: 15px;
+
+    height: 24px;
+    justify-content: space-between;
+}
+.name {
+    /* Text */
+
+    height: 24px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+
+    color: #00190e;
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+.demographicsText {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 5px;
+    color: #636363;
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+.demographicsOtherRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 1px 5px;
+    gap: 10px;
+
+    height: 18px;
+    left: calc(50% - 243px / 2 + 26.5px);
+    top: calc(50% - 23px / 2 - 455.5px);
+}
+.smallFont {
+    font-size: 12px;
+}
+.mediumFontColor {
+    color: #00190e;
+}
+
+.weightHeightGraphBtns {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+.btnText {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+}
+.btnTextWeight {
+    color: #000;
+    --border-width: 1px;
+    margin-right: 15px;
+}
+.dot {
+    font-size: 25px;
+}
+.initialsBox {
+    width: 80px;
+    height: 80px;
+    left: 31px;
+    top: 122px;
+    align-items: center;
+    background: #5983ba;
+    border-radius: 10px;
+    align-items: center;
+    display: flex;
+}
+.initialsText {
+    width: 100%;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 40px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    color: #ffffff;
+}
+.outcomeStatus {
+    align-items: center;
+    padding: 2px 7px;
+    width: 50px;
+    height: 18px;
+    background: #ddeedd;
+    border-radius: 22px;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 11px;
+    align-items: center;
+    text-align: center;
+}
+.graphSection {
+    box-sizing: border-box;
+    background: #f7f7f7;
+    border: 1px solid #d9d9d9;
+    border-radius: 3px;
+    margin-top: 7px;
+}
+.graphBtn {
+    display: flex;
+    justify-content: center;
+}
+.dueAlert {
+    display: flex;
+    justify-content: space-between;
+    border: solid 1px #ccc;
+    border-style: dashed;
+    margin-top: 10px;
+    padding: 5px;
+}
+.dueAlertText {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    color: #b42318;
+    padding: 10px;
+}
+/* ion-button {
+    --padding-top: 0;
+    --padding-bottom: 0;
+} */
+.vaccinesTitle {
+    display: flex;
+    justify-content: space-around;
+    padding: 15px;
+}
+.vaccinesTitleText {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 17px;
+    color: #00190e;
+}
+.vaccinesTitleDate {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    color: #636363;
+}
+.milestone {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.arrowBtns {
+    position: absolute;
+    top: 30px;
+}
+.vaccinesList {
+    margin-top: 8px;
+}
+</style>
