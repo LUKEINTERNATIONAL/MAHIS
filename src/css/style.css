@@ -293,6 +293,15 @@ ion-toast.custom-toast::part(container) {
     --width: 35vw;
     --height: 700px;
 }
+.otherVitalsModal {
+    --height: 530px;
+    --width: 420px;
+    --border-radius: 10px;
+    overflow: scroll;
+}
+ion-modal > .ion-page {
+    overflow: scroll;
+}
 .content_manager {
     justify-content: space-around;
     display: flex;

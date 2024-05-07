@@ -52,12 +52,10 @@
                 <div class="graphBtn">
                     <div class="weightHeightGraphBtns">
                         <div>
-                            <ion-button class="btnText btnTextWeight" size="small" fill="solid" color="warning">
-                                Current Height: <b>94 Cm </b>
-                            </ion-button>
+                            <span class="warningText"> Current Height: <b>94 Cm </b> </span>
                         </div>
                         <div>
-                            <ion-button class="btnText" size="small" fill="solid" color="success"> Current Weight: <b>22 Kg</b> </ion-button>
+                            <span class="successText"> Current Weight: <b>22 Kg</b> </span>
                         </div>
                     </div>
                 </div>
@@ -69,7 +67,7 @@
                             </ion-button>
                         </div>
                         <div>
-                            <ion-button class="btnText" fill="solid">
+                            <ion-button class="btnText" fill="solid" @click="openVitalsModal()">
                                 Enter Other Vitals
                                 <ion-icon slot="end" size="small" :icon="iconsContent.whiteVitals"></ion-icon>
                             </ion-button>
@@ -150,6 +148,52 @@
                         <ion-col size="2"> </ion-col>
                     </ion-row>
                 </div>
+                <div class="otherVaccine">
+                    <div class="centerBtns">
+                        <ion-button class="btnText" fill="solid"> Add Other Vaccines </ion-button>
+                    </div>
+                    <ion-button fill="solid" color="success">
+                        <ion-icon slot="start" :icon="iconsContent.greenInjection"></ion-icon>
+                        Cholera
+                    </ion-button>
+                </div>
+                <div class="dotsWizard">
+                    <ion-icon class="dotStatus" slot="start" :icon="iconsContent.greenDot"></ion-icon>
+                    <ion-icon class="dotStatus" slot="start" :icon="iconsContent.redDot"></ion-icon>
+                    <ion-icon class="dotBig" slot="start" :icon="iconsContent.blueDot"></ion-icon>
+                    <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
+                    <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
+                    <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
+                    <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
+                    <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
+                    <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
+                    <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
+                </div>
+
+                <div class="lastVaccine">
+                    <div class="lastVaccineTitle">
+                        <div class="lastVaccineText">Last vaccines given</div>
+                        <div class="seeFullList">
+                            <ion-button class="btnText btnTextWeight" size="small" fill="clear" color="tertiary">
+                                <span>See full History</span>
+                            </ion-button>
+                        </div>
+                    </div>
+                    <div class="lastVaccineDate">
+                        <ion-icon size="small" :icon="iconsContent.calendar"></ion-icon>
+                        <div>at Birth <span class="dot">.</span> 19 Apr 2024</div>
+                    </div>
+                    <div class="lastVaccineList">
+                        <ion-button fill="solid" color="success">
+                            <ion-icon slot="start" :icon="iconsContent.greenInjection"></ion-icon>
+                            OPV 0
+                        </ion-button>
+                        <ion-button fill="solid" color="success">
+                            <ion-icon slot="start" :icon="iconsContent.greenInjection"></ion-icon>
+                            BCG
+                        </ion-button>
+                    </div>
+                </div>
             </div>
         </ion-content>
     </ion-page>
@@ -182,7 +226,6 @@ import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/components/DemographicBar.vue";
 import { chevronBackOutline, checkmark, ellipsisVerticalSharp } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
-import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import { useVitalsStore } from "@/stores/VitalsStore";
 import { useDemographicsStore } from "@/stores/DemographicStore";
@@ -208,6 +251,8 @@ import { PatientReferralService } from "@/services/patient_referral_service";
 import { PatientAdmitService } from "@/services/patient_admit_service";
 import DynamicButton from "@/components/DynamicButton.vue";
 import WeightHeightChart from "@/apps/Immunization/components/Graphs/WeightHeightChart.vue";
+import { createModal } from "@/utils/Alerts";
+import OtherVitals from "@/apps/Immunization/components/OthervitalsModal.vue";
 import {
     modifyRadioValue,
     getRadioSelectedValue,
@@ -299,6 +344,9 @@ export default defineComponent({
     },
 
     methods: {
+        openVitalsModal() {
+            createModal(OtherVitals, { class: "otherVitalsModal" });
+        },
         async getData() {
             const steps = ["Growth Monitor", "Immunization Services", "Next Appointment", "Change Status"];
             // const steps = this.activities;
@@ -697,5 +745,92 @@ export default defineComponent({
 }
 .vaccinesList {
     margin-top: 8px;
+}
+.seeFullList {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #316cba;
+    float: right;
+}
+.warningText {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 6px;
+    gap: 1px;
+    background: #fedf89;
+    border-radius: 4px;
+    font-size: 13px;
+    margin-right: 10px;
+    color: #636363;
+}
+.successText {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 6px;
+    gap: 1px;
+    background: #ddeedd;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #636363;
+}
+.centerBtns {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+.otherVaccine {
+    padding: 10px;
+    margin-bottom: 10px;
+}
+.dotsWizard {
+    display: flex;
+    justify-content: space-between;
+    width: 150px;
+    margin: 0 auto;
+    align-items: center;
+}
+.dotBig {
+    font-size: 0.7rem !important;
+}
+.dotStatus {
+    font-size: 0.4rem !important;
+}
+.lastVaccineTitle {
+    display: flex;
+    justify-content: space-between;
+}
+.lastVaccine {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
+}
+.lastVaccineText {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 150%;
+    color: #00190e;
+}
+.lastVaccineList {
+    display: flex;
+    justify-content: space-between;
+    width: 210px;
+    margin-bottom: 20px;
+}
+.lastVaccineDate {
+    display: flex;
+    justify-content: space-between;
+    width: 210px;
+    margin-bottom: 10px;
+    align-items: center;
 }
 </style>

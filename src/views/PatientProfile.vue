@@ -41,7 +41,7 @@
                             class="start_new_co"
                             v-if="programAccess('NCD PROGRAM')"
                             style="margin-bottom: 20px"
-                            @click="nav(NCDUserAction.url)"
+                            @click="setProgram(NCDUserAction)"
                         >
                             {{ NCDUserAction.actionName }}
                         </ion-card>
@@ -164,7 +164,7 @@
                 class="displayNoneDesktop"
             >
                 <ul style="list-style: none; line-height: 50px">
-                    <li class="listPrograma" v-if="programAccess('NCD PROGRAM')" style="margin-bottom: 20px" @click="nav(NCDUserAction.url)">
+                    <li class="listPrograma" v-if="programAccess('NCD PROGRAM')" style="margin-bottom: 20px" @click="setProgram(NCDUserAction)">
                         {{ NCDUserAction.actionName }}
                     </li>
                     <li class="listPrograma" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">
@@ -378,6 +378,10 @@ export default defineComponent({
     },
 
     methods: {
+        setProgram(program: any) {
+            sessionStorage.setItem("app", JSON.stringify({ programID: program.id, applicationName: program.name }));
+            this.nav(program.url);
+        },
         convertToDisplayDate(date: any) {
             return HisDate.toStandardHisDisplayFormat(date);
         },
@@ -392,7 +396,6 @@ export default defineComponent({
         },
         async setNCDValue() {
             await UserService.setUserActivities();
-            sessionStorage.setItem("app", JSON.stringify({ programID: 32, applicationName: "NCD" }));
             if (this.userActions.length > 0) [{ NCDUserAction: this.NCDUserAction }] = this.userActions;
         },
         setOPDValue() {
