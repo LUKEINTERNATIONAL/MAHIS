@@ -63,10 +63,15 @@ import BasicForm from "@/components/BasicForm.vue"
 import { useVitalsStore } from "@/apps/Immunization/stores/VitalsStore"
 import DatePicker from "@/components/DatePicker.vue"
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
-import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
-import { VitalsService } from "@/services/vitals_service";
-import { Service } from "@/services/service";
+import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers"
+import { VitalsService } from "@/services/vitals_service"
+import { useDemographicsStore } from "@/stores/DemographicStore"
+import { Service } from "@/services/service"
+import HisDate from "@/utils/Date"
+import { BMIService } from "@/services/bmi_service";
 const store = useVitalsStore()
+const demographicsStore = useDemographicsStore()
+let BMI: { color: any; index: any; result: any } 
 
 
 const props = defineProps<{
@@ -97,7 +102,7 @@ function dateUpdate_fn1(data: any) {
     date_properties[0].dataValue.value = date_data
 }
 
-function validaterowData(event: any){
+async function validaterowData(event: any){
     const userID: any = Service.getUserID();
     const vitalsInstance= new VitalsService(55, userID);
 
@@ -111,10 +116,40 @@ function validaterowData(event: any){
         modifyFieldValue(store.vitals, "Height", "alertsErrorMassage", "");
     modifyFieldValue(store.vitals, "Height", "alertsError", false );
     }
-    
 
-    
+    const weight = vitalsInstance.validator({"inputHeader": "Weight*","value":getFieldValue(store.vitals,"Weight","value")})
 
+    if(weight){
+        modifyFieldValue(store.vitals, "Weight", "alertsErrorMassage", weight.flat(Infinity)[0]);
+    modifyFieldValue(store.vitals, "Weight", "alertsError", true );
+    }else{
+        modifyFieldValue(store.vitals, "Weight", "alertsErrorMassage", "");
+    modifyFieldValue(store.vitals, "Weight", "alertsError", false );
+    }
+
+    setBMI(getFieldValue(store.vitals,"Weight","value"), getFieldValue(store.vitals,"Height","value"))
+}
+
+async function setBMI(weight: any, height: any) {
+    if (demographicsStore.demographics.gender && demographicsStore.demographics.birthdate) {
+        BMI = await BMIService.getBMI(
+            parseInt(weight),
+            parseInt(height),
+            demographicsStore.demographics.gender,
+            HisDate.calculateAge(demographicsStore.demographics.birthdate, HisDate.currentDate())
+        )
+    }
+    updateBMI()
+}
+
+async function updateBMI() {
+    const bmiColor = BMI?.color ?? []
+    const vitals = store.vitals[0].alerts[0]
+    vitals.icon = BMIService.iconBMI(bmiColor)
+    vitals.backgroundColor = bmiColor[0]
+    vitals.textColor = bmiColor[1]
+    vitals.index = "BMI " + BMI?.index ?? ""
+    vitals.value = BMI?.result ?? ""
 }
 </script>
 <style scoped>
