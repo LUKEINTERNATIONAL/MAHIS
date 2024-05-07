@@ -88,7 +88,6 @@ import ComplicationsScreening from "@/apps/NCD/components/ConsultationPlan/Compl
 import ConfirmDiagnosis from "@/apps/NCD/components/ConsultationPlan/ConfirmDiagnosis.vue";
 import Outcome from "@/apps/NCD/components/ConsultationPlan/Outcome.vue";
 import ChangeStatus from "@/apps/Immunization/components/ConsultationPlan/ChangeStatus.vue";
-import GrowthMonitor from "@/apps/Immunization/components/ConsultationPlan/GrowthMonitor.vue";
 import Investigations from "@/components/Investigations.vue";
 import TreatmentPlan from "@/apps/NCD/components/ConsultationPlan/TreatmentPlan.vue";
 import OPDTreatmentPlan from "@/apps/OPD/components/ConsultationPlan/OPDTreatmentPlan.vue";
@@ -242,7 +241,6 @@ export default defineComponent({
         ImmunizationServices,
         ChangeStatus,
         ImmunizationNextAppointment,
-        GrowthMonitor,
       HeadAssessment,
       ANCTreatment,
       ANCDiagnosis,
