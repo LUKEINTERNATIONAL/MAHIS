@@ -21,7 +21,8 @@
                 />
 
                 <div>
-                    <ion-label v-if="date_properties[0].show_error.value" class="error-label">{{ date_properties[0].error_message }}</ion-label>
+                    <ion-label v-if="date_properties[0].show_error.value" class="error-label">
+                        {{ date_properties[0].error_message }}</ion-label>
                 </div>
             </ion-col>
         </ion-row>
@@ -31,6 +32,10 @@
                     :place_holder="time_properties[0].placeHolder"
                     @time-up-dated="time_properties[0].dataHandler"
                 />
+
+                <div>
+                    <ion-label v-if="time_properties[0].show_error.value" class="error-label">{{ time_properties[0].error_message }}</ion-label>
+                </div>
             </ion-col>
             <ion-col></ion-col>
         </ion-row>
@@ -41,13 +46,21 @@
                     :placeholder="note_properties[1].placeHolder"
                     :icon="personCircleOutline"
                     :inputValue="note_properties[1].dataValue.value"
+                    @update:inputValue="note_properties[1].dataHandler"
                 />
+
+                <div>
+                    <ion-label v-if="note_properties[1].show_error.value" class="error-label">
+                        {{ note_properties[1].error_message }}
+                    </ion-label>
+                </div>
             </ion-col>
             <ion-col>
                 <ion-checkbox 
                     :value="checkbox_properties[0].value"
                     alignment="start"
                     class="ion-lblCls"
+                    :disabled="checkbox_properties[0].disable_checkbox.value"
                     > 
                         {{ checkbox_properties[0].lblTxt }}
                     </ion-checkbox>
@@ -61,6 +74,8 @@
                     :icon="phonePortraitOutline"
                     :inputValue="phone_number_value"
                 />
+
+
             </ion-col>
             <ion-col></ion-col>
         </ion-row>
@@ -69,14 +84,26 @@
             <ion-col>
                 <DatePicker
                     :place_holder="date_properties[1].placeHolder"
-                    @time-up-dated="date_properties[1].dataHandler"
+                    @date-up-dated="date_properties[1].dataHandler"
                 />
+
+                <div>
+                    <ion-label v-if="date_properties[1].show_error.value" class="error-label">
+                        {{ date_properties[1].error_message }}
+                    </ion-label>
+                </div>
             </ion-col>
             <ion-col>
                 <TimePicker
                     :place_holder="time_properties[1].placeHolder"
                     @time-up-dated="time_properties[1].dataHandler"
                 />
+
+                <div>
+                    <ion-label v-if="time_properties[1].show_error.value" class="error-label">
+                        {{ time_properties[1].error_message }}
+                    </ion-label>
+                </div>
             </ion-col>
         </ion-row>
 
@@ -94,6 +121,12 @@
                     @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
                     @item-list-filtered="list_picker_prperties[0].listFilteredFN"
                 />
+
+                <div>
+                    <ion-label v-if="list_picker_prperties[0].show_error.value" class="error-label">
+                        {{ list_picker_prperties[0].error_message }}
+                    </ion-label>
+                </div>
             </ion-col>
 
             <ion-col>
@@ -109,6 +142,12 @@
                     @item-list-up-dated="list_picker_prperties[1].listUpdatedFN"
                     @item-list-filtered="list_picker_prperties[1].listFilteredFN"
                 />
+
+                <div>
+                    <ion-label v-if="list_picker_prperties[1].show_error.value" class="error-label">
+                        {{ list_picker_prperties[1].error_message }}
+                    </ion-label>
+                </div>
             </ion-col>
         </ion-row>
 
@@ -119,7 +158,14 @@
                     :icon="pencilOutline"
                     :inputValue="note_properties[5].dataValue.value"
                     :disabled="temP_AA"
+                    @update:inputValue="note_properties[5].dataHandler"
                 />
+
+                <div>
+                    <ion-label v-if="note_properties[5].show_error.value" class="error-label">
+                        {{ note_properties[5].error_message }}
+                    </ion-label>
+                </div>
             </ion-col>
         </ion-row>
 
@@ -129,6 +175,12 @@
                     :place_holder="time_properties[2].placeHolder"
                     @time-up-dated="time_properties[2].dataHandler"
                 />
+
+                <div>
+                    <ion-label v-if="time_properties[2].show_error.value" class="error-label">
+                        {{ time_properties[2].error_message }}
+                    </ion-label>
+                </div>
             </ion-col>
             
             <ion-col>
@@ -136,7 +188,15 @@
                     :placeholder="note_properties[2].placeHolder"
                     :icon="personCircleOutline"
                     :inputValue="note_properties[2].dataValue.value"
+                    @update:inputValue="note_properties[2].dataHandler"
                 />
+
+                
+                <div>
+                    <ion-label v-if="note_properties[2].show_error.value" class="error-label">
+                        {{ note_properties[2].error_message }}
+                    </ion-label>
+                </div>
             </ion-col>
 
         </ion-row>
@@ -147,7 +207,14 @@
                     :placeholder="note_properties[3].placeHolder"
                     :icon="medicalOutline"
                     :inputValue="note_properties[3].dataValue.value"
+                    @update:inputValue="note_properties[3].dataHandler"
                 />
+
+                <div>
+                    <ion-label v-if="note_properties[3].show_error.value" class="error-label">
+                        {{ note_properties[3].error_message }}
+                    </ion-label>
+                </div>
             </ion-col>
 
             <ion-col>
@@ -155,7 +222,14 @@
                     :placeholder="note_properties[4].placeHolder"
                     :icon="pencilOutline"
                     :inputValue="note_properties[4].dataValue.value"
+                    @update:inputValue="note_properties[4].dataHandler"
                 />
+
+                <div>
+                    <ion-label v-if="note_properties[4].show_error.value" class="error-label">
+                        {{ note_properties[4].error_message }}
+                    </ion-label>
+                </div>
             </ion-col>
         </ion-row>
 
@@ -181,7 +255,7 @@
 
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from "vue"
 export default defineComponent({
     name: "xxxComponent",
 });
@@ -196,6 +270,7 @@ import ListPicker from "@/components/ListPicker.vue"
 import BasicInputField from "@/components/BasicInputField.vue"
 import DynamicButton from "@/components/DynamicButton.vue"
 import { PatientService } from "@/services/patient_service"
+import { areFieldsValid, getFieldsValuesObj } from "@/utils/GeneralUti"
 import {
     checkmark,
     pulseOutline,
@@ -213,7 +288,8 @@ import {
     medicalOutline,
     pencilOutline,
     removeOutline
-} from "ionicons/icons";
+} from "ionicons/icons"
+import _ from "lodash"
 
 const phone_number_value = ref()
 const phone_number_place_holder = ref('gurdian phone number')
@@ -221,51 +297,73 @@ const isClientFemale = ref(true)
 const temP_A = ref(true as any)
 const temP_AA = ref(true as any)
 
+onMounted(async () => {
+    checkPatient()
+})
+
 const time_properties = [
     {
         placeHolder: {default: 'Enter time of death if known'} as any,
+        property_name: 'timeOfDeath',
         dataHandler: timeUpdate_fn1,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'error',
+        error_message: 'Time required',
+        type: 'time',
+        skip_validation: false,
     },
     {
         placeHolder: {default: 'Enter time arrived'} as any,
+        property_name: 'timeArrived',
         dataHandler: timeUpdate_fn2,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'error',
+        error_message: 'Time required',
+        type: 'time',
+        skip_validation: false,
     },
     {
         placeHolder: {default: 'Enter time confirming death'} as any,
+        property_name: 'timeOfDeathConfirmation',
         dataHandler: timeUpdate_fn3,
         dataValue: ref(),
         show_error: ref(false),
         error_message: 'error',
+        error_message: 'Time required',
+        skip_validation: false,
     }, 
 ]
 
 const date_properties = [
     {
         placeHolder: {default: 'Enter date of death'} as any,
+        property_name: 'dateOfDeath',
         dataHandler: dateUpdate_fn1,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'error',
+        error_message: 'Date required',
+        type: 'date',
+        skip_validation: false,
     },
     {
         placeHolder: {default: 'Enter date arrived'} as any,
+        property_name: 'dateArrived',
         dataHandler: dateUpdate_fn2,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'error'
+        error_message: 'Date required',
+        type: 'date',
+        skip_validation: false,
     },
     {
         placeHolder: {default: 'Enter date confirming death'} as any,
+        property_name: 'dateOfDeathConfirmation',
         dataHandler: dateUpdate_fn3,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'error',
+        error_message: 'Date required',
+        type: 'date',
+        skip_validation: false,
     }, 
 ]
 
@@ -273,50 +371,71 @@ const checkbox_properties = [
     {
         lblTxt: 'Was the individual pregnant at the time of death?',
         value: ref(false),
+        disable_checkbox: ref(true),
     }
 ]
 
 const note_properties = [
     {
         placeHolder: 'Enter place of death',
+        property_name: 'placeOfDeath',
         dataHandler: notesUpDated_fn1,
         dataValue: ref(),
         show_error: ref(false) as any,
-        error_message: 'error',
+        error_message: 'Input required, Only letters are allowed',
+        type: 'text',
+        skip_validation: false,
     },
     {
         placeHolder: 'Enter name of guardian',
+        property_name: 'nameOfGuardian',
         dataHandler: notesUpDated_fn2,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'error',
+        error_message: 'Input required, Only letters are allowed',
+        type: 'text',
+        skip_validation: false,
     },
     {
         placeHolder: 'Enter name of person confirming death',
+        property_name: 'nameOfPersonConfirmindDeath',
         dataHandler: notesUpDated_fn3,
         dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'Input required, Only letters are allowed',
+        type: 'text',
+        skip_validation: false,
     },
     {
         placeHolder:'Enter position of the person confirming death',
+        property_name: 'positionOfthePersonConfirmingDeath',
         dataHandler: notesUpDated_fn4,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'error',
+        error_message: 'Input required, Only letters are allowed',
+        type: 'text',
+        skip_validation: false,
     },
     {
         placeHolder: 'Enter medical council registration number of the person confirming death',
+        property_name: 'medicalConcilRegistrationNumberOfThePersonConfirmingDeath',
         dataHandler: notesUpDated_fn5,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'error',
+        error_message: 'Input required, Only letters and numbers are allowed',
+        type: 'alphanumeric',
+        skip_validation: false,
     },
     {
         placeHolder: 'Other (specify)',
+        property_name: 'otherNotes',
         dataHandler: notesUpDated_fn6,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'error',
-        dissabled: temP_AA.value
+        error_message: 'Input required, Only letters are allowed',
+        dissabled: temP_AA.value,
+        type: 'text',
+        skip_validation: true,
     }, 
 ]
 
@@ -360,24 +479,30 @@ const list_picker_prperties = [
         show_list_label: true as any,
         unqueId: 'qwerty' as any,
         name_of_list: 'Manner of death ' as any,
+        property_name: 'mannerOfDeath',
         placeHolder: 'Choose one' as any,
         items: mannerOfDeath.value,
         listUpdatedFN: listUpdated1,
         listFilteredFN: ()=>{},
         use_internal_filter: true as any,
         disabled: ref(false) as any,
+        show_error: ref(false),
+        error_message: 'selection required',
     },
     {
         multi_Selection: false as any,
         show_list_label: true as any,
-        unqueId: 'qwerty1' as any,
+        unqueId: 'qwerty1hjkn' as any,
         name_of_list: 'How did it occur?' as any,
+        property_name: 'howDiditOccur',
         placeHolder: 'Choose one' as any,
         items: causesOfDeath.value,
         listUpdatedFN: listUpdated2,
         listFilteredFN: ()=>{},
         use_internal_filter: true as any,
         disabled: temP_A.value,
+        show_error: ref(false),
+        error_message: 'selection required',
     },
 ]
 
@@ -416,35 +541,55 @@ function dateUpdate_fn1(data: any) {
 }
 
 function dateUpdate_fn2(data: any) {
-    date_properties[1].dataValue.value = data
+    const date_data = {
+        day: data.value.day,
+        month: data.value.month,
+        year: data.value.year,
+        formattedDate: data.formattedDate
+    }
+    date_properties[1].dataValue.value = date_data
+    console.log(date_properties[2].dataValue.value)
 }
 
 function dateUpdate_fn3(data: any) {
-    date_properties[2].dataValue.value = data
+    const date_data = {
+        day: data.value.day,
+        month: data.value.month,
+        year: data.value.year,
+        formattedDate: data.formattedDate
+    }
+    date_properties[2].dataValue.value = date_data
+
+    console.log(date_properties[2].dataValue.value)
 }
 
 function notesUpDated_fn1(event: any) {
     const reason = event.target.value
     note_properties[0].dataValue.value = reason
 }
-function notesUpDated_fn2(data: any) {
-    note_properties[1].dataValue.value = data
+function notesUpDated_fn2(event: any) {
+    const input = event.target.value
+    note_properties[1].dataValue.value = input
 }
 
-function notesUpDated_fn3(data: any) {
-    note_properties[2].dataValue.value = data
+function notesUpDated_fn3(event: any) {
+    const input = event.target.value
+    note_properties[2].dataValue.value = input
 }
 
-function notesUpDated_fn4(data: any) {
-    note_properties[3].dataValue.value = data
+function notesUpDated_fn4(event: any) {
+    const input = event.target.value
+    note_properties[3].dataValue.value = input
 }
 
-function notesUpDated_fn5(data: any) {
-    note_properties[4].dataValue.value = data
+function notesUpDated_fn5(event: any) {
+    const input = event.target.value
+    note_properties[4].dataValue.value = input
 }
 
-function notesUpDated_fn6(data: any) {
-    note_properties[5].dataValue.value = data
+function notesUpDated_fn6(event: any) {
+    const input = event.target.value
+    note_properties[5].dataValue.value = input
 }
 
 function listUpdated1(data: any) {
@@ -480,7 +625,7 @@ function listUpdated2(data: any) {
             temP_AA.value = false
             return
         } else if (index == 3 && datum.selected == false) {
-            resetSelectionForCausesOfDeath()
+            //resetSelectionForCausesOfDeath()
             temP_AA.value = true
         }
     })
@@ -488,33 +633,68 @@ function listUpdated2(data: any) {
     causesOfDeath.value = data
 }
 
-function iweFn(data: any) {
-
-}
 
 function checkPatient() {
     const patient = new PatientService()
-    return patient.isChildBearing()
-}
-
-function validateForm() {
-    validatePlaceOfDeath()
-    validateDateOfDeath()
-}
-
-function validatePlaceOfDeath() {
-    if (note_properties[0].dataValue.value == "" || note_properties[0].dataValue.value === undefined) {
-        note_properties[0].show_error.value = true
-    } else {
-        note_properties[0].show_error.value = false
+    const isChildBearing = patient.isChildBearing as any
+    if (isChildBearing == true) {
+        checkbox_properties[0].disable_checkbox.value = false
+    }
+    if (isChildBearing == false) {
+        checkbox_properties[0].disable_checkbox.value = true
     }
 }
 
-function validateDateOfDeath() {
-    if (date_properties[0].dataValue.value === undefined || date_properties[0].dataValue.value == "") {
-        date_properties[0].show_error.value = true 
+function validateForm() {
+    areFieldsValid(note_properties)
+    areFieldsValid(date_properties)
+    areFieldsValid(time_properties)
+    isItemSeleted(list_picker_prperties[0])
+    isItemSeleted(list_picker_prperties[1])
+
+    const payload = _.merge(
+        getFieldsValuesObj(note_properties),
+        getFieldsValuesObj(date_properties),
+        getFieldsValuesObj(time_properties),
+        getItemSeletedObj(list_picker_prperties[0]),
+        getItemSeletedObj(list_picker_prperties[1])
+    )
+
+    console.log(payload)
+}
+
+function isItemSeleted(propoerties_item: any) {
+    const temp_data_v = []
+    propoerties_item.items.forEach((item: any) => {
+        if (item.selected == true) {
+            temp_data_v.push(item)
+        }
+    })
+    if (temp_data_v.length > 0) {
+        propoerties_item.show_error.value = false 
     } else {
-        date_properties[0].show_error.value = false
+        propoerties_item.show_error.value = true
+    }
+
+    return propoerties_item.show_error.value
+}
+
+function getItemSeletedObj(propoerties_item: any) {
+    const temp_data_v: any[] = []
+    let resultObject: { [key: string]: any } = {};
+    propoerties_item.items.forEach((item: any) => {
+        if (item.selected == true) {
+            temp_data_v.push({
+                property_name: propoerties_item.property_name,
+                name: item.name
+            })
+        }
+    })
+    if (temp_data_v.length > 0) {
+        resultObject[temp_data_v[0].property_name] = temp_data_v[0].name
+        return resultObject
+    } else {
+        return resultObject
     }
 }
 

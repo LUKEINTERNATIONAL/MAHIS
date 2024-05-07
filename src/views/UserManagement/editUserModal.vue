@@ -11,7 +11,7 @@
             </ion-toolbar>
         </ion-header>
         <ion-content class="ion-padding">
-            <div class="modal_wrapper">
+            <div class="modal_wrapper" >
                 <div class="center text_12">
                     <ion-row>
                         <!-- <basic-form :contentData="[]"> </basic-form> -->
