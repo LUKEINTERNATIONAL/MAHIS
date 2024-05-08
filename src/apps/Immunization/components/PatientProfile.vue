@@ -45,7 +45,8 @@
                 </div>
             </div>
             <div>
-                <WeightHeightChart />
+                <WeightHeightChart v-if="isChild()" />
+                <PreviousVitals v-if="!isChild()" />
             </div>
             <div class="graphBtn">
                 <div class="weightHeightGraphBtns">
@@ -100,7 +101,7 @@
                 <div class="vaccinesTitleDate">(Swipe left or right for other milestones)</div>
             </div>
             <!--Vaccine Card-->
-            <div class="vaccinesList">
+            <div class="vaccinesList" @click="openAdministerVaccineModal()">
                 <ion-row>
                     <ion-col size="2">
                         <ion-button fill="clear" class="arrowBtns">
@@ -148,12 +149,8 @@
             </div>
             <div class="otherVaccine">
                 <div class="centerBtns">
-                    <ion-button class="btnText" fill="solid"> Add Other Vaccines </ion-button>
+                    <ion-button @click="openAdministerOtherVaccineModal()" class="btnText" fill="solid"> Add Other Vaccines </ion-button>
                 </div>
-                <ion-button fill="solid" color="success">
-                    <ion-icon slot="start" :icon="iconsContent.greenInjection"></ion-icon>
-                    Cholera
-                </ion-button>
             </div>
             <div class="dotsWizard">
                 <ion-icon class="dotStatus" slot="start" :icon="iconsContent.greenDot"></ion-icon>
@@ -253,6 +250,10 @@ import OtherVitals from "@/apps/Immunization/components/OthervitalsModal.vue";
 import vaccinationHistory from "@/apps/Immunization/components/Modals/vaccinationHistoryModal.vue";
 import personalInformationModal from "@/apps/Immunization/components/Modals/personalInformationModal.vue";
 import weightAndHeight from "@/apps/Immunization/components/Modals/weightAndHeight.vue";
+import administerVaccineModal from "@/apps/Immunization/components/Modals/administerVaccineModal.vue";
+import administerOtherVaccineModal from "@/apps/Immunization/components/Modals/administerOtherVaccineModal.vue";
+import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
+import { PatientService } from "@/services/patient_service";
 
 import {
     modifyRadioValue,
@@ -289,6 +290,7 @@ export default defineComponent({
         Stepper,
         DynamicButton,
         WeightHeightChart,
+        PreviousVitals,
     },
     data() {
         return {
@@ -357,6 +359,17 @@ export default defineComponent({
         },
         openVH() {
             createModal(vaccinationHistory, { class: "otherVitalsModal" });
+        },
+        openAdministerVaccineModal() {
+            createModal(administerVaccineModal, { class: "otherVitalsModal" });
+        },
+        openAdministerOtherVaccineModal() {
+            createModal(administerOtherVaccineModal, { class: "otherVitalsModal" });
+        },
+        isChild() {
+            const patient = new PatientService();
+            if (patient.isUnderFive()) return true;
+            else return false;
         },
         async getData() {
             const steps = ["Growth Monitor", "Immunization Services", "Next Appointment", "Change Status"];

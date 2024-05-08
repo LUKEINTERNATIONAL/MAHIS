@@ -3,7 +3,7 @@
         <div class="OtherVitalsTitle">Other Vitals</div>
         <div>Todays Date: <span></span> 06 Jul 2024</div>
     </div>
-    <div class="vitalsContent">
+    <div class="">
         <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form>
     </div>
     <div class="btnContent">

@@ -294,7 +294,7 @@ ion-toast.custom-toast::part(container) {
     --height: 700px;
 }
 .otherVitalsModal {
-    --height: 530px;
+    /* --height: 530px; */
     --width: 400px;
     --border-radius: 10px;
     overflow: scroll;
