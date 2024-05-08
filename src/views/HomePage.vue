@@ -19,7 +19,8 @@
                 <div class="totalNumber">3,764</div>
                 <div class="totalText">Children & Adults vaccinated this year!</div>
             </div>
-            <ion-img :src="loadImage('immunizationHome.jpeg')" alt="home image"></ion-img>
+            <!-- <ion-img :src="loadImage('immunizationHome.jpeg')" alt="home image"></ion-img> -->
+            <div style="background-color: #DDEEDD; widows: 100%; height: 100%;"></div>
             <div class="graphBackground">
                 <div class="dueMiss">
                     <div class="due">
@@ -251,7 +252,8 @@ export default defineComponent({
 .clientSeen {
     height: 120px;
     margin-top: 15px;
-    background: #ddeedd;
+    background: #FFFFFF;
+;
 }
 .clientSeenTitle {
     padding-top: 10px;
