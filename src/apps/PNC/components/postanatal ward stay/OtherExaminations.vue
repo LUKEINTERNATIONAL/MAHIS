@@ -34,6 +34,7 @@ import { mapState } from 'pinia';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import BasicCard from "@/components/BasicCard.vue";
 import {usePostnatalWardStayStore} from "@/apps/PNC/stores/postnatal ward stay/PostnatalWardMonitoring";
+import {getRadioSelectedValue, modifyRadioValue} from "@/services/data_helpers";
 export default defineComponent({
   name: "DeliveryDetails",
   components:{
@@ -71,13 +72,30 @@ export default defineComponent({
   mounted(){
     const otherExams=usePostnatalWardStayStore()
     this.initialData=otherExams.getInitial2()
+    this.handleOtherExaminations()
   },
   watch:{
+   otherExams:{
+     handler(){
+       this.handleOtherExaminations()
+     },
+     deep:true
+   },
   },
   setup() {
     return { checkmark,pulseOutline };
   },
-  methods: {}
+  methods: {
+    handleOtherExaminations(){
+      if (getRadioSelectedValue(this.otherExams, 'Status of uterus') == 'Sub-involuted') {
+        modifyRadioValue(this.otherExams, 'Intervention given', 'displayNone', false);
+      } else {
+        modifyRadioValue(this.otherExams, 'Intervention given', 'displayNone', true);
+        modifyRadioValue(this.otherExams, 'Intervention given', 'selectedValue', '');
+
+      }
+    }
+  }
 });
 
 </script>

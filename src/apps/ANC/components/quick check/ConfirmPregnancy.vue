@@ -92,13 +92,8 @@ export default defineComponent({
 .section {
   width: 100%;
   max-width: 1300px; /* Adjust max-width as needed */
-  margin-bottom: 20px;
 }
 
-ion-card {
-  box-shadow:none;
-  background-color:inherit;
-}
 .navigation-buttons {
   display: flex;
   justify-content: space-between;
@@ -116,7 +111,7 @@ ion-card {
   font-size: medium;
 }
 ion-card {
-  box-shadow:none;
-  background-color:inherit;
+  width: 100%;
+  color: black;
 }
 </style>

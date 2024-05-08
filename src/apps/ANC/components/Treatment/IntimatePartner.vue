@@ -201,8 +201,7 @@ export default defineComponent ({
 }
 
 ion-card {
- box-shadow:none;
-  background-color:inherit;   
+
   width: 100%;
  color: black;
 }

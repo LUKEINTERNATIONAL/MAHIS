@@ -147,6 +147,8 @@ export class UserService extends Service {
             NCDUserAction: {
                 actionName: NCDProgramActionName,
                 url: url,
+                name: "NCD",
+                id: "32",
             },
         };
     }

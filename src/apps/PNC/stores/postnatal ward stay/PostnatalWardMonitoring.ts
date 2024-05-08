@@ -378,7 +378,7 @@ const initialOtherexams=[
                     },
                     {
                         name: 'Sub-involuted',
-                        value: 'sub-involuted',
+                        value: 'Sub-involuted',
                         colSize: '5',
 
                     },
@@ -423,7 +423,8 @@ const initialOtherexams=[
     },
 
     {
-        selectdData: [],
+        selectedData: [],
+        childName:'',
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
         radioBtnContent:
@@ -433,7 +434,8 @@ const initialOtherexams=[
                     selectedValue: '',
                     name:'Intervention given',
                     class:'bold',
-                    displayNext:'Yes'
+                    displayNext:'Yes',
+                    displayNone:true,
                 },
                 data:[
                     {
@@ -1039,6 +1041,6 @@ export const usePostnatalWardStayStore = defineStore('postnatalWardStayStore',{
             return [...data];
         },
     },
-    persist:true,
+    // persist:true
 
 })

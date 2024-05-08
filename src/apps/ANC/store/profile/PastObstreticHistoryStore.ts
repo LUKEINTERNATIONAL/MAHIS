@@ -29,12 +29,14 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
         },
       },
       {
+        isFinishBtn: false,
+        sectionHeader: "",
         data: {
           rowData: [
             {
               colData: [
                 {
-                  inputHeader: "Abortions/Miscarriages",
+                  inputHeader: "Abortions",
                   value: "",
                   icon: icons.editPen,
                   name: "Abortions",
@@ -61,6 +63,8 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
         },
       },
       {
+        isFinishBtn: false,
+        sectionHeader: "",
         classDash: "dashed_bottom_border _padding",
         data: {
           rowData: [
