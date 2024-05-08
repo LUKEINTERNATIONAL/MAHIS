@@ -116,10 +116,11 @@ export default defineComponent({
         this.initialData = lnmp.getInitial();
         this.initialData1 = ultrasound.getInitial1();
         this.initialData2 = tetanus.getInitial2();
-        this.handleLMNP()
-        this.handleUltrasound()
+        //this.handleLMNP()
+        //this.handleUltrasound()
         this.handleTetanus()
         this.calculateEDD
+        this.handlettv1()
   
   
           
@@ -132,7 +133,7 @@ export default defineComponent({
        lmnp:{
          handler( event){
            this.handleInputData(event)
-           this.handleLMNP()
+           //this.handleLMNP()
            this.calculateEDD(event)
           },
          deep:true
@@ -140,13 +141,14 @@ export default defineComponent({
        },
         ultrasound:{
          handler(){
-           this.handleUltrasound()
+          // this.handleUltrasound()
          },
           deep:true
         },
         tetanus:{
           handler(){
             this.handleTetanus()
+            this.handlettv1()
           },
           deep:true
         },
@@ -159,39 +161,74 @@ export default defineComponent({
           this.validationRules(event)
           this.calculateGestationAgefromLNMP(event)
           this.calculateEDD(event)
+          this.calculateEDDFromGestationAge(event)
+          this.calculateLNMPdatefromAge(event)
+          this.calculateEDDFromPalpation(event)
         },
-
         calculateGestationAgefromLNMP(event: any) {
-          if (event.name == "lmnpDate") {
-            const lmnpDateValue = Date.parse(getFieldValue(this.lmnp, 'lmnpDate', 'value'));
-            if (!isNaN(lmnpDateValue)) {
-              const currentDate = new Date().getTime(); // current date in milliseconds
-              const lmnpGestationAge = Math.floor((currentDate - lmnpDateValue) / (1000 * 60 * 60 * 24 * 7)); // calculate gestation age in weeks
-              modifyFieldValue(this.lmnp, 'lmnpGestationAge', 'value', lmnpGestationAge);
-            } else {
-              modifyFieldValue(this.lmnp, 'lmnpGestationAge', 'value', null);
-            }
-          }
+              if (event.name == "lmnpDate") {
+                  const lmnpDateValue = Date.parse(getFieldValue(this.lmnp, 'lmnpDate', 'value'));
+                  if (!isNaN(lmnpDateValue)) {
+                      const currentDate = new Date().getTime();
+                      const gestationalAgeInDays = (currentDate - lmnpDateValue) / (1000 * 60 * 60 * 24);
+                      const gestationalAgeInWeeks = Math.floor(gestationalAgeInDays / 7);
+                      modifyFieldValue(this.lmnp, 'lmnpGestationAge', 'value', gestationalAgeInWeeks);
+                  } else {
+                      modifyFieldValue(this.lmnp, 'lmnpGestationAge', 'value', null);
+                  }
+              }
         },
         calculateEDD(event: any) {
-            if (event.name === "lmnpDate") {
-              const lmnpDateValue = Date.parse(getFieldValue(this.lmnp, 'lmnpDate', 'value'));
-              if (!isNaN(lmnpDateValue)) {
-                const currentDate = new Date().getTime();
-                const gestationWeeks = Math.floor((currentDate - lmnpDateValue) / (1000 * 60 * 60 * 24 * 7)); 
-                const estimatedDueDate = new Date(lmnpDateValue + gestationWeeks * 7 * 24 * 60 * 60 * 1000); 
-                modifyFieldValue(this.lmnp, 'Estimated date of delivery', 'value', estimatedDueDate);
-              } else {
-                modifyFieldValue(this.lmnp, 'Estimated date of delivery', 'value', null);
-              }
-            }
+                if (event.name === "lmnpDate") {
+                    const lmnpDateValue = Date.parse(getFieldValue(this.lmnp, 'lmnpDate', 'value'));
+                    if (!isNaN(lmnpDateValue)) {
+                        const eddDateValue = new Date(lmnpDateValue + 40 * 7 * 24 * 60 * 60 * 1000); 
+                        modifyFieldValue(this.lmnp, 'Estimated date of delivery', 'value', eddDateValue);
+                    } else {
+                        modifyFieldValue(this.lmnp, 'Estimated date of delivery', 'value', null);
+                    }
+                }
        
           },
-        handleLMNP(){
-        },
+          calculateEDDFromGestationAge(event: any) {
+              if (event.name === "specify") {
+                  const gestationalAgeInWeeks = parseInt(getFieldValue(this.ultrasound, 'specify', 'value'));
+                  if (!isNaN(gestationalAgeInWeeks)) {
+                      const currentDate = new Date();
+                      const conceptionDate = new Date(currentDate.getTime() - (gestationalAgeInWeeks * 7 * 24 * 60 * 60 * 1000));
+                      const edd = new Date(conceptionDate.getTime() + (280 * 24 * 60 * 60 * 1000));
+                      modifyFieldValue(this.ultrasound, 'Estimated date of delivery', 'value', edd);
+                  } else {
+                      modifyFieldValue(this.ultrasound, 'Estimated date of delivery', 'value', null);
+                  }
+              }
+          },
 
-        handleUltrasound(){
-        },
+          calculateLNMPdatefromAge(event: any) {
+              if (event.name === "specify") {
+                  const gestationalAgeInWeeks = parseInt(getFieldValue(this.ultrasound, 'specify', 'value'));
+                  if (!isNaN(gestationalAgeInWeeks)) {
+                      const currentDate = new Date();
+                      const lnmpDate = new Date(currentDate.getTime() - (gestationalAgeInWeeks * 7 * 24 * 60 * 60 * 1000));
+                      modifyFieldValue(this.ultrasound, 'ultrasound lmnp date', 'value', lnmpDate);
+                  } else {
+                      modifyFieldValue(this.ultrasound, 'ultrasound lmnp date', 'value', null);
+                  }
+              }
+          },
+          calculateEDDFromPalpation(event: any) {
+              if (event.name === "Gestation age to be used") {
+                  const gestationalAgeInWeeks = parseInt(getFieldValue(this.ultrasound, 'Gestation age to be used', 'value'));
+                  if (!isNaN(gestationalAgeInWeeks)) {
+                      const currentDate = new Date();
+                      const conceptionDate = new Date(currentDate.getTime() - (gestationalAgeInWeeks * 7 * 24 * 60 * 60 * 1000));
+                      const edd = new Date(conceptionDate.getTime() + (280 * 24 * 60 * 60 * 1000));
+                      modifyFieldValue(this.ultrasound, 'date of delivery', 'value', edd);
+                  } else {
+                      modifyFieldValue(this.ultrasound, 'date of delivery', 'value', null);
+                  }
+              }
+          },
 
         handleTetanus(){
           if(getRadioSelectedValue(this.tetanus, 'The woman received tetanus doses for immunization?')=='fully immunised'){
@@ -211,9 +248,44 @@ export default defineComponent({
           }
 
           if(getRadioSelectedValue(this.tetanus, 'The woman received tetanus doses for immunization?')=='under immunised'){
-            modifyFieldValue(this.tetanus,'immunised doses','displayNone', false)
-          }   else {modifyFieldValue(this.tetanus,'immunised doses','displayNone', true)}
+            modifyRadioValue(this.tetanus,'Number of tetanus doses','displayNone', false)
+          }   else {
+            modifyRadioValue(this.tetanus,'Number of tetanus doses','displayNone', true)
+          }
 
+          if(getRadioSelectedValue(this.tetanus, 'Number of tetanus doses')=='1'){
+            modifyFieldValue(this.tetanus,'tt6Date','displayNone', false)
+          }   else {
+            modifyFieldValue(this.tetanus,'tt6Date','displayNone', true)
+          }
+          if(getRadioSelectedValue(this.tetanus, 'Number of tetanus doses')=='2'){
+            modifyFieldValue(this.tetanus,'tt7Date','displayNone', false)
+            modifyFieldValue(this.tetanus,'tt8Date','displayNone', false)
+          }   else {
+            modifyFieldValue(this.tetanus,'tt7Date','displayNone', true)
+            modifyFieldValue(this.tetanus,'tt8Date','displayNone', true)
+          }
+          if(getRadioSelectedValue(this.tetanus, 'Number of tetanus doses')=='3'){
+            modifyFieldValue(this.tetanus,'tt9Date','displayNone', false)
+            modifyFieldValue(this.tetanus,'tt10Date','displayNone', false)
+            modifyFieldValue(this.tetanus,'tt11Date','displayNone', false)
+          }   else {
+            modifyFieldValue(this.tetanus,'tt9Date','displayNone', true)
+            modifyFieldValue(this.tetanus,'tt10Date','displayNone', true)
+            modifyFieldValue(this.tetanus,'tt11Date','displayNone', true)
+          }
+          if(getRadioSelectedValue(this.tetanus, 'Number of tetanus doses')=='4'){
+            modifyFieldValue(this.tetanus,'12','displayNone', false)
+            modifyFieldValue(this.tetanus,'13','displayNone', false)
+            modifyFieldValue(this.tetanus,'14','displayNone', false)
+            modifyFieldValue(this.tetanus,'15','displayNone', false)
+          }   else {
+            modifyFieldValue(this.tetanus,'12','displayNone', true)
+            modifyFieldValue(this.tetanus,'13','displayNone', true)
+            modifyFieldValue(this.tetanus,'14','displayNone', true)
+            modifyFieldValue(this.tetanus,'15','displayNone', true)
+          }
+          
 
           if(getRadioSelectedValue(this.tetanus,'The woman received tetanus doses for immunization?') == 'no doses'){
             modifyRadioValue(this.tetanus,'Reason Tetanus toxoid (TT) was not conducted','displayNone',false)
@@ -225,6 +297,13 @@ export default defineComponent({
           }
 
         },
+       handlettv1(){
+          // if(getRadioSelectedValue(this.tetanus, 'Number of tetanus doses')=='1'){
+          //   modifyFieldValue(this.tetanus,'tt1Date','displayNone', false)
+          // }   else {
+          //   modifyFieldValue(this.tetanus,'tt1Date','displayNone', true)
+          // }
+       },
     }
    
       },
