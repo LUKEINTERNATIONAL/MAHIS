@@ -199,7 +199,7 @@ export default defineComponent({
             //         this.$router.push("consultationPlan");
             //     }
             // }
-            this.$router.push("immunizationConsultation");
+            this.$router.push("patientProfile");
         },
         openModal() {
             createModal(SaveProgressModal);

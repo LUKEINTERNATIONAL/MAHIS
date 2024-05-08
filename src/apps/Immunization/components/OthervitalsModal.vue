@@ -362,7 +362,6 @@ h5 {
 }
 .vitalsContent {
     height: 500px;
-    margin: 10px;
 }
 .saveBtn {
     display: flex;
