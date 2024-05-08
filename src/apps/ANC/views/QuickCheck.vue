@@ -117,15 +117,15 @@ export default defineComponent({
           'number': 2,
           'last_step':'last_step'
         },
-        // {
-        //   'title': 'Confirm pregnancy',
-        //   'class': 'common_step',
-        //   'checked':'',
-        //   'icon': false,
-        //   'disabled':false,
-        //   'number': 3,
-        //   'last_step': ''
-        // },
+        {
+          'title': 'Reason for visit',
+          'class': 'common_step',
+          'checked':'',
+          'icon': false,
+          'disabled':false,
+          'number': 3,
+          'last_step': ''
+        },
         // {
         //   'title': 'Specific health concerns',
         //   'class': 'common_step',
@@ -147,11 +147,11 @@ export default defineComponent({
           component: 'ReasonForVisit',
           value: '2',
         },
-        // {
-        //   title: 'Confirm pregnancy',
-        //   component: 'ConfirmPregnancy',
-        //   value: '3',
-        // },
+        {
+          title: 'Reason for visit',
+          component: 'SubsequentVisits',
+          value: '3',
+        },
         // {
         //   title: 'Specific health concerns',
         //   component: 'SpecificHealthConcerns',

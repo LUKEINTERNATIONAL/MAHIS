@@ -1,13 +1,12 @@
 <template>
-    <ion-list>
-        <ion-item  class="dashed_bottom_border" style="font-weight: bold;">
-             Current physiological symptoms
-        </ion-item>   
-        <div class="sub_item_body">
-            <BasicForm :contentData="physiologicalSymptoms" />
-        </div>
-        <ion-item class="sub_item_body_close"/>
-    </ion-list>
+  <div class="container">
+    <ion-card class="section">
+      <ion-card-content>
+        <basic-form :contentData="physiologicalSymptoms"
+        ></basic-form>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </template>
 
 <script lang="ts">

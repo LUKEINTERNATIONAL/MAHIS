@@ -11,9 +11,10 @@ export const useAncEndStore = defineStore('ancEndStore',{
                 classDash: 'dashed_bottom_border',
                 radioBtnContent:{
                     header:{
-                        title: '',
+                        title: 'What is the outcome of the pregnancy?',
                         selectedValue: '',
-                        name:'Reason for closing ANC'
+                        name:'Reason for closing ANC',
+                        class:'bold'
                     },
                     data:[
                         {

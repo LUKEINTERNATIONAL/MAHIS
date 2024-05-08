@@ -166,6 +166,7 @@ import ImmidiatePostnatalChecksForChild
   from "@/apps/LABOUR/components/delivery details/ImmidiatePostnatalChecksForChild.vue";
 import ImmidiatePostnatalChecksForMother
   from "@/apps/LABOUR/components/delivery details/ImmidiatePostnatalChecksForMother.vue";
+import SubsequentVisits from "@/apps/ANC/components/quick check/SubsequentVisits.vue";
 
 export default defineComponent({
     name: "Home",
@@ -272,7 +273,9 @@ export default defineComponent({
       OtherExams,
       LabourVitals,
       ImmidiatePostnatalChecksForChild,
-      ImmidiatePostnatalChecksForMother
+      ImmidiatePostnatalChecksForMother,
+      SubsequentVisits
+
 
     },
     data() {
