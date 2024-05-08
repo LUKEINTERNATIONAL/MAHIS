@@ -416,7 +416,7 @@ ion-accordion {
     z-index: unset;
 }
 .multiselect__content-wrapper {
-    position: fixed;
+    position: absolute;
     width: 300px;
 }
 /* #null-0 {

@@ -9,15 +9,6 @@
                 <div class="title">
                     <div class="demographics_title">Birth Registration</div>
                 </div>
-                <div class="icon_div">
-                    <ion-icon :class="iconListStatus" :icon="list" @click="setDisplayType('list')"></ion-icon>
-                    <ion-icon
-                        :class="iconGridStatus"
-                        style="font-size: 21px; margin-top: 1.5px"
-                        :icon="grid"
-                        @click="setDisplayType('grid')"
-                    ></ion-icon>
-                </div>
             </div>
             <div>
                 <ion-row class="card_row">

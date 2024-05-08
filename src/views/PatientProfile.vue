@@ -2,9 +2,9 @@
     <ion-page>
         <Toolbar />
         <ion-content :fullscreen="true">
-            <DemographicBar class="displayNoneDesktop" v-if="activeProgramID !== 33" />
+            <DemographicBar class="displayNoneDesktop" v-if="activeProgramID !== 33 && activeProgramID != ''" />
             <PatientProfile v-if="activeProgramID == 33" />
-            <div class="content_manager" v-if="activeProgramID !== 33">
+            <div class="content_manager" v-if="activeProgramID !== 33 && activeProgramID != ''">
                 <ion-row class="content_width">
                     <ion-col size="3" size-lg="3" size-md="4" class="displayNoneMobile">
                         <ion-card style="margin-bottom: 20px; background-color: #fff">
