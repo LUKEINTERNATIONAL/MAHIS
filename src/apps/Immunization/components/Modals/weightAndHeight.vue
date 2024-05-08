@@ -26,14 +26,14 @@
                 <div>
                     <ion-button class="btnText" fill="solid">
                         Done today
-                        <ion-icon slot="end" size="small" :icon="icons.whiteVitals"></ion-icon>
+                        <ion-icon slot="end" size="small" :icon="icons.calenderwithPlus"></ion-icon>
                     </ion-button>
                 </div>
                 <div>or</div>
                 <div>
                     <ion-button class="btnText" fill="solid">
                         Done earlier
-                        <ion-icon slot="end" size="small" :icon="icons.whiteVitals"></ion-icon>
+                        <ion-icon slot="end" size="small" :icon="icons.calenderWithPenEdit"></ion-icon>
                     </ion-button>
                 </div>
             </div>
