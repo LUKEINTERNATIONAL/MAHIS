@@ -168,7 +168,7 @@ h5 {
     font-style: normal;
     font-weight: 600;
     font-size: 20px;
-    color: #00190e;
+    color: #1F2221D4 !important;
 }
 .OtherVitalsHeading {
     display: flex;

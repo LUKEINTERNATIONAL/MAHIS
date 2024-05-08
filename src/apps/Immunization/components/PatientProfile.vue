@@ -172,7 +172,7 @@
                 <div class="lastVaccineTitle">
                     <div class="lastVaccineText">Last vaccines given</div>
                     <div class="seeFullList">
-                        <ion-button @click="openVH()" class="btnText btnTextWeight" size="small" fill="clear" color="tertiary">
+                        <ion-button @click="openVH()" style="color: #016302;" class="btnText btnTextWeight" size="small" fill="clear">
                             <span>See full History</span>
                         </ion-button>
                     </div>
