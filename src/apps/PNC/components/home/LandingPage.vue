@@ -73,7 +73,6 @@
           </ion-card>
         </router-link>
       </ion-col>
-
     </ion-row>
   </ion-grid>
 </template>
@@ -105,8 +104,7 @@ export default defineComponent({
 <style scoped>
 .container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
   padding: 20px;
 }
 
@@ -119,9 +117,9 @@ export default defineComponent({
 }
 
 .card {
-  width: 100%;
+  width: 90%; /* Adjusted width for responsiveness */
   max-width: 300px;
-  margin: 10px;
+  margin: 20px auto; /* Centering and consistent top margin */
 }
 
 .card:hover {
@@ -142,11 +140,6 @@ img {
 }
 
 @media (max-width: 768px) {
-  .section {
-    flex-direction: column;
-    align-items: center;
-  }
-
   .card {
     width: 90%;
   }

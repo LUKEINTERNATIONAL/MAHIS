@@ -190,18 +190,18 @@ const initialDeliveryDetails=[
                     selectedValue: '',
                     class:'bold',
                     name:'Outcome of the delivery',
-                    displayNext:'Stillbirths'
+                    displayNext:'Live births'
                 },
                 data:[
                     {
                         name: 'Live births',
-                        value: 'live births',
+                        value: 'Live births',
                         colSize: '7',
 
                     },
                     {
                         name: 'Neonatal death',
-                        value: 'neonatal death',
+                        value: 'Neonatal death',
                         colSize: '7',
 
                     },
@@ -216,7 +216,6 @@ const initialDeliveryDetails=[
 
     },
     {
-        childName: 'Outcome of the delivery',
         selectdData: [],
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
@@ -248,6 +247,7 @@ const initialDeliveryDetails=[
 
     },
     {
+        childName: 'Outcome of the delivery',
         isFinishBtn: false,
         sectionHeader: '',
         classDash: 'dashed_bottom_border _padding',
@@ -258,6 +258,7 @@ const initialDeliveryDetails=[
                     {
                         colData: [
                             {
+                                displayNone:true,
                                 inputHeader: 'Total number of babies',
                                 unit: 'baby',
                                 icon: icons.editPen,
@@ -275,6 +276,7 @@ const initialDeliveryDetails=[
             },
     },
     {
+        childName: 'Outcome of the delivery',
         isFinishBtn: false,
         sectionHeader: '',
         classDash: 'dashed_bottom_border _padding',
@@ -285,6 +287,7 @@ const initialDeliveryDetails=[
                     {
                         colData: [
                             {
+                                displayNone:true,
                                 inputHeader: 'First name',
                                 unit: '',
                                 icon: icons.editPen,
@@ -313,6 +316,7 @@ const initialDeliveryDetails=[
             },
     },
     {
+        childName: 'Outcome of the delivery',
         isFinishBtn: false,
         sectionHeader: '',
         classDash: 'dashed_bottom_border _padding',
@@ -322,6 +326,7 @@ const initialDeliveryDetails=[
                     {
                         colData: [
                             {
+                                displayNone:true,
                                 inputHeader: 'Birth weight',
                                 unit: 'gm',
                                 icon: icons.weight,
@@ -350,6 +355,7 @@ const initialDeliveryDetails=[
             },
     },
     {
+        childName: 'Outcome of the delivery',
         isFinishBtn: false,
         sectionHeader: '',
         classDash: 'dashed_bottom_border _padding',
@@ -360,6 +366,7 @@ const initialDeliveryDetails=[
                     {
                         colData: [
                             {
+                                displayNone:true,
                                 inputHeader: 'APGAR score at 5 minutes',
                                 unit: '',
                                 icon: icons.weight,
@@ -377,6 +384,7 @@ const initialDeliveryDetails=[
     },
 
     {
+        childName: 'Outcome of the delivery',
         selectdData: [],
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
@@ -385,7 +393,8 @@ const initialDeliveryDetails=[
                     title: 'Newborn complications',
                     selectedValue: '',
                     class:'bold',
-                    name:'Newborn baby complications'
+                    name:'Newborn baby complications',
+                    displayNone:true,
                 },
                 data:[
 
@@ -410,6 +419,7 @@ const initialDeliveryDetails=[
 
     },
     {
+        childName: 'Outcome of the delivery',
         selectdData: [],
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
@@ -417,7 +427,8 @@ const initialDeliveryDetails=[
                 header:{
                     title: '',
                     selectedValue: '',
-                    name:'Newborn baby complications'
+                    name:'Newborn baby complications',
+                    displayNone:true,
 
                 },
                 data:[
@@ -444,13 +455,15 @@ const initialDeliveryDetails=[
     },
 
     {
+        childName: 'Outcome of the delivery',
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
                 header:{
                     title: '',
                     selectedValue: '',
-                    name:'Newborn baby complications'
+                    name:'Newborn baby complications',
+                    displayNone:true,
 
                 },
                 data:[

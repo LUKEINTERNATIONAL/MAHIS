@@ -1,14 +1,13 @@
 <template>
-    <ion-list>    
-        <div class="sub_item_body">
-            <BasicForm
-                :contentData="behaviourInfo"
-                :initialData="initialData"
-
-            />
-        </div>
-        <ion-item class="sub_item_body_close"/>
-    </ion-list>
+  <div class="container">
+    <ion-card class="section">
+      <ion-card-content>
+        <basic-form :contentData="behaviourInfo"
+                    :initialData="initialData"
+        ></basic-form>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </template>
 
 <script lang="ts">
@@ -62,13 +61,37 @@ data(vm) {
     }
 })
 </script>
-<style scoped>
-.sub_item_body{
-    margin-left: 45px;
+<style scoped>.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-ion-item.sub_item_body_close {
-        border-bottom: 2px dotted var(--ion-color-medium);
-        --inner-border-width:0;
-    }
+.section {
+  width: 100%;
+  max-width: 1300px; /* Adjust max-width as needed */
+  margin-bottom: 20px;
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 500px; /* Adjust max-width as needed */
+}
+
+@media (max-width: 1500px) {
+  .container {
+    padding: 10px;
+  }
+}
+.sub_item_header{
+  font-weight: bold;
+  font-size: medium;
+}
+ion-card {
+
+  width: 100%;
+  color: black;
+}
 </style>

@@ -1,13 +1,12 @@
 <template>
-    <ion-list>
-        <ion-item  class="dashed_bottom_border" style="font-weight: bold;">
-             Reason for closing ANC
-        </ion-item>      
-        <div class="sub_item_body">
-            <BasicForm :contentData="ancInfo" />
-        </div>
-        <ion-item class="sub_item_body_close"/>
-    </ion-list>
+  <div class="container">
+    <ion-card class="section">
+      <ion-card-content>
+        <basic-form :contentData="ancInfo"
+        ></basic-form>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </template>
 
 <script lang="ts">
@@ -159,4 +158,9 @@ ion-item.sub_item_body_close {
         border-bottom: 2px dotted var(--ion-color-medium);
         --inner-border-width:0;
     }
+ion-card {
+
+  width: 100%;
+  color: black;
+}
 </style>

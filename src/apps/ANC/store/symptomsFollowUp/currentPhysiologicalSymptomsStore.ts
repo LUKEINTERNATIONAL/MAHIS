@@ -10,9 +10,10 @@ export const useCurrentPhysiologicalSymptomsStore = defineStore('currentPhysiolo
                 checkboxBtnContent:
                 {
                     header:{
-                        title: '',
+                        title: 'Current physiological symptoms',
                         selectedValue: '',
                         name:'Physiological symptom',
+                        class:'bold'
                     },
                     data:[
                         {

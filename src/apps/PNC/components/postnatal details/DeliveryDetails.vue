@@ -35,6 +35,7 @@ import { mapState } from 'pinia';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import BasicCard from "@/components/BasicCard.vue";
 import {useDeliveryDetailsStore} from "@/apps/PNC/stores/postnatal details/DeliveryDetails";
+import {getRadioSelectedValue, modifyRadioValue} from "@/services/data_helpers";
 export default defineComponent({
   name: "DeliveryDetails",
   components:{
@@ -72,13 +73,32 @@ export default defineComponent({
   mounted(){
    const deliveryDetails=useDeliveryDetailsStore()
     this.initialData=deliveryDetails.getInitial()
+    this.handleDeliveryDetails()
+
   },
   watch:{
+    deliveryDetails: {
+      handler() {
+        this.handleDeliveryDetails()
+      },
+      deep:true
+    }
   },
   setup() {
     return { checkmark,pulseOutline };
   },
-  methods: {}
+  methods: {
+    handleDeliveryDetails() {
+      if (getRadioSelectedValue(this.deliveryDetails, 'Outcome of the delivery') == 'Stillbirths') {
+        modifyRadioValue(this.deliveryDetails, 'Type of still birth', 'displayNone', false);
+      } else {
+        modifyRadioValue(this.deliveryDetails, 'Type of still birth', 'displayNone', true);
+        modifyRadioValue(this.deliveryDetails, 'Type of still birth', 'selectedValue', '');
+
+      }
+
+    }
+  }
 });
 
 </script>
