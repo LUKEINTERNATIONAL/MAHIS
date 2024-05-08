@@ -818,6 +818,33 @@ const initialPhysicalExam= [
         radioBtnContent: {
             header: {
                 selectedValue: "",
+                name: "Chest movements",
+                title: "Chest movement?",
+                class:"bold",
+                displayNone: true,
+            },
+            data: [
+                {
+                    value: "Symmetrical",
+                    name: "Symmetrical",
+                    colSize: "6.01",
+                },
+                {
+                    value: "Asymmetrical",
+                    name:"Asymmetrical",
+                    colSize: "6.01",
+                },
+            ],
+        },
+    },
+    {
+        selectdData: [],
+        sideColSize:0.3,
+        childName:"Physical examination",
+        classDash: "dashed_bottom_border",
+        radioBtnContent: {
+            header: {
+                selectedValue: "",
                 name: "Heart sounds normal",
                 title: "Heart sounds normal?",
                 class:"bold",
@@ -982,9 +1009,9 @@ const initialPhysicalExam= [
             },
             data: [
                 {
-                    name: "Clackles",
+                    name: "Crackles",
                     disabled: false,
-                    value: "Clackles",
+                    value: "Crackles",
                     labelPlacement: "start",
                     colSize: "9",
                     justify: "space-between",
@@ -1925,33 +1952,7 @@ const initialPhysicalExam= [
             ],
         },
     },
-    {
-        selectdData: [],
-        sideColSize:0.3,
-        childName:"Physical examination",
-        classDash: "dashed_bottom_border",
-        radioBtnContent: {
-            header: {
-                selectedValue: "",
-                name: "Chest movements",
-                title: "Chest movement?",
-                class:"bold",
-                displayNone: true,
-            },
-            data: [
-                {
-                    value: "Symmetrical",
-                    name: "Symmetrical",
-                    colSize: "6.01",
-                },
-                {
-                    value: "Asymmetrical",
-                    name:"Asymmetrical",
-                    colSize: "6.01",
-                },
-            ],
-        },
-    },
+
 ] as any;
 export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
     state: () => ({

@@ -3,7 +3,7 @@
   <div class="container">
     <ion-card class="section">
       <ion-card-content>
-        <basic-form :contentData="ReasonForVisit"
+        <basic-form :contentData="ReasonForSubsequentVisit"
                     :initialData="initialData"
         ></basic-form>
       </ion-card-content>
@@ -36,7 +36,6 @@ import BasicForm from '@/components/BasicForm.vue'
 import {useReasonForVisitStore} from "@/apps/ANC/store/quickCheck/reasonForVisit";
 import {usePastMedicalHistoryStore} from "@/apps/OPD/stores/PastMedicalHistoryStore";
 import {
-  getCheckboxSelectedValue,
   getRadioSelectedValue,
   modifyCheckboxHeader, modifyCheckboxValue,
   modifyGroupedRadioValue,
@@ -68,11 +67,11 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapState(useReasonForVisitStore, ["ReasonForVisit"])
+    ...mapState(useReasonForVisitStore, ["ReasonForSubsequentVisit"])
   },
   mounted() {
-    const ReasonForVisit = useReasonForVisitStore();
-    this.initialData = ReasonForVisit.getInitial();
+    const ReasonForSubsequentVisit = useReasonForVisitStore();
+    this.initialData = ReasonForSubsequentVisit.getInitial1();
     this.handleFirstAntenalVisit();
     this.handleSpecificConcernsVisit()
   },
@@ -103,38 +102,6 @@ export default defineComponent({
       //   modifyCheckboxValue(this.ReasonForVisit, 'Danger signs', 'selectedValue', '');
       //
       // }
-      const checkBoxes=['Pre-term labour','Central cyanosis', 'Unconscious', 'Fever', 'Imminent delivery',
-        'Severe headache', 'Severe vomiting','Severe abdominal pain','Draining liquor',
-        'Respiratory problems','Convulsion history','Vomiting' , 'Oedema', 'Epigastric pain', 'Bleeding vaginally', 'Other danger signs']
-      if (getCheckboxSelectedValue(this.ReasonForVisit, 'None')?.checked) {
-        checkBoxes.forEach((checkbox) => {
-          modifyCheckboxValue(this.ReasonForVisit, checkbox, 'checked', false);
-          modifyCheckboxValue(this.ReasonForVisit, checkbox, 'disabled', true);
-          modifyRadioValue(this.ReasonForVisit, 'Action for danger signs', 'displayNone', true);
-        });
-      } else {
-        let anyCheckboxSelected = false;
-        checkBoxes.forEach((checkbox) => {
-          if (getCheckboxSelectedValue(this.ReasonForVisit, checkbox)?.checked) {
-            anyCheckboxSelected = true;
-          }
-          modifyCheckboxValue(this.ReasonForVisit, checkbox, 'disabled', false);
-        });
-        modifyRadioValue(this.ReasonForVisit, 'Action for danger signs', 'displayNone', !anyCheckboxSelected);
-      }
-
-      if (getRadioSelectedValue(this.ReasonForVisit, 'Action for danger signs') == 'No') {
-        modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', false);
-        modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', false);
-        // modifyCheckboxHeader(this.ReasonForVisit, 'Previous visits', 'selectedValue', '');
-
-      } else {
-        modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
-        modifyRadioValue(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
-        // modifyRadioValue(this.ReasonForVisit, 'Action for danger signs', 'selectedValue', '');
-
-      }
-
     },
     handleSpecificConcernsVisit(){
       // if (getRadioSelectedValue(this.ReasonForVisit, 'Reason for visit') == 'Specific complaint related to antenatal care') {

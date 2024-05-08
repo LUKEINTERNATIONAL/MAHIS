@@ -96,7 +96,7 @@
             <div class="milestone">
                 <div style="width: 120px; display: flex; justify-content: space-between; align-content: center">
                     <ion-icon size="small" :icon="iconsContent.calendar"></ion-icon>
-                    <div>at <span style="color: #b54708"> 10 Weeks</span></div>
+                    <div style="color: #636363; font-weight: bold;">at <span style="color: #636363"> 10 Weeks</span></div>
                 </div>
                 <div class="vaccinesTitleDate">(Swipe left or right for other milestones)</div>
             </div>
@@ -154,22 +154,22 @@
             </div>
             <div class="dotsWizard">
                 <ion-icon class="dotStatus" slot="start" :icon="iconsContent.greenDot"></ion-icon>
-                <ion-icon class="dotStatus" slot="start" :icon="iconsContent.redDot"></ion-icon>
-                <ion-icon class="dotBig" slot="start" :icon="iconsContent.blueDot"></ion-icon>
-                <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
-                <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
-                <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
-                <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
-                <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
-                <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
-                <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
+                <ion-icon class="dotStatus" slot="start" :icon="iconsContent.greenDot"></ion-icon>
+                <ion-icon class="dotBig" slot="start" :icon="iconsContent.greenDot"></ion-icon>
+                <ion-icon class="dotStatus" slot="start" :icon="iconsContent.greenDot"></ion-icon>
+                <ion-icon class="dotStatus" slot="start" :icon="iconsContent.greenDot"></ion-icon>
+                <ion-icon class="dotStatus" slot="start" :icon="iconsContent.greenDot"></ion-icon>
+                <ion-icon class="dotStatus" slot="start" :icon="iconsContent.greenDot"></ion-icon>
+                <ion-icon class="dotStatus" slot="start" :icon="iconsContent.greenDot"></ion-icon>
+                <ion-icon class="dotStatus" slot="start" :icon="iconsContent.greenDot"></ion-icon>
+                <ion-icon class="dotStatus" slot="start" :icon="iconsContent.greenDot"></ion-icon>
             </div>
 
             <div class="lastVaccine">
                 <div class="lastVaccineTitle">
                     <div class="lastVaccineText">Last vaccines given</div>
                     <div class="seeFullList">
-                        <ion-button @click="openVH()" class="btnText btnTextWeight" size="small" fill="clear" color="tertiary">
+                        <ion-button @click="openVH()" style="color: #016302;" class="btnText btnTextWeight" size="small" fill="clear">
                             <span>See full History</span>
                         </ion-button>
                     </div>
