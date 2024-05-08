@@ -1,7 +1,7 @@
 <template>
     <div class="pim-cls-1">
         <div class="OtherVitalsHeading">
-            <div class="OtherVitalsTitle" style="color: #00190e; font-size: 16px">Add Weight/Height</div>
+            <div class="OtherVitalsTitle" style="color: #1F2221D4; font-size: 16px">Add Weight/Height</div>
             <div style="margin-right: 5px; font-size: 14px" class="lbl-tl">Todays Date: <span class="lbl-ct"> 06 Jul 2024</span></div>
         </div>
         <div class="modal_wrapper">

@@ -11,7 +11,7 @@ export const useWomanBehaviourStore = defineStore("womanBehaviourStore", {
         checkboxBtnContent: {
           header: {
             class: "bold",
-            title: "Daily caffeine use",
+            title: "Daily caffeine intake",
             selectedValue: "",
             name: "Daily caffeine use",
           },

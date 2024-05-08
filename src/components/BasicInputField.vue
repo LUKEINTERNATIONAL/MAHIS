@@ -7,7 +7,6 @@
             @ionBlur="handleBlur"
             @click="handleClick"
             fill="outline"
-            :clear-input="true"
             :value="inputValue"
             :placeholder="placeholder"
             :type="inputType"
@@ -30,7 +29,6 @@
         </ion-input>
         <ion-textarea
             v-if="input == 'textArea'"
-            :clear-input="true"
             :disabled="disabled"
             @ionInput="handleInput"
             @ionBlur="handleBlur"

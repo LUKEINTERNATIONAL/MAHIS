@@ -93,6 +93,7 @@ export default defineComponent({
         modeOfDeliveryInstance: {} as any,
         currentSection: 0,
         inputField: '' as any,
+        
 
     };
   },
@@ -195,7 +196,7 @@ export default defineComponent({
       },
 
       handleDynamic(){
-                if(getRadioSelectedValue(this.modeOfDelivery,'cesareanSec')=='cesarean'){
+                if(getRadioSelectedValue(this.modeOfDelivery,'Mode of delivery')=='caesarean section'){
                   modifyFieldValue(this.modeOfDelivery,'Specify','displayNone',false)
                 }else{
                   modifyFieldValue(this.modeOfDelivery,'Specify','displayNone',true)
@@ -203,7 +204,7 @@ export default defineComponent({
 
       },
       handleAlert(e:any){
-              if(dynamicValue(this.modeOfDelivery,'cesareanSec',e.id)=='cesarean'){
+              if(dynamicValue(this.modeOfDelivery,'Mode of delivery',e.id)=='caesarean section'){
                 modifyDynamicFieldValue(e.id,this.modeOfDelivery,'Specify','displayNone',false)
               }else{
                 modifyDynamicFieldValue(e.id,this.modeOfDelivery,'Specify','displayNone',true)
@@ -308,6 +309,7 @@ export default defineComponent({
       },
       calculateLiveBirths(event:any){
         if (event.name === 'Gravida' || event.name === 'Abortions') {
+          let errorMessage: any = "";
           const gravidaValue= parseInt(getFieldValue(this.prevPregnancies, 'Gravida', 'value'));
           const abortionsValue = parseInt(getFieldValue(this.prevPregnancies, 'Abortions', 'value'));
           if (!isNaN(gravidaValue) && !isNaN(abortionsValue)) {

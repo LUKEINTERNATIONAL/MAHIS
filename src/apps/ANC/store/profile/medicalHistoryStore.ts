@@ -90,7 +90,7 @@ const allegiesForm = {
 
 const chronicHealthConditionsForm = {
   autoImmuneDesease: {
-    name: "Auto immune desease",
+    name: "Auto-immune desease",
     value: "auto immune desease",
   },
   asthma: {
@@ -119,16 +119,15 @@ const bloodDisorderForm = {
 };
 
 const cancerForm = {
-
-    gynaelogical: {
-        name: "Gynaecological",
-        value: "gynaecological"
-    },
-    otherSite: {
-        name: "",
-        value: "otherSite"
-    }
-}
+  gynaelogical: {
+    name: "Gynae Cancer",
+    value: "gynae cancer",
+  },
+  otherSite: {
+    name: "",
+    value: "otherSite",
+  },
+};
 
 const heartDeseaseForm = {
 
@@ -148,12 +147,12 @@ const diabetesForm = {
     value: "gestational diabetes",
   },
   preExistingType1: {
-    name: "pre-existing type 1",
-    value: "pre-existing type 1",
+    name: "Diabetes Type 1",
+    value: "diabetes type 1",
   },
   preExistingType2: {
-    name: "pre-existing type 2",
-    value: "pre-existing type 2",
+    name: "Diabetes Type 2",
+    value: "diabetes type 2",
   },
   otherDiabetis: {
     name: "",
@@ -162,12 +161,11 @@ const diabetesForm = {
 };
 
 const epilespyForm = {
-
-    epilespy: {
-        name: "Epilespy",
-        value: "epilespy"
-    }
-}
+  epilespy: {
+    name: "Epilepsy",
+    value: "epilepsy",
+  },
+};
 const hivTestForm = {
   hivTestRequired: {
     name: "HIV test required",
@@ -303,12 +301,11 @@ const hypertensionForm = {
     }
 }
 const kidneyForm = {
-
-    kidney: {
-        name: "Kidney",
-        value: "kidney"
-    }
-}
+  kidney: {
+    name: "Kidney Disease",
+    value: "kidney disease",
+  },
+};
 const tbForm = {
 
     tb: {
@@ -319,8 +316,8 @@ const tbForm = {
 
 const mentalIllinessForm = {
   mentalIlliness: {
-    name: "Mental  illiness",
-    value: "Mental  illiness",
+    name: "Mental illness",
+    value: "mental illness",
   },
 };
 
@@ -713,14 +710,14 @@ const initialAllergies=[
   },
 ] as any;
 
-const initialChronicConditions=[
+const initialChronicConditions = [
   {
     selectdData: [],
     isFinishBtn: false,
     classDash: "dashed_bottom_border",
     checkboxBtnContent: {
       header: {
-        title: "Does the woman have any existing chronic conditions?",
+        title: "Does the woman have existing Chronic Health Conditions?",
         selectedValue: "",
         class: "bold",
         name: "chronic conditions",
@@ -1004,6 +1001,14 @@ const initialChronicConditions=[
       },
       data: [
         {
+          name: "HIV negative",
+          value: "hiv negative",
+          labelPlacement: "start",
+          colSize: "6",
+          justify: "space-between",
+          checked: false,
+        },
+        {
           name: "None",
           value: "none",
           labelPlacement: "start",
@@ -1015,18 +1020,18 @@ const initialChronicConditions=[
     },
   },
   {
-    sideColSize:0,
+    sideColSize: 0,
     classDash: "dashed_bottom_border",
-    childName:'Other',
+    childName: "Other",
     data: {
       rowData: [
         {
           colData: [
             {
-              displayNone:true,
+              displayNone: true,
               inputHeader: "Specify other chronic conditions",
               icon: icons.editPen,
-              valueType:'text',
+              valueType: "text",
               value: diabetesForm.otherDiabetis.name,
               name: "Other notes",
               eventType: "input",
@@ -1040,7 +1045,7 @@ const initialChronicConditions=[
   },
   {
     classDash: "dashed_bottom_border",
-    sideColSize:0.5,
+    sideColSize: 0.5,
     data: {
       rowData: [
         {
@@ -1064,8 +1069,8 @@ const initialChronicConditions=[
     },
   },
   {
-    childName:'HIV positive',
-    sideColSize:0.5,
+    childName: "HIV positive",
+    sideColSize: 0.5,
     selectdData: [],
     classDash: "dashed_bottom_border",
     isFinishBtn: false,
@@ -1075,7 +1080,7 @@ const initialChronicConditions=[
         selectedValue: "",
         name: "chronic conditions",
         displayNone: true,
-        displayNext:"Yes",
+        displayNext: "Yes",
       },
       data: [
         {
@@ -1092,8 +1097,8 @@ const initialChronicConditions=[
     },
   },
   {
-    childName:"chronic conditions",
-    sideColSize:0.5,
+    childName: "chronic conditions",
+    sideColSize: 0.5,
     db_data: [],
     classDash: "dashed_bottom_border",
     isFinishBtn: false,
