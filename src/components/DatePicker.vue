@@ -16,7 +16,7 @@
         side="top"
         @didDismiss="popoverProperties.isOpen = false"
     >
-        <ion-datetime v-if="showPicker" @ionChange="saveTheDate" id="datetime" presentation="date" :show-default-buttons="true" />
+    <ion-datetime v-if="showPicker" @ionChange="saveTheDate" id="datetime" presentation="date" :show-default-buttons="true" />
     </ion-popover>
 </template>
 <script setup lang="ts">

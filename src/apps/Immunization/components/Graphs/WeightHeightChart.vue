@@ -5,7 +5,7 @@
             <div class="zScore">Weight Z-Score: <b>2.2</b></div>
         </div>
         <div>
-            <canvas id="myChart"></canvas>
+            <canvas height="200" id="myChart"></canvas>
         </div>
     </div>
 </template>
@@ -69,10 +69,10 @@ export default defineComponent({
                         label: "top",
                         data: [5, 13, 17, 21, 25, 29],
                         borderWidth: 1.5,
-
                         fill: 1,
                         backgroundColor: "rgba(253, 255, 140, 0.7)",
                         borderColor: "rgba(181, 71, 8, 0.8)",
+                        tension: 0.4,
                     },
 
                     {
@@ -80,12 +80,14 @@ export default defineComponent({
                         data: [4, 11.5, 15, 18, 21.5, 25],
                         borderWidth: 1,
                         borderColor: "#85c786",
+                        tension: 0.4,
                     },
                     {
                         label: "z-score",
                         data: [3, 9, 11.5, 14, 16, 18],
                         borderWidth: 1.5,
                         borderColor: "#4A4A4A",
+                        tension: 0.4,
                     },
                     {
                         label: "z-score",
@@ -94,6 +96,7 @@ export default defineComponent({
                         fill: 1,
                         backgroundColor: "rgba(150, 220, 166, 0.7)",
                         borderColor: "#85c786",
+                        tension: 0.4,
                     },
                     {
                         label: "bottom",
@@ -102,11 +105,11 @@ export default defineComponent({
                         fill: 1,
                         backgroundColor: "rgba(253, 255, 140, 0.7)",
                         borderColor: "rgba(222, 129, 7, 0.8)",
+                        tension: 0.2,
                     },
                 ],
             },
             options: {
-                tension: 0.2,
                 scales: {
                     y: {
                         beginAtZero: true,
@@ -119,7 +122,18 @@ export default defineComponent({
                                 size: 14,
                             },
                         },
+                        grace: "5%",
+                        ticks: {
+                            stepSize: 3,
+                        },
                     },
+                    // percentage: {
+                    //     beginAtZero: true,
+                    //     position: "right",
+                    //     grid: {
+                    //         drawOnChartArea: false,
+                    //     },
+                    // },
                     x: {
                         beginAtZero: true,
                         title: {
