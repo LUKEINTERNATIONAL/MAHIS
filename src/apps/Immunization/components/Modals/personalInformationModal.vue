@@ -3,7 +3,7 @@
         <div class="ion-padding pim-cls-1">
             <div class="modal_wrapper">
                 <div class="center text_12">
-                    <h4>Personal Information</h4>
+                    <h4 class="PI-cls-1">Personal Information</h4>
                     <ion-row>
                         <ion-col>
                             <ion-row>
@@ -69,7 +69,7 @@
 
                     <hr class="dashed-hr" />
 
-                    <h4>Gurdian Information</h4>
+                    <h4 class="PI-cls-1">Gurdian Information</h4>
                     <ion-row>
                         <ion-col>
                             <ion-row>
@@ -120,7 +120,7 @@
 
                     <hr class="dashed-hr" />
 
-                    <h4>Demographics Information</h4>
+                    <h4 class="PI-cls-1">Addresses</h4>
                     <ion-row>
                         <ion-col>
                             <ion-row>
@@ -206,5 +206,8 @@ ion-modal {
 }
 .modal_wrapper {
     padding: 0px 19px;
+}
+.PI-cls-1 {
+    color: #1F2221D4;
 }
 </style>
