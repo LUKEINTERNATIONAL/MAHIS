@@ -24,32 +24,33 @@
             <div class="graphBackground">
                 <div class="dueMiss">
                     <div class="due">
-                        <div class="dueMissText">Due for vaccination today</div>
                         <div class="dueNumber">104</div>
+                        <div class="dueMissText">Due for vaccination today</div>
+                        
                     </div>
                     <div class="missed">
-                        <div class="dueMissText">Those with missed doses</div>
                         <div class="missedNumber">264</div>
+                        <div class="dueMissText">Those with missed doses</div>
                     </div>
                 </div>
                 <div class="clientSeen">
                     <div class="clientSeenTitle">Clients you have seen today.</div>
                     <div class="clientSeenBoxes">
                         <div class="clientSeenBox">
-                            <div class="clientSeenBoxText">New</div>
                             <div class="clientSeenBoxNumber">15</div>
+                            <div class="clientSeenBoxText">New</div>
                         </div>
                         <div class="clientSeenBoxChild clientSeenBox">
-                            <div class="clientSeenBoxText">Children</div>
                             <div class="clientSeenBoxNumber">63</div>
+                            <div class="clientSeenBoxText">Children</div>
                         </div>
                         <div class="clientSeenBoxMen clientSeenBox">
-                            <div class="clientSeenBoxText">Women</div>
                             <div class="clientSeenBoxNumber">59</div>
+                            <div class="clientSeenBoxText">Women</div>  
                         </div>
                         <div class="clientSeenBoxWomen clientSeenBox">
-                            <div class="clientSeenBoxText">Men</div>
                             <div class="clientSeenBoxNumber">27</div>
+                            <div class="clientSeenBoxText">Men</div>                          
                         </div>
                     </div>
                 </div>
@@ -237,6 +238,7 @@ export default defineComponent({
     font-weight: 700;
     font-size: 36px;
     line-height: 30px;
+    margin-top: 10px;
 
     /* blue/800 */
     color: #0075b7;
@@ -246,6 +248,7 @@ export default defineComponent({
     font-weight: 700;
     font-size: 36px;
     line-height: 30px;
+    margin-top: 10px;
 
     color: #ff6378;
 }
