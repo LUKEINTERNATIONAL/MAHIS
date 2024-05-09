@@ -21,6 +21,8 @@
             </div>
         </div>
 
+        <customDatePicker v-if="showPD"/>
+
         <div class="btnContent">
             <div class="saveBtn">
                 <div>
@@ -31,7 +33,7 @@
                 </div>
                 <div>or</div>
                 <div>
-                    <ion-button class="btnText" fill="solid">
+                    <ion-button class="btnText" fill="solid" @click="showCPD">
                         Done earlier
                         <ion-icon slot="end" size="small" :icon="icons.calenderWithPenEdit"></ion-icon>
                     </ion-button>
@@ -48,20 +50,7 @@ export default defineComponent({
 });
 </script>
 <script setup lang="ts">
-import {
-    IonContent,
-    IonButton,
-    IonModal,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonCol,
-    IonAvatar,
-    IonImg,
-    IonLabel,
-    IonPage,
-    IonFooter,
-} from "@ionic/vue";
+import {IonButton} from "@ionic/vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import { createOutline } from "ionicons/icons";
 import BasicForm from "@/components/BasicForm.vue";
@@ -75,9 +64,11 @@ import { Service } from "@/services/service";
 import HisDate from "@/utils/Date";
 import { BMIService } from "@/services/bmi_service";
 import { icons } from "@/utils/svg";
+import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue"
 const store = useVitalsStore();
 const demographicsStore = useDemographicsStore();
 let BMI: { color: any; index: any; result: any };
+const showPD = ref(false)
 
 const props = defineProps<{
     is_open: any;
@@ -154,6 +145,10 @@ async function updateBMI() {
     vitals.textColor = bmiColor[1];
     vitals.index = "BMI " + BMI?.index ?? "";
     vitals.value = BMI?.result ?? "";
+}
+
+function showCPD() {
+    showPD.value = true
 }
 </script>
 <style scoped>
