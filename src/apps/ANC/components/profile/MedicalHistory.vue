@@ -97,6 +97,7 @@ import { modifyRadioValue,
     // modifyCheckboxHeaderValue,
     modifyCheckboxInputField,
     modifyCheckboxHeader} from '@/services/data_helpers'
+ import {validateField} from "@/services/ANC/profile_validation_service";
 
 //  import {icons} from "@/utils/svg.ts"
 
@@ -206,9 +207,10 @@ export default defineComponent({
             deep:true
         },
         exisitingChronicHealthConditions:{
-            handler(){
+            handler(col){
                 this.handleChronicCondition()
                 this.handleHIVPositive()
+              this.handleInputData(col)
             },
             deep:true
         }
@@ -220,11 +222,17 @@ export default defineComponent({
         ...mapState(useMedicalHistoryStore,["exisitingChronicHealthConditions"]),
         ...mapState(useMedicalHistoryStore,["hivTest"]),
         ...mapState(useMedicalHistoryStore,["syphilisTest"]),
+        ExistingChronicConditions(){ return getCheckboxSelectedValue(this.exisitingChronicHealthConditions, 'chronic conditions')},
 
-    },
+
+      },
     methods:{
+      validationRules(col: any) {
+        return validateField(this.exisitingChronicHealthConditions,col.name, (this as any)[col.name]);
+      },
         async handleInputData(col:any){
-            if(col.inputHeader  == "Facility for ART"){
+          this.validationRules(col)
+          if(col.inputHeader  == "Facility for ART"){
 
                 this.facilityData = await this.getFacility(col.value);
                 modifyFieldValue(this.exisitingChronicHealthConditions,'facility for art',"popOverData",{
@@ -426,8 +434,9 @@ export default defineComponent({
   font-size: medium;
 }
 ion-card {
-  box-shadow:none;
-  background-color:inherit;
+
+  color:black;
+  width:100%
 }
     
 </style>

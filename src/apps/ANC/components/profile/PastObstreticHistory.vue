@@ -10,19 +10,6 @@
 
             </ion-card-content>
         </ion-card>
-
-        <ion-card>
-        <ion-card-content>
-          </ion-card-content>
-        </ion-card>
-        <ion-card class="section">
-            <ion-card-content>
-            </ion-card-content>
-        </ion-card>
-        <ion-card class="section">
-            <ion-card-content>
-            </ion-card-content>
-        </ion-card>
     </div>
 </template>
 
@@ -217,7 +204,7 @@ export default defineComponent({
       },
 
       //Handling input data on Profile-Past Obstetric history
-      handleInputData(event: any){
+      async handleInputData(event: any){
             this.validaterowData(event)
             this.calculateParity(event)
             this.calculateLiveBirths(event)
@@ -357,8 +344,7 @@ export default defineComponent({
 }
 
 ion-card {
- box-shadow:none;
-  background-color:inherit;   
+
   width: 100%;
   color: black;
 }
