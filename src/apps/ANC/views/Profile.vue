@@ -215,7 +215,7 @@ export default defineComponent({
             this.saveMedication()
             this.saveCaffeinIntake()
             toastSuccess("Profile data saved successfully")
-            
+            resetPatientData();
             this.handleNavigation();
             
         },

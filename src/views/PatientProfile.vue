@@ -170,10 +170,11 @@
                     <li class="listPrograma" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">
                         <router-link to="/profile">+ Enroll in ANC Program</router-link>
                     </li>
-                    <li class="listPrograma" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">
+                    <li class="listPrograma" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px" >
                         + Enroll in Labour and delivery program
                     </li>
-                    <li class="listPrograma" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">+ Enroll in PNC program</li>
+                    <li class="listPrograma" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px" @click="navToPncProgram">
+                         + Enroll in PNC program</li>
                     <li
                         class="listPrograma"
                         v-if="programAccess('IMMUNIZATION PROGRAM')"

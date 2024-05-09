@@ -46,9 +46,9 @@ import Stepper from "@/components/Stepper.vue";
 import { mapState } from "pinia";
 import { getCheckboxSelectedValue } from "@/services/data_helpers";
 import { useDemographicsStore } from "@/stores/DemographicStore";
-import { useObstreticHistoryStore } from "../stores/obstetric details/obstetric";
-import { useQuickCheckStore } from "../stores/physical exam/quickCheck";
-import { usePhysicalExamStore } from "../stores/physical exam/physicalExamination";
+// import { useObstreticHistoryStore } from "../stores/obstetric details/obstetric";
+import { useLabourQuickCheckStore } from "../stores/physical exam/quickCheck";
+import { useLabourPhysicalExamStore } from "../stores/physical exam/physicalExamination";
 import { usefirstVaginalExaminationStore } from "../stores/physical exam/firstVaginalExamination";
 import { usePelvicAssessmentStore } from "../stores/physical exam/pelvicAssessment";
 import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
@@ -155,10 +155,10 @@ export default defineComponent({
     },
     computed: { 
          ...mapState(useDemographicsStore, ["demographics"]),
-         ...mapState(useQuickCheckStore,["pastProblems"]),
-         ...mapState(usePhysicalExamStore,["vitals"]),
-         ...mapState(usePhysicalExamStore,["anaemia"]),
-         ...mapState(usePhysicalExamStore,["otherphysicalExams"]),
+         ...mapState(useLabourQuickCheckStore,["pastProblems"]),
+         ...mapState(useLabourPhysicalExamStore,["vitals"]),
+         ...mapState(useLabourPhysicalExamStore,["anaemia"]),
+         ...mapState(useLabourPhysicalExamStore,["otherphysicalExams"]),
          ...mapState(usefirstVaginalExaminationStore,["firstVaginalExamination"]),
          ...mapState(usePelvicAssessmentStore,["pelvicAssessment"]),
 
