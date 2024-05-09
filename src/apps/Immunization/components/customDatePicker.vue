@@ -99,7 +99,7 @@
   <style>
   .picker-group {
     display: flex;
-    font-size: 25px;
+    font-size: 20px;
   }
   .vue-scroll-picker {
     height: 6em !important;

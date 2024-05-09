@@ -20,7 +20,7 @@
                 <div class="totalText">Children & Adults vaccinated this year!</div>
             </div>
             <!-- <ion-img :src="loadImage('immunizationHome.jpeg')" alt="home image"></ion-img> -->
-            <div style="background-color: #DDEEDD; widows: 100%; height: 40%;"></div>
+            <div style="background-color: rgb(255, 255, 255); widows: 100%; height: 40%;"></div>
             <div class="graphBackground">
                 <div class="dueMiss">
                     <div class="due">
