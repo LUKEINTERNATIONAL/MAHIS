@@ -30,15 +30,15 @@ import {
 } from "@ionic/vue";
 import { ConceptService } from "@/services/concept_service";
 import { defineComponent } from "vue";
-import Toolbar from "@/apps/ANC/components/Toolbar.vue";
-import ToolbarSearch from "@/apps/ANC/components/ToolbarSearch.vue";
+import Toolbar from "@/components/Toolbar.vue";
+import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import { mapState } from "pinia";
-import Stepper from "@/apps/ANC/components/Stepper.vue";
+import Stepper from "@/components/Stepper.vue";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import PastObstreticHistory from "../components/profile/PastObstreticHistory.vue";
 import CurrentPregnancies from "../components/profile/CurrentPregnancies.vue";
@@ -49,14 +49,15 @@ import { getCheckboxSelectedValue, getRadioSelectedValue } from "@/services/data
 import { useMedicalHistoryStore } from "@/apps/ANC/store/profile/medicalHistoryStore";
 import { useObstreticHistoryStore } from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
 import { useCurrentPregnanciesStore } from "@/apps/ANC/store/profile/CurrentPreganciesStore";
-import { useMedicationsStore } from "@/apps/ANC/store/profile/MedicationsStore";
+import { useMedicationStore } from "@/apps/ANC/store/profile/MedicationStore";
 import { useWomanBehaviourStore } from "@/apps/ANC/store/profile/womanBehaviourStore";
 import { Service } from "@/services/service";
 //import { ProfileService } from "@/services/anc_profile_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
 import { Preterms } from "../service/preterm";
-import { PastObstetricHistoryService } from "@/services/anc_profile_service";
+import { currentPregnancyService, MedicalHistoryService, PastObstetricHistoryService } from "@/services/anc_profile_service";
+import { resetPatientData } from "@/services/reset_data";
 
 // function someChecked(options, errorMassage) {
 //   if (!options.filter(v => v.checkboxBtnContent).some(v => v.checkboxBtnContent.data.some(d => d.checked))) {
@@ -146,11 +147,11 @@ export default defineComponent({
             StepperData: [
                 {
                     title: "Past Obstetric History",
-                    component: "PastObstetricHistory",
+                    component: "PastObstreticHistory",
                     value: "1",
                 },
                 {
-                    title: "Past Medical history",
+                    title: "Past Medical History",
                     component: "MedicalHistory",
                     value: "2",
                 },
@@ -182,7 +183,7 @@ export default defineComponent({
         ...mapState(useObstreticHistoryStore, ["preterm","prevPregnancies","Complications"]),
         ...mapState(useMedicalHistoryStore,['medicalHistory','allegy','exisitingChronicHealthConditions']),
         ...mapState(useCurrentPregnanciesStore,['palpation','tetanus','lmnp','ultrasound']),
-        ...mapState(useMedicationsStore,['Medication']),
+        ...mapState(useMedicationStore,['Medication']),
         ...mapState(useWomanBehaviourStore,['dailyCaffeineIntake'])
     },
     mounted() {
@@ -271,37 +272,91 @@ export default defineComponent({
             if (!patientStatus) return toastWarning("Unable to create Profile!");
             toastSuccess("Profile has been created");
         }
-        console.log(await this.buildPreterm())
+        //console.log(await this.buildPreterm())
         },
         async savePastPregnancyComplication(){
-        // if (this.preterm[0].selectedData.length > 0) {
-        //     const userID: any = Service.getUserID();
-        //     const Preterm = new ProfileService(this.demographics.patient_id, userID);
-        //     const encounter = await Preterm.createEncounter();
-        //     if (!encounter) return toastWarning("Unable to create Preterm encounter");
-        //     const patientStatus = await Preterm.saveObservationList(await this.buildPastObstetricHistory());
-        //     if (!patientStatus) return toastWarning("Unable to create Preterm !");
-        //     toastSuccess("Pretermhas been created");
-        // }
-        console.log(await this.buildPastPregnancyComplication())
+        if (this.Complications.length > 0) {
+            const userID: any = Service.getUserID();
+            const complication = new PastObstetricHistoryService(this.demographics.patient_id, userID);
+            const encounter = await complication.createEncounter();
+            if (!encounter) return toastWarning("Unable to create complications encounter");
+            const patientStatus = await complication.saveObservationList(await this.buildPastPregnancyComplication());
+            if (!patientStatus) return toastWarning("Unable to create Complications!");
+            toastSuccess("Complications has been created");
+        }
+        //console.log(await this.buildPastPregnancyComplication())
         },
         async savePastSurgeries(){
-            console.log(await this.buildPastSurgeries())
+            if (this.medicalHistory.length > 0) {
+            const userID: any = Service.getUserID();
+            const MedicalHistory = new  MedicalHistoryService(this.demographics.patient_id, userID);
+            const encounter = await MedicalHistory.createEncounter();
+            if (!encounter) return toastWarning("Unable to create past surgery encounter");
+            const patientStatus = await MedicalHistory.saveObservationList(await this.buildPastSurgeries());
+            if (!patientStatus) return toastWarning("Unable to create Past surgeries!");
+            toastSuccess("Past surgeries has been created");
+        }
+          //  console.log(await this.buildPastSurgeries())
         },
         async saveAllergy(){
-            console.log(await this.buildAllergy())
+        if (this.allegy.length > 0) {
+            const userID: any = Service.getUserID();
+            const MedicalHistory = new  MedicalHistoryService(this.demographics.patient_id, userID);
+            const encounter = await MedicalHistory.createEncounter();
+            if (!encounter) return toastWarning("Unable to create allergy encounter");
+            const patientStatus = await MedicalHistory.saveObservationList(await this.buildAllergy());
+            if (!patientStatus) return toastWarning("Unable to create Allergies!");
+            toastSuccess("Past Allergies has been created");
+        }
+            //console.log(await this.buildAllergy())
         },
         async saveChronicHealthCondition(){
-            console.log(await this.buildChronicHealthCondition())
+        if (this.exisitingChronicHealthConditions.length > 0) {
+            const userID: any = Service.getUserID();
+            const healthCondition = new  MedicalHistoryService(this.demographics.patient_id, userID);
+            const encounter = await healthCondition.createEncounter();
+            if (!encounter) return toastWarning("Unable to create Chronic Health Condition encounter");
+            const patientStatus = await healthCondition.saveObservationList(await this.buildChronicHealthCondition());
+            if (!patientStatus) return toastWarning("Unable to create Chronic Health Condition!");
+            toastSuccess("Chronic Health Condition has been created");
+        }
+           // console.log(await this.buildChronicHealthCondition())
         },
         async saveCurrentPrengancy(){
+            if (this.lmnp.length > 0) {
+            const userID: any = Service.getUserID();
+            const Lmnp = new  currentPregnancyService(this.demographics.patient_id, userID);
+            const encounter = await Lmnp.createEncounter();
+            if (!encounter) return toastWarning("Unable to create Lmnp encounter");
+            const patientStatus = await Lmnp.saveObservationList(await this.buildCurrentPrengancy());
+            if (!patientStatus) return toastWarning("Unable to create Lmnp!");
+            toastSuccess("Lmnp has been created");
+        }
             console.log(await this.buildCurrentPrengancy())
         },
         async saveMedication(){
-            console.log(await this.buildMedication())
+        if (this.Medication.length > 0) {
+            const userID: any = Service.getUserID();
+            const Medications = new  MedicalHistoryService(this.demographics.patient_id, userID);
+            const encounter = await Medications.createEncounter();
+            if (!encounter) return toastWarning("Unable to create Medications encounter");
+            const patientStatus = await Medications.saveObservationList(await this.buildMedication());
+            if (!patientStatus) return toastWarning("Unable to create Medications!");
+            toastSuccess("Medications has been created");
+        }
+            //console.log(await this.buildMedication())
         },
         async saveCaffeinIntake(){
-            console.log(await this.buildCaffeinIntake())
+        if (this.dailyCaffeineIntake.length > 0) {
+            const userID: any = Service.getUserID();
+            const caffeineIntake = new  MedicalHistoryService(this.demographics.patient_id, userID);
+            const encounter = await caffeineIntake.createEncounter();
+            if (!encounter) return toastWarning("Unable to create daily caffeine intake encounter");
+            const patientStatus = await caffeineIntake.saveObservationList(await this.buildCaffeinIntake());
+            if (!patientStatus) return toastWarning("Unable to create Daily Caffeine Intake!");
+            toastSuccess("Daily Caffeine Intake has been created");
+        }
+           // console.log(await this.buildCaffeinIntake())
         },
         async buildPregnancyHistory(){
             return[
@@ -367,3 +422,4 @@ export default defineComponent({
 </script>
 
 <style scoped></style>
+@/apps/ANC/store/profile/MedicationStore

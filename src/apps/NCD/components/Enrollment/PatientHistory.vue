@@ -38,29 +38,21 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useEnrollementStore, ["patientHistory"]),
-        ...mapState(useEnrollementStore, ["patientHistoryHIV"]),
     },
     watch: {
-        personInformation: {
+        patientHistory: {
             handler() {
-                this.updateEnrollmentStores();
-                this.buidCards();
-            },
-            deep: true,
-        },
-        patientHistoryHIV: {
-            handler() {
-                this.controllFields();
+                this.buildCards();
             },
             deep: true,
         },
     },
     mounted() {
         this.updateEnrollmentStores();
-        this.buidCards();
+        this.buildCards();
     },
     methods: {
-        buidCards() {
+        buildCards() {
             const enrollment = useEnrollementStore();
             this.cardData = {
                 mainTitle: "Enrollment",
@@ -69,11 +61,6 @@ export default defineComponent({
                         cardTitle: "Patient history & Complications ",
                         content: this.patientHistory,
                         initialData: enrollment.getInitialPatientHistory(),
-                    },
-                    {
-                        cardTitle: "Patient history & Complications ",
-                        content: this.patientHistoryHIV,
-                        initialData: enrollment.getInitialPatientHistoryHIV(),
                     },
                 ],
             };
@@ -84,21 +71,9 @@ export default defineComponent({
         updateEnrollmentStores() {
             const enrollmentStore = useEnrollementStore();
             enrollmentStore.setPatientHistory(this.patientHistory);
-            enrollmentStore.setPatientHistoryHIV(this.patientHistoryHIV);
-        },
-        controllFields() {
-            if (getRadioSelectedValue(this.patientHistoryHIV, "HIV") == "R") {
-                modifyFieldValue(this.patientHistoryHIV, "ART_start_date", "displayNone", false);
-            } else {
-                modifyFieldValue(this.patientHistoryHIV, "ART_start_date", "displayNone", true);
-            }
         },
         async handleInputData(event: any) {
-            console.log(event.al);
             if (event.al) {
-                if (event.value.detail.checked) modifyCheckboxInputField(this.patientHistoryHIV, event.al.name, "displayNone", false);
-                else modifyCheckboxInputField(this.patientHistoryHIV, event.al.name, "displayNone", true);
-
                 if (event.value.detail.checked) modifyCheckboxInputField(this.patientHistory, event.al.name, "displayNone", false);
                 else modifyCheckboxInputField(this.patientHistory, event.al.name, "displayNone", true);
             }

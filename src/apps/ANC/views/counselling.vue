@@ -46,10 +46,8 @@ import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import { useVitalsStore } from "@/stores/VitalsStore";
 import { useDemographicsStore } from "@/stores/DemographicStore";
-import { useInvestigationStore } from "@/stores/InvestigationStore";
-import { useDiagnosisStore } from "@/stores/DiagnosisStore";
 import { mapState } from "pinia";
-import Stepper from "@/apps/ANC/components/Stepper.vue";
+import Stepper from "@/components/Stepper.vue";
 import { Service } from "@/services/service";
 import { LabOrder } from "@/apps/NCD/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
@@ -63,6 +61,7 @@ import {BehaviourCounsellingService} from "@/apps/ANC/service/behaviour_counsell
 import {formatCheckBoxData, formatInputFiledData, formatRadioButtonData} from "@/services/formatServerData";
 import {PhysiologicalCounsellingService} from "@/apps/ANC/service/physiological_counselling_service";
 import {DietCounsellingService} from "@/apps/ANC/service/diet_counselling_service";
+import { resetPatientData } from "@/services/reset_data";
 export default defineComponent({
     name: "Home",
     components: {
@@ -164,6 +163,9 @@ export default defineComponent({
           await this.saveBehaviourCounselling();
           await this.savePhysiologicalCounselling()
           await  this.saveDietCounselling()
+          resetPatientData();
+          this.$router.push("ANChome");
+
 
         },
       async saveBehaviourCounselling() {
@@ -202,7 +204,7 @@ export default defineComponent({
           if (!patientStatus) return toastWarning("Unable to create patient diet counselling details!");
           toastSuccess("Diet counselling details have been created");
         }
-        console.log(await this.buildBehaviourCounselling())
+        console.log(await this.buildDietCounselling())
 
       },
       async buildBehaviourCounselling() {

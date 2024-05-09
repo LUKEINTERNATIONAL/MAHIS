@@ -35,7 +35,7 @@ import {
   getFieldValue,
 } from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
-import {useQuickCheckStore} from "@/apps/LABOUR/stores/physical exam/quickCheck";
+import {useLabourQuickCheckStore} from "@/apps/LABOUR/stores/physical exam/quickCheck";
 export default defineComponent({
   name: "History",
   components:{
@@ -67,7 +67,7 @@ export default defineComponent({
     };
   },
   computed:{
-    ...mapState(useQuickCheckStore,["pastProblems"]),
+    ...mapState(useLabourQuickCheckStore,["pastProblems"]),
 
   },
   mounted(){

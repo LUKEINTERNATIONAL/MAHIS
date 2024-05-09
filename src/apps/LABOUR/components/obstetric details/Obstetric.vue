@@ -3,14 +3,14 @@
     <ion-card class="section">
       <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">History on previous pregnancies</ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="prevPregnancies" ></basic-form>
+        <basic-form :contentData="labourDetails" ></basic-form>
       </ion-card-content>
     </ion-card>
     <ion-card class="section">
       <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Past pregnancy problems</ion-card-title></ion-card-header>
-      <ion-card-content>
+      <!-- <ion-card-content>
         <basic-form :contentData="pastProblems" ></basic-form>
-      </ion-card-content>
+      </ion-card-content> -->
     </ion-card>
   </div>
 
@@ -37,7 +37,7 @@ import BasicForm from '../../../../components/BasicForm.vue';
 import { icons } from '../../../../utils/svg';
 import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
-import { useObstreticHistoryStore} from "@/apps/LABOUR/stores/obstetric details/obstetric";
+///import { useLabourDetailsStore} from "@/apps/LABOUR/stores/obstetric details/obstetric";
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import {
   dynamicValue,
@@ -45,6 +45,7 @@ import {
   getFieldValue,
 } from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
+import { useLabourDetailsStore } from '../../stores/obstetric details/labour';
 export default defineComponent({
   name: "History",
   components:{
@@ -78,8 +79,9 @@ export default defineComponent({
     };
   },
   computed:{
-    ...mapState(useObstreticHistoryStore,["prevPregnancies"]),
-    ...mapState(useObstreticHistoryStore,["pastProblems"]),
+    // ...mapState(useLabourDetailsStore,["prevPregnancies"]),
+    // ...mapState(useLabourDetailsStore,["pastProblems"]),
+     ...mapState(useLabourDetailsStore,["labourDetails"]),
   },
   mounted(){
 

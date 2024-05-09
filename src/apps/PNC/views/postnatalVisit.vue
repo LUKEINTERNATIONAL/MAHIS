@@ -29,15 +29,21 @@ import {
   IonModal,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
-import Toolbar from "@/apps/PNC/components/Toolbar.vue";
-import ToolbarSearch from "@/apps/PNC/components/ToolbarSearch.vue";
+import Toolbar from "@/components/Toolbar.vue";
+import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/PNC/components/DemographicBar.vue";
 import { chevronBackOutline,checkmark } from 'ionicons/icons';
 import SaveProgressModal from '@/components/SaveProgressModal.vue'
-import { createModal } from '@/utils/Alerts'
+import {createModal, toastSuccess, toastWarning} from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
-import Stepper from "@/apps/PNC/components/Stepper.vue";
+import Stepper from "@/components/Stepper.vue";
 import { mapState } from 'pinia';
+import {useDemographicsStore} from "@/stores/DemographicStore";
+import {useVisitForMotherStore} from "@/apps/PNC/stores/postnatal visits/VisitForMother";
+import {useVisitForBabyStore} from "@/apps/PNC/stores/postnatal visits/VisitForBaby";
+import {Service} from "@/services/service";
+import {formatCheckBoxData, formatInputFiledData, formatRadioButtonData} from "@/services/formatServerData";
+import {PNCVisitService} from "@/apps/PNC/Services/pnc_visit_service";
 export default defineComponent({
   name: "postnatalVisit",
   components:{
@@ -105,7 +111,9 @@ export default defineComponent({
 
   computed:{
 
-
+    ...mapState(useDemographicsStore,["demographics"]),
+...mapState(useVisitForMotherStore,["visitForMother"]),
+...mapState(useVisitForBabyStore,["visitForBaby"]),
   },
   mounted(){
     this.markWizard()
@@ -113,6 +121,11 @@ export default defineComponent({
   },
   watch: {
 
+  },
+  getFormatedData(data: any) {
+    return data.map((item: any) => {
+      return item?.data;
+    });
   },
   setup() {
     return { chevronBackOutline,checkmark };
@@ -153,10 +166,40 @@ export default defineComponent({
         return item?.data;
       });
     },
-    saveData(){
+   async saveData(){
+      await this.savePNCVisit()
       this.$router.push("home");
 
     },
+
+    async savePNCVisit() {
+      if (this.visitForMother.length>0 && this.visitForBaby.length>0) {
+        const userID: any = Service.getUserID();
+        const  pncVisit= new PNCVisitService(this.demographics.patient_id, userID);
+        const encounter = await pncVisit.createEncounter();
+        if (!encounter) return toastWarning("Unable to create PNC visit encounter");
+        const patientStatus = await pncVisit.saveObservationList(await this.buildPNCVisit());
+        if (!patientStatus) return toastWarning("Unable to create patient PNC visit details!");
+        toastSuccess("PNC visit details for mother and baby have been created");
+      }
+      console.log(await this.buildPNCVisit())
+
+    },
+
+    async buildPNCVisit() {
+      return [
+
+        ...(await formatCheckBoxData(this.visitForMother)),
+        ...(await formatRadioButtonData(this.visitForMother)),
+        ...(await formatInputFiledData(this.visitForMother)),
+        ...(await formatCheckBoxData(this.visitForBaby)),
+        ...(await formatRadioButtonData(this.visitForBaby)),
+        ...(await formatInputFiledData(this.visitForBaby)),
+      ];
+    },
+
+
+
 
     openModal(){
       createModal(SaveProgressModal)

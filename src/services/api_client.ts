@@ -16,7 +16,8 @@ const ApiClient = (() => {
     }
 
     async function getFileConfig(): Promise<Config> {
-        const response = await fetch("/mahis/config.json");
+        // const response = await fetch("/mahis/config.json");
+        const response = await fetch("/config.json");
         if (!response.ok) {
             throw "Unable to retrieve configuration file/ Invalid config.json";
         }
@@ -27,7 +28,7 @@ const ApiClient = (() => {
             sessionStorage.setItem("apiProtocol", apiProtocol);
             sessionStorage.setItem("appConf", JSON.stringify(appConf));
             sessionStorage.setItem("apps", JSON.stringify(apps));
-            sessionStorage.setItem("app", JSON.stringify({ programID: 29, applicationName: "PATIENT REGISTRATION PROGRAM" }));
+            // sessionStorage.setItem("app", JSON.stringify({ programID: 29, applicationName: "PATIENT REGISTRATION PROGRAM" }));
             sessionStorage.setItem("thirdpartyApps", JSON.stringify(thirdpartyApps));
             sessionStorage.setItem("platformProfiles", JSON.stringify(platformProfiles));
             sessionStorage.setItem("otherApps", JSON.stringify(otherApps));

@@ -29,15 +29,22 @@ import {
   IonModal,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
-import Toolbar from "@/apps/PNC/components/Toolbar.vue";
-import ToolbarSearch from "@/apps/PNC/components/ToolbarSearch.vue";
+import Toolbar from "@/components/Toolbar.vue";
+import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/PNC/components/DemographicBar.vue";
 import { chevronBackOutline,checkmark } from 'ionicons/icons';
 import SaveProgressModal from '@/components/SaveProgressModal.vue'
-import { createModal } from '@/utils/Alerts'
+import {createModal, toastSuccess, toastWarning} from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
-import Stepper from "@/apps/PNC/components/Stepper.vue";
+import Stepper from "@/components/Stepper.vue";
 import { mapState } from 'pinia';
+import {Service} from "@/services/service";
+import {PostnatalWardStayService} from "@/apps/PNC/Services/postnatal_wardstay_service";
+import {formatCheckBoxData, formatInputFiledData, formatRadioButtonData} from "@/services/formatServerData";
+import {useDemographicsStore} from "@/stores/DemographicStore";
+import {useBabyStatusStore} from "@/apps/PNC/stores/postnatal ward stay/BabyStatus";
+import {BabyMonitoringService} from "@/apps/PNC/Services/baby_monitoring_service";
+import { resetPatientData } from '@/services/reset_data';
 export default defineComponent({
   name: "postnatalBabyStatus",
   components:{
@@ -91,13 +98,18 @@ export default defineComponent({
   watch: {
 
   },
+  getFormatedData(data: any) {
+    return data.map((item: any) => {
+      return item?.data;
+    });
+  },
   computed:{
 
-
+    ...mapState(useDemographicsStore,["demographics"]),
+    ...mapState(useBabyStatusStore,["babyStatusDetails"])
   },
   mounted(){
     this.markWizard()
-
   },
 
   setup() {
@@ -139,9 +151,32 @@ export default defineComponent({
         return item?.data;
       });
     },
-    saveData(){
+    async saveData(){
+      await this.saveBabyMonitoring()
+      resetPatientData();
       this.$router.push("home");
 
+    },
+    async saveBabyMonitoring() {
+      if (this.babyStatusDetails.length>0) {
+        const userID: any = Service.getUserID();
+        const  babyStatusDetails= new BabyMonitoringService(this.demographics.patient_id, userID);
+        const encounter = await babyStatusDetails.createEncounter();
+        if (!encounter) return toastWarning("Unable to create baby monitoring details encounter");
+        const patientStatus = await babyStatusDetails.saveObservationList(await this.buildBabyMonitoring());
+        if (!patientStatus) return toastWarning("Unable to create patient routine monitoring details for baby!");
+        toastSuccess("Postnatal ward monitoring details for baby have been created");
+      }
+      console.log(await this.buildBabyMonitoring())
+
+    },
+    async buildBabyMonitoring() {
+      return [
+
+        ...(await formatCheckBoxData(this.babyStatusDetails)),
+        ...(await formatRadioButtonData(this.babyStatusDetails)),
+        ...(await formatInputFiledData(this.babyStatusDetails)),
+      ];
     },
 
     openModal(){

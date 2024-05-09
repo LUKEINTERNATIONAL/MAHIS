@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg'
+import _ from "lodash";
 
 const initialPlacentaExamination=[
     {
@@ -33,11 +34,12 @@ const initialPlacentaExamination=[
                                 inputHeader: '',
                                 unit: '',
                                 icon: icons.time,
-                                value: '',
-                                name: 'time of delivery',
+                                valueType: 'text',
+                                name: 'Time of delivery',
                                 required: true,
                                 eventType: 'input',
-                                placeholder:'Pick time'
+                                placeholder:'Pick time',
+                                isTimePopover: true
 
                             },
                             {
@@ -45,11 +47,12 @@ const initialPlacentaExamination=[
                                 unit: '',
                                 icon: icons.calenderPrimary,
                                 value: '',
-                                name: 'date of delivery',
+                                valueType: 'text',
+                                name: 'Date of delivery',
                                 required: true,
-                                datePopover:true,
                                 eventType: 'input',
-                                placeholder:'Pick date'
+                                placeholder:'Pick date',
+                                isDatePopover:true,
                             },
 
                         ]
@@ -106,7 +109,8 @@ const initialPlacentaExamination=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
-                                name: 'Other',
+                                valueType:'text',
+                                name: 'Other mode of delivery notes',
                                 required: true,
                                 eventType: 'input',
                                 placeholder:''
@@ -207,6 +211,7 @@ const initialPlacentaExamination=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
+                                valueType:'text',
                                 name: 'Placenta weight',
                                 required: true,
                                 eventType: 'input',
@@ -218,6 +223,7 @@ const initialPlacentaExamination=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
+                                valueType:'text',
                                 name: 'Cord weight',
                                 required: true,
                                 eventType: 'input',
@@ -241,6 +247,7 @@ const initialPlacentaExamination=[
                     title: 'Cord insertion',
                     selectedValue: '',
                     class:"bold",
+                    name:'Cord insertion'
                 },
                 data:[
                     {
@@ -290,6 +297,7 @@ const initialPlacentaExamination=[
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
+                                valueType:'text',
                                 name: 'Number of vessels',
                                 required: true,
                                 eventType: 'input',
@@ -443,11 +451,12 @@ const initialPlacentaExamination=[
                         colData: [
                             {
                                 displayNone:true,
-                                inputHeader: 'Specify tears',
+                                inputHeader: 'Specify',
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
-                                name: 'Other tears',
+                                valueType:'text',
+                                name: 'Other perineum condition',
                                 required: true,
                                 eventType: 'input',
                                 placeholder:''
@@ -469,7 +478,7 @@ const initialPlacentaExamination=[
                     title: 'Repair done for Tears/Episiotomy',
                     selectedValue: '',
                     class:"bold",
-                    name:"Perineum",
+                    name:"Repair done for Tears/Episiotomy",
                 },
                 data:[
                     {
@@ -489,7 +498,7 @@ const initialPlacentaExamination=[
     },
 
 ] as any;
-export const useThirdStageOfLabour = defineStore('thirdStageOfLabour',{
+export const useThirdStageOfLabourStore = defineStore('thirdStageOfLabour',{
     state: () => ({
 
         placentaExamination: [...initialPlacentaExamination] as any,
@@ -501,7 +510,7 @@ export const useThirdStageOfLabour = defineStore('thirdStageOfLabour',{
             this.placentaExamination = data
         },
         getInitial(){
-            const data=[...initialPlacentaExamination]
+            const data=_.cloneDeep(initialPlacentaExamination)
             return [...data]
         }
     },

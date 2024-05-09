@@ -1,250 +1,311 @@
 <template>
-  <DashBox :status="no_item" :content="'No Diagnosis added'" />
+    <div class="container">
+        <ion-card  class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="diagnoses"> </basic-form>
+            </ion-card-content>
+    </ion-card>
 
-  <span v-if="display_item">
-        <list :listData="diagnosis[0].selectedData" @clicked:edit="editDiagnosis($event)" @clicked:delete="deleteDiagnosis"> </list>
-    </span>
+    <ion-card class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="hypertension"> </basic-form>
+                <basic-form :contentData="preEclampsia"> </basic-form>
+                <basic-form :contentData="hyper"> </basic-form>
+                <basic-form :contentData="hypertensionReason"> </basic-form>
+            </ion-card-content>
+    </ion-card>
 
-  <ion-row v-if="search_item">
-    <basic-form :contentData="diagnosis" @update:selected="handleInputData" @update:inputValue="handleInputData" @clicked:button="addNewRow">
-    </basic-form>
-  </ion-row>
-  <ion-row v-if="addItemButton" style="margin-top: 10px">
-    <DynamicButton fill="clear" :icon="iconsContent.plus" iconSlot="icon-only" @clicked:btn="displayInputFields()" name="Add Diagnosis" />
-  </ion-row>
-  <ion-row>
-    <ion-accordion-group ref="accordionGroup" class="previousView">
-      <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
-        <ion-item slot="header" color="light">
-          <ion-label class="previousLabel">Previous Diagnosis</ion-label>
-        </ion-item>
-        <div class="ion-padding" slot="content">
-          <previousDiagnosis />
-        </div>
-      </ion-accordion>
-    </ion-accordion-group>
-  </ion-row>
+    <ion-card  class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="hiv"> </basic-form>
+                <basic-form :contentData="hivReason"> </basic-form>
+                <basic-form :contentData="hepatitisB"> </basic-form>
+                <basic-form :contentData="hepatitisReason"> </basic-form>
+            </ion-card-content>
+    </ion-card>
+
+    <ion-card class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>
+                <basic-form :contentData="hepatitisC"> </basic-form>
+                <basic-form :contentData="syphilis"> </basic-form>
+                <basic-form :contentData="syphilisTesting"> </basic-form>
+                <basic-form :contentData="tbScreening"> </basic-form>
+            </ion-card-content>
+    </ion-card>
+
+    <ion-card  class="section">
+            <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
+            <ion-card-content>  
+                <basic-form :contentData="ASB"> </basic-form>
+                <basic-form :contentData="asbReason"> </basic-form>
+                <basic-form :contentData="GDM"> </basic-form>
+                <basic-form :contentData="diabetes"> </basic-form>
+                <basic-form :contentData="anaemia"> </basic-form>
+            </ion-card-content>
+    </ion-card>
+
+    </div>
+
+
+
+
+
+
+
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController, IonInput, IonPopover } from "@ionic/vue";
-import { defineComponent, ref } from "vue";
-import { checkmark, pulseOutline } from "ionicons/icons";
-import { icons } from "@/utils/svg";
-import { PatientDiagnosisService } from "@/services/patient_diagnosis_service";
-import DashBox from "@/components/DashBox.vue";
-import SelectionPopover from "@/components/SelectionPopover.vue";
-import BasicInputField from "@/components/BasicInputField.vue";
-import { useDiagnosisStore } from "@/stores/DiagnosisStore";
-import { mapState } from "pinia";
-import { toastWarning, popoverConfirmation } from "@/utils/Alerts";
-import List from "@/components/List.vue";
-import BasicForm from "@/components/BasicForm.vue";
-import DynamicButton from "@/components/DynamicButton.vue";
-import { Service } from "@/services/service";
-import previousDiagnosis from "@/apps/NCD/components/ConsultationPlan/previousVisits/previousDiagnosis.vue";
-import { Diagnosis} from "@/apps/NCD/services/diagnosis";
+import { defineComponent } from 'vue';
+import { 
+            IonContent, 
+            IonHeader,
+            IonItem,
+            IonList,
+            IonTitle, 
+            IonToolbar, 
+            IonMenu,
+            menuController,
+            IonToggle,
+            IonSelectOption,
+            IonInput,
+            IonSelect,
+            IonRadio,
+            IonRadioGroup
+        } from '@ionic/vue';
+import { mapState } from 'pinia';
+import BasicForm from '../../../../components/BasicForm.vue';
+import { checkmark, pulseOutline } from 'ionicons/icons';
+import { icons } from '../../../../utils/svg'; 
+import {useDiagnosisStore} from '../../store/diagnosisStore';
+import { modifyRadioValue,
+    getRadioSelectedValue,
+    getCheckboxSelectedValue,
+    getFieldValue,
+    modifyFieldValue,
+    modifyCheckboxValue} from '@/services/data_helpers'
+export default defineComponent ({
+    name: "diagnosisTreatment",
+    components: {
+        IonContent, 
+            IonHeader,
+            IonItem,
+            IonList,
+            IonTitle, 
+            IonToolbar, 
+            IonMenu,
+            menuController,
+            IonToggle,
+            IonSelectOption,
+            IonInput,
+            IonSelect,
+            BasicForm,
+            IonRadio,
+            IonRadioGroup,
+    },
+    data() {
+        return {
+            currentSection: 0,
+        }
+    },
+    setup(){
+        return { checkmark,pulseOutline };
+    },
+    computed:{
+        ...mapState(useDiagnosisStore, ["diagnoses"]),
+        ...mapState(useDiagnosisStore, ["hypertensionReason"]),
+        ...mapState(useDiagnosisStore, ["hivReason"]),
+        ...mapState(useDiagnosisStore, ["hepatitisReason"]),
+        ...mapState(useDiagnosisStore, ["asbReason"]),
+        ...mapState(useDiagnosisStore, ["hypertension"]),
+        ...mapState(useDiagnosisStore, ["preEclampsia"]),
+        ...mapState(useDiagnosisStore, ["hyper"]),
+        ...mapState(useDiagnosisStore, ["hiv"]),
+        ...mapState(useDiagnosisStore, ["hepatitisB"]),
+        ...mapState(useDiagnosisStore, ["hepatitisC"]),
+        ...mapState(useDiagnosisStore, ["syphilis"]),
+        ...mapState(useDiagnosisStore, ["syphilisTesting"]),
+        ...mapState(useDiagnosisStore, ["tbScreening"]),
+        ...mapState(useDiagnosisStore, ["ASB"]),
+        ...mapState(useDiagnosisStore, ["GDM"]),
+        ...mapState(useDiagnosisStore, ["diabetes"]),
+        ...mapState(useDiagnosisStore, ["anaemia"]),
 
-export default defineComponent({
-  name: "Menu",
-  components: {
-    IonContent,
-    IonHeader,
-    IonItem,
-    IonList,
-    IonMenu,
-    IonTitle,
-    IonToolbar,
-    IonInput,
-    IonPopover,
-    DashBox,
-    SelectionPopover,
-    BasicInputField,
-    List,
-    BasicForm,
-    DynamicButton,
-    previousDiagnosis,
-  },
-  data() {
-    return {
-      iconsContent: icons,
-      no_item: false,
-      search_item: false,
-      display_item: false,
-      addItemButton: true,
-      selectedText: "" as any,
-      conditionStatus: "" as any,
-      data: [] as any,
-      diagnosisData: [] as any,
-      popoverOpen: false,
-      event: "" as any,
-      selectedCondition: "" as any,
-    };
-  },
-  setup() {
-    return { checkmark, pulseOutline };
-  },
-  computed: {
-    ...mapState(useDiagnosisStore, ["diagnosis"]),
-    inputFields() {
-      return this.diagnosis[0].data.rowData[0].colData;
     },
-  },
-  watch: {
-    diagnosis: {
-      handler() {
-        this.setDashedBox();
-      },
-      deep: true,
+    mounted(){
+      this.handleHyperOther()
+      this. handledeHiv()
+      this.handleCounselHiv()
+      this.handleHperB()
+      this.handleasbReason()
+      this.handleOtherasb()
+      this. handleNone()
+      this.handleHyper()
+      this.handledeFirstHiv()
     },
-  },
-  mounted() {
-    this.updateDiagnosisStores();
-    this.setDashedBox();
-  },
-  methods: {
-    displayInputFields() {
-      this.conditionStatus = "";
-      this.selectedText = "";
-      this.no_item = false;
-      this.addItemButton = false;
-      this.search_item = true;
-    },
-    async validaterowData() {
-      this.diagnosis[0].data.rowData[0].colData[0].alertsError = false;
-      this.diagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = "";
-
-      this.diagnosisData = await this.getDiagnosis(this.inputFields[0].value);
-      if (this.inputFields[0].value == this.diagnosisData[0]?.name) {
-        return true;
-      } else {
-        this.search_item = true;
-        this.diagnosis[0].data.rowData[0].colData[0].alertsError = true;
-        this.diagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = "Please select diagnosis from the list";
-        return false;
-      }
-    },
-    async addNewRow() {
-      if (await this.validaterowData()) {
-        this.diagnosis[0].data.rowData[0].colData[0].value = this.inputFields[0].value;
-        this.search_item = false;
-        this.display_item = true;
-        this.addItemButton = true;
-        this.buildDiagnosis();
-      }
-      this.diagnosis[0].data.rowData[0].colData[0].value = "";
-      this.diagnosis[0].data.rowData[0].colData[0].popOverData.data = [];
-    },
-    buildDiagnosis() {
-      this.diagnosis[0].selectedData.push({
-        actionBtn: true,
-        btn: ["edit", "delete"],
-        name: this.inputFields[0].value,
-        id: this.diagnosisData[0].concept_id,
-        display: [this.inputFields[0].value],
-        data: {
-          concept_id: 6542, //primary diagnosis
-          value_coded: this.diagnosisData[0].concept_id,
-          obs_datetime: Service.getSessionDate(),
+    watch:{
+      diagnoses:{
+        handler(){
+          this. handleNone()
         },
-      });
+        deep:true
+      },
+      hypertensionReason:{
+        handler(){
+          this.handleHyperOther()
+          this.handleHyper()
+        },
+        deep:true
+      },
+      hiv:{
+        handler(){
+          this. handledeHiv()
+          this.handleCounselHiv()
+          this.handledeFirstHiv()
+        },deep:true
+      },
+      hepatitisReason:{
+        handler(){
+          this.handleHperB()
+          
+        },
+        deep:true
+      },
+      asbReason:{
+        handler(){
+          this.handleasbReason()
+          this.handleOtherasb()
+        },
+        deep:true
+      }
+
     },
-    updateDiagnosisStores() {
-      const diagnosisStore = useDiagnosisStore();
-      diagnosisStore.setDiagnosis(this.diagnosis);
-    },
-    openPopover(e: any) {
-      this.event = e;
-      this.popoverOpen = true;
-    },
-    async handleInputData(col: any) {
-      if (col.inputHeader == "Diagnosis") {
-        this.diagnosisData = await this.getDiagnosis(col.value);
-        this.diagnosis[0].data.rowData[0].colData[0].popOverData.data = this.diagnosisData;
-        this.validaterowData();
+    methods :{
+        goToNextSection() {
+      if (this.currentSection < 4) {
+        this.currentSection++;
       }
     },
-    async getDiagnosis(value: any) {
-      return await PatientDiagnosisService.getDiagnosis(value, 1, 5);
-    },
-    editDiagnosis(test: any) {
-      this.deleteDiagnosis(test);
-      this.selectedText = test.name;
-      this.diagnosis[0].data.rowData[0].colData[0].value = test.name;
-      this.addItemButton = false;
-      this.search_item = true;
-      this.updateDiagnosisStores();
-    },
-    async openDeletePopover(e: any) {
-      const deleteConfirmed = await popoverConfirmation(`Do you want to delete ${e.name} ?`, e.event);
-      if (deleteConfirmed) {
-        this.deleteDiagnosis(e.name);
+    goToPreviousSection() {
+      if (this.currentSection > 0) {
+        this.currentSection--;
       }
     },
-    deleteDiagnosis(diagnosis: any) {
-      this.diagnosis[0].selectedData = this.diagnosis[0].selectedData.filter((item: any) => item.display[0] !== diagnosis.name);
-      this.updateDiagnosisStores();
+    handleHyper(){
+      if(getRadioSelectedValue(this.hypertensionReason,'Counselling on hypertension')=='No'){
+          modifyRadioValue(this.hypertensionReason,'hypertension','displayNone',false)
+        }else{
+          modifyRadioValue(this.hypertensionReason,'hypertension','displayNone',true)
+        }
     },
-    setDashedBox() {
-      if (this.inputFields[0].value) {
-        this.addItemButton = false;
-        this.search_item = true;
-        this.no_item = false;
-      }
-      if (this.diagnosis[0].selectedData.length > 0) {
-        this.display_item = true;
-        this.no_item = false;
-      } else if (!this.search_item) {
-        this.no_item = true;
+    handleHyperOther(){
+      if(getRadioSelectedValue(this.hypertensionReason,'hypertension')=='other'){
+        modifyFieldValue(this.hypertensionReason,'other','displayNone',false)
+      }else{
+        modifyFieldValue(this.hypertensionReason,'other','displayNone',true)
       }
     },
-  },
-});
+    handledeFirstHiv(){
+      if(getRadioSelectedValue(this.hiv,'counselling on HIV not provided')=='no'){
+        modifyRadioValue(this.hiv,'counselling on HIV not provided','displayNone',false)
+      }else{
+         modifyRadioValue(this.hiv,'counselling on HIV not provided','displayNone',true)
+      }
+    },
+    handledeHiv(){
+      if(getRadioSelectedValue(this.hiv,'counselling on HIV not provided')=='other'){
+        modifyFieldValue(this.hiv,'hiv Counselling','displayNone',false)
+      }else{
+         modifyFieldValue(this.hiv,'hiv Counselling','displayNone',true)
+      }
+    },
+    handleCounselHiv(){
+      if(getRadioSelectedValue(this.hiv,'cousellHiv')=='no'){
+        modifyRadioValue(this.hiv,'hiv','displaNone',false)
+      }else{
+        modifyRadioValue(this.hiv,'hiv','displaNone',true)
+      }
+    },
+    handleHperB(){
+      if(getRadioSelectedValue(this.hepatitisReason,'hepatitis B')=='other'){
+        modifyFieldValue(this.hepatitisReason,'hepatitis B','displayNone',false)
+      }else{
+         modifyFieldValue(this.hepatitisReason,'hepatitis B','displayNone',true)
+      }
+    },
+    handleasbReason(){
+      if(getRadioSelectedValue(this.asbReason,'SevenDay')=='no'){
+        modifyRadioValue(this.asbReason,'SevenDayReason','displayNone',false)
+      }else{
+        modifyRadioValue(this.asbReason,'SevenDayReason','displayNone',true)
+      }
+    },
+    handleOtherasb(){
+      if(getRadioSelectedValue(this.asbReason,'SevenDayReason')=='other'){
+        modifyFieldValue(this.asbReason,'hypertensionCounselling','displayNone',false)
+      }else{
+        modifyFieldValue(this.asbReason,'hypertensionCounselling','displayNone',true)
+      }
+    },
+    handleNone(){
+        const checkBoxes=['Hypertension','Pre-eclampsia','HIV','Hepatitis B','Hepatitis C','Syphilis',]
+
+      if (getCheckboxSelectedValue(this.diagnoses, 'None')?.checked) {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.diagnoses, checkbox, 'checked', false);
+            modifyCheckboxValue(this.diagnoses, checkbox, 'disabled', true);
+        });
+        } else {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.diagnoses, checkbox, 'disabled', false);
+        });
+    }
+    },
+
+    }
+
+})
+
+
 </script>
 
 <style scoped>
-#container {
-  text-align: center;
-
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
-}
-
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-
-  color: #8c8c8c;
-
-  margin: 0;
-}
-
-#container a {
-  text-decoration: none;
-}
-
-.action_buttons {
-  color: var(--ion-color-primary);
+.container {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  float: right;
-  max-width: 70px;
 }
-.modify_buttons {
-  padding-left: 20px;
+
+.section {
+  width: 100%;
+  max-width: 1300px; 
+  margin-bottom: 20px;
 }
-.item_no_border {
-  --border-color: transparent;
+
+ion-card {
+ box-shadow:none;
+  background-color:inherit;   
+  width: 100%;
+ color: black;
 }
-.search_result {
-  padding: 10px;
+
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 500px; 
+}
+
+@media (max-width: 1500px) {
+  .container {
+    padding: 10px;
+  }
+}
+.sub_item_header{
+  font-weight: bold;
+  font-size: medium;
 }
 </style>

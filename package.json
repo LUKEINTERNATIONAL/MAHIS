@@ -1,5 +1,5 @@
 {
-  "name": "NCD",
+  "name": "MaHIS",
   "private": true,
   "version": "0.0.1",
   "type": "module",
@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@awesome-cordova-plugins/bluetooth-serial": "^6.4.0",
+    "@capacitor/android": "5.4.1",
     "@capacitor/app": "5.0.6",
     "@capacitor/core": "^5.4.1",
     "@capacitor/filesystem": "^5.2.1",
@@ -33,7 +34,6 @@
     "ionicons": "^7.0.0",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.8.2",
-    "n": "^9.2.1",
     "nprogress": "^0.2.0",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^3.2.0",
@@ -43,7 +43,7 @@
     "vue": "^3.2.45",
     "vue-multiselect": "^3.0.0-beta.3",
     "vue-router": "^4.1.6",
-    "vue3-apexcharts": "^1.4.4",
+    "vue3-apexcharts": "^1.5.2",
     "vue3-easy-data-table": "^1.5.47",
     "vue3-qrcode-reader": "^0.0.1"
   },

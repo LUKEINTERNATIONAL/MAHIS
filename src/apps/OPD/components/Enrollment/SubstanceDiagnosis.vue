@@ -44,7 +44,7 @@ export default defineComponent({
         personInformation: {
             handler() {
                 this.updateEnrollmentStores();
-                this.buidCards();
+                this.buildCards();
             },
             deep: true,
         },
@@ -52,10 +52,10 @@ export default defineComponent({
 
     mounted() {
         this.updateEnrollmentStores();
-        this.buidCards();
+        this.buildCards();
     },
     methods: {
-        buidCards() {
+        buildCards() {
             this.cardData = {
                 mainTitle: "Enrollment",
                 cards: [

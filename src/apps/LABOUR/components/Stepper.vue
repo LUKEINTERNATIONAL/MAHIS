@@ -31,7 +31,7 @@
       </div>
 
       <div class="accordion_group">
-        <ion-accordion-group @ionChange="accordionGroupChange($event)">
+        <ion-accordion-group @ionChange="accordionGroupChange($event)" :value="['1']">
           <ion-accordion v-for="(item, index) in StepperData" :key="index" :value="item.value">
             <ion-item slot="header">
               <ion-label>{{ item.title }}</ion-label>
@@ -84,7 +84,7 @@ import SaveProgressModal from "@/components/SaveProgressModal.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import DynamicButton from "@/components/DynamicButton.vue";
-import Vitals from "@/apps/LABOUR/components/repeatable things/Vitals.vue";
+import LabourVitals from "@/apps/LABOUR/components/repeatable things/LabourVitals.vue";
 import Labour from "@/apps/LABOUR/components/obstetric details/Labour.vue";
 import QuickCheck from "@/apps/LABOUR/components/physical exam/QuickCheck.vue";
 import PhysicalExamination from "@/apps/LABOUR/components/physical exam/PhysicalExamination.vue";
@@ -140,7 +140,7 @@ export default defineComponent({
     ThirdStageDelivery,
     end,
     OtherExams,
-    Vitals,
+    LabourVitals,
     ImmidiatePostnatalChecksForChild,
     ImmidiatePostnatalChecksForMother
   },

@@ -29,15 +29,30 @@ import {
   IonModal,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
-import Toolbar from "@/apps/LABOUR/components/Toolbar.vue";
-import ToolbarSearch from "@/apps/LABOUR/components/ToolbarSearch.vue";
+import Toolbar from "@/components/Toolbar.vue";
+import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/LABOUR/components/DemographicBar.vue";
 import { chevronBackOutline,checkmark } from 'ionicons/icons';
 import SaveProgressModal from '@/components/SaveProgressModal.vue'
-import { createModal } from '@/utils/Alerts'
+import {createModal, toastSuccess, toastWarning} from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
-import Stepper from "@/apps/LABOUR/components/Stepper.vue";
+import Stepper from "@/components/Stepper.vue";
 import { mapState } from 'pinia';
+import {Service} from "@/services/service";
+import {DangerSignsService} from "@/apps/ANC/service/danger_signs_service";
+import {ReasonForVisitService} from "@/apps/ANC/service/reason_for_visit_service";
+import {ConfirmPregnancyService} from "@/apps/ANC/service/confirm_pregnancy_service";
+import {SpecificHealthConcernsService} from "@/apps/ANC/service/specific_health_concerns_service";
+import {formatCheckBoxData, formatInputFiledData, formatRadioButtonData} from "@/services/formatServerData";
+import {
+  useImmediatePostnatalChecksForChildStore
+} from "@/apps/LABOUR/stores/delivery details/immediatepostnatalChecksForChild";
+import {
+  useImmediatePostnatalChecksForMotherStore
+} from "@/apps/LABOUR/stores/delivery details/immediatepostnatalChecksForMother";
+import {useDemographicsStore} from "@/stores/DemographicStore";
+import {ImmediatePostnatalChecksForChildService} from "@/apps/LABOUR/services/immediate_postnatal_checks_for_child";
+import { resetPatientData } from '@/services/reset_data';
 export default defineComponent({
   name: "postnatalChecks",
   components:{
@@ -104,7 +119,9 @@ export default defineComponent({
   },
 
   computed:{
-
+    ...mapState(useDemographicsStore, ["demographics"]),
+    ...mapState(useImmediatePostnatalChecksForChildStore,["examsAfterDeliveryForChild"]),
+      ...mapState(useImmediatePostnatalChecksForMotherStore,["examsAfterDelivery"]),
 
   },
   mounted(){
@@ -153,14 +170,47 @@ export default defineComponent({
         return item?.data;
       });
     },
-    saveData(){
-      this.$router.push("labourHome");
+    getFormatedData(data: any) {
+      return data.map((item: any) => {
+        return item?.data[0] || item?.data;
+      });
+    },
+    async saveData() {
+      await this.savePostnatalChecks();
+      toastSuccess("Immediate postnatal checks data saved successfully")
+      resetPatientData();
+      // this.$router.push("labourHome");
+    },
+
+    async savePostnatalChecks() {
+      if (this.examsAfterDeliveryForChild.length > 0 && this.examsAfterDelivery.length > 0) {
+        const userID: any = Service.getUserID();
+        const examsAfterDelivery = new ImmediatePostnatalChecksForChildService(this.demographics.patient_id, userID);
+        const encounter = await examsAfterDelivery.createEncounter();
+        if (!encounter) return toastWarning("Unable to create immediate checks for mother and child encounter");
+        const patientStatus = await examsAfterDelivery.saveObservationList(await this.buildPostnatalChecks());
+        if (!patientStatus) return toastWarning("Unable to create immediate checks for mother and child  !");
+        toastSuccess("Immediate checks after delivery for mother and child have been created");
+      }
+      console.log(await this.buildPostnatalChecks())
 
     },
 
-    openModal(){
-      createModal(SaveProgressModal)
-    }
+    openModal() {
+      createModal(SaveProgressModal);
+    },
+
+    async buildPostnatalChecks() {
+      return [
+        ...(await formatCheckBoxData(this.examsAfterDeliveryForChild)),
+        ...(await formatRadioButtonData(this.examsAfterDeliveryForChild)),
+        ...(await formatInputFiledData(this.examsAfterDeliveryForChild)),
+        ...(await formatCheckBoxData(this.examsAfterDelivery)),
+        ...(await formatRadioButtonData(this.examsAfterDelivery)),
+        ...(await formatInputFiledData(this.examsAfterDelivery)),
+      ];
+    },
+
   }
 })
 </script>

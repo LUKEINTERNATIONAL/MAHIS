@@ -17,6 +17,7 @@
 <script lang="ts">
 import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import Toolbar from "@/components/Toolbar.vue";
+import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import { IonContent, IonPage } from "@ionic/vue";
 import { defineComponent } from "vue";
 import UltrasoundScan from "@/apps/ANC/components/lab_tests/UltrasoundScan.vue";
@@ -24,7 +25,7 @@ import { icons } from "@/utils/svg";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import UrineTest from "@/apps/ANC/components/lab_tests/UrineTest.vue";
 import TB from "@/apps/ANC/components/lab_tests/TB.vue";
-import Stepper from "@/apps/ANC/components/Stepper.vue";
+import Stepper from "@/components/Stepper.vue";
 import { useLabTestsStore } from "../store/LabTestsStore";
 import { mapState } from "pinia";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
@@ -34,6 +35,7 @@ import { useUrineTestStore } from "../store/UrineTestStore";
 import { Service } from "@/services/service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import {TBScreeningInstance, UltrasoundInstance, UrineTestInstance} from "@/apps/ANC/service/labtests_service"
+import { resetPatientData } from "@/services/reset_data";
 export default defineComponent({
     name: "Lab",
     components: { IonPage, DemographicBar, Toolbar, IonContent, UltrasoundScan, UrineTest, TB, Stepper },
@@ -103,6 +105,7 @@ export default defineComponent({
                this.saveUltrasound();
                this.saveUrineTest();
                this.saveTBscreening();
+                resetPatientData();
             this.$router.push("ANChome");
                 toastSuccess("Lab tests data saved successfully");
             } else {

@@ -45,14 +45,12 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useEnrollementStore, ["familyHistory"]),
         ...mapState(useEnrollementStore, ["NCDNumber"]),
     },
     watch: {
-        personInformation: {
+        NCDNumber: {
             handler() {
-                this.updateEnrollmentStores();
-                this.buidCards();
+                this.buildCards();
             },
             deep: true,
         },
@@ -61,17 +59,13 @@ export default defineComponent({
         const j = await ProgramService.getNextSuggestedNCDNumber();
         modifyFieldValue(this.NCDNumber, "NCDNumber", "value", j.ncd_number.replace(/^\D+|\s/g, ""));
         modifyFieldValue(this.NCDNumber, "NCDNumber", "leftText", `${j.ncd_number.replace(/\d+/g, "")}-NCD-`);
-        this.buidCards();
+        this.buildCards();
     },
     methods: {
-        buidCards() {
+        buildCards() {
             this.cardData = {
                 mainTitle: "Enrollment",
                 cards: [
-                    {
-                        cardTitle: "Family history",
-                        content: this.familyHistory,
-                    },
                     {
                         cardTitle: "NCD number",
                         content: this.NCDNumber,
@@ -84,7 +78,6 @@ export default defineComponent({
         },
         updateEnrollmentStores() {
             const enrollmentStore = useEnrollementStore();
-            enrollmentStore.setFamilyHistory(this.familyHistory);
             enrollmentStore.setNCDNumber(this.NCDNumber);
         },
         testF(data: any) {

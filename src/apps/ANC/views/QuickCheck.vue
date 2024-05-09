@@ -32,8 +32,8 @@ import {
   modalController,
   AccordionGroupCustomEvent } from '@ionic/vue';
 import { defineComponent } from 'vue';
-import Toolbar from "@/apps/ANC/components/Toolbar.vue";
-import ToolbarSearch from '@/components/ToolbarSearch.vue'
+import Toolbar from "@/components/Toolbar.vue";
+import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/components/DemographicBar.vue";
 import { chevronBackOutline,checkmark } from 'ionicons/icons';
 import SaveProgressModal from '@/components/SaveProgressModal.vue'
@@ -44,7 +44,7 @@ import { useDemographicsStore } from '@/stores/DemographicStore'
 import { useInvestigationStore } from '@/stores/InvestigationStore'
 import { useDiagnosisStore } from '@/stores/DiagnosisStore'
 import { mapState } from 'pinia';
-import Stepper from "@/apps/ANC/components/Stepper.vue";
+import Stepper from "@/components/Stepper.vue";
 import { Service } from "@/services/service";
 import { toastWarning,popoverConfirmation, toastSuccess } from '@/utils/Alerts';
 import { Diagnosis } from '@/apps/NCD/services/diagnosis'
@@ -70,6 +70,7 @@ import {SpecificHealthConcernsService} from "@/apps/ANC/service/specific_health_
 import {useSpecificHealthConcernsStore} from "@/apps/ANC/store/quickCheck/specificHealthConcerns";
 import {useReasonForVisitStore} from "@/apps/ANC/store/quickCheck/reasonForVisit";
 import {ReasonForVisitService} from "@/apps/ANC/service/reason_for_visit_service";
+import { resetPatientData } from '@/services/reset_data';
 export default defineComponent({
   name: "Home",
   components:{
@@ -251,8 +252,9 @@ export default defineComponent({
       await this.saveReasonForVisit();
       await this.saveConfirmPregnancy();
       await this.saveHealthConcerns();
+      resetPatientData();
       this.$router.push("ANCHome");
-      this.isLoading = false;
+      //this.isLoading = false;
     },
 
     async saveDangerSigns() {

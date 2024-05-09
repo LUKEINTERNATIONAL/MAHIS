@@ -18,12 +18,13 @@
 import DemographicBar from "@/apps/ANC/components/DemographicBar.vue";
 import { defineComponent } from 'vue';
 import BasicInputField from '@/components/BasicInputField.vue';
-import Stepper from "@/apps/ANC/components/Stepper.vue";
+import Stepper from "@/components/Stepper.vue";
 import { icons } from '@/utils/svg';
 import { chevronBackOutline, checkmark } from 'ionicons/icons';
 import Referral from "@/apps/ANC/components/referral/Referral.vue";
 import { IonContent, IonHeader, IonItem, IonPage, IonList, IonMenu, IonTitle,IonToolbar } from "@ionic/vue";
-import Toolbar from "../components/Toolbar.vue";
+import Toolbar from "@/components/Toolbar.vue";
+import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import { useReferralStore } from "../store/referral/referralStore";
 import { mapState } from "pinia";
 import { formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
@@ -31,6 +32,7 @@ import { Service } from "@/services/service";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
 import {ReferralInstance} from '@/apps/ANC/service/referral_service'
 import { useDemographicsStore } from "@/stores/DemographicStore";
+import { resetPatientData } from "@/services/reset_data";
 
 
 
@@ -88,6 +90,7 @@ export default defineComponent ({
     markWizard() {},
     saveData() {
       this.saveReferral
+      resetPatientData();
       this.$router.push("ANCHome");
     },
     async buildReferral() {

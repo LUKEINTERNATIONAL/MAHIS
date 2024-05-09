@@ -47,7 +47,7 @@ import StandardValidations from "@/validations/StandardValidations";
 import {validateField} from "@/services/ANC/validation_service";
 import BasicCard from "@/components/BasicCard.vue";
 import { Service } from "@/services/service"
-import {useHeadssAssessmentStore} from "@/apps/ANC/store/others/headsAssessment";
+import {useHeadssAssessmentStore} from "@/apps/ANC/store/others/headsAssessmentStore";
 export default defineComponent({
   name: "History",
   components:{
@@ -149,4 +149,4 @@ ion-card {
   font-size: 14px;
 }
 
-</style>
+</style>@/apps/ANC/store/others/headsAssessmentStore

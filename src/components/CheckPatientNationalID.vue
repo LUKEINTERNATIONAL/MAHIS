@@ -1,5 +1,5 @@
 <template>
-    <div class="modal_wrapper">
+    <div class="modal_wrapper" style="--height: none">
         <div class="modal_title diplay_space_between">
             <span></span>
             <span @click="dismiss()" style="cursor: pointer; font-weight: 300">x</span>
@@ -10,7 +10,7 @@
                 a National ID card?
             </div>
             <div class="content">
-                <ion-card class="item">
+                <ion-card class="nationalIDCard">
                     <ion-icon slot="start" :icon="iconsContent.scanner" aria-hidden="true"></ion-icon>
                     <div>
                         <ion-button style="padding-top: 10px" @click="nav('registration/scan')" fill="solid">Yes, I need to scan it</ion-button>
@@ -75,13 +75,5 @@ export default defineComponent({
 .content {
     display: flex;
     justify-content: center;
-}
-.item {
-    padding: 90px 0px 90px 0px;
-    width: 50%;
-    margin-inline: 5px;
-    font-weight: 500;
-    font-size: 14px;
-    text-align: center;
 }
 </style>

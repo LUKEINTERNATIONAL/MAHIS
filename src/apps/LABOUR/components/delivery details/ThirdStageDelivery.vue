@@ -41,7 +41,7 @@ import {
 import BasicCard from "@/components/BasicCard.vue";
 //import {useReferralStore} from "@/apps/LABOUR/stores/repeatable things/referral";
 import {useEndLabourStore} from "@/apps/LABOUR/stores/repeatable things/labourAndDeliveryEnd";
-import {useThirdStageOfLabour} from "@/apps/LABOUR/stores/delivery details/thirdStageDelivery";
+import {useThirdStageOfLabourStore} from "@/apps/LABOUR/stores/delivery details/thirdStageDelivery";
 export default defineComponent({
   name: "ThirdStageOfDelivery",
   components:{
@@ -74,10 +74,10 @@ export default defineComponent({
     };
   },
   computed:{
-    ...mapState(useThirdStageOfLabour,["placentaExamination"]),
+    ...mapState(useThirdStageOfLabourStore,["placentaExamination"]),
   },
   mounted(){
-    const placentaExamination=useThirdStageOfLabour()
+    const placentaExamination=useThirdStageOfLabourStore()
     this.initialData=placentaExamination.getInitial()
   },
   watch:{
@@ -89,12 +89,12 @@ export default defineComponent({
 });
 
 </script>
-
 <style scoped>
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0); /* Adds a box shadow with reduced intensity */
 }
 
 .section {
@@ -104,8 +104,7 @@ export default defineComponent({
 }
 
 ion-card {
-  box-shadow:none;
-  background-color:inherit;
+  background-color: white;
   width: 100%;
   color: black;
 }
@@ -122,9 +121,8 @@ ion-card {
     padding: 10px;
   }
 }
-.sub_item_header{
+.sub_item_header {
   font-weight: bold;
   font-size: 14px;
 }
-
 </style>

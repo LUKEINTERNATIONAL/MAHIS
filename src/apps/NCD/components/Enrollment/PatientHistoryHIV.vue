@@ -37,37 +37,31 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useEnrollementStore, ["substance"]),
-        ...mapState(useEnrollementStore, ["enrollmentDiagnosis"]),
+        ...mapState(useEnrollementStore, ["patientHistoryHIV"]),
     },
     watch: {
-        personInformation: {
+        patientHistoryHIV: {
             handler() {
-                this.updateEnrollmentStores();
-                this.buidCards();
+                this.controllFields();
+                this.buildCards();
             },
             deep: true,
         },
     },
-
     mounted() {
         this.updateEnrollmentStores();
-        this.buidCards();
+        this.buildCards();
     },
     methods: {
-        buidCards() {
+        buildCards() {
             const enrollment = useEnrollementStore();
             this.cardData = {
                 mainTitle: "Enrollment",
                 cards: [
                     {
-                        cardTitle: "Substance use / Consumption",
-                        content: this.substance,
-                    },
-                    {
-                        cardTitle: "Diagnosis",
-                        content: this.enrollmentDiagnosis,
-                        initialData: enrollment.getInitialEnrollmentDiagnosis(),
+                        cardTitle: "Patient history & Complications ",
+                        content: this.patientHistoryHIV,
+                        initialData: enrollment.getInitialPatientHistoryHIV(),
                     },
                 ],
             };
@@ -77,17 +71,21 @@ export default defineComponent({
         },
         updateEnrollmentStores() {
             const enrollmentStore = useEnrollementStore();
-            enrollmentStore.setSubstance(this.substance);
-            enrollmentStore.setDiagnosis(this.enrollmentDiagnosis);
+            enrollmentStore.setPatientHistoryHIV(this.patientHistoryHIV);
         },
-
-        testF(data: any) {
-            console.log(data);
+        controllFields() {
+            if (getRadioSelectedValue(this.patientHistoryHIV, "HIV") == "R") {
+                modifyFieldValue(this.patientHistoryHIV, "ART_start_date", "displayNone", false);
+            } else {
+                modifyFieldValue(this.patientHistoryHIV, "ART_start_date", "displayNone", true);
+            }
         },
         async handleInputData(event: any) {
-            if (event?.value?.detail?.checked) {
-                modifyCheckboxInputField(this.enrollmentDiagnosis, event?.al?.name, "displayNone", false);
-            } else modifyCheckboxInputField(this.enrollmentDiagnosis, event?.al?.name, "displayNone", true);
+            console.log(event.al);
+            if (event.al) {
+                if (event.value.detail.checked) modifyCheckboxInputField(this.patientHistoryHIV, event.al.name, "displayNone", false);
+                else modifyCheckboxInputField(this.patientHistoryHIV, event.al.name, "displayNone", true);
+            }
         },
     },
 });
@@ -138,6 +136,7 @@ ion-radio {
     line-height: 3;
 }
 .small_font {
+    font-family: "Inter";
     font-style: normal;
     font-weight: 400;
     font-size: 12px;

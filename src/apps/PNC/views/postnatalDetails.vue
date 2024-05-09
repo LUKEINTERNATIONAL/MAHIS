@@ -29,15 +29,24 @@ import {
   IonModal,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
-import Toolbar from "@/apps/LABOUR/components/Toolbar.vue";
-import ToolbarSearch from "@/apps/LABOUR/components/ToolbarSearch.vue";
+import Toolbar from "@/components/Toolbar.vue";
+import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/LABOUR/components/DemographicBar.vue";
 import { chevronBackOutline,checkmark } from 'ionicons/icons';
 import SaveProgressModal from '@/components/SaveProgressModal.vue'
-import { createModal } from '@/utils/Alerts'
+import {createModal, toastSuccess, toastWarning} from '@/utils/Alerts'
 import { icons } from '@/utils/svg';
-import Stepper from "@/apps/PNC/components/Stepper.vue";
+import Stepper from "@/components/Stepper.vue";
 import { mapState } from 'pinia';
+import {Service} from "@/services/service";
+import {formatCheckBoxData, formatInputFiledData, formatRadioButtonData} from "@/services/formatServerData";
+import {useObstetricDetailsStore} from "@/apps/PNC/stores/postnatal details/ObstetricDetails";
+import {useDemographicsStore} from "@/stores/DemographicStore";
+import {PostnatalDetailsService} from "@/apps/PNC/Services/postnatal_details_service";
+import {useDeliveryDetailsStore} from "@/apps/PNC/stores/postnatal details/DeliveryDetails";
+import {useHIVStatusAndTreatmentStore} from "@/apps/PNC/stores/postnatal details/HIVStatusAndTreatment";
+import {modifyWizardData} from "@/services/data_helpers";
+import { resetPatientData } from '@/services/reset_data';
 export default defineComponent({
   name: "postnatalDetails",
   components:{
@@ -117,10 +126,30 @@ export default defineComponent({
     };
   },
   watch: {
+    obstetricDetails:{
+      handler(){
+        this.markWizard();
+      },
+      deep:true,
+    },
+    deliveryDetails:{
+      handler(){
+        this.markWizard();
+      },
+      deep:true,
+    }
 
   },
+  getFormatedData(data: any) {
+    return data.map((item: any) => {
+      return item?.data;
+    });
+  },
   computed:{
-
+    ...mapState(useDemographicsStore, ["demographics"]),
+    ...mapState(useObstetricDetailsStore,["obstetricDetails"]),
+    ...mapState(useDeliveryDetailsStore,["deliveryDetails"]),
+    ...mapState(useHIVStatusAndTreatmentStore,["hivStatusAndTreatment"]),
 
   },
 
@@ -134,20 +163,34 @@ export default defineComponent({
   },
 
   methods:{
-    markWizard(){
-      //   if(this.medications.validationStatus){
-      //     this.wizardData[0].checked = true;
-      //     this.wizardData[0].class = 'open_step common_step'
-      //   }else{
-      //     this.wizardData[0].checked = false;
-      //   }
+    markWizard: function () {
+      // if (this.obstetricDetails[0].selectedData.length > 0) {
+      //   modifyWizardData(this.wizardData, "Obstetric details",{
+      //     checked:true,
+      //     class:'open_step common_step'
+      //       });
+      // } else {
+      //   modifyWizardData(this.wizardData, "Obstetric details", {
+      //     checked: false,
+      //   });
+      // }
+      // if (this.deliveryDetails[0].selectedData.length > 0) {
+      //   modifyWizardData(this.wizardData, "Obstetric details",{
+      //     checked:true,
+      //     class:'open_step common_step'
+      //   });
+      // } else {
+      //   modifyWizardData(this.wizardData, "Obstetric details", {
+      //     checked: false,
+      //   });
+      // }
 
-      //   if(this.medicalHistory[0].selectdData.length > 0){
-      //     this.wizardData[1].checked = true;
-      //     this.wizardData[1].class = 'open_step common_step'
-      //   }else{
-      //     this.wizardData[1].checked = false;
-      //   }
+      // if(this.deliveryDetails[0].selectdData.length > 0){
+      //   this.wizardData[1].checked = true;
+      //   this.wizardData[1].class = 'open_step common_step'
+      // }else{
+      //   this.wizardData[1].checked = false;
+      // }
 
       //   if(this.womanBehaviour[0].selectdData.length > 0){
       //     this.wizardData[2].checked = true;
@@ -168,9 +211,40 @@ export default defineComponent({
         return item?.data;
       });
     },
-    saveData(){
+    async saveData(){
+      await this.savePostnatalDetails()
+      //toastSuccess("Postnatal details data saved successfully")
+      resetPatientData();
       this.$router.push("home");
 
+    },
+
+    async savePostnatalDetails() {
+      if (this.obstetricDetails.length > 0 && this.deliveryDetails.length>0 && this.hivStatusAndTreatment.length>0) {
+        const userID: any = Service.getUserID();
+        const  postnatalDetails= new PostnatalDetailsService(this.demographics.patient_id, userID);
+        const encounter = await postnatalDetails.createEncounter();
+        if (!encounter) return toastWarning("Unable to create patient postnatal details  encounter");
+        const patientStatus = await postnatalDetails.saveObservationList(await this.buildPostnatalDetails());
+        if (!patientStatus) return toastWarning("Unable to create patient obstetric, delivery and HIV status details!");
+        toastSuccess("Obstetric, delivery and HIV status details have been created");
+      }
+      console.log(await this.buildPostnatalDetails())
+
+    },
+
+    async buildPostnatalDetails() {
+      return [
+        ...(await formatCheckBoxData(this.obstetricDetails)),
+        ...(await formatRadioButtonData(this.obstetricDetails)),
+        ...(await formatInputFiledData(this.obstetricDetails)),
+        ...(await formatCheckBoxData(this.deliveryDetails)),
+        ...(await formatRadioButtonData(this.deliveryDetails)),
+        ...(await formatInputFiledData(this.deliveryDetails)),
+        ...(await formatCheckBoxData(this.hivStatusAndTreatment)),
+        ...(await formatRadioButtonData(this.hivStatusAndTreatment)),
+        ...(await formatInputFiledData(this.hivStatusAndTreatment)),
+      ];
     },
 
     openModal(){

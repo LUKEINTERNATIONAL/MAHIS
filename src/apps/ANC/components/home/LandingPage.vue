@@ -200,18 +200,21 @@ top: 50%;
 transform: translateY(-50%);
 }
 
-/* @media (max-width: 780px) { 
+@media (min-width: 1300px) {
   ion-grid {
-    margin-left: 0; 
+    margin-left: 4rem;
+    top: 2rem;
+    max-width: 1470px;
   }
-  ion-row {
-    flex-direction: column;
-    align-items: center;
-  }
+
  ion-card{
-    width: 90%;
+   width: 21em !important;
+   height: 12em !important;
+   max-width: 1470px;
   }
-} */
+}
+
+
 
 .section {
   width: 100%;

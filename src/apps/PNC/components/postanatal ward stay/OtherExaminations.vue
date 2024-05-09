@@ -1,9 +1,11 @@
 <template>
   <div class="container">
     <ion-card class="section">
-      <ion-card-header> <ion-card-title class=" sub_item_header"></ion-card-title></ion-card-header>
       <ion-card-content>
-        <basic-form :contentData="vitals" ></basic-form>
+        <basic-form
+            :contentData="otherExams"
+            :initialData="initialData"
+        ></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
@@ -30,15 +32,10 @@ import { icons } from '../../../../utils/svg';
 import BasicInputField from '../../../../components/BasicInputField.vue';
 import { mapState } from 'pinia';
 import { checkmark, pulseOutline } from 'ionicons/icons';
-import {
-  dynamicValue,
-  getCheckboxSelectedValue,
-  getFieldValue,
-} from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
-import {useVitalsStore} from "@/apps/LABOUR/stores/repeatable things/vitals";
+import {usePostnatalWardStayStore} from "@/apps/PNC/stores/postnatal ward stay/PostnatalWardMonitoring";
 export default defineComponent({
-  name: "FirstVaginalExamination",
+  name: "DeliveryDetails",
   components:{
     BasicCard,
     IonContent,
@@ -64,13 +61,16 @@ export default defineComponent({
       vValidations: '' as any,
       hasValidationErrors: [] as any,
       inputField: '' as any,
+      initialData:[] as any,
 
     };
   },
   computed:{
-    ...mapState(useVitalsStore,["vitals"]),
+    ...mapState(usePostnatalWardStayStore,["otherExams"]),
   },
   mounted(){
+    const otherExams=usePostnatalWardStayStore()
+    this.initialData=otherExams.getInitial2()
   },
   watch:{
   },
@@ -119,4 +119,4 @@ ion-card {
   font-size: 14px;
 }
 
-</style>
+</style>yle>

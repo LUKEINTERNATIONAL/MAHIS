@@ -39,28 +39,24 @@ const initialReasonForVisit= [
 
     },
     {
-        selectedData: [],
-        classDash:'dashed_bottom_border',
-        isFinishBtn: false,
-        sideColSize: 0,
+        classDash: "dashed_bottom_border",
         radioBtnContent: {
             header: {
-                title: "Does the woman had any previous ANC visit at any facility?",
-                name: "Previous visits",
+                title: "Does the woman had any previous ANC visit?",
+                class:'bold',
                 selectedValue: "",
-                displayNext: "Yes",
-                class: "bold",
+                name:'Previous visits'
             },
             data: [
                 {
-                    name: "Yes",
                     value: "Yes",
-                    colSize: 2,
+                    name: "Yes",
+                    colSize: "2",
                 },
                 {
-                    name: "No",
                     value: "No",
-                    colSize: 2,
+                    name: "No",
+                    colSize: "2",
                 },
             ],
         },
@@ -76,66 +72,58 @@ const initialReasonForVisit= [
                 {
                     colData: [
                         {
-                            displayNone: true,
-                            inputHeader: "Enter number of visits",
-                            class: "bold",
-                            icon: icons.editPen,
-                            unit:'Visit(s)',
-                            popOver: true,
-                            value: "",
-                            valueType: "number",
-                            name: "Number of previous anc visits",
-                            eventType: "input",
-                            required: true,
-                            alertsError: false,
-                            inputWidth:'55%',
-                            alertsErrorMassage: "",
-                            popOverData: {
-                                filterData: true,
-                                data: [],
-                            },
-                            // id: "",
-                            // idName: "visit",
-                        },
-
-                    ],
-                },
-            ],
-        },
-    },
-
-    {
-        childName:"",
-        classDash: "dashed_bottom_border",
-        sideColSize:0,
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
                             displayNone:true,
-                            inputHeader: "Start date",
-                            class: "bold",
-                            icon: icons.calendar,
-                            popOver: true,
-                            value: "",
-                            valueType: "text",
-                            name: "Number of previous anc visits",
-                            eventType: "input",
+                            class:"bold",
+                            inputHeader: 'Enter number of previous ANC visits',
+                            unit: '',
+                            icon: icons.editPen,
+                            value: '',
+                            valueType:"text",
+                            name: 'Number of previous visits',
                             required: true,
-                            alertsError: false,
-                            alertsErrorMassage: "",
-                            id: "",
-                            idName: "startDate",
-                            inputWidth:'55%',
-                            placeholder: "Pick the date",
-                            isDatePopover: true,
+                            eventType: 'input',
+                            inputWidth: "100%",
+
                         },
+
                     ],
                 },
             ],
         },
     },
+
+    // {
+    //     childName:"",
+    //     classDash: "dashed_bottom_border",
+    //     sideColSize:0,
+    //     data: {
+    //         rowData: [
+    //             {
+    //                 colData: [
+    //                     {
+    //                         displayNone:true,
+    //                         inputHeader: "Start date",
+    //                         class: "bold",
+    //                         icon: icons.calendar,
+    //                         popOver: true,
+    //                         value: "",
+    //                         valueType: "text",
+    //                         name: "",
+    //                         eventType: "input",
+    //                         required: true,
+    //                         alertsError: false,
+    //                         alertsErrorMassage: "",
+    //                         id: "",
+    //                         idName: "startDate",
+    //                         inputWidth:'55%',
+    //                         placeholder: "Pick the date",
+    //                         isDatePopover: true,
+    //                     },
+    //                 ],
+    //             },
+    //         ],
+    //     },
+    // },
 
 ] as any;
 export const useReasonForVisitStore = defineStore('reasonForVisitStore',{

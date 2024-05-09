@@ -35,14 +35,14 @@ import {
     IonModal,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
-import Toolbar from "@/apps/LABOUR/components/Toolbar.vue";
-import ToolbarSearch from "@/apps/LABOUR/components/ToolbarSearch.vue";
+import Toolbar from "@/components/Toolbar.vue";
+import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/apps/LABOUR/components/DemographicBar.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
 import { createModal, toastSuccess, toastWarning } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
-import Stepper from "@/apps/LABOUR/components/Stepper.vue";
+import Stepper from "@/components/Stepper.vue";
 import { mapState } from "pinia";
 import { getCheckboxSelectedValue } from "@/services/data_helpers";
 import { useDemographicsStore } from "@/stores/DemographicStore";
@@ -54,6 +54,7 @@ import { usePelvicAssessmentStore } from "../stores/physical exam/pelvicAssessme
 import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
 import { Service } from "@/services/service";
 import {QuickCheckInstance,PhysicalExamInstance, VaginalExamInstance, PelvicAssessmentInstance } from '@/apps/LABOUR/services/labour_assesment_service';
+import { resetPatientData } from "@/services/reset_data";
 
 export default defineComponent({
     name: "obstetricDetails",
@@ -243,6 +244,7 @@ export default defineComponent({
           this.saveVaginalExamInstance();
           this.savePhysicalExamInstance();
           this.savePelvicAssessmentInstance();
+          resetPatientData();
           this.$router.push("labourHome");
 
         },

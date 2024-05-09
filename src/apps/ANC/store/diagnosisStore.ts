@@ -7,13 +7,39 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
       {
         selectdData: [],
         isFinishBtn: false,
-        classDash: "",
+        radioBtnContent: {
+          header: {
+            title: "Counselling conducted on hypertension?",
+            selectedValue: "",
+            class: "bold",
+            name: "Counselling on hypertension",
+          },
+          data: [
+            {
+              name: "Yes",
+              value: "Yes",
+
+              colSize: "2.5",
+            },
+            {
+              name: "No",
+              value: "No",
+
+              colSize: "2.5",
+            },
+          ],
+        },
+      },
+      {
+        selectdData: [],
+        isFinishBtn: false,
         radioBtnContent: {
           header: {
             title: "Reason counselling on hypertension not provided",
             selectedValue: "",
             class: "bold",
             name: "hypertension",
+            displayNone: true,
           },
           data: [
             {
@@ -36,7 +62,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
       {
         isFinishBtn: false,
         sectionHeader: "",
-        classDash: "dashed_bottom_border _padding",
+        // classDash: "dashed_bottom_border _padding",
 
         data: {
           rowData: [
@@ -107,7 +133,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
                   displayNone: true,
                   inputHeader: "specify",
                   value: "",
-                  valueType:'text',
+                  valueType: "text",
                   name: "hepatitis B",
                   icon: icons.editPen,
                   required: true,
@@ -140,16 +166,16 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
             {
               name: "Yes",
               value: "Yes",
-              labelPlacement: "start",
-              colSize: "9",
-              justify: "space-between",
+              
+              colSize: "2.5",
+              
             },
             {
               name: "No",
               value: "no",
-              labelPlacement: "start",
-              colSize: "9",
-              justify: "space-between",
+              
+              colSize: "2.5",
+              
             },
           ],
         },
@@ -339,16 +365,12 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
             {
               name: "Yes",
               value: "Yes",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+              colSize: "2.5",
             },
             {
               name: "No",
               value: "No",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+              colSize: "2.5",
             },
           ],
         },
@@ -372,53 +394,19 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
             {
               name: "Yes",
               value: "Yes",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+              colSize: "2.5",
             },
             {
               name: "No",
               value: "No",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+              colSize: "2.5",
             },
           ],
         },
       },
     ] as any,
 
-    hyper: [
-      {
-        selectdData: [],
-        isFinishBtn: false,
-        classDash: "dashed_bottom_border",
-        radioBtnContent: {
-          header: {
-            title: "Counselling conducted on hypertension?",
-            selectedValue: "",
-            class: "bold",
-            name: "Counselling on hypertension",
-          },
-          data: [
-            {
-              name: "Yes",
-              value: "Yes",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-            {
-              name: "No",
-              value: "No",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-          ],
-        },
-      },
-    ] as any,
+    hyper: [] as any,
 
     hiv: [
       {
@@ -436,16 +424,14 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
             {
               name: "Yes",
               value: "Yes",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+
+              colSize: "2.5",
             },
             {
               name: "No",
               value: "no",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+
+              colSize: "2.5",
             },
           ],
         },
@@ -490,7 +476,7 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
             {
               colData: [
                 {
-                  displaNone: true,
+                  displayNone: true,
                   inputHeader: "specify",
                   value: "",
                   name: "hiv Counselling",
@@ -525,16 +511,14 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
             {
               name: "Yes",
               value: "Yes",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+
+              colSize: "2.5",
             },
             {
               name: "No",
               value: "No",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+
+              colSize: "2.5",
             },
           ],
         },
@@ -557,16 +541,14 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
             {
               name: "Yes",
               value: "Yes",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+
+              colSize: "2.5",
             },
             {
               name: "No",
               value: "No",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+
+              colSize: "2.5",
             },
           ],
         },
@@ -589,16 +571,14 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
             {
               name: "Yes",
               value: "Yes",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+
+              colSize: "2.5",
             },
             {
               name: "No",
               value: "No",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+
+              colSize: "2.5",
             },
           ],
         },
@@ -621,16 +601,14 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
             {
               name: "Yes",
               value: "Yes",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+
+              colSize: "2.5",
             },
             {
               name: "No",
               value: "No",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+
+              colSize: "2.5",
             },
           ],
         },
@@ -653,16 +631,14 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
             {
               name: "Yes",
               value: "Yes",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+
+              colSize: "2.5",
             },
             {
               name: "No",
               value: "No",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
+
+              colSize: "2.5",
             },
           ],
         },
@@ -687,16 +663,14 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
             {
               name: "Yes",
               value: "Yes",
-              labelPlacement: "start",
-              colSize: "9",
-              justify: "space-between",
+
+              colSize: "2.5",
             },
             {
               name: "No",
               value: "No",
-              labelPlacement: "start",
-              colSize: "9",
-              justify: "space-between",
+
+              colSize: "2.5",
             },
           ],
         },
@@ -718,16 +692,14 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
             {
               name: "Yes",
               value: "Yes",
-              labelPlacement: "start",
-              colSize: "9",
-              justify: "space-between",
+
+              colSize: "2.5",
             },
             {
               name: "No",
               value: "No",
-              labelPlacement: "start",
-              colSize: "9",
-              justify: "space-between",
+
+              colSize: "2.5",
             },
           ],
         },
@@ -749,16 +721,14 @@ export const useDiagnosisStore = defineStore("diagnosisStore", {
             {
               name: "Yes",
               value: "Yes",
-              labelPlacement: "start",
-              colSize: "9",
-              justify: "space-between",
+
+              colSize: "2.5",
             },
             {
               name: "No",
               value: "No",
-              labelPlacement: "start",
-              colSize: "9",
-              justify: "space-between",
+
+              colSize: "2.5",
             },
           ],
         },

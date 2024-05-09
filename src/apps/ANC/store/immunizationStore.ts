@@ -349,5 +349,5 @@ export const useImmunizationStore = defineStore("immunizationStore", {
       this.hepBReason = data;
     },
   },
-  // persist: true,
+   persist: true,
 });

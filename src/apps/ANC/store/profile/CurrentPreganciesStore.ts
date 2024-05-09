@@ -704,5 +704,5 @@ export const useCurrentPregnanciesStore = defineStore("currentPregnanciesStore",
       return [...data]; // Return a copy of the initial state
     }
   },
-  // persist:true,
+   persist:true,
 });

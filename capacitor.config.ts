@@ -4,8 +4,10 @@ const config: CapacitorConfig = {
     appId: "io.ionic.starter",
     appName: "MaHIS",
     webDir: "dist",
+    bundledWebRuntime: false,
     server: {
-        androidScheme: "https",
+        androidScheme: "http",
+        cleartext: true,
     },
 };
 

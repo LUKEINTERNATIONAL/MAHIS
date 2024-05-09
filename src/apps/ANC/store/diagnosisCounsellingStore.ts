@@ -19,16 +19,14 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
             {
               name: "Yes",
               value: "yes",
-              
+
               colSize: "2.5",
-             
             },
             {
               name: "No",
               value: "no",
-              
+
               colSize: "2.5",
-             
             },
           ],
         },
@@ -51,16 +49,14 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
             {
               name: "Yes",
               value: "yes",
-              
+
               colSize: "2.5",
-             
             },
             {
               name: "No",
               value: "no",
-              
+
               colSize: "2.5",
-             
             },
           ],
         },
@@ -83,16 +79,14 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
             {
               name: "Yes",
               value: "yes",
-              
+
               colSize: "2.5",
-             
             },
             {
               name: "No",
               value: "no",
-              
+
               colSize: "2.5",
-             
             },
           ],
         },
@@ -142,37 +136,32 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
             {
               name: "Side effects",
               value: "side effects",
-              
+
               colSize: "7",
-             
             },
             {
               name: "Stock-out",
               value: "stock-out",
-              
+
               colSize: "7",
-             
             },
             {
               name: "Gestational less than 13 weeks",
               value: "gestational less than 13 weeks",
-              
+
               colSize: "7",
-             
             },
             {
               name: "Allergy to medication",
               value: "allergy to medication",
-              
+
               colSize: "7",
-             
             },
             {
               name: "Other",
               value: "other",
-              
+
               colSize: "7",
-             
             },
           ],
         },
@@ -219,16 +208,14 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
             {
               name: "Yes",
               value: "yes",
-              
+
               colSize: "2.5",
-             
             },
             {
               name: "No",
               value: "no",
-              
+
               colSize: "2.5",
-             
             },
           ],
         },
@@ -252,16 +239,14 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
             {
               name: "Yes",
               value: "yes",
-              
+
               colSize: "2.5",
-             
             },
             {
               name: "No",
               value: "no",
-              
+
               colSize: "2.5",
-             
             },
           ],
         },
@@ -272,7 +257,7 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
       {
         selectdData: [],
         isFinishBtn: false,
-        classDash: "dashed_bottom_border _padding",
+        //  classDash: "dashed_bottom_border _padding",
         radioBtnContent: {
           header: {
             title: "Counselling conducted on HIV risk?",
@@ -284,16 +269,14 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
             {
               name: "Yes",
               value: "yes",
-              
+
               colSize: "2.5",
-             
             },
             {
               name: "No",
               value: "no",
-              
+
               colSize: "2.5",
-             
             },
           ],
         },
@@ -316,16 +299,14 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
             {
               name: "Yes",
               value: "yes",
-              
+
               colSize: "2.5",
-             
             },
             {
               name: "No",
               value: "no",
-              
+
               colSize: "2.5",
-             
             },
           ],
         },
@@ -342,6 +323,7 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
                 {
                   displayNone: true,
                   inputHeader: "Amount of PrEp provided",
+                  icon: icons.editPen,
                   value: "",
                   name: "Amount of PrEp provided",
                   required: true,
@@ -373,30 +355,26 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
             {
               name: "Client was referred",
               value: "client was referred",
-              
+
               colSize: "7",
-             
             },
             {
               name: "Stock-out",
               value: "stock-out",
-              
+
               colSize: "7",
-             
             },
             {
               name: "Client refused",
               value: "client refused",
-              
+
               colSize: "7",
-             
             },
             {
               name: "Other",
               value: "other",
-              
+
               colSize: "7",
-             
             },
           ],
         },
@@ -444,16 +422,14 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
             {
               name: "Yes",
               value: "yes",
-              
+
               colSize: "2.5",
-             
             },
             {
               name: "No",
               value: "no",
-              
+
               colSize: "2.5",
-             
             },
           ],
         },
@@ -477,16 +453,14 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
             {
               name: "Yes",
               value: "yes",
-              
+
               colSize: "2.5",
-             
             },
             {
               name: "No",
               value: "no",
-              
+
               colSize: "2.5",
-             
             },
           ],
         },
@@ -509,16 +483,14 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
             {
               name: "Yes",
               value: "yes",
-              
+
               colSize: "2.5",
-             
             },
             {
               name: "No",
               value: "no",
-              
+
               colSize: "2.5",
-             
             },
           ],
         },
@@ -541,16 +513,14 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
             {
               name: "Yes",
               value: "yes",
-              
+
               colSize: "2.5",
-             
             },
             {
               name: "No",
               value: "no",
-              
+
               colSize: "2.5",
-             
             },
           ],
         },
@@ -572,16 +542,14 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
             {
               name: "Yes",
               value: "yes",
-              
+
               colSize: "2.5",
-             
             },
             {
               name: "No",
               value: "no",
-              
+
               colSize: "2.5",
-             
             },
           ],
         },
@@ -603,16 +571,14 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
             {
               name: "Yes",
               value: "yes",
-              
+
               colSize: "2.5",
-             
             },
             {
               name: "No",
               value: "no",
-              
+
               colSize: "2.5",
-             
             },
           ],
         },
@@ -635,23 +601,20 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
             {
               name: "Facility",
               value: "facility",
-              
+
               colSize: "7",
-             
             },
             {
               name: "Facility (elective ceasarian section)",
               value: "facility (elective ceasarian section)",
-              
+
               colSize: "7",
-             
             },
             {
               name: "Other",
               value: "other",
-              
+
               colSize: "7",
-             
             },
           ],
         },
@@ -699,16 +662,14 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
             {
               name: "Yes",
               value: "yes",
-              
+
               colSize: "2.5",
-             
             },
             {
               name: "No",
               value: "no",
-              
+
               colSize: "2.5",
-             
             },
           ],
         },
@@ -731,16 +692,14 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
             {
               name: "Yes",
               value: "yes",
-              
+
               colSize: "2.5",
-             
             },
             {
               name: "No",
               value: "no",
-              
+
               colSize: "2.5",
-             
             },
           ],
         },
@@ -803,5 +762,5 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
       this.breastFeeding = data;
     },
   },
-  persist:true
+  persist: true,
 });
