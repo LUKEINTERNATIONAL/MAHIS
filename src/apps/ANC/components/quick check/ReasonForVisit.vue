@@ -5,6 +5,8 @@
       <ion-card-content>
         <basic-form :contentData="ReasonForVisit"
                     :initialData="initialData"
+                    @update:selected="handleInputData"
+                    @update:inputValue="handleInputData"
         ></basic-form>
       </ion-card-content>
     </ion-card>
@@ -42,6 +44,7 @@ import {
   modifyGroupedRadioValue,
   modifyRadioValue
 } from "@/services/data_helpers";
+import { validateField } from '@/services/ANC/quickCheck_validation_service';
 
 export default defineComponent({
   name: 'Menu',
@@ -68,7 +71,8 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapState(useReasonForVisitStore, ["ReasonForVisit"])
+    ...mapState(useReasonForVisitStore, ["ReasonForVisit"]),
+    reasonVisitFacility(){return getRadioSelectedValue(this.ReasonForVisit,'Reason for visit')}
   },
   mounted() {
     const ReasonForVisit = useReasonForVisitStore();
@@ -89,6 +93,12 @@ export default defineComponent({
     return { checkmark,pulseOutline };
   },
   methods:{
+    validationRules(event: any) {
+            return validateField(this.ReasonForVisit, event.name, (this as any)[event.name]);
+     },
+   async handleInputData(event:any){
+     this.validationRules(event)
+   },
     navigationMenu(url: any){
       menuController.close()
       this.$router.push(url);
