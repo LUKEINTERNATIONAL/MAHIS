@@ -3,7 +3,7 @@
         <ion-row>
             <ion-label v-if="show_label" :class="disableCls">{{ name_of_list }}: </ion-label>
             <ion-col style="width: 100%;">
-            <ion-item lines="none" class="ItemAl modal_wrapper" style="display: flex; flex-wrap: wrap;">
+            <ion-item lines="none" class="ItemAl modal_wrapper" style="display: flex; flex-wrap: wrap; margin-left: -30px; margin-top: 0%;">
                 <div v-for="(item, index) in local_itmes_List" :key="index">
                     <ion-button v-if="item.selected" @click="selectAl(item)" class="itemAlBtn">
                         {{ item.name }}

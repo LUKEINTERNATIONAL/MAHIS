@@ -29,12 +29,14 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
         },
       },
       {
+        isFinishBtn: false,
+        sectionHeader: "",
         data: {
           rowData: [
             {
               colData: [
                 {
-                  inputHeader: "Abortions/Miscarriages",
+                  inputHeader: "Abortions",
                   value: "",
                   icon: icons.editPen,
                   name: "Abortions",
@@ -61,6 +63,8 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
         },
       },
       {
+        isFinishBtn: false,
+        sectionHeader: "",
         classDash: "dashed_bottom_border _padding",
         data: {
           rowData: [
@@ -171,9 +175,9 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
           header: {
             class: "bold",
             title:
-              "Does the woman have any complications due to past pregnancies?",
+              "Did the woman have any of the complications during the past pregnancies?",
             selectedValue: "",
-            name: "Does the woman have any complications due to past pregnancies?",
+            name: "past pregnancies complications",
           },
           data: [
             {
@@ -185,8 +189,8 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
               justify: "space-between",
             },
             {
-              name: "Does not know",
-              value: "Does not know",
+              name: "Pre-eclampsia",
+              value: "pre-eclampsia",
               checked: false,
               labelPlacement: "start",
               colSize: "6",
@@ -202,17 +206,9 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
-            name: "Does the woman have any complications due to past pregnancies?",
+            name: "past pregnancies complications",
           },
           data: [
-            {
-              name: "Pre-eclampsia",
-              value: "pre-eclampsia",
-              checked: false,
-              labelPlacement: "start",
-              colSize: "6",
-              justify: "space-between",
-            },
             {
               name: "Eclampsia",
               value: "eclampsia",
@@ -221,19 +217,6 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
               colSize: "6",
               justify: "space-between",
             },
-          ],
-        },
-      },
-
-      {
-        classDash: "dashed_bottom_border",
-        checkboxBtnContent: {
-          header: {
-            title: "",
-            selectedValue: "",
-            name: "Does the woman have any complications due to past pregnancies?",
-          },
-          data: [
             {
               name: "Puerperal Sepsis",
               value: "puerperal sepsis",
@@ -242,42 +225,6 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
               colSize: "6",
               justify: "space-between",
             },
-            {
-              name: "Baby died within 24hrs of birth",
-              value: "baby died within 24hrs of birth",
-              checked: false,
-              labelPlacement: "start",
-              colSize: "6",
-              justify: "space-between",
-            },
-          ],
-        },
-      },
-      {
-        classDash: "dashed_bottom_border",
-        checkboxBtnContent: {
-          header: {
-            title: "",
-            selectedValue: "",
-            name: "Does the woman have any complications due to past pregnancies?",
-          },
-          data: [
-            {
-              name: "Convulsions",
-              value: "convulsions",
-              checked: false,
-              labelPlacement: "start",
-              colSize: "6",
-              justify: "space-between",
-            },
-            {
-              name: "Forceps",
-              value: "forceps",
-              checked: false,
-              labelPlacement: "start",
-              colSize: "6",
-              justify: "space-between",
-            },
           ],
         },
       },
@@ -288,7 +235,56 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
-            name: "Does the woman have any complications due to past pregnancies?",
+            name: "past pregnancies complications",
+          },
+          data: [
+            {
+              name: "Baby died within 24hrs of birth",
+              value: "baby died within 24hrs of birth",
+              checked: false,
+              labelPlacement: "start",
+              colSize: "6",
+              justify: "space-between",
+            },
+            {
+              name: "Convulsions",
+              value: "convulsions",
+              checked: false,
+              labelPlacement: "start",
+              colSize: "6",
+              justify: "space-between",
+            },
+          ],
+        },
+      },
+      // {
+      //   classDash: "dashed_bottom_border",
+      //   checkboxBtnContent: {
+      //     header: {
+      //       title: "",
+      //       selectedValue: "",
+      //       name: "past pregnancies complications",
+      //     },
+      //     data: [
+      //       // {
+      //       //   name: "Forceps",
+      //       //   value: "forceps",
+      //       //   checked: false,
+      //       //   labelPlacement: "start",
+      //       //   colSize: "6",
+      //       //   justify: "space-between",
+      //       // },
+      //     ],
+      //   },
+      // },
+
+      {
+        classDash: "dashed_bottom_border",
+        checkboxBtnContent: {
+          header: {
+            title: "",
+            selectedValue: "",
+            name: "past pregnancies complications",
           },
           data: [
             {
@@ -317,7 +313,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
-            name: "Does the woman have any complications due to past pregnancies?",
+            name: "past pregnancies complications",
           },
           data: [
             {
@@ -345,7 +341,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
           header: {
             title: "",
             selectedValue: "",
-            name: "Does the woman have any complications due to past pregnancies?",
+            name: "past pregnancies complications",
           },
           data: [
             {
@@ -406,19 +402,22 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
       this.abnormalities = data;
     },
     setModeOfDelivery(number: number) {
-      this.modeOfDelivery=[]
+      this.modeOfDelivery = [];
       for (let i = 0; i < number; i++) {
-        const inputs =getRadioButton(i)
-        this.modeOfDelivery.push(inputs[0])
-        this.modeOfDelivery.push(inputs[1])
+        const inputs = getRadioButton(i);
+        this.modeOfDelivery.push(inputs[0]);
+        this.modeOfDelivery.push(inputs[1]);
       }
     },
 
-    checkChanges(){
-      const number = this.modeOfDelivery.length /2;
-    for (let i = 0; i < number; i++) {
-      const value=getRadioSelectedValue(this.modeOfDelivery, `cesareanSec ${i}`)
-        if(value=='Other'){
+    checkChanges() {
+      const number = this.modeOfDelivery.length / 2;
+      for (let i = 0; i < number; i++) {
+        const value = getRadioSelectedValue(
+          this.modeOfDelivery,
+          `Mode of delivery ${i}`
+        );
+        if (value == "Other") {
           modifyFieldValue(
             this.modeOfDelivery,
             `Specify ${i}`,
@@ -426,57 +425,57 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
             false
           );
         } else {
-           modifyFieldValue(
-             this.modeOfDelivery,
-             `Specify ${i}`,
-             "displayNone",
-             true
-           );
+          modifyFieldValue(
+            this.modeOfDelivery,
+            `Specify ${i}`,
+            "displayNone",
+            true
+          );
         }
-    }
+      }
     },
     setComplications(data: any) {
       this.Complications = data;
     },
   },
- // persist: true,
+  // persist: true,
 });
 
 
 const getRadioButton = (number:number)=>{
   return [
     {
-      sideColSide:1
-,      selectdData: [],
+      sideColSide: 1,
+      selectdData: [],
       isFinishBtn: false,
       classDash: "dashed_bottom_border",
       radioBtnContent: {
         header: {
-          title: `Specify mode of delivery (child ${number+1})`,
+          title: `Specify mode of delivery (child ${number + 1})`,
           selectedValue: "",
-          name: `cesareanSec ${number}`,
-          class:"bold",
+          name: `Mode of delivery ${number}`,
+          class: "bold",
           //displayNext:"Other"
         },
         data: [
           {
-            name: "Cesarean section",
-            value: "cesarean",
+            name: "Caesarean section",
+            value: "caesarean section",
             colSize: "4.1",
           },
           {
-            name: "Vacuum",
-            value: "vacuum",
+            name: "Vacuum extraction delivery",
+            value: "vacuum extraction delivery",
             colSize: "4.1",
           },
           {
-            name: "Breach",
-            value: "breach",
+            name: "Breech delivery",
+            value: "breech delivery",
             colSize: "4.1",
           },
           {
-            name: "SDV",
-            value: "sdv",
+            name: "SVD",
+            value: "svd",
             colSize: "4.1",
           },
           {
@@ -495,7 +494,7 @@ const getRadioButton = (number:number)=>{
             colData: [
               {
                 displayNone: true,
-                inputHeader: `specify  for child ${number+1}`,
+                inputHeader: `specify  for child ${number + 1}`,
                 icon: icons.editPen,
                 value: "",
                 name: `Specify ${number}`,

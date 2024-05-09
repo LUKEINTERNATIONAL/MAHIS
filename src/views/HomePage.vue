@@ -19,7 +19,8 @@
                 <div class="totalNumber">3,764</div>
                 <div class="totalText">Children & Adults vaccinated this year!</div>
             </div>
-            <ion-img :src="loadImage('immunizationHome.jpeg')" alt="home image"></ion-img>
+            <!-- <ion-img :src="loadImage('immunizationHome.jpeg')" alt="home image"></ion-img> -->
+            <div style="background-color: #DDEEDD; widows: 100%; height: 40%;"></div>
             <div class="graphBackground">
                 <div class="dueMiss">
                     <div class="due">
@@ -53,7 +54,8 @@
                     </div>
                 </div>
                 <div>
-                    <ImmunizationTrendsGraph />
+                    <ImmunizationTrendsGraph v-if="controlGraphs == 'months'" />
+                    <ImmunizationGroupGraph v-if="controlGraphs == 'group'" />
                 </div>
             </div>
         </ion-content>
@@ -67,7 +69,8 @@ import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import { Service } from "@/services/service";
 import img from "@/utils/Img";
-import ImmunizationTrendsGraph from "@/apps/Immunization/components/ImmunizationTrendsGraph.vue";
+import ImmunizationTrendsGraph from "@/apps/Immunization/components/Graphs/ImmunizationTrendsGraph.vue";
+import ImmunizationGroupGraph from "@/apps/Immunization/components/Graphs/ImmunizationGroupGraph.vue";
 export default defineComponent({
     name: "Home",
     components: {
@@ -82,20 +85,34 @@ export default defineComponent({
         IonRow,
         IonCol,
         ImmunizationTrendsGraph,
+        ImmunizationGroupGraph,
+    },
+    data() {
+        return {
+            controlGraphs: "months" as any,
+        };
     },
     mounted() {
         this.setView();
+        // Start the timer on component mount
+        this.startTimer();
     },
     methods: {
         setView() {
             Service.getProgramID();
-            console.log("🚀 ~ setView ~ Service.getProgramID():", Service.getProgramID());
         },
         programID() {
             return Service.getProgramID();
         },
         loadImage(name: any) {
             return img(name);
+        },
+        startTimer() {
+            // Set a timer to switch graphs every 5 seconds
+            setInterval(() => {
+                // Toggle between 'months' and 'group'
+                this.controlGraphs = this.controlGraphs === "months" ? "group" : "months";
+            }, 7000);
         },
     },
 });
@@ -235,7 +252,8 @@ export default defineComponent({
 .clientSeen {
     height: 120px;
     margin-top: 15px;
-    background: #ddeedd;
+    background: #FFFFFF;
+;
 }
 .clientSeenTitle {
     padding-top: 10px;

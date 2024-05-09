@@ -34,6 +34,7 @@ import { mapState } from 'pinia';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import BasicCard from "@/components/BasicCard.vue";
 import {usePostnatalWardStayStore} from "@/apps/PNC/stores/postnatal ward stay/PostnatalWardMonitoring";
+import {getCheckboxSelectedValue, modifyCheckboxValue} from "@/services/data_helpers";
 export default defineComponent({
   name: "DeliveryDetails",
   components:{
@@ -71,13 +72,38 @@ export default defineComponent({
   mounted(){
     const dangerSigns=usePostnatalWardStayStore()
     this.initialData=dangerSigns.getInitial()
+    this.handleDangerSigns()
   },
   watch:{
+    dangerSigns:{
+      handler(){
+        this.handleDangerSigns()
+      },
+      deep:true
+    }
   },
   setup() {
     return { checkmark,pulseOutline };
   },
-  methods: {}
+  methods: {
+    handleDangerSigns(){
+      const checkBoxes=['Bleeding vaginally','Central cyanosis','Preterm labour',
+      'Severe vomiting','Fever','Visual disturbance','Severe abdominal pain','Unconscious',
+          'Other danger signs'
+      ]
+      if (getCheckboxSelectedValue(this.dangerSigns, 'No danger signs')?.checked) {
+        checkBoxes.forEach((checkbox) => {
+          modifyCheckboxValue(this.dangerSigns, checkbox, 'checked', false);
+          modifyCheckboxValue(this.dangerSigns, checkbox, 'disabled', true);
+        });
+      } else {
+        checkBoxes.forEach((checkbox) => {
+          modifyCheckboxValue(this.dangerSigns, checkbox, 'disabled', false);
+        });
+      }
+    }
+
+  }
 });
 
 </script>

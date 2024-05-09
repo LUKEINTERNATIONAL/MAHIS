@@ -35,6 +35,13 @@ import { mapState } from 'pinia';
 import BasicForm from '@/components/BasicForm.vue'
 import {useReasonForVisitStore} from "@/apps/ANC/store/quickCheck/reasonForVisit";
 import {usePastMedicalHistoryStore} from "@/apps/OPD/stores/PastMedicalHistoryStore";
+import {
+  getCheckboxSelectedValue,
+  getRadioSelectedValue,
+  modifyCheckboxHeader, modifyCheckboxValue,
+  modifyGroupedRadioValue,
+  modifyRadioValue
+} from "@/services/data_helpers";
 
 export default defineComponent({
   name: 'Menu',
@@ -66,6 +73,17 @@ export default defineComponent({
   mounted() {
     const ReasonForVisit = useReasonForVisitStore();
     this.initialData = ReasonForVisit.getInitial();
+    this.handleFirstAntenalVisit();
+    this.handleSpecificConcernsVisit()
+  },
+  watch:{
+    ReasonForVisit:{
+      handler(){
+        this.handleFirstAntenalVisit()
+        this.handleSpecificConcernsVisit()
+      },
+      deep:true
+    }
   },
   setup() {
     return { checkmark,pulseOutline };
@@ -75,6 +93,61 @@ export default defineComponent({
       menuController.close()
       this.$router.push(url);
     },
+    handleFirstAntenalVisit(){
+      // if (getRadioSelectedValue(this.ReasonForVisit, 'Reason for visit') == 'First antenatal care contact') {
+      //   modifyCheckboxHeader(this.ReasonForVisit, 'Danger signs', 'displayNone', false);
+      //   // modifyCheckboxHeader(this.ReasonForVisit, 'Previous visits', 'selectedValue', '');
+      //
+      // } else {
+      //   modifyCheckboxHeader(this.ReasonForVisit, 'Danger signs', 'displayNone', true);
+      //   modifyCheckboxValue(this.ReasonForVisit, 'Danger signs', 'selectedValue', '');
+      //
+      // }
+      const checkBoxes=['Pre-term labour','Central cyanosis', 'Unconscious', 'Fever', 'Imminent delivery',
+        'Severe headache', 'Severe vomiting','Severe abdominal pain','Draining liquor',
+        'Respiratory problems','Convulsion history','Vomiting' , 'Oedema', 'Epigastric pain', 'Bleeding vaginally', 'Other danger signs']
+      if (getCheckboxSelectedValue(this.ReasonForVisit, 'None')?.checked) {
+        checkBoxes.forEach((checkbox) => {
+          modifyCheckboxValue(this.ReasonForVisit, checkbox, 'checked', false);
+          modifyCheckboxValue(this.ReasonForVisit, checkbox, 'disabled', true);
+          modifyRadioValue(this.ReasonForVisit, 'Action for danger signs', 'displayNone', true);
+        });
+      } else {
+        let anyCheckboxSelected = false;
+        checkBoxes.forEach((checkbox) => {
+          if (getCheckboxSelectedValue(this.ReasonForVisit, checkbox)?.checked) {
+            anyCheckboxSelected = true;
+          }
+          modifyCheckboxValue(this.ReasonForVisit, checkbox, 'disabled', false);
+        });
+        modifyRadioValue(this.ReasonForVisit, 'Action for danger signs', 'displayNone', !anyCheckboxSelected);
+      }
+
+      if (getRadioSelectedValue(this.ReasonForVisit, 'Action for danger signs') == 'No') {
+        modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', false);
+        modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', false);
+        // modifyCheckboxHeader(this.ReasonForVisit, 'Previous visits', 'selectedValue', '');
+
+      } else {
+        modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
+        modifyRadioValue(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
+        // modifyRadioValue(this.ReasonForVisit, 'Action for danger signs', 'selectedValue', '');
+
+      }
+
+    },
+    handleSpecificConcernsVisit(){
+      // if (getRadioSelectedValue(this.ReasonForVisit, 'Reason for visit') == 'Specific complaint related to antenatal care') {
+      //   modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', false);
+      //   // modifyCheckboxHeader(this.ReasonForVisit, 'Previous visits', 'selectedValue', '');
+      //
+      // } else {
+      //   modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
+      //   modifyCheckboxValue(this.ReasonForVisit, 'Specific health concerns', 'selectedValue', '');
+      //
+      // }
+    },
+
   }
 });
 </script>
@@ -109,7 +182,8 @@ export default defineComponent({
   font-size: medium;
 }
 ion-card {
-  box-shadow:none;
-  background-color:inherit;
+
+  width: 100%;
+  color: black;
 }
 </style>

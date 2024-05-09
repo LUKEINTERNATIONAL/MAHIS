@@ -37,6 +37,7 @@
                                     <ion-list>
                                         <ion-item @click="navigationMenu('setSessionDate')" class="list-content">MoH</ion-item>
                                         <ion-item @click="navigationMenu('report')" class="list-content">Clinical Reports</ion-item>
+                                        <ion-item @click="navigationMenu('mockmodals')" class="list-content">Mock Modals</ion-item>
                                     </ion-list>
                                 </div>
                             </ion-accordion>

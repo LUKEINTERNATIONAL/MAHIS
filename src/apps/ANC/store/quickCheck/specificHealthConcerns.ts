@@ -357,8 +357,8 @@ const initialHealthConcerns=[
                         justify: 'space-between',
                     },
                     {
-                        name: 'No health concerns',
-                        value: 'No health concerns',
+                        name: 'None',
+                        value: 'None',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',

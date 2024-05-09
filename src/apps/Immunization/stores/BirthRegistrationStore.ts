@@ -9,13 +9,15 @@ const initialBirthRegistration = [
                     colData: [
                         {
                             inputHeader: "Birth certificate number",
-                            icon: icons.fullName,
+                            iconRight: icons.scannerIcon,
+                            icon: icons.nationalID,
                             value: "",
-                            name: "firstname",
+                            name: "middleName",
                             eventType: "input",
                             alertsError: false,
                             alertsErrorMassage: "",
                             required: true,
+                            placeholder: "__-__-__-__",
                         },
                     ],
                 },
@@ -29,9 +31,9 @@ const initialBirthRegistration = [
                     colData: [
                         {
                             inputHeader: "Birth Weight/First weight (kg)*",
-                            icon: icons.fullName,
+                            icon: icons.weight,
                             value: "",
-                            name: "middleName",
+                            name: "weight",
                             eventType: "input",
                             alertsError: false,
                             alertsErrorMassage: "",
@@ -49,9 +51,9 @@ const initialBirthRegistration = [
                     colData: [
                         {
                             inputHeader: "Birth Height(cm)",
-                            icon: icons.phone,
+                            icon: icons.height,
                             value: "",
-                            name: "phoneNumber",
+                            name: "Height",
                             eventType: "input",
                             alertsError: false,
                             alertsErrorMassage: "",
@@ -70,29 +72,25 @@ const initialBirthRegistration = [
                         {
                             inputHeader: "How many doses of Tdv did the mother receive?*",
                             icon: icons.search,
-                            isMultiSelect: true,
+                            isSingleSelect: true,
                             popOver: true,
                             value: "",
-                            name: "Pulse Rate Reason",
+                            name: "How many doses of Tdv",
                             multiSelectData: [
                                 {
-                                    id: 1,
-                                    name: "Patient uncooperative",
-                                },
-                                {
-                                    id: 2,
+                                    concept_id: 2,
                                     name: ">3 doses of TdV in past 5 years",
                                 },
                                 {
-                                    id: 3,
+                                    concept_id: 3,
                                     name: "1-4 doses of TdV in the past",
                                 },
                                 {
-                                    id: 4,
+                                    concept_id: 4,
                                     name: "Tdv not received",
                                 },
                                 {
-                                    id: 5,
+                                    concept_id: 5,
                                     name: "Unknown",
                                 },
                             ],
@@ -116,25 +114,21 @@ const initialBirthRegistration = [
                         {
                             inputHeader: "Protected at birth (PAB)*",
                             icon: icons.search,
-                            isMultiSelect: true,
+                            isSingleSelect: true,
                             popOver: true,
                             value: "",
-                            name: "Pulse Rate Reason",
+                            name: "Protected at birth",
                             multiSelectData: [
                                 {
-                                    id: 1,
-                                    name: "Patient uncooperative",
-                                },
-                                {
-                                    id: 2,
+                                    concept_id: 2,
                                     name: "Yes",
                                 },
                                 {
-                                    id: 3,
+                                    concept_id: 3,
                                     name: "No",
                                 },
                                 {
-                                    id: 4,
+                                    concept_id: 4,
                                     name: "Don't know",
                                 },
                             ],
@@ -158,15 +152,11 @@ const initialBirthRegistration = [
                         {
                             inputHeader: "HIV status of the Child's Mother",
                             icon: icons.search,
-                            isMultiSelect: true,
+                            isSingleSelect: true,
                             popOver: true,
                             value: "",
-                            name: "Pulse Rate Reason",
+                            name: "HIV status of the Child",
                             multiSelectData: [
-                                {
-                                    id: 1,
-                                    name: "Patient uncooperative",
-                                },
                                 {
                                     id: 2,
                                     name: "Positive",
@@ -180,6 +170,7 @@ const initialBirthRegistration = [
                                     name: "Unknown",
                                 },
                             ],
+                            openDirection: "top",
                             eventType: "input",
                             required: true,
                             alertsError: false,
@@ -206,5 +197,5 @@ export const useBirthRegistrationStore = defineStore("birthRegistrationStore", {
             return [...data];
         },
     },
-    persist: true,
+    // persist: true,
 });

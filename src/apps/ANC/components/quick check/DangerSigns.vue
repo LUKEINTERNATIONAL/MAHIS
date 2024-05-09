@@ -121,7 +121,7 @@ export default defineComponent({
       const checkBoxes=['Pre-term labour','Central cyanosis', 'Unconscious', 'Fever', 'Imminent delivery',
                         'Severe headache', 'Severe vomiting','Severe abdominal pain','Draining liquor',
                         'Respiratory problems','Convulsion history','Vomiting' , 'Oedema', 'Epigastric pain', 'Bleeding vaginally', 'Other']
-      if (getCheckboxSelectedValue(this.DangerSigns, 'No danger signs')?.checked) {
+      if (getCheckboxSelectedValue(this.DangerSigns, 'None')?.checked) {
         checkBoxes.forEach((checkbox) => {
           modifyCheckboxValue(this.DangerSigns, checkbox, 'checked', false);
           modifyCheckboxValue(this.DangerSigns, checkbox, 'disabled', true);
@@ -147,7 +147,6 @@ export default defineComponent({
 .section {
   width: 100%;
   max-width: 1300px; /* Adjust max-width as needed */
-  margin-bottom: 20px;
 }
 
 .navigation-buttons {
@@ -167,7 +166,7 @@ export default defineComponent({
   font-size: medium;
 }
 ion-card {
-  box-shadow:none;
-  background-color:inherit;
+  width: 100%;
+  color: black;
 }
 </style>

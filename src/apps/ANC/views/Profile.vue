@@ -45,7 +45,7 @@ import CurrentPregnancies from "../components/profile/CurrentPregnancies.vue";
 import Medications from "../components/profile/Medications.vue";
 import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue";
 import WomanBehaviour from "../components/profile/WomanBehaviour.vue";
-import { getCheckboxSelectedValue, getRadioSelectedValue } from "@/services/data_helpers";
+import { getCheckboxSelectedValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { useMedicalHistoryStore } from "@/apps/ANC/store/profile/medicalHistoryStore";
 import { useObstreticHistoryStore } from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
 import { useCurrentPregnanciesStore } from "@/apps/ANC/store/profile/CurrentPreganciesStore";
@@ -58,6 +58,7 @@ import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from 
 import { Preterms } from "../service/preterm";
 import { currentPregnancyService, MedicalHistoryService, PastObstetricHistoryService } from "@/services/anc_profile_service";
 import { resetPatientData } from "@/services/reset_data";
+import { ObservationService } from "@/services/observation_service";
 
 // function someChecked(options, errorMassage) {
 //   if (!options.filter(v => v.checkboxBtnContent).some(v => v.checkboxBtnContent.data.some(d => d.checked))) {
@@ -180,7 +181,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
-        ...mapState(useObstreticHistoryStore, ["preterm","prevPregnancies","Complications"]),
+        ...mapState(useObstreticHistoryStore, ["preterm","prevPregnancies","Complications",'modeOfDelivery']),
         ...mapState(useMedicalHistoryStore,['medicalHistory','allegy','exisitingChronicHealthConditions']),
         ...mapState(useCurrentPregnanciesStore,['palpation','tetanus','lmnp','ultrasound']),
         ...mapState(useMedicationStore,['Medication']),
@@ -206,14 +207,14 @@ export default defineComponent({
          async saveData() {
             
             this.savePrevPregnancies()
-            this.savePreterm()
-            this.savePastPregnancyComplication()
-            this.savePastSurgeries()
-            this.saveAllergy()
-            this.saveChronicHealthCondition()
-            this.saveCurrentPrengancy()
-            this.saveMedication()
-            this.saveCaffeinIntake()
+            // this.savePreterm()
+            // this.savePastPregnancyComplication()
+            // this.savePastSurgeries()
+            // this.saveAllergy()
+            // this.saveChronicHealthCondition()
+            // this.saveCurrentPrengancy()
+            // this.saveMedication()
+            // this.saveCaffeinIntake()
             toastSuccess("Profile data saved successfully")
             resetPatientData();
             this.handleNavigation();
@@ -260,7 +261,35 @@ export default defineComponent({
         //     if (!patientStatus) return toastWarning("Unable to create Pregnancies!");
         //     toastSuccess("Prev Pregnancies has been created");
         // }
-            console.log(await this.buildPregnancyHistory())
+            //console.log(await this.buildPregnancyHistory())
+           // console.log("========>",this.modeOfDelivery.length)
+
+            const number = this.modeOfDelivery.length / 2;
+            const children = []
+            for (let i = 0; i < number; i++) {
+                const value = getRadioSelectedValue(
+                this.modeOfDelivery,
+                `Mode of delivery ${i}`
+                );
+                const other = getFieldValue(this.modeOfDelivery,`Specify ${i}`,'value')
+                children.push({concept:"Mode of delivery",value,other})
+
+                const concept_id = await ConceptService.getConceptID("Mode of delivery", true);
+                console.log(";;;;;;;;",concept_id)
+                const concept_other = await ConceptService.getConceptID("other", true);
+                console.log(";;;;;;;;",concept_other)
+                const obs_datetime = ConceptService.getSessionDate();
+                 const obs:any = children.map(child=>{
+                    return {
+                        concept_id:concept_id,
+                        value_text:child.value,
+                        obs_datetime
+                    }
+                })
+                const obs_service = ObservationService.saveObs(82,obs)
+            
+      }
+      console.log("++++++++>",children)
         },
         async savePreterm(){    
         if (this.preterm.length > 0) {
@@ -360,7 +389,8 @@ export default defineComponent({
         },
         async buildPregnancyHistory(){
             return[
-                ...(await formatInputFiledData(this.prevPregnancies))
+                ...(await formatInputFiledData(this.prevPregnancies)), //modeOfDelivery
+                //...(await formatRadioButtonData(this.modeOfDelivery)) 
             ]
         },
         async buildPreterm(){

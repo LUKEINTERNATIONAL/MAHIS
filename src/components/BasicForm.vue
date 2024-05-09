@@ -19,7 +19,7 @@
                 <ion-row v-for="(element, index2) in item.data.rowData" :key="index2">
                     <ion-col v-for="(col, colIndex) in element.colData" :key="colIndex" v-show="!col.displayNone" :size="col.colSize">
                         <BasicInputField
-                            v-if="!col.isDatePopover && !col.isMultiSelect"
+                            v-if="!col.isDatePopover && !col.isMultiSelect && !col.isSingleSelect"
                             :inputHeader="col.inputHeader"
                             :sectionHeaderFontWeight="col.sectionHeaderFontWeight"
                             :bold="col.class"
@@ -50,8 +50,27 @@
                                 :taggable="true"
                                 :hide-selected="true"
                                 :close-on-select="false"
-                                openDirection="bottom"
-                                @tag="addTag"
+                                :openDirection="col.openDirection || 'bottom'"
+                                tag-placeholder=""
+                                placeholder=""
+                                selectLabel=""
+                                label="name"
+                                :searchable="true"
+                                @search-change="$emit('search-change', $event)"
+                                track-by="concept_id"
+                                :options="col.multiSelectData"
+                            />
+                        </div>
+                        <div v-if="col.isSingleSelect">
+                            <h6 v-if="col.inputHeader">{{ col.inputHeader }}</h6>
+                            <VueMultiselect
+                                v-model="col.value"
+                                @update:model-value="handleInput(contentData, col, $event, 'updateMultiselect')"
+                                :multiple="false"
+                                :taggable="false"
+                                :hide-selected="true"
+                                :close-on-select="true"
+                                :openDirection="col.openDirection || 'bottom'"
                                 tag-placeholder=""
                                 placeholder=""
                                 selectLabel=""

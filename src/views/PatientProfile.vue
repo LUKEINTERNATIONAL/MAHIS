@@ -2,8 +2,9 @@
     <ion-page>
         <Toolbar />
         <ion-content :fullscreen="true">
-            <DemographicBar class="displayNoneDesktop" />
-            <div class="content_manager">
+            <DemographicBar class="displayNoneDesktop" v-if="activeProgramID !== 33 && activeProgramID != ''" />
+            <PatientProfile v-if="activeProgramID == 33" />
+            <div class="content_manager" v-if="activeProgramID !== 33 && activeProgramID != ''">
                 <ion-row class="content_width">
                     <ion-col size="3" size-lg="3" size-md="4" class="displayNoneMobile">
                         <ion-card style="margin-bottom: 20px; background-color: #fff">
@@ -41,7 +42,7 @@
                             class="start_new_co"
                             v-if="programAccess('NCD PROGRAM')"
                             style="margin-bottom: 20px"
-                            @click="nav(NCDUserAction.url)"
+                            @click="setProgram(NCDUserAction)"
                         >
                             {{ NCDUserAction.actionName }}
                         </ion-card>
@@ -58,8 +59,8 @@
                         <ion-card
                             class="start_new_co"
                             v-if="programAccess('IMMUNIZATION PROGRAM')"
-                            @click="nav('birthRegistration')"
                             style="margin-bottom: 20px"
+                            @click="setProgram({ url: 'birthRegistration', id: 33, name: 'IMMUNIZATION PROGRAM' })"
                         >
                             + Enroll in Immunization program
                         </ion-card>
@@ -120,7 +121,7 @@
                     <ion-col size-sm="12" size-md="8" size-lg="9">
                         <ion-card style="background-color: #fff">
                             <div class="p_dash_header">
-                                <div class="p_title">Consultation Overview</div>
+                                <div class="p_title">Consultation Overview {{ activeProgramID }}</div>
                                 <div class="date">
                                     <span class="diplay_space_between" id="open-dates-trigger">
                                         <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.calendar" style="margin-right: 15px"></ion-icon>
@@ -153,50 +154,8 @@
                 </ion-row>
             </div>
 
-            <ion-popover
-                mobilePopover
-                trigger="programList"
-                trigger-action="click"
-                :show-backdrop="false"
-                size="auto"
-                :dismiss-on-select="true"
-                alignment="center"
-                class="displayNoneDesktop"
-            >
-                <ul style="list-style: none; line-height: 50px">
-                    <li class="listPrograma" v-if="programAccess('NCD PROGRAM')" style="margin-bottom: 20px" @click="nav(NCDUserAction.url)">
-                        {{ NCDUserAction.actionName }}
-                    </li>
-                    <li class="listPrograma" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">
-                        <router-link to="/profile">+ Enroll in ANC Program</router-link>
-                    </li>
-                    <li class="listPrograma" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px" >
-                        + Enroll in Labour and delivery program
-                    </li>
-                    <li class="listPrograma" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px" @click="navToPncProgram">
-                         + Enroll in PNC program</li>
-                    <li
-                        class="listPrograma"
-                        v-if="programAccess('IMMUNIZATION PROGRAM')"
-                        @click="nav('birthRegistration')"
-                        style="margin-bottom: 20px"
-                    >
-                        + Enroll in Immunization program
-                    </li>
-                    <li class="listPrograma" v-if="programAccess('OPD Program')" style="margin-bottom: 20px" @click="handleOPD()">
-                        {{ OPDProgramActionName }}
-                    </li>
-                </ul>
-            </ion-popover>
-            <ion-popover trigger="open-dates-trigger" trigger-action="click" :show-backdrop="false" size="auto">
-                <ul style="list-style: none; line-height: 50px" v-for="(item, index) in visits" :key="index">
-                    <li>{{ convertToDisplayDate(item) }}</li>
-                </ul>
-            </ion-popover>
             <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="displayNoneDesktop">
-                <ion-fab-button color="primary">
-                    <ion-icon :icon="chevronUpCircle"></ion-icon>
-                </ion-fab-button>
+                <ion-fab-button color="primary"> + </ion-fab-button>
                 <ion-fab-list side="top">
                     <ion-fab-button data-desc="Templates/Forms">
                         <ion-icon :icon="document"></ion-icon>
@@ -210,6 +169,44 @@
                 </ion-fab-list>
             </ion-fab>
         </ion-content>
+
+        <!-- <ion-popover
+            mobilePopover
+            trigger="programList"
+            trigger-action="click"
+            :show-backdrop="false"
+            size="auto"
+            :dismiss-on-select="true"
+            alignment="center"
+            class="displayNoneDesktop"
+        >
+            <ul style="list-style: none; line-height: 50px">
+                <li class="listPrograma" v-if="programAccess('NCD PROGRAM')" style="margin-bottom: 20px" @click="setProgram(NCDUserAction)">
+                    {{ NCDUserAction.actionName }}
+                </li>
+                <li class="listPrograma" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">
+                    <router-link to="/profile">+ Enroll in ANC Program</router-link>
+                </li>
+                <li class="listPrograma" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">+ Enroll in Labour and delivery program</li>
+                <li class="listPrograma" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">+ Enroll in PNC program</li>
+                <li
+                    class="listPrograma"
+                    v-if="programAccess('IMMUNIZATION PROGRAM')"
+                    style="margin-bottom: 20px"
+                    @click="setProgram({ url: 'birthRegistration', id: 33, name: 'IMMUNIZATION PROGRAM' })"
+                >
+                    + Enroll in Immunization program
+                </li>
+                <li class="listPrograma" v-if="programAccess('OPD Program')" style="margin-bottom: 20px" @click="handleOPD()">
+                    {{ OPDProgramActionName }}
+                </li>
+            </ul>
+        </ion-popover>
+        <ion-popover trigger="open-dates-trigger" trigger-action="click" :show-backdrop="false" size="auto">
+            <ul style="list-style: none; line-height: 50px" v-for="(item, index) in visits" :key="index">
+                <li>{{ convertToDisplayDate(item) }}</li>
+            </ul>
+        </ion-popover> -->
     </ion-page>
 </template>
 
@@ -288,6 +285,7 @@ import { toastWarning } from "@/utils/Alerts";
 
 import { ref } from "vue";
 import DynamicButton from "@/components/DynamicButton.vue";
+import PatientProfile from "@/apps/Immunization/components/PatientProfile.vue";
 export default defineComponent({
     components: {
         IonContent,
@@ -322,6 +320,7 @@ export default defineComponent({
         IonFab,
         IonFabButton,
         IonFabList,
+        PatientProfile,
     },
     data() {
         return {
@@ -332,6 +331,7 @@ export default defineComponent({
             OPDProgramActionName: "+ Start New OPD consultation" as any,
             visits: [] as any,
             NCDUserAction: [] as any,
+            activeProgramID: "" as any,
         };
     },
     computed: {
@@ -346,11 +346,13 @@ export default defineComponent({
         this.visits = await PatientService.getPatientVisits(patient.getID(), false);
         await UserService.setProgramUserActions();
         this.setNCDValue();
+        this.getProgram();
     },
     watch: {
         demographics: {
             handler() {
                 this.setNCDValue();
+                this.getProgram();
             },
             deep: true,
         },
@@ -379,6 +381,15 @@ export default defineComponent({
     },
 
     methods: {
+        setProgram(program: any) {
+            sessionStorage.setItem("app", JSON.stringify({ programID: program.id, applicationName: program.name }));
+            this.nav(program.url);
+        },
+        getProgram() {
+            let program: any = sessionStorage.getItem("app");
+            program = JSON.parse(program);
+            this.activeProgramID = program.programID;
+        },
         convertToDisplayDate(date: any) {
             return HisDate.toStandardHisDisplayFormat(date);
         },
@@ -393,7 +404,6 @@ export default defineComponent({
         },
         async setNCDValue() {
             await UserService.setUserActivities();
-            sessionStorage.setItem("app", JSON.stringify({ programID: 32, applicationName: "NCD" }));
             if (this.userActions.length > 0) [{ NCDUserAction: this.NCDUserAction }] = this.userActions;
         },
         setOPDValue() {

@@ -95,7 +95,7 @@ export default defineComponent({
                         'Change in blood pressure-down','Constipation', 'Contractions','Vaginal bleeding','Intimate partner violence',
                           'Flu symptoms','Painful urination','Dyspepsia','Itchy vulva','Headache','Heartburn','Frequent urination/Polyuria','Injury','Jaundice','Mental health-Depression',
                         'Genital warts','Painful intercourse','Other']
-      if (getCheckboxSelectedValue(this.HealthConcerns, 'No health concerns')?.checked) {
+      if (getCheckboxSelectedValue(this.HealthConcerns, 'None')?.checked) {
         checkBoxes.forEach((checkbox) => {
           modifyCheckboxValue(this.HealthConcerns, checkbox, 'checked', false);
           modifyCheckboxValue(this.HealthConcerns, checkbox, 'disabled', true);
@@ -141,7 +141,8 @@ export default defineComponent({
   font-size: medium;
 }
 ion-card {
-  box-shadow:none;
-  background-color:inherit;
+
+  width: 100%;
+  color: black;
 }
 </style>

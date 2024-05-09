@@ -1,17 +1,28 @@
 <template>
-    <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form>
-    <ion-row>
-        <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
-                <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Previous measurements</ion-label>
-                </ion-item>
-                <div class="ion-padding" slot="content">
-                    <PreviousVitals />
-                </div>
-            </ion-accordion>
-        </ion-accordion-group>
-    </ion-row>
+    <div class="OtherVitalsHeading">
+        <div class="OtherVitalsTitle">Other Vitals</div>
+        <div>Todays Date: <span></span> 06 Jul 2024</div>
+    </div>
+    <div class="">
+        <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form>
+    </div>
+    <div class="btnContent">
+        <div class="saveBtn">
+            <div>
+                <ion-button class="btnText" fill="solid">
+                    Done today
+                    <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon>
+                </ion-button>
+            </div>
+            <div>or</div>
+            <div>
+                <ion-button class="btnText" fill="solid">
+                    Done earlier
+                    <ion-icon slot="end" size="small" :icon="iconsContent.calenderWithPenEdit"></ion-icon>
+                </ion-button>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script lang="ts">
@@ -22,7 +33,7 @@ import { icons } from "@/utils/svg";
 import { iconBloodPressure } from "@/utils/SvgDynamicColor";
 import { BMIService } from "@/services/bmi_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
-import { useImmunizationVitalsStore } from "@/apps/Immunization/stores/VitalsStore";
+import { useVitalsStore } from "@/apps/Immunization/stores/OtherVitalsStores";
 import { mapState } from "pinia";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { arePropertiesNotEmpty } from "@/utils/Objects";
@@ -71,7 +82,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
-        ...mapState(useImmunizationVitalsStore, ["vitals"]),
+        ...mapState(useVitalsStore, ["vitals"]),
         ...mapState(useGeneralStore, ["activities"]),
     },
     async serverPrefetch() {
@@ -121,7 +132,7 @@ export default defineComponent({
             this.$router.push(url);
         },
         updateVitalsStores() {
-            const vitalsStore = useImmunizationVitalsStore();
+            const vitalsStore = useVitalsStore();
             vitalsStore.setVitals(this.vitals);
         },
         validationController(inputData: any) {
@@ -335,5 +346,34 @@ h5 {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+}
+.OtherVitalsTitle {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    color: #00190e;
+}
+.OtherVitalsHeading {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+    border-bottom: 1px solid #ccc;
+    line-height: 60px;
+}
+.vitalsContent {
+    height: 500px;
+}
+.saveBtn {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+    width: 330px;
+    align-items: center;
+}
+.btnContent {
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid #ccc;
+    line-height: 60px;
 }
 </style>

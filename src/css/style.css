@@ -293,6 +293,15 @@ ion-toast.custom-toast::part(container) {
     --width: 35vw;
     --height: 700px;
 }
+.otherVitalsModal {
+    /* --height: 530px; */
+    --width: 400px;
+    --border-radius: 10px;
+    overflow: scroll;
+}
+ion-modal > .ion-page {
+    overflow: scroll;
+}
 .content_manager {
     justify-content: space-around;
     display: flex;
@@ -407,7 +416,7 @@ ion-accordion {
     z-index: unset;
 }
 .multiselect__content-wrapper {
-    position: fixed;
+    position: absolute;
     width: 300px;
 }
 /* #null-0 {
@@ -460,4 +469,8 @@ ion-accordion {
 }
 ion-modal {
     --height: none;
+}
+.apexcharts-zoomin-icon,
+.apexcharts-zoomout-icon {
+    display: none;
 }
