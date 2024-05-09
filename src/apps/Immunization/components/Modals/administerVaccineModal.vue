@@ -5,6 +5,8 @@
     <div class="">
         <basic-form :contentData="administerVaccine"></basic-form>
     </div>
+
+    <customDatePicker v-if="showPD"/>
     <div class="btnContent">
         <div class="saveBtn">
             <div>
@@ -15,7 +17,7 @@
             </div>
             <div>or</div>
             <div>
-                <ion-button class="btnText" fill="solid">
+                <ion-button class="btnText" fill="solid" @click="showCPD">
                     Done earlier
                     <ion-icon slot="end" size="small" :icon="iconsContent.calenderWithPenEdit"></ion-icon>
                 </ion-button>
@@ -42,6 +44,7 @@ import { VitalsService } from "@/services/vitals_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { Service } from "@/services/service";
 import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
+import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue"
 import { ObservationService } from "@/services/observation_service";
 import { PatientService } from "@/services/patient_service";
 import { useGeneralStore } from "@/stores/GeneralStore";
@@ -67,6 +70,7 @@ export default defineComponent({
         BasicInputField,
         BasicForm,
         PreviousVitals,
+        customDatePicker,
     },
     data() {
         return {
@@ -77,6 +81,7 @@ export default defineComponent({
             hasValidationErrors: [] as any,
             vitalsInstance: {} as any,
             validationStatus: { heightWeight: false, bloodPressure: false } as any,
+            showPD: false as boolean,
         };
     },
     computed: {
@@ -154,6 +159,9 @@ export default defineComponent({
                 }
             }
         },
+        showCPD() {
+            this.showPD = true as boolean;
+        }
     },
 });
 </script>
