@@ -161,12 +161,8 @@ computed:{
                                   "hyper","hiv","hepatitisB","hepatitisC",
                                   "syphilis","syphilisTesting","tbScreening",
                                   "GDM","diabetes","anaemia","hypertensionReason"]),
-  ...mapState(useMedicationDispensedStore, ["iron",'calcium']),
-  ...mapState(useDiagnosisCounsellingStore, ["preEclampsia","preEclampsiaCounselling",
-                                             "aspirin","gdm","gdmCounselling","hivRisk",
-                                            "prEp","seekingCare","dangerSigns","ancContact",
-                                            "birth","modeOfTransport","intrapartum","birthPlace","postpartum","breastFeeding"]),
-                                            
+  ...mapState(useMedicationDispensedStore, ["iron"]),
+  ...mapState(useDiagnosisCounsellingStore, ["preEclampsia","aspirin","gdm","gdmCounselling","hivRisk","aspirin","gdm","gdmCounselling","hivRisk","prEp","birth","modeOfTransport","intrapartum","birthPlace","postpartum","breastFeeding"]),                                            
   ...mapState(useImmunizationStore,['ttDoses','HepBCounselling','HepB1','HepB2','HepB3','hepBReason']),
   ...mapState( useIntimatePartnerStore,['ipv','additionalCare','safety_assessment','physical_violence','beaten_pregnant',
                                  'woman_threatened','constant_jealous','strangling','murder_threat','referrals']),
@@ -254,20 +250,20 @@ methods: {
   async buildMedicationDispensed(){
     return[
        ...(await formatRadioButtonData(this.iron)),
-       ...(await formatRadioButtonData(this.calcium)),
+      // ...(await formatRadioButtonData(this.calcium)),
     ]
   },  
    async buildCouselling(){
     return[
        ...(await formatRadioButtonData(this.preEclampsia)),
-       ...(await formatRadioButtonData(this.preEclampsiaCounselling)),
+      // ...(await formatRadioButtonData(this.preEclampsiaCounselling)),
        ...(await formatRadioButtonData(this.aspirin)),
        ...(await formatRadioButtonData(this.gdm)),
        ...(await formatRadioButtonData(this.gdmCounselling)),
        ...(await formatRadioButtonData(this.hivRisk)),
        ...(await formatRadioButtonData(this.prEp)),
-       ...(await formatRadioButtonData(this.seekingCare)),
-       ...(await formatRadioButtonData(this.dangerSigns)),
+      //  ...(await formatRadioButtonData(this.seekingCare)),
+      //  ...(await formatRadioButtonData(this.dangerSigns)),
        ...(await formatRadioButtonData(this.birth)),
        ...(await formatRadioButtonData(this.modeOfTransport)),
        ...(await formatRadioButtonData(this.intrapartum)),

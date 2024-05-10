@@ -5,9 +5,9 @@
             <ion-card-content>
               <basic-form :contentData="iron"></basic-form>
               <basic-form :contentData="folicAcid"></basic-form>
-              <basic-form :contentData="folicAcidReason"></basic-form>
+              <!-- <basic-form :contentData="folicAcidReason"></basic-form> -->
               <basic-form :contentData="vitaminA"></basic-form>
-              <basic-form :contentData="calcium"></basic-form>
+              <!-- <basic-form :contentData="calcium"></basic-form> -->
             </ion-card-content>
     </ion-card>
 
