@@ -20,13 +20,12 @@
                 <div class="totalText">Children & Adults vaccinated this year!</div>
             </div>
             <!-- <ion-img :src="loadImage('immunizationHome.jpeg')" alt="home image"></ion-img> -->
-            <div style="background-color: rgb(255, 255, 255); widows: 100%; height: 40%;"></div>
+            <div style="background-color: rgb(255, 255, 255); widows: 100%; height: 40%"></div>
             <div class="graphBackground">
                 <div class="dueMiss">
                     <div class="due">
                         <div class="dueNumber">104</div>
                         <div class="dueMissText">Due for vaccination today</div>
-                        
                     </div>
                     <div class="missed">
                         <div class="missedNumber">264</div>
@@ -46,11 +45,11 @@
                         </div>
                         <div class="clientSeenBoxMen clientSeenBox">
                             <div class="clientSeenBoxNumber">59</div>
-                            <div class="clientSeenBoxText">Women</div>  
+                            <div class="clientSeenBoxText">Women</div>
                         </div>
                         <div class="clientSeenBoxWomen clientSeenBox">
                             <div class="clientSeenBoxNumber">27</div>
-                            <div class="clientSeenBoxText">Men</div>                          
+                            <div class="clientSeenBoxText">Men</div>
                         </div>
                     </div>
                 </div>
@@ -113,7 +112,7 @@ export default defineComponent({
             setInterval(() => {
                 // Toggle between 'months' and 'group'
                 this.controlGraphs = this.controlGraphs === "months" ? "group" : "months";
-            }, 7000);
+            }, 15000);
         },
     },
 });
@@ -255,8 +254,7 @@ export default defineComponent({
 .clientSeen {
     height: 120px;
     margin-top: 15px;
-    background: #FFFFFF;
-;
+    /* background: #FFFFFF; */
 }
 .clientSeenTitle {
     padding-top: 10px;
