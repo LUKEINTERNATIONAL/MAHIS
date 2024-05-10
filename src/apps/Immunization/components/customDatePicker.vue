@@ -2,7 +2,7 @@
     <div>
      <ion-row>
         <ion-col size="4">
-            <span style="color: #636363; font-weight: 400; font-size: 14px; margin-left: 20px;">
+            <span style="color: #636363; font-weight: 400; font-size: 14px; margin-left: 6px;">
                 Pick visit date:
             </span>
         </ion-col>
