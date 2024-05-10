@@ -262,7 +262,7 @@ export default defineComponent({
       }
       this.$router.push("ANCHome");
        } else{
-         await toastWarning('Please complete all required fields marked with (*)')
+         await toastWarning('Please complete all required fields')
        }
 
       console.log(await this.buildQuickCheck())

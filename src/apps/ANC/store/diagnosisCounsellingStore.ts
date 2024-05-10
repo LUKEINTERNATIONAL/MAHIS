@@ -33,35 +33,35 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
       },
     ],
 
-    preEclampsiaCounselling: [
-      {
-        selectdData: [],
-        isFinishBtn: false,
-        classDash: "dashed_bottom_border _padding",
-        radioBtnContent: {
-          header: {
-            title: "Pre-eclampsia counselling provided?",
-            name: "Pre-eclampsia counselling",
-            class: "bold",
-            selectedValue: "",
-          },
-          data: [
-            {
-              name: "Yes",
-              value: "yes",
+    // preEclampsiaCounselling: [
+    //   {
+    //     selectdData: [],
+    //     isFinishBtn: false,
+    //     classDash: "dashed_bottom_border _padding",
+    //     radioBtnContent: {
+    //       header: {
+    //         title: "Pre-eclampsia counselling provided?",
+    //         name: "Pre-eclampsia counselling",
+    //         class: "bold",
+    //         selectedValue: "",
+    //       },
+    //       data: [
+    //         {
+    //           name: "Yes",
+    //           value: "yes",
 
-              colSize: "2.5",
-            },
-            {
-              name: "No",
-              value: "no",
+    //           colSize: "2.5",
+    //         },
+    //         {
+    //           name: "No",
+    //           value: "no",
 
-              colSize: "2.5",
-            },
-          ],
-        },
-      },
-    ],
+    //           colSize: "2.5",
+    //         },
+    //       ],
+    //     },
+    //   },
+    // ],
 
     aspirin: [
       {
@@ -107,6 +107,7 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
                   value: "",
                   name: "Amount of daily aspirin provided",
                   required: true,
+                  unit: "mg",
                   eventType: "input",
                   alertsError: false,
                   alertsErrorMassage: "",
@@ -406,96 +407,96 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
       },
     ] as any,
 
-    seekingCare: [
-      {
-        selectdData: [],
-        isFinishBtn: false,
-        classDash: "dashed_bottom_border _padding",
-        radioBtnContent: {
-          header: {
-            title: "Counselling conducted on seeking care?",
-            selectedValue: "",
-            class: "bold",
-            name: "Counselling on seeking care",
-          },
-          data: [
-            {
-              name: "Yes",
-              value: "yes",
+    // seekingCare: [
+    //   {
+    //     selectdData: [],
+    //     isFinishBtn: false,
+    //     classDash: "dashed_bottom_border _padding",
+    //     radioBtnContent: {
+    //       header: {
+    //         title: "Counselling conducted on seeking care?",
+    //         selectedValue: "",
+    //         class: "bold",
+    //         name: "Counselling on seeking care",
+    //       },
+    //       data: [
+    //         {
+    //           name: "Yes",
+    //           value: "yes",
 
-              colSize: "2.5",
-            },
-            {
-              name: "No",
-              value: "no",
+    //           colSize: "2.5",
+    //         },
+    //         {
+    //           name: "No",
+    //           value: "no",
 
-              colSize: "2.5",
-            },
-          ],
-        },
-      },
-    ],
+    //           colSize: "2.5",
+    //         },
+    //       ],
+    //     },
+    //   },
+    // ],
 
-    dangerSigns: [
-      {
-        selectdData: [],
-        isFinishBtn: false,
-        classDash: "dashed_bottom_border _padding",
-        radioBtnContent: {
-          header: {
-            title:
-              "Counsel to immediately go to hospital if severe danger signs are present",
-            selectedValue: "",
-            class: "bold",
-            name: "Counsel to immediately go to hospital",
-          },
-          data: [
-            {
-              name: "Yes",
-              value: "yes",
+    // dangerSigns: [
+    //   {
+    //     selectdData: [],
+    //     isFinishBtn: false,
+    //     classDash: "dashed_bottom_border _padding",
+    //     radioBtnContent: {
+    //       header: {
+    //         title:
+    //           "Counsel to immediately go to hospital if severe danger signs are present",
+    //         selectedValue: "",
+    //         class: "bold",
+    //         name: "Counsel to immediately go to hospital",
+    //       },
+    //       data: [
+    //         {
+    //           name: "Yes",
+    //           value: "yes",
 
-              colSize: "2.5",
-            },
-            {
-              name: "No",
-              value: "no",
+    //           colSize: "2.5",
+    //         },
+    //         {
+    //           name: "No",
+    //           value: "no",
 
-              colSize: "2.5",
-            },
-          ],
-        },
-      },
-    ],
+    //           colSize: "2.5",
+    //         },
+    //       ],
+    //     },
+    //   },
+    // ],
 
-    ancContact: [
-      {
-        selectdData: [],
-        isFinishBtn: false,
-        classDash: "dashed_bottom_border _padding",
-        radioBtnContent: {
-          header: {
-            title: "Counseling on ANC contact schedule?",
-            selectedValue: "",
-            class: "bold",
-            name: "Counseling on ANC contact",
-          },
-          data: [
-            {
-              name: "Yes",
-              value: "yes",
+    // ancContact: [
+    //   {
+    //     selectdData: [],
+    //     isFinishBtn: false,
+    //     classDash: "dashed_bottom_border _padding",
+    //     radioBtnContent: {
+    //       header: {
+    //         title: "Counseling on ANC contact schedule?",
+    //         selectedValue: "",
+    //         class: "bold",
+    //         name: "Counseling on ANC contact",
+    //       },
+    //       data: [
+    //         {
+    //           name: "Yes",
+    //           value: "yes",
 
-              colSize: "2.5",
-            },
-            {
-              name: "No",
-              value: "no",
+    //           colSize: "2.5",
+    //         },
+    //         {
+    //           name: "No",
+    //           value: "no",
 
-              colSize: "2.5",
-            },
-          ],
-        },
-      },
-    ],
+    //           colSize: "2.5",
+    //         },
+    //       ],
+    //     },
+    //   },
+    // ],
 
     birth: [
       {
@@ -504,7 +505,8 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
         classDash: "dashed_bottom_border _padding",
         radioBtnContent: {
           header: {
-            title: "Counselling conducted on birth?",
+            title:
+              "Counselling conducted on birth preparedness and complications",
             selectedValue: "",
             class: "bold",
             name: "Counselling on birth",
@@ -533,7 +535,7 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
         classDash: "dashed_bottom_border _padding",
         radioBtnContent: {
           header: {
-            title: "Counselling conducted on mode of transport?",
+            title: "Provide counselling on Mode of transport and guardian",
             selectedValue: "",
             class: "bold",
             name: "Counselling on mode of transport",
@@ -605,8 +607,8 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
               colSize: "7",
             },
             {
-              name: "Facility (elective ceasarian section)",
-              value: "facility (elective ceasarian section)",
+              name: "Facility (elective caesarian section)",
+              value: "facility (elective caesarian section)",
 
               colSize: "7",
             },
@@ -710,9 +712,9 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
     setPreEclampsia(data: any) {
       this.preEclampsia = data;
     },
-    setPreEclampsiaCounselling(data: any) {
-      this.preEclampsiaCounselling = data;
-    },
+    // setPreEclampsiaCounselling(data: any) {
+    //   this.preEclampsiaCounselling = data;
+    // },
     setAspirin(data: any) {
       this.aspirin = data;
     },
@@ -734,15 +736,15 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
     setPrEpReason(data: any) {
       // this.prEpReason = data
     },
-    setSeekingCare(data: any) {
-      this.seekingCare = data;
-    },
-    setDangerSigns(data: any) {
-      this.dangerSigns = data;
-    },
-    setANCContact(data: any) {
-      this.ancContact = data;
-    },
+    // setSeekingCare(data: any) {
+    //   this.seekingCare = data;
+    // },
+    // setDangerSigns(data: any) {
+    //   this.dangerSigns = data;
+    // },
+    // setANCContact(data: any) {
+    //   this.ancContact = data;
+    // },
     setBirth(data: any) {
       this.birth = data;
     },

@@ -8,11 +8,7 @@ import Validation from "@/validations/StandardValidations";
 
 export function validateField(data: any, fieldName: string, value: any) {
   const validationRules: any = {
-    reasonVisitFacility: () => Validation.required(value),
-    dangerSigns: () => Validation.required(value),
-    pregnancyConfirmed: () => Validation.required(value),
-    pregnancyPlanned: () => Validation.required(value),
-    referWoman: () => Validation.required(value),
+    ironPrescription: () => Validation.isNumber(value),
   };
   const isValid = validationRules[fieldName]?.() == null;
 

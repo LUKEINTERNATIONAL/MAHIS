@@ -67,7 +67,6 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
         isFinishBtn: false,
         sectionHeader: "",
         classDash: "",
-
         data: {
           rowData: [
             {
@@ -77,7 +76,7 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
                   inputHeader: "Amount of Iron provided till delivery in mg",
                   value: "",
                   valueType: "text",
-                  icon: icons.editPen,
+                  unit: "mg",
                   name: "iron Amount",
                   required: true,
                   eventType: "input",
@@ -192,9 +191,10 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
               colData: [
                 {
                   displayNone: true,
-                  inputHeader: "Amount of Folic acid prescribed",
+                  inputHeader:
+                    "Amount of Folic acid prescribed till delivery in mg",
                   value: "",
-                  icon: icons.editPen,
+                  unit: "mg",
                   name: "Amount of Folic acid",
                   required: true,
                   valueType: "text",
@@ -337,6 +337,33 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
           ],
         },
       },
+      {
+        isFinishBtn: false,
+        sectionHeader: "",
+        classDash: "dashed_bottom_border _padding",
+
+        data: {
+          rowData: [
+            {
+              colData: [
+                {
+                  displayNone: true,
+                  inputHeader:
+                    "Amount of Vitamin prescribed till delivery in mg",
+                  value: "",
+                  unit: "mg",
+                  name: "Vitamin Amount",
+                  required: true,
+                  valueType: "text",
+                  eventType: "input",
+                  alertsError: false,
+                  alertsErrorMassage: "",
+                },
+              ],
+            },
+          ],
+        },
+      },
 
       // ],
 
@@ -406,134 +433,134 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
       },
     ] as any,
 
-    calcium: [
-      {
-        selectdData: [],
-        isFinishBtn: false,
-        classDash: "",
-        radioBtnContent: {
-          header: {
-            title: "Daily calcium prescribed?",
-            class: "bold",
-            selectedValue: "",
-            name: "Daily calcium prescription",
-          },
-          data: [
-            {
-              name: "Yes",
-              value: "yes",
+    // calcium: [
+    //   {
+    //     selectdData: [],
+    //     isFinishBtn: false,
+    //     classDash: "",
+    //     radioBtnContent: {
+    //       header: {
+    //         title: "Daily calcium prescribed?",
+    //         class: "bold",
+    //         selectedValue: "",
+    //         name: "Daily calcium prescription",
+    //       },
+    //       data: [
+    //         {
+    //           name: "Yes",
+    //           value: "yes",
 
-              colSize: "2.5",
-            },
-            {
-              name: "No",
-              value: "no",
+    //           colSize: "2.5",
+    //         },
+    //         {
+    //           name: "No",
+    //           value: "no",
 
-              colSize: "2.5",
-            },
-          ],
-        },
-      },
-      {
-        isFinishBtn: false,
-        sectionHeader: "",
-        classDash: "dashed_bottom_border _padding",
+    //           colSize: "2.5",
+    //         },
+    //       ],
+    //     },
+    //   },
+    //   {
+    //     isFinishBtn: false,
+    //     sectionHeader: "",
+    //     classDash: "dashed_bottom_border _padding",
 
-        data: {
-          rowData: [
-            {
-              colData: [
-                {
-                  displayNone: true,
-                  inputHeader: "Amount of daily calcium supplements",
-                  value: "",
-                  name: "calcium supplements",
-                  required: true,
-                  valueType: "text",
-                  eventType: "input",
-                  alertsError: false,
-                  alertsErrorMassage: "",
-                },
-              ],
-            },
-          ],
-        },
-      },
-      // ],
+    //     data: {
+    //       rowData: [
+    //         {
+    //           colData: [
+    //             {
+    //               displayNone: true,
+    //               inputHeader: "Amount of daily calcium supplements",
+    //               value: "",
+    //               name: "calcium supplements",
+    //               required: true,
+    //               valueType: "text",
+    //               eventType: "input",
+    //               alertsError: false,
+    //               alertsErrorMassage: "",
+    //             },
+    //           ],
+    //         },
+    //       ],
+    //     },
+    //   },
+    //   // ],
 
-      // calciumReason: [
-      {
-        selectdData: [],
-        isFinishBtn: false,
-        sectionHeader: "",
-        classDash: "",
-        radioBtnContent: {
-          header: {
-            title: "Reason calcium supplements not prescribed",
-            selectedValue: "",
-            class: "bold",
-            name: "calcium supplements not prescribed",
-            displayNone: true,
-          },
-          data: [
-            {
-              name: "Side effects",
-              value: "side effects",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-            {
-              name: "Stock-out",
-              value: "referred",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-            {
-              name: "Allergy to medication",
-              value: "allergy",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-            {
-              name: "Other",
-              value: "other",
-              labelPlacement: "start",
-              colSize: "7",
-              justify: "space-between",
-            },
-          ],
-        },
-      },
-      {
-        isFinishBtn: false,
-        sectionHeader: "",
-        classDash: "dashed_bottom_border _padding",
+    //   // calciumReason: [
+    //   {
+    //     selectdData: [],
+    //     isFinishBtn: false,
+    //     sectionHeader: "",
+    //     classDash: "",
+    //     radioBtnContent: {
+    //       header: {
+    //         title: "Reason calcium supplements not prescribed",
+    //         selectedValue: "",
+    //         class: "bold",
+    //         name: "calcium supplements not prescribed",
+    //         displayNone: true,
+    //       },
+    //       data: [
+    //         {
+    //           name: "Side effects",
+    //           value: "side effects",
+    //           labelPlacement: "start",
+    //           colSize: "7",
+    //           justify: "space-between",
+    //         },
+    //         {
+    //           name: "Stock-out",
+    //           value: "referred",
+    //           labelPlacement: "start",
+    //           colSize: "7",
+    //           justify: "space-between",
+    //         },
+    //         {
+    //           name: "Allergy to medication",
+    //           value: "allergy",
+    //           labelPlacement: "start",
+    //           colSize: "7",
+    //           justify: "space-between",
+    //         },
+    //         {
+    //           name: "Other",
+    //           value: "other",
+    //           labelPlacement: "start",
+    //           colSize: "7",
+    //           justify: "space-between",
+    //         },
+    //       ],
+    //     },
+    //   },
+    //   {
+    //     isFinishBtn: false,
+    //     sectionHeader: "",
+    //     classDash: "dashed_bottom_border _padding",
 
-        data: {
-          rowData: [
-            {
-              colData: [
-                {
-                  displayNone: true,
-                  inputHeader: "Other (specify)",
-                  unit: "",
-                  icon: icons.editPen,
-                  value: "",
-                  name: "Other",
-                  valueType: "text",
-                  required: true,
-                  eventType: "input",
-                  inputWidth: "85%",
-                },
-              ],
-            },
-          ],
-        },
-      },
-    ] as any,
+    //     data: {
+    //       rowData: [
+    //         {
+    //           colData: [
+    //             {
+    //               displayNone: true,
+    //               inputHeader: "Other (specify)",
+    //               unit: "",
+    //               icon: icons.editPen,
+    //               value: "",
+    //               name: "Other",
+    //               valueType: "text",
+    //               required: true,
+    //               eventType: "input",
+    //               inputWidth: "85%",
+    //             },
+    //           ],
+    //         },
+    //       ],
+    //     },
+    //   },
+    // ] as any,
   }),
   actions: {
     setIron(data: any) {
@@ -545,9 +572,9 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
     setFolicAcid(data: any) {
       this.folicAcid = data;
     },
-    setFolicAcidReason(data: any) {
-      this.folicAcidReason = data;
-    },
+    // setFolicAcidReason(data: any) {
+    //   this.folicAcidReason = data;
+    // },
     setVitaminA(data: any) {
       this.vitaminA = data;
     },
@@ -557,9 +584,9 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
     // setVitaminAReason(data:any) {
     //     this.vitaminAReason = data
     // },
-    setCalcium(data: any) {
-      this.calcium = data;
-    },
+    // setCalcium(data: any) {
+    //   this.calcium = data;
+    // },
     // setCalciumReason(data: any) {
     //   this.calciumReason = data;
     // },

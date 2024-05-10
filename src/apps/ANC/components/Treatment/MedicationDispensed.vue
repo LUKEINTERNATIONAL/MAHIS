@@ -73,7 +73,7 @@ export default defineComponent ({
         ...mapState(useMedicationDispensedStore, ["folicAcid"]),
        // ...mapState(useMedicationDispensedStore, ["folicAcidReason"]),
         ...mapState(useMedicationDispensedStore, ["vitaminA"]),
-        ...mapState(useMedicationDispensedStore, ["calcium"]),
+       // ...mapState(useMedicationDispensedStore, ["calcium"]),
 
     },
     mounted(){
@@ -81,15 +81,17 @@ export default defineComponent ({
       this.handleTypeIron()
       this.handleAcid()
       this.handleFolicIron()
-      this.handleCalcium()
+      // this.handleCalcium()
       this.handleVitaminA()
       this.handleVitaminNo()
       this.handleVitaminOther()
-      this.handleNoCalcium()
-      this.handleOtherCalcium()
+      // this.handleNoCalcium()
+      // this.handleOtherCalcium()
       this.handleNoFolic()
       this.handleNoIron()
       this.handleNoIronOther()
+      this.handleIronDailyWeekly()
+      this.handleVitaminDailyWeekly()
       
     },
     watch:{
@@ -99,6 +101,7 @@ export default defineComponent ({
           this.handleTypeIron()
           this.handleNoIron()
           this.handleNoIronOther()
+          this.handleIronDailyWeekly()
         },
         deep:true
       },
@@ -116,19 +119,20 @@ export default defineComponent ({
         },
         deep:true
       },
-      calcium:{
-        handler(){
-          this.handleCalcium()
-          this.handleNoCalcium()
-          this.handleOtherCalcium()
-        },
-        deep:true
-      },
+      // calcium:{
+      //   handler(){
+      //     this.handleCalcium()
+      //     this.handleNoCalcium()
+      //     this.handleOtherCalcium()
+      //   },
+      //   deep:true
+      // },
       vitaminA:{
         handler(){
            this.handleVitaminA()
            this.handleVitaminNo()
            this.handleVitaminOther()
+           this.handleVitaminDailyWeekly()
         },
         deep:true
       }
@@ -148,6 +152,24 @@ export default defineComponent ({
         modifyRadioValue(this.iron,'Type of Iron supplement dosage','displayNone',true)
       }
     },
+        handleIronDailyWeekly() {
+              const ironDosageType = getRadioSelectedValue(this.iron, 'Type of Iron supplement dosage');
+
+              if (ironDosageType === 'daily' || ironDosageType === 'weekly') {
+                modifyFieldValue(this.iron, 'iron Amount', 'displayNone', false); 
+              } else {
+                modifyFieldValue(this.iron, 'iron Amount', 'displayNone', true); 
+              }
+        },
+      handleVitaminDailyWeekly() {
+              const vitaminDosageType = getRadioSelectedValue(this.vitaminA, 'Type of Vitamin A dosage');
+
+              if (vitaminDosageType === 'daily' || vitaminDosageType === 'weekly') {
+                modifyFieldValue(this.vitaminA, 'Vitamin Amount', 'displayNone', false); 
+              } else {
+                modifyFieldValue(this.vitaminA, 'Vitamin Amount', 'displayNone', true); 
+              }
+        },
       handleNoIron(){
       if(getRadioSelectedValue(this.iron,'Iron prescription')=='no'){
         modifyRadioValue(this.iron,'Iron and folic acid not prescribed','displayNone',false)
@@ -184,27 +206,27 @@ export default defineComponent ({
          modifyFieldValue(this.folicAcid,'Other','displayNone',true)
       }
     },
-    handleCalcium(){
-      if(getRadioSelectedValue(this.calcium,'Daily calcium prescription')=='yes'){
-        modifyFieldValue(this.calcium,'calcium supplements','displayNone',false)
-      }else{
-        modifyFieldValue(this.calcium,'calcium supplements','displayNone',true)
-      }
-    },
-    handleNoCalcium(){
-      if(getRadioSelectedValue(this.calcium,'Daily calcium prescription')=='no'){
-        modifyRadioValue(this.calcium,'calcium supplements not prescribed','displayNone',false)
-      }else{
-        modifyRadioValue(this.calcium,'calcium supplements not prescribed','displayNone',true)
-      }
-    },
-      handleOtherCalcium(){
-      if(getRadioSelectedValue(this.calcium,'calcium supplements not prescribed')=='other'){
-        modifyFieldValue(this.calcium,'Other','displayNone',false)
-      }else{
-        modifyFieldValue(this.calcium,'Other','displayNone',true)
-      }
-    },
+    // handleCalcium(){
+    //   if(getRadioSelectedValue(this.calcium,'Daily calcium prescription')=='yes'){
+    //     modifyFieldValue(this.calcium,'calcium supplements','displayNone',false)
+    //   }else{
+    //     modifyFieldValue(this.calcium,'calcium supplements','displayNone',true)
+    //   }
+    // },
+    // handleNoCalcium(){
+    //   if(getRadioSelectedValue(this.calcium,'Daily calcium prescription')=='no'){
+    //     modifyRadioValue(this.calcium,'calcium supplements not prescribed','displayNone',false)
+    //   }else{
+    //     modifyRadioValue(this.calcium,'calcium supplements not prescribed','displayNone',true)
+    //   }
+    // },
+    //   handleOtherCalcium(){
+    //   if(getRadioSelectedValue(this.calcium,'calcium supplements not prescribed')=='other'){
+    //     modifyFieldValue(this.calcium,'Other','displayNone',false)
+    //   }else{
+    //     modifyFieldValue(this.calcium,'Other','displayNone',true)
+    //   }
+    // },
     handleVitaminA(){
       if(getRadioSelectedValue(this.vitaminA,'Vitamin A prescription')=='yes'){
         modifyRadioValue(this.vitaminA,'Type of Vitamin A dosage','displayNone',false)
