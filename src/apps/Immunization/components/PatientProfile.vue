@@ -321,8 +321,6 @@ export default defineComponent({
             this.$router.push("patientProfile");
         }
         this.markWizard();
-
-        console.log("🚀 ~ mounted ~ demographics.address:", this.demographics.address);
     },
     watch: {
         vitals: {

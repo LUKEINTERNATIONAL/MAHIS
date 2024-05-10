@@ -185,7 +185,7 @@ export default defineComponent({
                 category: "",
                 gender: item.person.gender,
                 patient_id: item.patient_id,
-                address: item.person.addresses[0].state_province + "," + item.person.addresses[0].city_village,
+                address: item?.person?.addresses[0]?.state_province + "," + item?.person?.addresses[0]?.city_village,
                 phone: item.person.person_attributes.find((attribute: any) => attribute.type.name === "Cell Phone Number")?.value,
             });
             resetPatientData();
