@@ -12,6 +12,8 @@
             </div>
         </div>
 
+        <customDatePicker v-if="showPD" />
+
         <div class="btnContent">
             <div class="saveBtn">
                 <div>
@@ -22,7 +24,7 @@
                 </div>
                 <div>or</div>
                 <div>
-                    <ion-button class="btnText" fill="solid">
+                    <ion-button class="btnText" fill="solid" @click="showCPD">
                         Done earlier
                         <ion-icon slot="end" size="small" :icon="iconContent.calenderWithPenEdit"></ion-icon>
                     </ion-button>

@@ -6,6 +6,8 @@
         <div class="">
             <basic-form :contentData="administerOtherVaccine"></basic-form>
         </div>
+
+        <customDatePicker v-if="showPD" />
         <div class="btnContent">
             <div class="saveBtn">
                 <div>
@@ -16,7 +18,7 @@
                 </div>
                 <div>or</div>
                 <div>
-                    <ion-button class="btnText" fill="solid">
+                    <ion-button class="btnText" fill="solid" @click="showCPD">
                         Done earlier
                         <ion-icon slot="end" size="small" :icon="iconsContent.calenderWithPenEdit"></ion-icon>
                     </ion-button>
@@ -45,6 +47,7 @@ import BasicForm from "@/components/BasicForm.vue";
 import { Service } from "@/services/service";
 import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
 import { ObservationService } from "@/services/observation_service";
+import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { PatientService } from "@/services/patient_service";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import {
@@ -69,6 +72,7 @@ export default defineComponent({
         BasicInputField,
         BasicForm,
         PreviousVitals,
+        customDatePicker,
     },
     data() {
         return {
@@ -79,6 +83,7 @@ export default defineComponent({
             hasValidationErrors: [] as any,
             vitalsInstance: {} as any,
             validationStatus: { heightWeight: false, bloodPressure: false } as any,
+            showPD: false as boolean,
         };
     },
     computed: {
@@ -155,6 +160,9 @@ export default defineComponent({
                     return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High BP " + ageGroup + " (Using Systolic Only)" };
                 }
             }
+        },
+        showCPD() {
+            this.showPD = true as boolean;
         },
     },
 });
