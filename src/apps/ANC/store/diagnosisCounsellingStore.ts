@@ -33,35 +33,35 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
       },
     ],
 
-    // preEclampsiaCounselling: [
-    //   {
-    //     selectdData: [],
-    //     isFinishBtn: false,
-    //     classDash: "dashed_bottom_border _padding",
-    //     radioBtnContent: {
-    //       header: {
-    //         title: "Pre-eclampsia counselling provided?",
-    //         name: "Pre-eclampsia counselling",
-    //         class: "bold",
-    //         selectedValue: "",
-    //       },
-    //       data: [
-    //         {
-    //           name: "Yes",
-    //           value: "yes",
+    preEclampsiaCounselling: [
+      {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        radioBtnContent: {
+          header: {
+            title: "Pre-eclampsia counselling provided?",
+            name: "Pre-eclampsia counselling",
+            class: "bold",
+            selectedValue: "",
+          },
+          data: [
+            {
+              name: "Yes",
+              value: "yes",
 
-    //           colSize: "2.5",
-    //         },
-    //         {
-    //           name: "No",
-    //           value: "no",
+              colSize: "2.5",
+            },
+            {
+              name: "No",
+              value: "no",
 
-    //           colSize: "2.5",
-    //         },
-    //       ],
-    //     },
-    //   },
-    // ],
+              colSize: "2.5",
+            },
+          ],
+        },
+      },
+    ],
 
     aspirin: [
       {
@@ -712,9 +712,9 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
     setPreEclampsia(data: any) {
       this.preEclampsia = data;
     },
-    // setPreEclampsiaCounselling(data: any) {
-    //   this.preEclampsiaCounselling = data;
-    // },
+    setPreEclampsiaCounselling(data: any) {
+      this.preEclampsiaCounselling = data;
+    },
     setAspirin(data: any) {
       this.aspirin = data;
     },
