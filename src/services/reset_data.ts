@@ -68,6 +68,8 @@ import { useBabyStatusStore } from "@/apps/PNC/stores/postnatal ward stay/BabySt
 import { useDangerSignsStore } from "@/apps/ANC/store/quickCheck/dangerSigns";
 //import { useMedicationsStore } from "@/apps/ANC/store/profile/MedicationsStore";
 
+import { useWeightHeightVitalsStore } from "@/apps/Immunization/stores/VitalsStore";
+
 export async function resetPatientData() {
     sessionStorage.setItem("saveProgressStatus", "false");
     const vitals = useVitalsStore();
@@ -80,6 +82,7 @@ export async function resetPatientData() {
     const enrollement = useEnrollementStore();
     const nextAppointment = useNextAppointmentStore();
     const registration = useRegistrationStore();
+    const weightHeightVitals = useWeightHeightVitalsStore();
 
     const ANCobstreticHistory = useObstreticHistoryStore();
     const ANCmedicalHistory = useMedicalHistoryStore();
@@ -106,7 +109,7 @@ export async function resetPatientData() {
     const ANCcurrentPhysiological = useCurrentPhysiologicalSymptomsStore();
     const ANCmedicalFollowUp = useMedicalFollowUpStore();
     const ANCpersistent = usePersistentBehaviourStore();
-    const ANCpersistentSymptoms = usePersistentSymptomsStore()
+    const ANCpersistentSymptoms = usePersistentSymptomsStore();
     const ANCwomenBehavior = useWomenBehaviourStore();
     const ANCmedication = useMedicStore();
     const ANCdiagnosisCounselling = useDiagnosisCounsellingStore();
@@ -133,7 +136,7 @@ export async function resetPatientData() {
     const LabourThirdStage = useThirdStageOfLabourStore();
     const LabourChecksForMother = useImmediatePostnatalChecksForMotherStore();
     const LabourChecksForChild = useImmediatePostnatalChecksForChildStore();
-    const LabourEnd = useEndLabourStore()
+    const LabourEnd = useEndLabourStore();
 
     const PNCObstetricDetails = useObstetricDetailsStore();
     const PNCDeliveryDetails = useDeliveryDetailsStore();
@@ -147,6 +150,7 @@ export async function resetPatientData() {
     registration.setHomeLocation(registration.getInitialHomeLocation());
     registration.setCurrentLocation(registration.getInitialCurrentLocation());
     registration.setGuardianInformation(registration.getInitialGuardianInformation());
+    weightHeightVitals.setVitals(weightHeightVitals.getInitialVitals());
 
     enrollement.setDiagnosis(enrollement.getInitialEnrollmentDiagnosis());
     enrollement.setPatientHistory(enrollement.getInitialPatientHistory());
@@ -162,8 +166,6 @@ export async function resetPatientData() {
     general.$reset();
     enrollement.$reset();
     nextAppointment.$reset();
-
-  
 
     ANCobstreticHistory.$reset();
     ANCmedicalHistory.$reset();
@@ -224,10 +226,6 @@ export async function resetPatientData() {
     PNCHIVStatusAndTreatment.$reset();
     PNCPostnatalWard.$reset();
     PNCBabyStatus.$reset();
-
-    
- 
-
 }
 
 export function resetDemographics() {

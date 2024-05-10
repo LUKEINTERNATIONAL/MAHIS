@@ -1,7 +1,7 @@
 <template>
-    <div class="pim-cls-1">
+    <div class="pim-cls-1 modal_wrapper">
         <div class="ion-padding pim-cls-1">
-            <div class="modal_wrapper">
+            <div>
                 <div class="center text_12">
                     <h4 class="PI-cls-1">Personal Information</h4>
                     <ion-row>
@@ -11,7 +11,7 @@
                                     <ion-label class="lbl-tl">Full Name:</ion-label>
                                 </ion-col>
                                 <ion-col>
-                                    <ion-label class="lbl-ct">John Doe</ion-label>
+                                    <ion-label class="lbl-ct">{{ demographics.name }}</ion-label>
                                 </ion-col>
                             </ion-row>
                         </ion-col>
@@ -22,7 +22,7 @@
                                     <ion-label class="lbl-tl">Sex</ion-label>
                                 </ion-col>
                                 <ion-col>
-                                    <ion-label class="lbl-ct">Male</ion-label>
+                                    <ion-label class="lbl-ct">{{ demographics.gender == "M" ? "Male" : "Female" }}</ion-label>
                                 </ion-col>
                             </ion-row>
                         </ion-col>
@@ -35,36 +35,20 @@
                                     <ion-label class="lbl-tl">Date of Birth:</ion-label>
                                 </ion-col>
                                 <ion-col>
-                                    <ion-label class="lbl-ct">19 April 2024</ion-label>
+                                    <ion-label class="lbl-ct">{{ formatBirthdate() }}</ion-label>
                                 </ion-col>
                             </ion-row>
                         </ion-col>
-
-                        <ion-col>
-                            <ion-row>
-                                <ion-col>
-                                    <ion-label class="lbl-tl">Age:</ion-label>
-                                </ion-col>
-                                <ion-col>
-                                    <ion-label class="lbl-ct">11 weeks</ion-label>
-                                </ion-col>
-                            </ion-row>
-                        </ion-col>
-                    </ion-row>
-
-                    <ion-row>
                         <ion-col>
                             <ion-row>
                                 <ion-col>
                                     <ion-label class="lbl-tl">Contacts:</ion-label>
                                 </ion-col>
                                 <ion-col>
-                                    <ion-label class="lbl-ct">09994587345</ion-label>
+                                    <ion-label class="lbl-ct">{{ demographics.phone }}</ion-label>
                                 </ion-col>
                             </ion-row>
                         </ion-col>
-
-                        <ion-col></ion-col>
                     </ion-row>
 
                     <hr class="dashed-hr" />
@@ -159,21 +143,52 @@
     </div>
 </template>
 <script lang="ts">
+import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonIcon, IonToolbar, IonSearchbar, IonPopover } from "@ionic/vue";
+import { notificationsOutline, personCircleOutline } from "ionicons/icons";
 import { defineComponent } from "vue";
+import ToolbarSearch from "@/components/ToolbarSearch.vue";
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import { mapState } from "pinia";
+import HisDate from "@/utils/Date";
 export default defineComponent({
-    watch: {},
-    name: "xxxComponent",
+    name: "Home",
+    components: {
+        IonContent,
+        IonHeader,
+        IonMenuButton,
+        IonSearchbar,
+        IonPage,
+        IonTitle,
+        IonToolbar,
+        ToolbarSearch,
+        IonIcon,
+        IonPopover,
+    },
+    data() {
+        return {
+            popoverOpen: false,
+            event: null as any,
+        };
+    },
+    computed: {
+        ...mapState(useDemographicsStore, ["demographics"]),
+    },
+    setup() {
+        return { notificationsOutline, personCircleOutline };
+    },
+    methods: {
+        nav(url: any) {
+            this.$router.push(url);
+        },
+        openPopover(e: Event) {
+            this.event = e;
+            this.popoverOpen = true;
+        },
+        formatBirthdate() {
+            return HisDate.getBirthdateAge(this.demographics.birthdate);
+        },
+    },
 });
-</script>
-<script setup lang="ts">
-import { IonContent, IonButton, IonModal, IonRow, IonCol, IonAvatar, IonImg, IonLabel, IonPage, IonFooter } from "@ionic/vue";
-import DynamicButton from "@/components/DynamicButton.vue";
-import { createOutline } from "ionicons/icons";
-
-// const props = defineProps<{
-//     is_open: any;
-//     person_id: any;
-// }>();
 </script>
 <style scoped>
 .lbl-tl {
@@ -206,8 +221,9 @@ ion-modal {
 }
 .modal_wrapper {
     padding: 0px 19px;
+    background: #fff;
 }
 .PI-cls-1 {
-    color: #1F2221D4;
+    color: #1f2221d4;
 }
 </style>

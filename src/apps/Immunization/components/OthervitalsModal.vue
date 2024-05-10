@@ -1,25 +1,27 @@
 <template>
-    <div class="OtherVitalsHeading">
-        <div class="OtherVitalsTitle">Other Vitals</div>
-        <div>Todays Date: <span></span> 06 Jul 2024</div>
-    </div>
-    <div class="">
-        <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form>
-    </div>
-    <div class="btnContent">
-        <div class="saveBtn">
-            <div>
-                <ion-button class="btnText" fill="solid">
-                    Done today
-                    <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon>
-                </ion-button>
-            </div>
-            <div>or</div>
-            <div>
-                <ion-button class="btnText" fill="solid">
-                    Done earlier
-                    <ion-icon slot="end" size="small" :icon="iconsContent.calenderWithPenEdit"></ion-icon>
-                </ion-button>
+    <div class="modal_wrapper">
+        <div class="OtherVitalsHeading">
+            <div class="OtherVitalsTitle">Other Vitals</div>
+            <div>Todays Date: <span></span> 06 Jul 2024</div>
+        </div>
+        <div class="">
+            <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form>
+        </div>
+        <div class="btnContent">
+            <div class="saveBtn">
+                <div>
+                    <ion-button class="btnText" fill="solid">
+                        Done today
+                        <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon>
+                    </ion-button>
+                </div>
+                <div>or</div>
+                <div>
+                    <ion-button class="btnText" fill="solid">
+                        Done earlier
+                        <ion-icon slot="end" size="small" :icon="iconsContent.calenderWithPenEdit"></ion-icon>
+                    </ion-button>
+                </div>
             </div>
         </div>
     </div>
@@ -325,7 +327,6 @@ export default defineComponent({
 
 <style scoped>
 .vitals_title {
-    border-bottom: 1px solid #b3b3b3;
     margin-bottom: 50px;
 }
 .input-with-icon {
@@ -357,7 +358,6 @@ h5 {
     display: flex;
     justify-content: space-between;
     margin: 20px;
-    border-bottom: 1px solid #ccc;
     line-height: 60px;
 }
 .vitalsContent {
@@ -373,7 +373,10 @@ h5 {
 .btnContent {
     display: flex;
     justify-content: center;
-    border-top: 1px solid #ccc;
     line-height: 60px;
+}
+.modal_wrapper {
+    padding: 0px 10px;
+    background: #fff;
 }
 </style>

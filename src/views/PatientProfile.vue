@@ -155,16 +155,16 @@
             </div>
 
             <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="displayNoneDesktop">
-                <ion-fab-button color="primary"> + </ion-fab-button>
+                <ion-fab-button color="primary"> <ion-icon :icon="grid"></ion-icon> </ion-fab-button>
                 <ion-fab-list side="top">
-                    <ion-fab-button data-desc="Templates/Forms">
-                        <ion-icon :icon="document"></ion-icon>
+                    <ion-fab-button data-desc="Enroll in NCD Program">
+                        <ion-icon :icon="add"></ion-icon>
                     </ion-fab-button>
-                    <ion-fab-button data-desc="Print Out & Other">
-                        <ion-icon :icon="medkit"></ion-icon>
+                    <ion-fab-button data-desc="Enroll in ANC Program">
+                        <ion-icon :icon="add"></ion-icon>
                     </ion-fab-button>
-                    <ion-fab-button data-desc="Apps" id="programList">
-                        <ion-icon :icon="grid"></ion-icon>
+                    <ion-fab-button data-desc="Start OPD Consultation" id="programList">
+                        <ion-icon :icon="add"></ion-icon>
                     </ion-fab-button>
                 </ion-fab-list>
             </ion-fab>
@@ -249,6 +249,7 @@ import {
     colorPalette,
     document,
     globe,
+    add,
 } from "ionicons/icons";
 import { modalController } from "@ionic/vue";
 import { icons } from "@/utils/svg";
@@ -377,6 +378,7 @@ export default defineComponent({
             document,
             globe,
             medkit,
+            add,
         };
     },
 
@@ -469,13 +471,14 @@ export default defineComponent({
 <style scoped>
 ion-fab-button[data-desc] {
     position: relative;
+    width: 0px;
 }
 
 ion-fab-button[data-desc]::after {
     position: absolute;
     content: attr(data-desc);
     z-index: 1;
-    right: 50px;
+    right: -20px;
     bottom: 7px;
     color: var(--ion-color-contrast, rgb(112, 109, 109));
     background-color: var(--ion-color-base, #fff);

@@ -19,6 +19,7 @@ const initialAdministerOtherVaccine = [
                             alertsError: false,
                             alertsErrorMassage: "",
                             disabled: false,
+                            colSize: 12,
                         },
                         {
                             inputHeader: "Vaccine Name",
@@ -29,6 +30,7 @@ const initialAdministerOtherVaccine = [
                             alertsError: false,
                             alertsErrorMassage: "",
                             disabled: false,
+                            colSize: 12,
                         },
                     ],
                 },
