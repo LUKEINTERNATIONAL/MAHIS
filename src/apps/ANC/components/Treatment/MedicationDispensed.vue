@@ -71,7 +71,7 @@ export default defineComponent ({
     computed:{
         ...mapState(useMedicationDispensedStore, ["iron"]),
         ...mapState(useMedicationDispensedStore, ["folicAcid"]),
-        ...mapState(useMedicationDispensedStore, ["folicAcidReason"]),
+       // ...mapState(useMedicationDispensedStore, ["folicAcidReason"]),
         ...mapState(useMedicationDispensedStore, ["vitaminA"]),
         ...mapState(useMedicationDispensedStore, ["calcium"]),
 
@@ -87,6 +87,9 @@ export default defineComponent ({
       this.handleVitaminOther()
       this.handleNoCalcium()
       this.handleOtherCalcium()
+      this.handleNoFolic()
+      this.handleNoIron()
+      this.handleNoIronOther()
       
     },
     watch:{
@@ -94,12 +97,16 @@ export default defineComponent ({
         handler(){
           this.handleIron()
           this.handleTypeIron()
+          this.handleNoIron()
+          this.handleNoIronOther()
         },
         deep:true
       },
       folicAcid:{
         handler(){
           this.handleAcid()
+          this.handleNoFolic()
+          this.handleFolicIron()
         },
         deep:true
       },
@@ -141,6 +148,21 @@ export default defineComponent ({
         modifyRadioValue(this.iron,'Type of Iron supplement dosage','displayNone',true)
       }
     },
+      handleNoIron(){
+      if(getRadioSelectedValue(this.iron,'Iron prescription')=='no'){
+        modifyRadioValue(this.iron,'Iron and folic acid not prescribed','displayNone',false)
+      }else{
+         modifyFieldValue(this.iron,'Iron and folic acid not prescribed','displayNone',true)
+      }
+    },
+    handleNoIronOther(){
+      if(getRadioSelectedValue(this.iron,'Iron and folic acid not prescribed')=='other'){
+        modifyFieldValue(this.iron,'Other','displayNone',false)
+      }else{
+         modifyFieldValue(this.iron,'Other','displayNone',true)
+      }
+    },
+  
     handleAcid(){
       if(getRadioSelectedValue(this.folicAcid,'Folic acid')=='yes'){
         modifyFieldValue(this.folicAcid,'Amount of Folic acid','displayNone',false)
@@ -148,11 +170,18 @@ export default defineComponent ({
          modifyFieldValue(this.folicAcid,'Amount of Folic acid','displayNone',true)
       }
     },
-    handleFolicIron(){
-      if(getRadioSelectedValue(this.folicAcidReason,'Iron and folic acid not prescribed')=='other'){
-        modifyFieldValue(this.folicAcidReason,'Other','displayNone',false)
+    handleNoFolic(){
+      if(getRadioSelectedValue(this.folicAcid,'Folic acid')=='no'){
+        modifyRadioValue(this.folicAcid,'Iron and folic acid not prescribed','displayNone',false)
       }else{
-         modifyFieldValue(this.folicAcidReason,'Other','displayNone',true)
+         modifyFieldValue(this.folicAcid,'Iron and folic acid not prescribed','displayNone',true)
+      }
+    },
+    handleFolicIron(){
+      if(getRadioSelectedValue(this.folicAcid,'Iron and folic acid not prescribed')=='other'){
+        modifyFieldValue(this.folicAcid,'Other','displayNone',false)
+      }else{
+         modifyFieldValue(this.folicAcid,'Other','displayNone',true)
       }
     },
     handleCalcium(){

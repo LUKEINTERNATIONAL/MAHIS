@@ -20,16 +20,14 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
             {
               name: "Yes",
               value: "yes",
-             
+
               colSize: "2.5",
-              
             },
             {
               name: "No",
               value: "no",
-             
+
               colSize: "2.5",
-              
             },
           ],
         },
@@ -76,7 +74,7 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
               colData: [
                 {
                   displayNone: true,
-                  inputHeader: "Amount of Iron prescribed",
+                  inputHeader: "Amount of Iron provided till delivery in mg",
                   value: "",
                   valueType: "text",
                   icon: icons.editPen,
@@ -85,6 +83,68 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
                   eventType: "input",
                   alertsError: false,
                   alertsErrorMassage: "",
+                },
+              ],
+            },
+          ],
+        },
+      },
+      {
+        selectdData: [],
+        isFinishBtn: false,
+        sectionHeader: "",
+        classDash: "",
+        radioBtnContent: {
+          header: {
+            title: "Reason Iron was not prescribed",
+            selectedValue: "",
+            class: "bold",
+            displayNone: true,
+            name: "Iron and folic acid not prescribed",
+          },
+          data: [
+            {
+              name: "Side effects",
+              value: "side effects",
+              labelPlacement: "start",
+              colSize: "7",
+              justify: "space-between",
+            },
+            {
+              name: "Client was referred",
+              value: "referred",
+              labelPlacement: "start",
+              colSize: "7",
+              justify: "space-between",
+            },
+            {
+              name: "Other",
+              value: "other",
+              labelPlacement: "start",
+              colSize: "7",
+              justify: "space-between",
+            },
+          ],
+        },
+      },
+      {
+        isFinishBtn: false,
+        sectionHeader: "",
+        classDash: "dashed_bottom_border _padding",
+        data: {
+          rowData: [
+            {
+              colData: [
+                {
+                  displayNone: true,
+                  inputHeader: "specify",
+                  unit: "",
+                  icon: icons.editPen,
+                  value: "",
+                  name: "Other",
+                  required: true,
+                  eventType: "input",
+                  inputWidth: "85%",
                 },
               ],
             },
@@ -109,16 +169,14 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
             {
               name: "Yes",
               value: "yes",
-              
+
               colSize: "2.5",
-              
             },
             {
               name: "No",
               value: "no",
-              
+
               colSize: "2.5",
-              
             },
           ],
         },
@@ -149,9 +207,9 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
           ],
         },
       },
-    ],
+      // ],
 
-    folicAcidReason: [
+      // folicAcidReason: [
       {
         selectdData: [],
         isFinishBtn: false,
@@ -159,9 +217,10 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
         classDash: "",
         radioBtnContent: {
           header: {
-            title: "Reason Iron and folic acid not prescribed",
+            title: "Reason folic acid was not prescribed",
             selectedValue: "",
             class: "bold",
+            displayNone: true,
             name: "Iron and folic acid not prescribed",
           },
           data: [
@@ -232,16 +291,14 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
             {
               name: "Yes",
               value: "yes",
-              
+
               colSize: "2.5",
-              
             },
             {
               name: "No",
               value: "no",
-              
+
               colSize: "2.5",
-              
             },
           ],
         },
@@ -365,16 +422,14 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
             {
               name: "Yes",
               value: "yes",
-              
+
               colSize: "2.5",
-              
             },
             {
               name: "No",
               value: "no",
-              
+
               colSize: "2.5",
-              
             },
           ],
         },
@@ -404,9 +459,9 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
           ],
         },
       },
-    // ],
+      // ],
 
-    // calciumReason: [
+      // calciumReason: [
       {
         selectdData: [],
         isFinishBtn: false,
