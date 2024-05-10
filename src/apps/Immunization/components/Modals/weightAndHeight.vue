@@ -66,6 +66,7 @@ import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from 
 import { defineComponent } from "vue";
 import { mapState } from "pinia";
 import { VitalsEncounter } from "@/apps/Immunization/services/vitals";
+import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 
 export default defineComponent({
     name: "Home",
@@ -76,6 +77,7 @@ export default defineComponent({
         IonTitle,
         IonToolbar,
         BasicForm,
+        customDatePicker,
     },
     data() {
         return {
@@ -83,6 +85,7 @@ export default defineComponent({
             iconContent: icons,
             event: null as any,
             BMI: "" as any,
+            showPD: false as boolean,
         };
     },
     computed: {
@@ -174,6 +177,9 @@ export default defineComponent({
             vitalsWeightHeight.textColor = bmiColor[1];
             vitalsWeightHeight.index = "BMI " + this.BMI?.index ?? "";
             vitalsWeightHeight.value = this.BMI?.result ?? "";
+        },
+        showCPD() {
+            this.showPD = true as boolean;
         },
     },
 });
