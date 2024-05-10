@@ -100,7 +100,7 @@ export class UserService extends Service {
                 return []; // Return an empty array if property_value is not available
             }
         } catch (error) {
-            console.error("Error fetching user activities:", error);
+            // console.error("Error fetching user activities:", error);
             return []; // Return an empty array in case of error
         }
     }

@@ -15,7 +15,7 @@
     "@awesome-cordova-plugins/bluetooth-serial": "^6.4.0",
     "@capacitor/android": "5.4.1",
     "@capacitor/app": "5.0.6",
-    "@capacitor/core": "^5.4.1",
+    "@capacitor/core": "^5.7.5",
     "@capacitor/filesystem": "^5.2.1",
     "@capacitor/haptics": "5.0.6",
     "@capacitor/keyboard": "5.0.6",
@@ -52,7 +52,7 @@
     "vue3-qrcode-reader": "^0.0.1"
   },
   "devDependencies": {
-    "@capacitor/cli": "^5.4.1",
+    "@capacitor/cli": "^5.7.5",
     "@types/lodash": "^4.14.202",
     "@types/nprogress": "^0.2.3",
     "@vitejs/plugin-legacy": "^4.0.2",

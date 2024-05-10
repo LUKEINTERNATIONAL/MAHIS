@@ -1,26 +1,28 @@
 <template>
-    <div class="OtherVitalsHeading">
-        <div class="OtherVitalsTitle">Administer Vaccine</div>
-    </div>
-    <div class="">
-        <basic-form :contentData="administerVaccine"></basic-form>
-    </div>
+    <div class="modal_wrapper">
+        <div class="OtherVitalsHeading">
+            <div class="OtherVitalsTitle">Administer Vaccine</div>
+        </div>
+        <div class="">
+            <basic-form :contentData="administerVaccine"></basic-form>
+        </div>
 
-    <customDatePicker v-if="showPD"/>
-    <div class="btnContent">
-        <div class="saveBtn">
-            <div>
-                <ion-button class="btnText" fill="solid">
-                    Done today
-                    <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon>
-                </ion-button>
-            </div>
-            <div>or</div>
-            <div>
-                <ion-button class="btnText" fill="solid" @click="showCPD">
-                    Done earlier
-                    <ion-icon slot="end" size="small" :icon="iconsContent.calenderWithPenEdit"></ion-icon>
-                </ion-button>
+        <customDatePicker v-if="showPD" />
+        <div class="btnContent">
+            <div class="saveBtn">
+                <div>
+                    <ion-button class="btnText" fill="solid">
+                        Done today
+                        <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon>
+                    </ion-button>
+                </div>
+                <div>or</div>
+                <div>
+                    <ion-button class="btnText" fill="solid" @click="showCPD">
+                        Done earlier
+                        <ion-icon slot="end" size="small" :icon="iconsContent.calenderWithPenEdit"></ion-icon>
+                    </ion-button>
+                </div>
             </div>
         </div>
     </div>
@@ -44,7 +46,7 @@ import { VitalsService } from "@/services/vitals_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { Service } from "@/services/service";
 import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
-import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue"
+import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { ObservationService } from "@/services/observation_service";
 import { PatientService } from "@/services/patient_service";
 import { useGeneralStore } from "@/stores/GeneralStore";
@@ -161,14 +163,13 @@ export default defineComponent({
         },
         showCPD() {
             this.showPD = true as boolean;
-        }
+        },
     },
 });
 </script>
 
 <style scoped>
 .vitals_title {
-    border-bottom: 1px solid #b3b3b3;
     margin-bottom: 50px;
 }
 .input-with-icon {
@@ -200,7 +201,6 @@ h5 {
     display: flex;
     justify-content: space-between;
     margin: 20px;
-    border-bottom: 1px solid #ccc;
     line-height: 60px;
 }
 .vitalsContent {
@@ -216,7 +216,6 @@ h5 {
 .btnContent {
     display: flex;
     justify-content: center;
-    border-top: 1px solid #ccc;
     line-height: 60px;
 }
 </style>
