@@ -212,7 +212,8 @@ ion-toast.custom-toast::part(container) {
     color: #00190e;
 }
 .modal_wrapper {
-    padding: 15px 19px;
+    padding: 0px 19px;
+    background-color: #fff;
 }
 
 /* vitals */
@@ -295,7 +296,7 @@ ion-toast.custom-toast::part(container) {
 }
 .otherVitalsModal {
     /* --height: 530px; */
-    --width: 400px;
+    --width: 370px;
     --border-radius: 10px;
     overflow: scroll;
 }

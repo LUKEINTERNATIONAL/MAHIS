@@ -328,7 +328,6 @@ const time_properties = [
         dataHandler: timeUpdate_fn3,
         dataValue: ref(),
         show_error: ref(false),
-        error_message: 'error',
         error_message: 'Time required',
         skip_validation: false,
     }, 
