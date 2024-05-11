@@ -11,6 +11,8 @@ const initialLMNP = [
         selectedValue: "",
         name: "LNMP Known?",
         displayNext: "Yes",
+        alertsError: false,
+        alertsErrorMassage: "",
       },
       data: [
         {
@@ -122,6 +124,8 @@ const initialUltraSound = [
         selectedValue: "",
         name: "Ultrasound done?",
         displayNext: "Yes",
+        alertsError: false,
+        alertsErrorMassage: "",
       },
       data: [
         {
@@ -241,6 +245,8 @@ const initialUltraSound = [
         selectedValue: "",
         name: "Gestation",
         displayNext: "Yes",
+        alertsError: false,
+        alertsErrorMassage: "",
       },
       data: [
         {
@@ -309,6 +315,8 @@ const initialUltraSound = [
         title: "Gestation age to be used*",
         selectedValue: "",
         name: "Gestation age to be used",
+        alertsError: false,
+        alertsErrorMassage: "",
       },
       data: [
         {
@@ -341,6 +349,8 @@ const initialTetenus = [
         title: "The woman received tetanus doses for immunization*?",
         selectedValue: "",
         name: "The woman received tetanus doses for immunization?",
+        alertsError: false,
+        alertsErrorMassage: "",
       },
       data: [
         {
@@ -377,6 +387,8 @@ const initialTetenus = [
         selectedValue: "",
         displayNone: true,
         name: "Number of tetanus doses",
+        alertsError: false,
+        alertsErrorMassage: "",
       },
       data: [
         {
@@ -732,6 +744,8 @@ const initialTetenus = [
         name: "Reason Tetanus toxoid (TT) was not conducted",
         selectedValue: "",
         displayNone: true,
+        alertsError: false,
+        alertsErrorMassage: "",
       },
       data: [
         {

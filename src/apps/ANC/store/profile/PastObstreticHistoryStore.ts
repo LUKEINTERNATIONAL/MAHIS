@@ -38,7 +38,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
               colData: [
                 {
                   class:'bold',
-                  inputHeader: "Abortions*",
+                  inputHeader: "Abortions/Miscarriages*",
                   value: "",
                   icon: icons.editPen,
                   name: "Abortions",

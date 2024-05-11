@@ -214,71 +214,72 @@ export default defineComponent({
       validaterowData(event: any) {
            this.validationRules(event)
 
-        const gravidaField = this.prevPregnancies.find((field: any) => field.data.rowData[0].colData[0].name === "Gravida");
+        if (getFieldValue(this.prevPregnancies, 'Gravida', 'value')) {
+          let errorMessage1: any = "";
 
-            const abortionsField = this.prevPregnancies.find((field: any) =>
-                field.data.rowData.length > 1 && field.data.rowData[1].colData[0].name === "Abortions");
+          if (StandardValidations.required(event.value) != null) {
+            errorMessage1 = StandardValidations.required(event.value);
+          }
+          else if (StandardValidations.isWholeNumber(event.value) != null) {
+            errorMessage1 = StandardValidations.isWholeNumber(event.value);
+          } else if (StandardValidations.checkMinMax(event.value, 1, 15) != null) {
+            errorMessage1 = StandardValidations.checkMinMax(event.value, 1, 15);
+          }
 
-            const stillBirthsField = this.prevPregnancies.find((field: any) =>
-                field.data.rowData.length > 1 && field.data.rowData[1].colData[1].name === "Stillbirths");
+          modifyFieldValue(this.prevPregnancies, 'Gravida', 'alertsError', !!errorMessage1);
+          modifyFieldValue(this.prevPregnancies, 'Gravida', 'alertsErrorMassage', errorMessage1 || '');
+        }
 
-            if (gravidaField && event.name === gravidaField.data.rowData[0].colData[0].name) {
-              let errorMessage: any = "";
 
-              if (StandardValidations.required(event.value) != null) {
-                errorMessage = StandardValidations.required(event.value);
-              } else if (StandardValidations.isWholeNumber(event.value) != null) {
-                errorMessage = StandardValidations.isWholeNumber(event.value);
-              } else if (StandardValidations.checkMinMax(event.value, 1, 15) != null) {
-                errorMessage = StandardValidations.checkMinMax(event.value, 1, 15);
-              }
-
-              modifyFieldValue(this.prevPregnancies, gravidaField.data.rowData[0].colData[0].name, 'alertsError', !!errorMessage);
-              modifyFieldValue(this.prevPregnancies, gravidaField.data.rowData[0].colData[0].name, 'alertsErrorMassage', errorMessage || '');
-            }
-
-        if (abortionsField && event.name === abortionsField.data.rowData[1].colData[0].name) {
-          let errorMessage: any = "";
+        if (getFieldValue(this.prevPregnancies, 'Abortions','value')) {
+          let errorMessage2: any = "";
 
           // Validation checks for event value
           if (StandardValidations.required(event.value) != null) {
-            errorMessage = StandardValidations.required(event.value);
+            errorMessage2 = StandardValidations.required(event.value);
           } else if (StandardValidations.isWholeNumber(event.value) != null) {
-            errorMessage = StandardValidations.isWholeNumber(event.value);
+            errorMessage2 = StandardValidations.isWholeNumber(event.value);
           } else if (StandardValidations.checkMinMax(event.value, 0, 15) != null) {
-            errorMessage = StandardValidations.checkMinMax(event.value, 0, 15);
+            errorMessage2 = StandardValidations.checkMinMax(event.value, 0, 15);
           } else {
             // Additional validation based on gravidaField value
-            const gravidaField = this.prevPregnancies.find((field: any) =>
-                field.data.rowData[0].colData[0].name === "Gravida"
-            );
+            const gravidaField = getFieldValue(this.prevPregnancies,'Gravida', 'value');
             if (gravidaField) {
-              const gravidaValue = gravidaField.data.rowData[0].colData[0].value;
+              const gravidaValue = gravidaField;
               if (parseInt(event.value) > parseInt(gravidaValue) || parseInt(event.value) < 0) {
-                errorMessage = "Abortions/Miscarriages should be less than or equal to Gravida and greater than or equal to 0.";
+                errorMessage2 = "Abortions/Miscarriages should be less than  Gravida and greater than or equal to 0.";
               }
             }
           }
 
           // Modify error message and error flag for Abortions field
-          modifyFieldValue(this.prevPregnancies, abortionsField.data.rowData[1].colData[0].name, 'alertsError', !!errorMessage);
-          modifyFieldValue(this.prevPregnancies, abortionsField.data.rowData[1].colData[0].name, 'alertsErrorMassage', errorMessage || '');
+          modifyFieldValue(this.prevPregnancies,'Abortions', 'alertsError', !!errorMessage2);
+          modifyFieldValue(this.prevPregnancies, 'Abortions', 'alertsErrorMassage', errorMessage2 || '');
         }
 
 
-        if (stillBirthsField && event.name === stillBirthsField.data.rowData[1].colData[1].name) {
-              let errorMessage: any = "";
+        if (getFieldValue(this.prevPregnancies,'Stillbirths','value')) {
+              let errorMessages: any = "";
 
               if (StandardValidations.required(event.value) != null) {
-                errorMessage = StandardValidations.required(event.value);
+                errorMessages = StandardValidations.required(event.value);
               } else if (StandardValidations.isWholeNumber(event.value) != null) {
-                errorMessage = StandardValidations.isWholeNumber(event.value);
+                errorMessages = StandardValidations.isWholeNumber(event.value);
               } else if (StandardValidations.checkMinMax(event.value, 0, 15) != null) {
-                errorMessage = StandardValidations.checkMinMax(event.value, 0, 15);
+                errorMessages = StandardValidations.checkMinMax(event.value, 0, 15);
+              }else {
+                // Additional validation based on gravidaField value
+                const data = getFieldValue(this.prevPregnancies,'Gravida', 'value');
+                if (data) {
+                  const gravida = data;
+                  if (parseInt(event.value) > parseInt(data) || parseInt(event.value) < 0) {
+                    errorMessages = "Stillbirths should be less than  Gravida and greater than or equal to 0.";
+                  }
+                }
               }
 
-              modifyFieldValue(this.prevPregnancies, stillBirthsField.data.rowData[1].colData[1].name, 'alertsError', !!errorMessage);
-              modifyFieldValue(this.prevPregnancies, stillBirthsField.data.rowData[1].colData[1].name, 'alertsErrorMassage', errorMessage || '');
+              modifyFieldValue(this.prevPregnancies, 'Stillbirths', 'alertsError', !!errorMessages);
+              modifyFieldValue(this.prevPregnancies, 'Stillbirths', 'alertsErrorMassage', errorMessages || '');
             }
           },
 
@@ -300,30 +301,13 @@ export default defineComponent({
           const gravidaValue= parseInt(getFieldValue(this.prevPregnancies, 'Gravida', 'value'));
           const abortionsValue = parseInt(getFieldValue(this.prevPregnancies, 'Abortions', 'value'));
           if (!isNaN(gravidaValue) && !isNaN(abortionsValue)) {
-            if(abortionsValue >= gravidaValue){
-              console.log("Abortions can't be greater or equal to Gravida")
-              return;
-            }
-            const liveBirthsValue = (gravidaValue-1)-abortionsValue
+            const liveBirthsValue = (gravidaValue)-abortionsValue
             modifyFieldValue(this.prevPregnancies, 'LiveBirths', 'value', liveBirthsValue);
           } else {
             // If either Gravida or Abortions is NaN, set LiveBirths to null
             modifyFieldValue(this.prevPregnancies, 'LiveBirths', 'value', null);          }
         }
       },
-      // calculateStillBirths(event:any){
-      //   if (event.name === 'Gravida' || event.name === 'Abortions' || event.name ==='LiveBirths') {
-      //     const gravidaValue= parseInt(getFieldValue(this.prevPregnancies, 'Gravida', 'value'));
-      //     const abortionsValue = parseInt(getFieldValue(this.prevPregnancies, 'Abortions', 'value'));
-      //     const liveBirthsValue= parseInt(getFieldValue(this.prevPregnancies, 'LiveBirths', 'value'));
-      //     if (!isNaN(gravidaValue) && !isNaN(abortionsValue && !isNaN(liveBirthsValue))) {
-      //       const stillbirthsValue = (gravidaValue-1)-(abortionsValue+liveBirthsValue)
-      //       modifyFieldValue(this.prevPregnancies, 'LiveBirths', 'value', stillbirthsValue);
-      //     } else {
-      //       this.validationRules({name:'StillBirths'})
-      //     }
-      //   }
-      // }
 
     },
 });

@@ -45,7 +45,12 @@ import CurrentPregnancies from "../components/profile/CurrentPregnancies.vue";
 import Medications from "../components/profile/Medications.vue";
 import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue";
 import WomanBehaviour from "../components/profile/WomanBehaviour.vue";
-import { getCheckboxSelectedValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
+import {
+  getCheckboxSelectedValue,
+  getFieldValue,
+  getRadioSelectedValue, modifyFieldValue,
+  modifyRadioValue
+} from "@/services/data_helpers";
 import { useMedicalHistoryStore } from "@/apps/ANC/store/profile/medicalHistoryStore";
 import { useObstreticHistoryStore } from "@/apps/ANC/store/profile/PastObstreticHistoryStore";
 import { useCurrentPregnanciesStore } from "@/apps/ANC/store/profile/CurrentPreganciesStore";
@@ -196,18 +201,18 @@ export default defineComponent({
         ...mapState(useMedicationStore,['Medication']),
         ...mapState(useWomanBehaviourStore,['dailyCaffeineIntake','Tobacco']),
       LNMPKnown() {return getRadioSelectedValue(this.lmnp, "LNMP Known?");},
-      // LMNP(){ return getRadioSelectedValue(this.lmnp, 'LMNP')},
-      // lmnpEED(){ return getFieldValue(this.lmnp, 'lmnpEED','value')},
-      // lmnpGestationAge(){ return getFieldValue(this.lmnp, 'lmnpGestationAge','value')},
-      // lmnpDate(){ return getFieldValue(this.lmnp, 'lmnpDate','value')},
-      // UltrasoundDone(){ return getRadioSelectedValue(this.ultrasound, 'Ultrasound done?')},
-      // UltrasoundDate(){ return getFieldValue(this.ultrasound, 'Ultrasound','value')},
-      // UltrasoundGestationAge(){ return getFieldValue(this.ultrasound, 'specify','value')},
-      // GestationAgeByPalpationKnown(){ return getRadioSelectedValue(this.palpation, 'Gestation')},
-      // GestationAgeByPalpation(){ return getFieldValue(this.palpation, 'Gestation age by palpation','value')},
-      // GestationAgeUsed(){ return getRadioSelectedValue(this.palpation, 'Gestation age to be used')},
-      // TetanusDosesForImmunisation(){ return getRadioSelectedValue(this.tetanus, 'The woman received tetanus doses for immunization?')},
-      // NumberOfUnderImmunisedDoses(){ return getRadioSelectedValue(this.tetanus, 'Number of tetanus doses')},
+      LMNP(){ return getRadioSelectedValue(this.lmnp, 'LMNP')},
+      lmnpEED(){ return getFieldValue(this.lmnp, 'lmnpEED','value')},
+      lmnpGestationAge(){ return getFieldValue(this.lmnp, 'lmnpGestationAge','value')},
+      lmnpDate(){ return getFieldValue(this.lmnp, 'lmnpDate','value')},
+      UltrasoundDone(){ return getRadioSelectedValue(this.ultrasound, 'Ultrasound done?')},
+      UltrasoundDate(){ return getFieldValue(this.ultrasound, 'Ultrasound','value')},
+      UltrasoundGestationAge(){ return getFieldValue(this.ultrasound, 'specify','value')},
+      GestationAgeByPalpationKnown(){ return getRadioSelectedValue(this.palpation, 'Gestation')},
+      GestationAgeByPalpation(){ return getFieldValue(this.palpation, 'Gestation age by palpation','value')},
+      GestationAgeUsed(){ return getRadioSelectedValue(this.palpation, 'Gestation age to be used')},
+      TetanusDosesForImmunisation(){ return getRadioSelectedValue(this.tetanus, 'The woman received tetanus doses for immunization?')},
+      NumberOfUnderImmunisedDoses(){ return getRadioSelectedValue(this.tetanus, 'Number of tetanus doses')},
       // tt1Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
       // tt2Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
       // tt3Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
@@ -259,13 +264,12 @@ export default defineComponent({
         return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
       },
       async saveProfile(){
-        // "lmnpGestationAge","lmnpDate","UltrasoundDone","UltrasoundDate","UltrasoundGestationAge",
-        //     "GestationAgeByPalpationKnown","GestationAgeByPalpation","GestationAgeUsed","TetanusDosesForImmunisation","NumberOfUnderImmunisedDoses",
+
         //     "tt1Date","tt2Date","tt3Date","tt4Date","tt5Date","tt6Date","tt7Date","tt8Date","tt9Date","tt10Date","tt11Date","tt12Date","tt13Date","tt14Date",
         //     "tt15Date","ReasonTTVnotConducted","DailyCaffeineIntake","SubstanceAbuse","SecondHandSmoke","ExistingChronicConditions","Medications","Stillbirths",
         //     "LiveBirths","Parity","Abortions"
-        const fields: any=["LNMPKnown",
-        ]
+        const fields: any=["LNMPKnown","lmnpDate",]
+        // if (Validation.required(this.lmnp))
         if(await this.validations(this.lmnp && this.ultrasound && this.palpation && this.exisitingChronicHealthConditions
             && this.Medication && this.dailyCaffeineIntake && this.Tobacco && this.tetanus && this.prevPregnancies, fields)){
           if (this.prevPregnancies.length > 0 && this.lmnp.length > 0 && this.exisitingChronicHealthConditions.length > 0 && this.allegy.length > 0
@@ -311,6 +315,15 @@ export default defineComponent({
           this.$router.push("headssAssessment");
 
         } else {
+          modifyRadioValue(this.lmnp,'LNMP Known?','alertsError', true)
+          modifyRadioValue(this.lmnp,'LNMP Known?','alertsErrorMassage', 'Value is required')
+          modifyFieldValue(this.lmnp, 'lmnpDate', 'alertsError', true)
+          modifyFieldValue(this.lmnp,'lmnpDate','alertsErrorMassage', 'Value is required')
+          modifyRadioValue(this.ultrasound,'UltrasoundDone','alertsError', true)
+          modifyRadioValue(this.ultrasound,'UltrasoundDone','alertsErrorMassage', 'Value is required')
+
+
+
           await toastWarning("Please complete all required fields")
         }
 

@@ -18,7 +18,6 @@
                           @update:inputValue="handleInputData"
                           :initialData="initialData2"
               ></basic-form>
-
             </ion-card-content>
     </ion-card>
 
