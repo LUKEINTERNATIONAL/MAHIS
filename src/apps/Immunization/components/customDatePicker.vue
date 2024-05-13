@@ -40,7 +40,7 @@
           container: document.getElementById('picker-container') as any,
           inline: true,
           rows: 3,
-          format: 'DD-MM-YYYY',
+          format: 'DD-MMM-YYYY',
           pick: datePickerEventListener
         })
     pickerInstance = picker
