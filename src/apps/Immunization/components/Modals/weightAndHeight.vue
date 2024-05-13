@@ -12,7 +12,7 @@
             </div>
         </div>
 
-        <customDatePicker v-if="showPD" />
+        <customDatePicker v-if="showPD"/>
 
         <div class="btnContent">
             <div class="saveBtn">
