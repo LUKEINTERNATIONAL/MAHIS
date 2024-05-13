@@ -64,6 +64,7 @@ import { useFatalMovementStore } from "../store/symptomsFollowUp/fatalMovementSt
 import { formatCheckBoxData, formatRadioButtonData } from "@/services/formatServerData";
 import {CurrentPhysiologicalSymptomsInstance, FetalMovementInstance, IntimatePartnerInstance, MedicalFollowUpInstance, PersistentBehavioursInstance, PersistentSymptomsInstance} from '@/apps/ANC/service/symptoms_follow_up_service';
 import { resetPatientData } from "@/services/reset_data";
+import { validateField } from "@/services/ANC/symptoms_validation";
 export default defineComponent({
     name: "Home",
     components: {
@@ -209,6 +210,8 @@ export default defineComponent({
             });
         },
         saveData() {
+            
+            
             this.saveMedicalFollowUp(),
             this.savePersistentBehaviours(),
             this.savePersistentSymptoms(),
@@ -225,6 +228,9 @@ export default defineComponent({
 
         ]
     },
+    async validations(data: any, fields: any) {
+            return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
+        },
     async buildPersistentBehaviours() {
        return [
          ...(await formatRadioButtonData(this.persistentBehaviour)),
@@ -262,15 +268,17 @@ export default defineComponent({
             medicalFollowUpInstance.push(this.demographics.patient_id, userID, data);
             toastSuccess("Medical follow-up data saved successfully");
         }
+    
 
         else {
-            toastWarning("Could not find all concepts");
+            toastWarning("Error saving medical follow-up data, try again");
         }
     },
 
     async savePersistentBehaviours () {
         const data: any = await this.buildPersistentBehaviours();
-        if (data.length > 0) {
+        const fields: any = ["High caffeine intake", " Tobacco use", "Recently quit tobacco products", "Exposure to second-hand smoke"];
+        if (data.length > 0 && await this.validations(this.persistentBehaviour, fields)) {
             const userID: any = Service.getUserID();
             const medicalFollowUpInstance = new PersistentBehavioursInstance();
             medicalFollowUpInstance.push(this.demographics.patient_id, userID, data);
@@ -278,13 +286,14 @@ export default defineComponent({
         }
 
         else {
-            toastWarning("Could not find all concepts");
+            toastWarning("Complete all required fields under Persistent behaviours");
         }
     },
 
     async savePersistentSymptoms () {
         const data: any = await this.buildPersistentSymptoms();
-        if (data.length > 0) {
+        const fields: any = ["Persistent Symptom"];
+        if (data.length > 0 && await this.validations(this.persistentSymptom, fields)) {
             const userID: any = Service.getUserID();
             const persistentSymptomsInstance = new PersistentSymptomsInstance();
             persistentSymptomsInstance.push(this.demographics.patient_id, userID, data);
@@ -292,13 +301,14 @@ export default defineComponent({
         }
 
         else {
-            toastWarning("Could not find all concepts");
+            toastWarning("Complete all required fields under Persistent symptom");
         }
     },
 
     async saveCurrentPhysiologicalSymptoms () {
         const data: any = await this.buildCurrentPhysiologicalSymptoms();
-        if (data.length > 0) {
+        const fields: any = ["Physiological symptom"];
+        if (data.length > 0 && await this.validations(this.physiologicalSymptoms, fields)) {
             const userID: any = Service.getUserID();
             const currentPhysiologicalSymptomsInstance = new CurrentPhysiologicalSymptomsInstance();
             currentPhysiologicalSymptomsInstance.push(this.demographics.patient_id, userID, data);
@@ -306,7 +316,7 @@ export default defineComponent({
         }
 
         else {
-            toastWarning("Could not find all concepts");
+            toastWarning("Complete all required fields under Physiological symptom");
         }
     },
 
@@ -326,7 +336,8 @@ export default defineComponent({
 
     async saveFetalMovement () {
         const data: any = await this.buildFetalMovement();
-        if (data.length > 0) {
+        const fields: any = ["Fetal movement"]
+        if (data.length > 0 && await this.validations(this.fatalMovement, fields)) {
             const userID: any = Service.getUserID();
             const fetalMovementInstance = new FetalMovementInstance();
             fetalMovementInstance.push(this.demographics.patient_id, userID, data);
@@ -334,9 +345,9 @@ export default defineComponent({
         }
 
         else {
-            toastWarning("Could not find all concepts");
+            toastWarning("Complete all required fields under Fetal movement");
         }
-    }
+    },
     
     },
 });
