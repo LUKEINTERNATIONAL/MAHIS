@@ -105,6 +105,8 @@
                 <div class="vaccinesTitleDate">(Swipe left or right for other milestones)</div>
             </div>
             <!--Vaccine Card-->
+
+            <customSlider/>
             <div class="vaccinesList" @click="openAdministerVaccineModal()">
                 <ion-row>
                     <ion-col size="2">
@@ -258,6 +260,7 @@ import administerVaccineModal from "@/apps/Immunization/components/Modals/admini
 import administerOtherVaccineModal from "@/apps/Immunization/components/Modals/administerOtherVaccineModal.vue";
 import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
 import { PatientService } from "@/services/patient_service";
+import customSlider from "@/apps/Immunization/components/customSlider.vue"
 
 import {
     modifyRadioValue,
@@ -295,6 +298,7 @@ export default defineComponent({
         DynamicButton,
         WeightHeightChart,
         PreviousVitals,
+        customSlider,
     },
     data() {
         return {
