@@ -2,8 +2,7 @@
   <div class="container">
     <ion-card class="section">
       <ion-card-content>
-        <basic-form :contentData="persistentBehaviour"
-        ></basic-form>
+        <basic-form :contentData="persistentBehaviour" @update:selected="handleInputData"></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
@@ -16,6 +15,7 @@ import { mapState } from 'pinia';
  import BasicInputField from "@/components/BasicInputField.vue";
  import {usePersistentBehaviourStore} from "@/apps/ANC/store/symptomsFollowUp/persistentBehaviourStore";
  import BasicForm from '@/components/BasicForm.vue';
+import { validateField } from "@/services/ANC/symptoms_validation";
 
 
 export default defineComponent({
@@ -28,11 +28,22 @@ export default defineComponent({
     },
 
     mounted(){
-        const persistentBehaviour =usePersistentBehaviourStore()
+        const persistentBehaviours =usePersistentBehaviourStore()
     },
       computed:{
         ...mapState(usePersistentBehaviourStore,["persistentBehaviour"]),
     },
+    methods: {
+      validationRules(event: any) {
+            return validateField(this.persistentBehaviour, event.name, (this as any)[event.name]);
+        },
+
+        async handleInputData(event: any) {
+            // console.log("🚀 ~ handleInputData ~ event:", event)
+
+            this.validationRules(event);
+        },
+    }
 })
 </script>
 <style scoped>
@@ -50,4 +61,3 @@ ion-card {
   color: black;
 }
 </style>
-@/apps/ANC/store/symptomsFollowUpStore/persistentBehaviourStore

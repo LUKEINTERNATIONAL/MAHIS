@@ -9,7 +9,6 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
                 isFinishBtn:false,
                  classDash: 'dashed_bottom_border',
                 radioBtnContent:{
-
                     header:{
                        
                         selectedValue:'',
@@ -18,7 +17,7 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
                     },
                     data:[
                         {
-                            name: 'High caffeine intake',
+                            name: 'High caffeine intake*',
                             value: 'Yes',
                             labelPlacement:'start',
                             colSize: "9.7",
@@ -47,7 +46,7 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
                     },
                     data:[
                         {
-                            name: 'Tobacco use',
+                            name: 'Tobacco use*',
                             value: 'Yes',
                             labelPlacement:'start',
                             colSize: "9.7",
@@ -76,7 +75,7 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
                     },
                     data:[
                         {
-                            name: 'Recently quit tobacco products',
+                            name: 'Recently quit tobacco products*',
                             value: 'Yes',
                             labelPlacement:'start',
                             colSize: "9.7",
@@ -104,7 +103,7 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
                     },
                     data:[
                         {
-                            name: 'Exposure to second-hand smoke',
+                            name: 'Exposure to second-hand smoke*',
                             value: 'Yes',
                             labelPlacement:'start',
                             colSize: "9.7",

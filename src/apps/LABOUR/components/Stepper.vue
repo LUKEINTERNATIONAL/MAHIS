@@ -94,6 +94,7 @@ import FirstVaginalExamination from "@/apps/LABOUR/components/physical exam/Firs
 import SecondStageDelivery from "@/apps/LABOUR/components/delivery details/SecondStageDelivery.vue";
 import ThirdStageDelivery from "@/apps/LABOUR/components/delivery details/ThirdStageDelivery.vue";
 import end from "@/apps/LABOUR/components/repeatable things/end.vue";
+import Obstetric from "./obstetric details/Obstetric.vue";
 import OtherExams from "@/apps/LABOUR/components/repeatable things/OtherExams.vue";
 import ImmidiatePostnatalChecksForChild
   from "@/apps/LABOUR/components/delivery details/ImmidiatePostnatalChecksForChild.vue";
@@ -126,6 +127,7 @@ export default defineComponent({
     ComplicationsScreening,
     ConfirmDiagnosis,
     Outcome,
+    Obstetric,
     Investigations,
     IonModal,
     Labour,

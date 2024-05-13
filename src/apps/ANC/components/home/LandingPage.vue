@@ -190,7 +190,7 @@ export default defineComponent({
 
 </script>
 
-<style scoped>
+<!-- <style scoped>
 ion-grid {
 text-align: center;
 position: absolute;
@@ -258,5 +258,56 @@ img {
 .sub_item_header{
   font-weight: bold;
   font-size: medium;
+}
+</style> -->
+
+<style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.section {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card {
+  width: 100%;
+  max-width: 300px;
+  margin: 10px;
+}
+
+.card:hover {
+  animation: bounce 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+@keyframes bounce {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0px); }
+}
+
+img {
+  width: 70%;
+  max-width: 70px;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .section {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card {
+    width: 90%;
+  }
 }
 </style>

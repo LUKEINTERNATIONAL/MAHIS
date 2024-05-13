@@ -215,6 +215,9 @@ ion-toast.custom-toast::part(container) {
     padding: 0px 19px;
     background-color: #fff;
 }
+ion-modal > .ion-page {
+    background: #fff;
+}
 
 /* vitals */
 .vitals_overview {

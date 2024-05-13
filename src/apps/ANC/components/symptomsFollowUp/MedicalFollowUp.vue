@@ -1,9 +1,9 @@
 <template>
   <div class="container">
+    <ion-label>Which of the following medications and supplements is the woman taking and any side effects?</ion-label>
     <ion-card class="section">
       <ion-card-content>
-        <basic-form :contentData="trial"
-        ></basic-form>
+        <basic-form :contentData="trial" ></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
@@ -16,6 +16,7 @@ import { mapState } from 'pinia';
  import BasicInputField from "@/components/BasicInputField.vue";
  import {useMedicalFollowUpStore} from "@/apps/ANC/store/symptomsFollowUp/medicalFollowUpStore";
  import BasicForm from '@/components/BasicForm.vue';
+ import { validateField } from "@/services/ANC/symptoms_validation";
 
 
 export default defineComponent({
@@ -33,6 +34,9 @@ export default defineComponent({
       computed:{
         ...mapState(useMedicalFollowUpStore,["trial"]),
     },
+    methods: {
+   
+    }
 })
 </script>
 <style scoped>
@@ -48,5 +52,9 @@ ion-card {
 
   width: 100%;
   color: black;
+}
+ion-label {
+  color: var(--ion-color-primary);
+  font-weight: bold;
 }
 </style>

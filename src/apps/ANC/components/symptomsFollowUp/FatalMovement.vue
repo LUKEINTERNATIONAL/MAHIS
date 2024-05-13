@@ -2,8 +2,7 @@
   <div class="container">
     <ion-card class="section">
       <ion-card-content>
-        <basic-form :contentData="fatalMovement"
-        ></basic-form>
+        <basic-form :contentData="fatalMovement" @update:selected="handleInputData"></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
@@ -16,6 +15,7 @@ import { mapState } from 'pinia';
  import BasicInputField from "@/components/BasicInputField.vue";
  import {useFatalMovementStore} from "@/apps/ANC/store/symptomsFollowUp/fatalMovementStore";
  import BasicForm from '@/components/BasicForm.vue';
+import { validateField } from "@/services/ANC/symptoms_validation";
 
 
 export default defineComponent({
@@ -33,6 +33,17 @@ export default defineComponent({
       computed:{
         ...mapState(useFatalMovementStore,["fatalMovement"]),
     },
+    methods:{
+      validationRules(event: any) {
+            return validateField(this.fatalMovement, event.name, (this as any)[event.name]);
+        },
+
+        async handleInputData(event: any) {
+            // console.log("🚀 ~ handleInputData ~ event:", event)
+
+            this.validationRules(event);
+        },
+    }
 })
 </script>
 <style scoped>
