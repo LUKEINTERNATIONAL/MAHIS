@@ -1,25 +1,28 @@
 <template>
-    <div class="OtherVitalsHeading">
-        <div class="OtherVitalsTitle">Other Vitals</div>
-        <div>Todays Date: <span></span> 06 Jul 2024</div>
-    </div>
-    <div class="">
-        <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form>
-    </div>
-    <div class="btnContent">
-        <div class="saveBtn">
-            <div>
-                <ion-button class="btnText" fill="solid">
-                    Done today
-                    <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon>
-                </ion-button>
-            </div>
-            <div>or</div>
-            <div>
-                <ion-button class="btnText" fill="solid">
-                    Done earlier
-                    <ion-icon slot="end" size="small" :icon="iconsContent.calenderWithPenEdit"></ion-icon>
-                </ion-button>
+    <div class="modal_wrapper">
+        <div class="OtherVitalsHeading">
+            <div class="OtherVitalsTitle">Other Vitals</div>
+            <div>Todays Date: <span></span> 06 Jul 2024</div>
+        </div>
+        <div class="">
+            <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form>
+        </div>
+        <customDatePicker v-if="showPD" />
+        <div class="btnContent">
+            <div class="saveBtn">
+                <div>
+                    <ion-button class="btnText" fill="solid">
+                        Done today
+                        <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon>
+                    </ion-button>
+                </div>
+                <div>or</div>
+                <div>
+                    <ion-button class="btnText" fill="solid" @click="showCPD">
+                        Done earlier
+                        <ion-icon slot="end" size="small" :icon="iconsContent.calenderWithPenEdit"></ion-icon>
+                    </ion-button>
+                </div>
             </div>
         </div>
     </div>
@@ -42,6 +45,7 @@ import BasicInputField from "@/components/BasicInputField.vue";
 import { VitalsService } from "@/services/vitals_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { Service } from "@/services/service";
+import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
 import { ObservationService } from "@/services/observation_service";
 import { PatientService } from "@/services/patient_service";
@@ -68,6 +72,7 @@ export default defineComponent({
         BasicInputField,
         BasicForm,
         PreviousVitals,
+        customDatePicker,
     },
     data() {
         return {
@@ -78,6 +83,7 @@ export default defineComponent({
             hasValidationErrors: [] as any,
             vitalsInstance: {} as any,
             validationStatus: { heightWeight: false, bloodPressure: false } as any,
+            showPD: false as boolean,
         };
     },
     computed: {
@@ -319,13 +325,15 @@ export default defineComponent({
                 }
             }
         },
+        showCPD() {
+            this.showPD = true as boolean;
+        },
     },
 });
 </script>
 
 <style scoped>
 .vitals_title {
-    border-bottom: 1px solid #b3b3b3;
     margin-bottom: 50px;
 }
 .input-with-icon {
@@ -357,7 +365,6 @@ h5 {
     display: flex;
     justify-content: space-between;
     margin: 20px;
-    border-bottom: 1px solid #ccc;
     line-height: 60px;
 }
 .vitalsContent {
@@ -373,7 +380,10 @@ h5 {
 .btnContent {
     display: flex;
     justify-content: center;
-    border-top: 1px solid #ccc;
     line-height: 60px;
+}
+.modal_wrapper {
+    padding: 0px 10px;
+    background: #fff;
 }
 </style>

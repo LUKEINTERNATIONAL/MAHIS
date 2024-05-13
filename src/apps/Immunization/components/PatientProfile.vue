@@ -4,26 +4,28 @@
             <ion-row>
                 <ion-col size="3">
                     <div class="initialsBox">
-                        <div class="initialsText">GZ</div>
+                        <div class="initialsText">{{ demographics?.name.charAt(0) }} {{ demographics?.name.split(" ")[1].charAt(0) }}</div>
                     </div>
                 </ion-col>
                 <ion-col size="9">
                     <div class="demographicsFirstRow">
-                        <div class="name">Godfrey Zuluful</div>
+                        <div class="name">{{ demographics.name }}</div>
                         <div class="name" @click="openPIM()" style="color: var(--ion-color-primary)">
                             <ion-icon :icon="ellipsisVerticalSharp"></ion-icon>
                         </div>
                     </div>
                     <div class="demographicsOtherRow">
-                        <div class="demographicsText">Male <span class="dot">.</span> 37 years old <span class="dot">.</span> 19 April 2024</div>
+                        <div class="demographicsText">
+                            {{ demographics.gender == "M" ? "Male" : "Female" }} <span class="dot">.</span> {{ formatBirthdate() }}
+                        </div>
                     </div>
                     <div class="demographicsOtherRow">
                         <div class="demographicsText">Current Address:</div>
-                        <div class="demographicsText mediumFontColor">Kaluluma, Side B</div>
+                        <div class="demographicsText mediumFontColor">{{ demographics.address }}</div>
                     </div>
                     <div class="demographicsOtherRow">
                         <div class="demographicsText smallFont">
-                            MRN: <span class="mediumFontColor">17000031AJ</span> <span class="dot">.</span> Outcome:
+                            MRN: <span class="mediumFontColor">{{ demographics.mrn }}</span> <span class="dot">.</span> Outcome:
                             <span class="outcomeStatus">Active</span>
                         </div>
                     </div>
@@ -372,6 +374,9 @@ export default defineComponent({
             const patient = new PatientService();
             if (patient.isUnderFive()) return true;
             else return false;
+        },
+        formatBirthdate() {
+            return HisDate.getBirthdateAge(this.demographics.birthdate);
         },
         async getData() {
             const steps = ["Growth Monitor", "Immunization Services", "Next Appointment", "Change Status"];

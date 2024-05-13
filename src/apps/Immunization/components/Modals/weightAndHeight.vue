@@ -1,39 +1,32 @@
 <template>
-    <div class="pim-cls-1">
+    <div class="pim-cls-1 modal_wrapper">
         <div class="OtherVitalsHeading">
-            <div class="OtherVitalsTitle" style="color: #1F2221D4; font-size: 16px">Add Weight/Height</div>
+            <div class="OtherVitalsTitle" style="color: #1f2221d4; font-size: 16px">Add Weight/Height</div>
             <div style="margin-right: 5px; font-size: 14px" class="lbl-tl">Todays Date: <span class="lbl-ct"> 06 Jul 2024</span></div>
         </div>
-        <div class="modal_wrapper">
+        <div>
             <div class="center text_12">
                 <ion-row>
-                    <BasicForm :content-data="store.vitals" @update:inputValue="validaterowData($event)" />
+                    <BasicForm :contentData="vitalsWeightHeight" @update:inputValue="validaterowData($event)" />
                 </ion-row>
-                <!-- <ion-row>
-                        <div style="margin-left: 10px; margin-right: 10px; width: 100%">
-                            <DatePicker
-                                style="width: 100%"
-                                :place_holder="date_properties[0].placeHolder"
-                                @date-up-dated="date_properties[0].dataHandler"
-                            />
-                        </div>
-                    </ion-row> -->
             </div>
         </div>
+
+        <customDatePicker v-if="showPD" />
 
         <div class="btnContent">
             <div class="saveBtn">
                 <div>
-                    <ion-button class="btnText" fill="solid">
+                    <ion-button class="btnText" fill="solid" @click="doneToday()">
                         Done today
-                        <ion-icon slot="end" size="small" :icon="icons.calenderwithPlus"></ion-icon>
+                        <ion-icon slot="end" size="small" :icon="iconContent.calenderwithPlus"></ion-icon>
                     </ion-button>
                 </div>
                 <div>or</div>
                 <div>
-                    <ion-button class="btnText" fill="solid">
+                    <ion-button class="btnText" fill="solid" @click="showCPD">
                         Done earlier
-                        <ion-icon slot="end" size="small" :icon="icons.calenderWithPenEdit"></ion-icon>
+                        <ion-icon slot="end" size="small" :icon="iconContent.calenderWithPenEdit"></ion-icon>
                     </ion-button>
                 </div>
             </div>
@@ -41,13 +34,6 @@
     </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-export default defineComponent({
-    watch: {},
-    name: "xxxComponent",
-});
-</script>
-<script setup lang="ts">
 import {
     IonContent,
     IonButton,
@@ -65,7 +51,7 @@ import {
 import DynamicButton from "@/components/DynamicButton.vue";
 import { createOutline } from "ionicons/icons";
 import BasicForm from "@/components/BasicForm.vue";
-import { useVitalsStore } from "@/apps/Immunization/stores/VitalsStore";
+import { useWeightHeightVitalsStore } from "@/apps/Immunization/stores/VitalsStore";
 import DatePicker from "@/components/DatePicker.vue";
 import { ref, watch, computed, onMounted, onUpdated } from "vue";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
@@ -75,86 +61,128 @@ import { Service } from "@/services/service";
 import HisDate from "@/utils/Date";
 import { BMIService } from "@/services/bmi_service";
 import { icons } from "@/utils/svg";
-const store = useVitalsStore();
-const demographicsStore = useDemographicsStore();
-let BMI: { color: any; index: any; result: any };
+import { toastSuccess, toastWarning } from "@/utils/Alerts";
+import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
+import { defineComponent } from "vue";
+import { mapState } from "pinia";
+import { VitalsEncounter } from "@/apps/Immunization/services/vitals";
+import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 
-const props = defineProps<{
-    is_open: any;
-    person_id: any;
-}>();
-
-const date_properties = [
-    {
-        placeHolder: { default: "Enter date" } as any,
-        property_name: "dateOfWeightAndHeight",
-        dataHandler: dateUpdate_fn1,
-        dataValue: ref(),
-        show_error: ref(false),
-        error_message: "Date required",
-        type: "date",
-        skip_validation: false,
+export default defineComponent({
+    name: "Home",
+    components: {
+        IonContent,
+        IonHeader,
+        IonPage,
+        IonTitle,
+        IonToolbar,
+        BasicForm,
+        customDatePicker,
     },
-];
+    data() {
+        return {
+            popoverOpen: false,
+            iconContent: icons,
+            event: null as any,
+            BMI: "" as any,
+            showPD: false as boolean,
+        };
+    },
+    computed: {
+        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useWeightHeightVitalsStore, ["vitalsWeightHeight"]),
+    },
+    mounted() {
+        console.log(this.vitalsWeightHeight);
+    },
+    setup() {},
+    methods: {
+        nav(url: any) {
+            this.$router.push(url);
+        },
+        openPopover(e: Event) {
+            this.event = e;
+            this.popoverOpen = true;
+        },
+        formatBirthdate() {
+            return HisDate.getBirthdateAge(this.demographics.birthdate);
+        },
 
-function dateUpdate_fn1(data: any) {
-    const date_data = {
-        day: data.value.day,
-        month: data.value.month,
-        year: data.value.year,
-        formattedDate: data.formattedDate,
-    };
-    date_properties[0].dataValue.value = date_data;
-}
+        async validaterowData(event: any) {
+            const userID: any = Service.getUserID();
+            const vitalsInstance = new VitalsService(55, userID);
 
-async function validaterowData(event: any) {
-    const userID: any = Service.getUserID();
-    const vitalsInstance = new VitalsService(55, userID);
+            const weightValue = getFieldValue(this.vitalsWeightHeight, "weight", "value");
+            const heightValue = getFieldValue(this.vitalsWeightHeight, "height", "value");
 
-    const height = vitalsInstance.validator({ inputHeader: "Height*", value: getFieldValue(store.vitals, "Height", "value") });
+            const height = vitalsInstance.validator({ inputHeader: "Height*", value: heightValue });
+            const weight = vitalsInstance.validator({ inputHeader: "Weight*", value: weightValue });
 
-    if (height) {
-        modifyFieldValue(store.vitals, "Height", "alertsErrorMassage", height.flat(Infinity)[0]);
-        modifyFieldValue(store.vitals, "Height", "alertsError", true);
-    } else {
-        modifyFieldValue(store.vitals, "Height", "alertsErrorMassage", "");
-        modifyFieldValue(store.vitals, "Height", "alertsError", false);
-    }
+            if (height && heightValue) {
+                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsErrorMassage", height.flat(Infinity)[0]);
+                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsError", true);
+            } else {
+                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsErrorMassage", "");
+                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsError", false);
+            }
 
-    const weight = vitalsInstance.validator({ inputHeader: "Weight*", value: getFieldValue(store.vitals, "Weight", "value") });
+            if (weight && weightValue) {
+                modifyFieldValue(this.vitalsWeightHeight, "weight", "alertsErrorMassage", weight.flat(Infinity)[0]);
+                modifyFieldValue(this.vitalsWeightHeight, "weight", "alertsError", true);
+            } else {
+                modifyFieldValue(this.vitalsWeightHeight, "weight", "alertsErrorMassage", "");
+                modifyFieldValue(this.vitalsWeightHeight, "weight", "alertsError", false);
+            }
 
-    if (weight) {
-        modifyFieldValue(store.vitals, "Weight", "alertsErrorMassage", weight.flat(Infinity)[0]);
-        modifyFieldValue(store.vitals, "Weight", "alertsError", true);
-    } else {
-        modifyFieldValue(store.vitals, "Weight", "alertsErrorMassage", "");
-        modifyFieldValue(store.vitals, "Weight", "alertsError", false);
-    }
+            if (weight == null && height == null) this.setBMI(weightValue, heightValue);
+        },
+        async doneToday() {
+            const userID: any = Service.getUserID();
+            const vitalsInstance = new VitalsService(55, userID);
+            const weightValue = getFieldValue(this.vitalsWeightHeight, "weight", "value");
+            const heightValue = getFieldValue(this.vitalsWeightHeight, "height", "value");
+            const height = vitalsInstance.validator({ inputHeader: "Height*", value: heightValue });
+            const weight = vitalsInstance.validator({ inputHeader: "Weight*", value: weightValue });
+            if (weight == null && height == null) {
+                toastSuccess("Saved successful");
 
-    setBMI(getFieldValue(store.vitals, "Weight", "value"), getFieldValue(store.vitals, "Height", "value"));
-}
+                const userID: any = Service.getUserID();
+                const VitalsInstance = new VitalsEncounter(this.demographics.patient_id, userID);
+                const encounter = await VitalsInstance.createEncounter();
+                if (!encounter) return toastWarning("Unable to create vitals encounter");
+                const data = await formatInputFiledData(this.vitalsWeightHeight);
+                await VitalsInstance.saveObservationList(data);
+                this.$emit("updateVitalsGraph");
+            } else {
+                toastWarning("Please complete the form");
+            }
+        },
+        async setBMI(weight: any, height: any) {
+            if (this.demographics.gender && this.demographics.birthdate) {
+                this.BMI = await BMIService.getBMI(
+                    parseInt(weight),
+                    parseInt(height),
+                    this.demographics.gender,
+                    HisDate.calculateAge(this.demographics.birthdate, HisDate.currentDate())
+                );
+            }
+            this.updateBMI();
+        },
 
-async function setBMI(weight: any, height: any) {
-    if (demographicsStore.demographics.gender && demographicsStore.demographics.birthdate) {
-        BMI = await BMIService.getBMI(
-            parseInt(weight),
-            parseInt(height),
-            demographicsStore.demographics.gender,
-            HisDate.calculateAge(demographicsStore.demographics.birthdate, HisDate.currentDate())
-        );
-    }
-    updateBMI();
-}
-
-async function updateBMI() {
-    const bmiColor = BMI?.color ?? [];
-    const vitals = store.vitals[0].alerts[0];
-    vitals.icon = BMIService.iconBMI(bmiColor);
-    vitals.backgroundColor = bmiColor[0];
-    vitals.textColor = bmiColor[1];
-    vitals.index = "BMI " + BMI?.index ?? "";
-    vitals.value = BMI?.result ?? "";
-}
+        async updateBMI() {
+            const bmiColor = this.BMI?.color ?? [];
+            const vitalsWeightHeight = this.vitalsWeightHeight[0].alerts[0];
+            vitalsWeightHeight.icon = BMIService.iconBMI(bmiColor);
+            vitalsWeightHeight.backgroundColor = bmiColor[0];
+            vitalsWeightHeight.textColor = bmiColor[1];
+            vitalsWeightHeight.index = "BMI " + this.BMI?.index ?? "";
+            vitalsWeightHeight.value = this.BMI?.result ?? "";
+        },
+        showCPD() {
+            this.showPD = true as boolean;
+        },
+    },
+});
 </script>
 <style scoped>
 .lbl-tl {
@@ -178,7 +206,8 @@ ion-footer {
     margin: 20px 0; /* Adjust as needed */
 }
 .modal_wrapper {
-    padding: 0px 19px;
+    padding: 0px 10px;
+    background: #fff;
 }
 
 .OtherVitalsTitle {
@@ -191,7 +220,6 @@ ion-footer {
     display: flex;
     justify-content: space-between;
     margin: 20px;
-    border-bottom: 1px solid #ccc;
     line-height: 60px;
 }
 .vitalsContent {
@@ -208,7 +236,6 @@ ion-footer {
 .btnContent {
     display: flex;
     justify-content: center;
-    border-top: 1px solid #ccc;
     line-height: 60px;
 }
 </style>
