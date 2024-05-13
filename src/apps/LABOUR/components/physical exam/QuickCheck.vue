@@ -1,7 +1,6 @@
 <template>
   <div class="container">
     <ion-card class="section">
-      <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header">Danger signs</ion-card-title></ion-card-header>
       <ion-card-content>
         <basic-form :contentData="pastProblems"  ></basic-form>
       </ion-card-content>

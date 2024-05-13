@@ -40,7 +40,7 @@ import { icons } from "@/utils/svg";
 import { mapState } from "pinia";
 import Stepper from "@/components/Stepper.vue";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
-import PastObstreticHistory from "@/apps/ANC/components/profile/PastObstreticHistory.vue";
+import PastObstreticHistory from "../components/profile/PastObstreticHistory.vue";
 import CurrentPregnancies from "../components/profile/CurrentPregnancies.vue";
 import Medications from "../components/profile/Medications.vue";
 import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue";
@@ -205,6 +205,7 @@ export default defineComponent({
         },
        
          async saveData() {
+            
             this.savePrevPregnancies()
             // this.savePreterm()
             // this.savePastPregnancyComplication()
@@ -216,8 +217,40 @@ export default defineComponent({
             // this.saveCaffeinIntake()
             toastSuccess("Profile data saved successfully")
             resetPatientData();
-            this.$router.push("headssAssessment");
+            this.handleNavigation();
+            
         },
+        handleNavigation() {
+      if (!this.demographics) {
+        console.warn('Demographics data not available yet. Skipping navigation.');
+        return;
+      }
+
+      const birthdate = new Date(this.demographics.birthdate);
+      const today = new Date();
+
+      const age = this.calculateAge(birthdate, today);
+
+      if (age >= 19) {
+        this.$router.push('ANCHome');
+      } else {
+        this.$router.push('headssAssessment'); 
+      }
+    },
+
+    calculateAge(birthdate, today) {
+    const birthYear = birthdate.getFullYear();
+    const currentYear = today.getFullYear();
+    let age = currentYear - birthYear;
+
+ 
+  if (today.getMonth() < birthdate.getMonth() ||
+      (today.getMonth() === birthdate.getMonth() && today.getDate() < birthdate.getDate())) {
+    age--;
+  }
+
+  return age;
+},
         async savePrevPregnancies(){
         // if (this.prevPregnancies[0].selectedData.length > 0) {
         //     const userID: any = Service.getUserID();

@@ -2,8 +2,7 @@
   <div class="container">
     <ion-card class="section">
       <ion-card-content>
-        <basic-form :contentData="persistentSymptom"
-        ></basic-form>
+        <basic-form :contentData="persistentSymptom" @update:selected="handleInputData"></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
@@ -17,6 +16,7 @@ import { mapState } from 'pinia';
  import {usePersistentSymptomsStore} from "@/apps/ANC/store/symptomsFollowUp/persistentSymptomsStore";
  import BasicForm from '@/components/BasicForm.vue';
 import { getCheckboxSelectedValue, modifyCheckboxValue } from "@/services/data_helpers";
+import { validateField } from "@/services/ANC/symptoms_validation";
 
 
 export default defineComponent({
@@ -29,7 +29,7 @@ export default defineComponent({
     },
 
     mounted(){
-        const persistentSymptom =usePersistentSymptomsStore()
+        // const persistentSymptom =usePersistentSymptomsStore()
         this.handleNone()
     },
     watch:{
@@ -57,6 +57,16 @@ export default defineComponent({
                         modifyCheckboxValue(this.persistentSymptom, checkbox, 'disabled', false);
                     });
                 }
+        },
+
+        validationRules(event: any) {
+            return validateField(this.persistentSymptom, event.name, (this as any)[event.name]);
+        },
+
+        async handleInputData(event: any) {
+            // console.log("🚀 ~ handleInputData ~ event:", event)
+
+            this.validationRules(event);
         },
     },
 })
