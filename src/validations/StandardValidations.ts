@@ -114,6 +114,16 @@ function checkMinMax(val: any, min: number, max: number) {
 
     return errorMessage ? errorMessage : null;
 }
+function isDate(value: any): null | string {
+    const dateRegex = /^(0[1-9]|[12]\d|3[01]) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec), \d{4}$/;
+
+    if (!value || !value.match(dateRegex)) {
+        return "Date must be in the format like '12 May, 2024'";
+    }
+
+    return null;
+}
+
 
 export default {
     isFloatingPointNumber,
@@ -133,4 +143,5 @@ export default {
     isMWNationalID,
     isEstimationDate,
     checkMinMax,
+    isDate
 };

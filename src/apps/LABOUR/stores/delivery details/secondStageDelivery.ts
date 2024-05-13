@@ -1059,8 +1059,8 @@ const initialObstetricDetails=[
                 data:[
 
                     {
-                        name: 'None',
-                        value: 'None',
+                        name: 'No complications',
+                        value: 'No complications',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',

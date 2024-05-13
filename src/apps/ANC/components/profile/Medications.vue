@@ -6,6 +6,8 @@
         <basic-form
             :contentData="Medication"
             :initialData="initialData"
+            @update:selected="handleInputData"
+            @update:inputValue="handleInputData"
         ></basic-form>
       </ion-card-content>
     </ion-card>
@@ -41,6 +43,7 @@ import { modifyRadioValue,
     getFieldValue,
     modifyFieldValue,
     modifyCheckboxValue} from '@/services/data_helpers'
+import {validateField} from "@/services/ANC/profile_validation_service";
 
 export default defineComponent({
   name: 'Menu',
@@ -73,15 +76,18 @@ export default defineComponent({
   },
   watch:{
      Medication:{
-          handler(){
+          handler(event){
         this.handleOther()
+            this.handleInputData(event)
       },
       deep:true
      }
    
   },
   computed: {
-    ...mapState(useMedicationStore, ["Medication"])
+    ...mapState(useMedicationStore, ["Medication"]),
+    Medications(){ return getCheckboxSelectedValue(this.Medication, 'Which medications is the woman currently prescribed?')},
+
   },
   setup() {
     return { checkmark,pulseOutline };
@@ -90,6 +96,12 @@ export default defineComponent({
     navigationMenu(url: any){
       menuController.close()
       this.$router.push(url);
+    },
+    validationRules(event: any) {
+      return validateField(this.Medication,event.name, (this as any)[event.name]);
+    },
+    async handleInputData(event: any){
+      this.validationRules(event)
     },
     handleOther(){
       const checkBoxes=['Oral PreP for HIV','Analgesic','Anti-consulsive',
@@ -146,9 +158,11 @@ export default defineComponent({
   font-weight: bold;
   font-size: medium;
 }
-ion-card {
-  box-shadow:none;
-  background-color:inherit;
-}
+  ion-card {
+
+    color:black;
+    width:100%
+  }
+
 </style>
 @/apps/ANC/store/profile/MedicationStore

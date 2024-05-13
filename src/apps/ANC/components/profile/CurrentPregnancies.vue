@@ -18,7 +18,6 @@
                           @update:inputValue="handleInputData"
                           :initialData="initialData2"
               ></basic-form>
-
             </ion-card-content>
     </ion-card>
 
@@ -56,7 +55,7 @@ import {
   modifyFieldValue, modifyRadioValue
 } from '@/services/data_helpers';
 import BasicCard from "@/components/BasicCard.vue";
-import {validateField} from "@/services/ANC/validation_service";
+import {validateField} from "@/services/ANC/profile_validation_service"
 import StandardValidations from "@/validations/StandardValidations";
 import HisDate from "@/utils/Date";
 
@@ -104,7 +103,35 @@ export default defineComponent({
           lmnpEED(){ return getFieldValue(this.lmnp, 'lmnpEED','value')},
           lmnpGestationAge(){ return getFieldValue(this.lmnp, 'lmnpGestationAge','value')},
           lmnpDate(){ return getFieldValue(this.lmnp, 'lmnpDate','value')},
-          //edd(){return getFieldValue(this.lmnp,'edd',"value")}
+          LNMPKnown(){ return getRadioSelectedValue(this.lmnp, 'LNMP Known?')},
+          UltrasoundDone(){ return getRadioSelectedValue(this.ultrasound, 'Ultrasound done?')},
+          UltrasoundDate(){ return getFieldValue(this.ultrasound, 'Ultrasound','value')},
+      UltrasoundGestationAge(){ return getFieldValue(this.ultrasound, 'specify','value')},
+      GestationAgeByPalpationKnown(){ return getRadioSelectedValue(this.palpation, 'Gestation')},
+      GestationAgeByPalpation(){ return getFieldValue(this.palpation, 'Gestation age by palpation','value')},
+      GestationAgeUsed(){ return getRadioSelectedValue(this.palpation, 'Gestation age to be used')},
+      TetanusDosesForImmunisation(){ return getRadioSelectedValue(this.tetanus, 'The woman received tetanus doses for immunization?')},
+      NumberOfUnderImmunisedDoses(){ return getRadioSelectedValue(this.tetanus, 'Number of tetanus doses')},
+      tt1Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
+      tt2Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
+      tt3Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
+      tt4Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
+      tt5Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
+      tt6Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
+      tt7Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
+      tt8Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
+      tt9Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
+      tt10Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
+      tt11Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
+      tt12Date(){ return getFieldValue(this.tetanus, '12','value')},
+      tt13Date(){ return getFieldValue(this.tetanus, '13','value')},
+      tt14Date(){ return getFieldValue(this.tetanus, '14','value')},
+      tt15Date(){ return getFieldValue(this.tetanus, '15','value')},
+      ReasonTTVnotConducted(){ return getRadioSelectedValue(this.tetanus, 'Reason Tetanus toxoid (TT) was not conducted')},
+
+
+
+      //edd(){return getFieldValue(this.lmnp,'edd',"value")}
 
   
       },
@@ -120,6 +147,7 @@ export default defineComponent({
         //this.handleUltrasound()
         this.handleTetanus()
         this.calculateEDD
+        this.validaterowData({})
         this.handlettv1()
   
   
@@ -135,13 +163,13 @@ export default defineComponent({
            this.handleInputData(event)
            //this.handleLMNP()
            this.calculateEDD(event)
+           this.lmnp
           },
          deep:true
 
        },
         ultrasound:{
          handler(){
-          // this.handleUltrasound()
          },
           deep:true
         },
@@ -157,8 +185,14 @@ export default defineComponent({
         validationRules(event: any) {
           return validateField(this.lmnp,event.name, (this as any)[event.name]);
         },
-        async handleInputData(event: any) {
+
+        // Validations
+        validaterowData(event: any) {
           this.validationRules(event)
+        },
+
+        async handleInputData(event: any) {
+          this.validaterowData(event)
           this.calculateGestationAgefromLNMP(event)
           this.calculateEDD(event)
           this.calculateEDDFromGestationAge(event)
@@ -217,8 +251,8 @@ export default defineComponent({
               }
           },
           calculateEDDFromPalpation(event: any) {
-              if (event.name === "Gestation age to be used") {
-                  const gestationalAgeInWeeks = parseInt(getFieldValue(this.ultrasound, 'Gestation age to be used', 'value'));
+              if (event.name === "Gestation age by palpation") {
+                  const gestationalAgeInWeeks = parseInt(getFieldValue(this.ultrasound, 'Gestation age by palpation', 'value'));
                   if (!isNaN(gestationalAgeInWeeks)) {
                       const currentDate = new Date();
                       const conceptionDate = new Date(currentDate.getTime() - (gestationalAgeInWeeks * 7 * 24 * 60 * 60 * 1000));
@@ -253,19 +287,19 @@ export default defineComponent({
             modifyRadioValue(this.tetanus,'Number of tetanus doses','displayNone', true)
           }
 
-          if(getRadioSelectedValue(this.tetanus, 'Number of tetanus doses')=='1'){
+          if(getRadioSelectedValue(this.tetanus, 'Number of tetanus doses')=='one dose'){
             modifyFieldValue(this.tetanus,'tt6Date','displayNone', false)
           }   else {
             modifyFieldValue(this.tetanus,'tt6Date','displayNone', true)
           }
-          if(getRadioSelectedValue(this.tetanus, 'Number of tetanus doses')=='2'){
+          if(getRadioSelectedValue(this.tetanus, 'Number of tetanus doses')=='two doses'){
             modifyFieldValue(this.tetanus,'tt7Date','displayNone', false)
             modifyFieldValue(this.tetanus,'tt8Date','displayNone', false)
           }   else {
             modifyFieldValue(this.tetanus,'tt7Date','displayNone', true)
             modifyFieldValue(this.tetanus,'tt8Date','displayNone', true)
           }
-          if(getRadioSelectedValue(this.tetanus, 'Number of tetanus doses')=='3'){
+          if(getRadioSelectedValue(this.tetanus, 'Number of tetanus doses')=='three doses'){
             modifyFieldValue(this.tetanus,'tt9Date','displayNone', false)
             modifyFieldValue(this.tetanus,'tt10Date','displayNone', false)
             modifyFieldValue(this.tetanus,'tt11Date','displayNone', false)
@@ -274,7 +308,7 @@ export default defineComponent({
             modifyFieldValue(this.tetanus,'tt10Date','displayNone', true)
             modifyFieldValue(this.tetanus,'tt11Date','displayNone', true)
           }
-          if(getRadioSelectedValue(this.tetanus, 'Number of tetanus doses')=='4'){
+          if(getRadioSelectedValue(this.tetanus, 'Number of tetanus doses')=='four doses'){
             modifyFieldValue(this.tetanus,'12','displayNone', false)
             modifyFieldValue(this.tetanus,'13','displayNone', false)
             modifyFieldValue(this.tetanus,'14','displayNone', false)
@@ -327,8 +361,7 @@ export default defineComponent({
 }
 
 ion-card {
- box-shadow:none;
-  background-color:inherit;   
+
   width: 100%;
  color: black;
 }
