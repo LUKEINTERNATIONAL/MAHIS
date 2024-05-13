@@ -106,7 +106,7 @@ export default defineComponent({
           LNMPKnown(){ return getRadioSelectedValue(this.lmnp, 'LNMP Known?')},
           UltrasoundDone(){ return getRadioSelectedValue(this.ultrasound, 'Ultrasound done?')},
           UltrasoundDate(){ return getFieldValue(this.ultrasound, 'Ultrasound','value')},
-         UltrasoundGestationAge(){ return getFieldValue(this.ultrasound, 'specify','value')},
+      UltrasoundGestationAge(){ return getFieldValue(this.ultrasound, 'specify','value')},
       GestationAgeByPalpationKnown(){ return getRadioSelectedValue(this.palpation, 'Gestation')},
       GestationAgeByPalpation(){ return getFieldValue(this.palpation, 'Gestation age by palpation','value')},
       GestationAgeUsed(){ return getRadioSelectedValue(this.palpation, 'Gestation age to be used')},
@@ -147,6 +147,7 @@ export default defineComponent({
         //this.handleUltrasound()
         this.handleTetanus()
         this.calculateEDD
+        this.validaterowData({})
         this.handlettv1()
   
   
@@ -181,23 +182,17 @@ export default defineComponent({
         },
       },
       methods:{
-        validationLNMPRules(event: any) {
+        validationRules(event: any) {
           return validateField(this.lmnp,event.name, (this as any)[event.name]);
         },
-        validationUltraSoundRules(event: any) {
-          return validateField(this.ultrasound,event.name, (this as any)[event.name]);
+
+        // Validations
+        validaterowData(event: any) {
+          this.validationRules(event)
         },
-        validationPalpationRules(event: any) {
-          return validateField(this.palpation,event.name, (this as any)[event.name]);
-        },
-        validationTetanusRules(event: any) {
-          return validateField(this.tetanus,event.name, (this as any)[event.name]);
-        },
+
         async handleInputData(event: any) {
-          this.validationLNMPRules(event)
-          this.validationTetanusRules(event)
-          this.validationPalpationRules(event)
-          this.validationUltraSoundRules(event)
+          this.validaterowData(event)
           this.calculateGestationAgefromLNMP(event)
           this.calculateEDD(event)
           this.calculateEDDFromGestationAge(event)
@@ -256,8 +251,8 @@ export default defineComponent({
               }
           },
           calculateEDDFromPalpation(event: any) {
-              if (event.name === "Gestation age to be used") {
-                  const gestationalAgeInWeeks = parseInt(getFieldValue(this.ultrasound, 'Gestation age to be used', 'value'));
+              if (event.name === "Gestation age by palpation") {
+                  const gestationalAgeInWeeks = parseInt(getFieldValue(this.ultrasound, 'Gestation age by palpation', 'value'));
                   if (!isNaN(gestationalAgeInWeeks)) {
                       const currentDate = new Date();
                       const conceptionDate = new Date(currentDate.getTime() - (gestationalAgeInWeeks * 7 * 24 * 60 * 60 * 1000));

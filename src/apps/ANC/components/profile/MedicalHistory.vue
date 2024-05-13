@@ -333,9 +333,9 @@ export default defineComponent({
         },
         handleChronicCondition(){
 
-            const checkBoxes=["Auto immune desease","Asthma","Sickle cell","Anemia", "HIV positive",
-                             "Thalassemia","Gynaecological","CCF","RHD","Gestational diabetes",
-                             "pre-existing type 1","pre-existing type 2","Epilespy","Hypertension","Kidney","TB","Mental  illiness","Other"]
+            const checkBoxes=["Auto-immune desease","Asthma","Sickle cell","Anemia", "HIV positive",
+                             "Thalassemia","Gynaecological","CCF","RHD","Gynae Cancer","Diabetes Type 1","Diabetes Type 2","Gestational diabetes",
+                             "pre-existing type 1","pre-existing type 2","Epilepsy","Hypertension","Kidney Disease","TB","Mental illness","Other"]
 
                 if (getCheckboxSelectedValue(this.exisitingChronicHealthConditions, 'None')?.checked) {
                 checkBoxes.forEach((checkbox) => {

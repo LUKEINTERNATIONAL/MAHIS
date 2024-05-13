@@ -91,7 +91,7 @@ const allegiesForm = {
 const chronicHealthConditionsForm = {
   autoImmuneDesease: {
     name: "Auto-immune desease",
-    value: "auto immune desease",
+    value: "auto immune disease",
   },
   asthma: {
     name: "Asthma",
@@ -1000,14 +1000,6 @@ const initialChronicConditions = [
         name: "chronic conditions",
       },
       data: [
-        {
-          name: "HIV negative",
-          value: "hiv negative",
-          labelPlacement: "start",
-          colSize: "6",
-          justify: "space-between",
-          checked: false,
-        },
         {
           name: "None",
           value: "none",

@@ -10,19 +10,21 @@ import Validation from "@/validations/StandardValidations"
 export function validateField(data: any,fieldName: string, value: any) {
     const validationRules: any = {
         'LMNP':()=>Validation.required(value),
+        'Gravida': () => MultValidations(fieldName, value),
+        // 'Gravida':()=>Validation.checkMinMax(value,1,15),
         'lmnpEED':()=>Validation.required(value),
-        'Stillbirths':()=>Validation.checkMinMax(value,1,15),
+        'Stillbirths': () => MultValidations(fieldName, value),
         'LiveBirths': () => Validation.required(value),
         'Parity':()=>Validation.required(value),
-        'Abortions': () => Validation.checkMinMax(value, 1, 15),
-        'lmnpDate':()=>Validation.required(value),
+        'Abortions': () => MultValidations(fieldName, value),
+        'lmnpDate':()=>MultValidations(fieldName, value),
         'lmnpGestationAge':()=>Validation.required(value),
         'LNMPKnown':()=>Validation.required(value),
         'UltrasoundDone':()=>Validation.required(value),
-        'UltrasoundDate':()=>Validation.required(value),
-        'UltrasoundGestationAge':()=>Validation.required(value),
+        'UltrasoundDate':()=>MultValidations(fieldName, value),
+        'UltrasoundGestationAge':()=>MultValidations(fieldName, value),
         'GestationAgeByPalpationKnown':()=>Validation.required(value),
-        'GestationAgeByPalpation':()=>Validation.required(value),
+        'GestationAgeByPalpation':()=>MultValidations(fieldName, value),
         'GestationAgeUsed':()=>Validation.required(value),
         'TetanusDosesForImmunisation':()=>Validation.required(value),
         'NumberOfUnderImmunisedDoses':()=>Validation.required(value),
@@ -67,4 +69,119 @@ export function validateField(data: any,fieldName: string, value: any) {
     }
     return isValid;
 }
+
+function MultValidations(fieldName: string, value: any): null | any {
+    if (fieldName === 'Gravida') {
+        const requiredError: any | null = Validation.required(value);
+        if (requiredError !== null) {
+            return requiredError;
+        }
+
+        const wholeNumberError: string | null = Validation.isWholeNumber(value);
+        if (wholeNumberError !== null) {
+            return wholeNumberError;
+        }
+
+        const minMaxError: string | null = Validation.checkMinMax(value, 1, 15);
+        if (minMaxError !== null) {
+            return minMaxError;
+        }
+    } else if (fieldName === 'Abortions') {
+        const requiredError: any | null = Validation.required(value);
+        if (requiredError !== null) {
+            return requiredError;
+        }
+
+        const wholeNumberError: string | null = Validation.isWholeNumber(value);
+        if (wholeNumberError !== null) {
+            return wholeNumberError;
+        }
+
+        const minMaxError: string | null = Validation.checkMinMax(value, 0, 15);
+        if (minMaxError !== null) {
+            return minMaxError;
+        }
+    }else if (fieldName === 'Stillbirths') {
+        const requiredError: any | null = Validation.required(value);
+        if (requiredError !== null) {
+            return requiredError;
+        }
+
+        const wholeNumberError: string | null = Validation.isWholeNumber(value);
+        if (wholeNumberError !== null) {
+            return wholeNumberError;
+        }
+
+        const minMaxError: string | null = Validation.checkMinMax(value, 0, 15);
+        if (minMaxError !== null) {
+            return minMaxError;
+        }
+    }else if (fieldName === 'lmnpDate') {
+        const requiredError: any | null = Validation.required(value);
+        if (requiredError !== null) {
+            return requiredError;
+        }
+
+        const DateError: string | null = Validation.isDate(value);
+        if (DateError !== null) {
+            return DateError;
+        }
+
+    }
+    else if (fieldName === 'UltrasoundDate') {
+        const requiredError: any | null = Validation.required(value);
+        if (requiredError !== null) {
+            return requiredError;
+        }
+
+        const DateError: string | null = Validation.isDate(value);
+        if (DateError !== null) {
+            return DateError;
+        }
+
+    } else if (fieldName === 'UltrasoundGestationAge') {
+        const requiredError: any | null = Validation.required(value);
+        if (requiredError !== null) {
+            return requiredError;
+        }
+
+        const wholeNumberError: string | null = Validation.isWholeNumber(value);
+        if (wholeNumberError !== null) {
+            return wholeNumberError;
+        }
+
+        const minMaxError: string | null = Validation.checkMinMax(value, 0, 36);
+        if (minMaxError !== null) {
+            return minMaxError;
+        }
+
+    }
+    else if (fieldName === 'GestationAgeByPalpation') {
+        const requiredError: any | null = Validation.required(value);
+        if (requiredError !== null) {
+            return requiredError;
+        }
+
+        const wholeNumberError: string | null = Validation.isWholeNumber(value);
+        if (wholeNumberError !== null) {
+            return wholeNumberError;
+        }
+
+        const minMaxError: string | null = Validation.checkMinMax(value, 0, 36);
+        if (minMaxError !== null) {
+            return minMaxError;
+        }
+
+    }
+    else {
+        // For other fields, simply return null
+        return null;
+    }
+
+    // Add a return statement here to satisfy TypeScript
+    return null;
+}
+
+
+
   
