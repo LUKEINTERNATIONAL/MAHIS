@@ -42,7 +42,6 @@
           rows: 3,
           format: 'DD-MM-YYYY',
           pick: datePickerEventListener
-          
         })
     pickerInstance = picker
   }
