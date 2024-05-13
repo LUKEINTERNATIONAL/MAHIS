@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg';
 import _ from "lodash";
+
+
 const initialReasonForVisit = [
   {
     classDash: "dashed_bottom_border _padding",

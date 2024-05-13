@@ -3,7 +3,7 @@
     <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
-              <basic-form :contentData="iron"></basic-form>
+              <basic-form :contentData="iron" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
               <basic-form :contentData="folicAcid"></basic-form>
               <!-- <basic-form :contentData="folicAcidReason"></basic-form> -->
               <basic-form :contentData="vitaminA"></basic-form>
@@ -37,7 +37,8 @@ import BasicForm from '../../../../components/BasicForm.vue';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import { icons } from '../../../../utils/svg'; 
 import { useMedicationDispensedStore } from '../../store/medicationDispensed';
-import { getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from '@/services/data_helpers';
+import { getFieldValue, getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from '@/services/data_helpers';
+import { validateField } from '@/services/ANC/treatement_validation_service';
 
 
 
@@ -74,6 +75,7 @@ export default defineComponent ({
        // ...mapState(useMedicationDispensedStore, ["folicAcidReason"]),
         ...mapState(useMedicationDispensedStore, ["vitaminA"]),
        // ...mapState(useMedicationDispensedStore, ["calcium"]),
+       ironPrescription(){return getFieldValue(this.iron,'iron Amount','value')},
 
     },
     mounted(){
@@ -92,6 +94,8 @@ export default defineComponent ({
       this.handleNoIronOther()
       this.handleIronDailyWeekly()
       this.handleVitaminDailyWeekly()
+      this.validaterowData({})
+
       
     },
     watch:{
@@ -138,6 +142,18 @@ export default defineComponent ({
       }
     },
     methods :{
+      handleInputData(data: any){
+            this. validationRules(data)
+      },
+      // Validations
+      validaterowData(event: any) {
+           this.validationRules(event)
+      },
+
+      validationRules(event: any) {
+         return validateField(this.iron,event.name, (this as any)[event.name]);  
+         // return fields.every((fieldName:string)=>validateField(data,fieldName,(this as any)[fieldName]))     
+     },
     handleIron(){
       if(getRadioSelectedValue(this.iron,'Iron prescription')=='yes'){
         modifyFieldValue(this.iron,'iron Amount','displayNone',false)

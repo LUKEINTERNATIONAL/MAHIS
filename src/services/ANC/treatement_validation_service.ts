@@ -8,7 +8,8 @@ import Validation from "@/validations/StandardValidations";
 
 export function validateField(data: any, fieldName: string, value: any) {
   const validationRules: any = {
-    ironPrescription: () => Validation.isNumber(value),
+    ironPrescription: () => Validation.isWholeNumber(value),
+    folicAcidPrescription: () => Validation.required(value),
   };
   const isValid = validationRules[fieldName]?.() == null;
 

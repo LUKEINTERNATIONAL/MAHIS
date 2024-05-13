@@ -1,12 +1,12 @@
 <template>
 <div class="container">
-    <!-- <ion-card class="section">
+    <ion-card class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
-            <ion-card-content> -->
-                <!-- <basic-form :contentData="preEclampsia"></basic-form> -->
-                <!-- <basic-form :contentData="preEclampsiaCounselling"></basic-form>
+            <ion-card-content> 
+                <basic-form :contentData="preEclampsia"></basic-form> 
+                <basic-form :contentData="preEclampsiaCounselling"></basic-form>
             </ion-card-content>
-    </ion-card> -->
+    </ion-card>
 
     <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
@@ -118,8 +118,8 @@ export default defineComponent({
       };
     },
     computed:{
-         //...mapState(useDiagnosisCounsellingStore,{}"preEclampsia"]),
-         //...mapState(useDiagnosisCounsellingStore,["preEclampsiaCounselling"]),
+         ...mapState(useDiagnosisCounsellingStore,["preEclampsia"]),
+         ...mapState(useDiagnosisCounsellingStore,["preEclampsiaCounselling"]),
          ...mapState(useDiagnosisCounsellingStore,["aspirin"]),
         // ...mapState(useDiagnosisCounsellingStore,["aspirinReason"]),
          ...mapState(useDiagnosisCounsellingStore,["gdm"]),

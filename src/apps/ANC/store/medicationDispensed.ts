@@ -159,7 +159,7 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
         classDash: "",
         radioBtnContent: {
           header: {
-            title: "Daily dose of folic acid prescribed?",
+            title: "Daily dose of folic acid prescribed?*",
             selectedValue: "",
             class: "bold",
             name: "Folic acid",

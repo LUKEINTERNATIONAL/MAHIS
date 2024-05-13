@@ -241,14 +241,29 @@ export default defineComponent({
       });
     },
     validationRules(data: any, fields:any) {
-          return fields.every((fieldName:string)=>validateField(data,fieldName,(this as any)[fieldName]))
+
+        // const reasons= ['malaria','typhod'];
+
+     let isChecked=false;
+     for(let i=0; i<fields.length;i++){
+      // check if checkbox is checked
+
+      const value =getCheckboxSelectedValue(this.ReasonForVisit,fields[i]);
+      if(value){
+        isChecked=true;
+        break;
+      }}
+
+      return isChecked
+
+         // return fields.every((fieldName:string)=>validateField(data,fieldName,(this as any)[fieldName]))
      },
     async saveData() {
       await this.saveQuickCheck();
       resetPatientData();
     },
      async saveQuickCheck() {
-      const fields: any =["dangerSigns"] //"reasonVisitFacility","pregnancyConfirmed","pregnancyPlanned",
+      const fields: any =["dangerSigns",'Pre-term labour',"None","Unconscious","Fever","Imminent delivery","Severe headache","Vomiting", "Severe abdominal pain","Draining liquor","Respiratory problems","Convulsion history","Convulsion history","Epigastric pain",] //"reasonVisitFacility","pregnancyConfirmed","pregnancyPlanned",
 
        if(await this.validationRules(this.ReasonForVisit,fields)){ // && this.ConfirmPregnancy
          if (this.ConfirmPregnancy.length > 0 && this.ReasonForVisit.length > 0) {

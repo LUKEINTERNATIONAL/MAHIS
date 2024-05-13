@@ -36,8 +36,9 @@ import { ImmunizationService, MedicationDispensedService } from "@/services/anc_
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
 import { resetPatientData } from "@/services/reset_data";
-import { getFieldValue } from "@/services/data_helpers";
+import { getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { validateField } from "@/services/ANC/treatement_validation_service";
+import StandardValidations from "@/validations/StandardValidations";
 
 export default defineComponent({
     name: "Treatment",
@@ -161,13 +162,14 @@ computed:{
                                   "hyper","hiv","hepatitisB","hepatitisC",
                                   "syphilis","syphilisTesting","tbScreening",
                                   "GDM","diabetes","anaemia","hypertensionReason"]),
-  ...mapState(useMedicationDispensedStore, ["iron"]),
+  ...mapState(useMedicationDispensedStore, ["iron","folicAcid"]),
   ...mapState(useDiagnosisCounsellingStore, ["preEclampsia","aspirin","gdm","gdmCounselling","hivRisk","aspirin","gdm","gdmCounselling","hivRisk","prEp","birth","modeOfTransport","intrapartum","birthPlace","postpartum","breastFeeding"]),                                            
   ...mapState(useImmunizationStore,['ttDoses','HepBCounselling','HepB1','HepB2','HepB3','hepBReason']),
   ...mapState( useIntimatePartnerStore,['ipv','additionalCare','safety_assessment','physical_violence','beaten_pregnant',
                                  'woman_threatened','constant_jealous','strangling','murder_threat','referrals']),
   ...mapState(useDewormingStore,['treatment','malaria']),
   ironPrescription(){return getFieldValue(this.iron,'iron Amount','value')},
+  folicAcidPrescription(){return getRadioSelectedValue(this.folicAcid,'iron Amount')},
 },
 
 methods: {
@@ -186,6 +188,7 @@ methods: {
     },
     validationRules(data: any, fields:any) {
           return fields.every((fieldName:string)=>validateField(data,fieldName,(this as any)[fieldName]))
+          
      },
   async saveDiagnosis(){
     console.log(await this.buildDiagnosis())
