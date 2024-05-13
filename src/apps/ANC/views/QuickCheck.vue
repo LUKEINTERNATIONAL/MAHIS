@@ -165,11 +165,11 @@ export default defineComponent({
     ...mapState(useConfirmPregnancyStore,["ConfirmPregnancy"]),
     ...mapState(useSpecificHealthConcernsStore,["HealthConcerns"]),
     ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
-    //reasonVisitFacility(){return getRadioSelectedValue(this.ReasonForVisit,'Reason for visit')},
+    reasonVisitFacility(){return getRadioSelectedValue(this.ReasonForVisit,'Reason for visit')},
     dangerSigns(){return getCheckboxSelectedValue(this.ReasonForVisit,'Central cyanosis')},//,'Pre-term labour',"None","Unconscious","Fever","Imminent delivery","Severe headache","Vomiting", "Severe abdominal pain","Draining liquor","Respiratory problems","Convulsion history","Convulsion history","Epigastric pain",
-    // pregnancyConfirmed(){return getRadioSelectedValue(this.ConfirmPregnancy,'Pregnancy confirmed')},
-    // pregnancyPlanned(){return getRadioSelectedValue(this.ConfirmPregnancy,'Pregnancy planned')},
-   // referWoman(){return getRadioSelectedValue(this.ReasonForVisit,'Action for danger signs')},
+     pregnancyConfirmed(){return getRadioSelectedValue(this.ConfirmPregnancy,'Pregnancy confirmed')},
+     pregnancyPlanned(){return getRadioSelectedValue(this.ConfirmPregnancy,'Pregnancy planned')},
+    referWoman(){return getRadioSelectedValue(this.ReasonForVisit,'Action for danger signs')},
 
   },
 
@@ -263,7 +263,7 @@ export default defineComponent({
       resetPatientData();
     },
      async saveQuickCheck() {
-      const fields: any =["dangerSigns",'Pre-term labour',"None","Unconscious","Fever","Imminent delivery","Severe headache","Vomiting", "Severe abdominal pain","Draining liquor","Respiratory problems","Convulsion history","Convulsion history","Epigastric pain",] //"reasonVisitFacility","pregnancyConfirmed","pregnancyPlanned",
+      const fields: any =["referWoman","pregnancyPlanned","pregnancyConfirmed","reasonVisitFacility","dangerSigns",'Pre-term labour',"None","Unconscious","Fever","Imminent delivery","Severe headache","Vomiting", "Severe abdominal pain","Draining liquor","Respiratory problems","Convulsion history","Convulsion history","Epigastric pain",] //"reasonVisitFacility","pregnancyConfirmed","pregnancyPlanned",
 
        if(await this.validationRules(this.ReasonForVisit,fields)){ // && this.ConfirmPregnancy
          if (this.ConfirmPregnancy.length > 0 && this.ReasonForVisit.length > 0) {
