@@ -213,31 +213,31 @@ export default defineComponent({
       GestationAgeUsed(){ return getRadioSelectedValue(this.palpation, 'Gestation age to be used')},
       TetanusDosesForImmunisation(){ return getRadioSelectedValue(this.tetanus, 'The woman received tetanus doses for immunization?')},
       NumberOfUnderImmunisedDoses(){ return getRadioSelectedValue(this.tetanus, 'Number of tetanus doses')},
-      tt1Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
-      tt2Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
-      tt3Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
-      tt4Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
-      tt5Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
-      tt6Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
-      tt7Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
-      tt8Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
-      tt9Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
-      tt10Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
-      tt11Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
-      tt12Date(){ return getFieldValue(this.tetanus, '12','value')},
-      tt13Date(){ return getFieldValue(this.tetanus, '13','value')},
-      tt14Date(){ return getFieldValue(this.tetanus, '14','value')},
-      tt15Date(){ return getFieldValue(this.tetanus, '15','value')},
-      ReasonTTVnotConducted(){ return getRadioSelectedValue(this.tetanus, 'Reason Tetanus toxoid (TT) was not conducted')},
-      DailyCaffeineIntake(){ return getCheckboxSelectedValue(this.dailyCaffeineIntake, 'Daily caffeine use')},
-      SubstanceAbuse(){ return getRadioSelectedValue(this.Tobacco, 'Recently quit tobacco products')},
-      SecondHandSmoke(){ return getRadioSelectedValue(this.Tobacco, 'Exposure to second hand smoke')},
-      ExistingChronicConditions(){ return getCheckboxSelectedValue(this.exisitingChronicHealthConditions, 'chronic conditions')},
-      Medications(){ return getCheckboxSelectedValue(this.Medication, 'Which medications is the woman currently prescribed?')},
-      Stillbirths(){ return getFieldValue(this.prevPregnancies, 'Stillbirths','value')},
-      LiveBirths(){ return getFieldValue(this.prevPregnancies, 'LiveBirths','value')},
-      Parity(){ return getFieldValue(this.prevPregnancies, 'Parity','value')},
-      Abortions(){ return getFieldValue(this.prevPregnancies, 'Abortions','value')},
+      // tt1Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
+      // tt2Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
+      // tt3Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
+      // tt4Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
+      // tt5Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
+      // tt6Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
+      // tt7Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
+      // tt8Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
+      // tt9Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
+      // tt10Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
+      // tt11Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
+      // tt12Date(){ return getFieldValue(this.tetanus, '12','value')},
+      // tt13Date(){ return getFieldValue(this.tetanus, '13','value')},
+      // tt14Date(){ return getFieldValue(this.tetanus, '14','value')},
+      // tt15Date(){ return getFieldValue(this.tetanus, '15','value')},
+      // ReasonTTVnotConducted(){ return getRadioSelectedValue(this.tetanus, 'Reason Tetanus toxoid (TT) was not conducted')},
+      // DailyCaffeineIntake(){ return getCheckboxSelectedValue(this.dailyCaffeineIntake, 'Daily caffeine use')},
+      // SubstanceAbuse(){ return getRadioSelectedValue(this.Tobacco, 'Recently quit tobacco products')},
+      // SecondHandSmoke(){ return getRadioSelectedValue(this.Tobacco, 'Exposure to second hand smoke')},
+      // ExistingChronicConditions(){ return getCheckboxSelectedValue(this.exisitingChronicHealthConditions, 'chronic conditions')},
+      // Medications(){ return getCheckboxSelectedValue(this.Medication, 'Which medications is the woman currently prescribed?')},
+      // Stillbirths(){ return getFieldValue(this.prevPregnancies, 'Stillbirths','value')},
+      // LiveBirths(){ return getFieldValue(this.prevPregnancies, 'LiveBirths','value')},
+      // Parity(){ return getFieldValue(this.prevPregnancies, 'Parity','value')},
+      // Abortions(){ return getFieldValue(this.prevPregnancies, 'Abortions','value')},
     },
     mounted() {
         this.markWizard()
@@ -255,7 +255,7 @@ export default defineComponent({
                 return item?.data;
             });
         },
-       
+
          async saveData() {
            await this.saveProfile()
           await   resetPatientData();
@@ -264,9 +264,11 @@ export default defineComponent({
         return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
       },
       async saveProfile(){
-        const fields: any=["LNMPKnown","lmnpDate",  "tt1Date","tt2Date","tt3Date","tt4Date","tt5Date","tt6Date","tt7Date","tt8Date","tt9Date","tt10Date","tt11Date","tt12Date","tt13Date","tt14Date",
-          "tt15Date","ReasonTTVnotConducted","DailyCaffeineIntake","SubstanceAbuse","SecondHandSmoke","ExistingChronicConditions","Medications","Stillbirths",
-          "LiveBirths","Parity","Abortions"]
+
+        //     "tt1Date","tt2Date","tt3Date","tt4Date","tt5Date","tt6Date","tt7Date","tt8Date","tt9Date","tt10Date","tt11Date","tt12Date","tt13Date","tt14Date",
+        //     "tt15Date","ReasonTTVnotConducted","DailyCaffeineIntake","SubstanceAbuse","SecondHandSmoke","ExistingChronicConditions","Medications","Stillbirths",
+        //     "LiveBirths","Parity","Abortions"
+        const fields: any=["LNMPKnown","lmnpDate",]
         // if (Validation.required(this.lmnp))
         if(await this.validations(this.lmnp && this.ultrasound && this.palpation && this.exisitingChronicHealthConditions
             && this.Medication && this.dailyCaffeineIntake && this.Tobacco && this.tetanus && this.prevPregnancies, fields)){
@@ -313,6 +315,13 @@ export default defineComponent({
           this.$router.push("headssAssessment");
 
         } else {
+          modifyRadioValue(this.lmnp,'LNMP Known?','alertsError', true)
+          modifyRadioValue(this.lmnp,'LNMP Known?','alertsErrorMassage', 'Value is required')
+          modifyFieldValue(this.lmnp, 'lmnpDate', 'alertsError', true)
+          modifyFieldValue(this.lmnp,'lmnpDate','alertsErrorMassage', 'Value is required')
+          // modifyRadioValue(this.ultrasound,'UltrasoundDone','alertsError', true)
+          // modifyRadioValue(this.ultrasound,'UltrasoundDone','alertsErrorMassage', 'Value is required')
+
 
           await toastWarning("Please complete all required fields")
         }
@@ -341,7 +350,6 @@ export default defineComponent({
           ...(await formatRadioButtonData(this.Tobacco)),
         ]
       },
-
         openModal() {
             createModal(SaveProgressModal);
         },
