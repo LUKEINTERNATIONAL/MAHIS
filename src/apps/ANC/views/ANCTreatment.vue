@@ -168,7 +168,7 @@ computed:{
   ...mapState( useIntimatePartnerStore,['ipv','additionalCare','safety_assessment','physical_violence','beaten_pregnant',
                                  'woman_threatened','constant_jealous','strangling','murder_threat','referrals']),
   ...mapState(useDewormingStore,['treatment','malaria']),
-  ironPrescription(){return getFieldValue(this.iron,'iron Amount','value')},
+ // ironPrescription(){return getFieldValue(this.iron,'iron Amount','value')},
   folicAcidPrescription(){return getRadioSelectedValue(this.folicAcid,'iron Amount')},
 },
 
@@ -194,9 +194,9 @@ methods: {
     console.log(await this.buildDiagnosis())
   },
   async saveMedicationDispensed(){
-    const fields: any = ['ironPrescription']
-    if(await this.validationRules(this.iron,fields)){
-         if (this.iron.length > 0) {
+    const fields: any = ['folicAcidPrescription'] //'ironPrescription',
+    if(await this.validationRules(this.folicAcid,fields)){
+         if (this.folicAcid.length > 0) {
       const userID: any = Service.getUserID();
       const medicationDispensed = new MedicationDispensedService(this.demographics.patient_id, userID);
       const encounter = await medicationDispensed.createEncounter();

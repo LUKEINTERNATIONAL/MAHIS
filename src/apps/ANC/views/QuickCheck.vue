@@ -166,10 +166,10 @@ export default defineComponent({
     ...mapState(useSpecificHealthConcernsStore,["HealthConcerns"]),
     ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
     reasonVisitFacility(){return getRadioSelectedValue(this.ReasonForVisit,'Reason for visit')},
-    dangerSigns(){return getCheckboxSelectedValue(this.ReasonForVisit,'Central cyanosis')},//,'Pre-term labour',"None","Unconscious","Fever","Imminent delivery","Severe headache","Vomiting", "Severe abdominal pain","Draining liquor","Respiratory problems","Convulsion history","Convulsion history","Epigastric pain",
+    //dangerSigns(){return getCheckboxSelectedValue(this.ReasonForVisit,'Central cyanosis')},//,'Pre-term labour',"None","Unconscious","Fever","Imminent delivery","Severe headache","Vomiting", "Severe abdominal pain","Draining liquor","Respiratory problems","Convulsion history","Convulsion history","Epigastric pain",
      pregnancyConfirmed(){return getRadioSelectedValue(this.ConfirmPregnancy,'Pregnancy confirmed')},
      pregnancyPlanned(){return getRadioSelectedValue(this.ConfirmPregnancy,'Pregnancy planned')},
-    referWoman(){return getRadioSelectedValue(this.ReasonForVisit,'Action for danger signs')},
+   // referWoman(){return getRadioSelectedValue(this.ReasonForVisit,'Action for danger signs')},
 
   },
 
@@ -241,31 +241,31 @@ export default defineComponent({
       });
     },
     validationRules(data: any, fields:any) {
-
-        // const reasons= ['malaria','typhod'];
-
      let isChecked=false;
      for(let i=0; i<fields.length;i++){
-      // check if checkbox is checked
-
       const value =getCheckboxSelectedValue(this.ReasonForVisit,fields[i]);
       if(value){
         isChecked=true;
         break;
-      }}
+      }
+    }
+      //return isChecked
+     // return isChecked && fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
 
-      return isChecked
-
-         // return fields.every((fieldName:string)=>validateField(data,fieldName,(this as any)[fieldName]))
+          return fields.every((fieldName:string)=>validateField(data,fieldName,(this as any)[fieldName]))
      },
     async saveData() {
       await this.saveQuickCheck();
       resetPatientData();
     },
      async saveQuickCheck() {
-      const fields: any =["referWoman","pregnancyPlanned","pregnancyConfirmed","reasonVisitFacility","dangerSigns",'Pre-term labour',"None","Unconscious","Fever","Imminent delivery","Severe headache","Vomiting", "Severe abdominal pain","Draining liquor","Respiratory problems","Convulsion history","Convulsion history","Epigastric pain",] //"reasonVisitFacility","pregnancyConfirmed","pregnancyPlanned",
+      const fields: any =["pregnancyPlanned","pregnancyConfirmed","reasonVisitFacility"]
+          // "dangerSigns",'Pre-term labour',"None","Unconscious","Fever","Imminent delivery",
+          // "Severe headache","Vomiting", "Severe abdominal pain","Draining liquor",
+          // "Respiratory problems","Convulsion history","Convulsion history",
+          // "Epigastric pain",] //"referWoman","reasonVisitFacility","pregnancyConfirmed","pregnancyPlanned",
 
-       if(await this.validationRules(this.ReasonForVisit,fields)){ // && this.ConfirmPregnancy
+       if(await this.validationRules(this.ReasonForVisit && this.ConfirmPregnancy,fields)){ // && this.ConfirmPregnancy
          if (this.ConfirmPregnancy.length > 0 && this.ReasonForVisit.length > 0) {
         const userID: any = Service.getUserID();
         const quickCheck = new ConfirmPregnancyService(this.demographics.patient_id, userID);
