@@ -144,7 +144,7 @@
 </template>
 <script lang="ts">
 import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonIcon, IonToolbar, IonSearchbar, IonPopover } from "@ionic/vue";
-import { notificationsOutline, personCircleOutline } from "ionicons/icons";
+import { notificationsOutline, personCircleOutline, createOutline } from "ionicons/icons";
 import { defineComponent } from "vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import { useDemographicsStore } from "@/stores/DemographicStore";
@@ -174,7 +174,7 @@ export default defineComponent({
         ...mapState(useDemographicsStore, ["demographics"]),
     },
     setup() {
-        return { notificationsOutline, personCircleOutline };
+        return { notificationsOutline, personCircleOutline, createOutline };
     },
     methods: {
         nav(url: any) {

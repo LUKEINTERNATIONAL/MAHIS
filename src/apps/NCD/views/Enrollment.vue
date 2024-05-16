@@ -149,7 +149,7 @@ import {
 } from "@/services/data_helpers";
 import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServerData";
 import { IdentifierService } from "@/services/identifier_service";
-import { resetPatientData } from "@/services/reset_data";
+import { resetNCDPatientData } from "@/apps/NCD/config/reset_ncd_data";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import { UserService } from "@/services/user_service";
 
@@ -246,7 +246,7 @@ export default defineComponent({
                 const demographicsStore = useDemographicsStore();
                 demographicsStore.setPatient(await PatientService.findByID(this.demographics.patient_id));
                 await this.saveEnrollment();
-                resetPatientData();
+                resetNCDPatientData();
                 await UserService.setProgramUserActions();
                 if (this.activities.length == 0) {
                     this.$router.push("patientProfile");

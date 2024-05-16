@@ -384,7 +384,6 @@ export default defineComponent({
                 this.$emit("update:inputValue", col);
             }
             if (inputType == "updateCheckbox") {
-                console.log("🚀 ~ handleInput ~ updateCheckbox:", this.initialData);
                 modifyCheckboxValue(data, col.name, "checked", event.detail.checked, this.initialData);
                 this.$emit("update:inputValue", { col, event });
             }
