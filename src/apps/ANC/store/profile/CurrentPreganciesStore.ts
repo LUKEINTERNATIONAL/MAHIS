@@ -111,8 +111,6 @@ const initialLMNP = [
       ],
     },
   },
-] as any;
-const initialUltraSound = [
   {
     selectdData: [],
     isFinishBtn: false,
@@ -208,9 +206,7 @@ const initialUltraSound = [
               maxDate: "2060-01-01",
               alertsError: false,
               alertsErrorMassage: "",
-              isDatePopover: true,
               icon: icons.calenderPrimary,
-              placeholder: "Pick date",
               disabled: "disabled",
               inputWidth: "100%",
               valueType: "text",
@@ -220,16 +216,14 @@ const initialUltraSound = [
               // displayNone: true,
               inputHeader: "EDD",
               value: "",
-              name: "Estimated date of delivery",
+              name: "Estimated date of delivery from ultrasound",
               required: true,
               eventType: "input",
               alertsError: false,
               alertsErrorMassage: "",
               minDate: "2023-01-01",
               maxDate: "2060-01-01",
-              isDatePopover: true,
               icon: icons.calenderPrimary,
-              placeholder: "Pick date",
               disabled: "disabled",
               inputWidth: "100%",
               valueType: "text",
@@ -343,8 +337,6 @@ const initialUltraSound = [
       ],
     },
   },
-] as any;
-const initialTetenus = [
   {
     selectdData: [],
     isFinishBtn: false,
@@ -385,7 +377,7 @@ const initialTetenus = [
   {
     selectdData: [],
     isFinishBtn: false,
-   // classDash: "dashed_bottom_border",
+    // classDash: "dashed_bottom_border",
     radioBtnContent: {
       header: {
         class: "bold",
@@ -808,6 +800,12 @@ const initialTetenus = [
       ],
     },
   },
+] as any;
+const initialUltraSound = [
+
+] as any;
+const initialTetenus = [
+
 ] as any;
 export const useCurrentPregnanciesStore = defineStore("currentPregnanciesStore", {
   state: () => ({

@@ -66,6 +66,8 @@ import { resetPatientData } from "@/services/reset_data";
 import { ObservationService } from "@/services/observation_service";
 import {validateField} from "@/services/ANC/profile_validation_service"
 import Validation from "@/validations/StandardValidations";
+import HisDate from "@/utils/Date";
+import calculateAge from "@/utils/Date"
 
 // function someChecked(options, errorMassage) {
 //   if (!options.filter(v => v.checkboxBtnContent).some(v => v.checkboxBtnContent.data.some(d => d.checked))) {
@@ -263,6 +265,11 @@ export default defineComponent({
       async validations(data: any, fields: any) {
         return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
       },
+
+      formatBirthdate() {
+        return HisDate.getBirthdateAge(this.demographics?.birthdate);
+      },
+
       async saveProfile(){
 
         //     "tt1Date","tt2Date","tt3Date","tt4Date","tt5Date","tt6Date","tt7Date","tt8Date","tt9Date","tt10Date","tt11Date","tt12Date","tt13Date","tt14Date",
@@ -311,8 +318,13 @@ export default defineComponent({
             const obs_service = ObservationService.saveObs(82,obs)
 
           }
-
-          this.$router.push("headssAssessment");
+                   const age = HisDate.getAgeInYears(this.demographics?.birthdate);
+                   if (age < 19)
+                   {
+                      this.$router.push("headssAssessment");
+                    } else {
+                      this.$router.push('ANCHome');
+                    }
 
         } else {
           modifyRadioValue(this.lmnp,'LNMP Known?','alertsError', true)
@@ -327,6 +339,7 @@ export default defineComponent({
         }
 
       },
+
       async buildProfile(){
         return[
           ...(await formatInputFiledData(this.prevPregnancies)),
