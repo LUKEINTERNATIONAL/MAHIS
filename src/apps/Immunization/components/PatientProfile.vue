@@ -108,6 +108,7 @@
 
             <customSlider/>
             <div class="vaccinesList" @click="openAdministerVaccineModal()">
+
                 <ion-row>
                     <ion-col size="2">
                         <ion-button fill="clear" class="arrowBtns">
@@ -134,6 +135,8 @@
                         </ion-button>
                     </ion-col>
                 </ion-row>
+
+                
                 <ion-row>
                     <ion-col size="2"> </ion-col>
                     <ion-col size="3.9">

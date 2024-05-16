@@ -1,34 +1,50 @@
 <template>
-    <ion-page>
-      <ion-content>
-        <swiper :modules="modules" :autoplay="true" :keyboard="true" :pagination="true" :scrollbar="true" :zoom="true">
-          <swiper-slide>Slide 1</swiper-slide>
-          <swiper-slide>Slide 2</swiper-slide>
-          <swiper-slide>Slide 3</swiper-slide>
-        </swiper>
-      </ion-content>
-    </ion-page>
+    <carousel :items-to-show="1.5">
+      <slide v-for="slide in 1" :key="slide">
+        {{ slide }}
+        <customSlider/>
+      </slide>
+
+      
+  
+      <template #addons>
+        <navigation />
+        <pagination />
+      </template>
+    </carousel>
   </template>
+  
   <script>
-    import { defineComponent } from 'vue';
-    import { Autoplay, Keyboard, Pagination, Scrollbar, Zoom } from 'swiper';
-    import { Swiper, SwiperSlide } from 'swiper/vue';
-    import { IonContent, IonPage, IonicSlides } from '@ionic/vue';
+  // If you are using PurgeCSS, make sure to whitelist the carousel CSS classes
+  import 'vue3-carousel/dist/carousel.css'
+  import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
+  import customSlider from "@/apps/Immunization/components/customVaccines.vue"
   
-    import 'swiper/css';
-    import 'swiper/css/autoplay';
-    import 'swiper/css/keyboard';
-    import 'swiper/css/pagination';
-    import 'swiper/css/scrollbar';
-    import 'swiper/css/zoom';
-    import '@ionic/vue/css/ionic-swiper.css';
-  
-    export default defineComponent({
-      components: { Swiper, SwiperSlide, IonContent, IonPage },
-      setup() {
-        return {
-          modules: [Autoplay, Keyboard, Pagination, Scrollbar, Zoom, IonicSlides],
-        };
-      },
-    });
+  export default {
+    name: 'App',
+    components: {
+      Carousel,
+      Slide,
+      Pagination,
+      Navigation,
+      customSlider
+    },
+  }
   </script>
+<style>
+    .carousel__icon {
+    width: var(--vc-icn-width);
+    height: var(--vc-icn-width);
+    fill: currentColor;
+    background: #BBDDBC;
+    color: #016302;
+    }
+
+    .carousel__pagination-button--active {
+    background-color: #016302;
+    }
+    .carousel__pagination-button::after .carousel__pagination-button--active {
+        background-color: hotpink;
+    }
+</style>
+  

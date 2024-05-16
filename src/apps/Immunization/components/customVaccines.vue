@@ -1,0 +1,355 @@
+<template>
+<div class="vaccinesList">
+
+<ion-row>
+    <ion-col size="3.9">
+        <ion-button  v-for="vaciine in vaccines" :key="vaciine" fill="solid" color="success">
+            <ion-icon slot="start" :icon="iconsContent.greenInjection"></ion-icon>
+            {{ vaciine }}
+            <ion-icon slot="end" :icon="iconsContent.greenTickCheckbox"></ion-icon>
+        </ion-button>
+    </ion-col>
+</ion-row>
+</div>
+</template>
+<script lang="ts">
+import {
+    IonContent,
+    IonHeader,
+    IonMenuButton,
+    IonPage,
+    IonTitle,
+    IonToolbar,
+    IonButton,
+    IonCard,
+    IonCardContent,
+    IonCardHeader,
+    IonCardSubtitle,
+    IonCardTitle,
+    IonAccordion,
+    IonAccordionGroup,
+    IonItem,
+    IonLabel,
+    IonModal,
+    modalController,
+    AccordionGroupCustomEvent,
+} from "@ionic/vue"
+import { icons } from "@/utils/svg"
+import { defineComponent } from "vue"
+export default defineComponent({
+    name: "Home",
+    components: {
+        IonContent,
+        IonHeader,
+        IonMenuButton,
+        IonPage,
+        IonTitle,
+        IonToolbar,
+        IonButton,
+        IonCard,
+        IonCardContent,
+        IonCardHeader,
+        IonCardSubtitle,
+        IonCardTitle,
+        IonAccordion,
+        IonAccordionGroup,
+        IonItem,
+        IonLabel,
+        IonModal,
+    },
+    data() {
+        return {
+            vaccines: [
+                'OPV 2',
+                'OPV 2',
+                'OPV 2',
+                'OPV 2',
+            ],
+            iconsContent: icons,
+        };
+    },
+    computed: {},
+    created() {
+        
+    },
+    mounted() {},
+    watch: {},
+    setup() {
+        return {  };
+    },
+
+    methods: {},
+});
+</script>
+<style scoped>
+.demographics {
+    box-sizing: border-box;
+    width: 95vw;
+    height: 92px;
+    left: calc(50% - 461px / 2 + 27.5px);
+    margin-top: 10px;
+    background: #ffffff;
+    border: 1px solid #d9d9d9;
+    border-radius: 7px;
+}
+.demographicsFirstRow {
+    /* _Input dropdown menu item */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 5px;
+    gap: 15px;
+
+    height: 24px;
+    justify-content: space-between;
+}
+.name {
+    /* Text */
+
+    height: 24px;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+
+    color: #00190e;
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+.demographicsText {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 5px;
+    color: #636363;
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+.demographicsOtherRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 1px 5px;
+    gap: 10px;
+
+    height: 18px;
+    left: calc(50% - 243px / 2 + 26.5px);
+    top: calc(50% - 23px / 2 - 455.5px);
+}
+.smallFont {
+    font-size: 12px;
+}
+.mediumFontColor {
+    color: #00190e;
+}
+
+.weightHeightGraphBtns {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+.btnText {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 12px;
+}
+.btnTextWeight {
+    color: #000;
+    --border-width: 1px;
+    margin-right: 15px;
+}
+.dot {
+    font-size: 25px;
+}
+.initialsBox {
+    width: 80px;
+    height: 80px;
+    left: 31px;
+    top: 122px;
+    align-items: center;
+    background: #5983ba;
+    border-radius: 10px;
+    align-items: center;
+    display: flex;
+}
+.initialsText {
+    width: 100%;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 40px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    color: #ffffff;
+}
+.outcomeStatus {
+    align-items: center;
+    padding: 2px 7px;
+    width: 50px;
+    height: 18px;
+    background: #ddeedd;
+    border-radius: 22px;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 11px;
+    align-items: center;
+    text-align: center;
+}
+.graphSection {
+    box-sizing: border-box;
+    background: #f7f7f7;
+    border: 1px solid #d9d9d9;
+    border-radius: 3px;
+    margin-top: 7px;
+}
+.graphBtn {
+    display: flex;
+    justify-content: center;
+}
+.dueAlert {
+    display: flex;
+    justify-content: space-between;
+    border: solid 1px #ccc;
+    border-style: dashed;
+    margin-top: 10px;
+    padding: 5px;
+}
+.dueAlertText {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    color: #b42318;
+    padding: 10px;
+}
+/* ion-button {
+    --padding-top: 0;
+    --padding-bottom: 0;
+} */
+.vaccinesTitle {
+    display: flex;
+    justify-content: space-around;
+    padding: 15px;
+}
+.vaccinesTitleText {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 17px;
+    color: #00190e;
+}
+.vaccinesTitleDate {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    color: #636363;
+}
+.milestone {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.arrowBtns {
+    position: absolute;
+    top: 30px;
+}
+.vaccinesList {
+    margin-top: 8px;
+}
+.seeFullList {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #316cba;
+    float: right;
+}
+.warningText {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 6px;
+    gap: 1px;
+    background: #fedf89;
+    border-radius: 4px;
+    font-size: 13px;
+    margin-right: 10px;
+    color: #636363;
+}
+.successText {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 6px;
+    gap: 1px;
+    background: #ddeedd;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #636363;
+}
+.centerBtns {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+.otherVaccine {
+    padding: 10px;
+    margin-bottom: 10px;
+}
+.dotsWizard {
+    display: flex;
+    justify-content: space-between;
+    width: 150px;
+    margin: 0 auto;
+    align-items: center;
+}
+.dotBig {
+    font-size: 0.7rem !important;
+}
+.dotStatus {
+    font-size: 0.4rem !important;
+}
+.lastVaccineTitle {
+    display: flex;
+    justify-content: space-between;
+}
+.lastVaccine {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
+}
+.lastVaccineText {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 150%;
+    color: #00190e;
+}
+.lastVaccineList {
+    display: flex;
+    justify-content: space-between;
+    width: 210px;
+    margin-bottom: 20px;
+}
+.lastVaccineDate {
+    display: flex;
+    justify-content: space-between;
+    width: 210px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+</style>

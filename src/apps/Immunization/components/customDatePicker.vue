@@ -25,6 +25,7 @@
   import { ref, computed, onMounted, watch } from 'vue'
   import {IonRow, IonCol, IonButton} from "@ionic/vue";
   import Picker from 'pickerjs'
+  import "pickerjs/dist/picker.css";
   const uniqId = ref("0")
   let pickerInstance = null as any
 
@@ -64,7 +65,7 @@
 
   </script>
   
-  <style>
+<style>
 .picker-cell::before {
   background-image: none !important;
   bottom: 50%;
@@ -82,6 +83,5 @@
 .picker-dialog {
   border: 0px solid !important;
 }
-
-  </style>
+</style>
   

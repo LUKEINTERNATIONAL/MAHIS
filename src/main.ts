@@ -13,7 +13,6 @@ import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import "vue3-easy-data-table/dist/style.css";
 import "vue-select/dist/vue-select.css";
-import "pickerjs/dist/picker.css";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/vue/css/core.css";
