@@ -4,7 +4,7 @@
       <ion-card-content>
         <basic-form
             :contentData="newbornComplications"
-            :initialData1="initialData1"
+            :initialData1="initialData"
         ></basic-form>
       </ion-card-content>
     </ion-card>
@@ -69,24 +69,17 @@ export default defineComponent({
       hasValidationErrors: [] as any,
       inputField: '' as any,
       initialData:[] as any,
-      initialData1:[] as any,
-      initialData2:[] as any,
+
 
     };
   },
   computed:{
-    ...mapState(useSecondStageOfLabourStore,["secondStageDetails"]),
     ...mapState(useSecondStageOfLabourStore,["newbornComplications"]),
-    ...mapState(useSecondStageOfLabourStore,["secondStageDetails"]),
-    ...mapState(useSecondStageOfLabourStore,["obstetricComplications"]),
+
   },
   mounted(){
-    const secondStageDetails=useSecondStageOfLabourStore()
     const newbornComplications=useSecondStageOfLabourStore()
-    const obstetricComplications=useSecondStageOfLabourStore()
-    this.initialData=secondStageDetails.getInitial()
-    this.initialData1=newbornComplications.getInitial1()
-    this.initialData2=obstetricComplications.getInitial2()
+    this.initialData=newbornComplications.getInitialNewbornComplications()
   },
   watch:{
   },

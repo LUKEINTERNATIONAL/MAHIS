@@ -13,6 +13,18 @@
   </ion-card>
 </router-link>
         </ion-col>
+         <ion-col>
+           <router-link to="/profile">
+             <ion-card color="secondary">
+               <ion-card-header>
+                 <ion-card-title>Profile</ion-card-title>
+
+               </ion-card-header>
+
+               <ion-card-content> <img src="../../public/icons/checkup.png" alt="Profile Icon"/> </ion-card-content>
+             </ion-card>
+           </router-link>
+         </ion-col>
 
         <ion-col>
             <router-link to="/symptomsFollowUp">
@@ -23,18 +35,6 @@
     </ion-card-header>
 
     <ion-card-content>  <img src="../../public/icons/symptom.png" alt="Profile Icon"/></ion-card-content>
-  </ion-card>
-</router-link>
-        </ion-col>
-        <ion-col>
-            <router-link to="/labTests">
-            <ion-card color="secondary">
-    <ion-card-header>
-      <ion-card-title>Lab tests and imaging</ion-card-title>
-    
-    </ion-card-header>
-
-    <ion-card-content>  <img src="../../public/icons/candidate.png" alt="Profile Icon"/> </ion-card-content>
   </ion-card>
 </router-link>
         </ion-col>
@@ -104,16 +104,18 @@
   </ion-card>
    </router-link>
         </ion-col>
-        <ion-col>
-            <ion-card color="secondary">
-    <ion-card-header>
-      <ion-card-title>User Management</ion-card-title>
-    
-    </ion-card-header>
+         <ion-col>
+           <router-link to="/labTests">
+             <ion-card color="secondary">
+               <ion-card-header>
+                 <ion-card-title>Lab tests and imaging</ion-card-title>
 
-    <ion-card-content>  <img src="../../public/icons/user-settings.png" alt="Profile Icon"/> </ion-card-content>
-  </ion-card>
-        </ion-col>
+               </ion-card-header>
+
+               <ion-card-content>  <img src="../../public/icons/candidate.png" alt="Profile Icon"/> </ion-card-content>
+             </ion-card>
+           </router-link>
+         </ion-col>
        </ion-row>
     </ion-grid>
 </template>
