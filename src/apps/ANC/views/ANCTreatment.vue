@@ -32,10 +32,13 @@ import { useImmunizationStore } from '../store/immunizationStore';
 import { useIntimatePartnerStore } from '../store/intimatePartnerStore';
 import { useDewormingStore } from '../store/dewormingStore';
 import { Service } from "@/services/service";
-import { ImmunizationService } from "@/services/anc_treatment_service";
+import { ImmunizationService, MedicationDispensedService } from "@/services/anc_treatment_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
 import { resetPatientData } from "@/services/reset_data";
+import { getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
+import { validateField } from "@/services/ANC/treatement_validation_service";
+import StandardValidations from "@/validations/StandardValidations";
 
 export default defineComponent({
     name: "Treatment",
@@ -159,16 +162,14 @@ computed:{
                                   "hyper","hiv","hepatitisB","hepatitisC",
                                   "syphilis","syphilisTesting","tbScreening",
                                   "GDM","diabetes","anaemia","hypertensionReason"]),
-  ...mapState(useMedicationDispensedStore, ["iron",'calcium']),
-  ...mapState(useDiagnosisCounsellingStore, ["preEclampsia","preEclampsiaCounselling",
-                                             "aspirin","gdm","gdmCounselling","hivRisk",
-                                            "prEp","seekingCare","dangerSigns","ancContact",
-                                            "birth","modeOfTransport","intrapartum","birthPlace","postpartum","breastFeeding"]),
-                                            
+  ...mapState(useMedicationDispensedStore, ["iron","folicAcid"]),
+  ...mapState(useDiagnosisCounsellingStore, ["preEclampsia","aspirin","gdm","gdmCounselling","hivRisk","aspirin","gdm","gdmCounselling","hivRisk","prEp","birth","modeOfTransport","intrapartum","birthPlace","postpartum","breastFeeding"]),                                            
   ...mapState(useImmunizationStore,['ttDoses','HepBCounselling','HepB1','HepB2','HepB3','hepBReason']),
   ...mapState( useIntimatePartnerStore,['ipv','additionalCare','safety_assessment','physical_violence','beaten_pregnant',
                                  'woman_threatened','constant_jealous','strangling','murder_threat','referrals']),
-  ...mapState(useDewormingStore,['treatment','malaria'])
+  ...mapState(useDewormingStore,['treatment','malaria']),
+ // ironPrescription(){return getFieldValue(this.iron,'iron Amount','value')},
+  folicAcidPrescription(){return getRadioSelectedValue(this.folicAcid,'iron Amount')},
 },
 
 methods: {
@@ -185,10 +186,28 @@ methods: {
       //this.$router.push('counselling');
 
     },
+    validationRules(data: any, fields:any) {
+          return fields.every((fieldName:string)=>validateField(data,fieldName,(this as any)[fieldName]))
+          
+     },
   async saveDiagnosis(){
     console.log(await this.buildDiagnosis())
   },
   async saveMedicationDispensed(){
+    const fields: any = ['folicAcidPrescription'] //'ironPrescription',
+    if(await this.validationRules(this.folicAcid,fields)){
+         if (this.folicAcid.length > 0) {
+      const userID: any = Service.getUserID();
+      const medicationDispensed = new MedicationDispensedService(this.demographics.patient_id, userID);
+      const encounter = await medicationDispensed.createEncounter();
+      if (!encounter) return toastWarning("Unable to create medication dispensed encounter");
+      const patientStatus = await medicationDispensed.saveObservationList(await this.buildMedicationDispensed());
+      if (!patientStatus) return toastWarning("Unable to create medication dispensed!");
+      toastSuccess("Medication Dispensed has been created");
+  }
+    }else{
+      await toastWarning('Please complete all required fields')
+    }
     console.log(await this.buildMedicationDispensed())
   },
   async saveCouselling(){
@@ -234,20 +253,20 @@ methods: {
   async buildMedicationDispensed(){
     return[
        ...(await formatRadioButtonData(this.iron)),
-       ...(await formatRadioButtonData(this.calcium)),
+      // ...(await formatRadioButtonData(this.calcium)),
     ]
   },  
    async buildCouselling(){
     return[
        ...(await formatRadioButtonData(this.preEclampsia)),
-       ...(await formatRadioButtonData(this.preEclampsiaCounselling)),
+      // ...(await formatRadioButtonData(this.preEclampsiaCounselling)),
        ...(await formatRadioButtonData(this.aspirin)),
        ...(await formatRadioButtonData(this.gdm)),
        ...(await formatRadioButtonData(this.gdmCounselling)),
        ...(await formatRadioButtonData(this.hivRisk)),
        ...(await formatRadioButtonData(this.prEp)),
-       ...(await formatRadioButtonData(this.seekingCare)),
-       ...(await formatRadioButtonData(this.dangerSigns)),
+      //  ...(await formatRadioButtonData(this.seekingCare)),
+      //  ...(await formatRadioButtonData(this.dangerSigns)),
        ...(await formatRadioButtonData(this.birth)),
        ...(await formatRadioButtonData(this.modeOfTransport)),
        ...(await formatRadioButtonData(this.intrapartum)),
