@@ -19,7 +19,7 @@
                 <div class="totalNumber">3,764</div>
                 <div class="totalText">Children & Adults vaccinated this year!</div>
             </div>
-            <!-- <ion-img :src="loadImage('immunizationHome.jpeg')" alt="home image"></ion-img> -->
+            <ion-img :src="loadImage('backgroundImg.png')" alt="home image"></ion-img>
             <div style="background-color: rgb(255, 255, 255); widows: 100%; height: 40%"></div>
             <div class="graphBackground">
                 <div class="dueMiss">
@@ -157,7 +157,7 @@ export default defineComponent({
     height: 62vh;
     left: 0px;
     top: 23vh;
-    background: linear-gradient(158.6deg, #467085 -12.55%, #f8f8f8 33.84%);
+    background: linear-gradient(158.6deg, #3c4662 -12.55%, #f8f8f8 33.84%);
     border-radius: 10px;
 }
 .total {
