@@ -140,9 +140,7 @@ export default defineComponent({
       ...mapState(useANCenrollementStore,["ANCNumber"]),
         ...mapState(useEnrollementStore, ["NCDNumber", "enrollmentDiagnosis", "substance", "patientHistoryHIV", "patientHistory"]),
     },
-    async mounted() {
-        this.setDisplayType(this.enrollmentDisplayType);
-    },
+
 
     setup() {
         return { chevronBackOutline, checkmark, arrowForwardCircle, grid, list };
