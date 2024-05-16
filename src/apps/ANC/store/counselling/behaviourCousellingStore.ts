@@ -11,7 +11,7 @@ const initialBehaviourInfo=[
             header:{
                 class:"bold",
                 name:'Counselling on caffeine',
-                title: 'Counselling  conducted on caffeine?',
+                title: 'Counselling  conducted on Caffeine reduction?',
                 selectedValue: '',
                 displayNext:"No"
             },
@@ -92,7 +92,7 @@ const initialBehaviourInfo=[
         radioBtnContent:{
             header:{
                 class:'bold',
-                title: 'Counselling  conducted on Tobacco?',
+                title: 'Counselling  conducted on Tobacco cessation?',
                 selectedValue: '',
                 name:'Counselling on tobacco',
                 displayNext:'No'

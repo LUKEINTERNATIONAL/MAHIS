@@ -2,8 +2,7 @@
   <div class="container">
     <ion-card class="section">
       <ion-card-content>
-        <basic-form :contentData="physiologicalSymptoms"
-        ></basic-form>
+        <basic-form :contentData="physiologicalSymptoms" @update:selected="handleInputData"></basic-form>
       </ion-card-content>
     </ion-card>
   </div>
@@ -17,6 +16,7 @@ import { mapState } from 'pinia';
  import {useCurrentPhysiologicalSymptomsStore} from "@/apps/ANC/store/symptomsFollowUp/currentPhysiologicalSymptomsStore";
  import BasicForm from '@/components/BasicForm.vue';
 import { getCheckboxSelectedValue, modifyCheckboxValue } from "@/services/data_helpers";
+import { validateField } from "@/services/ANC/symptoms_validation";
 
 
 export default defineComponent({
@@ -56,6 +56,15 @@ export default defineComponent({
             modifyCheckboxValue(this.physiologicalSymptoms, checkbox, 'disabled', false);
         });
     }
+        },
+        validationRules(event: any) {
+            return validateField(this.physiologicalSymptoms, event.name, (this as any)[event.name]);
+        },
+
+        async handleInputData(event: any) {
+            // console.log("🚀 ~ handleInputData ~ event:", event)
+
+            this.validationRules(event);
         },
     }
 })

@@ -63,6 +63,9 @@ import BasicCard from "@/components/BasicCard.vue";
 //import {useReferralStore} from "@/apps/LABOUR/stores/repeatable things/referral";
 import {useEndLabourStore} from "@/apps/LABOUR/stores/repeatable things/labourAndDeliveryEnd";
 import {useSecondStageOfLabourStore} from "@/apps/LABOUR/stores/delivery details/secondStageDelivery";
+import DeliveryNewbornDetails from "@/apps/LABOUR/components/delivery details/OtherDeliveryDetails.vue";
+import OtherDeliveryDetails from "@/apps/LABOUR/components/delivery details/OtherDeliveryDetails.vue";
+import ObstetricComplications from "@/apps/LABOUR/components/delivery details/ObstetricComplications.vue";
 export default defineComponent({
   name: "Menu",
   components: {
@@ -82,9 +85,9 @@ export default defineComponent({
     List,
     DynamicButton,
     labOrderResults,
-    // DeliveryNewbornDetails,
-    // OtherDeliveryDetails,
-    // ObstetricComplications
+    DeliveryNewbornDetails,
+    OtherDeliveryDetails,
+    ObstetricComplications
   },
   data() {
     return {

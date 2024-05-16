@@ -9,7 +9,7 @@ const initialDietCounselling=[
         classDash: 'dashed_bottom_border',
         radioBtnContent:{
             header:{
-                title: 'Counselling  conducted on health eating?',
+                title: 'Counselling  conducted on health eating and keeping physically active?',
                 selectedValue: '',
                 class:'bold',
                 name:'Counselling on health eating',

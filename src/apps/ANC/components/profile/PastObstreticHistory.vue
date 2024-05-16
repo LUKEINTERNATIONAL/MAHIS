@@ -10,19 +10,6 @@
 
             </ion-card-content>
         </ion-card>
-
-        <ion-card>
-        <ion-card-content>
-          </ion-card-content>
-        </ion-card>
-        <ion-card class="section">
-            <ion-card-content>
-            </ion-card-content>
-        </ion-card>
-        <ion-card class="section">
-            <ion-card-content>
-            </ion-card-content>
-        </ion-card>
     </div>
 </template>
 
@@ -59,7 +46,7 @@ import {
   modifyFieldValue
 } from '@/services/data_helpers';
 import StandardValidations from "@/validations/StandardValidations";
-import {validateField} from "@/services/ANC/validation_service";
+import {validateField} from "@/services/ANC/profile_validation_service"
 import BasicCard from "@/components/BasicCard.vue";
 import { Service } from "@/services/service"
 export default defineComponent({
@@ -104,6 +91,7 @@ export default defineComponent({
         ...mapState(useObstreticHistoryStore,["modeOfDelivery"]),
         ...mapState(useObstreticHistoryStore, ["Complications"]),
         Stillbirths(){ return getFieldValue(this.prevPregnancies, 'Stillbirths','value')},
+        Gravida(){ return getFieldValue(this.prevPregnancies, 'Gravida','value')},
         LiveBirths(){ return getFieldValue(this.prevPregnancies, 'LiveBirths','value')},
         Parity(){ return getFieldValue(this.prevPregnancies, 'Parity','value')},
         Abortions(){ return getFieldValue(this.prevPregnancies, 'Abortions','value')},
@@ -217,7 +205,7 @@ export default defineComponent({
       },
 
       //Handling input data on Profile-Past Obstetric history
-      handleInputData(event: any){
+      async handleInputData(event: any){
             this.validaterowData(event)
             this.calculateParity(event)
             this.calculateLiveBirths(event)
@@ -227,73 +215,38 @@ export default defineComponent({
       validaterowData(event: any) {
            this.validationRules(event)
 
-        const gravidaField = this.prevPregnancies.find((field: any) => field.data.rowData[0].colData[0].name === "Gravida");
-
-            const abortionsField = this.prevPregnancies.find((field: any) =>
-                field.data.rowData.length > 1 && field.data.rowData[1].colData[0].name === "Abortions");
-
-            const stillBirthsField = this.prevPregnancies.find((field: any) =>
-                field.data.rowData.length > 1 && field.data.rowData[1].colData[1].name === "Stillbirths");
-
-            if (gravidaField && event.name === gravidaField.data.rowData[0].colData[0].name) {
-              let errorMessage: any = "";
-
-              if (StandardValidations.required(event.value) != null) {
-                errorMessage = StandardValidations.required(event.value);
-              } else if (StandardValidations.isWholeNumber(event.value) != null) {
-                errorMessage = StandardValidations.isWholeNumber(event.value);
-              } else if (StandardValidations.checkMinMax(event.value, 1, 15) != null) {
-                errorMessage = StandardValidations.checkMinMax(event.value, 1, 15);
-              }
-
-              modifyFieldValue(this.prevPregnancies, gravidaField.data.rowData[0].colData[0].name, 'alertsError', !!errorMessage);
-              modifyFieldValue(this.prevPregnancies, gravidaField.data.rowData[0].colData[0].name, 'alertsErrorMassage', errorMessage || '');
-            }
-
-        if (abortionsField && event.name === abortionsField.data.rowData[1].colData[0].name) {
-          let errorMessage: any = "";
-
-          // Validation checks for event value
-          if (StandardValidations.required(event.value) != null) {
-            errorMessage = StandardValidations.required(event.value);
-          } else if (StandardValidations.isWholeNumber(event.value) != null) {
-            errorMessage = StandardValidations.isWholeNumber(event.value);
-          } else if (StandardValidations.checkMinMax(event.value, 0, 15) != null) {
-            errorMessage = StandardValidations.checkMinMax(event.value, 0, 15);
-          } else {
-            // Additional validation based on gravidaField value
-            const gravidaField = this.prevPregnancies.find((field: any) =>
-                field.data.rowData[0].colData[0].name === "Gravida"
-            );
-            if (gravidaField) {
-              const gravidaValue = gravidaField.data.rowData[0].colData[0].value;
-              if (parseInt(event.value) > parseInt(gravidaValue) || parseInt(event.value) < 0) {
-                errorMessage = "Abortions/Miscarriages should be less than or equal to Gravida and greater than or equal to 0.";
-              }
-            }
-          }
-
-          // Modify error message and error flag for Abortions field
-          modifyFieldValue(this.prevPregnancies, abortionsField.data.rowData[1].colData[0].name, 'alertsError', !!errorMessage);
-          modifyFieldValue(this.prevPregnancies, abortionsField.data.rowData[1].colData[0].name, 'alertsErrorMassage', errorMessage || '');
-        }
-
-
-        if (stillBirthsField && event.name === stillBirthsField.data.rowData[1].colData[1].name) {
-              let errorMessage: any = "";
-
-              if (StandardValidations.required(event.value) != null) {
-                errorMessage = StandardValidations.required(event.value);
-              } else if (StandardValidations.isWholeNumber(event.value) != null) {
-                errorMessage = StandardValidations.isWholeNumber(event.value);
-              } else if (StandardValidations.checkMinMax(event.value, 0, 15) != null) {
-                errorMessage = StandardValidations.checkMinMax(event.value, 0, 15);
-              }
-
-              modifyFieldValue(this.prevPregnancies, stillBirthsField.data.rowData[1].colData[1].name, 'alertsError', !!errorMessage);
-              modifyFieldValue(this.prevPregnancies, stillBirthsField.data.rowData[1].colData[1].name, 'alertsErrorMassage', errorMessage || '');
-            }
-          },
+        // if (getFieldValue(this.prevPregnancies, 'Abortions','value')) {
+        //   let errorMessage2: any = "";
+        //     // Additional validation based on gravidaField value
+        //     const gravidaField = getFieldValue(this.prevPregnancies,'Gravida', 'value');
+        //     if (gravidaField) {
+        //       const gravidaValue = gravidaField;
+        //       if (parseInt(event.value) > parseInt(gravidaValue) || parseInt(event.value) < 0) {
+        //         errorMessage2 = "Abortions/Miscarriages should be less than  Gravida and greater than or equal to 0.";
+        //     }
+        //   }
+        //
+        //   // Modify error message and error flag for Abortions field
+        //   modifyFieldValue(this.prevPregnancies,'Abortions', 'alertsError', !!errorMessage2);
+        //   modifyFieldValue(this.prevPregnancies, 'Abortions', 'alertsErrorMassage', errorMessage2 || '');
+        // }
+        //
+        //
+        // if (getFieldValue(this.prevPregnancies,'Stillbirths','value')) {
+        //       let errorMessages: any = "";
+        //         // Additional validation based on gravidaField value
+        //         const data = getFieldValue(this.prevPregnancies,'Gravida', 'value');
+        //         if (data) {
+        //           const gravida = data;
+        //           if (parseInt(event.value) > parseInt(data) || parseInt(event.value) < 0) {
+        //             errorMessages = "Stillbirths should be less than  Gravida and greater than or equal to 0.";
+        //         }
+        //       }
+        //
+        //       modifyFieldValue(this.prevPregnancies, 'Stillbirths', 'alertsError', !!errorMessages);
+        //       modifyFieldValue(this.prevPregnancies, 'Stillbirths', 'alertsErrorMassage', errorMessages || '');
+        //     }
+         },
 
           //Calculating parity.
       calculateParity(event: any) {
@@ -313,30 +266,13 @@ export default defineComponent({
           const gravidaValue= parseInt(getFieldValue(this.prevPregnancies, 'Gravida', 'value'));
           const abortionsValue = parseInt(getFieldValue(this.prevPregnancies, 'Abortions', 'value'));
           if (!isNaN(gravidaValue) && !isNaN(abortionsValue)) {
-            if(abortionsValue >= gravidaValue){
-              console.log("Abortions can't be greater or equal to Gravida")
-              return;
-            }
-            const liveBirthsValue = (gravidaValue-1)-abortionsValue
+            const liveBirthsValue = (gravidaValue)-abortionsValue
             modifyFieldValue(this.prevPregnancies, 'LiveBirths', 'value', liveBirthsValue);
           } else {
             // If either Gravida or Abortions is NaN, set LiveBirths to null
             modifyFieldValue(this.prevPregnancies, 'LiveBirths', 'value', null);          }
         }
       },
-      // calculateStillBirths(event:any){
-      //   if (event.name === 'Gravida' || event.name === 'Abortions' || event.name ==='LiveBirths') {
-      //     const gravidaValue= parseInt(getFieldValue(this.prevPregnancies, 'Gravida', 'value'));
-      //     const abortionsValue = parseInt(getFieldValue(this.prevPregnancies, 'Abortions', 'value'));
-      //     const liveBirthsValue= parseInt(getFieldValue(this.prevPregnancies, 'LiveBirths', 'value'));
-      //     if (!isNaN(gravidaValue) && !isNaN(abortionsValue && !isNaN(liveBirthsValue))) {
-      //       const stillbirthsValue = (gravidaValue-1)-(abortionsValue+liveBirthsValue)
-      //       modifyFieldValue(this.prevPregnancies, 'LiveBirths', 'value', stillbirthsValue);
-      //     } else {
-      //       this.validationRules({name:'StillBirths'})
-      //     }
-      //   }
-      // }
 
     },
 });
@@ -357,8 +293,7 @@ export default defineComponent({
 }
 
 ion-card {
- box-shadow:none;
-  background-color:inherit;   
+
   width: 100%;
   color: black;
 }

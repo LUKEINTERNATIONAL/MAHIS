@@ -8,15 +8,16 @@
             :initialData="initialData"
         ></basic-form>
       </ion-card-content>
-    </ion-card> <ion-card class="section">
-      <ion-card-content>
-        <basic-form
-            :contentData="dangerSigns"
-            :initialData="initialData1"
-
-        ></basic-form>
-      </ion-card-content>
     </ion-card>
+<!--    <ion-card class="section">-->
+<!--      <ion-card-content>-->
+<!--        <basic-form-->
+<!--            :contentData="dangerSigns"-->
+<!--            :initialData="initialData1"-->
+
+<!--        ></basic-form>-->
+<!--      </ion-card-content>-->
+<!--    </ion-card>-->
   </div>
 </template>
 <script lang="ts">
@@ -111,8 +112,7 @@ export default defineComponent({
 }
 
 ion-card {
-  box-shadow:none;
-  background-color:inherit;
+
   width: 100%;
   color: black;
 }

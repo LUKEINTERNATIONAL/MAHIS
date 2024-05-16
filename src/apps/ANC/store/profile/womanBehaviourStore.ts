@@ -11,7 +11,7 @@ export const useWomanBehaviourStore = defineStore("womanBehaviourStore", {
         checkboxBtnContent: {
           header: {
             class: "bold",
-            title: "Daily caffeine intake",
+            title: "Daily caffeine intake*",
             selectedValue: "",
             name: "Daily caffeine use",
           },
@@ -117,7 +117,7 @@ export const useWomanBehaviourStore = defineStore("womanBehaviourStore", {
         radioBtnContent: {
           header: {
             class: "bold",
-            title: "Recently quit tobacco products",
+            title: "Recently quit tobacco products*",
             selectedValue: "",
             name: "Recently quit tobacco products",
           },
@@ -140,7 +140,7 @@ export const useWomanBehaviourStore = defineStore("womanBehaviourStore", {
         radioBtnContent: {
           header: {
             class: "bold",
-            title: "Exposure to second hand smoke",
+            title: "Exposure to second hand smoke*",
             selectedValue: "",
             name: "Exposure to second hand smoke",
           },
