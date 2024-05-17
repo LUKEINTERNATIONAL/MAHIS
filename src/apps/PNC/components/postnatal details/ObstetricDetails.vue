@@ -6,6 +6,7 @@
         <basic-form
             :contentData="obstetricDetails"
             :initialData="initialData"
+            @update:selected="handleInputData" @update:inputValue="handleInputData"
 
         ></basic-form>
       </ion-card-content>
@@ -36,6 +37,8 @@ import { mapState } from 'pinia';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import BasicCard from "@/components/BasicCard.vue";
 import {useObstetricDetailsStore} from "@/apps/PNC/stores/postnatal details/ObstetricDetails";
+import {getCheckboxSelectedValue, getFieldValue, modifyCheckboxValue} from "@/services/data_helpers";
+import {validateField} from "@/services/PNC/obstetric_details_validation_service"
 export default defineComponent({
   name: "ObstetricDetails",
   components:{
@@ -70,17 +73,37 @@ export default defineComponent({
   },
   computed:{
     ...mapState(useObstetricDetailsStore,["obstetricDetails"]),
+    Parity(){ return getFieldValue(this.obstetricDetails, 'Parity','value')},
+    Gravida(){ return getFieldValue(this.obstetricDetails, 'Gravida','value')},
   },
   mounted(){
     const obstetricDetails=useObstetricDetailsStore()
     this.initialData=obstetricDetails.getInitial()
+    this.validateRowData({})
+
   },
   watch:{
   },
   setup() {
     return { checkmark,pulseOutline };
   },
-  methods: {}
+  methods: {
+
+
+    validationRules(event: any) {
+      return validateField(this.obstetricDetails,event.name, (this as any)[event.name]);
+    },
+
+    //Handling input data on Profile-Past Obstetric history
+    async handleInputData(event: any){
+      this.validateRowData(event)
+    },
+
+    // Validations
+    validateRowData(event: any) {
+      this.validationRules(event)
+    }
+  }
 });
 
 </script>
