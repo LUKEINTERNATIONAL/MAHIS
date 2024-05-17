@@ -169,7 +169,7 @@ computed:{
                                  'woman_threatened','constant_jealous','strangling','murder_threat','referrals']),
   ...mapState(useDewormingStore,['treatment','malaria']),
  // ironPrescription(){return getFieldValue(this.iron,'iron Amount','value')},
-  folicAcidPrescription(){return getRadioSelectedValue(this.folicAcid,'iron Amount')},
+  folicAcidPrescription(){return getRadioSelectedValue(this.folicAcid,'Folic acid')},
 },
 
 methods: {

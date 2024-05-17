@@ -39,6 +39,7 @@ import { icons } from '../../../../utils/svg';
 import { useMedicationDispensedStore } from '../../store/medicationDispensed';
 import { getFieldValue, getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from '@/services/data_helpers';
 import { validateField } from '@/services/ANC/treatement_validation_service';
+import StandardValidations from '@/validations/StandardValidations';
 
 
 
@@ -143,7 +144,7 @@ export default defineComponent ({
     },
     methods :{
       handleInputData(data: any){
-            this. validationRules(data)
+            this.validationRules(data)
       },
       // Validations
       validaterowData(event: any) {
