@@ -462,7 +462,12 @@ ion-radio {
     align-items: center;
 }
 .checkout_col ion-checkbox {
-    margin-right: 150px;
+    margin-right: 20%;
+}
+@media screen and (max-width: 768px) {
+  .checkout_col ion-checkbox {
+    margin-right: 10%;
+  }
 }
 .alerts_error {
     margin-top: 2px;

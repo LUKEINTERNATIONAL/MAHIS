@@ -9,21 +9,13 @@ import Validation from "@/validations/StandardValidations"
 
 export function validateField(data: any,fieldName: string, value: any) {
     const validationRules: any = {
-        'LMNP':()=>Validation.required(value),
-        'Gravida': () => MultValidations(fieldName, value),
-        'lmnpEED':()=>Validation.required(value),
-        'Stillbirths': () => MultValidations(fieldName, value),
-        'LiveBirths': () => Validation.required(value),
-        'Parity':()=>Validation.required(value),
-        'Abortions': () => MultValidations(fieldName, value),
-        'lmnpDate':()=>MultValidations(fieldName, value),
         'lmnpGestationAge':()=>Validation.required(value),
         'LNMPKnown':()=>Validation.required(value),
         'UltrasoundDone':()=>Validation.required(value),
         'UltrasoundDate':()=>MultValidations(fieldName, value),
-        'specify':()=>MultValidations(fieldName, value),
+        'UltrasoundGestationAge':()=>MultValidations(fieldName, value),
         'GestationAgeByPalpationKnown':()=>Validation.required(value),
-        'Gestation age by palpation':()=>MultValidations(fieldName, value),
+        'GestationAgeByPalpation':()=>MultValidations(fieldName, value),
         'GestationAgeUsed':()=>Validation.required(value),
         'TetanusDosesForImmunisation':()=>Validation.required(value),
         'NumberOfUnderImmunisedDoses':()=>Validation.required(value),
@@ -49,7 +41,6 @@ export function validateField(data: any,fieldName: string, value: any) {
         'CurrentMedications':()=>Validation.required(value),
         'SubstanceAbuse':()=>Validation.required(value),
         'SecondHandSmoke':()=>Validation.required(value),
-        'Who does the client live with':()=>Validation.required(value),
 
 
 
@@ -71,52 +62,7 @@ export function validateField(data: any,fieldName: string, value: any) {
 }
 
 function MultValidations(fieldName: string, value: any): null | any {
-    if (fieldName === 'Gravida') {
-        const requiredError: any | null = Validation.required(value);
-        if (requiredError !== null) {
-            return requiredError;
-        }
-
-        const wholeNumberError: string | null = Validation.isWholeNumber(value);
-        if (wholeNumberError !== null) {
-            return wholeNumberError;
-        }
-
-        const minMaxError: string | null = Validation.checkMinMax(value, 1, 15);
-        if (minMaxError !== null) {
-            return minMaxError;
-        }
-    } else if (fieldName === 'Abortions') {
-        const requiredError: any | null = Validation.required(value);
-        if (requiredError !== null) {
-            return requiredError;
-        }
-
-        const wholeNumberError: string | null = Validation.isWholeNumber(value);
-        if (wholeNumberError !== null) {
-            return wholeNumberError;
-        }
-
-        const minMaxError: string | null = Validation.checkMinMax(value, 0, 15);
-        if (minMaxError !== null) {
-            return minMaxError;
-        }
-    }else if (fieldName === 'Stillbirths') {
-        const requiredError: any | null = Validation.required(value);
-        if (requiredError !== null) {
-            return requiredError;
-        }
-
-        const wholeNumberError: string | null = Validation.isWholeNumber(value);
-        if (wholeNumberError !== null) {
-            return wholeNumberError;
-        }
-
-        const minMaxError: string | null = Validation.checkMinMax(value, 0, 15);
-        if (minMaxError !== null) {
-            return minMaxError;
-        }
-    } else  if (fieldName === 'lmnpDate') {
+    if (fieldName === 'lmnpDate') {
         const requiredError: any | null = Validation.required(value);
         if (requiredError !== null) {
             return requiredError;
@@ -139,7 +85,7 @@ function MultValidations(fieldName: string, value: any): null | any {
             return DateError;
         }
 
-    } else if (fieldName === 'specify') {
+    } else if (fieldName === 'UltrasoundGestationAge') {
         const requiredError: any | null = Validation.required(value);
         if (requiredError !== null) {
             return requiredError;
@@ -150,13 +96,13 @@ function MultValidations(fieldName: string, value: any): null | any {
             return wholeNumberError;
         }
 
-        const minMaxError: string | null = Validation.checkMinMax(value, 0, 42);
+        const minMaxError: string | null = Validation.checkMinMax(value, 0, 36);
         if (minMaxError !== null) {
             return minMaxError;
         }
 
     }
-    else if (fieldName === 'Gestation age by palpation') {
+    else if (fieldName === 'GestationAgeByPalpation') {
         const requiredError: any | null = Validation.required(value);
         if (requiredError !== null) {
             return requiredError;
@@ -167,7 +113,7 @@ function MultValidations(fieldName: string, value: any): null | any {
             return wholeNumberError;
         }
 
-        const minMaxError: string | null = Validation.checkMinMax(value, 0, 42);
+        const minMaxError: string | null = Validation.checkMinMax(value, 0, 36);
         if (minMaxError !== null) {
             return minMaxError;
         }
@@ -178,6 +124,7 @@ function MultValidations(fieldName: string, value: any): null | any {
         return null;
     }
 
+    // Add a return statement here to satisfy TypeScript
     return null;
 }
 

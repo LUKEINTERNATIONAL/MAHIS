@@ -74,7 +74,7 @@ export default defineComponent({
     ...mapState(useVisitForBabyStore,["visitForBaby"]),
   },
   mounted(){
-    const visitForBaby=useVisitForMotherStore()
+    const visitForBaby=useVisitForBabyStore()
     this.initialData=visitForBaby.getInitial()
   },
   watch:{

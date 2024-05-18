@@ -71,6 +71,8 @@ import {useSpecificHealthConcernsStore} from "@/apps/ANC/store/quickCheck/specif
 import {useReasonForVisitStore} from "@/apps/ANC/store/quickCheck/reasonForVisit";
 import {ReasonForVisitService} from "@/apps/ANC/service/reason_for_visit_service";
 import { resetPatientData } from '@/services/reset_data';
+import { getCheckboxSelectedValue, getRadioSelectedValue } from '@/services/data_helpers';
+import { validateField } from '@/services/ANC/quickCheck_validation_service';
 export default defineComponent({
   name: "Home",
   components:{
@@ -117,23 +119,14 @@ export default defineComponent({
           'number': 2,
           'last_step':'last_step'
         },
-        {
-          'title': 'Reason for visit',
-          'class': 'common_step',
-          'checked':'',
-          'icon': false,
-          'disabled':false,
-          'number': 3,
-          'last_step': ''
-        },
         // {
-        //   'title': 'Specific health concerns',
+        //   'title': 'Reason for visit',
         //   'class': 'common_step',
         //   'checked':'',
         //   'icon': false,
         //   'disabled':false,
-        //   'number': 4,
-        //   'last_step': 'last_step'
+        //   'number': 3,
+        //   'last_step': ''
         // },
       ],
       StepperData:[
@@ -147,15 +140,10 @@ export default defineComponent({
           component: 'ReasonForVisit',
           value: '2',
         },
-        {
-          title: 'Reason for visit',
-          component: 'SubsequentVisits',
-          value: '3',
-        },
         // {
-        //   title: 'Specific health concerns',
-        //   component: 'SpecificHealthConcerns',
-        //   value: '4',
+        //   title: 'Reason for visit',
+        //   component: 'SubsequentVisits',
+        //   value: '3',
         // },
       ],
       isOpen: false,
@@ -177,6 +165,12 @@ export default defineComponent({
     ...mapState(useConfirmPregnancyStore,["ConfirmPregnancy"]),
     ...mapState(useSpecificHealthConcernsStore,["HealthConcerns"]),
     ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
+    reasonVisitFacility(){return getRadioSelectedValue(this.ReasonForVisit,'Reason for visit')},
+    //dangerSigns(){return getCheckboxSelectedValue(this.ReasonForVisit,'Central cyanosis')},//,'Pre-term labour',"None","Unconscious","Fever","Imminent delivery","Severe headache","Vomiting", "Severe abdominal pain","Draining liquor","Respiratory problems","Convulsion history","Convulsion history","Epigastric pain",
+     pregnancyConfirmed(){return getRadioSelectedValue(this.ConfirmPregnancy,'Pregnancy confirmed')},
+     pregnancyPlanned(){return getRadioSelectedValue(this.ConfirmPregnancy,'Pregnancy planned')},
+   // referWoman(){return getRadioSelectedValue(this.ReasonForVisit,'Action for danger signs')},
+
   },
 
   async mounted() {
@@ -246,102 +240,63 @@ export default defineComponent({
         return item?.data[0] || item?.data;
       });
     },
+    validationRules(data: any, fields:any) {
+     let isChecked=false;
+     for(let i=0; i<fields.length;i++){
+      const value =getCheckboxSelectedValue(this.ReasonForVisit,fields[i]);
+      if(value){
+        isChecked=true;
+        break;
+      }
+    }
+      //return isChecked
+     // return isChecked && fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
+
+          return fields.every((fieldName:string)=>validateField(data,fieldName,(this as any)[fieldName]))
+     },
     async saveData() {
-      this.isLoading = true;
-      await this.saveDangerSigns();
-      await this.saveReasonForVisit();
-      await this.saveConfirmPregnancy();
-      await this.saveHealthConcerns();
+      await this.saveQuickCheck();
       resetPatientData();
+    },
+     async saveQuickCheck() {
+      const fields: any =["pregnancyPlanned","pregnancyConfirmed","reasonVisitFacility"]
+          // "dangerSigns",'Pre-term labour',"None","Unconscious","Fever","Imminent delivery",
+          // "Severe headache","Vomiting", "Severe abdominal pain","Draining liquor",
+          // "Respiratory problems","Convulsion history","Convulsion history",
+          // "Epigastric pain",] //"referWoman","reasonVisitFacility","pregnancyConfirmed","pregnancyPlanned",
+
+       if(await this.validationRules(this.ReasonForVisit && this.ConfirmPregnancy,fields)){ // && this.ConfirmPregnancy
+         if (this.ConfirmPregnancy.length > 0 && this.ReasonForVisit.length > 0) {
+        const userID: any = Service.getUserID();
+        const quickCheck = new ConfirmPregnancyService(this.demographics.patient_id, userID);
+        const encounter = await quickCheck.createEncounter();
+        if (!encounter) return toastWarning("Unable to create quick check encounter");
+        const patientStatus = await quickCheck.saveObservationList(await this.buildQuickCheck());
+        if (!patientStatus) return toastWarning("Unable to create quick check details!");
+        toastSuccess("Quick check details have been created");
+      }
       this.$router.push("ANCHome");
-      //this.isLoading = false;
-    },
+       } else{
+         await toastWarning('Please complete all required fields')
+       }
 
-    async saveDangerSigns() {
-      if (this.DangerSigns.length > 0) {
-        const userID: any = Service.getUserID();
-        const DangerSigns = new DangerSignsService(this.demographics.patient_id, userID);
-        const encounter = await DangerSigns.createEncounter();
-        if (!encounter) return toastWarning("Unable to create patient danger signs encounter");
-        const patientStatus = await DangerSigns.saveObservationList(await this.buildDangerSigns());
-        if (!patientStatus) return toastWarning("Unable to create patient danger signs  !");
-        toastSuccess("Danger signs have been created");
-      }
-      console.log(await this.buildDangerSigns())
-
+      console.log(await this.buildQuickCheck())
     },
-    async saveReasonForVisit() {
-      if (this.ReasonForVisit.length > 0) {
-        const userID: any = Service.getUserID();
-        const ReasonForVisit = new ReasonForVisitService(this.demographics.patient_id, userID);
-        const encounter = await ReasonForVisit.createEncounter();
-        if (!encounter) return toastWarning("Unable to create patient reason for visit encounter");
-        const patientStatus = await ReasonForVisit.saveObservationList(await this.buildReasonForVisit());
-        if (!patientStatus) return toastWarning("Unable to create patient's reason for visit!");
-        toastSuccess("Reason for visit details have been created");
-      }
-      console.log(await this.buildReasonForVisit())
-
-    },
-
-    async saveConfirmPregnancy() {
-      if (this.ConfirmPregnancy.length > 0) {
-        const userID: any = Service.getUserID();
-        const ConfirmPregnancy = new ConfirmPregnancyService(this.demographics.patient_id, userID);
-        const encounter = await ConfirmPregnancy.createEncounter();
-        if (!encounter) return toastWarning("Unable to create patient pregnancy confirmation encounter");
-        const patientStatus = await ConfirmPregnancy.saveObservationList(await this.buildConfirmPregnancy());
-        if (!patientStatus) return toastWarning("Unable to create patient pregnancy confirmation details!");
-        toastSuccess("Pregnancy confirmation details have been created");
-      }
-      console.log(await this.buildConfirmPregnancy())
-    },
-    async saveHealthConcerns() {
-      if (this.HealthConcerns.length > 0) {
-        const userID: any = Service.getUserID();
-        const HealthConcerns = new SpecificHealthConcernsService(this.demographics.patient_id, userID);
-        const encounter = await HealthConcerns.createEncounter();
-        if (!encounter) return toastWarning("Unable to create patient health concerns encounter");
-        const patientStatus = await HealthConcerns.saveObservationList(await this.buildHealthConcerns());
-        if (!patientStatus) return toastWarning("Unable to create patient health concerns!");
-        toastSuccess("Patient's specific health concerns have been created");
-      }
-      console.log(await this.buildHealthConcerns())
-    },
-
     openModal() {
       createModal(SaveProgressModal);
     },
 
-    async buildDangerSigns() {
+    async buildQuickCheck() {
       return [
-        ...(await formatCheckBoxData(this.DangerSigns)),
-        ...(await formatRadioButtonData(this.DangerSigns)),
-        ...(await formatInputFiledData(this.DangerSigns)),
-      ];
-    },
-    async buildConfirmPregnancy() {
-      return [
+        ...(await formatCheckBoxData(this.ReasonForVisit)),
+        ...(await formatRadioButtonData(this.ReasonForVisit)),
+        ...(await formatInputFiledData(this.ReasonForVisit)),
         ...(await formatCheckBoxData(this.ConfirmPregnancy)),
         ...(await formatRadioButtonData(this.ConfirmPregnancy)),
         ...(await formatInputFiledData(this.ConfirmPregnancy)),
       ];
     },
 
-    async buildHealthConcerns() {
-      return [
-        ...(await formatCheckBoxData(this.HealthConcerns)),
-        ...(await formatRadioButtonData(this.HealthConcerns)),
-        ...(await formatInputFiledData(this.HealthConcerns)),
-      ];
-    },
-    async buildReasonForVisit() {
-      return [
-        ...(await formatCheckBoxData(this.HealthConcerns)),
-        ...(await formatRadioButtonData(this.HealthConcerns)),
-        ...(await formatInputFiledData(this.HealthConcerns)),
-      ];
-    },
   },
 })
 </script>

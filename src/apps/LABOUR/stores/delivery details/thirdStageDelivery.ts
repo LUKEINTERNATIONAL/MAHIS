@@ -78,18 +78,18 @@ const initialPlacentaExamination=[
                     {
                         name: 'Controlled cord traction',
                         value: 'Controlled cord traction',
-                        colSize: '5',
+                        colSize: '7',
                     },
                     {
                         name: 'Manual removal',
                         value: 'Manual removal',
-                        colSize: '5',
+                        colSize: '7',
                     },
 
                     {
                         name: 'Other',
                         value: 'Other',
-                        colSize: '5',
+                        colSize: '7',
                     },
                 ]
             }
@@ -139,12 +139,12 @@ const initialPlacentaExamination=[
                     {
                         name: 'Complete',
                         value: 'Complete',
-                        colSize: '4',
+                        colSize: '3',
                     },
                     {
                         name: 'Incomplete',
                         value: 'Incomplete',
-                        colSize: '4',
+                        colSize: '3',
                     },
 
                 ]
@@ -167,12 +167,12 @@ const initialPlacentaExamination=[
                     {
                         name: 'Complete',
                         value: 'Complete',
-                        colSize: '4',
+                        colSize: '3',
                     },
                     {
                         name: 'Incomplete',
                         value: 'Incomplete',
-                        colSize: '4',
+                        colSize: '3',
                     },
 
                 ]
@@ -253,12 +253,12 @@ const initialPlacentaExamination=[
                     {
                         name: 'Central',
                         value: 'central',
-                        colSize: '4',
+                        colSize: '3',
                     },
                     {
                         name: 'Lateral',
                         value: 'lateral',
-                        colSize: '4',
+                        colSize: '3',
                     },
 
                 ]
@@ -328,12 +328,12 @@ const initialPlacentaExamination=[
                     {
                         name: 'Healthy',
                         value: 'Healthy',
-                        colSize: '4',
+                        colSize: '3',
                     },
                     {
                         name: 'Unhealthy',
                         value: 'Unhealthy',
-                        colSize: '4',
+                        colSize: '3',
                     },
 
                 ]
@@ -383,12 +383,12 @@ const initialPlacentaExamination=[
                     {
                         name: 'Intact',
                         value: 'Intact',
-                        colSize: '4',
+                        colSize: '3',
                     },
                     {
                         name: 'Tears',
                         value: 'Tears',
-                        colSize: '4',
+                        colSize: '3',
                     },
 
                 ]
@@ -413,27 +413,27 @@ const initialPlacentaExamination=[
                     {
                         name: 'Intact',
                         value: 'Intact',
-                        colSize: '4.000001',
+                        colSize: '3',
                     },
                     {
                         name: 'Tears',
                         value: 'Tears',
-                        colSize: '4.000001',
+                        colSize: '9',
                     },
                     {
                         name: 'Episiotomy',
                         value: 'episiotomy',
-                        colSize: '4.000001',
+                        colSize: '3',
                     },
                     {
                         name: 'Lacerations',
                         value: 'lacerations',
-                        colSize: '4.00001',
+                        colSize: '9',
                     },
                     {
                         name: 'Other',
                         value: 'Other',
-                        colSize: '4.000001',
+                        colSize: '3',
                     },
 
                 ]

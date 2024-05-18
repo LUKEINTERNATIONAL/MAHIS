@@ -8,7 +8,7 @@ const initialMedications=[
       classDash: "dashed_bottom_border",
     checkboxBtnContent: {
   header: {
-    title: "Which medications is the woman currently prescribed?",
+    title: "Which medications is the woman currently prescribed?*",
         selectedValue: "",
         class:"bold"
   },
