@@ -61,7 +61,7 @@
                 :key="componentKey"
             />
 
-            <ion-row v-if="!addItemButton" style="margin-bottom: 20px">
+            <ion-row v-if="!addItemButton">
                 <ion-col>
                     <ion-item class="input_item">
                         <ion-input v-model="drugName" @ionInput="FindDrugName" fill="outline"></ion-input>
@@ -97,6 +97,9 @@
                         </ion-content>
                     </ion-popover>
                 </ion-col>
+            </ion-row>
+
+            <ion-row v-if="!is_selected_insulin && !addItemButton">
                 <!-- <ion-col style="margin-top: -27px;">
                     <ListPicker
                         :multiSelection="multi_Selection"
@@ -121,33 +124,12 @@
                     </div>
                 </ion-col>
                 <ion-col>
-                    <ion-item class="input_item">
-                        <span class="spcls" id="chooseType" @click="popoverOpenForFrequencyFn2">
-                            <ion-input placeholder="Frequency" v-model="frequency"></ion-input>
-                            <ion-icon v-if="!showPopoverOpenForFrequency" :icon="chevronDownOutline" />
-                            <ion-icon v-if="showPopoverOpenForFrequency" :icon="chevronUpOutline" />
-                        </span>
-
-                        <ion-popover
-                            class="popover-al"
-                            :show-backdrop="false"
-                            trigger="chooseType"
-                            trigger-action="click"
-                            @didDismiss="showPopoverOpenForFrequency = false"
-                        >
-                            <ion-content color="light" class="ion-padding content-al">
-                                <ion-label>Choose the type:</ion-label>
-                                <ion-list class="list-al">
-                                    <div class="item-al" v-for="(item, index) in drug_frequencies" :key="index">
-                                        <ion-label @click="selectFrequency(index)" style="display: flex; justify-content: space-between">
-                                            {{ item.label }}
-                                            <ion-icon v-if="item.selected" class="icon-al" :icon="checkmarkOutline"></ion-icon>
-                                        </ion-label>
-                                    </div>
-                                </ion-list>
-                            </ion-content>
-                        </ion-popover>
-                    </ion-item>
+                    <sselectionList
+                        :labels="drug_frequencies_n"
+                        @selection-event="sselectionListUpdated"
+                        style="background-color: #fff; margin: 1px;"
+                    />
+                    <ion-label><span class="selectedPatient"></span></ion-label>
                 </ion-col>
                 <ion-col>
                     <ion-item class="input_item">
@@ -174,16 +156,60 @@
                         </ion-popover>
                     </ion-item>
                 </ion-col> -->
-                <ion-col class="action_buttons">
-                    <span @click="saveData()">+ Save</span>
+            </ion-row>
+
+            <ion-row v-if="is_selected_insulin">
+                <ion-col>
+                    <ion-item class="input_item">
+                        <ion-input placeholder="Morning Dose" v-model="morning_dose" fill="outline"></ion-input>
+                        <ion-label><span class="selectedPatient"></span></ion-label>
+                    </ion-item>
+                    <div>
+                        <ion-label v-if="show_error_msg_for_morning_dose" class="error-label">{{ morning_dose_err_msg }}</ion-label>
+                    </div>
+                </ion-col>
+
+                <ion-col>
+                    <ion-item class="input_item">
+                        <ion-input placeholder="Afternoon Dose" v-model="afternoon_dose" fill="outline"></ion-input>
+                        <ion-label><span class="selectedPatient"></span></ion-label>
+                    </ion-item>
+                    <div>
+                        <ion-label v-if="show_error_msg_for_afternoon_dose" class="error-label">{{ afternoon_doseerr_msg }}</ion-label>
+                    </div>
+                </ion-col>
+
+                <ion-col>
+                    <ion-item class="input_item">
+                        <ion-input placeholder="Evening Dose" v-model="evening_dose" fill="outline"></ion-input>
+                        <ion-label><span class="selectedPatient"></span></ion-label>
+                    </ion-item>
+                    <div>
+                        <ion-label v-if="show_error_msg_for_evening_dose" class="error-label">{{ evening_doseerr_msg }}</ion-label>
+                    </div>
                 </ion-col>
             </ion-row>
 
+            <ion-row v-if="!addItemButton" style="margin-bottom: 20px">
+            <dynamic-button
+                v-if="dynamic_button_properties[0].addItemButton"
+                :name="dynamic_button_properties[0].name"
+                :fill="dynamic_button_properties[0].btnFill"
+                :icon="addOutline"
+                @clicked:btn="dynamic_button_properties[0].fn"
+            />
+
+            <dynamic-button
+                v-if="dynamic_button_properties[1].addItemButton"
+                :name="dynamic_button_properties[1].name"
+                :fill="dynamic_button_properties[1].btnFill"
+                :icon="removeOutline"
+                @clicked:btn="dynamic_button_properties[1].fn"
+            />
+
+        </ion-row>
+
             <dynamic-button v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" @clicked:btn="addData"></dynamic-button>
-            <!-- <ion-row>
-                <dynamic-button class="addMedicalTpBtn" :name="btnName2"></dynamic-button>
-                <dynamic-button class="addMedicalTpBtn" :name="btnName3" style="margin-left: 4%"></dynamic-button>
-            </ion-row> -->
 
             <div style="margin-top: 14px">
                 <ion-accordion-group ref="accordionGroup" class="previousView" @ionChange="accordionGroupChangeFn1">
@@ -341,6 +367,7 @@ import {
     chevronDownOutline,
     chevronUpOutline,
     codeSlashOutline,
+    removeOutline,
 } from "ionicons/icons";
 import { ref, watch, computed, onMounted, onUpdated } from "vue";
 import { icons } from "@/utils/svg";
@@ -357,15 +384,15 @@ import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { useAllegyStore} from "@/apps/OPD/stores/AllergyStore"
 import NonPharmacologicalIntervention from "@/apps/OPD/components/ConsultationPlan/NonPharmacologicalIntervention.vue"
 import Allergies from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/Allergies.vue"
-import ListPicker from "@/components/ListPicker.vue"
+import sselectionList from "@/components/SselectionList.vue"
 
 const iconsContent = icons;
 const drug_frequencies = DRUG_FREQUENCIES;
+const drug_frequencies_n = DRUG_FREQUENCIES.map(drug => drug.label);
 const search_item = ref(false);
 const display_item = ref(false);
 const addItemButton = ref(true);
 const popoverOpen = ref(false);
-const prescPopoverOpen = ref(false);
 let event: null = null;
 const componentKey = ref(0);
 const drugnameErrMsg = ref("");
@@ -382,10 +409,7 @@ const duration = ref("");
 const prescription = ref("");
 const units = ref("");
 const drug_id = ref("");
-const showPopoverOpenForFrequency = ref(false);
 const btnName1 = "Add new medication";
-const btnName2 = "Send to pharmacy";
-const btnName3 = "Send to dispensation";
 const btnFill = "clear";
 const showMoreMedicationsMsg = ref("Show more medications");
 const store = useTreatmentPlanStore();
@@ -407,6 +431,21 @@ const showMoreAllergyMsg = ref("Show more allergies");
 const FirstPreviousAllegies = ref();
 const RestOfPreviousAllegies = ref();
 const currentDrugOb = ref()
+
+const morning_dose = ref()
+const morning_dose_err_msg = ref()
+const show_error_msg_for_morning_dose = ref(false)
+
+
+const afternoon_dose = ref()
+const afternoon_doseerr_msg = ref()
+const show_error_msg_for_afternoon_dose = ref(false)
+
+const evening_dose = ref()
+const evening_doseerr_msg = ref()
+const show_error_msg_for_evening_dose = ref(false)
+
+const is_selected_insulin = ref(false)
 
 const multi_Selection = false as any
 const uniqueId = "125389317452" as any
@@ -452,21 +491,42 @@ watch(
     async (newValue) => {
         validatedDrugName();
     }
-);
+)
+
+watch(
+    () => morning_dose.value,
+    async (newValue) => {
+        validateMorningDose();
+    }
+)
+
+watch(
+    () => afternoon_dose.value,
+    async (newValue) => {
+        validateAfternoonDose();
+    }
+)
+
+watch(
+    () => evening_dose.value,
+    async (newValue) => {
+        validateEveningDose();
+    }
+)
 
 watch(
     () => dose.value,
     async (newValue) => {
         validateDose();
     }
-);
+)
 
 watch(
     () => duration.value,
     async (newValue) => {
         validateDuration();
     }
-);
+)
 
 function addData() {
     addItemButton.value = !addItemButton.value;
@@ -506,9 +566,9 @@ async function validateDuration() {
 }
 
 async function areFieldsValid() {
-    const isDrugnameValid = await validatedDrugName();
-    const isDoseValid = await validateDose();
-    const isDurationValid = await validateDuration();
+    const isDrugnameValid = await validatedDrugName()
+    const isDoseValid = await validateDose()
+    const isDurationValid = await validateDuration()
 
     if (!isDrugnameValid && !isDoseValid && !isDurationValid) {
         return true;
@@ -517,12 +577,58 @@ async function areFieldsValid() {
     }
 }
 
-function selectAl(item: any) {
-    item.selected = !item.selected;
-    const treatmentPlanStore = useTreatmentPlanStore();
-    treatmentPlanStore.setSelectedMedicalAllergiesList(item);
-    saveStateValuesState();
+async function areInsulinFieldsValid() {
+    const isDrugnameValid = await validatedDrugName()
+    const is_morning_dose_valid = await validateMorningDose()
+    const is_afternoon_dose_valid = await validateAfternoonDose()
+    const is_evening_dose_valid = await validateEveningDose()
+
+    if (!isDrugnameValid && !is_morning_dose_valid && !is_afternoon_dose_valid && !is_evening_dose_valid) {
+        return true;
+    } else {
+        return false;
+    }
 }
+
+async function validateMorningDose() {
+    const isNum = isNumeric(morning_dose.value)
+    if (!isNum) {
+        morning_dose_err_msg.value = "please enter a number"
+        show_error_msg_for_morning_dose.value = true
+    } else {
+        show_error_msg_for_morning_dose.value = false
+    }
+    return show_error_msg_for_morning_dose.value
+}
+
+async function validateAfternoonDose() {
+    const isNum = isNumeric(afternoon_dose.value)
+    if (!isNum) {
+        afternoon_doseerr_msg.value = "please enter a number"
+        show_error_msg_for_afternoon_dose.value = true
+    } else {
+        show_error_msg_for_afternoon_dose.value = false
+    }
+    return show_error_msg_for_afternoon_dose.value
+}
+
+async function validateEveningDose() {
+    const isNum = isNumeric(evening_dose.value)
+    if (!isNum) {
+        evening_doseerr_msg.value = "please enter a number"
+        show_error_msg_for_evening_dose.value = true
+    } else {
+        show_error_msg_for_evening_dose.value = false
+    }
+    return show_error_msg_for_evening_dose.value  
+}
+
+// function selectAl(item: any) {
+//     item.selected = !item.selected;
+//     const treatmentPlanStore = useTreatmentPlanStore();
+//     treatmentPlanStore.setSelectedMedicalAllergiesList(item);
+//     saveStateValuesState();
+// }
 
 function selectFrequency(index: any) {
     drug_frequencies.forEach((item) => {
@@ -532,20 +638,20 @@ function selectFrequency(index: any) {
     frequency.value = drug_frequencies[index].label;
 }
 
-async function saveData() {
-    const are_fieldsValid = await areFieldsValid();
+async function generalPrescription() {
+    const are_fieldsValid = await areFieldsValid()
     if (!are_fieldsValid) {
-        toastWarning("Please enter correct data values", 4000);
+        toastWarning("Please enter correct data values", 4000)
         return;
     }
-    dissmissDrugAddField();
+    dissmissDrugAddField()
     const systemSessionDate = Service.getSessionDate();
     const daysToAdd = duration.value;
-    const generatedPrescriptionDate = addDaysToDate(systemSessionDate, parseInt(duration.value));
+    const generatedPrescriptionDate = addDaysToDate(systemSessionDate, parseInt(duration.value))
     let highlightbackground = false
 
     if (isPresentInAllergyList(currentDrugOb.value) == true) {
-        highlightbackground = true;
+        highlightbackground = true
     }
 
     const drugString = {
@@ -566,7 +672,51 @@ async function saveData() {
     prescription.value = "";
     componentKey.value++;
     saveStateValuesState();
-    
+}
+
+async function insulinPrescription() {
+    const are_fieldsValid = await areInsulinFieldsValid()
+    if (!are_fieldsValid) {
+        toastWarning("Please enter correct data values", 4000)
+        return;
+    }
+    dissmissDrugAddField()
+    const systemSessionDate = Service.getSessionDate();
+    const daysToAdd = duration.value;
+    const generatedPrescriptionDate = addDaysToDate(systemSessionDate, parseInt(duration.value))
+    let highlightbackground = false
+
+    if (isPresentInAllergyList(currentDrugOb.value) == true) {
+        highlightbackground = true
+    }
+
+    const drugString = {
+        drugName: drugName.value,
+        // dose: morning_dose.value,
+        // frequency: frequency.value,
+        // duration: duration.value,
+        prescription: generatedPrescriptionDate,
+        drug_id: drug_id.value,
+        units: units.value,
+        highlightbackground: highlightbackground
+    };
+    selectedMedicalDrugsList.value.push(drugString);
+    drugName.value = "";
+    // dose.value = "";
+    // frequency.value = "";
+    // duration.value = "";
+    prescription.value = "";
+    componentKey.value++;
+    saveStateValuesState();
+}
+
+async function saveData() {
+    if (is_selected_insulin.value == false) {
+        generalPrescription()
+    }
+    if (is_selected_insulin.value == true) {
+        insulinPrescription()
+    }
 }
 
 async function FindDrugName(text: any) {
@@ -578,15 +728,7 @@ async function FindDrugName(text: any) {
         name: searchText,
         page: page,
         page_size: limit,
-    });
-    // const filter_id_array: any[] = [];
-    // selectedAllergiesList2.value.forEach((selectedMedicalAllergy: any) => {
-    //     if (selectedMedicalAllergy.selected) {
-    //         filter_id_array.push(selectedMedicalAllergy.concept_id);
-    //     }
-    // });
-
-    //const filteredDrugs = filterArrayByIDs(drugs as any, filter_id_array as any);
+    })
 
     drugs.map((drug: any) => ({
         label: drug.name,
@@ -609,15 +751,7 @@ async function FindDrugName2(text: any) {
         name: search_value,
         page: page,
         page_size: limit,
-    });
-    // const filter_id_array: any[] = []
-    // selectedAllergiesList2.value.forEach((selectedMedicalAllergy: any) => {
-    //     if (selectedMedicalAllergy.selected) {
-    //         filter_id_array.push(selectedMedicalAllergy.concept_id);
-    //     }
-    // })
-
-    //const filteredDrugs = filterArrayByIDs(drugs as any, filter_id_array as any);
+    })
 
     drugs.map((drug: any) => ({
         label: drug.name,
@@ -645,16 +779,47 @@ function isPresentInAllergyList(obj: any) {
     }
 }
 
+function isInsulinPresent(obj: any) {
+    const insulin_concept_ids = [
+        279,
+        282,
+    ]
+    const filteredDrugs = hasMatchingIDs([obj] as any, insulin_concept_ids as any)
+    if (filteredDrugs == true) {
+        return true
+    } else {
+        return false
+    }
+}
+
+const dynamic_button_properties = [
+    {
+        showAddItemButton: true,
+        addItemButton: true,
+        name: "save",
+        btnFill: 'clear',
+        fn: saveData,
+    },
+    {
+        showAddItemButton: true,
+        addItemButton: true,
+        name: "cancel",
+        btnFill: 'clear',
+        fn: addData,
+    }
+]
+
+function sselectionListUpdated(data: any) {
+    selectFrequency(getLabelIndex(data.label))
+}
+
+function getLabelIndex(label: string) {
+  return DRUG_FREQUENCIES.findIndex(drug => drug.label === label);
+}
+
 async function findIfDrugNameExists() {
     const filteredDrugs = await FindDrugName2(drugName.value);
     if (filteredDrugs.length > 0) {
-        // if (drugName.length > 0) {
-        //     filteredDrugs.forEach((drug: any) => {
-        //         if (drug.name === drugName) {
-        //             return true
-        //         }
-        //     })
-        // }
         if (drugName.value.length == 0) {
             return false;
         }
@@ -675,36 +840,11 @@ function hasMatchingIDs(mainArray: any[], idsToFilter: any[]): boolean {
     );
 }
 
-
-async function FindAllegicDrugName(text: any) {
-    const searchText = text.target.value;
-    const page = 1,
-        limit = 10;
-    const drugs: ConceptName[] = await ConceptService.getConceptSet("OPD Medication", searchText);
-    // const drugs: ConceptName[] = await DrugService.getOPDDrugs({
-    // "name": searchText,
-    // "page": page,
-    // "selected": false as any,
-    // "page_size": limit,
-    // })
-    drugs.map((drug) => ({
-        label: drug.name,
-        value: drug.name,
-        other: drug,
-    }));
-    const treatmentPlanStore = useTreatmentPlanStore();
-    treatmentPlanStore.setMedicalAllergiesList(drugs);
-}
-
 function openPopover(e: any) {
     event = e;
     popoverOpen.value = true;
 }
 
-function openPrescPopover(e: any) {
-    // const prescEvent = e
-    prescPopoverOpen.value = true;
-}
 
 function selectedDrugName(name: any, obj: any) {
     drugName.value = name;
@@ -712,11 +852,15 @@ function selectedDrugName(name: any, obj: any) {
     units.value = obj.units;
     currentDrugOb.value = obj
     isPresentInAllergyList(obj)
+    const is_insulin_present = isInsulinPresent(obj)
+
+    if (is_insulin_present == true) {
+        is_selected_insulin.value = true
+    } else if (is_insulin_present == false) {
+        is_selected_insulin.value = false
+    }
 }
 
-function popoverOpenForFrequencyFn2() {
-    showPopoverOpenForFrequency.value = true;
-}
 
 function editItemAtIndex(index: any) {
     const dataItem = selectedMedicalDrugsList.value[index];
@@ -778,11 +922,9 @@ function dissmissDrugAddField(): void {
     search_item.value = false;
     display_item.value = true;
     addItemButton.value = true;
+    is_selected_insulin.value = false;
 }
 
-function setFocus() {
-    input.value.$el.setFocus();
-}
 
 function accordionGroupChangeFn1(ev: AccordionGroupCustomEvent) {}
 
@@ -878,7 +1020,7 @@ ion-button.medicalAlBtn {
     background: #fecdca;
     color: #b42318;
     text-transform: none;
-    padding: 6%;
+    padding: 8px;
     border-radius: 10px;
     margin-top: 7px;
     display: flex;
