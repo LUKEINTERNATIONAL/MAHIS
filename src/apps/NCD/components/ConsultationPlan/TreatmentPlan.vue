@@ -188,6 +188,16 @@
                         <ion-label v-if="show_error_msg_for_evening_dose" class="error-label">{{ evening_doseerr_msg }}</ion-label>
                     </div>
                 </ion-col>
+
+                <ion-col>
+                    <ion-item class="input_item">
+                        <ion-input placeholder="Duration" v-model="duration_for_insulin" fill="outline"></ion-input>
+                        <ion-label><span class="selectedPatient"></span></ion-label>
+                    </ion-item>
+                    <div>
+                        <ion-label v-if="show_err_for_duration_for_insulin" class="error-label">{{ duration_for_insulinerr_msg }}</ion-label>
+                    </div>
+                </ion-col>
             </ion-row>
 
             <ion-row v-if="!addItemButton" style="margin-bottom: 20px">
@@ -447,6 +457,10 @@ const show_error_msg_for_evening_dose = ref(false)
 
 const is_selected_insulin = ref(false)
 
+const duration_for_insulin = ref()
+const duration_for_insulinerr_msg = ref()
+const show_err_for_duration_for_insulin = ref()
+
 const multi_Selection = false as any
 const uniqueId = "125389317452" as any
 const name_of_list = ref("List" as any)
@@ -582,8 +596,9 @@ async function areInsulinFieldsValid() {
     const is_morning_dose_valid = await validateMorningDose()
     const is_afternoon_dose_valid = await validateAfternoonDose()
     const is_evening_dose_valid = await validateEveningDose()
+    const is_duration_for_insulin_valid = await validateDurationForInsulin()
 
-    if (!isDrugnameValid && !is_morning_dose_valid && !is_afternoon_dose_valid && !is_evening_dose_valid) {
+    if (!isDrugnameValid && !is_morning_dose_valid && !is_afternoon_dose_valid && !is_evening_dose_valid && !is_duration_for_insulin_valid) {
         return true;
     } else {
         return false;
@@ -621,6 +636,17 @@ async function validateEveningDose() {
         show_error_msg_for_evening_dose.value = false
     }
     return show_error_msg_for_evening_dose.value  
+}
+
+async function validateDurationForInsulin() {
+    const isNum = isNumeric(duration_for_insulin.value)
+    if (!isNum) {
+        duration_for_insulinerr_msg.value = "please enter a number"
+        show_err_for_duration_for_insulin.value = true
+    } else {
+        show_err_for_duration_for_insulin.value = false
+    }
+    return show_err_for_duration_for_insulin.value
 }
 
 // function selectAl(item: any) {
@@ -694,7 +720,7 @@ async function insulinPrescription() {
         drugName: drugName.value,
         // dose: morning_dose.value,
         // frequency: frequency.value,
-        // duration: duration.value,
+        duration: duration_for_insulin.value,
         prescription: generatedPrescriptionDate,
         drug_id: drug_id.value,
         units: units.value,
@@ -705,6 +731,10 @@ async function insulinPrescription() {
     // dose.value = "";
     // frequency.value = "";
     // duration.value = "";
+    morning_dose.value = "";
+    afternoon_dose.value = "";
+    evening_dose.value = "";
+    duration_for_insulin.value = "";
     prescription.value = "";
     componentKey.value++;
     saveStateValuesState();
