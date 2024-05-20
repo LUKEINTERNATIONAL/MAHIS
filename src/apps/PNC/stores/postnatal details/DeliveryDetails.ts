@@ -13,7 +13,7 @@ const initialDeliveryDetails=[
                     {
                         colData: [
                             {
-                                inputHeader: 'Date of delivery',
+                                inputHeader: 'Date of delivery*',
                                 value: '',
                                 name: 'Date of delivery',
                                 icon: icons.calenderPrimary,
@@ -43,7 +43,7 @@ const initialDeliveryDetails=[
         radioBtnContent:
             {
                 header:{
-                    title: 'Mode of delivery',
+                    title: 'Mode of delivery*',
                     selectedValue: '',
                     class:"bold",
                     name:"Mode of delivery",
@@ -115,7 +115,7 @@ const initialDeliveryDetails=[
         radioBtnContent:
             {
                 header:{
-                    title: 'Place of delivery',
+                    title: 'Place of delivery*',
                     selectedValue: '',
                     name:'Place of delivery',
                     class:'bold'
@@ -157,7 +157,7 @@ const initialDeliveryDetails=[
         radioBtnContent:
             {
                 header:{
-                    title: 'Staff conducting delivery',
+                    title: 'Staff conducting delivery*',
                     selectedValue: '',
                     class:'bold',
                     name:'Staff conducting delivery'
@@ -186,7 +186,7 @@ const initialDeliveryDetails=[
         radioBtnContent:
             {
                 header:{
-                    title: 'What was the outcome of the delivery?',
+                    title: 'What was the outcome of the delivery?*',
                     selectedValue: '',
                     class:'bold',
                     name:'Outcome of the delivery',
@@ -222,7 +222,7 @@ const initialDeliveryDetails=[
         radioBtnContent:
             {
                 header:{
-                    title: 'Type of still birth?',
+                    title: 'Type of still birth?*',
                     selectedValue: '',
                     class:'bold',
                     name:'Type of still birth',
@@ -259,7 +259,7 @@ const initialDeliveryDetails=[
                         colData: [
                             {
                                 displayNone:true,
-                                inputHeader: 'Total number of babies',
+                                inputHeader: 'Total number of babies*',
                                 unit: 'baby',
                                 icon: icons.editPen,
                                 value: '',
@@ -288,7 +288,7 @@ const initialDeliveryDetails=[
                         colData: [
                             {
                                 displayNone:true,
-                                inputHeader: 'First name',
+                                inputHeader: 'First name*',
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
@@ -299,7 +299,7 @@ const initialDeliveryDetails=[
                                 inputWidth: '',
                             },
                             {
-                                inputHeader: 'Last name',
+                                inputHeader: 'Last name*',
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
@@ -327,7 +327,7 @@ const initialDeliveryDetails=[
                         colData: [
                             {
                                 displayNone:true,
-                                inputHeader: 'Birth weight',
+                                inputHeader: 'Birth weight*',
                                 unit: 'gm',
                                 icon: icons.weight,
                                 value: '',
@@ -338,7 +338,7 @@ const initialDeliveryDetails=[
                                 inputWidth: '',
                             },
                             {
-                                inputHeader: 'Birth height',
+                                inputHeader: 'Birth height*',
                                 unit: 'cm',
                                 icon: icons.editPen,
                                 value: '',
@@ -367,7 +367,7 @@ const initialDeliveryDetails=[
                         colData: [
                             {
                                 displayNone:true,
-                                inputHeader: 'APGAR score at 5 minutes',
+                                inputHeader: 'APGAR score at 5 minutes*',
                                 unit: '',
                                 icon: icons.weight,
                                 value: '',
@@ -390,7 +390,7 @@ const initialDeliveryDetails=[
         checkboxBtnContent:
             {
                 header:{
-                    title: 'Newborn complications',
+                    title: 'Newborn complications*',
                     selectedValue: '',
                     class:'bold',
                     name:'Newborn baby complications',
@@ -525,7 +525,7 @@ const initialDeliveryDetails=[
         radioBtnContent:
             {
                 header:{
-                    title: 'Was resuscitation attempted?',
+                    title: 'Was resuscitation attempted?*',
                     selectedValue: '',
                     class:'bold',
                     name:'Resuscitation attempt',
@@ -558,7 +558,7 @@ const initialDeliveryDetails=[
         radioBtnContent:
             {
                 header:{
-                    title: 'Type of resuscitation',
+                    title: 'Type of resuscitation*',
                     selectedValue: '',
                     class:'bold',
                     name:'Type of Resuscitation',
