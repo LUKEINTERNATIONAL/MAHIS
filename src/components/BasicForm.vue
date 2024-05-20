@@ -12,10 +12,12 @@
     >
         <ion-col
             class="item_header_col"
-            v-if="item['sectionHeader'] || item['sideColSize'] || item['sectionHeader'] == null"
+            v-if="item['sectionHeader'] || item['sideColSize'] || item['sectionHeader'] == 'null'"
             :size="item['sideColSize']"
         >
-            <span class="item_header" :style="'font-weight:' + item.sectionHeaderFontWeight">{{ item["sectionHeader"] }}</span>
+            <span class="item_header" :style="'font-weight:' + item.sectionHeaderFontWeight" v-if="item['sectionHeader'] != 'null'">{{
+                item["sectionHeader"]
+            }}</span>
         </ion-col>
         <ion-col v-if="!item.displayNone">
             <!-- rowData -->
@@ -61,7 +63,7 @@
                                 label="name"
                                 :searchable="true"
                                 @search-change="$emit('search-change', $event)"
-                                track-by="concept_id"
+                                :track-by="col.trackBy || 'concept_id'"
                                 :options="col.multiSelectData"
                             />
                         </div>
@@ -71,8 +73,7 @@
                                 v-model="col.value"
                                 @update:model-value="handleInput(contentData, col, $event, 'updateMultiselect')"
                                 :multiple="false"
-                                :taggable="false"
-                                :hide-selected="true"
+                                :hide-selected="false"
                                 :close-on-select="true"
                                 :openDirection="col.openDirection || 'bottom'"
                                 tag-placeholder=""
@@ -81,7 +82,7 @@
                                 label="name"
                                 :searchable="true"
                                 @search-change="$emit('search-change', $event)"
-                                track-by="concept_id"
+                                :track-by="col.trackBy || 'concept_id'"
                                 :options="col.multiSelectData"
                             />
                         </div>
@@ -107,8 +108,15 @@
                             {{ col.alertsErrorMassage }}
                         </div>
                     </ion-col>
-                    <ion-col size="btn.btn_col_size || 1.7" class="btn_col" v-for="(btn, btnIndex) in element.btns" :key="btnIndex">
-                        <DynamicButton :name="btn.name" :fill="btn.fill" :icon="btn.icon" @click="$emit('clicked:button', btn.name)" />
+                    <ion-col :size="btn.btn_col_size || 1.7" class="btn_col" v-for="(btn, btnIndex) in element.btns" :key="btnIndex">
+                        <DynamicButton
+                            :name="btn.name"
+                            :showName="btn.showName"
+                            :size="btn.size"
+                            :fill="btn.fill"
+                            :icon="btn.icon"
+                            @click="$emit('clicked:button', btn.name)"
+                        />
                     </ion-col>
                 </ion-row>
             </span>
@@ -262,7 +270,7 @@
                                 label="name"
                                 :searchable="true"
                                 @search-change="$emit('search-change', $event)"
-                                track-by="id"
+                                :track-by="checkboxInput.trackBy || 'id'"
                                 :options="checkboxInput.multiSelectData"
                             />
                         </div>
@@ -465,9 +473,9 @@ ion-radio {
     margin-right: 20%;
 }
 @media screen and (max-width: 768px) {
-  .checkout_col ion-checkbox {
-    margin-right: 10%;
-  }
+    .checkout_col ion-checkbox {
+        margin-right: 10%;
+    }
 }
 .alerts_error {
     margin-top: 2px;

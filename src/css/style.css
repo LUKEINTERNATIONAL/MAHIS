@@ -373,6 +373,8 @@ video {
     justify-content: center;
     padding: 3vw;
     margin-bottom: 20px;
+    contain: unset;
+    overflow: unset;
 }
 .no_content {
     justify-content: center;
@@ -421,7 +423,7 @@ ion-accordion {
 }
 .multiselect__content-wrapper {
     position: absolute;
-    width: 300px;
+    width: 100%;
 }
 /* #null-0 {
     display: none;

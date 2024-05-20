@@ -37,8 +37,8 @@
                         <PersonalInformation />
                     </ion-col>
                     <ion-col size-sm="12" size-md="6" size-lg="4">
-                        <SocialHistory />
                         <CurrentLocation />
+                        <SocialHistory />
                     </ion-col>
                     <ion-col size-sm="12" size-md="6" size-lg="4" class="regDisplayFlex">
                         <HomeLocation />
@@ -198,6 +198,15 @@ export default defineComponent({
         relationship() {
             return getFieldValue(this.guardianInformation, "relationship", "value");
         },
+        current_district() {
+            return getFieldValue(this.currentLocation, "current_district", "value")?.name;
+        },
+        current_traditional_authority() {
+            return getFieldValue(this.currentLocation, "current_traditional_authority", "value")?.name;
+        },
+        current_village() {
+            return getFieldValue(this.currentLocation, "current_village", "value")?.name;
+        },
     },
 
     mounted() {
@@ -243,8 +252,7 @@ export default defineComponent({
             this.openNewPage(patientData);
         },
         async saveData() {
-            await this.createPatient();
-            await UserService.setProgramUserActions();
+            if (await this.createPatient()) await UserService.setProgramUserActions();
         },
         async validations(data: any, fields: any) {
             if (this.nationalID != "") {
@@ -259,7 +267,8 @@ export default defineComponent({
 
         async createPatient() {
             const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
-            if (await this.validations(this.personInformation, fields)) {
+            const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
+            if ((await this.validations(this.personInformation, fields)) && (await this.validations(this.currentLocation, currentFields))) {
                 this.buildPersonalInformation();
                 if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
                 const registration: any = new PatientRegistrationService();
@@ -274,8 +283,10 @@ export default defineComponent({
 
                 this.findPatient(patientID);
                 toastSuccess("Successfully Created Patient");
+                return true;
             } else {
                 if (!(await this.mwIdExists(this.nationalID))) toastWarning("Please complete all required fields");
+                return false;
             }
         },
         async createNationID() {
@@ -341,10 +352,10 @@ export default defineComponent({
                 home_district: getFieldValue(this.homeLocation, "homeDistrict", "value"),
                 home_traditional_authority: getFieldValue(this.homeLocation, "homeTraditionalAuthority", "value"),
                 home_village: getFieldValue(this.homeLocation, "homeVillage", "value"),
-                current_region: getFieldValue(this.currentLocation, "currentDistrict", "value"),
-                current_district: getFieldValue(this.currentLocation, "currentDistrict", "value"),
-                current_traditional_authority: getFieldValue(this.currentLocation, "currentTraditionalAuthority", "value"),
-                current_village: getFieldValue(this.currentLocation, "currentVillage", "value"),
+                current_region: getFieldValue(this.currentLocation, "current_district", "value"),
+                current_district: getFieldValue(this.currentLocation, "current_district", "value"),
+                current_traditional_authority: getFieldValue(this.currentLocation, "current_traditional_authority", "value"),
+                current_village: getFieldValue(this.currentLocation, "current_village", "value"),
                 landmark: getFieldValue(this.currentLocation, "closestLandmark", "value"),
                 cell_phone_number: getFieldValue(this.personInformation, "phoneNumber", "value"),
                 occupation: getRadioSelectedValue(this.socialHistory, "occupation"),

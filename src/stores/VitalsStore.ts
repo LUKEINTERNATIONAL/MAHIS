@@ -292,7 +292,7 @@ const initialVitals = [
         },
     },
     {
-        sectionHeader: null,
+        sectionHeader: "null",
         data: {
             rowData: [
                 {
