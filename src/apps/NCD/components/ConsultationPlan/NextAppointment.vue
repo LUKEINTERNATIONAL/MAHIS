@@ -113,7 +113,7 @@ export default defineComponent({
         this.appointment = new AppointmentService(patient.getID(), userID);
         this.nextAppointmentDate = this.appointment.date;
         const storeClinicalDaysStore = useClinicalDaysStore()
-        this.disabledDates = storeClinicalDaysStore.generateDisabledDates() as any
+        this.disabledDates = storeClinicalDaysStore.getDisabledDates() as any
     },
     methods: {
         updateNextAppointment() {

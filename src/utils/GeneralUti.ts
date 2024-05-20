@@ -53,3 +53,7 @@ export function getFieldsValuesObj(properties_array: any[]) {
     })
     return resultObject;
 }
+
+export function combineArrays<T>(...arrays: T[][]): T[] {
+    return arrays.reduce((combinedArray, array) => combinedArray.concat(array), []);
+}
