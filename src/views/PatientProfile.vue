@@ -144,7 +144,7 @@
             </ion-fab>
         </ion-content>
 
-        <!-- <ion-popover
+        <ion-popover
             mobilePopover
             trigger="programList"
             trigger-action="click"
@@ -180,7 +180,7 @@
             <ul style="list-style: none; line-height: 50px" v-for="(item, index) in visits" :key="index">
                 <li>{{ convertToDisplayDate(item) }}</li>
             </ul>
-        </ion-popover> -->
+        </ion-popover>
     </ion-page>
 </template>
 
@@ -383,30 +383,30 @@ export default defineComponent({
         async setNCDValue() {
             this.programBtn = await UserService.userProgramData();
             console.log(this.programBtn);
-            // if (this.userActions.length > 0) [{ NCDUserAction: this.NCDUserAction }] = this.userActions;
-            // this.programBtn = [
-            //     {
-            //         name: "NCD PROGRAM",
-            //         obj: this.NCDUserAction,
-            //     },
-            //     {
-            //         name: "IMMUNIZATION PROGRAM",
-            //         obj: {
-            //             url: "birthRegistration",
-            //             id: 33,
-            //             name: "IMMUNIZATION PROGRAM",
-            //         },
-            //     },
-            //     {
-            //         name: "NCD PROGRAM",
-            //         obj: {
-            //             actionName: "+ Enroll in ANC Program",
-            //             url: "NCDEnrollment",
-            //             name: "NCD",
-            //             id: "32",
-            //         },
-            //     },
-            // ];
+            if (this.userActions.length > 0) [{ NCDUserAction: this.NCDUserAction }] = this.userActions;
+            this.programBtn = [
+                {
+                    name: "NCD PROGRAM",
+                    obj: this.NCDUserAction,
+                },
+                {
+                    name: "IMMUNIZATION PROGRAM",
+                    obj: {
+                        url: "birthRegistration",
+                        id: 33,
+                        name: "IMMUNIZATION PROGRAM",
+                    },
+                },
+                {
+                    name: "NCD PROGRAM",
+                    obj: {
+                        actionName: "+ Enroll in ANC Program",
+                        url: "NCDEnrollment",
+                        name: "NCD",
+                        id: "32",
+                    },
+                },
+            ];
         },
         setOPDValue() {
             sessionStorage.setItem("app", JSON.stringify({ programID: 14, applicationName: "OPD" }));
