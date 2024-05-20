@@ -58,17 +58,23 @@
                 
                     <ion-col size="7">
                         <VueDatePicker
+                            v-model="date"
                             :enable-time-picker="false"
                             inline
                             auto-apply
+                            multi-dates
                         />
                     </ion-col>
 
                     <ion-col size="3">
                         <div style="margin-left: 40px;">
-                            <ion-label style="font-weight: bold; font-size: 22px;">Total Holidays Set</ion-label>
+                            <ion-row>
+                                <ion-label style="font-weight: bold; font-size: 22px;">Total Holidays Set</ion-label>
+                            </ion-row>
+                            <ion-row>
+                                <ion-label style="font-size: 22px; margin: 10px;">{{ totalHolidaysSelected }}</ion-label>
+                            </ion-row>
                         </div>
-                       
                     </ion-col>
                 
             </ion-row>
@@ -108,13 +114,17 @@ import {
     IonCheckbox
 } from "@ionic/vue"
 import Toolbar from '@/components/Toolbar.vue'
-import { ref, onMounted, watch } from "vue"
+import { ref, onMounted,computed, watch } from "vue"
 import { chevronBackOutline, checkmark } from "ionicons/icons"
 import Toggle from '@vueform/toggle'
 import router from '@/router'
+import HisDate from "@/utils/Date"
+import { useClinicalDaysStore } from "@/stores/clinicalDaysStore"
 
 const toggle_local = ref(false)
 const disable_weekends = ref(true)
+const totalHolidaysSelected = ref(0)
+const date = ref()
 
 watch(
     () => toggle_local.value,
@@ -123,9 +133,34 @@ watch(
     }
 )
 
+onMounted(async () => {
+    loadHolidayDates()
+})
+
+function loadHolidayDates() {
+    const store = useClinicalDaysStore()
+    totalHolidaysSelected.value = store.getHolidaydatesDataSize()
+    date.value = store.getHolidaydates()
+}
+
+watch(
+    () => date.value,
+    async (newValue) => {
+        saveStateValuesState()
+        loadHolidayDates()
+    }
+)
+
+function saveStateValuesState() {
+    const storeClinicalDaysStore = useClinicalDaysStore()
+    storeClinicalDaysStore.setSelectedMedicalDrugsList(date.value)
+}
+
 function nav(url: any) {
     router.push(url)
 }
+
+
 </script>
 
 <style scoped>
