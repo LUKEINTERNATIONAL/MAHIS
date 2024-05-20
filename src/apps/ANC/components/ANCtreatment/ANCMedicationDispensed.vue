@@ -13,55 +13,6 @@
       </ion-item>
     </ion-row>
 
-<!--    <ion-accordion-group ref="accordionGroup" class="previousView">-->
-<!--      <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">-->
-<!--        <ion-item slot="header" color="light">-->
-<!--          <ion-label class="previousLabel">A</ion-label>-->
-<!--        </ion-item>-->
-<!--        <div class="ion-padding" slot="content">-->
-<!--          <div class="ionLbltp" v-for="(item, index) in FirstPreviousAllegies" :key="index">-->
-<!--            <div v-if="index == 1">-->
-<!--              <div>-->
-<!--                <ion-label class="previousLabelDate">{{ item[0].date }}</ion-label>-->
-<!--              </div>-->
-<!--              <div v-for="(item1, index1) in item" :key="index1">-->
-<!--                <div class="previousSecDrgs">-->
-<!--                  <ion-list>-->
-<!--                    <ion-label class="notes_p">{{ item1.value }} </ion-label>-->
-<!--                  </ion-list>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-
-<!--          <ion-accordion-group @ionChange="accordionGroupChangeForAllergies">-->
-<!--            <ion-accordion value="fith" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">-->
-<!--              <ion-item slot="header" color="light">-->
-<!--                <ion-label class="" color="primary">{{ showMoreAllergyMsg }}</ion-label>-->
-<!--              </ion-item>-->
-<!--              <div class="ion-padding" slot="content">-->
-<!--                <div class="ionLbltp" v-for="(item, index) in RestOfPreviousAllegies" :key="index">-->
-<!--                  <div>-->
-<!--                    <ion-label class="previousLabelDate">{{ item[0] }}</ion-label>-->
-<!--                  </div>-->
-<!--                  <div v-for="(item1, index1) in removeOuterArray(item)" :key="index1">-->
-<!--                    &lt;!&ndash; <div>-->
-<!--                            <ion-label class="previousLabelDate">{{ item1.date }}</ion-label>-->
-<!--                        </div> &ndash;&gt;-->
-<!--                    <div class="previousSecDrgs">-->
-<!--                      <ion-list>-->
-<!--                        <ion-label class="notes_p">{{ item1.value }} </ion-label>-->
-<!--                      </ion-list>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </ion-accordion>-->
-<!--          </ion-accordion-group>-->
-<!--        </div>-->
-<!--      </ion-accordion>-->
-<!--    </ion-accordion-group>-->
-
     <ion-item lines="none">
       <ion-label>List of medications</ion-label>
     </ion-item>
@@ -98,9 +49,7 @@
               v-if="!show_error_msg_for_drug_name"
           >
             <ion-content color="light" class="ion-padding content-al">
-              <!-- <ion-row class="search_result" v-for="(item, index) in diagnosisData" :key="index" >
-                  <ion-col @click="selectedDrugName(item.name, item)">{{ item.name }} </ion-col>
-              </ion-row> -->
+
               <ion-list class="list-al">
                 <div class="item-al" v-for="(item, index) in diagnosisData" :key="index">
                   <ion-col @click="selectedDrugName(item.name, item)">{{ item.name }} </ion-col>
@@ -170,32 +119,13 @@
             <ion-label v-if="show_error_msg_for_duration" class="error-label">{{ durationErrMsg }}</ion-label>
           </div>
         </ion-col>
-        <!-- <ion-col>
-            <ion-item class="input_item" style="min-height: 50px !important; height: 5px;">
-                <ion-input  id="click-trigger2" placeholder="Prescription" v-model="prescription" ></ion-input>
-                <ion-popover
-                    @didDismiss="prescPopoverOpen = false"
-                    show-backdrop="false"
-                    dismiss-on-select="false"
-                    trigger="click-trigger2"
-                    trigger-action="click"
-                    >
-                    <ion-content class="search_card" >
-                        <ion-datetime ref="prescription" @ionChange="getDate($event)" presentation="date"></ion-datetime>
-                    </ion-content>
-                </ion-popover>
-            </ion-item>
-        </ion-col> -->
         <ion-col class="action_buttons">
           <span @click="saveData()">+ Save</span>
         </ion-col>
       </ion-row>
 
       <dynamic-button v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" @clicked:btn="addData"></dynamic-button>
-      <!-- <ion-row>
-          <dynamic-button class="addMedicalTpBtn" :name="btnName2"></dynamic-button>
-          <dynamic-button class="addMedicalTpBtn" :name="btnName3" style="margin-left: 4%"></dynamic-button>
-      </ion-row> -->
+
 
       <div style="margin-top: 14px">
         <ion-accordion-group ref="accordionGroup" class="previousView" @ionChange="accordionGroupChangeFn1">
@@ -249,71 +179,6 @@
         </ion-accordion-group>
       </div>
     </div>
-
-<!--    <div style="margin-top: 14px; margin-left: 10px">-->
-<!--      <ion-label class="tpStndCls">Non-pharmalogical therapy and other notes</ion-label>-->
-
-<!--      <NonPharmacologicalIntervention/>-->
-
-<!--      <ion-item class="input_item" style="min-height: 120px; margin-top: 14px">-->
-<!--        <ion-label> <ion-icon slot="start" :icon="iconsContent.editPen" aria-hidden="true"></ion-icon> </ion-label>-->
-<!--        <ion-textarea-->
-<!--            @ionInput="validateNotes"-->
-<!--            v-model="nonPharmalogicalTherapyAndOtherNotes"-->
-<!--            style="min-height: 120px"-->
-<!--            class="inputTpln"-->
-<!--            :auto-grow="true"-->
-<!--            fill="outline"-->
-<!--        ></ion-textarea>-->
-<!--      </ion-item>-->
-<!--    </div>-->
-<!--    <div style="margin-top: 14px; margin-left: 10px">-->
-<!--      <ion-accordion-group ref="accordionGroup" class="previousView">-->
-<!--        <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">-->
-<!--          <ion-item slot="header" color="light">-->
-<!--            <ion-label class="previousLabel">Previous visits notes</ion-label>-->
-<!--          </ion-item>-->
-<!--          <div class="ion-padding" slot="content">-->
-<!--            <div class="ionLbltp" v-for="(item, index) in FirstPreviousNotes" :key="index">-->
-<!--              <div v-if="index == 1">-->
-<!--                <div v-for="(item1, index1) in item" :key="index1">-->
-<!--                  <div>-->
-<!--                    <ion-label class="previousLabelDate">{{ item1.date }}</ion-label>-->
-<!--                  </div>-->
-<!--                  <div class="previousSecDrgs">-->
-<!--                    <ion-list>-->
-<!--                      <ion-label class="notes_p">{{ item1.notes }} </ion-label>-->
-<!--                    </ion-list>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </div>-->
-<!--            </div>-->
-
-<!--            <ion-accordion-group @ionChange="accordionGroupChangeForNotes">-->
-<!--              <ion-accordion value="third" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">-->
-<!--                <ion-item slot="header" color="light">-->
-<!--                  <ion-label class="" color="primary">{{ showMoreNotesMsg }}</ion-label>-->
-<!--                </ion-item>-->
-<!--                <div class="ion-padding" slot="content">-->
-<!--                  <div class="ionLbltp" v-for="(item, index) in RestOfPreviousNotes" :key="index">-->
-<!--                    <div v-for="(item1, index1) in removeOuterArray(item)" :key="index1">-->
-<!--                      <div>-->
-<!--                        <ion-label class="previousLabelDate">{{ item1.date }}</ion-label>-->
-<!--                      </div>-->
-<!--                      <div class="previousSecDrgs">-->
-<!--                        <ion-list>-->
-<!--                          <ion-label class="notes_p">{{ item1.notes }} </ion-label>-->
-<!--                        </ion-list>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </ion-accordion>-->
-<!--            </ion-accordion-group>-->
-<!--          </div>-->
-<!--        </ion-accordion>-->
-<!--      </ion-accordion-group>-->
-<!--    </div>-->
   </ion-list>
 </template>
 <script lang="ts">
@@ -368,7 +233,7 @@ import { PreviousTreatment } from "@/apps/NCD/services/treatment";
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { useAllegyStore} from "@/apps/OPD/stores/AllergyStore"
 import NonPharmacologicalIntervention from "@/apps/OPD/components/ConsultationPlan/NonPharmacologicalIntervention.vue"
-import ListPicker from "@/components/ListPicker.vue"
+//import ListPicker from "@/components/ListPicker.vue"
 import {Diagnosis} from "@/apps/OPD/services/diagnosis";
 
 const iconsContent = icons;
@@ -591,14 +456,7 @@ async function FindDrugName(text: any) {
     page: page,
     page_size: limit,
   });
-  // const filter_id_array: any[] = [];
-  // selectedAllergiesList2.value.forEach((selectedMedicalAllergy: any) => {
-  //     if (selectedMedicalAllergy.selected) {
-  //         filter_id_array.push(selectedMedicalAllergy.concept_id);
-  //     }
-  // });
 
-  //const filteredDrugs = filterArrayByIDs(drugs as any, filter_id_array as any);
 
   drugs.map((drug: any) => ({
     label: drug.name,
@@ -622,14 +480,7 @@ async function FindDrugName2(text: any) {
     page: page,
     page_size: limit,
   });
-  // const filter_id_array: any[] = []
-  // selectedAllergiesList2.value.forEach((selectedMedicalAllergy: any) => {
-  //     if (selectedMedicalAllergy.selected) {
-  //         filter_id_array.push(selectedMedicalAllergy.concept_id);
-  //     }
-  // })
 
-  //const filteredDrugs = filterArrayByIDs(drugs as any, filter_id_array as any);
 
   drugs.map((drug: any) => ({
     label: drug.name,

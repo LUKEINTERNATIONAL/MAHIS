@@ -10,7 +10,11 @@
             !contentData[index]?.data?.rowData[0]?.colData[0]?.displayNone
         "
     >
-        <ion-col class="item_header_col" v-if="item['sectionHeader'] || item['sideColSize']" :size="item['sideColSize']">
+        <ion-col
+            class="item_header_col"
+            v-if="item['sectionHeader'] || item['sideColSize'] || item['sectionHeader'] == null"
+            :size="item['sideColSize']"
+        >
             <span class="item_header" :style="'font-weight:' + item.sectionHeaderFontWeight">{{ item["sectionHeader"] }}</span>
         </ion-col>
         <ion-col v-if="!item.displayNone">
