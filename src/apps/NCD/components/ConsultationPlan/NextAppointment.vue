@@ -6,10 +6,10 @@
                     class="calender"
                     @date-update="handleDateUpdate"
                     v-model="date"
-                    :min-date="minDate"
                     inline
                     auto-apply
                     :enable-time-picker="false"
+                    :disabled-dates="disabledDates"
                 >
                     <template #day="{ day }">
                         <template v-if="day === tomorrow">
@@ -68,6 +68,7 @@ import { mapState } from "pinia";
 import { AppointmentService } from "@/services/appointment_service";
 import { Service } from "@/services/service";
 import { PatientService } from "@/services/patient_service";
+import { useClinicalDaysStore } from "@/stores/clinicalDaysStore";
 
 export default defineComponent({
     components: {
@@ -92,6 +93,7 @@ export default defineComponent({
             drugRunoutDate: "" as any,
             nextAppointmentDate: "" as any,
             minDate: new Date(),
+            disabledDates: []
         };
     },
     computed: {
@@ -110,6 +112,8 @@ export default defineComponent({
         const patient = new PatientService();
         this.appointment = new AppointmentService(patient.getID(), userID);
         this.nextAppointmentDate = this.appointment.date;
+        const storeClinicalDaysStore = useClinicalDaysStore()
+        this.disabledDates = storeClinicalDaysStore.generateDisabledDates() as any
     },
     methods: {
         updateNextAppointment() {

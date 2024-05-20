@@ -14,6 +14,12 @@ export const useClinicalDaysStore = defineStore('ClinicalDaysStore', {
         },
         getHolidaydatesDataSize() {
             return this.holidayDates.length
+        },
+        generateDisabledDates(): Date[] {
+            const disabledDates: Date[] = this.holidayDates
+                .map((dateString: string) => new Date(dateString))
+        
+            return disabledDates;
         }
     },
     persist:true,
