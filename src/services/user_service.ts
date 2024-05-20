@@ -160,7 +160,9 @@ export class UserService extends Service {
     }
     static async setNCDValue() {
         const patient = new PatientService();
+        console.log("🚀 ~ UserService ~ setNCDValue ~ patient.getID():", patient.getID());
         const visits = await PatientService.getPatientVisits(patient.getID(), false);
+
         const activities = await this.getUserActivities("NCD_activities");
         let url = "";
         let NCDProgramActionName = "";

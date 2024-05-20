@@ -339,15 +339,14 @@ const initialHomeLocation = [
                             popOver: true,
                             icon: icons.search,
                             value: "",
-                            name: "homeDistrict",
+                            name: "home_district",
                             setName: "homeLocation",
                             eventType: "input",
                             alertsError: false,
                             alertsErrorMassage: "",
-                            popOverData: {
-                                filterData: true,
-                                data: [],
-                            },
+                            isSingleSelect: true,
+                            trackBy: "district_id",
+                            multiSelectData: [],
                             id: "",
                             idName: "district_id",
                         },
@@ -365,18 +364,26 @@ const initialHomeLocation = [
                             inputHeader: "Home traditional authority",
                             icon: icons.search,
                             value: "",
-                            name: "homeTraditionalAuthority",
+                            name: "home_traditional_authority",
                             setName: "homeLocation",
                             eventType: "input",
                             alertsError: false,
                             alertsErrorMassage: "",
-                            popOverData: {
-                                filterData: false,
-                                data: [],
-                            },
-                            id: "",
+                            isSingleSelect: true,
+                            popOver: true,
+                            trackBy: "district_id",
+                            multiSelectData: [],
                             idName: "district_id",
                             displayNone: true,
+                        },
+                    ],
+                    btns: [
+                        {
+                            name: "TA",
+                            fill: "clear",
+                            btn_col_size: 2.1,
+                            showName: false,
+                            icon: icons.plus,
                         },
                     ],
                 },
@@ -392,18 +399,26 @@ const initialHomeLocation = [
                             inputHeader: "Home village",
                             icon: icons.search,
                             value: "",
-                            name: "homeVillage",
+                            name: "home_village",
                             setName: "homeLocation",
                             eventType: "input",
                             alertsError: false,
                             alertsErrorMassage: "",
-                            popOverData: {
-                                filterData: true,
-                                data: [],
-                            },
-                            id: "",
+                            isSingleSelect: true,
+                            popOver: true,
+                            trackBy: "district_id",
+                            multiSelectData: [],
                             idName: "traditional_authority_id",
                             displayNone: true,
+                        },
+                    ],
+                    btns: [
+                        {
+                            name: "Village",
+                            fill: "clear",
+                            btn_col_size: 2.1,
+                            showName: false,
+                            icon: icons.plus,
                         },
                     ],
                 },
@@ -420,18 +435,18 @@ const initialCurrentLocation = [
                 {
                     colData: [
                         {
-                            inputHeader: "Current district",
+                            inputHeader: "Current district*",
                             icon: icons.search,
                             value: "",
-                            name: "currentDistrict",
+                            name: "current_district",
                             setName: "currentLocation",
                             eventType: "input",
                             alertsError: false,
                             alertsErrorMassage: "",
-                            popOverData: {
-                                filterData: true,
-                                data: [],
-                            },
+                            isSingleSelect: true,
+                            popOver: true,
+                            trackBy: "district_id",
+                            multiSelectData: [],
                             id: "",
                             idName: "district_id",
                         },
@@ -446,18 +461,18 @@ const initialCurrentLocation = [
                 {
                     colData: [
                         {
-                            inputHeader: "Current traditional authority",
+                            inputHeader: "Current traditional authority*",
                             icon: icons.search,
                             value: "",
-                            name: "currentTraditionalAuthority",
+                            name: "current_traditional_authority",
                             setName: "currentLocation",
                             eventType: "input",
                             alertsError: false,
                             alertsErrorMassage: "",
-                            popOverData: {
-                                filterData: false,
-                                data: [],
-                            },
+                            isSingleSelect: true,
+                            popOver: true,
+                            trackBy: "traditional_authority_id",
+                            multiSelectData: [],
                             id: "",
                             idName: "district_id",
                             displayNone: true,
@@ -467,6 +482,15 @@ const initialCurrentLocation = [
                             },
                         },
                     ],
+                    btns: [
+                        {
+                            name: "TA",
+                            fill: "clear",
+                            btn_col_size: 2.1,
+                            showName: false,
+                            icon: icons.plus,
+                        },
+                    ],
                 },
             ],
         },
@@ -477,21 +501,30 @@ const initialCurrentLocation = [
                 {
                     colData: [
                         {
-                            inputHeader: "Current village",
+                            inputHeader: "Current village*",
                             icon: icons.search,
                             value: "",
-                            name: "currentVillage",
+                            name: "current_village",
                             setName: "currentLocation",
                             eventType: "input",
                             alertsError: false,
                             alertsErrorMassage: "",
-                            popOverData: {
-                                filterData: true,
-                                data: [],
-                            },
+                            isSingleSelect: true,
+                            popOver: true,
+                            trackBy: "village_id",
+                            multiSelectData: [],
                             id: "",
-                            idName: "traditional_authority_id",
+                            idName: "village_id",
                             displayNone: true,
+                        },
+                    ],
+                    btns: [
+                        {
+                            name: "Village",
+                            fill: "clear",
+                            btn_col_size: 2.1,
+                            showName: false,
+                            icon: icons.plus,
                         },
                     ],
                 },
@@ -546,6 +579,69 @@ const initialCurrentLocation = [
                                     },
                                 ],
                             },
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+] as any;
+const initialAddTA = [
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "TA*",
+                            value: "",
+                            name: "TA",
+                            eventType: "input",
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                            required: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Village*",
+                            value: "",
+                            name: "Village",
+                            eventType: "input",
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                            validate: false,
+                            required: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+] as any;
+const initialAddVillage = [
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Village*",
+                            value: "",
+                            name: "village",
+                            eventType: "input",
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                            validate: false,
+                            required: true,
                         },
                     ],
                 },
@@ -689,6 +785,8 @@ export const useRegistrationStore = defineStore("registrationStore", {
         homeLocation: [...initialHomeLocation],
         currentLocation: [...initialCurrentLocation],
         guardianInformation: [...initialGuardianInformation],
+        addTA: [...initialAddTA],
+        addVillage: [...initialAddVillage],
     }),
     actions: {
         setPersonalInformation(data: any) {
@@ -727,5 +825,5 @@ export const useRegistrationStore = defineStore("registrationStore", {
             return [...data];
         },
     },
-    persist: true,
+    // persist: true,
 });
