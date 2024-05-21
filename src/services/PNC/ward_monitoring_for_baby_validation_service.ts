@@ -9,10 +9,10 @@ import Validation from "@/validations/StandardValidations"
 
 export function validateField(data: any,fieldName: string, value: any) {
     const validationRules: any = {
-        'Systolic blood pressure': () => MultValidations(fieldName, value),
-        'Diastolic blood pressure': () => MultValidations(fieldName, value),
-        'Pulse': () => MultValidations(fieldName, value),
-        'Temp': () => MultValidations(fieldName, value),
+        'Birth weight': () => MultValidations(fieldName, value),
+        'Current weight': () => MultValidations(fieldName, value),
+        'Full name of the baby': () => MultValidations(fieldName, value),
+        'Date BCG given': () => MultValidations(fieldName, value),
         'Respiratory rate': () => MultValidations(fieldName, value),
 
 
