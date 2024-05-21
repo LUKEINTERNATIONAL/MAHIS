@@ -5,6 +5,7 @@ import { combineArrays } from "@/utils/GeneralUti"
 export const useClinicalDaysStore = defineStore('ClinicalDaysStore', {
     state: () => ({
         holidayDates: [] as any,
+        maximumNumberOfDaysForEachDay: 0 as number,
     }),
     actions:{
         setSelectedMedicalDrugsList(data: any) {
@@ -49,8 +50,13 @@ export const useClinicalDaysStore = defineStore('ClinicalDaysStore', {
                 this.getAllSundays(),
                 this.generateDisabledDates()
             )
-        }
-        
+        },
+        setMaximumNumberOfDaysForEachDay(num: number): void {
+            this.maximumNumberOfDaysForEachDay = num
+        },
+        getMaximumNumberOfDaysForEachDay(): number {
+            return this.maximumNumberOfDaysForEachDay
+        }  
     },
     persist:true,
 

@@ -30,22 +30,42 @@
                     <br />
                 </ion-col>
 
-                <ion-col>
-                    <ion-label style="font-weight: bold; font-size: 15px;">Enbale or disable weekends</ion-label>
-                    <Toggle
-                        class="toggle-green"
-                        :classes="{
-                            container: 'inline-block rounded-full outline-none focus:ring focus:ring-green-500 focus:ring-opacity-30',
-                        }" 
-                        v-model="toggle_local"
-                        :offLabel="'inactive'"
-                        :onLabel="'active'"
-                    />
+                <ion-col size="7">
+                    <ion-row>
+                        <ion-col>
+                            <div>
+                                <ion-label style="font-weight: bold; font-size: 15px;">Enbale or Disable weekends</ion-label>
+                                <Toggle
+                                    class="toggle-green"
+                                    :classes="{
+                                        container: 'inline-block rounded-full outline-none focus:ring focus:ring-green-500 focus:ring-opacity-30',
+                                    }" 
+                                    v-model="toggle_local"
+                                    :offLabel="'inactive'"
+                                    :onLabel="'active'"
+                                />
+                            </div>
+                        </ion-col>
+                        <ion-col size="8">
+                            <div style="margin-top: 30px;">
+                                <ion-checkbox class="ilbl" :disabled="disable_weekends" label-placement="end">Saturday</ion-checkbox>
+                                <br />
+                                <ion-checkbox class="ilbl" :disabled="disable_weekends" label-placement="end">Sunday</ion-checkbox>
+                                <br />
+                            </div>
+                        </ion-col>
+                    </ion-row>
 
-                    <ion-checkbox class="ilbl" :disabled="disable_weekends" label-placement="end">Saturday</ion-checkbox>
-                    <br />
-                    <ion-checkbox class="ilbl" :disabled="disable_weekends" label-placement="end">Sunday</ion-checkbox>
-                    <br />
+                    <ion-row>
+                        <ion-label style="font-weight: bold; font-size: 15px;">Set Maximum Next Appointments Vistis Per Day</ion-label>
+                    </ion-row>
+
+                    <ion-row>
+                        <ion-item class="input_item">
+                            <ion-input placeholder="Enter a number" v-model="maximumNumberOfDaysForEachDay" fill="outline"></ion-input>
+                            <ion-label><span class="selectedPatient"></span></ion-label>
+                        </ion-item>
+                    </ion-row>
                 </ion-col>
             </ion-row>
 
@@ -120,11 +140,13 @@ import Toggle from '@vueform/toggle'
 import router from '@/router'
 import HisDate from "@/utils/Date"
 import { useClinicalDaysStore } from "@/stores/clinicalDaysStore"
+import { combineArrays } from "@/utils/GeneralUti"
 
 const toggle_local = ref(false)
 const disable_weekends = ref(true)
 const totalHolidaysSelected = ref(0)
 const date = ref()
+const maximumNumberOfDaysForEachDay = ref(0)
 
 watch(
     () => toggle_local.value,
@@ -134,26 +156,36 @@ watch(
 )
 
 onMounted(async () => {
-    loadHolidayDates()
+    loadDataFromStore()
 })
 
-function loadHolidayDates() {
+function loadDataFromStore() {
     const store = useClinicalDaysStore()
     totalHolidaysSelected.value = store.getHolidaydatesDataSize()
     date.value = store.getHolidaydates()
+    maximumNumberOfDaysForEachDay.value = store.getMaximumNumberOfDaysForEachDay()
 }
+
+watch(
+    () => maximumNumberOfDaysForEachDay.value,
+    async (newValue) => {
+        saveStateValuesState()
+        loadDataFromStore()
+    }
+)
 
 watch(
     () => date.value,
     async (newValue) => {
         saveStateValuesState()
-        loadHolidayDates()
+        loadDataFromStore()
     }
 )
 
 function saveStateValuesState() {
     const storeClinicalDaysStore = useClinicalDaysStore()
     storeClinicalDaysStore.setSelectedMedicalDrugsList(date.value)
+    storeClinicalDaysStore.setMaximumNumberOfDaysForEachDay(maximumNumberOfDaysForEachDay.value)
 }
 
 function nav(url: any) {
@@ -185,5 +217,6 @@ function nav(url: any) {
         --toggle-height: 1.9rem;
         --toggle-border: 0.525rem;
         --toggle-font-size: 1rem;
+        margin-bottom: 30px;
     }
 </style>
