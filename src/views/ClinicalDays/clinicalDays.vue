@@ -41,8 +41,8 @@
                                         container: 'inline-block rounded-full outline-none focus:ring focus:ring-green-500 focus:ring-opacity-30',
                                     }" 
                                     v-model="toggle_local"
-                                    :offLabel="'inactive'"
-                                    :onLabel="'active'"
+                                    :offLabel="'disabled'"
+                                    :onLabel="'enabled'"
                                 />
                             </div>
                         </ion-col>
@@ -271,7 +271,7 @@ function nav(url: any) {
     .toggle-green {
         --toggle-bg-on: #006401;
         --toggle-border-on: #006401;
-        --toggle-width: 5.3rem;
+        --toggle-width: 6.3rem;
         --toggle-height: 1.9rem;
         --toggle-border: 0.525rem;
         --toggle-font-size: 1rem;

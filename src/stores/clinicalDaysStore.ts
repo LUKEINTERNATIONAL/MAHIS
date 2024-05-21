@@ -32,7 +32,7 @@ export const useClinicalDaysStore = defineStore('ClinicalDaysStore', {
         },
         getDays(day: number): Date[] {
             const startDate = new Date("2024-01-01");
-            const endDate = new Date("2024-12-31");
+            const endDate = new Date("2030-12-31");
             const saturdays: Date[] = [];
             const currentDate = new Date(startDate);
             while (currentDate <= endDate) {
