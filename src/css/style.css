@@ -441,6 +441,15 @@ ion-accordion {
 .multiselect__select::before {
     top: 95%;
 }
+.multiselect::before {
+    content: url("/public/svg/searchIcon.svg");
+    position: absolute;
+    font-size: 40px;
+    margin-left: 15px;
+}
+.multiselect__tags {
+    padding-left: 35px;
+}
 .multiselect__placeholder {
     padding-top: 9px;
     padding-left: 10px;

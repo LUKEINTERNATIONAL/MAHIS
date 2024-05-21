@@ -15,9 +15,9 @@ export function validateField(data: any, fieldName: string, value: any) {
         guardianMiddleName: () => Validation.isNameEmpty(value),
         guardianLastname: () => Validation.isNameEmpty(value),
         guardianPhoneNumber: () => Validation.isMWPhoneNumber(value),
-        current_district: () => Validation.isName(value),
-        current_traditional_authority: () => Validation.isName(value),
-        current_village: () => Validation.isName(value),
+        current_district: () => Validation.required(value),
+        current_traditional_authority: () => Validation.required(value),
+        current_village: () => Validation.required(value),
     };
     const isValid = validationRules[fieldName]?.() == null;
 
