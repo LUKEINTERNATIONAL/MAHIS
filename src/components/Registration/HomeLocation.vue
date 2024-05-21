@@ -55,9 +55,6 @@ export default defineComponent({
     watch: {
         homeLocation: {
             handler() {
-                this.changeHomeDistrict();
-                this.changeHomeTA();
-                this.changeHomeVillage();
                 this.buildCards();
             },
             deep: true,
@@ -66,42 +63,10 @@ export default defineComponent({
     async mounted() {
         this.updateRegistrationStores();
         this.buildCards();
-        this.changeHomeVillage();
-        this.changeHomeDistrict();
-        this.changeHomeTA();
 
         this.buildDistricts();
     },
     methods: {
-        changeHomeVillage() {
-            const home_VILLAGE = "currentVillage";
-            const VALUE = "value";
-            const HOME_VILLAGE = "homeVillage";
-
-            if (getCheckboxSelectedValue(this.homeLocation, "Same as current")) {
-                const currentVillage = getFieldValue(this.homeLocation, home_VILLAGE, VALUE);
-                modifyFieldValue(this.homeLocation, HOME_VILLAGE, VALUE, currentVillage);
-            }
-        },
-        changeHomeDistrict() {
-            const VALUE = "value";
-            const home_DISTRICT = "currentDistrict";
-            const HOME_DISTRICT = "homeDistrict";
-
-            if (getCheckboxSelectedValue(this.homeLocation, "Same as current")) {
-                const currentDistrict = getFieldValue(this.homeLocation, home_DISTRICT, VALUE);
-                modifyFieldValue(this.homeLocation, HOME_DISTRICT, VALUE, currentDistrict);
-            }
-        },
-        changeHomeTA() {
-            const HOME_TA = "homeTraditionalAuthority";
-            const VALUE = "value";
-            const CURRENT_TA = "currentTraditionalAuthority";
-            if (getCheckboxSelectedValue(this.homeLocation, "Same as current")) {
-                const currentTraditionalAuthority = getFieldValue(this.homeLocation, CURRENT_TA, VALUE);
-                modifyFieldValue(this.homeLocation, HOME_TA, VALUE, currentTraditionalAuthority);
-            }
-        },
         setSameAsCurrent() {
             if (getCheckboxSelectedValue(this.homeLocation, "Same as current")?.checked) {
                 const currentDistrict = getFieldValue(this.currentLocation, "current_district", "value");
@@ -138,7 +103,7 @@ export default defineComponent({
         },
         updateRegistrationStores() {
             const registrationStore = useRegistrationStore();
-            registrationStore.setHomeLocation(this.homeLocation);
+            // registrationStore.setHomeLocation(this.homeLocation);
             // registrationStore.setCurrentLocation(this.currentLocation);
         },
         async buildDistricts() {

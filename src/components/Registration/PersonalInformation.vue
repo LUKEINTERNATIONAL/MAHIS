@@ -108,10 +108,9 @@ export default defineComponent({
         },
 
         async handleInputData(event: any) {
-            // console.log("🚀 ~ handleInputData ~ event:", event);
             if (event.name == "Estimate Age") {
             }
-
+            // Estimated age
             this.validationRules(event);
             this.calculateDoB(event);
             this.calculateAge(event);
@@ -123,6 +122,9 @@ export default defineComponent({
 
                 modifyFieldValue(this.personInformation, "estimation", "value", HisDate.getAgeInYears(event.value));
                 this.validationRules({ name: "estimation" });
+            }
+            if (event.inputHeader == "Estimated age") {
+                event.value < 17 ? updateGuardianInfo(false) : updateGuardianInfo(true);
             }
         },
         calculateDoB(event: any) {

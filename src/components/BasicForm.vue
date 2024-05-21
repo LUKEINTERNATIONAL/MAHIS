@@ -15,9 +15,9 @@
             v-if="item['sectionHeader'] || item['sideColSize'] || item['sectionHeader'] == 'null'"
             :size="item['sideColSize']"
         >
-            <span class="item_header" :style="'font-weight:' + item.sectionHeaderFontWeight" v-if="item['sectionHeader'] != 'null'">{{
-                item["sectionHeader"]
-            }}</span>
+            <span class="item_header" :style="'font-weight:' + item.sectionHeaderFontWeight" v-if="item['sectionHeader'] != 'null'"
+                >{{ item["sectionHeader"] }}
+            </span>
         </ion-col>
         <ion-col v-if="!item.displayNone">
             <!-- rowData -->
@@ -47,7 +47,9 @@
                             :InnerActionBtnPropeties="col.InnerBtn"
                         />
                         <div v-if="col.isMultiSelect">
-                            <h6 v-if="col.inputHeader">{{ col.inputHeader }}</h6>
+                            <h6 v-if="col.inputHeader">
+                                {{ removeAsterisk(col.inputHeader) }} <span style="color: red" v-if="showAsterisk"> *</span>
+                            </h6>
                             <VueMultiselect
                                 v-if="col.isMultiSelect"
                                 v-model="col.value"
@@ -68,7 +70,9 @@
                             />
                         </div>
                         <div v-if="col.isSingleSelect">
-                            <h6 v-if="col.inputHeader">{{ col.inputHeader }}</h6>
+                            <h6 v-if="col.inputHeader">
+                                {{ removeAsterisk(col.inputHeader) }} <span style="color: red" v-if="showAsterisk"> *</span>
+                            </h6>
                             <VueMultiselect
                                 v-model="col.value"
                                 @update:model-value="handleInput(contentData, col, $event, 'updateMultiselect')"
@@ -122,7 +126,7 @@
             </span>
             <span v-if="item.radioBtnContent && !item?.radioBtnContent?.header?.displayNone">
                 <div style="font-size: 1rem" v-if="item.radioBtnContent?.header" :class="item.radioBtnContent?.header?.class">
-                    {{ item.radioBtnContent?.header.title }}
+                    {{ removeAsterisk(item.radioBtnContent?.header.title) }} <span style="color: red" v-if="showAsterisk"> *</span>
                 </div>
                 <ion-row class="checkbox_content">
                     <ion-col
@@ -257,7 +261,9 @@
                             @update:dateValue="handleInput(contentData, checkboxInput, $event, 'updateDate')"
                         />
                         <div v-if="checkboxInput.isMultiSelect">
-                            <h6 v-if="checkboxInput.inputHeader">{{ checkboxInput.inputHeader }}</h6>
+                            <h6 v-if="checkboxInput.inputHeader">
+                                {{ removeAsterisk(checkboxInput.inputHeader) }} <span style="color: red" v-if="showAsterisk"> *</span>
+                            </h6>
                             <VueMultiselect
                                 v-if="checkboxInput.isMultiSelect"
                                 v-model="checkboxInput.value"
@@ -333,6 +339,7 @@ export default defineComponent({
             date: "",
             value: [] as any,
             options: [{ name: "Vue.js" }, { name: "Javascript" }, { name: "Open Source" }, { name: "kaka" }],
+            showAsterisk: false,
         };
     },
     props: {
@@ -416,6 +423,14 @@ export default defineComponent({
         },
         test(e: any) {
             console.log(e);
+        },
+        removeAsterisk(str: any) {
+            if (str.includes("*")) {
+                this.showAsterisk = true;
+                return str.replace(/\*/g, "");
+            }
+            this.showAsterisk = false;
+            return str;
         },
     },
 });

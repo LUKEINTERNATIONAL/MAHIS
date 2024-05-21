@@ -38,7 +38,7 @@
                     </ion-col>
                     <ion-col size-sm="12" size-md="6" size-lg="4">
                         <CurrentLocation />
-                        <SocialHistory />
+                        <SocialHistory v-if="checkUnderFive" />
                     </ion-col>
                     <ion-col size-sm="12" size-md="6" size-lg="4" class="regDisplayFlex">
                         <HomeLocation />
@@ -157,6 +157,7 @@ export default defineComponent({
             demographic: true,
             currentStep: "Personal Information",
             scanner: false,
+            checkUnderFive: true,
             steps: ["Personal Information", "Guardian Information", "Location", "Social History"],
         };
     },
@@ -211,6 +212,8 @@ export default defineComponent({
 
     mounted() {
         this.setIconClass();
+        this.disableNationalIDInput();
+        this.isUnderFive();
     },
     watch: {
         personInformation: {
@@ -221,6 +224,8 @@ export default defineComponent({
                 data.setHomeLocation(this.homeLocation);
                 data.setCurrentLocation(this.currentLocation);
                 data.setGuardianInformation(this.guardianInformation);
+                this.isUnderFive();
+                this.disableNationalIDInput();
             },
             deep: true,
         },
@@ -229,6 +234,16 @@ export default defineComponent({
         return { arrowForwardCircle, grid, list };
     },
     methods: {
+        isUnderFive() {
+            if (!isEmpty(this.birthdate)) this.checkUnderFive = HisDate.getAgeInYears(this.birthdate) >= 5 ? true : false;
+        },
+        disableNationalIDInput() {
+            if (this.registrationType == "manual") {
+                modifyFieldValue(this.personInformation, "nationalID", "displayNone", true);
+            } else {
+                modifyFieldValue(this.personInformation, "nationalID", "displayNone", false);
+            }
+        },
         setCurrentStep(name: any) {
             this.currentStep = name;
         },
@@ -326,7 +341,7 @@ export default defineComponent({
                 category: "",
                 gender: item.person.gender,
                 patient_id: item.patient_id,
-                address: item.person.addresses[0].state_province + "," + item.person.addresses[0].city_village,
+                address: item.person?.addresses[0]?.state_province + "," + item?.person?.addresses[0]?.city_village,
                 phone: item.person.person_attributes.find((attribute: any) => attribute.type.name === "Cell Phone Number")?.value,
             });
             let url = "/patientProfile";

@@ -35,21 +35,21 @@ export default defineComponent({
             inputField: "" as any,
             setName: "" as any,
             religionsList: [
-                { name: "Christianity" },
-                { name: "Islam" },
-                { name: "Judaism" },
-                { name: "Hinduism" },
-                { name: "Buddhism" },
-                { name: "Sikhism" },
-                { name: "Jainism" },
-                { name: "Bahá'í Faith" },
-                { name: "Zoroastrianism" },
-                { name: "Confucianism" },
-                { name: "Taoism" },
-                { name: "Shinto" },
-                { name: "Baha'i Faith" },
-                { name: "Juche" },
-                { name: "Rastafari" },
+                { id: 1, name: "Christianity" },
+                { id: 2, name: "Islam" },
+                { id: 3, name: "Judaism" },
+                { id: 4, name: "Hinduism" },
+                { id: 5, name: "Buddhism" },
+                { id: 6, name: "Sikhism" },
+                { id: 7, name: "Jainism" },
+                { id: 8, name: "Bahá'í Faith" },
+                { id: 9, name: "Zoroastrianism" },
+                { id: 10, name: "Confucianism" },
+                { id: 11, name: "Taoism" },
+                { id: 12, name: "Shinto" },
+                { id: 13, name: "Baha'i Faith" },
+                { id: 14, name: "Juche" },
+                { id: 15, name: "Rastafari" },
             ],
         };
     },
@@ -133,10 +133,8 @@ export default defineComponent({
         },
         handleReligion(name: any) {
             if (name == "religion") {
-                modifyFieldValue(this.socialHistory, name, "popOverData", {
-                    filterData: true,
-                    data: this.religionsList,
-                });
+                console.log("ffffffffff", this.religionsList);
+                modifyFieldValue(this.socialHistory, name, "multiSelectData", this.religionsList);
             }
         },
     },

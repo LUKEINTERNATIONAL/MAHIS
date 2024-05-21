@@ -205,10 +205,25 @@ const initialSocialHistory = [
                             name: "religion",
                             placeholder: "eg. Christian",
                             eventType: "input",
-                            popOverData: {
-                                filterData: true,
-                                data: [],
-                            },
+                            isSingleSelect: true,
+                            trackBy: "id",
+                            multiSelectData: [
+                                { id: 1, name: "Christianity" },
+                                { id: 2, name: "Islam" },
+                                { id: 3, name: "Judaism" },
+                                { id: 4, name: "Hinduism" },
+                                { id: 5, name: "Buddhism" },
+                                { id: 6, name: "Sikhism" },
+                                { id: 7, name: "Jainism" },
+                                { id: 8, name: "Bahá'í Faith" },
+                                { id: 9, name: "Zoroastrianism" },
+                                { id: 10, name: "Confucianism" },
+                                { id: 11, name: "Taoism" },
+                                { id: 12, name: "Shinto" },
+                                { id: 13, name: "Baha'i Faith" },
+                                { id: 14, name: "Juche" },
+                                { id: 15, name: "Rastafari" },
+                            ],
                             alertsError: false,
                             alertsErrorMassage: "",
                         },
@@ -406,7 +421,7 @@ const initialHomeLocation = [
                             alertsErrorMassage: "",
                             isSingleSelect: true,
                             popOver: true,
-                            trackBy: "district_id",
+                            trackBy: "village_id",
                             multiSelectData: [],
                             idName: "traditional_authority_id",
                             displayNone: true,
@@ -476,10 +491,6 @@ const initialCurrentLocation = [
                             id: "",
                             idName: "district_id",
                             displayNone: true,
-                            InnerActionBtnPropeties: {
-                                name: "+ Add",
-                                show: true,
-                            },
                         },
                     ],
                     btns: [
@@ -531,6 +542,8 @@ const initialCurrentLocation = [
             ],
         },
     },
+] as any;
+const initialClosestLandmark = [
     {
         data: {
             rowData: [
@@ -544,48 +557,57 @@ const initialCurrentLocation = [
                             eventType: "input",
                             alertsError: false,
                             alertsErrorMassage: "",
-                            popOverData: {
-                                filterData: true,
-                                data: [
-                                    {
-                                        name: "Catholic Church",
-                                    },
-                                    {
-                                        name: "CCAP",
-                                    },
-                                    {
-                                        name: "Seventh Day",
-                                    },
-                                    {
-                                        name: "Mosque",
-                                    },
-                                    {
-                                        name: "Primary School",
-                                    },
-                                    {
-                                        name: "Borehole",
-                                    },
-                                    {
-                                        name: "Secondary School",
-                                    },
-                                    {
-                                        name: "College",
-                                    },
-                                    {
-                                        name: "Market",
-                                    },
-                                    {
-                                        name: "Football Ground",
-                                    },
-                                ],
-                            },
+                            isSingleSelect: true,
+                            popOver: true,
+                            multiSelectData: [
+                                {
+                                    id: 1,
+                                    name: "Catholic Church",
+                                },
+                                {
+                                    id: 2,
+                                    name: "CCAP",
+                                },
+                                {
+                                    id: 3,
+                                    name: "Seventh Day",
+                                },
+                                {
+                                    id: 4,
+                                    name: "Mosque",
+                                },
+                                {
+                                    id: 5,
+                                    name: "Primary School",
+                                },
+                                {
+                                    id: 6,
+                                    name: "Borehole",
+                                },
+                                {
+                                    id: 7,
+                                    name: "Secondary School",
+                                },
+                                {
+                                    id: 8,
+                                    name: "College",
+                                },
+                                {
+                                    id: 9,
+                                    name: "Market",
+                                },
+                                {
+                                    id: 10,
+                                    name: "Football Ground",
+                                },
+                            ],
                         },
                     ],
                 },
             ],
         },
     },
-] as any;
+];
 const initialAddTA = [
     {
         data: {
@@ -636,7 +658,7 @@ const initialAddVillage = [
                         {
                             inputHeader: "Village*",
                             value: "",
-                            name: "village",
+                            name: "Village",
                             eventType: "input",
                             alertsError: false,
                             alertsErrorMassage: "",
@@ -684,7 +706,7 @@ const initialGuardianInformation = [
                     colData: [
                         {
                             inputHeader: "First name",
-                            //icon: icons.fullName,
+                            icon: icons.fullName,
                             value: "",
                             name: "guardianFirstname",
                             eventType: "input",
@@ -784,6 +806,7 @@ export const useRegistrationStore = defineStore("registrationStore", {
         socialHistory: [...initialSocialHistory],
         homeLocation: [...initialHomeLocation],
         currentLocation: [...initialCurrentLocation],
+        closestLandmark: [...initialClosestLandmark],
         guardianInformation: [...initialGuardianInformation],
         addTA: [...initialAddTA],
         addVillage: [...initialAddVillage],

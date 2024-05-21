@@ -13,6 +13,7 @@
 
         <div class="btnContent">
             <div class="saveBtn">
+                <ion-button class="btnText" color="danger" fill="solid" @click="dismiss()" style="margin-right: 8px"> Cancel </ion-button>
                 <ion-button class="btnText" fill="solid" @click="saveTA"> Save </ion-button>
             </div>
         </div>
@@ -32,13 +33,12 @@ import {
     IonLabel,
     IonPage,
     IonFooter,
+    modalController,
 } from "@ionic/vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import { createOutline } from "ionicons/icons";
 import BasicForm from "@/components/BasicForm.vue";
 import { useWeightHeightVitalsStore } from "@/apps/Immunization/stores/VitalsStore";
-import DatePicker from "@/components/DatePicker.vue";
-import { ref, watch, computed, onMounted, onUpdated } from "vue";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { VitalsService } from "@/services/vitals_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
@@ -78,7 +78,6 @@ export default defineComponent({
             districtType: "" as any,
             TAType: "" as any,
             VillageType: "" as any,
-            location: "" as any,
         };
     },
     computed: {
@@ -90,19 +89,20 @@ export default defineComponent({
             this.districtType = "current_district";
             this.TAType = "current_traditional_authority";
             this.VillageType = "current_village";
-            this.location = this.currentLocation;
         } else {
             this.districtType = "home_district";
             this.TAType = "home_traditional_authority";
             this.VillageType = "home_village";
-            this.location = this.homeLocation;
         }
     },
     setup() {},
     methods: {
+        dismiss() {
+            modalController.dismiss();
+        },
         async saveData() {
             const TAValue = getFieldValue(this.addTA, "TA", "value");
-            const villageValue = getFieldValue(this.addTA, "village", "value");
+            const villageValue = getFieldValue(this.addTA, "Village", "value");
             if (Validation.isName(TAValue) == null && Validation.isName(villageValue) == null) {
                 const address = await LocationService.createAddress(
                     this.validationData.address_type,
@@ -110,7 +110,7 @@ export default defineComponent({
                     this.validationData.parent_location
                 );
                 if (address) {
-                    toastWarning(`${this.validationData.address_type} added successfully`);
+                    toastSuccess(`${this.validationData.address_type} added successfully`);
                     return true;
                 } else {
                     toastWarning(`Unable to add ${this.validationData.address_type}`);
@@ -122,6 +122,7 @@ export default defineComponent({
             if (this.validationStatus) {
                 if (await this.saveData()) {
                     await this.saveVillage();
+                    this.dismiss();
                 }
             } else {
                 toastWarning(`Please Fill all the required field with the correct value`);
@@ -130,8 +131,13 @@ export default defineComponent({
         async saveVillage() {
             let filteredList = [];
             const TAValue = getFieldValue(this.addTA, "TA", "value");
-            const villageValue = getFieldValue(this.addTA, "village", "value");
-            const districtData = getFieldValue(this.location, this.districtType, "value");
+            const villageValue = getFieldValue(this.addTA, "Village", "value");
+            let districtData = [];
+            if (sessionStorage.getItem("activeLocation") == "current") {
+                districtData = getFieldValue(this.currentLocation, this.districtType, "value");
+            } else {
+                districtData = getFieldValue(this.homeLocation, this.districtType, "value");
+            }
 
             filteredList = await LocationService.getTraditionalAuthorities(districtData.district_id, TAValue);
             const filteredData = filteredList.filter((item: any) => item.name.toLowerCase() == TAValue.toLowerCase());
@@ -144,20 +150,41 @@ export default defineComponent({
                 await this.saveData();
 
                 const TAList = await LocationService.getTraditionalAuthorities(districtData.district_id, "");
-                modifyFieldValue(this.location, this.TAType, "multiSelectData", TAList);
                 const villageList = await LocationService.getVillages(filteredData[0].traditional_authority_id, "");
-                modifyFieldValue(this.location, this.VillageType, "multiSelectData", villageList);
-
-                modifyFieldValue(this.location, this.VillageType, "value", { name: villageValue });
-                modifyFieldValue(this.location, this.TAType, "value", filteredData[0]);
-                modifyFieldValue(this.location, this.VillageType, "displayNone", false);
+                if (sessionStorage.getItem("activeLocation") == "current") {
+                    modifyFieldValue(this.currentLocation, this.TAType, "multiSelectData", TAList);
+                    modifyFieldValue(this.currentLocation, this.VillageType, "multiSelectData", villageList);
+                    modifyFieldValue(this.currentLocation, this.VillageType, "value", { name: villageValue });
+                    modifyFieldValue(this.currentLocation, this.TAType, "value", filteredData[0]);
+                    modifyFieldValue(this.currentLocation, this.VillageType, "displayNone", false);
+                } else {
+                    modifyFieldValue(this.homeLocation, this.TAType, "multiSelectData", TAList);
+                    modifyFieldValue(this.homeLocation, this.VillageType, "multiSelectData", villageList);
+                    modifyFieldValue(this.homeLocation, this.VillageType, "value", { name: villageValue });
+                    modifyFieldValue(this.homeLocation, this.TAType, "value", filteredData[0]);
+                    modifyFieldValue(this.homeLocation, this.VillageType, "displayNone", false);
+                }
+                modifyFieldValue(this.addTA, "TA", "value", "");
+                modifyFieldValue(this.addTA, "Village", "value", "");
+                if (sessionStorage.getItem("activeLocation") == "current") {
+                    modifyFieldValue(this.currentLocation, "current_traditional_authority", "alertsError", false);
+                    modifyFieldValue(this.currentLocation, "current_village", "alertsError", false);
+                } else {
+                    modifyFieldValue(this.homeLocation, "home_traditional_authority", "alertsError", false);
+                    modifyFieldValue(this.homeLocation, "home_village", "alertsError", false);
+                }
             }
         },
         async validaterowData(event: any) {
             this.validationStatus = false;
 
             const name = getFieldValue(this.addTA, event.name, "value");
-            const districtData = getFieldValue(this.location, this.districtType, "value");
+            let districtData = [];
+            if (sessionStorage.getItem("activeLocation") == "current") {
+                districtData = getFieldValue(this.currentLocation, this.districtType, "value");
+            } else {
+                districtData = getFieldValue(this.homeLocation, this.districtType, "value");
+            }
 
             if (Validation.isName(event.value) != null) {
                 modifyFieldValue(this.addTA, event.name, "alertsErrorMassage", "Please enter a valid " + event.name);
@@ -236,7 +263,7 @@ ion-footer {
     display: flex;
     justify-content: end;
     margin: 20px;
-    width: 330px;
+    width: 390px;
     align-items: end;
 }
 .btnContent {

@@ -1,7 +1,7 @@
 <template>
     <div class="pim-cls-1 modal_wrapper">
         <div class="OtherVitalsHeading">
-            <div class="OtherVitalsTitle" style="color: #1f2221d4; font-size: 16px">Add TA</div>
+            <div class="OtherVitalsTitle" style="color: #1f2221d4; font-size: 16px">Add Village</div>
         </div>
         <div>
             <div class="center text_12">
@@ -13,6 +13,7 @@
 
         <div class="btnContent">
             <div class="saveBtn">
+                <ion-button class="btnText" color="danger" fill="solid" @click="dismiss()" style="margin-right: 8px"> Cancel </ion-button>
                 <ion-button class="btnText" fill="solid" @click="saveVillage"> Save </ion-button>
             </div>
         </div>
@@ -32,6 +33,7 @@ import {
     IonLabel,
     IonPage,
     IonFooter,
+    modalController,
 } from "@ionic/vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import { createOutline } from "ionicons/icons";
@@ -100,8 +102,12 @@ export default defineComponent({
     },
     setup() {},
     methods: {
+        dismiss() {
+            modalController.dismiss();
+        },
         async saveData() {
-            const villageValue = getFieldValue(this.addVillage, "village", "value");
+            const villageValue = getFieldValue(this.addVillage, "Village", "value");
+            console.log("🚀 ~ saveData ~ villageValue:", villageValue);
             if (Validation.isName(villageValue) == null) {
                 const address = await LocationService.createAddress(
                     this.validationData.address_type,
@@ -109,7 +115,7 @@ export default defineComponent({
                     this.validationData.parent_location
                 );
                 if (address) {
-                    toastWarning(`${this.validationData.address_type} added successfully`);
+                    toastSuccess(`${this.validationData.address_type} added successfully`);
                     return true;
                 } else {
                     toastWarning(`Unable to add ${this.validationData.address_type}`);
@@ -120,46 +126,57 @@ export default defineComponent({
             return false;
         },
         async saveVillage() {
-            if (this.validationStatus) {
+            if (await this.validaterowData()) {
                 await this.saveData();
-                const villageValue = getFieldValue(this.addVillage, "village", "value");
+                const villageValue = getFieldValue(this.addVillage, "Village", "value");
                 const TAData = getFieldValue(this.location, this.TAType, "value");
                 const villageList = await LocationService.getVillages(TAData.traditional_authority_id, "");
                 modifyFieldValue(this.location, this.VillageType, "multiSelectData", villageList);
                 modifyFieldValue(this.location, this.VillageType, "value", { name: villageValue });
+
+                modifyFieldValue(this.addVillage, "Village", "value", "");
+                if (sessionStorage.getItem("activeLocation") == "current") {
+                    modifyFieldValue(this.currentLocation, "current_traditional_authority", "alertsError", false);
+                    modifyFieldValue(this.currentLocation, "current_village", "alertsError", false);
+                } else {
+                    modifyFieldValue(this.homeLocation, "home_traditional_authority", "alertsError", false);
+                    modifyFieldValue(this.homeLocation, "home_village", "alertsError", false);
+                }
+
+                this.dismiss();
             }
         },
-        async validaterowData(event: any) {
+        async validaterowData() {
             this.validationStatus = false;
-            const name = getFieldValue(this.addVillage, event.name, "value");
+            const name = getFieldValue(this.addVillage, "Village", "value");
             const TAData = getFieldValue(this.location, this.TAType, "value");
 
-            if (Validation.isName(event.value) != null) {
-                modifyFieldValue(this.addVillage, event.name, "alertsErrorMassage", "Please enter a valid " + event.name);
-                modifyFieldValue(this.addVillage, event.name, "alertsError", true);
+            if (Validation.isName(name) != null) {
+                modifyFieldValue(this.addVillage, "Village", "alertsErrorMassage", "Please enter a valid " + "Village");
+                modifyFieldValue(this.addVillage, "Village", "alertsError", true);
                 return false;
             } else {
-                modifyFieldValue(this.addVillage, event.name, "alertsErrorMassage", "");
-                modifyFieldValue(this.addVillage, event.name, "alertsError", false);
+                modifyFieldValue(this.addVillage, "Village", "alertsErrorMassage", "");
+                modifyFieldValue(this.addVillage, "Village", "alertsError", false);
             }
 
             const villageList = await LocationService.getVillages(TAData.traditional_authority_id, "");
 
             const filteredData = villageList.filter((item: any) => item.name.toLowerCase() == name.toLowerCase());
             if (!isEmpty(filteredData)) {
-                modifyFieldValue(this.addVillage, event.name, "alertsErrorMassage", "Can't add existing " + event.name);
-                modifyFieldValue(this.addVillage, event.name, "alertsError", true);
+                modifyFieldValue(this.addVillage, "Village", "alertsErrorMassage", "Can't add existing " + "Village");
+                modifyFieldValue(this.addVillage, "Village", "alertsError", true);
                 return false;
             } else {
-                modifyFieldValue(this.addVillage, event.name, "alertsErrorMassage", "");
-                modifyFieldValue(this.addVillage, event.name, "alertsError", false);
+                modifyFieldValue(this.addVillage, "Village", "alertsErrorMassage", "");
+                modifyFieldValue(this.addVillage, "Village", "alertsError", false);
             }
-            this.validationStatus = true;
             this.validationData = {
                 address_type: "Village",
                 addresses_name: name,
                 parent_location: TAData.traditional_authority_id,
             };
+            return true;
         },
     },
 });

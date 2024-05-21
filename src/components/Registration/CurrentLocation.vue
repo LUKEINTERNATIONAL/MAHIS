@@ -1,5 +1,11 @@
 <template>
-    <basic-card :content="cardData" @update:selected="handleInputData" @update:inputValue="handleInputData" @clicked:button="handleBtns"></basic-card>
+    <basic-card
+        :contentTwo="contentTwo"
+        :content="cardData"
+        @update:selected="handleInputData"
+        @update:inputValue="handleInputData"
+        @clicked:button="handleBtns"
+    ></basic-card>
 </template>
 
 <script lang="ts">
@@ -42,7 +48,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useRegistrationStore, ["homeLocation"]),
-        ...mapState(useRegistrationStore, ["currentLocation"]),
+        ...mapState(useRegistrationStore, ["currentLocation", "closestLandmark"]),
         current_district() {
             return getFieldValue(this.currentLocation, "current_district", "value")?.name;
         },
@@ -56,9 +62,6 @@ export default defineComponent({
     watch: {
         currentLocation: {
             handler() {
-                this.changeHomeDistrict();
-                this.changeHomeTA();
-                this.changeHomeVillage();
                 this.buildCards();
             },
             deep: true,
@@ -67,42 +70,9 @@ export default defineComponent({
     async mounted() {
         this.updateRegistrationStores();
         this.buildCards();
-        this.changeHomeVillage();
-        this.changeHomeDistrict();
-        this.changeHomeTA();
-
         this.buildDistricts();
     },
     methods: {
-        changeHomeVillage() {
-            const CURRENT_VILLAGE = "currentVillage";
-            const VALUE = "value";
-            const HOME_VILLAGE = "homeVillage";
-
-            if (getCheckboxSelectedValue(this.homeLocation, "Same as current")) {
-                const currentVillage = getFieldValue(this.currentLocation, CURRENT_VILLAGE, VALUE);
-                modifyFieldValue(this.homeLocation, HOME_VILLAGE, VALUE, currentVillage);
-            }
-        },
-        changeHomeDistrict() {
-            const VALUE = "value";
-            const CURRENT_DISTRICT = "currentDistrict";
-            const HOME_DISTRICT = "homeDistrict";
-
-            if (getCheckboxSelectedValue(this.homeLocation, "Same as current")) {
-                const currentDistrict = getFieldValue(this.currentLocation, CURRENT_DISTRICT, VALUE);
-                modifyFieldValue(this.homeLocation, HOME_DISTRICT, VALUE, currentDistrict);
-            }
-        },
-        changeHomeTA() {
-            const HOME_TA = "homeTraditionalAuthority";
-            const VALUE = "value";
-            const CURRENT_TA = "currentTraditionalAuthority";
-            if (getCheckboxSelectedValue(this.homeLocation, "Same as current")) {
-                const currentTraditionalAuthority = getFieldValue(this.currentLocation, CURRENT_TA, VALUE);
-                modifyFieldValue(this.homeLocation, HOME_TA, VALUE, currentTraditionalAuthority);
-            }
-        },
         async buildCards() {
             this.cardData = {
                 mainTitle: "Demographics",
@@ -110,17 +80,19 @@ export default defineComponent({
                     {
                         cardTitle: "Current Location",
                         content: this.currentLocation,
+                        contentTwo: this.closestLandmark,
                     },
                 ],
             };
+            console.log("🚀 ~ buildCards ~ this.cardData:", this.cardData);
         },
         openModal() {
             createModal(DispositionModal);
         },
         updateRegistrationStores() {
             const registrationStore = useRegistrationStore();
-            registrationStore.setHomeLocation(this.homeLocation);
-            registrationStore.setCurrentLocation(this.currentLocation);
+            // registrationStore.setHomeLocation(this.homeLocation);
+            // registrationStore.setCurrentLocation(this.currentLocation);
         },
         async buildDistricts() {
             this.districtList = [];
@@ -128,6 +100,7 @@ export default defineComponent({
                 const districts: any = await LocationService.getDistricts(i);
                 this.districtList.push(...districts);
             }
+            console.log("🚀 ~ buildDistricts ~ this.districtList:", this.districtList);
             modifyFieldValue(this.currentLocation, "current_district", "multiSelectData", this.districtList);
         },
         handleBtns(event: any) {
