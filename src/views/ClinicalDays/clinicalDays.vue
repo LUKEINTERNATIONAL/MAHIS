@@ -48,9 +48,9 @@
                         </ion-col>
                         <ion-col size="8">
                             <div style="margin-top: 30px;">
-                                <ion-checkbox class="ilbl" :disabled="disable_weekends" label-placement="end">Saturday</ion-checkbox>
+                                <ion-checkbox class="ilbl" :disabled="disable_weekends" label-placement="end" :checked="isSaturdayChecked" @ionChange="onCheckboxChange($event, 'saturday')">Saturday</ion-checkbox>
                                 <br />
-                                <ion-checkbox class="ilbl" :disabled="disable_weekends" label-placement="end">Sunday</ion-checkbox>
+                                <ion-checkbox class="ilbl" :disabled="disable_weekends" label-placement="end" :checked="isSundayChecked" @ionChange="onCheckboxChange($event, 'sunday')">Sunday</ion-checkbox>
                                 <br />
                             </div>
                         </ion-col>
@@ -154,6 +154,8 @@ const isTuesdayChecked = ref(false)
 const isThursdayChecked = ref(false)
 const isWednesdayChecked = ref(false)
 const isFridayChecked = ref(false)
+const isSaturdayChecked = ref(false)
+const isSundayChecked = ref(false)
 
 const onCheckboxChange = (event: Event, id: string) => {
     const target = event.target as HTMLIonCheckboxElement
@@ -172,11 +174,11 @@ const onCheckboxChange = (event: Event, id: string) => {
     if (id == "friday") {
         isFridayChecked.value = target.checked
     }
-    if (id == "") {
-        // isMondayChecked.value = target.checked
+    if (id == "saturday") {
+        isSaturdayChecked.value = target.checked
     }
-    if (id == "") {
-        // isMondayChecked.value = target.checked
+    if (id == "sunday") {
+        isSundayChecked.value = target.checked
     }
     saveAndReload()
 }
@@ -203,6 +205,15 @@ function loadDataFromStore() {
     isWednesdayChecked.value = store.getAreWednesdaysDisabled()
     isThursdayChecked.value = store.getAreThursdaysDisabled()
     isFridayChecked.value = store.getAreFridaysDisabled()
+    isSaturdayChecked.value = store.getAreSaturdaysDisabled()
+    isSundayChecked.value = store.getAreSundaysDisabled()
+
+    if (isSaturdayChecked.value == true || isSundayChecked.value == true) {
+        toggle_local.value = true
+    }
+    if (isSaturdayChecked.value == false && isSundayChecked.value == false) {
+        toggle_local.value = false
+    }
 }
 
 watch(
@@ -233,6 +244,8 @@ function saveStateValuesState() {
     storeClinicalDaysStore.setAreWednesdaysDisabled(isWednesdayChecked.value)
     storeClinicalDaysStore.setAreThursdaysDisabled(isThursdayChecked.value)
     storeClinicalDaysStore.setAreFridaysDisabled(isFridayChecked.value)
+    storeClinicalDaysStore.setAreSaturdaysDisabled(isSaturdayChecked.value)
+    storeClinicalDaysStore.setAreSundaysDisabled(isSundayChecked.value)
 }
 
 function nav(url: any) {
