@@ -62,7 +62,7 @@ import HisDate from "@/utils/Date";
 import { defineComponent } from "vue";
 import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
 import { useGeneralStore } from "@/stores/GeneralStore";
-import { resetPatientData } from "@/services/reset_data";
+import { resetNCDPatientData } from "@/apps/NCD/config/reset_ncd_data";
 import { PatientReferralService } from "@/services/patient_referral_service";
 import { PatientAdmitService } from "@/services/patient_admit_service";
 import { UserService } from "@/services/user_service";
@@ -157,7 +157,7 @@ export default defineComponent({
     methods: {
         async getData() {
             // const steps = ["Vital Signs", "Investigations", "Diagnosis", "Complications Screening", "Treatment Plan", "Next Appointment", "Outcome"];
-            const [{ NCD_activities: steps }] = this.activities;
+            const [{ programActivity: steps }] = this.activities;
             for (let i = 0; i < steps.length; i++) {
                 const title = steps[i];
                 const number = i + 1;
@@ -245,7 +245,7 @@ export default defineComponent({
             await this.saveDiagnosis();
             await this.saveTreatmentPlan();
             await this.saveOutComeStatus();
-            resetPatientData();
+            resetNCDPatientData();
             await UserService.setProgramUserActions();
             this.$router.push("patientProfile");
         },

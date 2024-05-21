@@ -660,16 +660,22 @@ export const icons = {
     backBlueArrow: `
     data:image/svg+xml;utf8,
     <svg width="25" height="40" viewBox="0 0 25 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="25" y="40" width="25" height="40" rx="3" transform="rotate(-180 25 40)" fill="#D1E7F8"/>
-    <path d="M6.49615 21.6641C5.30868 20.8725 5.30868 19.1275 6.49615 18.3359L15.8906 12.0729C17.2197 11.1869 19 12.1396 19 13.737V26.263C19 27.8604 17.2197 28.8131 15.8906 27.9271L6.49615 21.6641Z" fill="#316CBA"/>
+    <rect x="25" y="40" width="25" height="40" rx="3" transform="rotate(-180 25 40)" fill="#BBDDBC"/>
+    <path d="M6.49615 21.6641C5.30868 20.8725 5.30868 19.1275 6.49615 18.3359L15.8906 12.0729C17.2197 11.1869 19 12.1396 19 13.737V26.263C19 27.8604 17.2197 28.8131 15.8906 27.9271L6.49615 21.6641Z" fill="#016302"/>
     </svg>
+    <svg width="25" height="40" viewBox="0 0 25 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="25" y="40" width="25" height="40" rx="3" transform="rotate(-180 25 40)" fill="#BBDDBC"/>
+    <path d="M6.49615 21.6641C5.30868 20.8725 5.30868 19.1275 6.49615 18.3359L15.8906 12.0729C17.2197 11.1869 19 12.1396 19 13.737V26.263C19 27.8604 17.2197 28.8131 15.8906 27.9271L6.49615 21.6641Z" fill="#016302"/>
+    </svg>
+
    `,
     forwardBlueArrow: `
     data:image/svg+xml;utf8,
     <svg width="25" height="40" viewBox="0 0 25 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect width="25" height="40" rx="3" fill="#D1E7F8"/>
-    <path d="M18.5039 18.3359C19.6913 19.1275 19.6913 20.8725 18.5038 21.6641L9.1094 27.9271C7.78029 28.8131 6 27.8604 6 26.263L6 13.737C6 12.1396 7.78029 11.1869 9.1094 12.0729L18.5039 18.3359Z" fill="#316CBA"/>
+    <rect width="25" height="40" rx="3" fill="#BBDDBC"/>
+    <path d="M18.5039 18.3359C19.6913 19.1275 19.6913 20.8725 18.5038 21.6641L9.1094 27.9271C7.78029 28.8131 6 27.8604 6 26.263L6 13.737C6 12.1396 7.78029 11.1869 9.1094 12.0729L18.5039 18.3359Z" fill="#016302"/>
     </svg>
+
     `,
     bmi_rusults: `
     data:image/svg+xml;utf8,

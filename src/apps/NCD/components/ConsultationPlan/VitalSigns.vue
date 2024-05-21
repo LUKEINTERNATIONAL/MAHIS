@@ -74,48 +74,35 @@ export default defineComponent({
         ...mapState(useVitalsStore, ["vitals"]),
         ...mapState(useGeneralStore, ["activities"]),
     },
-    async serverPrefetch() {
-        // Call updateVitalsStores when the component is activated
-        this.updateVitalsStores();
-    },
     async mounted() {
-        const array = ["Height", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
-
-        // An array to store all promises
-        const promises = array.map(async (item: any) => {
-            if (
-                HisDate.toStandardHisFormat(await ObservationService.getFirstObsDatetime(this.demographics.patient_id, item)) == HisDate.currentDate()
-            ) {
-                modifyFieldValue(
-                    this.vitals,
-                    item,
-                    "value",
-                    await ObservationService.getFirstValueNumber(this.demographics.patient_id, item, HisDate.currentDate())
-                );
-            }
-        });
-
-        // Wait for all promises to resolve
-        await Promise.all(promises);
+        this.setTodayVitals();
 
         // After all async operations are finished
         const userID: any = Service.getUserID();
         this.vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
-        this.updateVitalsStores();
-        this.validaterowData({});
-    },
-    watch: {
-        vitals: {
-            handler() {
-                this.updateVitalsStores();
-            },
-            deep: true,
-        },
+        this.validaterowData("onload");
     },
     setup() {
         return { checkmark, pulseOutline };
     },
     methods: {
+        async setTodayVitals() {
+            const array = ["Height", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
+            const promises = array.map(async (item: any) => {
+                const firstDate = await ObservationService.getFirstObsDatetime(this.demographics.patient_id, item);
+                if (firstDate && HisDate.toStandardHisFormat(firstDate) == HisDate.currentDate()) {
+                    modifyFieldValue(
+                        this.vitals,
+                        item,
+                        "value",
+                        await ObservationService.getFirstValueNumber(this.demographics.patient_id, item, HisDate.currentDate())
+                    );
+                }
+            });
+
+            // Wait for all promises to resolve
+            await Promise.all(promises);
+        },
         navigationMenu(url: any) {
             menuController.close();
             this.$router.push(url);
@@ -182,14 +169,24 @@ export default defineComponent({
             this.vitals.forEach((section: any, sectionIndex: any) => {
                 if (section?.data?.rowData) {
                     section?.data?.rowData.forEach((col: any, colIndex: any) => {
-                        if (col.colData[0].inputHeader == "Systolic Pressure*") {
+                        if (
+                            (col.colData[0].inputHeader == "Systolic Pressure*" &&
+                                (inputData.inputHeader == "Systolic Pressure*" ||
+                                    inputData.inputHeader == "Diastolic pressure*" ||
+                                    inputData == "onload")) ||
+                            (col.colData[0].inputHeader == "Systolic Pressure" && inputData?.col?.name == "Blood Pressure Not Done")
+                        ) {
                             const isSystolicValid =
                                 this.vitalsInstance.validator(col.colData[0]) == null && this.vitalsInstance.validator(col.colData[1]) == null;
                             this.BPStatus = isSystolicValid ? this.getBloodPressureStatus(col.colData[0].value, col.colData[1].value) : {};
                             this.updateBP(col.colData[0].value, col.colData[1].value);
                         }
 
-                        if (col.colData[0].inputHeader == "Height*") {
+                        if (
+                            (col.colData[0].inputHeader == "Height*" &&
+                                (inputData.inputHeader == "Height*" || inputData.inputHeader == "Weight*" || inputData == "onload")) ||
+                            (col.colData[0].inputHeader == "Height" && inputData?.col?.name == "Height And Weight Not Done")
+                        ) {
                             const isHeightValid =
                                 this.vitalsInstance.validator(col.colData[0]) == null && this.vitalsInstance.validator(col.colData[1]) == null;
                             this.BMI = isHeightValid ? this.setBMI(col.colData[1].value, col.colData[0].value) : {};
@@ -221,7 +218,7 @@ export default defineComponent({
             this.vitals.validationStatus = !this.hasValidationErrors.includes("false");
         },
         async setBMI(weight: any, height: any) {
-            if (this.demographics.gender && this.demographics.birthdate) {
+            if (this.demographics.gender && this.demographics.birthdate && weight && height) {
                 this.BMI = await BMIService.getBMI(
                     parseInt(weight),
                     parseInt(height),
@@ -229,7 +226,6 @@ export default defineComponent({
                     HisDate.calculateAge(this.demographics.birthdate, HisDate.currentDate())
                 );
             }
-            this.updateBMI();
         },
         async updateBMI() {
             const bmiColor = this.BMI?.color ?? [];
@@ -250,61 +246,63 @@ export default defineComponent({
             vitals.value = this.BPStatus?.value ?? "";
         },
         getBloodPressureStatus(systolic: any, diastolic: any) {
-            let ageGroup;
-            let minSystolic;
-            let maxSystolic;
-            let minDiastolic;
-            let maxDiastolic;
-            const patient = new PatientService();
-            const age = patient.getAge();
-            // Determine age group and corresponding normal ranges
-            if (age < 1) {
-                ageGroup = "less than 1 year";
-                minSystolic = 75;
-                maxSystolic = 100;
-                minDiastolic = 50;
-                maxDiastolic = 70;
-            } else if (age >= 1 && age < 6) {
-                ageGroup = "1-5 years";
-                minSystolic = 80;
-                maxSystolic = 110;
-                minDiastolic = 50;
-                maxDiastolic = 80;
-            } else if (age >= 6 && age < 13) {
-                ageGroup = "6-13 years";
-                minSystolic = 85;
-                maxSystolic = 120;
-                minDiastolic = 55;
-                maxDiastolic = 80;
-            } else if (age >= 13 && age < 18) {
-                ageGroup = "13-18 years";
-                minSystolic = 95;
-                maxSystolic = 140;
-                minDiastolic = 60;
-                maxDiastolic = 90;
-            } else {
-                ageGroup = "above 18 years";
-                minSystolic = 100;
-                maxSystolic = 130;
-                minDiastolic = 60;
-                maxDiastolic = 90;
-            }
-
-            // Diastolic pressure is within normal range, check systolic pressure
-            if (systolic < minSystolic && diastolic < minDiastolic) {
-                return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low BP " + ageGroup };
-            } else if (systolic >= minSystolic && systolic <= maxSystolic && diastolic >= minDiastolic && diastolic <= maxDiastolic) {
-                return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal BP " + ageGroup };
-            } else if (systolic > maxSystolic && diastolic > maxDiastolic) {
-                return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High BP " + ageGroup };
-            } else {
-                // Diastolic pressure is not within normal range, consider only systolic pressure
-                if (systolic < minSystolic) {
-                    return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low BP " + ageGroup + " (Using Systolic Only)" };
-                } else if (systolic >= minSystolic && systolic <= maxSystolic) {
-                    return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal BP " + ageGroup + " (Using Systolic Only)" };
+            if (systolic && diastolic) {
+                let ageGroup;
+                let minSystolic;
+                let maxSystolic;
+                let minDiastolic;
+                let maxDiastolic;
+                const patient = new PatientService();
+                const age = patient.getAge();
+                // Determine age group and corresponding normal ranges
+                if (age < 1) {
+                    ageGroup = "less than 1 year";
+                    minSystolic = 75;
+                    maxSystolic = 100;
+                    minDiastolic = 50;
+                    maxDiastolic = 70;
+                } else if (age >= 1 && age < 6) {
+                    ageGroup = "1-5 years";
+                    minSystolic = 80;
+                    maxSystolic = 110;
+                    minDiastolic = 50;
+                    maxDiastolic = 80;
+                } else if (age >= 6 && age < 13) {
+                    ageGroup = "6-13 years";
+                    minSystolic = 85;
+                    maxSystolic = 120;
+                    minDiastolic = 55;
+                    maxDiastolic = 80;
+                } else if (age >= 13 && age < 18) {
+                    ageGroup = "13-18 years";
+                    minSystolic = 95;
+                    maxSystolic = 140;
+                    minDiastolic = 60;
+                    maxDiastolic = 90;
                 } else {
-                    return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High BP " + ageGroup + " (Using Systolic Only)" };
+                    ageGroup = "above 18 years";
+                    minSystolic = 100;
+                    maxSystolic = 130;
+                    minDiastolic = 60;
+                    maxDiastolic = 90;
+                }
+
+                // Diastolic pressure is within normal range, check systolic pressure
+                if (systolic < minSystolic && diastolic < minDiastolic) {
+                    return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low BP " + ageGroup };
+                } else if (systolic >= minSystolic && systolic <= maxSystolic && diastolic >= minDiastolic && diastolic <= maxDiastolic) {
+                    return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal BP " + ageGroup };
+                } else if (systolic > maxSystolic && diastolic > maxDiastolic) {
+                    return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High BP " + ageGroup };
+                } else {
+                    // Diastolic pressure is not within normal range, consider only systolic pressure
+                    if (systolic < minSystolic) {
+                        return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low BP " + ageGroup + " (Using Systolic Only)" };
+                    } else if (systolic >= minSystolic && systolic <= maxSystolic) {
+                        return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal BP " + ageGroup + " (Using Systolic Only)" };
+                    } else {
+                        return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High BP " + ageGroup + " (Using Systolic Only)" };
+                    }
                 }
             }
         },

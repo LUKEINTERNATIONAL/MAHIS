@@ -4,24 +4,28 @@
             <ion-row>
                 <ion-col size="3">
                     <div class="initialsBox">
-                        <div class="initialsText">GZ</div>
+                        <div class="initialsText">{{ demographics?.name.charAt(0) }} {{ demographics?.name.split(" ")[1].charAt(0) }}</div>
                     </div>
                 </ion-col>
                 <ion-col size="9">
                     <div class="demographicsFirstRow">
-                        <div class="name">Godfrey Zuluful</div>
-                        <div class="name" @click="openPIM()"><ion-icon :icon="ellipsisVerticalSharp"></ion-icon></div>
+                        <div class="name">{{ demographics.name }}</div>
+                        <div class="name" @click="openPIM()" style="color: var(--ion-color-primary)">
+                            <ion-icon :icon="ellipsisVerticalSharp"></ion-icon>
+                        </div>
                     </div>
                     <div class="demographicsOtherRow">
-                        <div class="demographicsText">Male <span class="dot">.</span> 37 years old <span class="dot">.</span> 19 April 2024</div>
+                        <div class="demographicsText">
+                            {{ demographics.gender == "M" ? "Male" : "Female" }} <span class="dot">.</span> {{ formatBirthdate() }}
+                        </div>
                     </div>
                     <div class="demographicsOtherRow">
                         <div class="demographicsText">Current Address:</div>
-                        <div class="demographicsText mediumFontColor">Kaluluma, Side B</div>
+                        <div class="demographicsText mediumFontColor">{{ demographics.address }}</div>
                     </div>
                     <div class="demographicsOtherRow">
                         <div class="demographicsText smallFont">
-                            MRN: <span class="mediumFontColor">17000031AJ</span> <span class="dot">.</span> Outcome:
+                            MRN: <span class="mediumFontColor">{{ demographics.mrn }}</span> <span class="dot">.</span> Outcome:
                             <span class="outcomeStatus">Active</span>
                         </div>
                     </div>
@@ -45,7 +49,8 @@
                 </div>
             </div>
             <div>
-                <WeightHeightChart />
+                <WeightHeightChart v-if="isChild()" />
+                <PreviousVitals v-if="!isChild()" />
             </div>
             <div class="graphBtn">
                 <div class="weightHeightGraphBtns">
@@ -95,12 +100,12 @@
             <div class="milestone">
                 <div style="width: 120px; display: flex; justify-content: space-between; align-content: center">
                     <ion-icon size="small" :icon="iconsContent.calendar"></ion-icon>
-                    <div>at <span style="color: #b54708"> 10 Weeks</span></div>
+                    <div style="color: #636363">at <span style="color: #636363; font-weight: bold; font-size: 14px"> 10 Weeks</span></div>
                 </div>
                 <div class="vaccinesTitleDate">(Swipe left or right for other milestones)</div>
             </div>
             <!--Vaccine Card-->
-            <div class="vaccinesList">
+            <div class="vaccinesList" @click="openAdministerVaccineModal()">
                 <ion-row>
                     <ion-col size="2">
                         <ion-button fill="clear" class="arrowBtns">
@@ -148,12 +153,8 @@
             </div>
             <div class="otherVaccine">
                 <div class="centerBtns">
-                    <ion-button class="btnText" fill="solid"> Add Other Vaccines </ion-button>
+                    <ion-button @click="openAdministerOtherVaccineModal()" class="btnText" fill="solid"> Add Other Vaccines </ion-button>
                 </div>
-                <ion-button fill="solid" color="success">
-                    <ion-icon slot="start" :icon="iconsContent.greenInjection"></ion-icon>
-                    Cholera
-                </ion-button>
             </div>
             <div class="dotsWizard">
                 <ion-icon class="dotStatus" slot="start" :icon="iconsContent.greenDot"></ion-icon>
@@ -172,7 +173,7 @@
                 <div class="lastVaccineTitle">
                     <div class="lastVaccineText">Last vaccines given</div>
                     <div class="seeFullList">
-                        <ion-button @click="openVH()" style="color: #016302;" class="btnText btnTextWeight" size="small" fill="clear">
+                        <ion-button @click="openVH()" style="color: #016302" class="btnText btnTextWeight" size="small" fill="clear">
                             <span>See full History</span>
                         </ion-button>
                     </div>
@@ -253,6 +254,10 @@ import OtherVitals from "@/apps/Immunization/components/OthervitalsModal.vue";
 import vaccinationHistory from "@/apps/Immunization/components/Modals/vaccinationHistoryModal.vue";
 import personalInformationModal from "@/apps/Immunization/components/Modals/personalInformationModal.vue";
 import weightAndHeight from "@/apps/Immunization/components/Modals/weightAndHeight.vue";
+import administerVaccineModal from "@/apps/Immunization/components/Modals/administerVaccineModal.vue";
+import administerOtherVaccineModal from "@/apps/Immunization/components/Modals/administerOtherVaccineModal.vue";
+import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
+import { PatientService } from "@/services/patient_service";
 
 import {
     modifyRadioValue,
@@ -289,6 +294,7 @@ export default defineComponent({
         Stepper,
         DynamicButton,
         WeightHeightChart,
+        PreviousVitals,
     },
     data() {
         return {
@@ -357,6 +363,20 @@ export default defineComponent({
         },
         openVH() {
             createModal(vaccinationHistory, { class: "otherVitalsModal" });
+        },
+        openAdministerVaccineModal() {
+            createModal(administerVaccineModal, { class: "otherVitalsModal" });
+        },
+        openAdministerOtherVaccineModal() {
+            createModal(administerOtherVaccineModal, { class: "otherVitalsModal" });
+        },
+        isChild() {
+            const patient = new PatientService();
+            if (patient.isUnderFive()) return true;
+            else return false;
+        },
+        formatBirthdate() {
+            return HisDate.getBirthdateAge(this.demographics.birthdate);
         },
         async getData() {
             const steps = ["Growth Monitor", "Immunization Services", "Next Appointment", "Change Status"];

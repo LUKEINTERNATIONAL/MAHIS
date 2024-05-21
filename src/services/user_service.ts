@@ -8,6 +8,7 @@ import { Program } from "../interfaces/program";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { ProgramService } from "@/services/program_service";
 import { useEnrollementStore } from "@/stores/EnrollmentStore";
+import ProgramData from "@/Data/ProgramData";
 
 export class UserService extends Service {
     constructor() {
@@ -100,14 +101,55 @@ export class UserService extends Service {
                 return []; // Return an empty array if property_value is not available
             }
         } catch (error) {
-            console.error("Error fetching user activities:", error);
+            // console.error("Error fetching user activities:", error);
             return []; // Return an empty array in case of error
         }
     }
+    static async userProgramData() {
+        const accessPrograms: any = sessionStorage.getItem("userPrograms");
+        const programs = JSON.parse(accessPrograms);
 
-    static async setUserActivities() {
+        const filteredPrograms = [];
+        for (const item of programs) {
+            if (item.name === "NCD PROGRAM") {
+                await this.setUserActivities("NCD_activities");
+                const NCDData: any = await this.setNCDValue();
+                item.url = NCDData.url;
+                item.actionName = NCDData.actionName;
+                filteredPrograms.push(item);
+            } else if (item.name === "IMMUNIZATION PROGRAM") {
+                item.url = "birthRegistration";
+                item.actionName = "+ Enroll in Immunization program";
+                filteredPrograms.push(item);
+            } else if (item.name === "OPD Program") {
+                item.url = "OPDvitals";
+                item.actionName = "+ Enroll in OPD program";
+                filteredPrograms.push(item);
+            } else if (item.name === "ANC PROGRAM") {
+                let ANCItem = { ...item }; // Create a new object
+                ANCItem.url = "ANCEnrollment";
+                ANCItem.actionName = "+ Enroll in ANC Program";
+                filteredPrograms.push(ANCItem);
+
+                let labourItem = { ...item }; // Create a new object
+                labourItem.url = "labour/labourHome";
+                labourItem.actionName = "+ Enroll in Labour and delivery program";
+                filteredPrograms.push(labourItem);
+
+                let pncItem = { ...item }; // Create a new object
+                pncItem.url = "pnc/Home";
+                pncItem.actionName = "+ Enroll in PNC program";
+                filteredPrograms.push(pncItem);
+            }
+        }
+
+        // Return a Promise that resolves with filteredPrograms
+        return Promise.resolve(filteredPrograms);
+    }
+
+    static async setUserActivities(programActivity: any) {
         const activities = [];
-        activities.push({ NCD_activities: await this.getUserActivities("NCD_activities") });
+        activities.push({ programActivity: await this.getUserActivities(programActivity) });
         const generalStore = useGeneralStore();
         generalStore.setActivity(activities);
     }
@@ -117,8 +159,6 @@ export class UserService extends Service {
         sessionStorage.setItem("userPrograms", JSON.stringify(data.programs));
     }
     static async setNCDValue() {
-        await this.setUserActivities();
-        // sessionStorage.setItem("app", JSON.stringify({ programID: 32, applicationName: "NCD" }));
         const patient = new PatientService();
         const visits = await PatientService.getPatientVisits(patient.getID(), false);
         const activities = await this.getUserActivities("NCD_activities");
@@ -144,12 +184,8 @@ export class UserService extends Service {
         }
 
         return {
-            NCDUserAction: {
-                actionName: NCDProgramActionName,
-                url: url,
-                name: "NCD",
-                id: "32",
-            },
+            actionName: NCDProgramActionName,
+            url: url,
         };
     }
     static async setNCDNumber() {

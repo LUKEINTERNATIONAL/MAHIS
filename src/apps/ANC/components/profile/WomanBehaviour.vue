@@ -3,14 +3,20 @@
         <!-- Caffeine -->
         <ion-card class="section">
             <ion-card-content>
-                <basic-form :contentData="dailyCaffeineIntake"></basic-form>
+                <basic-form :contentData="dailyCaffeineIntake"
+                            @update:selected="handleInputData"
+                            @update:inputValue="handleInputData"
+                ></basic-form>
             </ion-card-content>
         </ion-card>
 
         <!-- tobbaco -->
         <ion-card class="section">
             <ion-card-content>
-                <basic-form :contentData="Tobacco"></basic-form>
+                <basic-form :contentData="Tobacco"
+                            @update:selected="handleInputData"
+                            @update:inputValue="handleInputData"
+                ></basic-form>
             </ion-card-content>
         </ion-card>
         <!--    &lt;!&ndash; Navigation Buttons &ndash;&gt;-->
@@ -45,7 +51,8 @@ import BasicInputField from '@/components/BasicInputField.vue';
 import BasicForm from "@/components/BasicForm.vue";
 import {mapState} from "pinia";
 import {useWomanBehaviourStore} from "@/apps/ANC/store/profile/womanBehaviourStore";
-import { getCheckboxSelectedValue, modifyCheckboxValue } from '@/services/data_helpers';
+import {getCheckboxSelectedValue, getRadioSelectedValue, modifyCheckboxValue} from '@/services/data_helpers';
+import {validateField} from "@/services/ANC/profile_validation_service";
 
 
 export default defineComponent({
@@ -79,8 +86,9 @@ export default defineComponent({
   },
   watch:{
     dailyCaffeineIntake:{
-      handler(){
+      handler(event){
         this. handleNone()
+        this.handleInputData(event)
       },
       deep:true
     },
@@ -89,12 +97,26 @@ export default defineComponent({
   computed:{
     ...mapState(useWomanBehaviourStore,["dailyCaffeineIntake"]),
     ...mapState(useWomanBehaviourStore,["Tobacco"]),
+    DailyCaffeineIntake(){ return getCheckboxSelectedValue(this.dailyCaffeineIntake, 'Daily caffeine use')},
+    SubstanceAbuse(){ return getRadioSelectedValue(this.Tobacco, 'Recently quit tobacco products')},
+    SecondHandSmoke(){ return getRadioSelectedValue(this.Tobacco, 'Exposure to second hand smoke')},
+
   },
 
   setup() {
     return { checkmark,pulseOutline };
   },
   methods:{
+    validationCaffeineRules(event: any) {
+      return validateField(this.dailyCaffeineIntake,event.name, (this as any)[event.name]);
+    },
+    validationTobaccoRules(event: any) {
+      return validateField(this.dailyCaffeineIntake,event.name, (this as any)[event.name]);
+    },
+    async  handleInputData(event: any){
+      this.validationCaffeineRules(event)
+      this.validationTobaccoRules(event)
+    },
     handleNone(){
       const checkBoxes=['More than 2 cups of coffee',
                         'More than 4 cups of tea',
@@ -151,8 +173,9 @@ export default defineComponent({
   font-size: medium;
 }
 ion-card {
-  box-shadow:none;
-  background-color:inherit;
+
+  color:black;
+  width:100%
 }
 
 </style>

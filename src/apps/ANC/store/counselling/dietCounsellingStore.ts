@@ -9,7 +9,7 @@ const initialDietCounselling=[
         classDash: 'dashed_bottom_border',
         radioBtnContent:{
             header:{
-                title: 'Counselling  conducted on health eating?',
+                title: 'Counselling  conducted on health eating and keeping physically active?',
                 selectedValue: '',
                 class:'bold',
                 name:'Counselling on health eating',
@@ -85,6 +85,88 @@ const initialDietCounselling=[
         }
 
     },
+    {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border',
+        radioBtnContent:{
+            header:{
+                title: 'Counselling  conducted on increasingly daily energy and protein supplementation?',
+                selectedValue: '',
+                class:'bold',
+                name:"Counselling  conducted on increasingly daily energy and protein supplementation",
+                displayNext:"No"
+            },
+            data:[
+                {
+                    name: 'Yes',
+                    value:'Yes',
+                    colSize: "2.5",
+                },
+                {
+                    name: 'No',
+                    value:'No',
+                    colSize: "2.5",
+                },
+            ]
+        }
+    },
+    {
+        selectdData: [],
+        sideColSize:0.5,
+        childName: 'Counselling  conducted on increasingly daily energy and protein supplementation',
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border',
+        radioBtnContent:{
+            header:{
+                title: 'Reason counselling on increasing energy and protein dietary supplementation was not done?',
+                selectedValue: '',
+                name:"Reason counselling on increasing energy and protein dietary supplementation was not done",
+                class:'bold',
+                displayNone:true,
+                displayNext:'Other'
+            },
+            data:[
+                {
+                    name:'Client was referred',
+                    value: 'client was referred',
+                    colSize: "7",
+                },
+                {
+                    name:'Other',
+                    value:'Other',
+                    colSize: "7",
+                },
+            ]
+        }
+    },
+    {
+        childName:'Reason counselling on increasing energy and protein dietary supplementation was not done',
+        classDash: 'dashed_bottom_border',
+        sideColSize:0.5,
+        data:{
+            rowData:[
+                {
+                    colData:[
+                        {
+                            displayNone:true,
+                            inputHeader: 'Specify',
+                            icon: icons.editPen,
+                            valueType:'text',
+                            name: "Other notes",
+                            value: "Other notes",
+                            eventType: 'input',
+                            inputWidth: "82%",
+                            required: true
+                        }
+
+                    ]
+                }
+            ],
+
+        }
+
+    },
 
 ] as any;
 export const useDietCounsellingStore = defineStore('dietCounsellingStore',{
@@ -131,161 +213,7 @@ export const useDietCounsellingStore = defineStore('dietCounsellingStore',{
                     
             // },
             // //break
-            // {
-            //     selectdData: [],
-            //     isFinishBtn: false,
-            //     classDash: 'dashed_bottom_border',
-            //     radioBtnContent:{
-            //         header:{
-            //             title: 'Counselling  conducted on increasingly daily energy and protein intake?',
-            //             selectedValue: ''
-            //         },
-            //         data:[
-            //             {  
-            //                 name: physiologicalCousellingForm.counsellingOnEnergyProteinIntakeYes.name,
-            //                 value: physiologicalCousellingForm.counsellingOnEnergyProteinIntakeYes.value,
-            //                 labelPlacement:'start',
-            //                 colSize: "7",
-            //                 justify:"space-between" 
-            //             },
-            //             { 
-            //                 name: physiologicalCousellingForm.counsellingOnEnergyProteinIntakeNo.name,
-            //                 value: physiologicalCousellingForm.counsellingOnEnergyProteinIntakeNo.value,
-            //                 labelPlacement:'start',
-            //                 colSize: "7",
-            //                 justify:"space-between" 
-            //             },
-            //         ]
-            //     }
-            // },
-            // {
-            //     selectdData: [],
-            //     isFinishBtn: false,
-            //     classDash: 'dashed_bottom_border',
-            //     radioBtnContent:{
-            //         header:{
-            //             title: 'Reason couselling on increasing energy and protein dietary supplementation was not done?',
-            //             selectedValue: ''
-            //         },
-            //         data:[
-            //             {  
-            //                 name: physiologicalCousellingForm.clientReferredOnEnergyProteinIntake.name,
-            //                 value: physiologicalCousellingForm.clientReferredOnEnergyProteinIntake.value,
-            //                 labelPlacement:'start',
-            //                 colSize: "7",
-            //                 justify:"space-between" 
-            //             },
-            //             { 
-            //                 name: physiologicalCousellingForm.otherOnEnergyProteinIntake.name,
-            //                 value: physiologicalCousellingForm.otherOnEnergyProteinIntake.value,
-            //                 labelPlacement:'start',
-            //                 colSize: "7",
-            //                 justify:"space-between" 
-            //             },
-            //         ]
-            //     }
-            // },
-            // {   
-            //     classDash: 'dashed_bottom_border',
-            //     data:{ 
-            //         rowData:[
-            //             {
-            //                 colData:[
-            //                     {
-            //                         inputHeader: 'Other (specify)',
-            //                         icon: icons.editPen,
-            //                         name: physiologicalCousellingForm.specifyOnEnergyProteinIntake.name,
-            //                         value: physiologicalCousellingForm.specifyOnEnergyProteinIntake.value,
-            //                         eventType: 'input',
-            //                         inputWidth: "82%",
-            //                         required: true
-            //                     }
-                                
-            //                 ]
-            //             }
-            //         ],
-                    
-            //     }
-                    
-            // },
-            // //break
-            //              {
-            //     selectdData: [],
-            //     isFinishBtn: false,
-            //     classDash: 'dashed_bottom_border',
-            //     radioBtnContent:{
-            //         header:{
-            //             title: 'Counselling  conducted on balanced energy and protein  dietary supplentation?',
-            //             selectedValue: ''
-            //         },
-            //         data:[
-            //             {  
-            //                 name: physiologicalCousellingForm.counsellingOnEnergyProteinDietarySupplentationYes.name,
-            //                 value: physiologicalCousellingForm.counsellingOnEnergyProteinDietarySupplentationYes.value,
-            //                 labelPlacement:'start',
-            //                 colSize: "7",
-            //                 justify:"space-between" 
-            //             },
-            //             { 
-            //                 name: physiologicalCousellingForm.counsellingOnEnergyProteinDietarySupplentationNo.name,
-            //                 value: physiologicalCousellingForm.counsellingOnEnergyProteinDietarySupplentationNo.value,
-            //                 labelPlacement:'start',
-            //                 colSize: "7",
-            //                 justify:"space-between" 
-            //             },
-            //         ]
-            //     }
-            // },
-            // {
-            //     selectdData: [],
-            //     isFinishBtn: false,
-            //     classDash: 'dashed_bottom_border',
-            //     radioBtnContent:{
-            //         header:{
-            //             title: 'Reason couselling on balanced energy and protein dietary  supplementation was not done?',
-            //             selectedValue: ''
-            //         },
-            //         data:[
-            //             {  
-            //                 name: physiologicalCousellingForm.clientReferredOnEnergyProteinDietarySupplentation.name,
-            //                 value: physiologicalCousellingForm.clientReferredOnEnergyProteinDietarySupplentation.value,
-            //                 labelPlacement:'start',
-            //                 colSize: "7",
-            //                 justify:"space-between" 
-            //             },
-            //             { 
-            //                 name: physiologicalCousellingForm.otherOnEnergyProteinDietarySupplentation.name,
-            //                 value: physiologicalCousellingForm.otherOnEnergyProteinDietarySupplentation.value,
-            //                 labelPlacement:'start',
-            //                 colSize: "7",
-            //                 justify:"space-between" 
-            //             },
-            //         ]
-            //     }
-            // },
-            // {   
-            //     classDash: 'dashed_bottom_border',
-            //     data:{ 
-            //         rowData:[
-            //             {
-            //                 colData:[
-            //                     {
-            //                         inputHeader: 'Other (specify)',
-            //                         icon: icons.editPen,
-            //                         name: physiologicalCousellingForm.specifyOnEnergyProteinDietarySupplentation.name,
-            //                         value: physiologicalCousellingForm.specifyOnEnergyProteinDietarySupplentation.value,
-            //                         eventType: 'input',
-            //                         inputWidth: "82%",
-            //                         required: true
-            //                     }
-                                
-            //                 ]
-            //             }
-            //         ],
-                    
-            //     }
-                    
-            // },
+
 
 
             //second copy

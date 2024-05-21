@@ -11,9 +11,15 @@ import ANCTreatment from "@/apps/ANC/views/ANCTreatment.vue";
 import ANCHome from '../views/ANCHome.vue';
 import referral from "@/apps/ANC/views/referral.vue";
 import ANCreferral from "@/apps/ANC/views/ANCreferral.vue";
+import Enrollment from "@/apps/ANC/views/Enrollment.vue";
 
 
 export default [
+  {
+    path: '/ANCEnrollment',
+    name: 'ANCEnrollment',
+    component: Enrollment
+  },
 
   {
     path: '/profile',

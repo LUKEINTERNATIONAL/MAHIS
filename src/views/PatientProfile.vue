@@ -20,7 +20,7 @@
                                     <ion-col>{{ demographics?.mrn }}</ion-col>
                                 </ion-row>
                                 <ion-row>
-                                    <ion-col size="4">Gendar</ion-col>
+                                    <ion-col size="4">Gender</ion-col>
                                     <ion-col>{{ covertGender(demographics?.gender) }}</ion-col>
                                 </ion-row>
                                 <ion-row>
@@ -40,33 +40,13 @@
 
                         <ion-card
                             class="start_new_co"
-                            v-if="programAccess('NCD PROGRAM')"
                             style="margin-bottom: 20px"
-                            @click="setProgram(NCDUserAction)"
+                            @click="setProgram(btn)"
+                            v-for="(btn, index) in programBtn"
+                            :key="index"
                         >
-                            {{ NCDUserAction.actionName }}
+                            {{ btn.actionName }}
                         </ion-card>
-                        <ion-card class="start_new_co" v-if="demographics.gender === 'F'" style="margin-bottom: 20px">
-                            <router-link to="/profile">+ Enroll in ANC Program</router-link>
-                        </ion-card>
-
-                        <ion-card class="start_new_co" style="margin-bottom: 20px">
-                            <router-link to="/labour/labourHome">+ Enroll in Labour and delivery program</router-link>
-                        </ion-card>
-                        <ion-card class="start_new_co" style="margin-bottom: 20px">
-                            <router-link to="/pnc/Home"> + Enroll in PNC program</router-link>
-                        </ion-card>
-                        <ion-card
-                            class="start_new_co"
-                            v-if="programAccess('IMMUNIZATION PROGRAM')"
-                            style="margin-bottom: 20px"
-                            @click="setProgram({ url: 'birthRegistration', id: 33, name: 'IMMUNIZATION PROGRAM' })"
-                        >
-                            + Enroll in Immunization program
-                        </ion-card>
-                        <ion-card class="start_new_co" v-if="programAccess('OPD Program')" style="margin-bottom: 20px" @click="handleOPD()">
-                            {{ OPDProgramActionName }}</ion-card
-                        >
 
                         <ion-card style="margin-bottom: 20px; background-color: #fff">
                             <ion-accordion-group :value="['first']">
@@ -85,11 +65,11 @@
                                         </li>
                                         <li class="form_list">
                                             <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.notes"></ion-icon>
-                                            <div class="form_list_content">Surgucal Notes</div>
+                                            <div class="form_list_content">Surgical Notes</div>
                                         </li>
                                         <li class="form_list">
                                             <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.gynacological"></ion-icon>
-                                            <div class="form_list_content">Gynacological</div>
+                                            <div class="form_list_content">Gynaecological</div>
                                         </li>
                                         <li class="form_list">
                                             <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.notes"></ion-icon>
@@ -121,7 +101,7 @@
                     <ion-col size-sm="12" size-md="8" size-lg="9">
                         <ion-card style="background-color: #fff">
                             <div class="p_dash_header">
-                                <div class="p_title">Consultation Overview {{ activeProgramID }}</div>
+                                <div class="p_title">Consultation Overview</div>
                                 <div class="date">
                                     <span class="diplay_space_between" id="open-dates-trigger">
                                         <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.calendar" style="margin-right: 15px"></ion-icon>
@@ -155,16 +135,10 @@
             </div>
 
             <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="displayNoneDesktop">
-                <ion-fab-button color="primary"> + </ion-fab-button>
+                <ion-fab-button color="primary"> <ion-icon :icon="grid"></ion-icon> </ion-fab-button>
                 <ion-fab-list side="top">
-                    <ion-fab-button data-desc="Templates/Forms">
-                        <ion-icon :icon="document"></ion-icon>
-                    </ion-fab-button>
-                    <ion-fab-button data-desc="Print Out & Other">
-                        <ion-icon :icon="medkit"></ion-icon>
-                    </ion-fab-button>
-                    <ion-fab-button data-desc="Apps" id="programList">
-                        <ion-icon :icon="grid"></ion-icon>
+                    <ion-fab-button @click="setProgram(btn)" v-for="(btn, index) in programBtn" :key="index" :data-desc="btn.actionName">
+                        <ion-icon :icon="add"></ion-icon>
                     </ion-fab-button>
                 </ion-fab-list>
             </ion-fab>
@@ -249,6 +223,7 @@ import {
     colorPalette,
     document,
     globe,
+    add,
 } from "ionicons/icons";
 import { modalController } from "@ionic/vue";
 import { icons } from "@/utils/svg";
@@ -282,7 +257,7 @@ import {
     modifyFieldValue,
 } from "@/services/data_helpers";
 import { toastWarning } from "@/utils/Alerts";
-
+import ProgramData from "@/Data/ProgramData";
 import { ref } from "vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import PatientProfile from "@/apps/Immunization/components/PatientProfile.vue";
@@ -332,6 +307,7 @@ export default defineComponent({
             visits: [] as any,
             NCDUserAction: [] as any,
             activeProgramID: "" as any,
+            programBtn: {} as any,
         };
     },
     computed: {
@@ -346,13 +322,13 @@ export default defineComponent({
         this.visits = await PatientService.getPatientVisits(patient.getID(), false);
         await UserService.setProgramUserActions();
         this.setNCDValue();
-        this.getProgram();
+        this.setActiveProgram();
     },
     watch: {
         demographics: {
             handler() {
                 this.setNCDValue();
-                this.getProgram();
+                this.setActiveProgram();
             },
             deep: true,
         },
@@ -377,15 +353,17 @@ export default defineComponent({
             document,
             globe,
             medkit,
+            add,
         };
     },
 
     methods: {
         setProgram(program: any) {
-            sessionStorage.setItem("app", JSON.stringify({ programID: program.id, applicationName: program.name }));
+            sessionStorage.setItem("app", JSON.stringify({ programID: program.program_id, applicationName: program.name }));
+            this.setActiveProgram();
             this.nav(program.url);
         },
-        getProgram() {
+        setActiveProgram() {
             let program: any = sessionStorage.getItem("app");
             program = JSON.parse(program);
             this.activeProgramID = program.programID;
@@ -403,8 +381,32 @@ export default defineComponent({
             }
         },
         async setNCDValue() {
-            await UserService.setUserActivities();
-            if (this.userActions.length > 0) [{ NCDUserAction: this.NCDUserAction }] = this.userActions;
+            this.programBtn = await UserService.userProgramData();
+            console.log(this.programBtn);
+            // if (this.userActions.length > 0) [{ NCDUserAction: this.NCDUserAction }] = this.userActions;
+            // this.programBtn = [
+            //     {
+            //         name: "NCD PROGRAM",
+            //         obj: this.NCDUserAction,
+            //     },
+            //     {
+            //         name: "IMMUNIZATION PROGRAM",
+            //         obj: {
+            //             url: "birthRegistration",
+            //             id: 33,
+            //             name: "IMMUNIZATION PROGRAM",
+            //         },
+            //     },
+            //     {
+            //         name: "NCD PROGRAM",
+            //         obj: {
+            //             actionName: "+ Enroll in ANC Program",
+            //             url: "NCDEnrollment",
+            //             name: "NCD",
+            //             id: "32",
+            //         },
+            //     },
+            // ];
         },
         setOPDValue() {
             sessionStorage.setItem("app", JSON.stringify({ programID: 14, applicationName: "OPD" }));
@@ -469,19 +471,24 @@ export default defineComponent({
 <style scoped>
 ion-fab-button[data-desc] {
     position: relative;
+    width: 0px;
 }
 
 ion-fab-button[data-desc]::after {
     position: absolute;
     content: attr(data-desc);
     z-index: 1;
-    right: 50px;
+    right: -20px;
     bottom: 7px;
     color: var(--ion-color-contrast, rgb(112, 109, 109));
-    background-color: var(--ion-color-base, #fff);
+    background-color: rgb(221, 238, 221);
     padding: 5px 10px;
     border-radius: 10px;
     box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
+}
+ion-fab-button[data-desc]:hover::after {
+    background-color: rgb(200, 230, 200); /* Change background color on hover */
+    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.4), 0 6px 10px 0 rgba(0, 0, 0, 0.28), 0 1px 18px 0 rgba(0, 0, 0, 0.24); /* Adjust box-shadow on hover */
 }
 #container {
     text-align: center;

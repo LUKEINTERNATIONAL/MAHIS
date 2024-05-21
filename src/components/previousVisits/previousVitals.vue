@@ -185,8 +185,10 @@ export default defineComponent({
         },
         setWeight() {
             if (this.weight) {
+                console.log("🚀 ~ setWeight ~ this.weight:", this.weight);
                 this.setData(this.weight, "weight");
             }
+            console.log("🚀 ~ setWeight ~ this.weight:", this.weight);
         },
         setHeight() {
             if (this.height) {

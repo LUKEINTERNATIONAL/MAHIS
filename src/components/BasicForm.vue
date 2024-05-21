@@ -384,7 +384,6 @@ export default defineComponent({
                 this.$emit("update:inputValue", col);
             }
             if (inputType == "updateCheckbox") {
-                console.log("🚀 ~ handleInput ~ updateCheckbox:", this.initialData);
                 modifyCheckboxValue(data, col.name, "checked", event.detail.checked, this.initialData);
                 this.$emit("update:inputValue", { col, event });
             }
@@ -459,7 +458,12 @@ ion-radio {
     align-items: center;
 }
 .checkout_col ion-checkbox {
-    margin-right: 150px;
+    margin-right: 20%;
+}
+@media screen and (max-width: 768px) {
+  .checkout_col ion-checkbox {
+    margin-right: 10%;
+  }
 }
 .alerts_error {
     margin-top: 2px;

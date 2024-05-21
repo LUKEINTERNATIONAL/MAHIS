@@ -87,9 +87,9 @@ export default defineComponent({
             series: [
                 {
                     name: "",
-                    data: [],
+                    data: [] as any,
                 },
-            ],
+            ] as any,
         };
     },
     setup() {

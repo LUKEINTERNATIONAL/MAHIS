@@ -124,7 +124,7 @@ export default defineComponent({
                     name: "",
                     data: [],
                 },
-            ],
+            ] as any,
         };
     },
     setup() {

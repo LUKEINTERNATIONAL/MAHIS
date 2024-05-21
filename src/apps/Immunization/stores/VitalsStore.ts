@@ -15,9 +15,10 @@ const initialVitals = [
                             unit: "cm",
                             icon: icons.height,
                             value: "",
-                            name: "Height",
+                            name: "height",
                             required: true,
                             eventType: "input",
+                            valueType: "number",
                             alertsError: false,
                             alertsErrorMassage: "",
                             disabled: false,
@@ -27,9 +28,10 @@ const initialVitals = [
                             unit: "kg",
                             icon: icons.weight,
                             value: "",
-                            name: "Weight",
+                            name: "weight",
                             required: true,
                             eventType: "input",
+                            valueType: "number",
                             alertsError: false,
                             alertsErrorMassage: "",
                             disabled: false,
@@ -50,22 +52,22 @@ const initialVitals = [
             },
         ],
         previousView: {
-            name: "vitals",
+            name: "vitalsWeightHeight",
         },
     },
 ] as any;
-export const useVitalsStore = defineStore("vitalsWeightHeightStore", {
+export const useWeightHeightVitalsStore = defineStore("vitalsWeightHeightStore", {
     state: () => ({
-        vitals: [...initialVitals] as any,
+        vitalsWeightHeight: [...initialVitals] as any,
     }),
     actions: {
         setVitals(data: any) {
-            this.vitals = data;
+            this.vitalsWeightHeight = data;
         },
-        getInitialSocialHistory() {
+        getInitialVitals() {
             const data = _.cloneDeep(initialVitals);
             return [...data];
         },
     },
-    // persist: true,
+    persist: true,
 });
