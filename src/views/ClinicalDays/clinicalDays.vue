@@ -18,15 +18,15 @@
 
             <ion-row>
                 <ion-col>
-                    <ion-checkbox class="ilbl" label-placement="end">Monday</ion-checkbox>
+                    <ion-checkbox class="ilbl" label-placement="end" :checked="isMondayChecked" @ionChange="onCheckboxChange($event, 'monday')">Monday</ion-checkbox>
                     <br />
-                    <ion-checkbox class="ilbl" label-placement="end">Tuesday</ion-checkbox>
+                    <ion-checkbox class="ilbl" label-placement="end" :checked="isTuesdayChecked" @ionChange="onCheckboxChange($event, 'tuesday')">Tuesday</ion-checkbox>
                     <br />
-                    <ion-checkbox class="ilbl" label-placement="end">Wednesday</ion-checkbox>
+                    <ion-checkbox class="ilbl" label-placement="end" :checked="isWednesdayChecked" @ionChange="onCheckboxChange($event, 'wednesday')">Wednesday</ion-checkbox>
                     <br />
-                    <ion-checkbox class="ilbl" label-placement="end">Thursday</ion-checkbox>
+                    <ion-checkbox class="ilbl" label-placement="end" :checked="isThursdayChecked" @ionChange="onCheckboxChange($event, 'thursday')">Thursday</ion-checkbox>
                     <br />
-                    <ion-checkbox class="ilbl" label-placement="end">Friday</ion-checkbox>
+                    <ion-checkbox class="ilbl" label-placement="end" :checked="isFridayChecked" @ionChange="onCheckboxChange($event, 'friday')">Friday</ion-checkbox>
                     <br />
                 </ion-col>
 
@@ -83,6 +83,7 @@
                             inline
                             auto-apply
                             multi-dates
+                            :disabled-dates="disabledDates"
                         />
                     </ion-col>
 
@@ -147,6 +148,38 @@ const disable_weekends = ref(true)
 const totalHolidaysSelected = ref(0)
 const date = ref()
 const maximumNumberOfDaysForEachDay = ref(0)
+const disabledDates = ref([])
+const isMondayChecked = ref(false)
+const isTuesdayChecked = ref(false)
+const isThursdayChecked = ref(false)
+const isWednesdayChecked = ref(false)
+const isFridayChecked = ref(false)
+
+const onCheckboxChange = (event: Event, id: string) => {
+    const target = event.target as HTMLIonCheckboxElement
+    if (id == "monday") {
+        isMondayChecked.value = target.checked
+    }
+    if (id == "tuesday") {
+        isTuesdayChecked.value = target.checked
+    }
+    if (id == "wednesday") {
+        isWednesdayChecked.value = target.checked
+    }
+    if (id == "thursday") {
+        isThursdayChecked.value = target.checked
+    }
+    if (id == "friday") {
+        isFridayChecked.value = target.checked
+    }
+    if (id == "") {
+        // isMondayChecked.value = target.checked
+    }
+    if (id == "") {
+        // isMondayChecked.value = target.checked
+    }
+    saveAndReload()
+}
 
 watch(
     () => toggle_local.value,
@@ -164,35 +197,47 @@ function loadDataFromStore() {
     totalHolidaysSelected.value = store.getHolidaydatesDataSize()
     date.value = store.getHolidaydates()
     maximumNumberOfDaysForEachDay.value = store.getMaximumNumberOfDaysForEachDay()
+    disabledDates.value = store.getDisabledDates2() as any
+    isMondayChecked.value = store.getAreMondaysDisabled()
+    isTuesdayChecked.value = store.getAreTuesdaysDisabled()
+    isWednesdayChecked.value = store.getAreWednesdaysDisabled()
+    isThursdayChecked.value = store.getAreThursdaysDisabled()
+    isFridayChecked.value = store.getAreFridaysDisabled()
 }
 
 watch(
     () => maximumNumberOfDaysForEachDay.value,
     async (newValue) => {
-        saveStateValuesState()
-        loadDataFromStore()
+        saveAndReload()
     }
 )
 
 watch(
     () => date.value,
     async (newValue) => {
-        saveStateValuesState()
-        loadDataFromStore()
+        saveAndReload()
     }
 )
+
+function saveAndReload() {
+    saveStateValuesState()
+    loadDataFromStore()
+}
 
 function saveStateValuesState() {
     const storeClinicalDaysStore = useClinicalDaysStore()
     storeClinicalDaysStore.setSelectedMedicalDrugsList(date.value)
     storeClinicalDaysStore.setMaximumNumberOfDaysForEachDay(maximumNumberOfDaysForEachDay.value)
+    storeClinicalDaysStore.setAreMondaysDisabled(isMondayChecked.value)
+    storeClinicalDaysStore.setAreTuesdaysDisabled(isTuesdayChecked.value)
+    storeClinicalDaysStore.setAreWednesdaysDisabled(isWednesdayChecked.value)
+    storeClinicalDaysStore.setAreThursdaysDisabled(isThursdayChecked.value)
+    storeClinicalDaysStore.setAreFridaysDisabled(isFridayChecked.value)
 }
 
 function nav(url: any) {
     router.push(url)
 }
-
-
 </script>
 
 <style scoped>
