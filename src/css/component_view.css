@@ -62,9 +62,9 @@
     .searchField {
         width: 100vw !important;
     }
-    .search_card {
+    /* .search_card {
         width: 93vw !important;
-    }
+    } */
     .content_manager {
         display: block !important;
     }

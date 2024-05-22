@@ -9,25 +9,41 @@
         :dismiss-on-select="true"
     >
         <ion-content class="search_card">
-            <ion-row class="search_header">
-                <ion-col>Patient No. </ion-col>
-                <ion-col>Fullname</ion-col>
-                <ion-col>Birthdate</ion-col>
-                <ion-col style="max-width: 70px">Gender</ion-col>
-                <ion-col style="max-width: 30px"></ion-col>
-            </ion-row>
-            <ion-row class="search_result" v-for="(item, index) in patients" :key="index" @click="openNewPage('patientProfile', item)">
-                <ion-col>{{ patientIdentifier(item) }} </ion-col>
-                <ion-col>{{ item.person.names[0].given_name + " " + item.person.names[0].family_name }}</ion-col>
-                <ion-col>{{ item.person.birthdate }}</ion-col>
-                <ion-col style="max-width: 70px">{{ item.person.gender }}</ion-col>
-                <ion-col style="max-width: 30px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col size="5">
-                    <DynButton :icon="add" :name="'Add Patient'" :fill="'clear'" @click="openCheckPaitentNationalIDModal" />
-                </ion-col>
-            </ion-row>
+            <div style="width: 1300px">
+                <ion-row class="search_header">
+                    <ion-col style="max-width: 190px; min-width: 190px">Fullname</ion-col>
+                    <ion-col style="max-width: 150px; min-width: 150px">Birthdate</ion-col>
+                    <ion-col style="max-width: 90px; min-width: 90px; max-width: 90px">Gender</ion-col>
+                    <ion-col style="max-width: 330px; min-width: 330px">Current Address</ion-col>
+                    <ion-col style="max-width: 330px; min-width: 330px">Home Address</ion-col>
+                    <ion-col style="max-width: 100px; min-width: 100px">Phone</ion-col>
+                    <ion-col style="max-width: 25px"></ion-col>
+                </ion-row>
+                <ion-row class="search_result" v-for="(item, index) in patients" :key="index" @click="openNewPage('patientProfile', item)">
+                    <ion-col style="max-width: 190px; min-width: 190px">{{
+                        item.person.names[0].given_name + " " + item.person.names[0].family_name
+                    }}</ion-col>
+                    <ion-col style="max-width: 150px; min-width: 150px">{{ item.person.birthdate }}</ion-col>
+                    <ion-col style="max-width: 90px; min-width: 90px; max-width: 90px">{{ item.person.gender }}</ion-col>
+                    <ion-col style="max-width: 330px; min-width: 330px"
+                        >{{ item?.person?.addresses[0]?.state_province }}, {{ item?.person?.addresses[0]?.township_division }},{{
+                            item?.person?.addresses[0]?.city_village
+                        }}</ion-col
+                    >
+                    <ion-col style="max-width: 330px; min-width: 330px"
+                        >{{ item?.person?.addresses[0]?.address2 }}, {{ item?.person?.addresses[0]?.county_district }},{{
+                            item?.person?.addresses[0]?.neighborhood_cell
+                        }}</ion-col
+                    >
+                    <ion-col style="max-width: 150px; min-width: 150px">{{ getPhone(item) }}</ion-col>
+                    <ion-col style="max-width: 25px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="5">
+                        <DynButton :icon="add" :name="'Add Patient'" :fill="'clear'" @click="openCheckPaitentNationalIDModal" />
+                    </ion-col>
+                </ion-row>
+            </div>
         </ion-content>
     </ion-popover>
 </template>
@@ -185,8 +201,13 @@ export default defineComponent({
                 category: "",
                 gender: item.person.gender,
                 patient_id: item.patient_id,
-                address: item?.person?.addresses[0]?.state_province + "," + item?.person?.addresses[0]?.city_village,
-                phone: item.person.person_attributes.find((attribute: any) => attribute.type.name === "Cell Phone Number")?.value,
+                address:
+                    item?.person?.addresses[0]?.state_province +
+                    "," +
+                    item?.person?.addresses[0]?.township_division +
+                    "," +
+                    item?.person?.addresses[0]?.city_village,
+                phone: this.getPhone(item),
             });
             if (Service.getProgramID() == 32 || Service.getProgramID() == 33) {
                 resetNCDPatientData();
@@ -216,7 +237,9 @@ export default defineComponent({
                 this.$router.push(url);
             }
         },
-
+        getPhone(item: any) {
+            return item.person.person_attributes.find((attribute: any) => attribute.type.name === "Cell Phone Number")?.value;
+        },
         openPopover(e: any) {
             this.event = e;
             this.popoverOpen = true;
@@ -288,11 +311,12 @@ ion-col {
     color: var(--ion-hover) !important;
 }
 ion-popover {
-    --width: 60vw;
+    --width: 95vw;
+    --max-width: 1300px;
 }
 @media (max-width: 900px) {
     ion-popover {
-        --width: 97vw;
+        --width: 95vw;
     }
 }
 </style>

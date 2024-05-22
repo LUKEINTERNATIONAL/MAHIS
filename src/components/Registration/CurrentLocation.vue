@@ -1,11 +1,5 @@
 <template>
-    <basic-card
-        :contentTwo="contentTwo"
-        :content="cardData"
-        @update:selected="handleInputData"
-        @update:inputValue="handleInputData"
-        @clicked:button="handleBtns"
-    ></basic-card>
+    <basic-card :content="cardData" @update:selected="handleInputData" @update:inputValue="handleInputData" @clicked:button="handleBtns"></basic-card>
 </template>
 
 <script lang="ts">
@@ -84,7 +78,6 @@ export default defineComponent({
                     },
                 ],
             };
-            console.log("🚀 ~ buildCards ~ this.cardData:", this.cardData);
         },
         openModal() {
             createModal(DispositionModal);
@@ -100,7 +93,6 @@ export default defineComponent({
                 const districts: any = await LocationService.getDistricts(i);
                 this.districtList.push(...districts);
             }
-            console.log("🚀 ~ buildDistricts ~ this.districtList:", this.districtList);
             modifyFieldValue(this.currentLocation, "current_district", "multiSelectData", this.districtList);
         },
         handleBtns(event: any) {
