@@ -1,7 +1,7 @@
 <template>
     <div class="pim-cls-1 modal_wrapper">
         <div class="OtherVitalsHeading">
-            <div class="OtherVitalsTitle" style="color: #1f2221d4; font-size: 16px">Add Weight/Height</div>
+            <div class="OtherVitalsTitle" style="color: #1f2221d4; font-size: 14px">Add Weight/Height</div>
             <div style="margin-right: 5px; font-size: 14px" class="lbl-tl">Todays Date: <span class="lbl-ct"> 06 Jul 2024</span></div>
         </div>
         <div>
@@ -12,7 +12,7 @@
             </div>
         </div>
 
-        <customDatePicker v-if="showPD" />
+        <customDatePicker v-if="showPD"/>
 
         <div class="btnContent">
             <div class="saveBtn">

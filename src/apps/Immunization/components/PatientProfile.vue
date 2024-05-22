@@ -105,7 +105,10 @@
                 <div class="vaccinesTitleDate">(Swipe left or right for other milestones)</div>
             </div>
             <!--Vaccine Card-->
-            <div class="vaccinesList" @click="openAdministerVaccineModal()">
+
+            <customSlider/>
+            <!-- <div class="vaccinesList" @click="openAdministerVaccineModal()">
+
                 <ion-row>
                     <ion-col size="1.2">
                         <ion-button fill="clear" class="arrowBtns" style="left: -15px">
@@ -132,6 +135,8 @@
                         </ion-button>
                     </ion-col>
                 </ion-row>
+
+                
                 <ion-row>
                     <ion-col size="1.2"> </ion-col>
                     <ion-col size="3.9">
@@ -150,13 +155,13 @@
                     </ion-col>
                     <ion-col size="1.3"> </ion-col>
                 </ion-row>
-            </div>
-            <div class="otherVaccine">
+            </div> -->
+            <!-- <div class="otherVaccine">
                 <div class="centerBtns">
                     <ion-button @click="openAdministerOtherVaccineModal()" class="btnText" fill="solid"> Add Other Vaccines </ion-button>
                 </div>
-            </div>
-            <div class="dotsWizard">
+            </div> -->
+            <!-- <div class="dotsWizard">
                 <ion-icon class="dotStatus" slot="start" :icon="iconsContent.greenDot"></ion-icon>
                 <ion-icon class="dotStatus" slot="start" :icon="iconsContent.redDot"></ion-icon>
                 <ion-icon class="dotBig" slot="start" :icon="iconsContent.blueDot"></ion-icon>
@@ -167,7 +172,7 @@
                 <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
                 <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
                 <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
-            </div>
+            </div> -->
 
             <div class="lastVaccine">
                 <div class="lastVaccineTitle">
@@ -258,6 +263,7 @@ import administerVaccineModal from "@/apps/Immunization/components/Modals/admini
 import administerOtherVaccineModal from "@/apps/Immunization/components/Modals/administerOtherVaccineModal.vue";
 import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
 import { PatientService } from "@/services/patient_service";
+import customSlider from "@/apps/Immunization/components/customSlider.vue"
 
 import {
     modifyRadioValue,
@@ -295,6 +301,7 @@ export default defineComponent({
         DynamicButton,
         WeightHeightChart,
         PreviousVitals,
+        customSlider,
     },
     data() {
         return {

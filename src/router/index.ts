@@ -2,7 +2,8 @@ import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { RouteRecordRaw } from "vue-router";
 import HomePage from "../views/HomePage.vue";
 import Login from "../views/Login.vue";
-import users from "../views/UserManagement/users.vue";
+import users from "@/views/UserManagement/users.vue";
+import clinicaldays from "@/views/ClinicalDays/clinicalDays.vue";
 import PatientProfile from "../views/PatientProfile.vue";
 import PatientRegistration from "@/views/Registration.vue";
 import setSessionDate from "@/views/Configurations/SessionDate.vue";
@@ -14,7 +15,6 @@ import ANC from "@/apps/ANC/config/routes";
 import LABOUR from "@/apps/LABOUR/config/routes";
 import PNC from "@/apps/PNC/config/routes";
 import Immunization from "@/apps/Immunization/config/routes";
-import Mockmodals from "@/apps/Immunization/components/mockmodals.vue";
 const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
@@ -41,12 +41,6 @@ const routes: Array<RouteRecordRaw> = [
         component: setSessionDate,
     },
     {
-        path: "/mockmodals",
-        name: "Mockmodals",
-        component: Mockmodals,
-        props: true,
-    },
-    {
         path: "/registration/:registrationType",
         name: "registration",
         component: PatientRegistration,
@@ -56,7 +50,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/users",
         name: "users",
         component: users,
-        props: true,
+    },
+    {
+        path: "/clinicaldays",
+        name: "clinicaldays",
+        component: clinicaldays, 
     },
     ...NCD,
     ...OPD,
