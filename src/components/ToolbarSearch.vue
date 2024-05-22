@@ -11,8 +11,8 @@
         <ion-content class="search_card">
             <div style="width: 1300px">
                 <ion-row class="search_header">
-                    <ion-col style="max-width: 190px; min-width: 190px">Fullname</ion-col>
-                    <ion-col style="max-width: 150px; min-width: 150px">Birthdate</ion-col>
+                    <ion-col style="max-width: 188px; min-width: 188px">Fullname</ion-col>
+                    <ion-col style="max-width: 120px; min-width: 120px">Birthdate</ion-col>
                     <ion-col style="max-width: 90px; min-width: 90px; max-width: 90px">Gender</ion-col>
                     <ion-col style="max-width: 330px; min-width: 330px">Current Address</ion-col>
                     <ion-col style="max-width: 330px; min-width: 330px">Home Address</ion-col>
@@ -20,10 +20,10 @@
                     <ion-col style="max-width: 25px"></ion-col>
                 </ion-row>
                 <ion-row class="search_result" v-for="(item, index) in patients" :key="index" @click="openNewPage('patientProfile', item)">
-                    <ion-col style="max-width: 190px; min-width: 190px">{{
+                    <ion-col style="max-width: 188px; min-width: 188px">{{
                         item.person.names[0].given_name + " " + item.person.names[0].family_name
                     }}</ion-col>
-                    <ion-col style="max-width: 150px; min-width: 150px">{{ item.person.birthdate }}</ion-col>
+                    <ion-col style="max-width: 120px; min-width: 120px">{{ item.person.birthdate }}</ion-col>
                     <ion-col style="max-width: 90px; min-width: 90px; max-width: 90px">{{ item.person.gender }}</ion-col>
                     <ion-col style="max-width: 330px; min-width: 330px"
                         >{{ item?.person?.addresses[0]?.state_province }}, {{ item?.person?.addresses[0]?.township_division }},{{

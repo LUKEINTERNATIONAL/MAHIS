@@ -22,7 +22,6 @@
                         <ion-icon slot="end" size="small" :icon="iconContent.calenderwithPlus"></ion-icon>
                     </ion-button>
                 </div>
-                <div>or</div>
                 <div>
                     <ion-button class="btnText" fill="solid" @click="showCPD">
                         Done earlier
