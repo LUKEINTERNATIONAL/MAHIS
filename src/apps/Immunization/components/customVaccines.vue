@@ -2,7 +2,7 @@
 <div class="vaccinesList">
         <ion-row>
             <ion-col>
-                    <ion-button v-for="vaciine in vaccines" :key="vaciine" @click="openAdministerVaccineModal" fill="solid" color="success">
+                    <ion-button class="administerVac" v-for="vaciine in vaccines" :key="vaciine" @click="openAdministerVaccineModal" fill="solid" color="success">
                         <ion-icon slot="start" :icon="iconsContent.greenInjection"></ion-icon>
                         {{ vaciine }}
                         <ion-icon slot="end" :icon="iconsContent.greenTickCheckbox"></ion-icon>
@@ -363,5 +363,9 @@ export default defineComponent({
     width: 210px;
     margin-bottom: 10px;
     align-items: center;
+}
+.administerVac {
+    height: 58px;
+    width: 150px;
 }
 </style>
