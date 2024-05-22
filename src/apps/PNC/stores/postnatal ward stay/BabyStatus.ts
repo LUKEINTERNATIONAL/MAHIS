@@ -10,7 +10,7 @@ const initialBabyStatusDetails=[
         radioBtnContent:
             {
                 header:{
-                    title: 'What is the status of the baby?',
+                    title: 'What is the status of the baby?*',
                     selectedValue: '',
                     name:'Status of baby',
                     class:'bold',
@@ -47,7 +47,7 @@ const initialBabyStatusDetails=[
                         colData: [
                             {
                                 displayNone:true,
-                                inputHeader: 'Full name of the baby',
+                                inputHeader: 'Full name of the baby*',
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
@@ -72,7 +72,7 @@ const initialBabyStatusDetails=[
         radioBtnContent:
             {
                 header:{
-                    title: 'Baby sex?',
+                    title: 'Baby sex?*',
                     selectedValue: '',
                     name:'Sex',
                     class:'bold',
@@ -110,8 +110,8 @@ const initialBabyStatusDetails=[
                         colData: [
                             {
                                 displayNone:true,
-                                inputHeader: 'Birth weight',
-                                unit: 'kg',
+                                inputHeader: 'Birth weight*',
+                                unit: 'Grams',
                                 icon: icons.weight,
                                 value: '',
                                 valueType:'text',
@@ -121,8 +121,8 @@ const initialBabyStatusDetails=[
                                 inputWidth: '',
                             },
                             {
-                                inputHeader: 'current weight',
-                                unit: 'kg',
+                                inputHeader: 'Current weight*',
+                                unit: 'Grams',
                                 icon: icons.weight,
                                 valueType:'text',
                                 value: '',
@@ -223,7 +223,7 @@ const initialBabyStatusDetails=[
                     {
                         name: 'Very well',
                         value: 'Very well',
-                        colSize: '4',
+                        colSize: '2.5',
 
                     },
                     {
@@ -310,7 +310,6 @@ const initialBabyStatusDetails=[
     {
         childName:"Status of baby",
         selectdData: [],
-        classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
                 header:{
@@ -331,14 +330,7 @@ const initialBabyStatusDetails=[
                         colSize: '6',
                         justify: 'space-between',
                     },
-                    {
-                        name: 'Polio',
-                        value: 'polio',
-                        checked: false,
-                        labelPlacement: 'start',
-                        colSize: '6',
-                        justify: 'space-between',
-                    },
+
                 ]
             }
 
@@ -376,6 +368,34 @@ const initialBabyStatusDetails=[
                 ]
             },
     },
+    {
+        childName:"Status of baby",
+        selectdData: [],
+        classDash: 'dashed_bottom_border',
+        checkboxBtnContent:
+            {
+                header:{
+                    selectedValue: '',
+                    name:'Immunisation given',
+                    class:'bold',
+                    displayNone:true,
+
+                },
+                data:[
+
+                    {
+                        name: 'Polio',
+                        value: 'polio',
+                        checked: false,
+                        labelPlacement: 'start',
+                        colSize: '6',
+                        justify: 'space-between',
+                    },
+                ]
+            }
+
+    },
+
     {
         childName:'Polio',
         isFinishBtn: false,
