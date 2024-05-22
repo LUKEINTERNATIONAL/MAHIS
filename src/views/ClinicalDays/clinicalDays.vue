@@ -73,9 +73,7 @@
                 <ion-label style="font-weight: bold; font-size: 22px;">Set Clinical Holiday(s)</ion-label>
             </ion-row>
 
-            
             <ion-row>
-                
                     <ion-col size="7">
                         <VueDatePicker
                             v-model="date"
@@ -86,7 +84,6 @@
                             :disabled-dates="disabledDates"
                         />
                     </ion-col>
-
                     <ion-col size="3">
                         <div style="margin-left: 40px;">
                             <ion-row>
@@ -97,10 +94,7 @@
                             </ion-row>
                         </div>
                     </ion-col>
-                
             </ion-row>
-            
-            
         </div>
     </ion-content>
 </template>
@@ -231,11 +225,11 @@ watch(
 )
 
 function saveAndReload() {
-    saveStateValuesState()
+    saveStateValues()
     loadDataFromStore()
 }
 
-function saveStateValuesState() {
+function saveStateValues() {
     const storeClinicalDaysStore = useClinicalDaysStore()
     storeClinicalDaysStore.setSelectedMedicalDrugsList(date.value)
     storeClinicalDaysStore.setMaximumNumberOfDaysForEachDay(maximumNumberOfDaysForEachDay.value)

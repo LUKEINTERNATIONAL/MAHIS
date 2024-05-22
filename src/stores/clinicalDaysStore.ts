@@ -1,10 +1,13 @@
 import { defineStore } from 'pinia'
 import { icons } from '@/utils/svg';
-import { combineArrays } from "@/utils/GeneralUti"
+import { combineArrays, isSameDate } from "@/utils/GeneralUti"
+import { ProgramService } from "@/services/program_service"
+import { useDemographicsStore } from "@/stores/DemographicStore";
 
 export const useClinicalDaysStore = defineStore('ClinicalDaysStore', {
     state: () => ({
         holidayDates: [] as any,
+        assignedAppointmentsDates: [] as any,
         maximumNumberOfDaysForEachDay: 0 as number,
         areMondaysDisabled: false as boolean,
         areTuesdaysDisabled: false as boolean,
@@ -164,7 +167,54 @@ export const useClinicalDaysStore = defineStore('ClinicalDaysStore', {
         getAreSundaysDisabled(): boolean {
             return this.areSundaysDisabled;
         },
+        setsssignedAppointmentsDates(data: any): void {
+            const programID = ProgramService.getProgramID()
+            const patientID = useDemographicsStore().getPatient().patient_id
+            if (Array.isArray(this.assignedAppointmentsDates)) {
+                if (!appointmentExists(this.assignedAppointmentsDates, programID, patientID, data)) {
+                    this.assignedAppointmentsDates.push({
+                        programID,
+                        patientID,
+                        date: data,
+                    })
+                }
+            } else {
+                this.assignedAppointmentsDates = []
+            }
+        },
+        getAssignedAppointmentsDates() {
+            return this.assignedAppointmentsDates
+        },
+        getAssignedAppointments() {
+            if (Array.isArray(this.assignedAppointmentsDates)) {
+                return getDateCounts(this.assignedAppointmentsDates)
+            } else {
+                return []
+            }
+        }
+
     },
     persist:true,
-
 })
+
+function appointmentExists(appointments: any, programID: number, patientID: number, date: Date) {
+    return appointments.some((appointment: any) => 
+        appointment.programID === programID &&
+        appointment.patientID === patientID &&
+        isSameDate(new Date(appointment.date), new Date(date))
+    );
+}
+
+function getDateCounts(appointments: any) {
+    const dateCountMap = new Map();
+    appointments.forEach((appointment: any) => {
+        const dateKey = new Date(appointment.date).toISOString().split('T')[0];
+        if (dateCountMap.has(dateKey)) {
+            dateCountMap.set(dateKey, dateCountMap.get(dateKey) + 1);
+        } else {
+            dateCountMap.set(dateKey, 1);
+        }
+    })
+    const dateCountsArray = Array.from(dateCountMap, ([date, count]) => ({ date, count }));
+    return dateCountsArray;
+}

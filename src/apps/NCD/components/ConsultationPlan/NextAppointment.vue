@@ -93,7 +93,9 @@ export default defineComponent({
             drugRunoutDate: "" as any,
             nextAppointmentDate: "" as any,
             minDate: new Date(),
-            disabledDates: []
+            disabledDates: [],
+
+            datesCounts: [] as any,
         };
     },
     computed: {
@@ -112,8 +114,8 @@ export default defineComponent({
         const patient = new PatientService();
         this.appointment = new AppointmentService(patient.getID(), userID);
         this.nextAppointmentDate = this.appointment.date;
-        const storeClinicalDaysStore = useClinicalDaysStore()
-        this.disabledDates = storeClinicalDaysStore.getDisabledDates() as any
+        this.loadDataFromStore()
+       
     },
     methods: {
         updateNextAppointment() {
@@ -121,8 +123,11 @@ export default defineComponent({
             nextAppointmentStore.setNextAppointment(this.calendarDate);
         },
         handleDateUpdate(value: any) {
+            const storeClinicalDaysStore = useClinicalDaysStore()
+            storeClinicalDaysStore.setsssignedAppointmentsDates(value);
             this.calendarDate = HisDate.toStandardHisDisplayFormat(value);
             this.saveData();
+            this.loadDataFromStore()
         },
         async saveData() {
             try {
@@ -141,6 +146,15 @@ export default defineComponent({
             // await this.appointment.saveObservationList(ttt);
             console.log("🚀 ~ mounted ~ ttt:", ttt);
         },
+        loadDataFromStore() {
+            const storeClinicalDaysStore = useClinicalDaysStore()
+            this.disabledDates = storeClinicalDaysStore.getDisabledDates() as any
+            // this.date = storeClinicalDaysStore.getAssignedAppointmentsDates()
+            console.log(storeClinicalDaysStore.getAssignedAppointmentsDates())
+            console.log(storeClinicalDaysStore.getAssignedAppointments())
+
+            this.datesCounts = storeClinicalDaysStore.getAssignedAppointments() as any
+        }
     },
 });
 </script>
