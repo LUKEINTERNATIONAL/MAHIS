@@ -126,10 +126,10 @@ export class UserService extends Service {
                 item.actionName = "+ Enroll in OPD program";
                 filteredPrograms.push(item);
             } else if (item.name === "ANC PROGRAM") {
-                let profileItem = { ...item }; // Create a new object
-                profileItem.url = "profile";
-                profileItem.actionName = "+ Enroll in ANC Program";
-                filteredPrograms.push(profileItem);
+                let ANCItem = { ...item }; // Create a new object
+                ANCItem.url = "ANCEnrollment";
+                ANCItem.actionName = "+ Enroll in ANC Program";
+                filteredPrograms.push(ANCItem);
 
                 let labourItem = { ...item }; // Create a new object
                 labourItem.url = "labour/labourHome";
@@ -160,7 +160,9 @@ export class UserService extends Service {
     }
     static async setNCDValue() {
         const patient = new PatientService();
+        console.log("🚀 ~ UserService ~ setNCDValue ~ patient.getID():", patient.getID());
         const visits = await PatientService.getPatientVisits(patient.getID(), false);
+
         const activities = await this.getUserActivities("NCD_activities");
         let url = "";
         let NCDProgramActionName = "";

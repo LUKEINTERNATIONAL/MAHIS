@@ -110,27 +110,27 @@
             <!-- <div class="vaccinesList" @click="openAdministerVaccineModal()">
 
                 <ion-row>
-                    <ion-col size="2">
-                        <ion-button fill="clear" class="arrowBtns">
+                    <ion-col size="1.2">
+                        <ion-button fill="clear" class="arrowBtns" style="left: -15px">
                             <ion-icon size="large" :icon="iconsContent.backBlueArrow"></ion-icon>
                         </ion-button>
                     </ion-col>
                     <ion-col size="3.9">
-                        <ion-button fill="solid" color="success">
+                        <ion-button fill="solid" class="administerVac" color="success">
                             <ion-icon slot="start" :icon="iconsContent.greenInjection"></ion-icon>
                             OPV 2
                             <ion-icon slot="end" :icon="iconsContent.greenTickCheckbox"></ion-icon>
                         </ion-button>
                     </ion-col>
-                    <ion-col size="3.9" offset="0.1">
-                        <ion-button fill="solid" color="success">
+                    <ion-col size="3.9" offset="1">
+                        <ion-button fill="solid" class="administerVac" color="success">
                             <ion-icon slot="start" :icon="iconsContent.greenInjection"></ion-icon>
                             OPV 2
                             <ion-icon slot="end" :icon="iconsContent.greenTickCheckbox"></ion-icon>
                         </ion-button>
                     </ion-col>
                     <ion-col size="2">
-                        <ion-button fill="clear" class="arrowBtns">
+                        <ion-button fill="clear" class="arrowBtns" style="left: 18px">
                             <ion-icon size="large" :icon="iconsContent.forwardBlueArrow"></ion-icon>
                         </ion-button>
                     </ion-col>
@@ -138,22 +138,22 @@
 
                 
                 <ion-row>
-                    <ion-col size="2"> </ion-col>
+                    <ion-col size="1.2"> </ion-col>
                     <ion-col size="3.9">
-                        <ion-button fill="solid" color="medium">
+                        <ion-button fill="solid" class="administerVac" color="medium">
                             <ion-icon slot="start" :icon="iconsContent.whiteInjection"></ion-icon>
                             OPV 2
                             <ion-icon slot="end" :icon="iconsContent.whiteCheckbox"></ion-icon>
                         </ion-button>
                     </ion-col>
-                    <ion-col size="3.9" offset="0.1">
-                        <ion-button fill="solid" color="medium">
+                    <ion-col size="3.9" offset="1">
+                        <ion-button fill="solid" class="administerVac" color="medium">
                             <ion-icon slot="start" :icon="iconsContent.whiteInjection"></ion-icon>
                             OPV 2
                             <ion-icon slot="end" :icon="iconsContent.whiteCheckbox"></ion-icon>
                         </ion-button>
                     </ion-col>
-                    <ion-col size="2"> </ion-col>
+                    <ion-col size="1.3"> </ion-col>
                 </ion-row>
             </div> -->
             <!-- <div class="otherVaccine">
@@ -870,5 +870,9 @@ export default defineComponent({
     width: 210px;
     margin-bottom: 10px;
     align-items: center;
+}
+.administerVac {
+    height: 58px;
+    width: 150px;
 }
 </style>

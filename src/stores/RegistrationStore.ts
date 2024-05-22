@@ -205,10 +205,25 @@ const initialSocialHistory = [
                             name: "religion",
                             placeholder: "eg. Christian",
                             eventType: "input",
-                            popOverData: {
-                                filterData: true,
-                                data: [],
-                            },
+                            isSingleSelect: true,
+                            trackBy: "id",
+                            multiSelectData: [
+                                { id: 1, name: "Christianity" },
+                                { id: 2, name: "Islam" },
+                                { id: 3, name: "Judaism" },
+                                { id: 4, name: "Hinduism" },
+                                { id: 5, name: "Buddhism" },
+                                { id: 6, name: "Sikhism" },
+                                { id: 7, name: "Jainism" },
+                                { id: 8, name: "Bahá'í Faith" },
+                                { id: 9, name: "Zoroastrianism" },
+                                { id: 10, name: "Confucianism" },
+                                { id: 11, name: "Taoism" },
+                                { id: 12, name: "Shinto" },
+                                { id: 13, name: "Baha'i Faith" },
+                                { id: 14, name: "Juche" },
+                                { id: 15, name: "Rastafari" },
+                            ],
                             alertsError: false,
                             alertsErrorMassage: "",
                         },
@@ -339,15 +354,14 @@ const initialHomeLocation = [
                             popOver: true,
                             icon: icons.search,
                             value: "",
-                            name: "homeDistrict",
+                            name: "home_district",
                             setName: "homeLocation",
                             eventType: "input",
                             alertsError: false,
                             alertsErrorMassage: "",
-                            popOverData: {
-                                filterData: true,
-                                data: [],
-                            },
+                            isSingleSelect: true,
+                            trackBy: "district_id",
+                            multiSelectData: [],
                             id: "",
                             idName: "district_id",
                         },
@@ -365,18 +379,26 @@ const initialHomeLocation = [
                             inputHeader: "Home traditional authority",
                             icon: icons.search,
                             value: "",
-                            name: "homeTraditionalAuthority",
+                            name: "home_traditional_authority",
                             setName: "homeLocation",
                             eventType: "input",
                             alertsError: false,
                             alertsErrorMassage: "",
-                            popOverData: {
-                                filterData: false,
-                                data: [],
-                            },
-                            id: "",
+                            isSingleSelect: true,
+                            popOver: true,
+                            trackBy: "district_id",
+                            multiSelectData: [],
                             idName: "district_id",
                             displayNone: true,
+                        },
+                    ],
+                    btns: [
+                        {
+                            name: "TA",
+                            fill: "clear",
+                            btn_col_size: 2.1,
+                            showName: false,
+                            icon: icons.plus,
                         },
                     ],
                 },
@@ -392,18 +414,26 @@ const initialHomeLocation = [
                             inputHeader: "Home village",
                             icon: icons.search,
                             value: "",
-                            name: "homeVillage",
+                            name: "home_village",
                             setName: "homeLocation",
                             eventType: "input",
                             alertsError: false,
                             alertsErrorMassage: "",
-                            popOverData: {
-                                filterData: true,
-                                data: [],
-                            },
-                            id: "",
+                            isSingleSelect: true,
+                            popOver: true,
+                            trackBy: "village_id",
+                            multiSelectData: [],
                             idName: "traditional_authority_id",
                             displayNone: true,
+                        },
+                    ],
+                    btns: [
+                        {
+                            name: "Village",
+                            fill: "clear",
+                            btn_col_size: 2.1,
+                            showName: false,
+                            icon: icons.plus,
                         },
                     ],
                 },
@@ -420,18 +450,18 @@ const initialCurrentLocation = [
                 {
                     colData: [
                         {
-                            inputHeader: "Current district",
+                            inputHeader: "Current district*",
                             icon: icons.search,
                             value: "",
-                            name: "currentDistrict",
+                            name: "current_district",
                             setName: "currentLocation",
                             eventType: "input",
                             alertsError: false,
                             alertsErrorMassage: "",
-                            popOverData: {
-                                filterData: true,
-                                data: [],
-                            },
+                            isSingleSelect: true,
+                            popOver: true,
+                            trackBy: "district_id",
+                            multiSelectData: [],
                             id: "",
                             idName: "district_id",
                         },
@@ -446,25 +476,30 @@ const initialCurrentLocation = [
                 {
                     colData: [
                         {
-                            inputHeader: "Current traditional authority",
+                            inputHeader: "Current traditional authority*",
                             icon: icons.search,
                             value: "",
-                            name: "currentTraditionalAuthority",
+                            name: "current_traditional_authority",
                             setName: "currentLocation",
                             eventType: "input",
                             alertsError: false,
                             alertsErrorMassage: "",
-                            popOverData: {
-                                filterData: false,
-                                data: [],
-                            },
+                            isSingleSelect: true,
+                            popOver: true,
+                            trackBy: "traditional_authority_id",
+                            multiSelectData: [],
                             id: "",
                             idName: "district_id",
                             displayNone: true,
-                            InnerActionBtnPropeties: {
-                                name: "+ Add",
-                                show: true,
-                            },
+                        },
+                    ],
+                    btns: [
+                        {
+                            name: "TA",
+                            fill: "clear",
+                            btn_col_size: 2.1,
+                            showName: false,
+                            icon: icons.plus,
                         },
                     ],
                 },
@@ -477,27 +512,38 @@ const initialCurrentLocation = [
                 {
                     colData: [
                         {
-                            inputHeader: "Current village",
+                            inputHeader: "Current village*",
                             icon: icons.search,
                             value: "",
-                            name: "currentVillage",
+                            name: "current_village",
                             setName: "currentLocation",
                             eventType: "input",
                             alertsError: false,
                             alertsErrorMassage: "",
-                            popOverData: {
-                                filterData: true,
-                                data: [],
-                            },
+                            isSingleSelect: true,
+                            popOver: true,
+                            trackBy: "village_id",
+                            multiSelectData: [],
                             id: "",
-                            idName: "traditional_authority_id",
+                            idName: "village_id",
                             displayNone: true,
+                        },
+                    ],
+                    btns: [
+                        {
+                            name: "Village",
+                            fill: "clear",
+                            btn_col_size: 2.1,
+                            showName: false,
+                            icon: icons.plus,
                         },
                     ],
                 },
             ],
         },
     },
+] as any;
+const initialClosestLandmark = [
     {
         data: {
             rowData: [
@@ -511,41 +557,113 @@ const initialCurrentLocation = [
                             eventType: "input",
                             alertsError: false,
                             alertsErrorMassage: "",
-                            popOverData: {
-                                filterData: true,
-                                data: [
-                                    {
-                                        name: "Catholic Church",
-                                    },
-                                    {
-                                        name: "CCAP",
-                                    },
-                                    {
-                                        name: "Seventh Day",
-                                    },
-                                    {
-                                        name: "Mosque",
-                                    },
-                                    {
-                                        name: "Primary School",
-                                    },
-                                    {
-                                        name: "Borehole",
-                                    },
-                                    {
-                                        name: "Secondary School",
-                                    },
-                                    {
-                                        name: "College",
-                                    },
-                                    {
-                                        name: "Market",
-                                    },
-                                    {
-                                        name: "Football Ground",
-                                    },
-                                ],
-                            },
+                            isSingleSelect: true,
+                            popOver: true,
+                            multiSelectData: [
+                                {
+                                    id: 1,
+                                    name: "Catholic Church",
+                                },
+                                {
+                                    id: 2,
+                                    name: "CCAP",
+                                },
+                                {
+                                    id: 3,
+                                    name: "Seventh Day",
+                                },
+                                {
+                                    id: 4,
+                                    name: "Mosque",
+                                },
+                                {
+                                    id: 5,
+                                    name: "Primary School",
+                                },
+                                {
+                                    id: 6,
+                                    name: "Borehole",
+                                },
+                                {
+                                    id: 7,
+                                    name: "Secondary School",
+                                },
+                                {
+                                    id: 8,
+                                    name: "College",
+                                },
+                                {
+                                    id: 9,
+                                    name: "Market",
+                                },
+                                {
+                                    id: 10,
+                                    name: "Football Ground",
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+];
+const initialAddTA = [
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "TA*",
+                            value: "",
+                            name: "TA",
+                            eventType: "input",
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                            required: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Village*",
+                            value: "",
+                            name: "Village",
+                            eventType: "input",
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                            validate: false,
+                            required: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+] as any;
+const initialAddVillage = [
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Village*",
+                            value: "",
+                            name: "Village",
+                            eventType: "input",
+                            alertsError: false,
+                            alertsErrorMassage: "",
+                            validate: false,
+                            required: true,
                         },
                     ],
                 },
@@ -588,7 +706,7 @@ const initialGuardianInformation = [
                     colData: [
                         {
                             inputHeader: "First name",
-                            //icon: icons.fullName,
+                            icon: icons.fullName,
                             value: "",
                             name: "guardianFirstname",
                             eventType: "input",
@@ -688,7 +806,10 @@ export const useRegistrationStore = defineStore("registrationStore", {
         socialHistory: [...initialSocialHistory],
         homeLocation: [...initialHomeLocation],
         currentLocation: [...initialCurrentLocation],
+        closestLandmark: [...initialClosestLandmark],
         guardianInformation: [...initialGuardianInformation],
+        addTA: [...initialAddTA],
+        addVillage: [...initialAddVillage],
     }),
     actions: {
         setPersonalInformation(data: any) {
@@ -727,5 +848,5 @@ export const useRegistrationStore = defineStore("registrationStore", {
             return [...data];
         },
     },
-    persist: true,
+    // persist: true,
 });

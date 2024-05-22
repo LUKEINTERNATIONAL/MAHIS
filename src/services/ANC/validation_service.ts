@@ -6,9 +6,9 @@ export function validateField(data: any,fieldName: string, value: any) {
         'LMNP':()=>Validation.required(value),
         'lmnpEED':()=>Validation.required(value),
         'Stillbirths':()=>Validation.checkMinMax(value,1,15),
-        'LiveBirths':()=>Validation.required(value),
+        'LiveBirths': () => Validation.required(value),
         'Parity':()=>Validation.required(value),
-        'Abortions':()=>Validation.required(value),
+        'Abortions': () => Validation.checkMinMax(value, 1, 15),
         'lmnpDate':()=>Validation.required(value),
         'lmnpGestationAge':()=>Validation.required(value),
     };

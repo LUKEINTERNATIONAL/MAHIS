@@ -13,7 +13,8 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
             {
               colData: [
                 {
-                  inputHeader: "Gravida",
+                  class:'bold',
+                  inputHeader: "Gravida*",
                   value: "",
                   name: "Gravida",
                   icon: icons.editPen,
@@ -36,7 +37,8 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
             {
               colData: [
                 {
-                  inputHeader: "Abortions",
+                  class:'bold',
+                  inputHeader: "Abortions/Miscarriages*",
                   value: "",
                   icon: icons.editPen,
                   name: "Abortions",
@@ -47,7 +49,8 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
                   alertsErrorMassage: "",
                 },
                 {
-                  inputHeader: "Stillbirths",
+                  class:'bold',
+                  inputHeader: "Stillbirths*",
                   value: "",
                   name: "Stillbirths",
                   required: true,
@@ -71,7 +74,8 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
             {
               colData: [
                 {
-                  inputHeader: "Live births",
+                  class:'bold',
+                  inputHeader: "Live births*",
                   value: "",
                   disabled: true,
                   name: "LiveBirths",
@@ -82,7 +86,8 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
                   alertsErrorMassage: "",
                 },
                 {
-                  inputHeader: "Parity",
+                  class:'bold',
+                  inputHeader: "Parity*",
                   disabled: true,
                   value: "",
                   name: "Parity",

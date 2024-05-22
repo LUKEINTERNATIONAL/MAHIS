@@ -1,9 +1,9 @@
 <template>
     <ion-button :expand="expand" :fill="$props.fill" :size="size" :color="color" @click="$emit('clicked:btn')">
-        <span v-if="!subName" :style="'font-size: 14px; font-weight:' + fontWeight">
+        <span v-if="!subName && showName" :style="'font-size: 14px; font-weight:' + fontWeight">
             {{ $props.name }}
         </span>
-        <span v-if="subName">
+        <span v-if="subName && showName">
             <div style="margin-bottom: px; font-size: 14px">{{ $props.name }}</div>
             <span style="font-size: 14px; font-weight: 700">{{ $props.subName }}</span>
         </span>
@@ -53,6 +53,10 @@ export default defineComponent({
         color: {
             type: String,
             default: "primary",
+        },
+        showName: {
+            type: String,
+            default: true,
         },
         fontWeight: {
             default: "400",

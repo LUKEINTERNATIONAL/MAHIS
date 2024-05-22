@@ -4,6 +4,38 @@ import _ from "lodash";
 
 const initialBabyStatusDetails=[
     {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: 'dashed_bottom_border _padding',
+        radioBtnContent:
+            {
+                header:{
+                    title: 'What is the status of the baby?*',
+                    selectedValue: '',
+                    name:'Status of baby',
+                    class:'bold',
+                    displayNext:"Alive"
+
+                },
+                data:[
+                    {
+                        name: 'Alive',
+                        value: 'Alive',
+                        colSize: '2.5',
+
+                    },
+                    {
+                        name: 'Dead',
+                        value: 'Dead',
+                        colSize: '2.5',
+
+                    },
+                ]
+            }
+
+    },
+    {
+        childName:"Status of baby",
         isFinishBtn: false,
         sectionHeader: '',
         classDash: 'dashed_bottom_border _padding',
@@ -14,7 +46,8 @@ const initialBabyStatusDetails=[
                     {
                         colData: [
                             {
-                                inputHeader: 'Full name of the baby',
+                                displayNone:true,
+                                inputHeader: 'Full name of the baby*',
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',
@@ -32,16 +65,19 @@ const initialBabyStatusDetails=[
     },
 
     {
+        childName:"Status of baby",
         selectdData: [],
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
         radioBtnContent:
             {
                 header:{
-                    title: 'Baby sex?',
+                    title: 'Baby sex?*',
                     selectedValue: '',
                     name:'Sex',
-                    class:'bold'
+                    class:'bold',
+                    displayNone:true,
+
                 },
                 data:[
                     {
@@ -62,6 +98,7 @@ const initialBabyStatusDetails=[
 
     },
     {
+        childName:"Status of baby",
         isFinishBtn: false,
         sectionHeader: '',
         classDash: 'dashed_bottom_border _padding',
@@ -72,8 +109,9 @@ const initialBabyStatusDetails=[
                     {
                         colData: [
                             {
-                                inputHeader: 'Birth weight',
-                                unit: 'kg',
+                                displayNone:true,
+                                inputHeader: 'Birth weight*',
+                                unit: 'Grams',
                                 icon: icons.weight,
                                 value: '',
                                 valueType:'text',
@@ -83,8 +121,8 @@ const initialBabyStatusDetails=[
                                 inputWidth: '',
                             },
                             {
-                                inputHeader: 'current weight',
-                                unit: 'kg',
+                                inputHeader: 'Current weight*',
+                                unit: 'Grams',
                                 icon: icons.weight,
                                 valueType:'text',
                                 value: '',
@@ -100,6 +138,7 @@ const initialBabyStatusDetails=[
             },
     },
     {
+        childName:"Status of baby",
         selectdData: [],
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
@@ -109,7 +148,9 @@ const initialBabyStatusDetails=[
                     title: 'Is the birth weight low?',
                     class:'bold',
                     name:'Low birth weight',
-                    selectedValue: ''
+                    selectedValue: '',
+                    displayNone:true,
+
                 },
                 data:[
                     {
@@ -130,6 +171,7 @@ const initialBabyStatusDetails=[
 
     },
     {
+        childName:"Status of baby",
         selectdData: [],
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
@@ -140,6 +182,8 @@ const initialBabyStatusDetails=[
                     selectedValue: '',
                     class:'bold',
                     name:'Prematurity/Kangaroo',
+                    displayNone:true,
+
                 },
                 data:[
                     {
@@ -160,6 +204,7 @@ const initialBabyStatusDetails=[
     },
 
     {
+        childName:"Status of baby",
         selectdData: [],
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
@@ -170,13 +215,15 @@ const initialBabyStatusDetails=[
                     name:'Birth condition',
                     selectedValue: '',
                     class:'bold',
-                    displayNext:'Asphyxia'
+                    displayNext:'Asphyxia',
+                    displayNone:true,
+
                 },
                 data:[
                     {
                         name: 'Very well',
                         value: 'Very well',
-                        colSize: '4',
+                        colSize: '2.5',
 
                     },
                     {
@@ -220,37 +267,9 @@ const initialBabyStatusDetails=[
             }
 
     },
+
     {
-        selectdData: [],
-        isFinishBtn: false,
-        classDash: 'dashed_bottom_border _padding',
-        radioBtnContent:
-            {
-                header:{
-                    title: 'What is the status of the baby?',
-                    selectedValue: '',
-                    name:'Status of baby',
-                    class:'bold',
-
-                },
-                data:[
-                    {
-                        name: 'Alive',
-                        value: 'Alive',
-                        colSize: '2.5',
-
-                    },
-                    {
-                        name: 'Dead',
-                        value: 'Dead',
-                        colSize: '2.5',
-
-                    },
-                ]
-            }
-
-    },
-    {
+        childName:"Status of baby",
         selectdData: [],
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
@@ -260,7 +279,9 @@ const initialBabyStatusDetails=[
                     title: 'Is the visit within',
                     selectedValue: '',
                     name:'Is the visit within',
-                    class:'bold'
+                    class:'bold',
+                    displayNone:true,
+
                 },
                 data:[
                     {
@@ -287,15 +308,17 @@ const initialBabyStatusDetails=[
     },
 
     {
+        childName:"Status of baby",
         selectdData: [],
-        classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
                 header:{
                     title: 'What type immunisation has been given?',
                     selectedValue: '',
                     name:'Immunisation given',
-                    class:'bold'
+                    class:'bold',
+                    displayNone:true,
+
                 },
                 data:[
 
@@ -307,14 +330,7 @@ const initialBabyStatusDetails=[
                         colSize: '6',
                         justify: 'space-between',
                     },
-                    {
-                        name: 'Polio',
-                        value: 'polio',
-                        checked: false,
-                        labelPlacement: 'start',
-                        colSize: '6',
-                        justify: 'space-between',
-                    },
+
                 ]
             }
 
@@ -353,6 +369,34 @@ const initialBabyStatusDetails=[
             },
     },
     {
+        childName:"Status of baby",
+        selectdData: [],
+        classDash: 'dashed_bottom_border',
+        checkboxBtnContent:
+            {
+                header:{
+                    selectedValue: '',
+                    name:'Immunisation given',
+                    class:'bold',
+                    displayNone:true,
+
+                },
+                data:[
+
+                    {
+                        name: 'Polio',
+                        value: 'polio',
+                        checked: false,
+                        labelPlacement: 'start',
+                        colSize: '6',
+                        justify: 'space-between',
+                    },
+                ]
+            }
+
+    },
+
+    {
         childName:'Polio',
         isFinishBtn: false,
         sectionHeader: '',
@@ -385,6 +429,7 @@ const initialBabyStatusDetails=[
             },
     },
     {
+        childName:"Status of baby",
         selectdData: [],
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
@@ -394,7 +439,9 @@ const initialBabyStatusDetails=[
                     title: 'Tetracycline eye ointment  given?',
                     selectedValue: '',
                     name:'Tetracycline eye ointment',
-                    class:'bold'
+                    class:'bold',
+                    displayNone:true,
+
                 },
                 data:[
                     {
@@ -413,6 +460,7 @@ const initialBabyStatusDetails=[
 
     },
     {
+        childName:"Status of baby",
         selectdData: [],
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
@@ -422,7 +470,9 @@ const initialBabyStatusDetails=[
                     title: 'Cord care (Chlorhexidine) used?',
                     selectedValue: '',
                     name:'Cord care',
-                    class:'bold'
+                    class:'bold',
+                    displayNone:true,
+
                 },
                 data:[
                     {
@@ -441,6 +491,7 @@ const initialBabyStatusDetails=[
 
     },
     {
+        childName:"Status of baby",
         selectdData: [],
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
@@ -450,7 +501,9 @@ const initialBabyStatusDetails=[
                     title: 'Vitamin K given?',
                     selectedValue: '',
                     class:'bold',
-                    name:'Vitamin K given'
+                    name:'Vitamin K given',
+                    displayNone:true,
+
                 },
                 data:[
                     {
@@ -470,6 +523,7 @@ const initialBabyStatusDetails=[
 
     },
     {
+        childName:"Status of baby",
         selectdData: [],
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
@@ -478,7 +532,9 @@ const initialBabyStatusDetails=[
                     title: 'Danger signs',
                     selectedValue: '',
                     name:'Danger signs',
-                    class:'bold'
+                    class:'bold',
+                    displayNone:true,
+
                 },
                 data:[
 
@@ -503,6 +559,7 @@ const initialBabyStatusDetails=[
 
     },
     {
+        childName:"Status of baby",
         selectdData: [],
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
@@ -511,6 +568,8 @@ const initialBabyStatusDetails=[
                     title: '',
                     selectedValue: '',
                     name:'Danger signs',
+                    displayNone:true,
+
 
                 },
                 data:[
@@ -537,6 +596,7 @@ const initialBabyStatusDetails=[
     },
 
     {
+        childName:"Status of baby",
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
@@ -544,6 +604,8 @@ const initialBabyStatusDetails=[
                     title: '',
                     selectedValue: '',
                     name:'Danger signs',
+                    displayNone:true,
+
 
                 },
                 data:[
@@ -569,6 +631,7 @@ const initialBabyStatusDetails=[
 
     },
     {
+        childName:"Status of baby",
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
@@ -576,6 +639,8 @@ const initialBabyStatusDetails=[
                     title: '',
                     selectedValue: '',
                     name:'Danger signs',
+                    displayNone:true,
+
 
                 },
                 data:[
@@ -602,6 +667,7 @@ const initialBabyStatusDetails=[
     },
 
     {
+        childName:"Status of baby",
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
@@ -609,6 +675,8 @@ const initialBabyStatusDetails=[
                     title: '',
                     selectedValue: '',
                     name:'Danger signs',
+                    displayNone:true,
+
 
                 },
                 data:[
@@ -634,6 +702,7 @@ const initialBabyStatusDetails=[
     },
 
     {
+        childName:"Status of baby",
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
@@ -641,6 +710,8 @@ const initialBabyStatusDetails=[
                     title: '',
                     selectedValue: '',
                     name:'Danger signs',
+                    displayNone:true,
+
 
                 },
                 data:[
@@ -665,6 +736,7 @@ const initialBabyStatusDetails=[
 
     },
     {
+        childName:"Status of baby",
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
@@ -672,6 +744,8 @@ const initialBabyStatusDetails=[
                     title: '',
                     selectedValue: '',
                     name:'Danger signs',
+                    displayNone:true,
+
 
                 },
                 data:[
@@ -728,7 +802,7 @@ const initialBabyStatusDetails=[
                     {
                         colData: [
                             {
-                                displayNone:false,
+                                displayNone:true,
                                 inputHeader: 'Describe the intervention',
                                 unit: '',
                                 icon: icons.editPen,
@@ -746,6 +820,7 @@ const initialBabyStatusDetails=[
             },
     },
     {
+        childName:"Status of baby",
         selectdData: [],
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
@@ -755,7 +830,9 @@ const initialBabyStatusDetails=[
                     title: 'Nevirapine given?',
                     selectedValue: '',
                     class:'bold',
-                    name:'Nevirapine given'
+                    name:'Nevirapine given',
+                    displayNone:true,
+
                 },
                 data:[
                     {
@@ -775,6 +852,7 @@ const initialBabyStatusDetails=[
 
     },
     {
+        childName:"Status of baby",
         selectdData: [],
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
@@ -784,7 +862,9 @@ const initialBabyStatusDetails=[
                     title: 'Cotrimoxazole prophylaxis?',
                     selectedValue: '',
                     name:'Cotrimoxazole prophylaxis',
-                    class:'bold'
+                    class:'bold',
+                    displayNone:true,
+
                 },
                 data:[
                     {
@@ -832,6 +912,6 @@ export const useBabyStatusStore = defineStore('babyStatusStore',{
 
 
     },
-    persist:true,
+    // persist:true,
 
 })

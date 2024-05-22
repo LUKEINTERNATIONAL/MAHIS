@@ -5,15 +5,15 @@ import _ from "lodash";
 const initialObstetricDetails=[
     {
         isFinishBtn: false,
+        classDash: 'dashed_bottom_border',
         sectionHeader: '',
-        classDash: '',
         data:
             {
                 rowData:[
                     {
                         colData: [
                             {
-                                inputHeader: 'Gravida',
+                                inputHeader: 'Gravida*',
                                 value: '',
                                 name: 'Gravida',
                                 icon: icons.editPen,
@@ -24,7 +24,7 @@ const initialObstetricDetails=[
                                 alertsErrorMassage: ''
                             },
                             {
-                                inputHeader: 'Parity',
+                                inputHeader: 'Parity*',
                                 value: '',
                                 name: 'Parity',
                                 icon: icons.editPen,

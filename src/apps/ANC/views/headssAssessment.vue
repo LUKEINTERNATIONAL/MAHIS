@@ -37,6 +37,9 @@ import {useHeadssAssessmentStore} from "@/apps/ANC/store/others/headsAssessmentS
 import {useDemographicsStore} from "@/stores/DemographicStore";
 import {HeadssAssessmentService} from "@/apps/ANC/service/headss_assessment_service";
 import { resetPatientData } from '@/services/reset_data';
+import {getRadioSelectedValue, modifyRadioValue} from "@/services/data_helpers";
+import {validateField} from "@/services/ANC/profile_validation_service";
+import {useCurrentPregnanciesStore} from "@/apps/ANC/store/profile/CurrentPreganciesStore";
 
 
 
@@ -87,35 +90,55 @@ export default defineComponent ({
   setup () {
     return {chevronBackOutline, checkmark}
   },
+  watch: {
+    headssAssesment:{
+      handler(){
+        this.headssAssesment
+      },
+      deep:true
+    }
+
+  },
+
   computed:{
     ...mapState(useDemographicsStore, ["demographics"]),
-    ...mapState(useHeadssAssessmentStore,["headssAssesment"])
+    ...mapState(useHeadssAssessmentStore,["headssAssesment"]),
+    "Who does the client live with"() {return getRadioSelectedValue(this.headssAssesment, "Who does the client live with");},
+
   },
 
   methods: {
     markWizard(){},
     saveData(){
-      if (this.headssAssesment.length > 0) {
       this.saveHeadssAssesment();
       resetPatientData();
-      this.$router.push('ANCHome');
-      toastSuccess("HEADSS assessment details have been created");
-      }
-      else {
-        return toastWarning("fill the form!")
-      }
 
     },
+    async validations(data: any, fields: any) {
+      return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
+    },
     async saveHeadssAssesment() {
-      if (this.headssAssesment.length > 0) {
-        const userID: any = Service.getUserID();
-        const headssAssesment = new HeadssAssessmentService(this.demographics.patient_id, userID);
-        const encounter = await headssAssesment.createEncounter();
-        if (!encounter) return toastWarning("Unable to create patient HEADSS assessment encounter");
-        const patientStatus = await headssAssesment.saveObservationList(await this.buildHeadssAssesment());
-        if (!patientStatus) return toastWarning("Unable to create patient HEADSS assessment  !");
-        toastSuccess("HEADSS assessment details have been created");
+      const fields: any=['Who does the client live with']
+      if (await  this.validations(this.headssAssesment, fields)){
+        if (this.headssAssesment.length > 0) {
+          const userID: any = Service.getUserID();
+          const headssAssesment = new HeadssAssessmentService(this.demographics.patient_id, userID);
+          const encounter = await headssAssesment.createEncounter();
+          if (!encounter) return toastWarning("Unable to create patient HEADSS assessment encounter");
+          const patientStatus = await headssAssesment.saveObservationList(await this.buildHeadssAssesment());
+          if (!patientStatus) return toastWarning("Unable to create patient HEADSS assessment  !");
+          toastSuccess("HEADSS assessment details have been created");
+
+          this.$router.push('ANCHome');
+
+        }
+      } else {
+        modifyRadioValue(this.headssAssesment,'Who does the client live with','alertsError', true)
+        modifyRadioValue(this.headssAssesment,'Who does the client live with','alertsErrorMassage', 'This is a mandatory question')
+        await toastWarning("Please complete all required fields")
+
       }
+
       console.log(await this.buildHeadssAssesment())
 
     },

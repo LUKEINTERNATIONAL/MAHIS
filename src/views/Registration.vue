@@ -37,8 +37,8 @@
                         <PersonalInformation />
                     </ion-col>
                     <ion-col size-sm="12" size-md="6" size-lg="4">
-                        <SocialHistory />
                         <CurrentLocation />
+                        <SocialHistory v-if="checkUnderFive" />
                     </ion-col>
                     <ion-col size-sm="12" size-md="6" size-lg="4" class="regDisplayFlex">
                         <HomeLocation />
@@ -130,6 +130,7 @@ import HisDate from "@/utils/Date";
 import { useConfigurationStore } from "@/stores/ConfigurationStore";
 import { UserService } from "@/services/user_service";
 import { isEmpty } from "lodash";
+import { LocationService } from "@/services/location_service";
 
 export default defineComponent({
     components: {
@@ -157,6 +158,7 @@ export default defineComponent({
             demographic: true,
             currentStep: "Personal Information",
             scanner: false,
+            checkUnderFive: true,
             steps: ["Personal Information", "Guardian Information", "Location", "Social History"],
         };
     },
@@ -198,10 +200,22 @@ export default defineComponent({
         relationship() {
             return getFieldValue(this.guardianInformation, "relationship", "value");
         },
+        current_district() {
+            return getFieldValue(this.currentLocation, "current_district", "value")?.name;
+        },
+        current_traditional_authority() {
+            return getFieldValue(this.currentLocation, "current_traditional_authority", "value")?.name;
+        },
+        current_village() {
+            return getFieldValue(this.currentLocation, "current_village", "value")?.name;
+        },
     },
 
-    mounted() {
+    async mounted() {
         this.setIconClass();
+        this.disableNationalIDInput();
+        this.isUnderFive();
+        console.log("🚀 ~ mounted ~ ", await this.getRegion("Mzimba"));
     },
     watch: {
         personInformation: {
@@ -212,6 +226,8 @@ export default defineComponent({
                 data.setHomeLocation(this.homeLocation);
                 data.setCurrentLocation(this.currentLocation);
                 data.setGuardianInformation(this.guardianInformation);
+                this.isUnderFive();
+                this.disableNationalIDInput();
             },
             deep: true,
         },
@@ -220,6 +236,37 @@ export default defineComponent({
         return { arrowForwardCircle, grid, list };
     },
     methods: {
+        async getRegion(name: any) {
+            let districts = [];
+            for (let i of [1, 2, 3]) {
+                if ((i = 1)) districts = await LocationService.getDistricts(i);
+                if (districts.some((district: any) => district.name.trim() === name)) {
+                    return "Central Region";
+                }
+                if ((i = 2)) districts = await LocationService.getDistricts(i);
+                if (districts.some((district: any) => district.name.trim() === name)) {
+                    return "Northern Region";
+                }
+                if ((i = 3)) districts = await LocationService.getDistricts(i);
+                if (districts.some((district: any) => district.name.trim() === name)) {
+                    return "Southern Region";
+                }
+                if ((i = 4)) districts = await LocationService.getDistricts(i);
+                if (districts.some((district: any) => district.name.trim() === name)) {
+                    return "Foreign";
+                }
+            }
+        },
+        isUnderFive() {
+            if (!isEmpty(this.birthdate)) this.checkUnderFive = HisDate.getAgeInYears(this.birthdate) >= 5 ? true : false;
+        },
+        disableNationalIDInput() {
+            if (this.registrationType == "manual") {
+                modifyFieldValue(this.personInformation, "nationalID", "displayNone", true);
+            } else {
+                modifyFieldValue(this.personInformation, "nationalID", "displayNone", false);
+            }
+        },
         setCurrentStep(name: any) {
             this.currentStep = name;
         },
@@ -243,8 +290,7 @@ export default defineComponent({
             this.openNewPage(patientData);
         },
         async saveData() {
-            await this.createPatient();
-            await UserService.setProgramUserActions();
+            if (await this.createPatient()) await UserService.setProgramUserActions();
         },
         async validations(data: any, fields: any) {
             if (this.nationalID != "") {
@@ -259,8 +305,9 @@ export default defineComponent({
 
         async createPatient() {
             const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
-            if (await this.validations(this.personInformation, fields)) {
-                this.buildPersonalInformation();
+            const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
+            if ((await this.validations(this.personInformation, fields)) && (await this.validations(this.currentLocation, currentFields))) {
+                await this.buildPersonalInformation();
                 if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
                 const registration: any = new PatientRegistrationService();
                 await registration.registerPatient(this.personInformation[0].selectedData, []);
@@ -274,8 +321,10 @@ export default defineComponent({
 
                 this.findPatient(patientID);
                 toastSuccess("Successfully Created Patient");
+                return true;
             } else {
                 if (!(await this.mwIdExists(this.nationalID))) toastWarning("Please complete all required fields");
+                return false;
             }
         },
         async createNationID() {
@@ -315,7 +364,12 @@ export default defineComponent({
                 category: "",
                 gender: item.person.gender,
                 patient_id: item.patient_id,
-                address: item.person.addresses[0].state_province + "," + item.person.addresses[0].city_village,
+                address:
+                    item?.person?.addresses[0]?.state_province +
+                    "," +
+                    item?.person?.addresses[0]?.township_division +
+                    "," +
+                    item?.person?.addresses[0]?.city_village,
                 phone: item.person.person_attributes.find((attribute: any) => attribute.type.name === "Cell Phone Number")?.value,
             });
             let url = "/patientProfile";
@@ -329,7 +383,7 @@ export default defineComponent({
             if (ids >= 0) return item.patient_identifiers[ids].identifier;
             else return "";
         },
-        buildPersonalInformation() {
+        async buildPersonalInformation() {
             this.personInformation[0].selectedData = {
                 given_name: getFieldValue(this.personInformation, "firstname", "value"),
                 middle_name: getFieldValue(this.personInformation, "middleName", "value"),
@@ -337,15 +391,15 @@ export default defineComponent({
                 gender: this.gender,
                 birthdate: getFieldValue(this.personInformation, "birthdate", "value"),
                 birthdate_estimated: "false",
-                home_region: getFieldValue(this.homeLocation, "homeDistrict", "value"),
-                home_district: getFieldValue(this.homeLocation, "homeDistrict", "value"),
-                home_traditional_authority: getFieldValue(this.homeLocation, "homeTraditionalAuthority", "value"),
-                home_village: getFieldValue(this.homeLocation, "homeVillage", "value"),
-                current_region: getFieldValue(this.currentLocation, "currentDistrict", "value"),
-                current_district: getFieldValue(this.currentLocation, "currentDistrict", "value"),
-                current_traditional_authority: getFieldValue(this.currentLocation, "currentTraditionalAuthority", "value"),
-                current_village: getFieldValue(this.currentLocation, "currentVillage", "value"),
-                landmark: getFieldValue(this.currentLocation, "closestLandmark", "value"),
+                home_region: await this.getRegion(getFieldValue(this.homeLocation, "home_district", "value")?.name),
+                home_district: getFieldValue(this.homeLocation, "home_district", "value")?.name,
+                home_traditional_authority: getFieldValue(this.homeLocation, "home_traditional_authority", "value")?.name,
+                home_village: getFieldValue(this.homeLocation, "home_village", "value")?.name,
+                current_region: await this.getRegion(this.current_district),
+                current_district: this.current_district,
+                current_traditional_authority: this.current_traditional_authority,
+                current_village: this.current_village,
+                landmark: getFieldValue(this.currentLocation, "closestLandmark", "value")?.name,
                 cell_phone_number: getFieldValue(this.personInformation, "phoneNumber", "value"),
                 occupation: getRadioSelectedValue(this.socialHistory, "occupation"),
                 marital_status: getRadioSelectedValue(this.socialHistory, "maritalStatus"),

@@ -157,7 +157,7 @@ export default defineComponent({
       await this.saveWardMonitoring()
       toastSuccess("Postnatal ward stay data saved successfully")
       resetPatientData();
-     // this.$router.push("home");
+     this.$router.push("home");
 
     },
     async saveWardMonitoring() {

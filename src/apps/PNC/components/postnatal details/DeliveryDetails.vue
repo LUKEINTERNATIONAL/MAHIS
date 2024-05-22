@@ -6,6 +6,8 @@
         <basic-form
             :contentData="deliveryDetails"
             :initialData="initialData"
+            @update:selected="handleInputData" @update:inputValue="handleInputData"
+
         ></basic-form>
       </ion-card-content>
     </ion-card>
@@ -35,7 +37,13 @@ import { mapState } from 'pinia';
 import { checkmark, pulseOutline } from 'ionicons/icons';
 import BasicCard from "@/components/BasicCard.vue";
 import {useDeliveryDetailsStore} from "@/apps/PNC/stores/postnatal details/DeliveryDetails";
-import {getRadioSelectedValue, modifyRadioValue} from "@/services/data_helpers";
+import {
+  getCheckboxSelectedValue,
+  getFieldValue,
+  getRadioSelectedValue, modifyCheckboxValue,
+  modifyRadioValue
+} from "@/services/data_helpers";
+import {validateField} from "@/services/PNC/obstetric_details_validation_service";
 export default defineComponent({
   name: "DeliveryDetails",
   components:{
@@ -69,17 +77,28 @@ export default defineComponent({
   },
   computed:{
     ...mapState(useDeliveryDetailsStore,["deliveryDetails"]),
+    "Number of babies"(){ return getFieldValue(this.deliveryDetails, 'Number of babies','value')},
+    "Last name"(){ return getFieldValue(this.deliveryDetails, 'Last name','value')},
+    "First name"(){ return getFieldValue(this.deliveryDetails, 'First name','value')},
+    "Weight"(){ return getFieldValue(this.deliveryDetails, 'Weight','value')},
+    "Height"(){ return getFieldValue(this.deliveryDetails, 'Height','value')},
+    "Apgar score at 5 minutes"(){ return getFieldValue(this.deliveryDetails, 'Apgar score at 5 minutes','value')},
+
   },
   mounted(){
    const deliveryDetails=useDeliveryDetailsStore()
     this.initialData=deliveryDetails.getInitial()
     this.handleDeliveryDetails()
+    this.validateRowData({})
+    this.handlePastProblems()
+
 
   },
   watch:{
     deliveryDetails: {
       handler() {
         this.handleDeliveryDetails()
+        this.handlePastProblems()
       },
       deep:true
     }
@@ -88,6 +107,21 @@ export default defineComponent({
     return { checkmark,pulseOutline };
   },
   methods: {
+    handlePastProblems(){
+      const checkBoxes=['Prematurity','Sepsis','Congenital abnormalities',
+        'Asphyxia','Other complications'
+      ]
+      if (getCheckboxSelectedValue(this.deliveryDetails, 'None')?.checked) {
+        checkBoxes.forEach((checkbox) => {
+          modifyCheckboxValue(this.deliveryDetails, checkbox, 'checked', false);
+          modifyCheckboxValue(this.deliveryDetails, checkbox, 'disabled', true);
+        });
+      } else {
+        checkBoxes.forEach((checkbox) => {
+          modifyCheckboxValue(this.deliveryDetails, checkbox, 'disabled', false);
+        });
+      }
+    },
     handleDeliveryDetails() {
       if (getRadioSelectedValue(this.deliveryDetails, 'Outcome of the delivery') == 'Stillbirths') {
         modifyRadioValue(this.deliveryDetails, 'Type of still birth', 'displayNone', false);
@@ -97,6 +131,19 @@ export default defineComponent({
 
       }
 
+    },
+    validationRules(event: any) {
+      return validateField(this.deliveryDetails,event.name, (this as any)[event.name]);
+    },
+
+    //Handling input data on Profile-Past Obstetric history
+    async handleInputData(event: any){
+      this.validateRowData(event)
+    },
+
+    // Validations
+    validateRowData(event: any) {
+      this.validationRules(event)
     }
   }
 });
@@ -117,8 +164,7 @@ export default defineComponent({
 }
 
 ion-card {
-  box-shadow:none;
-  background-color:inherit;
+
   width: 100%;
   color: black;
 }

@@ -9,7 +9,7 @@ const initialWardDangerSigns=[
         checkboxBtnContent:
             {
                 header:{
-                    title: 'Danger signs',
+                    title: 'Danger signs*',
                     selectedValue: '',
                     class:'bold',
                     name:'Danger signs'
@@ -256,7 +256,7 @@ const initialVitals =[
                     {
                         colData: [
                             {
-                                inputHeader: 'Pulse rate',
+                                inputHeader: 'Pulse rate*',
                                 unit: 'BMP',
                                 icon: icons.pulse,
                                 value: '',
@@ -283,7 +283,7 @@ const initialVitals =[
                     {
                         colData: [
                             {
-                                inputHeader: 'Temperature',
+                                inputHeader: 'Temperature*',
                                 unit: 'C',
                                 icon: icons.temprature,
                                 value: '',
@@ -310,7 +310,7 @@ const initialVitals =[
                     {
                         colData: [
                             {
-                                inputHeader: 'Respiratory rate',
+                                inputHeader: 'Respiratory rate*',
                                 unit: 'BMP',
                                 icon: icons.respiratory,
                                 valueType:'text',
@@ -320,32 +320,6 @@ const initialVitals =[
                             },
                         ],
 
-                    },
-                ]
-            },
-        previousView:{
-            name:'vitals'
-        }
-    },
-    {
-        sectionHeader: 'Fetal heart rate',
-        classDash: 'dashed_bottom_border _padding',
-
-        data:
-            {
-                rowData:[
-                    {
-                        colData: [
-                            {
-                                inputHeader: 'Fetal heart rate',
-                                unit: 'BMP',
-                                icon: icons.respiratory,
-                                value: '',
-                                valueType:"text",
-                                name: 'Fetal heart rate',
-                                eventType: 'input'
-                            },
-                        ],
                     },
                 ]
             },
@@ -373,13 +347,13 @@ const initialOtherexams=[
                     {
                         name: 'Involuted',
                         value: 'involuted',
-                        colSize: '5',
+                        colSize: '4.001',
 
                     },
                     {
                         name: 'Sub-involuted',
                         value: 'Sub-involuted',
-                        colSize: '5',
+                        colSize: '4.001',
 
                     },
                     {
@@ -441,12 +415,12 @@ const initialOtherexams=[
                     {
                         name: 'Yes',
                         value: 'Yes',
-                        colSize: '2.5',
+                        colSize: '2',
                     },
                     {
                         name: 'No',
                         value: 'No',
-                        colSize: '2.5',
+                        colSize: '2',
                     },
                 ]
             }
@@ -499,25 +473,25 @@ const initialOtherexams=[
                     {
                         name: 'Mild',
                         value: 'mild',
-                        colSize: '5',
+                        colSize: '4.001',
 
                     },
                     {
                         name: 'Moderate',
                         value: 'moderate',
-                        colSize: '5',
+                        colSize: '4.001',
 
                     },
                     {
                         name: 'Heavy',
                         value: 'heavy',
-                        colSize: '5',
+                        colSize: '4.001',
 
                     },
                     {
                         name: 'Offensive smell',
                         value: 'Offensive smell',
-                        colSize: '5',
+                        colSize: '4.0001',
 
                     },
                     {
@@ -577,13 +551,13 @@ const initialOtherexams=[
                     {
                         name: 'Yes',
                         value: 'Yes',
-                        colSize: '2.5',
+                        colSize: '2',
 
                     },
                     {
                         name: 'No',
                         value: 'No',
-                        colSize: '2.5',
+                        colSize: '2',
 
                     },
                 ]
@@ -637,13 +611,13 @@ const initialOtherexams=[
                     {
                         name: 'Yes',
                         value: 'Yes',
-                        colSize: '2.5',
+                        colSize: '2',
 
                     },
                     {
                         name: 'No',
                         value: 'No',
-                        colSize: '2.5',
+                        colSize: '2',
 
                     },
                 ]
@@ -669,27 +643,28 @@ const initialOtherexams=[
                     {
                         name: 'Intact',
                         value: 'intact',
-                        colSize: '5',
+                        colSize: '4.001',
 
                     },
                     {
                         name: 'Gaped',
                         value: 'gaped',
-                        colSize: '5',
+                        colSize: '4.001',
 
                     },
                     {
                         name: 'Infected',
                         value: 'infected',
-                        colSize: '5',
+                        colSize: '4.001',
 
                     },
                     {
                         name: 'Infected and gaped',
                         value: 'infected and gaped',
-                        colSize: '5',
+                        colSize: '4.001',
 
                     },
+
                 ]
             }
 

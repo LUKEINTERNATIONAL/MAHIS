@@ -37,7 +37,7 @@ const initialPhysiologicalCounselling=[
         radioBtnContent:{
             header:{
                 class:'bold',
-                title: 'Reason counselling on non-pharmacological measures to reduce nausea and vomiting not conducted?',
+                title: 'Reason counselling on pharmacological treatment for nausea and vomiting was not conducted?',
                 selectedValue: '',
                 name:'Counselling on non-pharmacological measures not done',
                 displayNone:'true',
@@ -282,7 +282,7 @@ const initialPhysiologicalCounselling=[
         sideColSize:0.5,
         radioBtnContent:{
             header:{
-                title: 'Reason counselling on antacid was not done?',
+                title: 'Counselling conducted on antacid to relieve heartburn',
                 selectedValue: '',
                 name:'Counselling on antacid not done',
                 displayNone:true,
@@ -335,7 +335,7 @@ const initialPhysiologicalCounselling=[
         classDash: 'dashed_bottom_border',
         radioBtnContent:{
             header:{
-                title: 'Counselling  conducted on symptoms of leg craps?',
+                title: 'Counselling  conducted on symptoms of leg cramps?',
                 selectedValue: '',
                 name:"Counselling on leg craps",
                 class:'bold',
@@ -363,7 +363,7 @@ const initialPhysiologicalCounselling=[
         sideColSize:0.5,
         radioBtnContent:{
             header:{
-                title: 'Reason counselling on  assumptions for leg craps was not done?',
+                title: 'Reason counselling on  assumptions for leg cramps was not done?',
                 selectedValue: '',
                 name:'Counselling on leg craps not done',
                 displayNone:true,
@@ -581,7 +581,7 @@ const initialPhysiologicalCounselling=[
         classDash: 'dashed_bottom_border',
         radioBtnContent:{
             header:{
-                title: 'Counselling  conducted on the use of wheat?',
+                title: 'Counselling  conducted on the use of wheat bran and other fibre supplements?',
                 selectedValue: '',
                 name:'Counselling on wheat',
                 class:'bold',

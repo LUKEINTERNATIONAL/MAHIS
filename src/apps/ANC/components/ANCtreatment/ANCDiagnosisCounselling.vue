@@ -2,8 +2,8 @@
 <div class="container">
     <ion-card class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
-            <ion-card-content>
-                <!-- <basic-form :contentData="preEclampsia"></basic-form> -->
+            <ion-card-content> 
+                <basic-form :contentData="preEclampsia"></basic-form> 
                 <basic-form :contentData="preEclampsiaCounselling"></basic-form>
             </ion-card-content>
     </ion-card>
@@ -33,14 +33,14 @@
             </ion-card-content>
     </ion-card>
 
-    <ion-card  class="section">
+    <!-- <ion-card  class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
                 <basic-form :contentData="seekingCare"></basic-form>
                  <basic-form :contentData="dangerSigns"></basic-form>
                  <basic-form :contentData="ancContact"></basic-form>
             </ion-card-content>
-    </ion-card>
+    </ion-card> -->
 
     <ion-card class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
@@ -118,7 +118,7 @@ export default defineComponent({
       };
     },
     computed:{
-         //...mapState(useDiagnosisCounsellingStore,{}"preEclampsia"]),
+         ...mapState(useDiagnosisCounsellingStore,["preEclampsia"]),
          ...mapState(useDiagnosisCounsellingStore,["preEclampsiaCounselling"]),
          ...mapState(useDiagnosisCounsellingStore,["aspirin"]),
         // ...mapState(useDiagnosisCounsellingStore,["aspirinReason"]),
@@ -127,9 +127,9 @@ export default defineComponent({
          ...mapState(useDiagnosisCounsellingStore,["hivRisk"]),
          ...mapState(useDiagnosisCounsellingStore,["prEp"]),
         // ...mapState(useDiagnosisCounsellingStore,["prEpReason"]),
-         ...mapState(useDiagnosisCounsellingStore,["seekingCare"]),
-         ...mapState(useDiagnosisCounsellingStore,["dangerSigns"]),
-         ...mapState(useDiagnosisCounsellingStore,["ancContact"]),
+        //  ...mapState(useDiagnosisCounsellingStore,["seekingCare"]),
+        //  ...mapState(useDiagnosisCounsellingStore,["dangerSigns"]),
+        //  ...mapState(useDiagnosisCounsellingStore,["ancContact"]),
          ...mapState(useDiagnosisCounsellingStore,["birth"]),
          ...mapState(useDiagnosisCounsellingStore,["modeOfTransport"]),
          ...mapState(useDiagnosisCounsellingStore,["intrapartum"]),

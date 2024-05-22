@@ -1,23 +1,17 @@
 <template>
-    <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form>
-    <!-- Respiratory Exam -->
+    <div class="container">
     <ion-card class="section">
-        <ion-card-header>
-            <ion-card-title class="dashed_bottom_border sub_item_header">Respiration Exam</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-            <basic-form :contentData="respiration" @update:inputValue="validaterowData($event)"></basic-form>
-        </ion-card-content>
+      <ion-card-content>
+        <basic-form :contentData="vitals"
+                 @update:inputValue="validaterowData($event)"
+                :initialData="initialData"
+                >
+    </basic-form>
+      </ion-card-content>
     </ion-card>
-    <!-- Pre-eclampsia Section -->
-    <ion-card class="section">
-        <ion-card-header>
-            <ion-card-title class="dashed_bottom_border sub_item_header"> Pre-eclampsia with severe symptoms</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-            <basic-form :contentData="preEclampsia" @update:inputValue="validaterowData($event)"></basic-form>
-        </ion-card-content>
-    </ion-card>
+  </div>
+  
+   
 </template>
 
 <script lang="ts">
@@ -63,40 +57,39 @@ export default defineComponent({
             vValidations: "" as any,
             hasValidationErrors: [] as any,
             vitalsInstance: {} as any,
+            initialData:[] as any,
+            initialData1:[] as any,
+            initialData2:[] as any,
+
         };
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useVitalsStore, ["vitals"]),
-        ...mapState(useVitalsStore, ["respiration"]),
-        ...mapState(useVitalsStore, ["preEclampsia"]),
     },
     mounted() {
         const userID: any = Service.getUserID();
         this.vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
         this.updateVitalsStores();
         this.validaterowData({});
-        this.handleOtherAndNoRespirationDone();
+        this.handleOtherAndNovitalsDone();
+        const vitals=useVitalsStore()
+        const preEclampsia=useVitalsStore()
+        this.initialData=vitals.getInitial
+      
+
     },
     watch: {
         vitals: {
             handler() {
                 this.updateVitalsStores();
-            },
-            deep: true,
-        },
-        respiration: {
-            handler() {
-                this.handleOtherAndNoRespirationDone();
-            },
-            deep: true,
-        },
-        preEclampsia: {
-            handler() {
+                this.handleOtherAndNovitalsDone();
                 this.handlePreEclampsia();
+
             },
             deep: true,
         },
+       
     },
     setup() {
         return { checkmark, pulseOutline };
@@ -211,11 +204,11 @@ export default defineComponent({
             }
         },
 
-        handleOtherAndNoRespirationDone() {
-            if (getCheckboxSelectedValue(this.respiration, "Other")?.value == "other") {
-                modifyFieldValue(this.respiration, "Specify", "displayNone", false);
+        handleOtherAndNovitalsDone() {
+            if (getCheckboxSelectedValue(this.vitals, "Respiratory exam findings")?.value == "Other") {
+                modifyFieldValue(this.vitals, "Other notes", "displayNone", false);
             } else {
-                modifyFieldValue(this.respiration, "Specify", "displayNone", true);
+                modifyFieldValue(this.vitals, "Other notes", "displayNone", true);
             }
 
             const checkBoxes = [
@@ -230,14 +223,14 @@ export default defineComponent({
                 "Other",
             ];
 
-            if (getCheckboxSelectedValue(this.respiration, "Exam not done")?.checked) {
+            if (getCheckboxSelectedValue(this.vitals, "Exam not done")?.checked) {
                 checkBoxes.forEach((checkbox) => {
-                    modifyCheckboxValue(this.respiration, checkbox, "checked", false);
-                    modifyCheckboxValue(this.respiration, checkbox, "disabled", true);
+                    modifyCheckboxValue(this.vitals, checkbox, "checked", false);
+                    modifyCheckboxValue(this.vitals, checkbox, "disabled", true);
                 });
             } else {
                 checkBoxes.forEach((checkbox) => {
-                    modifyCheckboxValue(this.respiration, checkbox, "disabled", false);
+                    modifyCheckboxValue(this.vitals, checkbox, "disabled", false);
                 });
             }
         },
@@ -245,14 +238,14 @@ export default defineComponent({
         handlePreEclampsia() {
             const checkBoxes = ["Severe headache", "Visual disturbance", "Vomiting", "Epigastric pain", "Dizziness"];
 
-            if (getCheckboxSelectedValue(this.preEclampsia, "No severe pre-eclampsia")?.checked) {
+            if (getCheckboxSelectedValue(this.vitals, "No severe pre-eclampsia")?.checked) {
                 checkBoxes.forEach((checkbox) => {
-                    modifyCheckboxValue(this.preEclampsia, checkbox, "checked", false);
-                    modifyCheckboxValue(this.preEclampsia, checkbox, "disabled", true);
+                    modifyCheckboxValue(this.vitals, checkbox, "checked", false);
+                    modifyCheckboxValue(this.vitals, checkbox, "disabled", true);
                 });
             } else {
                 checkBoxes.forEach((checkbox) => {
-                    modifyCheckboxValue(this.preEclampsia, checkbox, "disabled", false);
+                    modifyCheckboxValue(this.vitals, checkbox, "disabled", false);
                 });
             }
         },
@@ -285,8 +278,8 @@ h5 {
     overflow: hidden;
 }
 ion-card {
-    box-shadow: none;
-    background-color: inherit;
+    width: 100%;
+    color:black;
 }
 .sub_item_header {
     font-weight: bold;

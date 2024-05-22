@@ -13,6 +13,18 @@
   </ion-card>
 </router-link>
         </ion-col>
+         <ion-col>
+           <router-link to="/profile">
+             <ion-card color="secondary">
+               <ion-card-header>
+                 <ion-card-title>Profile</ion-card-title>
+
+               </ion-card-header>
+
+               <ion-card-content> <img src="../../public/icons/checkup.png" alt="Profile Icon"/> </ion-card-content>
+             </ion-card>
+           </router-link>
+         </ion-col>
 
         <ion-col>
             <router-link to="/symptomsFollowUp">
@@ -23,18 +35,6 @@
     </ion-card-header>
 
     <ion-card-content>  <img src="../../public/icons/symptom.png" alt="Profile Icon"/></ion-card-content>
-  </ion-card>
-</router-link>
-        </ion-col>
-        <ion-col>
-            <router-link to="/labTests">
-            <ion-card color="secondary">
-    <ion-card-header>
-      <ion-card-title>Lab tests and imaging</ion-card-title>
-    
-    </ion-card-header>
-
-    <ion-card-content>  <img src="../../public/icons/candidate.png" alt="Profile Icon"/> </ion-card-content>
   </ion-card>
 </router-link>
         </ion-col>
@@ -104,16 +104,18 @@
   </ion-card>
    </router-link>
         </ion-col>
-        <ion-col>
-            <ion-card color="secondary">
-    <ion-card-header>
-      <ion-card-title>User Management</ion-card-title>
-    
-    </ion-card-header>
+         <ion-col>
+           <router-link to="/labTests">
+             <ion-card color="secondary">
+               <ion-card-header>
+                 <ion-card-title>Lab tests and imaging</ion-card-title>
 
-    <ion-card-content>  <img src="../../public/icons/user-settings.png" alt="Profile Icon"/> </ion-card-content>
-  </ion-card>
-        </ion-col>
+               </ion-card-header>
+
+               <ion-card-content>  <img src="../../public/icons/candidate.png" alt="Profile Icon"/> </ion-card-content>
+             </ion-card>
+           </router-link>
+         </ion-col>
        </ion-row>
     </ion-grid>
 </template>
@@ -190,7 +192,7 @@ export default defineComponent({
 
 </script>
 
-<style scoped>
+<!-- <style scoped>
 ion-grid {
 text-align: center;
 position: absolute;
@@ -258,5 +260,56 @@ img {
 .sub_item_header{
   font-weight: bold;
   font-size: medium;
+}
+</style> -->
+
+<style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.section {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card {
+  width: 100%;
+  max-width: 300px;
+  margin: 10px;
+}
+
+.card:hover {
+  animation: bounce 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+@keyframes bounce {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0px); }
+}
+
+img {
+  width: 70%;
+  max-width: 70px;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .section {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card {
+    width: 90%;
+  }
 }
 </style>

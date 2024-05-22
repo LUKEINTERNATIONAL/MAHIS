@@ -1,5 +1,5 @@
 <template>
-    <basic-card :content="cardData" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-card>
+    <basic-card :content="cardData" @update:selected="handleInputData" @update:inputValue="handleInputData" @clicked:button="handleBtns"></basic-card>
 </template>
 
 <script lang="ts">
@@ -16,7 +16,8 @@ import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import HisDate from "@/utils/Date";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue, getCheckboxSelectedValue } from "@/services/data_helpers";
 import { validateField } from "@/services/validation_service";
-import { stubTrue } from "lodash";
+import AddTA from "@/components/Registration/Modal/AddTA.vue";
+import AddVillage from "@/components/Registration/Modal/AddVillage.vue";
 
 export default defineComponent({
     name: "Menu",
@@ -40,81 +41,53 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useRegistrationStore, ["homeLocation"]),
-        ...mapState(useRegistrationStore, ["currentLocation"]),
-        homeRegion() {
-            return this.getRegion(this.getInputData(this.homeLocation, 0, 0, 0, "value"));
+        ...mapState(useRegistrationStore, ["homeLocation", "currentLocation"]),
+        home_district() {
+            return getFieldValue(this.homeLocation, "home_district", "value")?.name;
         },
-        homeDistrict() {
-            return this.getInputData(this.homeLocation, 0, 0, 0, "value");
+        home_traditional_authority() {
+            return getFieldValue(this.homeLocation, "home_traditional_authority", "value")?.name;
         },
-        homeTraditionalAuthority() {
-            return this.getInputData(this.homeLocation, 2, 0, 0, "value");
+        home_village() {
+            return getFieldValue(this.homeLocation, "home_village", "value")?.name;
         },
-        homeVillage() {
-            return this.getInputData(this.homeLocation, 1, 0, 0, "value");
-        },
-        currentRegion() {
-            return this.getRegion(this.getInputData(this.currentLocation, 0, 0, 0, "value"));
-        },
-        currentDistrict() {
-            return this.getInputData(this.currentLocation, 0, 0, 0, "value");
-        },
-        currentTraditionalAuthority() {
-            return this.getInputData(this.currentLocation, 2, 0, 0, "value");
-        },
-        currentVillage() {
-            return this.getInputData(this.currentLocation, 1, 0, 0, "value");
-        },
-        landmark() {
-            return this.getInputData(this.currentLocation, 3, 0, 0, "value");
-        },
-    },
-    async mounted() {
-        this.updateRegistrationStores();
-        this.buildCards();
-        this.handleCheckboxValueChange();
     },
     watch: {
         homeLocation: {
             handler() {
-                this.handleCheckboxValueChange();
                 this.buildCards();
             },
             deep: true,
         },
     },
+    async mounted() {
+        this.updateRegistrationStores();
+        this.buildCards();
+
+        this.buildDistricts();
+    },
     methods: {
-        handleCheckboxValueChange() {
-            const CURRENT_DISTRICT = "currentDistrict";
-            const HOME_DISTRICT = "homeDistrict";
-            const CURRENT_TA = "currentTraditionalAuthority";
-            const CURRENT_VILLAGE = "currentVillage";
-            const HOME_TA = "homeTraditionalAuthority";
-            const HOME_VILLAGE = "homeVillage";
-            const VALUE = "value";
-            const DISPLAY_NONE = "displayNone";
+        setSameAsCurrent() {
+            if (getCheckboxSelectedValue(this.homeLocation, "Same as current")?.checked) {
+                const currentDistrict = getFieldValue(this.currentLocation, "current_district", "value");
+                const currentTraditionalAuthority = getFieldValue(this.currentLocation, "current_traditional_authority", "value");
+                const currentVillage = getFieldValue(this.currentLocation, "current_village", "value");
+                modifyFieldValue(this.homeLocation, "home_district", "value", currentDistrict);
+                modifyFieldValue(this.homeLocation, "home_traditional_authority", "value", currentTraditionalAuthority);
+                modifyFieldValue(this.homeLocation, "home_village", "value", currentVillage);
 
-            if (getCheckboxSelectedValue(this.homeLocation, "Same as current")) {
-                const currentDistrict = getFieldValue(this.currentLocation, CURRENT_DISTRICT, VALUE);
-                const currentTraditionalAuthority = getFieldValue(this.currentLocation, CURRENT_TA, VALUE);
-                const currentVillage = getFieldValue(this.currentLocation, CURRENT_VILLAGE, VALUE);
-
-                modifyFieldValue(this.homeLocation, HOME_DISTRICT, VALUE, currentDistrict);
-                modifyFieldValue(this.homeLocation, HOME_TA, VALUE, currentTraditionalAuthority);
-                modifyFieldValue(this.homeLocation, HOME_TA, DISPLAY_NONE, false);
-                modifyFieldValue(this.homeLocation, HOME_VILLAGE, VALUE, currentVillage);
-                modifyFieldValue(this.homeLocation, HOME_VILLAGE, DISPLAY_NONE, false);
+                modifyFieldValue(this.homeLocation, "home_traditional_authority", "displayNone", false);
+                modifyFieldValue(this.homeLocation, "home_village", "displayNone", false);
             } else {
-                modifyFieldValue(this.homeLocation, HOME_DISTRICT, VALUE, "");
-                // modifyFieldValue(this.homeLocation, HOME_DISTRICT, DISPLAY_NONE, true);
-                modifyFieldValue(this.homeLocation, HOME_TA, VALUE, "");
-                modifyFieldValue(this.homeLocation, HOME_TA, DISPLAY_NONE, true);
-                modifyFieldValue(this.homeLocation, HOME_VILLAGE, VALUE, "");
-                modifyFieldValue(this.homeLocation, HOME_VILLAGE, DISPLAY_NONE, true);
+                modifyFieldValue(this.homeLocation, "home_district", "value", "");
+                modifyFieldValue(this.homeLocation, "home_traditional_authority", "value", "");
+                modifyFieldValue(this.homeLocation, "home_village", "value", "");
+
+                modifyFieldValue(this.homeLocation, "home_traditional_authority", "displayNone", true);
+                modifyFieldValue(this.homeLocation, "home_village", "displayNone", true);
             }
         },
-        buildCards() {
+        async buildCards() {
             this.cardData = {
                 mainTitle: "Demographics",
                 cards: [
@@ -130,105 +103,51 @@ export default defineComponent({
         },
         updateRegistrationStores() {
             const registrationStore = useRegistrationStore();
-            registrationStore.setHomeLocation(this.homeLocation);
-            registrationStore.setCurrentLocation(this.currentLocation);
+            // registrationStore.setHomeLocation(this.homeLocation);
+            // registrationStore.setCurrentLocation(this.currentLocation);
         },
-        validationRules(event: any) {
-            return validateField(this.homeLocation, event.name, (this as any)[event.name]);
-        },
-        getRadioValue(data: any, section: any) {
-            return data[section].radioBtnContent.header.selectedValue;
-        },
-        getRegion(district: any) {
-            return district;
-        },
-        getInputData(data: any, section: any, row: any, col: any, type: any) {
-            const rowData = data[section].data.rowData[row].colData[col];
-            switch (type) {
-                case "value":
-                    return rowData.value;
-                case "inputHeader":
-                    return rowData.inputHeader;
-                case "id":
-                    return rowData.id;
-                default:
-                    return null;
-            }
-        },
-
         async buildDistricts() {
-            this.locationData = this.setName === "homeLocation" ? this.homeLocation : this.currentLocation;
-            if (this.locationData[0].data.rowData[0].colData[0].popOverData?.data.length === 0) {
-                for (let i of [1, 2, 3]) {
-                    const districts: any = await LocationService.getDistricts(i);
-                    this.districtList.push(...districts);
-                }
+            this.districtList = [];
+            for (let i of [1, 2, 3]) {
+                const districts: any = await LocationService.getDistricts(i);
+                this.districtList.push(...districts);
             }
-            this.setName === "homeLocation"
-                ? (this.homeLocation[0].data.rowData[0].colData[0].popOverData.data = this.districtList)
-                : (this.currentLocation[0].data.rowData[0].colData[0].popOverData.data = this.districtList);
+            modifyFieldValue(this.homeLocation, "home_district", "multiSelectData", this.districtList);
         },
-
-        async buildTAs() {
-            const targetData = await LocationService.getTraditionalAuthorities(
-                this.getInputData(this.locationData, 0, 0, 0, "id"),
-                this.getInputData(this.locationData, 1, 0, 0, "value")
-            );
-            this.setName === "homeLocation"
-                ? (this.homeLocation[1].data.rowData[0].colData[0].popOverData.data = targetData)
-                : (this.currentLocation[1].data.rowData[0].colData[0].popOverData.data = targetData);
+        handleBtns(event: any) {
+            if (event == "TA") createModal(AddTA, { class: "otherVitalsModal" });
+            if (event == "Village") createModal(AddVillage, { class: "otherVitalsModal" });
         },
-
-        async buildVillages() {
-            const targetData = await LocationService.getVillages(
-                this.getInputData(this.locationData, 1, 0, 0, "id"),
-                this.getInputData(this.locationData, 2, 0, 0, "value")
-            );
-            this.setName === "homeLocation"
-                ? (this.homeLocation[2].data.rowData[0].colData[0].popOverData.data = targetData)
-                : (this.currentLocation[2].data.rowData[0].colData[0].popOverData.data = targetData);
+        async validations(data: any, fields: any) {
+            return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
         },
-
         async handleInputData(event: any) {
-            this.validationRules(event);
-            this.handleLocation(event);
-        },
-        async handleLocation(event: any) {
-            this.setName = event.setName;
-            if (this.setName == "homeLocation" || this.setName == "currentLocation") {
-                await this.buildDistricts();
-
-                await this.buildTAs();
-                const taDisplayNone = this.locationData[1].data.rowData[0].colData[0];
-                this.handleDisplayNone(taDisplayNone, 0);
-
-                await this.buildVillages();
-                const villageDisplayNone = this.locationData[2].data.rowData[0].colData[0];
-                this.handleDisplayNone(villageDisplayNone, 1);
+            if (event?.col?.name == "Same as current") this.setSameAsCurrent();
+            sessionStorage.setItem("activeLocation", "home");
+            const currentFields: any = ["home_district", "home_traditional_authority", "home_village"];
+            await this.validations(this.homeLocation, currentFields);
+            if (event.name == "home_district") {
+                modifyFieldValue(this.homeLocation, "home_traditional_authority", "displayNone", true);
+                modifyFieldValue(this.homeLocation, "home_traditional_authority", "value", "");
+                modifyFieldValue(this.homeLocation, "home_village", "displayNone", true);
+                modifyFieldValue(this.homeLocation, "home_village", "value", "");
+                if (event?.value?.district_id) this.setTA(event.value);
+            }
+            if (event.name == "home_traditional_authority") {
+                modifyFieldValue(this.homeLocation, "home_village", "displayNone", true);
+                modifyFieldValue(this.homeLocation, "home_village", "value", "");
+                if (event?.value?.traditional_authority_id) this.setVillage(event.value);
             }
         },
-        async handleDisplayNone(targetData: any, inputField: any) {
-            if ((await this.checkSelected(inputField)) && this.locationData[inputField].data.rowData[0].colData[0].value != "") {
-                this.setName === "homeLocation"
-                    ? (this.homeLocation[1 + inputField].data.rowData[0].colData[0].displayNone = false)
-                    : (this.currentLocation[1 + inputField].data.rowData[0].colData[0].displayNone = false);
-            } else {
-                if (this.setName === "homeLocation") {
-                    this.homeLocation[1 + inputField].data.rowData[0].colData[0].value = "";
-                    this.homeLocation[1 + inputField].data.rowData[0].colData[0].displayNone = true;
-                } else {
-                    this.currentLocation[1 + inputField].data.rowData[0].colData[0].value = "";
-                    this.currentLocation[1 + inputField].data.rowData[0].colData[0].displayNone = true;
-                }
-            }
+        async setTA(obj: any) {
+            const targetData = await LocationService.getTraditionalAuthorities(obj.district_id, "");
+            modifyFieldValue(this.homeLocation, "home_traditional_authority", "multiSelectData", targetData);
+            modifyFieldValue(this.homeLocation, "home_traditional_authority", "displayNone", false);
         },
-
-        async checkSelected(inputField: any) {
-            return new Promise(async (resolve) => {
-                const inputData = this.getInputData(this.locationData, inputField, 0, 0, "value");
-                const obj = this.locationData[inputField].data.rowData[0].colData[0].popOverData.data.find((obj: any) => obj.name === inputData);
-                resolve(obj);
-            });
+        async setVillage(obj: any) {
+            const targetData = await LocationService.getVillages(obj.traditional_authority_id, "");
+            modifyFieldValue(this.homeLocation, "home_village", "multiSelectData", targetData);
+            modifyFieldValue(this.homeLocation, "home_village", "displayNone", false);
         },
     },
 });
