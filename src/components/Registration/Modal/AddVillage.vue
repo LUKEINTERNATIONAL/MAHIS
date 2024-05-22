@@ -6,7 +6,7 @@
         <div>
             <div class="center text_12">
                 <ion-row>
-                    <BasicForm :contentData="addVillage" @update:inputValue="validaterowData($event)" />
+                    <BasicForm :contentData="addVillage" @update:inputValue="validaterowData()" />
                 </ion-row>
             </div>
         </div>
