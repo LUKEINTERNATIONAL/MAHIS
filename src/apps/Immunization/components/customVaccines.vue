@@ -367,5 +367,6 @@ export default defineComponent({
 .administerVac {
     height: 58px;
     width: 150px;
+    margin: 7px;
 }
 </style>
