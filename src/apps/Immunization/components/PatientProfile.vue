@@ -107,7 +107,7 @@
             <!--Vaccine Card-->
 
             <customSlider/>
-            <div class="vaccinesList" @click="openAdministerVaccineModal()">
+            <!-- <div class="vaccinesList" @click="openAdministerVaccineModal()">
 
                 <ion-row>
                     <ion-col size="2">
@@ -155,13 +155,13 @@
                     </ion-col>
                     <ion-col size="2"> </ion-col>
                 </ion-row>
-            </div>
-            <div class="otherVaccine">
+            </div> -->
+            <!-- <div class="otherVaccine">
                 <div class="centerBtns">
                     <ion-button @click="openAdministerOtherVaccineModal()" class="btnText" fill="solid"> Add Other Vaccines </ion-button>
                 </div>
-            </div>
-            <div class="dotsWizard">
+            </div> -->
+            <!-- <div class="dotsWizard">
                 <ion-icon class="dotStatus" slot="start" :icon="iconsContent.greenDot"></ion-icon>
                 <ion-icon class="dotStatus" slot="start" :icon="iconsContent.redDot"></ion-icon>
                 <ion-icon class="dotBig" slot="start" :icon="iconsContent.blueDot"></ion-icon>
@@ -172,7 +172,7 @@
                 <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
                 <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
                 <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
-            </div>
+            </div> -->
 
             <div class="lastVaccine">
                 <div class="lastVaccineTitle">

@@ -1,15 +1,15 @@
 <template>
 <div class="vaccinesList">
+        <ion-row>
+            <ion-col>
+                    <ion-button v-for="vaciine in vaccines" :key="vaciine" @click="openAdministerVaccineModal" fill="solid" color="success">
+                        <ion-icon slot="start" :icon="iconsContent.greenInjection"></ion-icon>
+                        {{ vaciine }}
+                        <ion-icon slot="end" :icon="iconsContent.greenTickCheckbox"></ion-icon>
+                    </ion-button>
+            </ion-col>
+        </ion-row>
 
-<ion-row>
-    <ion-col size="3.9">
-        <ion-button  v-for="vaciine in vaccines" :key="vaciine" fill="solid" color="success">
-            <ion-icon slot="start" :icon="iconsContent.greenInjection"></ion-icon>
-            {{ vaciine }}
-            <ion-icon slot="end" :icon="iconsContent.greenTickCheckbox"></ion-icon>
-        </ion-button>
-    </ion-col>
-</ion-row>
 </div>
 </template>
 <script lang="ts">
@@ -31,11 +31,15 @@ import {
     IonItem,
     IonLabel,
     IonModal,
+    IonCol,
+    IonRow,
     modalController,
     AccordionGroupCustomEvent,
 } from "@ionic/vue"
 import { icons } from "@/utils/svg"
 import { defineComponent } from "vue"
+import administerVaccineModal from "@/apps/Immunization/components/Modals/administerVaccineModal.vue"
+import { createModal } from "@/utils/Alerts";
 export default defineComponent({
     name: "Home",
     components: {
@@ -56,15 +60,11 @@ export default defineComponent({
         IonItem,
         IonLabel,
         IonModal,
+        IonCol,
+        IonRow,
     },
     data() {
         return {
-            vaccines: [
-                'OPV 2',
-                'OPV 2',
-                'OPV 2',
-                'OPV 2',
-            ],
             iconsContent: icons,
         };
     },
@@ -72,13 +72,25 @@ export default defineComponent({
     created() {
         
     },
-    mounted() {},
+    mounted() {
+
+    },
+    props: {
+        vaccines: {
+            type: [],
+            default: []
+        },
+  },
     watch: {},
     setup() {
         return {  };
     },
 
-    methods: {},
+    methods: {
+        openAdministerVaccineModal() {
+            createModal(administerVaccineModal, { class: "otherVitalsModal" });
+        },
+    },
 });
 </script>
 <style scoped>
