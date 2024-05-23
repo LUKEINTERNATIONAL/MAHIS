@@ -3,11 +3,16 @@
         <div class="OtherVitalsHeading">
             <div class="OtherVitalsTitle">Administer Vaccine</div>
         </div>
-        <div class="">
-            <basic-form :contentData="administerVaccine"></basic-form>
+        <div>
+            <BasicInputField
+                :placeholder="'Enter batch number'"
+                :icon="iconsContent.batchNumber"
+                :inputValue="''"
+                @update:inputValue=""
+            />
         </div>
 
-        <customDatePicker v-if="showPD" />
+        <customDatePicker v-if="showPD" @dateChange="updateDate"/>
         <div class="btnContent">
             <div class="saveBtn" v-if="showDateBtns">
                 <div>
@@ -16,7 +21,7 @@
                         <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon>
                     </ion-button>
                 </div>
-                <div>or</div>
+                <div style="margin-bottom: 20px;">or</div>
                 <div>
                     <ion-button class="btnText" fill="solid" @click="showCPD">
                         Done earlier
@@ -30,14 +35,14 @@
                     <ion-col>
                         <ion-button @click="dismiss" id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px;">
                             Cancel
-                            <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon>
+                            <!-- <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon> -->
                         </ion-button>
                     </ion-col>
 
                     <ion-col>
-                        <ion-button @click="dismiss" class="btnText" fill="solid" style="width: 130px;">
+                        <ion-button @click="saveBatch" class="btnText" fill="solid" style="width: 130px;">
                             save
-                            <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon>
+                            <!-- <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon> -->
                         </ion-button>
                     </ion-col>
                 </ion-row>
@@ -47,19 +52,20 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController, IonInput, modalController } from "@ionic/vue";
-import { defineComponent } from "vue";
-import { checkmark, pulseOutline } from "ionicons/icons";
-import { icons } from "@/utils/svg";
+import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController, IonInput, modalController } from "@ionic/vue"
+import { defineComponent } from "vue"
+import { checkmark, pulseOutline } from "ionicons/icons"
+import { icons } from "@/utils/svg"
 import { useDemographicsStore } from "@/stores/DemographicStore";
-import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
+import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore"
 import { mapState } from "pinia";
-import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";;
-import HisDate from "@/utils/Date";
-import BasicInputField from "@/components/BasicInputField.vue";
-import BasicForm from "@/components/BasicForm.vue";
-import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
-import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
+import { Service } from "@/services/service"
+import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts"
+import HisDate from "@/utils/Date"
+import BasicInputField from "@/components/BasicInputField.vue"
+import PreviousVitals from "@/components/previousVisits/previousVitals.vue"
+import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue"
+import {isEmpty} from "lodash"
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -80,7 +86,6 @@ export default defineComponent({
         IonToolbar,
         IonInput,
         BasicInputField,
-        BasicForm,
         PreviousVitals,
         customDatePicker,
     },
@@ -89,6 +94,7 @@ export default defineComponent({
             iconsContent: icons,
             showPD: false as boolean,
             showDateBtns: true as boolean,
+            vaccineDate: '' as any
         };
     },
     computed: {
@@ -107,6 +113,18 @@ export default defineComponent({
         },
         dismiss() {
             modalController.dismiss();
+        },
+        updateDate(date: any) {
+            this.vaccineDate = HisDate.toStandardHisFormat(date)
+        },
+        saveBatch() {
+            let vaccine_date
+            if (isEmpty(this.vaccineDate) == true) {
+                vaccine_date = Service.getSessionDate() 
+            } else {
+                vaccine_date = this.vaccineDate
+            }
+
         },
     },
 });

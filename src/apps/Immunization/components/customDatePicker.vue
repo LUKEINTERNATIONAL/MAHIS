@@ -47,8 +47,17 @@
     pickerInstance = picker
   }
 
+  const emit = defineEmits<{
+      (e: "dateChange", ObjectsArray: any): void
+  }>()
+
+  function dateChange() {
+      emit("dateChange", pickerInstance.getDate())
+  }
+
   function datePickerEventListener(event: any) {
-      console.log('Event occurred:', pickerInstance.getDate());
+      // console.log('Event occurred:', pickerInstance.getDate());
+      dateChange()
   }
 
   function generateUniqueString() {
