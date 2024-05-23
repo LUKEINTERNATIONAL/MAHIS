@@ -1,15 +1,14 @@
 <template>
 <div class="vaccinesList">
-        <ion-row>
-            <ion-col>
-                    <ion-button class="administerVac" v-for="vaciine in vaccines" :key="vaciine" @click="openAdministerVaccineModal" fill="solid" color="success">
-                        <ion-icon slot="start" :icon="iconsContent.greenInjection"></ion-icon>
-                        {{ vaciine }}
-                        <ion-icon slot="end" :icon="iconsContent.greenTickCheckbox"></ion-icon>
-                    </ion-button>
-            </ion-col>
-        </ion-row>
-
+    <ion-row>
+        <ion-col>
+                <ion-button class="administerVac" v-for="vaccine in vaccines" :key="vaccine" @click="openAdministerVaccineModal" fill="solid" color="success">
+                    <ion-icon slot="start" :icon="iconsContent.greenInjection"></ion-icon>
+                    {{ vaccine }}
+                    <ion-icon slot="end" :icon="iconsContent.greenTickCheckbox"></ion-icon>
+                </ion-button>
+        </ion-col>
+    </ion-row>
 </div>
 </template>
 <script lang="ts">
@@ -90,6 +89,7 @@ export default defineComponent({
         openAdministerVaccineModal() {
             createModal(administerVaccineModal, { class: "otherVitalsModal" });
         },
+        
     },
 });
 </script>

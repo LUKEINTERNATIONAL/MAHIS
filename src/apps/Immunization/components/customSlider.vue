@@ -2,29 +2,43 @@
     <carousel :items-to-show="1">
       <slide v-for="slide in 2" :key="slide">
         <!-- {{ slide }} -->
-        <customSlider :vaccines="vaccines" v-if="slide == 1"/>
-        <customSlider :vaccines="vaccines2" v-if="slide == 2"/>
+        <div class="container">
+          <ion-row class="top-row">
+            <customSlider :vaccines="vaccines" v-if="slide == 1"/>
+            <customSlider :vaccines="vaccines2" v-if="slide == 2"/>
+          </ion-row>
+
+          <ion-row class="bottom-row">
+            <div class="otherVaccine center-content">
+              <div class="centerBtns">
+                <ion-button @click="openAdministerOtherVaccineModal" class="btnText" fill="solid"> 
+                  Add Other Vaccines 
+                </ion-button>
+              </div>
+            </div>
+          </ion-row>
+        </div>
+        
       </slide>
       <template #addons>
         <navigation />
         <pagination />
       </template>
     </carousel>
-
-    <div class="otherVaccine">
-      <div class="centerBtns">
-          <ion-button @click="openAdministerOtherVaccineModal()" class="btnText" fill="solid"> Add Other Vaccines </ion-button>
-      </div>
-    </div>
 </template>
   
   <script>
   // If you are using PurgeCSS, make sure to whitelist the carousel CSS classes
   import 'vue3-carousel/dist/carousel.css'
   import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
+  import {
+    IonButton,
+    IonCol,
+    IonRow,
+} from "@ionic/vue"
   import customSlider from "@/apps/Immunization/components/customVaccines.vue"
   import administerOtherVaccineModal from "@/apps/Immunization/components/Modals/administerOtherVaccineModal.vue"
-  import { createModal } from "@/utils/Alerts";
+  import { createModal } from "@/utils/Alerts"
   
   export default {
     name: 'App',
@@ -33,7 +47,10 @@
       Slide,
       Pagination,
       Navigation,
-      customSlider
+      customSlider,
+      IonButton,
+      IonCol,
+      IonRow,
     },
     data() {
         return {
@@ -49,6 +66,8 @@
                 'OPV 5',
                 'OPV 5',
                 'OPV 6',
+                'OPV 5',
+                'OPV 5',
             ],
         };
     },
@@ -91,5 +110,28 @@
       font-weight: 500;
       font-size: 12px;
     }
+    .container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    ion-row {
+      width: 100%;
+    }
+
+    .bottom-row {
+      margin-top: 20px; /* Adjust the value as needed */
+      justify-content: center; /* Centers content horizontally */
+      align-items: center; /* Centers content vertically */
+    }
+
+    .center-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+    
+
 </style>
   
