@@ -1,8 +1,20 @@
 <template>
     <div class="modal_wrapper">
-        <div class="OtherVitalsHeading">
-            <div class="OtherVitalsTitle">Administer Vaccine</div>
-        </div>
+        <ion-row>
+            <ion-col style="margin-left: -9px;">
+                <div class="om">Administer Vaccine</div>
+            </ion-col>
+            <ion-col size="7" style="margin-right: -19px;">
+                <ion-label class="lbl-tl" style="font-size: 13;"> Todays Date: <span class="lbl-ct">06 Jul 2024</span></ion-label>
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-label style="font-weight: 600px; font-size: 20px; margin: 10px; margin-left: 0px;">Vaccine Name</ion-label>
+        </ion-row>
+        <ion-row>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey;">Lot number<span style="color: #B42318;">*</span></ion-label>
+        </ion-row>
         <div>
             <BasicInputField
                 :placeholder="'Enter batch number'"
@@ -181,7 +193,29 @@ h5 {
     line-height: 60px;
 }
 
+.advac {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    color: #00190e;
+}
+
 #cbtn {
   --background: #B42318;
+}
+
+.lbl-ct {
+    white-space: nowrap;
+    color: #08475e;
+    font-size: 14px;
+}
+.om {
+    font-size: 16;
+    font-weight:600px;
+}
+.lbl-tl {
+    min-width: 20px;
+    color: #b3b3b3 !important;
+    white-space: nowrap;
 }
 </style>
