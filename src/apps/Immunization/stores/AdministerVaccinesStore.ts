@@ -80,6 +80,5 @@ export const useAdministerVaccineStore = defineStore('administerVaccineStore',{
           return this.currentSelectedDrug
       }
     },
-    persist:true,
-
+    persist: true,
 })
