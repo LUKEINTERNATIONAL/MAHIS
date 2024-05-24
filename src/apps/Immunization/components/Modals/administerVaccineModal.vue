@@ -28,7 +28,7 @@
         <div class="btnContent">
             <div class="saveBtn" v-if="showDateBtns">
                 <div>
-                    <ion-button @click="dismiss" class="btnText" fill="solid">
+                    <ion-button @click="saveBatchWithTodayDate" class="btnText" fill="solid">
                         Done today
                         <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon>
                     </ion-button>
@@ -129,6 +129,10 @@ export default defineComponent({
         updateDate(date: any) {
             this.vaccineDate = HisDate.toStandardHisFormat(date)
         },
+        saveBatchWithTodayDate() {
+            let vaccine_date = Service.getSessionDate()
+            this.dismiss()
+        },
         saveBatch() {
             let vaccine_date
             if (isEmpty(this.vaccineDate) == true) {
@@ -136,7 +140,7 @@ export default defineComponent({
             } else {
                 vaccine_date = this.vaccineDate
             }
-
+            this.dismiss()
         },
     },
 });

@@ -1,5 +1,5 @@
 <template>
-    <carousel :items-to-show="1">
+    <carousel :items-to-show="1" :modelValue="2">
       <slide v-for="slide in 2" :key="slide">
         <!-- {{ slide }} -->
         <div class="container">
