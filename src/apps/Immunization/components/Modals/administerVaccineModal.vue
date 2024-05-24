@@ -19,8 +19,8 @@
             <BasicInputField
                 :placeholder="'Enter batch number'"
                 :icon="iconsContent.batchNumber"
-                :inputValue="''"
-                @update:inputValue=""
+                :inputValue="batchNumber"
+                @update:inputValue="updateBatchNumber"
             />
         </div>
 
@@ -106,19 +106,33 @@ export default defineComponent({
             iconsContent: icons,
             showPD: false as boolean,
             showDateBtns: true as boolean,
-            vaccineDate: '' as any
+            vaccineDate: '' as any,
+            batchNumber: '' as any,
+            currentDrug: '' as any
         };
     },
     computed: {
-        ...mapState(useAdministerVaccineStore, ["administerVaccine"]),
+        
     },
     async mounted() {
-        
+        console.log(this.$props.customSchedule)
+        this.loadCurrentSelectedDrug()
     },
     setup() {
         return { checkmark, pulseOutline };
     },
+    props: {
+        customSchedule: {
+            type: [],
+            default: [],
+        } as any,
+    },
     methods: {
+        loadCurrentSelectedDrug() {
+            const store = useAdministerVaccineStore()
+            console.log(store.getCurrentSelectedDrug())
+            this.currentDrug = store.getCurrentSelectedDrug()
+        },
         showCPD() {
             this.showPD = true as boolean;
             this.showDateBtns = false as boolean;
@@ -131,6 +145,7 @@ export default defineComponent({
         },
         saveBatchWithTodayDate() {
             let vaccine_date = Service.getSessionDate()
+            this.saveDta(vaccine_date)
             this.dismiss()
         },
         saveBatch() {
@@ -140,8 +155,30 @@ export default defineComponent({
             } else {
                 vaccine_date = this.vaccineDate
             }
+
+            this.saveDta(vaccine_date)
             this.dismiss()
         },
+        updateBatchNumber(event: any) {
+            const input = event.target.value
+            this.batchNumber = input
+            console.log(this.batchNumber)
+        },
+        saveDta(date_: any) {
+            const dta = {
+                batchNumber: this.batchNumber,
+                date_administered: date_,
+                visit_id: this.currentDrug.visit_id,
+                drug_id: this.currentDrug.drug_id,
+            }
+
+            const store = useAdministerVaccineStore()
+            store.setAdministeredVaccine(dta)
+
+            console.log(store.get)
+
+
+        }
     },
 });
 </script>

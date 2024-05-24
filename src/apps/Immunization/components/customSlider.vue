@@ -4,8 +4,8 @@
         <!-- {{ slide }} -->
         <div class="container">
           <ion-row class="top-row">
-            <customSlider :vaccines="vaccines" v-if="slide == 1"/>
-            <customSlider :vaccines="vaccines2" v-if="slide == 2"/>
+            <customVaccine :vaccines="vaccinesForVisit1" :visitId="1" v-if="slide == 1"/>
+            <customVaccine :vaccines="vaccinesForVisit2" :visitId="1" v-if="slide == 2"/>
           </ion-row>
 
           <ion-row class="bottom-row">
@@ -36,9 +36,10 @@
     IonCol,
     IonRow,
 } from "@ionic/vue"
-  import customSlider from "@/apps/Immunization/components/customVaccines.vue"
+  import customVaccine from "@/apps/Immunization/components/customVaccine.vue"
   import administerOtherVaccineModal from "@/apps/Immunization/components/Modals/administerOtherVaccineModal.vue"
   import { createModal } from "@/utils/Alerts"
+import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore.ts"
   
   export default {
     name: 'App',
@@ -47,37 +48,35 @@
       Slide,
       Pagination,
       Navigation,
-      customSlider,
+      customVaccine,
       IonButton,
       IonCol,
       IonRow,
     },
     data() {
         return {
-            vaccineSlides: [],
-            vaccines: [
-                'OPV 2',
-                'OPV 2',
-                'OPV 2',
-                'OPV 2',
-            ],
-            vaccines2: [
-                'OPV 4',
-                'OPV 5',
-                'OPV 5',
-                'OPV 6',
-                'OPV 5',
-                'OPV 5',
-            ],
+            vaccinesForVisit1: [],
+            vaccinesForVisit2: [],
         };
     },
     async mounted() {
-      this.vaccineSlides.push(customSlider)  
+      this.loadVaccineSchedule()
     },
     methods: {
       openAdministerOtherVaccineModal() {
         createModal(administerOtherVaccineModal, { class: "otherVitalsModal" });
       },
+      loadVaccineSchedule() {
+        const vaccineScheduleStore = useAdministerVaccineStore()
+        vaccineScheduleStore.getVaccineSchedule().forEach(vaccineSchudule => {
+          if (vaccineSchudule.visit == 1) {
+            this.vaccinesForVisit1 = vaccineSchudule.antigens
+          }
+          if (vaccineSchudule.visit == 2) {
+            this.vaccinesForVisit2 = vaccineSchudule.antigens
+          }
+        })
+      }
     }
   }
   </script>
