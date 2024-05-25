@@ -77,7 +77,7 @@ import HisDate from "@/utils/Date"
 import BasicInputField from "@/components/BasicInputField.vue"
 import PreviousVitals from "@/components/previousVisits/previousVitals.vue"
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue"
-import { saveVaccineAdministeredDrugs } from "@/apps/Immunization/services/vaccines_service"
+import { saveVaccineAdministeredDrugs, getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service"
 import {isEmpty} from "lodash"
 import {
     modifyCheckboxInputField,
@@ -172,14 +172,10 @@ export default defineComponent({
                 visit_id: this.currentDrug.visit_id,
                 drug_id: this.currentDrug.drug_id,
             }
-
             const store = useAdministerVaccineStore()
             store.setAdministeredVaccine(dta)
-
             console.log(store.getAdministeredVaccines())
             saveVaccineAdministeredDrugs()
-
-
         }
     },
 });

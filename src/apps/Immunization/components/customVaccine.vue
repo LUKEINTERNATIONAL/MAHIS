@@ -4,7 +4,7 @@
         <ion-col>
                 <ion-button class="administerVac" v-for="vaccine in vaccines" :key="vaccine" @click="openAdministerVaccineModal(vaccine)" fill="solid" color="success">
                     <ion-icon slot="start" :icon="iconsContent.greenInjection"></ion-icon>
-                    {{ vaccine.name }}
+                    {{ vaccine.drug_name }}
                     <ion-icon slot="end" :icon="iconsContent.greenTickCheckbox"></ion-icon>
                 </ion-button>
         </ion-col>

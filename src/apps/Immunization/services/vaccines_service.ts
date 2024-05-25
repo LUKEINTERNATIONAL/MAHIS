@@ -5,6 +5,11 @@ import { Service } from "@/services/service"
 import { PatientService } from "@/services/patient_service"
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
 
+export async function getVaccinesSchedule() {
+    const patient = new PatientService()
+    const data = await Service.getJson('eir/schedule', { patient_id: patient.getID() })
+    return data
+}
 
 export async function saveVaccineAdministeredDrugs() {
     const store = useAdministerVaccineStore()

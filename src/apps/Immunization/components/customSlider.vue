@@ -1,11 +1,21 @@
 <template>
     <carousel :items-to-show="1" :modelValue="2">
-      <slide v-for="slide in 2" :key="slide">
+      <slide v-for="slide in 12" :key="slide">
         <!-- {{ slide }} -->
         <div class="container">
           <ion-row class="top-row">
             <customVaccine :vaccines="vaccinesForVisit1" :visitId="1" v-if="slide == 1"/>
-            <customVaccine :vaccines="vaccinesForVisit2" :visitId="1" v-if="slide == 2"/>
+            <customVaccine :vaccines="vaccinesForVisit2" :visitId="2" v-if="slide == 2"/>
+            <customVaccine :vaccines="vaccinesForVisit3" :visitId="3" v-if="slide == 3"/>
+            <customVaccine :vaccines="vaccinesForVisit4" :visitId="4" v-if="slide == 4"/>
+            <customVaccine :vaccines="vaccinesForVisit5" :visitId="5" v-if="slide == 5"/>
+            <customVaccine :vaccines="vaccinesForVisit6" :visitId="6" v-if="slide == 6"/>
+            <customVaccine :vaccines="vaccinesForVisit7" :visitId="7" v-if="slide == 7"/>
+            <customVaccine :vaccines="vaccinesForVisit8" :visitId="8" v-if="slide == 8"/>
+            <customVaccine :vaccines="vaccinesForVisit9" :visitId="9" v-if="slide == 3"/>
+            <customVaccine :vaccines="vaccinesForVisit10" :visitId="10" v-if="slide == 10"/>
+            <customVaccine :vaccines="vaccinesForVisit11" :visitId="11" v-if="slide == 11"/>
+            <customVaccine :vaccines="vaccinesForVisit12" :visitId="12" v-if="slide == 12"/>
           </ion-row>
 
           <ion-row class="bottom-row">
@@ -40,6 +50,7 @@
   import administerOtherVaccineModal from "@/apps/Immunization/components/Modals/administerOtherVaccineModal.vue"
   import { createModal } from "@/utils/Alerts"
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore.ts"
+import { getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service"
   
   export default {
     name: 'App',
@@ -57,6 +68,16 @@ import { useAdministerVaccineStore } from "@/apps/Immunization/stores/Administer
         return {
             vaccinesForVisit1: [],
             vaccinesForVisit2: [],
+            vaccinesForVisit3: [],
+            vaccinesForVisit4: [],
+            vaccinesForVisit5: [],
+            vaccinesForVisit6: [],
+            vaccinesForVisit7: [],
+            vaccinesForVisit8: [],
+            vaccinesForVisit9: [],
+            vaccinesForVisit10: [],
+            vaccinesForVisit11: [],
+            vaccinesForVisit12: [],
         };
     },
     async mounted() {
@@ -66,15 +87,60 @@ import { useAdministerVaccineStore } from "@/apps/Immunization/stores/Administer
       openAdministerOtherVaccineModal() {
         createModal(administerOtherVaccineModal, { class: "otherVitalsModal" });
       },
-      loadVaccineSchedule() {
+      async loadVaccineSchedule() {
+        const data__ = await getVaccinesSchedule()
         const vaccineScheduleStore = useAdministerVaccineStore()
-        vaccineScheduleStore.getVaccineSchedule().forEach(vaccineSchudule => {
+        vaccineScheduleStore.setVaccineSchedule(data__)
+        vaccineScheduleStore.getVaccineSchedule().vaccinSchedule.forEach(vaccineSchudule => {
           if (vaccineSchudule.visit == 1) {
             this.vaccinesForVisit1 = vaccineSchudule.antigens
+            console.log(this.vaccinesForVisit1)
           }
+
           if (vaccineSchudule.visit == 2) {
             this.vaccinesForVisit2 = vaccineSchudule.antigens
           }
+
+          if (vaccineSchudule.visit == 3) {
+            this.vaccinesForVisit3 = vaccineSchudule.antigens
+          }
+
+          if (vaccineSchudule.visit == 4) {
+            this.vaccinesForVisit4 = vaccineSchudule.antigens
+          }
+
+          if (vaccineSchudule.visit == 5) {
+            this.vaccinesForVisit5 = vaccineSchudule.antigens
+          }
+
+          if (vaccineSchudule.visit == 6) {
+            this.vaccinesForVisit6 = vaccineSchudule.antigens
+          }
+
+          if (vaccineSchudule.visit == 7) {
+            this.vaccinesForVisit7 = vaccineSchudule.antigens
+          }
+
+          if (vaccineSchudule.visit == 8) {
+            this.vaccinesForVisit8 = vaccineSchudule.antigens
+          }
+
+          if (vaccineSchudule.visit == 9) {
+            this.vaccinesForVisit9 = vaccineSchudule.antigens
+          }
+
+          if (vaccineSchudule.visit == 10) {
+            this.vaccinesForVisit10 = vaccineSchudule.antigens
+          }
+
+          if (vaccineSchudule.visit == 11) {
+            this.vaccinesForVisit11 = vaccineSchudule.antigens
+          }
+
+          if (vaccineSchudule.visit == 12) {
+            this.vaccinesForVisit12 = vaccineSchudule.antigens
+          }
+
         })
       }
     }

@@ -57,7 +57,7 @@ export const useAdministerVaccineStore = defineStore('administerVaccineStore',{
     }),
     actions:{
       setVaccineSchedule(data: any) {
-
+        this.vaccineSchedule = data
       },
       getVaccineSchedule() {
           return this.vaccineSchedule
