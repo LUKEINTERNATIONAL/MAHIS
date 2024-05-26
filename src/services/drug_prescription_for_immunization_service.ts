@@ -23,9 +23,9 @@ export const DRUG_FREQUENCIES: Array<{label: string; code: string; value: number
     { label : "Unknown", code : "Unknown", value : 0 }
   ]
 
-  export class DrugPrescriptionService extends AppEncounterService {
+  export class DrugPrescriptionForImmunizationService extends AppEncounterService {
     constructor(patientID: number, providerID: number) {
-      super(patientID, 25, providerID) 
+      super(patientID, 134, providerID) 
     }
   
     async loadDrugs(filter = '', page=1, limit=10): Promise<any[]> {

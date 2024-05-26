@@ -63,6 +63,7 @@ export const useAdministerVaccineStore = defineStore('administerVaccineStore',{
           return this.vaccineSchedule
       },
       setAdministeredVaccine(data: any) {
+        this.administeredVaccines = []
         this.administeredVaccines.push(data)
       },
       getAdministeredVaccines() {

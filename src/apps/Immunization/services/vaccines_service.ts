@@ -1,5 +1,5 @@
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore"
-import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service"
+import { DRUG_FREQUENCIES, DrugPrescriptionForImmunizationService } from "../../../services/drug_prescription_for_immunization_service"
 import { isEmpty } from "lodash"
 import { Service } from "@/services/service"
 import { PatientService } from "@/services/patient_service"
@@ -13,14 +13,15 @@ export async function getVaccinesSchedule() {
 
 export async function saveVaccineAdministeredDrugs() {
     const store = useAdministerVaccineStore()
-    const userID: any = Service.getUserID();
+    const userId: any = Service.getUserID();
+    const programId: any = Service.getProgramID();
     const patient = new PatientService();
     if (!isEmpty(store.getAdministeredVaccines())) {
         const drugOrders = mapToOrders()
-        const prescriptionService = new DrugPrescriptionService(patient.getID(), userID)
+        const prescriptionService = new DrugPrescriptionForImmunizationService(patient.getID(), userId)
         const encounter = await prescriptionService.createEncounter()
         if (!encounter) return toastWarning("Unable to create treatment encounter")
-        const drugOrder = await prescriptionService.createDrugOrder(drugOrders)
+        const drugOrder = await prescriptionService.createDrugOrderForImmunization(drugOrders, programId)
         if (!drugOrder) return toastWarning("Unable to create drug orders!")
         toastSuccess("Drug order has been created")
     }
@@ -29,7 +30,7 @@ export async function saveVaccineAdministeredDrugs() {
 function mapToOrders(): any[] {
     const store = useAdministerVaccineStore()
     return store.getAdministeredVaccines().map((drug: any) => {
-        const startDate = DrugPrescriptionService.getSessionDate();
+        const startDate = DrugPrescriptionForImmunizationService.getSessionDate();
         const frequency = DRUG_FREQUENCIES.find((f) => f.label === drug.frequency) || ({} as (typeof DRUG_FREQUENCIES)[0]);
         return {
             drug_inventory_id: drug.drug_id,
