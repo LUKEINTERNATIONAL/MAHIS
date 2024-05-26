@@ -15,7 +15,7 @@ const initialVitals = [
                             unit: "cm",
                             icon: icons.height,
                             value: "",
-                            name: "height",
+                            name: "Height",
                             required: true,
                             eventType: "input",
                             valueType: "number",

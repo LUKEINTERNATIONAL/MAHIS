@@ -1,8 +1,8 @@
 <template>
     <div class="modal_wrapper">
         <div class="OtherVitalsHeading">
-            <div class="OtherVitalsTitle">Other Vitals</div>
-            <div>Todays Date: <span></span> 06 Jul 2024</div>
+            <div class="OtherVitalsTitle">OTHER VITALS</div>
+            <div class="TodaysDate">Todays Date: <span></span> {{ todays_date }}</div>
         </div>
         <div class="">
             <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form>
@@ -11,12 +11,12 @@
         <div class="btnContent">
             <div class="saveBtn">
                 <div>
-                    <ion-button class="btnText" fill="solid">
+                    <ion-button class="btnText" fill="solid" @click="saveVitals">
                         Done today
                         <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon>
                     </ion-button>
                 </div>
-                <div>or</div>
+                <div></div>
                 <div>
                     <ion-button class="btnText" fill="solid" @click="showCPD">
                         Done earlier
@@ -43,6 +43,7 @@ import { arePropertiesNotEmpty } from "@/utils/Objects";
 import HisDate from "@/utils/Date";
 import BasicInputField from "@/components/BasicInputField.vue";
 import { VitalsService } from "@/services/vitals_service";
+import { VitalsEncounter } from "@/apps/Immunization/services/vitals";
 import BasicForm from "@/components/BasicForm.vue";
 import { Service } from "@/services/service";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
@@ -82,8 +83,9 @@ export default defineComponent({
             vValidations: "" as any,
             hasValidationErrors: [] as any,
             vitalsInstance: {} as any,
-            validationStatus: { heightWeight: false, bloodPressure: false } as any,
+            validationStatus: { heightWeight: false, bloodPressure: false , pulseRate: false  } as any,
             showPD: false as boolean,
+            todays_date: HisDate.currentDate()
         };
     },
     computed: {
@@ -96,10 +98,10 @@ export default defineComponent({
         this.updateVitalsStores();
     },
     async mounted() {
-        const array = ["Height", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
+        const array = ["Height", "weight", "Systolic blood pressure", "Diastolic blood pressure", "Temp", "Pulse", "SP02", "Respiratory"];
 
         // An array to store all promises
-        const promises = array.map(async (item: any) => {
+        const promises = array.map(async (item: any) => {            
             if (
                 HisDate.toStandardHisFormat(await ObservationService.getFirstObsDatetime(this.demographics.patient_id, item)) == HisDate.currentDate()
             ) {
@@ -114,7 +116,6 @@ export default defineComponent({
 
         // Wait for all promises to resolve
         await Promise.all(promises);
-
         // After all async operations are finished
         const userID: any = Service.getUserID();
         this.vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
@@ -133,11 +134,12 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     methods: {
+
         navigationMenu(url: any) {
             menuController.close();
             this.$router.push(url);
         },
-        updateVitalsStores() {
+        updateVitalsStores() {     
             const vitalsStore = useVitalsStore();
             vitalsStore.setVitals(this.vitals);
         },
@@ -183,22 +185,22 @@ export default defineComponent({
                 modifyFieldValue(this.vitals, "Pulse", "disabled", true);
                 modifyFieldValue(this.vitals, "Pulse", "inputHeader", "Pulse rate");
                 modifyFieldValue(this.vitals, "Pulse", "value", "");
-                this.validationStatus.bloodPressure = false;
+                this.validationStatus.pulseRate = false;
             } else if (inputData?.col?.name == "Pulse Rate Not Done") {
                 modifyCheckboxInputField(this.vitals, "Pulse Rate Reason", "displayNone", true);
                 modifyFieldValue(this.vitals, "Pulse", "disabled", false);
                 modifyFieldValue(this.vitals, "Pulse", "inputHeader", "Pulse rate*");
                 modifyFieldValue(this.vitals, "Pulse", "value", "");
-                this.validationStatus.bloodPressure = true;
+                this.validationStatus.pulseRate = true;
             }
         },
         async validaterowData(inputData: any) {
             this.validationController(inputData);
             this.hasValidationErrors = [];
-
             this.vitals.forEach((section: any, sectionIndex: any) => {
                 if (section?.data?.rowData) {
                     section?.data?.rowData.forEach((col: any, colIndex: any) => {
+
                         if (col.colData[0].inputHeader == "Systolic Pressure*") {
                             const isSystolicValid =
                                 this.vitalsInstance.validator(col.colData[0]) == null && this.vitalsInstance.validator(col.colData[1]) == null;
@@ -211,7 +213,7 @@ export default defineComponent({
                                 this.vitalsInstance.validator(col.colData[0]) == null && this.vitalsInstance.validator(col.colData[1]) == null;
                             this.BMI = isHeightValid ? this.setBMI(col.colData[1].value, col.colData[0].value) : {};
                             this.updateBMI();
-                        }
+                        }                       
 
                         col.colData.some((input: any, inputIndex: any) => {
                             const validateResult = this.vitalsInstance.validator(input);
@@ -328,6 +330,13 @@ export default defineComponent({
         showCPD() {
             this.showPD = true as boolean;
         },
+        saveVitals() {
+
+              const userID: any = Service.getUserID();
+              const vitalsService =  new VitalsService(this.demographics.patient_id, userID)
+              const vitalsToSave = this.vitals; 
+              vitalsService.onFinish(vitalsToSave)
+         }
     },
 });
 </script>
@@ -366,6 +375,7 @@ h5 {
     justify-content: space-between;
     margin: 20px;
     line-height: 60px;
+    flex-direction: column;
 }
 .vitalsContent {
     height: 500px;
@@ -385,5 +395,13 @@ h5 {
 .modal_wrapper {
     padding: 0px 10px;
     background: #fff;
+}
+
+.TodaysDate {
+    display: flex;
+    align-items: center;
+}
+.TodaysDate span {
+    margin-left: 5px;
 }
 </style>
