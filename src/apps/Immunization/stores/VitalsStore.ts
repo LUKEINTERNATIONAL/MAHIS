@@ -15,7 +15,7 @@ const initialVitals = [
                             unit: "cm",
                             icon: icons.height,
                             value: "",
-                            name: "Height",
+                            name: "height",
                             required: true,
                             eventType: "input",
                             valueType: "number",
@@ -71,3 +71,6 @@ export const useWeightHeightVitalsStore = defineStore("vitalsWeightHeightStore",
     },
     persist: true,
 });
+
+
+

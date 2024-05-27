@@ -7,7 +7,7 @@ export class AppEncounterService extends ObservationService {
     encounterTypeID: number;
     programID: number;
     encounterID: number;
-    providerID: number;
+    //providerID: number;
     patientID: number;
     date: string;
     constructor(patientID: number, encounterTypeID: number, providerID = -1) {
@@ -16,7 +16,7 @@ export class AppEncounterService extends ObservationService {
         this.patientID = patientID
         this.encounterID = 0
         this.date = ObservationService.getSessionDate()
-        this.providerID = providerID
+        //this.providerID = providerID
         this.programID = ObservationService.getProgramID()
     }
 

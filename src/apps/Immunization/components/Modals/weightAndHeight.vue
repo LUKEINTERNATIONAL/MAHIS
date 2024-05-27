@@ -139,7 +139,7 @@ export default defineComponent({
             const userID: any = Service.getUserID();
             const vitalsInstance = new VitalsService(55, userID);
             const weightValue = getFieldValue(this.vitalsWeightHeight, "weight", "value");
-            const heightValue = getFieldValue(this.vitalsWeightHeight, "height", "value");
+            const heightValue = getFieldValue(this.vitalsWeightHeight, "Height", "value");
             const height = vitalsInstance.validator({ inputHeader: "Height*", value: heightValue });
             const weight = vitalsInstance.validator({ inputHeader: "Weight*", value: weightValue });
             if (weight == null && height == null) {
