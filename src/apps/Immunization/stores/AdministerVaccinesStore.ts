@@ -4,19 +4,21 @@ export const useAdministerVaccineStore = defineStore('administerVaccineStore',{
     state: () => ({
       administeredVaccines: [] as any,
       currentSelectedDrug: null as any,
-      vaccineSchedule: [
+      currentMilestone: '' as any,
+      vaccineSchedule: {
+        vaccinSchedule: [
           {
             "visit": 1,
             "age": "At birth",
             "antigens": [
               {
-                "name": "BCG",
+                "drug_name": "BCG",
                 "status": "Administered",
                 "date_administered": "06-04-2024",
                 "drug_id": 12
               },
               {
-                "name": "OPV0",
+                "drug_name": "OPV0",
                 "status": "missed",
                 "date_administered": "",
                 "drug_id": 13
@@ -28,32 +30,33 @@ export const useAdministerVaccineStore = defineStore('administerVaccineStore',{
             "age": "6 weeks",
             "antigens": [
               {
-                "name": "OPV1",
+                "drug_name": "OPV1",
                 "status": "pending",
                 "date_administered": "",
                 "drug_id": 14
               },
               {
-                "name": "Pentavalent 1",
+                "drug_name": "Pentavalent 1",
                 "status:": "pending",
                 "date_administered": "",
                 "drug_id": 15
               },
               {
-                "name": "PCV1",
+                "drug_name": "PCV1",
                 "status": "pending",
                 "date_administered": "",
                 "drug_id": 16
               },
               {
-                "name": "Rota 1",
+                "drug_name": "Rota 1",
                 "status": "pending",
                 "date_administered": "",
                 "drug_id": 17
               }
             ]
           }
-        ] as any,
+        ]
+      }
     }),
     actions:{
       setVaccineSchedule(data: any) {
@@ -69,16 +72,23 @@ export const useAdministerVaccineStore = defineStore('administerVaccineStore',{
       getAdministeredVaccines() {
         return this.administeredVaccines
       },
-      setCurrentSelectedDrug(visit_id: number, drug_id: number): void {
+      setCurrentSelectedDrug(visit_id: number, drug_id: number, drug_name: string): void {
           console.log(visit_id)
           console.log(drug_id)
           this.currentSelectedDrug = {
               visit_id: visit_id,
-              drug_id: drug_id
+              drug_id: drug_id,
+              drug_name: drug_name,
           }
       },
       getCurrentSelectedDrug() {
           return this.currentSelectedDrug
+      },
+      setCurrentMilestone(data: any): void {
+        this.currentMilestone = data
+      },
+      getCurrentMilestone() {
+        return this.currentMilestone
       }
     },
     persist: true,

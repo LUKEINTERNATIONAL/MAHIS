@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div style="margin-top: 40px;">
      <ion-row>
         <ion-col size="4">
-            <span style="color: #636363; font-weight: 400; font-size: 14px; margin-left: 6px;">
+            <span style="color: #636363;  font-size: 15px; margin-left: 0px;">
                 Pick visit date:
             </span>
         </ion-col>
@@ -91,6 +91,10 @@
 
 .picker-dialog {
   border: 0px solid !important;
+}
+
+.picker-picked {
+  color: #006401;
 }
 </style>
   

@@ -10,10 +10,10 @@
         </ion-row>
 
         <ion-row>
-            <ion-label style="font-weight: 600px; font-size: 20px; margin: 10px; margin-left: 0px;">Vaccine Name</ion-label>
+            <ion-label style="font-weight: 600px; font-size: 20px; margin: 10px; margin-left: 0px;">{{ drugName }}</ion-label>
         </ion-row>
         <ion-row>
-            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey;">Lot number<span style="color: #B42318;">*</span></ion-label>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey;">Batch number<span style="color: #B42318;">*</span></ion-label>
         </ion-row>
         <div>
             <BasicInputField
@@ -115,6 +115,7 @@ export default defineComponent({
             showDateBtns: true as boolean,
             vaccineDate: '' as any,
             batchNumber: '' as any,
+            drugName: '' as string,
             currentDrug: '' as any,
             is_batch_number_valid: false as boolean,
             batch_number_error_message: 'Enter a number'
@@ -124,7 +125,6 @@ export default defineComponent({
         
     },
     async mounted() {
-        console.log(this.$props.customSchedule)
         this.loadCurrentSelectedDrug()
     },
     setup() {
@@ -152,8 +152,9 @@ export default defineComponent({
     methods: {
         loadCurrentSelectedDrug() {
             const store = useAdministerVaccineStore()
-            console.log(store.getCurrentSelectedDrug())
+            //console.log(store.getCurrentSelectedDrug())
             this.currentDrug = store.getCurrentSelectedDrug()
+            this.drugName = this.currentDrug.drug_name
         },
         showCPD() {
             this.showPD = true as boolean;

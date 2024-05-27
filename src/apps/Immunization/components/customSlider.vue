@@ -1,5 +1,5 @@
 <template>
-    <carousel :items-to-show="1" :modelValue="2">
+    <carousel :items-to-show="1" :modelValue="1">
       <slide v-for="slide in 12" :key="slide">
         <!-- {{ slide }} -->
         <div class="container">
@@ -85,11 +85,12 @@ import { getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_servi
     },
     methods: {
       openAdministerOtherVaccineModal() {
-        createModal(administerOtherVaccineModal, { class: "otherVitalsModal" });
+        createModal(administerOtherVaccineModal, { class: "administerOtherVaccineModal" });
       },
       async loadVaccineSchedule() {
         const data__ = await getVaccinesSchedule()
         const vaccineScheduleStore = useAdministerVaccineStore()
+        vaccineScheduleStore.setCurrentMilestone('10 weeks')
         vaccineScheduleStore.setVaccineSchedule(data__)
         vaccineScheduleStore.getVaccineSchedule().vaccinSchedule.forEach(vaccineSchudule => {
           if (vaccineSchudule.visit == 1) {
@@ -196,6 +197,8 @@ import { getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_servi
       align-items: center;
       width: 100%;
     }
+
+    
     
 
 </style>

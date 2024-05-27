@@ -2,7 +2,7 @@
 <div class="vaccinesList">
     <ion-row>
         <ion-col>
-                <ion-button class="administerVac" v-for="vaccine in vaccines" :key="vaccine" @click="openAdministerVaccineModal(vaccine)" fill="solid" color="success">
+                <ion-button :disabled="disableVaccine(visitId)" class="administerVac" v-for="vaccine in vaccines" :key="vaccine" @click="openAdministerVaccineModal(vaccine)" fill="solid" color="success">
                     <ion-icon slot="start" :icon="iconsContent.greenInjection"></ion-icon>
                     {{ vaccine.drug_name }}
                     <ion-icon slot="end" :icon="iconsContent.greenTickCheckbox"></ion-icon>
@@ -93,10 +93,17 @@ export default defineComponent({
     methods: {
         openAdministerVaccineModal(data: any) {
             const store = useAdministerVaccineStore()
-            store.setCurrentSelectedDrug(this.$props.visitId as number, data.drug_id as number)
+            store.setCurrentSelectedDrug(this.$props.visitId as number, data.drug_id as number, data.drug_name)
             console.log( store.getCurrentSelectedDrug())
             createModal(administerVaccineModal, { });
         },
+        disableVaccine(identifier: string) {
+            if (identifier == '2') {
+                return false
+            } else {
+                return true
+            }
+        }
     },
 });
 </script>
