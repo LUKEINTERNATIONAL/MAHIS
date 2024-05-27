@@ -22,6 +22,12 @@
                 :inputValue="batchNumber"
                 @update:inputValue="updateBatchNumber"
             />
+
+            <div>
+                <ion-label v-if="is_batch_number_valid" class="error-label">
+                    {{ batch_number_error_message }}
+                </ion-label>
+            </div>
         </div>
 
         <customDatePicker v-if="showPD" @dateChange="updateDate"/>
@@ -109,7 +115,9 @@ export default defineComponent({
             showDateBtns: true as boolean,
             vaccineDate: '' as any,
             batchNumber: '' as any,
-            currentDrug: '' as any
+            currentDrug: '' as any,
+            is_batch_number_valid: false as boolean,
+            batch_number_error_message: 'Enter a number'
         };
     },
     computed: {
@@ -127,6 +135,19 @@ export default defineComponent({
             type: [],
             default: [],
         } as any,
+    },
+    watch: {
+        batchNumber: {
+            handler() {
+                if (this.isNumeric(this.batchNumber as string) == true) {
+                    this.is_batch_number_valid = false;
+                }
+                if (this.isNumeric(this.batchNumber as string) == false) {
+                    this.is_batch_number_valid = true;
+                }
+            },
+            deep: true,
+        },
     },
     methods: {
         loadCurrentSelectedDrug() {
@@ -147,7 +168,6 @@ export default defineComponent({
         saveBatchWithTodayDate() {
             let vaccine_date = Service.getSessionDate()
             this.saveDta(vaccine_date)
-            this.dismiss()
         },
         saveBatch() {
             let vaccine_date
@@ -158,14 +178,21 @@ export default defineComponent({
             }
 
             this.saveDta(vaccine_date)
-            this.dismiss()
         },
         updateBatchNumber(event: any) {
             const input = event.target.value
             this.batchNumber = input
-            console.log(this.batchNumber)
         },
         saveDta(date_: any) {
+            if (this.is_batch_number_valid == true ) {
+                toastWarning("Enter a number!")
+                return
+            }
+
+            if (this.batchNumber == '') {
+                toastWarning("Enter a number!")
+                return
+            }
             const dta = {
                 batch_number: this.batchNumber,
                 date_administered: date_,
@@ -174,8 +201,13 @@ export default defineComponent({
             }
             const store = useAdministerVaccineStore()
             store.setAdministeredVaccine(dta)
-            console.log(store.getAdministeredVaccines())
             saveVaccineAdministeredDrugs()
+            this.dismiss()
+        },
+        isNumeric(text: string) {
+            // Regular expression to match one or more digits
+            const regex = /^\d+$/;
+            return regex.test(text);
         }
     },
 });
@@ -256,5 +288,15 @@ h5 {
     min-width: 20px;
     color: #b3b3b3 !important;
     white-space: nowrap;
+}
+.error-label {
+    background: #fecdca;
+    color: #b42318;
+    text-transform: none;
+    padding: 6%;
+    border-radius: 10px;
+    margin-top: 7px;
+    display: flex;
+    text-align: center;
 }
 </style>
