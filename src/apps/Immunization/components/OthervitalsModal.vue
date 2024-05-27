@@ -1,5 +1,5 @@
 <template>
-    <div class="modal_wrapper">
+    <div v-if="formOpen"  class="modal_wrapper">
         <div class="OtherVitalsHeading">
             <div class="OtherVitalsTitle">OTHER VITALS</div>
             <div class="TodaysDate">Todays Date: <span></span> {{ todays_date }}</div>
@@ -85,7 +85,8 @@ export default defineComponent({
             vitalsInstance: {} as any,
             validationStatus: { heightWeight: false, bloodPressure: false , pulseRate: false  } as any,
             showPD: false as boolean,
-            todays_date: HisDate.currentDate()
+            todays_date: HisDate.currentDate(),
+            formOpen: true
         };
     },
     computed: {
@@ -330,12 +331,17 @@ export default defineComponent({
         showCPD() {
             this.showPD = true as boolean;
         },
+        closeForm() {
+            this.formOpen = false;
+        },
         saveVitals() {
 
               const userID: any = Service.getUserID();
               const vitalsService =  new VitalsService(this.demographics.patient_id, userID)
               const vitalsToSave = this.vitals;              
-              vitalsService.onFinish(vitalsToSave)
+              vitalsService.onFinish(vitalsToSave).then(() => {
+                this.closeForm();
+              })
          }
     },
 });
