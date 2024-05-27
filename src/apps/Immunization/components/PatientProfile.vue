@@ -33,35 +33,11 @@
             </ion-row>
         </div>
         <div class="graphSection">
-            <div class="graphBtn">
-                <div class="weightHeightGraphBtns">
-                    <div>
-                        <ion-button class="btnText btnTextWeight" size="small" fill="outline">
-                            Weight/Age Graph <ion-icon slot="end" size="small" :icon="iconsContent.networkBarDark"></ion-icon>
-                        </ion-button>
-                    </div>
-                    <div>
-                        <ion-button class="btnText" size="small" fill="solid">
-                            Height/Age Graph
-                            <ion-icon slot="end" size="small" :icon="iconsContent.networkBarLight"></ion-icon>
-                        </ion-button>
-                    </div>
-                </div>
-            </div>
             <div>
                 <WeightHeightChart v-if="isChild()" />
                 <PreviousVitals v-if="!isChild()" />
             </div>
-            <div class="graphBtn">
-                <div class="weightHeightGraphBtns">
-                    <div>
-                        <span class="warningText"> Current Height: <b>94 Cm </b> </span>
-                    </div>
-                    <div>
-                        <span class="successText"> Current Weight: <b>22 Kg</b> </span>
-                    </div>
-                </div>
-            </div>
+
             <div class="graphBtn" style="margin-bottom: 5px">
                 <div class="weightHeightGraphBtns">
                     <div>
@@ -106,7 +82,7 @@
             </div>
             <!--Vaccine Card-->
 
-            <customSlider/>
+            <customSlider />
             <!-- <div class="vaccinesList" @click="openAdministerVaccineModal()">
 
                 <ion-row>
@@ -263,7 +239,7 @@ import administerVaccineModal from "@/apps/Immunization/components/Modals/admini
 import administerOtherVaccineModal from "@/apps/Immunization/components/Modals/administerOtherVaccineModal.vue";
 import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
 import { PatientService } from "@/services/patient_service";
-import customSlider from "@/apps/Immunization/components/customSlider.vue"
+import customSlider from "@/apps/Immunization/components/customSlider.vue";
 
 import {
     modifyRadioValue,

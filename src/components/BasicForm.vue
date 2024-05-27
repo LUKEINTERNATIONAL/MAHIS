@@ -48,7 +48,7 @@
                         />
                         <div v-if="col.isMultiSelect">
                             <h6 v-if="col.inputHeader">
-                                {{ removeAsterisk(col.inputHeader) }} <span style="color: red" v-if="showAsterisk"> *</span>
+                                {{ col.inputHeader.replace(/\*/g, "") }} <span style="color: red" v-if="col.inputHeader.includes('*')"> *</span>
                             </h6>
                             <VueMultiselect
                                 v-if="col.isMultiSelect"
@@ -71,7 +71,7 @@
                         </div>
                         <div v-if="col.isSingleSelect">
                             <h6 v-if="col.inputHeader">
-                                {{ removeAsterisk(col.inputHeader) }} <span style="color: red" v-if="showAsterisk"> *</span>
+                                {{ col.inputHeader.replace(/\*/g, "") }} <span style="color: red" v-if="col.inputHeader.includes('*')"> *</span>
                             </h6>
                             <VueMultiselect
                                 v-model="col.value"
@@ -126,7 +126,8 @@
             </span>
             <span v-if="item.radioBtnContent && !item?.radioBtnContent?.header?.displayNone">
                 <div style="font-size: 1rem" v-if="item.radioBtnContent?.header" :class="item.radioBtnContent?.header?.class">
-                    {{ removeAsterisk(item.radioBtnContent?.header.title) }} <span style="color: red" v-if="showAsterisk"> *</span>
+                    {{ item.radioBtnContent?.header.title.replace(/\*/g, "") }}
+                    <span style="color: red" v-if="item.radioBtnContent?.header.title.includes('*')"> *</span>
                 </div>
                 <ion-row class="checkbox_content">
                     <ion-col
@@ -262,7 +263,8 @@
                         />
                         <div v-if="checkboxInput.isMultiSelect">
                             <h6 v-if="checkboxInput.inputHeader">
-                                {{ removeAsterisk(checkboxInput.inputHeader) }} <span style="color: red" v-if="showAsterisk"> *</span>
+                                {{ checkboxInput.inputHeader.replace(/\*/g, "") }}
+                                <span style="color: red" v-if="checkboxInput.inputHeader.includes('*')"> *</span>
                             </h6>
                             <VueMultiselect
                                 v-if="checkboxInput.isMultiSelect"
@@ -339,7 +341,6 @@ export default defineComponent({
             date: "",
             value: [] as any,
             options: [{ name: "Vue.js" }, { name: "Javascript" }, { name: "Open Source" }, { name: "kaka" }],
-            showAsterisk: false,
         };
     },
     props: {
@@ -423,14 +424,6 @@ export default defineComponent({
         },
         test(e: any) {
             console.log(e);
-        },
-        removeAsterisk(str: any) {
-            if (str.includes("*")) {
-                this.showAsterisk = true;
-                return str.replace(/\*/g, "");
-            }
-            this.showAsterisk = false;
-            return str;
         },
     },
 });
