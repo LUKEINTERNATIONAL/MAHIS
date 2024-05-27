@@ -39,7 +39,7 @@ function mapToOrders(): any[] {
             auto_expire_date: startDate,
             units: 'ml',
             instructions: '',
-            dose: '',
+            dose: 1,
             frequency: "",
             batch_number: drug.batch_number,
             visit_id: drug.visit_id,
