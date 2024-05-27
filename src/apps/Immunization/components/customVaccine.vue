@@ -1,15 +1,14 @@
 <template>
 <div class="vaccinesList">
-        <ion-row>
-            <ion-col>
-                    <ion-button class="administerVac" v-for="vaciine in vaccines" :key="vaciine" @click="openAdministerVaccineModal" fill="solid" color="success">
-                        <ion-icon slot="start" :icon="iconsContent.greenInjection"></ion-icon>
-                        {{ vaciine }}
-                        <ion-icon slot="end" :icon="iconsContent.greenTickCheckbox"></ion-icon>
-                    </ion-button>
-            </ion-col>
-        </ion-row>
-
+    <ion-row>
+        <ion-col>
+                <ion-button class="administerVac" v-for="vaccine in vaccines" :key="vaccine" @click="openAdministerVaccineModal(vaccine)" fill="solid" color="success">
+                    <ion-icon slot="start" :icon="iconsContent.greenInjection"></ion-icon>
+                    {{ vaccine.drug_name }}
+                    <ion-icon slot="end" :icon="iconsContent.greenTickCheckbox"></ion-icon>
+                </ion-button>
+        </ion-col>
+    </ion-row>
 </div>
 </template>
 <script lang="ts">
@@ -40,6 +39,7 @@ import { icons } from "@/utils/svg"
 import { defineComponent } from "vue"
 import administerVaccineModal from "@/apps/Immunization/components/Modals/administerVaccineModal.vue"
 import { createModal } from "@/utils/Alerts";
+import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore"
 export default defineComponent({
     name: "Home",
     components: {
@@ -79,7 +79,11 @@ export default defineComponent({
         vaccines: {
             type: [],
             default: []
-        },
+        } as any,
+        visitId: {
+            type: String,
+            default: 0
+        } as any,
   },
     watch: {},
     setup() {
@@ -87,8 +91,11 @@ export default defineComponent({
     },
 
     methods: {
-        openAdministerVaccineModal() {
-            createModal(administerVaccineModal, { class: "otherVitalsModal" });
+        openAdministerVaccineModal(data: any) {
+            const store = useAdministerVaccineStore()
+            store.setCurrentSelectedDrug(this.$props.visitId as number, data.drug_id as number)
+            console.log( store.getCurrentSelectedDrug())
+            createModal(administerVaccineModal, { });
         },
     },
 });
@@ -367,5 +374,6 @@ export default defineComponent({
 .administerVac {
     height: 58px;
     width: 150px;
+    margin: 7px;
 }
 </style>
