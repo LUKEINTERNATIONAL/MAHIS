@@ -98,7 +98,7 @@ export default defineComponent({
         this.updateVitalsStores();
     },
     async mounted() {
-        const array = ["Height", "weight", "Systolic blood pressure", "Diastolic blood pressure", "Temp", "Pulse", "SP02", "Respiratory"];
+        const array = ["height", "weight", "Systolic blood pressure", "Diastolic blood pressure", "Temp", "Pulse", "SP02", "Respiratory"];
 
         // An array to store all promises
         const promises = array.map(async (item: any) => {            
@@ -334,7 +334,7 @@ export default defineComponent({
 
               const userID: any = Service.getUserID();
               const vitalsService =  new VitalsService(this.demographics.patient_id, userID)
-              const vitalsToSave = this.vitals; 
+              const vitalsToSave = this.vitals;              
               vitalsService.onFinish(vitalsToSave)
          }
     },

@@ -48,7 +48,12 @@ function dateDiffInDays(date1: string, date2: string) {
 function getAgeInYears(date: string | Date): number {
     return dayjs().diff(date, "years");
 }
-
+function getAgeInFloatYears(date: string | Date, currentD = currentDate()): number {
+    const now = dayjs(currentD);
+    const birthDate = dayjs(date);
+    const ageInYears = now.diff(birthDate, "days") / 365.25;
+    return parseFloat(ageInYears.toFixed(3));
+}
 function toStandardHisTimeFormat(date: string | Date) {
     return dayjs(date).format("HH:mm");
 }
@@ -160,4 +165,5 @@ export default {
     calculateAge,
     getBirthdateAge,
     ageInMonths,
+    getAgeInFloatYears,
 };
