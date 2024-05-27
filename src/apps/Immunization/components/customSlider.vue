@@ -90,7 +90,8 @@ import { getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_servi
       async loadVaccineSchedule() {
         const data__ = await getVaccinesSchedule()
         const vaccineScheduleStore = useAdministerVaccineStore()
-        vaccineScheduleStore.setVaccineSchedule(data__)
+        vaccineScheduleStore.setCurrentMilestone('10 weeks')
+        // vaccineScheduleStore.setVaccineSchedule(data__)
         vaccineScheduleStore.getVaccineSchedule().vaccinSchedule.forEach(vaccineSchudule => {
           if (vaccineSchudule.visit == 1) {
             this.vaccinesForVisit1 = vaccineSchudule.antigens

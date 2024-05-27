@@ -100,7 +100,7 @@
             <div class="milestone">
                 <div style="width: 120px; display: flex; justify-content: space-between; align-content: center">
                     <ion-icon size="small" :icon="iconsContent.calendar"></ion-icon>
-                    <div style="color: #636363">at <span style="color: #636363; font-weight: bold; font-size: 14px"> 10 Weeks</span></div>
+                    <div style="color: #636363">at <span style="color: #636363; font-weight: bold; font-size: 14px"> {{ current_milestone }}</span></div>
                 </div>
                 <div class="vaccinesTitleDate">(Swipe left or right for other milestones)</div>
             </div>
@@ -264,6 +264,7 @@ import administerOtherVaccineModal from "@/apps/Immunization/components/Modals/a
 import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
 import { PatientService } from "@/services/patient_service";
 import customSlider from "@/apps/Immunization/components/customSlider.vue"
+import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore"
 
 import {
     modifyRadioValue,
@@ -309,6 +310,7 @@ export default defineComponent({
             StepperData: [] as any,
             isOpen: false,
             iconsContent: icons,
+            current_milestone: '' as string,
         };
     },
     computed: {
@@ -319,6 +321,8 @@ export default defineComponent({
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
         ...mapState(useGeneralStore, ["activities"]),
         ...mapState(useOutcomeStore, ["dispositions"]),
+        ...mapState(useAdministerVaccineStore, ["currentMilestone"]),
+        
     },
     created() {
         this.getData();
@@ -328,6 +332,7 @@ export default defineComponent({
             this.$router.push("patientProfile");
         }
         this.markWizard();
+        this.loadCurrentMilestone();
     },
     watch: {
         vitals: {
@@ -353,6 +358,12 @@ export default defineComponent({
                 this.markWizard();
             },
         },
+        currentMilestone: {
+            handler() {
+                console.log("Current Milestone: " + this.currentMilestone)
+                this.loadCurrentMilestone();
+            },
+        }
     },
     setup() {
         return { chevronBackOutline, checkmark, ellipsisVerticalSharp };
@@ -596,6 +607,10 @@ export default defineComponent({
                 };
             });
         },
+        loadCurrentMilestone() {
+            const store = useAdministerVaccineStore()
+            this.current_milestone = store.getCurrentMilestone()
+        }
     },
 });
 </script>

@@ -93,7 +93,7 @@ export default defineComponent({
     methods: {
         openAdministerVaccineModal(data: any) {
             const store = useAdministerVaccineStore()
-            store.setCurrentSelectedDrug(this.$props.visitId as number, data.drug_id as number)
+            store.setCurrentSelectedDrug(this.$props.visitId as number, data.drug_id as number, data.drug_name)
             console.log( store.getCurrentSelectedDrug())
             createModal(administerVaccineModal, { });
         },
