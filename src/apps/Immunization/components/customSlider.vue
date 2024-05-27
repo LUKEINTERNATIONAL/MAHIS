@@ -85,7 +85,7 @@ import { getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_servi
     },
     methods: {
       openAdministerOtherVaccineModal() {
-        createModal(administerOtherVaccineModal, { class: "otherVitalsModal" });
+        createModal(administerOtherVaccineModal, { class: "administerOtherVaccineModal" });
       },
       async loadVaccineSchedule() {
         const data__ = await getVaccinesSchedule()
@@ -197,6 +197,8 @@ import { getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_servi
       align-items: center;
       width: 100%;
     }
+
+    
     
 
 </style>
