@@ -128,15 +128,6 @@ export default defineComponent({
         async displayWeightGraph() {
             this.dataset = [
                 {
-                    label: "bottom",
-                    data: this.valueNumericArray,
-                    borderWidth: 2,
-                    borderColor: "#000",
-                    pointRadius: 3, // Add dots on the intersections
-                    pointBackgroundColor: "#000",
-                    parsing: false,
-                },
-                {
                     label: "top",
                     data: [5, 13, 17, 21, 25, 29],
                     borderWidth: 1.5,
@@ -144,6 +135,7 @@ export default defineComponent({
                     backgroundColor: "rgba(253, 255, 140, 0.7)",
                     borderColor: "rgba(181, 71, 8, 0.8)",
                     tension: 0.4,
+                    order: 2,
                 },
 
                 {
@@ -152,6 +144,7 @@ export default defineComponent({
                     borderWidth: 1,
                     borderColor: "#85c786",
                     tension: 0.4,
+                    order: 3,
                 },
                 {
                     label: "z-score",
@@ -159,6 +152,7 @@ export default defineComponent({
                     borderWidth: 1.5,
                     borderColor: "#4A4A4A",
                     tension: 0.4,
+                    order: 4,
                 },
                 {
                     label: "z-score",
@@ -168,6 +162,7 @@ export default defineComponent({
                     backgroundColor: "rgba(150, 220, 166, 0.7)",
                     borderColor: "#85c786",
                     tension: 0.4,
+                    order: 5,
                 },
                 {
                     label: "bottom",
@@ -177,6 +172,17 @@ export default defineComponent({
                     backgroundColor: "rgba(253, 255, 140, 0.7)",
                     borderColor: "rgba(222, 129, 7, 0.8)",
                     tension: 0.2,
+                    order: 6,
+                },
+                {
+                    label: "bottom2",
+                    data: this.valueNumericArray,
+                    borderWidth: 2,
+                    borderColor: "#000",
+                    pointRadius: 3, // Add dots on the intersections
+                    pointBackgroundColor: "#000",
+                    parsing: false,
+                    order: 1,
                 },
             ];
             this.weight = await ObservationService.getAll(this.demographics.patient_id, "weight");
@@ -188,15 +194,6 @@ export default defineComponent({
         async displayHeightGraph() {
             this.dataset = [
                 {
-                    label: "bottom",
-                    data: this.valueNumericArray,
-                    borderWidth: 2,
-                    borderColor: "#000",
-                    pointRadius: 3, // Add dots on the intersections
-                    pointBackgroundColor: "#000",
-                    parsing: false,
-                },
-                {
                     label: "top",
                     data: [5, 13, 17, 21, 25, 29],
                     borderWidth: 1.5,
@@ -204,6 +201,7 @@ export default defineComponent({
                     backgroundColor: "rgba(253, 255, 140, 0.7)",
                     borderColor: "rgba(181, 71, 8, 0.8)",
                     tension: 0.4,
+                    order: 2,
                 },
 
                 {
@@ -212,6 +210,7 @@ export default defineComponent({
                     borderWidth: 1,
                     borderColor: "#85c786",
                     tension: 0.4,
+                    order: 3,
                 },
                 {
                     label: "z-score",
@@ -219,6 +218,7 @@ export default defineComponent({
                     borderWidth: 1.5,
                     borderColor: "#4A4A4A",
                     tension: 0.4,
+                    order: 4,
                 },
                 {
                     label: "z-score",
@@ -228,6 +228,7 @@ export default defineComponent({
                     backgroundColor: "rgba(150, 220, 166, 0.7)",
                     borderColor: "#85c786",
                     tension: 0.4,
+                    order: 5,
                 },
                 {
                     label: "bottom",
@@ -237,6 +238,17 @@ export default defineComponent({
                     backgroundColor: "rgba(253, 255, 140, 0.7)",
                     borderColor: "rgba(222, 129, 7, 0.8)",
                     tension: 0.2,
+                    order: 6,
+                },
+                {
+                    label: "bottom2",
+                    data: this.valueNumericArray,
+                    borderWidth: 2,
+                    borderColor: "#000",
+                    pointRadius: 3, // Add dots on the intersections
+                    pointBackgroundColor: "#000",
+                    parsing: false,
+                    order: 1,
                 },
             ];
             this.height = await ObservationService.getAll(this.demographics.patient_id, "Height");
