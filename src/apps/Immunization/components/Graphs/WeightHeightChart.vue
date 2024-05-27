@@ -93,6 +93,7 @@ export default defineComponent({
             zScoreValue: "" as any,
             zScoreName: "" as any,
             graphTitle: "" as any,
+            stepSize: "" as any,
             iconsContent: icons,
             heightBtnProperty: { fill: "outline", icon: icons.networkBarDark } as any,
             weightBtnProperty: { fill: "solid", icon: icons.networkBarLight } as any,
@@ -106,7 +107,7 @@ export default defineComponent({
     },
     async mounted() {
         await this.displayWeightGraph();
-        this.buildGraph();
+        await this.buildGraph();
     },
     methods: {
         async changeGraph(name: any) {
@@ -126,72 +127,12 @@ export default defineComponent({
             this.currentWeight = await ObservationService.getFirstObsValue(this.demographics.patient_id, "weight", "value_numeric");
         },
         async displayWeightGraph() {
-            this.dataset = [
-                {
-                    label: "top",
-                    data: [5, 13, 17, 21, 25, 29],
-                    borderWidth: 1.5,
-                    fill: 1,
-                    backgroundColor: "rgba(253, 255, 140, 0.7)",
-                    borderColor: "rgba(181, 71, 8, 0.8)",
-                    tension: 0.4,
-                    order: 2,
-                },
-
-                {
-                    label: "z-score",
-                    data: [4, 11.5, 15, 18, 21.5, 25],
-                    borderWidth: 1,
-                    borderColor: "#85c786",
-                    tension: 0.4,
-                    order: 3,
-                },
-                {
-                    label: "z-score",
-                    data: [3, 9, 11.5, 14, 16, 18],
-                    borderWidth: 1.5,
-                    borderColor: "#4A4A4A",
-                    tension: 0.4,
-                    order: 4,
-                },
-                {
-                    label: "z-score",
-                    data: [2.2, 7, 9, 10.9, 12.5, 13.8],
-                    borderWidth: 1,
-                    fill: 1,
-                    backgroundColor: "rgba(150, 220, 166, 0.7)",
-                    borderColor: "#85c786",
-                    tension: 0.4,
-                    order: 5,
-                },
-                {
-                    label: "bottom",
-                    data: [2, 6, 8, 9.8, 11, 12],
-                    borderWidth: 1.5,
-                    fill: 1,
-                    backgroundColor: "rgba(253, 255, 140, 0.7)",
-                    borderColor: "rgba(222, 129, 7, 0.8)",
-                    tension: 0.2,
-                    order: 6,
-                },
-                {
-                    label: "bottom2",
-                    data: this.valueNumericArray,
-                    borderWidth: 2,
-                    borderColor: "#000",
-                    pointRadius: 3, // Add dots on the intersections
-                    pointBackgroundColor: "#000",
-                    parsing: false,
-                    order: 1,
-                },
-            ];
             this.weight = await ObservationService.getAll(this.demographics.patient_id, "weight");
+            this.stepSize = 3;
             this.valueNumericArray = this.weight.map((item: any) => {
                 return { x: HisDate.getAgeInFloatYears(this.demographics?.birthdate, item.obs_datetime), y: item.value_numeric };
             });
             await this.calculateWeightZScore();
-        },
-        async displayHeightGraph() {
             this.dataset = [
                 {
                     label: "top",
@@ -251,11 +192,118 @@ export default defineComponent({
                     order: 1,
                 },
             ];
+        },
+        async displayHeightGraph() {
             this.height = await ObservationService.getAll(this.demographics.patient_id, "Height");
+            this.stepSize = 5;
             this.valueNumericArray = this.height.map((item: any) => {
                 return { x: HisDate.getAgeInFloatYears(this.demographics?.birthdate, item.obs_datetime), y: item.value_numeric };
             });
             await this.calculateHeightZScore();
+            this.dataset = [
+                {
+                    label: "top",
+                    data: [
+                        { x: 0, y: 55 },
+                        { x: 1, y: 82 },
+                        { x: 2, y: 96 },
+                        { x: 2, y: 95 },
+                        { x: 3, y: 107 },
+                        { x: 4, y: 116 },
+                        { x: 5, y: 123.5 },
+                    ],
+                    borderWidth: 1.5,
+                    fill: 1,
+                    backgroundColor: "rgba(253, 255, 140, 0.7)",
+                    borderColor: "rgba(181, 71, 8, 0.8)",
+                    tension: 0.4,
+                    order: 2,
+                    parsing: false,
+                },
+
+                {
+                    label: "z-score",
+                    data: [
+                        { x: 0, y: 54 },
+                        { x: 1, y: 79 },
+                        { x: 2, y: 93 },
+                        { x: 2, y: 92 },
+                        { x: 3, y: 103 },
+                        { x: 4, y: 111 },
+                        { x: 5, y: 119 },
+                    ],
+                    borderWidth: 1,
+                    borderColor: "#85c786",
+                    tension: 0.4,
+                    order: 3,
+                    parsing: false,
+                },
+                {
+                    label: "z-score",
+                    data: [
+                        { x: 0, y: 49 },
+                        { x: 1, y: 74 },
+                        { x: 2, y: 86 },
+                        { x: 2, y: 85 },
+                        { x: 3, y: 95 },
+                        { x: 4, y: 103 },
+                        { x: 5, y: 109 },
+                    ],
+                    borderWidth: 1.5,
+                    borderColor: "#4A4A4A",
+                    tension: 0.4,
+                    order: 4,
+                    parsing: false,
+                },
+                {
+                    label: "z-score",
+                    data: [
+                        { x: 0, y: 45 },
+                        { x: 1, y: 68 },
+                        { x: 2, y: 80 },
+                        { x: 2, y: 79 },
+                        { x: 3, y: 87 },
+                        { x: 4, y: 94 },
+                        { x: 5, y: 100 },
+                    ],
+                    borderWidth: 1,
+                    fill: 1,
+                    backgroundColor: "rgba(150, 220, 166, 0.7)",
+                    borderColor: "#85c786",
+                    tension: 0.4,
+                    order: 5,
+                    parsing: false,
+                },
+                {
+                    label: "bottom",
+                    data: [
+                        { x: 0, y: 44 },
+                        { x: 1, y: 66 },
+                        { x: 2, y: 77 },
+                        { x: 2, y: 76 },
+                        { x: 3, y: 84 },
+                        { x: 4, y: 90 },
+                        { x: 5, y: 95 },
+                    ],
+                    borderWidth: 1.5,
+                    fill: 1,
+                    backgroundColor: "rgba(253, 255, 140, 0.7)",
+                    borderColor: "rgba(222, 129, 7, 0.8)",
+                    tension: 0.2,
+                    order: 6,
+                    parsing: false,
+                },
+                {
+                    label: "bottom2",
+                    data: this.valueNumericArray,
+                    borderWidth: 2,
+                    borderColor: "#000",
+                    pointRadius: 3, // Add dots on the intersections
+                    pointBackgroundColor: "#000",
+                    parsing: false,
+                    order: 1,
+                },
+            ];
         },
         async calculateHeightZScore() {
             this.setValues();
@@ -277,7 +325,7 @@ export default defineComponent({
             this.calculateZScore(this.currentHeight, params);
         },
         async calculateWeightZScore() {
-            this.setValues();
+            await this.setValues();
             const obs_datetime = await ObservationService.getFirstObsValue(this.demographics.patient_id, "weight", "obs_datetime");
             const ageInDays = HisDate.dateDiffInDays(obs_datetime, this.demographics?.birthdate);
             const gender = this.demographics.gender;
@@ -325,7 +373,7 @@ export default defineComponent({
                             },
                             grace: "5%",
                             ticks: {
-                                stepSize: 3,
+                                stepSize: this.stepSize,
                             },
                         },
                         x: {
