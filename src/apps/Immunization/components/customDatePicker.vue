@@ -1,8 +1,8 @@
 <template>
     <div style="margin-top: 40px;">
      <ion-row>
-        <ion-col size="4">
-            <span style="color: #636363;  font-size: 15px; margin-left: 0px;">
+        <ion-col size="5">
+            <span style="color: grey;  font-size: 16px; margin-left: 0px;">
                 Pick visit date:
             </span>
         </ion-col>
