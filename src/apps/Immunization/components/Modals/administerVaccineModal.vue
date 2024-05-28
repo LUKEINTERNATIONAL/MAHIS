@@ -1,10 +1,10 @@
 <template>
     <div class="modal_wrapper">
         <ion-row>
-            <ion-col style="margin-left: -9px;">
+            <ion-col>
                 <div class="om">Administer Vaccine</div>
             </ion-col>
-            <ion-col size="7" style="margin-right: -19px;">
+            <ion-col size="6" style="margin-left: -9px;">
                 <ion-label class="lbl-tl" style="font-size: 13;"> Todays Date: <span class="lbl-ct">06 Jul 2024</span></ion-label>
             </ion-col>
         </ion-row>
@@ -282,7 +282,7 @@ h5 {
     font-size: 14px;
 }
 .om {
-    font-size: 16;
+    font-size: 10;
     font-weight:600px;
 }
 .lbl-tl {
@@ -299,5 +299,9 @@ h5 {
     margin-top: 7px;
     display: flex;
     text-align: center;
+}
+.modal_wrapper {
+    /* padding: 0px 10px; */
+    background: #fff;
 }
 </style>

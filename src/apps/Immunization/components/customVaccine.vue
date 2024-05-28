@@ -119,7 +119,7 @@ export default defineComponent({
         openAdministerVaccineModal(data: any) {
             const store = useAdministerVaccineStore()
             store.setCurrentSelectedDrug(this.$props.visitId as number, data.drug_id as number, data.drug_name)
-            createModal(administerVaccineModal, { });
+            createModal(administerVaccineModal, { class: "otherVitalsModal" })
         },
         disableVaccine(identifier: string) {
             const store = useAdministerVaccineStore()
