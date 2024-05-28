@@ -1,8 +1,8 @@
 <template>
-    <div class="pim-cls-1 modal_wrapper">
+    <div v-if="formOpen"  class="pim-cls-1 modal_wrapper">
         <div class="OtherVitalsHeading">
-            <div class="OtherVitalsTitle" style="color: #1f2221d4; font-size: 14px">Add Weight/Height</div>
-            <div style="margin-right: 5px; font-size: 14px" class="lbl-tl">Todays Date: <span class="lbl-ct"> 06 Jul 2024</span></div>
+            <div class="OtherVitalsTitle">WEIGHT & HEIGHT</div>
+            <div class="TodaysDate">Todays Date: <span></span> {{ todays_date }}</div>
         </div>
         <div>
             <div class="center text_12">
@@ -85,6 +85,8 @@ export default defineComponent({
             event: null as any,
             BMI: "" as any,
             showPD: false as boolean,
+            todays_date: HisDate.currentDate(),
+            formOpen: true
         };
     },
     computed: {
@@ -93,6 +95,7 @@ export default defineComponent({
     },
     mounted() {
         console.log(this.vitalsWeightHeight);
+        this.validaterowData({});
     },
     setup() {},
     methods: {
@@ -106,23 +109,20 @@ export default defineComponent({
         formatBirthdate() {
             return HisDate.getBirthdateAge(this.demographics.birthdate);
         },
-
         async validaterowData(event: any) {
             const userID: any = Service.getUserID();
             const vitalsInstance = new VitalsService(55, userID);
 
             const weightValue = getFieldValue(this.vitalsWeightHeight, "weight", "value");
-            const heightValue = getFieldValue(this.vitalsWeightHeight, "height", "value");
-
+            const heightValue = getFieldValue(this.vitalsWeightHeight, "Height", "value");
             const height = vitalsInstance.validator({ inputHeader: "Height*", value: heightValue });
             const weight = vitalsInstance.validator({ inputHeader: "Weight*", value: weightValue });
-
             if (height && heightValue) {
-                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsErrorMassage", height.flat(Infinity)[0]);
-                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsError", true);
+                modifyFieldValue(this.vitalsWeightHeight, "Height", "alertsErrorMassage", height.flat(Infinity)[0]);
+                modifyFieldValue(this.vitalsWeightHeight, "Height", "alertsError", true);
             } else {
-                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsErrorMassage", "");
-                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsError", false);
+                modifyFieldValue(this.vitalsWeightHeight, "Height", "alertsErrorMassage", "");
+                modifyFieldValue(this.vitalsWeightHeight, "Height", "alertsError", false);
             }
 
             if (weight && weightValue) {
@@ -143,8 +143,7 @@ export default defineComponent({
             const height = vitalsInstance.validator({ inputHeader: "Height*", value: heightValue });
             const weight = vitalsInstance.validator({ inputHeader: "Weight*", value: weightValue });
             if (weight == null && height == null) {
-                toastSuccess("Saved successful");
-
+                await this.toastSuccess("Saved successful");
                 const userID: any = Service.getUserID();
                 const VitalsInstance = new VitalsEncounter(this.demographics.patient_id, userID);
                 const encounter = await VitalsInstance.createEncounter();
@@ -152,9 +151,17 @@ export default defineComponent({
                 const data = await formatInputFiledData(this.vitalsWeightHeight);
                 await VitalsInstance.saveObservationList(data);
                 this.$emit("updateVitalsGraph");
+                
             } else {
                 toastWarning("Please complete the form");
             }
+        },
+        closeForm() {
+                this.formOpen = false;
+            },
+        async toastSuccess(message:any) {
+            await toastSuccess(message);
+            this.closeForm();
         },
         async setBMI(weight: any, height: any) {
             if (this.demographics.gender && this.demographics.birthdate) {
@@ -220,6 +227,7 @@ ion-footer {
     justify-content: space-between;
     margin: 20px;
     line-height: 60px;
+    flex-direction: column;
 }
 .vitalsContent {
     height: 500px;
@@ -236,5 +244,12 @@ ion-footer {
     display: flex;
     justify-content: center;
     line-height: 60px;
+}
+.TodaysDate {
+    display: flex;
+    align-items: center;
+}
+.TodaysDate span {
+    margin-left: 5px;
 }
 </style>
