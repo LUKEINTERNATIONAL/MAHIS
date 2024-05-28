@@ -1,5 +1,5 @@
 <template>
-    <carousel :items-to-show="1" :modelValue="1">
+    <carousel :items-to-show="1" :modelValue="2">
       <slide v-for="slide in 12" :key="slide">
         <!-- {{ slide }} -->
         <div class="container">
@@ -47,9 +47,9 @@
     IonCol,
     IonRow,
   } from "@ionic/vue"
-    import customVaccine from "@/apps/Immunization/components/customVaccine.vue"
-    import administerOtherVaccineModal from "@/apps/Immunization/components/Modals/administerOtherVaccineModal.vue"
-    import { createModal } from "@/utils/Alerts"
+  import customVaccine from "@/apps/Immunization/components/customVaccine.vue"
+  import administerOtherVaccineModal from "@/apps/Immunization/components/Modals/administerOtherVaccineModal.vue"
+  import { createModal } from "@/utils/Alerts"
   import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore"
   import { getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service"
     
@@ -93,6 +93,7 @@
         const vaccineScheduleStore = useAdministerVaccineStore()
         vaccineScheduleStore.setCurrentMilestone('10 weeks')
         vaccineScheduleStore.setVaccineSchedule(data__)
+        vaccineScheduleStore.setCurrentVisitId(3)
         vaccineScheduleStore.getVaccineSchedule().vaccinSchedule.forEach(vaccineSchudule => {
           if (vaccineSchudule.visit == 1) {
             this.vaccinesForVisit1 = vaccineSchudule.antigens as any
@@ -186,9 +187,9 @@
     }
 
     .bottom-row {
-      margin-top: 20px; /* Adjust the value as needed */
-      justify-content: center; /* Centers content horizontally */
-      align-items: center; /* Centers content vertically */
+      margin-top: 20px;
+      justify-content: center;
+      align-items: center;
     }
 
     .center-content {
@@ -197,9 +198,5 @@
       align-items: center;
       width: 100%;
     }
-
-    
-    
-
 </style>
   
