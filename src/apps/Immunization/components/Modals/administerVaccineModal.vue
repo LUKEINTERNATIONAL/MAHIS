@@ -1,10 +1,10 @@
 <template>
     <div class="modal_wrapper">
         <ion-row>
-            <ion-col>
+            <ion-col style="margin-left: -3px;">
                 <div class="om">Administer Vaccine</div>
             </ion-col>
-            <ion-col size="6" style="margin-left: -9px;">
+            <ion-col size="6">
                 <ion-label class="lbl-tl" style="font-size: 13;"> Todays Date: <span class="lbl-ct">06 Jul 2024</span></ion-label>
             </ion-col>
         </ion-row>

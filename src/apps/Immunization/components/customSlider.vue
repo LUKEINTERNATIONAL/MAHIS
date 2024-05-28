@@ -12,7 +12,7 @@
             <customVaccine :vaccines="vaccinesForVisit6" :visitId="6" v-if="slide == 6"/>
             <customVaccine :vaccines="vaccinesForVisit7" :visitId="7" v-if="slide == 7"/>
             <customVaccine :vaccines="vaccinesForVisit8" :visitId="8" v-if="slide == 8"/>
-            <customVaccine :vaccines="vaccinesForVisit9" :visitId="9" v-if="slide == 3"/>
+            <customVaccine :vaccines="vaccinesForVisit9" :visitId="9" v-if="slide == 9"/>
             <customVaccine :vaccines="vaccinesForVisit10" :visitId="10" v-if="slide == 10"/>
             <customVaccine :vaccines="vaccinesForVisit11" :visitId="11" v-if="slide == 11"/>
             <customVaccine :vaccines="vaccinesForVisit12" :visitId="12" v-if="slide == 12"/>
