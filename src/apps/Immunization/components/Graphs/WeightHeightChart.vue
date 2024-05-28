@@ -129,10 +129,13 @@ export default defineComponent({
         async displayWeightGraph() {
             this.weight = await ObservationService.getAll(this.demographics.patient_id, "weight");
             this.stepSize = 3;
-            this.valueNumericArray = this.weight.map((item: any) => {
-                return { x: HisDate.getAgeInFloatYears(this.demographics?.birthdate, item.obs_datetime), y: item.value_numeric };
-            });
-            await this.calculateWeightZScore();
+            if (this.weight) {
+                this.valueNumericArray = this.weight?.map((item: any) => {
+                    return { x: HisDate.getAgeInFloatYears(this.demographics?.birthdate, item.obs_datetime), y: item.value_numeric };
+                });
+                await this.calculateWeightZScore();
+            }
+
             this.dataset = [
                 {
                     label: "top",
@@ -182,7 +185,7 @@ export default defineComponent({
                     order: 6,
                 },
                 {
-                    label: "bottom2",
+                    label: "Value",
                     data: this.valueNumericArray,
                     borderWidth: 2,
                     borderColor: "#000",
@@ -196,10 +199,13 @@ export default defineComponent({
         async displayHeightGraph() {
             this.height = await ObservationService.getAll(this.demographics.patient_id, "Height");
             this.stepSize = 5;
-            this.valueNumericArray = this.height.map((item: any) => {
-                return { x: HisDate.getAgeInFloatYears(this.demographics?.birthdate, item.obs_datetime), y: item.value_numeric };
-            });
-            await this.calculateHeightZScore();
+            if (this.height) {
+                this.valueNumericArray = this.height.map((item: any) => {
+                    return { x: HisDate.getAgeInFloatYears(this.demographics?.birthdate, item.obs_datetime), y: item.value_numeric };
+                });
+                await this.calculateHeightZScore();
+            }
+
             this.dataset = [
                 {
                     label: "top",
