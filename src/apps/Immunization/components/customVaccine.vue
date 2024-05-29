@@ -2,10 +2,10 @@
 <div class="vaccinesList">
     <ion-row>
         <ion-col>
-                <ion-button :disabled="disableVaccine(visitId)" class="administerVac" v-for="vaccine in vaccines" :key="vaccine" @click="openAdministerVaccineModal(vaccine)" fill="solid" color="success">
-                    <ion-icon slot="start" :icon="iconsContent.greenInjection"></ion-icon>
+                <ion-button :disabled="disableVaccine(visitId)" class="administerVac" v-for="vaccine in vaccines" :key="vaccine" @click="openAdministerVaccineModal(vaccine)" fill="solid" :color="getColorForVaccine(vaccine, visitId)">
+                    <ion-icon slot="start" :icon="getInjectSignForVaccine(vaccine)"></ion-icon>
                     {{ vaccine.drug_name }}
-                    <ion-icon slot="end" :icon="iconsContent.greenTickCheckbox"></ion-icon>
+                    <ion-icon slot="end" :icon="getCheckBoxForVaccine(vaccine)"></ion-icon>
                 </ion-button>
         </ion-col>
     </ion-row>
@@ -73,7 +73,7 @@ export default defineComponent({
         
     },
     mounted() {
-
+        
     },
     props: {
         vaccines: {
@@ -91,16 +91,45 @@ export default defineComponent({
     },
 
     methods: {
+        getColorForVaccine(vaccine: any, visit_id: number): string{
+            const store = useAdministerVaccineStore()
+            if (visit_id < store.getCurrentVisitId() && vaccine.status != 'administered') {
+                return 'danger'
+            }
+            if (vaccine.status == 'administered') {
+                return 'success'
+            } else {
+                return 'medium'
+            }
+        },
+        getInjectSignForVaccine(vaccine: any) {
+            if (vaccine.status == 'administered') {
+                return this.iconsContent.greenInjection
+            } if (vaccine.status != 'administered') {
+                return this.iconsContent.whiteInjection
+            }
+        },
+        getCheckBoxForVaccine(vaccine: any) {
+            if (vaccine.status == 'administered') {
+                return this.iconsContent.greenTickCheckbox
+            } else {
+                return this.iconsContent.whiteCheckbox
+            }
+        },
         openAdministerVaccineModal(data: any) {
             const store = useAdministerVaccineStore()
             store.setCurrentSelectedDrug(this.$props.visitId as number, data.drug_id as number, data.drug_name)
-            console.log( store.getCurrentSelectedDrug())
-            createModal(administerVaccineModal, { });
+            createModal(administerVaccineModal, { class: "otherVitalsModal" })
         },
         disableVaccine(identifier: string) {
-            if (identifier == '2') {
+            const store = useAdministerVaccineStore()
+            const currentVisitId = store.getCurrentVisitId()
+            if (identifier == currentVisitId) {
                 return false
-            } else {
+            } if (identifier < currentVisitId) {
+                return false
+            }
+            else {
                 return true
             }
         }

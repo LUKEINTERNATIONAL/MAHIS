@@ -5,6 +5,7 @@ export const useAdministerVaccineStore = defineStore('administerVaccineStore',{
       administeredVaccines: [] as any,
       currentSelectedDrug: null as any,
       currentMilestone: '' as any,
+      currentVisitId: '' as any,
       vaccineSchedule: {
         vaccinSchedule: [
           {
@@ -64,6 +65,12 @@ export const useAdministerVaccineStore = defineStore('administerVaccineStore',{
       },
       getVaccineSchedule() {
           return this.vaccineSchedule
+      },
+      setCurrentVisitId(data: number) {
+        this.currentVisitId = data
+      },
+      getCurrentVisitId() {
+        return this.currentVisitId
       },
       setAdministeredVaccine(data: any) {
         this.administeredVaccines = []
