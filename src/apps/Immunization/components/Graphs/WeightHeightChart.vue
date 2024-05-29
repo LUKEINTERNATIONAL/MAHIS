@@ -57,6 +57,7 @@ import HeightForAgeBoys from "@/Data/HeightForAgeBoys";
 import WeightForAgeBoys from "@/Data/WeightForAgeBoys";
 import WeightForAgeGirls from "@/Data/WeightForAgeGirls";
 import HeightForAgeGirls from "@/Data/HeightForAgeGirls";
+import { useWeightHeightVitalsStore } from "@/apps/Immunization/stores/VitalsStore";
 
 export default defineComponent({
     name: "Menu",
@@ -72,6 +73,21 @@ export default defineComponent({
 
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useWeightHeightVitalsStore, ["vitalsWeightHeight"]),
+    },
+    watch: {
+        demographics: {
+            handler() {
+                this.buildGraph();
+            },
+            deep: true,
+        },
+        vitalsWeightHeight: {
+            handler() {
+                this.buildGraph();
+            },
+            deep: true,
+        },
     },
     data() {
         return {
@@ -123,6 +139,7 @@ export default defineComponent({
             this.buildGraph();
         },
         async setValues() {
+            this.dataset = [];
             this.currentHeight = await ObservationService.getFirstObsValue(this.demographics.patient_id, "Height", "value_numeric");
             this.currentWeight = await ObservationService.getFirstObsValue(this.demographics.patient_id, "weight", "value_numeric");
         },
@@ -135,66 +152,6 @@ export default defineComponent({
                 });
                 await this.calculateWeightZScore();
             }
-
-            this.dataset = [
-                {
-                    label: "top",
-                    data: [5, 13, 17, 21, 25, 29],
-                    borderWidth: 1.5,
-                    fill: 1,
-                    backgroundColor: "rgba(253, 255, 140, 0.7)",
-                    borderColor: "rgba(181, 71, 8, 0.8)",
-                    tension: 0.4,
-                    order: 2,
-                },
-
-                {
-                    label: "z-score",
-                    data: [4, 11.5, 15, 18, 21.5, 25],
-                    borderWidth: 1,
-                    borderColor: "#85c786",
-                    tension: 0.4,
-                    order: 3,
-                },
-                {
-                    label: "z-score",
-                    data: [3, 9, 11.5, 14, 16, 18],
-                    borderWidth: 1.5,
-                    borderColor: "#4A4A4A",
-                    tension: 0.4,
-                    order: 4,
-                },
-                {
-                    label: "z-score",
-                    data: [2.2, 7, 9, 10.9, 12.5, 13.8],
-                    borderWidth: 1,
-                    fill: 1,
-                    backgroundColor: "rgba(150, 220, 166, 0.7)",
-                    borderColor: "#85c786",
-                    tension: 0.4,
-                    order: 5,
-                },
-                {
-                    label: "bottom",
-                    data: [2, 6, 8, 9.8, 11, 12],
-                    borderWidth: 1.5,
-                    fill: 1,
-                    backgroundColor: "rgba(253, 255, 140, 0.7)",
-                    borderColor: "rgba(222, 129, 7, 0.8)",
-                    tension: 0.2,
-                    order: 6,
-                },
-                {
-                    label: "Value",
-                    data: this.valueNumericArray,
-                    borderWidth: 2,
-                    borderColor: "#000",
-                    pointRadius: 3, // Add dots on the intersections
-                    pointBackgroundColor: "#000",
-                    parsing: false,
-                    order: 1,
-                },
-            ];
         },
         async displayHeightGraph() {
             this.height = await ObservationService.getAll(this.demographics.patient_id, "Height");
@@ -205,111 +162,6 @@ export default defineComponent({
                 });
                 await this.calculateHeightZScore();
             }
-
-            this.dataset = [
-                {
-                    label: "top",
-                    data: [
-                        { x: 0, y: 55 },
-                        { x: 1, y: 82 },
-                        { x: 2, y: 96 },
-                        { x: 2, y: 95 },
-                        { x: 3, y: 107 },
-                        { x: 4, y: 116 },
-                        { x: 5, y: 123.5 },
-                    ],
-                    borderWidth: 1.5,
-                    fill: 1,
-                    backgroundColor: "rgba(253, 255, 140, 0.7)",
-                    borderColor: "rgba(181, 71, 8, 0.8)",
-                    tension: 0.4,
-                    order: 2,
-                    parsing: false,
-                },
-
-                {
-                    label: "z-score",
-                    data: [
-                        { x: 0, y: 54 },
-                        { x: 1, y: 79 },
-                        { x: 2, y: 93 },
-                        { x: 2, y: 92 },
-                        { x: 3, y: 103 },
-                        { x: 4, y: 111 },
-                        { x: 5, y: 119 },
-                    ],
-                    borderWidth: 1,
-                    borderColor: "#85c786",
-                    tension: 0.4,
-                    order: 3,
-                    parsing: false,
-                },
-                {
-                    label: "z-score",
-                    data: [
-                        { x: 0, y: 49 },
-                        { x: 1, y: 74 },
-                        { x: 2, y: 86 },
-                        { x: 2, y: 85 },
-                        { x: 3, y: 95 },
-                        { x: 4, y: 103 },
-                        { x: 5, y: 109 },
-                    ],
-                    borderWidth: 1.5,
-                    borderColor: "#4A4A4A",
-                    tension: 0.4,
-                    order: 4,
-                    parsing: false,
-                },
-                {
-                    label: "z-score",
-                    data: [
-                        { x: 0, y: 45 },
-                        { x: 1, y: 68 },
-                        { x: 2, y: 80 },
-                        { x: 2, y: 79 },
-                        { x: 3, y: 87 },
-                        { x: 4, y: 94 },
-                        { x: 5, y: 100 },
-                    ],
-                    borderWidth: 1,
-                    fill: 1,
-                    backgroundColor: "rgba(150, 220, 166, 0.7)",
-                    borderColor: "#85c786",
-                    tension: 0.4,
-                    order: 5,
-                    parsing: false,
-                },
-                {
-                    label: "bottom",
-                    data: [
-                        { x: 0, y: 44 },
-                        { x: 1, y: 66 },
-                        { x: 2, y: 77 },
-                        { x: 2, y: 76 },
-                        { x: 3, y: 84 },
-                        { x: 4, y: 90 },
-                        { x: 5, y: 95 },
-                    ],
-                    borderWidth: 1.5,
-                    fill: 1,
-                    backgroundColor: "rgba(253, 255, 140, 0.7)",
-                    borderColor: "rgba(222, 129, 7, 0.8)",
-                    tension: 0.2,
-                    order: 6,
-                    parsing: false,
-                },
-                {
-                    label: "bottom2",
-                    data: this.valueNumericArray,
-                    borderWidth: 2,
-                    borderColor: "#000",
-                    pointRadius: 3, // Add dots on the intersections
-                    pointBackgroundColor: "#000",
-                    parsing: false,
-                    order: 1,
-                },
-            ];
         },
         async calculateHeightZScore() {
             this.setValues();
@@ -321,9 +173,11 @@ export default defineComponent({
             if (gender === "M") {
                 this.graphTitle = "Height-for-Age-Boy";
                 params = HeightForAgeBoys[ageInDays];
+                this.datasetHeightAgeBoy();
             } else if (gender === "F") {
                 this.graphTitle = "Height-for-Age-Girls";
                 params = HeightForAgeGirls[ageInDays];
+                this.datasetHeightAgeGirl();
             } else {
                 throw new Error("Invalid gender");
             }
@@ -340,9 +194,11 @@ export default defineComponent({
             if (gender === "M") {
                 this.graphTitle = "Weight-for-Age-Boy";
                 params = WeightForAgeBoys[ageInDays];
+                this.datasetWeightAgeBoy();
             } else if (gender === "F") {
                 this.graphTitle = "Weight-for-Age-Girl";
                 params = WeightForAgeGirls[ageInDays];
+                this.datasetWeightAgeGirl();
             } else {
                 throw new Error("Invalid gender");
             }
@@ -354,6 +210,7 @@ export default defineComponent({
             this.zScoreValue = Math.round(zScore * 10) / 10;
         },
         buildGraph() {
+            console.log("hie its me");
             const ctx: any = document.getElementById("myChart");
             if (this.chart) {
                 this.chart.destroy();
@@ -408,6 +265,340 @@ export default defineComponent({
                 },
             });
         },
+        datasetWeightAgeBoy() {
+            this.dataset = [
+                {
+                    label: "top",
+                    data: [4.9, 13.1, 17, 21, 25.1, 29.5],
+                    borderWidth: 1.5,
+                    fill: 1,
+                    backgroundColor: "rgba(253, 255, 140, 0.7)",
+                    borderColor: "rgba(181, 71, 8, 0.8)",
+                    tension: 0.4,
+                    order: 2,
+                },
+
+                {
+                    label: "z-score",
+                    data: [4.1, 11.5, 14.9, 18.1, 21.5, 25],
+                    borderWidth: 1,
+                    borderColor: "#85c786",
+                    tension: 0.4,
+                    order: 3,
+                },
+                {
+                    label: "z-score",
+                    data: [3.1, 9, 11.5, 13.9, 16, 18.1],
+                    borderWidth: 1.5,
+                    borderColor: "#4A4A4A",
+                    tension: 0.4,
+                    order: 4,
+                },
+                {
+                    label: "z-score",
+                    data: [2.2, 7, 9, 10.9, 12.1, 13.8],
+                    borderWidth: 1,
+                    fill: 1,
+                    backgroundColor: "rgba(150, 220, 166, 0.7)",
+                    borderColor: "#85c786",
+                    tension: 0.4,
+                    order: 5,
+                },
+                {
+                    label: "bottom",
+                    data: [2, 6.1, 8, 9.8, 10.9, 11.1, 12],
+                    borderWidth: 1.5,
+                    fill: 1,
+                    backgroundColor: "rgba(253, 255, 140, 0.7)",
+                    borderColor: "rgba(222, 129, 7, 0.8)",
+                    tension: 0.2,
+                    order: 6,
+                },
+                {
+                    label: "Value",
+                    data: this.valueNumericArray,
+                    borderWidth: 2,
+                    borderColor: "#000",
+                    pointRadius: 3, // Add dots on the intersections
+                    pointBackgroundColor: "#000",
+                    parsing: false,
+                    order: 1,
+                },
+            ];
+        },
+        datasetHeightAgeBoy() {
+            this.dataset = [
+                {
+                    label: "top",
+                    data: [
+                        { x: 0, y: 55.09 },
+                        { x: 1, y: 83 },
+                        { x: 2, y: 97 },
+                        { x: 2, y: 96.1 },
+                        { x: 3, y: 107 },
+                        { x: 4, y: 116 },
+                        { x: 5, y: 124 },
+                    ],
+                    borderWidth: 1.5,
+                    fill: 1,
+                    backgroundColor: "rgba(253, 255, 140, 0.7)",
+                    borderColor: "rgba(181, 71, 8, 0.8)",
+                    tension: 0.4,
+                    order: 2,
+                    parsing: false,
+                },
+
+                {
+                    label: "z-score",
+                    data: [
+                        { x: 0, y: 53.9 },
+                        { x: 1, y: 80.01 },
+                        { x: 2, y: 94 },
+                        { x: 2, y: 93.1 },
+                        { x: 3, y: 103.1 },
+                        { x: 4, y: 111.9 },
+                        { x: 5, y: 119 },
+                    ],
+                    borderWidth: 1,
+                    borderColor: "#85c786",
+                    tension: 0.4,
+                    order: 3,
+                    parsing: false,
+                },
+                {
+                    label: "z-score",
+                    data: [
+                        { x: 0, y: 50 },
+                        { x: 1, y: 75.9 },
+                        { x: 2, y: 88 },
+                        { x: 2, y: 87 },
+                        { x: 3, y: 96 },
+                        { x: 4, y: 103.1 },
+                        { x: 5, y: 110 },
+                    ],
+                    borderWidth: 1.5,
+                    borderColor: "#4A4A4A",
+                    tension: 0.4,
+                    order: 4,
+                    parsing: false,
+                },
+                {
+                    label: "z-score",
+                    data: [
+                        { x: 0, y: 46 },
+                        { x: 1, y: 71 },
+                        { x: 2, y: 82 },
+                        { x: 2, y: 81 },
+                        { x: 3, y: 88.9 },
+                        { x: 4, y: 95 },
+                        { x: 5, y: 101 },
+                    ],
+                    borderWidth: 1,
+                    fill: 1,
+                    backgroundColor: "rgba(150, 220, 166, 0.7)",
+                    borderColor: "#85c786",
+                    tension: 0.4,
+                    order: 5,
+                    parsing: false,
+                },
+                {
+                    label: "bottom",
+                    data: [
+                        { x: 0, y: 44.9 },
+                        { x: 1, y: 68.1 },
+                        { x: 2, y: 79 },
+                        { x: 2, y: 78 },
+                        { x: 3, y: 85 },
+                        { x: 4, y: 91 },
+                        { x: 5, y: 96 },
+                    ],
+                    borderWidth: 1.5,
+                    fill: 1,
+                    backgroundColor: "rgba(253, 255, 140, 0.7)",
+                    borderColor: "rgba(222, 129, 7, 0.8)",
+                    tension: 0.2,
+                    order: 6,
+                    parsing: false,
+                },
+                {
+                    label: "bottom2",
+                    data: this.valueNumericArray,
+                    borderWidth: 2,
+                    borderColor: "#000",
+                    pointRadius: 3, // Add dots on the intersections
+                    pointBackgroundColor: "#000",
+                    parsing: false,
+                    order: 1,
+                },
+            ];
+        },
+        datasetWeightAgeGirl() {
+            this.dataset = [
+                {
+                    label: "top",
+                    data: [4.9, 13, 17, 21, 25.1, 29.5],
+                    borderWidth: 1.5,
+                    fill: 1,
+                    backgroundColor: "rgba(253, 255, 140, 0.7)",
+                    borderColor: "rgba(181, 71, 8, 0.8)",
+                    tension: 0.4,
+                    order: 2,
+                },
+
+                {
+                    label: "z-score",
+                    data: [4.5, 12, 15.1, 18.1, 21.05, 24.05],
+                    borderWidth: 1,
+                    borderColor: "#85c786",
+                    tension: 0.4,
+                    order: 3,
+                },
+                {
+                    label: "z-score",
+                    data: [3.5, 9.8, 12.05, 14.2, 16.2, 18.1],
+                    borderWidth: 1.5,
+                    borderColor: "#4A4A4A",
+                    tension: 0.4,
+                    order: 4,
+                },
+                {
+                    label: "z-score",
+                    data: [2.5, 7.9, 9.8, 11.2, 12.9, 14],
+                    borderWidth: 1,
+                    fill: 1,
+                    backgroundColor: "rgba(150, 220, 166, 0.7)",
+                    borderColor: "#85c786",
+                    tension: 0.4,
+                    order: 5,
+                },
+                {
+                    label: "bottom",
+                    data: [2, 7, 8, 8.8, 10, 11.1, 12.2],
+                    borderWidth: 1.5,
+                    fill: 1,
+                    backgroundColor: "rgba(253, 255, 140, 0.7)",
+                    borderColor: "rgba(222, 129, 7, 0.8)",
+                    tension: 0.2,
+                    order: 6,
+                },
+                {
+                    label: "Value",
+                    data: this.valueNumericArray,
+                    borderWidth: 2,
+                    borderColor: "#000",
+                    pointRadius: 3, // Add dots on the intersections
+                    pointBackgroundColor: "#000",
+                    parsing: false,
+                    order: 1,
+                },
+            ];
+        },
+        datasetHeightAgeGirl() {
+            this.dataset = [
+                {
+                    label: "top",
+                    data: [
+                        { x: 0, y: 55 },
+                        { x: 1, y: 82 },
+                        { x: 2, y: 96 },
+                        { x: 2, y: 95.5 },
+                        { x: 3, y: 106.1 },
+                        { x: 4, y: 116 },
+                        { x: 5, y: 123.9 },
+                    ],
+                    borderWidth: 1.5,
+                    fill: 1,
+                    backgroundColor: "rgba(253, 255, 140, 0.7)",
+                    borderColor: "rgba(181, 71, 8, 0.8)",
+                    tension: 0.4,
+                    order: 2,
+                    parsing: false,
+                },
+
+                {
+                    label: "z-score",
+                    data: [
+                        { x: 0, y: 53 },
+                        { x: 1, y: 79 },
+                        { x: 2, y: 93 },
+                        { x: 2, y: 92.5 },
+                        { x: 3, y: 103 },
+                        { x: 4, y: 111 },
+                        { x: 5, y: 118 },
+                    ],
+                    borderWidth: 1,
+                    borderColor: "#85c786",
+                    tension: 0.4,
+                    order: 3,
+                    parsing: false,
+                },
+                {
+                    label: "z-score",
+                    data: [
+                        { x: 0, y: 49 },
+                        { x: 1, y: 74 },
+                        { x: 2, y: 86 },
+                        { x: 2, y: 85.5 },
+                        { x: 3, y: 95 },
+                        { x: 4, y: 103 },
+                        { x: 5, y: 109.1 },
+                    ],
+                    borderWidth: 1.5,
+                    borderColor: "#4A4A4A",
+                    tension: 0.4,
+                    order: 4,
+                    parsing: false,
+                },
+                {
+                    label: "z-score",
+                    data: [
+                        { x: 0, y: 45 },
+                        { x: 1, y: 69 },
+                        { x: 2, y: 80 },
+                        { x: 2, y: 79.5 },
+                        { x: 3, y: 87.1 },
+                        { x: 4, y: 94 },
+                        { x: 5, y: 100 },
+                    ],
+                    borderWidth: 1,
+                    fill: 1,
+                    backgroundColor: "rgba(150, 220, 166, 0.7)",
+                    borderColor: "#85c786",
+                    tension: 0.4,
+                    order: 5,
+                    parsing: false,
+                },
+                {
+                    label: "bottom",
+                    data: [
+                        { x: 0, y: 43.9 },
+                        { x: 1, y: 66 },
+                        { x: 2, y: 77 },
+                        { x: 2, y: 76.5 },
+                        { x: 3, y: 84 },
+                        { x: 4, y: 90 },
+                        { x: 5, y: 95 },
+                    ],
+                    borderWidth: 1.5,
+                    fill: 1,
+                    backgroundColor: "rgba(253, 255, 140, 0.7)",
+                    borderColor: "rgba(222, 129, 7, 0.8)",
+                    tension: 0.2,
+                    order: 6,
+                    parsing: false,
+                },
+                {
+                    label: "bottom2",
+                    data: this.valueNumericArray,
+                    borderWidth: 2,
+                    borderColor: "#000",
+                    pointRadius: 3, // Add dots on the intersections
+                    pointBackgroundColor: "#000",
+                    parsing: false,
+                    order: 1,
+                },
+            ];
+        },
     },
 });
 </script>
@@ -451,8 +642,10 @@ export default defineComponent({
 }
 .weightHeightGraphBtns {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     margin-top: 8px;
+    width: 100%;
+    max-width: 500px;
 }
 .warningText {
     display: flex;

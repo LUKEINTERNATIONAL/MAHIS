@@ -12,7 +12,7 @@
             </div>
         </div>
 
-        <customDatePicker v-if="showPD"/>
+        <customDatePicker v-if="showPD" />
 
         <div class="btnContent">
             <div class="saveBtn">
@@ -46,6 +46,7 @@ import {
     IonLabel,
     IonPage,
     IonFooter,
+    modalController,
 } from "@ionic/vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import { createOutline } from "ionicons/icons";
@@ -91,9 +92,7 @@ export default defineComponent({
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useWeightHeightVitalsStore, ["vitalsWeightHeight"]),
     },
-    mounted() {
-        console.log(this.vitalsWeightHeight);
-    },
+    mounted() {},
     setup() {},
     methods: {
         nav(url: any) {
@@ -137,24 +136,30 @@ export default defineComponent({
         },
         async doneToday() {
             const userID: any = Service.getUserID();
-            const vitalsInstance = new VitalsService(55, userID);
+            const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
             const weightValue = getFieldValue(this.vitalsWeightHeight, "weight", "value");
-            const heightValue = getFieldValue(this.vitalsWeightHeight, "Height", "value");
+            const heightValue = getFieldValue(this.vitalsWeightHeight, "height", "value");
             const height = vitalsInstance.validator({ inputHeader: "Height*", value: heightValue });
             const weight = vitalsInstance.validator({ inputHeader: "Weight*", value: weightValue });
             if (weight == null && height == null) {
-                toastSuccess("Saved successful");
-
-                const userID: any = Service.getUserID();
-                const VitalsInstance = new VitalsEncounter(this.demographics.patient_id, userID);
-                const encounter = await VitalsInstance.createEncounter();
+                const encounter = await vitalsInstance.createEncounter();
                 if (!encounter) return toastWarning("Unable to create vitals encounter");
                 const data = await formatInputFiledData(this.vitalsWeightHeight);
-                await VitalsInstance.saveObservationList(data);
+                await vitalsInstance.saveObservationList(data);
+                toastSuccess("Saved successful");
+                this.cleanInputFields();
                 this.$emit("updateVitalsGraph");
             } else {
                 toastWarning("Please complete the form");
             }
+        },
+        cleanInputFields() {
+            modifyFieldValue(this.vitalsWeightHeight, "weight", "value", "");
+            modifyFieldValue(this.vitalsWeightHeight, "height", "value", "");
+            this.dismiss();
+        },
+        dismiss() {
+            modalController.dismiss();
         },
         async setBMI(weight: any, height: any) {
             if (this.demographics.gender && this.demographics.birthdate) {
