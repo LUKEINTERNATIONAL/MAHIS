@@ -18,7 +18,7 @@
                 <div class="title">
                     <div class="demographics_title">Demographics</div>
                 </div>
-                <div class="icon_div">
+                <div class="icon_div displayNoneMobile">
                     <ion-icon :class="iconListStatus" :icon="list" @click="setDisplayType('list')"></ion-icon>
                     <ion-icon
                         :class="iconGridStatus"
@@ -39,6 +39,7 @@
                     <ion-col size-sm="12" size-md="6" size-lg="4">
                         <CurrentLocation />
                         <SocialHistory v-if="checkUnderFive" />
+                        <BirthRegistration v-if="checkUnderOne" />
                     </ion-col>
                     <ion-col size-sm="12" size-md="6" size-lg="4" class="regDisplayFlex">
                         <HomeLocation />
@@ -113,6 +114,7 @@ import GuardianInformation from "@/components/Registration/GuardianInformation.v
 import HomeLocation from "@/components/Registration/HomeLocation.vue";
 import CurrentLocation from "@/components/Registration/CurrentLocation.vue";
 import SocialHistory from "@/components/Registration/SocialHistory.vue";
+import BirthRegistration from "@/components/Registration/BirthRegistration.vue";
 import ScanRegistration from "@/components/Registration/ScanRegistration.vue";
 import { useRegistrationStore } from "@/stores/RegistrationStore";
 import { mapState } from "pinia";
@@ -149,6 +151,7 @@ export default defineComponent({
         HomeLocation,
         SocialHistory,
         ScanRegistration,
+        BirthRegistration,
     },
     data() {
         return {
@@ -159,6 +162,7 @@ export default defineComponent({
             currentStep: "Personal Information",
             scanner: false,
             checkUnderFive: true,
+            checkUnderOne: false,
             steps: ["Personal Information", "Guardian Information", "Location", "Social History"],
         };
     },
@@ -214,8 +218,7 @@ export default defineComponent({
     async mounted() {
         this.setIconClass();
         this.disableNationalIDInput();
-        this.isUnderFive();
-        console.log("🚀 ~ mounted ~ ", await this.getRegion("Mzimba"));
+        this.checkAge();
     },
     watch: {
         personInformation: {
@@ -226,7 +229,7 @@ export default defineComponent({
                 data.setHomeLocation(this.homeLocation);
                 data.setCurrentLocation(this.currentLocation);
                 data.setGuardianInformation(this.guardianInformation);
-                this.isUnderFive();
+                this.checkAge();
                 this.disableNationalIDInput();
             },
             deep: true,
@@ -257,8 +260,11 @@ export default defineComponent({
                 }
             }
         },
-        isUnderFive() {
-            if (!isEmpty(this.birthdate)) this.checkUnderFive = HisDate.getAgeInYears(this.birthdate) >= 5 ? true : false;
+        checkAge() {
+            if (!isEmpty(this.birthdate)) {
+                this.checkUnderFive = HisDate.getAgeInYears(this.birthdate) >= 5 ? true : false;
+                this.checkUnderOne = HisDate.getAgeInYears(this.birthdate) <= 1 ? true : false;
+            }
         },
         disableNationalIDInput() {
             if (this.registrationType == "manual") {
@@ -374,7 +380,6 @@ export default defineComponent({
             });
             let url = "/patientProfile";
             const patient = new PatientService();
-            if (await patient.isUnderFive()) url = "/birthRegistration";
             this.$router.push(url);
         },
         patientIdentifier(item: any) {

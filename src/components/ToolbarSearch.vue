@@ -226,8 +226,6 @@ export default defineComponent({
                     this.$router.push(NCDUserAction.url);
                 } else if (userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "OPD PROGRAM")) {
                     this.$router.push("OPDvitals");
-                } else if (userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "IMMUNIZATION PROGRAM")) {
-                    this.$router.push("birthRegistration");
                 } else if (roles.some((role: any) => role.role === "Pharmacist")) {
                     this.$router.push("dispensation");
                 } else {

@@ -118,7 +118,7 @@ export class UserService extends Service {
                 item.actionName = NCDData.actionName;
                 filteredPrograms.push(item);
             } else if (item.name === "IMMUNIZATION PROGRAM") {
-                item.url = "birthRegistration";
+                item.url = "patientProfile";
                 item.actionName = "+ Enroll in Immunization program";
                 filteredPrograms.push(item);
             } else if (item.name === "OPD Program") {
