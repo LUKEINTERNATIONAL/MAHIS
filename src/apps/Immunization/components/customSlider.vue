@@ -1,5 +1,5 @@
 <template>
-    <carousel :items-to-show="1" :modelValue="2">
+    <carousel :items-to-show="1" :modelValue="2" @slide-end="slideEvent">
       <slide v-for="slide in 12" :key="slide">
         <!-- {{ slide }} -->
         <div class="container">
@@ -79,6 +79,7 @@
             vaccinesForVisit10: [],
             vaccinesForVisit11: [],
             vaccinesForVisit12: [],
+            milestones: [],
         };
     },
     async mounted() {
@@ -91,10 +92,15 @@
       async loadVaccineSchedule() {
         const data__ = await getVaccinesSchedule()
         const vaccineScheduleStore = useAdministerVaccineStore()
+
         vaccineScheduleStore.setCurrentMilestone('10 weeks')
-        vaccineScheduleStore.setVaccineSchedule(data__)
         vaccineScheduleStore.setCurrentVisitId(3)
+
+        vaccineScheduleStore.setVaccineSchedule(data__)
         vaccineScheduleStore.getVaccineSchedule().vaccinSchedule.forEach(vaccineSchudule => {
+          const obj =  { visit_id: vaccineSchudule.visit, age: vaccineSchudule.age }
+          this.milestones = this.appendUniqueObject(this.milestones, obj)
+
           if (vaccineSchudule.visit == 1) {
             this.vaccinesForVisit1 = vaccineSchudule.antigens as any
           }
@@ -144,6 +150,21 @@
           }
 
         })
+      },
+      slideEvent(SlideEventData: any) {
+        const vaccineScheduleStore = useAdministerVaccineStore()
+        this.milestones.forEach((milestone: any) => {
+          if(milestone.visit_id -1 == SlideEventData.currentSlideIndex) {
+            vaccineScheduleStore.setCurrentMilestone(milestone.age)
+          }
+        })
+      },
+      appendUniqueObject(arr: any, obj: any) {
+        const exists = arr.some((item: { visit_id: any; age: any; }) => item.visit_id === obj.visit_id && item.age === obj.age)
+        if (!exists) {
+          arr.push(obj)
+        }
+        return arr
       }
     }
   });
