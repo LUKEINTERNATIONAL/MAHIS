@@ -1,36 +1,38 @@
 <template>
     <div :fullscreen="true" style="--background: #fff">
         <div class="demographics">
-            <ion-row>
-                <ion-col size="3">
-                    <div class="initialsBox">
-                        <div class="initialsText">{{ demographics?.name.charAt(0) }} {{ demographics?.name.split(" ")[1].charAt(0) }}</div>
-                    </div>
-                </ion-col>
-                <ion-col size="9">
-                    <div class="demographicsFirstRow">
-                        <div class="name">{{ demographics.name }}</div>
-                        <div class="name" @click="openPIM()" style="color: var(--ion-color-primary)">
-                            <ion-icon :icon="ellipsisVerticalSharp"></ion-icon>
+            <div style="max-width: 400px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
+                <ion-row>
+                    <ion-col size="3">
+                        <div :class="demographics.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
+                            <ion-icon style="color: #fff; font-size: 70px" :icon="person"></ion-icon>
                         </div>
-                    </div>
-                    <div class="demographicsOtherRow">
-                        <div class="demographicsText">
-                            {{ demographics.gender == "M" ? "Male" : "Female" }} <span class="dot">.</span> {{ formatBirthdate() }}
+                    </ion-col>
+                    <ion-col size="9">
+                        <div class="demographicsFirstRow">
+                            <div class="name">{{ demographics.name }}</div>
                         </div>
-                    </div>
-                    <div class="demographicsOtherRow">
-                        <div class="demographicsText">Current Address:</div>
-                        <div class="demographicsText mediumFontColor">{{ demographics.address }}</div>
-                    </div>
-                    <div class="demographicsOtherRow">
-                        <div class="demographicsText smallFont">
-                            MRN: <span class="mediumFontColor">{{ demographics.mrn }}</span> <span class="dot">.</span> Outcome:
-                            <span class="outcomeStatus">Active</span>
+                        <div class="demographicsOtherRow">
+                            <div class="demographicsText">
+                                {{ demographics.gender == "M" ? "Male" : "Female" }} <span class="dot">.</span> {{ formatBirthdate() }}
+                            </div>
                         </div>
-                    </div>
-                </ion-col>
-            </ion-row>
+                        <div class="demographicsOtherRow">
+                            <div class="demographicsText">Current Address:</div>
+                            <div class="demographicsText mediumFontColor">{{ demographics.address }}</div>
+                        </div>
+                        <div class="demographicsOtherRow">
+                            <div class="demographicsText smallFont">
+                                MRN: <span class="mediumFontColor">{{ demographics.mrn }}</span> <span class="dot">.</span> Outcome:
+                                <span class="outcomeStatus">Active</span>
+                            </div>
+                        </div>
+                    </ion-col>
+                </ion-row>
+            </div>
+            <div class="name" @click="openPIM()" style="color: var(--ion-color-primary); margin-top: 10px">
+                <ion-icon :icon="ellipsisVerticalSharp"></ion-icon>
+            </div>
         </div>
         <div class="graphSection">
             <div>
@@ -76,79 +78,15 @@
             <div class="milestone">
                 <div style="width: 120px; display: flex; justify-content: space-between; align-content: center">
                     <ion-icon size="small" :icon="iconsContent.calendar"></ion-icon>
-                    <div style="color: #636363">at <span style="color: #636363; font-weight: bold; font-size: 14px"> {{ current_milestone }}</span></div>
+                    <div style="color: #636363">
+                        at <span style="color: #636363; font-weight: bold; font-size: 14px"> {{ current_milestone }}</span>
+                    </div>
                 </div>
                 <div class="vaccinesTitleDate">(Swipe left or right for other milestones)</div>
             </div>
             <!--Vaccine Card-->
 
             <customSlider />
-            <!-- <div class="vaccinesList" @click="openAdministerVaccineModal()">
-
-                <ion-row>
-                    <ion-col size="1.2">
-                        <ion-button fill="clear" class="arrowBtns" style="left: -15px">
-                            <ion-icon size="large" :icon="iconsContent.backBlueArrow"></ion-icon>
-                        </ion-button>
-                    </ion-col>
-                    <ion-col size="3.9">
-                        <ion-button fill="solid" class="administerVac" color="success">
-                            <ion-icon slot="start" :icon="iconsContent.greenInjection"></ion-icon>
-                            OPV 2
-                            <ion-icon slot="end" :icon="iconsContent.greenTickCheckbox"></ion-icon>
-                        </ion-button>
-                    </ion-col>
-                    <ion-col size="3.9" offset="1">
-                        <ion-button fill="solid" class="administerVac" color="success">
-                            <ion-icon slot="start" :icon="iconsContent.greenInjection"></ion-icon>
-                            OPV 2
-                            <ion-icon slot="end" :icon="iconsContent.greenTickCheckbox"></ion-icon>
-                        </ion-button>
-                    </ion-col>
-                    <ion-col size="2">
-                        <ion-button fill="clear" class="arrowBtns" style="left: 18px">
-                            <ion-icon size="large" :icon="iconsContent.forwardBlueArrow"></ion-icon>
-                        </ion-button>
-                    </ion-col>
-                </ion-row>
-
-                
-                <ion-row>
-                    <ion-col size="1.2"> </ion-col>
-                    <ion-col size="3.9">
-                        <ion-button fill="solid" class="administerVac" color="medium">
-                            <ion-icon slot="start" :icon="iconsContent.whiteInjection"></ion-icon>
-                            OPV 2
-                            <ion-icon slot="end" :icon="iconsContent.whiteCheckbox"></ion-icon>
-                        </ion-button>
-                    </ion-col>
-                    <ion-col size="3.9" offset="1">
-                        <ion-button fill="solid" class="administerVac" color="medium">
-                            <ion-icon slot="start" :icon="iconsContent.whiteInjection"></ion-icon>
-                            OPV 2
-                            <ion-icon slot="end" :icon="iconsContent.whiteCheckbox"></ion-icon>
-                        </ion-button>
-                    </ion-col>
-                    <ion-col size="1.3"> </ion-col>
-                </ion-row>
-            </div> -->
-            <!-- <div class="otherVaccine">
-                <div class="centerBtns">
-                    <ion-button @click="openAdministerOtherVaccineModal()" class="btnText" fill="solid"> Add Other Vaccines </ion-button>
-                </div>
-            </div> -->
-            <!-- <div class="dotsWizard">
-                <ion-icon class="dotStatus" slot="start" :icon="iconsContent.greenDot"></ion-icon>
-                <ion-icon class="dotStatus" slot="start" :icon="iconsContent.redDot"></ion-icon>
-                <ion-icon class="dotBig" slot="start" :icon="iconsContent.blueDot"></ion-icon>
-                <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
-                <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
-                <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
-                <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
-                <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
-                <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
-                <ion-icon class="dotStatus" slot="start" :icon="iconsContent.grayDot"></ion-icon>
-            </div> -->
 
             <div class="lastVaccine">
                 <div class="lastVaccineTitle">
@@ -203,7 +141,7 @@ import {
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/components/DemographicBar.vue";
-import { chevronBackOutline, checkmark, ellipsisVerticalSharp } from "ionicons/icons";
+import { chevronBackOutline, checkmark, ellipsisVerticalSharp, person } from "ionicons/icons";
 import SaveProgressModal from "@/components/SaveProgressModal.vue";
 import { icons } from "@/utils/svg";
 import { useVitalsStore } from "@/stores/VitalsStore";
@@ -239,8 +177,8 @@ import administerVaccineModal from "@/apps/Immunization/components/Modals/admini
 import administerOtherVaccineModal from "@/apps/Immunization/components/Modals/administerOtherVaccineModal.vue";
 import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
 import { PatientService } from "@/services/patient_service";
-import customSlider from "@/apps/Immunization/components/customSlider.vue"
-import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore"
+import customSlider from "@/apps/Immunization/components/customSlider.vue";
+import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 
 import {
     modifyRadioValue,
@@ -286,7 +224,7 @@ export default defineComponent({
             StepperData: [] as any,
             isOpen: false,
             iconsContent: icons,
-            current_milestone: '' as string,
+            current_milestone: "" as string,
         };
     },
     computed: {
@@ -298,7 +236,6 @@ export default defineComponent({
         ...mapState(useGeneralStore, ["activities"]),
         ...mapState(useOutcomeStore, ["dispositions"]),
         ...mapState(useAdministerVaccineStore, ["currentMilestone"]),
-        
     },
     created() {
         this.getData();
@@ -338,10 +275,10 @@ export default defineComponent({
             handler() {
                 this.loadCurrentMilestone();
             },
-        }
+        },
     },
     setup() {
-        return { chevronBackOutline, checkmark, ellipsisVerticalSharp };
+        return { chevronBackOutline, checkmark, ellipsisVerticalSharp, person };
     },
 
     methods: {
@@ -583,9 +520,9 @@ export default defineComponent({
             });
         },
         loadCurrentMilestone() {
-            const store = useAdministerVaccineStore()
-            this.current_milestone = store.getCurrentMilestone()
-        }
+            const store = useAdministerVaccineStore();
+            this.current_milestone = store.getCurrentMilestone();
+        },
     },
 });
 </script>
@@ -600,6 +537,8 @@ export default defineComponent({
     background: #ffffff;
     border: 1px solid #d9d9d9;
     border-radius: 7px;
+    display: flex;
+    justify-content: space-between;
 }
 .demographicsFirstRow {
     /* _Input dropdown menu item */
@@ -661,8 +600,10 @@ export default defineComponent({
 
 .weightHeightGraphBtns {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     margin-top: 8px;
+    width: 100%;
+    max-width: 500px;
 }
 .btnText {
     font-style: normal;
@@ -683,10 +624,16 @@ export default defineComponent({
     left: 31px;
     top: 122px;
     align-items: center;
-    background: #5983ba;
     border-radius: 10px;
     align-items: center;
     display: flex;
+    justify-content: center;
+}
+.maleColor {
+    background: #5983ba;
+}
+.femaleColor {
+    background: #876d9b;
 }
 .initialsText {
     width: 100%;

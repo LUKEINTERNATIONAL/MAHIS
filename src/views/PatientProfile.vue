@@ -224,6 +224,7 @@ import {
     document,
     globe,
     add,
+    person,
 } from "ionicons/icons";
 import { modalController } from "@ionic/vue";
 import { icons } from "@/utils/svg";
@@ -354,6 +355,7 @@ export default defineComponent({
             globe,
             medkit,
             add,
+            person,
         };
     },
 

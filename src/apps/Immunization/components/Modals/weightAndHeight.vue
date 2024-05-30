@@ -1,5 +1,5 @@
 <template>
-    <div v-if="formOpen"  class="pim-cls-1 modal_wrapper">
+    <div v-if="formOpen" class="pim-cls-1 modal_wrapper">
         <div class="OtherVitalsHeading">
             <div class="OtherVitalsTitle">WEIGHT & HEIGHT</div>
             <div class="TodaysDate">Todays Date: <span></span> {{ todays_date }}</div>
@@ -12,7 +12,7 @@
             </div>
         </div>
 
-        <customDatePicker v-if="showPD"/>
+        <customDatePicker v-if="showPD" />
 
         <div class="btnContent">
             <div class="saveBtn">
@@ -46,6 +46,7 @@ import {
     IonLabel,
     IonPage,
     IonFooter,
+    modalController,
 } from "@ionic/vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import { createOutline } from "ionicons/icons";
@@ -86,17 +87,14 @@ export default defineComponent({
             BMI: "" as any,
             showPD: false as boolean,
             todays_date: HisDate.currentDate(),
-            formOpen: true
+            formOpen: true,
         };
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useWeightHeightVitalsStore, ["vitalsWeightHeight"]),
     },
-    mounted() {
-        console.log(this.vitalsWeightHeight);
-        this.validaterowData({});
-    },
+    mounted() {},
     setup() {},
     methods: {
         nav(url: any) {
@@ -137,31 +135,30 @@ export default defineComponent({
         },
         async doneToday() {
             const userID: any = Service.getUserID();
-            const vitalsInstance = new VitalsService(55, userID);
+            const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
             const weightValue = getFieldValue(this.vitalsWeightHeight, "weight", "value");
-            const heightValue = getFieldValue(this.vitalsWeightHeight, "Height", "value");
+            const heightValue = getFieldValue(this.vitalsWeightHeight, "height", "value");
             const height = vitalsInstance.validator({ inputHeader: "Height*", value: heightValue });
             const weight = vitalsInstance.validator({ inputHeader: "Weight*", value: weightValue });
             if (weight == null && height == null) {
-                await this.toastSuccess("Saved successful");
-                const userID: any = Service.getUserID();
-                const VitalsInstance = new VitalsEncounter(this.demographics.patient_id, userID);
-                const encounter = await VitalsInstance.createEncounter();
+                const encounter = await vitalsInstance.createEncounter();
                 if (!encounter) return toastWarning("Unable to create vitals encounter");
                 const data = await formatInputFiledData(this.vitalsWeightHeight);
-                await VitalsInstance.saveObservationList(data);
+                await vitalsInstance.saveObservationList(data);
+                toastSuccess("Saved successful");
+                this.cleanInputFields();
                 this.$emit("updateVitalsGraph");
-                
             } else {
                 toastWarning("Please complete the form");
             }
         },
-        closeForm() {
-                this.formOpen = false;
-            },
-        async toastSuccess(message:any) {
-            await toastSuccess(message);
-            this.closeForm();
+        cleanInputFields() {
+            modifyFieldValue(this.vitalsWeightHeight, "weight", "value", "");
+            modifyFieldValue(this.vitalsWeightHeight, "height", "value", "");
+            this.dismiss();
+        },
+        dismiss() {
+            modalController.dismiss();
         },
         async setBMI(weight: any, height: any) {
             if (this.demographics.gender && this.demographics.birthdate) {
