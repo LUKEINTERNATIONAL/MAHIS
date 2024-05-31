@@ -613,6 +613,7 @@ export default defineComponent({
     background: #ffffff;
     border-radius: 5px;
     margin: 10px;
+    height: 100vw;
 }
 .immunizationGraphText {
     padding-left: 10px;

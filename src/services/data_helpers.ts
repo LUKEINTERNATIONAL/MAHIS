@@ -91,7 +91,6 @@ export function modifyCheckboxHeader(data: any, headerName: any, element: any, n
     });
 }
 function modifyObjects(data: any[], triggerName: any, initialData: any) {
-    console.log("🚀 ~ data.forEach ~ triggerName:", triggerName);
     data.forEach((item: any, index: number) => {
         if (triggerName && item.childName === triggerName) {
             data[index] = _.cloneDeep(initialData[index]);

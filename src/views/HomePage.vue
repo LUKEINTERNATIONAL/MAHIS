@@ -17,7 +17,7 @@
         <ion-content v-if="programID() == 33">
             <div class="total">
                 <div class="totalNumber">3,764</div>
-                <div class="totalText">Children & Adults vaccinated this year!</div>
+                <div class="totalText">Children & Adults vaccinated this year.</div>
             </div>
             <ion-img :src="loadImage('backgroundImg.png')" alt="home image"></ion-img>
             <div style="background-color: rgb(255, 255, 255); widows: 100%; height: 40%"></div>
@@ -53,7 +53,7 @@
                         </div>
                     </div>
                 </div>
-                <div>
+                <div class="graphCard">
                     <ImmunizationTrendsGraph v-if="controlGraphs == 'months'" />
                     <ImmunizationGroupGraph v-if="controlGraphs == 'group'" />
                 </div>
@@ -111,7 +111,7 @@ export default defineComponent({
             // Set a timer to switch graphs every 5 seconds
             setInterval(() => {
                 // Toggle between 'months' and 'group'
-                this.controlGraphs = this.controlGraphs === "months" ? "group" : "months";
+                // this.controlGraphs = this.controlGraphs === "months" ? "group" : "months";
             }, 15000);
         },
     },
@@ -157,9 +157,10 @@ export default defineComponent({
     height: 62vh;
     left: 0px;
     top: 23vh;
-    background: linear-gradient(158.6deg, #3c4662 -12.55%, #f8f8f8 33.84%);
-    border-radius: 10px;
+    background: linear-gradient(158.66deg, #d6d5d6 0.36%, #f8f8f8 40.1%);
+    border-radius: 22px;
 }
+
 .total {
     position: absolute;
     width: 251px;
@@ -183,7 +184,7 @@ export default defineComponent({
     line-height: 77px;
 
     /* text_color */
-    color: #00190e;
+    color: #5d5d5d;
 }
 .totalText {
     width: 229px;
@@ -223,7 +224,7 @@ export default defineComponent({
 }
 .dueMissText {
     font-style: normal;
-    font-weight: 500;
+    font-weight: 700;
     font-size: 14px;
     line-height: 17px;
     display: flex;
@@ -240,7 +241,7 @@ export default defineComponent({
     margin-top: 10px;
 
     /* blue/800 */
-    color: #0075b7;
+    color: #016302;
 }
 .missedNumber {
     font-style: normal;
@@ -249,12 +250,12 @@ export default defineComponent({
     line-height: 30px;
     margin-top: 10px;
 
-    color: #ff6378;
+    color: #b42318;
 }
 .clientSeen {
     height: 120px;
     margin-top: 15px;
-    /* background: #FFFFFF; */
+    background: #ffffff;
 }
 .clientSeenTitle {
     padding-top: 10px;
@@ -305,5 +306,13 @@ export default defineComponent({
     text-align: center;
 
     color: #ffffff;
+}
+.graphCard {
+    width: 98vw;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+.modal_wrapper {
+    border-radius: 8px;
 }
 </style>

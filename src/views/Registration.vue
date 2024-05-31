@@ -6,7 +6,7 @@
                     <ion-icon slot="separator" size="large" :icon="iconsContent.arrowLeft"></ion-icon>
                     <span style="padding-left: 10px">Go back</span>
                 </div>
-                <div>New patient registration</div>
+                <div></div>
                 <div style="display: flex; align-items: center">
                     <ion-icon slot="separator" size="large" :icon="iconsContent.help"></ion-icon>
                     <span style="padding-left: 10px"> Need any help?</span>
@@ -16,7 +16,7 @@
         <ion-content>
             <div class="container">
                 <div class="title">
-                    <div class="demographics_title">Demographics</div>
+                    <div class="demographics_title">New patient registration</div>
                 </div>
                 <div class="icon_div displayNoneMobile">
                     <ion-icon :class="iconListStatus" :icon="list" @click="setDisplayType('list')"></ion-icon>
@@ -53,13 +53,14 @@
                     <PersonalInformation />
                 </div>
                 <div v-if="currentStep == 'Location'">
-                    <div style="display: flex; justify-content: center">
+                    <div style="justify-content: center">
                         <div><CurrentLocation /></div>
                         <div><HomeLocation /></div>
                     </div>
                 </div>
                 <div v-if="currentStep == 'Social History'">
-                    <SocialHistory />
+                    <SocialHistory v-if="checkUnderFive" />
+                    <BirthRegistration v-if="checkUnderOne" />
                 </div>
                 <div v-if="currentStep == 'Guardian Information'">
                     <GuardianInformation />
@@ -72,7 +73,7 @@
         <ion-footer v-if="registrationType == 'manual' && registrationDisplayType == 'list'">
             <div class="footer position_content">
                 <DynamicButton name="Previous" :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
-                <ion-breadcrumbs class="breadcrumbs">
+                <ion-breadcrumbs class="breadcrumbs displayNoneMobile">
                     <ion-breadcrumb @click="setCurrentStep('Personal Information')" :class="{ active: currentStep === 'Personal Information' }">
                         <span class="breadcrumb-text">Personal Information</span>
                         <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
@@ -163,7 +164,7 @@ export default defineComponent({
             scanner: false,
             checkUnderFive: true,
             checkUnderOne: false,
-            steps: ["Personal Information", "Guardian Information", "Location", "Social History"],
+            steps: ["Personal Information", "Location", "Social History", "Guardian Information"],
         };
     },
     props: ["registrationType"],
@@ -280,6 +281,9 @@ export default defineComponent({
             this.$router.push(url);
         },
         nextStep() {
+            if (this.checkUnderFive || this.checkUnderOne)
+                this.steps = ["Personal Information", "Location", "Social History", "Guardian Information"];
+            else this.steps = ["Personal Information", "Location", "Guardian Information"];
             const currentIndex = this.steps.indexOf(this.currentStep);
             if (currentIndex < this.steps.length - 1) {
                 this.currentStep = this.steps[currentIndex + 1];
@@ -502,7 +506,7 @@ ion-footer {
 }
 .demographics_title {
     font-weight: 700;
-    font-size: 24px;
+    font-size: 22px;
     padding-top: 20px;
 }
 .demographics {

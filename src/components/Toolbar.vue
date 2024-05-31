@@ -3,14 +3,16 @@
         <div class="content_manager" style="margin-top: unset">
             <ion-toolbar class="content_width primary_color_background">
                 <ion-menu-button slot="start" />
-                <ion-title style="cursor: pointer" @click="nav('/home')"><b>MaHIS</b> <br><small>{{ locationName }}</small></ion-title>
+                <ion-title style="cursor: pointer" @click="nav('/home')"
+                    ><b>MaHIS</b><small>({{ programName }})</small></ion-title
+                >
                 <ion-buttons slot="end" class="search-input-desktop" style="max-width: 800px">
                     <ToolbarSearch />
                 </ion-buttons>
                 <div class="notifaction_person" slot="end">
-                    <ion-buttons style="cursor: pointer" slot="end" class="iconFont">
+                    <ion-buttons style="cursor: pointer; margin-right: 5px" slot="end" class="iconFont">
                         <ion-icon :icon="notificationsOutline"></ion-icon>
-                        <ion-badge slot="start" class="badge">9</ion-badge>
+                        <!-- <ion-badge slot="start" class="badge">9</ion-badge> -->
                     </ion-buttons>
                     <ion-buttons style="cursor: pointer" slot="end" @click="openPopover($event)" class="iconFont" id="popover-button">
                         <ion-icon :icon="personCircleOutline"></ion-icon>
@@ -39,6 +41,7 @@ import { notificationsOutline, personCircleOutline } from "ionicons/icons";
 import { defineComponent } from "vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import useFacility from "@/composables/useFacility";
+import { Service } from "@/services/service";
 export default defineComponent({
     name: "Home",
     components: {
@@ -57,13 +60,16 @@ export default defineComponent({
         return {
             popoverOpen: false,
             event: null as any,
-            locationName: "Kawale Health Center"
+            locationName: "",
+            programName: "",
         };
     },
+    mounted() {
+        this.programName = Service.getProgramName();
+    },
     setup() {
-
-        const {  facilityName, facilityUUID, district } = useFacility();
-        return { notificationsOutline, personCircleOutline, facilityName};
+        const { facilityName, facilityUUID, district } = useFacility();
+        return { notificationsOutline, personCircleOutline, facilityName };
     },
     methods: {
         nav(url: any) {
@@ -124,7 +130,7 @@ export default defineComponent({
 }
 .notifaction_person {
     display: flex;
-    margin-left: 50px;
+    margin-left: 20px;
     margin-right: 20px;
     align-items: center;
     /* justify-content: center; */
