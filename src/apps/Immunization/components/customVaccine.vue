@@ -3,9 +3,9 @@
     <ion-row>
         <ion-col>
                 <ion-button :disabled="disableVaccine(visitId)" class="administerVac" v-for="vaccine in vaccines" :key="vaccine" @click="openAdministerVaccineModal(vaccine)" fill="solid" :color="getColorForVaccine(vaccine, visitId)">
-                    <ion-icon slot="start" :icon="getInjectSignForVaccine(vaccine)"></ion-icon>
+                    <ion-icon slot="start" :icon="getInjectSignForVaccine(vaccine, visitId)"></ion-icon>
                     {{ vaccine.drug_name }}
-                    <ion-icon slot="end" :icon="getCheckBoxForVaccine(vaccine)"></ion-icon>
+                    <ion-icon slot="end" :icon="getCheckBoxForVaccine(vaccine, visitId)"></ion-icon>
                 </ion-button>
         </ion-col>
     </ion-row>
@@ -102,14 +102,28 @@ export default defineComponent({
                 return 'medium'
             }
         },
-        getInjectSignForVaccine(vaccine: any) {
+        getInjectSignForVaccine(vaccine: any, visit_id: number) {
+            const store = useAdministerVaccineStore()
+            if (visit_id < store.getCurrentVisitId() && vaccine.status != 'administered') {
+                return this.iconsContent.redXclose
+            }
+            if (visit_id < store.getCurrentVisitId() && vaccine.status == 'administered') {
+                return this.iconsContent.smallAlreadyAdminstered
+            }
             if (vaccine.status == 'administered') {
                 return this.iconsContent.greenInjection
             } if (vaccine.status != 'administered') {
                 return this.iconsContent.whiteInjection
             }
         },
-        getCheckBoxForVaccine(vaccine: any) {
+        getCheckBoxForVaccine(vaccine: any, visit_id: number) {
+            const store = useAdministerVaccineStore()
+            if (visit_id < store.getCurrentVisitId() && vaccine.status != 'administered') {
+                return this.iconsContent.smallEditPen
+            }
+            if (visit_id < store.getCurrentVisitId() && vaccine.status == 'administered') {
+                return this.iconsContent.smallEditPen
+            }
             if (vaccine.status == 'administered') {
                 return this.iconsContent.greenTickCheckbox
             } else {

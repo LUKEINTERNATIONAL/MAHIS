@@ -948,6 +948,26 @@ export const icons = {
         </clipPath>
     </defs>
     </svg>
+    `,
 
+    redXclose: `
+    data:image/svg+xml;utf8,
+        <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4.75293 5.25293L13.247 13.747M4.75731 13.7426L13.2426 5.25731" stroke="#B42318" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`,
+
+    smallEditPen: `
+    data:image/svg+xml;utf8,
+        <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9.76404 6.15315L9.94943 5.96773C10.7996 5.11753 12.1781 5.11753 13.0283 5.96773C13.8785 6.81793 13.8785 8.19639 13.0283 9.04659L12.8429 9.23201L9.76404 6.15315Z" fill="#016302"/>
+        <path d="M9.27823 6.63916L5.75995 10.1574C5.37165 10.5457 5.1775 10.7399 5.02215 10.9581C4.80711 11.26 4.64603 11.5969 4.54605 11.9539C4.47383 12.2118 4.44464 12.4848 4.38626 13.0308C4.3296 13.5607 4.30126 13.8257 4.37086 14.0281C4.46729 14.3086 4.68765 14.529 4.96814 14.6254C5.17056 14.695 5.43552 14.6667 5.96545 14.61C6.51146 14.5516 6.78449 14.5224 7.04237 14.4502C7.39933 14.3502 7.73626 14.1892 8.03822 13.9741C8.25638 13.8187 8.45053 13.6246 8.83878 13.2363L12.3571 9.71804L9.27823 6.63916Z" fill="#016302"/>
+    </svg>
+    `,
+
+    smallAlreadyAdminstered: `
+    data:image/svg+xml;utf8,
+        <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7.5 12.5L8.9828 14.7242C9.73365 15.8505 11.363 15.9212 12.2086 14.8642L16.5 9.5" stroke="#006401" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
     `
 };

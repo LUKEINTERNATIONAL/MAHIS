@@ -1,8 +1,17 @@
 <template>
-    <carousel :items-to-show="1" :modelValue="2" @slide-end="slideEvent">
+    <carousel :items-to-show="1" :modelValue="3" @slide-end="slideEvent">
       <slide v-for="slide in 12" :key="slide">
         <!-- {{ slide }} -->
         <div class="container">
+
+          <span v-if="showCurrentMilestoneAlert">
+            <ion-button class="btnText btnTextWeight" style="padding: 0px 5px 0px 5px;" size="small" fill="solid" color="danger">
+                <ion-icon slot="start" size="small" :icon="iconsContent.alertDangerRed"></ion-icon>
+                <b> at {{ age }} due today</b>
+            </ion-button>
+          </span>
+
+
           <ion-row class="top-row">
             <customVaccine :vaccines="vaccinesForVisit1" :visitId="1" v-if="slide == 1"/>
             <customVaccine :vaccines="vaccinesForVisit2" :visitId="2" v-if="slide == 2"/>
@@ -46,12 +55,14 @@
     IonButton,
     IonCol,
     IonRow,
+    IonLabel
   } from "@ionic/vue"
   import customVaccine from "@/apps/Immunization/components/customVaccine.vue"
   import administerOtherVaccineModal from "@/apps/Immunization/components/Modals/administerOtherVaccineModal.vue"
   import { createModal } from "@/utils/Alerts"
   import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore"
   import { getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service"
+  import { icons } from "@/utils/svg"
     
   export default defineComponent ({
     name: "xxxComponent",
@@ -64,6 +75,7 @@
       IonButton,
       IonCol,
       IonRow,
+      IonLabel
     },
     data() {
         return {
@@ -80,6 +92,9 @@
             vaccinesForVisit11: [],
             vaccinesForVisit12: [],
             milestones: [],
+            iconsContent: icons,
+            showCurrentMilestoneAlert: false,
+            age: '',
         };
     },
     async mounted() {
@@ -93,11 +108,14 @@
         const data__ = await getVaccinesSchedule()
         const vaccineScheduleStore = useAdministerVaccineStore()
 
-        vaccineScheduleStore.setCurrentMilestone('10 weeks')
-        vaccineScheduleStore.setCurrentVisitId(3)
+        vaccineScheduleStore.setCurrentMilestone('14 weeks')
+        this.showCurrentMilestoneAlert = true
+        this.age = '14 weeks'
+        vaccineScheduleStore.setCurrentMilestoneToAdminister({currentMilestone: '14 weeks'})
+        vaccineScheduleStore.setCurrentVisitId(4)
 
         vaccineScheduleStore.setVaccineSchedule(data__)
-        vaccineScheduleStore.getVaccineSchedule().vaccinSchedule.forEach(vaccineSchudule => {
+        vaccineScheduleStore.getVaccineSchedule().vaccinSchedule.forEach((vaccineSchudule: any) => {
           const obj =  { visit_id: vaccineSchudule.visit, age: vaccineSchudule.age }
           this.milestones = this.appendUniqueObject(this.milestones, obj)
 
@@ -153,11 +171,26 @@
       },
       slideEvent(SlideEventData: any) {
         const vaccineScheduleStore = useAdministerVaccineStore()
+        const CurrentMilestoneToAdminister = vaccineScheduleStore.getCurrentMilestoneToAdminister() as any
         this.milestones.forEach((milestone: any) => {
           if(milestone.visit_id -1 == SlideEventData.currentSlideIndex) {
             vaccineScheduleStore.setCurrentMilestone(milestone.age)
           }
         })
+
+        const templmilesytone = vaccineScheduleStore.getCurrentMilestone()
+
+        if (templmilesytone == CurrentMilestoneToAdminister.currentMilestone) {
+            this.showCurrentMilestoneAlert = true
+
+            console.log("qawsedrftgyh", this.showCurrentMilestoneAlert)
+            return
+          }
+
+          if (templmilesytone.age != CurrentMilestoneToAdminister.currentMilestone) {
+            this.showCurrentMilestoneAlert = false
+            console.log("jmjmk", this.showCurrentMilestoneAlert)
+          }
       },
       appendUniqueObject(arr: any, obj: any) {
         const exists = arr.some((item: { visit_id: any; age: any; }) => item.visit_id === obj.visit_id && item.age === obj.age)
@@ -201,6 +234,12 @@
     .container {
       display: flex;
       flex-direction: column;
+    }
+
+    .btnTextWeight {
+        color: #000;
+        --border-width: 1px;
+        margin-right: 0px;
     }
 
     ion-row {

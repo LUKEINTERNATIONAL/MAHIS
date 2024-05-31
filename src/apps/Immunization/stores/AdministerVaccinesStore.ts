@@ -5,59 +5,9 @@ export const useAdministerVaccineStore = defineStore('administerVaccineStore',{
       administeredVaccines: [] as any,
       currentSelectedDrug: null as any,
       currentMilestone: '' as any,
+      currentMilestoneToAdminister: {},
       currentVisitId: '' as any,
-      vaccineSchedule: {
-        vaccinSchedule: [
-          {
-            "visit": 1,
-            "age": "At birth",
-            "antigens": [
-              {
-                "drug_name": "BCG",
-                "status": "Administered",
-                "date_administered": "06-04-2024",
-                "drug_id": 12
-              },
-              {
-                "drug_name": "OPV0",
-                "status": "missed",
-                "date_administered": "",
-                "drug_id": 13
-              }
-            ]
-          },
-          {
-            "visit": 2,
-            "age": "6 weeks",
-            "antigens": [
-              {
-                "drug_name": "OPV1",
-                "status": "pending",
-                "date_administered": "",
-                "drug_id": 14
-              },
-              {
-                "drug_name": "Pentavalent 1",
-                "status:": "pending",
-                "date_administered": "",
-                "drug_id": 15
-              },
-              {
-                "drug_name": "PCV1",
-                "status": "pending",
-                "date_administered": "",
-                "drug_id": 16
-              },
-              {
-                "drug_name": "Rota 1",
-                "status": "pending",
-                "date_administered": "",
-                "drug_id": 17
-              }
-            ]
-          }
-        ]
-      }
+      vaccineSchedule: {} as any,
     }),
     actions:{
       setVaccineSchedule(data: any) {
@@ -96,6 +46,12 @@ export const useAdministerVaccineStore = defineStore('administerVaccineStore',{
       },
       getCurrentMilestone() {
         return this.currentMilestone
+      },
+      setCurrentMilestoneToAdminister(data: any): void {
+        this.currentMilestoneToAdminister = data
+      },
+      getCurrentMilestoneToAdminister() {
+       return this.currentMilestoneToAdminister
       }
     },
     persist: true,
