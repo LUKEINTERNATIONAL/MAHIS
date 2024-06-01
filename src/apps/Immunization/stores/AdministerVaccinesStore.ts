@@ -8,6 +8,7 @@ export const useAdministerVaccineStore = defineStore('administerVaccineStore',{
       currentMilestoneToAdminister: {},
       currentVisitId: '' as any,
       vaccineSchedule: {} as any,
+      vaccineReload: false,
     }),
     actions:{
       setVaccineSchedule(data: any) {
@@ -52,7 +53,13 @@ export const useAdministerVaccineStore = defineStore('administerVaccineStore',{
       },
       getCurrentMilestoneToAdminister() {
        return this.currentMilestoneToAdminister
-      }
+      },
+      setVaccineReload(value: boolean): void {
+        this.vaccineReload = value
+      },
+      getVaccineReload(): boolean {
+        return this.vaccineReload
+      },
     },
     persist: true,
 })

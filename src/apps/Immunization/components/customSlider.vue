@@ -60,6 +60,7 @@
   import customVaccine from "@/apps/Immunization/components/customVaccine.vue"
   import administerOtherVaccineModal from "@/apps/Immunization/components/Modals/administerOtherVaccineModal.vue"
   import { createModal } from "@/utils/Alerts"
+  import { mapState } from "pinia"
   import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore"
   import { getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service"
   import { icons } from "@/utils/svg"
@@ -97,8 +98,19 @@
             age: '',
         };
     },
+    computed: {
+      ...mapState(useAdministerVaccineStore, ["vaccineReload"]),
+    },
     async mounted() {
       this.loadVaccineSchedule()
+    },
+    watch: {
+      vaccineReload: {
+            handler() {
+              this.loadVaccineSchedule()
+            },
+            deep: true,
+        },
     },
     methods: {
       openAdministerOtherVaccineModal() {
