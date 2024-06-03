@@ -1,8 +1,7 @@
 <template>
-    <div class="pim-cls-1 modal_wrapper">
+    <div v-if="formOpen" class="pim-cls-1 modal_wrapper">
         <div class="OtherVitalsHeading">
-            <div class="OtherVitalsTitle" style="color: #1f2221d4; font-size: 16px">Add Weight/Height</div>
-            <div style="margin-right: 5px; font-size: 14px" class="lbl-tl">Todays Date: <span class="lbl-ct"> 06 Jul 2024</span></div>
+            <div class="OtherVitalsTitle">Add Weight/Height</div>
         </div>
         <div>
             <div class="center text_12">
@@ -12,23 +11,33 @@
             </div>
         </div>
 
-        <customDatePicker v-if="showPD" />
+        <customDatePicker @dateChange="updateDate" v-if="showPD" />
 
         <div class="btnContent">
-            <div class="saveBtn">
+            <div class="saveBtn" v-if="showDateBtns">
                 <div>
-                    <ion-button class="btnText" fill="solid" @click="doneToday()">
+                    <ion-button class="btnText" fill="solid" @click="saveVitals()">
                         Done today
                         <ion-icon slot="end" size="small" :icon="iconContent.calenderwithPlus"></ion-icon>
                     </ion-button>
                 </div>
-                <div>or</div>
                 <div>
                     <ion-button class="btnText" fill="solid" @click="showCPD">
                         Done earlier
                         <ion-icon slot="end" size="small" :icon="iconContent.calenderWithPenEdit"></ion-icon>
                     </ion-button>
                 </div>
+            </div>
+            <div class="saveBtn" v-if="!showDateBtns">
+                <ion-row>
+                    <ion-col>
+                        <ion-button @click="dismiss" id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px"> Cancel </ion-button>
+                    </ion-col>
+
+                    <ion-col>
+                        <ion-button @click="saveVitals()" class="btnText" fill="solid" style="width: 130px"> save </ion-button>
+                    </ion-col>
+                </ion-row>
             </div>
         </div>
     </div>
@@ -47,6 +56,7 @@ import {
     IonLabel,
     IonPage,
     IonFooter,
+    modalController,
 } from "@ionic/vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import { createOutline } from "ionicons/icons";
@@ -86,15 +96,16 @@ export default defineComponent({
             event: null as any,
             BMI: "" as any,
             showPD: false as boolean,
+            vitals_date: HisDate.toStandardHisFormat(HisDate.currentDate()),
+            formOpen: true,
+            showDateBtns: true as boolean,
         };
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useWeightHeightVitalsStore, ["vitalsWeightHeight"]),
     },
-    mounted() {
-        console.log(this.vitalsWeightHeight);
-    },
+    mounted() {},
     setup() {},
     methods: {
         nav(url: any) {
@@ -107,23 +118,20 @@ export default defineComponent({
         formatBirthdate() {
             return HisDate.getBirthdateAge(this.demographics.birthdate);
         },
-
         async validaterowData(event: any) {
             const userID: any = Service.getUserID();
-            const vitalsInstance = new VitalsService(55, userID);
+            const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
 
             const weightValue = getFieldValue(this.vitalsWeightHeight, "weight", "value");
-            const heightValue = getFieldValue(this.vitalsWeightHeight, "height", "value");
-
+            const heightValue = getFieldValue(this.vitalsWeightHeight, "Height", "value");
             const height = vitalsInstance.validator({ inputHeader: "Height*", value: heightValue });
             const weight = vitalsInstance.validator({ inputHeader: "Weight*", value: weightValue });
-
             if (height && heightValue) {
-                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsErrorMassage", height.flat(Infinity)[0]);
-                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsError", true);
+                modifyFieldValue(this.vitalsWeightHeight, "Height", "alertsErrorMassage", height.flat(Infinity)[0]);
+                modifyFieldValue(this.vitalsWeightHeight, "Height", "alertsError", true);
             } else {
-                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsErrorMassage", "");
-                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsError", false);
+                modifyFieldValue(this.vitalsWeightHeight, "Height", "alertsErrorMassage", "");
+                modifyFieldValue(this.vitalsWeightHeight, "Height", "alertsError", false);
             }
 
             if (weight && weightValue) {
@@ -136,26 +144,33 @@ export default defineComponent({
 
             if (weight == null && height == null) this.setBMI(weightValue, heightValue);
         },
-        async doneToday() {
+        async saveVitals() {
             const userID: any = Service.getUserID();
-            const vitalsInstance = new VitalsService(55, userID);
+            const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
+            console.log("🚀 ~ saveVitals ~ this.demographics.patient_id:", this.demographics.patient_id);
             const weightValue = getFieldValue(this.vitalsWeightHeight, "weight", "value");
             const heightValue = getFieldValue(this.vitalsWeightHeight, "height", "value");
             const height = vitalsInstance.validator({ inputHeader: "Height*", value: heightValue });
             const weight = vitalsInstance.validator({ inputHeader: "Weight*", value: weightValue });
             if (weight == null && height == null) {
-                toastSuccess("Saved successful");
-
-                const userID: any = Service.getUserID();
-                const VitalsInstance = new VitalsEncounter(this.demographics.patient_id, userID);
-                const encounter = await VitalsInstance.createEncounter();
+                const encounter = await vitalsInstance.createEncounter();
                 if (!encounter) return toastWarning("Unable to create vitals encounter");
-                const data = await formatInputFiledData(this.vitalsWeightHeight);
-                await VitalsInstance.saveObservationList(data);
-                this.$emit("updateVitalsGraph");
+                const data = await formatInputFiledData(this.vitalsWeightHeight, this.vitals_date);
+                await vitalsInstance.saveObservationList(data);
+                toastSuccess("Saved successful");
+                this.cleanInputFields();
+                this.vitalsWeightHeight[0].validationStatus = "success";
             } else {
                 toastWarning("Please complete the form");
             }
+        },
+        cleanInputFields() {
+            modifyFieldValue(this.vitalsWeightHeight, "weight", "value", "");
+            modifyFieldValue(this.vitalsWeightHeight, "height", "value", "");
+            this.dismiss();
+        },
+        dismiss() {
+            modalController.dismiss();
         },
         async setBMI(weight: any, height: any) {
             if (this.demographics.gender && this.demographics.birthdate) {
@@ -180,6 +195,11 @@ export default defineComponent({
         },
         showCPD() {
             this.showPD = true as boolean;
+            this.showDateBtns = false as boolean;
+        },
+
+        updateDate(date: any) {
+            this.vitals_date = HisDate.toStandardHisFormat(date);
         },
     },
 });
@@ -213,14 +233,15 @@ ion-footer {
 .OtherVitalsTitle {
     font-style: normal;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 16px;
     color: #00190e;
 }
 .OtherVitalsHeading {
     display: flex;
     justify-content: space-between;
-    margin: 20px;
-    line-height: 60px;
+    margin: 10px;
+    line-height: 40px;
+    flex-direction: column;
 }
 .vitalsContent {
     height: 500px;
@@ -237,5 +258,12 @@ ion-footer {
     display: flex;
     justify-content: center;
     line-height: 60px;
+}
+.TodaysDate {
+    display: flex;
+    align-items: center;
+}
+.TodaysDate span {
+    margin-left: 5px;
 }
 </style>

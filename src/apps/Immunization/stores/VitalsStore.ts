@@ -5,7 +5,6 @@ const initialVitals = [
     {
         isFinishBtn: false,
         validationStatus: "",
-
         data: {
             rowData: [
                 {

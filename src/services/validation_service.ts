@@ -11,10 +11,13 @@ export function validateField(data: any, fieldName: string, value: any) {
         gender: () => Validation.required(value),
         phoneNumber: () => Validation.isMWPhoneNumber(value),
         estimation: () => Validation.isEstimationDate(value),
-        guardianFirstname: () => Validation.isName(value),
+        guardianFirstname: () => Validation.isNameEmpty(value),
         guardianMiddleName: () => Validation.isNameEmpty(value),
-        guardianLastname: () => Validation.isName(value),
+        guardianLastname: () => Validation.isNameEmpty(value),
         guardianPhoneNumber: () => Validation.isMWPhoneNumber(value),
+        current_district: () => Validation.required(value),
+        current_traditional_authority: () => Validation.required(value),
+        current_village: () => Validation.required(value),
     };
     const isValid = validationRules[fieldName]?.() == null;
 

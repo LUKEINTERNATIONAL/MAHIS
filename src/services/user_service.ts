@@ -118,7 +118,7 @@ export class UserService extends Service {
                 item.actionName = NCDData.actionName;
                 filteredPrograms.push(item);
             } else if (item.name === "IMMUNIZATION PROGRAM") {
-                item.url = "birthRegistration";
+                item.url = "patientProfile";
                 item.actionName = "+ Enroll in Immunization program";
                 filteredPrograms.push(item);
             } else if (item.name === "OPD Program") {
@@ -160,7 +160,9 @@ export class UserService extends Service {
     }
     static async setNCDValue() {
         const patient = new PatientService();
+        console.log("🚀 ~ UserService ~ setNCDValue ~ patient.getID():", patient.getID());
         const visits = await PatientService.getPatientVisits(patient.getID(), false);
+
         const activities = await this.getUserActivities("NCD_activities");
         let url = "";
         let NCDProgramActionName = "";

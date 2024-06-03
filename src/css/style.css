@@ -299,7 +299,8 @@ ion-modal > .ion-page {
 }
 .otherVitalsModal {
     /* --height: 530px; */
-    --width: 370px;
+    --width: 95vw;
+    --max-width: 550px;
     --border-radius: 10px;
     overflow: scroll;
 }
@@ -373,6 +374,8 @@ video {
     justify-content: center;
     padding: 3vw;
     margin-bottom: 20px;
+    contain: unset;
+    overflow: unset;
 }
 .no_content {
     justify-content: center;
@@ -421,7 +424,7 @@ ion-accordion {
 }
 .multiselect__content-wrapper {
     position: absolute;
-    width: 300px;
+    width: 100%;
 }
 /* #null-0 {
     display: none;
@@ -438,6 +441,15 @@ ion-accordion {
 }
 .multiselect__select::before {
     top: 95%;
+}
+.multiselect::before {
+    content: url("/public/svg/searchIcon.svg");
+    position: absolute;
+    font-size: 40px;
+    margin-left: 15px;
+}
+.multiselect__tags {
+    padding-left: 35px;
 }
 .multiselect__placeholder {
     padding-top: 9px;
@@ -466,7 +478,7 @@ ion-accordion {
     text-align: left;
 }
 .search_card {
-    width: 59vw;
+    width: 1290px;
     --padding: 5px;
     --background: #fff;
     left: 10px;
@@ -477,4 +489,7 @@ ion-modal {
 .apexcharts-zoomin-icon,
 .apexcharts-zoomout-icon {
     display: none;
+}
+#cbtn {
+    --background: #b42318;
 }

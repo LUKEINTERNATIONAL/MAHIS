@@ -169,7 +169,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
-        ...mapState(useVitalsStore,["vitals", "respiration", "preEclampsia"]),
+        ...mapState(useVitalsStore,["vitals",]),
         ...mapState(useMaternalExamStore,["pallor", "breastExam", "vaginalInspection", "cervicalExam", "oedemaPresence"]),
         ...mapState(useFetalAssessment, ["fetalAssessment"]),
         ...mapState(useFetalPresentationStore,["fetalPresentation"]),
@@ -256,8 +256,8 @@ export default defineComponent({
        async buildVitals() {
        return [
          ...(await formatInputFiledData(this.vitals)),
-         ...(await formatCheckBoxData(this.respiration)),
-         ...(await formatCheckBoxData(this.preEclampsia))
+         // ...(await formatCheckBoxData(this.respiration)),
+         // ...(await formatCheckBoxData(this.preEclampsia))
         ]
     },
     async buildMartenalExam() {

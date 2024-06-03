@@ -16,7 +16,7 @@ export async function formatRadioButtonData(data: any) {
     return (await Promise.all(buildObjPromises)).filter((obj) => obj !== null);
 }
 
-export async function formatInputFiledData(data: any) {
+export async function formatInputFiledData(data: any, obs_datetime = ConceptService.getSessionDate()) {
     const buildObjPromises = data.map(async (item: any) => {
         if (!item?.data?.rowData) return [];
 
@@ -25,7 +25,6 @@ export async function formatInputFiledData(data: any) {
                 if (!element.value || element.buildConceptIgnore) return null;
 
                 const concept_id = await ConceptService.getConceptID(element.name, true);
-                const obs_datetime = ConceptService.getSessionDate();
 
                 if (element.valueType === "text") {
                     return { concept_id, value_text: element.value, obs_datetime };

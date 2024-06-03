@@ -1,43 +1,65 @@
 import { defineStore } from "pinia";
-import { icons } from "@/utils/svg";
-import _ from "lodash";
-const initialAdministerVaccine = [
-    {
-        isFinishBtn: false,
-        validationStatus: "",
 
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Batch Number",
-                            value: "",
-                            name: "Height",
-                            required: true,
-                            eventType: "input",
-                            alertsError: false,
-                            alertsErrorMassage: "",
-                            disabled: false,
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-] as any;
-export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
+export const useAdministerVaccineStore = defineStore('administerVaccineStore',{
     state: () => ({
-        administerVaccine: [...initialAdministerVaccine] as any,
+      administeredVaccines: [] as any,
+      currentSelectedDrug: null as any,
+      currentMilestone: '' as any,
+      currentMilestoneToAdminister: {},
+      currentVisitId: '' as any,
+      vaccineSchedule: {} as any,
+      vaccineReload: false,
     }),
-    actions: {
-        setAdministerVaccine(data: any) {
-            this.administerVaccine = data;
-        },
-        getInitialSocialHistory() {
-            const data = _.cloneDeep(initialAdministerVaccine);
-            return [...data];
-        },
+    actions:{
+      setVaccineSchedule(data: any) {
+        this.vaccineSchedule = data
+      },
+      getVaccineSchedule() {
+          return this.vaccineSchedule
+      },
+      setCurrentVisitId(data: number) {
+        this.currentVisitId = data
+      },
+      getCurrentVisitId() {
+        return this.currentVisitId
+      },
+      setAdministeredVaccine(data: any) {
+        this.administeredVaccines = []
+        this.administeredVaccines.push(data)
+      },
+      getAdministeredVaccines() {
+        return this.administeredVaccines
+      },
+      setCurrentSelectedDrug(visit_id: number, drug_id: number, drug_name: string): void {
+          console.log(visit_id)
+          console.log(drug_id)
+          this.currentSelectedDrug = {
+              visit_id: visit_id,
+              drug_id: drug_id,
+              drug_name: drug_name,
+          }
+      },
+      getCurrentSelectedDrug() {
+          return this.currentSelectedDrug
+      },
+      setCurrentMilestone(data: any): void {
+        this.currentMilestone = data
+      },
+      getCurrentMilestone() {
+        return this.currentMilestone
+      },
+      setCurrentMilestoneToAdminister(data: any): void {
+        this.currentMilestoneToAdminister = data
+      },
+      getCurrentMilestoneToAdminister() {
+       return this.currentMilestoneToAdminister
+      },
+      setVaccineReload(value: boolean): void {
+        this.vaccineReload = value
+      },
+      getVaccineReload(): boolean {
+        return this.vaccineReload
+      },
     },
-    // persist: true,
-});
+    persist: true,
+})
