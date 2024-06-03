@@ -1,16 +1,16 @@
 <template>
+
+    <div v-if="showCurrentMilestoneAlert" class="alert_banner">
+      <apan>Vaccines due today</apan>
+      <ion-icon style="margin-top: 7px;" slot="end" size="medium" :icon="iconsContent.alertDangerRed">
+      </ion-icon>
+      <span style="font-weight: 700;">{{ age }}</span>
+    </div>
+
     <carousel :items-to-show="1" :modelValue="3" @slide-end="slideEvent">
       <slide v-for="slide in 12" :key="slide">
         <!-- {{ slide }} -->
         <div class="container">
-
-          <span v-if="showCurrentMilestoneAlert">
-            <ion-button class="btnText btnTextWeight" style="padding: 0px 5px 0px 5px;" size="small" fill="solid" color="danger">
-                <ion-icon slot="start" size="small" :icon="iconsContent.alertDangerRed"></ion-icon>
-                <b> due today ( {{ age }} )</b>
-            </ion-button>
-          </span>
-
 
           <ion-row class="top-row">
             <customVaccine :vaccines="vaccinesForVisit1" :visitId="1" v-if="slide == 1"/>
@@ -26,16 +26,6 @@
             <customVaccine :vaccines="vaccinesForVisit11" :visitId="11" v-if="slide == 11"/>
             <customVaccine :vaccines="vaccinesForVisit12" :visitId="12" v-if="slide == 12"/>
           </ion-row>
-
-          <ion-row class="bottom-row">
-            <div class="otherVaccine center-content">
-              <div class="centerBtns">
-                <ion-button @click="openAdministerOtherVaccineModal" class="btnText" fill="solid"> 
-                  Add Other Vaccines 
-                </ion-button>
-              </div>
-            </div>
-          </ion-row>
         </div>
         
       </slide>
@@ -43,6 +33,20 @@
         <navigation />
         <pagination />
       </template>
+    </carousel>
+
+    <carousel>
+      <slide v-for="slide in 12" :key="slide">
+        <ion-row class="bottom-row">
+          <div class="otherVaccine center-content">
+            <div class="centerBtns">
+              <ion-button @click="openAdministerOtherVaccineModal" class="btnText" fill="solid"> 
+                Add Other Vaccines 
+              </ion-button>
+            </div>
+          </div>
+        </ion-row>
+      </slide>
     </carousel>
 </template>
 
@@ -219,7 +223,8 @@
     width: var(--vc-icn-width);
     height: var(--vc-icn-width);
     fill: currentColor;
-    background: #BBDDBC;
+    background: none;
+    /* background: #BBDDBC; */
     color: #016302;
     }
 
@@ -269,6 +274,29 @@
       justify-content: center;
       align-items: center;
       width: 100%;
+    }
+
+    .alert_banner {
+      /* Milestone */
+      /* Auto layout */
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      padding: 0px 30px;
+      gap: 9px;
+
+      width: 430px;
+      height: 33px;
+
+      /* green/300 */
+      background: #DDEEDD;
+
+      /* Inside auto layout */
+      flex: none;
+      order: 1;
+      align-self: stretch;
+      flex-grow: 0;
     }
 </style>
   
