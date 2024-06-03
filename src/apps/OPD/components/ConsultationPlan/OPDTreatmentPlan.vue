@@ -75,35 +75,24 @@
 
             <ion-row v-if="!addItemButton">
                 <ion-col>
-                    <ion-item class="input_item">
-                        <ion-input v-model="drugName" @ionInput="FindDrugName" fill="outline"></ion-input>
-
-                        <ion-label>
-                            <ion-icon slot="start" :icon="iconsContent.search" class="selectedPatient" aria-hidden="true"></ion-icon>
-                        </ion-label>
-                    </ion-item>
-                    <div>
-                        <ion-label v-if="show_error_msg_for_drug_name" class="error-label">{{ drugnameErrMsg }}</ion-label>
-                    </div>
-
-                    <ion-popover
-                        :is-open="popoverOpen"
-                        :event="event"
-                        @didDismiss="popoverOpen = false"
-                        :keyboard-close="false"
-                        :show-backdrop="false"
-                        :dismiss-on-select="true"
-                        style="top: 10px; left: -25px"
-                        v-if="!show_error_msg_for_drug_name"
-                    >
-                        <ion-content color="light" class="ion-padding content-al">
-                            <ion-list class="list-al">
-                                <div class="item-al" v-for="(item, index) in diagnosisData" :key="index">
-                                    <ion-col @click="selectedDrugName(item.name, item)">{{ item.name }} </ion-col>
-                                </div>
-                            </ion-list>
-                        </ion-content>
-                    </ion-popover>
+                    <VueMultiselect
+                        style="margin-top: 27px;"
+                        v-model="selected_drug"
+                        @update:model-value="selectedDrugName($event)"
+                        :multiple="false"
+                        :taggable="false"
+                        :hide-selected="true"
+                        :close-on-select="true"
+                        openDirection="bottom"
+                        tag-placeholder="Select method of prescription"
+                        placeholder="Select method of prescription"
+                        selectLabel=""
+                        label="name"
+                        :searchable="true"
+                        @search-change="FindDrugName($event)"
+                        track-by="uuid"
+                        :options="diagnosisData"
+                    />
                 </ion-col>
             </ion-row>
 
@@ -425,6 +414,7 @@ const currentDrugOb = ref()
 const multi_Selection = false as any
 const selected_pres_method = ref()
 const selected_frequency = ref()
+const selected_drug = ref()
 const uniqueId = "45" as any
 const name_of_list = ref("List" as any)
 const list_place_holder = ref("Please select method of prescribing medication" as any)
@@ -591,31 +581,21 @@ async function saveData() {
 }
 
 async function FindDrugName(text: any) {
-    const searchText = text.target.value;
-    openPopover(text);
+    const searchText = text
     const page = 1,
         limit = 10;
     const drugs: ConceptName[] = await DrugService.getOPDDrugs({
         name: searchText,
         page: page,
         page_size: limit,
-    });
-    // const filter_id_array: any[] = [];
-    // selectedAllergiesList2.value.forEach((selectedMedicalAllergy: any) => {
-    //     if (selectedMedicalAllergy.selected) {
-    //         filter_id_array.push(selectedMedicalAllergy.concept_id);
-    //     }
-    // });
-
-    //const filteredDrugs = filterArrayByIDs(drugs as any, filter_id_array as any);
-
+    })
     drugs.map((drug: any) => ({
         label: drug.name,
         value: drug.name,
         other: drug,
-    }));
+    }))
 
-    diagnosisData.value = drugs;
+    diagnosisData.value = drugs
 }
 
 async function FindDrugName2(text: any) {
@@ -727,21 +707,19 @@ function openPrescPopover(e: any) {
     prescPopoverOpen.value = true;
 }
 
-function selectedDrugName(name: any, obj: any) {
-    drugName.value = name;
-    drug_id.value = obj.drug_id;
-    units.value = obj.units;
-    currentDrugOb.value = obj
-    isPresentInAllergyList(obj)
+function selectedDrugName(data: any) {
+    drugName.value = data.name;
+    drug_id.value = data.drug_id;
+    units.value = data.units;
+    currentDrugOb.value = data
+    isPresentInAllergyList(data)
 }
 
-function popoverOpenForFrequencyFn2() {
-    showPopoverOpenForFrequency.value = true;
-}
 
 function editItemAtIndex(index: any) {
     const dataItem = selectedMedicalDrugsList.value[index];
     selectedMedicalDrugsList.value.splice(index, 1);
+    selected_drug.value = dataItem;
     drugName.value = dataItem.drugName;
     dose.value = dataItem.dose;
     frequency.value = dataItem.frequency;
