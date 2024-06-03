@@ -40,6 +40,7 @@ import { defineComponent } from "vue"
 import administerVaccineModal from "@/apps/Immunization/components/Modals/administerVaccineModal.vue"
 import { createModal } from "@/utils/Alerts";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore"
+import { PatientService } from "@/services/patient_service"
 export default defineComponent({
     name: "Home",
     components: {
@@ -135,12 +136,27 @@ export default defineComponent({
             store.setCurrentSelectedDrug(this.$props.visitId as number, data.drug_id as number, data.drug_name)
             createModal(administerVaccineModal, { class: "otherVitalsModal" })
         },
-        disableVaccine(identifier: string) {
+        disableVaccine(identifier: number) {
+            const client = new PatientService()
+            const client_age = client.getAge()
+            const is_under_five = this.getVisitNumber(client_age) as number
             const store = useAdministerVaccineStore()
             const currentVisitId = store.getCurrentVisitId()
+            const currentSchFound = store.getCurrentSchedFound()
+            
+            if (currentSchFound == false) {
+                return true
+            }
+            
             if (identifier == currentVisitId) {
                 return false
-            } if (identifier < currentVisitId) {
+            } 
+
+            if (identifier < is_under_five) {
+                return true
+            }
+            
+            if (identifier < currentVisitId) {
                 return false
             }
             else {
@@ -149,6 +165,29 @@ export default defineComponent({
         },
         checkVaccineName(name: string) {
             return name.replace(/Pentavalent/g, "Penta");
+        },
+        getVisitNumber(age: number) {
+            if (age < 10/52) {
+                return 1; // Visit 1: 10 weeks
+            } else if (age < 14/52) {
+                return 2; // Visit 2: 14 weeks
+            } else if (age < 5/12) {
+                return 3; // Visit 3: 5 months
+            } else if (age < 6/12) {
+                return 4; // Visit 4: 6 months
+            } else if (age < 7/12) {
+                return 5; // Visit 5: 7 months
+            } else if (age < 9/12) {
+                return 6; // Visit 6: 9 months
+            } else if (age < 15/12) {
+                return 7; // Visit 7: 15 months
+            } else if (age < 22/12) {
+                return 8; // Visit 8: 22 months
+            } else if (age < 12) {
+                return 9; // Visit 9: 12 years above
+            } else {
+                return 10; // Visit 10: 18 years above
+            }
         }
     },
 });
