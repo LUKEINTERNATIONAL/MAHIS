@@ -7,10 +7,12 @@ const initialLMNP = [
     radioBtnContent: {
       header: {
         class: "bold",
-        title: "LNMP Known?",
+        title: "LNMP Known?*",
         selectedValue: "",
         name: "LNMP Known?",
         displayNext: "Yes",
+        alertsError: false,
+        alertsErrorMassage: "",
       },
       data: [
         {
@@ -109,8 +111,6 @@ const initialLMNP = [
       ],
     },
   },
-] as any;
-const initialUltraSound = [
   {
     selectdData: [],
     isFinishBtn: false,
@@ -118,10 +118,12 @@ const initialUltraSound = [
     radioBtnContent: {
       header: {
         class: "bold",
-        title: "Ultrasound done?",
+        title: "Ultrasound done?*",
         selectedValue: "",
         name: "Ultrasound done?",
         displayNext: "Yes",
+        alertsError: false,
+        alertsErrorMassage: "",
       },
       data: [
         {
@@ -156,6 +158,7 @@ const initialUltraSound = [
               maxDate: "2060-01-01",
               required: true,
               eventType: "input",
+              valueType: "text",
               alertsError: false,
               alertsErrorMassage: "",
               isDatePopover: true,
@@ -165,11 +168,12 @@ const initialUltraSound = [
             },
             {
               class: "bold",
-              inputHeader: "Gestation age from ultrasound",
+              inputHeader: "Gestation age from ultrasound*",
               value: "",
               name: "specify",
               required: true,
               eventType: "input",
+              valueType: "text",
               alertsError: false,
               alertsErrorMassage: "",
               icon: icons.editPen,
@@ -202,57 +206,29 @@ const initialUltraSound = [
               maxDate: "2060-01-01",
               alertsError: false,
               alertsErrorMassage: "",
-              //isDatePopover: true,
               icon: icons.calenderPrimary,
-              placeholder: "Pick date",
               disabled: "disabled",
               inputWidth: "100%",
+              valueType: "text",
+
             },
             {
               // displayNone: true,
               inputHeader: "EDD",
               value: "",
-              name: "Estimated date of delivery",
+              name: "Estimated date of delivery from ultrasound",
               required: true,
               eventType: "input",
               alertsError: false,
               alertsErrorMassage: "",
               minDate: "2023-01-01",
               maxDate: "2060-01-01",
-              //isDatePopover: true,
               icon: icons.calenderPrimary,
-              placeholder: "Pick date",
               disabled: "disabled",
               inputWidth: "100%",
+              valueType: "text",
+
             },
-          ],
-        },
-      ],
-    },
-  },
-  {
-    sideColSize: 0.5,
-    childName: "Ultrasound done?",
-    isFinishBtn: false,
-    classDash: "dashed_bottom_border",
-    data: {
-      rowData: [
-        {
-          colData: [
-            // {
-            //   class: "bold",
-            //   displayNone: true,
-            //   inputHeader: "Gestation age from ultrasound",
-            //   value: "",
-            //   name: "specify",
-            //   required: true,
-            //   eventType: "input",
-            //   alertsError: false,
-            //   alertsErrorMassage: "",
-            //   icon: icons.editPen,
-            //   placeholder: "",
-            //   inputWidth: "100%",
-            // },
           ],
         },
       ],
@@ -265,10 +241,12 @@ const initialUltraSound = [
     radioBtnContent: {
       header: {
         class: "bold",
-        title: "Gestation age by Palpation known?",
+        title: "Gestation age by Palpation known*?",
         selectedValue: "",
         name: "Gestation",
         displayNext: "Yes",
+        alertsError: false,
+        alertsErrorMassage: "",
       },
       data: [
         {
@@ -296,10 +274,10 @@ const initialUltraSound = [
           colData: [
             {
               displayNone: true,
-              inputHeader: "Enter gestation age by palpation",
+              inputHeader: "Enter gestation age by palpation*",
               value: "",
               class: "bold",
-              name: "Gestation age to be used",
+              name: "Gestation age by palpation",
               required: true,
               eventType: "input",
               valueType: "text",
@@ -334,9 +312,11 @@ const initialUltraSound = [
     radioBtnContent: {
       header: {
         class: "bold",
-        title: "Gestation age to be used",
+        title: "Gestation age to be used*",
         selectedValue: "",
         name: "Gestation age to be used",
+        alertsError: false,
+        alertsErrorMassage: "",
       },
       data: [
         {
@@ -357,8 +337,6 @@ const initialUltraSound = [
       ],
     },
   },
-] as any;
-const initialTetenus = [
   {
     selectdData: [],
     isFinishBtn: false,
@@ -366,30 +344,32 @@ const initialTetenus = [
     radioBtnContent: {
       header: {
         class: "bold",
-        title: "The woman received tetanus doses for immunization?",
+        title: "The woman received tetanus doses for immunization*?",
         selectedValue: "",
         name: "The woman received tetanus doses for immunization?",
+        alertsError: false,
+        alertsErrorMassage: "",
       },
       data: [
         {
           name: "Fully Immunised",
           value: "fully immunised",
-          colSize: "5",
+          colSize: "4",
         },
         {
           name: "Under Immunised",
           value: "under immunised",
-          colSize: "5",
+          colSize: "4",
         },
         {
           name: "No doses",
           value: "no doses",
-          colSize: "5",
+          colSize: "4.001",
         },
         {
           name: "Unknown doses",
           value: "unknown doses",
-          colSize: "5",
+          colSize: "4",
         },
       ],
     },
@@ -397,35 +377,37 @@ const initialTetenus = [
   {
     selectdData: [],
     isFinishBtn: false,
-   // classDash: "dashed_bottom_border",
+    // classDash: "dashed_bottom_border",
     radioBtnContent: {
       header: {
         class: "bold",
-        title: "Number of tetanus doses for immunization",
+        title: "Number of under immunised tetanus doses*",
         selectedValue: "",
         displayNone: true,
         name: "Number of tetanus doses",
+        alertsError: false,
+        alertsErrorMassage: "",
       },
       data: [
         {
-          name: "1",
-          value: "1",
-          colSize: "5",
+          name: "One dose",
+          value: "one dose",
+          colSize: "4",
         },
         {
-          name: "2",
-          value: "2",
-          colSize: "5",
+          name: "Two doses",
+          value: "two doses",
+          colSize: "4",
         },
         {
-          name: "3",
-          value: "3",
-          colSize: "5",
+          name: "Three doses",
+          value: "three doses",
+          colSize: "4.001",
         },
         {
-          name: "4",
-          value: "4",
-          colSize: "5",
+          name: "Four doses",
+          value: "four doses",
+          colSize: "4",
         },
       ],
     },
@@ -440,7 +422,7 @@ const initialTetenus = [
           colData: [
             {
               displayNone: true,
-              inputHeader: "TTV 1 immunisation date",
+              inputHeader: "TTV 1 immunisation date*",
               value: "",
               name: "tt6Date",
               isDatePopover: true,
@@ -467,7 +449,7 @@ const initialTetenus = [
           colData: [
             {
               displayNone: true,
-              inputHeader: "TTV 1 immunisation date",
+              inputHeader: "TTV 1 immunisation date*",
               value: "",
               name: "tt7Date",
               isDatePopover: true,
@@ -481,7 +463,7 @@ const initialTetenus = [
             },
             {
               displayNone: true,
-              inputHeader: "TTV 2 immunisation date",
+              inputHeader: "TTV 2 immunisation date*",
               value: "",
               name: "tt8Date",
               isDatePopover: true,
@@ -509,7 +491,7 @@ const initialTetenus = [
           colData: [
             {
               displayNone: true,
-              inputHeader: "TTV 1 immunisation date",
+              inputHeader: "TTV 1 immunisation date*",
               value: "",
               name: "tt9Date",
               isDatePopover: true,
@@ -523,7 +505,7 @@ const initialTetenus = [
             },
             {
               displayNone: true,
-              inputHeader: "TTV 2 immunisation date",
+              inputHeader: "TTV 2 immunisation date*",
               value: "",
               name: "tt10Date",
               isDatePopover: true,
@@ -537,7 +519,7 @@ const initialTetenus = [
             },
             {
               displayNone: true,
-              inputHeader: "TTV 3 immunisation date",
+              inputHeader: "TTV 3 immunisation date*",
               value: "",
               name: "tt11Date",
               isDatePopover: true,
@@ -564,7 +546,7 @@ const initialTetenus = [
           colData: [
             {
               displayNone: true,
-              inputHeader: "TTV 1 immunisation date",
+              inputHeader: "TTV 1 immunisation date*",
               value: "",
               name: "tt1Date",
               isDatePopover: true,
@@ -578,7 +560,7 @@ const initialTetenus = [
             },
             {
               //displayNone: true,
-              inputHeader: "TTV 2 immunisation date",
+              inputHeader: "TTV 2 immunisation date*",
               value: "",
               name: "tt2Date",
               isDatePopover: true,
@@ -592,7 +574,7 @@ const initialTetenus = [
             },
             {
               // displayNone: true,
-              inputHeader: "TTV 3 immunisation date",
+              inputHeader: "TTV 3 immunisation date*",
               value: "",
               name: "tt3Date",
               isDatePopover: true,
@@ -606,7 +588,7 @@ const initialTetenus = [
             },
             {
               //displayNone: true,
-              inputHeader: "TTV 4 immunisation date",
+              inputHeader: "TTV 4 immunisation date*",
               value: "",
               name: "tt4Date",
               isDatePopover: true,
@@ -620,7 +602,7 @@ const initialTetenus = [
             },
             {
               displayNone: true,
-              inputHeader: "TTV 5 immunisation date",
+              inputHeader: "TTV 5 immunisation date*",
               value: "",
               name: "tt5Date",
               isDatePopover: true,
@@ -647,7 +629,7 @@ const initialTetenus = [
           colData: [
             {
               displayNone: true,
-              inputHeader: "TTV 1 immunisation date",
+              inputHeader: "TTV 1 immunisation date*",
               value: "",
               name: "12",
               isDatePopover: true,
@@ -661,7 +643,7 @@ const initialTetenus = [
             },
             {
               //displayNone: true,
-              inputHeader: "TTV 2 immunisation date",
+              inputHeader: "TTV 2 immunisation date*",
               value: "",
               name: "13",
               isDatePopover: true,
@@ -675,7 +657,7 @@ const initialTetenus = [
             },
             {
               // displayNone: true,
-              inputHeader: "TTV 3 immunisation date",
+              inputHeader: "TTV 3 immunisation date*",
               value: "",
               name: "14",
               isDatePopover: true,
@@ -756,10 +738,12 @@ const initialTetenus = [
     radioBtnContent: {
       header: {
         class: "bold",
-        title: "Reason Tetanus toxoid (TT) was not conducted",
+        title: "Reason Tetanus toxoid (TT) was not conducted*",
         name: "Reason Tetanus toxoid (TT) was not conducted",
         selectedValue: "",
         displayNone: true,
+        alertsError: false,
+        alertsErrorMassage: "",
       },
       data: [
         {
@@ -817,6 +801,12 @@ const initialTetenus = [
     },
   },
 ] as any;
+const initialUltraSound = [
+
+] as any;
+const initialTetenus = [
+
+] as any;
 export const useCurrentPregnanciesStore = defineStore("currentPregnanciesStore", {
   state: () => ({
     palpation: [] as any,
@@ -825,15 +815,15 @@ export const useCurrentPregnanciesStore = defineStore("currentPregnanciesStore",
     tetanus: [...initialTetenus] as any,
   }),
   actions: {
-    // setTetanus(data: any) {
-    //   this.tetanus = data;
-    // },
-    // setLMNP(data: any) {
-    //   this.lmnp = data;
-    // },
-    // setUltrasound(data: any) {
-    //   this.ultrasound = data;
-    // },
+    setTetanus(data: any) {
+      this.tetanus = data;
+    },
+    setLMNP(data: any) {
+      this.lmnp = data;
+    },
+    setUltrasound(data: any) {
+      this.ultrasound = data;
+    },
     getInitial(){
       const data = _.cloneDeep(initialLMNP);
       return [...data]; // Return a copy of the initial state

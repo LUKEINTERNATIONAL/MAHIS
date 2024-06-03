@@ -9,79 +9,19 @@
                 <div class="title">
                     <div class="demographics_title">Enrollment</div>
                 </div>
-                <div class="icon_div">
-                    <ion-icon :class="iconListStatus" :icon="list" @click="setDisplayType('list')"></ion-icon>
-                    <ion-icon
-                        :class="iconGridStatus"
-                        style="font-size: 21px; margin-top: 1.5px"
-                        :icon="grid"
-                        @click="setDisplayType('grid')"
-                    ></ion-icon>
-                </div>
             </div>
-            <div v-if="enrollmentDisplayType == 'grid'">
-                <ion-row class="card_row" v-if="enrollmentDisplayType == 'grid'">
+            <div >
+
                     <ion-col size-sm="12" size-md="12" size-lg="6" size-xl="4">
-                        <PatientHistory />
+                        <Elligibility/>
+
                     </ion-col>
-                    <ion-col size-sm="12" size-md="12" size-lg="6" size-xl="4">
-                        <PatientHistoryHIV />
-                        <FamilyHistory />
-                    </ion-col>
-                    <ion-col size-sm="12" size-md="12" size-lg="6" size-xl="4">
-                        <EnrollmentDiagnosis />
-                        <Substance />
-                        <NCDNumber />
-                    </ion-col>
-                </ion-row>
-            </div>
-            <div v-if="enrollmentDisplayType == 'list'">
-                <div v-if="currentStep == 'Substance & Diagnosis'">
-                    <SubstanceDiagnosis />
-                </div>
-                <div v-if="currentStep == 'Patient History'">
-                    <div style="display: flex; justify-content: center">
-                        <div><PatientHistory /></div>
-                    </div>
-                </div>
-                <div v-if="currentStep == 'Family History and NCDNumber'">
-                    <FamilyHistoryNCDNumber />
-                </div>
+              <div class="footer" style="margin-right: 520px">
+                <DynamicButton name="Save" iconSlot="end" :icon="iconsContent.saveWhite" @click="saveData()" />
+              </div>
             </div>
         </ion-content>
-        <div class="footer2" v-if="enrollmentDisplayType == 'grid'">
-            <DynamicButton name="Save" iconSlot="end" :icon="iconsContent.saveWhite" @click="saveData()" />
-        </div>
-        <ion-footer v-if="enrollmentDisplayType == 'list'">
-            <div class="footer position_content">
-                <DynamicButton name="Previous" :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
-                <ion-breadcrumbs class="breadcrumbs">
-                    <ion-breadcrumb @click="setCurrentStep('Substance & Diagnosis')" :class="{ active: currentStep === 'Substance & Diagnosis' }">
-                        <span class="breadcrumb-text">Substance & Diagnosis</span>
-                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
-                    </ion-breadcrumb>
-                    <ion-breadcrumb @click="setCurrentStep('Patient History')" :class="{ active: currentStep === 'Patient History' }">
-                        <span class="breadcrumb-text">Patient History</span>
-                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
-                    </ion-breadcrumb>
-                    <ion-breadcrumb
-                        @click="setCurrentStep('Family History and NCDNumber')"
-                        :class="{ active: currentStep === 'Family History and NCDNumber' }"
-                    >
-                        <span class="breadcrumb-text">Family History and NCDNumber</span>
-                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
-                    </ion-breadcrumb>
-                </ion-breadcrumbs>
-                <DynamicButton
-                    v-if="currentStep == 'Family History and NCDNumber'"
-                    name="Save"
-                    iconSlot="end"
-                    :icon="iconsContent.saveWhite"
-                    @click="saveData()"
-                />
-                <DynamicButton v-else name="Next" iconSlot="end" :icon="iconsContent.arrowRightWhite" @click="nextStep" />
-            </div>
-        </ion-footer>
+
     </ion-page>
 </template>
 
@@ -126,12 +66,8 @@ import { LabOrder } from "@/services/lab_order";
 import { VitalsService } from "@/services/vitals_service";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";
-import PatientHistory from "@/apps/NCD/components/Enrollment/PatientHistory.vue";
-import PatientHistoryHIV from "@/apps/NCD/components/Enrollment/PatientHistoryHIV.vue";
-import EnrollmentDiagnosis from "@/apps/NCD/components/Enrollment/Diagnosis.vue";
-import Substance from "@/apps/NCD/components/Enrollment/Substance.vue";
-import NCDNumber from "@/apps/NCD/components/Enrollment/NCDNumber.vue";
-import FamilyHistory from "@/apps/NCD/components/Enrollment/FamilyHistory.vue";
+import ANCNumber from "@/apps/ANC/components/Enrollment/ANCNumber.vue";
+import Elligibility from "@/apps/ANC/components/Enrollment/Elligibility.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import { useConfigurationStore } from "@/stores/ConfigurationStore";
 import { arrowForwardCircle, grid, list } from "ionicons/icons";
@@ -149,9 +85,10 @@ import {
 } from "@/services/data_helpers";
 import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServerData";
 import { IdentifierService } from "@/services/identifier_service";
-import { resetNCDPatientData } from "@/apps/NCD/config/reset_ncd_data";
+import { resetPatientData } from "@/services/reset_data";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import { UserService } from "@/services/user_service";
+import {useANCenrollementStore} from "@/apps/ANC/store/Enrollment/EnrollmentStore";
 
 export default defineComponent({
     name: "Home",
@@ -177,12 +114,8 @@ export default defineComponent({
         IonLabel,
         IonModal,
         Stepper,
-        PatientHistory,
-        PatientHistoryHIV,
-        EnrollmentDiagnosis,
-        Substance,
-        NCDNumber,
-        FamilyHistory,
+        Elligibility,
+        ANCNumber,
         DynamicButton,
     },
     data() {
@@ -204,11 +137,10 @@ export default defineComponent({
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useConfigurationStore, ["enrollmentDisplayType"]),
         ...mapState(useGeneralStore, ["activities"]),
+      ...mapState(useANCenrollementStore,["ANCNumber"]),
         ...mapState(useEnrollementStore, ["NCDNumber", "enrollmentDiagnosis", "substance", "patientHistoryHIV", "patientHistory"]),
     },
-    async mounted() {
-        this.setDisplayType(this.enrollmentDisplayType);
-    },
+
 
     setup() {
         return { chevronBackOutline, checkmark, arrowForwardCircle, grid, list };
@@ -231,7 +163,9 @@ export default defineComponent({
             }
         },
         async saveData() {
-            await this.saveNcdNumber();
+            // await this.saveNcdNumber();
+          this.$router.push("ANCHome");
+
         },
 
         async saveNcdNumber() {
@@ -246,7 +180,7 @@ export default defineComponent({
                 const demographicsStore = useDemographicsStore();
                 demographicsStore.setPatient(await PatientService.findByID(this.demographics.patient_id));
                 await this.saveEnrollment();
-                resetNCDPatientData();
+                resetPatientData();
                 await UserService.setProgramUserActions();
                 if (this.activities.length == 0) {
                     this.$router.push("patientProfile");
@@ -260,17 +194,6 @@ export default defineComponent({
         },
         nav(url: any) {
             this.$router.push(url);
-        },
-        setDisplayType(type: any) {
-            if (type == "grid") {
-                this.currentStep = "Enrollment";
-            } else {
-                this.currentStep = "Substance & Diagnosis";
-                this.steps = ["Substance & Diagnosis", "Patient History", "Family History and NCDNumber"];
-            }
-            const demographicsStore = useConfigurationStore();
-            demographicsStore.setEnrollmentDisplayType(type);
-            this.setIconClass();
         },
         setIconClass() {
             this.iconListStatus = "inactive_icon";
@@ -417,6 +340,14 @@ ion-footer {
 .inactive_icon {
     font-size: 25px;
     color: #ccc;
+}
+.footer {
+  margin-left: 59%;
+}
+@media screen and (max-width: 768px) {
+  .footer {
+    margin-left: 65%;
+  }
 }
 
 .container {

@@ -14,7 +14,7 @@ const initialVisitForBaby=[
                     title: 'What is the status of the baby?',
                     selectedValue: '',
                     name:'Status of baby',
-                    displayNext:"",
+                    displayNext:"Alive",
                     class:"bold",
                     displayNone:'',
                 },
@@ -35,6 +35,7 @@ const initialVisitForBaby=[
 
     },
     {
+        childName:"Status of baby",
         isFinishBtn: false,
         sectionHeader: '',
         classDash: 'dashed_bottom_border _padding',
@@ -45,6 +46,7 @@ const initialVisitForBaby=[
                     {
                         colData: [
                             {
+                                displayNone:true,
                                 inputHeader: 'Current weight',
                                 unit: 'kg',
                                 icon: icons.weight,
@@ -64,6 +66,7 @@ const initialVisitForBaby=[
 
 
     {
+        childName:"Status of baby",
         selectdData: [],
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
@@ -74,7 +77,8 @@ const initialVisitForBaby=[
                     selectedValue: '',
                     name:'Postnatal visit period',
                     class:"bold",
-                    displayNone:'',
+                    displayNone:true,
+
                 },
                 data:[
                     {
@@ -98,6 +102,7 @@ const initialVisitForBaby=[
     },
 
     {
+        childName:"Status of baby",
         selectdData: [],
         classDash: 'dashed_bottom_border _padding',
         checkboxBtnContent:
@@ -108,7 +113,7 @@ const initialVisitForBaby=[
                     name:'Type of immunisation the baby received',
                     displayNext:"",
                     class:"bold",
-                    displayNone:'',
+                    displayNone:true,
                 },
                 data:[
 
@@ -134,6 +139,7 @@ const initialVisitForBaby=[
     },
 
     {
+
         childName:'BCG',
         isFinishBtn: false,
         sectionHeader: '',
@@ -200,6 +206,7 @@ const initialVisitForBaby=[
     },
 
     {
+        childName:"Status of baby",
         selectdData: [],
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
@@ -209,7 +216,7 @@ const initialVisitForBaby=[
                     selectedValue: '',
                     name:'Danger signs',
                     class:"bold",
-                    displayNone:'',
+                    displayNone:true,
                 },
                 data:[
 
@@ -234,6 +241,7 @@ const initialVisitForBaby=[
 
     },
     {
+        childName:"Status of baby",
         selectdData: [],
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
@@ -242,6 +250,8 @@ const initialVisitForBaby=[
                     title: '',
                     selectedValue: '',
                     name:'Danger signs',
+                    displayNone:true,
+
 
                 },
                 data:[
@@ -268,6 +278,7 @@ const initialVisitForBaby=[
     },
 
     {
+        childName:"Status of baby",
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
@@ -275,6 +286,8 @@ const initialVisitForBaby=[
                     title: '',
                     selectedValue: '',
                     name:'Danger signs',
+                    displayNone:true,
+
 
                 },
                 data:[
@@ -300,6 +313,7 @@ const initialVisitForBaby=[
 
     },
     {
+        childName:"Status of baby",
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
@@ -307,6 +321,8 @@ const initialVisitForBaby=[
                     title: '',
                     selectedValue: '',
                     name:'Danger signs',
+                    displayNone:true,
+
 
                 },
                 data:[
@@ -333,6 +349,7 @@ const initialVisitForBaby=[
     },
 
     {
+        childName:"Status of baby",
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
@@ -340,6 +357,8 @@ const initialVisitForBaby=[
                     title: '',
                     selectedValue: '',
                     name:'Danger signs',
+                    displayNone:true,
+
 
                 },
                 data:[
@@ -364,7 +383,7 @@ const initialVisitForBaby=[
 
     },
 
-    {
+    {        childName:"Status of baby",
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
@@ -372,6 +391,8 @@ const initialVisitForBaby=[
                     title: '',
                     selectedValue: '',
                     name:'Danger signs',
+                    displayNone:true,
+
 
                 },
                 data:[
@@ -396,6 +417,7 @@ const initialVisitForBaby=[
 
     },
     {
+        childName:"Status of baby",
         classDash: 'dashed_bottom_border',
         checkboxBtnContent:
             {
@@ -403,6 +425,8 @@ const initialVisitForBaby=[
                     title: '',
                     selectedValue: '',
                     name:'Danger signs',
+                    displayNone:true,
+
 
                 },
                 data:[
@@ -449,6 +473,7 @@ const initialVisitForBaby=[
     },
     {
         selectdData: [],
+        childName:"Status of baby",
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
         radioBtnContent:
@@ -459,6 +484,8 @@ const initialVisitForBaby=[
                     name:'Intervention on danger signs',
                     class:"bold",
                     displayNext:'Yes',
+                    displayNone:true,
+
 
                 },
                 data:[
@@ -506,6 +533,7 @@ const initialVisitForBaby=[
     },
     {
         selectdData: [],
+        childName:"Status of baby",
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
         radioBtnContent:
@@ -516,6 +544,8 @@ const initialVisitForBaby=[
                     name:'Nevirapine started',
                     class:"bold",
                     displayNext:'No',
+                    displayNone:true,
+
                 },
                 data:[
                     {
@@ -573,7 +603,7 @@ export const useVisitForBabyStore = defineStore('visitForBabyStore',{
             this.visitForBaby = data
         },
         getInitial(){
-            const data=_.cloneDeep(initialVisitForBaby);
+            const data=_.cloneDeep(initialVisitForBaby)
             return [...data];
         }
 

@@ -74,7 +74,7 @@ export default defineComponent({
     ...mapState(useVisitForBabyStore,["visitForBaby"]),
   },
   mounted(){
-    const visitForBaby=useVisitForMotherStore()
+    const visitForBaby=useVisitForBabyStore()
     this.initialData=visitForBaby.getInitial()
   },
   watch:{
@@ -101,8 +101,6 @@ export default defineComponent({
 }
 
 ion-card {
-  box-shadow:none;
-  background-color:inherit;
   width: 100%;
   color: black;
 }

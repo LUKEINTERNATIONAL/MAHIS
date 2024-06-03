@@ -1059,8 +1059,8 @@ const initialObstetricDetails=[
                 data:[
 
                     {
-                        name: 'None',
-                        value: 'None',
+                        name: 'No complications',
+                        value: 'No complications',
                         checked: false,
                         labelPlacement: 'start',
                         colSize: '6',
@@ -1214,7 +1214,9 @@ const initialObstetricDetails=[
                         name: 'None',
                         value: 'None',
                         checked: false,
+                        labelPlacement: 'start',
                         colSize: '8',
+                        justify: 'space-between',
                     },
 
                 ]
@@ -1237,7 +1239,9 @@ const initialObstetricDetails=[
                         name: 'Oxytocin/cabitocin/tranexamic acid',
                         value: 'oxytocin/cabitocin/tranexamic acid',
                         checked: false,
+                        labelPlacement: 'start',
                         colSize: '8',
+                        justify: 'space-between',
                     },
 
                 ]
@@ -1260,7 +1264,9 @@ const initialObstetricDetails=[
                         name: 'Anticonvulsants',
                         value: 'anticonvulsants',
                         checked: false,
+                        labelPlacement: 'start',
                         colSize: '8',
+                        justify: 'space-between',
                     },
 
                 ]
@@ -1269,7 +1275,7 @@ const initialObstetricDetails=[
     },
     {
         selectdData: [],
-        classDash: 'dashed_bottom_border',
+        classDash: '',
         checkboxBtnContent:
             {
                 header:{
@@ -1284,7 +1290,9 @@ const initialObstetricDetails=[
                         name: 'Antibiotics',
                         value: 'antibiotics',
                         checked: false,
+                        labelPlacement: 'start',
                         colSize: '8',
+                        justify: 'space-between',
                     },
                 ]
             }
@@ -1306,7 +1314,9 @@ const initialObstetricDetails=[
                         name: 'Blood transfusion',
                         value: 'blood transfusion',
                         checked: false,
+                        labelPlacement: 'start',
                         colSize: '8',
+                        justify: 'space-between',
                     },
 
 
@@ -1329,7 +1339,9 @@ const initialObstetricDetails=[
                         name: 'Manual removal of placenta',
                         value: 'manual removal of placenta',
                         checked: false,
+                        labelPlacement: 'start',
                         colSize: '8',
+                        justify: 'space-between',
                     },
 
                 ]
@@ -1351,7 +1363,9 @@ const initialObstetricDetails=[
                         name: 'Non-pneumatic Anti-shock Garment (NASG)',
                         value: 'Non-pneumatic Anti-shock Garment (NASG)',
                         checked: false,
+                        labelPlacement: 'start',
                         colSize: '8',
+                        justify: 'space-between',
                     },
 
                 ]
@@ -1370,10 +1384,12 @@ const initialObstetricDetails=[
                 data:[
 
                     {
-                        name: 'Manual Removal of Retained Products of Conception (MRPOC)',
+                        name: 'Manual Removal of Retained Products of Conception',
                         value: 'manual Removal of Retained Products of Conception',
                         checked: false,
+                        labelPlacement: 'start',
                         colSize: '8',
+                        justify: 'space-between',
                     },
 
                 ]
@@ -1395,7 +1411,9 @@ const initialObstetricDetails=[
                         name: 'Evacuation',
                         value: 'evacuation',
                         checked: false,
+                        labelPlacement: 'start',
                         colSize: '8',
+                        justify: 'space-between',
                     },
 
                 ]
@@ -1417,7 +1435,9 @@ const initialObstetricDetails=[
                         name: 'Misoprostol',
                         value: 'misoprostol',
                         checked: false,
+                        labelPlacement: 'start',
                         colSize: '8',
+                        justify: 'space-between',
                     },
 
                 ]
@@ -1439,7 +1459,9 @@ const initialObstetricDetails=[
                         name: 'Other care',
                         value: 'Other care',
                         checked: false,
+                        labelPlacement: 'start',
                         colSize: '8',
+                        justify: 'space-between',
                     },
 
                 ]
@@ -1529,11 +1551,11 @@ export const useSecondStageOfLabourStore = defineStore('secondStageOfLabourStore
             const data=_.cloneDeep(initialSecondStageDetails)
             return [...data]
         },
-        getInitial1(){
+        getInitialNewbornComplications(){
             const data=_.cloneDeep(initialNewbornComplications)
             return [...data]
         },
-        getInitial2(){
+        getInitialObstetricDetails(){
             const data=_.cloneDeep(initialObstetricDetails)
             return [...data]
         }

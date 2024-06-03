@@ -136,6 +136,20 @@ export class VitalsService extends AppEncounterService {
                 },
             },
             {
+                name: "Respiratory rate",
+                validator: (val: any) => {
+                    const minErrors = this.checkMinMax(val, 5, 80);
+                    return this.mergeErrors([minErrors]);
+                },
+            },
+            {
+                name: "Oxygen saturation",
+                validator: (val: any) => {
+                    const minErrors = this.checkMinMax(val, 80, 100);
+                    return this.mergeErrors([minErrors]);
+                },
+            },
+            {
                 name: "Systolic Pressure*",
                 validator: (val: any) => {
                     const errors = [];

@@ -63,9 +63,11 @@ import DynButton from "@/components/DynamicButton.vue";
 import { createModal, toastWarning } from "@/utils/Alerts";
 import CheckPatientNationalID from "@/components/CheckPatientNationalID.vue";
 import { resetPatientData } from "@/services/reset_data";
+import { resetNCDPatientData } from "@/apps/NCD/config/reset_ncd_data";
 import { mapState } from "pinia";
 import Validation from "@/validations/StandardValidations";
 import { UserService } from "@/services/user_service";
+import { Service } from "@/services/service";
 
 export default defineComponent({
     name: "Home",
@@ -149,15 +151,13 @@ export default defineComponent({
         async searchByOtherIds(searchText: any) {
             if (Validation.isWholeNumber(searchText) === null) {
                 const IDs: any = await this.setID(searchText);
-                const artData = await PatientService.findByOtherID(4, IDs["ARVNumber"]);
-                const ncdData = await PatientService.findByOtherID(31, IDs["NCDNumber"]);
-
-                if (artData.length > 0) {
-                    this.patients.push(...artData);
+                if (Service.getProgramID() == 1) {
+                    const artData = await PatientService.findByOtherID(4, IDs["ARVNumber"]);
+                    if (artData.length > 0) this.patients.push(...artData);
                 }
-
-                if (ncdData.length > 0) {
-                    this.patients.push(...ncdData);
+                if (Service.getProgramID() == 32) {
+                    const ncdData = await PatientService.findByOtherID(31, IDs["NCDNumber"]);
+                    if (ncdData.length > 0) this.patients.push(...ncdData);
                 }
             }
         },
@@ -188,7 +188,11 @@ export default defineComponent({
                 address: item?.person?.addresses[0]?.state_province + "," + item?.person?.addresses[0]?.city_village,
                 phone: item.person.person_attributes.find((attribute: any) => attribute.type.name === "Cell Phone Number")?.value,
             });
-            resetPatientData();
+            if (Service.getProgramID() == 32 || Service.getProgramID() == 33) {
+                resetNCDPatientData();
+            } else {
+                resetPatientData();
+            }
             const roleData: any = sessionStorage.getItem("userRoles");
             const userProgramsData: any = sessionStorage.getItem("userPrograms");
             const userPrograms: any = JSON.parse(userProgramsData);
