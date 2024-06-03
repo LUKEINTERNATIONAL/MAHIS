@@ -4,7 +4,7 @@
         <ion-col>
                 <ion-button :disabled="disableVaccine(visitId)" class="administerVac" v-for="vaccine in vaccines" :key="vaccine" @click="openAdministerVaccineModal(vaccine)" fill="solid" :color="getColorForVaccine(vaccine, visitId)">
                     <ion-icon slot="start" :icon="getInjectSignForVaccine(vaccine, visitId)"></ion-icon>
-                    {{ vaccine.drug_name }}
+                    {{ checkVaccineName(vaccine.drug_name) }}
                     <ion-icon slot="end" :icon="getCheckBoxForVaccine(vaccine, visitId)"></ion-icon>
                 </ion-button>
         </ion-col>
@@ -146,6 +146,9 @@ export default defineComponent({
             else {
                 return true
             }
+        },
+        checkVaccineName(name: string) {
+            return name.replace(/Pentavalent/g, "Penta");
         }
     },
 });
@@ -423,7 +426,7 @@ export default defineComponent({
 }
 .administerVac {
     height: 58px;
-    width: 170px;
+    width: 160px;
     margin: 7px;
 }
 </style>

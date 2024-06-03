@@ -223,7 +223,8 @@
     width: var(--vc-icn-width);
     height: var(--vc-icn-width);
     fill: currentColor;
-    background: #BBDDBC;
+    background: none;
+    /* background: #BBDDBC; */
     color: #016302;
     }
 
