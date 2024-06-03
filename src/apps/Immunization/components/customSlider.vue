@@ -7,7 +7,7 @@
           <span v-if="showCurrentMilestoneAlert">
             <ion-button class="btnText btnTextWeight" style="padding: 0px 5px 0px 5px;" size="small" fill="solid" color="danger">
                 <ion-icon slot="start" size="small" :icon="iconsContent.alertDangerRed"></ion-icon>
-                <b> at {{ age }} due today</b>
+                <b> due today ( {{ age }} )</b>
             </ion-button>
           </span>
 
