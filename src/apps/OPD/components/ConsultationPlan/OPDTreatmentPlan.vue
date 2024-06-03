@@ -73,56 +73,75 @@
                 :key="componentKey"
             />
 
-            <ion-row v-if="!addItemButton" style="margin-bottom: 20px">
+            <ion-row v-if="!addItemButton">
                 <ion-col>
-                    <ion-item class="input_item">
-                        <ion-input v-model="drugName" @ionInput="FindDrugName" fill="outline"></ion-input>
-                        <!--  -->
-
-                        <ion-label>
-                            <ion-icon slot="start" :icon="iconsContent.search" class="selectedPatient" aria-hidden="true"></ion-icon>
-                        </ion-label>
-                    </ion-item>
-                    <div>
-                        <ion-label v-if="show_error_msg_for_drug_name" class="error-label">{{ drugnameErrMsg }}</ion-label>
-                    </div>
-
-                    <ion-popover
-                        :is-open="popoverOpen"
-                        :event="event"
-                        @didDismiss="popoverOpen = false"
-                        :keyboard-close="false"
-                        :show-backdrop="false"
-                        :dismiss-on-select="true"
-                        style="top: 10px; left: -25px"
-                        v-if="!show_error_msg_for_drug_name"
-                    >
-                        <ion-content color="light" class="ion-padding content-al">
-                            <!-- <ion-row class="search_result" v-for="(item, index) in diagnosisData" :key="index" >
-                                <ion-col @click="selectedDrugName(item.name, item)">{{ item.name }} </ion-col>
-                            </ion-row> -->
-                            <ion-list class="list-al">
-                                <div class="item-al" v-for="(item, index) in diagnosisData" :key="index">
-                                    <ion-col @click="selectedDrugName(item.name, item)">{{ item.name }} </ion-col>
-                                </div>
-                            </ion-list>
-                        </ion-content>
-                    </ion-popover>
+                    <VueMultiselect
+                        style="margin-top: 27px;"
+                        v-model="selected_drug"
+                        @update:model-value="selectedDrugName($event)"
+                        :multiple="false"
+                        :taggable="false"
+                        :hide-selected="true"
+                        :close-on-select="true"
+                        openDirection="bottom"
+                        tag-placeholder="Select method of prescription"
+                        placeholder="Select method of prescription"
+                        selectLabel=""
+                        label="name"
+                        :searchable="true"
+                        @search-change="FindDrugName($event)"
+                        track-by="uuid"
+                        :options="diagnosisData"
+                    />
                 </ion-col>
-                <ion-col style="margin-top: -27px;">
-                <ListPicker
-                    :multiSelection="multi_Selection"
-                    :uniqueId="uniqueId"
-                    :name_of_list="name_of_list"
-                    :choose_place_holder="list_place_holder"
-                    :use_internal_filter="true"
-                    :items_-list="route_list"
-                    :show_label="show_list_label"
-                    :disabled="false"
-                    @item-list-up-dated="routeListUpdated"
-                    @item-list-filtered="routeListFiltred"
-                />
+            </ion-row>
+
+            <ion-row v-if="!addItemButton">
+                <ion-col class="qaws">
+                    <VueMultiselect
+                        style="margin-top: 27px;"
+                        v-model="selected_pres_method"
+                        @update:model-value="routeListUpdated($event)"
+                        :multiple="false"
+                        :taggable="false"
+                        :hide-selected="true"
+                        :close-on-select="true"
+                        openDirection="bottom"
+                        tag-placeholder="Select method of prescription"
+                        placeholder="Select method of prescription"
+                        selectLabel=""
+                        label="name"
+                        :searchable="true"
+                        @search-change="$emit('search-change', $event)"
+                        track-by="id"
+                        :options="route_list"
+                    />
                 </ion-col>
+
+
+                <ion-col class="qaws">
+                    <VueMultiselect
+                        style="margin-top: 27px;"
+                        v-model="selected_frequency"
+                        @update:model-value="frequencyDropDownUpdated($event)"
+                        :multiple="false"
+                        :taggable="false"
+                        :hide-selected="true"
+                        :close-on-select="true"
+                        openDirection="bottom"
+                        tag-placeholder="Select Frequency"
+                        placeholder="Select Frequency"
+                        selectLabel=""
+                        label="label"
+                        :searchable="true"
+                        @search-change="$emit('search-change', $event)"
+                        track-by="code"
+                        :options="drug_frequencies"
+                    />
+                </ion-col>
+            </ion-row>
+
+            <ion-row v-if="!addItemButton">
                 <ion-col>
                     <ion-item class="input_item">
                         <ion-input placeholder="Dose" v-model="dose" fill="outline"></ion-input>
@@ -132,35 +151,7 @@
                         <ion-label v-if="show_error_msg_for_dose" class="error-label">{{ doseErrMsg }}</ion-label>
                     </div>
                 </ion-col>
-                <ion-col>
-                    <ion-item class="input_item">
-                        <span class="spcls" id="chooseType" @click="popoverOpenForFrequencyFn2">
-                            <ion-input placeholder="Frequency" v-model="frequency"></ion-input>
-                            <ion-icon v-if="!showPopoverOpenForFrequency" :icon="chevronDownOutline" />
-                            <ion-icon v-if="showPopoverOpenForFrequency" :icon="chevronUpOutline" />
-                        </span>
 
-                        <ion-popover
-                            class="popover-al"
-                            :show-backdrop="false"
-                            trigger="chooseType"
-                            trigger-action="click"
-                            @didDismiss="showPopoverOpenForFrequency = false"
-                        >
-                            <ion-content color="light" class="ion-padding content-al">
-                                <ion-label>Choose the type:</ion-label>
-                                <ion-list class="list-al">
-                                    <div class="item-al" v-for="(item, index) in drug_frequencies" :key="index">
-                                        <ion-label @click="selectFrequency(index)" style="display: flex; justify-content: space-between">
-                                            {{ item.label }}
-                                            <ion-icon v-if="item.selected" class="icon-al" :icon="checkmarkOutline"></ion-icon>
-                                        </ion-label>
-                                    </div>
-                                </ion-list>
-                            </ion-content>
-                        </ion-popover>
-                    </ion-item>
-                </ion-col>
                 <ion-col>
                     <ion-item class="input_item">
                         <ion-input placeholder="Duration" v-model="duration" fill="outline"></ion-input>
@@ -170,25 +161,24 @@
                         <ion-label v-if="show_error_msg_for_duration" class="error-label">{{ durationErrMsg }}</ion-label>
                     </div>
                 </ion-col>
-                <!-- <ion-col>
-                    <ion-item class="input_item" style="min-height: 50px !important; height: 5px;">
-                        <ion-input  id="click-trigger2" placeholder="Prescription" v-model="prescription" ></ion-input>
-                        <ion-popover
-                            @didDismiss="prescPopoverOpen = false" 
-                            show-backdrop="false" 
-                            dismiss-on-select="false"
-                            trigger="click-trigger2"
-                            trigger-action="click"
-                            >
-                            <ion-content class="search_card" >
-                                <ion-datetime ref="prescription" @ionChange="getDate($event)" presentation="date"></ion-datetime>
-                            </ion-content>
-                        </ion-popover>
-                    </ion-item>
-                </ion-col> -->
-                <ion-col class="action_buttons">
-                    <span @click="saveData()">+ Save</span>
-                </ion-col>
+            </ion-row>
+
+            <ion-row v-if="!addItemButton" style="margin-bottom: 20px">
+                <dynamic-button
+                    v-if="dynamic_button_properties[0].addItemButton"
+                    :name="dynamic_button_properties[0].name"
+                    :fill="dynamic_button_properties[0].btnFill"
+                    :icon="addOutline"
+                    @clicked:btn="dynamic_button_properties[0].fn"
+                />
+
+                <dynamic-button
+                    v-if="dynamic_button_properties[1].addItemButton"
+                    :name="dynamic_button_properties[1].name"
+                    :fill="dynamic_button_properties[1].btnFill"
+                    :icon="removeOutline"
+                    @clicked:btn="dynamic_button_properties[1].fn"
+                />
             </ion-row>
 
             <dynamic-button v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" @clicked:btn="addData"></dynamic-button>
@@ -353,6 +343,7 @@ import {
     chevronDownOutline,
     chevronUpOutline,
     codeSlashOutline,
+    removeOutline,
 } from "ionicons/icons";
 import { ref, watch, computed, onMounted, onUpdated } from "vue";
 import { icons } from "@/utils/svg";
@@ -365,8 +356,9 @@ import { ConceptService } from "@/services/concept_service";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { Service } from "@/services/service";
 import { PreviousTreatment } from "@/apps/NCD/services/treatment";
-import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
+import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore"
 import { useAllegyStore} from "@/apps/OPD/stores/AllergyStore"
+import VueMultiselect from "vue-multiselect"
 import NonPharmacologicalIntervention from "@/apps/OPD/components/ConsultationPlan/NonPharmacologicalIntervention.vue"
 import ListPicker from "@/components/ListPicker.vue"
 
@@ -420,26 +412,29 @@ const RestOfPreviousAllegies = ref();
 const currentDrugOb = ref()
 
 const multi_Selection = false as any
+const selected_pres_method = ref()
+const selected_frequency = ref()
+const selected_drug = ref()
 const uniqueId = "45" as any
 const name_of_list = ref("List" as any)
 const list_place_holder = ref("Please select method of prescribing medication" as any)
 const route_list = ref([
-    { name: "Oral" },
-    { name: "Intravenous (IV)" },
-    { name: "Intramuscular (IM)" },
-    { name: "Intradermal" },
-    { name: "Rectally" },
-    { name: "Sublingual" },
-    { name: "Vaginally" },
-    { name: "Buccal" },
-    { name: "Subcutaneous" },
-    { name: "Intraosseous" },
-    { name: "Other"}
+    { id:1 , name: "Oral" },
+    { id:2 , name: "Intravenous (IV)" },
+    { id:3 , name: "Intramuscular (IM)" },
+    { id:4 , name: "Intradermal" },
+    { id:5 , name: "Rectally" },
+    { id:6 , name: "Sublingual" },
+    { id:7 , name: "Vaginally" },
+    { id:8 , name: "Buccal" },
+    { id:9 , name: "Subcutaneous" },
+    { id:10 , name: "Intraosseous" },
+    { id:11 , name: "Other"}
 ] as any)
 const show_list_label = false as any
 
 function routeListUpdated(data: any) {
-
+    // selected_pres_method.value = data.name
 }
 
 function routeListFiltred(data: any) {
@@ -456,6 +451,8 @@ onMounted(async () => {
     FirstPreviousAllegies.value = Object.entries(previousDrugAllergies)[0];
     const [, ...restEntriesAllegies] = Object.entries(previousDrugAllergies);
     RestOfPreviousAllegies.value = restEntriesAllegies;
+
+    console.log(drug_frequencies)
 });
 
 watch(
@@ -535,6 +532,9 @@ function selectAl(item: any) {
     saveStateValuesState();
 }
 
+function frequencyDropDownUpdated(event: any) {
+    frequency.value = event.label
+}
 function selectFrequency(index: any) {
     drug_frequencies.forEach((item) => {
         item.selected = false;
@@ -581,31 +581,21 @@ async function saveData() {
 }
 
 async function FindDrugName(text: any) {
-    const searchText = text.target.value;
-    openPopover(text);
+    const searchText = text
     const page = 1,
         limit = 10;
     const drugs: ConceptName[] = await DrugService.getOPDDrugs({
         name: searchText,
         page: page,
         page_size: limit,
-    });
-    // const filter_id_array: any[] = [];
-    // selectedAllergiesList2.value.forEach((selectedMedicalAllergy: any) => {
-    //     if (selectedMedicalAllergy.selected) {
-    //         filter_id_array.push(selectedMedicalAllergy.concept_id);
-    //     }
-    // });
-
-    //const filteredDrugs = filterArrayByIDs(drugs as any, filter_id_array as any);
-
+    })
     drugs.map((drug: any) => ({
         label: drug.name,
         value: drug.name,
         other: drug,
-    }));
+    }))
 
-    diagnosisData.value = drugs;
+    diagnosisData.value = drugs
 }
 
 async function FindDrugName2(text: any) {
@@ -717,21 +707,19 @@ function openPrescPopover(e: any) {
     prescPopoverOpen.value = true;
 }
 
-function selectedDrugName(name: any, obj: any) {
-    drugName.value = name;
-    drug_id.value = obj.drug_id;
-    units.value = obj.units;
-    currentDrugOb.value = obj
-    isPresentInAllergyList(obj)
+function selectedDrugName(data: any) {
+    drugName.value = data.name;
+    drug_id.value = data.drug_id;
+    units.value = data.units;
+    currentDrugOb.value = data
+    isPresentInAllergyList(data)
 }
 
-function popoverOpenForFrequencyFn2() {
-    showPopoverOpenForFrequency.value = true;
-}
 
 function editItemAtIndex(index: any) {
     const dataItem = selectedMedicalDrugsList.value[index];
     selectedMedicalDrugsList.value.splice(index, 1);
+    selected_drug.value = dataItem;
     drugName.value = dataItem.drugName;
     dose.value = dataItem.dose;
     frequency.value = dataItem.frequency;
@@ -846,6 +834,23 @@ function accordionGroupChangeForAllergies(ev: AccordionGroupCustomEvent) {
 function removeOuterArray(arr: any) {
     return arr[1];
 }
+
+const dynamic_button_properties = [
+    {
+        showAddItemButton: true,
+        addItemButton: true,
+        name: "save",
+        btnFill: 'clear',
+        fn: saveData,
+    },
+    {
+        showAddItemButton: true,
+        addItemButton: true,
+        name: "cancel",
+        btnFill: 'clear',
+        fn: addData,
+    }
+]
 </script>
 
 <style scoped>
@@ -973,5 +978,8 @@ ion-list.list-al {
 }
 .notes_p {
     margin: 4%;
+}
+.qaws {
+    margin-top: -27px;
 }
 </style>
