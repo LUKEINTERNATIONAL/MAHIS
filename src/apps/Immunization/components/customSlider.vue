@@ -2,9 +2,9 @@
 
     <div v-if="showCurrentMilestoneAlert" class="alert_banner">
       <apan>Vaccines due today</apan>
-      <ion-icon style="margin-top: 7px;" slot="end" size="medium" :icon="iconsContent.alertDangerRed">
+      <ion-icon style="margin-top: 7px;" slot="end" size="medium" :icon="iconsContent.greenCalender">
       </ion-icon>
-      <span style="font-weight: 700;">{{ age }}</span>
+      <span style="font-weight: 700;">{{age}}</span>
     </div>
 
     <carousel :items-to-show="1" :modelValue="3" @slide-end="slideEvent">
