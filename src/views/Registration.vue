@@ -31,24 +31,24 @@
             <div v-if="registrationType == 'scan'">
                 <ScanRegistration />
             </div>
-            <div class="center_content" v-if="registrationType == 'manual' && registrationDisplayType == 'grid'">
-                <ion-row v-if="registrationDisplayType == 'grid'">
-                    <ion-col size-sm="12" size-md="6" size-lg="4">
+            <div class="center_content" v-if="registrationType == 'manual' && registrationDisplayType == 'grid' && screenWidth > 991">
+                <div v-if="registrationDisplayType == 'grid'" class="flex-container">
+                    <div class="flex-item">
                         <PersonalInformation />
-                    </ion-col>
-                    <ion-col size-sm="12" size-md="6" size-lg="4">
+                    </div>
+                    <div class="flex-item">
                         <CurrentLocation />
                         <SocialHistory v-if="checkUnderFive" />
                         <BirthRegistration v-if="checkUnderOne" />
-                    </ion-col>
-                    <ion-col size-sm="12" size-md="6" size-lg="4" class="regDisplayFlex">
+                    </div>
+                    <div class="flex-item">
                         <HomeLocation />
                         <GuardianInformation />
-                    </ion-col>
-                </ion-row>
+                    </div>
+                </div>
             </div>
 
-            <div v-if="registrationType == 'manual' && registrationDisplayType == 'list'">
+            <div v-if="(registrationType == 'manual' && registrationDisplayType == 'list') || screenWidth <= 991">
                 <div v-if="currentStep == 'Personal Information'">
                     <PersonalInformation />
                 </div>
@@ -67,10 +67,10 @@
                 </div>
             </div>
         </ion-content>
-        <div class="footer2" v-if="registrationDisplayType == 'grid'">
+        <div class="footer2" v-if="registrationDisplayType == 'grid' && screenWidth > 991">
             <DynamicButton name="Save" iconSlot="end" :icon="iconsContent.saveWhite" @click="saveData()" />
         </div>
-        <ion-footer v-if="registrationType == 'manual' && registrationDisplayType == 'list'">
+        <ion-footer v-if="(registrationType == 'manual' && registrationDisplayType == 'list') || screenWidth <= 991">
             <div class="footer position_content">
                 <DynamicButton name="Previous" :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
                 <ion-breadcrumbs class="breadcrumbs displayNoneMobile">
@@ -165,6 +165,7 @@ export default defineComponent({
             checkUnderFive: true,
             checkUnderOne: false,
             steps: ["Personal Information", "Location", "Social History", "Guardian Information"],
+            screenWidth: "" as any,
         };
     },
     props: ["registrationType"],
@@ -217,6 +218,7 @@ export default defineComponent({
     },
 
     async mounted() {
+        this.screenWidth = window.screen.width;
         this.setIconClass();
         this.disableNationalIDInput();
         this.checkAge();
@@ -517,5 +519,19 @@ ion-footer {
 .center_content {
     display: flex;
     justify-content: center;
+}
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px;
+}
+
+.flex-item {
+    color: white;
+    flex: 1 1 100px;
+    text-align: center;
+    border-radius: 5px;
+    box-sizing: border-box;
 }
 </style>

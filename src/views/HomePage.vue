@@ -71,6 +71,7 @@ import { Service } from "@/services/service";
 import img from "@/utils/Img";
 import ImmunizationTrendsGraph from "@/apps/Immunization/components/Graphs/ImmunizationTrendsGraph.vue";
 import ImmunizationGroupGraph from "@/apps/Immunization/components/Graphs/ImmunizationGroupGraph.vue";
+import { getVaccinesData } from "@/apps/Immunization/services/dashboard_service";
 export default defineComponent({
     name: "Home",
     components: {
@@ -92,10 +93,11 @@ export default defineComponent({
             controlGraphs: "months" as any,
         };
     },
-    mounted() {
+    async mounted() {
         this.setView();
         // Start the timer on component mount
         this.startTimer();
+        console.log(await getVaccinesData());
     },
     methods: {
         setView() {
@@ -111,7 +113,7 @@ export default defineComponent({
             // Set a timer to switch graphs every 5 seconds
             setInterval(() => {
                 // Toggle between 'months' and 'group'
-                // this.controlGraphs = this.controlGraphs === "months" ? "group" : "months";
+                this.controlGraphs = this.controlGraphs === "months" ? "group" : "months";
             }, 15000);
         },
     },
