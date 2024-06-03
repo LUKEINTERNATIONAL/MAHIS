@@ -273,7 +273,6 @@ export default defineComponent({
         },
         currentMilestone: {
             handler() {
-                console.log("Current Milestone: " + this.currentMilestone);
                 this.loadCurrentMilestone();
             },
         },

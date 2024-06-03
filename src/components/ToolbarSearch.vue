@@ -84,6 +84,7 @@ import { mapState } from "pinia";
 import Validation from "@/validations/StandardValidations";
 import { UserService } from "@/services/user_service";
 import { Service } from "@/services/service";
+import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore"
 
 export default defineComponent({
     name: "Home",
@@ -214,6 +215,8 @@ export default defineComponent({
             } else {
                 resetPatientData();
             }
+            const store = useAdministerVaccineStore()
+            store.setVaccineReload(!store.getVaccineReload())
             const roleData: any = sessionStorage.getItem("userRoles");
             const userProgramsData: any = sessionStorage.getItem("userPrograms");
             const userPrograms: any = JSON.parse(userProgramsData);
