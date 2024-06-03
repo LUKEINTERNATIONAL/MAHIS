@@ -45,7 +45,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { mapState } from "pinia";
-import DynamicList from "../components/DynamicList.vue";
+import DynamicList from "../components/DynamicListOPDcopy.vue";
 import { useDispensationStore } from '@/apps/OPD/stores/DispensationStore'
 import { ObservationService } from "@/services/observation_service";
 import { isEmpty } from "lodash";
