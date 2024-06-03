@@ -3,21 +3,20 @@
         <ion-col>
             <div style="display: flex; padding: 0.3em;">
                 <ion-label
-                    style="width: 260px; color: #00190E; font-weight: 550; font: inter; line-height: 14px; line-height: 21px;">Drug
+                    style="width: 450px; color: #00190E; font-weight: 550; font: inter; line-height: 14px; line-height: 21px;">Drug
                     Name</ion-label>
             </div>
         </ion-col>
         <ion-col>
             <div style="display: flex; padding: 0.3em;">
                 <ion-label
-                    style="width: 260px; color: #00190E; font-weight: 550; font: inter; line-height: 14px; line-height: 21px;">Frequency</ion-label>
+                    style="width: 350px; color: #00190E; font-weight: 550; font: inter; line-height: 14px; line-height: 21px;">Frequency</ion-label>
             </div>
         </ion-col>
         <ion-col>
             <div style="display: flex; padding: 0.3em;">
                 <ion-label
-                    style="width: 260px; color: #00190E; font-weight: 550; font: inter; line-height: 14px; line-height: 21px;">Quantity
-                    Dispensed</ion-label>
+                    style="color: #00190E; font-weight: 550; font: inter; line-height: 14px; line-height: 21px;">Dispensation</ion-label>
             </div>
         </ion-col>
     </ion-row>
@@ -25,16 +24,16 @@
     <ion-item v-for="(item, index) in dataArray" class="ionLbltp" :key="index" @mousemove="highlightItem(index)"
         @mouseout="undoHighlightItem(index)">
         <ion-row>
-            <ion-col class="col-st1">
+            <ion-col class="col-st10">
                 <ion-checkbox v-if="withCheckboxs" :id="index" @ionChange="$emit('clickt', $event)" justify="start"
                     labelPlacement="end" :checked=true>
                     <div style="display: flex; padding: 0.3em;">
                         <ion-label :id="asignLblID(index)"
-                            style="width: 260px; color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{
+                            style="width: 370px; color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{
         item.drugName }}</ion-label>
                         <div class="padding"></div>
                         <ion-label
-                            style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">
+                            style="width: 330px; color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">
                             {{ item.frequency }} /{{ " for" }} {{ item.duration }} days
                         </ion-label>
                     </div>
@@ -42,11 +41,11 @@
                 <div v-if="!withCheckboxs">
                     <div @click="$emit('click', $event)" style="display: flex; padding: 0.3em; ">
                         <ion-label :id="asignLblID(index)"
-                            style="width: 260px; color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{
+                            style="width: 430px; color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{
         item.drugName }}</ion-label>
                         <ion-label class="padding"></ion-label>
                         <ion-label
-                            style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">
+                            style="width: 360px; color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">
                             {{ item.frequency }} /{{ " for" }} {{ item.duration }} days
                         </ion-label>
                     </div>
@@ -221,6 +220,7 @@ export default defineComponent({
 </script>
 <style scoped>
 .input_item {
+    width: 200px;
     height: 50px;
     margin-top: 5px;
 }
@@ -258,13 +258,5 @@ ion-item.ionLbltp {
 
 .modify_buttons {
     padding-left: 20px;
-}
-
-.col-st1 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 165rem;
-
 }
 </style>
