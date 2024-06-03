@@ -109,19 +109,23 @@
 
         <ion-row>
             <ion-col>
-                <ListPicker
-                    :multiSelection="list_picker_prperties[0].multi_Selection"
-                    :show_label="list_picker_prperties[0].show_list_label"
-                    :uniqueId="list_picker_prperties[0].unqueId"
-                    :name_of_list="list_picker_prperties[0].name_of_list"
-                    :choose_place_holder="list_picker_prperties[0].placeHolder"
-                    :items_-list="list_picker_prperties[0].items"
-                    :use_internal_filter="list_picker_prperties[0].use_internal_filter"
-                    :disabled="list_picker_prperties[0].disabled.value"
-                    @item-list-up-dated="list_picker_prperties[0].listUpdatedFN"
-                    @item-list-filtered="list_picker_prperties[0].listFilteredFN"
-                />
-
+                <VueMultiselect
+                        v-model="manner_of_death_Selection_value"
+                        @update:model-value="listUpdated1($event)"
+                        :multiple="false"
+                        :taggable="false"
+                        :hide-selected="true"
+                        :close-on-select="true"
+                        openDirection="bottom"
+                        tag-placeholder="Manner of death"
+                        placeholder="Manner of death"
+                        selectLabel=""
+                        label="name"
+                        :searchable="true"
+                        @search-change="$emit('search-change', $event)"
+                        track-by="id"
+                        :options="mannerOfDeath"
+                    />
                 <div>
                     <ion-label v-if="list_picker_prperties[0].show_error.value" class="error-label">
                         {{ list_picker_prperties[0].error_message }}
@@ -130,18 +134,24 @@
             </ion-col>
 
             <ion-col>
-                <ListPicker
-                    :multiSelection="list_picker_prperties[1].multi_Selection"
-                    :show_label="list_picker_prperties[1].show_list_label"
-                    :uniqueId="list_picker_prperties[1].unqueId"
-                    :name_of_list="list_picker_prperties[1].name_of_list"
-                    :choose_place_holder="list_picker_prperties[1].placeHolder"
-                    :items_-list="list_picker_prperties[1].items"
-                    :use_internal_filter="list_picker_prperties[0].use_internal_filter"
-                    :disabled="temP_A"
-                    @item-list-up-dated="list_picker_prperties[1].listUpdatedFN"
-                    @item-list-filtered="list_picker_prperties[1].listFilteredFN"
-                />
+                <VueMultiselect
+                        v-model="how_did_it_occur_Selection_value"
+                        @update:model-value="listUpdated2($event)"
+                        :multiple="false"
+                        :taggable="false"
+                        :hide-selected="true"
+                        :close-on-select="true"
+                        openDirection="bottom"
+                        tag-placeholder="How did it occur?"
+                        placeholder="How did it occur?"
+                        selectLabel=""
+                        label="name"
+                        :disabled="temP_A"
+                        :searchable="true"
+                        @search-change="$emit('search-change', $event)"
+                        track-by="id"
+                        :options="causesOfDeath"
+                    />
 
                 <div>
                     <ion-label v-if="list_picker_prperties[1].show_error.value" class="error-label">
@@ -268,6 +278,7 @@ import DatePicker from "@/components/DatePicker.vue"
 import Note from "@/apps/OPD/components/ConsultationPlan/Note.vue"
 import ListPicker from "@/components/ListPicker.vue"
 import BasicInputField from "@/components/BasicInputField.vue"
+import VueMultiselect from "vue-multiselect"
 import DynamicButton from "@/components/DynamicButton.vue"
 import { PatientService } from "@/services/patient_service"
 import { areFieldsValid, getFieldsValuesObj } from "@/utils/GeneralUti"
@@ -296,6 +307,8 @@ const phone_number_place_holder = ref('gurdian phone number')
 const isClientFemale = ref(true)
 const temP_A = ref(true as any)
 const temP_AA = ref(true as any)
+const manner_of_death_Selection_value = ref()
+const how_did_it_occur_Selection_value = ref()
 
 onMounted(async () => {
     checkPatient()
@@ -456,25 +469,26 @@ const dynamic_button_properties = [
 ]
 
 const mannerOfDeath = ref([
-    { name: "Natural" },
-    { name: "Accident" },
-    { name: "Homicide" },
-    { name: "Suicide" },
-    { name: "Pending investigation" },
-    { name: "Could not be determined" },
-    { name: "Other - specify" }
+    { id:1, name: "Natural" },
+    { id:2,  name: "Accident" },
+    { id:3,  name: "Homicide" },
+    { id:4,  name: "Suicide" },
+    { id:5,  name: "Pending investigation" },
+    { id:6,  name: "Could not be determined" },
+    { id:7,  name: "Other - specify" }
 ] as any)
 
 const causesOfDeath = ref([
-    { name: "Motor vehicle (passenger)" },
-    { name: "Motor vehicle (pedestrian)" },
-    { name: "Drowning" },
-    { name: "Other - specify" }
+    { id:1, name: "Motor vehicle (passenger)" },
+    { id:2, name: "Motor vehicle (pedestrian)" },
+    { id:3, name: "Drowning" },
+    { id:4, name: "Other - specify" }
 ] as any)
 
 const list_picker_prperties = [
     {
         multi_Selection: false as any,
+        manner_of_death_Selection_value: ref(),
         show_list_label: true as any,
         unqueId: 'qwerty' as any,
         name_of_list: 'Manner of death ' as any,
@@ -592,24 +606,21 @@ function notesUpDated_fn6(event: any) {
 }
 
 function listUpdated1(data: any) {
-    data.forEach((datum: any, index: number) => {
-        if (index == 1 && datum.selected == true) {
-            temP_A.value = false
-            return
-        } else if (index == 1 && datum.selected == false) {
-            resetSelectionForCausesOfDeath()
-            temP_A.value = true
-        }
+    if (data.id == 2) {
+        temP_A.value = false
+        temP_AA.value = true
+        return
+    }
 
-        if (index == 6 && datum.selected == true) {
-            temP_AA.value = false
-            return
-        } else if (index == 6 && datum.selected == false) {
-            resetSelectionForCausesOfDeath()
-            temP_AA.value = true
-        }
-    })
-    mannerOfDeath.value = data
+    if (data.id == 7) {
+        temP_AA.value = false
+        temP_A.value = true
+        return
+    }
+
+    temP_A.value = true
+    temP_AA.value = true
+    return
 }
 
 function resetSelectionForCausesOfDeath() {
@@ -619,17 +630,13 @@ function resetSelectionForCausesOfDeath() {
 }
 
 function listUpdated2(data: any) {
-    data.forEach((datum: any, index: number) => {
-        if (index == 3 && datum.selected == true) {
-            temP_AA.value = false
-            return
-        } else if (index == 3 && datum.selected == false) {
-            //resetSelectionForCausesOfDeath()
-            temP_AA.value = true
-        }
-    })
-            
-    causesOfDeath.value = data
+    console.log("listUpdated", data)
+    if (data.id == 4) {
+        temP_AA.value = false
+        return
+    }
+    temP_AA.value = true
+    return
 }
 
 
