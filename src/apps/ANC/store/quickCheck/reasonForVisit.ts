@@ -279,7 +279,7 @@ const initialReasonForVisit = [
 
         {
           name: "Other danger signs",
-          value: "Other danger signs",
+          value: "other danger signs",
           checked: false,
           labelPlacement: "start",
           colSize: "6",

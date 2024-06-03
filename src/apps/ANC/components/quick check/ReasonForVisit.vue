@@ -41,6 +41,7 @@ import {
   getCheckboxSelectedValue,
   getRadioSelectedValue,
   modifyCheckboxHeader, modifyCheckboxValue,
+  modifyFieldValue,
   modifyGroupedRadioValue,
   modifyRadioValue
 } from "@/services/data_helpers";
@@ -104,15 +105,11 @@ export default defineComponent({
       this.$router.push(url);
     },
     handleFirstAntenalVisit(){
-      // if (getRadioSelectedValue(this.ReasonForVisit, 'Reason for visit') == 'First antenatal care contact') {
-      //   modifyCheckboxHeader(this.ReasonForVisit, 'Danger signs', 'displayNone', false);
-      //   // modifyCheckboxHeader(this.ReasonForVisit, 'Previous visits', 'selectedValue', '');
-      //
-      // } else {
-      //   modifyCheckboxHeader(this.ReasonForVisit, 'Danger signs', 'displayNone', true);
-      //   modifyCheckboxValue(this.ReasonForVisit, 'Danger signs', 'selectedValue', '');
-      //
-      // }
+      if (getCheckboxSelectedValue(this.ReasonForVisit, 'Other danger signs')?.value == 'other danger signs') {
+        modifyFieldValue(this.ReasonForVisit, 'Other notes', 'displayNone', false);
+      } else {
+        modifyFieldValue(this.ReasonForVisit, 'Other notes', 'displayNone', true);  
+      }
       const checkBoxes=['Pre-term labour','Central cyanosis', 'Unconscious', 'Fever', 'Imminent delivery',
         'Severe headache', 'Severe vomiting','Severe abdominal pain','Draining liquor',
         'Respiratory problems','Convulsion history','Vomiting' , 'Oedema', 'Epigastric pain', 'Bleeding vaginally', 'Other danger signs']
