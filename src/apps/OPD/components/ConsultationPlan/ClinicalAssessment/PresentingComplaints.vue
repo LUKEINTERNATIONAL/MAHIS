@@ -182,6 +182,7 @@ export default defineComponent({
                 this.buildpresentingComplaintsList();
             }
             this.presentingComplaints[0].data.rowData[0].colData[0].value = "";
+            this.presentingComplaints[0].data.rowData[0].colData[1].value = "";
             this.presentingComplaints[0].data.rowData[0].colData[0].popOverData.data = [];
         },
         buildpresentingComplaintsList() {
