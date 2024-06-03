@@ -201,23 +201,22 @@
             </ion-row>
 
             <ion-row v-if="!addItemButton" style="margin-bottom: 20px">
-            <dynamic-button
-                v-if="dynamic_button_properties[0].addItemButton"
-                :name="dynamic_button_properties[0].name"
-                :fill="dynamic_button_properties[0].btnFill"
-                :icon="addOutline"
-                @clicked:btn="dynamic_button_properties[0].fn"
-            />
+                <dynamic-button
+                    v-if="dynamic_button_properties[0].addItemButton"
+                    :name="dynamic_button_properties[0].name"
+                    :fill="dynamic_button_properties[0].btnFill"
+                    :icon="addOutline"
+                    @clicked:btn="dynamic_button_properties[0].fn"
+                />
 
-            <dynamic-button
-                v-if="dynamic_button_properties[1].addItemButton"
-                :name="dynamic_button_properties[1].name"
-                :fill="dynamic_button_properties[1].btnFill"
-                :icon="removeOutline"
-                @clicked:btn="dynamic_button_properties[1].fn"
-            />
-
-        </ion-row>
+                <dynamic-button
+                    v-if="dynamic_button_properties[1].addItemButton"
+                    :name="dynamic_button_properties[1].name"
+                    :fill="dynamic_button_properties[1].btnFill"
+                    :icon="removeOutline"
+                    @clicked:btn="dynamic_button_properties[1].fn"
+                />
+            </ion-row>
 
             <dynamic-button v-if="addItemButton" :name="btnName1" :fill="btnFill" :icon="addOutline" @clicked:btn="addData"></dynamic-button>
 
