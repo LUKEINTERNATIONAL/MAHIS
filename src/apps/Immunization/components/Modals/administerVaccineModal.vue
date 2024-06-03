@@ -139,10 +139,10 @@ export default defineComponent({
     watch: {
         batchNumber: {
             handler() {
-                if (this.isNumeric(this.batchNumber as string) == true) {
+                if (this.isAlphaNumeric(this.batchNumber as string) == true) {
                     this.is_batch_number_valid = false;
                 }
-                if (this.isNumeric(this.batchNumber as string) == false) {
+                if (this.isAlphaNumeric(this.batchNumber as string) == false) {
                     this.is_batch_number_valid = true;
                 }
             },
@@ -205,9 +205,9 @@ export default defineComponent({
             saveVaccineAdministeredDrugs();
             this.dismiss();
         },
-        isNumeric(text: string) {
+        isAlphaNumeric(text: string) {
             // Regular expression to match one or more digits
-            const regex = /^\d+$/;
+            const regex = /^[a-zA-Z0-9]+$/;
             return regex.test(text);
         },
     },
