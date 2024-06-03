@@ -105,7 +105,7 @@ export default defineComponent({
         getInjectSignForVaccine(vaccine: any, visit_id: number) {
             const store = useAdministerVaccineStore()
             if (visit_id < store.getCurrentVisitId() && vaccine.status != 'administered') {
-                return this.iconsContent.redXclose
+                return this.iconsContent.redAlert
             }
             if (visit_id < store.getCurrentVisitId() && vaccine.status == 'administered') {
                 return this.iconsContent.smallAlreadyAdminstered
@@ -125,7 +125,7 @@ export default defineComponent({
                 return this.iconsContent.smallEditPen
             }
             if (vaccine.status == 'administered') {
-                return this.iconsContent.greenTickCheckbox
+                return this.iconsContent.improvedGreenTick
             } else {
                 return this.iconsContent.whiteCheckbox
             }
