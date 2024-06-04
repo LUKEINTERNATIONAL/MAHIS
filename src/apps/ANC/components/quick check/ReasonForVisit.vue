@@ -72,7 +72,7 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapState(useReasonForVisitStore, ["ReasonForVisit"]),
+    ...mapState(useReasonForVisitStore, ["ReasonForVisit","ReasonForSubsequentVisit"]),
     reasonVisitFacility(){return getRadioSelectedValue(this.ReasonForVisit,'Reason for visit')}
   },
   mounted() {
@@ -124,6 +124,7 @@ handleFirstAntenalVisit() {
   ];
 
   if (getCheckboxSelectedValue(this.ReasonForVisit, 'None')?.checked) {
+  
     checkBoxes.forEach((checkbox) => {
       modifyCheckboxValue(this.ReasonForVisit, checkbox, 'checked', false);
       modifyCheckboxValue(this.ReasonForVisit, checkbox, 'disabled', true);
@@ -132,6 +133,11 @@ handleFirstAntenalVisit() {
     // Reset and hide 
     modifyRadioValue(this.ReasonForVisit, 'Action for danger signs', 'selectedValue', '');
     modifyRadioValue(this.ReasonForVisit, 'Action for danger signs', 'displayNone', true);
+    modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', true);
+    
+    //ReasonForSubsequentVisit
+    modifyFieldValue(this.ReasonForVisit, 'notes', 'displayNone', true);
+    modifyFieldValue(this.ReasonForVisit, 'Number of previous visits', 'displayNone', true);
 
   } else {
     let anyCheckboxSelected = false;
@@ -143,15 +149,16 @@ handleFirstAntenalVisit() {
       modifyCheckboxValue(this.ReasonForVisit, checkbox, 'disabled', false);
     });
 
+    
+
     modifyRadioValue(this.ReasonForVisit, 'Action for danger signs', 'displayNone', !anyCheckboxSelected);
   }
 
   if (getRadioSelectedValue(this.ReasonForVisit, 'Action for danger signs') == 'No') {
-    modifyCheckboxValue(this.ReasonForVisit, 'Specific health concerns', 'displayNone', false);
-    //modifyCheckboxValue
+    modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', false);
     modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', false);
   } else {
-    modifyCheckboxValue(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
+    modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
     modifyRadioValue(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
   }
 }
