@@ -123,15 +123,15 @@ export default defineComponent({
             const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
 
             const weightValue = getFieldValue(this.vitalsWeightHeight, "weight", "value");
-            const heightValue = getFieldValue(this.vitalsWeightHeight, "Height", "value");
+            const heightValue = getFieldValue(this.vitalsWeightHeight, "height", "value");
             const height = vitalsInstance.validator({ inputHeader: "Height*", value: heightValue });
             const weight = vitalsInstance.validator({ inputHeader: "Weight*", value: weightValue });
             if (height && heightValue) {
-                modifyFieldValue(this.vitalsWeightHeight, "Height", "alertsErrorMassage", height.flat(Infinity)[0]);
-                modifyFieldValue(this.vitalsWeightHeight, "Height", "alertsError", true);
+                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsErrorMassage", height.flat(Infinity)[0]);
+                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsError", true);
             } else {
-                modifyFieldValue(this.vitalsWeightHeight, "Height", "alertsErrorMassage", "");
-                modifyFieldValue(this.vitalsWeightHeight, "Height", "alertsError", false);
+                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsErrorMassage", "");
+                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsError", false);
             }
 
             if (weight && weightValue) {
@@ -141,8 +141,7 @@ export default defineComponent({
                 modifyFieldValue(this.vitalsWeightHeight, "weight", "alertsErrorMassage", "");
                 modifyFieldValue(this.vitalsWeightHeight, "weight", "alertsError", false);
             }
-
-            if (weight == null && height == null) this.setBMI(weightValue, heightValue);
+            this.setBMI(weightValue, heightValue);
         },
         async saveVitals() {
             const userID: any = Service.getUserID();
