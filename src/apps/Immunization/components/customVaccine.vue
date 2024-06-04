@@ -144,9 +144,9 @@ export default defineComponent({
             const currentVisitId = store.getCurrentVisitId()
             const currentSchFound = store.getCurrentSchedFound()
             
-            if (currentSchFound == false) {
-                return true
-            }
+            // if (currentSchFound == false) {
+            //     return true
+            // }
             
             if (identifier == currentVisitId) {
                 return false
