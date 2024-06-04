@@ -84,8 +84,8 @@
                         :hide-selected="true"
                         :close-on-select="true"
                         openDirection="bottom"
-                        tag-placeholder="Select method of prescription"
-                        placeholder="Select method of prescription"
+                        tag-placeholder="Find and select medication"
+                        placeholder="Find and select medication"
                         selectLabel=""
                         label="name"
                         :searchable="true"
@@ -451,8 +451,6 @@ onMounted(async () => {
     FirstPreviousAllegies.value = Object.entries(previousDrugAllergies)[0];
     const [, ...restEntriesAllegies] = Object.entries(previousDrugAllergies);
     RestOfPreviousAllegies.value = restEntriesAllegies;
-
-    console.log(drug_frequencies)
 });
 
 watch(

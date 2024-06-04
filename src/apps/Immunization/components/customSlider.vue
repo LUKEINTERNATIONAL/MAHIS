@@ -1,13 +1,13 @@
 <template>
 
     <div v-if="showCurrentMilestoneAlert" class="alert_banner">
-      <apan>Vaccines due today</apan>
+      <apan>{{ msg }}</apan>
       <ion-icon style="margin-top: 7px;" slot="end" size="medium" :icon="iconsContent.greenCalender">
       </ion-icon>
       <span style="font-weight: 700;">{{age}}</span>
     </div>
 
-    <carousel :items-to-show="1" :modelValue="3" @slide-end="slideEvent">
+    <carousel :items-to-show="1" :modelValue="landingSlide" @slide-end="slideEvent">
       <slide v-for="slide in 12" :key="slide">
         <!-- {{ slide }} -->
         <div class="container">
@@ -100,6 +100,8 @@
             iconsContent: icons,
             showCurrentMilestoneAlert: false,
             age: '',
+            landingSlide: 0,
+            msg: 'Vaccines due today',
         };
     },
     computed: {
@@ -124,14 +126,37 @@
         const data__ = await getVaccinesSchedule()
         const vaccineScheduleStore = useAdministerVaccineStore()
 
-        vaccineScheduleStore.setCurrentMilestone('14 weeks')
-        this.showCurrentMilestoneAlert = true
-        this.age = '14 weeks'
-        vaccineScheduleStore.setCurrentMilestoneToAdminister({currentMilestone: '14 weeks'})
-        vaccineScheduleStore.setCurrentVisitId(4)
-
         vaccineScheduleStore.setVaccineSchedule(data__)
+        let upcoming_f = false
+        let found = false
         vaccineScheduleStore.getVaccineSchedule().vaccinSchedule.forEach((vaccineSchudule: any) => {
+
+          console.log(vaccineSchudule.milestone_status)
+          if (vaccineSchudule.milestone_status == 'current' ) {
+            vaccineScheduleStore.setCurrentVisitId(vaccineSchudule.visit)
+            vaccineScheduleStore.setCurrentMilestoneToAdminister({currentMilestone: vaccineSchudule.age})
+            this.landingSlide = vaccineSchudule.visit - 1
+            this.age = vaccineSchudule.age
+            found = true
+            vaccineScheduleStore.setCurrentSchedFound(true)
+          }
+
+          if (found == false && vaccineSchudule.milestone_status == 'upcoming' && upcoming_f == false) {
+            vaccineScheduleStore.setCurrentVisitId(vaccineSchudule.visit)
+            vaccineScheduleStore.setCurrentMilestoneToAdminister({currentMilestone: vaccineSchudule.age})
+            this.landingSlide = vaccineSchudule.visit - 1
+            this.age = vaccineSchudule.age
+            upcoming_f = true
+          }
+
+          if (found == false && vaccineSchudule.visit == 12 && upcoming_f == false) {
+            vaccineScheduleStore.setCurrentVisitId(vaccineSchudule.visit)
+            vaccineScheduleStore.setCurrentMilestoneToAdminister({currentMilestone: vaccineSchudule.age})
+            this.landingSlide = vaccineSchudule.visit - 1
+            this.age = vaccineSchudule.age
+            upcoming_f = true
+          }
+
           const obj =  { visit_id: vaccineSchudule.visit, age: vaccineSchudule.age }
           this.milestones = this.appendUniqueObject(this.milestones, obj)
 
@@ -184,6 +209,9 @@
           }
 
         })
+        if (found == false) {
+          vaccineScheduleStore.setCurrentSchedFound(false)
+        }
       },
       slideEvent(SlideEventData: any) {
         const vaccineScheduleStore = useAdministerVaccineStore()
@@ -197,15 +225,19 @@
         const templmilesytone = vaccineScheduleStore.getCurrentMilestone()
 
         if (templmilesytone == CurrentMilestoneToAdminister.currentMilestone) {
+           if (vaccineScheduleStore.getCurrentSchedFound() == false) {
+            this.msg = "Upcoming Vaccines"
+           }
+           if (vaccineScheduleStore.getCurrentSchedFound() == true) {
+            this.msg = "Vaccines due today"
+           }
             this.showCurrentMilestoneAlert = true
-
-            console.log("qawsedrftgyh", this.showCurrentMilestoneAlert)
             return
           }
 
           if (templmilesytone.age != CurrentMilestoneToAdminister.currentMilestone) {
             this.showCurrentMilestoneAlert = false
-            console.log("jmjmk", this.showCurrentMilestoneAlert)
+            
           }
       },
       appendUniqueObject(arr: any, obj: any) {
