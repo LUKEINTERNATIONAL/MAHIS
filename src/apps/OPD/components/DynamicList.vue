@@ -4,7 +4,7 @@
             <div style="display: flex; padding: 0.3em;">
                 <ion-label
                     style="width: 260px; color: #00190E; font-weight: 550; font: inter; line-height: 14px; line-height: 21px;">Drug
-                    Name</ion-label>
+                </ion-label>
             </div>
         </ion-col>
         <ion-col>
