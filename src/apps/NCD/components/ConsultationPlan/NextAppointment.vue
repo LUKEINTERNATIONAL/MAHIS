@@ -6,10 +6,10 @@
                     class="calender"
                     @date-update="handleDateUpdate"
                     v-model="date"
-                    :min-date="minDate"
                     inline
                     auto-apply
                     :enable-time-picker="false"
+                    :disabled-dates="disabledDates"
                 >
                     <template #day="{ day }">
                         <template v-if="day === tomorrow">
@@ -68,6 +68,7 @@ import { mapState } from "pinia";
 import { AppointmentService } from "@/services/appointment_service";
 import { Service } from "@/services/service";
 import { PatientService } from "@/services/patient_service";
+import { useClinicalDaysStore } from "@/stores/clinicalDaysStore";
 
 export default defineComponent({
     components: {
@@ -92,6 +93,9 @@ export default defineComponent({
             drugRunoutDate: "" as any,
             nextAppointmentDate: "" as any,
             minDate: new Date(),
+            disabledDates: [],
+
+            datesCounts: [] as any,
         };
     },
     computed: {
@@ -110,6 +114,8 @@ export default defineComponent({
         const patient = new PatientService();
         this.appointment = new AppointmentService(patient.getID(), userID);
         this.nextAppointmentDate = this.appointment.date;
+        this.loadDataFromStore()
+       
     },
     methods: {
         updateNextAppointment() {
@@ -117,8 +123,11 @@ export default defineComponent({
             nextAppointmentStore.setNextAppointment(this.calendarDate);
         },
         handleDateUpdate(value: any) {
+            const storeClinicalDaysStore = useClinicalDaysStore()
+            storeClinicalDaysStore.setsssignedAppointmentsDates(value);
             this.calendarDate = HisDate.toStandardHisDisplayFormat(value);
             this.saveData();
+            this.loadDataFromStore()
         },
         async saveData() {
             try {
@@ -137,6 +146,15 @@ export default defineComponent({
             // await this.appointment.saveObservationList(ttt);
             console.log("🚀 ~ mounted ~ ttt:", ttt);
         },
+        loadDataFromStore() {
+            const storeClinicalDaysStore = useClinicalDaysStore()
+            this.disabledDates = storeClinicalDaysStore.getDisabledDates() as any
+            // this.date = storeClinicalDaysStore.getAssignedAppointmentsDates()
+            console.log(storeClinicalDaysStore.getAssignedAppointmentsDates())
+            console.log(storeClinicalDaysStore.getAssignedAppointments())
+
+            this.datesCounts = storeClinicalDaysStore.getAssignedAppointments() as any
+        }
     },
 });
 </script>

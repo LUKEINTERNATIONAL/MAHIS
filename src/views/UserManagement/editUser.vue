@@ -49,7 +49,7 @@
         <ion-row>
             <ion-col>
                 <Toggle
-                    class="toggle-green "
+                    class="toggle-green"
                     :classes="{
                         container: 'inline-block rounded-full outline-none focus:ring focus:ring-green-500 focus:ring-opacity-30',
                     }" 

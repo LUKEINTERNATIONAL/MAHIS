@@ -1,11 +1,11 @@
 <template>
-    <div class="custom_card" style="padding:10px">
+    <div class="custom_card" style="padding: 10px">
         <DashBox :status="no_item" :content="'No Diagnosis added'" />
-    
+
         <span v-if="display_item">
             <list :listData="OPDdiagnosis[0].selectedData" @clicked:edit="editDiagnosis($event)" @clicked:delete="deleteDiagnosis"> </list>
         </span>
-    
+
         <ion-row v-if="search_item">
             <basic-form
                 :contentData="OPDdiagnosis"
@@ -203,7 +203,7 @@ export default defineComponent({
                 this.OPDdiagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = "Diagnosis already selected";
                 return false;
             }
-            this.OPDdiagnosis[0].selectedData = [...this.OPDdiagnosis[0].selectedData,...diagnosis];
+            this.OPDdiagnosis[0].selectedData = [...this.OPDdiagnosis[0].selectedData, ...diagnosis];
             return true;
         },
         compareArrays(array1: any, array2: any) {
@@ -314,5 +314,9 @@ export default defineComponent({
 }
 .search_result {
     padding: 10px;
+}
+.previousView {
+    margin-top: 70px;
+    margin-bottom: 20px;
 }
 </style>

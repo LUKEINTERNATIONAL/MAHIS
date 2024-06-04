@@ -174,23 +174,28 @@ export default defineComponent({
             return arrayOfObjects.some((obj: any) => obj.name === name);
         },
         async addNewRow() {
-            if (await this.validaterowData()) {
+            if ((await this.validaterowData()) && this.validateDurationUnits()) {
                 this.presentingComplaints[0].data.rowData[0].colData[0].value = this.inputFields[0].value;
                 this.search_item = false;
                 this.display_item = true;
                 this.addItemButton = true;
                 this.buildpresentingComplaintsList();
+            } else {
+                return;
             }
             this.presentingComplaints[0].data.rowData[0].colData[0].value = "";
+            this.presentingComplaints[0].data.rowData[0].colData[1].value = "";
+            this.presentingComplaints[0].data.rowData[0].colData[2].value = "";
             this.presentingComplaints[0].data.rowData[0].colData[0].popOverData.data = [];
         },
         buildpresentingComplaintsList() {
+            const duration = this.inputFields[1].value + " " + this.inputFields[2].value.name;
             this.presentingComplaints[0].selectedData.push({
                 actionBtn: true,
                 btn: ["edit", "delete"],
                 name: this.inputFields[0].value,
                 id: this.presentingComplaintsListData[0].concept_id,
-                display: [this.inputFields[0].value, this.inputFields[1].value],
+                display: [this.inputFields[0].value, duration],
                 data: [
                     {
                         concept_id: 6542, //primary presentingComplaints
@@ -199,11 +204,12 @@ export default defineComponent({
                     },
                     {
                         concept_id: 1294, //Duration of symptom in days
-                        value_numeric: this.presentingComplaintsListData[0].concept_id,
+                        value_text: this.presentingComplaintsListData[0].concept_id,
                         obs_datetime: Service.getSessionDate(),
                     },
                 ],
             });
+            console.log("🚀 ~ buildpresentingComplaintsList ~ this.presentingComplaints[0].selectedData:", this.presentingComplaints[0].selectedData);
         },
         updatePresentingComplaintsListStores() {
             const presentingComplaintsListStore = usePresentingComplaintsStore();
@@ -220,6 +226,8 @@ export default defineComponent({
                 this.validaterowData();
             } else if (col.inputHeader == "Duration") {
                 this.validateDuration();
+            } else if (col.inputHeader == "Duration Units") {
+                this.validateDurationUnits();
             }
         },
         validateDuration() {
@@ -232,6 +240,19 @@ export default defineComponent({
                 this.search_item = true;
                 this.presentingComplaints[0].data.rowData[0].colData[1].alertsError = true;
                 this.presentingComplaints[0].data.rowData[0].colData[1].alertsErrorMassage = " Value must be a number";
+                return false;
+            }
+        },
+        validateDurationUnits() {
+            this.presentingComplaints[0].data.rowData[0].colData[2].alertsError = false;
+            this.presentingComplaints[0].data.rowData[0].colData[2].alertsErrorMassage = "";
+
+            if (this.inputFields[2].value) {
+                return true;
+            } else {
+                this.search_item = true;
+                this.presentingComplaints[0].data.rowData[0].colData[2].alertsError = true;
+                this.presentingComplaints[0].data.rowData[0].colData[2].alertsErrorMassage = "Please select duration units";
                 return false;
             }
         },
@@ -296,5 +317,9 @@ h5 {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+}
+.previousView {
+    margin-top: 70px;
+    margin-bottom: 20px;
 }
 </style>

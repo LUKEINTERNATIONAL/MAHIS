@@ -54,7 +54,7 @@ import { isEmpty } from "lodash";
 import HisDate from "@/utils/Date";
 import { defineComponent } from "vue";
 import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
-import { useVitalsStore } from "../stores/OpdVitalsStore";
+import { useVitalsStore } from "@/stores/VitalsStore";
 import { getFieldValue, getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from "@/services/data_helpers";
 export default defineComponent({
     name: "Home",
@@ -86,7 +86,7 @@ export default defineComponent({
             dispositions: "" as any,
             wizardData: [
                 {
-                    title: "Vitals",
+                    title: "Vital Signs",
                     class: "common_step",
                     checked: false,
                     disabled: false,
@@ -96,8 +96,8 @@ export default defineComponent({
             ],
             StepperData: [
                 {
-                    title: "Vitals",
-                    component: "OPDVitals",
+                    title: "Vital Signs",
+                    component: "VitalSigns",
                     value: "1",
                 },
             ],

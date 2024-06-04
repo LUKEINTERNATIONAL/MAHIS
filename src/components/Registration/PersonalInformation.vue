@@ -108,7 +108,8 @@ export default defineComponent({
         },
 
         async handleInputData(event: any) {
-            if (event.name == "Estimate Age") {
+            if (event?.col?.name == "Estimate Age" && !event?.col?.checked) {
+                modifyFieldValue(this.personInformation, "estimation", "displayNone", true);
             }
             // Estimated age
             this.validationRules(event);
