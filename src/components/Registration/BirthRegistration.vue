@@ -138,6 +138,9 @@ export default defineComponent({
     },
 
     methods: {
+        handleBtns() {
+            console.log("lll");
+        },
         setCurrentStep(name: any) {
             this.currentStep = name;
         },
