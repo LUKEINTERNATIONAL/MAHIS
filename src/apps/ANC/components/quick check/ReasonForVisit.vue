@@ -104,45 +104,60 @@ export default defineComponent({
       menuController.close()
       this.$router.push(url);
     },
-    handleFirstAntenalVisit(){
-      if (getCheckboxSelectedValue(this.ReasonForVisit, 'Other danger signs')?.value == 'other danger signs') {
-        modifyFieldValue(this.ReasonForVisit, 'Other notes', 'displayNone', false);
-      } else {
-        modifyFieldValue(this.ReasonForVisit, 'Other notes', 'displayNone', true);  
+    //   if (getRadioSelectedValue(this.ReasonForVisit, 'Action for danger signs') == 'No') {
+    //     modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', false);
+    //     modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', false);
+    //     // modifyCheckboxHeader(this.ReasonForVisit, 'Previous visits', 'selectedValue', '');
+
+
+handleFirstAntenalVisit() {
+  if (getCheckboxSelectedValue(this.ReasonForVisit, 'Other danger signs')?.value == 'other danger signs') {
+    modifyFieldValue(this.ReasonForVisit, 'Other notes', 'displayNone', false);
+  } else {
+    modifyFieldValue(this.ReasonForVisit, 'Other notes', 'displayNone', true);  
+  }
+
+  const checkBoxes = [
+    'Pre-term labour', 'Central cyanosis', 'Unconscious', 'Fever', 'Imminent delivery',
+    'Severe headache', 'Severe vomiting', 'Severe abdominal pain', 'Draining liquor',
+    'Respiratory problems', 'Convulsion history', 'Vomiting', 'Oedema', 'Epigastric pain', 'Bleeding vaginally', 'Other danger signs'
+  ];
+
+  if (getCheckboxSelectedValue(this.ReasonForVisit, 'None')?.checked) {
+    checkBoxes.forEach((checkbox) => {
+      modifyCheckboxValue(this.ReasonForVisit, checkbox, 'checked', false);
+      modifyCheckboxValue(this.ReasonForVisit, checkbox, 'disabled', true);
+    });
+
+    // Reset and hide 
+    modifyRadioValue(this.ReasonForVisit, 'Action for danger signs', 'selectedValue', '');
+    modifyRadioValue(this.ReasonForVisit, 'Action for danger signs', 'displayNone', true);
+
+  } else {
+    let anyCheckboxSelected = false;
+
+    checkBoxes.forEach((checkbox) => {
+      if (getCheckboxSelectedValue(this.ReasonForVisit, checkbox)?.checked) {
+        anyCheckboxSelected = true;
       }
-      const checkBoxes=['Pre-term labour','Central cyanosis', 'Unconscious', 'Fever', 'Imminent delivery',
-        'Severe headache', 'Severe vomiting','Severe abdominal pain','Draining liquor',
-        'Respiratory problems','Convulsion history','Vomiting' , 'Oedema', 'Epigastric pain', 'Bleeding vaginally', 'Other danger signs']
-      if (getCheckboxSelectedValue(this.ReasonForVisit, 'None')?.checked) {
-        checkBoxes.forEach((checkbox) => {
-          modifyCheckboxValue(this.ReasonForVisit, checkbox, 'checked', false);
-          modifyCheckboxValue(this.ReasonForVisit, checkbox, 'disabled', true);
-          modifyRadioValue(this.ReasonForVisit, 'Action for danger signs', 'displayNone', true);
-        });
-      } else {
-        let anyCheckboxSelected = false;
-        checkBoxes.forEach((checkbox) => {
-          if (getCheckboxSelectedValue(this.ReasonForVisit, checkbox)?.checked) {
-            anyCheckboxSelected = true;
-          }
-          modifyCheckboxValue(this.ReasonForVisit, checkbox, 'disabled', false);
-        });
-        modifyRadioValue(this.ReasonForVisit, 'Action for danger signs', 'displayNone', !anyCheckboxSelected);
-      }
+      modifyCheckboxValue(this.ReasonForVisit, checkbox, 'disabled', false);
+    });
 
-      if (getRadioSelectedValue(this.ReasonForVisit, 'Action for danger signs') == 'No') {
-        modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', false);
-        modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', false);
-        // modifyCheckboxHeader(this.ReasonForVisit, 'Previous visits', 'selectedValue', '');
+    modifyRadioValue(this.ReasonForVisit, 'Action for danger signs', 'displayNone', !anyCheckboxSelected);
+  }
 
-      } else {
-        modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
-        modifyRadioValue(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
-        // modifyRadioValue(this.ReasonForVisit, 'Action for danger signs', 'selectedValue', '');
+  if (getRadioSelectedValue(this.ReasonForVisit, 'Action for danger signs') == 'No') {
+    modifyCheckboxValue(this.ReasonForVisit, 'Specific health concerns', 'displayNone', false);
+    //modifyCheckboxValue
+    modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', false);
+  } else {
+    modifyCheckboxValue(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
+    modifyRadioValue(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
+  }
+}
 
-      }
 
-    },
+,
     handleSpecificConcernsVisit(){
       // if (getRadioSelectedValue(this.ReasonForVisit, 'Reason for visit') == 'Specific complaint related to antenatal care') {
       //   modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', false);
