@@ -430,9 +430,9 @@ export default defineComponent({
         async saveConsciousness() {
             const data = await formatRadioButtonData(this.levelOfConsciousness);
 
-            console.log({ data });
+            // console.log("=====>",{ data });
 
-            return;
+    
             const userID: any = Service.getUserID();
             const consciousness = new ConsciousnessService(this.demographics.patient_id, userID);
             const encounter = await consciousness.createEncounter();
@@ -441,7 +441,7 @@ export default defineComponent({
             //   const gcs = this.levelOfConsciousness[0].radioBtnContent.data;
 
             const dat = await formatRadioButtonData(this.levelOfConsciousness);
-            //   await consciousness.saveObservationList(gcs);
+              await consciousness.saveObservationList(dat);
         },
         async buildPhysicalExamination() {
             return [

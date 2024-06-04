@@ -9,6 +9,7 @@
     </ion-app>
 </template>
 
+
 <script lang="ts">
 import Menu from "@/components/Menu.vue";
 import { IonApp, IonRouterOutlet } from "@ionic/vue";
