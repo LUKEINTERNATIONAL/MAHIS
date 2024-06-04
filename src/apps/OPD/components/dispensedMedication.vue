@@ -13,12 +13,18 @@
             </ion-item>
         </ion-row>
 
-        <ion-label>Current Diagnoses</ion-label>
-        <div v-for="(item, index) in list" :key="index">
-            <ion-button color="secondary" class="medicalAlBtn">
-                {{ item.display[0] }}
-            </ion-button>
-        </div>
+        <ion-label>Diagnoses</ion-label>
+        <ion-row>
+            <ion-item lines="none" class="medicalAl">
+                <ion-row>
+                    <div v-for="(item, index) in list" :key="index">
+                        <ion-button color="secondary" class="medicalAlBtn">
+                            {{ item.display[0] }}
+                        </ion-button>
+                    </div>
+                </ion-row>
+            </ion-item>
+        </ion-row>
 
         <div class="space" />
         <ion-label>Prescribed Medications To Be Dispensed</ion-label>
