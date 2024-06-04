@@ -126,7 +126,6 @@ function MultValidations(fieldName: string, value: any): null | any {
         if (DateError !== null) {
             return DateError;
         }
-
     }
     else if (fieldName === 'UltrasoundDate') {
         const requiredError: any | null = Validation.required(value);
