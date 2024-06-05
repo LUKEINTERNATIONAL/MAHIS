@@ -76,9 +76,9 @@
                 </div>
             </div>
             <div class="milestone">
-                <div style="width: 120px; display: flex; justify-content: space-between; align-content: center">
-                    <ion-icon size="small" :icon="iconsContent.calendar"></ion-icon>
-                    <div style="color: #636363">
+                <div style="display: flex; justify-content: space-between; align-content: center">
+                    <ion-icon size="small" :icon="iconsContent.greenCalender"></ion-icon>
+                    <div style="color: #636363; margin-left: 5px; margin-top: -4px;">
                         at <span style="color: #636363; font-weight: bold; font-size: 14px"> {{ current_milestone }}</span>
                     </div>
                 </div>
@@ -697,8 +697,9 @@ export default defineComponent({
 }
 .vaccinesTitleText {
     font-style: normal;
+    margin-top: -7px;
     font-weight: 600;
-    font-size: 17px;
+    font-size: 20px;
     color: #00190e;
 }
 .vaccinesTitleDate {

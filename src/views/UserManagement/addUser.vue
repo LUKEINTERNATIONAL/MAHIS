@@ -49,6 +49,35 @@
     </ion-row>
 
     <ion-row>
+        <ion-col size="6">
+            <VueMultiselect
+                v-model="selected_location"
+                @update:model-value="selectedLocation($event)"
+                :multiple="false"
+                :taggable="false"
+                :hide-selected="true"
+                :close-on-select="true"
+                openDirection="bottom"
+                tag-placeholder="Find and select medication"
+                placeholder="Find and select medication"
+                selectLabel=""
+                label="name"
+                :searchable="true"
+                @search-change="FindLocation($event)"
+                track-by="location_id"
+                :options="locationData"
+            />
+
+            <div>
+                <ion-label v-if="location_show_error" class="error-label">
+                    {{ location_error_message }}
+                </ion-label>
+            </div>
+        </ion-col>
+    </ion-row>
+
+    <ion-row>
+
         <ion-col>
             <ListPicker
                 :multiSelection="list_picker_prperties[0].multi_Selection"
@@ -163,6 +192,9 @@ import _ from "lodash"
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
 import ListPicker from "../../components/ListPicker.vue"
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts"
+import VueMultiselect from "vue-multiselect"
+import { LocationService } from "@/services/location_service"
+import { isEmpty } from "lodash"
 import {
     addOutline,
     pencilOutline,
@@ -187,6 +219,11 @@ const passwordErrorMsgs = [
     'Input must be at least 4 characters long, containing only letters, numbers, and symbols',
     'Password does not match'
 ]
+const selected_location = ref()
+const locationData = ref([]) as any
+const locationId = ref()
+const location_error_message = ref('Select location')
+const location_show_error = ref(false)
 
 const props = defineProps<{
     action: any
@@ -204,15 +241,37 @@ watch(
     }
 )
 
+function selectedLocation(data: any) {
+    locationId.value = data.location_id
+}
+
+async function FindLocation(text: any) {
+    let srch_text
+    if (isEmpty(text) == true) {
+        srch_text = ''
+    } if (isEmpty(text) == false) {
+        srch_text = text
+    }
+    const temp_data1 = await LocationService.getFacilities({ name: srch_text })
+    locationData.value = []
+    temp_data1.forEach((item: any) => {
+        if (isEmpty(item.name) == false) {
+                locationData.value.push(item)
+            }
+    })
+}
+
 async function trigerSaveFn() {
     const _isRoleSelected_ = isRoleSelected()
     const _isProgramSelected_ = isProgramSelected()
     const _areFieldsValid_ = areFieldsValid(input_properties)
     const _isSSelectionValid_ = isSSelectionValid()
     const _ValidatePassword_ = ValidatePassword()
+    const _validateLocation = validateLocation()
 
-    if (_areFieldsValid_ == true && _ValidatePassword_ == true && _isSSelectionValid_ == true && _isRoleSelected_ == true && _isProgramSelected_ == true) {
+    if (_areFieldsValid_ == true && _ValidatePassword_ == true && _isSSelectionValid_ == true && _isRoleSelected_ == true && _isProgramSelected_ == true && _validateLocation == true) {
         const data1 = getFieldsValuesObj(input_properties)
+        console.log(selected_location.value)
         const payload = {
             family_name: data1.last_name,
             given_name: data1.firstname,
@@ -221,7 +280,8 @@ async function trigerSaveFn() {
             password: password_input_properties[0].dataValue.value,
             programs: selectedProgramIds,
             roles: selectedRoleNames,
-            gender: isSSelection_properties[0].dataValue.value
+            gender: isSSelection_properties[0].dataValue.value,
+            location_id: selected_location.value.location_id
         }
 
         try {
@@ -330,12 +390,24 @@ function isSSelectionValid() {
     return is_valid
 }
 
+function validateLocation() {
+    if (isEmpty(selected_location.value) == true) {
+        location_show_error.value = true
+        return false
+    }
+    if (isEmpty(selected_location.value) == false) {
+        location_show_error.value = false
+        return true
+    }
+}
+
 function ValidatePassword(): boolean {
     let is_valid = false
     let error_foundP_p1 = false
     let error_foundP_p2 = false
     let is_password1_valid
     let is_password2_valid
+    
 
     password_input_properties[0].error_message = passwordErrorMsgs[0]
     password_input_properties[1].error_message = passwordErrorMsgs[0]
