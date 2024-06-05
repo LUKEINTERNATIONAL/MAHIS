@@ -355,7 +355,7 @@ const initialReasonForVisit = [
     checkboxBtnContent: {
       header: {
         class: "bold",
-        title: "What are the specific health concerns for the patient*?",
+        title: "What are the specific health concerns for the patient?",
         selectedValue: "",
         name: "Specific health concerns",
         displayNone: true,

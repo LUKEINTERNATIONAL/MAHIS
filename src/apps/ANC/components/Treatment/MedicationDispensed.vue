@@ -4,7 +4,7 @@
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
               <basic-form :contentData="iron" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
-              <basic-form :contentData="folicAcid" @update:inputValue="handleInputData"></basic-form>
+              <basic-form :contentData="folicAcid" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
               <!-- <basic-form :contentData="folicAcid"></basic-form> -->
               <!-- <basic-form :contentData="folicAcidReason"></basic-form> -->
               <basic-form :contentData="vitaminA"></basic-form>
@@ -78,7 +78,7 @@ export default defineComponent ({
         ...mapState(useMedicationDispensedStore, ["vitaminA"]),
        // ...mapState(useMedicationDispensedStore, ["calcium"]),
        "iron Amount"(){return getFieldValue(this.iron,'iron Amount','value')},
-       "Folic acid"(){return getFieldValue(this.folicAcid,'Amount of Folic acid','value')},
+       "Amount of Folic acid"(){return getFieldValue(this.folicAcid,'Amount of Folic acid','value')},
 
 
     },
@@ -155,7 +155,7 @@ export default defineComponent ({
       },
 
       validationRules(event: any) {
-         return validateField(this.iron,event.name, (this as any)[event.name]) || validateField(this.folicAcid,event.name, (this as any)[event.name]);  
+         return validateField(this.folicAcid,event.name, (this as any)[event.name]) || validateField(this.iron,event.name, (this as any)[event.name]);  
          // return fields.every((fieldName:string)=>validateField(data,fieldName,(this as any)[fieldName]))     
      },
     handleIron(){

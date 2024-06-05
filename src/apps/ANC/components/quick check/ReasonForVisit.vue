@@ -121,9 +121,13 @@ handleFirstAntenalVisit() {
     'Pre-term labour', 'Central cyanosis', 'Unconscious', 'Fever', 'Imminent delivery',
     'Severe headache', 'Severe vomiting', 'Severe abdominal pain', 'Draining liquor',
     'Respiratory problems', 'Convulsion history', 'Vomiting', 'Oedema', 'Epigastric pain', 'Bleeding vaginally', 'Other danger signs'
+
+    ,'Abnormal vaginal discharge','Change in blood pressure-up','Diarrhoea','Vomiting','Genital ulcers','Change in blood pressure-down',
+    'Constipation','Contractions','Vaginal bleeding','Intimate partner violence','Flu symptoms','Painful urination','Headache','Dyspepsia','Frequent urination/Polyuria',
+    'Injury','Jaundice','Mental health-Depression','Genital warts','Itchy vulva','Painful intercourse','No health concerns','Other'
   ];
 
-  if (getCheckboxSelectedValue(this.ReasonForVisit, 'None')?.checked) {
+ if(getCheckboxSelectedValue(this.ReasonForVisit, 'None')?.checked){
   
     checkBoxes.forEach((checkbox) => {
       modifyCheckboxValue(this.ReasonForVisit, checkbox, 'checked', false);
