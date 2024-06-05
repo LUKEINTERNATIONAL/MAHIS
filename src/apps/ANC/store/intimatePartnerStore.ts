@@ -10,7 +10,7 @@ export const useIntimatePartnerStore = defineStore("intimatePartnerStore", {
         //classDash: "dashed_bottom_border _padding",
         radioBtnContent: {
           header: {
-            title: "Intimate partner firstlline support provided?",
+            title: "Intimate partner firstline support provided?",
             selectedValue: "",
             class: "bold",
             name: "intimateInfo",

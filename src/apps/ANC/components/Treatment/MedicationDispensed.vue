@@ -4,7 +4,8 @@
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
               <basic-form :contentData="iron" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
-              <basic-form :contentData="folicAcid"></basic-form>
+              <basic-form :contentData="folicAcid" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-form>
+              <!-- <basic-form :contentData="folicAcid"></basic-form> -->
               <!-- <basic-form :contentData="folicAcidReason"></basic-form> -->
               <basic-form :contentData="vitaminA"></basic-form>
               <!-- <basic-form :contentData="calcium"></basic-form> -->
@@ -39,6 +40,7 @@ import { icons } from '../../../../utils/svg';
 import { useMedicationDispensedStore } from '../../store/medicationDispensed';
 import { getFieldValue, getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from '@/services/data_helpers';
 import { validateField } from '@/services/ANC/treatement_validation_service';
+import StandardValidations from '@/validations/StandardValidations';
 
 
 
@@ -75,7 +77,9 @@ export default defineComponent ({
        // ...mapState(useMedicationDispensedStore, ["folicAcidReason"]),
         ...mapState(useMedicationDispensedStore, ["vitaminA"]),
        // ...mapState(useMedicationDispensedStore, ["calcium"]),
-       ironPrescription(){return getFieldValue(this.iron,'iron Amount','value')},
+       "iron Amount"(){return getFieldValue(this.iron,'iron Amount','value')},
+       "Amount of Folic acid"(){return getFieldValue(this.folicAcid,'Amount of Folic acid','value')},
+
 
     },
     mounted(){
@@ -143,7 +147,7 @@ export default defineComponent ({
     },
     methods :{
       handleInputData(data: any){
-            this. validationRules(data)
+            this.validationRules(data)
       },
       // Validations
       validaterowData(event: any) {
@@ -151,7 +155,7 @@ export default defineComponent ({
       },
 
       validationRules(event: any) {
-         return validateField(this.iron,event.name, (this as any)[event.name]);  
+         return validateField(this.folicAcid,event.name, (this as any)[event.name]) || validateField(this.iron,event.name, (this as any)[event.name]);  
          // return fields.every((fieldName:string)=>validateField(data,fieldName,(this as any)[fieldName]))     
      },
     handleIron(){

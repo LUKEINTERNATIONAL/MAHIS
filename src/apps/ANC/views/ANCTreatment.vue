@@ -66,7 +66,7 @@ export default defineComponent({
     return {
   wizardData: [
                {
-                    title: 'Diagnosis and treatment',
+                    title: 'Diagnosis and Treatment',
                     class: 'common_step',
                     checked:false,
                     disabled:false,
@@ -74,7 +74,7 @@ export default defineComponent({
                     last_step: ''
                 },
                 {
-                    title: 'Medication dispensed',
+                    title: 'Medication Dispensed',
                     class: 'common_step',
                     checked:false,
                     disabled:false,
@@ -98,7 +98,7 @@ export default defineComponent({
                     last_step: ''
                 },
                 {
-                    title: 'Intimate Partner',
+                    title: 'Intimate Partner Violence',
                     class: 'common_step',
                     checked:false,
                     disabled:false,
@@ -106,7 +106,7 @@ export default defineComponent({
                     last_step: ''
                 },
                 {
-                    title: 'Deworming & malaria prophylaxis',
+                    title: 'Deworming & Malaria Prophylaxis',
                     class: 'common_step',
                     checked:false,
                     disabled:false,
@@ -117,12 +117,12 @@ export default defineComponent({
               ],
   StepperData: [
                {
-                    title: 'Diagnosis and treatment',
+                    title: 'Diagnosis and Treatment',
                     component: 'DiagnosisTreatment',
                     value: '1'
                 },
                 {
-                    title: 'Medication dispensed',
+                    title: 'Medication Dispensed',
                     component: 'MedicationDispensed',
                     value: '2'
                 },
@@ -137,12 +137,12 @@ export default defineComponent({
                     value: '4'
                 },
                 {
-                    title: 'Intimate partner',
+                    title: 'Intimate Partner Violence',
                     component: 'IntimatePartner',
                     value: '5'
                 },
                 {
-                    title: 'Deworming & malaria prophylaxis',
+                    title: 'Deworming & Malaria Prophylaxis',
                     component: 'Deworming',
                     value: '6'
                 },
@@ -169,7 +169,7 @@ computed:{
                                  'woman_threatened','constant_jealous','strangling','murder_threat','referrals']),
   ...mapState(useDewormingStore,['treatment','malaria']),
  // ironPrescription(){return getFieldValue(this.iron,'iron Amount','value')},
-  folicAcidPrescription(){return getRadioSelectedValue(this.folicAcid,'iron Amount')},
+  folicAcidPrescription(){return getRadioSelectedValue(this.folicAcid,'Folic acid')},
 },
 
 methods: {
