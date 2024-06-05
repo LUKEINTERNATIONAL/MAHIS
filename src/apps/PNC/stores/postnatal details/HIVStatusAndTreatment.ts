@@ -10,7 +10,7 @@ const initialHIVStatusAndTreatment =[
         radioBtnContent:
             {
                 header:{
-                    title: 'HIV status of woman',
+                    title: 'HIV status of woman*',
                     selectedValue: '',
                     class:'bold',
                     name:'Mother HIV Status'
@@ -19,19 +19,19 @@ const initialHIVStatusAndTreatment =[
                     {
                         name: 'Positive',
                         value: 'positive',
-                        colSize: '5',
+                        colSize: '4.001',
 
                     },
                     {
                         name: 'Negative',
                         value: 'negative',
-                        colSize: '5',
+                        colSize: '4.001',
 
                     },
                     {
                         name: 'Unknown',
                         value: 'unknown',
-                        colSize: '5',
+                        colSize: '4',
 
                     },
                 ]
@@ -45,21 +45,22 @@ const initialHIVStatusAndTreatment =[
         radioBtnContent:
             {
                 header:{
-                    title: 'New HIV test result in postnatal',
+                    title: 'New HIV test result in postnatal*',
                     selectedValue: '',
                     class:'bold',
-                    name:'New HIV status'
+                    name:'New HIV status',
+                    displayNext:"Positive"
                 },
                 data:[
                     {
                         name: 'Positive',
                         value: 'Positive',
-                        colSize: '5'
+                        colSize: '4.001'
                     },
                     {
                         name: 'Negative',
                         value: 'Negative',
-                        colSize: '5'
+                        colSize: '4.001'
 
                     },
                     {
@@ -74,27 +75,29 @@ const initialHIVStatusAndTreatment =[
     },
     {
         selectdData: [],
+        childName: 'New HIV status',
         isFinishBtn: false,
         classDash: 'dashed_bottom_border _padding',
         radioBtnContent:
             {
                 header:{
-                    title: 'Has the woman started ART treatment?',
+                    title: 'Has the woman started ART treatment?*',
                     selectedValue: '',
                     class:'bold',
                     name:'Has the woman started ART treatment',
-                    displayNext:'Yes'
+                    displayNext:'Yes',
+                    displayNone:true
                 },
                 data:[
                     {
                         name: 'Yes',
                         value: 'Yes',
-                        colSize: '2.5'
+                        colSize: '2'
                     },
                     {
                         name: 'No',
                         value: 'No',
-                        colSize: '2.5'
+                        colSize: '2'
 
                     },
                 ]
@@ -113,7 +116,7 @@ const initialHIVStatusAndTreatment =[
                         colData: [
                             {
                                 displayNone:true,
-                                inputHeader: 'ART clinic number',
+                                inputHeader: 'ART clinic number*',
                                 unit: '',
                                 icon: icons.editPen,
                                 value: '',

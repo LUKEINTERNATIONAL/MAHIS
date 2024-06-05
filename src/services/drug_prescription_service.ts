@@ -45,6 +45,14 @@ export const DRUG_FREQUENCIES: Array<{label: string; code: string; value: number
         'drug_orders': drugOrders
       })
     }
+
+    createDrugOrderForImmunization(drugOrders: Array<DrugInterface>, programId: number){
+      return DrugOrderService.create_for_immunization({
+        'encounter_id': this.encounterID,
+        'drug_orders': drugOrders,
+        'program_id': programId
+      } as any)
+    }
   }
 
   export function getFrequencyLabelOrCheckCode(codeOrLabel: string): string | undefined {

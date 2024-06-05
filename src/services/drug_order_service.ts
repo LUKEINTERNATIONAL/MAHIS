@@ -10,6 +10,10 @@ export class DrugOrderService extends Service {
         return this.postJson('drug_orders', orders)
     }
 
+    static create_for_immunization(orders: DrugOrderInterface) {
+        return this.postJson('/immunization/administer_vaccine', orders)
+    }
+
     static updateDispensationOrders(orders: any) {
         return this.postJson('dispensations', {
             'program_id': this.getProgramID(),

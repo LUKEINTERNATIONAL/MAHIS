@@ -226,33 +226,20 @@ const initialVitals = [
                         },
                     ],
                 },
-                {
-                    colData: [
-                        {
-                            inputHeader: "Respiratory rate",
-                            unit: "BMP",
-                            icon: icons.respiratory,
-                            value: "",
-                            name: "Respiratory rate",
-                            eventType: "input",
-                        },
-                        {
-                            inputHeader: "Oxygen saturation",
-                            unit: "%",
-                            icon: icons.oxgenStaturation,
-                            value: "",
-                            name: "SP02",
-                            eventType: "input",
-                        },
-                    ],
-                },
             ],
         },
-        previousView: {
-            name: "vitals",
-        },
+        alerts: [
+            {
+                backgroundColor: "",
+                status: "",
+                icon: "",
+                textColor: "",
+                value: "",
+                name: "",
+                index: "",
+            },
+        ],
     },
-
     {
         classDash: "dashed_bottom_border",
         selectedData: [],
@@ -303,6 +290,44 @@ const initialVitals = [
                 },
             ],
         },
+    },
+    {
+        sectionHeader: "null",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Respiratory rate",
+                            unit: "BMP",
+                            icon: icons.respiratory,
+                            value: "",
+                            name: "Respiratory rate",
+                            eventType: "input",
+                        },
+                        {
+                            inputHeader: "Oxygen saturation",
+                            unit: "%",
+                            icon: icons.oxgenStaturation,
+                            value: "",
+                            name: "SP02",
+                            eventType: "input",
+                        },
+                    ],
+                },
+            ],
+        },
+        alerts: [
+            {
+                backgroundColor: "",
+                status: "",
+                icon: "",
+                textColor: "",
+                value: "",
+                name: "",
+                index: "",
+            },
+        ],
     },
 ] as any;
 export const useVitalsStore = defineStore("vitalsStore", {

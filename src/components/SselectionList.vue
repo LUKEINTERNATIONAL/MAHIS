@@ -80,6 +80,9 @@ function populateOptions() {
     }
 
     .v-select, .v-select * {
-        font-size: 25px;
+        /* font-size: 25px; */
+        
+        background-color: inherit;
     }
+    
 </style>

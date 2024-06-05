@@ -13,7 +13,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { mapState } from "pinia";
-import DynamicList from "../components/DynamicList.vue";
+import DynamicList from "./DynamicListOPDcopy.vue";
 import { useDispensationStore } from '@/apps/OPD/stores/DispensationStore'
 
 export default defineComponent({

@@ -2,13 +2,13 @@
     <ion-page>
         <Toolbar />
         <ion-content :fullscreen="true">
-            <div id="" style="margin-top: 30px;">
+            <div id="" style="margin-top: 30px; margin-left: 8%; margin-right: 8%;">
 
                 <ion-row>
                     <ion-col>
-                        <div class="back_profile" @click="nav('patientProfile')">
+                        <div class="back_profile" @click="nav('home')">
                             <ion-icon style="font-size: 20px" :icon="chevronBackOutline"> </ion-icon>
-                            <span style="cursor: pointer"> Back to profile</span>
+                            <span style="cursor: pointer"> Back To Home Page</span>
                         </div>
                     </ion-col>
                 </ion-row>

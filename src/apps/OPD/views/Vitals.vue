@@ -54,8 +54,9 @@ import { isEmpty } from "lodash";
 import HisDate from "@/utils/Date";
 import { defineComponent } from "vue";
 import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
-import { useVitalsStore } from "../stores/OpdVitalsStore";
+import { useVitalsStore } from "@/stores/VitalsStore";
 import { getFieldValue, getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from "@/services/data_helpers";
+import { resetOPDPatientData } from "@/apps/OPD/config/reset_opd_data";
 export default defineComponent({
     name: "Home",
     components: {
@@ -86,7 +87,7 @@ export default defineComponent({
             dispositions: "" as any,
             wizardData: [
                 {
-                    title: "Vitals",
+                    title: "Vital Signs",
                     class: "common_step",
                     checked: false,
                     disabled: false,
@@ -96,8 +97,8 @@ export default defineComponent({
             ],
             StepperData: [
                 {
-                    title: "Vitals",
-                    component: "OPDVitals",
+                    title: "Vital Signs",
+                    component: "VitalSigns",
                     value: "1",
                 },
             ],
@@ -351,20 +352,21 @@ export default defineComponent({
                 return item?.data;
             });
         },
-        saveData() {
+        async saveData() {
             if (this.vitals.validationStatus) {
-                this.saveVitals();
-                this.saveOutComeStatus();
+                await this.saveVitals();
+                resetOPDPatientData();
+                this.$router.push("OPDConsultationPlan");
+            } else {
+                toastWarning("Please fill all required fields");
             }
-            this.$router.push("OPDConsultationPlan");
         },
-        saveVitals() {
+        async saveVitals() {
             const userID: any = Service.getUserID();
             const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
-            vitalsInstance.onFinish(this.vitals);
+            await vitalsInstance.onFinish(this.vitals);
         },
 
-        async saveOutComeStatus() {},
         openModal() {
             createModal(SaveProgressModal);
         },

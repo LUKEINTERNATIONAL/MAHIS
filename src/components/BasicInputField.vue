@@ -1,5 +1,5 @@
 <template>
-    <h6 v-if="inputHeader" :class="bold">{{ inputHeader }}</h6>
+    <h6 v-if="inputHeader" :class="bold">{{ removeAsterisk(inputHeader) }} <span style="color: red" v-if="showAsterisk"> *</span></h6>
     <div class="" :style="'width:' + inputWidth">
         <ion-input
             v-if="input == 'input'"
@@ -81,6 +81,7 @@ export default defineComponent({
             event: "" as any,
             selectedText: "" as any,
             filteredData: [] as any,
+            showAsterisk: false,
         };
     },
 
@@ -171,6 +172,14 @@ export default defineComponent({
         },
         handleInnerActionBtnPropetiesFn(event: any) {
             this.$emit("update:InnerActionBtnPropetiesAction", event);
+        },
+        removeAsterisk(str: any) {
+            if (str.includes("*")) {
+                this.showAsterisk = true;
+                return str.replace(/\*/g, "");
+            }
+            this.showAsterisk = false;
+            return str;
         },
     },
 });

@@ -43,7 +43,8 @@ import {
     modifyRadioValue,
     modifyFieldValue,
 } from "@/services/data_helpers";
-
+import { find, isEmpty } from "lodash";
+import dayjs from "dayjs";
 export default defineComponent({
     components: {
         IonContent,
@@ -63,11 +64,24 @@ export default defineComponent({
             iconsContent: icons,
             BMI: {} as any,
             BPStatus: {} as any,
+            TempStatus: {} as any,
+            PulseStatus: {} as any,
+            RespiratoryStatus: {} as any,
+            OxygenStatus: {} as any,
             vValidations: "" as any,
             hasValidationErrors: [] as any,
             vitalsInstance: {} as any,
             validationStatus: { heightWeight: false, bloodPressure: false } as any,
         };
+    },
+    watch: {
+        vitals: {
+            handler() {
+                this.checkHeight();
+                this.setTodayVitals();
+            },
+            deep: true,
+        },
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
@@ -76,8 +90,6 @@ export default defineComponent({
     },
     async mounted() {
         this.setTodayVitals();
-
-        // After all async operations are finished
         const userID: any = Service.getUserID();
         this.vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
         this.validaterowData("onload");
@@ -162,7 +174,25 @@ export default defineComponent({
                 this.validationStatus.bloodPressure = true;
             }
         },
+        async checkHeight() {
+            const patient = new PatientService();
+            const lastHeight = await patient.getRecentHeightObs();
+            if (!isEmpty(lastHeight)) {
+                const patientAgeAtPrevRecordedHeight = dayjs(lastHeight["obs_datetime"]).diff(patient.getBirthdate(), "year");
+                const recentHeight = lastHeight["value_numeric"];
+                const recentHeightObsID = lastHeight["obs_id"];
+                /**
+                 * For a scenario where a patient's height was last updated when they were a minor
+                 * and they return as an adult, provide an option to update their height.
+                 */
+                if (!(patientAgeAtPrevRecordedHeight < 18 || patient.getAge() < 18)) {
+                    modifyFieldValue(this.vitals, "Height", "disabled", true);
+                    modifyFieldValue(this.vitals, "Height", "value", recentHeight);
+                }
+            }
+        },
         async validaterowData(inputData: any) {
+            this.checkHeight();
             this.validationController(inputData);
             this.hasValidationErrors = [];
 
@@ -180,6 +210,29 @@ export default defineComponent({
                                 this.vitalsInstance.validator(col.colData[0]) == null && this.vitalsInstance.validator(col.colData[1]) == null;
                             this.BPStatus = isSystolicValid ? this.getBloodPressureStatus(col.colData[0].value, col.colData[1].value) : {};
                             this.updateBP(col.colData[0].value, col.colData[1].value);
+                        }
+                        if (
+                            (col.colData[1].inputHeader == "Pulse rate*" && (inputData.inputHeader == "Pulse rate*" || inputData == "onload")) ||
+                            (col.colData[1].inputHeader == "Pulse rate" && inputData?.col?.name == "Pulse Rate Not Done")
+                        ) {
+                            const isPulseValid = this.vitalsInstance.validator(col.colData[1]) == null;
+                            const pulseStatus = isPulseValid ? this.getPulseRateStatus(col.colData[1].value) : {};
+                            this.updateTemperateRate("pulse", col.colData[1].value + " BMP", pulseStatus, 4);
+                        }
+                        if (col.colData[0].value && col.colData[0].inputHeader == "Temperature") {
+                            const isTempValid = this.vitalsInstance.validator(col.colData[0]) == null;
+                            const tempStatus = isTempValid ? this.getTemperatureStatus(col.colData[0].value) : {};
+                            this.updateTemperateRate("temp", col.colData[0].value + "°C", tempStatus, 4);
+                        }
+                        if (col.colData[0].inputHeader == "Respiratory rate") {
+                            const isRespiratoryValid = this.vitalsInstance.validator(col.colData[0]) == null;
+                            const respiratoryStatus = isRespiratoryValid ? this.getRespiratoryRateStatus(col.colData[0].value) : {};
+                            this.updateTemperateRate("respiratory", col.colData[0].value + "BMP", respiratoryStatus, 6);
+                        }
+                        if (col.colData[1].value && col.colData[1].inputHeader == "Oxygen saturation") {
+                            const isOxygenValid = this.vitalsInstance.validator(col.colData[1]) == null;
+                            const oxygenStatus = isOxygenValid ? this.getOxygenSaturationStatus(col.colData[1].value) : {};
+                            this.updateTemperateRate("oxygen", col.colData[1].value + "%", oxygenStatus, 6);
                         }
 
                         if (
@@ -225,6 +278,7 @@ export default defineComponent({
                     this.demographics.gender,
                     HisDate.calculateAge(this.demographics.birthdate, HisDate.currentDate())
                 );
+                this.updateBMI();
             }
         },
         async updateBMI() {
@@ -244,6 +298,21 @@ export default defineComponent({
             vitals.textColor = bpColor[1];
             vitals.index = systolic + "/" + diastolic;
             vitals.value = this.BPStatus?.value ?? "";
+        },
+        async updateTemperateRate(name: any, index: any, obj: any, objNumber: any) {
+            const filteredArray = this.vitals[objNumber]?.alerts?.filter((item: any) => item.name !== name);
+            this.vitals[objNumber].alerts = filteredArray;
+            const bpColor = obj?.colors ?? [];
+            this.vitals[objNumber]?.alerts.push({
+                backgroundColor: bpColor[0],
+                status: "",
+                icon: "",
+                textColor: bpColor[1],
+                value: obj?.value ?? "",
+                name: name,
+                index: index,
+            });
+            console.log(this.vitals[4]?.alerts);
         },
         getBloodPressureStatus(systolic: any, diastolic: any) {
             if (systolic && diastolic) {
@@ -303,6 +372,152 @@ export default defineComponent({
                     } else {
                         return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High BP " + ageGroup + " (Using Systolic Only)" };
                     }
+                }
+            }
+        },
+        getTemperatureStatus(value: any) {
+            if (value) {
+                let ageGroup;
+                let minTemp;
+                let maxTemp;
+                const patient = new PatientService();
+                const age = patient.getAge();
+                // Determine age group and corresponding normal ranges base on Axillary
+                if (age <= 1) {
+                    ageGroup = "(less than 1 year)";
+                    minTemp = 36.5;
+                    maxTemp = 37.5;
+                } else if (age >= 1 && age <= 18) {
+                    ageGroup = "(1-18 years)";
+                    minTemp = 36;
+                    maxTemp = 37.5;
+                } else if (age >= 19 && age <= 64) {
+                    ageGroup = "(above 18 years)";
+                    minTemp = 35.9;
+                    maxTemp = 36.7;
+                } else if (age >= 65) {
+                    ageGroup = "(above 18 years)";
+                    minTemp = 35.6;
+                    maxTemp = 36.5;
+                } else {
+                    minTemp = "";
+                    maxTemp = "";
+                }
+
+                if (value < minTemp) {
+                    return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low Temperature " + ageGroup };
+                } else if (value >= minTemp && value <= maxTemp) {
+                    return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal Temperature " + ageGroup };
+                } else if (value > maxTemp) {
+                    return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High Temperature " + ageGroup };
+                }
+            }
+        },
+        getPulseRateStatus(value: any) {
+            if (value) {
+                let ageGroup;
+                let minPulse;
+                let maxPulse;
+                const patient = new PatientService();
+                const age = patient.getAge();
+                // Determine age group and corresponding normal ranges base on Axillary
+                if (age <= 0.08) {
+                    ageGroup = "(0-1 month)";
+                    minPulse = 70;
+                    maxPulse = 190;
+                } else if (age >= 0.08 && age < 1) {
+                    ageGroup = "(1-11 months)";
+                    minPulse = 80;
+                    maxPulse = 160;
+                } else if (age >= 1 && age <= 2) {
+                    ageGroup = "(1-2 years)";
+                    minPulse = 80;
+                    maxPulse = 130;
+                } else if (age >= 3 && age <= 4) {
+                    ageGroup = "(3-4 years)";
+                    minPulse = 80;
+                    maxPulse = 120;
+                } else if (age >= 5 && age <= 6) {
+                    ageGroup = "(5-6 years)";
+                    minPulse = 75;
+                    maxPulse = 115;
+                } else if (age >= 7 && age <= 9) {
+                    ageGroup = "(7-9 years)";
+                    minPulse = 70;
+                    maxPulse = 110;
+                } else if (age >= 10) {
+                    ageGroup = "(Above 10 years)";
+                    minPulse = 60;
+                    maxPulse = 100;
+                } else {
+                    minPulse = "";
+                    maxPulse = "";
+                }
+
+                if (value < minPulse) {
+                    return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low Pulse Rate " + ageGroup };
+                } else if (value >= minPulse && value <= maxPulse) {
+                    return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal Pulse Rate " + ageGroup };
+                } else if (value > maxPulse) {
+                    return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High Pulse Rate " + ageGroup };
+                }
+            }
+        },
+        getOxygenSaturationStatus(value: any) {
+            if (value) {
+                let minOxygenSaturation = 95;
+                let maxOxygenSaturation = 100;
+
+                if (value < minOxygenSaturation) {
+                    return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low oxygen saturation" };
+                } else if (value >= minOxygenSaturation && value <= maxOxygenSaturation) {
+                    return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal oxygen saturation" };
+                }
+            }
+        },
+        getRespiratoryRateStatus(value: any) {
+            if (value) {
+                let ageGroup;
+                let minRespiratoryRate;
+                let maxRespiratoryRate;
+                const patient = new PatientService();
+                const age = patient.getAge();
+                // Determine age group and corresponding normal ranges base on Axillary
+                if (age <= 1) {
+                    ageGroup = "(0-1 year)";
+                    minRespiratoryRate = 30;
+                    maxRespiratoryRate = 60;
+                } else if (age >= 1 && age < 3) {
+                    ageGroup = "(1-3 years)";
+                    minRespiratoryRate = 24;
+                    maxRespiratoryRate = 40;
+                } else if (age >= 3 && age <= 6) {
+                    ageGroup = "(3-6 years)";
+                    minRespiratoryRate = 22;
+                    maxRespiratoryRate = 34;
+                } else if (age >= 6 && age <= 12) {
+                    ageGroup = "(6-12 years)";
+                    minRespiratoryRate = 18;
+                    maxRespiratoryRate = 30;
+                } else if (age >= 12 && age <= 18) {
+                    ageGroup = "(12-18 years)";
+                    minRespiratoryRate = 12;
+                    maxRespiratoryRate = 16;
+                } else if (age >= 19) {
+                    ageGroup = "(Above 19 years)";
+                    minRespiratoryRate = 12;
+                    maxRespiratoryRate = 20;
+                } else {
+                    minRespiratoryRate = "";
+                    maxRespiratoryRate = "";
+                }
+
+                if (value < minRespiratoryRate) {
+                    return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low respiratory rate" + ageGroup };
+                } else if (value >= minRespiratoryRate && value <= maxRespiratoryRate) {
+                    return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal respiratory rate" + ageGroup };
+                } else if (value > maxRespiratoryRate) {
+                    return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High respiratory rate" + ageGroup };
                 }
             }
         },

@@ -6,18 +6,11 @@
         <basic-form
             :contentData="babyStatusDetails"
             :initialData="initialData"
+            @update:selected="handleInputData" @update:inputValue="handleInputData"
+
         ></basic-form>
       </ion-card-content>
     </ion-card>
-<!--    <ion-card class="section">-->
-<!--      <ion-card-content>-->
-<!--        <basic-form-->
-<!--            :contentData="dangerSigns"-->
-<!--            :initialData="initialData1"-->
-
-<!--        ></basic-form>-->
-<!--      </ion-card-content>-->
-<!--    </ion-card>-->
   </div>
 </template>
 <script lang="ts">
@@ -46,6 +39,7 @@ import BasicCard from "@/components/BasicCard.vue";
 import {useDeliveryDetailsStore} from "@/apps/PNC/stores/postnatal details/DeliveryDetails";
 import {useDischargeWomanStore} from "@/apps/PNC/stores/others/DischargeWoman";
 import {useBabyStatusStore} from "@/apps/PNC/stores/postnatal ward stay/BabyStatus";
+import {validateField} from "@/services/PNC/ward_monitoring_for_baby_validation_service";
 export default defineComponent({
   name: "BabyStatus",
   components:{
@@ -93,7 +87,21 @@ export default defineComponent({
   setup() {
     return { checkmark,pulseOutline };
   },
-  methods: {}
+  methods: {
+    validationRules(event: any) {
+      return validateField(this.babyStatusDetails,event.name, (this as any)[event.name]);
+    },
+
+    //Handling input data on Profile-Past Obstetric history
+    async handleInputData(event: any){
+      this.validateRowData(event)
+    },
+
+    // Validations
+    validateRowData(event: any) {
+      this.validationRules(event)
+    }
+  }
 });
 
 </script>

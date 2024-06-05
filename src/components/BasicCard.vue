@@ -10,6 +10,13 @@
                     :initialData="card.initialData"
                     @update:selected="$emit('update:selected', $event)"
                     @update:inputValue="$emit('update:inputValue', $event)"
+                    @clicked:button="$emit('clicked:button', $event)"
+                ></basic-form>
+                <basic-form
+                    :contentData="card.contentTwo"
+                    @update:selected="$emit('update:selected', $event)"
+                    @update:inputValue="$emit('update:inputValue', $event)"
+                    @clicked:button="$emit('clicked:button', $event)"
                 ></basic-form>
             </div>
         </ion-card>
@@ -43,6 +50,9 @@ export default defineComponent({
     },
     props: {
         content: {
+            default: "" as any,
+        },
+        contentTwo: {
             default: "" as any,
         },
         size: {

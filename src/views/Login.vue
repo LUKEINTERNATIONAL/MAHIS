@@ -246,4 +246,7 @@ export default defineComponent({
     position: unset !important;
     width: inherit !important;
 }
+.multiselect::before {
+    top: -7px;
+}
 </style>

@@ -10,8 +10,14 @@
             !contentData[index]?.data?.rowData[0]?.colData[0]?.displayNone
         "
     >
-        <ion-col class="item_header_col" v-if="item['sectionHeader'] || item['sideColSize']" :size="item['sideColSize']">
-            <span class="item_header" :style="'font-weight:' + item.sectionHeaderFontWeight">{{ item["sectionHeader"] }}</span>
+        <ion-col
+            class="item_header_col"
+            v-if="item['sectionHeader'] || item['sideColSize'] || item['sectionHeader'] == 'null'"
+            :size="item['sideColSize']"
+        >
+            <span class="item_header" :style="'font-weight:' + item.sectionHeaderFontWeight" v-if="item['sectionHeader'] != 'null'"
+                >{{ item["sectionHeader"] }}
+            </span>
         </ion-col>
         <ion-col v-if="!item.displayNone">
             <!-- rowData -->
@@ -41,7 +47,9 @@
                             :InnerActionBtnPropeties="col.InnerBtn"
                         />
                         <div v-if="col.isMultiSelect">
-                            <h6 v-if="col.inputHeader">{{ col.inputHeader }}</h6>
+                            <h6 v-if="col.inputHeader">
+                                {{ col.inputHeader.replace(/\*/g, "") }} <span style="color: red" v-if="col.inputHeader.includes('*')"> *</span>
+                            </h6>
                             <VueMultiselect
                                 v-if="col.isMultiSelect"
                                 v-model="col.value"
@@ -57,18 +65,19 @@
                                 label="name"
                                 :searchable="true"
                                 @search-change="$emit('search-change', $event)"
-                                track-by="concept_id"
+                                :track-by="col.trackBy || 'concept_id'"
                                 :options="col.multiSelectData"
                             />
                         </div>
                         <div v-if="col.isSingleSelect">
-                            <h6 v-if="col.inputHeader">{{ col.inputHeader }}</h6>
+                            <h6 v-if="col.inputHeader">
+                                {{ col.inputHeader.replace(/\*/g, "") }} <span style="color: red" v-if="col.inputHeader.includes('*')"> *</span>
+                            </h6>
                             <VueMultiselect
                                 v-model="col.value"
                                 @update:model-value="handleInput(contentData, col, $event, 'updateMultiselect')"
                                 :multiple="false"
-                                :taggable="false"
-                                :hide-selected="true"
+                                :hide-selected="false"
                                 :close-on-select="true"
                                 :openDirection="col.openDirection || 'bottom'"
                                 tag-placeholder=""
@@ -77,7 +86,7 @@
                                 label="name"
                                 :searchable="true"
                                 @search-change="$emit('search-change', $event)"
-                                track-by="concept_id"
+                                :track-by="col.trackBy || 'concept_id'"
                                 :options="col.multiSelectData"
                             />
                         </div>
@@ -103,14 +112,22 @@
                             {{ col.alertsErrorMassage }}
                         </div>
                     </ion-col>
-                    <ion-col size="btn.btn_col_size || 1.7" class="btn_col" v-for="(btn, btnIndex) in element.btns" :key="btnIndex">
-                        <DynamicButton :name="btn.name" :fill="btn.fill" :icon="btn.icon" @click="$emit('clicked:button', btn.name)" />
+                    <ion-col :size="btn.btn_col_size || 1.7" class="btn_col" v-for="(btn, btnIndex) in element.btns" :key="btnIndex">
+                        <DynamicButton
+                            :name="btn.name"
+                            :showName="btn.showName"
+                            :size="btn.size"
+                            :fill="btn.fill"
+                            :icon="btn.icon"
+                            @click="$emit('clicked:button', btn.name)"
+                        />
                     </ion-col>
                 </ion-row>
             </span>
             <span v-if="item.radioBtnContent && !item?.radioBtnContent?.header?.displayNone">
                 <div style="font-size: 1rem" v-if="item.radioBtnContent?.header" :class="item.radioBtnContent?.header?.class">
-                    {{ item.radioBtnContent?.header.title }}
+                    {{ item.radioBtnContent?.header.title.replace(/\*/g, "") }}
+                    <span style="color: red" v-if="item.radioBtnContent?.header.title.includes('*')"> *</span>
                 </div>
                 <ion-row class="checkbox_content">
                     <ion-col
@@ -245,7 +262,10 @@
                             @update:dateValue="handleInput(contentData, checkboxInput, $event, 'updateDate')"
                         />
                         <div v-if="checkboxInput.isMultiSelect">
-                            <h6 v-if="checkboxInput.inputHeader">{{ checkboxInput.inputHeader }}</h6>
+                            <h6 v-if="checkboxInput.inputHeader">
+                                {{ checkboxInput.inputHeader.replace(/\*/g, "") }}
+                                <span style="color: red" v-if="checkboxInput.inputHeader.includes('*')"> *</span>
+                            </h6>
                             <VueMultiselect
                                 v-if="checkboxInput.isMultiSelect"
                                 v-model="checkboxInput.value"
@@ -258,7 +278,7 @@
                                 label="name"
                                 :searchable="true"
                                 @search-change="$emit('search-change', $event)"
-                                track-by="id"
+                                :track-by="checkboxInput.trackBy || 'id'"
                                 :options="checkboxInput.multiSelectData"
                             />
                         </div>
@@ -461,9 +481,9 @@ ion-radio {
     margin-right: 20%;
 }
 @media screen and (max-width: 768px) {
-  .checkout_col ion-checkbox {
-    margin-right: 10%;
-  }
+    .checkout_col ion-checkbox {
+        margin-right: 10%;
+    }
 }
 .alerts_error {
     margin-top: 2px;

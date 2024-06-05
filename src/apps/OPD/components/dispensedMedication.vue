@@ -13,12 +13,18 @@
             </ion-item>
         </ion-row>
 
-        <ion-label>Current Diagnoses</ion-label>
-        <div v-for="(item, index) in list" :key="index">
-            <ion-button color="secondary" class="medicalAlBtn">
-                {{ item.display[0] }}
-            </ion-button>
-        </div>
+        <ion-label>Diagnoses</ion-label>
+        <ion-row>
+            <ion-item lines="none" class="medicalAl">
+                <ion-row>
+                    <div v-for="(item, index) in list" :key="index">
+                        <ion-button color="secondary" class="medicalAlBtn">
+                            {{ item.display[0] }}
+                        </ion-button>
+                    </div>
+                </ion-row>
+            </ion-item>
+        </ion-row>
 
         <div class="space" />
         <ion-label>Prescribed Medications To Be Dispensed</ion-label>
@@ -45,7 +51,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { mapState } from "pinia";
-import DynamicList from "../components/DynamicList.vue";
+import DynamicList from "../components/DynamicListOPDcopy.vue";
 import { useDispensationStore } from '@/apps/OPD/stores/DispensationStore'
 import { ObservationService } from "@/services/observation_service";
 import { isEmpty } from "lodash";

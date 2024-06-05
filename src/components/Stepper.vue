@@ -1,6 +1,6 @@
 <template>
     <ion-row>
-        <ion-col size-md="4" size-xl="2.5" size-sm="0" size-lg="4" offset-sm="0" offset-md="0.4" offset-xl="0.8" class="displayNoneMobile" >
+        <ion-col size-md="4" size-xl="2.5" size-sm="0" size-lg="4" offset-sm="0" offset-md="0.4" offset-xl="0.8" class="displayNoneMobile">
             <ion-card class="wizard_card">
                 <div class="wizard_title">
                     <strong> {{ stepperTitle }}</strong>
@@ -23,14 +23,14 @@
             </ion-card>
         </ion-col>
 
-      <ion-col size-sm="12" size-xl="7" size-md="7.2" size-lg="7" offset-sm="0" offset-md="0.4" offset-xl="0.8" class="">
+        <ion-col size-sm="12" size-xl="7" size-md="7.2" size-lg="7" offset-sm="0" offset-md="0.4" offset-xl="0.8" class="">
             <div class="back_profile" @click="openModal()">
                 <ion-icon style="font-size: 20px" :icon="chevronBackOutline"> </ion-icon>
                 <span style="cursor: pointer"> Back to profile</span>
             </div>
 
             <div class="accordion_group">
-                <ion-accordion-group @ionChange="accordionGroupChange($event)">
+                <ion-accordion-group @ionChange="accordionGroupChange($event)" value="1">
                     <ion-accordion v-for="(item, index) in StepperData" :key="index" :value="item.value">
                         <ion-item slot="header">
                             <ion-label>{{ item.title }}</ion-label>
@@ -80,8 +80,7 @@ import PresentingComplaints from "@/apps/OPD/components/ConsultationPlan/Clinica
 import ClinicalAssessment from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
-import VitalSigns from "@/apps/NCD/components/ConsultationPlan/VitalSigns.vue";
-import OPDVitals from "@/apps/OPD/components/Vitals.vue";
+import VitalSigns from "@/components/VitalSigns.vue";
 import Diagnosis from "@/apps/NCD/components/ConsultationPlan/Diagnosis.vue";
 import OPDDiagnosis from "@/apps/OPD/components/ConsultationPlan/OPDDiagnosis.vue";
 import ComplicationsScreening from "@/apps/NCD/components/ConsultationPlan/ComplicationsScreening.vue";
@@ -161,10 +160,8 @@ import ThirdStageDelivery from "@/apps/LABOUR/components/delivery details/ThirdS
 import end from "@/apps/LABOUR/components/repeatable things/end.vue";
 import OtherExams from "@/apps/LABOUR/components/repeatable things/OtherExams.vue";
 import LabourVitals from "@/apps/LABOUR/components/repeatable things/LabourVitals.vue";
-import ImmidiatePostnatalChecksForChild
-  from "@/apps/LABOUR/components/delivery details/ImmidiatePostnatalChecksForChild.vue";
-import ImmidiatePostnatalChecksForMother
-  from "@/apps/LABOUR/components/delivery details/ImmidiatePostnatalChecksForMother.vue";
+import ImmidiatePostnatalChecksForChild from "@/apps/LABOUR/components/delivery details/ImmidiatePostnatalChecksForChild.vue";
+import ImmidiatePostnatalChecksForMother from "@/apps/LABOUR/components/delivery details/ImmidiatePostnatalChecksForMother.vue";
 import SubsequentVisits from "@/apps/ANC/components/quick check/SubsequentVisits.vue";
 
 export default defineComponent({
@@ -234,7 +231,6 @@ export default defineComponent({
         Immunization,
         IntimatePartner,
         Deworming,
-        OPDVitals,
         OPDDiagnosis,
         OPDTreatmentPlan,
         OPDOutcome,
@@ -242,39 +238,37 @@ export default defineComponent({
         ImmunizationServices,
         ChangeStatus,
         ImmunizationNextAppointment,
-      HeadAssessment,
-      ANCTreatment,
-      ANCDiagnosis,
-      ANCDiagnosisCounselling,
-      ANCImmunization,
-      ANCIntimatePartner,
-      ANCDeworming,
-      ANCMedicationDispensed,
-      DischargeWoman,
-      PNCEnd,
-      BabyStatus,
-      PostnatalWardMonitoring,
-      DeliveryDetails,
-      HIVStatusAndTreatment,
-      ObstetricDetails,
-      VisitForMother,
-      VisitForBaby,
-      Labour,
-      QuickCheck,
-      PhysicalExamination,
-      PelvicAssessment,
-      PatientReferral,
-      FirstVaginalExamination,
-      SecondStageDelivery,
-      ThirdStageDelivery,
-      end,
-      OtherExams,
-      LabourVitals,
-      ImmidiatePostnatalChecksForChild,
-      ImmidiatePostnatalChecksForMother,
-      SubsequentVisits
-
-
+        HeadAssessment,
+        ANCTreatment,
+        ANCDiagnosis,
+        ANCDiagnosisCounselling,
+        ANCImmunization,
+        ANCIntimatePartner,
+        ANCDeworming,
+        ANCMedicationDispensed,
+        DischargeWoman,
+        PNCEnd,
+        BabyStatus,
+        PostnatalWardMonitoring,
+        DeliveryDetails,
+        HIVStatusAndTreatment,
+        ObstetricDetails,
+        VisitForMother,
+        VisitForBaby,
+        Labour,
+        QuickCheck,
+        PhysicalExamination,
+        PelvicAssessment,
+        PatientReferral,
+        FirstVaginalExamination,
+        SecondStageDelivery,
+        ThirdStageDelivery,
+        end,
+        OtherExams,
+        LabourVitals,
+        ImmidiatePostnatalChecksForChild,
+        ImmidiatePostnatalChecksForMother,
+        SubsequentVisits,
     },
     data() {
         return {

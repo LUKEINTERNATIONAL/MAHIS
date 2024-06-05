@@ -1,5 +1,5 @@
 <template>
-    <h6 v-if="inputHeader">{{ inputHeader }}</h6>
+    <h6 v-if="inputHeader">{{ removeAsterisk(inputHeader) }} <span style="color: red" v-if="showAsterisk"> *</span></h6>
     <VueDatePicker
         @date-update="$emit('update:dateValue', formatDate($event))"
         auto-apply
@@ -55,13 +55,14 @@ export default defineComponent({
     },
     data() {
         return {
-            bold:'text-bold',
+            bold: "text-bold",
             displayList: [] as any,
             popoverOpen: false,
             event: "" as any,
             selectedText: "" as any,
             filteredData: [] as any,
             flow: ["year", "month", "calendar"],
+            showAsterisk: false,
         };
     },
     props: {
@@ -149,6 +150,14 @@ export default defineComponent({
         handleInnerActionBtnPropetiesFn(event: any) {
             this.$emit("update:InnerActionBtnPropetiesAction", event);
         },
+        removeAsterisk(str: any) {
+            if (str.includes("*")) {
+                this.showAsterisk = true;
+                return str.replace(/\*/g, "");
+            }
+            this.showAsterisk = false;
+            return str;
+        },
     },
 });
 </script>
@@ -158,6 +167,6 @@ h6 {
     margin-top: 0px;
 }
 .text-bold {
-  font-weight: bold;
+    font-weight: bold;
 }
 </style>
