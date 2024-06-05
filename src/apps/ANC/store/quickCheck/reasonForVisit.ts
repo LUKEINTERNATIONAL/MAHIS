@@ -851,7 +851,7 @@ const initialSubsequentVisits= [
             {
                 header:{
                     class:'bold',
-                    title: 'Reason the woman came to the facility today*',
+                    title: 'Reason the woman came to the facility today *',
                     selectedValue: '',
                     name:'Reason for visit',
                     displayNext:'Specific complaint related to antenatal care'
@@ -882,7 +882,7 @@ const initialSubsequentVisits= [
         sideColSize: 0.5,
         checkboxBtnContent: {
             header: {
-                title: "What danger signs does the woman has?*",
+               // title: "What danger signs does the woman has? *",
                 selectedValue: "",
                 class:"bold",
                 name:'Danger signs',

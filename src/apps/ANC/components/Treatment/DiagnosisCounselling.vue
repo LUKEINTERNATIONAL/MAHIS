@@ -145,6 +145,7 @@ export default defineComponent({
          this. handlePrepNotProvided()
          this.handleOtherPrep()
          this.handleBirthPlace()
+         this.handleFamilyPlanning()
       },
       watch:{
         aspirin:{
@@ -166,6 +167,11 @@ export default defineComponent({
         birthPlace:{
           handler(){
             this.handleBirthPlace()
+          },deep:true
+        },
+        postpartum:{
+          handler(){
+            this.handleFamilyPlanning()
           },deep:true
         }
       },
@@ -223,17 +229,13 @@ export default defineComponent({
             modifyFieldValue(this.birthPlace,'Specify','displayNone',true)
           }
         },
-         //Method for navigating sections
-    goToNextSection() {
-      if (this.currentSection < 6) {
-        this.currentSection++;
-      }
-    },
-    goToPreviousSection() {
-      if (this.currentSection > 0) {
-        this.currentSection--;
-      }
-    },
+        handleFamilyPlanning(){
+          if(getRadioSelectedValue(this.postpartum,'Counselling on postpartum')=='yes'){
+            modifyRadioValue(this.postpartum,'family planning','displayNone',false)
+          }else{
+            modifyRadioValue(this.postpartum,'family planning','displayNone',true)
+          }
+        }
         },
       });
 
