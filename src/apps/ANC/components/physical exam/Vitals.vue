@@ -66,7 +66,7 @@ export default defineComponent({
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useVitalsStore, ["vitals"]),
-        ...mapState(useVitalsStore, ["preEclampsia"]),
+//        ...mapState(useVitalsStore, ["preEclampsia"]),
     },
     mounted() {
         const userID: any = Service.getUserID();

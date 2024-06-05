@@ -80,8 +80,8 @@ import ComplicationsScreening from "@/apps/NCD/components/ConsultationPlan/Compl
 import ConfirmDiagnosis from "@/apps/NCD/components/ConsultationPlan/ConfirmDiagnosis.vue";
 import Outcome from "@/apps/NCD/components/ConsultationPlan/Outcome.vue";
 import Investigations from "@/components/Investigations.vue";
-import Medications from "@/apps/ANC/components/profile/Medications.vue";
-import WomanBehaviour from "@/apps/ANC/components/profile/WomanBehaviour.vue";
+//import Medications from "@/apps/ANC/components/profile/Medications.vue";
+//import WomanBehaviour from "@/apps/ANC/components/profile/WomanBehaviour.vue";
 import DangerSigns from "@/apps/ANC/components/quick check/DangerSigns.vue";
 import ConfirmPregnancy from "@/apps/ANC/components/quick check/ConfirmPregnancy.vue";
 import ReasonForVisit from "@/apps/ANC/components/quick check/ReasonForVisit.vue";
@@ -92,10 +92,10 @@ import FetalAssessment from "@/apps/ANC/components/physical exam/FetalAssessment
 import FetalPresentation from "@/apps/ANC/components/physical exam/FetalPresentation.vue";
 import MaternalExam from "@/apps/ANC/components/physical exam/MaternalExam.vue";
 import PresentingSigns from "@/apps/ANC/components/physical exam/PresentingSigns.vue";
-import CurrentPregnancies from "@/apps/ANC/components/profile/CurrentPregnancies.vue";
+//import CurrentPregnancies from "@/apps/ANC/components/profile/CurrentPregnancies.vue";
 import UltrasoundScan from "@/apps/ANC/components/lab_tests/UltrasoundScan.vue";
 import UrineTest from "@/apps/ANC/components/lab_tests/UrineTest.vue";
-import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue";
+//import MedicalHistory from "@/apps/ANC/components/profile/MedicalHistory.vue";
 import CurrentPregnancies from "@/apps/ANC/components/profile/CurrentPregnancies.vue";
 import PastObstreticHistory from "@/apps/ANC/components/profile/PastObstreticHistory.vue";
 import TB from "@/apps/ANC/components/lab_tests/TB.vue";
