@@ -269,6 +269,15 @@ export default defineComponent({
       formatBirthdate() {
         return HisDate.getBirthdateAge(this.demographics?.birthdate);
       },
+      async saveLmnp(){
+            const userID: any = Service.getUserID();
+            const lnmp = new  currentPregnancyService(this.demographics.patient_id, userID);
+            const encounter = await lnmp.createEncounter();
+            if (!encounter) return toastWarning("Unable to create lnmp encounter");
+            const patientStatus = await lnmp.saveObservationList(await this.buildProfile());
+            if (!patientStatus) return toastWarning("Unable to create lnmp information!");
+            await  toastSuccess("Profile information have been created");
+      },
 
       async saveProfile(){
 
@@ -304,9 +313,9 @@ export default defineComponent({
             children.push({concept:"Mode of delivery",value,other})
 
             const concept_id = await ConceptService.getConceptID("Mode of delivery", true);
-            console.log(";;;;;;;;",concept_id)
+            //console.log(";;;;;;;;",concept_id)
             const concept_other = await ConceptService.getConceptID("other", true);
-            console.log(";;;;;;;;",concept_other)
+            //console.log(";;;;;;;;",concept_other)
             const obs_datetime = ConceptService.getSessionDate();
             const obs:any = children.map(child=>{
               return {

@@ -5,28 +5,30 @@ export const useImmunizationStore = defineStore("immunizationStore", {
   state: () => ({
     ttDoses: [
       {
-        selectdData: [],
         isFinishBtn: false,
+        sectionHeader: "",
         classDash: "dashed_bottom_border _padding",
-        radioBtnContent: {
-          header: {
-            title: "Did the client complete Tetanus Toxoid (TT) doses before?",
-            selectedValue: "",
-            class: "bold",
-            name: "Tetanus Toxoid",
-          },
-          data: [
-            {
-              name: "Yes",
-              value: "yes",
 
-              colSize: "2.5",
-            },
+        data: {
+          rowData: [
             {
-              name: "No",
-              value: "no",
-
-              colSize: "2.5",
+              colData: [
+                {
+                  //displayNone: true,
+                  inputHeader: "TTV",
+                  value: "",
+                  valueType: "text",
+                  name: "hepb1 Date",
+                  isDatePopover: true,
+                  icon: icons.calenderPrimary,
+                  placeholder: "Pick the date",
+                  required: true,
+                  eventType: "input",
+                  inputWidth: "100%",
+                  alertsError: false,
+                  alertsErrorMassage: "",
+                },
+              ],
             },
           ],
         },
@@ -349,5 +351,5 @@ export const useImmunizationStore = defineStore("immunizationStore", {
       this.hepBReason = data;
     },
   },
-   persist: true,
+  //persist: true,
 });

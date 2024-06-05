@@ -3,6 +3,7 @@
     <ion-card class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
+                <basic-form :contentData="ttDoses"></basic-form>
                 <basic-form :contentData="HepB1"></basic-form>
                 <basic-form :contentData="HepB2"></basic-form>
                 <basic-form :contentData="HepB3"></basic-form>
@@ -36,6 +37,9 @@ import { checkmark, pulseOutline } from 'ionicons/icons';
 import { icons } from '../../../../utils/svg'; 
 import { useImmunizationStore } from '../../store/immunizationStore';
 import { getRadioSelectedValue, modifyFieldValue } from '@/services/data_helpers';
+import { useCurrentPregnanciesStore } from '../../store/profile/CurrentPreganciesStore';
+import { ObservationService } from '@/services/observation_service';
+import { useDemographicsStore } from '../../store/DemographicsStore';
 
 
 
@@ -69,16 +73,12 @@ export default defineComponent ({
     },
     computed:{
         ...mapState(useImmunizationStore, ["ttDoses"]),
-        // ...mapState(useImmunizationStore, ["tt1"]),
-        // ...mapState(useImmunizationStore, ["tt2"]),
-        // ...mapState(useImmunizationStore, ["tt3"]),
-        // ...mapState(useImmunizationStore, ["tt4"]),
-        // ...mapState(useImmunizationStore, ["tt5"]),
-        // ...mapState(useImmunizationStore, ["ttReason"]),
         ...mapState(useImmunizationStore, ["HepB1"]),
         ...mapState(useImmunizationStore, ["HepB2"]),
         ...mapState(useImmunizationStore, ["HepB3"]),
         ...mapState(useImmunizationStore, ["hepBReason"]),
+
+        ...mapState(useDemographicsStore, ["demographics"]),
    
 
     },
@@ -87,6 +87,7 @@ export default defineComponent ({
       this.handleB2()
        this.handleB3()
        this.handelHepreason()
+       this.handleTTinfo()
     },
     watch:{
       HepB1:{
@@ -108,7 +109,13 @@ export default defineComponent ({
         handler(){
           this.handelHepreason()
         },deep:true
-      }
+      },
+      // lmnp:{
+      //   handler(){
+      //     this.handleTTinfo()
+      //   },deep:true
+      // }
+
     },
 
     methods :{
@@ -140,6 +147,22 @@ export default defineComponent ({
            modifyFieldValue(this.hepBReason,'Specify','displayNone',true)
         }
       },
+      handleTTinfo(){
+        // if(getRadioSelectedValue(this.lmnp,'The woman received tetanus doses for immunization?')=='under immunised'){
+        //   modifyFieldValue(this.ttDoses,'hepb1 Date','displayNone',false)
+        // }else{
+        //   modifyFieldValue(this.ttDoses,'hepb1 Date','displayNone',true)
+        // }
+        // console.log(getRadioSelectedValue(this.lmnp,'The woman received tetanus doses for immunization?'))
+        this.setValues()
+      },
+        async setValues() {
+            const immunisation = await ObservationService.getFirstObsValue(this.demographics.patient_id,"Number of tetanus doses", "value_coded");
+            const immu =  await ObservationService.getFirstObsValue(this.demographics.patient_id, "Height", "value_numeric");
+            console.log(immunisation)
+            console.log(immu)
+        },
+      //lmnp
       // handleB3(){
       //   if(getRadioSelectedValue(this.HepB3,'b3')=='yes'){
       //     modifyFieldValue(this.HepB3,'hep3Date','displayNone',false)
