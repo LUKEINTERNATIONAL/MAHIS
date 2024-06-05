@@ -42,7 +42,7 @@ import {
   getRadioSelectedValue,
   modifyCheckboxValue,
   modifyDynamicFieldValue,
-  modifyFieldValue
+  modifyFieldValue, modifyRadioValue
 } from '@/services/data_helpers';
 import StandardValidations from "@/validations/StandardValidations";
 import {validateField} from "@/services/ANC/profile_validation_service"
@@ -196,7 +196,7 @@ export default defineComponent({
               }else{
                 modifyDynamicFieldValue(e.id,this.modeOfDelivery,'Specify','displayNone',true)
                }
-      },
+              },
 
 
       validationRules(event: any) {
@@ -213,39 +213,6 @@ export default defineComponent({
       // Validations
       validaterowData(event: any) {
            this.validationRules(event)
-
-
-        // if (getFieldValue(this.prevPregnancies, 'Abortions','value')) {
-        //   let errorMessage2: any = "";
-        //     // Additional validation based on gravidaField value
-        //     const gravidaField = getFieldValue(this.prevPregnancies,'Gravida', 'value');
-        //     if (gravidaField) {
-        //       const gravidaValue = gravidaField;
-        //       if (parseInt(event.value) > parseInt(gravidaValue) || parseInt(event.value) < 0) {
-        //         errorMessage2 = "Abortions/Miscarriages should be less than  Gravida and greater than or equal to 0.";
-        //     }
-        //   }
-        //
-        //   // Modify error message and error flag for Abortions field
-        //   modifyFieldValue(this.prevPregnancies,'Abortions', 'alertsError', !!errorMessage2);
-        //   modifyFieldValue(this.prevPregnancies, 'Abortions', 'alertsErrorMassage', errorMessage2 || '');
-        // }
-        //
-        //
-        // if (getFieldValue(this.prevPregnancies,'Stillbirths','value')) {
-        //       let errorMessages: any = "";
-        //         // Additional validation based on gravidaField value
-        //         const data = getFieldValue(this.prevPregnancies,'Gravida', 'value');
-        //         if (data) {
-        //           const gravida = data;
-        //           if (parseInt(event.value) > parseInt(data) || parseInt(event.value) < 0) {
-        //             errorMessages = "Stillbirths should be less than  Gravida and greater than or equal to 0.";
-        //         }
-        //       }
-        //
-        //       modifyFieldValue(this.prevPregnancies, 'Stillbirths', 'alertsError', !!errorMessages);
-        //       modifyFieldValue(this.prevPregnancies, 'Stillbirths', 'alertsErrorMassage', errorMessages || '');
-        //     }
          },
 
           //Calculating parity.
@@ -268,6 +235,11 @@ export default defineComponent({
           if (!isNaN(gravidaValue) && !isNaN(abortionsValue)) {
             const liveBirthsValue = (gravidaValue)-abortionsValue
             modifyFieldValue(this.prevPregnancies, 'LiveBirths', 'value', liveBirthsValue);
+             if (getFieldValue(this.prevPregnancies, 'LiveBirths','value',)>=1){
+               modifyRadioValue(this.prevPregnancies,'Was last live birth preterm?','displayNone', false)
+             } else{
+               modifyRadioValue(this.prevPregnancies,'Was last live birth preterm?','displayNone', true)
+             }
           } else {
             // If either Gravida or Abortions is NaN, set LiveBirths to null
             modifyFieldValue(this.prevPregnancies, 'LiveBirths', 'value', null);          }

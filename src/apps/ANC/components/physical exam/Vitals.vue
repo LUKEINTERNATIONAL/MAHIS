@@ -84,6 +84,10 @@ export default defineComponent({
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useVitalsStore, ["vitals"]),
+<<<<<<< HEAD
+//        ...mapState(useVitalsStore, ["preEclampsia"]),
+=======
+>>>>>>> 9211ca8488d3e146ae8802522a732542d7578f2d
     },
     mounted() {
         const userID: any = Service.getUserID();

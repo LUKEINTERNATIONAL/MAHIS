@@ -45,6 +45,26 @@ export const usePresentingComplaintsStore = defineStore("PresentingComplaintsSto
                                     id: "",
                                     idName: "district_id",
                                 },
+                                {
+                                    inputHeader: "Duration Units",
+                                    popOver: true,
+                                    icon: icons.search,
+                                    value: "",
+                                    name: "units",
+                                    eventType: "input",
+                                    alertsError: false,
+                                    alertsErrorMassage: "",
+                                    isSingleSelect: true,
+                                    trackBy: "id",
+                                    multiSelectData: [
+                                        { id: "1", name: "Hours" },
+                                        { id: "2", name: "Days" },
+                                        { id: "3", name: "Months" },
+                                        { id: "4", name: "Years" },
+                                    ],
+                                    id: "",
+                                    idName: "district_id",
+                                },
                             ],
                             btns: [
                                 {

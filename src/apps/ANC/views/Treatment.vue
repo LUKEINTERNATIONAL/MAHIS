@@ -113,12 +113,12 @@ export default defineComponent({
               ],
   StepperData: [
                {
-                    title: 'Diagnosis and treatment',
+                    title: 'Diagnosis and Treatment',
                     component: 'DiagnosisTreatment',
                     value: '1'
                 },
                 {
-                    title: 'Medication dispensed',
+                    title: 'Medication Dispensed',
                     component: 'MedicationDispensed',
                     value: '2'
                 },
@@ -133,12 +133,12 @@ export default defineComponent({
                     value: '4'
                 },
                 {
-                    title: 'Intimate partner',
+                    title: 'Intimate Partner Violence',
                     component: 'IntimatePartner',
                     value: '5'
                 },
                 {
-                    title: 'Deworming and malaria prophylaxis',
+                    title: 'Deworming and Malaria Prophylaxis',
                     component: 'Deworming',
                     value: '6'
                 },

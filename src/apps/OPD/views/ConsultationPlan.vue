@@ -83,6 +83,7 @@ import { ConsciousnessService } from "@/apps/OPD/services/consciousness_service"
 import { usePhysicalExaminationStore } from "@/apps/OPD/stores/PhysicalExamination";
 import { PhysicalExamService } from "@/apps/OPD/services/physical_exam_service";
 
+
 export default defineComponent({
     name: "Home",
     components: {
@@ -198,7 +199,7 @@ export default defineComponent({
         ...mapState(useOPDDiagnosisStore, ["OPDdiagnosis"]),
         ...mapState(usePhysicalExaminationStore, ["physicalExam"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
-        ...mapState(useLevelOfConsciousnessStore, ["levelOfConsciousness"]),
+        ...mapState(useLevelOfConsciousnessStore, ["levelOfConsciousness","levelOfConsciousnessMinor"]),
     },
     async mounted() {
         this.investigations;
@@ -428,20 +429,23 @@ export default defineComponent({
             ];
         },
         async saveConsciousness() {
-            const data = await formatRadioButtonData(this.levelOfConsciousness);
+            // const data = await formatRadioButtonData(this.levelOfConsciousness);
 
-            console.log({ data });
-
-            return;
             const userID: any = Service.getUserID();
             const consciousness = new ConsciousnessService(this.demographics.patient_id, userID);
             const encounter = await consciousness.createEncounter();
             if (!encounter) return toastWarning("Unable to create patient complaints encounter");
 
-            //   const gcs = this.levelOfConsciousness[0].radioBtnContent.data;
+              const patientAge = HisDate.getAgeInYears(this.demographics.birthdate);
 
-            const dat = await formatRadioButtonData(this.levelOfConsciousness);
-            //   await consciousness.saveObservationList(gcs);
+            let data;
+            
+            if(patientAge < 18){
+                data = await formatRadioButtonData(this.levelOfConsciousnessMinor);
+            }else {
+                data= await formatRadioButtonData(this.levelOfConsciousness); 
+            }
+              await consciousness.saveObservationList(data);
         },
         async buildPhysicalExamination() {
             return [
