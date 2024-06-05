@@ -166,7 +166,7 @@ function MultValidations(fieldName: string, value: any): null | any {
             return wholeNumberError;
         }
 
-        const minMaxError: string | null = Validation.checkMinMax(value, 0, 42);
+        const minMaxError: string | null = Validation.checkMinMax(value, 4, 36);
         if (minMaxError !== null) {
             return minMaxError;
         }
