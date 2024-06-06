@@ -6,12 +6,11 @@
         @didDismiss="popoverOpen = false"
         :keyboard-close="false"
         :show-backdrop="false"
-        :dismiss-on-select="true"
-    >
-        <ion-content class="search_card">
-            <div style="width: 1300px">
+        :dismiss-on-select="true">
+        
+            <div style="width: 1300px" class="sticky-table">
                 <ion-row class="search_header">
-                    <ion-col style="max-width: 188px; min-width: 188px">Fullname</ion-col>
+                    <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">Fullname</ion-col>
                     <ion-col style="max-width: 120px; min-width: 120px">Birthdate</ion-col>
                     <ion-col style="max-width: 90px; min-width: 90px; max-width: 90px">Gender</ion-col>
                     <ion-col style="max-width: 330px; min-width: 330px">Current Address</ion-col>
@@ -20,7 +19,7 @@
                     <ion-col style="max-width: 25px"></ion-col>
                 </ion-row>
                 <ion-row class="search_result" v-for="(item, index) in patients" :key="index" @click="openNewPage('patientProfile', item)">
-                    <ion-col style="max-width: 188px; min-width: 188px">{{
+                    <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">{{
                         item.person.names[0].given_name + " " + item.person.names[0].family_name
                     }}</ion-col>
                     <ion-col style="max-width: 120px; min-width: 120px">{{ item.person.birthdate }}</ion-col>
@@ -38,15 +37,20 @@
                     <ion-col style="max-width: 150px; min-width: 150px">{{ getPhone(item) }}</ion-col>
                     <ion-col style="max-width: 25px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
                 </ion-row>
-                <ion-row>
-                    <ion-col size="5">
-                        <DynButton :icon="add" :name="'Add Patient'" :fill="'clear'" @click="openCheckPaitentNationalIDModal" />
+                <ion-row class="sticky-column">
+                    <ion-col size="4" class="sticky-column">
+                        <DynButton :icon="add" :name="'Add Patient'" :fill="'clear'" @click="openCheckPaitentNationalIDModal" />                        
+                             <div id="container-div">  
+                                   <img id="hand" src="../../public/images/hand.svg" >
+                                   <img id="handinfo" src="../../public/images/swipeinfo.png">
+                             </div>
                     </ion-col>
                 </ion-row>
             </div>
-        </ion-content>
+       
     </ion-popover>
 </template>
+
 
 <script lang="ts">
 import {
@@ -68,7 +72,7 @@ import {
     IonRow,
     IonCol,
 } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { defineComponent,onMounted } from "vue";
 import { PatientService } from "@/services/patient_service";
 import { checkmark, add, search } from "ionicons/icons";
 import { useDemographicsStore } from "@/stores/DemographicStore";
@@ -102,6 +106,7 @@ export default defineComponent({
         IonCol,
     },
     setup() {
+       
         return { checkmark, add };
     },
     data() {
@@ -150,6 +155,7 @@ export default defineComponent({
                     per_page: "7",
                 };
                 this.patients = await PatientService.search(payload);
+                if(this.patients.length > 0){ this.callswipeleft(); }
             }
         },
         async searchByNpid(searchText: any) {
@@ -184,6 +190,29 @@ export default defineComponent({
                     this.patients.push(...nationalID);
                 }
             }
+        },
+        callswipeleft(){
+
+            const containerDiv = document.getElementById("container-div") as HTMLDivElement;            
+            if(containerDiv){
+
+                if (window.innerWidth > window.innerHeight) {
+                     containerDiv.style.width = `${window.innerHeight * 0.8}px`;
+                } else {
+                     containerDiv.style.width = `${window.innerWidth * 0.8}px`;
+                }
+                     containerDiv.style.height = containerDiv.style.width;            
+           
+                const handElement = document.getElementById("hand");
+                const handInfo = document.getElementById("handinfo") as HTMLDivElement;
+               if (handElement) {
+                   handElement.addEventListener("animationend", () => {
+                    handElement.style.display = "none";
+                       handInfo.style.display = "none";
+                    
+                   });                
+                }
+           }
         },
         patientIdentifier(identifiers: any) {
             return identifiers.patient_identifiers
@@ -255,70 +284,140 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.second_bar_list {
-    list-style: none;
-    justify-content: space-between;
-    display: flex;
-    font-size: 16px;
-    margin: unset;
-    padding: unset;
+.sticky-table {
+  width: 100%;
+  border-collapse: collapse;
 }
-.search_result {
-    text-align: left;
-    padding: 5px;
-    color: #b3b3b3;
+
+.sticky-table th,
+.sticky-table td {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  color:black;
 }
-li {
-    margin-right: 40px;
+
+.sticky-column {
+  position: sticky;
+  left: 0;
+  background-color: #f9f9f9;
+  z-index: 1; 
+  color:black;
 }
+
+.sticky-table th {
+  background-color: #f0f0f0; 
+  color:black;
+}
+
+.sticky-table tr:hover {
+  background-color: #f1f1f1;
+}
+
 .search_header {
-    border-bottom: 1px solid;
-    border-bottom-style: dashed;
-    padding-top: 10px;
-    text-align: left;
-    padding: 5px;
-    color: #b3b3b3;
+  border-bottom: 1px solid;
+  border-bottom-style: dashed;
+  padding-top: 10px;
+  text-align: left;
+  padding: 5px;
+  color: #b3b3b3;
+  color:black;
 }
-.searchbar-input.sc-ion-searchbar-md {
-    padding-top: 8px !important;
-    padding-bottom: 8px !important;
+
+.search_result {
+  text-align: left;
+  padding: 5px;
+  color: #b3b3b3;
+  color:black;
 }
-ion-col {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+
+.search_result:hover {
+  background-color: #ebebeb;
+  border-radius: 5px;
+}
+
+.search_result .selectedPatient {
+  font-size: 18px;
+  color: #b3b3b3;
 }
 
 .search_result .selectedPatient:hover {
-    color: var(--ion-color-primary) !important;
-    font-size: 18px;
+  color: var(--ion-color-primary);
 }
-.search_result .selectedPatient {
-    --ion-hover: #fff;
-    font-size: 18px;
-    color: var(--ion-hover);
-}
+
+
 .search_result:hover ion-icon {
-    --ion-hover: var(--ion-color-primary);
-    background-color: #ebebeb;
-    border-radius: 5px;
-    color: var(--ion-hover) !important;
+  background-color: #ebebeb;
+  border-radius: 5px;
 }
-.search_result:hover {
-    --ion-hover: var(--ion-color-primary);
-    background-color: #ebebeb;
-    border-radius: 5px;
-    color: var(--ion-hover) !important;
-}
-ion-popover {
-    --width: 95vw;
-    --max-width: 1300px;
-}
+
 @media (max-width: 900px) {
-    ion-popover {
-        --width: 95vw;
-    }
+  ion-popover {
+    --width: 95vw;
+  }
 }
+
+ion-popover {
+  --width: 95vw;
+  --max-width: 1300px;
+}
+
+
+#container-div {
+  position: absolute;
+  top: 50%;
+  left: 65%;
+  transform: translate(-50%, -50%);
+}
+
+#hand {
+  position: absolute;
+  width: 16.36%;
+  left: 30%;
+  top: 36%;
+  animation-name: swipe;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 3;
+  animation-duration: 3s; 
+}
+#handinfo {
+  position: absolute;
+  width: 50%;
+  left: 30%;
+  top: 48%;
+  padding-left: 17%;
+  animation-name: swipe;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 3;
+  animation-duration: 3s; 
+}
+
+.hidden {
+    display: none;
+}
+
+/*** ANIMATIONS ***/
+@keyframes swipe {
+  0%   { left: 45%; }
+  40%  { left: 13%;   }
+  100% { left: 13%;   }
+}
+
+@keyframes fall_1 {
+  0%   { top: 32.65%; opacity: 0.666 }
+  20%  { top: 32.65%;              }
+  60%  {              opacity: 0   }
+  67%  { top: 47%;                 }
+  100% { top: 47%;    opacity: 0   }
+}
+
+@keyframes fall_2 {
+  0%   { top: 32.65%; opacity: 0.666 }
+  13%  { top: 32.65%;              }
+  53%  {              opacity: 0   }
+  60%  { top: 47%;                 }
+  100% { top: 47%;    opacity: 0   }
+}
+
 </style>
 <style>
 ion-popover {
