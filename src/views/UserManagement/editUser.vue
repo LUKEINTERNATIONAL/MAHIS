@@ -221,6 +221,7 @@ import BasicInputField from "@/components/BasicInputField.vue"
 import { UserService } from "@/services/user_service"
 import { ProgramService } from "@/services/program_service"
 import { areFieldsValid, getFieldsValuesObj, isPasswordValid } from "@/utils/GeneralUti"
+import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
 
 const toggle_local = ref(false)
 const user_roles = ref([] as any)
@@ -419,6 +420,19 @@ async function updateUserDemographics() {
             must_append_roles:false,
         }
         UserService.updateUser(userId.value, payload)
+
+        const username_payload = {
+            new_username: user_name.value,
+        }
+
+        try {
+            const response = await UserService.updateusername(userId.value, username_payload)
+            // console.log(response.message[0])
+            toastSuccess("username updated successfully")
+        } catch (error) {
+            toastWarning("username update failed, already existing")
+            
+        }
     } 
 }
 

@@ -34,6 +34,10 @@ export class UserService extends Service {
         return this.putJson(`users/${id}`, data);
     }
 
+    static updateusername(id: number, data: Record<string, any>) {
+        return this.putJson(`users/${id}/update_username`, data)
+    }
+
     static activateUser(id: number) {
         return this.postJson(`users/${id}/activate`, {});
     }
