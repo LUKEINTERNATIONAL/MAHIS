@@ -143,44 +143,6 @@
                 </ion-fab-list>
             </ion-fab>
         </ion-content>
-
-        <!-- <ion-popover
-            mobilePopover
-            trigger="programList"
-            trigger-action="click"
-            :show-backdrop="false"
-            size="auto"
-            :dismiss-on-select="true"
-            alignment="center"
-            class="displayNoneDesktop"
-        >
-            <ul style="list-style: none; line-height: 50px">
-                <li class="listPrograma" v-if="programAccess('NCD PROGRAM')" style="margin-bottom: 20px" @click="setProgram(NCDUserAction)">
-                    {{ NCDUserAction.actionName }}
-                </li>
-                <li class="listPrograma" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">
-                    <router-link to="/profile">+ Enroll in ANC Program</router-link>
-                </li>
-                <li class="listPrograma" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">+ Enroll in Labour and delivery program</li>
-                <li class="listPrograma" v-if="programAccess('ANC PROGRAM')" style="margin-bottom: 20px">+ Enroll in PNC program</li>
-                <li
-                    class="listPrograma"
-                    v-if="programAccess('IMMUNIZATION PROGRAM')"
-                    style="margin-bottom: 20px"
-                    @click="setProgram({ url: 'birthRegistration', id: 33, name: 'IMMUNIZATION PROGRAM' })"
-                >
-                    + Enroll in Immunization program
-                </li>
-                <li class="listPrograma" v-if="programAccess('OPD Program')" style="margin-bottom: 20px" @click="handleOPD()">
-                    {{ OPDProgramActionName }}
-                </li>
-            </ul>
-        </ion-popover>
-        <ion-popover trigger="open-dates-trigger" trigger-action="click" :show-backdrop="false" size="auto">
-            <ul style="list-style: none; line-height: 50px" v-for="(item, index) in visits" :key="index">
-                <li>{{ convertToDisplayDate(item) }}</li>
-            </ul>
-        </ion-popover> -->
     </ion-page>
 </template>
 
@@ -384,31 +346,6 @@ export default defineComponent({
         },
         async setNCDValue() {
             this.programBtn = await UserService.userProgramData();
-            console.log(this.programBtn);
-            // if (this.userActions.length > 0) [{ NCDUserAction: this.NCDUserAction }] = this.userActions;
-            // this.programBtn = [
-            //     {
-            //         name: "NCD PROGRAM",
-            //         obj: this.NCDUserAction,
-            //     },
-            //     {
-            //         name: "IMMUNIZATION PROGRAM",
-            //         obj: {
-            //             url: "birthRegistration",
-            //             id: 33,
-            //             name: "IMMUNIZATION PROGRAM",
-            //         },
-            //     },
-            //     {
-            //         name: "NCD PROGRAM",
-            //         obj: {
-            //             actionName: "+ Enroll in ANC Program",
-            //             url: "NCDEnrollment",
-            //             name: "NCD",
-            //             id: "32",
-            //         },
-            //     },
-            // ];
         },
         setOPDValue() {
             sessionStorage.setItem("app", JSON.stringify({ programID: 14, applicationName: "OPD" }));

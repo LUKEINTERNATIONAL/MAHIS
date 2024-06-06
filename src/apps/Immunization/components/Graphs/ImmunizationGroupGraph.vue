@@ -2,7 +2,7 @@
     <div class="modal_wrapper">
         <div class="immunizationGraph">
             <div class="immunizationGraphText">Immunization Graphs</div>
-            <ApexChart width="100%" height="252" type="area" :options="options" :series="series" />
+            <ApexChart width="100%" height="100%" type="area" :options="options" :series="series" />
         </div>
     </div>
 </template>
@@ -258,6 +258,7 @@ export default defineComponent({
 
     background: #ffffff;
     border-radius: 8px;
+    height: 90vw;
 }
 .immunizationGraphText {
     padding-left: 10px;

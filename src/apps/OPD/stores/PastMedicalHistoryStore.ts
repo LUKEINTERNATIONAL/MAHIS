@@ -463,7 +463,7 @@ export const usePastMedicalHistoryStore = defineStore("pastMedicalHistoryStore",
         pastMedicalHistory: [...initialPastMedicalHistory] as any,
     }),
     actions: {
-        setPregnancy(data: any) {
+        setPastMedicalHistory(data: any) {
             this.pastMedicalHistory = data;
         },
         getInitial() {

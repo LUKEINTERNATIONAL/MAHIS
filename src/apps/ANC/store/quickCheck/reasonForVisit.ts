@@ -279,7 +279,7 @@ const initialReasonForVisit = [
 
         {
           name: "Other danger signs",
-          value: "Other danger signs",
+          value: "other danger signs",
           checked: false,
           labelPlacement: "start",
           colSize: "6",
@@ -355,7 +355,7 @@ const initialReasonForVisit = [
     checkboxBtnContent: {
       header: {
         class: "bold",
-        title: "What are the specific health concerns for the patient*?",
+        title: "What are the specific health concerns for the patient?",
         selectedValue: "",
         name: "Specific health concerns",
         displayNone: true,
@@ -743,7 +743,7 @@ const initialReasonForVisit = [
               icon: icons.editPen,
               value: "",
               valueType: "text",
-              name: "Other notes",
+              name: "notes",
               required: true,
               eventType: "input",
               inputWidth: "85%",
@@ -851,7 +851,7 @@ const initialSubsequentVisits= [
             {
                 header:{
                     class:'bold',
-                    title: 'Reason the woman came to the facility today*',
+                    title: 'Reason the woman came to the facility today *',
                     selectedValue: '',
                     name:'Reason for visit',
                     displayNext:'Specific complaint related to antenatal care'
@@ -882,7 +882,7 @@ const initialSubsequentVisits= [
         sideColSize: 0.5,
         checkboxBtnContent: {
             header: {
-                title: "What danger signs does the woman has?*",
+               // title: "What danger signs does the woman has? *",
                 selectedValue: "",
                 class:"bold",
                 name:'Danger signs',
@@ -1156,7 +1156,7 @@ const initialSubsequentVisits= [
                             icon: icons.editPen,
                             value: "",
                             valueType:'text',
-                            name: "Other notes",
+                            name: "Other note",
                             eventType: "input",
                             inputWidth: "100%",
                             required: true,
@@ -1789,30 +1789,30 @@ const getVisitDateField=(number:number)=>{
         },
     ]
 }
-export const useReasonForVisitStore = defineStore('reasonForVisitStore',{
-    state: () => ({
-        ReasonForVisit:[...initialReasonForVisit] as any,
-        ReasonForSubsequentVisit:[...initialSubsequentVisits]
-    }),
-    actions:{
-        setReasonForVisit(number: number){
-            this.ReasonForVisit = []
-            for (let i = 0; i < number; i++) {
-                const inputs =getVisitDateField(i)
-                this.ReasonForVisit.push(inputs[0])
-                this.ReasonForVisit.push(inputs[1])
-            }
-        },
-
-        getInitial(){
-            const data = _.cloneDeep(initialReasonForVisit);
-            return [...data];
-        },
-        getInitial1(){
-            const data = _.cloneDeep(initialSubsequentVisits);
-            return [...data];
-        }
+export const useReasonForVisitStore = defineStore("reasonForVisitStore", {
+  state: () => ({
+    ReasonForVisit: [...initialReasonForVisit] as any,
+    ReasonForSubsequentVisit: [...initialSubsequentVisits],
+    //initialSubsequentVisits
+  }),
+  actions: {
+    setReasonForVisit(number: number) {
+      this.ReasonForVisit = [];
+      for (let i = 0; i < number; i++) {
+        const inputs = getVisitDateField(i);
+        this.ReasonForVisit.push(inputs[0]);
+        this.ReasonForVisit.push(inputs[1]);
+      }
     },
-    // persist:true,
 
-})
+    getInitial() {
+      const data = _.cloneDeep(initialReasonForVisit);
+      return [...data];
+    },
+    getInitial1() {
+      const data = _.cloneDeep(initialSubsequentVisits);
+      return [...data];
+    },
+  },
+  // persist:true,
+});

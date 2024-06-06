@@ -3,7 +3,7 @@ import { icons } from "@/utils/svg";
 
 export const ConsciousnessConcepts = {
     BEST_VERBAL_RESPONSE: 'Best verbal response',
-    EYE_OPENING_RESPONSE: 'Eye-opening response',
+    EYE_OPENING_RESPONSE: 'Eye opening response',
     BEST_MOTOR_RESPONSE: 'Best motor response',
 
 }

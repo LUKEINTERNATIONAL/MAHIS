@@ -71,6 +71,14 @@ import { popoverConfirmation } from "@/utils/Alerts";
 import List from "@/components/List.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import Validation from "@/validations/StandardValidations";
+import {
+    modifyCheckboxInputField,
+    getCheckboxSelectedValue,
+    getRadioSelectedValue,
+    getFieldValue,
+    modifyRadioValue,
+    modifyFieldValue,
+} from "@/services/data_helpers";
 
 export default defineComponent({
     components: {
@@ -104,7 +112,6 @@ export default defineComponent({
             search_item: false,
             display_item: false,
             addItemButton: true,
-            selectedText: "" as any,
             conditionStatus: "" as any,
             data: [] as any,
             presentingComplaintsListData: [] as any,
@@ -139,20 +146,11 @@ export default defineComponent({
     },
     methods: {
         async getPresenting() {
-            const data = await PatientComplaintsService.getComplaintsList("Presenting complaint group");
-
-            const promises = data.map(async (item: any) => {
-                const complaints = await PatientComplaintsService.getComplaintsList(item.name);
-                return [...complaints];
-            });
-
-            this.complaints = await Promise.all(promises);
-
-            this.complaints = this.complaints.flat();
+            this.complaints = await PatientComplaintsService.getComplaintsList("Presenting complaint");
+            modifyFieldValue(this.presentingComplaints, "PresentingComplaints", "multiSelectData", this.complaints);
         },
         displayInputFields() {
             this.conditionStatus = "";
-            this.selectedText = "";
             this.no_item = false;
             this.addItemButton = false;
             this.search_item = true;
@@ -161,7 +159,7 @@ export default defineComponent({
             this.presentingComplaints[0].data.rowData[0].colData[0].alertsError = false;
             this.presentingComplaints[0].data.rowData[0].colData[0].alertsErrorMassage = "";
 
-            if (this.isNameInArray(this.inputFields[0].value, this.complaints)) {
+            if (this.inputFields[0].value.name) {
                 return true;
             } else {
                 this.search_item = true;
@@ -174,36 +172,52 @@ export default defineComponent({
             return arrayOfObjects.some((obj: any) => obj.name === name);
         },
         async addNewRow() {
-            if (await this.validaterowData()) {
+            if ((await this.validaterowData()) && this.validateDuration()) {
                 this.presentingComplaints[0].data.rowData[0].colData[0].value = this.inputFields[0].value;
                 this.search_item = false;
                 this.display_item = true;
                 this.addItemButton = true;
                 this.buildpresentingComplaintsList();
+            } else {
+                return;
             }
             this.presentingComplaints[0].data.rowData[0].colData[0].value = "";
-            this.presentingComplaints[0].data.rowData[0].colData[0].popOverData.data = [];
+            this.presentingComplaints[0].data.rowData[0].colData[1].value = "";
+            this.presentingComplaints[0].data.rowData[0].colData[1].unitsData.value = "";
         },
         buildpresentingComplaintsList() {
-            this.presentingComplaints[0].selectedData.push({
-                actionBtn: true,
-                btn: ["edit", "delete"],
-                name: this.inputFields[0].value,
-                id: this.presentingComplaintsListData[0].concept_id,
-                display: [this.inputFields[0].value, this.inputFields[1].value],
-                data: [
-                    {
-                        concept_id: 6542, //primary presentingComplaints
-                        value_coded: this.presentingComplaintsListData[0].concept_id,
-                        obs_datetime: Service.getSessionDate(),
-                    },
-                    {
-                        concept_id: 1294, //Duration of symptom in days
-                        value_numeric: this.presentingComplaintsListData[0].concept_id,
-                        obs_datetime: Service.getSessionDate(),
-                    },
-                ],
-            });
+            if (!this.isNameInData(this.inputFields[0].value.name, this.presentingComplaints[0].selectedData)) {
+                const duration = this.inputFields[1].value + " " + this.inputFields[1].unitsData.value.name;
+                this.presentingComplaints[0].selectedData.push({
+                    actionBtn: true,
+                    btn: ["edit", "delete"],
+                    name: this.inputFields[0].value.name,
+                    concept_id: this.inputFields[0].value.concept_id,
+                    duration: this.inputFields[1].value,
+                    durationUnits: this.inputFields[1].unitsData.value,
+                    display: [this.inputFields[0].value.name, duration],
+                    data: [
+                        {
+                            concept_id: 8578,
+                            value_coded: this.inputFields[0].value.concept_id,
+                            obs_datetime: Service.getSessionDate(),
+                            child: [
+                                {
+                                    concept_id: this.inputFields[0].value.concept_id,
+                                    value_text: duration,
+                                    obs_datetime: Service.getSessionDate(),
+                                },
+                            ],
+                        },
+                    ],
+                });
+            } else {
+                toastWarning("Presenting complaint already added");
+            }
+            console.log(this.presentingComplaints[0].selectedData);
+        },
+        isNameInData(name: any, dataArray: any) {
+            return dataArray.some((item: any) => item.name === name);
         },
         updatePresentingComplaintsListStores() {
             const presentingComplaintsListStore = usePresentingComplaintsStore();
@@ -215,8 +229,6 @@ export default defineComponent({
         },
         async handleInputData(col: any) {
             if (col.inputHeader == "Presenting Complaints") {
-                this.presentingComplaintsListData = this.complaints;
-                this.presentingComplaints[0].data.rowData[0].colData[0].popOverData.data = this.presentingComplaintsListData;
                 this.validaterowData();
             } else if (col.inputHeader == "Duration") {
                 this.validateDuration();
@@ -225,8 +237,13 @@ export default defineComponent({
         validateDuration() {
             this.presentingComplaints[0].data.rowData[0].colData[1].alertsError = false;
             this.presentingComplaints[0].data.rowData[0].colData[1].alertsErrorMassage = "";
+            if (!this.inputFields[1].unitsData.value) {
+                this.presentingComplaints[0].data.rowData[0].colData[1].alertsError = true;
+                this.presentingComplaints[0].data.rowData[0].colData[1].alertsErrorMassage = "Duration Units Required";
+                return false;
+            }
 
-            if (Validation.isNumber(this.inputFields[1].value) == null) {
+            if (Validation.isNumber(this.inputFields[1].value) == null && this.inputFields[1].value != "") {
                 return true;
             } else {
                 this.search_item = true;
@@ -236,18 +253,13 @@ export default defineComponent({
             }
         },
         editpresentingComplaintsList(test: any) {
-            this.deletepresentingComplaintsList(test);
-            this.selectedText = test.name;
-            this.presentingComplaints[0].data.rowData[0].colData[0].value = test.name;
+            this.deletepresentingComplaintsList(test.item);
+            this.presentingComplaints[0].data.rowData[0].colData[0].value = test.item;
+            this.presentingComplaints[0].data.rowData[0].colData[1].value = test.item.duration;
+            this.presentingComplaints[0].data.rowData[0].colData[1].unitsData.value = test.item.durationUnits;
             this.addItemButton = false;
             this.search_item = true;
             this.updatePresentingComplaintsListStores();
-        },
-        async openDeletePopover(e: any) {
-            // const deleteConfirmed = await popoverConfirmation(`Do you want to delete ${e.name} ?`, e.event);
-            // if (deleteConfirmed) {
-            //     this.deletepresentingComplaintsList(e.name);
-            // }
         },
         deletepresentingComplaintsList(presentingComplaints: any) {
             this.presentingComplaints[0].selectedData = this.presentingComplaints[0].selectedData.filter(
@@ -296,5 +308,9 @@ h5 {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+}
+.previousView {
+    margin-top: 70px;
+    margin-bottom: 20px;
 }
 </style>

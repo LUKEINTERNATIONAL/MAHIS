@@ -4,6 +4,7 @@ import { isEmpty } from "lodash"
 import { Service } from "@/services/service"
 import { PatientService } from "@/services/patient_service"
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
+import HisDate from "@/utils/Date"
 
 export async function getVaccinesSchedule() {
     const patient = new PatientService()
@@ -20,10 +21,11 @@ export async function saveVaccineAdministeredDrugs() {
         const drugOrders = mapToOrders()
         const prescriptionService = new DrugPrescriptionForImmunizationService(patient.getID(), userId)
         const encounter = await prescriptionService.createEncounter()
-        if (!encounter) return toastWarning("Unable to create treatment encounter")
+        if (!encounter) return toastWarning("Unable to create immunization encounter")
         const drugOrder = await prescriptionService.createDrugOrderForImmunization(drugOrders, programId)
-        if (!drugOrder) return toastWarning("Unable to create drug orders!")
-        toastSuccess("Drug order has been created")
+        if (!drugOrder) return toastWarning("Unable register vaccine!")
+        toastSuccess("Vaccine registred successfully")
+        store.setVaccineReload(!store.getVaccineReload())
     }
 }
 
@@ -34,15 +36,22 @@ function mapToOrders(): any[] {
         const frequency = DRUG_FREQUENCIES.find((f) => f.label === drug.frequency) || ({} as (typeof DRUG_FREQUENCIES)[0]);
         return {
             drug_inventory_id: drug.drug_id,
-            equivalent_daily_dose: drug.dose == "Unknown" ? 0 : drug.dose * frequency?.value || 0,
+            equivalent_daily_dose: 1,
             start_date: drug.date_administered,
-            auto_expire_date: startDate,
+            auto_expire_date: calculateExpireDate(drug.date_administered, 1),
             units: 'ml',
             instructions: '',
             dose: 1,
-            frequency: "",
+            frequency: "Unknown",
             batch_number: drug.batch_number,
             visit_id: drug.visit_id,
+            prn: 0,
         };
     });
+}
+
+function calculateExpireDate(startDate: string | Date, duration: any) {
+    const date = new Date(startDate);
+    date.setDate(date.getDate() + parseInt(duration));
+    return HisDate.toStandardHisFormat(date);
 }

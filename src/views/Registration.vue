@@ -6,7 +6,7 @@
                     <ion-icon slot="separator" size="large" :icon="iconsContent.arrowLeft"></ion-icon>
                     <span style="padding-left: 10px">Go back</span>
                 </div>
-                <div>New patient registration</div>
+                <div></div>
                 <div style="display: flex; align-items: center">
                     <ion-icon slot="separator" size="large" :icon="iconsContent.help"></ion-icon>
                     <span style="padding-left: 10px"> Need any help?</span>
@@ -16,9 +16,9 @@
         <ion-content>
             <div class="container">
                 <div class="title">
-                    <div class="demographics_title">Demographics</div>
+                    <div class="demographics_title">New patient registration</div>
                 </div>
-                <div class="icon_div">
+                <div class="icon_div displayNoneMobile">
                     <ion-icon :class="iconListStatus" :icon="list" @click="setDisplayType('list')"></ion-icon>
                     <ion-icon
                         :class="iconGridStatus"
@@ -31,47 +31,49 @@
             <div v-if="registrationType == 'scan'">
                 <ScanRegistration />
             </div>
-            <div class="center_content" v-if="registrationType == 'manual' && registrationDisplayType == 'grid'">
-                <ion-row v-if="registrationDisplayType == 'grid'">
-                    <ion-col size-sm="12" size-md="6" size-lg="4">
+            <div class="center_content" v-if="registrationType == 'manual' && registrationDisplayType == 'grid' && screenWidth > 991">
+                <div v-if="registrationDisplayType == 'grid'" class="flex-container">
+                    <div class="flex-item">
                         <PersonalInformation />
-                    </ion-col>
-                    <ion-col size-sm="12" size-md="6" size-lg="4">
+                    </div>
+                    <div class="flex-item">
                         <CurrentLocation />
                         <SocialHistory v-if="checkUnderFive" />
-                    </ion-col>
-                    <ion-col size-sm="12" size-md="6" size-lg="4" class="regDisplayFlex">
+                        <BirthRegistration v-if="checkUnderOne" />
+                    </div>
+                    <div class="flex-item">
                         <HomeLocation />
                         <GuardianInformation />
-                    </ion-col>
-                </ion-row>
+                    </div>
+                </div>
             </div>
 
-            <div v-if="registrationType == 'manual' && registrationDisplayType == 'list'">
+            <div v-if="(registrationType == 'manual' && registrationDisplayType == 'list') || screenWidth <= 991">
                 <div v-if="currentStep == 'Personal Information'">
                     <PersonalInformation />
                 </div>
                 <div v-if="currentStep == 'Location'">
-                    <div style="display: flex; justify-content: center">
+                    <div style="justify-content: center">
                         <div><CurrentLocation /></div>
                         <div><HomeLocation /></div>
                     </div>
                 </div>
                 <div v-if="currentStep == 'Social History'">
-                    <SocialHistory />
+                    <SocialHistory v-if="checkUnderFive" />
+                    <BirthRegistration v-if="checkUnderOne" />
                 </div>
                 <div v-if="currentStep == 'Guardian Information'">
                     <GuardianInformation />
                 </div>
             </div>
         </ion-content>
-        <div class="footer2" v-if="registrationDisplayType == 'grid'">
+        <div class="footer2" v-if="registrationDisplayType == 'grid' && screenWidth > 991">
             <DynamicButton name="Save" iconSlot="end" :icon="iconsContent.saveWhite" @click="saveData()" />
         </div>
-        <ion-footer v-if="registrationType == 'manual' && registrationDisplayType == 'list'">
+        <ion-footer v-if="(registrationType == 'manual' && registrationDisplayType == 'list') || screenWidth <= 991">
             <div class="footer position_content">
                 <DynamicButton name="Previous" :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
-                <ion-breadcrumbs class="breadcrumbs">
+                <ion-breadcrumbs class="breadcrumbs displayNoneMobile">
                     <ion-breadcrumb @click="setCurrentStep('Personal Information')" :class="{ active: currentStep === 'Personal Information' }">
                         <span class="breadcrumb-text">Personal Information</span>
                         <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
@@ -113,6 +115,7 @@ import GuardianInformation from "@/components/Registration/GuardianInformation.v
 import HomeLocation from "@/components/Registration/HomeLocation.vue";
 import CurrentLocation from "@/components/Registration/CurrentLocation.vue";
 import SocialHistory from "@/components/Registration/SocialHistory.vue";
+import BirthRegistration from "@/components/Registration/BirthRegistration.vue";
 import ScanRegistration from "@/components/Registration/ScanRegistration.vue";
 import { useRegistrationStore } from "@/stores/RegistrationStore";
 import { mapState } from "pinia";
@@ -149,6 +152,7 @@ export default defineComponent({
         HomeLocation,
         SocialHistory,
         ScanRegistration,
+        BirthRegistration,
     },
     data() {
         return {
@@ -159,7 +163,9 @@ export default defineComponent({
             currentStep: "Personal Information",
             scanner: false,
             checkUnderFive: true,
-            steps: ["Personal Information", "Guardian Information", "Location", "Social History"],
+            checkUnderOne: false,
+            steps: ["Personal Information", "Location", "Social History", "Guardian Information"],
+            screenWidth: "" as any,
         };
     },
     props: ["registrationType"],
@@ -212,10 +218,10 @@ export default defineComponent({
     },
 
     async mounted() {
+        this.screenWidth = window.screen.width;
         this.setIconClass();
         this.disableNationalIDInput();
-        this.isUnderFive();
-        console.log("🚀 ~ mounted ~ ", await this.getRegion("Mzimba"));
+        this.checkAge();
     },
     watch: {
         personInformation: {
@@ -226,7 +232,7 @@ export default defineComponent({
                 data.setHomeLocation(this.homeLocation);
                 data.setCurrentLocation(this.currentLocation);
                 data.setGuardianInformation(this.guardianInformation);
-                this.isUnderFive();
+                this.checkAge();
                 this.disableNationalIDInput();
             },
             deep: true,
@@ -257,8 +263,11 @@ export default defineComponent({
                 }
             }
         },
-        isUnderFive() {
-            if (!isEmpty(this.birthdate)) this.checkUnderFive = HisDate.getAgeInYears(this.birthdate) >= 5 ? true : false;
+        checkAge() {
+            if (!isEmpty(this.birthdate)) {
+                this.checkUnderFive = HisDate.getAgeInYears(this.birthdate) >= 5 ? true : false;
+                this.checkUnderOne = HisDate.getAgeInYears(this.birthdate) <= 1 ? true : false;
+            }
         },
         disableNationalIDInput() {
             if (this.registrationType == "manual") {
@@ -274,6 +283,9 @@ export default defineComponent({
             this.$router.push(url);
         },
         nextStep() {
+            if (this.checkUnderFive || this.checkUnderOne)
+                this.steps = ["Personal Information", "Location", "Social History", "Guardian Information"];
+            else this.steps = ["Personal Information", "Location", "Guardian Information"];
             const currentIndex = this.steps.indexOf(this.currentStep);
             if (currentIndex < this.steps.length - 1) {
                 this.currentStep = this.steps[currentIndex + 1];
@@ -374,7 +386,6 @@ export default defineComponent({
             });
             let url = "/patientProfile";
             const patient = new PatientService();
-            if (await patient.isUnderFive()) url = "/birthRegistration";
             this.$router.push(url);
         },
         patientIdentifier(item: any) {
@@ -497,7 +508,7 @@ ion-footer {
 }
 .demographics_title {
     font-weight: 700;
-    font-size: 24px;
+    font-size: 22px;
     padding-top: 20px;
 }
 .demographics {
@@ -508,5 +519,19 @@ ion-footer {
 .center_content {
     display: flex;
     justify-content: center;
+}
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px;
+}
+
+.flex-item {
+    color: white;
+    flex: 1 1 100px;
+    text-align: center;
+    border-radius: 5px;
+    box-sizing: border-box;
 }
 </style>

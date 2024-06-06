@@ -1,8 +1,17 @@
 <template>
-    <carousel :items-to-show="1" :modelValue="2">
+
+    <div v-if="showCurrentMilestoneAlert" class="alert_banner">
+      <apan>{{ msg }}</apan>
+      <ion-icon style="margin-top: 7px;" slot="end" size="medium" :icon="iconsContent.greenCalender">
+      </ion-icon>
+      <span style="font-weight: 700;">{{age}}</span>
+    </div>
+
+    <carousel :items-to-show="1" :modelValue="landingSlide" @slide-end="slideEvent">
       <slide v-for="slide in 12" :key="slide">
         <!-- {{ slide }} -->
         <div class="container">
+
           <ion-row class="top-row">
             <customVaccine :vaccines="vaccinesForVisit1" :visitId="1" v-if="slide == 1"/>
             <customVaccine :vaccines="vaccinesForVisit2" :visitId="2" v-if="slide == 2"/>
@@ -17,16 +26,6 @@
             <customVaccine :vaccines="vaccinesForVisit11" :visitId="11" v-if="slide == 11"/>
             <customVaccine :vaccines="vaccinesForVisit12" :visitId="12" v-if="slide == 12"/>
           </ion-row>
-
-          <ion-row class="bottom-row">
-            <div class="otherVaccine center-content">
-              <div class="centerBtns">
-                <ion-button @click="openAdministerOtherVaccineModal" class="btnText" fill="solid"> 
-                  Add Other Vaccines 
-                </ion-button>
-              </div>
-            </div>
-          </ion-row>
         </div>
         
       </slide>
@@ -34,6 +33,20 @@
         <navigation />
         <pagination />
       </template>
+    </carousel>
+
+    <carousel>
+      <slide v-for="slide in 12" :key="slide">
+        <ion-row class="bottom-row">
+          <div class="otherVaccine center-content">
+            <div class="centerBtns">
+              <ion-button @click="openAdministerOtherVaccineModal" class="btnText" fill="solid"> 
+                Add Other Vaccines 
+              </ion-button>
+            </div>
+          </div>
+        </ion-row>
+      </slide>
     </carousel>
 </template>
 
@@ -46,12 +59,15 @@
     IonButton,
     IonCol,
     IonRow,
+    IonLabel
   } from "@ionic/vue"
   import customVaccine from "@/apps/Immunization/components/customVaccine.vue"
   import administerOtherVaccineModal from "@/apps/Immunization/components/Modals/administerOtherVaccineModal.vue"
   import { createModal } from "@/utils/Alerts"
+  import { mapState } from "pinia"
   import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore"
   import { getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service"
+  import { icons } from "@/utils/svg"
     
   export default defineComponent ({
     name: "xxxComponent",
@@ -64,6 +80,7 @@
       IonButton,
       IonCol,
       IonRow,
+      IonLabel
     },
     data() {
         return {
@@ -79,10 +96,27 @@
             vaccinesForVisit10: [],
             vaccinesForVisit11: [],
             vaccinesForVisit12: [],
+            milestones: [],
+            iconsContent: icons,
+            showCurrentMilestoneAlert: false,
+            age: '',
+            landingSlide: 0,
+            msg: 'Vaccines due today',
         };
+    },
+    computed: {
+      ...mapState(useAdministerVaccineStore, ["vaccineReload"]),
     },
     async mounted() {
       this.loadVaccineSchedule()
+    },
+    watch: {
+      vaccineReload: {
+            handler() {
+              this.loadVaccineSchedule()
+            },
+            deep: true,
+        },
     },
     methods: {
       openAdministerOtherVaccineModal() {
@@ -91,10 +125,41 @@
       async loadVaccineSchedule() {
         const data__ = await getVaccinesSchedule()
         const vaccineScheduleStore = useAdministerVaccineStore()
-        vaccineScheduleStore.setCurrentMilestone('10 weeks')
+
         vaccineScheduleStore.setVaccineSchedule(data__)
-        vaccineScheduleStore.setCurrentVisitId(3)
-        vaccineScheduleStore.getVaccineSchedule().vaccinSchedule.forEach(vaccineSchudule => {
+        let upcoming_f = false
+        let found = false
+        vaccineScheduleStore.getVaccineSchedule().vaccinSchedule.forEach((vaccineSchudule: any) => {
+
+          console.log(vaccineSchudule.milestone_status)
+          if (vaccineSchudule.milestone_status == 'current' ) {
+            vaccineScheduleStore.setCurrentVisitId(vaccineSchudule.visit)
+            vaccineScheduleStore.setCurrentMilestoneToAdminister({currentMilestone: vaccineSchudule.age})
+            this.landingSlide = vaccineSchudule.visit - 1
+            this.age = vaccineSchudule.age
+            found = true
+            vaccineScheduleStore.setCurrentSchedFound(true)
+          }
+
+          if (found == false && vaccineSchudule.milestone_status == 'upcoming' && upcoming_f == false) {
+            vaccineScheduleStore.setCurrentVisitId(vaccineSchudule.visit)
+            vaccineScheduleStore.setCurrentMilestoneToAdminister({currentMilestone: vaccineSchudule.age})
+            this.landingSlide = vaccineSchudule.visit - 1
+            this.age = vaccineSchudule.age
+            upcoming_f = true
+          }
+
+          if (found == false && vaccineSchudule.visit == 12 && upcoming_f == false) {
+            vaccineScheduleStore.setCurrentVisitId(vaccineSchudule.visit)
+            vaccineScheduleStore.setCurrentMilestoneToAdminister({currentMilestone: vaccineSchudule.age})
+            this.landingSlide = vaccineSchudule.visit - 1
+            this.age = vaccineSchudule.age
+            upcoming_f = true
+          }
+
+          const obj =  { visit_id: vaccineSchudule.visit, age: vaccineSchudule.age }
+          this.milestones = this.appendUniqueObject(this.milestones, obj)
+
           if (vaccineSchudule.visit == 1) {
             this.vaccinesForVisit1 = vaccineSchudule.antigens as any
           }
@@ -144,6 +209,43 @@
           }
 
         })
+        if (found == false) {
+          vaccineScheduleStore.setCurrentSchedFound(false)
+        }
+      },
+      slideEvent(SlideEventData: any) {
+        const vaccineScheduleStore = useAdministerVaccineStore()
+        const CurrentMilestoneToAdminister = vaccineScheduleStore.getCurrentMilestoneToAdminister() as any
+        this.milestones.forEach((milestone: any) => {
+          if(milestone.visit_id -1 == SlideEventData.currentSlideIndex) {
+            vaccineScheduleStore.setCurrentMilestone(milestone.age)
+          }
+        })
+
+        const templmilesytone = vaccineScheduleStore.getCurrentMilestone()
+
+        if (templmilesytone == CurrentMilestoneToAdminister.currentMilestone) {
+           if (vaccineScheduleStore.getCurrentSchedFound() == false) {
+            this.msg = "Upcoming Vaccines"
+           }
+           if (vaccineScheduleStore.getCurrentSchedFound() == true) {
+            this.msg = "Vaccines due today"
+           }
+            this.showCurrentMilestoneAlert = true
+            return
+          }
+
+          if (templmilesytone.age != CurrentMilestoneToAdminister.currentMilestone) {
+            this.showCurrentMilestoneAlert = false
+            
+          }
+      },
+      appendUniqueObject(arr: any, obj: any) {
+        const exists = arr.some((item: { visit_id: any; age: any; }) => item.visit_id === obj.visit_id && item.age === obj.age)
+        if (!exists) {
+          arr.push(obj)
+        }
+        return arr
       }
     }
   });
@@ -153,7 +255,8 @@
     width: var(--vc-icn-width);
     height: var(--vc-icn-width);
     fill: currentColor;
-    background: #BBDDBC;
+    background: none;
+    /* background: #BBDDBC; */
     color: #016302;
     }
 
@@ -182,6 +285,12 @@
       flex-direction: column;
     }
 
+    .btnTextWeight {
+        color: #000;
+        --border-width: 1px;
+        margin-right: 0px;
+    }
+
     ion-row {
       width: 100%;
     }
@@ -197,6 +306,29 @@
       justify-content: center;
       align-items: center;
       width: 100%;
+    }
+
+    .alert_banner {
+      /* Milestone */
+      /* Auto layout */
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      padding: 0px 30px;
+      gap: 9px;
+
+      width: 430px;
+      height: 33px;
+
+      /* green/300 */
+      background: #DDEEDD;
+
+      /* Inside auto layout */
+      flex: none;
+      order: 1;
+      align-self: stretch;
+      flex-grow: 0;
     }
 </style>
   

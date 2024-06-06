@@ -1,30 +1,29 @@
-import {defineStore} from "pinia";
-import {icons} from "@/utils/svg";
-import _ from "lodash"
+import { defineStore } from "pinia";
+import { icons } from "@/utils/svg";
+import _ from "lodash";
 
-const initialPhysicalExam= [
-
+const initialPhysicalExam = [
     {
         selectdData: [],
         classDash: "dashed_bottom_border",
-        sideColSize:0.3,
+        sideColSize: 0.3,
         radioBtnContent: {
             header: {
-                title:'Has physical examination been done?',
+                title: "Has physical examination been done?",
                 selectedValue: "",
                 name: "Physical examination",
                 displayNext: "Yes",
-                class:"bold"
+                class: "bold",
             },
             data: [
                 {
                     name: "Yes",
-                    value:"Yes",
+                    value: "Yes",
                     colSize: "2",
                 },
                 {
                     value: "No",
-                    name:"No",
+                    name: "No",
                     colSize: "2.0",
                 },
             ],
@@ -32,8 +31,8 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:0.3,
-        childName:'',
+        sideColSize: 0.3,
+        childName: "",
         classDash: "dashed_bottom_border",
         radioBtnContent: {
             header: {
@@ -41,7 +40,7 @@ const initialPhysicalExam= [
                 selectedValue: "",
                 name: "Reason why physical examination not done",
                 displayNone: true,
-                class:'bold'
+                class: "bold",
             },
             data: [
                 {
@@ -59,16 +58,16 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:0.3,
-        childName:"Physical examination",
+        sideColSize: 0.3,
+        childName: "Physical examination",
         classDash: "dashed_bottom_border",
         radioBtnContent: {
             header: {
                 selectedValue: "",
                 name: "Eyes normal",
                 title: "Eyes normal?",
-                displayNext:"No",
-                class:"bold",
+                displayNext: "No",
+                class: "bold",
                 displayNone: true,
             },
             data: [
@@ -79,7 +78,7 @@ const initialPhysicalExam= [
                 },
                 {
                     value: "No",
-                    name:"No",
+                    name: "No",
                     colSize: "2",
                 },
             ],
@@ -87,17 +86,17 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:1,
+        sideColSize: 1,
         isFinishBtn: false,
-        childName:"Eyes normal",
+        childName: "Eyes normal",
         classDash: "",
         checkboxBtnContent: {
             header: {
                 title: "What are the abnormalities on eyes?",
                 selectedValue: "",
-                displayNone:true,
+                displayNone: true,
                 name: "Abnormality for eyes",
-                class:'bold'
+                class: "bold",
             },
             data: [
                 {
@@ -130,18 +129,17 @@ const initialPhysicalExam= [
         },
     },
 
-
     {
         selectdData: [],
-        sideColSize:1,
-        childName:"Eyes normal",
+        sideColSize: 1,
+        childName: "Eyes normal",
         isFinishBtn: false,
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
             header: {
                 title: "",
                 selectedValue: "",
-                 displayNone: true,
+                displayNone: true,
                 name: "Abnormality for eyes",
             },
             data: [
@@ -159,9 +157,9 @@ const initialPhysicalExam= [
     },
 
     {
-        childName:"Other eye abnormality",
+        childName: "Other eye abnormality",
         classDash: "dashed_bottom_border",
-        sideColSize:1,
+        sideColSize: 1,
         data: {
             rowData: [
                 {
@@ -169,10 +167,10 @@ const initialPhysicalExam= [
                         {
                             displayNone: true,
                             inputHeader: "Specify eye abnormality",
-                            class:'bold',
+                            class: "bold",
                             icon: icons.editPen,
                             value: "",
-                            valueType:'text',
+                            valueType: "text",
                             name: "Other eye abnormality notes",
                             eventType: "input",
                             inputWidth: "100%",
@@ -185,17 +183,17 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:0.3,
-        childName:"Physical examination",
+        sideColSize: 0.3,
+        childName: "Physical examination",
         classDash: "dashed_bottom_border",
         radioBtnContent: {
             header: {
                 selectedValue: "",
                 name: "Mouth normal",
                 title: "Mouth normal?",
-                displayNext:"No",
-                class:"bold",
-                displayNone:true
+                displayNext: "No",
+                class: "bold",
+                displayNone: true,
             },
             data: [
                 {
@@ -205,7 +203,7 @@ const initialPhysicalExam= [
                 },
                 {
                     value: "No",
-                    name:"No",
+                    name: "No",
                     colSize: "2",
                 },
             ],
@@ -213,8 +211,8 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:1,
-        childName:'Mouth normal',
+        sideColSize: 1,
+        childName: "Mouth normal",
         isFinishBtn: false,
         classDash: "",
         checkboxBtnContent: {
@@ -223,7 +221,7 @@ const initialPhysicalExam= [
                 selectedValue: "",
                 displayNone: true,
                 name: "Abnormality for  mouth",
-                class:'bold'
+                class: "bold",
             },
             data: [
                 {
@@ -257,11 +255,10 @@ const initialPhysicalExam= [
         },
     },
 
-
     {
         selectdData: [],
-        sideColSize:1,
-        childName:"Mouth normal",
+        sideColSize: 1,
+        childName: "Mouth normal",
         isFinishBtn: false,
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
@@ -286,9 +283,9 @@ const initialPhysicalExam= [
     },
 
     {
-        childName:'Other mouth abnormality',
+        childName: "Other mouth abnormality",
         classDash: "dashed_bottom_border",
-        sideColSize:1,
+        sideColSize: 1,
         data: {
             rowData: [
                 {
@@ -296,10 +293,10 @@ const initialPhysicalExam= [
                         {
                             displayNone: true,
                             inputHeader: "Specify mouth abnormality",
-                            class:'bold',
+                            class: "bold",
                             icon: icons.editPen,
                             value: "",
-                            valueType:'text',
+                            valueType: "text",
                             name: "Other mouth abnormality notes",
                             eventType: "input",
                             inputWidth: "100%",
@@ -312,16 +309,16 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:0.3,
-        childName:"Physical examination",
+        sideColSize: 0.3,
+        childName: "Physical examination",
         classDash: "dashed_bottom_border",
         radioBtnContent: {
             header: {
                 selectedValue: "",
                 name: "Ears normal",
                 title: "Ears normal?",
-                class:"bold",
-                displayNext:"No",
+                class: "bold",
+                displayNext: "No",
                 displayNone: true,
             },
             data: [
@@ -332,7 +329,7 @@ const initialPhysicalExam= [
                 },
                 {
                     value: "No",
-                    name:"No",
+                    name: "No",
                     colSize: "2",
                 },
             ],
@@ -340,7 +337,7 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:1,
+        sideColSize: 1,
         childName: "Ears normal",
         isFinishBtn: false,
         classDash: "",
@@ -350,7 +347,7 @@ const initialPhysicalExam= [
                 selectedValue: "",
                 displayNone: true,
                 name: "Abnormality for ears",
-                class:'bold'
+                class: "bold",
             },
             data: [
                 {
@@ -375,11 +372,10 @@ const initialPhysicalExam= [
         },
     },
 
-
     {
         selectdData: [],
-        sideColSize:1,
-        childName:'Ears normal',
+        sideColSize: 1,
+        childName: "Ears normal",
         isFinishBtn: false,
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
@@ -405,8 +401,8 @@ const initialPhysicalExam= [
 
     {
         classDash: "dashed_bottom_border",
-        sideColSize:1,
-        childName:"Other ears abnormality",
+        sideColSize: 1,
+        childName: "Other ears abnormality",
         data: {
             rowData: [
                 {
@@ -414,10 +410,10 @@ const initialPhysicalExam= [
                         {
                             displayNone: true,
                             inputHeader: "Specify ears abnormality",
-                            class:'bold',
+                            class: "bold",
                             icon: icons.editPen,
                             value: "",
-                            valueType:'text',
+                            valueType: "text",
                             name: "Other ears abnormality notes",
                             eventType: "input",
                             inputWidth: "100%",
@@ -431,16 +427,16 @@ const initialPhysicalExam= [
 
     {
         selectdData: [],
-        sideColSize:0.3,
-        childName:"Physical examination",
+        sideColSize: 0.3,
+        childName: "Physical examination",
         classDash: "dashed_bottom_border",
         radioBtnContent: {
             header: {
                 selectedValue: "",
                 name: "Face normal",
                 title: "Face normal?",
-                class:"bold",
-                displayNext:"No",
+                class: "bold",
+                displayNext: "No",
                 displayNone: true,
             },
             data: [
@@ -451,7 +447,7 @@ const initialPhysicalExam= [
                 },
                 {
                     value: "No",
-                    name:"No",
+                    name: "No",
                     colSize: "2",
                 },
             ],
@@ -459,7 +455,7 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:1,
+        sideColSize: 1,
         childName: "Face normal",
         isFinishBtn: false,
         classDash: "",
@@ -469,7 +465,7 @@ const initialPhysicalExam= [
                 selectedValue: "",
                 displayNone: true,
                 name: "Abnormality for face",
-                class:'bold'
+                class: "bold",
             },
             data: [
                 {
@@ -494,11 +490,10 @@ const initialPhysicalExam= [
         },
     },
 
-
     {
         selectdData: [],
-        sideColSize:1,
-        childName:"Face normal",
+        sideColSize: 1,
+        childName: "Face normal",
         isFinishBtn: false,
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
@@ -524,8 +519,8 @@ const initialPhysicalExam= [
 
     {
         classDash: "dashed_bottom_border",
-        sideColSize:1,
-        childName:"Other face abnormality",
+        sideColSize: 1,
+        childName: "Other face abnormality",
         data: {
             rowData: [
                 {
@@ -533,10 +528,10 @@ const initialPhysicalExam= [
                         {
                             displayNone: true,
                             inputHeader: "Specify face abnormality",
-                            class:'bold',
+                            class: "bold",
                             icon: icons.editPen,
                             value: "",
-                            valueType:'text',
+                            valueType: "text",
                             name: "Other face abnormality notes",
                             eventType: "input",
                             inputWidth: "100%",
@@ -549,16 +544,16 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:0.3,
-        childName:"Physical examination",
+        sideColSize: 0.3,
+        childName: "Physical examination",
         classDash: "dashed_bottom_border",
         radioBtnContent: {
             header: {
                 selectedValue: "",
                 name: "Neck normal",
                 title: "Neck normal?",
-                class:"bold",
-                displayNext:"No",
+                class: "bold",
+                displayNext: "No",
                 displayNone: true,
             },
             data: [
@@ -569,7 +564,7 @@ const initialPhysicalExam= [
                 },
                 {
                     value: "No",
-                    name:"No",
+                    name: "No",
                     colSize: "2",
                 },
             ],
@@ -577,9 +572,9 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:1,
+        sideColSize: 1,
         isFinishBtn: false,
-        childName:"Neck normal",
+        childName: "Neck normal",
         classDash: "",
         checkboxBtnContent: {
             header: {
@@ -587,7 +582,7 @@ const initialPhysicalExam= [
                 selectedValue: "",
                 displayNone: true,
                 name: "Abnormality for neck",
-                class:'bold'
+                class: "bold",
             },
             data: [
                 {
@@ -621,11 +616,10 @@ const initialPhysicalExam= [
         },
     },
 
-
     {
         selectdData: [],
-        sideColSize:1,
-        childName:"Neck normal",
+        sideColSize: 1,
+        childName: "Neck normal",
         isFinishBtn: false,
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
@@ -651,8 +645,8 @@ const initialPhysicalExam= [
 
     {
         classDash: "dashed_bottom_border",
-        sideColSize:1,
-        childName:"Other neck abnormality",
+        sideColSize: 1,
+        childName: "Other neck abnormality",
         data: {
             rowData: [
                 {
@@ -660,10 +654,10 @@ const initialPhysicalExam= [
                         {
                             displayNone: true,
                             inputHeader: "Specify neck abnormality",
-                            class:'bold',
+                            class: "bold",
                             icon: icons.editPen,
                             value: "",
-                            valueType:'text',
+                            valueType: "text",
                             name: "Other neck abnormality notes",
                             eventType: "input",
                             inputWidth: "100%",
@@ -676,16 +670,16 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:0.3,
-        childName:"Physical examination",
+        sideColSize: 0.3,
+        childName: "Physical examination",
         classDash: "dashed_bottom_border",
         radioBtnContent: {
             header: {
                 selectedValue: "",
                 name: "Chest inspection normal",
                 title: "Chest inspection normal?",
-                class:"bold",
-                displayNext:"No",
+                class: "bold",
+                displayNext: "No",
                 displayNone: true,
             },
             data: [
@@ -696,7 +690,7 @@ const initialPhysicalExam= [
                 },
                 {
                     value: "No",
-                    name:"No",
+                    name: "No",
                     colSize: "2",
                 },
             ],
@@ -704,7 +698,7 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:1,
+        sideColSize: 1,
         childName: "Chest inspection normal",
         isFinishBtn: false,
         classDash: "",
@@ -714,7 +708,7 @@ const initialPhysicalExam= [
                 selectedValue: "",
                 displayNone: true,
                 name: "Abnormality for  chest inspection",
-                class:'bold'
+                class: "bold",
             },
             data: [
                 {
@@ -757,11 +751,10 @@ const initialPhysicalExam= [
         },
     },
 
-
     {
         selectdData: [],
-        sideColSize:1,
-        childName:'Chest inspection normal',
+        sideColSize: 1,
+        childName: "Chest inspection normal",
         isFinishBtn: false,
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
@@ -787,8 +780,8 @@ const initialPhysicalExam= [
 
     {
         classDash: "dashed_bottom_border",
-        sideColSize:1,
-        childName:"Other chest abnormality",
+        sideColSize: 1,
+        childName: "Other chest abnormality",
         data: {
             rowData: [
                 {
@@ -796,10 +789,10 @@ const initialPhysicalExam= [
                         {
                             displayNone: true,
                             inputHeader: "Specify chest abnormality",
-                            class:'bold',
+                            class: "bold",
                             icon: icons.editPen,
                             value: "",
-                            valueType:'text',
+                            valueType: "text",
                             name: "Other chest abnormality notes",
                             eventType: "input",
                             inputWidth: "100%",
@@ -812,15 +805,15 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:0.3,
-        childName:"Physical examination",
+        sideColSize: 0.3,
+        childName: "Physical examination",
         classDash: "dashed_bottom_border",
         radioBtnContent: {
             header: {
                 selectedValue: "",
                 name: "Chest movements",
                 title: "Chest movement?",
-                class:"bold",
+                class: "bold",
                 displayNone: true,
             },
             data: [
@@ -831,7 +824,7 @@ const initialPhysicalExam= [
                 },
                 {
                     value: "Asymmetrical",
-                    name:"Asymmetrical",
+                    name: "Asymmetrical",
                     colSize: "6.01",
                 },
             ],
@@ -839,16 +832,16 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:0.3,
-        childName:"Physical examination",
+        sideColSize: 0.3,
+        childName: "Physical examination",
         classDash: "dashed_bottom_border",
         radioBtnContent: {
             header: {
                 selectedValue: "",
                 name: "Heart sounds normal",
                 title: "Heart sounds normal?",
-                class:"bold",
-                displayNext:"No",
+                class: "bold",
+                displayNext: "No",
                 displayNone: true,
             },
             data: [
@@ -859,7 +852,7 @@ const initialPhysicalExam= [
                 },
                 {
                     value: "No",
-                    name:"No",
+                    name: "No",
                     colSize: "2",
                 },
             ],
@@ -867,17 +860,17 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:1,
+        sideColSize: 1,
         isFinishBtn: false,
         classDash: "",
-        childName:"Heart sounds normal",
+        childName: "Heart sounds normal",
         checkboxBtnContent: {
             header: {
                 title: "What are the abnormalities on the heart sounds?",
                 selectedValue: "",
                 displayNone: true,
                 name: "Heart sounds abnormality",
-                class:'bold'
+                class: "bold",
             },
             data: [
                 {
@@ -921,16 +914,16 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:0.3,
-        childName:"Physical examination",
+        sideColSize: 0.3,
+        childName: "Physical examination",
         classDash: "dashed_bottom_border",
         radioBtnContent: {
             header: {
                 selectedValue: "",
                 name: "Breath sounds normal",
                 title: "Breath sounds normal?",
-                class:"bold",
-                displayNext:"No",
+                class: "bold",
+                displayNext: "No",
                 displayNone: true,
             },
             data: [
@@ -941,7 +934,7 @@ const initialPhysicalExam= [
                 },
                 {
                     value: "No",
-                    name:"No",
+                    name: "No",
                     colSize: "2",
                 },
             ],
@@ -949,9 +942,9 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:1,
+        sideColSize: 1,
         isFinishBtn: false,
-        childName:"Breath sounds normal",
+        childName: "Breath sounds normal",
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
             header: {
@@ -959,7 +952,7 @@ const initialPhysicalExam= [
                 selectedValue: "",
                 displayNone: true,
                 name: "Breath sounds abnormality",
-                class:'bold'
+                class: "bold",
             },
             data: [
                 {
@@ -989,14 +982,13 @@ const initialPhysicalExam= [
                     justify: "space-between",
                     checked: false,
                 },
-
             ],
         },
     },
     {
         selectdData: [],
         childName: "Added",
-        sideColSize:1,
+        sideColSize: 1,
         isFinishBtn: false,
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
@@ -1005,7 +997,7 @@ const initialPhysicalExam= [
                 selectedValue: "",
                 displayNone: true,
                 name: "Abnormalities when added",
-                class:'bold'
+                class: "bold",
             },
             data: [
                 {
@@ -1044,22 +1036,21 @@ const initialPhysicalExam= [
                     justify: "space-between",
                     checked: false,
                 },
-
             ],
         },
     },
     {
         selectdData: [],
-        sideColSize:0.3,
-        childName:"Physical examination",
+        sideColSize: 0.3,
+        childName: "Physical examination",
         classDash: "dashed_bottom_border",
         radioBtnContent: {
             header: {
                 selectedValue: "",
                 name: "Abdominal inspection normal",
                 title: "Abdominal inspection normal?",
-                class:"bold",
-                displayNext:'No',
+                class: "bold",
+                displayNext: "No",
                 displayNone: true,
             },
             data: [
@@ -1070,7 +1061,7 @@ const initialPhysicalExam= [
                 },
                 {
                     value: "No",
-                    name:"No",
+                    name: "No",
                     colSize: "2",
                 },
             ],
@@ -1078,8 +1069,8 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:1,
-        childName:"Abdominal inspection normal",
+        sideColSize: 1,
+        childName: "Abdominal inspection normal",
         isFinishBtn: false,
         checkboxBtnContent: {
             header: {
@@ -1087,7 +1078,7 @@ const initialPhysicalExam= [
                 selectedValue: "",
                 displayNone: true,
                 name: "Abdominal inspection abnormality",
-                class:'bold'
+                class: "bold",
             },
             data: [
                 {
@@ -1150,8 +1141,8 @@ const initialPhysicalExam= [
 
     {
         selectdData: [],
-        sideColSize:1,
-        childName:"Abdominal inspection normal",
+        sideColSize: 1,
+        childName: "Abdominal inspection normal",
         isFinishBtn: false,
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
@@ -1176,9 +1167,9 @@ const initialPhysicalExam= [
     },
 
     {
-        childName:'Other abdominal abnormality',
+        childName: "Other abdominal abnormality",
         classDash: "dashed_bottom_border",
-        sideColSize:1,
+        sideColSize: 1,
         data: {
             rowData: [
                 {
@@ -1186,10 +1177,10 @@ const initialPhysicalExam= [
                         {
                             displayNone: true,
                             inputHeader: "Specify abdominal abnormality",
-                            class:'bold',
+                            class: "bold",
                             icon: icons.editPen,
                             value: "",
-                            valueType:'text',
+                            valueType: "text",
                             name: "Other abdominal abnormality notes",
                             eventType: "input",
                             inputWidth: "100%",
@@ -1203,16 +1194,16 @@ const initialPhysicalExam= [
 
     {
         selectdData: [],
-        sideColSize:0.3,
-        childName:"Physical examination",
+        sideColSize: 0.3,
+        childName: "Physical examination",
         classDash: "dashed_bottom_border",
         radioBtnContent: {
             header: {
                 selectedValue: "",
                 name: "Abdominal auscultation normal",
                 title: "Abdominal auscultation normal?",
-                class:"bold",
-                displayNext:"No",
+                class: "bold",
+                displayNext: "No",
                 displayNone: true,
             },
             data: [
@@ -1223,7 +1214,7 @@ const initialPhysicalExam= [
                 },
                 {
                     value: "No",
-                    name:"No",
+                    name: "No",
                     colSize: "2",
                 },
             ],
@@ -1231,8 +1222,8 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:1,
-        childName:"Abdominal auscultation normal",
+        sideColSize: 1,
+        childName: "Abdominal auscultation normal",
         isFinishBtn: false,
         classDash: "",
         checkboxBtnContent: {
@@ -1241,7 +1232,7 @@ const initialPhysicalExam= [
                 selectedValue: "",
                 displayNone: true,
                 name: "Abdominal auscultation abnormality",
-                class:'bold'
+                class: "bold",
             },
             data: [
                 {
@@ -1272,16 +1263,15 @@ const initialPhysicalExam= [
                     justify: "space-between",
                     checked: false,
                 },
-
             ],
         },
     },
 
     {
         selectdData: [],
-        sideColSize:1,
+        sideColSize: 1,
         isFinishBtn: false,
-        childName:"Abdominal auscultation normal",
+        childName: "Abdominal auscultation normal",
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
             header: {
@@ -1306,8 +1296,8 @@ const initialPhysicalExam= [
 
     {
         classDash: "dashed_bottom_border",
-        childName:'Other abdominal auscultation abnormality',
-        sideColSize:1,
+        childName: "Other abdominal auscultation abnormality",
+        sideColSize: 1,
         data: {
             rowData: [
                 {
@@ -1315,10 +1305,10 @@ const initialPhysicalExam= [
                         {
                             displayNone: true,
                             inputHeader: "Specify abdominal auscultation abnormality",
-                            class:'bold',
+                            class: "bold",
                             icon: icons.editPen,
                             value: "",
-                            valueType:'text',
+                            valueType: "text",
                             name: "Other abdominal auscultation abnormality notes",
                             eventType: "input",
                             inputWidth: "100%",
@@ -1331,7 +1321,7 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:1,
+        sideColSize: 1,
         childName: "Reduced bowel sounds",
         isFinishBtn: false,
         classDash: "dashed_bottom_border",
@@ -1341,7 +1331,7 @@ const initialPhysicalExam= [
                 selectedValue: "",
                 displayNone: true,
                 name: "Bowel sounds abnormality",
-                class:'bold'
+                class: "bold",
             },
             data: [
                 {
@@ -1362,23 +1352,22 @@ const initialPhysicalExam= [
                     justify: "space-between",
                     checked: false,
                 },
-
             ],
         },
     },
 
     {
         selectdData: [],
-        sideColSize:0.3,
-        childName:"Physical examination",
+        sideColSize: 0.3,
+        childName: "Physical examination",
         classDash: "dashed_bottom_border",
         radioBtnContent: {
             header: {
                 selectedValue: "",
                 name: "Abdominal palpation normal",
                 title: "Abdominal palpation normal?",
-                class:"bold",
-                displayNext:"No",
+                class: "bold",
+                displayNext: "No",
                 displayNone: true,
             },
             data: [
@@ -1389,7 +1378,7 @@ const initialPhysicalExam= [
                 },
                 {
                     value: "No",
-                    name:"No",
+                    name: "No",
                     colSize: "2",
                 },
             ],
@@ -1397,7 +1386,7 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:1,
+        sideColSize: 1,
         childName: "Abdominal palpation normal",
         isFinishBtn: false,
         classDash: "",
@@ -1407,7 +1396,7 @@ const initialPhysicalExam= [
                 selectedValue: "",
                 displayNone: true,
                 name: "Abdominal palpation abnormality",
-                class:'bold'
+                class: "bold",
             },
             data: [
                 {
@@ -1437,14 +1426,13 @@ const initialPhysicalExam= [
                     justify: "space-between",
                     checked: false,
                 },
-
             ],
         },
     },
     {
         selectdData: [],
-        sideColSize:1,
-        childName:'Abdominal palpation normal',
+        sideColSize: 1,
+        childName: "Abdominal palpation normal",
         isFinishBtn: false,
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
@@ -1469,9 +1457,9 @@ const initialPhysicalExam= [
     },
 
     {
-        childName:'Other abdominal masses',
+        childName: "Other abdominal masses",
         classDash: "dashed_bottom_border",
-        sideColSize:1,
+        sideColSize: 1,
         data: {
             rowData: [
                 {
@@ -1479,10 +1467,10 @@ const initialPhysicalExam= [
                         {
                             displayNone: true,
                             inputHeader: "Specify abdominal palpation abnormality",
-                            class:'bold',
+                            class: "bold",
                             icon: icons.editPen,
                             value: "",
-                            valueType:'text',
+                            valueType: "text",
                             name: "Other abdominal palpation abnormality notes",
                             eventType: "input",
                             inputWidth: "100%",
@@ -1495,16 +1483,16 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:0.3,
-        childName:"Physical examination",
+        sideColSize: 0.3,
+        childName: "Physical examination",
         classDash: "dashed_bottom_border",
         radioBtnContent: {
             header: {
                 selectedValue: "",
                 name: "Genital examination normal",
                 title: "Genital examination normal?",
-                class:"bold",
-                displayNext:'No',
+                class: "bold",
+                displayNext: "No",
                 displayNone: true,
             },
             data: [
@@ -1515,7 +1503,7 @@ const initialPhysicalExam= [
                 },
                 {
                     value: "No",
-                    name:"No",
+                    name: "No",
                     colSize: "2",
                 },
             ],
@@ -1523,8 +1511,8 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:1,
-        childName: 'Genital examination normal',
+        sideColSize: 1,
+        childName: "Genital examination normal",
         isFinishBtn: false,
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
@@ -1533,7 +1521,7 @@ const initialPhysicalExam= [
                 selectedValue: "",
                 displayNone: true,
                 name: "Genital examination abnormality",
-                class:'bold'
+                class: "bold",
             },
             data: [
                 {
@@ -1572,16 +1560,15 @@ const initialPhysicalExam= [
                     justify: "space-between",
                     checked: false,
                 },
-
             ],
         },
     },
     {
         selectdData: [],
-        sideColSize:1,
+        sideColSize: 1,
         isFinishBtn: false,
         classDash: "",
-        childName:'Genital examination normal',
+        childName: "Genital examination normal",
         checkboxBtnContent: {
             header: {
                 title: "",
@@ -1604,8 +1591,8 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:1,
-        childName:'Urethral meatus abnormal',
+        sideColSize: 1,
+        childName: "Urethral meatus abnormal",
         isFinishBtn: false,
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
@@ -1614,7 +1601,7 @@ const initialPhysicalExam= [
                 selectedValue: "",
                 displayNone: true,
                 name: "Urethral meatus abnormalities",
-                class:'bold'
+                class: "bold",
             },
             data: [
                 {
@@ -1653,14 +1640,13 @@ const initialPhysicalExam= [
                     justify: "space-between",
                     checked: false,
                 },
-
             ],
         },
     },
     {
         selectdData: [],
-        sideColSize:1,
-        childName:'Genital examination normal',
+        sideColSize: 1,
+        childName: "Genital examination normal",
         isFinishBtn: false,
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
@@ -1685,8 +1671,8 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:1,
-        childName:'Vulva examination',
+        sideColSize: 1,
+        childName: "Vulva examination",
         isFinishBtn: false,
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
@@ -1695,7 +1681,7 @@ const initialPhysicalExam= [
                 selectedValue: "",
                 displayNone: true,
                 name: "Vulva inspection abnormalities",
-                class:'bold'
+                class: "bold",
             },
             data: [
                 {
@@ -1716,14 +1702,13 @@ const initialPhysicalExam= [
                     justify: "space-between",
                     checked: false,
                 },
-
             ],
         },
     },
     {
         selectdData: [],
-        sideColSize:1,
-        childName:'Genital examination normal',
+        sideColSize: 1,
+        childName: "Genital examination normal",
         isFinishBtn: false,
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
@@ -1748,9 +1733,9 @@ const initialPhysicalExam= [
     },
 
     {
-        childName:'Other genital abnormalities',
+        childName: "Other genital abnormalities",
         classDash: "dashed_bottom_border",
-        sideColSize:1,
+        sideColSize: 1,
         data: {
             rowData: [
                 {
@@ -1758,10 +1743,10 @@ const initialPhysicalExam= [
                         {
                             displayNone: true,
                             inputHeader: "Specify genital abnormality",
-                            class:'bold',
+                            class: "bold",
                             icon: icons.editPen,
                             value: "",
-                            valueType:'text',
+                            valueType: "text",
                             name: "Other genital abnormality notes",
                             eventType: "input",
                             inputWidth: "100%",
@@ -1774,16 +1759,16 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:0.3,
-        childName:"Physical examination",
+        sideColSize: 0.3,
+        childName: "Physical examination",
         classDash: "dashed_bottom_border",
         radioBtnContent: {
             header: {
                 selectedValue: "",
                 name: "Extremities normal",
                 title: "Extremities normal?",
-                class:"bold",
-                displayNext:'No',
+                class: "bold",
+                displayNext: "No",
                 displayNone: true,
             },
             data: [
@@ -1794,7 +1779,7 @@ const initialPhysicalExam= [
                 },
                 {
                     value: "No",
-                    name:"No",
+                    name: "No",
                     colSize: "2",
                 },
             ],
@@ -1802,9 +1787,9 @@ const initialPhysicalExam= [
     },
     {
         selectdData: [],
-        sideColSize:1,
+        sideColSize: 1,
         isFinishBtn: false,
-        childName:"Extremities normal",
+        childName: "Extremities normal",
         classDash: "",
         checkboxBtnContent: {
             header: {
@@ -1812,7 +1797,7 @@ const initialPhysicalExam= [
                 selectedValue: "",
                 displayNone: true,
                 name: "Abnormality for extremities",
-                class:'bold'
+                class: "bold",
             },
             data: [
                 {
@@ -1896,14 +1881,13 @@ const initialPhysicalExam= [
                     justify: "space-between",
                     checked: false,
                 },
-
             ],
         },
     },
     {
         selectdData: [],
-        sideColSize:1,
-        childName:'Extremities normal',
+        sideColSize: 1,
+        childName: "Extremities normal",
         isFinishBtn: false,
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
@@ -1929,8 +1913,8 @@ const initialPhysicalExam= [
 
     {
         classDash: "dashed_bottom_border",
-        sideColSize:1,
-        childName:'Other extremities abnormality',
+        sideColSize: 1,
+        childName: "Other extremities abnormality",
         data: {
             rowData: [
                 {
@@ -1938,10 +1922,10 @@ const initialPhysicalExam= [
                         {
                             displayNone: true,
                             inputHeader: "Specify extremity abnormality",
-                            class:'bold',
+                            class: "bold",
                             icon: icons.editPen,
                             value: "",
-                            valueType:'text',
+                            valueType: "text",
                             name: "Other extremities abnormalities notes",
                             eventType: "input",
                             inputWidth: "100%",
@@ -1952,22 +1936,19 @@ const initialPhysicalExam= [
             ],
         },
     },
-
 ] as any;
-export const usePhysicalExaminationStore = defineStore("physicalExamStore", {
+export const usePhysicalExaminationStore = defineStore("physicalOPDExamStore", {
     state: () => ({
-        physicalExam: [...initialPhysicalExam]
+        physicalExam: [...initialPhysicalExam],
     }),
     actions: {
         setPhysicalExamStore(data: any) {
             this.physicalExam = data;
-
-
         },
-        getInitial(){
+        getInitial() {
             const data = _.cloneDeep(initialPhysicalExam);
             return [...data]; // Return a copy of the initial state
-        }
+        },
     },
     persist: true,
 });

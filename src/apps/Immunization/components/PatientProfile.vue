@@ -4,7 +4,7 @@
             <div style="max-width: 400px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
                 <ion-row>
                     <ion-col size="3">
-                        <div :class="demographics.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
+                        <div :class="demographics.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'" @click="openPIM()">
                             <ion-icon style="color: #fff; font-size: 70px" :icon="person"></ion-icon>
                         </div>
                     </ion-col>
@@ -30,7 +30,7 @@
                     </ion-col>
                 </ion-row>
             </div>
-            <div class="name" @click="openPIM()" style="color: var(--ion-color-primary); margin-top: 10px">
+            <div class="name" style="color: var(--ion-color-primary); margin-top: 10px">
                 <ion-icon :icon="ellipsisVerticalSharp"></ion-icon>
             </div>
         </div>
@@ -273,7 +273,6 @@ export default defineComponent({
         },
         currentMilestone: {
             handler() {
-                console.log("Current Milestone: " + this.currentMilestone);
                 this.loadCurrentMilestone();
             },
         },

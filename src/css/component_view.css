@@ -32,6 +32,9 @@
         display: flex;
         justify-content: space-between;
     }
+    .displayNoneMobile {
+        display: none !important;
+    }
 }
 @media (max-width: 768px) {
     .regDisplayFlex {
@@ -47,9 +50,7 @@
     .search-input-desktop {
         display: none !important;
     }
-    .displayNoneMobile {
-        display: none !important;
-    }
+
     .displayNoneDesktop {
         display: flex !important;
     }

@@ -13,7 +13,6 @@ export const useMedicationDispensedStore = defineStore("medicationDispensed", {
             title: "Iron prescribed?",
             selectedValue: "",
             class: "bold",
-            //name:'ironInfo'
             name: "Iron prescription",
           },
           data: [
