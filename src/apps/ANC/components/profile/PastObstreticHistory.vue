@@ -188,7 +188,6 @@ export default defineComponent({
                 }else{
                   modifyFieldValue(this.modeOfDelivery,'Specify','displayNone',true)
                  }
-
       },
       handleAlert(e:any){
               if(dynamicValue(this.modeOfDelivery,'Mode of delivery',e.id)=='caesarean section'){

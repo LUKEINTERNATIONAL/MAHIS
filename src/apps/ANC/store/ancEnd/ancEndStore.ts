@@ -20,83 +20,63 @@ export const useAncEndStore = defineStore('ancEndStore',{
                         {
                             name: "In labour",
                             value: "In labour",
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "4",
                         },
                         {
                             name: "Live birth",
                             value: "Live birth",
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "4",
                         },
                         {
                             name: "Stillbirth",
                             value: "Stillbirth",
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "4.01",
                         },
                         {
                             name: "Miscarriage",
-                            value:"Miscarraige",
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            value:"Miscarriage",
+                            colSize: "4.01",
                         },
-                                                {
+                        {
                             name: "Abortion",
                             value: "Abortion",
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "4.01",
                         },
                         {
                             name: "Death",
                             value: "Death",
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "4.01",
                         },
                         {
                             name: "Lost to follow up",
                             value: "Lost to follow up",
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "4.01",
                         },
                         {
                             name:  "Moved away",
                             value: "Moved away",
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "4.01",
                         },
                         {
                             name: "False pregnancy",
                             value: "False pregnancy",
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "4.01",
                         },
                         {
                             name:"Wrong entry",
                             value: "Wrong entry",
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            colSize: "4.01",
                         },
                         {
-                            name:  "Other",
-                            value: "Other",
-                            labelPlacement:'start',
-                            colSize: "7",
-                            justify:"space-between" 
+                            name:  "Other outcome",
+                            value: "Other outcome",
+                            colSize: "4.01",
                         },
+
                     ]
                 }
             },
+
             {
                 data:{ 
                             rowData:[
@@ -293,7 +273,7 @@ export const useAncEndStore = defineStore('ancEndStore',{
                         title: 'Preterm birth',
                         selectedValue: '',
                         name:'Preterm',
-                        diplayNone:true,
+                        displayNone:true,
                     },
                     data:[
                         {
@@ -384,10 +364,10 @@ export const useAncEndStore = defineStore('ancEndStore',{
             ]as any,            
     }),
         actions:{
-        // addAncInfo(data:any){
-        //     this.ancInfo = data
-        // }
+        addAncInfo(data:any){
+            this.ancInfo = data
+        }
     },
-    persist:true
+    // persist:true
 })
 

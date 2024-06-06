@@ -40,6 +40,7 @@ import {useDeliveryDetailsStore} from "@/apps/PNC/stores/postnatal details/Deliv
 import {useDischargeWomanStore} from "@/apps/PNC/stores/others/DischargeWoman";
 import {useBabyStatusStore} from "@/apps/PNC/stores/postnatal ward stay/BabyStatus";
 import {validateField} from "@/services/PNC/ward_monitoring_for_baby_validation_service";
+import {getFieldValue} from "@/services/data_helpers";
 export default defineComponent({
   name: "BabyStatus",
   components:{
@@ -75,12 +76,16 @@ export default defineComponent({
   computed:{
     ...mapState(useBabyStatusStore,["babyStatusDetails"]),
     ...mapState(useBabyStatusStore,["dangerSigns"]),
+    "Birth weight"(){ return getFieldValue(this.babyStatusDetails, 'Birth weight','value')},
+
   },
   mounted(){
     const babyStatusDetails=useBabyStatusStore()
     const dangerSigns=useBabyStatusStore()
     this.initialData=babyStatusDetails.getInitial()
     this.initialData1=dangerSigns.getInitial1()
+    this.validateRowData({})
+
   },
   watch:{
   },
@@ -142,4 +147,4 @@ ion-card {
   font-size: 14px;
 }
 
-</style>yle>
+</style>

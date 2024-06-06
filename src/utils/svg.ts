@@ -386,6 +386,13 @@ export const icons = {
     </svg>
 
     `,
+    timePicker:`data:image/svg+xml;utf8,
+<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="12.5" cy="12" r="9" stroke="#006401" stroke-width="1.5" opacity="0.4"/>
+  <line x1="12.5" y1="12" x2="12.5" y2="7" stroke="#006401" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="12.5" y1="12" x2="15.5" y2="15" stroke="#006401" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="12.5" cy="12" r="1" fill="#006401"/>
+</svg>`,
     scannerIcon: `
     data:image/svg+xml;utf8,
     <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
