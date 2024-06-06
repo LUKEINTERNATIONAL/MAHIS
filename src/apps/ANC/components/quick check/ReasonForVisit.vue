@@ -41,6 +41,7 @@ import {
   getCheckboxSelectedValue,
   getRadioSelectedValue,
   modifyCheckboxHeader, modifyCheckboxValue,
+  modifyFieldValue,
   modifyGroupedRadioValue,
   modifyRadioValue
 } from "@/services/data_helpers";
@@ -71,7 +72,7 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapState(useReasonForVisitStore, ["ReasonForVisit"]),
+    ...mapState(useReasonForVisitStore, ["ReasonForVisit","ReasonForSubsequentVisit"]),
     reasonVisitFacility(){return getRadioSelectedValue(this.ReasonForVisit,'Reason for visit')}
   },
   mounted() {
@@ -103,49 +104,71 @@ export default defineComponent({
       menuController.close()
       this.$router.push(url);
     },
-    handleFirstAntenalVisit(){
-      // if (getRadioSelectedValue(this.ReasonForVisit, 'Reason for visit') == 'First antenatal care contact') {
-      //   modifyCheckboxHeader(this.ReasonForVisit, 'Danger signs', 'displayNone', false);
-      //   // modifyCheckboxHeader(this.ReasonForVisit, 'Previous visits', 'selectedValue', '');
-      //
-      // } else {
-      //   modifyCheckboxHeader(this.ReasonForVisit, 'Danger signs', 'displayNone', true);
-      //   modifyCheckboxValue(this.ReasonForVisit, 'Danger signs', 'selectedValue', '');
-      //
-      // }
-      const checkBoxes=['Pre-term labour','Central cyanosis', 'Unconscious', 'Fever', 'Imminent delivery',
-        'Severe headache', 'Severe vomiting','Severe abdominal pain','Draining liquor',
-        'Respiratory problems','Convulsion history','Vomiting' , 'Oedema', 'Epigastric pain', 'Bleeding vaginally', 'Other danger signs']
-      if (getCheckboxSelectedValue(this.ReasonForVisit, 'None')?.checked) {
-        checkBoxes.forEach((checkbox) => {
-          modifyCheckboxValue(this.ReasonForVisit, checkbox, 'checked', false);
-          modifyCheckboxValue(this.ReasonForVisit, checkbox, 'disabled', true);
-          modifyRadioValue(this.ReasonForVisit, 'Action for danger signs', 'displayNone', true);
-        });
-      } else {
-        let anyCheckboxSelected = false;
-        checkBoxes.forEach((checkbox) => {
-          if (getCheckboxSelectedValue(this.ReasonForVisit, checkbox)?.checked) {
-            anyCheckboxSelected = true;
-          }
-          modifyCheckboxValue(this.ReasonForVisit, checkbox, 'disabled', false);
-        });
-        modifyRadioValue(this.ReasonForVisit, 'Action for danger signs', 'displayNone', !anyCheckboxSelected);
+    //   if (getRadioSelectedValue(this.ReasonForVisit, 'Action for danger signs') == 'No') {
+    //     modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', false);
+    //     modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', false);
+    //     // modifyCheckboxHeader(this.ReasonForVisit, 'Previous visits', 'selectedValue', '');
+
+
+handleFirstAntenalVisit() {
+  if (getCheckboxSelectedValue(this.ReasonForVisit, 'Other danger signs')?.value == 'other danger signs') {
+    modifyFieldValue(this.ReasonForVisit, 'Other notes', 'displayNone', false);
+  } else {
+    modifyFieldValue(this.ReasonForVisit, 'Other notes', 'displayNone', true);  
+  }
+
+  const checkBoxes = [
+    'Pre-term labour', 'Central cyanosis', 'Unconscious', 'Fever', 'Imminent delivery',
+    'Severe headache', 'Severe vomiting', 'Severe abdominal pain', 'Draining liquor',
+    'Respiratory problems', 'Convulsion history', 'Vomiting', 'Oedema', 'Epigastric pain', 'Bleeding vaginally', 'Other danger signs'
+
+    ,'Abnormal vaginal discharge','Change in blood pressure-up','Diarrhoea','Vomiting','Genital ulcers','Change in blood pressure-down',
+    'Constipation','Contractions','Vaginal bleeding','Intimate partner violence','Flu symptoms','Painful urination','Headache','Dyspepsia','Frequent urination/Polyuria',
+    'Injury','Jaundice','Mental health-Depression','Genital warts','Itchy vulva','Painful intercourse','No health concerns','Other'
+  ];
+
+ if(getCheckboxSelectedValue(this.ReasonForVisit, 'None')?.checked){
+  
+    checkBoxes.forEach((checkbox) => {
+      modifyCheckboxValue(this.ReasonForVisit, checkbox, 'checked', false);
+      modifyCheckboxValue(this.ReasonForVisit, checkbox, 'disabled', true);
+    });
+
+    // Reset and hide 
+    modifyRadioValue(this.ReasonForVisit, 'Action for danger signs', 'selectedValue', '');
+    modifyRadioValue(this.ReasonForVisit, 'Action for danger signs', 'displayNone', true);
+    modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', true);
+    
+    //ReasonForSubsequentVisit
+    modifyFieldValue(this.ReasonForVisit, 'notes', 'displayNone', true);
+    modifyFieldValue(this.ReasonForVisit, 'Number of previous visits', 'displayNone', true);
+
+  } else {
+    let anyCheckboxSelected = false;
+
+    checkBoxes.forEach((checkbox) => {
+      if (getCheckboxSelectedValue(this.ReasonForVisit, checkbox)?.checked) {
+        anyCheckboxSelected = true;
       }
+      modifyCheckboxValue(this.ReasonForVisit, checkbox, 'disabled', false);
+    });
 
-      if (getRadioSelectedValue(this.ReasonForVisit, 'Action for danger signs') == 'No') {
-        modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', false);
-        modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', false);
-        // modifyCheckboxHeader(this.ReasonForVisit, 'Previous visits', 'selectedValue', '');
+    
 
-      } else {
-        modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
-        modifyRadioValue(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
-        // modifyRadioValue(this.ReasonForVisit, 'Action for danger signs', 'selectedValue', '');
+    modifyRadioValue(this.ReasonForVisit, 'Action for danger signs', 'displayNone', !anyCheckboxSelected);
+  }
 
-      }
+  if (getRadioSelectedValue(this.ReasonForVisit, 'Action for danger signs') == 'No') {
+    modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', false);
+    modifyRadioValue(this.ReasonForVisit, 'Previous visits', 'displayNone', false);
+  } else {
+    modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
+    modifyRadioValue(this.ReasonForVisit, 'Specific health concerns', 'displayNone', true);
+  }
+}
 
-    },
+
+,
     handleSpecificConcernsVisit(){
       // if (getRadioSelectedValue(this.ReasonForVisit, 'Reason for visit') == 'Specific complaint related to antenatal care') {
       //   modifyCheckboxHeader(this.ReasonForVisit, 'Specific health concerns', 'displayNone', false);

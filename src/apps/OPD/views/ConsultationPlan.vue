@@ -199,7 +199,7 @@ export default defineComponent({
         ...mapState(useOPDDiagnosisStore, ["OPDdiagnosis"]),
         ...mapState(usePhysicalExaminationStore, ["physicalExam"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
-        ...mapState(useLevelOfConsciousnessStore, ["levelOfConsciousness"]),
+        ...mapState(useLevelOfConsciousnessStore, ["levelOfConsciousness", "levelOfConsciousnessMinor"]),
     },
     async mounted() {
         this.markWizard();
@@ -435,6 +435,16 @@ export default defineComponent({
                 const consciousness = new ConsciousnessService(this.demographics.patient_id, userID);
                 const encounter = await consciousness.createEncounter();
                 if (!encounter) return toastWarning("Unable to create patient complaints encounter");
+
+                const patientAge = HisDate.getAgeInYears(this.demographics.birthdate);
+
+                let data;
+
+                if (patientAge < 18) {
+                    data = await formatRadioButtonData(this.levelOfConsciousnessMinor);
+                } else {
+                    data = await formatRadioButtonData(this.levelOfConsciousness);
+                }
                 await consciousness.saveObservationList(data);
             }
         },

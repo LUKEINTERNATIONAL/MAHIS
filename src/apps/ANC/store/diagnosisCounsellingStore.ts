@@ -676,8 +676,88 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
           ],
         },
       },
+      {
+        selectdData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        radioBtnContent: {
+          header: {
+            title: "Family planning methods",
+            selectedValue: "",
+            class: "bold",
+            name: "family planning",
+            displayNone:true
+          },
+          data: [
+            {
+              name: "Copper-bearing intrauterine device (Cu-IUD)",
+              value: "copper-bearing intrauterine device (Cu-IUD)",
+              colSize: "6",
+            },
+            {
+              name: "Levonorgestrel intrauterine device (LNG-IUD)",
+              value: "levonorgestrel intrauterine device (LNG-IUD)",
+              colSize: "6",
+            },
+            {
+              name: "Etonogestrel (ETG) one-rod implant",
+              value: "etonogestrel (ETG) one-rod implant",
+              colSize: "6",
+            },
+            {
+              name: "Levonorgestrel (LNG) two-rod implant",
+              value: "Levonorgestrel (LNG) two-rod implant",
+              colSize: "6",
+            },
+            {
+              name: "DMPA-IM",
+              value: "DMPA-IM",
+              colSize: "6",
+            },
+            {
+              name: "DMPA-SC",
+              value: "DMPA-SC",
+              colSize: "6",
+            },
+            {
+              name: "Progestogen-only pills (POP)",
+              value: "Progestogen-only pills (POP)",
+              colSize: "6",
+            },
+            {
+              name: "Combined oral contraceptives (COCs)",
+              value: "Combined oral contraceptives (COCs)",
+              colSize: "6",
+            },
+            {
+              name: "Male condoms",
+              value: "Male condoms",
+              colSize: "6",
+            },
+            {
+              name: "Female condoms",
+              value: "Female condoms",
+              colSize: "6",
+            },
+            {
+              name: "Male sterilization",
+              value: "Male sterilization",
+              colSize: "6",
+            },
+            {
+              name: "Female sterilization",
+              value: "Female sterilization",
+              colSize: "6",
+            },
+            {
+              name: "No method provided",
+              value: "No method provided",
+              colSize: "6",
+            },
+          ],
+        },
+      },
     ],
-
     breastFeeding: [
       {
         selectdData: [],
@@ -764,5 +844,5 @@ export const useDiagnosisCounsellingStore = defineStore("diagnosisCounsellingSto
       this.breastFeeding = data;
     },
   },
-  persist: true,
+  //persist: true,
 });
