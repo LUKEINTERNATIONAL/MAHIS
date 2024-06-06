@@ -134,6 +134,8 @@ import { useConfigurationStore } from "@/stores/ConfigurationStore";
 import { UserService } from "@/services/user_service";
 import { isEmpty } from "lodash";
 import { LocationService } from "@/services/location_service";
+import { useBirthRegistrationStore } from "@/apps/Immunization/stores/BirthRegistrationStore";
+import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from "@/services/formatServerData";
 
 export default defineComponent({
     components: {
@@ -176,6 +178,7 @@ export default defineComponent({
         ...mapState(useRegistrationStore, ["currentLocation"]),
         ...mapState(useRegistrationStore, ["guardianInformation"]),
         ...mapState(useConfigurationStore, ["registrationDisplayType"]),
+        ...mapState(useBirthRegistrationStore, ["birthRegistration"]),
         nationalID() {
             return getFieldValue(this.personInformation, "nationalID", "value");
         },
@@ -219,6 +222,7 @@ export default defineComponent({
 
     async mounted() {
         this.screenWidth = window.screen.width;
+        // await this.saveBirthdayData();
         this.setIconClass();
         this.disableNationalIDInput();
         this.checkAge();
@@ -265,8 +269,9 @@ export default defineComponent({
         },
         checkAge() {
             if (!isEmpty(this.birthdate)) {
+                console.log(HisDate.ageInMonths(this.birthdate));
                 this.checkUnderFive = HisDate.getAgeInYears(this.birthdate) >= 5 ? true : false;
-                this.checkUnderOne = HisDate.getAgeInYears(this.birthdate) <= 1 ? true : false;
+                this.checkUnderOne = HisDate.ageInMonths(this.birthdate) < 9 ? true : false;
             }
         },
         disableNationalIDInput() {
@@ -330,7 +335,7 @@ export default defineComponent({
                         this.createGuardian(patientID);
                     }
                 }
-
+                // await this.saveBirthdayData();
                 this.findPatient(patientID);
                 toastSuccess("Successfully Created Patient");
                 return true;
@@ -338,6 +343,9 @@ export default defineComponent({
                 if (!(await this.mwIdExists(this.nationalID))) toastWarning("Please complete all required fields");
                 return false;
             }
+        },
+        async saveBirthdayData() {
+            console.log(await formatInputFiledData(this.birthRegistration));
         },
         async createNationID() {
             if (this.validatedNationalID()) {

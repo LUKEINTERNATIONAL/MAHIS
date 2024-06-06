@@ -32,6 +32,10 @@
             </div>
         </div>
 
+        <div class="client_admi">
+            <span class="client_admi_sub">Vaccination done by: </span><span class="client_admin_sub_x">{{ full_name }}</span>
+        </div>
+
         <customDatePicker v-if="showPD" @dateChange="updateDate" />
         <div class="btnContent">
             <div class="saveBtn" v-if="showDateBtns">
@@ -41,7 +45,7 @@
                         <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon>
                     </ion-button>
                 </div>
-                <div style="margin-bottom: 20px">or</div>
+                <div style="margin-bottom: 20px"></div>
                 <div>
                     <ion-button class="btnText" fill="solid" @click="showCPD">
                         Done earlier
@@ -95,6 +99,7 @@ import {
     modifyRadioValue,
     modifyFieldValue,
 } from "@/services/data_helpers";
+import { useUserStore } from "@/stores/userStore"
 
 export default defineComponent({
     components: {
@@ -120,12 +125,14 @@ export default defineComponent({
             drugName: "" as string,
             currentDrug: "" as any,
             is_batch_number_valid: false as boolean,
-            batch_number_error_message: "Enter a number",
+            batch_number_error_message: "Enter a valid batch number",
+            full_name: "" as string,
         };
     },
     computed: {},
     async mounted() {
-        this.loadCurrentSelectedDrug();
+        this.loadCurrentSelectedDrug()
+        this.displayUserNames()
     },
     setup() {
         return { checkmark, pulseOutline };
@@ -186,12 +193,12 @@ export default defineComponent({
         },
         saveDta(date_: any) {
             if (this.is_batch_number_valid == true) {
-                toastWarning("Enter a number!");
+                toastWarning("Enter batch number!");
                 return;
             }
 
             if (this.batchNumber == "") {
-                toastWarning("Enter a number!");
+                toastWarning("Enter batch number!");
                 return;
             }
             const dta = {
@@ -210,6 +217,13 @@ export default defineComponent({
             const regex = /^[a-zA-Z0-9]+$/;
             return regex.test(text);
         },
+        displayUserNames() {
+            const user_store = useUserStore()
+            const user = user_store.getUser()
+            const first_name = user.person.names[0].given_name
+            const last_name = user.person.names[0].family_name
+            this.full_name = first_name + " " + last_name
+        }
     },
 });
 </script>
@@ -298,6 +312,36 @@ h5 {
 }
 .modal_wrapper {
     /* padding: 0px 10px; */
-    background: #fff;
+        background: inherit;
+    }
+    .client_admi {
+        /* Today's date */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 10px 10px 0px;
+    gap: 5px;
+
+    width: 363px;
+    height: 28px;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 2;
+    align-self: stretch;
+    flex-grow: 0;
+}
+.client_admi_sub {
+    font-weight: 400;
+    font-size: 15px;
+    color:  #636363;
+}
+.client_admin_sub_x {
+    font-weight: 500;
+    font-size: 16px;
+    color: #454545;
 }
 </style>

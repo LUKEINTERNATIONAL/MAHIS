@@ -2,7 +2,7 @@
 <div class="vaccinesList">
     <ion-row>
         <ion-col>
-                <ion-button :disabled="disableVaccine(visitId)" class="administerVac" v-for="vaccine in vaccines" :key="vaccine" @click="openAdministerVaccineModal(vaccine)" fill="solid" :color="getColorForVaccine(vaccine, visitId)">
+                <ion-button :disabled="disableVaccine(visitId)" class="administerVac" v-for="vaccine in vaccines" :key="vaccine" @click="openAdministerVaccineModal(vaccine)" fill="solid" :color="getColorForVaccine(vaccine, visitId)" style="background: #DDEEDD; border-radius: 8px; color: #636363;">
                     <ion-icon slot="start" :icon="getInjectSignForVaccine(vaccine, visitId)"></ion-icon>
                     {{ checkVaccineName(vaccine.drug_name) }}
                     <ion-icon slot="end" :icon="getCheckBoxForVaccine(vaccine, visitId)"></ion-icon>
@@ -100,7 +100,7 @@ export default defineComponent({
             if (vaccine.status == 'administered') {
                 return 'success'
             } else {
-                return 'medium'
+                return 'medium-green'
             }
         },
         getInjectSignForVaccine(vaccine: any, visit_id: number) {
@@ -114,7 +114,7 @@ export default defineComponent({
             if (vaccine.status == 'administered') {
                 return this.iconsContent.greenInjection
             } if (vaccine.status != 'administered') {
-                return this.iconsContent.whiteInjection
+                return this.iconsContent.fadedGreenIjection
             }
         },
         getCheckBoxForVaccine(vaccine: any, visit_id: number) {

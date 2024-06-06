@@ -234,10 +234,6 @@ const _columns_ = ref<Header[]>([
 
 ] as any)
 
-
-
-
-
 const data_table_properties = [
     {
         columns: _columns_.value as any,
