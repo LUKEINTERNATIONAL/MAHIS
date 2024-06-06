@@ -1,25 +1,5 @@
 <template>
-    <ion-page>
-        <Toolbar />
-        <ion-content>
-            <div class="container">
-                <div style="display: flex; align-items: center" @click="nav('patientProfile')">
-                    <DynamicButton fill="clear" name="Back to profile" iconSlot="start" :icon="iconsContent.arrowLeft" />
-                </div>
-                <div class="title">
-                    <div class="demographics_title">Birth Registration</div>
-                </div>
-            </div>
-            <div>
-                <ion-row class="card_row">
-                    <basic-card :content="cardData" @update:inputValue="handleInputData"></basic-card>
-                </ion-row>
-            </div>
-        </ion-content>
-        <div class="footer2">
-            <DynamicButton name="Save" iconSlot="end" :icon="iconsContent.saveWhite" @click="saveData()" />
-        </div>
-    </ion-page>
+    <basic-card :content="cardData" @update:selected="handleInputData" @update:inputValue="handleInputData" @clicked:button="handleBtns"></basic-card>
 </template>
 
 <script lang="ts">
@@ -139,6 +119,14 @@ export default defineComponent({
         ...mapState(useEnrollementStore, ["NCDNumber", "enrollmentDiagnosis", "substance", "patientHistoryHIV", "patientHistory"]),
         ...mapState(useBirthRegistrationStore, ["birthRegistration"]),
     },
+    watch: {
+        birthRegistration: {
+            handler() {
+                this.buildCards();
+            },
+            deep: true,
+        },
+    },
     async mounted() {
         this.setDisplayType(this.enrollmentDisplayType);
         this.updateEnrollmentStores();
@@ -150,6 +138,9 @@ export default defineComponent({
     },
 
     methods: {
+        handleBtns() {
+            console.log("lll");
+        },
         setCurrentStep(name: any) {
             this.currentStep = name;
         },
@@ -239,9 +230,9 @@ export default defineComponent({
         buildCards() {
             const enrollment = useBirthRegistrationStore();
             this.cardData = {
-                mainTitle: "Child Enrollment",
                 cards: [
                     {
+                        cardTitle: "Birth Registration",
                         content: this.birthRegistration,
                         initialData: enrollment.getInitialBirthRegistration(),
                     },

@@ -6,48 +6,31 @@
                     <h4 class="PI-cls-1">Personal Information</h4>
                     <ion-row>
                         <ion-col>
-                            <ion-row>
-                                <ion-col>
-                                    <ion-label class="lbl-tl">Full Name:</ion-label>
-                                </ion-col>
-                                <ion-col>
-                                    <ion-label class="lbl-ct">{{ demographics.name }}</ion-label>
-                                </ion-col>
-                            </ion-row>
+                            <ion-label class="lbl-tl">Full Name:</ion-label>
                         </ion-col>
-
                         <ion-col>
-                            <ion-row>
-                                <ion-col>
-                                    <ion-label class="lbl-tl">Sex</ion-label>
-                                </ion-col>
-                                <ion-col>
-                                    <ion-label class="lbl-ct">{{ demographics.gender == "M" ? "Male" : "Female" }}</ion-label>
-                                </ion-col>
-                            </ion-row>
+                            <ion-label class="lbl-ct">{{ demographics.name }}</ion-label>
+                        </ion-col>
+                        <ion-col offset="1.6">
+                            <ion-label class="lbl-tl">Sex:</ion-label>
+                        </ion-col>
+                        <ion-col>
+                            <ion-label class="lbl-ct">{{ demographics.gender == "M" ? "Male" : "Female" }}</ion-label>
                         </ion-col>
                     </ion-row>
 
                     <ion-row>
                         <ion-col>
-                            <ion-row>
-                                <ion-col>
-                                    <ion-label class="lbl-tl">Date of Birth:</ion-label>
-                                </ion-col>
-                                <ion-col>
-                                    <ion-label class="lbl-ct">{{ formatBirthdate() }}</ion-label>
-                                </ion-col>
-                            </ion-row>
+                            <ion-label class="lbl-tl">Date of Birth:</ion-label>
                         </ion-col>
                         <ion-col>
-                            <ion-row>
-                                <ion-col>
-                                    <ion-label class="lbl-tl">Contacts:</ion-label>
-                                </ion-col>
-                                <ion-col>
-                                    <ion-label class="lbl-ct">{{ demographics.phone }}</ion-label>
-                                </ion-col>
-                            </ion-row>
+                            <ion-label class="lbl-ct">{{ formatBirthdate() }}</ion-label>
+                        </ion-col>
+                        <ion-col>
+                            <ion-label class="lbl-tl">Contacts:</ion-label>
+                        </ion-col>
+                        <ion-col>
+                            <ion-label class="lbl-ct">{{ demographics.phone }}</ion-label>
                         </ion-col>
                     </ion-row>
 
@@ -150,6 +133,7 @@ import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { mapState } from "pinia";
 import HisDate from "@/utils/Date";
+import DynamicButton from "@/components/DynamicButton.vue";
 export default defineComponent({
     name: "Home",
     components: {
@@ -163,6 +147,7 @@ export default defineComponent({
         ToolbarSearch,
         IonIcon,
         IonPopover,
+        DynamicButton,
     },
     data() {
         return {
@@ -198,7 +183,7 @@ export default defineComponent({
 }
 .lbl-ct {
     white-space: nowrap;
-    color: #08475e;
+    color: #636363;
 }
 pim-cls-1 {
     --background: #ffff;
@@ -216,7 +201,7 @@ ion-modal {
 }
 .dashed-hr {
     border: none;
-    border-top: 2px dashed #b3b3b3;
+    border-top: 1px dashed #b3b3b3;
     margin: 20px 0; /* Adjust as needed */
 }
 .modal_wrapper {

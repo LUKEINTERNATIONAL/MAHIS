@@ -47,7 +47,7 @@ import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import { useDiagnosisStore } from "@/stores/DiagnosisStore";
 import { mapState } from "pinia";
-import Stepper from "../components/Stepper.vue";
+import Stepper from "@/components/Stepper.vue";
 import { defineComponent } from "vue";
 import { useDispensationStore } from "@/apps/OPD/stores/DispensationStore";
 

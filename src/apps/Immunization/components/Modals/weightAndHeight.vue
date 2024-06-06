@@ -1,8 +1,7 @@
 <template>
     <div v-if="formOpen" class="pim-cls-1 modal_wrapper">
         <div class="OtherVitalsHeading">
-            <div class="OtherVitalsTitle">WEIGHT & HEIGHT</div>
-            <div class="TodaysDate">Todays Date: <span></span> {{ todays_date }}</div>
+            <div class="OtherVitalsTitle">Add Weight/Height</div>
         </div>
         <div>
             <div class="center text_12">
@@ -12,12 +11,12 @@
             </div>
         </div>
 
-        <customDatePicker v-if="showPD" />
+        <customDatePicker @dateChange="updateDate" v-if="showPD" />
 
         <div class="btnContent">
-            <div class="saveBtn">
+            <div class="saveBtn" v-if="showDateBtns">
                 <div>
-                    <ion-button class="btnText" fill="solid" @click="doneToday()">
+                    <ion-button class="btnText" fill="solid" @click="saveVitals()">
                         Done today
                         <ion-icon slot="end" size="small" :icon="iconContent.calenderwithPlus"></ion-icon>
                     </ion-button>
@@ -28,6 +27,17 @@
                         <ion-icon slot="end" size="small" :icon="iconContent.calenderWithPenEdit"></ion-icon>
                     </ion-button>
                 </div>
+            </div>
+            <div class="saveBtn" v-if="!showDateBtns">
+                <ion-row>
+                    <ion-col>
+                        <ion-button @click="dismiss" id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px"> Cancel </ion-button>
+                    </ion-col>
+
+                    <ion-col>
+                        <ion-button @click="saveVitals()" class="btnText" fill="solid" style="width: 130px"> save </ion-button>
+                    </ion-col>
+                </ion-row>
             </div>
         </div>
     </div>
@@ -86,8 +96,9 @@ export default defineComponent({
             event: null as any,
             BMI: "" as any,
             showPD: false as boolean,
-            todays_date: HisDate.currentDate(),
+            vitals_date: HisDate.toStandardHisFormat(HisDate.currentDate()),
             formOpen: true,
+            showDateBtns: true as boolean,
         };
     },
     computed: {
@@ -109,18 +120,18 @@ export default defineComponent({
         },
         async validaterowData(event: any) {
             const userID: any = Service.getUserID();
-            const vitalsInstance = new VitalsService(55, userID);
+            const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
 
             const weightValue = getFieldValue(this.vitalsWeightHeight, "weight", "value");
-            const heightValue = getFieldValue(this.vitalsWeightHeight, "Height", "value");
+            const heightValue = getFieldValue(this.vitalsWeightHeight, "height", "value");
             const height = vitalsInstance.validator({ inputHeader: "Height*", value: heightValue });
             const weight = vitalsInstance.validator({ inputHeader: "Weight*", value: weightValue });
             if (height && heightValue) {
-                modifyFieldValue(this.vitalsWeightHeight, "Height", "alertsErrorMassage", height.flat(Infinity)[0]);
-                modifyFieldValue(this.vitalsWeightHeight, "Height", "alertsError", true);
+                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsErrorMassage", height.flat(Infinity)[0]);
+                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsError", true);
             } else {
-                modifyFieldValue(this.vitalsWeightHeight, "Height", "alertsErrorMassage", "");
-                modifyFieldValue(this.vitalsWeightHeight, "Height", "alertsError", false);
+                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsErrorMassage", "");
+                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsError", false);
             }
 
             if (weight && weightValue) {
@@ -130,12 +141,12 @@ export default defineComponent({
                 modifyFieldValue(this.vitalsWeightHeight, "weight", "alertsErrorMassage", "");
                 modifyFieldValue(this.vitalsWeightHeight, "weight", "alertsError", false);
             }
-
-            if (weight == null && height == null) this.setBMI(weightValue, heightValue);
+            this.setBMI(weightValue, heightValue);
         },
-        async doneToday() {
+        async saveVitals() {
             const userID: any = Service.getUserID();
             const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
+            console.log("🚀 ~ saveVitals ~ this.demographics.patient_id:", this.demographics.patient_id);
             const weightValue = getFieldValue(this.vitalsWeightHeight, "weight", "value");
             const heightValue = getFieldValue(this.vitalsWeightHeight, "height", "value");
             const height = vitalsInstance.validator({ inputHeader: "Height*", value: heightValue });
@@ -143,11 +154,11 @@ export default defineComponent({
             if (weight == null && height == null) {
                 const encounter = await vitalsInstance.createEncounter();
                 if (!encounter) return toastWarning("Unable to create vitals encounter");
-                const data = await formatInputFiledData(this.vitalsWeightHeight);
+                const data = await formatInputFiledData(this.vitalsWeightHeight, this.vitals_date);
                 await vitalsInstance.saveObservationList(data);
                 toastSuccess("Saved successful");
                 this.cleanInputFields();
-                this.$emit("updateVitalsGraph");
+                this.vitalsWeightHeight[0].validationStatus = "success";
             } else {
                 toastWarning("Please complete the form");
             }
@@ -183,6 +194,11 @@ export default defineComponent({
         },
         showCPD() {
             this.showPD = true as boolean;
+            this.showDateBtns = false as boolean;
+        },
+
+        updateDate(date: any) {
+            this.vitals_date = HisDate.toStandardHisFormat(date);
         },
     },
 });
@@ -216,14 +232,14 @@ ion-footer {
 .OtherVitalsTitle {
     font-style: normal;
     font-weight: 600;
-    font-size: 20px;
+    font-size: 16px;
     color: #00190e;
 }
 .OtherVitalsHeading {
     display: flex;
     justify-content: space-between;
-    margin: 20px;
-    line-height: 60px;
+    margin: 10px;
+    line-height: 40px;
     flex-direction: column;
 }
 .vitalsContent {

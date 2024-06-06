@@ -174,7 +174,38 @@ export default defineComponent({
           this.calculateEDDFromGestationAge(event)
           this.calculateLNMPdatefromAge(event)
           this.calculateEDDFromPalpation(event)
+          this.handleLMNPDateRange(event)
+          this.handleUltraSoundDateRange(event)
         },
+
+        handleLMNPDateRange(event: any) {
+          // Get the current date
+          const currentDate = new Date();
+          // Calculate the date 36 weeks before the current date
+          const minDate = new Date(currentDate);
+          minDate.setDate(currentDate.getDate() - (36 * 7));
+          // Format the minDate and maxDate to a string in the desired format (e.g., YYYY-MM-DD)
+          const formattedMinDate = minDate.toISOString().split('T')[0];
+          const formattedMaxDate = currentDate.toISOString().split('T')[0];
+          // Set the minDate and maxDate
+          modifyFieldValue(this.lmnp, 'lmnpDate', 'minDate', formattedMinDate);
+          modifyFieldValue(this.lmnp, 'lmnpDate', 'maxDate', formattedMaxDate);
+        },
+        handleUltraSoundDateRange(event: any) {
+          // Get the current date
+          const currentDate = new Date();
+          // Calculate the date 36 weeks before the current date
+          const minDate = new Date(currentDate);
+          minDate.setDate(currentDate.getDate() - (36 * 7));
+          // Format the minDate and maxDate to a string in the desired format (e.g., YYYY-MM-DD)
+          const formattedMinDate = minDate.toISOString().split('T')[0];
+          const formattedMaxDate = currentDate.toISOString().split('T')[0];
+          // Set the minDate and maxDate
+          modifyFieldValue(this.lmnp, 'Ultrasound', 'minDate', formattedMinDate);
+          modifyFieldValue(this.lmnp, 'Ultrasound', 'maxDate', formattedMaxDate);
+        },
+
+
         calculateGestationAgefromLNMP(event: any) {
               if (event.name == "lmnpDate") {
                   const lmnpDateValue = Date.parse(getFieldValue(this.lmnp, 'lmnpDate', 'value'));

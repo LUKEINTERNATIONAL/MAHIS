@@ -122,12 +122,12 @@ export class UserService extends Service {
                 item.actionName = NCDData.actionName;
                 filteredPrograms.push(item);
             } else if (item.name === "IMMUNIZATION PROGRAM") {
-                item.url = "birthRegistration";
+                item.url = "patientProfile";
                 item.actionName = "+ Enroll in Immunization program";
                 filteredPrograms.push(item);
             } else if (item.name === "OPD Program") {
                 item.url = "OPDvitals";
-                item.actionName = "+ Enroll in OPD program";
+                item.actionName = "+ Start OPD consultation";
                 filteredPrograms.push(item);
             } else if (item.name === "ANC PROGRAM") {
                 let ANCItem = { ...item }; // Create a new object

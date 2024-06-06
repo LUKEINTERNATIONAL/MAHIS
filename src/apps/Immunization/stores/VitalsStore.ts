@@ -5,7 +5,6 @@ const initialVitals = [
     {
         isFinishBtn: false,
         validationStatus: "",
-
         data: {
             rowData: [
                 {
@@ -71,6 +70,3 @@ export const useWeightHeightVitalsStore = defineStore("vitalsWeightHeightStore",
     },
     persist: true,
 });
-
-
-

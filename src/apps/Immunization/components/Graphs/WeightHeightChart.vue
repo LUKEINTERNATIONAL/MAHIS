@@ -84,7 +84,9 @@ export default defineComponent({
         },
         vitalsWeightHeight: {
             handler() {
-                this.buildGraph();
+                if (this.vitalsWeightHeight[0].validationStatus == "success") {
+                    this.changeGraph("weight");
+                }
             },
             deep: true,
         },
@@ -136,7 +138,7 @@ export default defineComponent({
                 this.heightBtnProperty = { fill: "solid", icon: icons.networkBarLight };
                 await this.displayHeightGraph();
             }
-            this.buildGraph();
+            await this.buildGraph();
         },
         async setValues() {
             this.dataset = [];
@@ -209,8 +211,9 @@ export default defineComponent({
             let zScore = (Math.pow(value / obj.M, obj.L) - 1) / (obj.L * obj.S);
             this.zScoreValue = Math.round(zScore * 10) / 10;
         },
-        buildGraph() {
-            console.log("hie its me");
+        async buildGraph() {
+            this.vitalsWeightHeight[0].validationStatus = "";
+            console.log("🚀 ~ buildGraph ~ this.vitalsWeightHeight[0].validationStatus:", this.vitalsWeightHeight[0].validationStatus);
             const ctx: any = document.getElementById("myChart");
             if (this.chart) {
                 this.chart.destroy();
@@ -610,6 +613,7 @@ export default defineComponent({
     background: #ffffff;
     border-radius: 5px;
     margin: 10px;
+    height: 70vw;
 }
 .immunizationGraphText {
     padding-left: 10px;

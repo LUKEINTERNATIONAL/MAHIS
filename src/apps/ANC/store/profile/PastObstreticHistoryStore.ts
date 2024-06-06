@@ -102,6 +102,37 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
           ],
         },
       },
+      {
+        selectedData: [],
+        isFinishBtn: false,
+        classDash: "dashed_bottom_border _padding",
+        radioBtnContent: {
+          header: {
+            class: "bold",
+            title: "Was last live birth preterm?",
+            selectedValue: "",
+            name: "Was last live birth preterm?",
+            displayNone:true,
+          },
+          data: [
+            {
+              name: "Last live birth was preterm",
+              value: "Preterm pregnancy - less than 28 weeks",
+              colSize: "9",
+            },
+            {
+              name: "Last live birth was not preterm/ Last live birth was full term",
+              value: "Preterm pregnancy - 28 to 34 weeks",
+              colSize: "9",
+            },
+            {
+              name: "Last live birth had congenital abnormalities",
+              value: "Preterm premature rupture of membranes (PPROM)",
+              colSize: "9",
+            },
+          ],
+        },
+      },
     ] as any,
     abnormalities: [
       {
@@ -140,36 +171,7 @@ export const useObstreticHistoryStore = defineStore("obstreticHistoryStore", {
       },
     ],
     preterm: [
-      {
-        selectedData: [],
-        isFinishBtn: false,
-        classDash: "dashed_bottom_border _padding",
-        radioBtnContent: {
-          header: {
-            class: "bold",
-            title: "Was last live birth preterm?",
-            selectedValue: "",
-            name: "Was last live birth preterm?",
-          },
-          data: [
-            {
-              name: "Last live birth was preterm",
-              value: "Preterm pregnancy - less than 28 weeks",
-              colSize: "9",
-            },
-            {
-              name: "Last live birth was not preterm/ Last live birth was full term",
-              value: "Preterm pregnancy - 28 to 34 weeks",
-              colSize: "9",
-            },
-            {
-              name: "Last live birth had congenital abnormalities",
-              value: "Preterm premature rupture of membranes (PPROM)",
-              colSize: "9",
-            },
-          ],
-        },
-      },
+
     ],
     modeOfDelivery: [] as any,
     Complications: [

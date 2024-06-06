@@ -45,7 +45,7 @@
                 fill="clear"
                 :icon="iconsContent.edit"
                 iconSlot="icon-only"
-                @click="$emit('clicked:edit', { event: $event, name: item.name, id: item.id })"
+                @click="$emit('clicked:edit', { event: $event, item: item })"
             />
             <DynamicButton
                 v-if="item?.btn?.includes('delete')"
