@@ -1,17 +1,11 @@
 <template>
     <div class="container">
-    <ion-card class="section">
-      <ion-card-content>
-        <basic-form :contentData="vitals"
-                 @update:inputValue="validaterowData($event)"
-                :initialData="initialData"
-                >
-    </basic-form>
-      </ion-card-content>
-    </ion-card>
-  </div>
-  
-   
+        <ion-card class="section">
+            <ion-card-content>
+                <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)" :initialData="initialData"> </basic-form>
+            </ion-card-content>
+        </ion-card>
+    </div>
 </template>
 
 <script lang="ts">
@@ -57,19 +51,14 @@ export default defineComponent({
             vValidations: "" as any,
             hasValidationErrors: [] as any,
             vitalsInstance: {} as any,
-            initialData:[] as any,
-            initialData1:[] as any,
-            initialData2:[] as any,
-
+            initialData: [] as any,
+            initialData1: [] as any,
+            initialData2: [] as any,
         };
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useVitalsStore, ["vitals"]),
-<<<<<<< HEAD
-//        ...mapState(useVitalsStore, ["preEclampsia"]),
-=======
->>>>>>> 9211ca8488d3e146ae8802522a732542d7578f2d
     },
     mounted() {
         const userID: any = Service.getUserID();
@@ -77,11 +66,9 @@ export default defineComponent({
         this.updateVitalsStores();
         this.validaterowData({});
         this.handleOtherAndNovitalsDone();
-        const vitals=useVitalsStore()
-        const preEclampsia=useVitalsStore()
-        this.initialData=vitals.getInitial
-      
-
+        const vitals = useVitalsStore();
+        const preEclampsia = useVitalsStore();
+        this.initialData = vitals.getInitial;
     },
     watch: {
         vitals: {
@@ -89,11 +76,9 @@ export default defineComponent({
                 this.updateVitalsStores();
                 this.handleOtherAndNovitalsDone();
                 this.handlePreEclampsia();
-
             },
             deep: true,
         },
-       
     },
     setup() {
         return { checkmark, pulseOutline };
@@ -283,7 +268,7 @@ h5 {
 }
 ion-card {
     width: 100%;
-    color:black;
+    color: black;
 }
 .sub_item_header {
     font-weight: bold;
