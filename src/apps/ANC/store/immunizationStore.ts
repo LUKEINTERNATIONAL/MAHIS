@@ -14,7 +14,7 @@ export const useImmunizationStore = defineStore("immunizationStore", {
             {
               colData: [
                 {
-                  //displayNone: true,
+                  displayNone: true,
                   inputHeader: "TTV",
                   value: "",
                   valueType: "text",

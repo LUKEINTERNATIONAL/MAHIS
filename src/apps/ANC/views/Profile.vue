@@ -215,6 +215,8 @@ export default defineComponent({
       GestationAgeUsed(){ return getRadioSelectedValue(this.palpation, 'Gestation age to be used')},
       TetanusDosesForImmunisation(){ return getRadioSelectedValue(this.tetanus, 'The woman received tetanus doses for immunization?')},
       NumberOfUnderImmunisedDoses(){ return getRadioSelectedValue(this.tetanus, 'Number of tetanus doses')},
+
+
       // tt1Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
       // tt2Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
       // tt3Date(){ return getFieldValue(this.tetanus, 'tt1Date','value')},
@@ -259,7 +261,8 @@ export default defineComponent({
         },
 
          async saveData() {
-           await this.saveProfile()
+           //await this.saveProfile()
+           await  this.saveLnmp()
           await   resetPatientData();
         },
       async validations(data: any, fields: any) {
@@ -269,16 +272,20 @@ export default defineComponent({
       formatBirthdate() {
         return HisDate.getBirthdateAge(this.demographics?.birthdate);
       },
-      async saveLmnp(){
+      async saveLnmp(){
+        if (this.lmnp.length >  0) {
             const userID: any = Service.getUserID();
-            const lnmp = new  currentPregnancyService(this.demographics.patient_id, userID);
-            const encounter = await lnmp.createEncounter();
-            if (!encounter) return toastWarning("Unable to create lnmp encounter");
-            const patientStatus = await lnmp.saveObservationList(await this.buildProfile());
-            if (!patientStatus) return toastWarning("Unable to create lnmp information!");
+            const profile = new  currentPregnancyService(this.demographics.patient_id, userID);
+            const encounter = await profile.createEncounter();
+            if (!encounter) return toastWarning("Unable to create profile encounter");
+            const patientStatus = await profile.saveObservationList(await this.buildProfile());
+            if (!patientStatus) return toastWarning("Unable to create profile information!");
             await  toastSuccess("Profile information have been created");
-      },
+            // console.log(await this.buildProfile())
 
+          }
+          console.log(await this.buildProfile())
+      },
       async saveProfile(){
 
         //     "tt1Date","tt2Date","tt3Date","tt4Date","tt5Date","tt6Date","tt7Date","tt8Date","tt9Date","tt10Date","tt11Date","tt12Date","tt13Date","tt14Date",
@@ -370,6 +377,11 @@ export default defineComponent({
           ...(await formatInputFiledData(this.Medication)),
           ...(await formatCheckBoxData(this.dailyCaffeineIntake)),
           ...(await formatRadioButtonData(this.Tobacco)),
+        ]
+      },
+      async buildLnmp(){
+        [
+          ...(await formatRadioButtonData(this.lmnp)),
         ]
       },
         openModal() {

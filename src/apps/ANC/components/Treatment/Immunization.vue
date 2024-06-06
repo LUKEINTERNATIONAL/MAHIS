@@ -158,11 +158,13 @@ export default defineComponent ({
       },
         async setValues() {
             const immunisation = await ObservationService.getFirstObsValue(this.demographics.patient_id,"Number of tetanus doses", "value_coded");
-            const immu =  await ObservationService.getFirstObsValue(this.demographics.patient_id, "Height", "value_numeric");
             console.log(immunisation)
-            console.log(immu)
+            if(immunisation == 'Two doses'){
+              modifyFieldValue(this.ttDoses,'hepb1 Date','displayNone',false)
+            }else{
+              modifyFieldValue(this.ttDoses,'hepb1 Date','displayNone',true)
+            }
         },
-      //lmnp
       // handleB3(){
       //   if(getRadioSelectedValue(this.HepB3,'b3')=='yes'){
       //     modifyFieldValue(this.HepB3,'hep3Date','displayNone',false)
