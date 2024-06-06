@@ -123,7 +123,7 @@ export class UserService extends Service {
                 filteredPrograms.push(item);
             } else if (item.name === "OPD Program") {
                 item.url = "OPDvitals";
-                item.actionName = "+ Enroll in OPD program";
+                item.actionName = "+ Start OPD consultation";
                 filteredPrograms.push(item);
             } else if (item.name === "ANC PROGRAM") {
                 let ANCItem = { ...item }; // Create a new object

@@ -80,11 +80,12 @@ import { createModal, toastWarning } from "@/utils/Alerts";
 import CheckPatientNationalID from "@/components/CheckPatientNationalID.vue";
 import { resetPatientData } from "@/services/reset_data";
 import { resetNCDPatientData } from "@/apps/NCD/config/reset_ncd_data";
+import { resetOPDPatientData } from "@/apps/OPD/config/reset_opd_data";
 import { mapState } from "pinia";
 import Validation from "@/validations/StandardValidations";
 import { UserService } from "@/services/user_service";
 import { Service } from "@/services/service";
-import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore"
+import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 
 export default defineComponent({
     name: "Home",
@@ -212,11 +213,13 @@ export default defineComponent({
             });
             if (Service.getProgramID() == 32 || Service.getProgramID() == 33) {
                 resetNCDPatientData();
+            } else if (Service.getProgramID() == 14) {
+                resetOPDPatientData();
             } else {
                 resetPatientData();
             }
-            const store = useAdministerVaccineStore()
-            store.setVaccineReload(!store.getVaccineReload())
+            const store = useAdministerVaccineStore();
+            store.setVaccineReload(!store.getVaccineReload());
             const roleData: any = sessionStorage.getItem("userRoles");
             const userProgramsData: any = sessionStorage.getItem("userPrograms");
             const userPrograms: any = JSON.parse(userProgramsData);
@@ -229,11 +232,11 @@ export default defineComponent({
                     this.$router.push(NCDUserAction.url);
                 } else if (userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "OPD PROGRAM")) {
                     this.$router.push("OPDvitals");
-                } else if (roles.some((role: any) => role.role === "Pharmacist")) {
-                    this.$router.push("dispensation");
                 } else {
                     this.$router.push(url);
                 }
+            } else if (roles.some((role: any) => role.role === "Pharmacist")) {
+                this.$router.push("dispensation");
             } else {
                 this.$router.push(url);
             }
