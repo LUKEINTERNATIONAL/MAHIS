@@ -22,14 +22,20 @@ export async function formatInputFiledData(data: any, obs_datetime = ConceptServ
 
         return Promise.all(
             item.data.rowData[0].colData.map(async (element: any) => {
-                if (!element.value || element.buildConceptIgnore) return null;
+                let value = "";
+                if (element.isSingleSelect) {
+                    value = element.value.name;
+                } else {
+                    value = element.value;
+                }
+                if (!value || element.buildConceptIgnore) return null;
 
                 const concept_id = await ConceptService.getConceptID(element.name, true);
 
                 if (element.valueType === "text") {
-                    return { concept_id, value_text: element.value, obs_datetime };
+                    return { concept_id, value_text: value, obs_datetime };
                 } else if (element.valueType === "number") {
-                    return { concept_id, value_numeric: element.value, obs_datetime };
+                    return { concept_id, value_numeric: value, obs_datetime };
                 } else {
                     return null;
                 }

@@ -12,6 +12,7 @@ const initialBirthRegistration = [
                             iconRight: icons.scannerIcon,
                             icon: icons.nationalID,
                             value: "",
+                            valueType: "text",
                             name: "middleName",
                             eventType: "input",
                             alertsError: false,
@@ -32,8 +33,9 @@ const initialBirthRegistration = [
                         {
                             inputHeader: "Birth Weight/First weight (kg)*",
                             icon: icons.weight,
+                            valueType: "number",
                             value: "",
-                            name: "weight",
+                            name: "Weight",
                             eventType: "input",
                             alertsError: false,
                             alertsErrorMassage: "",
@@ -52,8 +54,9 @@ const initialBirthRegistration = [
                         {
                             inputHeader: "Birth Height(cm)",
                             icon: icons.height,
+                            valueType: "number",
                             value: "",
-                            name: "Height",
+                            name: "Height (cm)",
                             eventType: "input",
                             alertsError: false,
                             alertsErrorMassage: "",
@@ -72,25 +75,26 @@ const initialBirthRegistration = [
                         {
                             inputHeader: "How many doses of Tdv did the mother receive?*",
                             icon: icons.search,
+                            valueType: "text",
                             isSingleSelect: true,
                             popOver: true,
                             value: "",
                             name: "How many doses of Tdv",
                             multiSelectData: [
                                 {
-                                    concept_id: 2,
+                                    concept_id: 11760,
                                     name: ">3 doses of TdV in past 5 years",
                                 },
                                 {
-                                    concept_id: 3,
+                                    concept_id: 11761,
                                     name: "1-4 doses of TdV in the past",
                                 },
                                 {
-                                    concept_id: 4,
+                                    concept_id: 11762,
                                     name: "Tdv not received",
                                 },
                                 {
-                                    concept_id: 5,
+                                    concept_id: 1067,
                                     name: "Unknown",
                                 },
                             ],
@@ -114,21 +118,22 @@ const initialBirthRegistration = [
                         {
                             inputHeader: "Protected at birth (PAB)*",
                             icon: icons.search,
+                            valueType: "text",
                             isSingleSelect: true,
                             popOver: true,
                             value: "",
                             name: "Protected at birth",
                             multiSelectData: [
                                 {
-                                    concept_id: 2,
+                                    concept_id: 1065,
                                     name: "Yes",
                                 },
                                 {
-                                    concept_id: 3,
+                                    concept_id: 1066,
                                     name: "No",
                                 },
                                 {
-                                    concept_id: 4,
+                                    concept_id: 1067,
                                     name: "Don't know",
                                 },
                             ],
@@ -152,21 +157,22 @@ const initialBirthRegistration = [
                         {
                             inputHeader: "HIV status of the Child's Mother",
                             icon: icons.search,
+                            valueType: "text",
                             isSingleSelect: true,
                             popOver: true,
                             value: "",
-                            name: "HIV status of the Child",
+                            name: "HIV status",
                             multiSelectData: [
                                 {
-                                    id: 2,
+                                    id: 703,
                                     name: "Positive",
                                 },
                                 {
-                                    id: 3,
+                                    id: 664,
                                     name: "Negative",
                                 },
                                 {
-                                    id: 4,
+                                    id: 1067,
                                     name: "Unknown",
                                 },
                             ],
@@ -197,5 +203,5 @@ export const useBirthRegistrationStore = defineStore("birthRegistrationStore", {
             return [...data];
         },
     },
-    // persist: true,
+    persist: true,
 });
