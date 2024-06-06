@@ -20,6 +20,7 @@
                                 :user_id="user_id"
                                 :toggle="true"
                                 :action="action"
+                                @save="isFormValid"
                             />
                         </ion-col>
                        
@@ -68,7 +69,17 @@ const emit = defineEmits<{
 
 function saveAction() {
     action.value = generateRandomStrings(100, 3)
-    closeModal()
+    // closeModal()
+}
+
+function isFormValid(data: any) {
+    console.log(data)
+    if (data == true) {
+        closeModal()
+    }
+    if (data == false) {
+        
+    }
 }
 
 function closeModal() {

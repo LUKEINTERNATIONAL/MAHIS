@@ -1,36 +1,54 @@
 <template>
     
 
-        <ion-row>
-            <ion-col>
-                <BasicInputField
-                    :placeholder="note_properties[1].placeHolder"
-                    :icon="personOutline"
-                    :inputValue="first_name"
-                    @update:inputValue="note_properties[1].dataHandler"
-                />
-            </ion-col>
-            <ion-col>
-                <BasicInputField
-                    :placeholder="note_properties[2].placeHolder"
-                    :icon="peopleOutline"
-                    :inputValue="last_name"
-                    @update:inputValue="note_properties[2].dataHandler"
-                />
-            </ion-col>
-        </ion-row>
+    <ion-row>
+        <ion-col>
+            <BasicInputField
+                :placeholder="input_properties[1].placeHolder"
+                :icon="personOutline"
+                :inputValue="first_name"
+                @update:inputValue="input_properties[1].dataHandler"
+            />
 
-        <ion-row>
+            <div>
+                <ion-label v-if="input_properties[1].show_error.value" class="error-label">
+                    {{ input_properties[1].error_message }}
+                </ion-label>
+            </div>
+        </ion-col>
+        <ion-col>
+            <BasicInputField
+                :placeholder="input_properties[2].placeHolder"
+                :icon="peopleOutline"
+                :inputValue="last_name"
+                @update:inputValue="input_properties[2].dataHandler"
+            />
+
+            <div>
+                <ion-label v-if="input_properties[2].show_error.value" class="error-label">
+                    {{ input_properties[2].error_message }}
+                </ion-label>
+            </div>
+        </ion-col>
+    </ion-row>
+
+    <ion-row>
             <ion-col>
                 <BasicInputField
-                    :placeholder="note_properties[0].placeHolder"
+                    :placeholder="input_properties[0].placeHolder"
                     :icon="personCircleOutline"
                     :inputValue="user_name"
-                    @update:inputValue="note_properties[0].dataHandler"
+                    @update:inputValue="input_properties[0].dataHandler"
                 />
+
+                <div>
+                    <ion-label v-if="input_properties[0].show_error.value" class="error-label">
+                        {{ input_properties[0].error_message }}
+                    </ion-label>
+                </div>
             </ion-col>
             <ion-col></ion-col>
-        </ion-row>
+    </ion-row>
 
 
 
@@ -57,6 +75,34 @@
                     :offLabel="'inactive'"
                     :onLabel="'active'"
                 />
+            </ion-col>
+        </ion-row>
+
+        <ion-row>
+            <ion-col size="6">
+                <VueMultiselect
+                    v-model="selected_location"
+                    @update:model-value="selectedLocation($event)"
+                    :multiple="false"
+                    :taggable="false"
+                    :hide-selected="true"
+                    :close-on-select="true"
+                    openDirection="bottom"
+                    tag-placeholder="Find and select medication"
+                    placeholder="Find and select medication"
+                    selectLabel=""
+                    label="name"
+                    :searchable="true"
+                    @search-change="FindLocation($event)"
+                    track-by="location_id"
+                    :options="locationData"
+                />
+
+                <div>
+                    <ion-label v-if="location_show_error" class="error-label">
+                        {{ location_error_message }}
+                    </ion-label>
+                </div>
             </ion-col>
         </ion-row>
 
@@ -157,6 +203,9 @@ import { IonContent, IonHeader, IonItem, IonCol, IonToolbar, IonMenu, modalContr
 import Toggle from '@vueform/toggle'
 import ListPicker from "../../components/ListPicker.vue"
 import userActivities from "./userActivities.vue"
+import VueMultiselect from "vue-multiselect"
+import { LocationService } from "@/services/location_service"
+import { isEmpty } from "lodash"
 import {
     addOutline,
     pencilOutline,
@@ -171,6 +220,8 @@ import { ref, onMounted, watch } from "vue"
 import BasicInputField from "@/components/BasicInputField.vue"
 import { UserService } from "@/services/user_service"
 import { ProgramService } from "@/services/program_service"
+import { areFieldsValid, getFieldsValuesObj, isPasswordValid } from "@/utils/GeneralUti"
+import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
 
 const toggle_local = ref(false)
 const user_roles = ref([] as any)
@@ -182,6 +233,11 @@ const last_name = ref()
 const userId = ref() as any
 const show_user_programs = ref(false)
 const actionN = ref('')
+const selected_location = ref()
+const locationData = ref([]) as any
+const locationId = ref()
+const location_error_message = ref('Select location')
+const location_show_error = ref(false)
 
 const props = defineProps<{
     toggle: true,
@@ -201,6 +257,27 @@ watch(
         trigerSaveFn()
     }
 )
+
+function selectedLocation(data: any) {
+    selected_location.value = data
+}
+
+async function FindLocation(text: any) {
+    console.log(text)
+    let srch_text
+    if (isEmpty(text) == true) {
+        srch_text = ''
+    } if (isEmpty(text) == false) {
+        srch_text = text
+    }
+    const temp_data1 = await LocationService.getFacilities({ name: srch_text })
+    locationData.value = []
+    temp_data1.forEach((item: any) => {
+        if (isEmpty(item.name) == false) {
+                locationData.value.push(item)
+            }
+    })
+}
 
 async function getUserStatus() {
     const deactivated_on = user_data.value.deactivated_on
@@ -225,15 +302,85 @@ function trigerSaveFn() {
     preSavePrograms()
     preSaveRoles()
     trigerSaveStatusFn()
+    updateUserDemographics()
+}
+
+const input_properties = [
+    {
+        placeHolder: 'username',
+        property_name: 'username',
+        dataHandler: inputUpDated_fn1,
+        dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'Input required, Only letters are allowed',
+        type: 'text',
+    },
+    {
+        placeHolder: 'firstname',
+        property_name: 'firstname',
+        dataHandler: inputUpDated_fn2,
+        dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'Input required, Only letters are allowed',
+        type: 'text',
+    },
+    {
+        placeHolder: 'last name',
+        property_name: 'last_name',
+        dataHandler: inputUpDated_fn3,
+        dataValue: ref(),
+        show_error: ref(false),
+        error_message: 'Input required, Only letters are allowed',
+        type: 'text',
+    },
+]
+
+function inputUpDated_fn1(event: any) {
+    const input = event.target.value
+    input_properties[0].dataValue.value = input
+    user_name.value = input
+}
+function inputUpDated_fn2(event: any) {
+    const input = event.target.value
+    input_properties[1].dataValue.value = input
+    first_name.value = input
+}
+function inputUpDated_fn3(event: any) {
+    const input = event.target.value
+    input_properties[2].dataValue.value = input
+    last_name.value = input
+}
+
+function validateLocation() {
+    if (isEmpty(selected_location.value) == true) {
+        location_show_error.value = true
+        return false
+    }
+    if (isEmpty(selected_location.value) == false) {
+        location_show_error.value = false
+        return true
+    }
 }
 
 
 async function getUserData() {
     userId.value = props.user_id
     user_data.value = await UserService.getUserByID(props.user_id)
+    if (user_data.value.location_id != null) {
+            const response = await LocationService.getLocation(user_data.value.location_id)
+        if (isEmpty(response) == false) {
+            selected_location.value = response
+        }
+    }
     user_name.value = user_data.value.username
+    input_properties[0].dataValue.value = user_name.value
+
     first_name.value =  userFirstname(user_data.value.person.names)
+    input_properties[1].dataValue.value = first_name.value
+
     last_name.value = userLastname(user_data.value.person.names)
+    input_properties[2].dataValue.value = last_name.value
+
     fillUserRoles()
     fillUserPrograms()
     getAPICounterPart() 
@@ -252,8 +399,41 @@ async function preSaveRoles() {
     selectedRoles.forEach((role: any) => {
         selectedRoleNames.push(role.other.role)
     })
-
     saveRoles(selectedRoleNames)
+}
+
+async function updateUserDemographics() {
+    const _areFieldsValid_ = areFieldsValid(input_properties)
+    const _validateLocation = validateLocation()
+
+    if (_areFieldsValid_ == false && _validateLocation == false) {
+        saveEvent(false)
+    }
+
+    if (_areFieldsValid_ == true && _validateLocation == true) {
+        saveEvent(true)
+        const payload = {
+            given_name: first_name.value,
+            family_name: last_name.value,
+            username: user_name.value,
+            location_id: selected_location.value.location_id,
+            must_append_roles:false,
+        }
+        UserService.updateUser(userId.value, payload)
+
+        const username_payload = {
+            new_username: user_name.value,
+        }
+
+        try {
+            const response = await UserService.updateusername(userId.value, username_payload)
+            // console.log(response.message[0])
+            toastSuccess("username updated successfully")
+        } catch (error) {
+            toastWarning("username update failed, already existing")
+            
+        }
+    } 
 }
 
 async function saveRoles(roleNames: any) {
@@ -368,15 +548,15 @@ async function setSelectedUserPrograms() {
 const note_properties = [
     {
         placeHolder: 'username',
-        dataHandler: ()=>{},
-        dataValue: ref(),
+        dataHandler: usernameupdated,
+        dataValue: ref() as any,
         show_error: ref(false),
         error_message: 'please provide a reason'
     },
     {
         placeHolder: 'firstname',
         dataHandler: ()=>{},
-        dataValue: ref(),
+        dattrueaValue: ref() as any,
         show_error: ref(false),
         error_message: 'please provide a reason'
     },
@@ -388,6 +568,11 @@ const note_properties = [
         error_message: 'please provide a reason'
     },
 ]
+
+function usernameupdated(event: any) {
+    const input = event.target.value
+    user_name.value = input
+}
 
 const dynamic_button_properties = [
     {
@@ -477,6 +662,14 @@ function userLastname(items: any) {
     return _str_;
 }
 
+const emit = defineEmits<{
+    (e: "save", boolean_value: boolean): void
+}>()
+
+function saveEvent(boolean_value: any) {
+    emit("save", boolean_value)
+}
+
 </script>
 <style src="@vueform/toggle/themes/default.css"></style>
 <style scoped>
@@ -536,6 +729,16 @@ function userLastname(items: any) {
     color: #006401;
     text-transform: none;
     padding: 6%;
+    border-radius: 10px;
+    margin-top: 7px;
+    display: flex;
+    text-align: center;
+}
+.error-label {
+    background: #fecdca;
+    color: #b42318;
+    text-transform: none;
+    padding: 3%;
     border-radius: 10px;
     margin-top: 7px;
     display: flex;
