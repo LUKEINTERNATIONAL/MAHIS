@@ -82,7 +82,7 @@ import { useLevelOfConsciousnessStore } from "@/apps/OPD/stores/LevelOfConscious
 import { ConsciousnessService } from "@/apps/OPD/services/consciousness_service";
 import { usePhysicalExaminationStore } from "@/apps/OPD/stores/PhysicalExamination";
 import { PhysicalExamService } from "@/apps/OPD/services/physical_exam_service";
-
+import { resetOPDPatientData } from "@/apps/OPD/config/reset_opd_data";
 
 export default defineComponent({
     name: "Home",
@@ -199,11 +199,9 @@ export default defineComponent({
         ...mapState(useOPDDiagnosisStore, ["OPDdiagnosis"]),
         ...mapState(usePhysicalExaminationStore, ["physicalExam"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
-        ...mapState(useLevelOfConsciousnessStore, ["levelOfConsciousness","levelOfConsciousnessMinor"]),
+        ...mapState(useLevelOfConsciousnessStore, ["levelOfConsciousness", "levelOfConsciousnessMinor"]),
     },
     async mounted() {
-        this.investigations;
-        console.log("🚀 ~ mounted ~ this.investigations:", this.investigations);
         this.markWizard();
     },
     watch: {
@@ -280,9 +278,7 @@ export default defineComponent({
             });
         },
         async saveData() {
-            if (this.OPDdiagnosis[0].selectedData.length > 0) {
-                await this.saveDiagnosis();
-            }
+            await this.saveDiagnosis();
             await this.saveTreatmentPlan();
             await this.saveOutComeStatus();
             await this.saveWomenStatus();
@@ -290,6 +286,7 @@ export default defineComponent({
             await this.savePastMedicalHistory();
             await this.saveConsciousness();
             await this.savePhysicalExam();
+            resetOPDPatientData();
             this.$router.push("patientProfile");
         },
         async savePastMedicalHistory() {
@@ -317,12 +314,13 @@ export default defineComponent({
             this.presentingComplaints[0].selectedData;
         },
         async savePhysicalExam() {
-            if (this.physicalExam.length > 0) {
+            const data = await this.buildPhysicalExamination();
+            if (data.length > 0) {
                 const userID: any = Service.getUserID();
                 const PhysicalExam = new PhysicalExamService(this.demographics.patient_id, userID);
                 const encounter = await PhysicalExam.createEncounter();
                 if (!encounter) return toastWarning("Unable to create patient physical examination encounter");
-                const patientStatus = await PhysicalExam.saveObservationList(await this.buildPhysicalExamination());
+                const patientStatus = await PhysicalExam.saveObservationList(data);
                 if (!patientStatus) return toastWarning("Unable to create patient physical examination  !");
                 toastSuccess("Physical examination has been created");
             }
@@ -340,9 +338,11 @@ export default defineComponent({
             }
         },
         saveDiagnosis() {
-            const userID: any = Service.getUserID();
-            const diagnosisInstance = new Diagnosis();
-            diagnosisInstance.onSubmit(this.demographics.patient_id, userID, this.getFormatedData(this.OPDdiagnosis[0].selectedData));
+            if (this.OPDdiagnosis[0].selectedData.length > 0) {
+                const userID: any = Service.getUserID();
+                const diagnosisInstance = new Diagnosis();
+                diagnosisInstance.onSubmit(this.demographics.patient_id, userID, this.getFormatedData(this.OPDdiagnosis[0].selectedData));
+            }
         },
         async saveTreatmentPlan() {
             const userID: any = Service.getUserID();
@@ -429,23 +429,24 @@ export default defineComponent({
             ];
         },
         async saveConsciousness() {
-            // const data = await formatRadioButtonData(this.levelOfConsciousness);
+            const data = await formatRadioButtonData(this.levelOfConsciousness);
+            if (data.length > 0) {
+                const userID: any = Service.getUserID();
+                const consciousness = new ConsciousnessService(this.demographics.patient_id, userID);
+                const encounter = await consciousness.createEncounter();
+                if (!encounter) return toastWarning("Unable to create patient complaints encounter");
 
-            const userID: any = Service.getUserID();
-            const consciousness = new ConsciousnessService(this.demographics.patient_id, userID);
-            const encounter = await consciousness.createEncounter();
-            if (!encounter) return toastWarning("Unable to create patient complaints encounter");
+                const patientAge = HisDate.getAgeInYears(this.demographics.birthdate);
 
-              const patientAge = HisDate.getAgeInYears(this.demographics.birthdate);
+                let data;
 
-            let data;
-            
-            if(patientAge < 18){
-                data = await formatRadioButtonData(this.levelOfConsciousnessMinor);
-            }else {
-                data= await formatRadioButtonData(this.levelOfConsciousness); 
+                if (patientAge < 18) {
+                    data = await formatRadioButtonData(this.levelOfConsciousnessMinor);
+                } else {
+                    data = await formatRadioButtonData(this.levelOfConsciousness);
+                }
+                await consciousness.saveObservationList(data);
             }
-              await consciousness.saveObservationList(data);
         },
         async buildPhysicalExamination() {
             return [

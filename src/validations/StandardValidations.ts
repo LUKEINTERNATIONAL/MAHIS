@@ -59,7 +59,7 @@ function isNameEmpty(value: any): null | string {
 }
 
 function isNumber(val: any) {
-    return isNaN(parseInt(val)) ? "Value must be a number" : null;
+    return isNaN(val) ? "Value must be a number" : null;
 }
 function isWholeNumber(val: any): null | string {
     // Regular expression to match only whole numbers
@@ -124,7 +124,6 @@ function isDate(value: any): null | string {
     return null;
 }
 
-
 export default {
     isFloatingPointNumber,
     validateSeries,
@@ -143,5 +142,5 @@ export default {
     isMWNationalID,
     isEstimationDate,
     checkMinMax,
-    isDate
+    isDate,
 };

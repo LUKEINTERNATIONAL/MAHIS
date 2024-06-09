@@ -25,7 +25,7 @@
                 <ion-row v-for="(element, index2) in item.data.rowData" :key="index2">
                     <ion-col v-for="(col, colIndex) in element.colData" :key="colIndex" v-show="!col.displayNone" :size="col.colSize">
                         <BasicInputField
-                            v-if="!col.isDatePopover && !col.isMultiSelect && !col.isSingleSelect"
+                            v-if="!col.isDatePopover && !col.isMultiSelect && !col.isSingleSelect && !col.isChangeUnits"
                             :inputHeader="col.inputHeader"
                             :sectionHeaderFontWeight="col.sectionHeaderFontWeight"
                             :bold="col.class"
@@ -41,6 +41,30 @@
                             :eventType="col.eventType"
                             @update:inputValue="handleInput(contentData, col, $event, 'updateInput')"
                             @clicked:inputValue="handleInput(contentData, col, $event, 'clickedInput')"
+                            :popOverData="col.popOverData"
+                            @setPopoverValue="handleInput(contentData, col, $event, 'setPopoverValue')"
+                            @handleInnerActionBtnPropetiesFn="$emit('click:innerBtn', col)"
+                            :InnerActionBtnPropeties="col.InnerBtn"
+                        />
+                        <BasicInputChangeUnits
+                            v-if="col.isChangeUnits"
+                            :inputHeader="col.inputHeader"
+                            :unitsData="col.unitsData"
+                            :sectionHeaderFontWeight="col.sectionHeaderFontWeight"
+                            :bold="col.class"
+                            :unit="col.unit"
+                            :input="col.input"
+                            :disabled="col.disabled"
+                            :icon="col.icon"
+                            :placeholder="col.placeholder"
+                            :iconRight="col.iconRight"
+                            :leftText="col.leftText"
+                            :inputWidth="col.inputWidth"
+                            :inputValue="col.value"
+                            :eventType="col.eventType"
+                            @update:inputValue="handleInput(contentData, col, $event, 'updateInput')"
+                            @clicked:inputValue="handleInput(contentData, col, $event, 'clickedInput')"
+                            @update:units="handleInput(contentData, col, $event, 'updateUnits')"
                             :popOverData="col.popOverData"
                             @setPopoverValue="handleInput(contentData, col, $event, 'setPopoverValue')"
                             @handleInnerActionBtnPropetiesFn="$emit('click:innerBtn', col)"
@@ -75,6 +99,7 @@
                             </h6>
                             <VueMultiselect
                                 v-model="col.value"
+                                :max-height="150"
                                 @update:model-value="handleInput(contentData, col, $event, 'updateMultiselect')"
                                 :multiple="false"
                                 :hide-selected="false"
@@ -305,6 +330,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import BasicInputField from "@/components/BasicInputField.vue";
+import BasicInputChangeUnits from "@/components/BasicInputChangeUnits.vue";
 import DateInputField from "@/components/DateInputField.vue";
 import DynamicButton from "./DynamicButton.vue";
 import { IonDatetime, IonDatetimeButton, IonCheckbox } from "@ionic/vue";
@@ -320,6 +346,7 @@ import {
     modifyRadioValue,
     modifyFieldValue,
     modifyGroupedRadioValue,
+    modifyUnitsValue,
 } from "@/services/data_helpers";
 
 export default defineComponent({
@@ -331,6 +358,7 @@ export default defineComponent({
         IonCheckbox,
         DateInputField,
         VueMultiselect,
+        BasicInputChangeUnits,
     },
     data() {
         return {
@@ -340,7 +368,7 @@ export default defineComponent({
             flow: ["month", "year", "calendar"],
             date: "",
             value: [] as any,
-            options: [{ name: "Vue.js" }, { name: "Javascript" }, { name: "Open Source" }, { name: "kaka" }],
+            options: [] as any,
         };
     },
     props: {
@@ -368,6 +396,10 @@ export default defineComponent({
             }
             if (inputType == "updateMultiselect") {
                 modifyFieldValue(data, col.name, "value", event);
+                this.$emit("update:inputValue", col);
+            }
+            if (inputType == "updateUnits") {
+                modifyUnitsValue(data, col.name, "value", event?.name);
                 this.$emit("update:inputValue", col);
             }
 
