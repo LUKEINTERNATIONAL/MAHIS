@@ -9,23 +9,6 @@
     </basic-form>
       </ion-card-content>
     </ion-card>
-
-     <!-- Pallor -->
-     <ion-card class="section">
-      <ion-card-header>
-        <ion-card-title class="dashed_bottom_border sub_item_header">Weight category</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <div class="categories">
-
-        
-        <div class="category">
-
-                BMI = 
-                </div>
-                </div>
-      </ion-card-content>
-    </ion-card>
   </div>
   
    
@@ -84,10 +67,6 @@ export default defineComponent({
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useVitalsStore, ["vitals"]),
-<<<<<<< HEAD
-//        ...mapState(useVitalsStore, ["preEclampsia"]),
-=======
->>>>>>> 9211ca8488d3e146ae8802522a732542d7578f2d
     },
     mounted() {
         const userID: any = Service.getUserID();
