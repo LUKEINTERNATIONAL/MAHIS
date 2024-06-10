@@ -15,7 +15,7 @@ export const useReferralStore = defineStore('referralStore',{
                         title: 'Referral for urgent care *',
                         selectedValue: '',
                         class:"bold",
-                        name:'referral for urgent care'
+                        name:'Referral for urgent care'
                     },
                     data:[
                         {  
@@ -46,7 +46,7 @@ export const useReferralStore = defineStore('referralStore',{
                     data:[
                         {  
                             name: "Referral for screening including diagnostics",
-                            value: "Referral for screening ",
+                            value: "Referral for screening including diagnostics",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 
@@ -67,9 +67,10 @@ export const useReferralStore = defineStore('referralStore',{
                 classDash: 'dashed_bottom_border',
                 radioBtnContent:{
                     header:{
-                        title: 'Any treatment given before referral',
+                        title: 'Any treatment given before referral?',
                         class:"bold",
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'Any treatment given before referral'
                     },
                     data:[
                         {  
