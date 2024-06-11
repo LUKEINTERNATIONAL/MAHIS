@@ -608,6 +608,8 @@ async function saveData() {
     componentKey.value++;
     selected_drug.value = ref()
     selected_pres_method.value = ref()
+    show_error_msg_for_dose.value = false
+    show_error_msg_for_duration.value = false
     saveStateValuesState();
 }
 
