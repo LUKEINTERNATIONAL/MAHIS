@@ -91,7 +91,7 @@
                         :searchable="true"
                         @search-change="FindDrugName($event)"
                         track-by="uuid"
-                        :options="diagnosisData"
+                        :options="OPDDrugList"
                     />
                 </ion-col>
             </ion-row>
@@ -377,7 +377,6 @@ const doseErrMsg = ref("");
 const show_error_msg_for_dose = ref(false);
 const durationErrMsg = ref();
 const show_error_msg_for_duration = ref(false);
-const diagnosisData = ref([] as any);
 const drugName = ref("");
 const dose = ref("");
 const duration = ref("");
@@ -392,8 +391,9 @@ const btnFill = "clear";
 const showMoreMedicationsMsg = ref("Show more medications");
 const store = useTreatmentPlanStore();
 const store2 = useAllegyStore();
-const selectedAllergiesList2 = computed(() => store2.selectedMedicalAllergiesList);
-const selectedMedicalDrugsList = computed(() => store.selectedMedicalDrugsList);
+const selectedAllergiesList2 = computed(() => store2.selectedMedicalAllergiesList)
+const selectedMedicalDrugsList = computed(() => store.selectedMedicalDrugsList)
+const OPDDrugList = computed(() => store.partialOPDdrugList)
 const nonPharmalogicalTherapyAndOtherNotes = computed(() => store.nonPharmalogicalTherapyAndOtherNotes);
 const values = ["first", "second", "third"];
 const PreviuosSelectedMedicalDrugsList = ref();
@@ -576,7 +576,7 @@ async function FindDrugName(text: any) {
         other: drug,
     }))
 
-    diagnosisData.value = drugs
+    store.setPartialOPDdrugList(drugs)
 }
 
 async function FindDrugName2(text: any) {
@@ -591,15 +591,7 @@ async function FindDrugName2(text: any) {
         name: search_value,
         page: page,
         page_size: limit,
-    });
-    // const filter_id_array: any[] = []
-    // selectedAllergiesList2.value.forEach((selectedMedicalAllergy: any) => {
-    //     if (selectedMedicalAllergy.selected) {
-    //         filter_id_array.push(selectedMedicalAllergy.concept_id);
-    //     }
-    // })
-
-    //const filteredDrugs = filterArrayByIDs(drugs as any, filter_id_array as any);
+    })
 
     drugs.map((drug: any) => ({
         label: drug.name,
@@ -607,7 +599,7 @@ async function FindDrugName2(text: any) {
         other: drug,
     }));
 
-    diagnosisData.value = drugs;
+    store.setPartialOPDdrugList(drugs)
     return drugs;
 }
 
@@ -630,13 +622,6 @@ function isPresentInAllergyList(obj: any) {
 async function findIfDrugNameExists() {
     const filteredDrugs = await FindDrugName2(drugName.value);
     if (filteredDrugs.length > 0) {
-        // if (drugName.length > 0) {
-        //     filteredDrugs.forEach((drug: any) => {
-        //         if (drug.name === drugName) {
-        //             return true
-        //         }
-        //     })
-        // }
         if (drugName.value.length == 0) {
             return false;
         }
@@ -645,7 +630,6 @@ async function findIfDrugNameExists() {
 }
 
 function hasMatchingIDs(mainArray: any[], idsToFilter: any[]): boolean {
-    // Check if any item in mainArray has concept_id included in idsToFilter
     return mainArray.some((item: any) => 
         idsToFilter.includes(item.concept_id as never)
     );
@@ -663,7 +647,6 @@ function selectedDrugName(data: any) {
 function editItemAtIndex(index: any) {
     const dataItem = selectedMedicalDrugsList.value[index]
     selectedMedicalDrugsList.value.splice(index, 1)
-    selected_drug.value = dataItem
     drugName.value = dataItem.drugName
     dose.value = dataItem.dose
     selected_frequency.value = {label: dataItem.frequency, code: dataItem.frequency_code},
@@ -674,15 +657,6 @@ function editItemAtIndex(index: any) {
     selected_drug.value = {id:dataItem.drug_id, name:dataItem.drugdrugName}
     selected_pres_method.value = {id:dataItem.route_id, name: dataItem.route_name}
     saveStateValuesState()
-}
-
-function getDate(ev: any) {
-    const inputDate = new Date(ev.detail.value);
-    const year = inputDate.getFullYear();
-    const month = inputDate.getMonth() + 1;
-    const day = inputDate.getDate();
-    const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-    prescription.value = formattedDate;
 }
 
 function removeItemAtIndex(index: any) {
@@ -782,14 +756,14 @@ const dynamic_button_properties = [
     {
         showAddItemButton: true,
         addItemButton: true,
-        name: "add",
+        name: "Add",
         btnFill: 'clear',
         fn: saveData,
     },
     {
         showAddItemButton: true,
         addItemButton: true,
-        name: "cancel",
+        name: "Cancel",
         btnFill: 'clear',
         fn: addData,
     }
