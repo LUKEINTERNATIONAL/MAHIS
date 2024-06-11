@@ -24,7 +24,7 @@ export const useImmunizationStore = defineStore("immunizationStore", {
                   placeholder: "Pick the date",
                   required: true,
                   eventType: "input",
-                  inputWidth: "100%",
+                  inputWidth: "50%",
                   alertsError: false,
                   alertsErrorMassage: "",
                 },

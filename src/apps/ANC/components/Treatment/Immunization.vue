@@ -148,12 +148,6 @@ export default defineComponent ({
         }
       },
       handleTTinfo(){
-        // if(getRadioSelectedValue(this.lmnp,'The woman received tetanus doses for immunization?')=='under immunised'){
-        //   modifyFieldValue(this.ttDoses,'hepb1 Date','displayNone',false)
-        // }else{
-        //   modifyFieldValue(this.ttDoses,'hepb1 Date','displayNone',true)
-        // }
-        // console.log(getRadioSelectedValue(this.lmnp,'The woman received tetanus doses for immunization?'))
         this.setValues()
       },
         async setValues() {
@@ -173,7 +167,6 @@ export default defineComponent ({
       //   }
       //   console.log(getRadioSelectedValue(this.HepB3,'b3'))
       // },
-    //Method for navigating sections
 
     }
 
