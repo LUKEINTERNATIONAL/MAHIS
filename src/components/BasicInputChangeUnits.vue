@@ -1,6 +1,6 @@
 <template>
     <h6 v-if="inputHeader" :class="bold">{{ removeAsterisk(inputHeader) }} <span style="color: red" v-if="showAsterisk"> *</span></h6>
-    <div class="" :style="'width:' + inputWidth">
+    <div class="groupInput" :style="'width:' + inputWidth">
         <ion-input
             v-if="input == 'input'"
             @ionInput="handleInput"
@@ -27,35 +27,24 @@
                 <span v-if="unit">{{ unit }}</span>
             </ion-label>
         </ion-input>
-        <ion-textarea
-            v-if="input == 'textArea'"
-            :disabled="disabled"
-            @ionInput="handleInput"
-            @ionBlur="handleBlur"
-            @click="handleClick"
-            class="custom"
-            :placeholder="placeholder"
-            :auto-grow="true"
-            fill="outline"
-        >
-            <ion-label style="display: flex" slot="start">
-                <ion-icon v-if="icon" :icon="icon" aria-hidden="true"></ion-icon>
-                <span v-if="leftText" class="left-text"> {{ leftText }}</span>
-            </ion-label>
-            <ion-label v-if="unit || iconRight" slot="end" style="border-left: 1px solid #e6e6e6; padding-left: 10px">
-                <ion-icon v-if="iconRight" :icon="iconRight" aria-hidden="true"></ion-icon>
-                <span v-if="unit">{{ unit }}</span>
-            </ion-label>
-        </ion-textarea>
+        <VueMultiselect
+            v-if="unitsData.isSingleSelect"
+            @update:model-value="$emit('update:units', $event)"
+            v-model="unitsData.value"
+            :multiple="false"
+            :hide-selected="false"
+            :close-on-select="true"
+            :openDirection="unitsData.openDirection || 'bottom'"
+            tag-placeholder=""
+            placeholder=""
+            selectLabel=""
+            label="name"
+            :searchable="true"
+            @search-change="$emit('search-change', $event)"
+            :track-by="unitsData.trackBy || 'concept_id'"
+            :options="unitsData.multiSelectData"
+        />
     </div>
-    <SelectionPopover
-        v-if="eventType === 'input' || eventType === 'blur'"
-        :content="filteredData"
-        :popoverOpen="popoverOpen"
-        @closePopoover="popoverOpen = $event"
-        :event="event"
-        @setSelection="$emit('setPopoverValue', $event)"
-    />
 </template>
 
 <script lang="ts">
@@ -63,6 +52,7 @@ import { IonContent, IonHeader, IonItem, IonIcon, IonTitle, IonToolbar, IonMenu,
 import { defineComponent } from "vue";
 import SelectionPopover from "@/components/SelectionPopover.vue";
 import { caretDownSharp } from "ionicons/icons";
+import VueMultiselect from "vue-multiselect";
 import { size } from "lodash";
 
 export default defineComponent({
@@ -73,6 +63,7 @@ export default defineComponent({
         SelectionPopover,
         IonPopover,
         IonIcon,
+        VueMultiselect,
     },
     data() {
         return {
@@ -122,7 +113,7 @@ export default defineComponent({
             default: "",
         },
         inputType: {
-            default: "text" as any,
+            default: "" as any,
         },
         eventType: {
             type: String,
@@ -146,6 +137,9 @@ export default defineComponent({
                 name: "provide name",
                 show: false,
             },
+        },
+        unitsData: {
+            default: {} as any,
         },
     },
     methods: {
@@ -186,6 +180,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.multiselect::before {
+    content: "";
+}
 h6 {
     margin-top: 0px;
 }
@@ -197,5 +194,15 @@ h6 {
 }
 .custom {
     --background: #fff;
+}
+.groupInput {
+    display: flex;
+    border: solid 1px #b3b3b3;
+    border-radius: 4px;
+}
+ion-input {
+    --border-color: unset !important;
+    --border-radius: unset !important;
+    --background: none !important;
 }
 </style>

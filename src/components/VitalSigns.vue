@@ -42,6 +42,7 @@ import {
     getFieldValue,
     modifyRadioValue,
     modifyFieldValue,
+    modifyCheckboxValue,
 } from "@/services/data_helpers";
 import { find, isEmpty } from "lodash";
 import dayjs from "dayjs";
@@ -64,6 +65,7 @@ export default defineComponent({
             iconsContent: icons,
             BMI: {} as any,
             BPStatus: {} as any,
+            saveBtnStatus: {} as any,
             TempStatus: {} as any,
             PulseStatus: {} as any,
             RespiratoryStatus: {} as any,
@@ -78,7 +80,14 @@ export default defineComponent({
         vitals: {
             handler() {
                 this.checkHeight();
+            },
+            deep: true,
+        },
+        $route: {
+            handler() {
+                this.checkHeight();
                 this.setTodayVitals();
+                this.updateVitalsStores();
             },
             deep: true,
         },
@@ -89,31 +98,53 @@ export default defineComponent({
         ...mapState(useGeneralStore, ["activities"]),
     },
     async mounted() {
-        this.setTodayVitals();
+        await this.setTodayVitals();
         const userID: any = Service.getUserID();
         this.vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
-        this.validaterowData("onload");
+        await this.validaterowData("onload");
     },
     setup() {
         return { checkmark, pulseOutline };
     },
     methods: {
         async setTodayVitals() {
-            const array = ["Height", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
+            const array = ["Height (cm)", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
+            const mandatoryFields = ["Height (cm)", "Weight", "Systolic", "Diastolic", "Pulse"];
+            const mandatoryDone = [] as any;
             const promises = array.map(async (item: any) => {
                 const firstDate = await ObservationService.getFirstObsDatetime(this.demographics.patient_id, item);
                 if (firstDate && HisDate.toStandardHisFormat(firstDate) == HisDate.currentDate()) {
+                    if (item == "Weight") {
+                        modifyCheckboxValue(this.vitals, "Height And Weight Not Done", "displayNone", true);
+                    }
+                    if (item == "Systolic") {
+                        modifyCheckboxValue(this.vitals, "Blood Pressure Not Done", "displayNone", true);
+                    }
+                    if (item == "Pulse") {
+                        modifyCheckboxValue(this.vitals, "Pulse Rate Not Done", "displayNone", true);
+                    }
                     modifyFieldValue(
                         this.vitals,
                         item,
                         "value",
                         await ObservationService.getFirstValueNumber(this.demographics.patient_id, item, HisDate.currentDate())
                     );
+                    modifyFieldValue(this.vitals, item, "disabled", true);
+                    mandatoryDone.push("true");
+                } else if (mandatoryFields.includes(item)) {
+                    mandatoryDone.push("false");
+                } else {
+                    modifyFieldValue(this.vitals, item, "value", "");
                 }
             });
 
-            // Wait for all promises to resolve
             await Promise.all(promises);
+            if (!mandatoryDone.includes("false")) {
+                this.vitals[0].actionBtn = "Finish";
+            } else {
+                this.vitals[0].actionBtn = "Finish and Save";
+            }
+            return !mandatoryDone.includes("false");
         },
         navigationMenu(url: any) {
             menuController.close();
@@ -126,18 +157,18 @@ export default defineComponent({
         validationController(inputData: any) {
             if (inputData?.col?.name == "Height And Weight Not Done" && inputData.col.checked) {
                 modifyCheckboxInputField(this.vitals, "Height Weight Reason", "displayNone", false);
-                modifyFieldValue(this.vitals, "Height", "disabled", true);
+                modifyFieldValue(this.vitals, "Height (cm)", "disabled", true);
                 modifyFieldValue(this.vitals, "Weight", "disabled", true);
-                modifyFieldValue(this.vitals, "Height", "inputHeader", "Height");
+                modifyFieldValue(this.vitals, "Height (cm)", "inputHeader", "Height");
                 modifyFieldValue(this.vitals, "Weight", "inputHeader", "Weight");
-                modifyFieldValue(this.vitals, "Height", "value", "");
+                modifyFieldValue(this.vitals, "Height (cm)", "value", "");
                 modifyFieldValue(this.vitals, "Weight", "value", "");
                 this.validationStatus.heightWeight = false;
             } else if (inputData?.col?.name == "Height And Weight Not Done") {
                 modifyCheckboxInputField(this.vitals, "Height Weight Reason", "displayNone", true);
-                modifyFieldValue(this.vitals, "Height", "disabled", false);
+                modifyFieldValue(this.vitals, "Height (cm)", "disabled", false);
                 modifyFieldValue(this.vitals, "Weight", "disabled", false);
-                modifyFieldValue(this.vitals, "Height", "inputHeader", "Height*");
+                modifyFieldValue(this.vitals, "Height (cm)", "inputHeader", "Height*");
                 modifyFieldValue(this.vitals, "Weight", "inputHeader", "Weight*");
                 this.validationStatus.heightWeight = true;
             }
@@ -251,14 +282,14 @@ export default defineComponent({
                             if (validateResult?.length > 0) {
                                 this.hasValidationErrors.push("false");
                                 if (input.inputHeader === inputData.inputHeader) {
-                                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsError = true;
+                                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = true;
                                     this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage =
                                         validateResult.flat(Infinity)[0];
                                     return true;
                                 }
                             } else {
                                 this.hasValidationErrors.push("true");
-                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsError = false;
+                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = false;
                                 this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
                             }
 
@@ -278,6 +309,7 @@ export default defineComponent({
                     this.demographics.gender,
                     HisDate.calculateAge(this.demographics.birthdate, HisDate.currentDate())
                 );
+                console.log("🚀 ~ setBMI ~ this.BMI:", this.BMI);
                 this.updateBMI();
             }
         },

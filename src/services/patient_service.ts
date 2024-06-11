@@ -113,6 +113,9 @@ export class PatientService extends Service {
     updateMWNationalId(newId: string) {
         return PatientIdentifierService.create(this.getID(), 28, newId);
     }
+    updateBirthId(newId: string) {
+        return PatientIdentifierService.create(this.getID(), 23, newId);
+    }
 
     isMale() {
         return ["Male", "M"].includes(this.getGender());

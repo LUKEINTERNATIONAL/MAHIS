@@ -177,9 +177,9 @@ export default defineComponent({
             const firstCol = this.investigations[0].data.rowData[0].colData[0];
             const secondCol = this.investigations[0].data.rowData[0].colData[1];
 
-            firstCol.alertsError = false;
+            firstCol.alertsErrorMassage = false;
             firstCol.alertsErrorMassage = "";
-            secondCol.alertsError = false;
+            secondCol.alertsErrorMassage = false;
             secondCol.alertsErrorMassage = "";
 
             secondCol.disabled = false;
@@ -204,15 +204,19 @@ export default defineComponent({
                 } else {
                     secondCol.value = "";
                     this.search_item = true;
-                    firstCol.alertsError = true;
+                    firstCol.alertsErrorMassage = true;
                     firstCol.alertsErrorMassage = "Please select test from the list";
                 }
             } else {
                 secondCol.value = "";
             }
-
+            if (this.isNameInData(this.inputFields[0].value, await this.investigations[0].selectedData)) {
+                firstCol.alertsErrorMassage = true;
+                firstCol.alertsErrorMassage = "Lab order already selected";
+                return false;
+            }
             if (specimenValue && !specimenMatches && !secondCol.disabled) {
-                secondCol.alertsError = true;
+                secondCol.alertsErrorMassage = true;
                 secondCol.alertsErrorMassage = "Please select specimen from the list";
             }
 
@@ -229,6 +233,16 @@ export default defineComponent({
             }
             this.updateInvestigationWizard();
             this.investigations[0].data.rowData[0].colData[0].popOverData.data = [];
+        },
+        isNameInData(name: any, dataArray: any) {
+            for (let item of dataArray) {
+                for (let test of item.tests) {
+                    if (test.name === name) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         },
         async saveTest() {
             const investigationInstance = new LabOrder();

@@ -11,6 +11,15 @@ import { useNextAppointmentStore } from "@/stores/NextAppointmentStore";
 import { useRegistrationStore } from "@/stores/RegistrationStore";
 import { useGeneralStore } from "@/stores/GeneralStore";
 
+import { useAllegyStore } from "@/apps/OPD/stores/AllergyStore";
+import { useOPDDiagnosisStore } from "@/apps/OPD/stores/DiagnosisStore";
+import { useDispensationStore } from "@/apps/OPD/stores/DispensationStore";
+import { useLevelOfConsciousnessStore } from "@/apps/OPD/stores/LevelOfConsciousnessStore";
+import { useNonPharmacologicalInterventionStore } from "@/apps/OPD/stores/NonPharmacologicalInterventionStore";
+import { usePastMedicalHistoryStore } from "@/apps/OPD/stores/PastMedicalHistoryStore";
+import { usePregnancyStore } from "@/apps/OPD/stores/PregnancyStore";
+import { usePresentingComplaintsStore } from "@/apps/OPD/stores/PresentingComplaintsStore";
+
 import { useWeightHeightVitalsStore } from "@/apps/Immunization/stores/VitalsStore";
 
 export async function resetOPDPatientData() {
@@ -26,8 +35,15 @@ export async function resetOPDPatientData() {
     const nextAppointment = useNextAppointmentStore();
     const registration = useRegistrationStore();
     const weightHeightVitals = useWeightHeightVitalsStore();
+    const presentingComplaintsStore = usePresentingComplaintsStore();
+    const pastMedicalHistoryStore = usePastMedicalHistoryStore();
+    const OPDDiagnosisStore = useOPDDiagnosisStore();
 
-    vitals.setVitals(vitals.getInitialSocialHistory());
+    presentingComplaintsStore.setPresentingComplaints(presentingComplaintsStore.getInitial());
+    pastMedicalHistoryStore.setPastMedicalHistory(pastMedicalHistoryStore.getInitial());
+    OPDDiagnosisStore.setOPDDiagnosis(OPDDiagnosisStore.getInitial());
+
+    vitals.setVitals(vitals.getInitialVitals());
     registration.setPersonalInformation(registration.getInitialPersonalInformation());
     registration.setSocialHistory(registration.getInitialSocialHistory());
     registration.setHomeLocation(registration.getInitialHomeLocation());

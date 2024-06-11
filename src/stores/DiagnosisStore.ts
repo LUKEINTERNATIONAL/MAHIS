@@ -19,7 +19,6 @@ export const useDiagnosisStore = defineStore("DiagnosisStore", {
                                     name: "diagnosis",
                                     eventType: "input",
                                     required: true,
-                                    alertsError: false,
                                     alertsErrorMassage: "",
                                     popOverData: {
                                         filterData: false,

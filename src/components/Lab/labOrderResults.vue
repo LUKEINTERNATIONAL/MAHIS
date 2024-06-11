@@ -187,7 +187,6 @@ export default defineComponent({
                     name: item.name,
                     required: true,
                     eventType: "input",
-                    alertsError: false,
                     alertsErrorMassage: "",
                 });
             });

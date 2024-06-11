@@ -68,7 +68,7 @@
             </div>
         </ion-content>
         <div class="footer2" v-if="registrationDisplayType == 'grid' && screenWidth > 991">
-            <DynamicButton name="Save" iconSlot="end" :icon="iconsContent.saveWhite" @click="saveData()" />
+            <DynamicButton name="Save" iconSlot="end" :icon="iconsContent.saveWhite" :disabledValue="disableSaveBtn" @click="saveData()" />
         </div>
         <ion-footer v-if="(registrationType == 'manual' && registrationDisplayType == 'list') || screenWidth <= 991">
             <div class="footer position_content">
@@ -98,7 +98,14 @@
                     :icon="iconsContent.saveWhite"
                     @click="saveData()"
                 />
-                <DynamicButton v-else name="Next" iconSlot="end" :icon="iconsContent.arrowRightWhite" @click="nextStep" />
+                <DynamicButton
+                    v-else
+                    name="Next"
+                    :disabledValue="disableSaveBtn"
+                    iconSlot="end"
+                    :icon="iconsContent.arrowRightWhite"
+                    @click="nextStep"
+                />
             </div>
         </ion-footer>
     </ion-page>
@@ -134,6 +141,10 @@ import { useConfigurationStore } from "@/stores/ConfigurationStore";
 import { UserService } from "@/services/user_service";
 import { isEmpty } from "lodash";
 import { LocationService } from "@/services/location_service";
+import { useBirthRegistrationStore } from "@/apps/Immunization/stores/BirthRegistrationStore";
+import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from "@/services/formatServerData";
+import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
+import { AppEncounterService } from "@/services/app_encounter_service";
 
 export default defineComponent({
     components: {
@@ -166,6 +177,7 @@ export default defineComponent({
             checkUnderOne: false,
             steps: ["Personal Information", "Location", "Social History", "Guardian Information"],
             screenWidth: "" as any,
+            disableSaveBtn: false,
         };
     },
     props: ["registrationType"],
@@ -176,8 +188,12 @@ export default defineComponent({
         ...mapState(useRegistrationStore, ["currentLocation"]),
         ...mapState(useRegistrationStore, ["guardianInformation"]),
         ...mapState(useConfigurationStore, ["registrationDisplayType"]),
+        ...mapState(useBirthRegistrationStore, ["birthRegistration"]),
         nationalID() {
             return getFieldValue(this.personInformation, "nationalID", "value");
+        },
+        birthID() {
+            return getFieldValue(this.birthRegistration, "Serial Number", "value");
         },
         firstname() {
             return getFieldValue(this.personInformation, "firstname", "value");
@@ -265,8 +281,9 @@ export default defineComponent({
         },
         checkAge() {
             if (!isEmpty(this.birthdate)) {
+                console.log(HisDate.ageInMonths(this.birthdate));
                 this.checkUnderFive = HisDate.getAgeInYears(this.birthdate) >= 5 ? true : false;
-                this.checkUnderOne = HisDate.getAgeInYears(this.birthdate) <= 1 ? true : false;
+                this.checkUnderOne = HisDate.ageInMonths(this.birthdate) < 9 ? true : false;
             }
         },
         disableNationalIDInput() {
@@ -311,6 +328,12 @@ export default defineComponent({
                     return false;
                 }
             }
+            if (this.birthID != "") {
+                if (await this.birthIdExists(this.nationalID)) {
+                    toastWarning("The Birth ID is already assigned to another person");
+                    return false;
+                }
+            }
 
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
         },
@@ -318,25 +341,50 @@ export default defineComponent({
         async createPatient() {
             const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
             const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
-            if ((await this.validations(this.personInformation, fields)) && (await this.validations(this.currentLocation, currentFields))) {
+
+            if (
+                (await this.validations(this.personInformation, fields)) &&
+                (await this.validations(this.currentLocation, currentFields)) &&
+                this.validateBirthData()
+            ) {
+                this.disableSaveBtn = true;
                 await this.buildPersonalInformation();
                 if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
                 const registration: any = new PatientRegistrationService();
                 await registration.registerPatient(this.personInformation[0].selectedData, []);
                 const patientID = registration.getPersonID();
                 this.createNationID();
+                this.createBirthID();
                 if (Object.keys(this.guardianInformation[0].selectedData).length === 0) {
                     if (await this.validations(this.guardianInformation, ["guardianFirstname", "guardianLastname"])) {
                         this.createGuardian(patientID);
                     }
                 }
-
+                await this.saveBirthdayData(patientID);
                 this.findPatient(patientID);
                 toastSuccess("Successfully Created Patient");
                 return true;
             } else {
-                if (!(await this.mwIdExists(this.nationalID))) toastWarning("Please complete all required fields");
+                toastWarning("Please complete all required fields");
                 return false;
+            }
+        },
+        validateBirthData() {
+            if (this.checkUnderOne) {
+                return validateInputFiledData(this.birthRegistration);
+            } else {
+                return true;
+            }
+        },
+        async saveBirthdayData(patientID: any) {
+            const data = await formatInputFiledData(this.birthRegistration);
+            if (data.length > 0) {
+                const userID: any = Service.getUserID();
+
+                // Registration Encounter
+                const registration = new AppEncounterService(patientID, 5, userID);
+                await registration.createEncounter();
+                await registration.saveObservationList(data);
             }
         },
         async createNationID() {
@@ -345,14 +393,31 @@ export default defineComponent({
                 await patient.updateMWNationalId(getFieldValue(this.personInformation, "nationalID", "value"));
             }
         },
-        async mwIdExists(nid: string) {
+        async createBirthID() {
+            if (this.validatedBirthID()) {
+                const patient = new PatientService();
+                await patient.updateBirthId(this.birthID);
+            }
+        },
+        async mwIdExists(nid: any) {
+            return this.checkIDExistences(28, nid);
+        },
+        async birthIdExists(nid: any) {
+            return this.checkIDExistences(23, nid);
+        },
+        async checkIDExistences(nid: any, identifierId: any) {
             if (!nid) return false;
-            const people = await PatientService.findByOtherID(28, nid);
+            const people = await PatientService.findByOtherID(identifierId, nid);
             if (people.length > 0) return true;
             else return false;
         },
         validatedNationalID() {
-            if (this.nationalID != "" && !getFieldValue(this.personInformation, "nationalID", "alertsError")) {
+            if (this.nationalID != "" && !getFieldValue(this.personInformation, "nationalID", "alertsErrorMassage")) {
+                return true;
+            } else return false;
+        },
+        validatedBirthID() {
+            if (this.birthID != "" && !getFieldValue(this.birthRegistration, "Serial Number", "alertsErrorMassage")) {
                 return true;
             } else return false;
         },
@@ -385,7 +450,7 @@ export default defineComponent({
                 phone: item.person.person_attributes.find((attribute: any) => attribute.type.name === "Cell Phone Number")?.value,
             });
             let url = "/patientProfile";
-            const patient = new PatientService();
+            this.disableSaveBtn = false;
             this.$router.push(url);
         },
         patientIdentifier(item: any) {

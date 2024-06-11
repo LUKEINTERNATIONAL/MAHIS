@@ -5,6 +5,12 @@ export function modifyFieldValue(data: any, fieldName: any, element: any, newVal
         if (colData) colData[element] = newValue;
     }
 }
+export function modifyUnitsValue(data: any, fieldName: any, element: any, newValue: any) {
+    for (const item of data) {
+        const colData = data.flatMap((item: any) => item.data?.rowData?.[0]?.colData).find((col: any) => col?.name === fieldName);
+        if (colData) colData["unitsData"][element] = newValue;
+    }
+}
 export function modifyDynamicFieldValue(id: any, data: any, fieldName: any, element: any, newValue: any) {
     for (const item of data) {
         if (item.data.id === id && item.data.rowData[0].colData[0].name === fieldName) {

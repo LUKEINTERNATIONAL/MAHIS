@@ -1,4 +1,4 @@
-import { isEmpty, isPlainObject } from "lodash";
+import { isEmpty, isPlainObject, isArray } from "lodash";
 
 function validateSeries(conditions: Array<any>) {
     try {
@@ -59,7 +59,7 @@ function isNameEmpty(value: any): null | string {
 }
 
 function isNumber(val: any) {
-    return isNaN(parseInt(val)) ? "Value must be a number" : null;
+    return isNaN(val) ? "Value must be a number" : null;
 }
 function isWholeNumber(val: any): null | string {
     // Regular expression to match only whole numbers
@@ -123,9 +123,19 @@ function isDate(value: any): null | string {
 
     return null;
 }
-
+function isNotEmptyandNumber(value: any) {
+    return `${value}`.match(/^-?\d+\.?\d*$/) ? null : `Invalid entry`;
+}
+function validateWeight(val: any) {
+    return isNotEmptyandNumber(val) || checkMinMax(val, 2.0, 250.0);
+}
+function validateHeight(val: any) {
+    return isNotEmptyandNumber(val) || checkMinMax(val, 40, 220);
+}
 
 export default {
+    validateHeight,
+    validateWeight,
     isFloatingPointNumber,
     validateSeries,
     required,
@@ -143,5 +153,5 @@ export default {
     isMWNationalID,
     isEstimationDate,
     checkMinMax,
-    isDate
-};
+    isDate,
+} as any;

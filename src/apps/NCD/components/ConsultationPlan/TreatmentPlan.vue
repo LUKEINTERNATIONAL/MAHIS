@@ -280,14 +280,14 @@
             
             <ion-item class="input_item" style="min-height: 120px; margin-top: 14px">
                 <ion-label> <ion-icon slot="start" :icon="iconsContent.editPen" aria-hidden="true"></ion-icon> </ion-label>
-                <ion-textarea
+                <IonTextarea
                     @ionInput="validateNotes"
                     v-model="nonPharmalogicalTherapyAndOtherNotes"
                     style="min-height: 120px"
                     class="inputTpln"
                     :auto-grow="true"
                     fill="outline"
-                ></ion-textarea>
+                />
             </ion-item>
         </div>
         <div style="margin-top: 14px; margin-left: 10px">
