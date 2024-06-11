@@ -1,5 +1,14 @@
 <template>
   <div class="container">
+      <!-- Pallor -->
+      <ion-card class="section">
+      <ion-card-header>
+        <ion-card-title class="dashed_bottom_border sub_item_header">Respiratory exam findings</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <basic-form :contentData="respiratory"></basic-form>
+      </ion-card-content>
+    </ion-card>
     <!-- Pallor -->
     <ion-card class="section">
       <ion-card-header>
@@ -107,7 +116,7 @@ export default defineComponent({
     };
   },
   computed:{
-
+    ...mapState(useMaternalExamStore,["respiratory"]),
     ...mapState(useMaternalExamStore,["pallor"]),
     ...mapState(useMaternalExamStore,["breastExam"]),
     ...mapState(useMaternalExamStore,["vaginalInspection"]),

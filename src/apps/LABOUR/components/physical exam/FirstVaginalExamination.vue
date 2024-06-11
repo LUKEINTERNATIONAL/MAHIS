@@ -38,7 +38,7 @@ import {
 import BasicCard from "@/components/BasicCard.vue";
 import {usefirstVaginalExaminationStore} from "@/apps/LABOUR/stores/physical exam/firstVaginalExamination";
 export default defineComponent({
-  name: "FirstVaginalExamination",
+  name: "FirstVaginalExamination", 
   components:{
     BasicCard,
     IonContent,

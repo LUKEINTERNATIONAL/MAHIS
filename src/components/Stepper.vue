@@ -99,6 +99,7 @@ import SpecificHealthConcerns from "@/apps/ANC/components/quick check/SpecificHe
 import FetalAssessment from "@/apps/ANC/components/physical exam/FetalAssessment.vue";
 import FetalPresentation from "@/apps/ANC/components/physical exam/FetalPresentation.vue";
 import MaternalExam from "@/apps/ANC/components/physical exam/MaternalExam.vue";
+import Vitals from "@/apps/ANC/components/physical exam/Vitals.vue";
 import PresentingSigns from "@/apps/ANC/components/physical exam/PresentingSigns.vue";
 import CurrentPregnancies from "@/apps/ANC/components/profile/CurrentPregnancies.vue";
 import PastObstreticHistory from "@/apps/ANC/components/profile/PastObstreticHistory.vue";
@@ -204,6 +205,7 @@ export default defineComponent({
         SpecificHealthConcerns,
         FetalPresentation,
         FetalAssessment,
+        Vitals,
         MaternalExam,
         PresentingSigns,
         CurrentPregnancies,
