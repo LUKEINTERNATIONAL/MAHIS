@@ -98,6 +98,7 @@
                                 {{ col.inputHeader.replace(/\*/g, "") }} <span style="color: red" v-if="col.inputHeader.includes('*')"> *</span>
                             </h6>
                             <VueMultiselect
+                                v-if="col.inputFieldDisplayNone"
                                 v-model="col.value"
                                 :max-height="150"
                                 @update:model-value="handleInput(contentData, col, $event, 'updateMultiselect')"

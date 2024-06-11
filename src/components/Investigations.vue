@@ -4,7 +4,7 @@
             <ion-item slot="header" color="light">
                 <ion-label class="previousLabel">Lab Investigations</ion-label>
             </ion-item>
-            <div class="ion-padding" slot="content">
+            <div class="ion-padding" slot="content" style="margin-bottom: 125px">
                 <span>
                     <labOrderResults :propOrders="orders" />
                 </span>
@@ -143,7 +143,10 @@ export default defineComponent({
         this.updateInvestigationsStores();
         this.setDashedBox();
         this.updateInvestigationWizard();
-        this.labOrders = await OrderService.getTestTypes();
+
+        this.specimen = await OrderService.getSpecimens("");
+        modifyFieldValue(this.investigations, "specimen", "multiSelectData", this.specimen);
+        modifyFieldValue(this.investigations, "specimen", "inputFieldDisplayNone", true);
     },
 
     methods: {
@@ -200,7 +203,7 @@ export default defineComponent({
                         secondCol.value = this.specimen[0].name;
                         secondCol.disabled = true;
                     }
-                    secondCol.popOverData.data = this.specimen;
+                    secondCol.multiSelectData = this.specimen;
                 } else {
                     secondCol.value = "";
                     this.search_item = true;
@@ -232,7 +235,7 @@ export default defineComponent({
                 this.addItemButton = true;
             }
             this.updateInvestigationWizard();
-            this.investigations[0].data.rowData[0].colData[0].popOverData.data = [];
+            this.investigations[0].data.rowData[0].colData[0].multiSelectData = [];
         },
         isNameInData(name: any, dataArray: any) {
             for (let item of dataArray) {
@@ -259,12 +262,20 @@ export default defineComponent({
         },
 
         async handleInputData(col: any) {
-            if (col.inputHeader == "Test") {
-                this.popoverOpen = true;
-                this.testData = await this.filterTest(col.value);
-                this.investigations[0].data.rowData[0].colData[0].popOverData.data = this.testData;
+            if (col.inputHeader == "Specimen") {
+                modifyFieldValue(this.investigations, "test", "value", "");
             }
-            this.validateRowData();
+            if (col.inputHeader == "Specimen" && col.value) {
+                this.labOrders = await OrderService.getTestTypesBySpecimen(col.value.name);
+                modifyFieldValue(this.investigations, "test", "disabled", false);
+                modifyFieldValue(this.investigations, "test", "multiSelectData", this.labOrders);
+            }
+            // if (col.inputHeader == "Test") {
+            //     this.popoverOpen = true;
+            //     this.testData = await this.filterTest(col.value);
+            //     this.investigations[0].data.rowData[0].colData[0].multiSelectData = this.testData;
+            // }
+            // this.validateRowData();
         },
 
         async filterTest(name: any) {

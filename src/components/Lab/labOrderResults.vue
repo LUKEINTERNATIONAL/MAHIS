@@ -179,7 +179,7 @@ export default defineComponent({
                 },
             ] as any;
             testIndicators.forEach((item: any) => {
-                indicators[1].data.rowData[0].colData.push({
+                let data = {
                     inputHeader: item.name,
                     value: "",
                     colSize: 3,
@@ -188,7 +188,33 @@ export default defineComponent({
                     required: true,
                     eventType: "input",
                     alertsErrorMassage: "",
-                });
+                };
+                console.log("🚀 ~ testIndicators.forEach ~ item.name:", item.name);
+                if (item.name == "MRDT") {
+                    let multiData = [] as any;
+                    if (item.name == "MRDT") {
+                        multiData = [
+                            { id: "1", name: "Positive" },
+                            { id: "2", name: "Negative" },
+                            { id: "3", name: "Invalid" },
+                        ];
+                    }
+
+                    data = {
+                        inputHeader: "Duration Units",
+                        icon: icons.search,
+                        value: "",
+                        name: "units",
+                        eventType: "input",
+                        alertsErrorMassage: "",
+                        isSingleSelect: true,
+                        trackBy: "id",
+                        multiSelectData: multiData,
+                        id: "",
+                        idName: "district_id",
+                    };
+                }
+                indicators[1].data.rowData[0].colData.push(data);
             });
             const lab = useLabResultsStore();
             lab.setLabResults(indicators);
