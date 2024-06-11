@@ -27,7 +27,7 @@ export async function resetNCDPatientData() {
     const registration = useRegistrationStore();
     const weightHeightVitals = useWeightHeightVitalsStore();
 
-    vitals.setVitals(vitals.getInitialSocialHistory());
+    vitals.setVitals(vitals.getInitialVitals());
     registration.setPersonalInformation(registration.getInitialPersonalInformation());
     registration.setSocialHistory(registration.getInitialSocialHistory());
     registration.setHomeLocation(registration.getInitialHomeLocation());
