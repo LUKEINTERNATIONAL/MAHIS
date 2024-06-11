@@ -454,7 +454,7 @@ ion-accordion {
     top: 95%;
 }
 .multiselect::before {
-    content: url("/public/svg/searchIcon.svg");
+    content: url("/svg/searchIcon.svg");
     position: absolute;
     font-size: 40px;
     margin-left: 15px;

@@ -3,6 +3,7 @@
     <ion-card class="section">
             <ion-card-header> <ion-card-title class="dashed_bottom_border sub_item_header"></ion-card-title></ion-card-header>
             <ion-card-content>
+                <basic-form :contentData="ttDoses"></basic-form>
                 <basic-form :contentData="HepB1"></basic-form>
                 <basic-form :contentData="HepB2"></basic-form>
                 <basic-form :contentData="HepB3"></basic-form>
@@ -69,12 +70,6 @@ export default defineComponent ({
     },
     computed:{
         ...mapState(useImmunizationStore, ["ttDoses"]),
-        // ...mapState(useImmunizationStore, ["tt1"]),
-        // ...mapState(useImmunizationStore, ["tt2"]),
-        // ...mapState(useImmunizationStore, ["tt3"]),
-        // ...mapState(useImmunizationStore, ["tt4"]),
-        // ...mapState(useImmunizationStore, ["tt5"]),
-        // ...mapState(useImmunizationStore, ["ttReason"]),
         ...mapState(useImmunizationStore, ["HepB1"]),
         ...mapState(useImmunizationStore, ["HepB2"]),
         ...mapState(useImmunizationStore, ["HepB3"]),

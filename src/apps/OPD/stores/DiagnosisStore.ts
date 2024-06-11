@@ -33,7 +33,6 @@ const initialOPDdiagnosis = [
                             multiSelectData: [],
                             eventType: "input",
                             required: true,
-                            alertsError: false,
                             alertsErrorMassage: "",
                             id: "",
                             idName: "district_id",

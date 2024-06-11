@@ -117,14 +117,14 @@ export default defineComponent({
                         if (validateResult?.length > 0) {
                             this.hasValidationErrors.push("false");
                             if (input.inputHeader === inputData.inputHeader) {
-                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsError = true;
+                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = true;
                                 this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage =
                                     validateResult.flat(Infinity)[0];
                                 return true;
                             } 
                         } else {
                             this.hasValidationErrors.push("true");
-                            this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsError = false;
+                            this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = false;
                             this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
                         }
 
