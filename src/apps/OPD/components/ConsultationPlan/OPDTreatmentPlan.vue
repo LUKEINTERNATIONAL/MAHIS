@@ -16,7 +16,7 @@
         <ion-accordion-group ref="accordionGroup" class="previousView">
             <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
                 <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Allergies</ion-label>
+                    <ion-label class="previousLabel">Documented allergies timeline</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
                     <div class="ionLbltp" v-for="(item, index) in FirstPreviousAllegies" :key="index">
@@ -84,8 +84,8 @@
                         :hide-selected="true"
                         :close-on-select="true"
                         openDirection="bottom"
-                        tag-placeholder="Find and select medication"
-                        placeholder="Find and select medication"
+                        tag-placeholder="Select medication"
+                        placeholder="Select medication"
                         selectLabel=""
                         label="name"
                         :searchable="true"
@@ -107,8 +107,8 @@
                         :hide-selected="true"
                         :close-on-select="true"
                         openDirection="bottom"
-                        tag-placeholder="Select method of prescription"
-                        placeholder="Select method of prescription"
+                        tag-placeholder="Select route"
+                        placeholder="Select route"
                         selectLabel=""
                         label="name"
                         :searchable="true"
@@ -116,6 +116,9 @@
                         track-by="id"
                         :options="route_list"
                     />
+                    <div>
+                        <ion-label v-if="show_error_msg_for_duration" class="error-label">{{ durationErrMsg }}</ion-label>
+                    </div>
                 </ion-col>
 
 
@@ -129,8 +132,8 @@
                         :hide-selected="true"
                         :close-on-select="true"
                         openDirection="bottom"
-                        tag-placeholder="Select Frequency"
-                        placeholder="Select Frequency"
+                        tag-placeholder="Frequency"
+                        placeholder="Frequency"
                         selectLabel=""
                         label="label"
                         :searchable="true"
@@ -138,6 +141,9 @@
                         track-by="code"
                         :options="drug_frequencies"
                     />
+                    <div>
+                        <ion-label v-if="show_error_msg_for_duration" class="error-label">{{ durationErrMsg }}</ion-label>
+                    </div>
                 </ion-col>
             </ion-row>
 
@@ -154,7 +160,7 @@
 
                 <ion-col>
                     <ion-item class="input_item">
-                        <ion-input placeholder="Duration" v-model="duration" fill="outline"></ion-input>
+                        <ion-input placeholder="Duration in days" v-model="duration" fill="outline"></ion-input>
                         <ion-label><span class="selectedPatient"></span></ion-label>
                     </ion-item>
                     <div>
@@ -741,6 +747,7 @@ function removeItemAtIndex(index: any) {
     selectedMedicalDrugsList.value.splice(index, 1);
     componentKey.value++;
     saveStateValuesState();
+    toastWarning("you have removed a drug from list", 6000)
 }
 
 function validateNotes(ev: any) {
@@ -837,7 +844,7 @@ const dynamic_button_properties = [
     {
         showAddItemButton: true,
         addItemButton: true,
-        name: "save",
+        name: "add",
         btnFill: 'clear',
         fn: saveData,
     },
