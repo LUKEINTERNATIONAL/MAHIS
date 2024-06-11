@@ -11,7 +11,7 @@ import { useRegistrationStore } from "@/stores/RegistrationStore";
 import { mapState } from "pinia";
 import BasicCard from "../BasicCard.vue";
 import HisDate from "@/utils/Date";
-import { getFieldValue, getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
+import { getCheckboxSelectedValue, getFieldValue, getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
 import { validateField } from "@/services/validation_service";
 import dayjs from "dayjs";
 import { Service } from "@/services/service";
@@ -41,6 +41,7 @@ export default defineComponent({
         personInformation: {
             handler() {
                 this.buildCards();
+                this.calculateDoB(event);
             },
             deep: true,
         },
@@ -79,6 +80,7 @@ export default defineComponent({
     async mounted() {
         this.updateRegistrationStores();
         this.buildCards();
+        this.calculateDoB(event);
     },
 
     methods: {
@@ -110,6 +112,9 @@ export default defineComponent({
         async handleInputData(event: any) {
             if (event?.col?.name == "Estimate Age" && !event?.col?.checked) {
                 modifyFieldValue(this.personInformation, "estimation", "displayNone", true);
+            }else{
+               // modifyFieldValue(this.personInformation,'birthdate','disabled',true)
+                console.log("-------")
             }
             // Estimated age
             this.validationRules(event);
@@ -128,15 +133,42 @@ export default defineComponent({
                 event.value < 17 ? updateGuardianInfo(false) : updateGuardianInfo(true);
             }
         },
-        calculateDoB(event: any) {
-            if (event.name == "estimation") {
-                const year = dayjs(Service.getSessionDate())
-                    .subtract(event.value as number, "years")
-                    .year();
-                modifyFieldValue(this.personInformation, "birthdate", "value", HisDate.toStandardHisDisplayFormat(`${year}-06-15`));
-                return `${year}-06-15`;
-            }
-        },
+        // calculateDoB(event: any) {
+        //     if (event.name == "estimation") {
+        //         const year = dayjs(Service.getSessionDate())
+        //             .subtract(event.value as number, "years")
+        //             .year();
+        //         modifyFieldValue(this.personInformation, "birthdate", "value", HisDate.toStandardHisDisplayFormat(`${year}-06-15`));
+        //         return `${year}-06-15`;
+        //     }
+        // },
+    calculateDoB(event: any) {
+        console.log(";;;;;;;;;;;;;")
+    if (event.name === "estimation") {
+        const unit = event.unitsData.value.name; 
+        const value = event.value as number;
+        let sessionDate = dayjs(Service.getSessionDate());
+        switch (unit) {
+            case "Days":
+                sessionDate = sessionDate.subtract(value, "days");
+                break;
+            case "Months":
+                sessionDate = sessionDate.subtract(value, "months");
+                break;
+            case "Years":
+                sessionDate = sessionDate.subtract(value, "years");
+                break;
+            default:
+                throw new Error("Invalid unit");
+        }
+        const formattedDate = HisDate.toStandardHisDisplayFormat(sessionDate.format("YYYY-MM-DD"));
+        modifyFieldValue(this.personInformation, "birthdate", "value", formattedDate);
+        
+        return formattedDate;
+    }
+}
+
+
     },
 });
 </script>
