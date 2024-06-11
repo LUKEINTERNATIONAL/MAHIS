@@ -1,5 +1,5 @@
 <template>
-    <div v-if="formOpen"  class="modal_wrapper">
+    <div v-if="formOpen" class="modal_wrapper">
         <div class="OtherVitalsHeading">
             <div class="OtherVitalsTitle">OTHER VITALS</div>
             <div class="TodaysDate">Todays Date: <span></span> {{ todays_date }}</div>
@@ -83,10 +83,10 @@ export default defineComponent({
             vValidations: "" as any,
             hasValidationErrors: [] as any,
             vitalsInstance: {} as any,
-            validationStatus: { heightWeight: false, bloodPressure: false , pulseRate: false  } as any,
+            validationStatus: { heightWeight: false, bloodPressure: false, pulseRate: false } as any,
             showPD: false as boolean,
             todays_date: HisDate.currentDate(),
-            formOpen: true
+            formOpen: true,
         };
     },
     computed: {
@@ -102,7 +102,7 @@ export default defineComponent({
         const array = ["height", "weight", "Systolic blood pressure", "Diastolic blood pressure", "Temp", "Pulse", "SP02", "Respiratory"];
 
         // An array to store all promises
-        const promises = array.map(async (item: any) => {            
+        const promises = array.map(async (item: any) => {
             if (
                 HisDate.toStandardHisFormat(await ObservationService.getFirstObsDatetime(this.demographics.patient_id, item)) == HisDate.currentDate()
             ) {
@@ -135,12 +135,11 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     methods: {
-
         navigationMenu(url: any) {
             menuController.close();
             this.$router.push(url);
         },
-        updateVitalsStores() {     
+        updateVitalsStores() {
             const vitalsStore = useVitalsStore();
             vitalsStore.setVitals(this.vitals);
         },
@@ -201,7 +200,6 @@ export default defineComponent({
             this.vitals.forEach((section: any, sectionIndex: any) => {
                 if (section?.data?.rowData) {
                     section?.data?.rowData.forEach((col: any, colIndex: any) => {
-
                         if (col.colData[0].inputHeader == "Systolic Pressure*") {
                             const isSystolicValid =
                                 this.vitalsInstance.validator(col.colData[0]) == null && this.vitalsInstance.validator(col.colData[1]) == null;
@@ -214,21 +212,21 @@ export default defineComponent({
                                 this.vitalsInstance.validator(col.colData[0]) == null && this.vitalsInstance.validator(col.colData[1]) == null;
                             this.BMI = isHeightValid ? this.setBMI(col.colData[1].value, col.colData[0].value) : {};
                             this.updateBMI();
-                        }                       
+                        }
 
                         col.colData.some((input: any, inputIndex: any) => {
                             const validateResult = this.vitalsInstance.validator(input);
                             if (validateResult?.length > 0) {
                                 this.hasValidationErrors.push("false");
                                 if (input.inputHeader === inputData.inputHeader) {
-                                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsError = true;
+                                    this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = true;
                                     this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage =
                                         validateResult.flat(Infinity)[0];
                                     return true;
                                 }
                             } else {
                                 this.hasValidationErrors.push("true");
-                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsError = false;
+                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = false;
                                 this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
                             }
 
@@ -335,14 +333,13 @@ export default defineComponent({
             this.formOpen = false;
         },
         saveVitals() {
-
-              const userID: any = Service.getUserID();
-              const vitalsService =  new VitalsService(this.demographics.patient_id, userID)
-              const vitalsToSave = this.vitals;              
-              vitalsService.onFinish(vitalsToSave).then(() => {
+            const userID: any = Service.getUserID();
+            const vitalsService = new VitalsService(this.demographics.patient_id, userID);
+            const vitalsToSave = this.vitals;
+            vitalsService.onFinish(vitalsToSave).then(() => {
                 this.closeForm();
-              })
-         }
+            });
+        },
     },
 });
 </script>

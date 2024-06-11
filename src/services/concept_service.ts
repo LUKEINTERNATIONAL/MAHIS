@@ -45,7 +45,7 @@ export class ConceptService extends Service {
         return this.getConceptNameFromApi(conceptId);
     }
 
-    static getConceptID(conceptName: string, strictMode = false) {
+    static getConceptID(conceptName: string, strictMode = true) {
         try {
             return this.getCachedConceptID(conceptName, strictMode);
         } catch (e) {

@@ -72,7 +72,6 @@ const initialPastMedicalHistory = [
                             name: "TB drugs",
                             eventType: "input",
                             required: true,
-                            alertsError: false,
                             alertsErrorMassage: "",
                             popOverData: {
                                 filterData: true,
@@ -91,7 +90,6 @@ const initialPastMedicalHistory = [
                             name: "TB drug start date",
                             eventType: "input",
                             required: true,
-                            alertsError: false,
                             alertsErrorMassage: "",
                             id: "",
                             idName: "startDate",
@@ -288,7 +286,6 @@ const initialPastMedicalHistory = [
                             name: "Current hypertension treatment regimen",
                             eventType: "input",
                             required: true,
-                            alertsError: false,
                             alertsErrorMassage: "",
                             popOverData: {
                                 filterData: false,
@@ -366,7 +363,6 @@ const initialPastMedicalHistory = [
                             name: "ARV start date",
                             eventType: "input",
                             required: true,
-                            alertsError: false,
                             alertsErrorMassage: "",
                             idName: "medication",
                             placeholder: "Pick the date",

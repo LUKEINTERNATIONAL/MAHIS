@@ -24,11 +24,11 @@ export async function formatInputFiledData(data: any, obs_datetime = ConceptServ
             item.data.rowData[0].colData.map(async (element: any) => {
                 let value = "";
                 if (element.isSingleSelect) {
-                    value = element.value.name;
+                    value = element?.value?.name;
                 } else {
-                    value = element.value;
+                    value = element?.value;
                 }
-                if (!value || element.buildConceptIgnore) return null;
+                if (element.buildConceptIgnore || !value ) return null;
 
                 const concept_id = await ConceptService.getConceptID(element.name, true);
 

@@ -2,9 +2,10 @@ import { modifyFieldValue, modifyRadioValue, modifyCheckboxValue, modifyCheckbox
 import Validation from "@/validations/StandardValidations";
 
 export function validateField(data: any, fieldName: string, value: any) {
+    const test = "isName";
     const validationRules: any = {
         nationalID: () => Validation.isMWNationalID(value),
-        firstname: () => Validation.isName(value),
+        firstname: () => Validation[test](value),
         lastname: () => Validation.isName(value),
         middleName: () => Validation.isNameEmpty(value),
         birthdate: () => Validation.required(value),
@@ -21,8 +22,8 @@ export function validateField(data: any, fieldName: string, value: any) {
     };
     const isValid = validationRules[fieldName]?.() == null;
 
-    modifyFieldValue(data, fieldName, "alertsError", !isValid);
-    modifyRadioValue(data, fieldName, "alertsError", !isValid);
+    modifyFieldValue(data, fieldName, "alertsErrorMassage", !isValid);
+    modifyRadioValue(data, fieldName, "alertsErrorMassage", !isValid);
 
     if (!isValid) {
         modifyFieldValue(data, fieldName, "alertsErrorMassage", validationRules[fieldName]?.());

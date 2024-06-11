@@ -12,7 +12,6 @@ const initialSessionDate = [
                             value: "",
                             name: "sessionDate",
                             eventType: "input",
-                            alertsError: false,
                             alertsErrorMassage: "",
                             required: true,
                             isDatePopover: true,

@@ -41,9 +41,6 @@
                     </ion-accordion>
                 </ion-accordion-group>
                 <hr style="background: rgba(0, 0, 0, 0.13)" />
-                <div style="float: right">
-                    <DynamicButton name="Finish and Save" iconSlot="end" @click="$emit('finishBtn')" />
-                </div>
             </div>
         </ion-col>
     </ion-row>
@@ -394,7 +391,7 @@ ion-accordion.accordion-expanded ion-item[slot="header"] {
 }
 .accordion_group {
     /* position: fixed; */
-    height: 700px;
+    height: 78vh;
     /* width: 58%; */
     overflow-y: auto;
     top: 200px;

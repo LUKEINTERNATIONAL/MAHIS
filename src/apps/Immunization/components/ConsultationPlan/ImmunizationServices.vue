@@ -286,9 +286,9 @@ export default defineComponent({
             const firstCol = this.investigations[0].data.rowData[0].colData[0];
             const secondCol = this.investigations[0].data.rowData[0].colData[1];
 
-            firstCol.alertsError = false;
+            firstCol.alertsErrorMassage = false;
             firstCol.alertsErrorMassage = "";
-            secondCol.alertsError = false;
+            secondCol.alertsErrorMassage = false;
             secondCol.alertsErrorMassage = "";
 
             secondCol.disabled = false;
@@ -313,7 +313,7 @@ export default defineComponent({
                 } else {
                     secondCol.value = "";
                     this.search_item = true;
-                    firstCol.alertsError = true;
+                    firstCol.alertsErrorMassage = true;
                     firstCol.alertsErrorMassage = "Please select test from the list";
                 }
             } else {
@@ -321,7 +321,7 @@ export default defineComponent({
             }
 
             if (specimenValue && !specimenMatches && !secondCol.disabled) {
-                secondCol.alertsError = true;
+                secondCol.alertsErrorMassage = true;
                 secondCol.alertsErrorMassage = "Please select specimen from the list";
             }
 

@@ -5,6 +5,7 @@
             <DemographicBar />
             <Stepper stepperTitle="Vitals" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData" />
         </ion-content>
+        <BasicFooter :name="actionBtn" @finishBtn="saveData()" />
     </ion-page>
 </template>
 
@@ -31,6 +32,7 @@ import {
     AccordionGroupCustomEvent,
 } from "@ionic/vue";
 import Toolbar from "@/components/Toolbar.vue";
+import BasicFooter from "@/components/BasicFooter.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import DemographicBar from "@/components/DemographicBar.vue";
 import { chevronBackOutline, checkmark } from "ionicons/icons";
@@ -81,11 +83,13 @@ export default defineComponent({
         IonLabel,
         IonModal,
         Stepper,
+        BasicFooter,
     },
     data() {
         return {
             hasValidationErrors: [] as any,
             dispositions: "" as any,
+            actionBtn: "" as any,
             wizardData: [
                 {
                     title: "Vital Signs",
@@ -145,6 +149,7 @@ export default defineComponent({
 
     methods: {
         markWizard() {
+            this.actionBtn = this.vitals[0].actionBtn;
             if (this.vitals.validationStatus) {
                 this.wizardData[0].checked = true;
                 this.wizardData[0].class = "open_step common_step";
@@ -153,13 +158,17 @@ export default defineComponent({
             }
         },
         async saveData() {
-            if (this.vitals.validationStatus) {
-                await this.saveVitals();
-                resetOPDPatientData();
-                this.$router.push("OPDConsultationPlan");
+            if (this.actionBtn != "Finish") {
+                if (this.vitals.validationStatus) {
+                    await this.saveVitals();
+                    resetOPDPatientData();
+                    this.$router.push("OPDConsultationPlan");
+                } else {
+                    await this.validaterowData();
+                    toastWarning("Please fill all required fields");
+                }
             } else {
-                await this.validaterowData();
-                toastWarning("Please fill all required fields");
+                this.$router.push("OPDConsultationPlan");
             }
         },
         async saveVitals() {
@@ -177,13 +186,13 @@ export default defineComponent({
                             const validateResult = vitalsInstance.validator(input);
                             if (validateResult?.length > 0) {
                                 this.hasValidationErrors.push("false");
-                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsError = true;
+                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = true;
                                 this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage =
                                     validateResult.flat(Infinity)[0];
                                 return true;
                             } else {
                                 this.hasValidationErrors.push("true");
-                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsError = false;
+                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = false;
                                 this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
                             }
 

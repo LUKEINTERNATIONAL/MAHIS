@@ -147,6 +147,7 @@ export default defineComponent({
     methods: {
         async getPresenting() {
             this.complaints = await PatientComplaintsService.getComplaintsList("Presenting complaint");
+            console.log("🚀 ~ getPresenting ~ this.complaints :", this.complaints);
             modifyFieldValue(this.presentingComplaints, "PresentingComplaints", "multiSelectData", this.complaints);
         },
         displayInputFields() {
@@ -156,14 +157,14 @@ export default defineComponent({
             this.search_item = true;
         },
         async validaterowData() {
-            this.presentingComplaints[0].data.rowData[0].colData[0].alertsError = false;
+            this.presentingComplaints[0].data.rowData[0].colData[0].alertsErrorMassage = false;
             this.presentingComplaints[0].data.rowData[0].colData[0].alertsErrorMassage = "";
 
             if (this.inputFields[0].value.name) {
                 return true;
             } else {
                 this.search_item = true;
-                this.presentingComplaints[0].data.rowData[0].colData[0].alertsError = true;
+                this.presentingComplaints[0].data.rowData[0].colData[0].alertsErrorMassage = true;
                 this.presentingComplaints[0].data.rowData[0].colData[0].alertsErrorMassage = "Please select presenting complaints from the list";
                 return false;
             }
@@ -235,10 +236,10 @@ export default defineComponent({
             }
         },
         validateDuration() {
-            this.presentingComplaints[0].data.rowData[0].colData[1].alertsError = false;
+            this.presentingComplaints[0].data.rowData[0].colData[1].alertsErrorMassage = false;
             this.presentingComplaints[0].data.rowData[0].colData[1].alertsErrorMassage = "";
             if (!this.inputFields[1].unitsData.value) {
-                this.presentingComplaints[0].data.rowData[0].colData[1].alertsError = true;
+                this.presentingComplaints[0].data.rowData[0].colData[1].alertsErrorMassage = true;
                 this.presentingComplaints[0].data.rowData[0].colData[1].alertsErrorMassage = "Duration Units Required";
                 return false;
             }
@@ -247,7 +248,7 @@ export default defineComponent({
                 return true;
             } else {
                 this.search_item = true;
-                this.presentingComplaints[0].data.rowData[0].colData[1].alertsError = true;
+                this.presentingComplaints[0].data.rowData[0].colData[1].alertsErrorMassage = true;
                 this.presentingComplaints[0].data.rowData[0].colData[1].alertsErrorMassage = " Value must be a number";
                 return false;
             }

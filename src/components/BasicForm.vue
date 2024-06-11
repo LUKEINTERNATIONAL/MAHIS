@@ -133,7 +133,7 @@
                             @update:dateValue="handleInput(contentData, col, $event, 'updateDate')"
                         />
 
-                        <div class="alerts_error" v-if="col.alertsError">
+                        <div class="alerts_error" v-if="col.alertsErrorMassage">
                             {{ col.alertsErrorMassage }}
                         </div>
                     </ion-col>
@@ -193,11 +193,11 @@
                             @clicked:inputValue="handleInput(contentData, radioInput, $event, 'clickedInput')"
                         />
 
-                        <div class="alerts_error" v-if="radioInput.alertsError">
+                        <div class="alerts_error" v-if="radioInput.alertsErrorMassage">
                             {{ radioInput.alertsErrorMassage }}
                         </div>
                     </ion-col>
-                    <div class="alerts_error" v-if="item.radioBtnContent?.header.alertsError">
+                    <div class="alerts_error" v-if="item.radioBtnContent?.header.alertsErrorMassage">
                         {{ item.radioBtnContent?.header.alertsErrorMassage }}
                     </div>
                 </ion-row>
@@ -226,7 +226,7 @@
                             </ion-radio-group>
                         </ion-col>
                     </ion-col>
-                    <!-- <div class="alerts_error" v-if="item.groupedRadioBtnContent?.header.alertsError">
+                    <!-- <div class="alerts_error" v-if="item.groupedRadioBtnContent?.header.alertsErrorMassage">
                         {{ item.groupedRadioBtnContent?.header.alertsErrorMassage }}
                     </div> -->
                 </ion-row>
@@ -261,7 +261,7 @@
                                 <p v-if="al.example" class="small_font">{{ al.example }}</p>
                             </span>
                         </ion-checkbox>
-                        <div class="alerts_error" v-if="al.alertsError">
+                        <div class="alerts_error" v-if="al.alertsErrorMassage">
                             {{ al.alertsErrorMassage }}
                         </div>
                     </ion-col>
@@ -307,7 +307,7 @@
                                 :options="checkboxInput.multiSelectData"
                             />
                         </div>
-                        <div class="alerts_error" v-if="checkboxInput.alertsError">
+                        <div class="alerts_error" v-if="checkboxInput.alertsErrorMassage">
                             {{ checkboxInput.alertsErrorMassage }}
                         </div>
                     </ion-col>
@@ -337,6 +337,7 @@ import { IonDatetime, IonDatetimeButton, IonCheckbox } from "@ionic/vue";
 import HisDate from "@/utils/Date";
 import VueMultiselect from "vue-multiselect";
 import { createModal } from "@/utils/Alerts";
+import Validation from "@/validations/StandardValidations";
 
 import {
     modifyCheckboxInputField,
@@ -391,19 +392,23 @@ export default defineComponent({
         handleInput(data: any, col: any, event: any, inputType: any) {
             this.event = event;
             if (inputType == "updateInput") {
+                this.validateData(data, col, event.target.value);
                 modifyFieldValue(data, col.name, "value", event.target.value);
                 this.$emit("update:inputValue", col);
             }
             if (inputType == "updateMultiselect") {
+                this.validateData(data, col, event?.name);
                 modifyFieldValue(data, col.name, "value", event);
                 this.$emit("update:inputValue", col);
             }
             if (inputType == "updateUnits") {
+                this.validateData(data, col, event?.name);
                 modifyUnitsValue(data, col.name, "value", event?.name);
                 this.$emit("update:inputValue", col);
             }
 
             if (inputType == "updateDate") {
+                this.validateData(data, col, event);
                 modifyFieldValue(data, col.name, "value", event);
                 modifyCheckboxInputField(data, col.name, "value", event);
                 this.$emit("update:inputValue", col);
@@ -423,21 +428,31 @@ export default defineComponent({
             }
 
             if (inputType == "updateRadioBtnContent") {
+                this.validateData(data, col, event.target.value);
                 modifyRadioValue(data, col.name, "selectedValue", event.target.value, this.initialData);
                 this.$emit("update:inputValue", col);
             }
             if (inputType == "updateGroupedRadioBtnContent") {
+                this.validateData(data, col, event.target.value);
                 modifyGroupedRadioValue(data, col.name, "selectedValue", event.target.value);
                 this.$emit("update:inputValue", col);
             }
 
             if (inputType == "checkboxInput") {
+                this.validateData(data, col, event.target.value);
                 modifyCheckboxInputField(data, col.name, "value", event.target.value);
                 this.$emit("update:inputValue", col);
             }
             if (inputType == "updateCheckbox") {
+                this.validateData(data, col, event.detail.checked);
                 modifyCheckboxValue(data, col.name, "checked", event.detail.checked, this.initialData);
                 this.$emit("update:inputValue", { col, event });
+            }
+        },
+        validateData(data: any, col: any, value: any) {
+            if (col.validationFunctionName) {
+                const validationMessage = Validation[col.validationFunctionName](value);
+                modifyFieldValue(data, col.name, "alertsErrorMassage", validationMessage);
             }
         },
         handleSelected(col: any) {

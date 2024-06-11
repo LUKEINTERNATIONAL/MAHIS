@@ -11,7 +11,7 @@ export const useDangerSignsStore = defineStore("dangerSignsStore", {
                     header: {
                         title: "",
                         selectedValue: "",
-                        name:'Danger signs'
+                        name: "Danger signs",
                     },
                     data: [
                         {
@@ -322,7 +322,6 @@ export const useDangerSignsStore = defineStore("dangerSignsStore", {
                                     name: "Visit date",
                                     required: true,
                                     eventType: "input",
-                                    alertsError: false,
                                     alertsErrorMassage: "",
                                     isDatePopover: true,
                                     icon: icons.calenderPrimary,
