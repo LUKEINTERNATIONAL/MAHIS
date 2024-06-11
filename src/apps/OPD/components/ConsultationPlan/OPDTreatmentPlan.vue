@@ -514,6 +514,8 @@ function validateDrug() {
 function addData() {
     addItemButton.value = !addItemButton.value;
     search_item.value = true;
+    show_error_msg_for_dose.value = false
+    show_error_msg_for_duration.value = false
 }
 
 async function validatedDrugName() {
@@ -608,8 +610,6 @@ async function saveData() {
     componentKey.value++;
     selected_drug.value = ref()
     selected_pres_method.value = ref()
-    show_error_msg_for_dose.value = false
-    show_error_msg_for_duration.value = false
     saveStateValuesState();
 }
 
