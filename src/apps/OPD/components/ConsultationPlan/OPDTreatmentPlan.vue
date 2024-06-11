@@ -198,7 +198,7 @@
                 <ion-accordion-group ref="accordionGroup" class="previousView" @ionChange="accordionGroupChangeFn1">
                     <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
                         <ion-item slot="header" color="light">
-                            <ion-label class="previousLabel">Previous medications</ion-label>
+                            <ion-label class="previousLabel">Documented medications timeline</ion-label>
                         </ion-item>
                         <div class="ion-padding" slot="content">
                             <div class="ionLbltp" v-for="(item, index) in PreviuosSelectedMedicalDrugsList" :key="index">
