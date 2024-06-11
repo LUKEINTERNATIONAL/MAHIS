@@ -56,8 +56,8 @@ const initialVitals=[
                             icon: icons.weight,
                             value: '',
                             name: 'Pre-gestation weight',
-                            valueType:'number',
-                            required: true,
+                            valueType: 'number',
+                            // required: true,
                             eventType: 'input',
                             alertsError: false,
                             alertsErrorMassage: ''
@@ -70,6 +70,33 @@ const initialVitals=[
         },
         alerts:
         [
+            {
+                backgroundColor: '',
+                status: '',
+                icon: '',
+                textColor: '',
+                value: '',
+                name: '',
+                index: ''
+            }, 
+            {
+                backgroundColor: '',
+                status: '',
+                icon: '',
+                textColor: '',
+                value: '',
+                name: '',
+                index: ''
+            },
+            {
+                backgroundColor: '',
+                status: '',
+                icon: '',
+                textColor: '',
+                value: '',
+                name: '',
+                index: ''
+            },
             {
                 backgroundColor: '',
                 status: '',
@@ -149,14 +176,15 @@ const initialVitals=[
                 value: '',
                 name: '',
                 index: ''
-            }
+            },
+         
         ],
         previousView:{
             name:'vitals'
         }
     },
     {
-        sectionHeader: 'Temperature and Purse',
+        sectionHeader: 'Temperature and Pulse rate',
         classDash: 'dashed_bottom_border _padding',
 
         data:
@@ -174,7 +202,7 @@ const initialVitals=[
                                 eventType: 'input'
                             },
                             {
-                                inputHeader: 'Pulse rate',
+                                inputHeader: 'Pulse rate*',
                                 unit: 'BMP',
                                 icon: icons.pulse,
                                 value: '',
@@ -226,195 +254,195 @@ const initialVitals=[
             name:'vitals'
         }
     },
-    {
-        selectdData: [],
-        classDash:'dashed_bottom_border',
-        checkboxBtnContent:
-            {
-                header:{
-                    title: 'Respiratory exam findings',
-                    selectedValue: '',
-                    name:'Respiratory exam findings',
-                    class:"bold",
-                },
-                data:[
-                    {
-                        name: 'Exam not done',
-                        value: 'exam not done',
-                        checked: false,
-                        labelPlacement: 'start',
-                        colSize: '6',
-                        justify: 'space-between'
+    // {
+    //     selectdData: [],
+    //     classDash:'dashed_bottom_border',
+    //     checkboxBtnContent:
+    //         {
+    //             header:{
+    //                 title: 'Respiratory exam findings',
+    //                 selectedValue: '',
+    //                 name:'Respiratory exam findings',
+    //                 class:"bold",
+    //             },
+    //             data:[
+    //                 {
+    //                     name: 'Exam not done',
+    //                     value: 'exam not done',
+    //                     checked: false,
+    //                     labelPlacement: 'start',
+    //                     colSize: '6',
+    //                     justify: 'space-between'
 
-                    },
-                    {
-                        name: 'Normal exam',
-                        value: 'normal exam',
-                        checked: false,
-                        labelPlacement: 'start',
-                        colSize: '6',
-                        justify: 'space-between'
+    //                 },
+    //                 {
+    //                     name: 'Normal exam',
+    //                     value: 'normal exam',
+    //                     checked: false,
+    //                     labelPlacement: 'start',
+    //                     colSize: '6',
+    //                     justify: 'space-between'
 
-                    },
-                ]
-            }
+    //                 },
+    //             ]
+    //         }
 
-    },
+    // },
 
 
-    {
-        selectdData: [],
-        classDash:'dashed_bottom_border',
-        checkboxBtnContent:
-            {
-                header:{
-                    title: '',
-                    selectedValue: '',
-                    name:'Respiratory exam findings'
-                },
-                data:[
-                    {
-                        name: 'Cough',
-                        value: 'cough',
-                        checked: false,
-                        labelPlacement: 'start',
-                        colSize: '6',
-                        justify: 'space-between'
+    // {
+    //     selectdData: [],
+    //     classDash:'dashed_bottom_border',
+    //     checkboxBtnContent:
+    //         {
+    //             header:{
+    //                 title: '',
+    //                 selectedValue: '',
+    //                 name:'Respiratory exam findings'
+    //             },
+    //             data:[
+    //                 {
+    //                     name: 'Cough',
+    //                     value: 'cough',
+    //                     checked: false,
+    //                     labelPlacement: 'start',
+    //                     colSize: '6',
+    //                     justify: 'space-between'
 
-                    },
-                    {
-                        name: 'Rapid breathing',
-                        value: 'rapid breathing',
-                        checked: false,
-                        labelPlacement: 'start',
-                        colSize: '6',
-                        justify: 'space-between'
+    //                 },
+    //                 {
+    //                     name: 'Rapid breathing',
+    //                     value: 'rapid breathing',
+    //                     checked: false,
+    //                     labelPlacement: 'start',
+    //                     colSize: '6',
+    //                     justify: 'space-between'
 
-                    },
-                ]
-            }
+    //                 },
+    //             ]
+    //         }
 
-    },
+    // },
 
-    {
-        selectdData: [],
-        classDash:'dashed_bottom_border',
-        checkboxBtnContent:
-            {
-                header:{
-                    title: '',
-                    selectedValue: '',
-                    name:'Respiratory exam findings'
-                },
-                data:[
-                    {
-                        name: 'Slow breathing',
-                        value: 'Slow breathing',
-                        checked: false,
-                        labelPlacement: 'start',
-                        colSize: '6',
-                        justify: 'space-between'
+    // {
+    //     selectdData: [],
+    //     classDash:'dashed_bottom_border',
+    //     checkboxBtnContent:
+    //         {
+    //             header:{
+    //                 title: '',
+    //                 selectedValue: '',
+    //                 name:'Respiratory exam findings'
+    //             },
+    //             data:[
+    //                 {
+    //                     name: 'Slow breathing',
+    //                     value: 'Slow breathing',
+    //                     checked: false,
+    //                     labelPlacement: 'start',
+    //                     colSize: '6',
+    //                     justify: 'space-between'
 
-                    },
-                    {
-                        name: 'Wheezing',
-                        value: 'wheezing',
-                        checked: false,
-                        labelPlacement: 'start',
-                        colSize: '6',
-                        justify: 'space-between'
+    //                 },
+    //                 {
+    //                     name: 'Wheezing',
+    //                     value: 'wheezing',
+    //                     checked: false,
+    //                     labelPlacement: 'start',
+    //                     colSize: '6',
+    //                     justify: 'space-between'
 
-                    },
-                ]
-            }
+    //                 },
+    //             ]
+    //         }
 
-    },
-    {
-        selectdData: [],
-        classDash:'dashed_bottom_border',
-        checkboxBtnContent:
-            {
-                header:{
-                    title: '',
-                    selectedValue: '',
-                    name:'Respiratory exam findings'
-                },
-                data:[
-                    {
-                        name: 'Rales',
-                        value: 'Rales',
-                        checked: false,
-                        labelPlacement: 'start',
-                        colSize: '6',
-                        justify: 'space-between'
+    // },
+    // {
+    //     selectdData: [],
+    //     classDash:'dashed_bottom_border',
+    //     checkboxBtnContent:
+    //         {
+    //             header:{
+    //                 title: '',
+    //                 selectedValue: '',
+    //                 name:'Respiratory exam findings'
+    //             },
+    //             data:[
+    //                 {
+    //                     name: 'Rales',
+    //                     value: 'Rales',
+    //                     checked: false,
+    //                     labelPlacement: 'start',
+    //                     colSize: '6',
+    //                     justify: 'space-between'
 
-                    },
-                    {
-                        name: 'Respiratory distress',
-                        value: 'respiratory distress',
-                        checked: false,
-                        labelPlacement: 'start',
-                        colSize: '6',
-                        justify: 'space-between'
+    //                 },
+    //                 {
+    //                     name: 'Respiratory distress',
+    //                     value: 'respiratory distress',
+    //                     checked: false,
+    //                     labelPlacement: 'start',
+    //                     colSize: '6',
+    //                     justify: 'space-between'
 
-                    },
-                ]
-            }
+    //                 },
+    //             ]
+    //         }
 
-    },
+    // },
 
-    {
-        classDash:'dashed_bottom_border',
-        checkboxBtnContent:
-            {
-                header:{
-                    title: '',
-                    selectedValue: '',
-                    name:'Respiratory exam findings'
-                },
-                data:[
-                    {
-                        name: 'Other',
-                        value: 'Other',
-                        checked: false,
-                        labelPlacement: 'start',
-                        colSize: '6',
-                        justify: 'space-between'
+    // {
+    //     classDash:'dashed_bottom_border',
+    //     checkboxBtnContent:
+    //         {
+    //             header:{
+    //                 title: '',
+    //                 selectedValue: '',
+    //                 name:'Respiratory exam findings'
+    //             },
+    //             data:[
+    //                 {
+    //                     name: 'Other',
+    //                     value: 'Other',
+    //                     checked: false,
+    //                     labelPlacement: 'start',
+    //                     colSize: '6',
+    //                     justify: 'space-between'
 
-                    },
-                ]
-            }
+    //                 },
+    //             ]
+    //         }
 
-    },
-    {
-        sideColSize:0.000001,
-        sectionHeader: '',
-        classDash: 'dashed_bottom_border',
-        data:
-            {
-                rowData:[
-                    {
-                        colData: [
-                            {
-                                displayNone: true,
-                                inputHeader: 'Specify',
-                                unit: '',
-                                icon: icons.editPen,
-                                value: '',
-                                name: 'Other notes',
-                                valueType: 'text',
-                                required: true,
-                                eventType: 'input',
-                                inputWidth: "100%",
+    // },
+    // {
+    //     sideColSize:0.000001,
+    //     sectionHeader: '',
+    //     classDash: 'dashed_bottom_border',
+    //     data:
+    //         {
+    //             rowData:[
+    //                 {
+    //                     colData: [
+    //                         {
+    //                             displayNone: true,
+    //                             inputHeader: 'Specify',
+    //                             unit: '',
+    //                             icon: icons.editPen,
+    //                             value: '',
+    //                             name: 'Other notes',
+    //                             valueType: 'text',
+    //                             required: true,
+    //                             eventType: 'input',
+    //                             inputWidth: "100%",
 
-                            },
+    //                         },
 
-                        ],
+    //                     ],
 
-                    },
-                ]
-            },
-    },
+    //                 },
+    //             ]
+    //         },
+    // },
     {
         selectdData: [],
         classDash:'dashed_bottom_border',

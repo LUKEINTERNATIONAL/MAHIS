@@ -10,7 +10,6 @@ export const  usePersistentBehaviourStore  = defineStore('persistentBehaviourSto
                  classDash: 'dashed_bottom_border',
                 radioBtnContent:{
                     header:{
-                       
                         selectedValue:'',
                         radioTitle:['Yes','No'],
                         name:'High caffeine intake'

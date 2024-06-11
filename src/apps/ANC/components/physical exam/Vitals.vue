@@ -21,6 +21,7 @@ import { mapState } from "pinia";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { arePropertiesNotEmpty } from "@/utils/Objects";
 import HisDate from "@/utils/Date";
+import DynamicButton from "@/components/DynamicButton.vue";
 import BasicInputField from "@/components/BasicInputField.vue";
 import { VitalsService } from "@/services/ANC/anc_vitals_service";
 import StandardValidations from "@/validations/StandardValidations";
@@ -120,7 +121,7 @@ export default defineComponent({
                                 this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage =
                                     validateResult.flat(Infinity)[0];
                                 return true;
-                            }
+                            } 
                         } else {
                             this.hasValidationErrors.push("true");
                             this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsError = false;
@@ -153,7 +154,41 @@ export default defineComponent({
             vitals.textColor = bmiColor[1];
             vitals.index = this.BMI?.index ?? "";
             vitals.value = this.BMI?.result ?? "";
+            this.updateExpectedWeightGain();
+            this.updateAverageWeightGain();
+            this.updateTotalWeightGain();
         },
+
+        async updateExpectedWeightGain () {
+            const bmiColor = this.BMI?.color ?? [];
+            const vitals = this.vitals[0].alerts[1];
+            vitals.icon = BMIService.iconBMI(bmiColor);
+            vitals.backgroundColor = bmiColor[0];
+            vitals.textColor = bmiColor[1];
+            vitals.index = this.BMI?.index ?? "";
+            vitals.value = this.BMI?.result ?? "";
+        },
+
+        async updateAverageWeightGain () {
+            const bmiColor = this.BMI?.color ?? [];
+            const vitals = this.vitals[0].alerts[2];
+            vitals.icon = BMIService.iconBMI(bmiColor);
+            vitals.backgroundColor = bmiColor[0];
+            vitals.textColor = bmiColor[1];
+            vitals.index = this.BMI?.index ?? "";
+            vitals.value = this.BMI?.result ?? "";
+        },
+
+        async updateTotalWeightGain () {
+            const bmiColor = this.BMI?.color ?? [];
+            const vitals = this.vitals[0].alerts[3];
+            vitals.icon = BMIService.iconBMI(bmiColor);
+            vitals.backgroundColor = bmiColor[0];
+            vitals.textColor = bmiColor[1];
+            vitals.index = this.BMI?.index ?? "";
+            vitals.value = this.BMI?.result ?? "";
+        },
+
         async updateBP(systolic: any, diastolic: any) {
             const vitals = this.vitals[1].alerts[0];
             const bpColor = this.BPStatus?.colors ?? [];
@@ -265,6 +300,24 @@ h5 {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+}
+.category{
+width: 400px;
+height: 70px;
+background-color: #DDEEDD;
+border-radius: 0.99%;
+color: #016302;
+font-weight: bolder;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+.categories {
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
 }
 ion-card {
     width: 100%;
