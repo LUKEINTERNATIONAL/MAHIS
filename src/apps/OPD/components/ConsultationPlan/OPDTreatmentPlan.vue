@@ -93,6 +93,9 @@
                         track-by="uuid"
                         :options="OPDDrugList"
                     />
+                    <div>
+                        <ion-label style="padding: 3%;;" v-if="show_error_msg_for_drug" class="error-label">{{ drugErrMsg }}</ion-label>
+                    </div>
                 </ion-col>
             </ion-row>
 
@@ -116,7 +119,7 @@
                         :options="route_list"
                     />
                     <div>
-                        <ion-label v-if="show_error_msg_for_duration" class="error-label">{{ durationErrMsg }}</ion-label>
+                        <ion-label v-if="show_error_msg_for_pres_method" class="error-label">{{ pres_methodErrMsg }}</ion-label>
                     </div>
                 </ion-col>
 
@@ -140,7 +143,7 @@
                         :options="drug_frequencies"
                     />
                     <div>
-                        <ion-label v-if="show_error_msg_for_duration" class="error-label">{{ durationErrMsg }}</ion-label>
+                        <ion-label v-if="show_error_msg_for_frequency" class="error-label">{{ frequencyErrMsg }}</ion-label>
                     </div>
                 </ion-col>
             </ion-row>
@@ -363,6 +366,7 @@ import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore"
 import { useAllegyStore} from "@/apps/OPD/stores/AllergyStore"
 import VueMultiselect from "vue-multiselect"
 import NonPharmacologicalIntervention from "@/apps/OPD/components/ConsultationPlan/NonPharmacologicalIntervention.vue"
+import { isEmpty } from "lodash"
 
 const iconsContent = icons;
 const drug_frequencies = DRUG_FREQUENCIES;
@@ -408,6 +412,13 @@ const FirstPreviousAllegies = ref();
 const RestOfPreviousAllegies = ref();
 const currentDrugOb = ref()
 
+const pres_methodErrMsg = ref('Select a route')
+const show_error_msg_for_pres_method = ref(false)
+const frequencyErrMsg = ref('Select frequency')
+const show_error_msg_for_frequency = ref(false)
+const drugErrMsg = ref('Select drug')
+const show_error_msg_for_drug = ref(false)
+
 const selected_pres_method = ref()
 const selected_frequency = ref()
 const selected_drug = ref()
@@ -449,6 +460,7 @@ watch(
     }
 );
 
+
 watch(
     () => dose.value,
     async (newValue) => {
@@ -462,6 +474,42 @@ watch(
         validateDuration();
     }
 );
+
+function validateRoute() {
+    if (isEmpty(selected_pres_method.value) == true) {
+        show_error_msg_for_pres_method.value = true
+        return false
+    }
+
+    if (isEmpty(selected_pres_method.value) == false) {
+        show_error_msg_for_pres_method.value = false
+        return true
+    }
+}
+
+function validateFrequency() {
+    if (isEmpty(selected_frequency.value) == true) {
+        show_error_msg_for_frequency.value = true
+        return false
+    }
+
+    if (isEmpty(selected_frequency.value) == false) {
+        show_error_msg_for_frequency.value = false
+        return true
+    }
+}
+
+function validateDrug() {
+    if (isEmpty(selected_drug.value) == true) {
+        show_error_msg_for_drug.value = true
+        return false
+    }
+
+    if (isEmpty(selected_drug.value) == false) {
+        show_error_msg_for_drug.value = false
+        return true
+    }
+}
 
 function addData() {
     addItemButton.value = !addItemButton.value;
@@ -504,8 +552,11 @@ async function areFieldsValid() {
     const isDrugnameValid = await validatedDrugName();
     const isDoseValid = await validateDose();
     const isDurationValid = await validateDuration();
+    const isFrequencyValid = validateFrequency()
+    const isDrugValid = validateDrug()
+    const isRouteValid = validateRoute()
 
-    if (!isDrugnameValid && !isDoseValid && !isDurationValid) {
+    if (!isDrugnameValid && !isDoseValid && !isDurationValid && isFrequencyValid == true && isDrugValid == true && isRouteValid == true) {
         return true;
     } else {
         return false;
@@ -551,14 +602,13 @@ async function saveData() {
     selectedMedicalDrugsList.value.push(drugString);
     drugName.value = "";
     dose.value = "";
-    selected_frequency.value = "";
+    selected_frequency.value = ref()
     duration.value = "";
     prescription.value = "";
     componentKey.value++;
-    selected_drug.value = ""
-    selected_pres_method.value = ""
+    selected_drug.value = ref()
+    selected_pres_method.value = ref()
     saveStateValuesState();
-    
 }
 
 async function FindDrugName(text: any) {
