@@ -358,7 +358,6 @@ import { DrugService } from "@/services/drug_service";
 import { ConceptName } from "@/interfaces/conceptName";
 import DynamicButton from "@/components/DynamicButton.vue";
 import DynamicList from "@/components/DynamicList.vue";
-import { ConceptService } from "@/services/concept_service";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { Service } from "@/services/service";
 import { PreviousTreatment } from "@/apps/NCD/services/treatment";
@@ -366,16 +365,13 @@ import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore"
 import { useAllegyStore} from "@/apps/OPD/stores/AllergyStore"
 import VueMultiselect from "vue-multiselect"
 import NonPharmacologicalIntervention from "@/apps/OPD/components/ConsultationPlan/NonPharmacologicalIntervention.vue"
-import ListPicker from "@/components/ListPicker.vue"
 
 const iconsContent = icons;
 const drug_frequencies = DRUG_FREQUENCIES;
 const search_item = ref(false);
 const display_item = ref(false);
 const addItemButton = ref(true);
-const popoverOpen = ref(false);
-const prescPopoverOpen = ref(false);
-let event: null = null;
+
 const componentKey = ref(0);
 const drugnameErrMsg = ref("");
 const show_error_msg_for_drug_name = ref(false);
@@ -402,8 +398,6 @@ const store2 = useAllegyStore();
 const selectedAllergiesList2 = computed(() => store2.selectedMedicalAllergiesList);
 const selectedMedicalDrugsList = computed(() => store.selectedMedicalDrugsList);
 const nonPharmalogicalTherapyAndOtherNotes = computed(() => store.nonPharmalogicalTherapyAndOtherNotes);
-const selectedMedicalAllergiesList = computed(() => store.selectedMedicalAllergiesList);
-const input = ref();
 const values = ["first", "second", "third"];
 const PreviuosSelectedMedicalDrugsList = ref();
 const FirstPreviousNotes = ref();
@@ -417,13 +411,9 @@ const FirstPreviousAllegies = ref();
 const RestOfPreviousAllegies = ref();
 const currentDrugOb = ref()
 
-const multi_Selection = false as any
 const selected_pres_method = ref()
 const selected_frequency = ref()
 const selected_drug = ref()
-const uniqueId = "45" as any
-const name_of_list = ref("List" as any)
-const list_place_holder = ref("Please select method of prescribing medication" as any)
 const route_list = ref([
     { id:1 , name: "Oral" },
     { id:2 , name: "Intravenous (IV)" },
@@ -441,10 +431,6 @@ const show_list_label = false as any
 
 function routeListUpdated(data: any) {
     // selected_pres_method.value = data.name
-}
-
-function routeListFiltred(data: any) {
-
 }
 
 onMounted(async () => {
@@ -529,23 +515,11 @@ async function areFieldsValid() {
     }
 }
 
-function selectAl(item: any) {
-    item.selected = !item.selected;
-    const treatmentPlanStore = useTreatmentPlanStore();
-    treatmentPlanStore.setSelectedMedicalAllergiesList(item);
-    saveStateValuesState();
-}
 
 function frequencyDropDownUpdated(event: any) {
     frequency.value = event.label
 }
-function selectFrequency(index: any) {
-    drug_frequencies.forEach((item) => {
-        item.selected = false;
-    });
-    drug_frequencies[index].selected = !drug_frequencies[index].selected;
-    frequency.value = drug_frequencies[index].label;
-}
+
 
 async function saveData() {
     const are_fieldsValid = await areFieldsValid();
@@ -667,48 +641,11 @@ async function findIfDrugNameExists() {
     } else return false;
 }
 
-function filterArrayByIDs(mainArray: [], idsToFilter: []) {
-    return mainArray.filter((item: any) => 
-        !idsToFilter.includes(item.concept_id as never)
-    );
-}
-
 function hasMatchingIDs(mainArray: any[], idsToFilter: any[]): boolean {
     // Check if any item in mainArray has concept_id included in idsToFilter
     return mainArray.some((item: any) => 
         idsToFilter.includes(item.concept_id as never)
     );
-}
-
-
-async function FindAllegicDrugName(text: any) {
-    const searchText = text.target.value;
-    const page = 1,
-        limit = 10;
-    const drugs: ConceptName[] = await ConceptService.getConceptSet("OPD Medication", searchText);
-    // const drugs: ConceptName[] = await DrugService.getOPDDrugs({
-    // "name": searchText,
-    // "page": page,
-    // "selected": false as any,
-    // "page_size": limit,
-    // })
-    drugs.map((drug) => ({
-        label: drug.name,
-        value: drug.name,
-        other: drug,
-    }));
-    const treatmentPlanStore = useTreatmentPlanStore();
-    treatmentPlanStore.setMedicalAllergiesList(drugs);
-}
-
-function openPopover(e: any) {
-    event = e;
-    popoverOpen.value = true;
-}
-
-function openPrescPopover(e: any) {
-    // const prescEvent = e
-    prescPopoverOpen.value = true;
 }
 
 function selectedDrugName(data: any) {
@@ -782,10 +719,6 @@ function dissmissDrugAddField(): void {
     search_item.value = false;
     display_item.value = true;
     addItemButton.value = true;
-}
-
-function setFocus() {
-    input.value.$el.setFocus();
 }
 
 function accordionGroupChangeFn1(ev: AccordionGroupCustomEvent) {}
