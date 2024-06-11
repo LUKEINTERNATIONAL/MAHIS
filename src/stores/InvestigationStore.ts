@@ -21,7 +21,6 @@ export const useInvestigationStore = defineStore("investigationStore", {
                                     popOver: true,
                                     eventType: "input",
                                     required: true,
-                                    alertsError: false,
                                     alertsErrorMassage: "",
                                     popOverData: {
                                         filterData: false,
@@ -37,7 +36,6 @@ export const useInvestigationStore = defineStore("investigationStore", {
                                     name: "specimen",
                                     eventType: "input",
                                     required: true,
-                                    alertsError: false,
                                     alertsErrorMassage: "",
                                     disabled: false,
                                     popOverData: {

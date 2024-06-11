@@ -6,6 +6,7 @@ const initialVitals = [
         isFinishBtn: false,
         validationStatus: "",
         sectionHeader: "Height and weight",
+        actionBtn: "Finish and Save",
 
         data: {
             rowData: [
@@ -15,11 +16,10 @@ const initialVitals = [
                             inputHeader: "Height*",
                             unit: "cm",
                             icon: icons.height,
-                            value: "",
-                            name: "Height",
+                            value: " ",
+                            name: "Height (cm)",
                             required: true,
                             eventType: "input",
-                            alertsError: false,
                             alertsErrorMassage: "",
                             disabled: false,
                         },
@@ -27,11 +27,10 @@ const initialVitals = [
                             inputHeader: "Weight*",
                             unit: "kg",
                             icon: icons.weight,
-                            value: "",
+                            value: " ",
                             name: "Weight",
                             required: true,
                             eventType: "input",
-                            alertsError: false,
                             alertsErrorMassage: "",
                             disabled: false,
                         },
@@ -62,8 +61,7 @@ const initialVitals = [
         checkboxBtnContent: {
             header: {
                 title: "",
-                selectedValue: "",
-                name: "Primary diagnosis",
+                selectedValue: " ",
             },
             data: [
                 {
@@ -71,6 +69,7 @@ const initialVitals = [
                     name: "Height And Weight Not Done",
                     value: "Height And Weight Not Done",
                     checked: false,
+                    displayNone: false,
                 },
             ],
             inputFields: [
@@ -79,7 +78,7 @@ const initialVitals = [
                     icon: icons.search,
                     isMultiSelect: true,
                     popOver: true,
-                    value: "",
+                    value: " ",
                     name: "Height Weight Reason",
                     multiSelectData: [
                         {
@@ -88,17 +87,11 @@ const initialVitals = [
                         },
                         {
                             id: 2,
-                            name: "Patient uncooperative",
-                        },
-                        {
-                            id: 3,
                             name: "Machine not working",
                         },
                     ],
                     eventType: "input",
                     required: true,
-                    alertsError: false,
-                    alertsErrorMassage: "",
                     id: "",
                     idName: "district_id",
                     displayNone: true,
@@ -116,7 +109,7 @@ const initialVitals = [
                             inputHeader: "Systolic Pressure*",
                             unit: "mmHg",
                             icon: icons.systolicPressure,
-                            value: "",
+                            value: " ",
                             name: "Systolic",
                             required: true,
                             eventType: "input",
@@ -126,7 +119,7 @@ const initialVitals = [
                             inputHeader: "Diastolic pressure*",
                             unit: "mmHg",
                             icon: icons.diastolicPressure,
-                            value: "",
+                            value: " ",
                             name: "Diastolic",
                             required: true,
                             eventType: "input",
@@ -158,7 +151,7 @@ const initialVitals = [
         checkboxBtnContent: {
             header: {
                 title: "",
-                selectedValue: "",
+                selectedValue: " ",
                 name: "Primary diagnosis",
             },
             data: [
@@ -167,6 +160,7 @@ const initialVitals = [
                     name: "Blood Pressure Not Done",
                     value: "Blood Pressure Not Done",
                     checked: false,
+                    displayNone: false,
                 },
             ],
             inputFields: [
@@ -175,7 +169,7 @@ const initialVitals = [
                     icon: icons.search,
                     isMultiSelect: true,
                     popOver: true,
-                    value: "",
+                    value: " ",
                     name: "Blood Pressure Reason",
                     multiSelectData: [
                         {
@@ -184,16 +178,11 @@ const initialVitals = [
                         },
                         {
                             id: 2,
-                            name: "Patient uncooperative",
-                        },
-                        {
-                            id: 3,
                             name: "Machine not working",
                         },
                     ],
                     eventType: "input",
                     required: true,
-                    alertsError: false,
                     alertsErrorMassage: "",
                     id: "",
                     idName: "district_id",
@@ -212,7 +201,7 @@ const initialVitals = [
                             inputHeader: "Temperature",
                             unit: "C",
                             icon: icons.temprature,
-                            value: "",
+                            value: " ",
                             name: "Temp",
                             eventType: "input",
                         },
@@ -220,7 +209,7 @@ const initialVitals = [
                             inputHeader: "Pulse rate*",
                             unit: "BMP",
                             icon: icons.pulse,
-                            value: "",
+                            value: " ",
                             name: "Pulse",
                             eventType: "input",
                         },
@@ -247,7 +236,7 @@ const initialVitals = [
         checkboxBtnContent: {
             header: {
                 title: "",
-                selectedValue: "",
+                selectedValue: " ",
                 name: "Primary diagnosis",
             },
             data: [
@@ -256,6 +245,7 @@ const initialVitals = [
                     name: "Pulse Rate Not Done",
                     value: "Pulse Rate Not Done",
                     checked: false,
+                    displayNone: false,
                 },
             ],
             inputFields: [
@@ -264,7 +254,7 @@ const initialVitals = [
                     icon: icons.search,
                     isMultiSelect: true,
                     popOver: true,
-                    value: "",
+                    value: " ",
                     name: "Pulse Rate Reason",
                     multiSelectData: [
                         {
@@ -273,16 +263,11 @@ const initialVitals = [
                         },
                         {
                             id: 2,
-                            name: "Patient uncooperative",
-                        },
-                        {
-                            id: 3,
                             name: "Machine not working",
                         },
                     ],
                     eventType: "input",
                     required: true,
-                    alertsError: false,
                     alertsErrorMassage: "",
                     id: "",
                     idName: "district_id",
@@ -301,7 +286,7 @@ const initialVitals = [
                             inputHeader: "Respiratory rate",
                             unit: "BMP",
                             icon: icons.respiratory,
-                            value: "",
+                            value: " ",
                             name: "Respiratory rate",
                             eventType: "input",
                         },
@@ -309,7 +294,7 @@ const initialVitals = [
                             inputHeader: "Oxygen saturation",
                             unit: "%",
                             icon: icons.oxgenStaturation,
-                            value: "",
+                            value: " ",
                             name: "SP02",
                             eventType: "input",
                         },
@@ -338,7 +323,7 @@ export const useVitalsStore = defineStore("vitalsStore", {
         setVitals(data: any) {
             this.vitals = data;
         },
-        getInitialSocialHistory() {
+        getInitialVitals() {
             const data = _.cloneDeep(initialVitals);
             return [...data];
         },

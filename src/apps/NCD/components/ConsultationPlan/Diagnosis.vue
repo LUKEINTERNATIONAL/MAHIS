@@ -117,7 +117,7 @@ export default defineComponent({
             this.search_item = true;
         },
         async validaterowData() {
-            this.diagnosis[0].data.rowData[0].colData[0].alertsError = false;
+            this.diagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = false;
             this.diagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = "";
 
             this.diagnosisData = await this.getDiagnosis(this.inputFields[0].value);
@@ -125,7 +125,7 @@ export default defineComponent({
                 return true;
             } else {
                 this.search_item = true;
-                this.diagnosis[0].data.rowData[0].colData[0].alertsError = true;
+                this.diagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = true;
                 this.diagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = "Please select diagnosis from the list";
                 return false;
             }

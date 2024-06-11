@@ -107,7 +107,7 @@ export class VitalsService extends AppEncounterService {
             {
                 name: "Weight*",
                 validator: (val: any) => {
-                    const emptyErrors = this.isNotEmptyandFloat(val);
+                    const emptyErrors = this.isNotEmptyandNumber(val);
                     const minErrors = this.checkMinMax(val, 40.0, 250.0);
                     return this.mergeErrors([emptyErrors, minErrors]);
                 },
@@ -115,7 +115,8 @@ export class VitalsService extends AppEncounterService {
             {
                 name: "Pre-gestation weight",
                 validator: (val: any) => {
-                    const emptyErrors = this.isNotEmptyandFloat(val);
+                    console.log (val)
+                    const emptyErrors = this.isNotEmptyandNumber(val);
                     const minErrors = this.checkMinMax(val, 40.0, 250.0);
                     return this.mergeErrors([emptyErrors, minErrors]);
                 },
@@ -148,7 +149,7 @@ export class VitalsService extends AppEncounterService {
                 validator: (val: any) => {
                     const errors = [];
                     errors.push(this.isNotEmptyandNumber(val));
-                    errors.push(this.checkMinMax(val, 110, 140));
+                    errors.push(this.checkMinMax(val, 60, 140));
                     return this.mergeErrors(errors);
                 },
             },
@@ -157,7 +158,7 @@ export class VitalsService extends AppEncounterService {
                 validator: (val: any) => {
                     const errors = [];
                     errors.push(this.isNotEmptyandNumber(val));
-                    errors.push(this.checkMinMax(val, 110, 140));
+                    errors.push(this.checkMinMax(val, 60, 140));
                     return this.mergeErrors(errors);
                 },
             },
@@ -166,7 +167,7 @@ export class VitalsService extends AppEncounterService {
                 validator: (val: any) => {
                     const errors = [];
                     errors.push(this.isNotEmptyandNumber(val));
-                    errors.push(this.checkMinMax(val, 60, 90));
+                    errors.push(this.checkMinMax(val, 60, 140));
                     return this.mergeErrors(errors);
                 },
             },
@@ -175,7 +176,7 @@ export class VitalsService extends AppEncounterService {
                 validator: (val: any) => {
                     const errors: any = [];
                     errors.push(this.isNotEmptyandNumber(val));
-                    errors.push(this.checkMinMax(val, 110, 140));
+                    errors.push(this.checkMinMax(val, 60, 140));
                     return this.mergeErrors(errors);
                 },
             },
@@ -191,7 +192,7 @@ export class VitalsService extends AppEncounterService {
                 name: "Oxygen saturation",
                 validator: (val: any) => {
                     // errors.push(this.isNotEmptyandNumber(val));
-                    const minErrors = this.checkMinMax(val, 60, 120);
+                    const minErrors = this.checkMinMax(val, 0, 100);
                     return this.mergeErrors([minErrors]);
                 },
             },

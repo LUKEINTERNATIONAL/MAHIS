@@ -1,489 +1,460 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
 
-export const useUrineTestStore = defineStore ("urineTestingStore", {
-    state: ()=> ({
-        urineTest:[
+export const useUrineTestStore = defineStore("urineTestingStore", {
+    state: () => ({
+        urineTest: [
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                {
-                    header:{
-                        title: 'Select whether:',
-                        selectedValue: '',
-                        name:'Urine test status',
+                classDash: "dashed_bottom_border _padding",
+                radioBtnContent: {
+                    header: {
+                        title: "Select whether:",
+                        selectedValue: "",
+                        name: "Urine test status",
                     },
-                    data:[
+                    data: [
                         {
-                            name: 'Urine test conducted',
-                            value: 'Test conducted',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "Urine test conducted",
+                            value: "Test conducted",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
                         {
-                            name: 'Urine test ordered',
-                            value: 'Test ordered',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "Urine test ordered",
+                            value: "Test ordered",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
                         {
-                            name: 'Urine test not done',
-                            value: 'Test not done',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "Urine test not done",
+                            value: "Test not done",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
-                    ]
-                }
-                    
-            },
-                        {
-                selectdData: [],
-                isFinishBtn: false,  
-                classDash: 'dashed_bottom_border _padding', 
-                radioBtnContent:
-                {
-                    header:{
-                        title: 'Select the urine test conducted:',
-                        selectedValue: '',
-                        class: 'bold',
-                        displayNone:true,
-                        name:'Urine test',
-                           
-                    },
-                    data:[
-                        {
-                            name: 'Midstream urine culture (recommended)',
-                            value: 'Midstream urine culture',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
-                        },
-                        {
-                            name: 'Midstream urine gram-staining',
-                            value: 'Midstream urine gram-staining',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
-                        },
-                        {
-                            name: 'Urine dipstick',
-                            value: 'Urine dipstick',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
-                        },
-                    ]
-                },    
-            },
-            {
-                isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                data:
-                {      header: {
-                    selectedValue: '',
-                    name: 'Date' 
-
+                    ],
                 },
-                    rowData:[
+            },
+            {
+                selectdData: [],
+                isFinishBtn: false,
+                classDash: "dashed_bottom_border _padding",
+                radioBtnContent: {
+                    header: {
+                        title: "Select the urine test conducted:",
+                        selectedValue: "",
+                        class: "bold",
+                        displayNone: true,
+                        name: "Urine test",
+                    },
+                    data: [
+                        {
+                            name: "Midstream urine culture (recommended)",
+                            value: "Midstream urine culture",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
+                        },
+                        {
+                            name: "Midstream urine gram-staining",
+                            value: "Midstream urine gram-staining",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
+                        },
+                        {
+                            name: "Urine dipstick",
+                            value: "Urine dipstick",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
+                        },
+                    ],
+                },
+            },
+            {
+                isFinishBtn: false,
+                classDash: "dashed_bottom_border _padding",
+                data: {
+                    header: {
+                        selectedValue: "",
+                        name: "Date",
+                    },
+                    rowData: [
                         {
                             colData: [
-                                {   
-                                    displayNone:true,
-                                    inputHeader: 'Urine Test Date',
-                                    value: '',
-                                    name: 'Urine test date',
+                                {
+                                    displayNone: true,
+                                    inputHeader: "Urine Test Date",
+                                    value: "",
+                                    name: "Urine test date",
                                     valueType: "date",
                                     required: true,
-                                    eventType: 'input',
-                                    alertsError: false,
-                                    alertsErrorMassage: '',
+                                    eventType: "input",
+                                    alertsErrorMassage: "",
                                     isDatePopover: true,
                                     icon: icons.calenderPrimary,
-                                    placeholder: 'Pick the date',
+                                    placeholder: "Pick the date",
                                 },
-                                
                             ],
-                            
                         },
-                   
-        
                     ],
-                
                 },
-                        
             },
             {
                 selectdData: [],
                 isFinishBtn: false,
-                 sectionHeader: '',
-                classDash: 'dashed_bottom_border _padding',
-                checkboxBtnContent:
-                {
-                    header:{
-                        title: 'Reason Urine test not done',
-                        selectedValue: '',
+                sectionHeader: "",
+                classDash: "dashed_bottom_border _padding",
+                checkboxBtnContent: {
+                    header: {
+                        title: "Reason Urine test not done",
+                        selectedValue: "",
                         displayNone: true,
-                        class:'bold',
-                        name:'Reason not done'
+                        class: "bold",
+                        name: "Reason not done",
                     },
-                    data:[
-                        {   
-                            name: 'Machine not functioning',
-                            value: 'Machine not functioning',
-                            labelPlacement: 'start',
-                            colSize: '6',
-                            justify: 'space-between',
+                    data: [
+                        {
+                            name: "Machine not functioning",
+                            value: "Machine not functioning",
+                            labelPlacement: "start",
+                            colSize: "6",
+                            justify: "space-between",
                         },
                         {
-                            name: 'Technician not available',
-                            value: 'Technician not available',
-                            labelPlacement: 'start',
-                            colSize: '6',
-                            justify: 'space-between',
+                            name: "Technician not available",
+                            value: "Technician not available",
+                            labelPlacement: "start",
+                            colSize: "6",
+                            justify: "space-between",
                         },
                         {
-                            name: 'Other',
-                            value: 'Other',
-                            labelPlacement: 'start',
-                            colSize: '6',
-                            justify: 'space-between',
+                            name: "Other",
+                            value: "Other",
+                            labelPlacement: "start",
+                            colSize: "6",
+                            justify: "space-between",
                         },
-                    ]
-                }
-                    
+                    ],
+                },
             },
             {
                 isFinishBtn: false,
-                sectionHeader: '',
-                classDash: 'dashed_bottom_border _padding',
+                sectionHeader: "",
+                classDash: "dashed_bottom_border _padding",
 
-                data:
-                    {
-                        header:{
-                            selectedValue: '',
-                            
-                        },
-                        rowData:[
-                            {
-                                colData: [
-                                    {   
-                                        displayNone:true,
-                                        inputHeader: 'specify',
-                                        unit: '',
-                                        icon: icons.editPen,
-                                        value: '',
-                                        name: 'Other (specify)',
-                                        valueType: 'text',
-                                        required: true,
-                                        eventType: 'input',
-                                        inputWidth: "85%",
-                                    },
-
-                                ]
-                            }
-                        ]
+                data: {
+                    header: {
+                        selectedValue: "",
                     },
+                    rowData: [
+                        {
+                            colData: [
+                                {
+                                    displayNone: true,
+                                    inputHeader: "specify",
+                                    unit: "",
+                                    icon: icons.editPen,
+                                    value: "",
+                                    name: "Other (specify)",
+                                    valueType: "text",
+                                    required: true,
+                                    eventType: "input",
+                                    inputWidth: "85%",
+                                },
+                            ],
+                        },
+                    ],
+                },
             },
         ] as any,
-        culture:[
+        culture: [
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                {
-                    header:{
-                        title: 'Midstream urine culture result',
-                        selectedValue: '',
+                classDash: "dashed_bottom_border _padding",
+                radioBtnContent: {
+                    header: {
+                        title: "Midstream urine culture result",
+                        selectedValue: "",
                         displayNone: true,
-                        class:'bold',
-                        name: 'Midstream urine culture result'
+                        class: "bold",
+                        name: "Midstream urine culture result",
                     },
-                    data:[
+                    data: [
                         {
-                            name: 'Positive-any agent',
-                            value: 'positive',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "Positive-any agent",
+                            value: "positive",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
                         {
-                            name: 'Positive-Group B Streptococcus (GBS)',
-                            value: 'Positive-Group B Streptococcus',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "Positive-Group B Streptococcus (GBS)",
+                            value: "Positive-Group B Streptococcus",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
                         {
-                            name: 'Negative',
-                            value: 'negative',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "Negative",
+                            value: "negative",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
-                    ]
-                }
-                    
-            }
+                    ],
+                },
+            },
         ] as any,
-        gram:[
+        gram: [
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                {
-                    header:{
-                        title: 'Midstream urine gram-staining result',
-                        selectedValue: '',
+                classDash: "dashed_bottom_border _padding",
+                radioBtnContent: {
+                    header: {
+                        title: "Midstream urine gram-staining result",
+                        selectedValue: "",
                         displayNone: true,
-                        class: 'bold',
-                        name: 'Midstream urine gram-staining result'
+                        class: "bold",
+                        name: "Midstream urine gram-staining result",
                     },
-                    data:[
+                    data: [
                         {
-                            name: 'Positive',
-                            value: 'positive',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "Positive",
+                            value: "positive",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
                         {
-                            name: 'Negative',
-                            value: 'negative',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "Negative",
+                            value: "negative",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
-                    ]
-                }
-                    
-            }
+                    ],
+                },
+            },
         ] as any,
-        nitrites:[
+        nitrites: [
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                {
-                    header:{
-                        title: 'Dipstick test result - nitrites',
-                        selectedValue: '',
+                classDash: "dashed_bottom_border _padding",
+                radioBtnContent: {
+                    header: {
+                        title: "Dipstick test result - nitrites",
+                        selectedValue: "",
                         displayNone: true,
-                        class: 'bold',
-                        name: 'Nitrites dipstick test result'
+                        class: "bold",
+                        name: "Nitrites dipstick test result",
                     },
-                    data:[
+                    data: [
                         {
-                            name: 'None',
-                            value: 'none',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "None",
+                            value: "none",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
                         {
-                            name: '+',
-                            value: '+',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "+",
+                            value: "+",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
                         {
-                            name: '++',
-                            value: '++',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "++",
+                            value: "++",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
                         {
-                            name: '+++',
-                            value: '+++',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "+++",
+                            value: "+++",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
                         {
-                            name: '++++',
-                            value: 'negative',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "++++",
+                            value: "negative",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
-                    ]
-                }
-                    
-            }
+                    ],
+                },
+            },
         ] as any,
-        leukocytes:[
+        leukocytes: [
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                {
-                    header:{
-                        title: 'Dipstick test result - leukocytes',
-                        selectedValue: '',
+                classDash: "dashed_bottom_border _padding",
+                radioBtnContent: {
+                    header: {
+                        title: "Dipstick test result - leukocytes",
+                        selectedValue: "",
                         displayNone: true,
-                        class: 'bold',
-                        name: 'Leukocytes dipstick test result'
+                        class: "bold",
+                        name: "Leukocytes dipstick test result",
                     },
-                    data:[
+                    data: [
                         {
-                            name: 'None',
-                            value: 'none',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "None",
+                            value: "none",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
                         {
-                            name: '+',
-                            value: '+',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "+",
+                            value: "+",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
                         {
-                            name: '++',
-                            value: '++',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "++",
+                            value: "++",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
                         {
-                            name: '+++',
-                            value: '+++',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "+++",
+                            value: "+++",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
                         {
-                            name: '++++',
-                            value: 'negative',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "++++",
+                            value: "negative",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
-                    ]
-                }
-                    
-            }
+                    ],
+                },
+            },
         ] as any,
-        protein:[
+        protein: [
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                {
-                    header:{
-                        title: 'Dipstick test result - protein',
-                        selectedValue: '',
+                classDash: "dashed_bottom_border _padding",
+                radioBtnContent: {
+                    header: {
+                        title: "Dipstick test result - protein",
+                        selectedValue: "",
                         displayNone: true,
-                        class: 'bold',
-                        name: 'Protein dipstick test result'
+                        class: "bold",
+                        name: "Protein dipstick test result",
                     },
-                    data:[
+                    data: [
                         {
-                            name: 'Negative',
-                            value: 'none',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "Negative",
+                            value: "none",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
                         {
-                            name: '+',
-                            value: '+',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "+",
+                            value: "+",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
                         {
-                            name: '++',
-                            value: '++',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "++",
+                            value: "++",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
                         {
-                            name: '+++',
-                            value: '+++',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "+++",
+                            value: "+++",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
                         {
-                            name: '++++',
-                            value: 'negative',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "++++",
+                            value: "negative",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
-                    ]
-                }
-                    
-            }
+                    ],
+                },
+            },
         ] as any,
-        glucose:[
+        glucose: [
             {
                 selectdData: [],
                 isFinishBtn: false,
-                classDash: 'dashed_bottom_border _padding',
-                radioBtnContent:
-                {
-                    header:{
-                        title: 'Dipstick test result - glucose',
-                        selectedValue: '',
+                classDash: "dashed_bottom_border _padding",
+                radioBtnContent: {
+                    header: {
+                        title: "Dipstick test result - glucose",
+                        selectedValue: "",
                         displayNone: true,
-                        class: 'bold',
-                        name: 'Glucose dipstick test result'
+                        class: "bold",
+                        name: "Glucose dipstick test result",
                     },
-                    data:[
+                    data: [
                         {
-                            name: 'Negative',
-                            value: 'none',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "Negative",
+                            value: "none",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
                         {
-                            name: '+',
-                            value: '+',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "+",
+                            value: "+",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
                         {
-                            name: '++',
-                            value: '++',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "++",
+                            value: "++",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
                         {
-                            name: '+++',
-                            value: '+++',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "+++",
+                            value: "+++",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
                         {
-                            name: '++++',
-                            value: 'negative',
-                            labelPlacement: 'start',
-                            colSize: '7',
-                            justify: 'space-between',
+                            name: "++++",
+                            value: "negative",
+                            labelPlacement: "start",
+                            colSize: "7",
+                            justify: "space-between",
                         },
-                    ]
-                }
-                    
-            }
+                    ],
+                },
+            },
         ] as any,
     }),
 
@@ -494,30 +465,27 @@ export const useUrineTestStore = defineStore ("urineTestingStore", {
         // setTestType(data: any){
         //     this.testType = data
         // },
-        setUrineTest(data: any){
-            this.urineTest = data
+        setUrineTest(data: any) {
+            this.urineTest = data;
         },
-        setNitrites(data: any){
-            this.nitrites = data
+        setNitrites(data: any) {
+            this.nitrites = data;
         },
-        setCulture(data: any){
-            this.culture = data
+        setCulture(data: any) {
+            this.culture = data;
         },
-        setGram(data: any){
-            this.gram = data
+        setGram(data: any) {
+            this.gram = data;
         },
-        setLeukocytes(data: any){
-            this.leukocytes = data
+        setLeukocytes(data: any) {
+            this.leukocytes = data;
         },
-        setProtein(data: any){
-            this.protein = data
+        setProtein(data: any) {
+            this.protein = data;
         },
-        setGlucose(data: any){
-            this.glucose = data
+        setGlucose(data: any) {
+            this.glucose = data;
         },
-
-
     },
-    persist:true,
-    
-})
+    persist: true,
+});

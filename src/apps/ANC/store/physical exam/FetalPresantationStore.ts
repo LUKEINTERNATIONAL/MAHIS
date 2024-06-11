@@ -71,7 +71,7 @@ export const useFetalPresentationStore = defineStore('fetalPresentationStore',{
                 header:{
                     title: '',
                     selectedValue: '',
-                    name:'Fetal Presentation'
+                    
                 },
 
                 data:
