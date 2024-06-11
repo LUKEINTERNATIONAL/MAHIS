@@ -106,7 +106,6 @@
                         :taggable="false"
                         :hide-selected="true"
                         :close-on-select="true"
-                        openDirection="bottom"
                         tag-placeholder="Select route"
                         placeholder="Select route"
                         selectLabel=""
@@ -131,7 +130,6 @@
                         :taggable="false"
                         :hide-selected="true"
                         :close-on-select="true"
-                        openDirection="bottom"
                         tag-placeholder="Frequency"
                         placeholder="Frequency"
                         selectLabel=""
@@ -382,7 +380,6 @@ const show_error_msg_for_duration = ref(false);
 const diagnosisData = ref([] as any);
 const drugName = ref("");
 const dose = ref("");
-const frequency = ref("");
 const duration = ref("");
 const prescription = ref("");
 const units = ref("");
@@ -430,7 +427,7 @@ const route_list = ref([
 const show_list_label = false as any
 
 function routeListUpdated(data: any) {
-    // selected_pres_method.value = data.name
+    selected_pres_method.value = data
 }
 
 onMounted(async () => {
@@ -517,7 +514,7 @@ async function areFieldsValid() {
 
 
 function frequencyDropDownUpdated(event: any) {
-    frequency.value = event.label
+    selected_frequency.value = event
 }
 
 
@@ -540,20 +537,26 @@ async function saveData() {
     const drugString = {
         drugName: drugName.value,
         dose: dose.value,
-        frequency: frequency.value,
+        frequency: selected_frequency.value.label,
+        frequency_code: selected_frequency.value.code,
         duration: duration.value,
         prescription: generatedPrescriptionDate,
         drug_id: drug_id.value,
         units: units.value,
+        route_id: selected_pres_method.value.id,
+        route_name: selected_pres_method.value.name,
         highlightbackground: highlightbackground
     };
+    
     selectedMedicalDrugsList.value.push(drugString);
     drugName.value = "";
     dose.value = "";
-    frequency.value = "";
+    selected_frequency.value = "";
     duration.value = "";
     prescription.value = "";
     componentKey.value++;
+    selected_drug.value = ""
+    selected_pres_method.value = ""
     saveStateValuesState();
     
 }
@@ -658,17 +661,19 @@ function selectedDrugName(data: any) {
 
 
 function editItemAtIndex(index: any) {
-    const dataItem = selectedMedicalDrugsList.value[index];
-    selectedMedicalDrugsList.value.splice(index, 1);
-    selected_drug.value = dataItem;
-    drugName.value = dataItem.drugName;
-    dose.value = dataItem.dose;
-    frequency.value = dataItem.frequency;
-    duration.value = dataItem.duration;
-    prescription.value = dataItem.prescription;
-    addItemButton.value = !addItemButton;
-    componentKey.value++;
-    saveStateValuesState();
+    const dataItem = selectedMedicalDrugsList.value[index]
+    selectedMedicalDrugsList.value.splice(index, 1)
+    selected_drug.value = dataItem
+    drugName.value = dataItem.drugName
+    dose.value = dataItem.dose
+    selected_frequency.value = {label: dataItem.frequency, code: dataItem.frequency_code},
+    duration.value = dataItem.duration
+    prescription.value = dataItem.prescription
+    addItemButton.value = !addItemButton
+    componentKey.value++
+    selected_drug.value = {id:dataItem.drug_id, name:dataItem.drugdrugName}
+    selected_pres_method.value = {id:dataItem.route_id, name: dataItem.route_name}
+    saveStateValuesState()
 }
 
 function getDate(ev: any) {

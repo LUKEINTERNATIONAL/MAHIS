@@ -10,7 +10,7 @@
 
         <ion-row>
             <ion-col size="10" class="" :class="highLightBnd(item)">
-                <ion-label class="truncate-text" style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.dose }} / {{ item.frequency }} / daily / {{ item.duration }} / until {{ item.prescription }}</ion-label>
+                <ion-label class="truncate-text" style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.dose }} / {{ item.frequency }} / daily / {{ item.duration }} / until {{ item.prescription }} (<span style="color: red;">{{ item.route_name }}</span>)</ion-label>
             </ion-col>
 
             <ion-col :class="highLightBnd(item)" size="2" v-if="show_actions_buttons" class="action_buttons">
