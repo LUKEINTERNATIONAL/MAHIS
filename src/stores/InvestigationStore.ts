@@ -27,7 +27,6 @@ export const useInvestigationStore = defineStore("investigationStore", {
                                     multiSelectData: [],
                                     id: "",
                                     idName: "specimen_id",
-                                    inputFieldDisplayNone: false,
                                 },
                                 {
                                     disabled: true,

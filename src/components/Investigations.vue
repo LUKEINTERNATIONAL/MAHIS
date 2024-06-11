@@ -146,7 +146,6 @@ export default defineComponent({
 
         this.specimen = await OrderService.getSpecimens("");
         modifyFieldValue(this.investigations, "specimen", "multiSelectData", this.specimen);
-        modifyFieldValue(this.investigations, "specimen", "inputFieldDisplayNone", true);
     },
 
     methods: {
