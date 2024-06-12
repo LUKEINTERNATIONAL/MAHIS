@@ -16,7 +16,7 @@
         side="top"
         @didDismiss="popoverProperties.isOpen = false"
     >
-    <ion-datetime v-if="showPicker" @ionChange="saveTheDate" id="datetime" presentation="date" :show-default-buttons="true" />
+    <ion-datetime v-if="showPicker" @ionChange="saveTheDate" id="datetime" presentation="date" :max="maxdate" :show-default-buttons="true" />
     </ion-popover>
 </template>
 <script setup lang="ts">
@@ -26,8 +26,10 @@ import DynamicButton from "./DynamicButton.vue";
 import { today } from "ionicons/icons";
 import { ref } from "vue";
 import { icons } from "../utils/svg";
+import { Service } from "@/services/service";
 
 const refDate = ref();
+const maxdate = Service.getSessionDate();
 const calenderIcon = icons.calendar;
 const popoverProperties = ref({
     title: "Set Time",

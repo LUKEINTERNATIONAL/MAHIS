@@ -81,7 +81,7 @@
                         @update:model-value="selectedDrugName($event)"
                         :multiple="false"
                         :taggable="false"
-                        :hide-selected="true"
+                        :hide-selected="false"
                         :close-on-select="true"
                         openDirection="bottom"
                         tag-placeholder="Select medication"
@@ -107,7 +107,7 @@
                         @update:model-value="routeListUpdated($event)"
                         :multiple="false"
                         :taggable="false"
-                        :hide-selected="true"
+                        :hide-selected="false"
                         :close-on-select="true"
                         tag-placeholder="Select route"
                         placeholder="Select route"
@@ -131,7 +131,7 @@
                         @update:model-value="frequencyDropDownUpdated($event)"
                         :multiple="false"
                         :taggable="false"
-                        :hide-selected="true"
+                        :hide-selected="false"
                         :close-on-select="true"
                         tag-placeholder="Frequency"
                         placeholder="Frequency"
@@ -433,7 +433,7 @@ const route_list = ref([
     { id:8 , name: "Buccal" },
     { id:9 , name: "Subcutaneous" },
     { id:10 , name: "Intraosseous" },
-    { id:11 , name: "Other"}
+    { id:11 , name: "Other method of prescription"}
 ] as any)
 const show_list_label = false as any
 

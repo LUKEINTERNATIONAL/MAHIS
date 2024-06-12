@@ -133,7 +133,7 @@ const referralType = ref([
         name: "Discharged Home"
     },
     {
-        name: "Dead",
+        name: "Death",
         selected: false,
     }
 ] as any)
