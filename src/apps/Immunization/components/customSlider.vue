@@ -196,9 +196,10 @@
         let upcoming_f = false
         let found = false
         this.vaccineSchudulesCount = vaccineScheduleStore.getVaccineSchedule().vaccinSchedule.length
+        vaccineScheduleStore.resetMissedVaccineSchedules()
         vaccineScheduleStore.getVaccineSchedule().vaccinSchedule.forEach((vaccineSchudule: any) => {
 
-          console.log(vaccineSchudule.milestone_status)
+          this.findMissingVaccines(vaccineSchudule)
           if (vaccineSchudule.milestone_status == 'current' ) {
             vaccineScheduleStore.setCurrentVisitId(vaccineSchudule.visit)
             vaccineScheduleStore.setCurrentMilestoneToAdminister({currentMilestone: vaccineSchudule.age})
@@ -329,8 +330,24 @@
         }
 
         if (arr.length == 0) {
-          console.log("jere it is")
           return false
+        }
+      },
+      findMissingVaccines(milestone: any) {
+        const obj = {
+          age: milestone.age,
+          vaccines: [] as any
+        }
+        if (milestone.milestone_status=="passed") {
+          milestone.antigens.forEach((vaccine: any) => {
+            if (vaccine.status == "pending") {
+              obj.vaccines.push(vaccine)
+            }
+          })
+        }
+        const vaccineScheduleStore = useAdministerVaccineStore()
+        if (obj.vaccines.length > 0) {
+          vaccineScheduleStore.setMissedVaccineSchedules(obj)
         }
       }
     }

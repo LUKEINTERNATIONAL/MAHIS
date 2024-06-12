@@ -61,13 +61,15 @@
         <div>
             <div class="graphBtn">
                 <div class="dueAlert">
-                    <div>
-                        <ion-button class="btnText btnTextWeight" size="small" fill="solid" color="danger">
-                            <ion-icon slot="start" size="small" :icon="iconsContent.alertDangerRed"></ion-icon>
-                            <b> at 6 weeks overdue</b>
-                        </ion-button>
-                    </div>
-                    <div class="dueAlertText">4 vaccines missed!</div>
+                    <ion-row v-for="(item, index) in missedVaccineSchedules" :key="index">
+                        <div>
+                            <ion-button class="btnText btnTextWeight" size="small" fill="solid" color="danger">
+                                <ion-icon slot="start" size="small" :icon="iconsContent.alertDangerRed"></ion-icon>
+                                <b> at {{ item.age }}</b>
+                            </ion-button>
+                        </div>
+                        <div class="dueAlertText">{{ item.vaccines.length }} vaccine(s) missed!</div>
+                    </ion-row>
                 </div>
             </div>
             <div class="vaccinesTitle">
@@ -136,6 +138,7 @@ import {
     IonItem,
     IonLabel,
     IonModal,
+    IonRow,
     modalController,
     AccordionGroupCustomEvent,
 } from "@ionic/vue";
@@ -220,6 +223,7 @@ export default defineComponent({
         WeightHeightChart,
         PreviousVitals,
         customSlider,
+        IonRow,
     },
     data() {
         return {
@@ -228,7 +232,7 @@ export default defineComponent({
             isOpen: false,
             iconsContent: icons,
             current_milestone: "" as string,
-            todays_date: HisDate.currentDate(),
+            todays_date: HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
         };
     },
     computed: {
@@ -239,7 +243,7 @@ export default defineComponent({
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
         ...mapState(useGeneralStore, ["activities"]),
         ...mapState(useOutcomeStore, ["dispositions"]),
-        ...mapState(useAdministerVaccineStore, ["currentMilestone"]),
+        ...mapState(useAdministerVaccineStore, ["currentMilestone", "missedVaccineSchedules"]),
     },
     created() {
         this.getData();
@@ -832,5 +836,10 @@ export default defineComponent({
 .administerVac {
     height: 58px;
     width: 150px;
+}
+.dashed-hr {
+    border: none;
+    border-top: 1px dashed #b3b3b3;
+    margin: 20px 0; /* Adjust as needed */
 }
 </style>

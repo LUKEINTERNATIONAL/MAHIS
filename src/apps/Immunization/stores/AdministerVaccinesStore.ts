@@ -10,6 +10,7 @@ export const useAdministerVaccineStore = defineStore('administerVaccineStore',{
       vaccineSchedule: {} as any,
       vaccineReload: false,
       currentSchedFound: false,
+      missedVaccineSchedules: [] as any, 
     }),
     actions:{
       setVaccineSchedule(data: any) {
@@ -66,6 +67,15 @@ export const useAdministerVaccineStore = defineStore('administerVaccineStore',{
       },
       getCurrentSchedFound(): boolean {
         return this.currentSchedFound
+      },
+      setMissedVaccineSchedules(data: any): void {
+        this.missedVaccineSchedules.push(data)
+      },
+      getMissedVaccineSchedules(): any {
+        return this.missedVaccineSchedules
+      },
+      resetMissedVaccineSchedules(): void {
+        this.missedVaccineSchedules = []
       }
     },
     persist: true,
