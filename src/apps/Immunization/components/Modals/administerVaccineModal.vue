@@ -134,6 +134,9 @@ export default defineComponent({
     async mounted() {
         this.loadCurrentSelectedDrug()
         this.displayUserNames()
+        const store = useAdministerVaccineStore()
+        this.showPD = store.isVaccinePassed()
+        this.showDateBtns = !this.showPD
     },
     setup() {
         return { checkmark, pulseOutline };

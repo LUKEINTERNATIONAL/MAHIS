@@ -33,8 +33,6 @@ export const useAdministerVaccineStore = defineStore('administerVaccineStore',{
         return this.administeredVaccines
       },
       setCurrentSelectedDrug(visit_id: number, drug_id: number, drug_name: string): void {
-          console.log(visit_id)
-          console.log(drug_id)
           this.currentSelectedDrug = {
               visit_id: visit_id,
               drug_id: drug_id,
@@ -76,6 +74,17 @@ export const useAdministerVaccineStore = defineStore('administerVaccineStore',{
       },
       resetMissedVaccineSchedules(): void {
         this.missedVaccineSchedules = []
+      },
+      isVaccinePassed(): boolean {
+        let bool = false
+        this.vaccineSchedule.vaccinSchedule.forEach((vaccineSchudule: any) => {
+          vaccineSchudule.antigens.forEach((vaccine: any) => {
+              if (this.currentSelectedDrug.drug_id == vaccine.drug_id && vaccineSchudule.milestone_status=="passed") {
+                bool = true
+              }
+          })
+        })
+        return bool
       }
     },
     persist: true,
