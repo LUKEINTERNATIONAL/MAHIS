@@ -72,7 +72,7 @@
             <div class="vaccinesTitle">
                 <div style="width: 370px; display: flex; justify-content: space-between; align-content: center">
                     <div class="vaccinesTitleText">Administer Vaccines</div>
-                    <div class="vaccinesTitleDate">Todays Date: <b>06 Jul 2024 </b></div>
+                    <div class="vaccinesTitleDate">Todays Date: <b>{{ todays_date }}</b></div>
                 </div>
             </div>
             <div class="milestone">
@@ -225,6 +225,7 @@ export default defineComponent({
             isOpen: false,
             iconsContent: icons,
             current_milestone: "" as string,
+            todays_date: HisDate.currentDate(),
         };
     },
     computed: {

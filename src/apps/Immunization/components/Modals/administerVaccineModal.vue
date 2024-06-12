@@ -5,7 +5,7 @@
                 <div class="om">Administer Vaccine</div>
             </ion-col>
             <ion-col size="6">
-                <ion-label class="lbl-tl" style="font-size: 13"> Todays Date: <span class="lbl-ct">06 Jul 2024</span></ion-label>
+                <ion-label class="lbl-tl" style="font-size: 13"> Todays Date: <span class="lbl-ct">{{ sessionDate }}</span></ion-label>
             </ion-col>
         </ion-row>
 
@@ -127,6 +127,7 @@ export default defineComponent({
             is_batch_number_valid: false as boolean,
             batch_number_error_message: "Enter a valid batch number",
             full_name: "" as string,
+            sessionDate: HisDate.toStandardHisDisplayFormat(Service.getSessionDate())
         };
     },
     computed: {},
