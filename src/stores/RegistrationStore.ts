@@ -237,6 +237,10 @@ const initialSocialHistory = [
                     value: "employed",
                 },
                 {
+                    name: "Student",
+                    value: "Student",
+                },
+                {
                     name: "Unemployed",
                     value: "unemployed",
                 },

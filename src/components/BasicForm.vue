@@ -99,6 +99,7 @@
                             </h6>
                             <VueMultiselect
                                 v-if="!col.inputFieldDisplayNone"
+                                :disabled="col.disabled"
                                 v-model="col.value"
                                 :max-height="150"
                                 @update:model-value="handleInput(contentData, col, $event, 'updateMultiselect')"

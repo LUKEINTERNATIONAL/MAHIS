@@ -450,6 +450,9 @@ ion-accordion {
     border: 1px solid #b3b3b3;
     padding-left: 35px;
 }
+.multiselect--disabled .multiselect__tags {
+    background: #ededed !important;
+}
 .multiselect__select::before {
     top: 95%;
 }

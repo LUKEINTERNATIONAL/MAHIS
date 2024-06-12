@@ -132,8 +132,16 @@ function validateWeight(val: any) {
 function validateHeight(val: any) {
     return isNotEmptyandNumber(val) || checkMinMax(val, 40, 220);
 }
+function validateRBS(val: any) {
+    return isNotEmptyandNumber(val) || checkMinMax(val, 70, 200);
+}
+function validateFBS(val: any) {
+    return isNotEmptyandNumber(val) || checkMinMax(val, 70, 126);
+}
 
 export default {
+    validateRBS,
+    validateFBS,
     validateHeight,
     validateWeight,
     isFloatingPointNumber,
