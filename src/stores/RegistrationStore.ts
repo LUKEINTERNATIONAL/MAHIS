@@ -2,186 +2,218 @@ import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
 import _ from "lodash";
 const initialPersonalInformation = [
-    {
-        selectedData: [],
-        isFinishBtn: false,
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "National ID",
-                            iconRight: icons.scannerIcon,
-                            icon: icons.nationalID,
-                            value: "",
-                            name: "nationalID",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            required: true,
-                            placeholder: "__-__-__-__",
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "First name*",
-                            icon: icons.fullName,
-                            value: "",
-                            name: "firstname",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            required: true,
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Last name*",
-                            icon: icons.fullName,
-                            value: "",
-                            name: "lastname",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            required: true,
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Middle name",
-                            icon: icons.fullName,
-                            value: "",
-                            name: "middleName",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            required: true,
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Phone number",
-                            icon: icons.phone,
-                            value: "",
-                            name: "phoneNumber",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            required: true,
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Date of birth*",
-                            icon: icons.calenderPrimary,
-                            value: "",
-                            name: "birthdate",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            required: true,
-                            isDatePopover: true,
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        selectedData: [],
-        initial: [],
-        isFinishBtn: false,
-        sideColSize: 1,
-        checkboxBtnContent: {
-            header: {
-                selectedValue: "",
-                name: "Estimate",
+  {
+    selectedData: [],
+    isFinishBtn: false,
+    data: {
+      rowData: [
+        {
+          colData: [
+            {
+              inputHeader: "National ID",
+              iconRight: icons.scannerIcon,
+              icon: icons.nationalID,
+              value: "",
+              name: "nationalID",
+              eventType: "input",
+              alertsErrorMassage: "",
+              required: true,
+              placeholder: "__-__-__-__",
             },
-            data: [
-                {
-                    name: "Estimate Age",
-                    value: "TB",
-                    checked: false,
-                },
-            ],
+          ],
         },
+      ],
     },
-    {
-        childName: "Estimate Age",
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            displayNone: true,
-                            inputHeader: "Estimated age",
-                            icon: icons.calenderPrimary,
-                            value: "",
-                            name: "estimation",
-                            eventType: "input",
-                            alertsErrorMassage: "",
-                            required: true,
-                        },
-                    ],
-                },
-            ],
+  },
+  {
+    data: {
+      rowData: [
+        {
+          colData: [
+            {
+              inputHeader: "First name*",
+              icon: icons.fullName,
+              value: "",
+              name: "firstname",
+              eventType: "input",
+              alertsErrorMassage: "",
+              required: true,
+            },
+          ],
         },
+      ],
     },
-    {
-        radioBtnContent: {
-            header: {
-                title: "Gender*",
-                selectedValue: "",
-                name: "gender",
+  },
+  {
+    data: {
+      rowData: [
+        {
+          colData: [
+            {
+              inputHeader: "Last name*",
+              icon: icons.fullName,
+              value: "",
+              name: "lastname",
+              eventType: "input",
+              alertsErrorMassage: "",
+              required: true,
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    data: {
+      rowData: [
+        {
+          colData: [
+            {
+              inputHeader: "Middle name",
+              icon: icons.fullName,
+              value: "",
+              name: "middleName",
+              eventType: "input",
+              alertsErrorMassage: "",
+              required: true,
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    data: {
+      rowData: [
+        {
+          colData: [
+            {
+              inputHeader: "Phone number",
+              icon: icons.phone,
+              value: "",
+              name: "phoneNumber",
+              eventType: "input",
+              alertsErrorMassage: "",
+              required: true,
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    data: {
+      rowData: [
+        {
+          colData: [
+            {
+              inputHeader: "Date of birth*",
+              icon: icons.calenderPrimary,
+              value: "",
+              name: "birthdate",
+              eventType: "input",
+              //disabled: true,
+              alertsErrorMassage: "",
+              required: true,
+              isDatePopover: true,
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    selectedData: [],
+    initial: [],
+    isFinishBtn: false,
+    sideColSize: 1,
+    checkboxBtnContent: {
+      header: {
+        selectedValue: "",
+        name: "Estimate",
+      },
+      data: [
+        {
+          name: "Estimate Age",
+          value: "TB",
+          checked: false,
+        },
+      ],
+    },
+  },
+  {
+    childName: "Estimate Age",
+    data: {
+      rowData: [
+        {
+          colData: [
+            // {
+            //     displayNone: true,
+            //     inputHeader: "Estimated age",
+            //     icon: icons.calenderPrimary,
+            //     value: "",
+            //     name: "estimation",
+            //     eventType: "input",
+            //     alertsErrorMassage: "",
+            //     required: true,
+            // },
+            {
+              displayNone: true,
+              inputHeader: "Estimated age",
+              value: "",
+              icon: icons.time,
+              name: "estimation",
+              required: true,
+              eventType: "input",
+              alertsErrorMassage: "",
+              isChangeUnits: true,
+              id: "",
+              idName: "district_id",
+              unitsData: {
+                inputHeader: "Duration Units",
+                popOver: true,
+                icon: icons.search,
+                value: "",
+                name: "units",
+                eventType: "input",
                 alertsErrorMassage: "",
+                isSingleSelect: true,
+                trackBy: "id",
+                multiSelectData: [
+                  { id: "1", name: "Days" },
+                  { id: "2", name: "Months" },
+                  { id: "3", name: "Years" },
+                ],
+                id: "",
+                idName: "district_id",
+              },
             },
-            data: [
-                {
-                    name: "Male",
-                    value: "M",
-                    colSize: "4",
-                },
-                {
-                    name: "Female",
-                    value: "F",
-                },
-            ],
+          ],
         },
+      ],
     },
+  },
+  {
+    radioBtnContent: {
+      header: {
+        title: "Gender*",
+        selectedValue: "",
+        name: "gender",
+        alertsErrorMassage: "",
+      },
+      data: [
+        {
+          name: "Male",
+          value: "M",
+          colSize: "4",
+        },
+        {
+          name: "Female",
+          value: "F",
+        },
+      ],
+    },
+  },
 ] as any;
 const initialSocialHistory = [
     {
@@ -235,6 +267,10 @@ const initialSocialHistory = [
                 {
                     name: "Employed",
                     value: "employed",
+                },
+                {
+                    name: "Student",
+                    value: "Student",
                 },
                 {
                     name: "Unemployed",

@@ -38,7 +38,7 @@
                     </div>
                     <div class="flex-item">
                         <CurrentLocation />
-                        <SocialHistory v-if="checkUnderFive" />
+                        <SocialHistory v-if="checkUnderFourteen" />
                         <BirthRegistration v-if="checkUnderOne" />
                     </div>
                     <div class="flex-item">
@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 <div v-if="currentStep == 'Social History'">
-                    <SocialHistory v-if="checkUnderFive" />
+                    <SocialHistory v-if="checkUnderFourteen" />
                     <BirthRegistration v-if="checkUnderOne" />
                 </div>
                 <div v-if="currentStep == 'Guardian Information'">
@@ -173,7 +173,7 @@ export default defineComponent({
             demographic: true,
             currentStep: "Personal Information",
             scanner: false,
-            checkUnderFive: true,
+            checkUnderFourteen: true,
             checkUnderOne: false,
             steps: ["Personal Information", "Location", "Social History", "Guardian Information"],
             screenWidth: "" as any,
@@ -282,7 +282,7 @@ export default defineComponent({
         checkAge() {
             if (!isEmpty(this.birthdate)) {
                 console.log(HisDate.ageInMonths(this.birthdate));
-                this.checkUnderFive = HisDate.getAgeInYears(this.birthdate) >= 5 ? true : false;
+                this.checkUnderFourteen = HisDate.getAgeInYears(this.birthdate) >= 14 ? true : false;
                 this.checkUnderOne = HisDate.ageInMonths(this.birthdate) < 9 ? true : false;
             }
         },
@@ -300,7 +300,7 @@ export default defineComponent({
             this.$router.push(url);
         },
         nextStep() {
-            if (this.checkUnderFive || this.checkUnderOne)
+            if (this.checkUnderFourteen || this.checkUnderOne)
                 this.steps = ["Personal Information", "Location", "Social History", "Guardian Information"];
             else this.steps = ["Personal Information", "Location", "Guardian Information"];
             const currentIndex = this.steps.indexOf(this.currentStep);

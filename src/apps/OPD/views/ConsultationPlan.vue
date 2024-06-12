@@ -11,6 +11,7 @@
                 :StepperData="StepperData"
             />
         </ion-content>
+        <BasicFooter @finishBtn="saveData()" />
     </ion-page>
 </template>
 
@@ -83,6 +84,7 @@ import { ConsciousnessService } from "@/apps/OPD/services/consciousness_service"
 import { usePhysicalExaminationStore } from "@/apps/OPD/stores/PhysicalExamination";
 import { PhysicalExamService } from "@/apps/OPD/services/physical_exam_service";
 import { resetOPDPatientData } from "@/apps/OPD/config/reset_opd_data";
+import BasicFooter from "@/components/BasicFooter.vue";
 
 export default defineComponent({
     name: "Home",
@@ -108,6 +110,7 @@ export default defineComponent({
         IonLabel,
         IonModal,
         Stepper,
+        BasicFooter,
     },
     data() {
         return {
