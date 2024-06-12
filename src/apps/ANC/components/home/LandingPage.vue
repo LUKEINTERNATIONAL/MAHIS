@@ -96,10 +96,9 @@
             <router-link to="/ancEnd">
             <ion-card color="secondary">
     <ion-card-header>
-      <ion-card-title>ANC End</ion-card-title>
+      <ion-card-title>Pregnancy outcome</ion-card-title>
      
     </ion-card-header>
-
     <ion-card-content>  <img src="../../public/icons/bed.png" alt="Profile Icon"/> </ion-card-content>
   </ion-card>
    </router-link>

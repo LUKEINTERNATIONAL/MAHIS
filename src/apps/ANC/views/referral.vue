@@ -30,7 +30,6 @@ import { mapState } from "pinia";
 import { formatInputFiledData, formatRadioButtonData } from "@/services/formatServerData";
 import { Service } from "@/services/service";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
-import {ReferralInstance} from '@/apps/ANC/service/referral_service'
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { resetPatientData } from "@/services/reset_data";
 
@@ -101,17 +100,17 @@ export default defineComponent ({
     },
 
     async saveReferral () {
-        const data: any = await this.buildReferral();
-        if (data.length > 0) {
-            const userID: any = Service.getUserID();
-            const referralInstance = new ReferralInstance();
-            referralInstance.push(this.demographics.patient_id, userID, data);
-            toastSuccess("Referral data saved successfully");
-        }
-
-        else {
-            toastWarning("Could not find all concepts");
-        }
+        // const data: any = await this.buildReferral();
+        // if (data.length > 0) {
+        //     const userID: any = Service.getUserID();
+        //     const referralInstance = new ReferralInstance();
+        //     referralInstance.push(this.demographics.patient_id, userID, data);
+        //     toastSuccess("Referral data saved successfully");
+        // }
+        //
+        // else {
+        //     toastWarning("Could not find all concepts");
+        // }
     },
   },
 });

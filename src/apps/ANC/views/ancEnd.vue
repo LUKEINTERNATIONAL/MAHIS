@@ -3,7 +3,7 @@
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
-            <Stepper stepperTitle="ANC-End" :wizardData="wizardData" @updateStatus="markWizard" :StepperData="StepperData" />
+            <Stepper stepperTitle="Pregnancy outcome" :wizardData="wizardData" @updateStatus="markWizard" :StepperData="StepperData" />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
     </ion-page>
@@ -83,7 +83,7 @@ export default defineComponent({
         return {
             wizardData: [
                 {
-                    title: "AncEnd",
+                    title: "Pregnancy outcome",
                     class: "common_step",
                     checked: "",
                     icon: false,
@@ -94,7 +94,7 @@ export default defineComponent({
             ],
             StepperData: [
                 {
-                    title: "AncEnd",
+                    title: "Pregnancy outcome",
                     component: "AncEnd",
                     value: "1",
                 },
