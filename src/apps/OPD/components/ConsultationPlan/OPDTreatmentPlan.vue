@@ -16,7 +16,7 @@
         <ion-accordion-group ref="accordionGroup" class="previousView">
             <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
                 <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Allergies</ion-label>
+                    <ion-label class="previousLabel">Documented allergies timeline</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content">
                     <div class="ionLbltp" v-for="(item, index) in FirstPreviousAllegies" :key="index">
@@ -81,18 +81,21 @@
                         @update:model-value="selectedDrugName($event)"
                         :multiple="false"
                         :taggable="false"
-                        :hide-selected="true"
+                        :hide-selected="false"
                         :close-on-select="true"
                         openDirection="bottom"
-                        tag-placeholder="Find and select medication"
-                        placeholder="Find and select medication"
+                        tag-placeholder="Select medication"
+                        placeholder="Select medication"
                         selectLabel=""
                         label="name"
                         :searchable="true"
                         @search-change="FindDrugName($event)"
                         track-by="uuid"
-                        :options="diagnosisData"
+                        :options="OPDDrugList"
                     />
+                    <div>
+                        <ion-label style="padding: 3%;;" v-if="show_error_msg_for_drug" class="error-label">{{ drugErrMsg }}</ion-label>
+                    </div>
                 </ion-col>
             </ion-row>
 
@@ -104,11 +107,10 @@
                         @update:model-value="routeListUpdated($event)"
                         :multiple="false"
                         :taggable="false"
-                        :hide-selected="true"
+                        :hide-selected="false"
                         :close-on-select="true"
-                        openDirection="bottom"
-                        tag-placeholder="Select method of prescription"
-                        placeholder="Select method of prescription"
+                        tag-placeholder="Select route"
+                        placeholder="Select route"
                         selectLabel=""
                         label="name"
                         :searchable="true"
@@ -116,6 +118,9 @@
                         track-by="id"
                         :options="route_list"
                     />
+                    <div>
+                        <ion-label v-if="show_error_msg_for_pres_method" class="error-label">{{ pres_methodErrMsg }}</ion-label>
+                    </div>
                 </ion-col>
 
 
@@ -126,11 +131,10 @@
                         @update:model-value="frequencyDropDownUpdated($event)"
                         :multiple="false"
                         :taggable="false"
-                        :hide-selected="true"
+                        :hide-selected="false"
                         :close-on-select="true"
-                        openDirection="bottom"
-                        tag-placeholder="Select Frequency"
-                        placeholder="Select Frequency"
+                        tag-placeholder="Frequency"
+                        placeholder="Frequency"
                         selectLabel=""
                         label="label"
                         :searchable="true"
@@ -138,6 +142,9 @@
                         track-by="code"
                         :options="drug_frequencies"
                     />
+                    <div>
+                        <ion-label v-if="show_error_msg_for_frequency" class="error-label">{{ frequencyErrMsg }}</ion-label>
+                    </div>
                 </ion-col>
             </ion-row>
 
@@ -154,7 +161,7 @@
 
                 <ion-col>
                     <ion-item class="input_item">
-                        <ion-input placeholder="Duration" v-model="duration" fill="outline"></ion-input>
+                        <ion-input placeholder="Duration in days" v-model="duration" fill="outline"></ion-input>
                         <ion-label><span class="selectedPatient"></span></ion-label>
                     </ion-item>
                     <div>
@@ -191,7 +198,7 @@
                 <ion-accordion-group ref="accordionGroup" class="previousView" @ionChange="accordionGroupChangeFn1">
                     <ion-accordion value="first" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
                         <ion-item slot="header" color="light">
-                            <ion-label class="previousLabel">Previous medications</ion-label>
+                            <ion-label class="previousLabel">Documented medications timeline</ion-label>
                         </ion-item>
                         <div class="ion-padding" slot="content">
                             <div class="ionLbltp" v-for="(item, index) in PreviuosSelectedMedicalDrugsList" :key="index">
@@ -352,7 +359,6 @@ import { DrugService } from "@/services/drug_service";
 import { ConceptName } from "@/interfaces/conceptName";
 import DynamicButton from "@/components/DynamicButton.vue";
 import DynamicList from "@/components/DynamicList.vue";
-import { ConceptService } from "@/services/concept_service";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { Service } from "@/services/service";
 import { PreviousTreatment } from "@/apps/NCD/services/treatment";
@@ -360,16 +366,14 @@ import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore"
 import { useAllegyStore} from "@/apps/OPD/stores/AllergyStore"
 import VueMultiselect from "vue-multiselect"
 import NonPharmacologicalIntervention from "@/apps/OPD/components/ConsultationPlan/NonPharmacologicalIntervention.vue"
-import ListPicker from "@/components/ListPicker.vue"
+import { isEmpty } from "lodash"
 
 const iconsContent = icons;
 const drug_frequencies = DRUG_FREQUENCIES;
 const search_item = ref(false);
 const display_item = ref(false);
 const addItemButton = ref(true);
-const popoverOpen = ref(false);
-const prescPopoverOpen = ref(false);
-let event: null = null;
+
 const componentKey = ref(0);
 const drugnameErrMsg = ref("");
 const show_error_msg_for_drug_name = ref(false);
@@ -377,10 +381,8 @@ const doseErrMsg = ref("");
 const show_error_msg_for_dose = ref(false);
 const durationErrMsg = ref();
 const show_error_msg_for_duration = ref(false);
-const diagnosisData = ref([] as any);
 const drugName = ref("");
 const dose = ref("");
-const frequency = ref("");
 const duration = ref("");
 const prescription = ref("");
 const units = ref("");
@@ -393,11 +395,10 @@ const btnFill = "clear";
 const showMoreMedicationsMsg = ref("Show more medications");
 const store = useTreatmentPlanStore();
 const store2 = useAllegyStore();
-const selectedAllergiesList2 = computed(() => store2.selectedMedicalAllergiesList);
-const selectedMedicalDrugsList = computed(() => store.selectedMedicalDrugsList);
+const selectedAllergiesList2 = computed(() => store2.selectedMedicalAllergiesList)
+const selectedMedicalDrugsList = computed(() => store.selectedMedicalDrugsList)
+const OPDDrugList = computed(() => store.partialOPDdrugList)
 const nonPharmalogicalTherapyAndOtherNotes = computed(() => store.nonPharmalogicalTherapyAndOtherNotes);
-const selectedMedicalAllergiesList = computed(() => store.selectedMedicalAllergiesList);
-const input = ref();
 const values = ["first", "second", "third"];
 const PreviuosSelectedMedicalDrugsList = ref();
 const FirstPreviousNotes = ref();
@@ -411,13 +412,16 @@ const FirstPreviousAllegies = ref();
 const RestOfPreviousAllegies = ref();
 const currentDrugOb = ref()
 
-const multi_Selection = false as any
+const pres_methodErrMsg = ref('Select a route')
+const show_error_msg_for_pres_method = ref(false)
+const frequencyErrMsg = ref('Select frequency')
+const show_error_msg_for_frequency = ref(false)
+const drugErrMsg = ref('Select drug')
+const show_error_msg_for_drug = ref(false)
+
 const selected_pres_method = ref()
 const selected_frequency = ref()
 const selected_drug = ref()
-const uniqueId = "45" as any
-const name_of_list = ref("List" as any)
-const list_place_holder = ref("Please select method of prescribing medication" as any)
 const route_list = ref([
     { id:1 , name: "Oral" },
     { id:2 , name: "Intravenous (IV)" },
@@ -429,16 +433,12 @@ const route_list = ref([
     { id:8 , name: "Buccal" },
     { id:9 , name: "Subcutaneous" },
     { id:10 , name: "Intraosseous" },
-    { id:11 , name: "Other"}
+    { id:11 , name: "Other method of prescription"}
 ] as any)
 const show_list_label = false as any
 
 function routeListUpdated(data: any) {
-    // selected_pres_method.value = data.name
-}
-
-function routeListFiltred(data: any) {
-
+    selected_pres_method.value = data
 }
 
 onMounted(async () => {
@@ -460,6 +460,7 @@ watch(
     }
 );
 
+
 watch(
     () => dose.value,
     async (newValue) => {
@@ -474,9 +475,47 @@ watch(
     }
 );
 
+function validateRoute() {
+    if (isEmpty(selected_pres_method.value) == true) {
+        show_error_msg_for_pres_method.value = true
+        return false
+    }
+
+    if (isEmpty(selected_pres_method.value) == false) {
+        show_error_msg_for_pres_method.value = false
+        return true
+    }
+}
+
+function validateFrequency() {
+    if (isEmpty(selected_frequency.value) == true) {
+        show_error_msg_for_frequency.value = true
+        return false
+    }
+
+    if (isEmpty(selected_frequency.value) == false) {
+        show_error_msg_for_frequency.value = false
+        return true
+    }
+}
+
+function validateDrug() {
+    if (isEmpty(selected_drug.value) == true) {
+        show_error_msg_for_drug.value = true
+        return false
+    }
+
+    if (isEmpty(selected_drug.value) == false) {
+        show_error_msg_for_drug.value = false
+        return true
+    }
+}
+
 function addData() {
     addItemButton.value = !addItemButton.value;
     search_item.value = true;
+    show_error_msg_for_dose.value = false
+    show_error_msg_for_duration.value = false
 }
 
 async function validatedDrugName() {
@@ -515,31 +554,22 @@ async function areFieldsValid() {
     const isDrugnameValid = await validatedDrugName();
     const isDoseValid = await validateDose();
     const isDurationValid = await validateDuration();
+    const isFrequencyValid = validateFrequency()
+    const isDrugValid = validateDrug()
+    const isRouteValid = validateRoute()
 
-    if (!isDrugnameValid && !isDoseValid && !isDurationValid) {
+    if (!isDrugnameValid && !isDoseValid && !isDurationValid && isFrequencyValid == true && isDrugValid == true && isRouteValid == true) {
         return true;
     } else {
         return false;
     }
 }
 
-function selectAl(item: any) {
-    item.selected = !item.selected;
-    const treatmentPlanStore = useTreatmentPlanStore();
-    treatmentPlanStore.setSelectedMedicalAllergiesList(item);
-    saveStateValuesState();
-}
 
 function frequencyDropDownUpdated(event: any) {
-    frequency.value = event.label
+    selected_frequency.value = event
 }
-function selectFrequency(index: any) {
-    drug_frequencies.forEach((item) => {
-        item.selected = false;
-    });
-    drug_frequencies[index].selected = !drug_frequencies[index].selected;
-    frequency.value = drug_frequencies[index].label;
-}
+
 
 async function saveData() {
     const are_fieldsValid = await areFieldsValid();
@@ -560,22 +590,27 @@ async function saveData() {
     const drugString = {
         drugName: drugName.value,
         dose: dose.value,
-        frequency: frequency.value,
+        frequency: selected_frequency.value.label,
+        frequency_code: selected_frequency.value.code,
         duration: duration.value,
         prescription: generatedPrescriptionDate,
         drug_id: drug_id.value,
         units: units.value,
+        route_id: selected_pres_method.value.id,
+        route_name: selected_pres_method.value.name,
         highlightbackground: highlightbackground
     };
+    
     selectedMedicalDrugsList.value.push(drugString);
     drugName.value = "";
     dose.value = "";
-    frequency.value = "";
+    selected_frequency.value = ref()
     duration.value = "";
     prescription.value = "";
     componentKey.value++;
+    selected_drug.value = ref()
+    selected_pres_method.value = ref()
     saveStateValuesState();
-    
 }
 
 async function FindDrugName(text: any) {
@@ -593,7 +628,7 @@ async function FindDrugName(text: any) {
         other: drug,
     }))
 
-    diagnosisData.value = drugs
+    store.setPartialOPDdrugList(drugs)
 }
 
 async function FindDrugName2(text: any) {
@@ -608,15 +643,7 @@ async function FindDrugName2(text: any) {
         name: search_value,
         page: page,
         page_size: limit,
-    });
-    // const filter_id_array: any[] = []
-    // selectedAllergiesList2.value.forEach((selectedMedicalAllergy: any) => {
-    //     if (selectedMedicalAllergy.selected) {
-    //         filter_id_array.push(selectedMedicalAllergy.concept_id);
-    //     }
-    // })
-
-    //const filteredDrugs = filterArrayByIDs(drugs as any, filter_id_array as any);
+    })
 
     drugs.map((drug: any) => ({
         label: drug.name,
@@ -624,7 +651,7 @@ async function FindDrugName2(text: any) {
         other: drug,
     }));
 
-    diagnosisData.value = drugs;
+    store.setPartialOPDdrugList(drugs)
     return drugs;
 }
 
@@ -647,13 +674,6 @@ function isPresentInAllergyList(obj: any) {
 async function findIfDrugNameExists() {
     const filteredDrugs = await FindDrugName2(drugName.value);
     if (filteredDrugs.length > 0) {
-        // if (drugName.length > 0) {
-        //     filteredDrugs.forEach((drug: any) => {
-        //         if (drug.name === drugName) {
-        //             return true
-        //         }
-        //     })
-        // }
         if (drugName.value.length == 0) {
             return false;
         }
@@ -661,48 +681,10 @@ async function findIfDrugNameExists() {
     } else return false;
 }
 
-function filterArrayByIDs(mainArray: [], idsToFilter: []) {
-    return mainArray.filter((item: any) => 
-        !idsToFilter.includes(item.concept_id as never)
-    );
-}
-
 function hasMatchingIDs(mainArray: any[], idsToFilter: any[]): boolean {
-    // Check if any item in mainArray has concept_id included in idsToFilter
     return mainArray.some((item: any) => 
         idsToFilter.includes(item.concept_id as never)
     );
-}
-
-
-async function FindAllegicDrugName(text: any) {
-    const searchText = text.target.value;
-    const page = 1,
-        limit = 10;
-    const drugs: ConceptName[] = await ConceptService.getConceptSet("OPD Medication", searchText);
-    // const drugs: ConceptName[] = await DrugService.getOPDDrugs({
-    // "name": searchText,
-    // "page": page,
-    // "selected": false as any,
-    // "page_size": limit,
-    // })
-    drugs.map((drug) => ({
-        label: drug.name,
-        value: drug.name,
-        other: drug,
-    }));
-    const treatmentPlanStore = useTreatmentPlanStore();
-    treatmentPlanStore.setMedicalAllergiesList(drugs);
-}
-
-function openPopover(e: any) {
-    event = e;
-    popoverOpen.value = true;
-}
-
-function openPrescPopover(e: any) {
-    // const prescEvent = e
-    prescPopoverOpen.value = true;
 }
 
 function selectedDrugName(data: any) {
@@ -715,32 +697,25 @@ function selectedDrugName(data: any) {
 
 
 function editItemAtIndex(index: any) {
-    const dataItem = selectedMedicalDrugsList.value[index];
-    selectedMedicalDrugsList.value.splice(index, 1);
-    selected_drug.value = dataItem;
-    drugName.value = dataItem.drugName;
-    dose.value = dataItem.dose;
-    frequency.value = dataItem.frequency;
-    duration.value = dataItem.duration;
-    prescription.value = dataItem.prescription;
-    addItemButton.value = !addItemButton;
-    componentKey.value++;
-    saveStateValuesState();
-}
-
-function getDate(ev: any) {
-    const inputDate = new Date(ev.detail.value);
-    const year = inputDate.getFullYear();
-    const month = inputDate.getMonth() + 1;
-    const day = inputDate.getDate();
-    const formattedDate = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-    prescription.value = formattedDate;
+    const dataItem = selectedMedicalDrugsList.value[index]
+    selectedMedicalDrugsList.value.splice(index, 1)
+    drugName.value = dataItem.drugName
+    dose.value = dataItem.dose
+    selected_frequency.value = {label: dataItem.frequency, code: dataItem.frequency_code},
+    duration.value = dataItem.duration
+    prescription.value = dataItem.prescription
+    addItemButton.value = !addItemButton
+    componentKey.value++
+    selected_drug.value = {id:dataItem.drug_id, name:dataItem.drugdrugName}
+    selected_pres_method.value = {id:dataItem.route_id, name: dataItem.route_name}
+    saveStateValuesState()
 }
 
 function removeItemAtIndex(index: any) {
     selectedMedicalDrugsList.value.splice(index, 1);
     componentKey.value++;
     saveStateValuesState();
+    toastWarning("you have removed a drug from list", 6000)
 }
 
 function validateNotes(ev: any) {
@@ -775,10 +750,6 @@ function dissmissDrugAddField(): void {
     search_item.value = false;
     display_item.value = true;
     addItemButton.value = true;
-}
-
-function setFocus() {
-    input.value.$el.setFocus();
 }
 
 function accordionGroupChangeFn1(ev: AccordionGroupCustomEvent) {}
@@ -837,14 +808,14 @@ const dynamic_button_properties = [
     {
         showAddItemButton: true,
         addItemButton: true,
-        name: "save",
+        name: "Add",
         btnFill: 'clear',
         fn: saveData,
     },
     {
         showAddItemButton: true,
         addItemButton: true,
-        name: "cancel",
+        name: "Cancel",
         btnFill: 'clear',
         fn: addData,
     }
