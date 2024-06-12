@@ -18,8 +18,8 @@
     </div> -->
     
 
-    <carousel :items-to-show="1" :modelValue="landingSlide" @slide-end="slideEvent">
-      <slide v-for="slide in 12" :key="slide">
+    <carousel v-if="vaccineSchudulesCount > 0" :items-to-show="1" :modelValue="landingSlide" @slide-end="slideEvent">
+      <slide v-for="slide in vaccineSchudulesCount" :key="slide">
         <!-- {{ slide }} -->
         <div class="container">
 
@@ -107,6 +107,7 @@
             vaccinesForVisit10: [],
             vaccinesForVisit11: [],
             vaccinesForVisit12: [],
+            vaccineSchudulesCount: 0,
             milestones: [],
             iconsContent: icons,
             showCurrentMilestoneAlert: false,
@@ -141,6 +142,7 @@
         vaccineScheduleStore.setVaccineSchedule(data__)
         let upcoming_f = false
         let found = false
+        this.vaccineSchudulesCount = vaccineScheduleStore.getVaccineSchedule().vaccinSchedule.length
         vaccineScheduleStore.getVaccineSchedule().vaccinSchedule.forEach((vaccineSchudule: any) => {
 
           console.log(vaccineSchudule.milestone_status)
