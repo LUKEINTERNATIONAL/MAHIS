@@ -18,7 +18,7 @@
                     <ion-col style="max-width: 100px; min-width: 100px">Phone</ion-col>
                     <ion-col style="max-width: 25px"></ion-col>
                 </ion-row>
-                <ion-row class="search_result" v-for="(item, index) in patients" :key="index" @click="openNewPage('patientProfile', item)">
+                <ion-row class="search_result clickable-row" v-for="(item, index) in patients" :key="index" @click="openNewPage('patientProfile', item)">
                     <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">{{
                         item.person.names[0].given_name + " " + item.person.names[0].family_name
                     }}</ion-col>
@@ -374,7 +374,9 @@ ion-popover {
   animation-iteration-count: 3;
   animation-duration: 3s; 
 }
-
+.clickable-row {
+    cursor: pointer;
+}
 .hidden {
     display: none;
 }
