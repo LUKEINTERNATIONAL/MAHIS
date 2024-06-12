@@ -1514,7 +1514,7 @@ const initialPhysicalExam = [
         sideColSize: 1,
         childName: "Genital examination normal",
         isFinishBtn: false,
-        classDash: "dashed_bottom_border",
+        classDash: "",
         checkboxBtnContent: {
             header: {
                 title: "What are the abnormalities after genital examination?",
@@ -1560,6 +1560,33 @@ const initialPhysicalExam = [
                     justify: "space-between",
                     checked: false,
                 },
+                {
+                    name: "Visible bleeding",
+                    disabled: false,
+                    value: "Visible bleeding",
+                    labelPlacement: "start",
+                    colSize: "9",
+                    justify: "space-between",
+                    checked: false,
+                },
+                {
+                    name: "Scrotal swelling",
+                    disabled: false,
+                    value: "Scrotal swelling",
+                    labelPlacement: "start",
+                    colSize: "9",
+                    justify: "space-between",
+                    checked: false,
+                },
+                {
+                    name: "Tastes swelling",
+                    disabled: false,
+                    value: "Tastes swelling",
+                    labelPlacement: "start",
+                    colSize: "9",
+                    justify: "space-between",
+                    checked: false,
+                },
             ],
         },
     },
@@ -1591,13 +1618,13 @@ const initialPhysicalExam = [
     },
     {
         selectdData: [],
-        sideColSize: 1,
+        sideColSize: 1.5,
         childName: "Urethral meatus abnormal",
         isFinishBtn: false,
         classDash: "dashed_bottom_border",
         checkboxBtnContent: {
             header: {
-                title: "What are the urethral meatus abnormalities?",
+                title: "What are the urethral meatus abnormalities for the patient?",
                 selectedValue: "",
                 displayNone: true,
                 name: "Urethral meatus abnormalities",
@@ -1609,7 +1636,7 @@ const initialPhysicalExam = [
                     disabled: false,
                     value: "Oedema",
                     labelPlacement: "start",
-                    colSize: "9",
+                    colSize: "8.5",
                     justify: "space-between",
                     checked: false,
                 },
@@ -1618,37 +1645,29 @@ const initialPhysicalExam = [
                     disabled: false,
                     value: "Abnormal discharge",
                     labelPlacement: "start",
-                    colSize: "9",
+                    colSize: "8.5",
                     justify: "space-between",
                     checked: false,
                 },
                 {
-                    name: "Scrotal swelling",
+                    name: "Bleeding",
                     disabled: false,
-                    value: "Scrotal swelling",
+                    value: "Bleeding",
                     labelPlacement: "start",
-                    colSize: "9",
+                    colSize: "8.5",
                     justify: "space-between",
                     checked: false,
                 },
-                {
-                    name: "Tastes swelling",
-                    disabled: false,
-                    value: "Tastes swelling",
-                    labelPlacement: "start",
-                    colSize: "9",
-                    justify: "space-between",
-                    checked: false,
-                },
+
             ],
         },
     },
+
     {
         selectdData: [],
         sideColSize: 1,
         childName: "Genital examination normal",
         isFinishBtn: false,
-        classDash: "dashed_bottom_border",
         checkboxBtnContent: {
             header: {
                 title: "",
@@ -1671,7 +1690,7 @@ const initialPhysicalExam = [
     },
     {
         selectdData: [],
-        sideColSize: 1,
+        sideColSize: 1.5,
         childName: "Vulva examination",
         isFinishBtn: false,
         classDash: "dashed_bottom_border",
@@ -1685,20 +1704,21 @@ const initialPhysicalExam = [
             },
             data: [
                 {
-                    name: "Visible bleeding",
+                    name: "Oedematous cervix",
                     disabled: false,
-                    value: "Visible bleeding",
+                    value: "Oedematous cervix",
                     labelPlacement: "start",
-                    colSize: "9",
+                    colSize: "8.5",
                     justify: "space-between",
                     checked: false,
                 },
+
                 {
                     name: "Abnormal vaginal discharge",
                     disabled: false,
                     value: "Abnormal vaginal discharge",
                     labelPlacement: "start",
-                    colSize: "9",
+                    colSize: "8.5",
                     justify: "space-between",
                     checked: false,
                 },
@@ -1717,12 +1737,13 @@ const initialPhysicalExam = [
                 selectedValue: "",
                 displayNone: true,
                 name: "Genital examination abnormality",
+                class: "bold",
             },
             data: [
                 {
-                    name: "Other male genital abnormality",
+                    name: "Other genital abnormalities",
                     disabled: false,
-                    value: "Other male genital abnormality",
+                    value: "Other genital abnormalities",
                     labelPlacement: "start",
                     colSize: "9",
                     justify: "space-between",
@@ -1731,7 +1752,6 @@ const initialPhysicalExam = [
             ],
         },
     },
-
     {
         childName: "Other genital abnormalities",
         classDash: "dashed_bottom_border",
@@ -1757,6 +1777,7 @@ const initialPhysicalExam = [
             ],
         },
     },
+
     {
         selectdData: [],
         sideColSize: 0.3,
@@ -1950,5 +1971,5 @@ export const usePhysicalExaminationStore = defineStore("physicalOPDExamStore", {
             return [...data]; // Return a copy of the initial state
         },
     },
-    persist: true,
+    // persist: true,
 });

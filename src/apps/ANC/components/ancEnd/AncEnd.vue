@@ -2,7 +2,9 @@
   <div class="container">
     <ion-card class="section">
       <ion-card-content>
-        <basic-form :contentData="ancInfo"
+        <basic-form
+            :contentData="ancInfo"
+            :initialData="initialData"
         ></basic-form>
       </ion-card-content>
     </ion-card>
@@ -38,6 +40,8 @@ export default defineComponent({
       currentSection: 0, // Initialize currentSection to 0
       vValidations: '' as any,
       hasValidationErrors: [] as any,
+      initialData:[] as any,
+
     };
   },
     computed:{
@@ -45,17 +49,13 @@ export default defineComponent({
     },
 
     mounted(){
-        // const  ancInfo =useAncEndStore()
+        const  ancInfo =useAncEndStore()
+        this.initialData=ancInfo.getInitialANCend()
         this.handleOther()
         this.handledeath()
         this.handleDeathDate()
         this.handleRecordNotViewed()
-        this.handleDeliverDate()
-        this.handlePlaceDelivery()
-        this.handleOtherPlaceDelivery()
-        this.handlePretermBirth()
-        this.handleModeDelivery()
-        this.handleWeight()
+
     },
     watch:{
         ancInfo:{
@@ -64,12 +64,7 @@ export default defineComponent({
                 this.handledeath()
                 this.handleDeathDate()
                 this.handleRecordNotViewed()
-                this.handleDeliverDate()
-                this.handlePlaceDelivery()
-                this.handleOtherPlaceDelivery()
-                this.handlePretermBirth()
-                this.handleModeDelivery()
-                this.handleWeight()
+
             },
             deep:true
         }
@@ -77,75 +72,34 @@ export default defineComponent({
   
     methods:{
         handleOther(){
-            if(getRadioSelectedValue(this.ancInfo,'Reason for closing ANC')=='Other'){
-                modifyFieldValue(this.ancInfo,'Other (specify)','displayNone',false)
+            if(getRadioSelectedValue(this.ancInfo,'ANC pregnancy outcome')=='Other outcome'){
+                modifyFieldValue(this.ancInfo,'Pregnancy outcome notes','displayNone',false)
             }else{
-                modifyFieldValue(this.ancInfo,'Other (specify)','displayNone',true)
+                modifyFieldValue(this.ancInfo,'Pregnancy outcome notes','displayNone',true)
             }
         },
         handledeath(){
-            if(getRadioSelectedValue(this.ancInfo,'Reason for closing ANC')=='Death'){
-                modifyFieldValue(this.ancInfo,'DeathDate','displayNone',false)
+            if(getRadioSelectedValue(this.ancInfo,'ANC pregnancy outcome')=='Death'){
+                modifyFieldValue(this.ancInfo,'Date of death','displayNone',false)
             }else{
-                modifyFieldValue(this.ancInfo,'DeathDate','displayNone',true)
+                modifyFieldValue(this.ancInfo,'Date of death','displayNone',true)
             }
         },
         handleDeathDate(){
-            if(getRadioSelectedValue(this.ancInfo,'Reason for closing ANC')=='Death'){
-                modifyFieldValue(this.ancInfo,'DeathCause','displayNone',false)
+            if(getRadioSelectedValue(this.ancInfo,'ANC pregnancy outcome')=='Death'){
+                modifyFieldValue(this.ancInfo,'Cause of death','displayNone',false)
             }else{
-                modifyFieldValue(this.ancInfo,'DeathCause','displayNone',true)
+                modifyFieldValue(this.ancInfo,'Cause of death','displayNone',true)
             }
         },
         handleRecordNotViewed(){
-            if(getRadioSelectedValue(this.ancInfo,'Reason for closing ANC')=='Death'){
-                modifyRadioValue(this.ancInfo,'recordViewed','displayNone',false)
+            if(getRadioSelectedValue(this.ancInfo,'ANC pregnancy outcome')=='Death'){
+                modifyRadioValue(this.ancInfo,'Client record will no longer be  viewed','displayNone',false)
             }else{
-                modifyRadioValue(this.ancInfo,'recordViewed','displayNone',true)
+                modifyRadioValue(this.ancInfo,'Client record will no longer be  viewed','displayNone',true)
             }
         },
-        handleDeliverDate(){
-            if(getRadioSelectedValue(this.ancInfo,'Reason for closing ANC')=='Live birth'){
-                modifyFieldValue(this.ancInfo,'Date of delivery','displayNone',false)
-            }else{
-                modifyFieldValue(this.ancInfo,'Date of delivery','displayNone',true)
-            }
-        },
-        handlePlaceDelivery(){
-            if(getRadioSelectedValue(this.ancInfo,'Reason for closing ANC')=='Live birth'){
-                modifyRadioValue(this.ancInfo,'Place of Delivery','displayNone',false)
-            }else{
-                modifyRadioValue(this.ancInfo,'Place of Delivery','displayNone',true)
-            }
-        },
-        handleOtherPlaceDelivery(){
-            if(getRadioSelectedValue(this.ancInfo,'Place of Delivery')=='Other'){
-                modifyFieldValue(this.ancInfo,'Other (specify)','displayNone',false)
-            }else{
-                 modifyFieldValue(this.ancInfo,'Other (specify)','displayNone',true)
-            }
-        },
-        handlePretermBirth(){
-               if(getRadioSelectedValue(this.ancInfo,'Reason for closing ANC')=='Live birth'){
-                modifyRadioValue(this.ancInfo,'Preterm','displayNone',false)
-            }else{
-                modifyRadioValue(this.ancInfo,'Preterm','displayNone',true)
-            }
-        },
-        handleModeDelivery(){
-           if(getRadioSelectedValue(this.ancInfo,'Reason for closing ANC')=='Live birth'){
-                modifyRadioValue(this.ancInfo,'Mode of delivery','displayNone',false)
-            }else{
-                modifyRadioValue(this.ancInfo,'Mode of delivery','displayNone',true)
-            }
-        },
-        handleWeight(){
-            if(getRadioSelectedValue(this.ancInfo,'Reason for closing ANC')=='Live birth'){
-                modifyFieldValue(this.ancInfo,'Weight','displayNone',false)
-            }else{
-                 modifyFieldValue(this.ancInfo,'Weight','displayNone',true)
-            }
-        }
+
     }
 })
 </script>

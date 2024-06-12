@@ -363,8 +363,6 @@ export default defineComponent({
                 modifyRadioValue(this.lmnp, "LNMP Known?", "alertsErrorMassage", "Value is required");
                 modifyFieldValue(this.lmnp, "lmnpDate", "alertsErrorMassage", true);
                 modifyFieldValue(this.lmnp, "lmnpDate", "alertsErrorMassage", "Value is required");
-                // modifyRadioValue(this.ultrasound,'UltrasoundDone','alertsErrorMassage', true)
-                // modifyRadioValue(this.ultrasound,'UltrasoundDone','alertsErrorMassage', 'Value is required')
 
                 await toastWarning("Please complete all required fields");
             }

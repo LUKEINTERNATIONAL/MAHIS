@@ -127,11 +127,8 @@ export default defineComponent({
         const maxDate = new Date(currentDate);
         minDate.setDate(minDate.getDate() - 1);
         maxDate.setMonth(maxDate.getMonth() + 6);
-
-        // Format the minDate and maxDate to a string in the desired format (e.g., YYYY-MM-DD)
         const formattedMinDate = minDate.toISOString().split('T')[0];
         const formattedMaxDate = maxDate.toISOString().split('T')[0];
-        // Set the minDate and maxDate
         modifyFieldValue(this.referralInfo, 'Date scheduled referral', 'minDate', formattedMinDate);
         modifyFieldValue(this.referralInfo, 'Date scheduled referral', 'maxDate', formattedMaxDate);
       },
