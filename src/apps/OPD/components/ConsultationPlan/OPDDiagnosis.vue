@@ -52,6 +52,7 @@ import DynamicButton from "@/components/DynamicButton.vue";
 import { Service } from "@/services/service";
 import previousDiagnosis from "@/apps/NCD/components/ConsultationPlan/previousVisits/previousDiagnosis.vue";
 import { Diagnosis } from "../../services/diagnosis";
+import { modifyFieldValue } from "@/services/data_helpers";
 
 export default defineComponent({
     name: "Menu",
@@ -78,6 +79,7 @@ export default defineComponent({
             iconsContent: icons,
             no_item: false,
             search_item: false,
+            display_primary: true,
             display_item: false,
             addItemButton: true,
             selectedText: "" as any,
@@ -88,6 +90,7 @@ export default defineComponent({
             event: "" as any,
             selectedCondition: "" as any,
             selected: null,
+            diagnoses: [] as any,
         };
     },
     setup() {
@@ -103,6 +106,7 @@ export default defineComponent({
         OPDdiagnosis: {
             handler() {
                 this.setDashedBox();
+                this.removePrimaryDiagnosis();
             },
             deep: true,
         },
@@ -110,6 +114,7 @@ export default defineComponent({
     async mounted() {
         this.updateDiagnosisStores();
         this.setDashedBox();
+        this.removePrimaryDiagnosis();
 
         this.OPDdiagnosis[0].data.rowData[0].colData[1].multiSelectData = await this.getDiagnosis("");
     },
@@ -125,14 +130,14 @@ export default defineComponent({
             this.search_item = true;
         },
         async validaterowData() {
-            this.OPDdiagnosis[0].data.rowData[0].colData[0].alertsError = false;
+            this.OPDdiagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = false;
             this.OPDdiagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = "";
 
-            this.diagnosisData = await this.getDiagnosis(this.inputFields[0].value);
-            if (this.inputFields[0].value == this.diagnosisData[0]?.name) {
+            this.diagnosisData = await this.getDiagnosis(this.inputFields[0].value.name);
+            if (this.inputFields[0].value.name == this.diagnosisData[0]?.name) {
                 const isPrimaryValid = this.OPDdiagnosis[0].selectedData.every((item: any) => {
                     if (item.display[1] == "Primary diagnosis") {
-                        this.OPDdiagnosis[0].data.rowData[0].colData[0].alertsError = true;
+                        this.OPDdiagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = true;
                         this.OPDdiagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = "Primary diagnosis can not be more than two";
                         return false;
                     } else return true;
@@ -143,7 +148,7 @@ export default defineComponent({
                 else return true;
             } else {
                 this.search_item = true;
-                this.OPDdiagnosis[0].data.rowData[0].colData[0].alertsError = true;
+                this.OPDdiagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = true;
                 this.OPDdiagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = "Please select diagnosis from the list";
                 return false;
             }
@@ -152,24 +157,32 @@ export default defineComponent({
         async addNewRow() {
             if (await this.validaterowData()) {
                 if (this.buildDiagnosis()) {
-                    this.OPDdiagnosis[0].data.rowData[0].colData[0].value = this.inputFields[0].value;
+                    this.OPDdiagnosis[0].data.rowData[0].colData[0].value = this.inputFields[0].value.name;
                     this.search_item = false;
                     this.display_item = true;
-                    this.addItemButton = true;
+                    this.addItemButton = true; 
+                    this.display_primary = false;   
                 }
             }
             this.OPDdiagnosis[0].data.rowData[0].colData[0].value = "";
             this.OPDdiagnosis[0].data.rowData[0].colData[1].value = "";
             this.OPDdiagnosis[0].data.rowData[0].colData[0].popOverData.data = [];
+            
+        },
+        removePrimaryDiagnosis () {
+            if (this.display_primary === false) {
+                modifyFieldValue (this.OPDdiagnosis, "primaryDiagnosis", "inputFieldDisplayNone", true);
+                modifyFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "colSize", 0);
+            }
         },
         buildDiagnosis() {
             const diagnosis = [];
             diagnosis.push({
                 actionBtn: true,
                 btn: ["delete"],
-                name: this.inputFields[0].value,
+                name: this.inputFields[0].value.name,
                 id: this.diagnosisData[0].concept_id,
-                display: [this.inputFields[0].value, "Primary diagnosis"],
+                display: [this.inputFields[0].value.name, "Primary diagnosis"],
                 data: {
                     concept_id: 6542, //Primary diagnosis
                     value_coded: this.diagnosisData[0].concept_id,
@@ -194,15 +207,16 @@ export default defineComponent({
             }
             const compareArrays = this.compareArrays(this.OPDdiagnosis[0].selectedData, diagnosis);
             if (compareArrays[0] === "Differential diagnosis") {
-                this.OPDdiagnosis[0].data.rowData[0].colData[1].alertsError = true;
+                this.OPDdiagnosis[0].data.rowData[0].colData[1].alertsErrorMassage = true;
                 this.OPDdiagnosis[0].data.rowData[0].colData[1].alertsErrorMassage = "Diagnosis already selected";
                 return false;
             }
             if (compareArrays[0] === "Primary diagnosis") {
-                this.OPDdiagnosis[0].data.rowData[0].colData[0].alertsError = true;
+                this.OPDdiagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = true;
                 this.OPDdiagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = "Diagnosis already selected";
                 return false;
             }
+          
             this.OPDdiagnosis[0].selectedData = [...this.OPDdiagnosis[0].selectedData, ...diagnosis];
             return true;
         },
@@ -224,7 +238,7 @@ export default defineComponent({
         async handleInputData(col: any) {
             if (col.inputHeader == "Primary Diagnosis*") {
                 this.diagnosisData = await this.getDiagnosis(col.value);
-                this.OPDdiagnosis[0].data.rowData[0].colData[0].popOverData.data = this.diagnosisData;
+                this.OPDdiagnosis[0].data.rowData[0].colData[0].multiSelectData = this.diagnosisData;
                 this.validaterowData();
             }
             if (col.inputHeader == "Differential Diagnosis") {
@@ -233,7 +247,9 @@ export default defineComponent({
             }
         },
         async getDiagnosis(value: any) {
-            return await PatientDiagnosisService.getDiagnosis(value, 1, 5);
+           this.diagnoses = await PatientDiagnosisService.getDiagnosis(value, 1, 5);
+           modifyFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "multiSelectData", this.diagnoses)
+           return this.diagnoses
         },
         editDiagnosis(test: any) {
             this.deleteDiagnosis(test);
@@ -254,7 +270,7 @@ export default defineComponent({
             this.updateDiagnosisStores();
         },
         setDashedBox() {
-            if (this.inputFields[0].value || this.inputFields[1].value) {
+            if (this.inputFields[0].value.name || this.inputFields[1].value.name) {
                 this.addItemButton = false;
                 this.search_item = true;
                 this.no_item = false;

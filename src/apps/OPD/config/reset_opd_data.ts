@@ -43,7 +43,7 @@ export async function resetOPDPatientData() {
     pastMedicalHistoryStore.setPastMedicalHistory(pastMedicalHistoryStore.getInitial());
     OPDDiagnosisStore.setOPDDiagnosis(OPDDiagnosisStore.getInitial());
 
-    vitals.setVitals(vitals.getInitialSocialHistory());
+    vitals.setVitals(vitals.getInitialVitals());
     registration.setPersonalInformation(registration.getInitialPersonalInformation());
     registration.setSocialHistory(registration.getInitialSocialHistory());
     registration.setHomeLocation(registration.getInitialHomeLocation());

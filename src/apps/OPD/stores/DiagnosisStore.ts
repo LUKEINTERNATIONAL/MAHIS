@@ -11,20 +11,20 @@ const initialOPDdiagnosis = [
                     colData: [
                         {
                             inputHeader: "Primary Diagnosis*",
-                            icon: icons.search,
-                            popOver: true,
                             value: "",
                             name: "primaryDiagnosis",
-                            eventType: "input",
+                            icon: icons.search,
                             required: true,
+                            eventType: "input",
                             alertsError: false,
                             alertsErrorMassage: "",
-                            popOverData: {
-                                filterData: false,
-                                data: [],
-                            },
-                            id: "",
+                            isSingleSelect: true,
+                            trackBy: "concept_id",
+                            multiSelectData: [],
                             idName: "district_id",
+                            // inputFieldDisplayNone: true,
+                            // colSize: 0,
+                            
                         },
                         {
                             inputHeader: "Differential Diagnosis",
@@ -36,7 +36,6 @@ const initialOPDdiagnosis = [
                             multiSelectData: [],
                             eventType: "input",
                             required: true,
-                            alertsError: false,
                             alertsErrorMassage: "",
                             id: "",
                             idName: "district_id",

@@ -1,4 +1,4 @@
-import { isEmpty, isPlainObject } from "lodash";
+import { isEmpty, isPlainObject, isArray } from "lodash";
 
 function validateSeries(conditions: Array<any>) {
     try {
@@ -123,8 +123,27 @@ function isDate(value: any): null | string {
 
     return null;
 }
+function isNotEmptyandNumber(value: any) {
+    return `${value}`.match(/^-?\d+\.?\d*$/) ? null : `Invalid entry`;
+}
+function validateWeight(val: any) {
+    return isNotEmptyandNumber(val) || checkMinMax(val, 2.0, 250.0);
+}
+function validateHeight(val: any) {
+    return isNotEmptyandNumber(val) || checkMinMax(val, 40, 220);
+}
+function validateRBS(val: any) {
+    return isNotEmptyandNumber(val) || checkMinMax(val, 70, 200);
+}
+function validateFBS(val: any) {
+    return isNotEmptyandNumber(val) || checkMinMax(val, 70, 126);
+}
 
 export default {
+    validateRBS,
+    validateFBS,
+    validateHeight,
+    validateWeight,
     isFloatingPointNumber,
     validateSeries,
     required,
@@ -143,4 +162,4 @@ export default {
     isEstimationDate,
     checkMinMax,
     isDate,
-};
+} as any;

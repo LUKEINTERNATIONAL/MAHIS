@@ -122,7 +122,7 @@ export default defineComponent({
             default: "",
         },
         inputType: {
-            default: "" as any,
+            default: "text" as any,
         },
         eventType: {
             type: String,

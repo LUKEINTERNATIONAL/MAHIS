@@ -7,7 +7,7 @@
         :keyboard-close="false"
         :show-backdrop="false"
         :dismiss-on-select="true">
-        
+
             <div style="width: 1300px" class="sticky-table">
                 <ion-row class="search_header">
                     <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">Fullname</ion-col>
@@ -18,7 +18,7 @@
                     <ion-col style="max-width: 100px; min-width: 100px">Phone</ion-col>
                     <ion-col style="max-width: 25px"></ion-col>
                 </ion-row>
-                <ion-row class="search_result" v-for="(item, index) in patients" :key="index" @click="openNewPage('patientProfile', item)">
+                <ion-row class="search_result clickable-row" v-for="(item, index) in patients" :key="index" @click="openNewPage('patientProfile', item)">
                     <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">{{
                         item.person.names[0].given_name + " " + item.person.names[0].family_name
                     }}</ion-col>
@@ -40,7 +40,7 @@
                 <ion-row class="sticky-column">
                     <ion-col size="4" class="sticky-column">
                         <DynButton :icon="add" :name="'Add Patient'" :fill="'clear'" @click="openCheckPaitentNationalIDModal" />                        
-                             <div id="container-div">  
+                             <div>  
                                    <img id="hand" src="../../public/images/hand.svg" >
                                    <img id="handinfo" src="../../public/images/swipeinfo.png">
                              </div>
@@ -50,7 +50,6 @@
        
     </ion-popover>
 </template>
-
 
 <script lang="ts">
 import {
@@ -72,7 +71,7 @@ import {
     IonRow,
     IonCol,
 } from "@ionic/vue";
-import { defineComponent,onMounted } from "vue";
+import { defineComponent, onMounted } from "vue";
 import { PatientService } from "@/services/patient_service";
 import { checkmark, add, search } from "ionicons/icons";
 import { useDemographicsStore } from "@/stores/DemographicStore";
@@ -108,7 +107,6 @@ export default defineComponent({
         IonCol,
     },
     setup() {
-       
         return { checkmark, add };
     },
     data() {
@@ -157,7 +155,9 @@ export default defineComponent({
                     per_page: "7",
                 };
                 this.patients = await PatientService.search(payload);
-                if(this.patients.length > 0){ this.callswipeleft(); }
+                if (this.patients.length > 0) {
+                    this.callswipeleft();
+                }
             }
         },
         async searchByNpid(searchText: any) {
@@ -194,27 +194,15 @@ export default defineComponent({
             }
         },
         callswipeleft(){
-
-            const containerDiv = document.getElementById("container-div") as HTMLDivElement;            
-            if(containerDiv){
-
-                if (window.innerWidth > window.innerHeight) {
-                     containerDiv.style.width = `${window.innerHeight * 0.8}px`;
-                } else {
-                     containerDiv.style.width = `${window.innerWidth * 0.8}px`;
-                }
-                     containerDiv.style.height = containerDiv.style.width;            
-           
-                const handElement = document.getElementById("hand");
+            
+             const handElement = document.getElementById("hand");
                 const handInfo = document.getElementById("handinfo") as HTMLDivElement;
-               if (handElement) {
-                   handElement.addEventListener("animationend", () => {
-                    handElement.style.display = "none";
-                       handInfo.style.display = "none";
-                    
-                   });                
+                if (handElement) {
+                    handElement.addEventListener("animationend", () => {
+                        handElement.style.display = "none";
+                        handInfo.style.display = "none";
+                    });
                 }
-           }
         },
         patientIdentifier(identifiers: any) {
             return identifiers.patient_identifiers
@@ -244,9 +232,9 @@ export default defineComponent({
                 resetNCDPatientData();
             } else if (Service.getProgramID() == 14) {
                 resetOPDPatientData();
-            } else {
-                resetPatientData();
             }
+            resetPatientData();
+
             const store = useAdministerVaccineStore();
             store.setVaccineReload(!store.getVaccineReload());
             const roleData: any = sessionStorage.getItem("userRoles");
@@ -278,6 +266,7 @@ export default defineComponent({
             this.popoverOpen = true;
         },
         openCheckPaitentNationalIDModal() {
+            resetPatientData();
             createModal(CheckPatientNationalID, { class: "nationalIDModal" });
         },
         onDismiss() {
@@ -289,95 +278,84 @@ export default defineComponent({
 
 <style scoped>
 .sticky-table {
-  width: 100%;
-  border-collapse: collapse;
+    width: 100%;
+    border-collapse: collapse;
 }
 
 .sticky-table th,
 .sticky-table td {
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  color:black;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    color: black;
 }
-
 .sticky-column {
-  position: sticky;
-  left: 0;
-  background-color: #f9f9f9;
-  z-index: 1; 
-  color:black;
+    position: sticky;
+    left: 0;
+    background-color: #f9f9f9;
+    z-index: 1;
+    color: black;
 }
 
 .sticky-table th {
-  background-color: #f0f0f0; 
-  color:black;
+    background-color: #f0f0f0;
+    color: black;
 }
 
 .sticky-table tr:hover {
-  background-color: #f1f1f1;
+    background-color: #f1f1f1;
 }
 
 .search_header {
-  border-bottom: 1px solid;
-  border-bottom-style: dashed;
-  padding-top: 10px;
-  text-align: left;
-  padding: 5px;
-  color: #b3b3b3;
-  color:black;
+    border-bottom: 1px solid;
+    border-bottom-style: dashed;
+    padding-top: 10px;
+    text-align: left;
+    padding: 5px;
+    color: #b3b3b3;
+    color: black;
 }
 
 .search_result {
-  text-align: left;
-  padding: 5px;
-  color: #b3b3b3;
-  color:black;
+    text-align: left;
+    padding: 5px;
+    color: #b3b3b3;
+    color: black;
 }
 
 .search_result:hover {
-  background-color: #ebebeb;
-  border-radius: 5px;
+    background-color: #ebebeb;
+    border-radius: 5px;
 }
 
 .search_result .selectedPatient {
-  font-size: 18px;
-  color: #b3b3b3;
+    font-size: 18px;
+    color: #b3b3b3;
 }
 
 .search_result .selectedPatient:hover {
-  color: var(--ion-color-primary);
+    color: var(--ion-color-primary);
 }
 
-
 .search_result:hover ion-icon {
-  background-color: #ebebeb;
-  border-radius: 5px;
+    background-color: #ebebeb;
+    border-radius: 5px;
 }
 
 @media (max-width: 900px) {
-  ion-popover {
-    --width: 95vw;
-  }
+    ion-popover {
+        --width: 95vw;
+    }
 }
 
 ion-popover {
-  --width: 95vw;
-  --max-width: 1300px;
-}
-
-
-#container-div {
-  position: absolute;
-  top: 50%;
-  left: 65%;
-  transform: translate(-50%, -50%);
+    --width: 95vw;
+    --max-width: 1300px;
 }
 
 #hand {
   position: absolute;
-  width: 16.36%;
-  left: 30%;
   top: 36%;
+  padding-left: 30%;
   animation-name: swipe;
   animation-timing-function: ease-in-out;
   animation-iteration-count: 3;
@@ -385,43 +363,74 @@ ion-popover {
 }
 #handinfo {
   position: absolute;
-  width: 50%;
+  width: 70%;
   left: 30%;
   top: 48%;
-  padding-left: 17%;
+  padding-left: 35%;
   animation-name: swipe;
   animation-timing-function: ease-in-out;
   animation-iteration-count: 3;
   animation-duration: 3s; 
 }
-
+.clickable-row {
+    cursor: pointer;
+}
 .hidden {
     display: none;
 }
 
 /*** ANIMATIONS ***/
 @keyframes swipe {
-  0%   { left: 45%; }
-  40%  { left: 13%;   }
-  100% { left: 13%;   }
+    0% {
+        left: 45%;
+    }
+    40% {
+        left: 13%;
+    }
+    100% {
+        left: 13%;
+    }
 }
 
 @keyframes fall_1 {
-  0%   { top: 32.65%; opacity: 0.666 }
-  20%  { top: 32.65%;              }
-  60%  {              opacity: 0   }
-  67%  { top: 47%;                 }
-  100% { top: 47%;    opacity: 0   }
+    0% {
+        top: 32.65%;
+        opacity: 0.666;
+    }
+    20% {
+        top: 32.65%;
+    }
+    60% {
+        opacity: 0;
+    }
+    67% {
+        top: 47%;
+    }
+    100% {
+        top: 47%;
+        opacity: 0;
+    }
 }
 
 @keyframes fall_2 {
-  0%   { top: 32.65%; opacity: 0.666 }
-  13%  { top: 32.65%;              }
-  53%  {              opacity: 0   }
-  60%  { top: 47%;                 }
-  100% { top: 47%;    opacity: 0   }
+    0% {
+        top: 32.65%;
+        opacity: 0.666;
+    }
+    13% {
+        top: 32.65%;
+    }
+    53% {
+        opacity: 0;
+    }
+    60% {
+        top: 47%;
+    }
+    100% {
+        top: 47%;
+        opacity: 0;
+    }
 }
-
 </style>
 <style>
 ion-popover {

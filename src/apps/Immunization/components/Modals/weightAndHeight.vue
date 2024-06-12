@@ -128,18 +128,18 @@ export default defineComponent({
             const weight = vitalsInstance.validator({ inputHeader: "Weight*", value: weightValue });
             if (height && heightValue) {
                 modifyFieldValue(this.vitalsWeightHeight, "height", "alertsErrorMassage", height.flat(Infinity)[0]);
-                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsError", true);
+                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsErrorMassage", true);
             } else {
                 modifyFieldValue(this.vitalsWeightHeight, "height", "alertsErrorMassage", "");
-                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsError", false);
+                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsErrorMassage", false);
             }
 
             if (weight && weightValue) {
                 modifyFieldValue(this.vitalsWeightHeight, "weight", "alertsErrorMassage", weight.flat(Infinity)[0]);
-                modifyFieldValue(this.vitalsWeightHeight, "weight", "alertsError", true);
+                modifyFieldValue(this.vitalsWeightHeight, "weight", "alertsErrorMassage", true);
             } else {
                 modifyFieldValue(this.vitalsWeightHeight, "weight", "alertsErrorMassage", "");
-                modifyFieldValue(this.vitalsWeightHeight, "weight", "alertsError", false);
+                modifyFieldValue(this.vitalsWeightHeight, "weight", "alertsErrorMassage", false);
             }
             this.setBMI(weightValue, heightValue);
         },

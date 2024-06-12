@@ -7,6 +7,7 @@
                         <div :class="demographics.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'" @click="openPIM()">
                             <ion-icon style="color: #fff; font-size: 70px" :icon="person"></ion-icon>
                         </div>
+                        <span class="protectedStatus">Unprotected at birth</span>
                     </ion-col>
                     <ion-col size="9">
                         <div class="demographicsFirstRow">
@@ -78,7 +79,7 @@
             <div class="milestone">
                 <div style="display: flex; justify-content: space-between; align-content: center">
                     <ion-icon size="small" :icon="iconsContent.greenCalender"></ion-icon>
-                    <div style="color: #636363; margin-left: 5px; margin-top: -4px;">
+                    <div style="color: #636363; margin-left: 5px; margin-top: -4px">
                         at <span style="color: #636363; font-weight: bold; font-size: 14px"> {{ current_milestone }}</span>
                     </div>
                 </div>
@@ -179,6 +180,8 @@ import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
 import { PatientService } from "@/services/patient_service";
 import customSlider from "@/apps/Immunization/components/customSlider.vue";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
+import { ConceptService } from "@/services/concept_service";
+import { ObservationService } from "@/services/observation_service";
 
 import {
     modifyRadioValue,
@@ -241,12 +244,14 @@ export default defineComponent({
     created() {
         this.getData();
     },
-    mounted() {
+    async mounted() {
         if (this.activities.length == 0) {
             this.$router.push("patientProfile");
         }
         this.markWizard();
         this.loadCurrentMilestone();
+        // const protected =
+        await ObservationService.getFirstValueText(this.demographics.patient_id, "Protected at birth");
     },
     watch: {
         vitals: {
@@ -532,7 +537,7 @@ export default defineComponent({
 .demographics {
     box-sizing: border-box;
     width: 95vw;
-    height: 92px;
+    /* height: 92px; */
     left: calc(50% - 461px / 2 + 27.5px);
     margin-top: 10px;
     background: #ffffff;
@@ -659,6 +664,20 @@ export default defineComponent({
     font-weight: 700;
     font-size: 11px;
     align-items: center;
+    text-align: center;
+}
+.protectedStatus {
+    align-items: center;
+    padding: 2px 7px;
+    width: 50px;
+    height: 18px;
+    background: #ddeedd;
+    border-radius: 22px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 11px;
+    align-items: center;
+    color: #006401;
     text-align: center;
 }
 .graphSection {

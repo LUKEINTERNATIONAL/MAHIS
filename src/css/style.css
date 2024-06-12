@@ -450,11 +450,14 @@ ion-accordion {
     border: 1px solid #b3b3b3;
     padding-left: 35px;
 }
+.multiselect--disabled .multiselect__tags {
+    background: #ededed !important;
+}
 .multiselect__select::before {
     top: 95%;
 }
 .multiselect::before {
-    content: url("/public/svg/searchIcon.svg");
+    content: url("/svg/searchIcon.svg");
     position: absolute;
     font-size: 40px;
     margin-left: 15px;

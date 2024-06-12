@@ -23,7 +23,7 @@ function validaterowData(ev: any) {
         }
 
         // Update the UI based on validation results
-        // modifyFieldValue(this.prevPregnancies, 'Gravida', 'alertsError', !!errorMessage);
+        // modifyFieldValue(this.prevPregnancies, 'Gravida', 'alertsErrorMassage', !!errorMessage);
         // Update the error message in the UI
         // modifyFieldValue(this.prevPregnancies, 'Gravida', 'alertsErrorMassage', errorMessage || '');
     }

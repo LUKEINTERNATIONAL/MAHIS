@@ -2,194 +2,218 @@ import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
 import _ from "lodash";
 const initialPersonalInformation = [
-    {
-        selectedData: [],
-        isFinishBtn: false,
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "National ID",
-                            iconRight: icons.scannerIcon,
-                            icon: icons.nationalID,
-                            value: "",
-                            name: "nationalID",
-                            eventType: "input",
-                            alertsError: false,
-                            alertsErrorMassage: "",
-                            required: true,
-                            placeholder: "__-__-__-__",
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "First name*",
-                            icon: icons.fullName,
-                            value: "",
-                            name: "firstname",
-                            eventType: "input",
-                            alertsError: false,
-                            alertsErrorMassage: "",
-                            required: true,
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Last name*",
-                            icon: icons.fullName,
-                            value: "",
-                            name: "lastname",
-                            eventType: "input",
-                            alertsError: false,
-                            alertsErrorMassage: "",
-                            required: true,
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Middle name",
-                            icon: icons.fullName,
-                            value: "",
-                            name: "middleName",
-                            eventType: "input",
-                            alertsError: false,
-                            alertsErrorMassage: "",
-                            required: true,
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Phone number",
-                            icon: icons.phone,
-                            value: "",
-                            name: "phoneNumber",
-                            eventType: "input",
-                            alertsError: false,
-                            alertsErrorMassage: "",
-                            required: true,
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            inputHeader: "Date of birth*",
-                            icon: icons.calenderPrimary,
-                            value: "",
-                            name: "birthdate",
-                            eventType: "input",
-                            alertsError: false,
-                            alertsErrorMassage: "",
-                            required: true,
-                            isDatePopover: true,
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    {
-        selectedData: [],
-        initial: [],
-        isFinishBtn: false,
-        sideColSize: 1,
-        checkboxBtnContent: {
-            header: {
-                selectedValue: "",
-                name: "Estimate",
+  {
+    selectedData: [],
+    isFinishBtn: false,
+    data: {
+      rowData: [
+        {
+          colData: [
+            {
+              inputHeader: "National ID",
+              iconRight: icons.scannerIcon,
+              icon: icons.nationalID,
+              value: "",
+              name: "nationalID",
+              eventType: "input",
+              alertsErrorMassage: "",
+              required: true,
+              placeholder: "__-__-__-__",
             },
-            data: [
-                {
-                    name: "Estimate Age",
-                    value: "TB",
-                    checked: false,
-                },
-            ],
+          ],
         },
+      ],
     },
-    {
-        childName: "Estimate Age",
-        data: {
-            rowData: [
-                {
-                    colData: [
-                        {
-                            displayNone: true,
-                            inputHeader: "Estimated age",
-                            icon: icons.calenderPrimary,
-                            value: "",
-                            name: "estimation",
-                            eventType: "input",
-                            alertsError: false,
-                            alertsErrorMassage: "",
-                            required: true,
-                        },
-                    ],
-                },
-            ],
+  },
+  {
+    data: {
+      rowData: [
+        {
+          colData: [
+            {
+              inputHeader: "First name*",
+              icon: icons.fullName,
+              value: "",
+              name: "firstname",
+              eventType: "input",
+              alertsErrorMassage: "",
+              required: true,
+            },
+          ],
         },
+      ],
     },
-    {
-        radioBtnContent: {
-            header: {
-                title: "Gender*",
-                selectedValue: "",
-                name: "gender",
-                alertsError: false,
+  },
+  {
+    data: {
+      rowData: [
+        {
+          colData: [
+            {
+              inputHeader: "Last name*",
+              icon: icons.fullName,
+              value: "",
+              name: "lastname",
+              eventType: "input",
+              alertsErrorMassage: "",
+              required: true,
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    data: {
+      rowData: [
+        {
+          colData: [
+            {
+              inputHeader: "Middle name",
+              icon: icons.fullName,
+              value: "",
+              name: "middleName",
+              eventType: "input",
+              alertsErrorMassage: "",
+              required: true,
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    data: {
+      rowData: [
+        {
+          colData: [
+            {
+              inputHeader: "Phone number",
+              icon: icons.phone,
+              value: "",
+              name: "phoneNumber",
+              eventType: "input",
+              alertsErrorMassage: "",
+              required: true,
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    data: {
+      rowData: [
+        {
+          colData: [
+            {
+              inputHeader: "Date of birth*",
+              icon: icons.calenderPrimary,
+              value: "",
+              name: "birthdate",
+              eventType: "input",
+              //disabled: true,
+              alertsErrorMassage: "",
+              required: true,
+              isDatePopover: true,
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    selectedData: [],
+    initial: [],
+    isFinishBtn: false,
+    sideColSize: 1,
+    checkboxBtnContent: {
+      header: {
+        selectedValue: "",
+        name: "Estimate",
+      },
+      data: [
+        {
+          name: "Estimate Age",
+          value: "TB",
+          checked: false,
+        },
+      ],
+    },
+  },
+  {
+    childName: "Estimate Age",
+    data: {
+      rowData: [
+        {
+          colData: [
+            // {
+            //     displayNone: true,
+            //     inputHeader: "Estimated age",
+            //     icon: icons.calenderPrimary,
+            //     value: "",
+            //     name: "estimation",
+            //     eventType: "input",
+            //     alertsErrorMassage: "",
+            //     required: true,
+            // },
+            {
+              displayNone: true,
+              inputHeader: "Estimated age",
+              value: "",
+              icon: icons.time,
+              name: "estimation",
+              required: true,
+              eventType: "input",
+              alertsErrorMassage: "",
+              isChangeUnits: true,
+              id: "",
+              idName: "district_id",
+              unitsData: {
+                inputHeader: "Duration Units",
+                popOver: true,
+                icon: icons.search,
+                value: "",
+                name: "units",
+                eventType: "input",
                 alertsErrorMassage: "",
+                isSingleSelect: true,
+                trackBy: "id",
+                multiSelectData: [
+                  { id: "1", name: "Days" },
+                  { id: "2", name: "Months" },
+                  { id: "3", name: "Years" },
+                ],
+                id: "",
+                idName: "district_id",
+              },
             },
-            data: [
-                {
-                    name: "Male",
-                    value: "M",
-                    colSize: "4",
-                },
-                {
-                    name: "Female",
-                    value: "F",
-                },
-            ],
+          ],
         },
+      ],
     },
+  },
+  {
+    radioBtnContent: {
+      header: {
+        title: "Gender*",
+        selectedValue: "",
+        name: "gender",
+        alertsErrorMassage: "",
+      },
+      data: [
+        {
+          name: "Male",
+          value: "M",
+          colSize: "4",
+        },
+        {
+          name: "Female",
+          value: "F",
+        },
+      ],
+    },
+  },
 ] as any;
 const initialSocialHistory = [
     {
@@ -224,7 +248,6 @@ const initialSocialHistory = [
                                 { id: 14, name: "Juche" },
                                 { id: 15, name: "Rastafari" },
                             ],
-                            alertsError: false,
                             alertsErrorMassage: "",
                         },
                     ],
@@ -246,6 +269,10 @@ const initialSocialHistory = [
                     value: "employed",
                 },
                 {
+                    name: "Student",
+                    value: "Student",
+                },
+                {
                     name: "Unemployed",
                     value: "unemployed",
                 },
@@ -264,7 +291,6 @@ const initialSocialHistory = [
                 title: "Marital status",
                 selectedValue: "",
                 name: "maritalStatus",
-                alertsError: false,
                 alertsErrorMassage: "",
                 class: "bold",
             },
@@ -296,7 +322,6 @@ const initialSocialHistory = [
                 title: "Highest Level Of Education",
                 selectedValue: "",
                 name: "highestLevelOfEducation",
-                alertsError: false,
                 alertsErrorMassage: "",
                 class: "bold",
             },
@@ -357,7 +382,6 @@ const initialHomeLocation = [
                             name: "home_district",
                             setName: "homeLocation",
                             eventType: "input",
-                            alertsError: false,
                             alertsErrorMassage: "",
                             isSingleSelect: true,
                             trackBy: "district_id",
@@ -382,7 +406,6 @@ const initialHomeLocation = [
                             name: "home_traditional_authority",
                             setName: "homeLocation",
                             eventType: "input",
-                            alertsError: false,
                             alertsErrorMassage: "",
                             isSingleSelect: true,
                             popOver: true,
@@ -417,7 +440,6 @@ const initialHomeLocation = [
                             name: "home_village",
                             setName: "homeLocation",
                             eventType: "input",
-                            alertsError: false,
                             alertsErrorMassage: "",
                             isSingleSelect: true,
                             popOver: true,
@@ -456,7 +478,6 @@ const initialCurrentLocation = [
                             name: "current_district",
                             setName: "currentLocation",
                             eventType: "input",
-                            alertsError: false,
                             alertsErrorMassage: "",
                             isSingleSelect: true,
                             popOver: true,
@@ -482,7 +503,6 @@ const initialCurrentLocation = [
                             name: "current_traditional_authority",
                             setName: "currentLocation",
                             eventType: "input",
-                            alertsError: false,
                             alertsErrorMassage: "",
                             isSingleSelect: true,
                             popOver: true,
@@ -518,7 +538,6 @@ const initialCurrentLocation = [
                             name: "current_village",
                             setName: "currentLocation",
                             eventType: "input",
-                            alertsError: false,
                             alertsErrorMassage: "",
                             isSingleSelect: true,
                             popOver: true,
@@ -555,7 +574,6 @@ const initialClosestLandmark = [
                             name: "closestLandmark",
                             value: "",
                             eventType: "input",
-                            alertsError: false,
                             alertsErrorMassage: "",
                             isSingleSelect: true,
                             popOver: true,
@@ -619,7 +637,6 @@ const initialAddTA = [
                             value: "",
                             name: "TA",
                             eventType: "input",
-                            alertsError: false,
                             alertsErrorMassage: "",
                             required: true,
                         },
@@ -638,7 +655,6 @@ const initialAddTA = [
                             value: "",
                             name: "Village",
                             eventType: "input",
-                            alertsError: false,
                             alertsErrorMassage: "",
                             validate: false,
                             required: true,
@@ -660,7 +676,6 @@ const initialAddVillage = [
                             value: "",
                             name: "Village",
                             eventType: "input",
-                            alertsError: false,
                             alertsErrorMassage: "",
                             validate: false,
                             required: true,
@@ -686,7 +701,6 @@ const initialGuardianInformation = [
                             value: "",
                             name: "guardianNationalID",
                             eventType: "input",
-                            alertsError: false,
                             alertsErrorMassage: "",
                             placeholder: "__-__-__-__",
                             displayNone: true,
@@ -710,7 +724,6 @@ const initialGuardianInformation = [
                             value: "",
                             name: "guardianFirstname",
                             eventType: "input",
-                            alertsError: false,
                             alertsErrorMassage: "",
                         },
                     ],
@@ -729,7 +742,6 @@ const initialGuardianInformation = [
                             value: "",
                             name: "guardianLastname",
                             eventType: "input",
-                            alertsError: false,
                             alertsErrorMassage: "",
                         },
                     ],
@@ -748,7 +760,6 @@ const initialGuardianInformation = [
                             value: "",
                             name: "guardianMiddleName",
                             eventType: "input",
-                            alertsError: false,
                             alertsErrorMassage: "",
                         },
                     ],
@@ -767,7 +778,6 @@ const initialGuardianInformation = [
                             value: "",
                             name: "guardianPhoneNumber",
                             eventType: "input",
-                            alertsError: false,
                             alertsErrorMassage: "",
                         },
                     ],
@@ -786,7 +796,6 @@ const initialGuardianInformation = [
                             value: "",
                             name: "relationship",
                             eventType: "input",
-                            alertsError: false,
                             alertsErrorMassage: "",
                             selectedID: "",
                             popOverData: {

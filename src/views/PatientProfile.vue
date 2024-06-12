@@ -20,7 +20,7 @@
                                     <ion-col>{{ demographics?.mrn }}</ion-col>
                                 </ion-row>
                                 <ion-row>
-                                    <ion-col size="4">Gender</ion-col>
+                                    <ion-col size="4">Gendar</ion-col>
                                     <ion-col>{{ covertGender(demographics?.gender) }}</ion-col>
                                 </ion-row>
                                 <ion-row>
@@ -65,11 +65,11 @@
                                         </li>
                                         <li class="form_list">
                                             <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.notes"></ion-icon>
-                                            <div class="form_list_content">Surgical Notes</div>
+                                            <div class="form_list_content">Surgucal Notes</div>
                                         </li>
                                         <li class="form_list">
                                             <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.gynacological"></ion-icon>
-                                            <div class="form_list_content">Gynaecological</div>
+                                            <div class="form_list_content">Gynacological</div>
                                         </li>
                                         <li class="form_list">
                                             <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.notes"></ion-icon>

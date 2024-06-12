@@ -139,7 +139,7 @@ export default defineComponent({
             StepperData: [
                 {
                     title: "Vitals",
-                    component: "vitals",
+                    component: "Vitals",
                     value: "1",
                 },
                 {

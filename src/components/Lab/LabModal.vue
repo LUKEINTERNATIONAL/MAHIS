@@ -127,7 +127,7 @@ export default defineComponent({
                     indicator: {
                         concept_id: item.id,
                     },
-                    value: item.value || "not done",
+                    value: item.value.name || item.value || "not done",
                     value_modifier: "",
                     value_type: "text",
                 });
