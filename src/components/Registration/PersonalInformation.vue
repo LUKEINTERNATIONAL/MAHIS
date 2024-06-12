@@ -143,7 +143,6 @@ export default defineComponent({
         //     }
         // },
     calculateDoB(event: any) {
-        console.log(";;;;;;;;;;;;;")
     if (event.name === "estimation") {
         const unit = event.unitsData.value.name; 
         const value = event.value as number;
