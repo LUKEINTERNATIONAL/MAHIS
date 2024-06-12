@@ -7,7 +7,7 @@
         :keyboard-close="false"
         :show-backdrop="false"
         :dismiss-on-select="true">
-        
+
             <div style="width: 1300px" class="sticky-table">
                 <ion-row class="search_header">
                     <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">Fullname</ion-col>
@@ -288,7 +288,6 @@ export default defineComponent({
     border: 1px solid #ddd;
     color: black;
 }
-
 .sticky-column {
     position: sticky;
     left: 0;
