@@ -94,7 +94,7 @@
                             />
                         </div>
                         <div v-if="col.isSingleSelect">
-                            <h6 v-if="col.inputHeader">
+                            <h6 v-if="col.inputHeader && !col.inputFieldDisplayNone">
                                 {{ col.inputHeader.replace(/\*/g, "") }} <span style="color: red" v-if="col.inputHeader.includes('*')"> *</span>
                             </h6>
                             <VueMultiselect
