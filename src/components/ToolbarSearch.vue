@@ -6,47 +6,48 @@
         @didDismiss="popoverOpen = false"
         :keyboard-close="false"
         :show-backdrop="false"
-        :dismiss-on-select="true"
-    >
-        <div style="width: 1300px" class="sticky-table">
-            <ion-row class="search_header">
-                <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">Fullname</ion-col>
-                <ion-col style="max-width: 120px; min-width: 120px">Birthdate</ion-col>
-                <ion-col style="max-width: 90px; min-width: 90px; max-width: 90px">Gender</ion-col>
-                <ion-col style="max-width: 330px; min-width: 330px">Current Address</ion-col>
-                <ion-col style="max-width: 330px; min-width: 330px">Home Address</ion-col>
-                <ion-col style="max-width: 100px; min-width: 100px">Phone</ion-col>
-                <ion-col style="max-width: 25px"></ion-col>
-            </ion-row>
-            <ion-row class="search_result" v-for="(item, index) in patients" :key="index" @click="openNewPage('patientProfile', item)">
-                <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">{{
-                    item.person.names[0].given_name + " " + item.person.names[0].family_name
-                }}</ion-col>
-                <ion-col style="max-width: 120px; min-width: 120px">{{ item.person.birthdate }}</ion-col>
-                <ion-col style="max-width: 90px; min-width: 90px; max-width: 90px">{{ item.person.gender }}</ion-col>
-                <ion-col style="max-width: 330px; min-width: 330px"
-                    >{{ item?.person?.addresses[0]?.state_province }}, {{ item?.person?.addresses[0]?.township_division }},{{
-                        item?.person?.addresses[0]?.city_village
-                    }}</ion-col
-                >
-                <ion-col style="max-width: 330px; min-width: 330px"
-                    >{{ item?.person?.addresses[0]?.address2 }}, {{ item?.person?.addresses[0]?.county_district }},{{
-                        item?.person?.addresses[0]?.neighborhood_cell
-                    }}</ion-col
-                >
-                <ion-col style="max-width: 150px; min-width: 150px">{{ getPhone(item) }}</ion-col>
-                <ion-col style="max-width: 25px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
-            </ion-row>
-            <ion-row class="sticky-column">
-                <ion-col size="4" class="sticky-column">
-                    <DynButton :icon="add" :name="'Add Patient'" :fill="'clear'" @click="openCheckPaitentNationalIDModal" />
-                    <div id="container-div">
-                        <img id="hand" src="../../public/images/hand.svg" />
-                        <img id="handinfo" src="../../public/images/swipeinfo.png" />
-                    </div>
-                </ion-col>
-            </ion-row>
-        </div>
+        :dismiss-on-select="true">
+
+            <div style="width: 1300px" class="sticky-table">
+                <ion-row class="search_header">
+                    <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">Fullname</ion-col>
+                    <ion-col style="max-width: 120px; min-width: 120px">Birthdate</ion-col>
+                    <ion-col style="max-width: 90px; min-width: 90px; max-width: 90px">Gender</ion-col>
+                    <ion-col style="max-width: 330px; min-width: 330px">Current Address</ion-col>
+                    <ion-col style="max-width: 330px; min-width: 330px">Home Address</ion-col>
+                    <ion-col style="max-width: 100px; min-width: 100px">Phone</ion-col>
+                    <ion-col style="max-width: 25px"></ion-col>
+                </ion-row>
+                <ion-row class="search_result clickable-row" v-for="(item, index) in patients" :key="index" @click="openNewPage('patientProfile', item)">
+                    <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">{{
+                        item.person.names[0].given_name + " " + item.person.names[0].family_name
+                    }}</ion-col>
+                    <ion-col style="max-width: 120px; min-width: 120px">{{ item.person.birthdate }}</ion-col>
+                    <ion-col style="max-width: 90px; min-width: 90px; max-width: 90px">{{ item.person.gender }}</ion-col>
+                    <ion-col style="max-width: 330px; min-width: 330px"
+                        >{{ item?.person?.addresses[0]?.state_province }}, {{ item?.person?.addresses[0]?.township_division }},{{
+                            item?.person?.addresses[0]?.city_village
+                        }}</ion-col
+                    >
+                    <ion-col style="max-width: 330px; min-width: 330px"
+                        >{{ item?.person?.addresses[0]?.address2 }}, {{ item?.person?.addresses[0]?.county_district }},{{
+                            item?.person?.addresses[0]?.neighborhood_cell
+                        }}</ion-col
+                    >
+                    <ion-col style="max-width: 150px; min-width: 150px">{{ getPhone(item) }}</ion-col>
+                    <ion-col style="max-width: 25px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
+                </ion-row>
+                <ion-row class="sticky-column">
+                    <ion-col size="4" class="sticky-column">
+                        <DynButton :icon="add" :name="'Add Patient'" :fill="'clear'" @click="openCheckPaitentNationalIDModal" />                        
+                             <div>  
+                                   <img id="hand" src="../../public/images/hand.svg" >
+                                   <img id="handinfo" src="../../public/images/swipeinfo.png">
+                             </div>
+                    </ion-col>
+                </ion-row>
+            </div>
+       
     </ion-popover>
 </template>
 
@@ -192,17 +193,9 @@ export default defineComponent({
                 }
             }
         },
-        callswipeleft() {
-            const containerDiv = document.getElementById("container-div") as HTMLDivElement;
-            if (containerDiv) {
-                if (window.innerWidth > window.innerHeight) {
-                    containerDiv.style.width = `${window.innerHeight * 0.8}px`;
-                } else {
-                    containerDiv.style.width = `${window.innerWidth * 0.8}px`;
-                }
-                containerDiv.style.height = containerDiv.style.width;
-
-                const handElement = document.getElementById("hand");
+        callswipeleft(){
+            
+             const handElement = document.getElementById("hand");
                 const handInfo = document.getElementById("handinfo") as HTMLDivElement;
                 if (handElement) {
                     handElement.addEventListener("animationend", () => {
@@ -210,7 +203,6 @@ export default defineComponent({
                         handInfo.style.display = "none";
                     });
                 }
-            }
         },
         patientIdentifier(identifiers: any) {
             return identifiers.patient_identifiers
@@ -296,7 +288,6 @@ export default defineComponent({
     border: 1px solid #ddd;
     color: black;
 }
-
 .sticky-column {
     position: sticky;
     left: 0;
@@ -361,35 +352,29 @@ ion-popover {
     --max-width: 1300px;
 }
 
-#container-div {
-    position: absolute;
-    top: 50%;
-    left: 65%;
-    transform: translate(-50%, -50%);
-}
-
 #hand {
-    position: absolute;
-    width: 16.36%;
-    left: 30%;
-    top: 36%;
-    animation-name: swipe;
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: 3;
-    animation-duration: 3s;
+  position: absolute;
+  top: 36%;
+  padding-left: 30%;
+  animation-name: swipe;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 3;
+  animation-duration: 3s; 
 }
 #handinfo {
-    position: absolute;
-    width: 50%;
-    left: 30%;
-    top: 48%;
-    padding-left: 17%;
-    animation-name: swipe;
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: 3;
-    animation-duration: 3s;
+  position: absolute;
+  width: 70%;
+  left: 30%;
+  top: 48%;
+  padding-left: 35%;
+  animation-name: swipe;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 3;
+  animation-duration: 3s; 
 }
-
+.clickable-row {
+    cursor: pointer;
+}
 .hidden {
     display: none;
 }

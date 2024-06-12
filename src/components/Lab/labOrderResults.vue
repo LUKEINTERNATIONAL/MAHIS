@@ -135,6 +135,12 @@ export default defineComponent({
             },
             deep: true,
         },
+        $route: {
+            handler() {
+                this.updateLabList();
+            },
+            deep: true,
+        },
     },
     methods: {
         async updateLabList() {
@@ -188,11 +194,46 @@ export default defineComponent({
                     required: true,
                     eventType: "input",
                     alertsErrorMassage: "",
-                };
-                console.log("🚀 ~ testIndicators.forEach ~ item.name:", item.name);
-                if (item.name == "MRDT") {
+                } as any;
+                if (item.name == "RBS") {
+                    data = {
+                        inputHeader: item.name,
+                        value: "",
+                        colSize: 3,
+                        id: item.concept_id,
+                        name: item.name,
+                        required: true,
+                        eventType: "input",
+                        alertsErrorMassage: "",
+                        validationFunctionName: "validateRBS",
+                        unit: "mg/dL",
+                    };
+                }
+                if (item.name == "FBS") {
+                    data = {
+                        inputHeader: item.name,
+                        value: "",
+                        colSize: 3,
+                        id: item.concept_id,
+                        name: item.name,
+                        required: true,
+                        eventType: "input",
+                        alertsErrorMassage: "",
+                        validationFunctionName: "validateFBS",
+                        unit: "mg/dL",
+                    };
+                }
+                if (
+                    item.name == "MRDT" ||
+                    item.name == "Tuberculosis program" ||
+                    item.name == "Vdrl" ||
+                    item.name == "Hepatitis B" ||
+                    item.name == "Lam" ||
+                    item.name == "CrAg" ||
+                    item.name == "CD4 count"
+                ) {
                     let multiData = [] as any;
-                    if (item.name == "MRDT") {
+                    if (item.name == "MRDT" || item.name == "Vdrl" || item.name == "Hepatitis B" || item.name == "CrAg" || item.name == "Lam") {
                         multiData = [
                             { id: "1", name: "Positive" },
                             { id: "2", name: "Negative" },
@@ -200,8 +241,24 @@ export default defineComponent({
                         ];
                     }
 
+                    if (item.name == "Tuberculosis program") {
+                        multiData = [
+                            { id: "1", name: "Scanty" },
+                            { id: "2", name: "Negative" },
+                            { id: "3", name: "1+" },
+                            { id: "4", name: "2+" },
+                            { id: "5", name: "3+" },
+                        ];
+                    }
+                    if (item.name == "CD4 count") {
+                        multiData = [
+                            { id: "1", name: "below reference line" },
+                            { id: "2", name: "above reference line" },
+                        ];
+                    }
+
                     data = {
-                        inputHeader: "Duration Units",
+                        inputHeader: item.name,
                         icon: icons.search,
                         value: "",
                         name: "units",
@@ -210,9 +267,9 @@ export default defineComponent({
                         isSingleSelect: true,
                         trackBy: "id",
                         multiSelectData: multiData,
-                        id: "",
+                        id: item.concept_id,
                         idName: "district_id",
-                    };
+                    } as any;
                 }
                 indicators[1].data.rowData[0].colData.push(data);
             });
