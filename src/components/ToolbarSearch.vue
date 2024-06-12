@@ -51,7 +51,6 @@
     </ion-popover>
 </template>
 
-
 <script lang="ts">
 import {
     IonContent,
@@ -72,7 +71,7 @@ import {
     IonRow,
     IonCol,
 } from "@ionic/vue";
-import { defineComponent,onMounted } from "vue";
+import { defineComponent, onMounted } from "vue";
 import { PatientService } from "@/services/patient_service";
 import { checkmark, add, search } from "ionicons/icons";
 import { useDemographicsStore } from "@/stores/DemographicStore";
@@ -108,7 +107,6 @@ export default defineComponent({
         IonCol,
     },
     setup() {
-       
         return { checkmark, add };
     },
     data() {
@@ -157,7 +155,9 @@ export default defineComponent({
                     per_page: "7",
                 };
                 this.patients = await PatientService.search(payload);
-                if(this.patients.length > 0){ this.callswipeleft(); }
+                if (this.patients.length > 0) {
+                    this.callswipeleft();
+                }
             }
         },
         async searchByNpid(searchText: any) {
@@ -197,12 +197,11 @@ export default defineComponent({
             
              const handElement = document.getElementById("hand");
                 const handInfo = document.getElementById("handinfo") as HTMLDivElement;
-               if (handElement) {
-                   handElement.addEventListener("animationend", () => {
-                    handElement.style.display = "none";
-                       handInfo.style.display = "none";
-                    
-                   });                
+                if (handElement) {
+                    handElement.addEventListener("animationend", () => {
+                        handElement.style.display = "none";
+                        handInfo.style.display = "none";
+                    });
                 }
         },
         patientIdentifier(identifiers: any) {
@@ -233,9 +232,9 @@ export default defineComponent({
                 resetNCDPatientData();
             } else if (Service.getProgramID() == 14) {
                 resetOPDPatientData();
-            } else {
-                resetPatientData();
             }
+            resetPatientData();
+
             const store = useAdministerVaccineStore();
             store.setVaccineReload(!store.getVaccineReload());
             const roleData: any = sessionStorage.getItem("userRoles");
@@ -267,6 +266,7 @@ export default defineComponent({
             this.popoverOpen = true;
         },
         openCheckPaitentNationalIDModal() {
+            resetPatientData();
             createModal(CheckPatientNationalID, { class: "nationalIDModal" });
         },
         onDismiss() {
@@ -278,80 +278,79 @@ export default defineComponent({
 
 <style scoped>
 .sticky-table {
-  width: 100%;
-  border-collapse: collapse;
+    width: 100%;
+    border-collapse: collapse;
 }
 
 .sticky-table th,
 .sticky-table td {
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  color:black;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    color: black;
 }
 
 .sticky-column {
-  position: sticky;
-  left: 0;
-  background-color: #f9f9f9;
-  z-index: 1; 
-  color:black;
+    position: sticky;
+    left: 0;
+    background-color: #f9f9f9;
+    z-index: 1;
+    color: black;
 }
 
 .sticky-table th {
-  background-color: #f0f0f0; 
-  color:black;
+    background-color: #f0f0f0;
+    color: black;
 }
 
 .sticky-table tr:hover {
-  background-color: #f1f1f1;
+    background-color: #f1f1f1;
 }
 
 .search_header {
-  border-bottom: 1px solid;
-  border-bottom-style: dashed;
-  padding-top: 10px;
-  text-align: left;
-  padding: 5px;
-  color: #b3b3b3;
-  color:black;
+    border-bottom: 1px solid;
+    border-bottom-style: dashed;
+    padding-top: 10px;
+    text-align: left;
+    padding: 5px;
+    color: #b3b3b3;
+    color: black;
 }
 
 .search_result {
-  text-align: left;
-  padding: 5px;
-  color: #b3b3b3;
-  color:black;
+    text-align: left;
+    padding: 5px;
+    color: #b3b3b3;
+    color: black;
 }
 
 .search_result:hover {
-  background-color: #ebebeb;
-  border-radius: 5px;
+    background-color: #ebebeb;
+    border-radius: 5px;
 }
 
 .search_result .selectedPatient {
-  font-size: 18px;
-  color: #b3b3b3;
+    font-size: 18px;
+    color: #b3b3b3;
 }
 
 .search_result .selectedPatient:hover {
-  color: var(--ion-color-primary);
+    color: var(--ion-color-primary);
 }
 
-
 .search_result:hover ion-icon {
-  background-color: #ebebeb;
-  border-radius: 5px;
+    background-color: #ebebeb;
+    border-radius: 5px;
 }
 
 @media (max-width: 900px) {
-  ion-popover {
-    --width: 95vw;
-  }
+    ion-popover {
+        --width: 95vw;
+    }
 }
 
 ion-popover {
-  --width: 95vw;
-  --max-width: 1300px;
+    --width: 95vw;
+    --max-width: 1300px;
 }
 
 #hand {
@@ -383,27 +382,56 @@ ion-popover {
 
 /*** ANIMATIONS ***/
 @keyframes swipe {
-  0%   { left: 45%; }
-  40%  { left: 13%;   }
-  100% { left: 13%;   }
+    0% {
+        left: 45%;
+    }
+    40% {
+        left: 13%;
+    }
+    100% {
+        left: 13%;
+    }
 }
 
 @keyframes fall_1 {
-  0%   { top: 32.65%; opacity: 0.666 }
-  20%  { top: 32.65%;              }
-  60%  {              opacity: 0   }
-  67%  { top: 47%;                 }
-  100% { top: 47%;    opacity: 0   }
+    0% {
+        top: 32.65%;
+        opacity: 0.666;
+    }
+    20% {
+        top: 32.65%;
+    }
+    60% {
+        opacity: 0;
+    }
+    67% {
+        top: 47%;
+    }
+    100% {
+        top: 47%;
+        opacity: 0;
+    }
 }
 
 @keyframes fall_2 {
-  0%   { top: 32.65%; opacity: 0.666 }
-  13%  { top: 32.65%;              }
-  53%  {              opacity: 0   }
-  60%  { top: 47%;                 }
-  100% { top: 47%;    opacity: 0   }
+    0% {
+        top: 32.65%;
+        opacity: 0.666;
+    }
+    13% {
+        top: 32.65%;
+    }
+    53% {
+        opacity: 0;
+    }
+    60% {
+        top: 47%;
+    }
+    100% {
+        top: 47%;
+        opacity: 0;
+    }
 }
-
 </style>
 <style>
 ion-popover {

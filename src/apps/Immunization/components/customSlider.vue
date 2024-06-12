@@ -2,10 +2,21 @@
 
     <div v-if="showCurrentMilestoneAlert" class="alert_banner">
       <apan>{{ msg }}</apan>
-      <ion-icon style="margin-top: 7px;" slot="end" size="medium" :icon="iconsContent.greenCalender">
-      </ion-icon>
-      <span style="font-weight: 700;">{{age}}</span>
+      <!-- <ion-icon style="margin-top: 7px;" slot="end" size="medium" :icon="iconsContent.greenCalender">
+      </ion-icon> -->
+      <!-- <span style="font-weight: 700;">{{age}}</span> -->
     </div>
+
+    <div v-if="!showCurrentMilestoneAlert" class="alert_banner" style="background: inherit;">
+      <!-- <ion-icon style="margin-top: 7px;" slot="end" size="medium" :icon="iconsContent.greenCalender">
+      </ion-icon>
+      <span style="font-weight: 700;">{{ current_milestone }}</span> -->
+    </div>
+
+    <!-- <div class="swipe_msg">
+      <div class="vaccinesTitleDate">(Swipe left or right for other milestones)</div>
+    </div> -->
+    
 
     <carousel :items-to-show="1" :modelValue="landingSlide" @slide-end="slideEvent">
       <slide v-for="slide in 12" :key="slide">
@@ -102,6 +113,7 @@
             age: '',
             landingSlide: 0,
             msg: 'Vaccines due today',
+            current_milestone: "" as string,
         };
     },
     computed: {
@@ -219,6 +231,7 @@
         this.milestones.forEach((milestone: any) => {
           if(milestone.visit_id -1 == SlideEventData.currentSlideIndex) {
             vaccineScheduleStore.setCurrentMilestone(milestone.age)
+            this.current_milestone = milestone.age
           }
         })
 
@@ -329,6 +342,27 @@
       order: 1;
       align-self: stretch;
       flex-grow: 0;
+    }
+    .swipe_msg {
+      /* Auto layout */
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      padding: 0px;
+      gap: 10px;
+
+
+      /* Inside auto layout */
+      flex: none;
+      order: 3;
+      flex-grow: 0;
+    }
+    .vaccinesTitleDate {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        color: #636363;
     }
 </style>
   

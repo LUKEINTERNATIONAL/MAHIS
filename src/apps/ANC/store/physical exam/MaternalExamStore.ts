@@ -3,6 +3,159 @@ import { icons } from '@/utils/svg';
 
 export const useMaternalExamStore = defineStore('maternalExamStore',{
     state: () => ({
+        respiratory: [{
+            selectdData: [],
+            classDash:'dashed_bottom_border',
+            checkboxBtnContent:
+                {
+                    header:{
+                        title: '',
+                        selectedValue: '',
+                        name:'Respiratory exam findings'
+                    },
+                    data:[
+                        {
+                            name: 'Cough',
+                            value: 'cough',
+                            checked: false,
+                            labelPlacement: 'start',
+                            colSize: '6',
+                            justify: 'space-between'
+    
+                        },
+                        {
+                            name: 'Rapid breathing',
+                            value: 'rapid breathing',
+                            checked: false,
+                            labelPlacement: 'start',
+                            colSize: '6',
+                            justify: 'space-between'
+    
+                        },
+                    ]
+                }
+    
+        },
+    
+        {
+            selectdData: [],
+            classDash:'dashed_bottom_border',
+            checkboxBtnContent:
+                {
+                    header:{
+                        title: '',
+                        selectedValue: '',
+                        name:'Respiratory exam findings'
+                    },
+                    data:[
+                        {
+                            name: 'Slow breathing',
+                            value: 'Slow breathing',
+                            checked: false,
+                            labelPlacement: 'start',
+                            colSize: '6',
+                            justify: 'space-between'
+    
+                        },
+                        {
+                            name: 'Wheezing',
+                            value: 'wheezing',
+                            checked: false,
+                            labelPlacement: 'start',
+                            colSize: '6',
+                            justify: 'space-between'
+    
+                        },
+                    ]
+                }
+    
+        },
+        {
+            selectdData: [],
+            classDash:'dashed_bottom_border',
+            checkboxBtnContent:
+                {
+                    header:{
+                        title: '',
+                        selectedValue: '',
+                        name:'Respiratory exam findings'
+                    },
+                    data:[
+                        {
+                            name: 'Rales',
+                            value: 'Rales',
+                            checked: false,
+                            labelPlacement: 'start',
+                            colSize: '6',
+                            justify: 'space-between'
+    
+                        },
+                        {
+                            name: 'Respiratory distress',
+                            value: 'respiratory distress',
+                            checked: false,
+                            labelPlacement: 'start',
+                            colSize: '6',
+                            justify: 'space-between'
+    
+                        },
+                    ]
+                }
+    
+        },
+    
+        {
+            classDash:'dashed_bottom_border',
+            checkboxBtnContent:
+                {
+                    header:{
+                        title: '',
+                        selectedValue: '',
+                        name:'Respiratory exam findings'
+                    },
+                    data:[
+                        {
+                            name: 'Other',
+                            value: 'Other',
+                            checked: false,
+                            labelPlacement: 'start',
+                            colSize: '6',
+                            justify: 'space-between'
+    
+                        },
+                    ]
+                }
+    
+        },
+        {
+            sideColSize:0.000001,
+            sectionHeader: '',
+            classDash: 'dashed_bottom_border',
+            data:
+                {
+                    rowData:[
+                        {
+                            colData: [
+                                {
+                                    displayNone: true,
+                                    inputHeader: 'Specify',
+                                    unit: '',
+                                    icon: icons.editPen,
+                                    value: '',
+                                    name: 'Other notes',
+                                    valueType: 'text',
+                                    required: true,
+                                    eventType: 'input',
+                                    inputWidth: "100%",
+    
+                                },
+    
+                            ],
+    
+                        },
+                    ]
+                },
+        }],
         pallor: [
             {
                 classDash:'dashed_bottom_border',

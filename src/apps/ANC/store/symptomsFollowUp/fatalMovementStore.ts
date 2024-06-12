@@ -1,19 +1,5 @@
 import { defineStore } from "pinia"
 
-const fatalForm={
-    normalFetalMovement:{
-        name:"Normal fetal movement",
-        value:"normalFetalMovement"
-    },
-       reducedPoorFetalMovement:{
-        name:"Reduced or poor fetal movement",
-        value:"reducedPoorFetalMovement"
-    },
-       noFetalMovement:{
-        name:"No fetal movement",
-        value:"noFetalMovement"
-    }
-}
 
 export const useFatalMovementStore =  defineStore('fatalMovementStore',{
     state: ()=>({

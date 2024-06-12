@@ -1,17 +1,11 @@
 <template>
     <div class="container">
-    <ion-card class="section">
-      <ion-card-content>
-        <basic-form :contentData="vitals"
-                 @update:inputValue="validaterowData($event)"
-                :initialData="initialData"
-                >
-    </basic-form>
-      </ion-card-content>
-    </ion-card>
-  </div>
-  
-   
+        <ion-card class="section">
+            <ion-card-content>
+                <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)" :initialData="initialData"> </basic-form>
+            </ion-card-content>
+        </ion-card>
+    </div>
 </template>
 
 <script lang="ts">
@@ -27,6 +21,7 @@ import { mapState } from "pinia";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { arePropertiesNotEmpty } from "@/utils/Objects";
 import HisDate from "@/utils/Date";
+import DynamicButton from "@/components/DynamicButton.vue";
 import BasicInputField from "@/components/BasicInputField.vue";
 import { VitalsService } from "@/services/ANC/anc_vitals_service";
 import StandardValidations from "@/validations/StandardValidations";
@@ -57,19 +52,14 @@ export default defineComponent({
             vValidations: "" as any,
             hasValidationErrors: [] as any,
             vitalsInstance: {} as any,
-            initialData:[] as any,
-            initialData1:[] as any,
-            initialData2:[] as any,
-
+            initialData: [] as any,
+            initialData1: [] as any,
+            initialData2: [] as any,
         };
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useVitalsStore, ["vitals"]),
-<<<<<<< HEAD
-//        ...mapState(useVitalsStore, ["preEclampsia"]),
-=======
->>>>>>> 9211ca8488d3e146ae8802522a732542d7578f2d
     },
     mounted() {
         const userID: any = Service.getUserID();
@@ -77,11 +67,9 @@ export default defineComponent({
         this.updateVitalsStores();
         this.validaterowData({});
         this.handleOtherAndNovitalsDone();
-        const vitals=useVitalsStore()
-        const preEclampsia=useVitalsStore()
-        this.initialData=vitals.getInitial
-      
-
+        const vitals = useVitalsStore();
+        const preEclampsia = useVitalsStore();
+        this.initialData = vitals.getInitial;
     },
     watch: {
         vitals: {
@@ -89,11 +77,9 @@ export default defineComponent({
                 this.updateVitalsStores();
                 this.handleOtherAndNovitalsDone();
                 this.handlePreEclampsia();
-
             },
             deep: true,
         },
-       
     },
     setup() {
         return { checkmark, pulseOutline };
@@ -131,14 +117,14 @@ export default defineComponent({
                         if (validateResult?.length > 0) {
                             this.hasValidationErrors.push("false");
                             if (input.inputHeader === inputData.inputHeader) {
-                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsError = true;
+                                this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = true;
                                 this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage =
                                     validateResult.flat(Infinity)[0];
                                 return true;
-                            }
+                            } 
                         } else {
                             this.hasValidationErrors.push("true");
-                            this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsError = false;
+                            this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = false;
                             this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = "";
                         }
 
@@ -168,7 +154,41 @@ export default defineComponent({
             vitals.textColor = bmiColor[1];
             vitals.index = this.BMI?.index ?? "";
             vitals.value = this.BMI?.result ?? "";
+            this.updateExpectedWeightGain();
+            this.updateAverageWeightGain();
+            this.updateTotalWeightGain();
         },
+
+        async updateExpectedWeightGain () {
+            const bmiColor = this.BMI?.color ?? [];
+            const vitals = this.vitals[0].alerts[1];
+            vitals.icon = BMIService.iconBMI(bmiColor);
+            vitals.backgroundColor = bmiColor[0];
+            vitals.textColor = bmiColor[1];
+            vitals.index = this.BMI?.index ?? "";
+            vitals.value = this.BMI?.result ?? "";
+        },
+
+        async updateAverageWeightGain () {
+            const bmiColor = this.BMI?.color ?? [];
+            const vitals = this.vitals[0].alerts[2];
+            vitals.icon = BMIService.iconBMI(bmiColor);
+            vitals.backgroundColor = bmiColor[0];
+            vitals.textColor = bmiColor[1];
+            vitals.index = this.BMI?.index ?? "";
+            vitals.value = this.BMI?.result ?? "";
+        },
+
+        async updateTotalWeightGain () {
+            const bmiColor = this.BMI?.color ?? [];
+            const vitals = this.vitals[0].alerts[3];
+            vitals.icon = BMIService.iconBMI(bmiColor);
+            vitals.backgroundColor = bmiColor[0];
+            vitals.textColor = bmiColor[1];
+            vitals.index = this.BMI?.index ?? "";
+            vitals.value = this.BMI?.result ?? "";
+        },
+
         async updateBP(systolic: any, diastolic: any) {
             const vitals = this.vitals[1].alerts[0];
             const bpColor = this.BPStatus?.colors ?? [];
@@ -281,9 +301,27 @@ h5 {
     white-space: nowrap;
     overflow: hidden;
 }
+.category{
+width: 400px;
+height: 70px;
+background-color: #DDEEDD;
+border-radius: 0.99%;
+color: #016302;
+font-weight: bolder;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+.categories {
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+}
 ion-card {
     width: 100%;
-    color:black;
+    color: black;
 }
 .sub_item_header {
     font-weight: bold;

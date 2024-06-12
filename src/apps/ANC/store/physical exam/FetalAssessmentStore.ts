@@ -11,7 +11,7 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
                 sectionHeader: "",
 
                 header: {
-                    name:"Symphysis-fundal height",
+                    name: "Symphysis-fundal height",
                     selectedValue: "",
                 },
 
@@ -28,7 +28,6 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
                                     valueType: "number",
                                     required: true,
                                     eventType: "input",
-                                    alertsError: false,
                                     alertsErrorMassage: "",
                                     inputWidth: "55%",
                                 },
@@ -69,7 +68,6 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
                 sectionHeader: "",
                 classDash: "dashed_bottom_border",
                 header: {
-                  
                     selectedValue: "",
                 },
                 data: {
@@ -123,7 +121,6 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
                 sectionHeader: "",
                 classDash: "",
                 header: {
-                    
                     selectedValue: "",
                 },
                 data: {
@@ -176,7 +173,7 @@ export const useFetalAssessment = defineStore("fetalAssessment", {
     }),
     actions: {
         setFetalAssessment(data: any) {
-             this.fetalAssessment = data
+            this.fetalAssessment = data;
         },
     },
     persist: true,

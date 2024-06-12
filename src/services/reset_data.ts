@@ -4,6 +4,7 @@ import { useOutcomeStore } from "@/stores/OutcomeStore";
 import { useMedicationsStore } from "@/stores/MedicationsStore";
 import { useTreatmentPlanStore } from "@/stores/TreatmentPlanStore";
 import { useDiagnosisStore } from "@/stores/DiagnosisStore";
+import { useBirthRegistrationStore } from "@/apps/Immunization/stores/BirthRegistrationStore";
 
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useEnrollementStore } from "@/stores/EnrollmentStore";
@@ -83,6 +84,7 @@ export async function resetPatientData() {
     const nextAppointment = useNextAppointmentStore();
     const registration = useRegistrationStore();
     const weightHeightVitals = useWeightHeightVitalsStore();
+    const birthRegistration = useBirthRegistrationStore();
 
     const ANCobstreticHistory = useObstreticHistoryStore();
     const ANCmedicalHistory = useMedicalHistoryStore();
@@ -144,7 +146,8 @@ export async function resetPatientData() {
     const PNCPostnatalWard = usePostnatalWardStayStore();
     const PNCBabyStatus = useBabyStatusStore();
 
-    vitals.setVitals(vitals.getInitialSocialHistory());
+    vitals.setVitals(vitals.getInitialVitals());
+    birthRegistration.setBirthRegistration(birthRegistration.getInitialBirthRegistration());
     registration.setPersonalInformation(registration.getInitialPersonalInformation());
     registration.setSocialHistory(registration.getInitialSocialHistory());
     registration.setHomeLocation(registration.getInitialHomeLocation());
