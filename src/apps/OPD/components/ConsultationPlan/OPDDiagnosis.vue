@@ -106,6 +106,7 @@ export default defineComponent({
         OPDdiagnosis: {
             handler() {
                 this.setDashedBox();
+                this.removePrimaryDiagnosis();
             },
             deep: true,
         },
@@ -113,6 +114,7 @@ export default defineComponent({
     async mounted() {
         this.updateDiagnosisStores();
         this.setDashedBox();
+        this.removePrimaryDiagnosis();
 
         this.OPDdiagnosis[0].data.rowData[0].colData[1].multiSelectData = await this.getDiagnosis("");
     },
@@ -158,13 +160,20 @@ export default defineComponent({
                     this.OPDdiagnosis[0].data.rowData[0].colData[0].value = this.inputFields[0].value.name;
                     this.search_item = false;
                     this.display_item = true;
-                    this.addItemButton = true;
-                    this.display_primary = false;
+                    this.addItemButton = true; 
+                    this.display_primary = false;   
                 }
             }
             this.OPDdiagnosis[0].data.rowData[0].colData[0].value = "";
             this.OPDdiagnosis[0].data.rowData[0].colData[1].value = "";
             this.OPDdiagnosis[0].data.rowData[0].colData[0].popOverData.data = [];
+            
+        },
+        removePrimaryDiagnosis () {
+            if (this.display_primary === false) {
+                modifyFieldValue (this.OPDdiagnosis, "primaryDiagnosis", "inputFieldDisplayNone", true);
+                modifyFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "colSize", 0);
+            }
         },
         buildDiagnosis() {
             const diagnosis = [];
@@ -207,6 +216,7 @@ export default defineComponent({
                 this.OPDdiagnosis[0].data.rowData[0].colData[0].alertsErrorMassage = "Diagnosis already selected";
                 return false;
             }
+          
             this.OPDdiagnosis[0].selectedData = [...this.OPDdiagnosis[0].selectedData, ...diagnosis];
             return true;
         },

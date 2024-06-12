@@ -22,7 +22,9 @@ const initialOPDdiagnosis = [
                             trackBy: "concept_id",
                             multiSelectData: [],
                             idName: "district_id",
-                            inputFieldDisplayNone: true,
+                            // inputFieldDisplayNone: true,
+                            // colSize: 0,
+                            
                         },
                         {
                             inputHeader: "Differential Diagnosis",
