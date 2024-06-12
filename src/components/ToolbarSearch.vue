@@ -40,7 +40,7 @@
                 <ion-row class="sticky-column">
                     <ion-col size="4" class="sticky-column">
                         <DynButton :icon="add" :name="'Add Patient'" :fill="'clear'" @click="openCheckPaitentNationalIDModal" />                        
-                             <div id="container-div">  
+                             <div>  
                                    <img id="hand" src="../../public/images/hand.svg" >
                                    <img id="handinfo" src="../../public/images/swipeinfo.png">
                              </div>
@@ -194,18 +194,8 @@ export default defineComponent({
             }
         },
         callswipeleft(){
-
-            const containerDiv = document.getElementById("container-div") as HTMLDivElement;            
-            if(containerDiv){
-
-                if (window.innerWidth > window.innerHeight) {
-                     containerDiv.style.width = `${window.innerHeight * 0.8}px`;
-                } else {
-                     containerDiv.style.width = `${window.innerWidth * 0.8}px`;
-                }
-                     containerDiv.style.height = containerDiv.style.width;            
-           
-                const handElement = document.getElementById("hand");
+            
+             const handElement = document.getElementById("hand");
                 const handInfo = document.getElementById("handinfo") as HTMLDivElement;
                if (handElement) {
                    handElement.addEventListener("animationend", () => {
@@ -214,7 +204,6 @@ export default defineComponent({
                     
                    });                
                 }
-           }
         },
         patientIdentifier(identifiers: any) {
             return identifiers.patient_identifiers
@@ -365,19 +354,10 @@ ion-popover {
   --max-width: 1300px;
 }
 
-
-#container-div {
-  position: absolute;
-  top: 50%;
-  left: 65%;
-  transform: translate(-50%, -50%);
-}
-
 #hand {
   position: absolute;
-  width: 16.36%;
-  left: 30%;
   top: 36%;
+  padding-left: 30%;
   animation-name: swipe;
   animation-timing-function: ease-in-out;
   animation-iteration-count: 3;
@@ -385,10 +365,10 @@ ion-popover {
 }
 #handinfo {
   position: absolute;
-  width: 50%;
+  width: 70%;
   left: 30%;
   top: 48%;
-  padding-left: 17%;
+  padding-left: 35%;
   animation-name: swipe;
   animation-timing-function: ease-in-out;
   animation-iteration-count: 3;
