@@ -7,6 +7,7 @@ export const useTreatmentPlanStore = defineStore('TreatmentPlanStore', {
         medicalAllergiesList: [] as any,
         selectedMedicalAllergiesList: [] as any,
         nonPharmalogicalTherapyAndOtherNotes: '' as string,
+        partialOPDdrugList: [] as any,
     }),
     actions:{
         setSelectedMedicalDrugsList(data: any) {
@@ -31,6 +32,12 @@ export const useTreatmentPlanStore = defineStore('TreatmentPlanStore', {
         },
         getSelectedMedicalAllergiesList() {
             return this.selectedMedicalAllergiesList
+        },
+        setPartialOPDdrugList(data: any): void {
+            this.partialOPDdrugList = data
+        },
+        getPartialOPDdrugList(): any {
+            return this.partialOPDdrugList
         }
     },
     persist:true,

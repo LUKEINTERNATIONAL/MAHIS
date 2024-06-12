@@ -89,6 +89,10 @@ const initialVitals = [
                             id: 2,
                             name: "Machine not working",
                         },
+                        {
+                            id: 3,
+                            name: "Machine not available",
+                        },
                     ],
                     eventType: "input",
                     required: true,
@@ -180,6 +184,10 @@ const initialVitals = [
                             id: 2,
                             name: "Machine not working",
                         },
+                        {
+                            id: 3,
+                            name: "Machine not available",
+                        },
                     ],
                     eventType: "input",
                     required: true,
@@ -264,6 +272,10 @@ const initialVitals = [
                         {
                             id: 2,
                             name: "Machine not working",
+                        },
+                        {
+                            id: 3,
+                            name: "Machine not available",
                         },
                     ],
                     eventType: "input",

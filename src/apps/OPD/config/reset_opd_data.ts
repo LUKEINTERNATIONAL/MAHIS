@@ -39,6 +39,10 @@ export async function resetOPDPatientData() {
     const pastMedicalHistoryStore = usePastMedicalHistoryStore();
     const OPDDiagnosisStore = useOPDDiagnosisStore();
 
+    const levelOfConsciousness = useLevelOfConsciousnessStore()
+    
+    levelOfConsciousness.$reset
+
     presentingComplaintsStore.setPresentingComplaints(presentingComplaintsStore.getInitial());
     pastMedicalHistoryStore.setPastMedicalHistory(pastMedicalHistoryStore.getInitial());
     OPDDiagnosisStore.setOPDDiagnosis(OPDDiagnosisStore.getInitial());

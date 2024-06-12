@@ -77,6 +77,7 @@ export default defineComponent({
         IonLabel,
         IonModal,
         Stepper,
+        BasicFooter,
     },
     data() {
         return {
