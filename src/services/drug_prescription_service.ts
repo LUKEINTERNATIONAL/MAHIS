@@ -4,6 +4,7 @@ import { AppEncounterService } from "@/services/app_encounter_service"
 import { DrugOrderService } from "@/services/drug_order_service";
 import { OrderService } from "@/services/order_service";
 import { DrugService } from './drug_service';
+import { ConceptService } from "@/services/concept_service"
 
 export const DRUG_FREQUENCIES: Array<{label: string; code: string; value: number; [x: string]: any}> = [
     { label : "ONCE A DAY (OD)", code : "OD", value : 1 },
@@ -66,4 +67,9 @@ export const DRUG_FREQUENCIES: Array<{label: string; code: string; value: number
         return frequency.label
     }
     return undefined
-}
+  }
+
+  export async function getDrugRouteList() {
+    const data = await ConceptService.getConceptSet('Method of drug administration')
+    return data
+  }

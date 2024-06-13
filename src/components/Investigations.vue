@@ -1,5 +1,5 @@
 <template>
-    <ion-accordion-group ref="accordionGroup" class="previousView">
+    <ion-accordion-group ref="accordionGroup" class="previousView" value="first">
         <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
             <ion-item slot="header" color="light">
                 <ion-label class="previousLabel">Lab Investigations</ion-label>
@@ -19,7 +19,7 @@
                     </basic-form>
                 </span>
 
-                <ion-row v-if="addItemButton" style="margin-top: 10px">
+                <ion-row v-if="addItemButton && !isLabUser" style="margin-top: 10px">
                     <DynamicButton
                         fill="clear"
                         :icon="iconsContent.plus"
@@ -31,7 +31,7 @@
             </div>
         </ion-accordion>
     </ion-accordion-group>
-    <ion-accordion-group ref="accordionGroup" class="previousView">
+    <ion-accordion-group ref="accordionGroup" class="previousView" v-if="!isLabUser">
         <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
             <ion-item slot="header" color="light">
                 <ion-label class="previousLabel">Radiology Investigation</ion-label>
@@ -39,7 +39,7 @@
             <div class="ion-padding" slot="content"></div>
         </ion-accordion>
     </ion-accordion-group>
-    <ion-accordion-group ref="accordionGroup" class="previousView">
+    <ion-accordion-group ref="accordionGroup" class="previousView" v-if="!isLabUser">
         <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
             <ion-item slot="header" color="light">
                 <ion-label class="previousLabel">Other Investigation</ion-label>
@@ -119,6 +119,7 @@ export default defineComponent({
             specimen: "" as any,
             radiologyOrdersStatus: false,
             otherOrdersStatus: false,
+            isLabUser: false,
         };
     },
     setup() {
@@ -146,6 +147,11 @@ export default defineComponent({
         },
     },
     async mounted() {
+        const roleData: any = sessionStorage.getItem("userRoles");
+        const roles: any = JSON.parse(roleData);
+        if (roles.some((role: any) => role.role === "Lab")) {
+            this.isLabUser = true;
+        }
         await this.getSpecimens();
         this.updateInvestigationsStores();
         this.setDashedBox();

@@ -162,23 +162,35 @@
                 </ion-item>
                 <div class="ion-padding" slot="content">
                     <ion-row>
-                        <ion-col>
-                            <BasicInputField
-                                :placeholder="note_properties[0].placeHolder"
-                                :icon="keyOutline"
-                                :inputValue="note_properties[0].dataValue.value"
-                                @update:inputValue="note_properties[0].dataHandler"
-                            />
-                        </ion-col>
-                        <ion-col>
-                            <BasicInputField
-                                :placeholder="note_properties[0].placeHolder"
-                                :icon="keyOutline"
-                                :inputValue="note_properties[0].dataValue.value"
-                                @update:inputValue="note_properties[0].dataHandler"
-                            />
-                        </ion-col>
-                    </ion-row>
+        <ion-col>
+            <BasicInputField
+                :placeholder="password_input_properties[0].placeHolder"
+                :icon="keyOutline"
+                :inputValue="password_input_properties[0].dataValue.value"
+                @update:inputValue="password_input_properties[0].dataHandler"
+            />
+
+            <div>
+                <ion-label v-if="password_input_properties[0].show_error.value" class="error-label">
+                    {{ password_input_properties[0].error_message }}
+                </ion-label>
+            </div>
+        </ion-col>
+        <ion-col>
+            <BasicInputField
+                :placeholder="password_input_properties[1].placeHolder"
+                :icon="keyOutline"
+                :inputValue="password_input_properties[1].dataValue.value"
+                @update:inputValue="password_input_properties[1].dataHandler"
+            />
+
+            <div>
+                <ion-label v-if="password_input_properties[1].show_error.value" class="error-label">
+                    {{ password_input_properties[1].error_message }}
+                </ion-label>
+            </div>
+        </ion-col>
+    </ion-row>
                 </div>
             </ion-accordion>
         </ion-accordion-group>
@@ -238,6 +250,10 @@ const locationData = ref([]) as any
 const locationId = ref()
 const location_error_message = ref('Select location')
 const location_show_error = ref(false)
+const passwordErrorMsgs = [
+    'Input must be at least 4 characters long, containing only letters, numbers, and symbols',
+    'Password does not match'
+]
 
 const props = defineProps<{
     toggle: true,
@@ -303,6 +319,7 @@ function trigerSaveFn() {
     preSaveRoles()
     trigerSaveStatusFn()
     updateUserDemographics()
+    // updatePassword()
 }
 
 const input_properties = [
@@ -335,6 +352,32 @@ const input_properties = [
     },
 ]
 
+const password_input_properties = [
+    {
+        placeHolder: 'new password',
+        dataHandler: passwordInputUpDated_fn1,
+        dataValue: ref(),
+        show_error: ref(false),
+        error_message: passwordErrorMsgs[0],
+    },
+    {
+        placeHolder: 'confirm password',
+        dataHandler: passwordInputUpDated_fn2,
+        dataValue: ref(),
+        show_error: ref(false),
+        error_message: passwordErrorMsgs[0],
+    },
+]
+
+function passwordInputUpDated_fn1(event: any) {
+    const input = event.target.value
+    password_input_properties[0].dataValue.value = input
+}
+function passwordInputUpDated_fn2(event: any) {
+    const input = event.target.value
+    password_input_properties[1].dataValue.value = input
+}
+
 function inputUpDated_fn1(event: any) {
     const input = event.target.value
     input_properties[0].dataValue.value = input
@@ -360,6 +403,82 @@ function validateLocation() {
         location_show_error.value = false
         return true
     }
+}
+
+function updatePassword() {
+    const _ValidatePassword_ = ValidatePassword()
+    if (_ValidatePassword_ == true) {
+
+    }
+ }
+
+function ValidatePassword(): boolean {
+    let is_valid = false
+    let error_foundP_p1 = false
+    let error_foundP_p2 = false
+    let is_password1_valid
+    let is_password2_valid
+    
+
+    password_input_properties[0].error_message = passwordErrorMsgs[0]
+    password_input_properties[1].error_message = passwordErrorMsgs[0]
+
+    if (password_input_properties[0].dataValue.value == undefined || password_input_properties[0].dataValue.value == "") {
+        password_input_properties[0].show_error.value = true
+        error_foundP_p1 = true
+    }
+
+    if (password_input_properties[1].dataValue.value == undefined || password_input_properties[1].dataValue.value == "") {
+        password_input_properties[1].show_error.value = true
+        error_foundP_p2 = true
+    }
+
+
+    if (error_foundP_p1 == false) {
+        is_password1_valid = isPasswordValid(password_input_properties[0].dataValue.value)
+
+        if (is_password1_valid == false) {
+            password_input_properties[0].show_error.value = true
+            error_foundP_p1 = true
+        }
+
+        if (is_password1_valid == true) {
+            password_input_properties[0].show_error.value = false
+        }
+    }
+
+    if (error_foundP_p2 == false) {
+        is_password2_valid = isPasswordValid(password_input_properties[1].dataValue.value)
+
+        if (is_password2_valid == false) {
+            password_input_properties[1].show_error.value = true
+            error_foundP_p2 = true
+        }
+
+        if (is_password2_valid == true) {
+            password_input_properties[1].show_error.value = false
+        }
+    }
+
+    if (error_foundP_p1 == false && error_foundP_p2 == false) {
+        if (is_password1_valid == true && is_password2_valid == true) {
+            if (password_input_properties[0].dataValue.value === password_input_properties[1].dataValue.value) {
+                password_input_properties[0].show_error.value = false
+                password_input_properties[1].show_error.value = false
+                is_valid = true
+            }
+
+            if (password_input_properties[0].dataValue.value != password_input_properties[1].dataValue.value) {
+                password_input_properties[0].error_message = passwordErrorMsgs[1]
+                password_input_properties[1].error_message = passwordErrorMsgs[1]
+                password_input_properties[0].show_error.value = true
+                password_input_properties[1].show_error.value = true
+                is_valid = false
+            }
+
+        }
+    }
+    return is_valid
 }
 
 

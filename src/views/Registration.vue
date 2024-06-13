@@ -253,6 +253,12 @@ export default defineComponent({
             },
             deep: true,
         },
+        $route: {
+            handler() {
+                this.setCurrentStep("Personal Information");
+            },
+            deep: true,
+        },
     },
     setup() {
         return { arrowForwardCircle, grid, list };
