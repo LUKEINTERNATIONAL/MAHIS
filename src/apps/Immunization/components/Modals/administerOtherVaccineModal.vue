@@ -48,7 +48,6 @@ import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
 import { ObservationService } from "@/services/observation_service";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { PatientService } from "@/services/patient_service";
-import { useGeneralStore } from "@/stores/GeneralStore";
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -88,7 +87,6 @@ export default defineComponent({
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useAdministerOtherVaccineStore, ["administerOtherVaccine"]),
-        ...mapState(useGeneralStore, ["activities"]),
     },
     async mounted() {
         const array = ["Height", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];

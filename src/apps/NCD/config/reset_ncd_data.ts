@@ -9,7 +9,6 @@ import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useEnrollementStore } from "@/stores/EnrollmentStore";
 import { useNextAppointmentStore } from "@/stores/NextAppointmentStore";
 import { useRegistrationStore } from "@/stores/RegistrationStore";
-import { useGeneralStore } from "@/stores/GeneralStore";
 
 import { useWeightHeightVitalsStore } from "@/apps/Immunization/stores/VitalsStore";
 
@@ -21,7 +20,6 @@ export async function resetNCDPatientData() {
     const medications = useMedicationsStore();
     const treatmentPlan = useTreatmentPlanStore();
     const diagnosis = useDiagnosisStore();
-    const general = useGeneralStore();
     const enrollement = useEnrollementStore();
     const nextAppointment = useNextAppointmentStore();
     const registration = useRegistrationStore();

@@ -203,7 +203,7 @@ export default defineComponent({
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useConfigurationStore, ["enrollmentDisplayType"]),
-        ...mapState(useGeneralStore, ["activities"]),
+        ...mapState(useGeneralStore, ["NCDActivities"]),
         ...mapState(useEnrollementStore, ["NCDNumber", "enrollmentDiagnosis", "substance", "patientHistoryHIV", "patientHistory"]),
     },
     async mounted() {
@@ -248,7 +248,7 @@ export default defineComponent({
                 await this.saveEnrollment();
                 resetNCDPatientData();
                 await UserService.setProgramUserActions();
-                if (this.activities.length == 0) {
+                if (this.NCDActivities.length == 0) {
                     this.$router.push("patientProfile");
                 } else {
                     this.$router.push("consultationPlan");

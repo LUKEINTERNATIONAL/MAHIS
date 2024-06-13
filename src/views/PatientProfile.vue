@@ -277,7 +277,7 @@ export default defineComponent({
         ...mapState(useDemographicsStore, ["demographics", "patient"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalAllergiesList"]),
         ...mapState(useEnrollementStore, ["NCDNumber"]),
-        ...mapState(useGeneralStore, ["activities", "userActions"]),
+        ...mapState(useGeneralStore, ["NCDUserActions"]),
         ...mapState(useVitalsStore, ["vitals"]),
     },
     async mounted() {
@@ -295,7 +295,7 @@ export default defineComponent({
             },
             deep: true,
         },
-        userActions: {
+        NCDUserActions: {
             handler() {
                 this.setNCDValue();
             },

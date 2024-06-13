@@ -11,6 +11,7 @@
                 :StepperData="StepperData"
             />
         </ion-content>
+        <BasicFooter @finishBtn="saveData()" />
     </ion-page>
 </template>
 
@@ -66,6 +67,7 @@ import { resetNCDPatientData } from "@/apps/NCD/config/reset_ncd_data";
 import { PatientReferralService } from "@/services/patient_referral_service";
 import { PatientAdmitService } from "@/services/patient_admit_service";
 import { UserService } from "@/services/user_service";
+import BasicFooter from "@/components/BasicFooter.vue";
 import {
     modifyRadioValue,
     getRadioSelectedValue,
@@ -98,6 +100,7 @@ export default defineComponent({
         IonLabel,
         IonModal,
         Stepper,
+        BasicFooter,
     },
     data() {
         return {
@@ -113,14 +116,14 @@ export default defineComponent({
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
-        ...mapState(useGeneralStore, ["activities"]),
+        ...mapState(useGeneralStore, ["NCDActivities"]),
         ...mapState(useOutcomeStore, ["dispositions"]),
     },
     created() {
         this.getData();
     },
     mounted() {
-        if (this.activities.length == 0) {
+        if (this.NCDActivities.length == 0) {
             this.$router.push("patientProfile");
         }
         this.markWizard();
@@ -157,9 +160,8 @@ export default defineComponent({
     methods: {
         async getData() {
             // const steps = ["Vital Signs", "Investigations", "Diagnosis", "Complications Screening", "Treatment Plan", "Next Appointment", "Outcome"];
-            const [{ programActivity: steps }] = this.activities;
-            for (let i = 0; i < steps.length; i++) {
-                const title = steps[i];
+            for (let i = 0; i < this.NCDActivities.length; i++) {
+                const title = this.NCDActivities[i];
                 const number = i + 1;
 
                 this.wizardData.push({
@@ -168,7 +170,7 @@ export default defineComponent({
                     checked: i === 0 ? false : "",
                     disabled: false,
                     number,
-                    last_step: i === steps.length - 1 ? "last_step" : "",
+                    last_step: i === this.NCDActivities.length - 1 ? "last_step" : "",
                 });
 
                 this.StepperData.push({
