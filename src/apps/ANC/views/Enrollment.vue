@@ -10,18 +10,15 @@
                     <div class="demographics_title">Enrollment</div>
                 </div>
             </div>
-            <div >
-
-                    <ion-col size-sm="12" size-md="12" size-lg="6" size-xl="4">
-                        <Elligibility/>
-
-                    </ion-col>
-              <div class="footer" style="margin-right: 520px">
-                <DynamicButton name="Save" iconSlot="end" :icon="iconsContent.saveWhite" @click="saveData()" />
-              </div>
+            <div>
+                <ion-col size-sm="12" size-md="12" size-lg="6" size-xl="4">
+                    <Elligibility />
+                </ion-col>
+                <div class="footer" style="margin-right: 520px">
+                    <DynamicButton name="Save" iconSlot="end" :icon="iconsContent.saveWhite" @click="saveData()" />
+                </div>
             </div>
         </ion-content>
-
     </ion-page>
 </template>
 
@@ -86,9 +83,8 @@ import {
 import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServerData";
 import { IdentifierService } from "@/services/identifier_service";
 import { resetPatientData } from "@/services/reset_data";
-import { useGeneralStore } from "@/stores/GeneralStore";
 import { UserService } from "@/services/user_service";
-import {useANCenrollementStore} from "@/apps/ANC/store/Enrollment/EnrollmentStore";
+import { useANCenrollementStore } from "@/apps/ANC/store/Enrollment/EnrollmentStore";
 
 export default defineComponent({
     name: "Home",
@@ -136,11 +132,9 @@ export default defineComponent({
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useConfigurationStore, ["enrollmentDisplayType"]),
-        ...mapState(useGeneralStore, ["activities"]),
-      ...mapState(useANCenrollementStore,["ANCNumber"]),
+        ...mapState(useANCenrollementStore, ["ANCNumber"]),
         ...mapState(useEnrollementStore, ["NCDNumber", "enrollmentDiagnosis", "substance", "patientHistoryHIV", "patientHistory"]),
     },
-
 
     setup() {
         return { chevronBackOutline, checkmark, arrowForwardCircle, grid, list };
@@ -164,8 +158,7 @@ export default defineComponent({
         },
         async saveData() {
             // await this.saveNcdNumber();
-          this.$router.push("ANCHome");
-
+            this.$router.push("ANCHome");
         },
 
         async saveNcdNumber() {
@@ -182,11 +175,6 @@ export default defineComponent({
                 await this.saveEnrollment();
                 resetPatientData();
                 await UserService.setProgramUserActions();
-                if (this.activities.length == 0) {
-                    this.$router.push("patientProfile");
-                } else {
-                    this.$router.push("consultationPlan");
-                }
             }
         },
         openModal() {
@@ -342,12 +330,12 @@ ion-footer {
     color: #ccc;
 }
 .footer {
-  margin-left: 59%;
+    margin-left: 59%;
 }
 @media screen and (max-width: 768px) {
-  .footer {
-    margin-left: 65%;
-  }
+    .footer {
+        margin-left: 65%;
+    }
 }
 
 .container {

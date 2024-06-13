@@ -34,7 +34,6 @@ import { Service } from "@/services/service";
 import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
 import { ObservationService } from "@/services/observation_service";
 import { PatientService } from "@/services/patient_service";
-import { useGeneralStore } from "@/stores/GeneralStore";
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -95,7 +94,6 @@ export default defineComponent({
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useVitalsStore, ["vitals"]),
-        ...mapState(useGeneralStore, ["activities"]),
     },
     async mounted() {
         await this.setTodayVitals();
