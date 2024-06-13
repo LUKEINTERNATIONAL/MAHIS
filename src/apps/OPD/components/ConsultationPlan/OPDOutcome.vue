@@ -119,6 +119,9 @@ const show_admitted_options = ref(false)
 const show_referred_options = ref(false)
 
 const editItem = ref()
+const editFormData = ref({ type: "", name: "", reason: "", date: "" });
+const isEditing = ref(false);
+const editingItemIndex = ref<number | null>(null);
 
 const referralType = ref([
     {
@@ -239,6 +242,25 @@ function dataSavedTrigFn() {
     show_admitted_options.value = false
     show_referred_options.value = false
     resetSelection()
+}
+function triggerEditItem(index: number) {
+  const item = dispositions.value[index];
+  editFormData.value = { ...item };
+  editingItemIndex.value = index;
+  isEditing.value = true;
+}
+
+function cancelEditItem() {
+  isEditing.value = false;
+  editingItemIndex.value = null;
+}
+
+function saveEditItem() {
+  if (editingItemIndex.value !== null) {
+    dispositions.value[editingItemIndex.value] = { ...editFormData.value };
+    isEditing.value = false;
+    editingItemIndex.value = null;
+  }
 }
 </script>
 
