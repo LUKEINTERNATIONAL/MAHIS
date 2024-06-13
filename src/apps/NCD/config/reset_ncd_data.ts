@@ -44,7 +44,6 @@ export async function resetNCDPatientData() {
     medications.$reset();
     treatmentPlan.$reset();
     diagnosis.$reset();
-    general.$reset();
     enrollement.$reset();
     nextAppointment.$reset();
 }
