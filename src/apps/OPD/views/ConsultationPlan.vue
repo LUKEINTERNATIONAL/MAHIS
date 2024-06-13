@@ -177,12 +177,6 @@ export default defineComponent({
             deep: true,
         },
 
-        $route: {
-            handler() {
-                console.log("======",this.levelOfConsciousness)
-            },
-            deep: true,
-        },
         selectedMedicalDrugsList: {
             handler() {
                 this.markWizard();
