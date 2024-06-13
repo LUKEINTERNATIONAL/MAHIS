@@ -12,10 +12,10 @@ export const useReferralStore = defineStore('referralStore',{
                 classDash: 'dashed_bottom_border',
                 radioBtnContent:{
                     header:{
-                        title: 'Referral for urgent care',
+                        title: 'Referral for urgent care *',
                         selectedValue: '',
                         class:"bold",
-                        name:'referral for urgent care'
+                        name:'Referral for urgent care'
                     },
                     data:[
                         {  
@@ -46,7 +46,7 @@ export const useReferralStore = defineStore('referralStore',{
                     data:[
                         {  
                             name: "Referral for screening including diagnostics",
-                            value: "Referral for screening ",
+                            value: "Referral for screening including diagnostics",
                             labelPlacement:'start',
                             colSize: "7",
                             justify:"space-between" 
@@ -67,9 +67,10 @@ export const useReferralStore = defineStore('referralStore',{
                 classDash: 'dashed_bottom_border',
                 radioBtnContent:{
                     header:{
-                        title: 'Any treatment given before referral',
+                        title: 'Any treatment given before referral?',
                         class:"bold",
-                        selectedValue: ''
+                        selectedValue: '',
+                        name:'Any treatment given before referral'
                     },
                     data:[
                         {  
@@ -97,25 +98,32 @@ export const useReferralStore = defineStore('referralStore',{
                         {
                             colData:[
                                 {
-                                    inputHeader: 'Date',
+                                    class:"bold",
+                                    inputHeader: 'Date scheduled referral *',
                                     icon: icons.calenderPrimary,
                                     name: "Date scheduled referral",
-                                    value: "Date scheduled referral",
+                                    value: "",
                                     eventType: 'input',
                                     valueType: 'date',
+                                    minDate:"",
+                                    maxDate:"",
                                     required: true,
+                                    placeholder:'Pick date',
                                     isDatePopover: true
                                 },
                                     {
-                                    inputHeader: 'Time',
-                                    name: 'Time scheduled referral',
-                                    value: "Time scheduled referral",
+                                        class:"bold",
+
+                                        inputHeader: 'Time scheduled referral',
+                                        icon: icons.timePicker,
+                                        name: 'Time scheduled referral',
+                                    value: "",
                                     valueType: "date",
-                                    eventType: 'input',
+                                        placeholder:'Pick time',
+                                        eventType: 'input',
                                     required: true
                                 }
-                                
-                            ]
+                                ]
                         }
                     ],
                     
@@ -133,12 +141,24 @@ export const useReferralStore = defineStore('referralStore',{
                         {
                             colData:[
                                 {
-                                    inputHeader: 'Location',
+                                    class:"bold",
+                                    inputHeader: "Where is the client being referred to? *",
+                                    icon: icons.search,
+                                    value: "",
                                     name: "Location of referral",
-                                    value: "Location of referral",
-                                    eventType: 'input',
-                                    valueType: 'text',
-                                    required: true
+                                    popOver: true,
+                                    valueType: "text",
+                                    eventType: "input",
+                                    required: true,
+                                    alertsError: false,
+                                    alertsErrorMassage: "",
+                                    placeholder: "Search for facility",
+                                    popOverData: {
+                                        filterData: false,
+                                        data: [],
+                                    },
+                                    id: "",
+                                    idName: "facility_id",
                                 },
                                 
                             ]
@@ -151,7 +171,7 @@ export const useReferralStore = defineStore('referralStore',{
             {   
                classDash: 'dashed_bottom_border',
                header:{
-                        title: 'Date and time referal was made',
+                        title: 'Date and time referral was made',
                         selectedValue: ''
                     },
                 data:{ 
@@ -159,22 +179,28 @@ export const useReferralStore = defineStore('referralStore',{
                         {
                             colData:[
                                 {
-                                    inputHeader: 'Date',
+                                    class:"bold",
+                                    inputHeader: 'Date referral was made *',
                                     icon: icons.calenderPrimary,
                                     name: "Date referral was made",
-                                    value: "Date referral was made",
+                                    value: "",
                                     eventType: 'input',
                                     valueType:'date',
+                                    minDate:"",
+                                    maxDate:"",
                                     required: true,
+                                    placeholder:'Pick date',
                                     isDatePopover: true
                                 },
                                     {
-                                    inputHeader: 'Time',
+                                        class:"bold",
+                                        inputHeader: 'Time referral made',
                                     name: "Time referral made",
-                                    value: "Time referral made",
+                                    value: "",
                                     eventType: 'input',
                                     valueType:'text',
-                                    required: true
+                                        placeholder:'Pick time',
+                                        required: true
                                 }
                                 
                             ]
@@ -195,18 +221,30 @@ export const useReferralStore = defineStore('referralStore',{
                         {
                             colData:[
                                 {
-                                    inputHeader: 'Provider’s facility',
-                                    name: 'Provider’s facility',
-                                    value: 'Provider’s facility',
-                                    eventType: 'input',
-                                    valueType:'text',
-                                    required: true
+                                    class:"bold",
+                                    inputHeader: "Provider’s facility *",
+                                    icon: icons.search,
+                                    value: "",
+                                    name: "Provider’s facility",
+                                    popOver: true,
+                                    valueType: "text",
+                                    eventType: "input",
+                                    required: true,
+                                    alertsError: false,
+                                    alertsErrorMassage: "",
+                                    placeholder: "Search for facility",
+                                    popOverData: {
+                                        filterData: false,
+                                        data: [],
+                                    },
+                                    id: "",
+                                    idName: "facility_id",
                                 },
                                     {
                                     inputHeader: 'Provider’s phone number',
                                     icon: icons.editPen,
                                     name: 'Provider’s phone number',
-                                    value: 'Provider’s phone number',
+                                    value: '',
                                     eventType: 'input',
                                     required: true
                                 },
@@ -230,18 +268,39 @@ export const useReferralStore = defineStore('referralStore',{
                         {
                             colData:[
                                 {
+                                    class:"bold",
                                     inputHeader: 'Referral notes',
                                     icon: icons.editPen,
                                     name: 'Referral notes',
-                                    value:'Referral notes',
+                                    value:'',
                                     eventType: 'input',
                                     required: true
                                 },
+
+                            ]
+                        }
+                    ],
+
+                }
+
+            },
+            {
+                classDash: 'dashed_bottom_border',
+                header:{
+                    title: 'Provider who made the referral',
+                    selectedValue: ''
+                },
+                data:{
+                    rowData:[
+                        {
+                            colData:[
+
                                 {
+                                    class:"bold",
                                     inputHeader: 'Client history summary',
                                     icon: icons.editPen,
                                     name: 'Client history summary',
-                                    value: 'Client history summary',
+                                    value: '',
                                     eventType: 'input',
                                     required: true
                                 }
@@ -261,5 +320,5 @@ export const useReferralStore = defineStore('referralStore',{
             this.referralInfo = data
         }
     },
-    persist:true
+    // persist:true
 })

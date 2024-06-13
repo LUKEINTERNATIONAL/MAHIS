@@ -239,8 +239,6 @@ export default defineComponent({
                 filterData: false,
                 data: this.facilityData,
               },)
-                // console.log("<========>",this.exisitingChronicHealthConditions[0].data.rowData[0])
-                // this.exisitingChronicHealthConditions[0].data.rowData[0].colData[0].popOverData.data = this.facilityData;
 
             }
 

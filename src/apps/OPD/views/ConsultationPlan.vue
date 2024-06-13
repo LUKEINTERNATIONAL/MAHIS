@@ -176,6 +176,13 @@ export default defineComponent({
             },
             deep: true,
         },
+
+        $route: {
+            handler() {
+                console.log("======",this.levelOfConsciousness)
+            },
+            deep: true,
+        },
         selectedMedicalDrugsList: {
             handler() {
                 this.markWizard();
@@ -306,7 +313,8 @@ export default defineComponent({
             await this.saveConsciousness();
             await this.savePhysicalExam();
             resetOPDPatientData();
-            this.$router.push("patientProfile");
+            console.log("===========><");
+            //this.$router.push("patientProfile");
         },
         async savePastMedicalHistory() {
             const pastMedicalHistoryData: any = await this.buildPastMedicalHistory();
