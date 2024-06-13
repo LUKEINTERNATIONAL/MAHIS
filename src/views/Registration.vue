@@ -345,7 +345,7 @@ export default defineComponent({
             if (
                 (await this.validations(this.personInformation, fields)) &&
                 (await this.validations(this.currentLocation, currentFields)) &&
-                this.validateBirthData()
+                this.validateBirthData() && (await this.validations(this.guardianInformation,["guardianFirstname","guardianLastname","guardianPhoneNumber"]))
             ) {
                 this.disableSaveBtn = true;
                 await this.buildPersonalInformation();
@@ -366,9 +366,12 @@ export default defineComponent({
                 return true;
             } else {
                 toastWarning("Please complete all required fields");
-                return false;
+
+
+              return false;
             }
         },
+
         validateBirthData() {
             if (this.checkUnderOne) {
                 return validateInputFiledData(this.birthRegistration);
