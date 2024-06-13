@@ -1,7 +1,6 @@
 <template>
     <div class="OtherVitalsHeading">
         <div class="OtherVitalsTitle">Vaccination History</div>
-        <!-- <div>Todays Date: <span></span> 06 Jul 2024</div> -->
     </div>
 
     <div class="mod-ls">

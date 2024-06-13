@@ -115,7 +115,7 @@
                         label="name"
                         :searchable="true"
                         @search-change="$emit('search-change', $event)"
-                        track-by="id"
+                        track-by="concept_id"
                         :options="route_list"
                     />
                     <div>
@@ -354,7 +354,7 @@ import {
 } from "ionicons/icons";
 import { ref, watch, computed, onMounted, onUpdated } from "vue";
 import { icons } from "@/utils/svg";
-import { DRUG_FREQUENCIES } from "@/services/drug_prescription_service";
+import { DRUG_FREQUENCIES, getDrugRouteList } from "@/services/drug_prescription_service";
 import { DrugService } from "@/services/drug_service";
 import { ConceptName } from "@/interfaces/conceptName";
 import DynamicButton from "@/components/DynamicButton.vue";
@@ -422,19 +422,7 @@ const show_error_msg_for_drug = ref(false)
 const selected_pres_method = ref()
 const selected_frequency = ref()
 const selected_drug = ref()
-const route_list = ref([
-    { id:1 , name: "Oral" },
-    { id:2 , name: "Intravenous (IV)" },
-    { id:3 , name: "Intramuscular (IM)" },
-    { id:4 , name: "Intradermal" },
-    { id:5 , name: "Rectally" },
-    { id:6 , name: "Sublingual" },
-    { id:7 , name: "Vaginally" },
-    { id:8 , name: "Buccal" },
-    { id:9 , name: "Subcutaneous" },
-    { id:10 , name: "Intraosseous" },
-    { id:11 , name: "Other method of prescription"}
-] as any)
+const route_list = ref([] as any)
 const show_list_label = false as any
 
 function routeListUpdated(data: any) {
@@ -451,6 +439,7 @@ onMounted(async () => {
     FirstPreviousAllegies.value = Object.entries(previousDrugAllergies)[0];
     const [, ...restEntriesAllegies] = Object.entries(previousDrugAllergies);
     RestOfPreviousAllegies.value = restEntriesAllegies;
+    route_list.value = await getDrugRouteList()
 });
 
 watch(
@@ -596,7 +585,7 @@ async function saveData() {
         prescription: generatedPrescriptionDate,
         drug_id: drug_id.value,
         units: units.value,
-        route_id: selected_pres_method.value.id,
+        route_concept_id: selected_pres_method.value.concept_id,
         route_name: selected_pres_method.value.name,
         highlightbackground: highlightbackground
     };
@@ -707,7 +696,7 @@ function editItemAtIndex(index: any) {
     addItemButton.value = !addItemButton
     componentKey.value++
     selected_drug.value = {id:dataItem.drug_id, name:dataItem.drugdrugName}
-    selected_pres_method.value = {id:dataItem.route_id, name: dataItem.route_name}
+    selected_pres_method.value = {concept_id:dataItem.route_concept_id, name: dataItem.route_name}
     saveStateValuesState()
 }
 
