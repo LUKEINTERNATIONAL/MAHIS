@@ -22,6 +22,8 @@
                 :placeholder="'Enter batch number'"
                 :icon="iconsContent.batchNumber"
                 :inputValue="batchNumber"
+                :-inner-action-btn-propeties="InnerActionBtnPropeties"
+                @update:InnerActionBtnPropetiesAction="InnerActionBtnPropeties.fn"
                 @update:inputValue="updateBatchNumber"
             />
 
@@ -91,6 +93,8 @@ import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { saveVaccineAdministeredDrugs, getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service";
 import { isEmpty } from "lodash";
+import QRCodeReadersrc from "@/components/QRCodeReader.vue"
+import { createModal } from "@/utils/Alerts"
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -127,7 +131,12 @@ export default defineComponent({
             is_batch_number_valid: false as boolean,
             batch_number_error_message: "Enter a valid batch number",
             full_name: "" as string,
-            sessionDate: HisDate.toStandardHisDisplayFormat(Service.getSessionDate())
+            sessionDate: HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
+            InnerActionBtnPropeties: {
+                name: "Scan",
+                show: true,
+                fn: () => { createModal(QRCodeReadersrc, { class: "otherVitalsModal" })}
+            },
         };
     },
     computed: {},
@@ -227,6 +236,9 @@ export default defineComponent({
             const first_name = user.person.names[0].given_name
             const last_name = user.person.names[0].family_name
             this.full_name = first_name + " " + last_name
+        },
+        showQRcode() {
+            createModal(QRCodeReadersrc, { class: "otherVitalsModal" })
         }
     },
 });
