@@ -9,6 +9,7 @@
                 @updateStatus="markWizard"
                 @finishBtn="saveData()"
                 :StepperData="StepperData"
+                :openStepper="openStepper"
             />
         </ion-content>
         <BasicFooter @finishBtn="saveData()" />
@@ -66,15 +67,6 @@ import HisDate from "@/utils/Date";
 import { defineComponent } from "vue";
 import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
 import { Diagnosis } from "@/apps/NCD/services/diagnosis";
-import {
-    modifyRadioValue,
-    getRadioSelectedValue,
-    getCheckboxSelectedValue,
-    getFieldValue,
-    getCheckboxInputField,
-    modifyFieldValue,
-    modifyCheckboxValue,
-} from "@/services/data_helpers";
 import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from "@/services/formatServerData";
 import { PatientComplaintsService } from "@/apps/OPD/services/patient_complaints_service";
 import { PatientGeneralConsultationService } from "@/services/patient_general_consultation";
@@ -85,6 +77,16 @@ import { usePhysicalExaminationStore } from "@/apps/OPD/stores/PhysicalExaminati
 import { PhysicalExamService } from "@/apps/OPD/services/physical_exam_service";
 import { resetOPDPatientData } from "@/apps/OPD/config/reset_opd_data";
 import BasicFooter from "@/components/BasicFooter.vue";
+import { WorkflowService } from "@/services/workflow_service";
+import { useGeneralStore } from "@/stores/GeneralStore";
+import {
+    modifyRadioValue,
+    getRadioSelectedValue,
+    getCheckboxSelectedValue,
+    modifyWizardData,
+    modifyFieldValue,
+    modifyCheckboxValue,
+} from "@/services/data_helpers";
 
 export default defineComponent({
     name: "Home",
@@ -115,79 +117,9 @@ export default defineComponent({
     data() {
         return {
             dispositions: "" as any,
-            wizardData: [
-                {
-                    title: "Clinical Assessment",
-                    class: "common_step",
-                    checked: false,
-                    disabled: false,
-                    number: 1,
-                    last_step: "",
-                },
-                {
-                    title: "Investigations",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 2,
-                    last_step: "",
-                },
-                {
-                    title: "Diagnosis",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 3,
-                    last_step: "",
-                },
-                {
-                    title: "Treatment",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 4,
-                    last_step: "",
-                },
-                {
-                    title: "Outcome",
-                    class: "common_step",
-                    checked: "",
-                    icon: false,
-                    disabled: false,
-                    number: 5,
-                    last_step: "last_step",
-                },
-            ],
-            StepperData: [
-                {
-                    title: "Clinical Assessment",
-                    component: "ClinicalAssessment",
-                    value: "1",
-                },
-                {
-                    title: "Investigations",
-                    component: "Investigations",
-                    value: "2",
-                },
-                {
-                    title: "Diagnosis",
-                    component: "OPDDiagnosis",
-                    value: "3",
-                },
-                {
-                    title: "Treatment plan",
-                    component: "OPDTreatmentPlan",
-                    value: "4",
-                },
-                {
-                    title: "Outcome",
-                    component: "OPDOutcome",
-                    value: "5",
-                },
-            ],
+            openStepper: "1" as any,
+            wizardData: [] as any,
+            StepperData: [] as any,
             isOpen: false,
             iconsContent: icons,
         };
@@ -203,14 +135,32 @@ export default defineComponent({
         ...mapState(usePhysicalExaminationStore, ["physicalExam"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
         ...mapState(useLevelOfConsciousnessStore, ["levelOfConsciousness", "levelOfConsciousnessMinor"]),
+        ...mapState(useGeneralStore, ["activities"]),
+    },
+    created() {
+        // this.getData();
     },
     async mounted() {
+        this.getData();
+        // if (this.activities.length == 0) {
+        //     this.$router.push("patientProfile");
+        // }
+
         this.markWizard();
+
+        // this.openStepper
     },
     watch: {
         vitals: {
             handler() {
                 this.markWizard();
+            },
+            deep: true,
+        },
+        $route: {
+            handler() {
+                this.markWizard();
+                this.getData();
             },
             deep: true,
         },
@@ -237,42 +187,108 @@ export default defineComponent({
     },
 
     methods: {
-        markWizard() {
-            // const filteredArray = await this.orders.filter((obj: any) => {
-            //     return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
-            // });
-            // if (filteredArray.length > 0) {
-            //     this.investigations[0].selectedData = filteredArray;
-            // } else {
-            //     this.investigations[0].selectedData = "";
-            // }
+        async getData() {
+            this.wizardData = [];
+            const { name } = await WorkflowService.nextTask(this.demographics.patient_id);
 
-            if (this.vitals.validationStatus) {
-                this.wizardData[0].checked = true;
-                this.wizardData[0].class = "open_step common_step";
+            // const steps = ["Clinical Assessment", "Investigations", "Diagnosis", "Treatment Plan", "Outcome"];
+            const [{ programActivity: steps }] = this.activities;
+            for (let i = 0; i < steps.length; i++) {
+                let wizardClass = "common_step";
+                if (name == "PRESENTING COMPLAINTS" && steps[i] == "Clinical Assessment") {
+                    this.openStepper = i + 1;
+                    wizardClass = "open_step common_step";
+                }
+                if (name == "LAB RESULTS" && steps[i] == "Investigations") {
+                    this.openStepper = i + 1;
+                    wizardClass = "open_step common_step";
+                }
+                if (name == "OUTPATIENT DIAGNOSIS" && steps[i] == "Diagnosis") {
+                    this.openStepper = i + 1;
+                    wizardClass = "open_step common_step";
+                }
+                if (name == "PRESCRIPTION" && steps[i] == "Treatment") {
+                    this.openStepper = i + 1;
+                    wizardClass = "open_step common_step";
+                }
+                if (name == "PATIENT OUTCOME" && steps[i] == "Outcome") {
+                    this.openStepper = i + 1;
+                    wizardClass = "open_step common_step";
+                }
+                const title = steps[i];
+                const number = i + 1;
+
+                this.wizardData.push({
+                    title,
+                    class: wizardClass,
+                    checked: i === 0 ? false : "",
+                    disabled: false,
+                    number,
+                    last_step: i === steps.length - 1 ? "last_step" : "",
+                });
+
+                this.StepperData.push({
+                    title,
+                    component: title.replace(/\s+/g, ""),
+                    value: number.toString(),
+                });
+            }
+        },
+
+        markWizard() {
+            if (this.presentingComplaints) {
+                modifyWizardData(this.wizardData, "Clinical Assessments", {
+                    checked: true,
+                    class: "open_step common_step",
+                });
             } else {
-                this.wizardData[0].checked = false;
+                modifyWizardData(this.wizardData, "Clinical Assessments", {
+                    checked: false,
+                });
             }
 
             if (this.investigations[0].selectedData.length > 0) {
-                this.wizardData[1].checked = true;
-                this.wizardData[1].class = "open_step common_step";
+                modifyWizardData(this.wizardData, "Investigations", {
+                    checked: true,
+                    class: "open_step common_step",
+                });
             } else {
-                this.wizardData[1].checked = false;
+                modifyWizardData(this.wizardData, "Investigations", {
+                    checked: false,
+                });
             }
 
             if (this.OPDdiagnosis[0].selectedData.length > 0) {
-                this.wizardData[2].checked = true;
-                this.wizardData[2].class = "open_step common_step";
+                modifyWizardData(this.wizardData, "Diagnosis", {
+                    checked: true,
+                    class: "open_step common_step",
+                });
             } else {
-                this.wizardData[2].checked = false;
+                modifyWizardData(this.wizardData, "Diagnosis", {
+                    checked: false,
+                });
             }
 
             if (this.selectedMedicalDrugsList.length > 0) {
-                this.wizardData[4].checked = true;
-                this.wizardData[4].class = "open_step common_step";
+                modifyWizardData(this.wizardData, "Treatment Plan", {
+                    checked: true,
+                    class: "open_step common_step",
+                });
             } else {
-                this.wizardData[4].checked = false;
+                modifyWizardData(this.wizardData, "Treatment Plan", {
+                    checked: false,
+                });
+            }
+
+            if (this.dispositions.length > 0) {
+                modifyWizardData(this.wizardData, "Outcome", {
+                    checked: true,
+                    class: "open_step common_step",
+                });
+            } else {
+                modifyWizardData(this.wizardData, "Outcome", {
+                    checked: false,
+                });
             }
         },
         getFormatedData(data: any) {

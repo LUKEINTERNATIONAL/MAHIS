@@ -6,48 +6,47 @@
         @didDismiss="popoverOpen = false"
         :keyboard-close="false"
         :show-backdrop="false"
-        :dismiss-on-select="true">
-
-            <div style="width: 1300px" class="sticky-table">
-                <ion-row class="search_header">
-                    <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">Fullname</ion-col>
-                    <ion-col style="max-width: 120px; min-width: 120px">Birthdate</ion-col>
-                    <ion-col style="max-width: 90px; min-width: 90px; max-width: 90px">Gender</ion-col>
-                    <ion-col style="max-width: 330px; min-width: 330px">Current Address</ion-col>
-                    <ion-col style="max-width: 330px; min-width: 330px">Home Address</ion-col>
-                    <ion-col style="max-width: 100px; min-width: 100px">Phone</ion-col>
-                    <ion-col style="max-width: 25px"></ion-col>
-                </ion-row>
-                <ion-row class="search_result clickable-row" v-for="(item, index) in patients" :key="index" @click="openNewPage('patientProfile', item)">
-                    <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">{{
-                        item.person.names[0].given_name + " " + item.person.names[0].family_name
-                    }}</ion-col>
-                    <ion-col style="max-width: 120px; min-width: 120px">{{ item.person.birthdate }}</ion-col>
-                    <ion-col style="max-width: 90px; min-width: 90px; max-width: 90px">{{ item.person.gender }}</ion-col>
-                    <ion-col style="max-width: 330px; min-width: 330px"
-                        >{{ item?.person?.addresses[0]?.state_province }}, {{ item?.person?.addresses[0]?.township_division }},{{
-                            item?.person?.addresses[0]?.city_village
-                        }}</ion-col
-                    >
-                    <ion-col style="max-width: 330px; min-width: 330px"
-                        >{{ item?.person?.addresses[0]?.address2 }}, {{ item?.person?.addresses[0]?.county_district }},{{
-                            item?.person?.addresses[0]?.neighborhood_cell
-                        }}</ion-col
-                    >
-                    <ion-col style="max-width: 150px; min-width: 150px">{{ getPhone(item) }}</ion-col>
-                    <ion-col style="max-width: 25px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
-                </ion-row>
-                <ion-row class="sticky-column">
-                    <ion-col size="4" class="sticky-column">
-                        <DynButton :icon="add" :name="'Add Patient'" :fill="'clear'" @click="openCheckPaitentNationalIDModal" />                        
-                             <div>  
-                                   <img id="hand" src="../../public/images/hand.svg" >
-                                   <img id="handinfo" src="../../public/images/swipeinfo.png">
-                             </div>
-                    </ion-col>
-                </ion-row>
-            </div>
-       
+        :dismiss-on-select="true"
+    >
+        <div style="width: 1300px" class="sticky-table">
+            <ion-row class="search_header">
+                <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">Fullname</ion-col>
+                <ion-col style="max-width: 120px; min-width: 120px">Birthdate</ion-col>
+                <ion-col style="max-width: 90px; min-width: 90px; max-width: 90px">Gender</ion-col>
+                <ion-col style="max-width: 330px; min-width: 330px">Current Address</ion-col>
+                <ion-col style="max-width: 330px; min-width: 330px">Home Address</ion-col>
+                <ion-col style="max-width: 100px; min-width: 100px">Phone</ion-col>
+                <ion-col style="max-width: 25px"></ion-col>
+            </ion-row>
+            <ion-row class="search_result clickable-row" v-for="(item, index) in patients" :key="index" @click="openNewPage('patientProfile', item)">
+                <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">{{
+                    item.person.names[0].given_name + " " + item.person.names[0].family_name
+                }}</ion-col>
+                <ion-col style="max-width: 120px; min-width: 120px">{{ item.person.birthdate }}</ion-col>
+                <ion-col style="max-width: 90px; min-width: 90px; max-width: 90px">{{ item.person.gender }}</ion-col>
+                <ion-col style="max-width: 330px; min-width: 330px"
+                    >{{ item?.person?.addresses[0]?.state_province }}, {{ item?.person?.addresses[0]?.township_division }},{{
+                        item?.person?.addresses[0]?.city_village
+                    }}</ion-col
+                >
+                <ion-col style="max-width: 330px; min-width: 330px"
+                    >{{ item?.person?.addresses[0]?.address2 }}, {{ item?.person?.addresses[0]?.county_district }},{{
+                        item?.person?.addresses[0]?.neighborhood_cell
+                    }}</ion-col
+                >
+                <ion-col style="max-width: 150px; min-width: 150px">{{ getPhone(item) }}</ion-col>
+                <ion-col style="max-width: 25px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
+            </ion-row>
+            <ion-row class="sticky-column">
+                <ion-col size="4" class="sticky-column">
+                    <DynButton :icon="add" :name="'Add Patient'" :fill="'clear'" @click="openCheckPaitentNationalIDModal" />
+                    <div>
+                        <img id="hand" src="../../public/images/hand.svg" />
+                        <img id="handinfo" src="../../public/images/swipeinfo.png" />
+                    </div>
+                </ion-col>
+            </ion-row>
+        </div>
     </ion-popover>
 </template>
 
@@ -193,16 +192,15 @@ export default defineComponent({
                 }
             }
         },
-        callswipeleft(){
-            
-             const handElement = document.getElementById("hand");
-                const handInfo = document.getElementById("handinfo") as HTMLDivElement;
-                if (handElement) {
-                    handElement.addEventListener("animationend", () => {
-                        handElement.style.display = "none";
-                        handInfo.style.display = "none";
-                    });
-                }
+        callswipeleft() {
+            const handElement = document.getElementById("hand");
+            const handInfo = document.getElementById("handinfo") as HTMLDivElement;
+            if (handElement) {
+                handElement.addEventListener("animationend", () => {
+                    handElement.style.display = "none";
+                    handInfo.style.display = "none";
+                });
+            }
         },
         patientIdentifier(identifiers: any) {
             return identifiers.patient_identifiers
@@ -210,7 +208,7 @@ export default defineComponent({
                 .map((identifier: any) => identifier.identifier)
                 .join(", ");
         },
-        openNewPage(url: any, item: any) {
+        async openNewPage(url: any, item: any) {
             const demographicsStore = useDemographicsStore();
             demographicsStore.setPatient(item);
             demographicsStore.setDemographics({
@@ -237,12 +235,18 @@ export default defineComponent({
 
             const store = useAdministerVaccineStore();
             store.setVaccineReload(!store.getVaccineReload());
-            const roleData: any = sessionStorage.getItem("userRoles");
             const userProgramsData: any = sessionStorage.getItem("userPrograms");
             const userPrograms: any = JSON.parse(userProgramsData);
+            const roleData: any = sessionStorage.getItem("userRoles");
             const roles: any = JSON.parse(roleData);
             UserService.setProgramUserActions();
-            if (userPrograms.length == 1) {
+
+            if (roles.some((role: any) => role.role === "Pharmacist")) {
+                this.$router.push("dispensation");
+            } else if (roles.some((role: any) => role.role === "Lab")) {
+                await UserService.setUserActivities("OPD_activities");
+                this.$router.push("OPDConsultationPlan");
+            } else if (userPrograms.length == 1) {
                 let NCDUserAction: any = "";
                 if (this.userActions.length > 0) [{ NCDUserAction: NCDUserAction }] = this.userActions;
                 if (NCDUserAction && userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "NCD PROGRAM")) {
@@ -252,8 +256,6 @@ export default defineComponent({
                 } else {
                     this.$router.push(url);
                 }
-            } else if (roles.some((role: any) => role.role === "Pharmacist")) {
-                this.$router.push("dispensation");
             } else {
                 this.$router.push(url);
             }
@@ -353,24 +355,24 @@ ion-popover {
 }
 
 #hand {
-  position: absolute;
-  top: 36%;
-  padding-left: 30%;
-  animation-name: swipe;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: 3;
-  animation-duration: 3s; 
+    position: absolute;
+    top: 36%;
+    padding-left: 30%;
+    animation-name: swipe;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: 3;
+    animation-duration: 3s;
 }
 #handinfo {
-  position: absolute;
-  width: 70%;
-  left: 30%;
-  top: 48%;
-  padding-left: 35%;
-  animation-name: swipe;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: 3;
-  animation-duration: 3s; 
+    position: absolute;
+    width: 70%;
+    left: 30%;
+    top: 48%;
+    padding-left: 35%;
+    animation-name: swipe;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: 3;
+    animation-duration: 3s;
 }
 .clickable-row {
     cursor: pointer;

@@ -7,7 +7,11 @@
                         <div :class="demographics.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'" @click="openPIM()">
                             <ion-icon style="color: #fff; font-size: 70px" :icon="person"></ion-icon>
                         </div>
-                        <span class="protectedStatus">Unprotected at birth</span>
+                        <span v-if="protectedStatus == 'Yes'" style="background: #fedf89; color: #b54708" class="protectedStatus"
+                            >Unprotected at birth</span
+                        >
+                        <span v-else-if="protectedStatus == 'No'" style="background: #fecdca" class="protectedStatus">Protected at birth</span>
+                        <span v-else class="protectedStatus" style="background: #fecdca; color: #b42318">Unknown protection at birth</span>
                     </ion-col>
                     <ion-col size="9">
                         <div class="demographicsFirstRow">
@@ -172,6 +176,7 @@ import WeightHeightChart from "@/apps/Immunization/components/Graphs/WeightHeigh
 import { createModal } from "@/utils/Alerts";
 import OtherVitals from "@/apps/Immunization/components/OthervitalsModal.vue";
 import vaccinationHistory from "@/apps/Immunization/components/Modals/vaccinationHistoryModal.vue";
+import followUpVisitModal from "@/apps/Immunization/components/Modals/followUpVisitModal.vue";
 import personalInformationModal from "@/apps/Immunization/components/Modals/personalInformationModal.vue";
 import weightAndHeight from "@/apps/Immunization/components/Modals/weightAndHeight.vue";
 import administerVaccineModal from "@/apps/Immunization/components/Modals/administerVaccineModal.vue";
@@ -228,6 +233,8 @@ export default defineComponent({
             isOpen: false,
             iconsContent: icons,
             current_milestone: "" as string,
+            unprotected_at_birth: "" as string,
+            protectedStatus: "" as string,
         };
     },
     computed: {
@@ -249,8 +256,8 @@ export default defineComponent({
         }
         this.markWizard();
         this.loadCurrentMilestone();
-        // const protected =
-        await ObservationService.getFirstValueText(this.demographics.patient_id, "Protected at birth");
+        this.protectedStatus = await ObservationService.getFirstValueText(this.demographics.patient_id, "Protected at birth");
+        this.openFollowModal();
     },
     watch: {
         vitals: {
@@ -281,6 +288,11 @@ export default defineComponent({
                 this.loadCurrentMilestone();
             },
         },
+        $route: {
+            async handler() {
+                this.protectedStatus = await ObservationService.getFirstValueText(this.demographics.patient_id, "Protected at birth");
+            },
+        },
     },
     setup() {
         return { chevronBackOutline, checkmark, ellipsisVerticalSharp, person };
@@ -298,6 +310,9 @@ export default defineComponent({
         },
         openVH() {
             createModal(vaccinationHistory, { class: "otherVitalsModal" });
+        },
+        openFollowModal() {
+            createModal(followUpVisitModal, { class: "otherVitalsModal" });
         },
         openAdministerVaccineModal() {
             createModal(administerVaccineModal, { class: "otherVitalsModal" });
@@ -670,7 +685,6 @@ export default defineComponent({
     padding: 2px 7px;
     width: 50px;
     height: 18px;
-    background: #ddeedd;
     border-radius: 22px;
     font-style: normal;
     font-weight: 400;

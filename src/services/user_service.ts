@@ -35,7 +35,7 @@ export class UserService extends Service {
     }
 
     static updateusername(id: number, data: Record<string, any>) {
-        return this.putJson(`users/${id}/update_username`, data)
+        return this.putJson(`users/${id}/update_username`, data);
     }
 
     static activateUser(id: number) {
@@ -126,6 +126,7 @@ export class UserService extends Service {
                 item.actionName = "+ Enroll in Immunization program";
                 filteredPrograms.push(item);
             } else if (item.name === "OPD Program") {
+                await this.setUserActivities("OPD_activities");
                 item.url = "OPDvitals";
                 item.actionName = "+ Start OPD consultation";
                 filteredPrograms.push(item);

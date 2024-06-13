@@ -9,7 +9,6 @@ import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useEnrollementStore } from "@/stores/EnrollmentStore";
 import { useNextAppointmentStore } from "@/stores/NextAppointmentStore";
 import { useRegistrationStore } from "@/stores/RegistrationStore";
-import { useGeneralStore } from "@/stores/GeneralStore";
 
 import { useAllegyStore } from "@/apps/OPD/stores/AllergyStore";
 import { useOPDDiagnosisStore } from "@/apps/OPD/stores/DiagnosisStore";
@@ -30,7 +29,6 @@ export async function resetOPDPatientData() {
     const medications = useMedicationsStore();
     const treatmentPlan = useTreatmentPlanStore();
     const diagnosis = useDiagnosisStore();
-    const general = useGeneralStore();
     const enrollement = useEnrollementStore();
     const nextAppointment = useNextAppointmentStore();
     const registration = useRegistrationStore();
@@ -62,7 +60,6 @@ export async function resetOPDPatientData() {
     medications.$reset();
     treatmentPlan.$reset();
     diagnosis.$reset();
-    general.$reset();
     enrollement.$reset();
     nextAppointment.$reset();
 }
