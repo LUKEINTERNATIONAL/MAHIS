@@ -3,8 +3,8 @@
         <div class="text_header_16">Investigations</div>
         <span v-if="inputFields.length > 0">
             <div class="laboratory" v-for="(item, index) in inputFields" :key="index">
-                <div>{{ item?.display[0] }}</div>
-                <div>{{ item?.display[1] }}</div>
+                <!-- <div>{{ item?.display[0] }}</div>
+                <div>{{ item?.display[1] }}</div> -->
             </div>
         </span>
     </div>
