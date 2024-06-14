@@ -68,6 +68,7 @@ import labOrderResults from "@/components/Lab/labOrderResults.vue";
 import { LabOrder } from "@/services/lab_order";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import HisDate from "@/utils/Date";
+import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
 
 import {
     modifyCheckboxInputField,
@@ -141,7 +142,7 @@ export default defineComponent({
         },
         $route: {
             async handler() {
-                await this.getSpecimens();
+                await this.getTests();
             },
             deep: true,
         },
@@ -152,16 +153,16 @@ export default defineComponent({
         if (roles.some((role: any) => role.role === "Lab")) {
             this.isLabUser = true;
         }
-        await this.getSpecimens();
+        await this.getTests();
         this.updateInvestigationsStores();
         this.setDashedBox();
         this.updateInvestigationWizard();
     },
 
     methods: {
-        async getSpecimens() {
-            const specimen = await OrderService.getSpecimens("");
-            modifyFieldValue(this.investigations, "specimen", "multiSelectData", specimen);
+        async getTests() {
+            const test = await OrderService.getTestTypes();
+            modifyFieldValue(this.investigations, "test", "multiSelectData", test);
         },
         toggleLabOrderStatus() {
             this.labOrderStatus = !this.labOrderStatus;
@@ -190,11 +191,12 @@ export default defineComponent({
             this.search_item = true;
         },
         async validateRowData() {
-            if (this.inputFields[1].value.name && this.inputFields[0].value.name) return true;
-            else return false;
+            return validateInputFiledData(this.investigations);
+            // if (this.inputFields[1].value.name && this.inputFields[0].value.name) return true;
+            // else return false;
         },
         async checkTest() {
-            if (await this.isNameInData(this.inputFields[1].value.name, await this.investigations[0].selectedData)) {
+            if (await this.isNameInData(this.inputFields[0].value.name, await this.investigations[0].selectedData)) {
                 modifyFieldValue(this.investigations, "test", "alertsErrorMassage", "Lab order already selected");
                 return false;
             } else {
@@ -203,7 +205,7 @@ export default defineComponent({
             }
         },
         async addNewRow() {
-            if ((await this.validateRowData()) && (await this.checkTest())) {
+            if (validateInputFiledData(this.investigations) && (await this.checkTest())) {
                 await this.saveTest();
                 this.investigations[0].data.rowData[0].colData[0].value = "";
                 this.investigations[0].data.rowData[0].colData[1].value = "";
@@ -227,14 +229,14 @@ export default defineComponent({
             const investigationInstance = new LabOrder();
             await investigationInstance.postActivities(this.demographics.patient_id, [
                 {
-                    concept_id: this.inputFields[1].value.concept_id,
-                    name: this.inputFields[1].value.name,
-                    specimen: this.inputFields[0].value.name,
+                    concept_id: this.inputFields[0].value.concept_id,
+                    name: this.inputFields[0].value.name,
+                    specimen: this.inputFields[1].value.name,
                     reason: "Routine",
-                    specimenConcept: await ConceptService.getConceptID(this.inputFields[0].value.name, true),
+                    specimenConcept: await ConceptService.getConceptID(this.inputFields[1].value.name, true),
                 },
             ]);
-            modifyFieldValue(this.investigations, "test", "disabled", true);
+            modifyFieldValue(this.investigations, "specimen", "disabled", true);
             this.orders = await OrderService.getOrders(this.demographics.patient_id);
         },
 
@@ -242,11 +244,18 @@ export default defineComponent({
             if (col.inputHeader == "Test") {
                 this.checkTest();
             }
-            if (col.inputHeader == "Specimen" && col.value) {
-                this.labOrders = await OrderService.getTestTypesBySpecimen(col.value.name);
-                modifyFieldValue(this.investigations, "test", "value", "");
-                modifyFieldValue(this.investigations, "test", "disabled", false);
-                modifyFieldValue(this.investigations, "test", "multiSelectData", this.labOrders);
+            modifyFieldValue(this.investigations, "specimen", "alertsErrorMassage", "");
+            if (col.inputHeader == "Test" && col.value) {
+                this.specimen = await OrderService.getSpecimens(col.value.name);
+                if (this.specimen.length == 1) {
+                    modifyFieldValue(this.investigations, "specimen", "value", this.specimen[0]);
+                    modifyFieldValue(this.investigations, "specimen", "disabled", true);
+                } else {
+                    modifyFieldValue(this.investigations, "specimen", "value", "");
+                    modifyFieldValue(this.investigations, "specimen", "disabled", false);
+                }
+
+                modifyFieldValue(this.investigations, "specimen", "multiSelectData", this.specimen);
             }
         },
 
