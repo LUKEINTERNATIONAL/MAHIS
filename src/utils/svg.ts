@@ -574,24 +574,23 @@ export const icons = {
     `,
     alertDangerRed: `
     data:image/svg+xml;utf8,
-   <svg width="34" height="31" viewBox="0 0 34 31" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g filter="url(#filter0_d_359_421)">
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2927 3.28878L6.82271 17.4288C6.64807 17.7312 6.55567 18.0741 6.5547 18.4233C6.55372 18.7725 6.6442 19.1159 6.81713 19.4193C6.99007 19.7227 7.23943 19.9755 7.54041 20.1526C7.8414 20.3297 8.18351 20.4249 8.53271 20.4288H25.4727C25.8219 20.4249 26.164 20.3297 26.465 20.1526C26.766 19.9755 27.0153 19.7227 27.1883 19.4193C27.3612 19.1159 27.4517 18.7725 27.4507 18.4233C27.4497 18.0741 27.3573 17.7312 27.1827 17.4288L18.7127 3.28878C18.5344 2.99488 18.2834 2.7519 17.9839 2.58326C17.6844 2.41463 17.3464 2.32603 17.0027 2.32603C16.659 2.32603 16.321 2.41463 16.0215 2.58326C15.722 2.7519 15.471 2.99488 15.2927 3.28878ZM17 7.42857C17.5523 7.42857 18 7.87629 18 8.42857V12.4286C18 12.9809 17.5523 13.4286 17 13.4286C16.4477 13.4286 16 12.9809 16 12.4286V8.42857C16 7.87629 16.4477 7.42857 17 7.42857ZM17 15.4286C16.4477 15.4286 16 15.8763 16 16.4286C16 16.9809 16.4477 17.4286 17 17.4286H17.01C17.5623 17.4286 18.01 16.9809 18.01 16.4286C18.01 15.8763 17.5623 15.4286 17.01 15.4286H17Z" fill="#B42318"/>
-    </g>
-    <defs>
-    <filter id="filter0_d_359_421" x="0.554688" y="0.326035" width="32.896" height="30.1027" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-    <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-    <feOffset dy="4"/>
-    <feGaussianBlur stdDeviation="3"/>
-    <feComposite in2="hardAlpha" operator="out"/>
-    <feColorMatrix type="matrix" values="0 0 0 0 0.0348617 0 0 0 0 0.105138 0 0 0 0 0.0536759 0 0 0 0.2 0"/>
-    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_359_421"/>
-    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_359_421" result="shape"/>
-    </filter>
-    </defs>
-    </svg>
-
+        <svg width="34" height="32" viewBox="0 0 34 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g filter="url(#filter0_d_1178_996)">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M15.2927 4.3602L6.82271 18.5002C6.64807 18.8026 6.55567 19.1455 6.5547 19.4947C6.55372 19.8439 6.6442 20.1873 6.81713 20.4907C6.99007 20.7941 7.23943 21.047 7.54041 21.2241C7.8414 21.4012 8.18351 21.4964 8.53271 21.5002H25.4727C25.8219 21.4964 26.164 21.4012 26.465 21.2241C26.766 21.047 27.0153 20.7941 27.1883 20.4907C27.3612 20.1873 27.4517 19.8439 27.4507 19.4947C27.4497 19.1455 27.3573 18.8026 27.1827 18.5002L18.7127 4.3602C18.5344 4.06631 18.2834 3.82332 17.9839 3.65469C17.6844 3.48605 17.3464 3.39746 17.0027 3.39746C16.659 3.39746 16.321 3.48605 16.0215 3.65469C15.722 3.82332 15.471 4.06631 15.2927 4.3602ZM17 8.5C17.5523 8.5 18 8.94772 18 9.5V13.5C18 14.0523 17.5523 14.5 17 14.5C16.4477 14.5 16 14.0523 16 13.5V9.5C16 8.94772 16.4477 8.5 17 8.5ZM17 16.5C16.4477 16.5 16 16.9477 16 17.5C16 18.0523 16.4477 18.5 17 18.5H17.01C17.5623 18.5 18.01 18.0523 18.01 17.5C18.01 16.9477 17.5623 16.5 17.01 16.5H17Z" fill="#B42318"/>
+        </g>
+        <defs>
+        <filter id="filter0_d_1178_996" x="0.554688" y="1.39746" width="32.896" height="30.1028" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+        <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+        <feOffset dy="4"/>
+        <feGaussianBlur stdDeviation="3"/>
+        <feComposite in2="hardAlpha" operator="out"/>
+        <feColorMatrix type="matrix" values="0 0 0 0 0.0348617 0 0 0 0 0.105138 0 0 0 0 0.0536759 0 0 0 0.2 0"/>
+        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1178_996"/>
+        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1178_996" result="shape"/>
+        </filter>
+        </defs>
+        </svg>
     `,
     obese: `
     data:image/svg+xml;utf8,
