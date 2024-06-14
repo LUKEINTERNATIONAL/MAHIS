@@ -138,10 +138,9 @@ export default defineComponent({
         ...mapState(useGeneralStore, ["OPDActivities"]),
     },
     created() {
-        // this.getData();
+        this.getData();
     },
     async mounted() {
-        this.getData();
         // if (this.activities.length == 0) {
         //     this.$router.push("patientProfile");
         // }
@@ -160,7 +159,6 @@ export default defineComponent({
         $route: {
             handler() {
                 this.markWizard();
-                this.getData();
             },
             deep: true,
         },
