@@ -131,7 +131,7 @@ export default defineComponent({
     mounted() {
         this.updatePresentingComplaintsListStores();
         this.setDashedBox();
-        // this.getPresenting();
+        this.getPresenting();
     },
     watch: {
         presentingComplaints: {
