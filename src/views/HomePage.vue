@@ -74,6 +74,7 @@ import ImmunizationGroupGraph from "@/apps/Immunization/components/Graphs/Immuni
 import { getVaccinesData } from "@/apps/Immunization/services/dashboard_service";
 import { useUserStore } from "@/stores/userStore";
 import { useGeneralStore } from "@/stores/GeneralStore";
+import { mapState } from "pinia";
 import { UserService } from "@/services/user_service";
 export default defineComponent({
     name: "Home",
@@ -96,17 +97,18 @@ export default defineComponent({
             controlGraphs: "months" as any,
         };
     },
+    computed: {
+        ...mapState(useGeneralStore, ["OPDActivities"]),
+    },
     async mounted() {
         this.setView();
         // Start the timer on component mount
         this.startTimer();
         console.log(await getVaccinesData());
-
-        const OPDActivities = await this.getUserActivities("NCD_activities");
-        console.log("🚀 ~ AuthService ~ startSession ~ OPDActivities:", OPDActivities);
         const generalStore = useGeneralStore();
-        generalStore.OPDActivities = await this.getUserActivities("OPD_activities");
-        generalStore.NCDActivities = await this.getUserActivities("NCD_activities");
+        generalStore.setOPDActivity(await this.getUserActivities("OPD_activities"));
+        generalStore.setNCDActivity(await this.getUserActivities("NCD_activities"));
+        console.log("🚀 ~ AuthService ~ startSession ~ OPDActivities:", this.OPDActivities);
     },
     methods: {
         async getUserActivities(activities: any) {

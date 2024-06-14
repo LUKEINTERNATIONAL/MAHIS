@@ -131,7 +131,7 @@ export default defineComponent({
     mounted() {
         this.updatePresentingComplaintsListStores();
         this.setDashedBox();
-        this.getPresenting();
+        // this.getPresenting();
     },
     watch: {
         presentingComplaints: {
@@ -143,6 +143,7 @@ export default defineComponent({
         $router: {
             handler() {
                 this.getPresenting();
+                console.log("getting presenting complaint");
             },
             deep: true,
         },

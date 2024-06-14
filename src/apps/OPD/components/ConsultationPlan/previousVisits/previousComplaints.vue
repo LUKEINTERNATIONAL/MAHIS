@@ -68,15 +68,15 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     watch: {
-        presentingComplaints: {
-            handler() {
-                this.updateList();
+        $router: {
+            async handler() {
+                await this.updateList();
             },
             deep: true,
         },
         demographics: {
-            handler() {
-                this.updateList();
+            async handler() {
+                await this.updateList();
             },
             deep: true,
         },

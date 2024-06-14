@@ -173,7 +173,7 @@ const initialPersonalInformation = [
                                 inputHeader: "Duration Units",
                                 popOver: true,
                                 icon: icons.search,
-                                value: "",
+                                value: { id: "3", name: "Years" },
                                 name: "units",
                                 eventType: "input",
                                 alertsErrorMassage: "",
@@ -687,131 +687,131 @@ const initialAddVillage = [
     },
 ] as any;
 const initialGuardianInformation = [
-  {
-    selectedData: {},
-    isFinishBtn: false,
-    data: {
-      rowData: [
-        {
-          colData: [
-            {
-              inputHeader: "Guardian National ID",
-              iconRight: icons.scannerIcon,
-              icon: icons.nationalID,
-              value: "",
-              name: "guardianNationalID",
-              eventType: "input",
-              alertsErrorMassage: "",
-              placeholder: "__-__-__-__",
-              displayNone: true,
-            },
-          ],
+    {
+        selectedData: {},
+        isFinishBtn: false,
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Guardian National ID",
+                            iconRight: icons.scannerIcon,
+                            icon: icons.nationalID,
+                            value: "",
+                            name: "guardianNationalID",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            placeholder: "__-__-__-__",
+                            displayNone: true,
+                        },
+                    ],
+                },
+            ],
         },
-      ],
     },
-  },
 
-  {
-    selectedData: {},
-    isFinishBtn: false,
-    data: {
-      rowData: [
-        {
-          colData: [
-            {
-              inputHeader: "First name *",
-              icon: icons.fullName,
-              value: "",
-              name: "guardianFirstname",
-              eventType: "input",
-              alertsErrorMassage: "",
-              validationFunctionName: "isName",
-            },
-          ],
+    {
+        selectedData: {},
+        isFinishBtn: false,
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "First name *",
+                            icon: icons.fullName,
+                            value: "",
+                            name: "guardianFirstname",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            validationFunctionName: "isName",
+                        },
+                    ],
+                },
+            ],
         },
-      ],
     },
-  },
-  {
-    data: {
-      rowData: [
-        {
-          colData: [
-            {
-              inputHeader: "Last name *",
-              icon: icons.fullName,
-              value: "",
-              name: "guardianLastname",
-              eventType: "input",
-              alertsErrorMassage: "",
-              validationFunctionName: "isName",
-            },
-          ],
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Last name *",
+                            icon: icons.fullName,
+                            value: "",
+                            name: "guardianLastname",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            validationFunctionName: "isName",
+                        },
+                    ],
+                },
+            ],
         },
-      ],
     },
-  },
-  {
-    data: {
-      rowData: [
-        {
-          colData: [
-            {
-              inputHeader: "Middle name",
-              icon: icons.fullName,
-              value: "",
-              name: "guardianMiddleName",
-              eventType: "input",
-              alertsErrorMassage: "",
-            },
-          ],
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Middle name",
+                            icon: icons.fullName,
+                            value: "",
+                            name: "guardianMiddleName",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                        },
+                    ],
+                },
+            ],
         },
-      ],
     },
-  },
-  {
-    data: {
-      rowData: [
-        {
-          colData: [
-            {
-              inputHeader: "Phone number *",
-              icon: icons.phone,
-              value: "",
-              name: "guardianPhoneNumber",
-              eventType: "input",
-              alertsErrorMassage: "",
-              validationFunctionName: "isMWPhoneNumber",
-            },
-          ],
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Phone number *",
+                            icon: icons.phone,
+                            value: "",
+                            name: "guardianPhoneNumber",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            validationFunctionName: "isMWPhoneNumber",
+                        },
+                    ],
+                },
+            ],
         },
-      ],
     },
-  },
-  {
-    data: {
-      rowData: [
-        {
-          colData: [
-            {
-              inputHeader: "Relationship to patient *",
-              icon: icons.search,
-              value: "",
-              name: "relationship",
-              eventType: "input",
-              alertsErrorMassage: "",
-              selectedID: "",
-              validationFunctionName: "isName",
-              popOverData: {
-                filterData: false,
-                data: [],
-              },
-            },
-          ],
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Relationship to patient *",
+                            icon: icons.search,
+                            value: "",
+                            name: "relationship",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            selectedID: "",
+                            validationFunctionName: "isName",
+                            popOverData: {
+                                filterData: false,
+                                data: [],
+                            },
+                        },
+                    ],
+                },
+            ],
         },
-      ],
     },
-  },
 ] as any;
 export const useRegistrationStore = defineStore("registrationStore", {
     state: () => ({
@@ -861,5 +861,5 @@ export const useRegistrationStore = defineStore("registrationStore", {
             return [...data];
         },
     },
-  //  persist: true,
+    //  persist: true,
 });

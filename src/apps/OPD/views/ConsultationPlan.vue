@@ -137,8 +137,8 @@ export default defineComponent({
         ...mapState(useLevelOfConsciousnessStore, ["levelOfConsciousness", "levelOfConsciousnessMinor"]),
         ...mapState(useGeneralStore, ["OPDActivities"]),
     },
-    created() {
-        this.getData();
+    async created() {
+        await this.getData();
     },
     async mounted() {
         // if (this.activities.length == 0) {
@@ -157,7 +157,8 @@ export default defineComponent({
             deep: true,
         },
         $route: {
-            handler() {
+            async handler() {
+                await this.getData();
                 this.markWizard();
             },
             deep: true,
@@ -188,7 +189,9 @@ export default defineComponent({
     methods: {
         async getData() {
             this.wizardData = [];
+            this.StepperData = [];
             const { name } = await WorkflowService.nextTask(this.demographics.patient_id);
+            console.log("🚀 ~ getData ~ name:", name);
 
             // const steps = ["Clinical Assessment", "Investigations", "Diagnosis", "Treatment Plan", "Outcome"];
             for (let i = 0; i < this.OPDActivities.length; i++) {
@@ -312,7 +315,13 @@ export default defineComponent({
             await this.saveConsciousness();
             await this.savePhysicalExam();
             resetOPDPatientData();
-            this.$router.push("patientProfile");
+            const roleData: any = sessionStorage.getItem("userRoles");
+            const roles: any = JSON.parse(roleData);
+            if (roles.some((role: any) => role.role === "Lab")) {
+                this.$router.push("home");
+            } else {
+                this.$router.push("patientProfile");
+            }
         },
         async savePastMedicalHistory() {
             const pastMedicalHistoryData: any = await this.buildPastMedicalHistory();
