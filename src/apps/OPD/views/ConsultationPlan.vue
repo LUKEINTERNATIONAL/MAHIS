@@ -206,7 +206,7 @@ export default defineComponent({
                     this.openStepper = i + 1;
                     wizardClass = "open_step common_step";
                 }
-                if (name == "PRESCRIPTION" && this.OPDActivities[i] == "Treatment") {
+                if (name == "PRESCRIPTION" && this.OPDActivities[i] == "Treatment Plan") {
                     this.openStepper = i + 1;
                     wizardClass = "open_step common_step";
                 }
@@ -214,7 +214,15 @@ export default defineComponent({
                     this.openStepper = i + 1;
                     wizardClass = "open_step common_step";
                 }
-                const title = this.OPDActivities[i];
+                let title = this.OPDActivities[i];
+                let componentName = this.OPDActivities[i];
+                if (this.OPDActivities[i] == "Diagnosis") {
+                    componentName = "OPDDiagnosis";
+                }
+                if (this.OPDActivities[i] == "Treatment Plan") {
+                    componentName = "OPDTreatmentPlan";
+                }
+
                 const number = i + 1;
 
                 this.wizardData.push({
@@ -228,7 +236,7 @@ export default defineComponent({
 
                 this.StepperData.push({
                     title,
-                    component: title.replace(/\s+/g, ""),
+                    component: componentName.replace(/\s+/g, ""),
                     value: number.toString(),
                 });
             }
