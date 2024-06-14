@@ -140,6 +140,12 @@ export default defineComponent({
             },
             deep: true,
         },
+        $router: {
+            handler() {
+                this.getPresenting();
+            },
+            deep: true,
+        },
     },
     setup() {
         return { checkmark, pulseOutline };
@@ -147,7 +153,6 @@ export default defineComponent({
     methods: {
         async getPresenting() {
             this.complaints = await PatientComplaintsService.getComplaintsList("Presenting complaint");
-            console.log("🚀 ~ getPresenting ~ this.complaints :", this.complaints);
             modifyFieldValue(this.presentingComplaints, "PresentingComplaints", "multiSelectData", this.complaints);
         },
         displayInputFields() {
@@ -156,66 +161,55 @@ export default defineComponent({
             this.addItemButton = false;
             this.search_item = true;
         },
-        async validaterowData() {
-            this.presentingComplaints[0].data.rowData[0].colData[0].alertsErrorMassage = false;
-            this.presentingComplaints[0].data.rowData[0].colData[0].alertsErrorMassage = "";
-
-            if (this.inputFields[0].value.name) {
-                return true;
-            } else {
-                this.search_item = true;
-                this.presentingComplaints[0].data.rowData[0].colData[0].alertsErrorMassage = true;
-                this.presentingComplaints[0].data.rowData[0].colData[0].alertsErrorMassage = "Please select presenting complaints from the list";
-                return false;
-            }
-        },
         isNameInArray(name: any, arrayOfObjects: any) {
             return arrayOfObjects.some((obj: any) => obj.name === name);
         },
         async addNewRow() {
-            if ((await this.validaterowData()) && this.validateDuration()) {
+            if (this.validateDuration() && this.checkPresentingComplaints()) {
                 this.presentingComplaints[0].data.rowData[0].colData[0].value = this.inputFields[0].value;
                 this.search_item = false;
                 this.display_item = true;
                 this.addItemButton = true;
                 this.buildpresentingComplaintsList();
-            } else {
-                return;
             }
             this.presentingComplaints[0].data.rowData[0].colData[0].value = "";
             this.presentingComplaints[0].data.rowData[0].colData[1].value = "";
             this.presentingComplaints[0].data.rowData[0].colData[1].unitsData.value = "";
         },
-        buildpresentingComplaintsList() {
+        checkPresentingComplaints() {
             if (!this.isNameInData(this.inputFields[0].value.name, this.presentingComplaints[0].selectedData)) {
-                const duration = this.inputFields[1].value + " " + this.inputFields[1].unitsData.value.name;
-                this.presentingComplaints[0].selectedData.push({
-                    actionBtn: true,
-                    btn: ["edit", "delete"],
-                    name: this.inputFields[0].value.name,
-                    concept_id: this.inputFields[0].value.concept_id,
-                    duration: this.inputFields[1].value,
-                    durationUnits: this.inputFields[1].unitsData.value,
-                    display: [this.inputFields[0].value.name, duration],
-                    data: [
-                        {
-                            concept_id: 8578,
-                            value_coded: this.inputFields[0].value.concept_id,
-                            obs_datetime: Service.getSessionDate(),
-                            child: [
-                                {
-                                    concept_id: this.inputFields[0].value.concept_id,
-                                    value_text: duration,
-                                    obs_datetime: Service.getSessionDate(),
-                                },
-                            ],
-                        },
-                    ],
-                });
+                modifyFieldValue(this.presentingComplaints, "PresentingComplaints", "alertsErrorMassage", "");
+                return true;
             } else {
-                toastWarning("Presenting complaint already added");
+                modifyFieldValue(this.presentingComplaints, "PresentingComplaints", "alertsErrorMassage", "Presenting complaint already added");
+                return false;
             }
-            console.log(this.presentingComplaints[0].selectedData);
+        },
+        buildpresentingComplaintsList() {
+            const duration = this.inputFields[1].value + " " + this.inputFields[1].unitsData.value.name;
+            this.presentingComplaints[0].selectedData.push({
+                actionBtn: true,
+                btn: ["edit", "delete"],
+                name: this.inputFields[0].value.name,
+                concept_id: this.inputFields[0].value.concept_id,
+                duration: this.inputFields[1].value,
+                durationUnits: this.inputFields[1].unitsData.value,
+                display: [this.inputFields[0].value.name, duration],
+                data: [
+                    {
+                        concept_id: 8578,
+                        value_coded: this.inputFields[0].value.concept_id,
+                        obs_datetime: Service.getSessionDate(),
+                        child: [
+                            {
+                                concept_id: this.inputFields[0].value.concept_id,
+                                value_text: duration,
+                                obs_datetime: Service.getSessionDate(),
+                            },
+                        ],
+                    },
+                ],
+            });
         },
         isNameInData(name: any, dataArray: any) {
             return dataArray.some((item: any) => item.name === name);
@@ -230,7 +224,7 @@ export default defineComponent({
         },
         async handleInputData(col: any) {
             if (col.inputHeader == "Presenting Complaints") {
-                this.validaterowData();
+                this.checkPresentingComplaints();
             } else if (col.inputHeader == "Duration") {
                 this.validateDuration();
             }
