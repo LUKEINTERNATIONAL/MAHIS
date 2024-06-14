@@ -100,36 +100,58 @@
                     </ion-col>
                     <ion-col size-sm="12" size-md="8" size-lg="9">
                         <ion-card style="background-color: #fff">
-                            <div class="p_dash_header">
-                                <div class="p_title">Consultation Overview</div>
-                                <div class="date">
-                                    <span class="diplay_space_between" id="open-dates-trigger">
-                                        <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.calendar" style="margin-right: 15px"></ion-icon>
-                                        <div>6th Oct, 2023</div>
-                                    </span>
-                                    <ion-icon slot="start" aria-hidden="true" :icon="iconsContent.today_date"></ion-icon>
-                                </div>
+                            <div style="display: flex; justify-content: space-between">
+                                <div class="vitalsTitle">Most recent Vitals & Biometrics</div>
+                                <div class="dateClass">Todays Date: 06 Jul 2024</div>
                             </div>
-
-                            <ion-grid class="grid">
+                            <div style="padding-left: 10px; padding-right: 10px">
                                 <ion-row>
-                                    <ion-col class="col" style="border-top-left-radius: 4px">
-                                        <VitalsGrid />
-                                    </ion-col>
-                                    <ion-col class="col" style="border-top-right-radius: 4px">
-                                        <InvestigationsGrid />
-                                    </ion-col>
+                                    <ion-col class="vitalsHeading">Weight</ion-col>
+                                    <ion-col class="vitalsHeading">Height</ion-col>
+                                    <ion-col class="vitalsHeading">Temperature</ion-col>
+                                    <ion-col class="vitalsHeading">Blood glucose</ion-col>
+                                    <ion-col class="vitalsHeading">Pulse Rate</ion-col>
+                                    <ion-col class="vitalsHeading">Blood pressure</ion-col>
                                 </ion-row>
                                 <ion-row>
-                                    <ion-col class="col" style="border-bottom-left-radius: 4px">
-                                        <MedicationsGrid />
-                                    </ion-col>
-                                    <ion-col class="col" style="border-bottom-right-radius: 4px" expand="block">
-                                        <DispositionGrid />
-                                    </ion-col>
+                                    <ion-col class="vitalsValue">67 <span class="vitalsUnits">kg</span></ion-col>
+                                    <ion-col class="vitalsValue">137 <span class="vitalsUnits">cm</span></ion-col>
+                                    <ion-col class="vitalsValue">36.1 <span class="vitalsUnits">C</span></ion-col>
+                                    <ion-col class="vitalsValue">4.6 <span class="vitalsUnits">mg/dL</span></ion-col>
+                                    <ion-col class="vitalsValue">101 <span class="vitalsUnits">bpm </span></ion-col>
+                                    <ion-col class="vitalsValue">140/90 <span class="vitalsUnits">mmhg</span></ion-col>
                                 </ion-row>
-                            </ion-grid>
+                            </div>
                         </ion-card>
+                        <div>
+                            <ion-segment value="custom">
+                                <ion-segment-button value="custom">
+                                    <ion-label>Patient Summary</ion-label>
+                                </ion-segment-button>
+                                <ion-segment-button value="segment">
+                                    <ion-label>Programs</ion-label>
+                                </ion-segment-button>
+                                <ion-segment-button value="Visits History">
+                                    <ion-label>Visits History</ion-label>
+                                </ion-segment-button>
+                                <ion-segment-button value="Vitals & Measurements Summary">
+                                    <ion-label>Vitals & Measurements Summary</ion-label>
+                                </ion-segment-button>
+                                <ion-segment-button value="Lab Tests History">
+                                    <ion-label>Lab Tests History</ion-label>
+                                </ion-segment-button>
+                                <ion-segment-button value="Diagnoses History">
+                                    <ion-label>Diagnoses History</ion-label>
+                                </ion-segment-button>
+                                <ion-segment-button value="Allergies & Contraindication">
+                                    <ion-label>Allergies & Contraindication</ion-label>
+                                </ion-segment-button>
+                            </ion-segment>
+                        </div>
+                        <div style="display: flex; margin-top: 10px">
+                            <div style="width: 50vw; background-color: #fff; border-radius: 5px; margin-right: 5px"><WeightHeightChart /></div>
+                            <div style="width: 50vw; background-color: #fff; border-radius: 5px"><PreviousVitals /></div>
+                        </div>
                     </ion-col>
                 </ion-row>
             </div>
@@ -224,8 +246,12 @@ import ProgramData from "@/Data/ProgramData";
 import { ref } from "vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import PatientProfile from "@/apps/Immunization/components/PatientProfile.vue";
+import WeightHeightChart from "@/apps/Immunization/components/Graphs/WeightHeightChart.vue";
+import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
 export default defineComponent({
     components: {
+        WeightHeightChart,
+        PreviousVitals,
         IonContent,
         IonHeader,
         IonMenuButton,
@@ -408,6 +434,44 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.vitalsHeading {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    color: #636363;
+}
+.vitalsUnits {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    color: #636363;
+}
+.vitalsValue {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 25px;
+    display: flex;
+    align-items: center;
+    color: #00190e;
+}
+.vitalsTitle {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    color: #00190e;
+    padding: 10px;
+}
+.dateClass {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    color: #016302;
+    padding: 10px;
+}
 ion-fab-button[data-desc] {
     position: relative;
     width: 0px;
@@ -557,5 +621,12 @@ ion-item[slot="header"] {
     margin-right: 5px;
     display: inline-block;
     margin-bottom: 5px;
+}
+
+ion-segment-button {
+    background: #fff;
+    margin-right: 1px;
+    font-size: 12px;
+    text-transform: unset;
 }
 </style>

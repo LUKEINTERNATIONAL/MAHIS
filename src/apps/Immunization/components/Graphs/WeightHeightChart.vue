@@ -208,7 +208,7 @@ export default defineComponent({
             this.calculateZScore(this.currentWeight, params);
         },
         calculateZScore(value: any, obj: any) {
-            let zScore = (Math.pow(value / obj.M, obj.L) - 1) / (obj.L * obj.S);
+            let zScore = (Math.pow(value / obj?.M, obj?.L) - 1) / (obj?.L * obj?.S);
             this.zScoreValue = Math.round(zScore * 10) / 10;
         },
         async buildGraph() {
@@ -613,7 +613,7 @@ export default defineComponent({
     background: #ffffff;
     border-radius: 5px;
     margin: 10px;
-    height: 70vw;
+    /* height: 70%; */
 }
 .immunizationGraphText {
     padding-left: 10px;
