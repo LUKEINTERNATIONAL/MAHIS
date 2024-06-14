@@ -77,6 +77,7 @@ import { usePhysicalExaminationStore } from "@/apps/OPD/stores/PhysicalExaminati
 import { PhysicalExamService } from "@/apps/OPD/services/physical_exam_service";
 import { resetOPDPatientData } from "@/apps/OPD/config/reset_opd_data";
 import BasicFooter from "@/components/BasicFooter.vue";
+import { ObservationService } from '@/services/observation_service';
 import { WorkflowService } from "@/services/workflow_service";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import {
@@ -400,12 +401,36 @@ export default defineComponent({
             }
 
             if (!isEmpty(this.selectedMedicalDrugsList)) {
+                const drug_oder_obs_list = [] as any
                 const drugOrders = this.mapToOrders();
                 const prescriptionService = new DrugPrescriptionService(patientID, userID);
                 const encounter = await prescriptionService.createEncounter();
                 if (!encounter) return toastWarning("Unable to create treatment encounter");
                 const drugOrder = await prescriptionService.createDrugOrder(drugOrders);
                 if (!drugOrder) return toastWarning("Unable to create drug orders!");
+                drugOrder.forEach((drug_oder: any) => {
+                    this.selectedMedicalDrugsList.forEach((selected_medication: any) => {
+                        if (selected_medication.drug_id == drug_oder.drug_inventory_id) {
+                            const drug_oder_obs = {
+                                concept_id: selected_medication.route_concept_id,
+                                value_text: selected_medication.route_name,
+                                obs_datetime: Service.getSessionDate(),
+                                encounter_id: encounter.encounter_id,
+                                order_id: drug_oder.order_id,
+                            }
+                            drug_oder_obs_list.push(drug_oder_obs)
+                        }
+                    })
+                })
+                if (drug_oder_obs_list.length > 0) {
+                    drug_oder_obs_list.forEach(async (ob_to_be: any) => {
+                        const payload = {
+                            encounter_id: ob_to_be.encounter_id,
+                            observations: [ob_to_be]
+                        }
+                       const obs = await ObservationService.create(payload)
+                    })
+                }
                 toastSuccess("Drug order has been created");
             }
         },

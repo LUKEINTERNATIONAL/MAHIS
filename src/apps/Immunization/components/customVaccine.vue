@@ -133,7 +133,7 @@ export default defineComponent({
         },
         openAdministerVaccineModal(data: any) {
             const store = useAdministerVaccineStore()
-            store.setCurrentSelectedDrug(this.$props.visitId as number, data.drug_id as number, data.drug_name)
+            store.setCurrentSelectedDrug(this.$props.visitId as number, data.drug_id as number, data.drug_name, data.vaccine_batch_number as string)
             createModal(administerVaccineModal, { class: "otherVitalsModal" })
         },
         disableVaccine(identifier: number) {
@@ -144,9 +144,9 @@ export default defineComponent({
             const currentVisitId = store.getCurrentVisitId()
             const currentSchFound = store.getCurrentSchedFound()
             
-            // if (currentSchFound == false) {
-            //     return true
-            // }
+            if (currentSchFound == false) {
+                return true
+            }
             
             if (identifier == currentVisitId) {
                 return false

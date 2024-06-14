@@ -175,6 +175,7 @@ export default defineComponent({
             //console.log(store.getCurrentSelectedDrug())
             this.currentDrug = store.getCurrentSelectedDrug();
             this.drugName = this.currentDrug.drug_name;
+            this.batchNumber = this.currentDrug.vaccine_batch_number;
         },
         showCPD() {
             this.showPD = true as boolean;
