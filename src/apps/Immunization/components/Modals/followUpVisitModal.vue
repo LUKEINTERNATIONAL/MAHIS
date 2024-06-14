@@ -1,41 +1,27 @@
 <template>
     <div class="modal_wrapper">
+        <div class="modal_title diplay_space_between">
+            <span></span>
+            <span @click="dismiss()" style="cursor: pointer; font-weight: 300">x</span>
+        </div>
         <div class="OtherVitalsHeading">
-            <div class="OtherVitalsTitle">Administer Other Vaccine</div>
+            <div class="OtherVitalsTitle">Follow up visits</div>
         </div>
         <div class="">
-            <basic-form :contentData="administerOtherVaccine"></basic-form>
-        </div>
-
-        <customDatePicker v-if="showPD" />
-        <div class="btnContent">
-            <div class="saveBtn">
-                <div>
-                    <ion-button class="btnText" fill="solid">
-                        Done today
-                        <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon>
-                    </ion-button>
-                </div>
-                <div>
-                    <ion-button class="btnText" fill="solid" @click="showCPD">
-                        Done earlier
-                        <ion-icon slot="end" size="small" :icon="iconsContent.calenderWithPenEdit"></ion-icon>
-                    </ion-button>
-                </div>
-            </div>
+            <basic-form :contentData="followUpStore" @update:inputValue="handleInputData"></basic-form>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController, IonInput } from "@ionic/vue";
+import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController, IonInput, modalController } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { checkmark, pulseOutline } from "ionicons/icons";
 import { icons } from "@/utils/svg";
 import { iconBloodPressure } from "@/utils/SvgDynamicColor";
 import { BMIService } from "@/services/bmi_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
-import { useAdministerOtherVaccineStore } from "@/apps/Immunization/stores/AdministerOtherVaccinesStore";
+import { useFollowUpStoreStore } from "@/apps/Immunization/stores/FollowUpStore";
 import { mapState } from "pinia";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import { arePropertiesNotEmpty } from "@/utils/Objects";
@@ -86,7 +72,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
-        ...mapState(useAdministerOtherVaccineStore, ["administerOtherVaccine"]),
+        ...mapState(useFollowUpStoreStore, ["followUpStore"]),
     },
     async mounted() {
         const array = ["Height", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
@@ -98,6 +84,25 @@ export default defineComponent({
         navigationMenu(url: any) {
             menuController.close();
             this.$router.push(url);
+        },
+        handleInputData(event: any) {
+            if (event?.col?.name == "Change guardian" && event?.col?.checked) {
+                const guardianFields = ["guardianFirstname", "guardianLastname", "guardianMiddleName", "guardianPhoneNumber", "relationship"];
+                guardianFields.forEach((fields) => {
+                    modifyFieldValue(this.followUpStore, fields, "displayNone", false);
+                });
+            } else if (event?.col?.name == "Change guardian") {
+                const guardianFields = ["guardianFirstname", "guardianLastname", "guardianMiddleName", "guardianPhoneNumber", "relationship"];
+                guardianFields.forEach((fields) => {
+                    modifyFieldValue(this.followUpStore, fields, "displayNone", true);
+                });
+            }
+
+            if (event?.col?.name == "Vaccine adverse effects" && event?.col?.checked) {
+                modifyFieldValue(this.followUpStore, "Vaccine adverse effects", "displayNone", false);
+            } else if (event?.col?.name == "Vaccine adverse effects") {
+                modifyFieldValue(this.followUpStore, "Vaccine adverse effects", "displayNone", true);
+            }
         },
         getBloodPressureStatus(systolic: any, diastolic: any) {
             let ageGroup;
@@ -161,6 +166,9 @@ export default defineComponent({
         showCPD() {
             this.showPD = true as boolean;
         },
+        dismiss() {
+            modalController.dismiss();
+        },
     },
 });
 </script>
@@ -197,8 +205,7 @@ h5 {
 .OtherVitalsHeading {
     display: flex;
     justify-content: space-between;
-    margin: 20px;
-    line-height: 60px;
+    margin: 10px;
 }
 .vitalsContent {
     height: 500px;

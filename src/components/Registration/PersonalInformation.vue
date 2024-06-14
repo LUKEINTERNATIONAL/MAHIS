@@ -112,9 +112,8 @@ export default defineComponent({
         async handleInputData(event: any) {
             if (event?.col?.name == "Estimate Age" && !event?.col?.checked) {
                 modifyFieldValue(this.personInformation, "estimation", "displayNone", true);
-            }else{
-               // modifyFieldValue(this.personInformation,'birthdate','disabled',true)
-                console.log("-------")
+            } else {
+                // modifyFieldValue(this.personInformation,'birthdate','disabled',true)
             }
             // Estimated age
             this.validationRules(event);
@@ -142,33 +141,30 @@ export default defineComponent({
         //         return `${year}-06-15`;
         //     }
         // },
-    calculateDoB(event: any) {
-        console.log(";;;;;;;;;;;;;")
-    if (event.name === "estimation") {
-        const unit = event.unitsData.value.name; 
-        const value = event.value as number;
-        let sessionDate = dayjs(Service.getSessionDate());
-        switch (unit) {
-            case "Days":
-                sessionDate = sessionDate.subtract(value, "days");
-                break;
-            case "Months":
-                sessionDate = sessionDate.subtract(value, "months");
-                break;
-            case "Years":
-                sessionDate = sessionDate.subtract(value, "years");
-                break;
-            default:
-                throw new Error("Invalid unit");
-        }
-        const formattedDate = HisDate.toStandardHisDisplayFormat(sessionDate.format("YYYY-MM-DD"));
-        modifyFieldValue(this.personInformation, "birthdate", "value", formattedDate);
-        
-        return formattedDate;
-    }
-}
+        calculateDoB(event: any) {
+            if (event?.name === "estimation") {
+                const unit = event?.unitsData?.value?.name;
+                const value = event?.value as number;
+                let sessionDate = dayjs(Service.getSessionDate());
+                switch (unit) {
+                    case "Days":
+                        sessionDate = sessionDate.subtract(value, "days");
+                        break;
+                    case "Months":
+                        sessionDate = sessionDate.subtract(value, "months");
+                        break;
+                    case "Years":
+                        sessionDate = sessionDate.subtract(value, "years");
+                        break;
+                    // default:
+                    //     throw new Error("Invalid unit");
+                }
+                const formattedDate = HisDate.toStandardHisDisplayFormat(sessionDate.format("YYYY-MM-DD"));
+                modifyFieldValue(this.personInformation, "birthdate", "value", formattedDate);
 
-
+                return formattedDate;
+            }
+        },
     },
 });
 </script>

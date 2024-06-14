@@ -33,7 +33,6 @@ import { checkmark, pulseOutline } from "ionicons/icons";
 import { ref } from "vue";
 import { icons } from "@/utils/svg";
 import { resetPatientData } from "@/services/reset_data";
-import { useGeneralStore } from "@/stores/GeneralStore";
 import { mapState } from "pinia";
 import { UserService } from "@/services/user_service";
 

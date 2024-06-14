@@ -2,15 +2,23 @@ import { defineStore } from "pinia";
 
 export const useGeneralStore = defineStore("generalStore", {
     state: () => ({
-        activities: [] as any,
-        userActions: [] as any,
+        OPDActivities: [] as any,
+        NCDActivities: [] as any,
+        OPDUserActions: [] as any,
+        NCDUserActions: [] as any,
     }),
     actions: {
-        setActivity(data: any) {
-            this.activities = data;
+        setOPDActivity(data: any) {
+            this.OPDActivities = data;
         },
-        setUserActions(data: any) {
-            this.userActions = data;
+        setNCDActivity(data: any) {
+            this.NCDActivities = data;
+        },
+        setOPDUserActions(data: any) {
+            this.OPDUserActions = data;
+        },
+        setNCDUserActions(data: any) {
+            this.NCDUserActions = data;
         },
     },
     persist: true,

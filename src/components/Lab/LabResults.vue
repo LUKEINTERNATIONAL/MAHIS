@@ -17,7 +17,7 @@
         <br />
         <div class="triage_modal_btn center">
             <div class="center_btn">
-                <ion-button class="primary_btn" @click="saveResults()">Save</ion-button>
+                <ion-button class="primary_btn" @click="saveLabOrder()">Save</ion-button>
                 <span @click="dismiss()" style="cursor: pointer"> Don't Save</span>
             </div>
         </div>
@@ -34,7 +34,7 @@ import { resetPatientData } from "@/services/reset_data";
 import { useLabResultsStore } from "@/stores/LabResults";
 import { mapState } from "pinia";
 import BasicForm from "@/components/BasicForm.vue";
-import { PatientLabResultService } from "@/services/patient_lab_result_service";
+import { PatientLabOrderService } from "@/services/patient_lab_order_service";
 import HisDate from "@/utils/Date";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import {
@@ -80,8 +80,8 @@ export default defineComponent({
         dismiss() {
             modalController.dismiss();
         },
-        async saveResults() {
-            const patientLabResultService = new PatientLabResultService(this.demographics.patient_id);
+        async saveLabOrder() {
+            const patientLabResultService = new PatientLabOrderService(this.demographics.patient_id);
             patientLabResultService.setTestID(this.labResults[0].id);
             patientLabResultService.setResultDate(HisDate.currentDate());
             await patientLabResultService.createEncounter();

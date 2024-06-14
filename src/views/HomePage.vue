@@ -72,6 +72,9 @@ import img from "@/utils/Img";
 import ImmunizationTrendsGraph from "@/apps/Immunization/components/Graphs/ImmunizationTrendsGraph.vue";
 import ImmunizationGroupGraph from "@/apps/Immunization/components/Graphs/ImmunizationGroupGraph.vue";
 import { getVaccinesData } from "@/apps/Immunization/services/dashboard_service";
+import { useUserStore } from "@/stores/userStore";
+import { useGeneralStore } from "@/stores/GeneralStore";
+import { UserService } from "@/services/user_service";
 export default defineComponent({
     name: "Home",
     components: {
@@ -98,8 +101,31 @@ export default defineComponent({
         // Start the timer on component mount
         this.startTimer();
         console.log(await getVaccinesData());
+
+        const OPDActivities = await this.getUserActivities("NCD_activities");
+        console.log("🚀 ~ AuthService ~ startSession ~ OPDActivities:", OPDActivities);
+        const generalStore = useGeneralStore();
+        generalStore.OPDActivities = await this.getUserActivities("OPD_activities");
+        generalStore.NCDActivities = await this.getUserActivities("NCD_activities");
     },
     methods: {
+        async getUserActivities(activities: any) {
+            try {
+                const userID = Service.getUserID();
+                const userData = await UserService.getJson("user_properties", {
+                    user_id: userID,
+                    property: activities,
+                });
+                if (userData.property_value) {
+                    return userData.property_value.split(",");
+                } else {
+                    return []; // Return an empty array if property_value is not available
+                }
+            } catch (error) {
+                // console.error("Error fetching user activities:", error);
+                return []; // Return an empty array in case of error
+            }
+        },
         setView() {
             Service.getProgramID();
         },

@@ -21,7 +21,9 @@ import {
     getRadioSelectedValue,
     modifyFieldValue,
     modifyRadioValue,
+    modifyCheckboxValue,
 } from "@/services/data_helpers";
+import { checkbox } from "ionicons/icons";
 export default defineComponent({
     name: "Menu",
     components: {
@@ -46,8 +48,43 @@ export default defineComponent({
     mounted() {
         const medicationHistory = usePastMedicalHistoryStore();
         this.initialData = medicationHistory.getInitial();
+        this.handleChronicConditions()
+    },
+    watch:{
+        pastMedicalHistory:{
+            handler(){
+                this.handleChronicConditions()
+            },deep:true
+        }
     },
     methods: {
+        handleChronicConditions() {
+    const checkBoxes = ["TB", "Chronic Obstructive Pulmonary Disease (COPD)",
+                        "Asthma", "Epilepsy", "Previous stroke", "Peptic Ulcer Disease (PUD)",
+                        "Mental disorder", "Bleeding disorders", "Hypertension", "HIV Positive",
+                        "Diabetes Mellitus"];
+
+    if (getCheckboxSelectedValue(this.pastMedicalHistory, 'None')?.checked) {
+        checkBoxes.forEach((checkbox) => {
+            modifyRadioValue(this.pastMedicalHistory,'TB treatment','displayNone',true)
+            modifyFieldValue(this.pastMedicalHistory,'TB drugs','displayNone',true)
+            modifyFieldValue(this.pastMedicalHistory,'TB drug start date','displayNone',true)
+            modifyRadioValue(this.pastMedicalHistory,'Hypertension medication','displayNone',true)
+            modifyFieldValue(this.pastMedicalHistory,'Current hypertension treatment regimen','displayNone',true)
+            modifyRadioValue(this.pastMedicalHistory,'HIV status','displayNone',true)
+            modifyFieldValue(this.pastMedicalHistory,'ARV start date','displayNone',true)
+            modifyRadioValue(this.pastMedicalHistory,'Diabetes','displayNone',true)
+            modifyRadioValue(this.pastMedicalHistory,'Controlled by','displayNone',true)
+
+            modifyCheckboxValue(this.pastMedicalHistory, checkbox, 'checked', false);
+            modifyCheckboxValue(this.pastMedicalHistory, checkbox, 'disabled', true);
+        });
+    } else {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.pastMedicalHistory, checkbox, 'disabled', false);
+        });
+    }
+},
         handleInputData(event: any) {
             modifyFieldValue(this.pastMedicalHistory, "TB drugs", "popOverData", {
                 filterData: true,

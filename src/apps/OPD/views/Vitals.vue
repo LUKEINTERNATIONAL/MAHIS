@@ -59,6 +59,7 @@ import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/dru
 import { useVitalsStore } from "@/stores/VitalsStore";
 import { getFieldValue, getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from "@/services/data_helpers";
 import { resetOPDPatientData } from "@/apps/OPD/config/reset_opd_data";
+import { WorkflowService } from "@/services/workflow_service";
 export default defineComponent({
     name: "Home",
     components: {
@@ -114,6 +115,9 @@ export default defineComponent({
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useVitalsStore, ["vitals"]),
+    },
+    async created() {
+        // this.getData();
     },
     mounted() {
         this.markWizard();
