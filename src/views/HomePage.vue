@@ -76,8 +76,10 @@ import { useUserStore } from "@/stores/userStore";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import { mapState } from "pinia";
 import { UserService } from "@/services/user_service";
+import SetUser from "@/views/Mixin/SetUser.vue";
 export default defineComponent({
     name: "Home",
+    mixins: [SetUser],
     components: {
         IonContent,
         IonHeader,
@@ -105,29 +107,8 @@ export default defineComponent({
         // Start the timer on component mount
         this.startTimer();
         console.log(await getVaccinesData());
-        const generalStore = useGeneralStore();
-        generalStore.setOPDActivity(await this.getUserActivities("OPD_activities"));
-        generalStore.setNCDActivity(await this.getUserActivities("NCD_activities"));
-        console.log("🚀 ~ AuthService ~ startSession ~ OPDActivities:", this.OPDActivities);
     },
     methods: {
-        async getUserActivities(activities: any) {
-            try {
-                const userID = Service.getUserID();
-                const userData = await UserService.getJson("user_properties", {
-                    user_id: userID,
-                    property: activities,
-                });
-                if (userData.property_value) {
-                    return userData.property_value.split(",");
-                } else {
-                    return []; // Return an empty array if property_value is not available
-                }
-            } catch (error) {
-                // console.error("Error fetching user activities:", error);
-                return []; // Return an empty array in case of error
-            }
-        },
         setView() {
             Service.getProgramID();
         },

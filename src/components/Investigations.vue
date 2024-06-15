@@ -6,7 +6,7 @@
             </ion-item>
             <div class="ion-padding" slot="content" style="margin-bottom: 125px">
                 <span>
-                    <labOrderResults :propOrders="orders" />
+                    <labOrderResults :propOrders="labOrders" />
                 </span>
 
                 <span v-if="search_item">
@@ -19,7 +19,7 @@
                     </basic-form>
                 </span>
 
-                <ion-row v-if="addItemButton && !isLabUser" style="margin-top: 10px">
+                <ion-row v-if="addItemButton && userRole != 'Lab'" style="margin-top: 10px">
                     <DynamicButton
                         fill="clear"
                         :icon="iconsContent.plus"
@@ -31,7 +31,7 @@
             </div>
         </ion-accordion>
     </ion-accordion-group>
-    <ion-accordion-group ref="accordionGroup" class="previousView" v-if="!isLabUser">
+    <ion-accordion-group ref="accordionGroup" class="previousView" v-if="userRole != 'Lab'">
         <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
             <ion-item slot="header" color="light">
                 <ion-label class="previousLabel">Radiology Investigation</ion-label>
@@ -39,7 +39,7 @@
             <div class="ion-padding" slot="content"></div>
         </ion-accordion>
     </ion-accordion-group>
-    <ion-accordion-group ref="accordionGroup" class="previousView" v-if="!isLabUser">
+    <ion-accordion-group ref="accordionGroup" class="previousView" v-if="userRole != 'Lab'">
         <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
             <ion-item slot="header" color="light">
                 <ion-label class="previousLabel">Other Investigation</ion-label>
@@ -69,6 +69,8 @@ import { LabOrder } from "@/services/lab_order";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import HisDate from "@/utils/Date";
 import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
+import { Service } from "@/services/service";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 
 import {
     modifyCheckboxInputField,
@@ -82,6 +84,7 @@ import { ConceptService } from "@/services/concept_service";
 
 export default defineComponent({
     name: "Menu",
+    mixins: [SetUserRole],
     components: {
         IonContent,
         IonHeader,
@@ -110,9 +113,8 @@ export default defineComponent({
             selectedText: "" as any,
             testResult: "" as any,
             test: "" as any,
-            orders: "" as any,
-            filteredSpecimen: "" as any,
             labOrders: "" as any,
+            filteredSpecimen: "" as any,
             testData: [] as any,
             popoverOpen: false,
             labOrderStatus: false,
@@ -120,7 +122,6 @@ export default defineComponent({
             specimen: "" as any,
             radiologyOrdersStatus: false,
             otherOrdersStatus: false,
-            isLabUser: false,
         };
     },
     setup() {
@@ -140,6 +141,12 @@ export default defineComponent({
             },
             deep: true,
         },
+        demographics: {
+            async handler() {
+                this.labOrders = await OrderService.getOrders(this.demographics.patient_id);
+            },
+            deep: true,
+        },
         $route: {
             async handler() {
                 await this.getTests();
@@ -148,11 +155,6 @@ export default defineComponent({
         },
     },
     async mounted() {
-        const roleData: any = sessionStorage.getItem("userRoles");
-        const roles: any = JSON.parse(roleData);
-        if (roles.some((role: any) => role.role === "Lab")) {
-            this.isLabUser = true;
-        }
         await this.getTests();
         this.updateInvestigationsStores();
         this.setDashedBox();
@@ -168,8 +170,8 @@ export default defineComponent({
             this.labOrderStatus = !this.labOrderStatus;
         },
         async updateInvestigationWizard() {
-            this.orders = await OrderService.getOrders(this.demographics.patient_id);
-            const filteredArray = await this.orders.filter((obj: any) => {
+            this.labOrders = await OrderService.getOrders(this.demographics.patient_id);
+            const filteredArray = await this.labOrders.filter((obj: any) => {
                 return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
             });
             if (filteredArray.length > 0) {
@@ -237,7 +239,7 @@ export default defineComponent({
                 },
             ]);
             modifyFieldValue(this.investigations, "specimen", "disabled", true);
-            this.orders = await OrderService.getOrders(this.demographics.patient_id);
+            this.labOrders = await OrderService.getOrders(this.demographics.patient_id);
         },
 
         async handleInputData(col: any) {

@@ -5,7 +5,7 @@
         <div style="--background: #fff">
             <list :listData="listResults" @clicked:delete="voidLabOrder" @clicked:view="viewLabOrder"></list>
         </div>
-        <div style="margin-top: 5px" v-if="listResults.length <= 3 && listSeeMoreResults.length > 3">
+        <div style="margin-top: 5px" v-if="listResults.length <= 3 && listSeeMoreResults.length >= 3">
             <DynamicButton @click="seeOrderStatus('more')" name="Show More Lab Results" fill="clear" iconSlot="icon-only" />
         </div>
 
@@ -19,7 +19,7 @@
         <div>
             <list :listData="listOrders" @clicked:delete="voidLabOrder" @clicked:results="openResultsForm"></list>
         </div>
-        <div style="margin-top: 5px" v-if="listOrders.length <= 3 && listSeeMoreOrders.length > 3">
+        <div style="margin-top: 5px" v-if="listOrders.length <= 3 && listSeeMoreOrders.length >= 3">
             <DynamicButton @click="seeResultsStatus('more')" name="Show More Lab Orders" fill="clear" iconSlot="icon-only" />
         </div>
         <div style="margin-top: 5px" v-if="listOrders.length >= 4">

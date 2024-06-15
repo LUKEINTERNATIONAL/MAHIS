@@ -71,6 +71,8 @@ import { popoverConfirmation } from "@/utils/Alerts";
 import List from "@/components/List.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import Validation from "@/validations/StandardValidations";
+import { ObservationService } from "@/services/observation_service";
+import { isEmpty } from "lodash";
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -128,10 +130,11 @@ export default defineComponent({
             return this.presentingComplaints[0].data.rowData[0].colData;
         },
     },
-    mounted() {
+    async mounted() {
         this.updatePresentingComplaintsListStores();
         this.setDashedBox();
         this.getPresenting();
+        await this.updateList();
     },
     watch: {
         presentingComplaints: {
@@ -264,18 +267,25 @@ export default defineComponent({
             this.updatePresentingComplaintsListStores();
         },
         setDashedBox() {
+            this.presentingComplaints[0].selectedData;
             if (this.inputFields[0]?.value) {
                 this.addItemButton = false;
                 this.search_item = true;
                 this.no_item = false;
             }
             if (this.presentingComplaints[0].selectedData.length > 0) {
+                this.updateList();
                 this.display_item = true;
                 this.no_item = false;
             } else if (!this.search_item) {
                 this.no_item = true;
-                console.log("🚀 ~ setDashedBox ~ this.no_item :", this.no_item);
             }
+        },
+        async updateList() {
+            const obs = await ObservationService.getAll(this.demographics.patient_id, "Presenting complaint");
+            const filteredArray = await obs.filter((obj: any) => {
+                return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.obs_datetime);
+            });
         },
     },
 });

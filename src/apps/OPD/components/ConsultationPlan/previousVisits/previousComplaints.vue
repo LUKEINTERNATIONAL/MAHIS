@@ -72,6 +72,7 @@ export default defineComponent({
             async handler() {
                 await this.updateList();
             },
+            immediate: true,
             deep: true,
         },
         demographics: {

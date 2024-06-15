@@ -4,15 +4,17 @@
         <ion-content :fullscreen="true">
             <DemographicBar />
             <Stepper
-                stepperTitle="The consultation plan"
+                :stepperTitle="userRoleSettings.stepperTitle"
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 @finishBtn="saveData()"
                 :StepperData="StepperData"
                 :openStepper="openStepper"
+                :backUrl="userRoleSettings.url"
+                :backBtn="userRoleSettings.btnName"
             />
         </ion-content>
-        <BasicFooter @finishBtn="saveData()" />
+        <BasicFooter @finishBtn="saveData()" v-if="userRole != 'Lab'" />
     </ion-page>
 </template>
 
@@ -80,6 +82,8 @@ import BasicFooter from "@/components/BasicFooter.vue";
 import { ObservationService } from "@/services/observation_service";
 import { WorkflowService } from "@/services/workflow_service";
 import { useGeneralStore } from "@/stores/GeneralStore";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 import {
     modifyRadioValue,
     getRadioSelectedValue,
@@ -91,6 +95,7 @@ import {
 
 export default defineComponent({
     name: "Home",
+    mixins: [SetUserRole, SetEncounter],
     components: {
         IonContent,
         IonHeader,
@@ -147,8 +152,6 @@ export default defineComponent({
         // }
 
         this.markWizard();
-
-        // this.openStepper
     },
     watch: {
         vitals: {
@@ -307,21 +310,27 @@ export default defineComponent({
             });
         },
         async saveData() {
-            await this.saveDiagnosis();
-            await this.saveTreatmentPlan();
-            await this.saveOutComeStatus();
-            await this.saveWomenStatus();
-            await this.savePresentingComplaints();
-            await this.savePastMedicalHistory();
-            await this.saveConsciousness();
-            await this.savePhysicalExam();
-            resetOPDPatientData();
-            const roleData: any = sessionStorage.getItem("userRoles");
-            const roles: any = JSON.parse(roleData);
-            if (roles.some((role: any) => role.role === "Lab")) {
-                this.$router.push("home");
+            const obs = await ObservationService.getAll(this.demographics.patient_id, "Presenting complaint");
+            const filteredArray = await obs.filter((obj: any) => {
+                return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.obs_datetime);
+            });
+            if (this.presentingComplaints[0].selectedData.length > 0 || filteredArray.length > 0) {
+                await this.saveDiagnosis();
+                await this.saveTreatmentPlan();
+                await this.saveOutComeStatus();
+                await this.saveWomenStatus();
+                await this.savePresentingComplaints();
+                await this.savePastMedicalHistory();
+                await this.saveConsciousness();
+                await this.savePhysicalExam();
+                resetOPDPatientData();
+                if (this.userRole == "Lab") {
+                    this.$router.push("home");
+                } else {
+                    this.$router.push("patientProfile");
+                }
             } else {
-                this.$router.push("patientProfile");
+                toastWarning("Patient complaints is required");
             }
         },
         async savePastMedicalHistory() {

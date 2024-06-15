@@ -388,19 +388,19 @@ export default defineComponent({
 
                 // Diastolic pressure is within normal range, check systolic pressure
                 if (systolic < minSystolic && diastolic < minDiastolic) {
-                    return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low BP " + ageGroup };
+                    return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low BP " };
                 } else if (systolic >= minSystolic && systolic <= maxSystolic && diastolic >= minDiastolic && diastolic <= maxDiastolic) {
-                    return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal BP " + ageGroup };
+                    return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal BP " };
                 } else if (systolic > maxSystolic && diastolic > maxDiastolic) {
-                    return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High BP " + ageGroup };
+                    return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High BP " };
                 } else {
                     // Diastolic pressure is not within normal range, consider only systolic pressure
                     if (systolic < minSystolic) {
-                        return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low BP " + ageGroup + " (Using Systolic Only)" };
+                        return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low BP " + " (Using Systolic Only)" };
                     } else if (systolic >= minSystolic && systolic <= maxSystolic) {
-                        return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal BP " + ageGroup + " (Using Systolic Only)" };
+                        return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal BP " + " (Using Systolic Only)" };
                     } else {
-                        return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High BP " + ageGroup + " (Using Systolic Only)" };
+                        return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High BP " + " (Using Systolic Only)" };
                     }
                 }
             }
@@ -435,11 +435,11 @@ export default defineComponent({
                 }
 
                 if (value < minTemp) {
-                    return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low Temperature " + ageGroup };
+                    return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low Temperature " };
                 } else if (value >= minTemp && value <= maxTemp) {
-                    return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal Temperature " + ageGroup };
+                    return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal Temperature " };
                 } else if (value > maxTemp) {
-                    return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High Temperature " + ageGroup };
+                    return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High Temperature " };
                 }
             }
         },
@@ -485,11 +485,11 @@ export default defineComponent({
                 }
 
                 if (value < minPulse) {
-                    return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low Pulse Rate " + ageGroup };
+                    return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low Pulse Rate " };
                 } else if (value >= minPulse && value <= maxPulse) {
-                    return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal Pulse Rate " + ageGroup };
+                    return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal Pulse Rate " };
                 } else if (value > maxPulse) {
-                    return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High Pulse Rate " + ageGroup };
+                    return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High Pulse Rate " };
                 }
             }
         },
@@ -543,11 +543,11 @@ export default defineComponent({
                 }
 
                 if (value < minRespiratoryRate) {
-                    return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low respiratory rate" + ageGroup };
+                    return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low respiratory rate" };
                 } else if (value >= minRespiratoryRate && value <= maxRespiratoryRate) {
-                    return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal respiratory rate" + ageGroup };
+                    return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal respiratory rate" };
                 } else if (value > maxRespiratoryRate) {
-                    return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High respiratory rate" + ageGroup };
+                    return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High respiratory rate" };
                 }
             }
         },
