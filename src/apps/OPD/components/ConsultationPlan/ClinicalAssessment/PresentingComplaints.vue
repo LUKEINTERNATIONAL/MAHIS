@@ -134,7 +134,6 @@ export default defineComponent({
         this.updatePresentingComplaintsListStores();
         this.setDashedBox();
         this.getPresenting();
-        await this.updateList();
     },
     watch: {
         presentingComplaints: {
@@ -274,7 +273,6 @@ export default defineComponent({
                 this.no_item = false;
             }
             if (this.presentingComplaints[0].selectedData.length > 0) {
-                this.updateList();
                 this.display_item = true;
                 this.no_item = false;
             } else if (!this.search_item) {
@@ -282,10 +280,10 @@ export default defineComponent({
             }
         },
         async updateList() {
-            const obs = await ObservationService.getAll(this.demographics.patient_id, "Presenting complaint");
-            const filteredArray = await obs.filter((obj: any) => {
-                return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.obs_datetime);
-            });
+            // const obs = await ObservationService.getAll(this.demographics.patient_id, "Presenting complaint");
+            // const filteredArray = await obs.filter((obj: any) => {
+            //     return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.obs_datetime);
+            // });
         },
     },
 });

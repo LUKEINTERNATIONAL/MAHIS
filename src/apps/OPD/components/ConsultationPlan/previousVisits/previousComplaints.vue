@@ -91,11 +91,15 @@ export default defineComponent({
             const presentingComplaint = !isEmpty(obs)
                 ? Promise.all(
                       obs.map(async (ob: any) => {
-                          return {
-                              name: await ObservationService.getConceptName(ob["value_coded"]),
-                              obs_date: ob.obs_datetime,
-                              duration: ob.children[0].value_text,
-                          };
+                          if (ob.value_coded) {
+                              return {
+                                  name: await ObservationService.getConceptName(ob["value_coded"]),
+                                  obs_date: ob.obs_datetime,
+                                  duration: ob.children[0].value_text,
+                              };
+                          } else {
+                              return [];
+                          }
                       })
                   )
                 : [];
