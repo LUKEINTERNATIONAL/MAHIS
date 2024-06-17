@@ -148,9 +148,27 @@
                                 </ion-segment-button>
                             </ion-segment>
                         </div>
-                        <div style="display: flex; margin-top: 10px">
-                            <div style="width: 50vw; background-color: #fff; border-radius: 5px; margin-right: 5px"><WeightHeightChart /></div>
-                            <div style="width: 50vw; background-color: #fff; border-radius: 5px"><PreviousVitals /></div>
+                        <div>
+                            <div style="display: flex; margin-top: 10px">
+                                <div style="width: 50vw; background-color: #fff; border-radius: 5px; margin-right: 5px"><WeightHeightChart /></div>
+                                <div style="width: 50vw; background-color: #fff; border-radius: 5px"><PreviousVitals /></div>
+                            </div>
+                            <div class="bottomSummary">
+                                <ion-segment value="custom">
+                                    <ion-segment-button value="custom">
+                                        <ion-label>Medications</ion-label>
+                                    </ion-segment-button>
+                                    <ion-segment-button value="segment">
+                                        <ion-label>Investigations</ion-label>
+                                    </ion-segment-button>
+                                    <ion-segment-button value="Visits History">
+                                        <ion-label>Immunizations</ion-label>
+                                    </ion-segment-button>
+                                    <ion-segment-button value="Vitals & Measurements Summary">
+                                        <ion-label>Notes</ion-label>
+                                    </ion-segment-button>
+                                </ion-segment>
+                            </div>
                         </div>
                     </ion-col>
                 </ion-row>
@@ -628,5 +646,23 @@ ion-segment-button {
     margin-right: 1px;
     font-size: 12px;
     text-transform: unset;
+}
+.bottomSummary {
+    margin-top: 20px;
+    max-width: 600px;
+}
+.bottomSummary .segment-button-checked {
+    background: #fff !important;
+    --indicator-color: none;
+}
+.bottomSummary ion-segment-button {
+    background: #e6e6e6;
+    margin-right: 5px;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    text-transform: unset;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 12px;
 }
 </style>
