@@ -351,7 +351,7 @@ export default defineComponent({
             if (
                 (await this.validations(this.personInformation, fields)) &&
                 (await this.validations(this.currentLocation, currentFields)) &&
-                this.validateBirthData() && (await this.validations(this.guardianInformation,["guardianFirstname","guardianLastname","guardianPhoneNumber"]))
+                this.validateBirthData()
             ) {
                 this.disableSaveBtn = true;
                 await this.buildPersonalInformation();

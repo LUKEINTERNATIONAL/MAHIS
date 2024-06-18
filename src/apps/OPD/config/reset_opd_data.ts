@@ -49,7 +49,7 @@ export async function resetOPDPatientData() {
     levelOfConsciousness.setPregnancy(levelOfConsciousness.getinitiallevelOfConsciousnessMinor());
     pregnancy.setPregnancy(pregnancy.getPregnancy())
     pastMedicalHistoryStore.setPastMedicalHistory(pastMedicalHistoryStore.getInitial());
-    physicalExamination.setPhysicalExamStore(physicalExamination.getInitial())
+    physicalExamination.setPhysicalExamStore(physicalExamination.getInitial());
     //allegy.selectedMedicalAllergiesList(allegy)
 
     allegy.$reset();
