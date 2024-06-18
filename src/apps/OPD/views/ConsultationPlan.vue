@@ -4,15 +4,17 @@
         <ion-content :fullscreen="true">
             <DemographicBar />
             <Stepper
-                stepperTitle="The consultation plan"
+                :stepperTitle="userRoleSettings.stepperTitle"
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
                 @finishBtn="saveData()"
                 :StepperData="StepperData"
                 :openStepper="openStepper"
+                :backUrl="userRoleSettings.url"
+                :backBtn="userRoleSettings.btnName"
             />
         </ion-content>
-        <BasicFooter @finishBtn="saveData()" />
+        <BasicFooter @finishBtn="saveData()" v-if="userRole != 'Lab'" />
     </ion-page>
 </template>
 
@@ -77,9 +79,11 @@ import { usePhysicalExaminationStore } from "@/apps/OPD/stores/PhysicalExaminati
 import { PhysicalExamService } from "@/apps/OPD/services/physical_exam_service";
 import { resetOPDPatientData } from "@/apps/OPD/config/reset_opd_data";
 import BasicFooter from "@/components/BasicFooter.vue";
-import { ObservationService } from '@/services/observation_service';
+import { ObservationService } from "@/services/observation_service";
 import { WorkflowService } from "@/services/workflow_service";
 import { useGeneralStore } from "@/stores/GeneralStore";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
+import SetEncounter from "@/views/Mixin/SetEncounter.vue";
 import {
     modifyRadioValue,
     getRadioSelectedValue,
@@ -91,6 +95,7 @@ import {
 
 export default defineComponent({
     name: "Home",
+    mixins: [SetUserRole, SetEncounter],
     components: {
         IonContent,
         IonHeader,
@@ -138,8 +143,8 @@ export default defineComponent({
         ...mapState(useLevelOfConsciousnessStore, ["levelOfConsciousness", "levelOfConsciousnessMinor"]),
         ...mapState(useGeneralStore, ["OPDActivities"]),
     },
-    created() {
-        this.getData();
+    async created() {
+        await this.getData();
     },
     async mounted() {
         // if (this.activities.length == 0) {
@@ -147,8 +152,6 @@ export default defineComponent({
         // }
 
         this.markWizard();
-
-        // this.openStepper
     },
     watch: {
         vitals: {
@@ -158,7 +161,8 @@ export default defineComponent({
             deep: true,
         },
         $route: {
-            handler() {
+            async handler() {
+                await this.getData();
                 this.markWizard();
             },
             deep: true,
@@ -189,7 +193,9 @@ export default defineComponent({
     methods: {
         async getData() {
             this.wizardData = [];
+            this.StepperData = [];
             const { name } = await WorkflowService.nextTask(this.demographics.patient_id);
+            console.log("🚀 ~ getData ~ name:", name);
 
             // const steps = ["Clinical Assessment", "Investigations", "Diagnosis", "Treatment Plan", "Outcome"];
             for (let i = 0; i < this.OPDActivities.length; i++) {
@@ -304,16 +310,31 @@ export default defineComponent({
             });
         },
         async saveData() {
-            await this.saveDiagnosis();
-            await this.saveTreatmentPlan();
-            await this.saveOutComeStatus();
-            await this.saveWomenStatus();
-            await this.savePresentingComplaints();
-            await this.savePastMedicalHistory();
-            await this.saveConsciousness();
-            await this.savePhysicalExam();
-            resetOPDPatientData();
-            this.$router.push("patientProfile");
+            const obs = await ObservationService.getAll(this.demographics.patient_id, "Presenting complaint");
+            let filteredArray = [];
+            if (obs) {
+                filteredArray = await obs.filter((obj: any) => {
+                    return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.obs_datetime);
+                });
+            }
+            if (this.presentingComplaints[0].selectedData.length > 0 || filteredArray.length > 0) {
+                await this.saveDiagnosis();
+                await this.saveTreatmentPlan();
+                await this.saveOutComeStatus();
+                await this.saveWomenStatus();
+                await this.savePresentingComplaints();
+                await this.savePastMedicalHistory();
+                await this.saveConsciousness();
+                await this.savePhysicalExam();
+                resetOPDPatientData();
+                if (this.userRole == "Lab") {
+                    this.$router.push("home");
+                } else {
+                    this.$router.push("patientProfile");
+                }
+            } else {
+                toastWarning("Patient complaints is required");
+            }
         },
         async savePastMedicalHistory() {
             const pastMedicalHistoryData: any = await this.buildPastMedicalHistory();
@@ -392,7 +413,7 @@ export default defineComponent({
             }
 
             if (!isEmpty(this.selectedMedicalDrugsList)) {
-                const drug_oder_obs_list = [] as any
+                const drug_oder_obs_list = [] as any;
                 const drugOrders = this.mapToOrders();
                 const prescriptionService = new DrugPrescriptionService(patientID, userID);
                 const encounter = await prescriptionService.createEncounter();
@@ -408,19 +429,19 @@ export default defineComponent({
                                 obs_datetime: Service.getSessionDate(),
                                 encounter_id: encounter.encounter_id,
                                 order_id: drug_oder.order_id,
-                            }
-                            drug_oder_obs_list.push(drug_oder_obs)
+                            };
+                            drug_oder_obs_list.push(drug_oder_obs);
                         }
-                    })
-                })
+                    });
+                });
                 if (drug_oder_obs_list.length > 0) {
                     drug_oder_obs_list.forEach(async (ob_to_be: any) => {
                         const payload = {
                             encounter_id: ob_to_be.encounter_id,
-                            observations: [ob_to_be]
-                        }
-                       const obs = await ObservationService.create(payload)
-                    })
+                            observations: [ob_to_be],
+                        };
+                        const obs = await ObservationService.create(payload);
+                    });
                 }
                 toastSuccess("Drug order has been created");
             }

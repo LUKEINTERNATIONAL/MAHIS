@@ -39,8 +39,7 @@
                     <div class="flex-item">
                         <CurrentLocation />
                         <SocialHistory v-if="checkUnderFourteen" />
-                        <BirthRegistration v-if="checkUnderOne" />
-                        <BirthRegistaration v-if="checkUnderFive"/>
+                        <BirthRegistration v-if="checkUnderNine" />
                     </div>
                     <div class="flex-item">
                         <HomeLocation />
@@ -61,8 +60,7 @@
                 </div>
                 <div v-if="currentStep == 'Social History'">
                     <SocialHistory v-if="checkUnderFourteen" />
-                    <BirthRegistration v-if="checkUnderOne" />
-                    <BirthRegistration v-if="checkUnderFive"/>
+                    <BirthRegistration v-if="checkUnderNine" />
                 </div>
                 <div v-if="currentStep == 'Guardian Information'">
                     <GuardianInformation />
@@ -176,7 +174,7 @@ export default defineComponent({
             currentStep: "Personal Information",
             scanner: false,
             checkUnderFourteen: true,
-            checkUnderOne: false,
+            checkUnderNine: false,
             checkUnderFive: false,
             steps: ["Personal Information", "Location", "Social History", "Guardian Information"],
             screenWidth: "" as any,
@@ -292,7 +290,7 @@ export default defineComponent({
             if (!isEmpty(this.birthdate)) {
                 console.log(HisDate.ageInMonths(this.birthdate));
                 this.checkUnderFourteen = HisDate.getAgeInYears(this.birthdate) >= 14 ? true : false;
-                this.checkUnderOne = HisDate.ageInMonths(this.birthdate) < 9 ? true : false;
+                this.checkUnderNine = HisDate.ageInMonths(this.birthdate) < 9 ? true : false;
                 this.checkUnderFive = HisDate.ageInMonths(this.birthdate) < 9 ? true : false;
             }
         },
@@ -310,7 +308,7 @@ export default defineComponent({
             this.$router.push(url);
         },
         nextStep() {
-            if (this.checkUnderFourteen || this.checkUnderOne || this.checkUnderFive)
+            if (this.checkUnderFourteen || this.checkUnderNine || this.checkUnderFive)
                 this.steps = ["Personal Information", "Location", "Social History", "Guardian Information"];
             else this.steps = ["Personal Information", "Location", "Guardian Information"];
             const currentIndex = this.steps.indexOf(this.currentStep);
@@ -353,10 +351,10 @@ export default defineComponent({
             const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
 
             if (
-                (await this.validations(this.personInformation, fields)) 
-                &&(await this.validations(this.currentLocation, currentFields)) 
-                && this.validateBirthData() 
-                && this.validateGaudiarnInfo()
+                (await this.validations(this.personInformation, fields)) &&
+                (await this.validations(this.currentLocation, currentFields)) &&
+                this.validateBirthData() &&
+                this.validateGaudiarnInfo()
             ) {
                 this.disableSaveBtn = true;
                 await this.buildPersonalInformation();
@@ -380,14 +378,14 @@ export default defineComponent({
                 return false;
             }
         },
-        validateGaudiarnInfo(){
-            if(this.checkUnderFive){
-                return validateInputFiledData(this.guardianInformation)
+        validateGaudiarnInfo() {
+            if (this.checkUnderFive) {
+                return validateInputFiledData(this.guardianInformation);
             }
-            return true
+            return true;
         },
-        validateBirthData(){
-            if (this.checkUnderOne) {
+        validateBirthData() {
+            if (this.checkUnderNine) {
                 return validateInputFiledData(this.birthRegistration);
             } else {
                 return true;

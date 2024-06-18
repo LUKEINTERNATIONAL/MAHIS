@@ -23,7 +23,7 @@ import {
     modifyCheckboxValue,
 } from "@/services/data_helpers";
 import { journalOutline } from "ionicons/icons";
-import {useANCenrollementStore} from "@/apps/ANC/store/Enrollment/EnrollmentStore";
+import { useANCenrollementStore } from "@/apps/ANC/store/Enrollment/EnrollmentStore";
 export default defineComponent({
     name: "Menu",
     components: {
@@ -132,7 +132,7 @@ ion-radio {
 .small_font {
     font-style: normal;
     font-weight: 400;
-    font-size: 12px;
+    font-size: 14px;
     color: #636363;
 }
 .checkbox_header {
