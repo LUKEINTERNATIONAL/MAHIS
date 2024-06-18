@@ -566,9 +566,9 @@ export default defineComponent({
                 const updatedDemodata = await this.updateDemographics();
                 //const updatedGuardian = this.updateGuardian();
                 //const updatedAddress = this.updateAddress();
-                toastSuccess("Successfully Updated Patient");
                 await this.updatePatientDemographics(updatedDemodata);
-                this.setEditableValues(); // Update local data after save               
+                this.setEditableValues(); // Update local data after save   
+                toastSuccess("Successfully Updated Patient");            
                 this.viewInfo = true;
             } catch (error) {
                 toastWarning("Failed to save details");
@@ -615,7 +615,6 @@ export default defineComponent({
               
              const patientData = await PatientService.findByID(data.person_id);           
              this.setPatient(patientData);
-             let names = data.person_attributes.find( (x:any) => x.person_attribute_type_id == 12)["value"];
              this.setDemographics({ "name":`${data.names[0].given_name} ${data.names[0].family_name}`,
                                     "patient_id": data.person_id,
                                     "gender":data.gender,
