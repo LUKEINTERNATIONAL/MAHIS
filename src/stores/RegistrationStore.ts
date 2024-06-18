@@ -775,7 +775,7 @@ const initialGuardianInformation = [
                 {
                     colData: [
                         {
-                            inputHeader: "Phone number *",
+                            inputHeader: "Phone number",
                             icon: icons.phone,
                             value: "",
                             name: "guardianPhoneNumber",
@@ -861,5 +861,5 @@ export const useRegistrationStore = defineStore("registrationStore", {
             return [...data];
         },
     },
-    //  persist: true,
+    persist: true,
 });

@@ -165,7 +165,7 @@ export default defineComponent({
             else if (active == "BMI") this.activeBMI = "_active";
         },
         setData() {
-            this.series[0].data = ["10", "20", "50", "60", "90", "109", "20", "10", "50", "15"];
+            this.series[0].data = ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0"];
             this.series[0].name = "Total";
             this.options = {
                 ...this.options,

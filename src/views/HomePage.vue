@@ -16,7 +16,7 @@
         </ion-content>
         <ion-content v-if="programID() == 33">
             <div class="total">
-                <div class="totalNumber">3,764</div>
+                <div class="totalNumber">0</div>
                 <div class="totalText">Children & Adults vaccinated this year.</div>
             </div>
             <ion-img :src="loadImage('backgroundImg.png')" alt="home image"></ion-img>
@@ -24,11 +24,11 @@
             <div class="graphBackground">
                 <div class="dueMiss">
                     <div class="due">
-                        <div class="dueNumber">104</div>
+                        <div class="dueNumber">0</div>
                         <div class="dueMissText">Due for vaccination today</div>
                     </div>
                     <div class="missed">
-                        <div class="missedNumber">264</div>
+                        <div class="missedNumber">0</div>
                         <div class="dueMissText">Those with missed doses</div>
                     </div>
                 </div>
@@ -36,19 +36,19 @@
                     <div class="clientSeenTitle">Clients you have seen today.</div>
                     <div class="clientSeenBoxes">
                         <div class="clientSeenBox">
-                            <div class="clientSeenBoxNumber">15</div>
+                            <div class="clientSeenBoxNumber">0</div>
                             <div class="clientSeenBoxText">New</div>
                         </div>
                         <div class="clientSeenBoxChild clientSeenBox">
-                            <div class="clientSeenBoxNumber">63</div>
+                            <div class="clientSeenBoxNumber">0</div>
                             <div class="clientSeenBoxText">Children</div>
                         </div>
                         <div class="clientSeenBoxMen clientSeenBox">
-                            <div class="clientSeenBoxNumber">59</div>
+                            <div class="clientSeenBoxNumber">0</div>
                             <div class="clientSeenBoxText">Women</div>
                         </div>
                         <div class="clientSeenBoxWomen clientSeenBox">
-                            <div class="clientSeenBoxNumber">27</div>
+                            <div class="clientSeenBoxNumber">0</div>
                             <div class="clientSeenBoxText">Men</div>
                         </div>
                     </div>
@@ -77,6 +77,7 @@ import { useGeneralStore } from "@/stores/GeneralStore";
 import { mapState } from "pinia";
 import { UserService } from "@/services/user_service";
 import SetUser from "@/views/Mixin/SetUser.vue";
+import ApiClient from "@/services/api_client";
 export default defineComponent({
     name: "Home",
     mixins: [SetUser],
@@ -106,9 +107,17 @@ export default defineComponent({
         this.setView();
         // Start the timer on component mount
         this.startTimer();
-        console.log(await getVaccinesData());
+        // console.log(await getVaccinesData());
+        // this.getPatientSummary();
     },
     methods: {
+        getPatientSummary: async function () {
+            const response = await ApiClient.get(`immunization/stats`);
+            if (response && response.status == 200) {
+                const data = await response.json();
+                // console.log("🚀 ~ getPatientSummary:function ~ data:", data);
+            }
+        },
         setView() {
             Service.getProgramID();
         },
