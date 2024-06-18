@@ -7,7 +7,6 @@
                 stepperTitle="Postnatal Visit"
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
-                @finishBtn="saveData()"
                 :StepperData="StepperData"
             />
         </ion-content>
@@ -55,6 +54,7 @@ import { PNCVisitService } from "@/apps/PNC/Services/pnc_visit_service";
 export default defineComponent({
     name: "postnatalVisit",
     components: {
+      BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,
