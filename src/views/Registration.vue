@@ -377,7 +377,9 @@ export default defineComponent({
                 return true;
             } else {
                 toastWarning("Please complete all required fields");
-                return false;
+
+
+              return false;
             }
         },
         validateGaudiarnInfo(){

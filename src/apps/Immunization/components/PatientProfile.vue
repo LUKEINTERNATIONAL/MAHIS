@@ -172,7 +172,6 @@ import { isEmpty } from "lodash";
 import HisDate from "@/utils/Date";
 import { defineComponent } from "vue";
 import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
-import { useGeneralStore } from "@/stores/GeneralStore";
 import { resetPatientData } from "@/services/reset_data";
 import { PatientReferralService } from "@/services/patient_referral_service";
 import { PatientAdmitService } from "@/services/patient_admit_service";
@@ -250,7 +249,6 @@ export default defineComponent({
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
-        ...mapState(useGeneralStore, ["activities"]),
         ...mapState(useOutcomeStore, ["dispositions"]),
         ...mapState(useAdministerVaccineStore, ["currentMilestone", "missedVaccineSchedules"]),
     },
@@ -258,9 +256,6 @@ export default defineComponent({
         this.getData();
     },
     async mounted() {
-        if (this.activities.length == 0) {
-            this.$router.push("patientProfile");
-        }
         this.markWizard();
         this.loadCurrentMilestone();
         this.protectedStatus = await ObservationService.getFirstValueText(this.demographics.patient_id, "Protected at birth");

@@ -50,7 +50,6 @@ import customDatePicker from "@/apps/Immunization/components/customDatePicker.vu
 import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
 import { ObservationService } from "@/services/observation_service";
 import { PatientService } from "@/services/patient_service";
-import { useGeneralStore } from "@/stores/GeneralStore";
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -92,7 +91,6 @@ export default defineComponent({
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useVitalsStore, ["vitals"]),
-        ...mapState(useGeneralStore, ["activities"]),
     },
     async serverPrefetch() {
         // Call updateVitalsStores when the component is activated

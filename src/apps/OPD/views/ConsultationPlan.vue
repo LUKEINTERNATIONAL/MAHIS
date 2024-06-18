@@ -135,13 +135,12 @@ export default defineComponent({
         ...mapState(usePhysicalExaminationStore, ["physicalExam"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
         ...mapState(useLevelOfConsciousnessStore, ["levelOfConsciousness", "levelOfConsciousnessMinor"]),
-        ...mapState(useGeneralStore, ["activities"]),
+        ...mapState(useGeneralStore, ["OPDActivities"]),
     },
     created() {
-        // this.getData();
+        this.getData();
     },
     async mounted() {
-        this.getData();
         // if (this.activities.length == 0) {
         //     this.$router.push("patientProfile");
         // }
@@ -160,7 +159,6 @@ export default defineComponent({
         $route: {
             handler() {
                 this.markWizard();
-                this.getData();
             },
             deep: true,
         },
@@ -193,30 +191,29 @@ export default defineComponent({
             const { name } = await WorkflowService.nextTask(this.demographics.patient_id);
 
             // const steps = ["Clinical Assessment", "Investigations", "Diagnosis", "Treatment Plan", "Outcome"];
-            const [{ programActivity: steps }] = this.activities;
-            for (let i = 0; i < steps.length; i++) {
+            for (let i = 0; i < this.OPDActivities.length; i++) {
                 let wizardClass = "common_step";
-                if (name == "PRESENTING COMPLAINTS" && steps[i] == "Clinical Assessment") {
+                if (name == "PRESENTING COMPLAINTS" && this.OPDActivities[i] == "Clinical Assessment") {
                     this.openStepper = i + 1;
                     wizardClass = "open_step common_step";
                 }
-                if (name == "LAB RESULTS" && steps[i] == "Investigations") {
+                if (name == "LAB RESULTS" && this.OPDActivities[i] == "Investigations") {
                     this.openStepper = i + 1;
                     wizardClass = "open_step common_step";
                 }
-                if (name == "OUTPATIENT DIAGNOSIS" && steps[i] == "Diagnosis") {
+                if (name == "OUTPATIENT DIAGNOSIS" && this.OPDActivities[i] == "Diagnosis") {
                     this.openStepper = i + 1;
                     wizardClass = "open_step common_step";
                 }
-                if (name == "PRESCRIPTION" && steps[i] == "Treatment") {
+                if (name == "PRESCRIPTION" && this.OPDActivities[i] == "Treatment") {
                     this.openStepper = i + 1;
                     wizardClass = "open_step common_step";
                 }
-                if (name == "PATIENT OUTCOME" && steps[i] == "Outcome") {
+                if (name == "PATIENT OUTCOME" && this.OPDActivities[i] == "Outcome") {
                     this.openStepper = i + 1;
                     wizardClass = "open_step common_step";
                 }
-                const title = steps[i];
+                const title = this.OPDActivities[i];
                 const number = i + 1;
 
                 this.wizardData.push({
@@ -225,7 +222,7 @@ export default defineComponent({
                     checked: i === 0 ? false : "",
                     disabled: false,
                     number,
-                    last_step: i === steps.length - 1 ? "last_step" : "",
+                    last_step: i === this.OPDActivities.length - 1 ? "last_step" : "",
                 });
 
                 this.StepperData.push({
@@ -307,8 +304,7 @@ export default defineComponent({
             await this.saveConsciousness();
             await this.savePhysicalExam();
             resetOPDPatientData();
-            console.log("===========><");
-            //this.$router.push("patientProfile");
+            this.$router.push("patientProfile");
         },
         async savePastMedicalHistory() {
             const pastMedicalHistoryData: any = await this.buildPastMedicalHistory();

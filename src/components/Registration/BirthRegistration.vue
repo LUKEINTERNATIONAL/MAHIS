@@ -63,7 +63,6 @@ import {
 import { formatRadioButtonData, formatCheckBoxData } from "@/services/formatServerData";
 import { IdentifierService } from "@/services/identifier_service";
 import { resetPatientData } from "@/services/reset_data";
-import { useGeneralStore } from "@/stores/GeneralStore";
 import { useBirthRegistrationStore } from "@/apps/Immunization/stores/BirthRegistrationStore";
 import BasicCard from "@/components/BasicCard.vue";
 
@@ -115,7 +114,6 @@ export default defineComponent({
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useConfigurationStore, ["enrollmentDisplayType"]),
-        ...mapState(useGeneralStore, ["activities"]),
         ...mapState(useEnrollementStore, ["NCDNumber", "enrollmentDiagnosis", "substance", "patientHistoryHIV", "patientHistory"]),
         ...mapState(useBirthRegistrationStore, ["birthRegistration"]),
     },
@@ -172,7 +170,6 @@ export default defineComponent({
             //     patient.createNcdNumber(formattedNCDNumber);
             //     const demographicsStore = useDemographicsStore();
             //     demographicsStore.setPatient(await PatientService.findByID(this.demographics.patient_id));
-            //     const generalStore = useGeneralStore();
             //     generalStore.setSaveProgressStatus("");
             //     resetPatientData();
             //     if (this.activities.length == 0) {

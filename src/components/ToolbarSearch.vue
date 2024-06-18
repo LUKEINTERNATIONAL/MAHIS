@@ -118,7 +118,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useGlobalPropertyStore, ["globalPropertyStore"]),
-        ...mapState(useGeneralStore, ["activities", "userActions"]),
+        ...mapState(useGeneralStore, ["NCDUserActions"]),
     },
     methods: {
         async handleInput(ev: any) {
@@ -244,11 +244,10 @@ export default defineComponent({
             if (roles.some((role: any) => role.role === "Pharmacist")) {
                 this.$router.push("dispensation");
             } else if (roles.some((role: any) => role.role === "Lab")) {
-                await UserService.setUserActivities("OPD_activities");
                 this.$router.push("OPDConsultationPlan");
             } else if (userPrograms.length == 1) {
                 let NCDUserAction: any = "";
-                if (this.userActions.length > 0) [{ NCDUserAction: NCDUserAction }] = this.userActions;
+                if (this.NCDUserActions.length > 0) [{ NCDUserAction: NCDUserAction }] = this.NCDUserActions;
                 if (NCDUserAction && userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "NCD PROGRAM")) {
                     this.$router.push(NCDUserAction.url);
                 } else if (userPrograms.length == 1 && userPrograms.some((userProgram: any) => userProgram.name === "OPD PROGRAM")) {

@@ -12,10 +12,10 @@ export function validateField(data: any, fieldName: string, value: any) {
         gender: () => Validation.required(value),
         phoneNumber: () => Validation.isMWPhoneNumber(value),
         estimation: () => Validation.isEstimationDate(value),
-        guardianFirstname: () => Validation.isNameEmpty(value),
+        guardianFirstname: () =>MultValidations(fieldName, value),
+        guardianLastname: () => MultValidations(fieldName, value),
         guardianMiddleName: () => Validation.isNameEmpty(value),
-        guardianLastname: () => Validation.isNameEmpty(value),
-        guardianPhoneNumber: () => Validation.isMWPhoneNumber(value),
+        guardianPhoneNumber: () => MultValidations(fieldName, value),
         current_district: () => Validation.required(value),
         current_traditional_authority: () => Validation.required(value),
         current_village: () => Validation.required(value),
@@ -30,4 +30,45 @@ export function validateField(data: any, fieldName: string, value: any) {
         modifyRadioValue(data, fieldName, "alertsErrorMassage", validationRules[fieldName]?.());
     }
     return isValid;
+}
+
+function MultValidations(fieldName: string, value: any): null | any {
+    if (fieldName === "guardianFirstname") {
+        const requiredError: any | null = Validation.required(value);
+        if (requiredError !== null) {
+            return requiredError;
+        }
+
+        const wholeNumberError: string | null = Validation.isNameEmpty(value);
+        if (wholeNumberError !== null) {
+            return wholeNumberError;
+        }
+    } else if (fieldName === "guardianLastname") {
+        const requiredError: any | null = Validation.required(value);
+        if (requiredError !== null) {
+            return requiredError;
+        }
+
+        const wholeNumberError: string | null = Validation.isNameEmpty(value);
+        if (wholeNumberError !== null) {
+            return wholeNumberError;
+        }
+
+    } else if (fieldName === "guardianPhoneNumber") {
+        const requiredError: any | null = Validation.required(value);
+        if (requiredError !== null) {
+            return requiredError;
+        }
+
+        const wholeNumberError: string | null = Validation.isMWPhoneNumber(value);
+        if (wholeNumberError !== null) {
+            return wholeNumberError;
+        }
+
+    } else {
+        // For other fields, simply return null
+        return null;
+    }
+
+    return null;
 }
