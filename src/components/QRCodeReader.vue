@@ -1,36 +1,12 @@
 <template>
-  <div class="flex justify-center items-center mt-10">
-    <template v-if="isLoading">
-      <button class="bg-yellow-300 px-6 py-1 rounded-md me-4" @click="handleFacemode">
-        Facemode
-      </button>
-      <button class="bg-red-300 px-6 py-1 rounded-md" @click="handleOnCanStop">Stop</button>
-    </template>
-
-    <template v-else>
-      <ion-button @click="handleOnCanPlay"></ion-button>
-      <button class="bg-green-300 px-6 py-1 rounded-md" @click="handleOnCanPlay">Stream</button>
-
-      <button v-if="decode" class="bg-blue-300 px-6 py-1 rounded-md" @click="handleOnReset">
-        Reset
-      </button>
-    </template>
-  </div>
 
   <div class="flex flex-col items-center justify-center mt-6">
-    <pre>Result:{{ decode }}</pre>
-
+    <!-- <pre>Result:{{ decode }}</pre> -->
     <div class="phone mt-6">
       <div class="notch-container">
         <div class="notch"></div>
       </div>
-
       <div class="content">
-        <template v-if="!isLoading">
-          <h1 class="text-xl mb-2">Reader Barcode & QRCode</h1>
-          <h2 class="text-base text-red-500 capitalize mb-4">mode: shoot</h2>
-        </template>
-
         <StreamQrcodeBarcodeReader
           ref="refCamera"
           capture="shoot"
@@ -43,9 +19,13 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { type Result, StreamQrcodeBarcodeReader } from 'vue3-barcode-qrcode-reader'
-import { IonRow, IonCol, IonButton, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue";
+import { IonRow, IonCol, IonButton, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue"
+
+onMounted(async () => {
+  handleOnCanPlay()
+})
 
 const decode = ref<Result | undefined>(undefined)
 const isLoading = ref<boolean>(false)
@@ -76,3 +56,10 @@ function handleOnCanStop() {
   refCamera.value?.onCanStop()
 }
 </script>
+<style>
+  .scanner__container .content {
+    min-height: inherit !important;
+    background: darkgrey !important;
+    /* padding: 1px; */
+  }
+</style>
