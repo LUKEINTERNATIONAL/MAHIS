@@ -139,7 +139,7 @@ export default defineComponent({
             StepperData: [
                 {
                     title: "Vitals",
-                    component: "Vitals",
+                    component: "ANCVitals",
                     value: "1",
                 },
                 {
@@ -256,7 +256,7 @@ export default defineComponent({
        async buildVitals() {
        return [
          ...(await formatInputFiledData(this.vitals)),
-         // ...(await formatCheckBoxData(this.respiration)),
+         ...(await formatCheckBoxData(this.vitals)),
          // ...(await formatCheckBoxData(this.preEclampsia))
         ]
     },
@@ -304,6 +304,7 @@ export default defineComponent({
 
     async saveVitals() {
             const data: any = await this.buildVitals();
+            console.log(data);
             if (data.length > 0) {
                 const userID: any = Service.getUserID();
                 const vitalsInstance = new VitalsInstance();
