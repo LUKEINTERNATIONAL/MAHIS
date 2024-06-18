@@ -7,6 +7,11 @@
                         <div :class="demographics.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'" @click="openPIM()">
                             <ion-icon style="color: #fff; font-size: 70px" :icon="person"></ion-icon>
                         </div>
+                        <span v-if="protectedStatus == 'Yes'" style="background: #fedf89; color: #b54708" class="protectedStatus"
+                            >Unprotected at birth</span
+                        >
+                        <span v-else-if="protectedStatus == 'No'" style="background: #fecdca" class="protectedStatus">Protected at birth</span>
+                        <span v-else class="protectedStatus" style="background: #fecdca; color: #b42318">Unknown protection at birth</span>
                     </ion-col>
                     <ion-col size="9">
                         <div class="demographicsFirstRow">
@@ -60,25 +65,29 @@
         <div>
             <div class="graphBtn">
                 <div class="dueAlert">
-                    <div>
-                        <ion-button class="btnText btnTextWeight" size="small" fill="solid" color="danger">
-                            <ion-icon slot="start" size="small" :icon="iconsContent.alertDangerRed"></ion-icon>
-                            <b> at 6 weeks overdue</b>
-                        </ion-button>
-                    </div>
-                    <div class="dueAlertText">4 vaccines missed!</div>
+                    <ion-row v-for="(item, index) in missedVaccineSchedules" :key="index">
+                        <div>
+                            <ion-button class="btnText btnTextWeight" size="small" fill="solid" color="danger">
+                                <ion-icon slot="start" size="small" :icon="iconsContent.alertDangerRed"></ion-icon>
+                                <b> at {{ item.age }}</b>
+                            </ion-button>
+                        </div>
+                        <div class="dueAlertText">{{ item.vaccines.length }} vaccine(s) missed!</div>
+                    </ion-row>
                 </div>
             </div>
             <div class="vaccinesTitle">
                 <div style="width: 370px; display: flex; justify-content: space-between; align-content: center">
                     <div class="vaccinesTitleText">Administer Vaccines</div>
-                    <div class="vaccinesTitleDate">Todays Date: <b>06 Jul 2024 </b></div>
+                    <div class="vaccinesTitleDate">
+                        Todays Date: <b>{{ todays_date }}</b>
+                    </div>
                 </div>
             </div>
             <div class="milestone">
                 <div style="display: flex; justify-content: space-between; align-content: center">
                     <ion-icon size="small" :icon="iconsContent.greenCalender"></ion-icon>
-                    <div style="color: #636363; margin-left: 5px; margin-top: -4px;">
+                    <div style="color: #636363; margin-left: 5px; margin-top: -4px">
                         at <span style="color: #636363; font-weight: bold; font-size: 14px"> {{ current_milestone }}</span>
                     </div>
                 </div>
@@ -135,6 +144,7 @@ import {
     IonItem,
     IonLabel,
     IonModal,
+    IonRow,
     modalController,
     AccordionGroupCustomEvent,
 } from "@ionic/vue";
@@ -162,7 +172,6 @@ import { isEmpty } from "lodash";
 import HisDate from "@/utils/Date";
 import { defineComponent } from "vue";
 import { DRUG_FREQUENCIES, DrugPrescriptionService } from "../../../services/drug_prescription_service";
-import { useGeneralStore } from "@/stores/GeneralStore";
 import { resetPatientData } from "@/services/reset_data";
 import { PatientReferralService } from "@/services/patient_referral_service";
 import { PatientAdmitService } from "@/services/patient_admit_service";
@@ -171,6 +180,7 @@ import WeightHeightChart from "@/apps/Immunization/components/Graphs/WeightHeigh
 import { createModal } from "@/utils/Alerts";
 import OtherVitals from "@/apps/Immunization/components/OthervitalsModal.vue";
 import vaccinationHistory from "@/apps/Immunization/components/Modals/vaccinationHistoryModal.vue";
+import followUpVisitModal from "@/apps/Immunization/components/Modals/followUpVisitModal.vue";
 import personalInformationModal from "@/apps/Immunization/components/Modals/personalInformationModal.vue";
 import weightAndHeight from "@/apps/Immunization/components/Modals/weightAndHeight.vue";
 import administerVaccineModal from "@/apps/Immunization/components/Modals/administerVaccineModal.vue";
@@ -179,6 +189,8 @@ import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
 import { PatientService } from "@/services/patient_service";
 import customSlider from "@/apps/Immunization/components/customSlider.vue";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
+import { ConceptService } from "@/services/concept_service";
+import { ObservationService } from "@/services/observation_service";
 
 import {
     modifyRadioValue,
@@ -217,6 +229,7 @@ export default defineComponent({
         WeightHeightChart,
         PreviousVitals,
         customSlider,
+        IonRow,
     },
     data() {
         return {
@@ -225,6 +238,9 @@ export default defineComponent({
             isOpen: false,
             iconsContent: icons,
             current_milestone: "" as string,
+            unprotected_at_birth: "" as string,
+            protectedStatus: "" as string,
+            todays_date: HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
         };
     },
     computed: {
@@ -233,19 +249,17 @@ export default defineComponent({
         ...mapState(useInvestigationStore, ["investigations"]),
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
-        ...mapState(useGeneralStore, ["activities"]),
         ...mapState(useOutcomeStore, ["dispositions"]),
-        ...mapState(useAdministerVaccineStore, ["currentMilestone"]),
+        ...mapState(useAdministerVaccineStore, ["currentMilestone", "missedVaccineSchedules"]),
     },
     created() {
         this.getData();
     },
-    mounted() {
-        if (this.activities.length == 0) {
-            this.$router.push("patientProfile");
-        }
+    async mounted() {
         this.markWizard();
         this.loadCurrentMilestone();
+        this.protectedStatus = await ObservationService.getFirstValueText(this.demographics.patient_id, "Protected at birth");
+        this.openFollowModal();
     },
     watch: {
         vitals: {
@@ -276,6 +290,11 @@ export default defineComponent({
                 this.loadCurrentMilestone();
             },
         },
+        $route: {
+            async handler() {
+                this.protectedStatus = await ObservationService.getFirstValueText(this.demographics.patient_id, "Protected at birth");
+            },
+        },
     },
     setup() {
         return { chevronBackOutline, checkmark, ellipsisVerticalSharp, person };
@@ -293,6 +312,9 @@ export default defineComponent({
         },
         openVH() {
             createModal(vaccinationHistory, { class: "otherVitalsModal" });
+        },
+        openFollowModal() {
+            createModal(followUpVisitModal, { class: "otherVitalsModal" });
         },
         openAdministerVaccineModal() {
             createModal(administerVaccineModal, { class: "otherVitalsModal" });
@@ -531,7 +553,7 @@ export default defineComponent({
 .demographics {
     box-sizing: border-box;
     width: 95vw;
-    height: 92px;
+    /* height: 92px; */
     left: calc(50% - 461px / 2 + 27.5px);
     margin-top: 10px;
     background: #ffffff;
@@ -660,6 +682,19 @@ export default defineComponent({
     align-items: center;
     text-align: center;
 }
+.protectedStatus {
+    align-items: center;
+    padding: 2px 7px;
+    width: 50px;
+    height: 18px;
+    border-radius: 22px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 11px;
+    align-items: center;
+    color: #006401;
+    text-align: center;
+}
 .graphSection {
     box-sizing: border-box;
     background: #f7f7f7;
@@ -672,10 +707,9 @@ export default defineComponent({
     justify-content: center;
 }
 .dueAlert {
-    display: flex;
     justify-content: space-between;
-    border: solid 1px #ccc;
-    border-style: dashed;
+    /* border: solid 1px #ccc;
+    border-style: dashed; */
     margin-top: 10px;
     padding: 5px;
 }
@@ -812,5 +846,10 @@ export default defineComponent({
 .administerVac {
     height: 58px;
     width: 150px;
+}
+.dashed-hr {
+    border: none;
+    border-top: 1px dashed #b3b3b3;
+    margin: 20px 0; /* Adjust as needed */
 }
 </style>

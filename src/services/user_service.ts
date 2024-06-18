@@ -35,7 +35,7 @@ export class UserService extends Service {
     }
 
     static updateusername(id: number, data: Record<string, any>) {
-        return this.putJson(`users/${id}/update_username`, data)
+        return this.putJson(`users/${id}/update_username`, data);
     }
 
     static activateUser(id: number) {
@@ -116,7 +116,6 @@ export class UserService extends Service {
         const filteredPrograms = [];
         for (const item of programs) {
             if (item.name === "NCD PROGRAM") {
-                await this.setUserActivities("NCD_activities");
                 const NCDData: any = await this.setNCDValue();
                 item.url = NCDData.url;
                 item.actionName = NCDData.actionName;
@@ -151,12 +150,6 @@ export class UserService extends Service {
         return Promise.resolve(filteredPrograms);
     }
 
-    static async setUserActivities(programActivity: any) {
-        const activities = [];
-        activities.push({ programActivity: await this.getUserActivities(programActivity) });
-        const generalStore = useGeneralStore();
-        generalStore.setActivity(activities);
-    }
     static async updateUserPrograms() {
         const userID: any = Service.getUserID();
         const data = await UserService.getUserByID(userID);
@@ -164,7 +157,6 @@ export class UserService extends Service {
     }
     static async setNCDValue() {
         const patient = new PatientService();
-        console.log("🚀 ~ UserService ~ setNCDValue ~ patient.getID():", patient.getID());
         const visits = await PatientService.getPatientVisits(patient.getID(), false);
 
         const activities = await this.getUserActivities("NCD_activities");
@@ -203,6 +195,6 @@ export class UserService extends Service {
     static async setProgramUserActions() {
         const actions = await this.setNCDValue();
         const generalStore = useGeneralStore();
-        generalStore.setUserActions([actions]);
+        generalStore.setNCDUserActions([actions]);
     }
 }

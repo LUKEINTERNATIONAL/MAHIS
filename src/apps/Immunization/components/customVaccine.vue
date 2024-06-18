@@ -38,7 +38,7 @@ import {
 import { icons } from "@/utils/svg"
 import { defineComponent } from "vue"
 import administerVaccineModal from "@/apps/Immunization/components/Modals/administerVaccineModal.vue"
-import { createModal } from "@/utils/Alerts";
+import { createModal } from "@/utils/Alerts"
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore"
 import { PatientService } from "@/services/patient_service"
 export default defineComponent({

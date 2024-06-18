@@ -1,13 +1,13 @@
 import { OrderService } from "@/services/order_service";
 import { AppEncounterService } from "./app_encounter_service";
 
-export class PatientLabResultService extends AppEncounterService {
+export class PatientLabOrderService extends AppEncounterService {
     patientID: number;
     testTypeID: number;
     resultDate: string;
     testID: number;
     constructor(patientId: number) {
-        super(patientId, 32);
+        super(patientId, 57);
         this.patientID = patientId;
         this.testTypeID = -1;
         this.resultDate = "";
