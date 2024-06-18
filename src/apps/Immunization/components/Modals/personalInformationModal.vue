@@ -462,6 +462,7 @@ export default defineComponent({
         },
     },
     async mounted() {
+
                  this.buildCurrentLocations();
     },
     setup() {         
@@ -565,9 +566,9 @@ export default defineComponent({
                 const updatedDemodata = await this.updateDemographics();
                 //const updatedGuardian = this.updateGuardian();
                 //const updatedAddress = this.updateAddress();
-                await this.updatePatientDemographics(updatedDemodata);
-                this.setEditableValues(); // Update local data after save
                 toastSuccess("Successfully Updated Patient");
+                await this.updatePatientDemographics(updatedDemodata);
+                this.setEditableValues(); // Update local data after save               
                 this.viewInfo = true;
             } catch (error) {
                 toastWarning("Failed to save details");
@@ -614,11 +615,12 @@ export default defineComponent({
               
              const patientData = await PatientService.findByID(data.person_id);           
              this.setPatient(patientData);
-             this.setDemographics({ "name": `${data.names[0].given_name} ${data.names[0].family_name}`,
+             let names = data.person_attributes.find( (x:any) => x.person_attribute_type_id == 12)["value"];
+             this.setDemographics({ "name":`${data.names[0].given_name} ${data.names[0].family_name}`,
                                     "patient_id": data.person_id,
                                     "gender":data.gender,
                                     "birthdate":data.birthdate,
-                                    "phone":data.phone,
+                                    "phone": data.person_attributes.find( (x:any) => x.person_attribute_type_id == 12)["value"],
                                     "mrn": patientData.patient_identifiers[0].identifier,
                                     "address":`${data.addresses[0].state_province} ${data.addresses[0].township_division} ${data.addresses[0].city_village}`});
             
