@@ -311,9 +311,12 @@ export default defineComponent({
         },
         async saveData() {
             const obs = await ObservationService.getAll(this.demographics.patient_id, "Presenting complaint");
-            const filteredArray = await obs.filter((obj: any) => {
-                return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.obs_datetime);
-            });
+            let filteredArray = [];
+            if (obs) {
+                filteredArray = await obs.filter((obj: any) => {
+                    return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.obs_datetime);
+                });
+            }
             if (this.presentingComplaints[0].selectedData.length > 0 || filteredArray.length > 0) {
                 await this.saveDiagnosis();
                 await this.saveTreatmentPlan();
