@@ -206,8 +206,8 @@ export class Service {
 
     static getUserRoles() {
         const roles = sessionStorage.getItem("userRoles");
-
-        return roles ? JSON.parse(roles) : [];
+        const roleObj = roles ? JSON.parse(roles) : [];
+        return roleObj[0].role;
     }
 
     static getUserName() {

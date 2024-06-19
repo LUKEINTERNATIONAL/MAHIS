@@ -113,6 +113,7 @@ export class PreviousTreatment {
                 start_date: patientVisit.value,
             });
             if (!isEmpty(medications)) {
+                console.log(medications)
                 const previousPrescriptions = medications.map((medication: any) => ({
                     drugName: medication.drug.name,
                     value: HisDate.toStandardHisTimeFormat(medication.order.start_date),

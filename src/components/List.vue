@@ -122,7 +122,7 @@ export default defineComponent({
 .list_header {
     font-style: normal;
     font-weight: 400;
-    font-size: 12px;
+    font-size: 14px;
     /* identical to box height, or 18px */
     text-align: center;
 

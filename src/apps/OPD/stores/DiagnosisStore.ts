@@ -16,15 +16,14 @@ const initialOPDdiagnosis = [
                             icon: icons.search,
                             required: true,
                             eventType: "input",
-                            alertsError: false,
                             alertsErrorMassage: "",
                             isSingleSelect: true,
                             trackBy: "concept_id",
                             multiSelectData: [],
                             idName: "district_id",
+                            validationFunctionName: "required",
                             // inputFieldDisplayNone: true,
                             // colSize: 0,
-                            
                         },
                         {
                             inputHeader: "Differential Diagnosis",

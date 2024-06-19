@@ -630,7 +630,7 @@ export default defineComponent({
     border-radius: 4px;
     font-style: normal;
     font-weight: 400;
-    font-size: 12px;
+    font-size: 14px;
     color: #636363;
     display: flex;
     height: 22px;
