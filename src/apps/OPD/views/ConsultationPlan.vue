@@ -140,7 +140,7 @@ export default defineComponent({
         ...mapState(useOPDDiagnosisStore, ["OPDdiagnosis"]),
         ...mapState(usePhysicalExaminationStore, ["physicalExam"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
-        ...mapState(useLevelOfConsciousnessStore, ["levelOfConsciousness", "levelOfConsciousnessMinor"]),
+        ...mapState(useLevelOfConsciousnessStore, ["adult", "minor"]),
         ...mapState(useGeneralStore, ["OPDActivities"]),
     },
     async created() {
@@ -500,7 +500,7 @@ export default defineComponent({
             ];
         },
         async saveConsciousness() {
-            const data = await formatRadioButtonData(this.levelOfConsciousness);
+            const data = await formatRadioButtonData(this.adult);
             if (data.length > 0) {
                 const userID: any = Service.getUserID();
                 const consciousness = new ConsciousnessService(this.demographics.patient_id, userID);
@@ -512,9 +512,9 @@ export default defineComponent({
                 let data;
 
                 if (patientAge < 18) {
-                    data = await formatRadioButtonData(this.levelOfConsciousnessMinor);
+                    data = await formatRadioButtonData(this.minor);
                 } else {
-                    data = await formatRadioButtonData(this.levelOfConsciousness);
+                    data = await formatRadioButtonData(this.adult);
                 }
                 await consciousness.saveObservationList(data);
             }
