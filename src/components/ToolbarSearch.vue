@@ -38,7 +38,7 @@
                 <ion-col style="max-width: 25px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
             </ion-row>
 
-            <Pagination />
+            <Pagination :page="page" :onClickNext="nextPage" :onClickPrevious="previousPage" />
 
             <ion-row class="sticky-column">
                 <ion-col size="4" class="sticky-column">
@@ -92,7 +92,7 @@ import { UserService } from "@/services/user_service";
 import { Service } from "@/services/service";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import Pagination from "./Pagination.vue";
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 export default defineComponent({
     name: "Home",
@@ -112,17 +112,7 @@ export default defineComponent({
         Pagination,
     },
     setup() {
-        const page = ref(0);
-
-        const nextPage = ()=>{
-            page.value++
-        }
-
-        const previousPage = ()=> {
-            page.value--;
-        }
-
-        return { checkmark, add, nextPage, previousPage };
+        return { checkmark };
     },
     data() {
         return {
@@ -130,6 +120,8 @@ export default defineComponent({
             event: null,
             patients: [] as any,
             showPopover: true,
+            page:1,
+            searchText:""
         };
     },
     computed: {
@@ -138,14 +130,15 @@ export default defineComponent({
     },
     methods: {
         async handleInput(ev: any) {
-            const searchText = ev.target.value;
+            this.searchText = ev.target.value;
             this.patients = [];
             this.popoverOpen = false;
-            if (searchText.length > 0) {
+            if (this.searchText.length > 0) {
                 this.openPopover(ev);
-                await this.searchDemographicPayload(searchText);
+                await this.searchDemographicPayload(this.searchText);
             }
         },
+
         async setID(scannedID: any) {
             const sitePrefix = await this.globalPropertyStore.sitePrefix;
             return {
@@ -166,7 +159,7 @@ export default defineComponent({
                     given_name: splittedArray[0],
                     family_name: splittedArray.length >= 2 ? splittedArray[1] : "",
                     gender: splittedArray.length >= 3 ? splittedArray[2] : "",
-                    page: "",
+                    page: this.page.toString(),
                     per_page: "7",
                 };
                 this.patients = await PatientService.search(payload);
@@ -291,7 +284,18 @@ export default defineComponent({
         onDismiss() {
             console.log("Popover dismissed");
         },
+        nextPage(){
+            this.page++;
+        },
+        previousPage(){
+            this.page--;
+        }
     },
+    watch:{
+        page(){
+            this.searchDemographicPayload(this.searchText);
+        }
+    }
 });
 </script>
 

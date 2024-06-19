@@ -2,6 +2,9 @@
   <ion-button fill="outline" @click="handlePrevious" >
     <ion-icon :icon="chevronBack"></ion-icon>
   </ion-button>
+ <ion-button fill="clear" >
+    <h3> {{page}}</h3>
+ </ion-button>
   <ion-button fill="outline" @click="handleNext" >
     <ion-icon :icon="chevronForward"></ion-icon>
   </ion-button>
@@ -23,6 +26,10 @@ export default defineComponent({
       type: Function,
       required: true,
     },
+    page : {
+        type: Number,
+        required: true
+    }
   },
   methods: {
     handlePrevious() {
@@ -33,7 +40,7 @@ export default defineComponent({
     },
   },
   setup() {
-    return { chevronForward, chevronBack };
+    return { chevronForward, chevronBack, };
   },
 });
 </script>
