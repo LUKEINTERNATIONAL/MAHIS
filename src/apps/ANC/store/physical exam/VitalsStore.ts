@@ -143,7 +143,7 @@ const initialVitals = [
         },
     },
     {
-        sectionHeader: "Temperature and Purse",
+        sectionHeader: "Temperature and Pulse",
         classDash: "dashed_bottom_border _padding",
 
         data: {
