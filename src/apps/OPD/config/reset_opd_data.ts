@@ -25,7 +25,7 @@ import { usePhysicalExaminationStore } from "@/apps/OPD/stores/PhysicalExaminati
 
 export async function resetOPDPatientData() {
     sessionStorage.setItem("saveProgressStatus", "false");
-    //const opdVitals = useVitalsStore();
+    const opdVitals = useVitalsStore();
     const vitals = useVitalsStore();
     const investigations = useInvestigationStore();
     const outcome = useOutcomeStore();
@@ -54,8 +54,8 @@ export async function resetOPDPatientData() {
     physicalExamination.setPhysicalExamStore(physicalExamination.getInitial());
     //allegy.selectedMedicalAllergiesList(allegy)
 
-    allegy.$reset();
-    //opdVitals.$reset();
+    
+    opdVitals.$reset();
 
 
     presentingComplaintsStore.setPresentingComplaints(presentingComplaintsStore.getInitial());
