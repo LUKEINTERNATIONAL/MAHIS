@@ -46,9 +46,15 @@ export async function resetOPDPatientData() {
     const allegy = useAllegyStore()
 
   
+<<<<<<< HEAD
+
+    levelOfConsciousness.reset();
+    // levelOfConsciousness.setPregnancy(levelOfConsciousness.getinitiallevelOfConsciousnessMinor());
+=======
     //opdVitals.setVitals(opdVitals.getOpdVitals());
     levelOfConsciousness.setPregnancy(levelOfConsciousness.getInitialLevelOfConsciousness());
     levelOfConsciousness.setPregnancy(levelOfConsciousness.getinitiallevelOfConsciousnessMinor());
+>>>>>>> dev
     pregnancy.setPregnancy(pregnancy.getPregnancy())
     pastMedicalHistoryStore.setPastMedicalHistory(pastMedicalHistoryStore.getInitial());
     physicalExamination.setPhysicalExamStore(physicalExamination.getInitial());
