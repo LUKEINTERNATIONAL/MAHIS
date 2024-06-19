@@ -1,11 +1,11 @@
 <template>
-  <ion-button fill="outline" @click="handlePrevious" >
+  <ion-button fill="outline" :disabled="disablePrevious" @click="handlePrevious">
     <ion-icon :icon="chevronBack"></ion-icon>
   </ion-button>
- <ion-button fill="clear" >
-    <h3> {{page}}</h3>
- </ion-button>
-  <ion-button fill="outline" @click="handleNext" >
+  <ion-button fill="clear">
+    <h3>{{ page }}</h3>
+  </ion-button>
+  <ion-button fill="outline" :disabled="disableNext" @click="handleNext">
     <ion-icon :icon="chevronForward"></ion-icon>
   </ion-button>
 </template>
@@ -26,10 +26,18 @@ export default defineComponent({
       type: Function,
       required: true,
     },
-    page : {
-        type: Number,
-        required: true
-    }
+    page: {
+      type: Number,
+      required: true,
+    },
+    disableNext: {
+      type: Boolean,
+      required: true,
+    },
+    disablePrevious: {
+      type: Boolean,
+      required: true,
+    },
   },
   methods: {
     handlePrevious() {
@@ -40,7 +48,7 @@ export default defineComponent({
     },
   },
   setup() {
-    return { chevronForward, chevronBack, };
+    return { chevronForward, chevronBack };
   },
 });
 </script>

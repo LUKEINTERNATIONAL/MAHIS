@@ -38,7 +38,7 @@
                 <ion-col style="max-width: 25px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
             </ion-row>
 
-            <Pagination :page="page" :onClickNext="nextPage" :onClickPrevious="previousPage" />
+            <Pagination :disablePrevious="page-1 == 0" :disableNext="patients.length < paginationSize" :page="page" :onClickNext="nextPage" :onClickPrevious="previousPage" />
 
             <ion-row class="sticky-column">
                 <ion-col size="4" class="sticky-column">
@@ -92,7 +92,7 @@ import { UserService } from "@/services/user_service";
 import { Service } from "@/services/service";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import Pagination from "./Pagination.vue";
-import { ref, watch } from 'vue';
+
 
 export default defineComponent({
     name: "Home",
@@ -121,7 +121,8 @@ export default defineComponent({
             patients: [] as any,
             showPopover: true,
             page:1,
-            searchText:""
+            searchText:"",
+            paginationSize:7
         };
     },
     computed: {
@@ -160,11 +161,9 @@ export default defineComponent({
                     family_name: splittedArray.length >= 2 ? splittedArray[1] : "",
                     gender: splittedArray.length >= 3 ? splittedArray[2] : "",
                     page: this.page.toString(),
-                    per_page: "7",
+                    per_page: this.paginationSize.toString(),
                 };
                 this.patients = await PatientService.search(payload);
-
-                console.log(this.patients.length)
                 if (this.patients.length > 0) {
                     this.callswipeleft();
                 }
@@ -294,6 +293,9 @@ export default defineComponent({
     watch:{
         page(){
             this.searchDemographicPayload(this.searchText);
+        },
+        searchText(){
+            this.page = 1;
         }
     }
 });
