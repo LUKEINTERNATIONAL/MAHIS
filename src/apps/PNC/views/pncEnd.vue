@@ -7,7 +7,6 @@
                 stepperTitle="Postnatal end"
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
-                @finishBtn="saveData()"
                 :StepperData="StepperData"
             />
         </ion-content>
@@ -55,6 +54,7 @@ import { PNCEndService } from "@/apps/PNC/Services/pnc_end_service";
 export default defineComponent({
     name: "pncEnd",
     components: {
+      BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,

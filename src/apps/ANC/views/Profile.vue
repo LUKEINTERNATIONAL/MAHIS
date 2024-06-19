@@ -3,8 +3,10 @@
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
-            <Stepper stepperTitle="Profile" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData" />
+            <Stepper stepperTitle="Profile" :wizardData="wizardData" @updateStatus="markWizard"  :StepperData="StepperData" />
         </ion-content>
+      <BasicFooter @finishBtn="saveData()" />
+
     </ion-page>
 </template>
 

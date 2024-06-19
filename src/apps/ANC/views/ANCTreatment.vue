@@ -7,11 +7,11 @@
                 stepperTitle="Treament and Diagnosis"
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
-                @finishBtn="saveData()"
                 :StepperData="StepperData"
             />
         </ion-content>
-        <BasicFooter @finishBtn="saveData()" />
+      <BasicFooter @finishBtn="saveData()" />
+
     </ion-page>
 </template>
 <script lang="ts">
@@ -46,10 +46,12 @@ import { resetPatientData } from "@/services/reset_data";
 import { getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { validateField } from "@/services/ANC/treatement_validation_service";
 import StandardValidations from "@/validations/StandardValidations";
+import BasicFooter from "@/components/BasicFooter.vue";
 
 export default defineComponent({
     name: "Treatment",
     components: {
+      BasicFooter,
         IonContent,
         IonHeader,
         IonItem,

@@ -7,10 +7,11 @@
                 stepperTitle="Physical examination"
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
-                @finishBtn="saveData()"
                 :StepperData="StepperData"
             />
         </ion-content>
+      <BasicFooter @finishBtn="saveData()" />
+
     </ion-page>
 </template>
 
@@ -63,12 +64,15 @@ import { useFetalAssessment } from "../store/physical exam/FetalAssessmentStore"
 import { useFetalPresentationStore } from "../store/physical exam/FetalPresantationStore";
 import { usePresentingSigns } from "../store/physical exam/PresentingSignsStore";
 import { resetPatientData } from "@/services/reset_data";
+import BasicFooter from "@/components/BasicFooter.vue";
 export default defineComponent({
     name: "PhysicalExam",
     components: {
+      BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,
+        BasicFooter,
         IonPage,
         IonTitle,
         IonToolbar,
@@ -139,7 +143,7 @@ export default defineComponent({
             StepperData: [
                 {
                     title: "Vitals",
-                    component: "Vitals",
+                    component: "ANCVitals",
                     value: "1",
                 },
                 {
@@ -246,7 +250,7 @@ export default defineComponent({
                 this.saveFetalPresentation();
                 this.savePresentingSigns();
                 resetPatientData();
-                this.$router.push("ANChome");
+                //this.$router.push("ANChome");
                 toastSuccess("Physical examination data saved successfully");
             } else {
                 toastWarning("Please complete all required fields");
@@ -256,7 +260,7 @@ export default defineComponent({
        async buildVitals() {
        return [
          ...(await formatInputFiledData(this.vitals)),
-         // ...(await formatCheckBoxData(this.respiration)),
+         ...(await formatCheckBoxData(this.vitals)),
          // ...(await formatCheckBoxData(this.preEclampsia))
         ]
     },
@@ -304,6 +308,7 @@ export default defineComponent({
 
     async saveVitals() {
             const data: any = await this.buildVitals();
+            console.log(data);
             if (data.length > 0) {
                 const userID: any = Service.getUserID();
                 const vitalsInstance = new VitalsInstance();

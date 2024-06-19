@@ -7,7 +7,6 @@
                 stepperTitle="Postnatal ward stay"
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
-                @finishBtn="saveData()"
                 :StepperData="StepperData"
             />
         </ion-content>
@@ -57,6 +56,7 @@ export default defineComponent({
     name: "postnatalBabyStatus",
     components: {
         IonContent,
+      BasicFooter,
         IonHeader,
         IonMenuButton,
         IonPage,

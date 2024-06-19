@@ -11,7 +11,8 @@
                 :StepperData="StepperData"
             />
         </ion-content>
-        <BasicFooter @finishBtn="saveData()" />
+      <BasicFooter @finishBtn="saveData()" />
+
     </ion-page>
 </template>
 
@@ -59,6 +60,7 @@ import { resetPatientData } from "@/services/reset_data";
 export default defineComponent({
     name: "obstetricDetails",
     components: {
+      BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,

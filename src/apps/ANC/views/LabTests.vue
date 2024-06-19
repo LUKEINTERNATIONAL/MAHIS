@@ -7,10 +7,11 @@
                 stepper-title="Lab test and imaging"
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
-                @finishBtn="saveData()"
                 :StepperData="StepperData"
             ></Stepper>
         </ion-content>
+      <BasicFooter @finishBtn="saveData()" />
+
     </ion-page>
 </template>
 
@@ -36,9 +37,10 @@ import { Service } from "@/services/service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import {TBScreeningInstance, UltrasoundInstance, UrineTestInstance} from "@/apps/ANC/service/labtests_service"
 import { resetPatientData } from "@/services/reset_data";
+import BasicFooter from "@/components/BasicFooter.vue";
 export default defineComponent({
     name: "Lab",
-    components: { IonPage, DemographicBar, Toolbar, IonContent, UltrasoundScan, UrineTest, TB, Stepper },
+    components: {BasicFooter, IonPage, DemographicBar, Toolbar, IonContent, UltrasoundScan, UrineTest, TB, Stepper },
     data() {
         return {
             iconsContent: icons,
