@@ -45,8 +45,8 @@ export async function resetOPDPatientData() {
 
   
 
-    levelOfConsciousness.setPregnancy(levelOfConsciousness.getInitialLevelOfConsciousness());
-    levelOfConsciousness.setPregnancy(levelOfConsciousness.getinitiallevelOfConsciousnessMinor());
+    levelOfConsciousness.reset();
+    // levelOfConsciousness.setPregnancy(levelOfConsciousness.getinitiallevelOfConsciousnessMinor());
     pregnancy.setPregnancy(pregnancy.getPregnancy())
     pastMedicalHistoryStore.setPastMedicalHistory(pastMedicalHistoryStore.getInitial());
     physicalExamination.setPhysicalExamStore(physicalExamination.getInitial())
