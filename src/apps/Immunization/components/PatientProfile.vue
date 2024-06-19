@@ -1,19 +1,14 @@
 <template>
     <div :fullscreen="true" style="--background: #fff">
         <div class="demographics">
-            <div style="max-width: 400px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
+            <div style="max-width: 500px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
                 <ion-row>
-                    <ion-col size="3">
+                    <ion-col size="3.3">
                         <div :class="demographics.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'" @click="openPIM()">
-                            <ion-icon style="color: #fff; font-size: 70px" :icon="person"></ion-icon>
+                            <ion-icon style="color: #fff; font-size: 100px" :icon="person"></ion-icon>
                         </div>
-                        <span v-if="protectedStatus == 'Yes'" style="background: #fedf89; color: #b54708" class="protectedStatus"
-                            >Unprotected at birth</span
-                        >
-                        <span v-else-if="protectedStatus == 'No'" style="background: #fecdca" class="protectedStatus">Protected at birth</span>
-                        <span v-else class="protectedStatus" style="background: #fecdca; color: #b42318">Unknown protection at birth</span>
                     </ion-col>
-                    <ion-col size="9">
+                    <ion-col size="8.7">
                         <div class="demographicsFirstRow">
                             <div class="name">{{ demographics.name }}</div>
                         </div>
@@ -28,8 +23,22 @@
                         </div>
                         <div class="demographicsOtherRow">
                             <div class="demographicsText smallFont">
-                                MRN: <span class="mediumFontColor">{{ demographics.mrn }}</span> <span class="dot">.</span> Outcome:
-                                <span class="outcomeStatus">Active</span>
+                                MRN: <span class="mediumFontColor">{{ demographics.mrn }}</span>
+                            </div>
+                        </div>
+                        <div class="demographicsOtherRow">
+                            <div class="demographicsText smallFont">Outcome: <span class="outcomeStatus"> Active</span></div>
+                        </div>
+                        <div class="demographicsOtherRow">
+                            <div class="demographicsText smallFont">
+                                Status:
+                                <span v-if="protectedStatus == 'No'" style="background: #fedf89; color: #b54708" class="protectedStatus"
+                                    >Unprotected at birth</span
+                                >
+                                <span v-else-if="protectedStatus == 'Yes'" style="background: #fecdca" class="protectedStatus"
+                                    >Protected at birth</span
+                                >
+                                <span v-else class="protectedStatus" style="background: #fecdca; color: #b42318">Unknown protection at birth</span>
                             </div>
                         </div>
                     </ion-col>
@@ -65,7 +74,23 @@
         <div>
             <div class="graphBtn">
                 <div class="dueAlert">
-                    <ion-row v-for="(item, index) in missedVaccineSchedules" :key="index">
+                    <ion-row>
+                        <div class="box-line"></div>
+                        <ion-col v-if="overDueVaccinesCount > 0" style="display: flex; justify-content: center">
+                            <div class="missed_vaccine_alert">
+                                <ion-icon slot="start" size="small" :icon="iconsContent.alertDangerRed" />
+                                <span style="margin: 10px">{{ overDueVaccinesCount }} vaccine(s) overdue</span>
+                            </div>
+                        </ion-col>
+                        <ion-col style="display: flex; justify-content: center; cursor: pointer" @click="showMissedVaccines">
+                            <div class="missed_vaccine_alert_txt">
+                                <span>click to see missed vaccines</span>
+                            </div>
+                        </ion-col>
+                        <div class="box-line"></div>
+                    </ion-row>
+
+                    <!-- <ion-row v-for="(item, index) in missedVaccineSchedules" :key="index">
                         <div>
                             <ion-button class="btnText btnTextWeight" size="small" fill="solid" color="danger">
                                 <ion-icon slot="start" size="small" :icon="iconsContent.alertDangerRed"></ion-icon>
@@ -73,7 +98,7 @@
                             </ion-button>
                         </div>
                         <div class="dueAlertText">{{ item.vaccines.length }} vaccine(s) missed!</div>
-                    </ion-row>
+                    </ion-row> -->
                 </div>
             </div>
             <div class="vaccinesTitle">
@@ -191,6 +216,8 @@ import customSlider from "@/apps/Immunization/components/customSlider.vue";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import { ConceptService } from "@/services/concept_service";
 import { ObservationService } from "@/services/observation_service";
+import missedVaccinesModal from "@/apps/Immunization/components/Modals/missedVaccinesModal.vue";
+import { DrugOrderService } from "@/services/drug_order_service";
 
 import {
     modifyRadioValue,
@@ -241,6 +268,7 @@ export default defineComponent({
             unprotected_at_birth: "" as string,
             protectedStatus: "" as string,
             todays_date: HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
+            lastVaccine: [] as any,
         };
     },
     computed: {
@@ -250,7 +278,7 @@ export default defineComponent({
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
         ...mapState(useOutcomeStore, ["dispositions"]),
-        ...mapState(useAdministerVaccineStore, ["currentMilestone", "missedVaccineSchedules"]),
+        ...mapState(useAdministerVaccineStore, ["currentMilestone", "missedVaccineSchedules", "overDueVaccinesCount"]),
     },
     created() {
         this.getData();
@@ -259,7 +287,7 @@ export default defineComponent({
         this.markWizard();
         this.loadCurrentMilestone();
         this.protectedStatus = await ObservationService.getFirstValueText(this.demographics.patient_id, "Protected at birth");
-        this.openFollowModal();
+        await this.openFollowModal();
     },
     watch: {
         vitals: {
@@ -295,6 +323,12 @@ export default defineComponent({
                 this.protectedStatus = await ObservationService.getFirstValueText(this.demographics.patient_id, "Protected at birth");
             },
         },
+        demographics: {
+            async handler() {
+                this.protectedStatus = await ObservationService.getFirstValueText(this.demographics.patient_id, "Protected at birth");
+                await this.openFollowModal();
+            },
+        },
     },
     setup() {
         return { chevronBackOutline, checkmark, ellipsisVerticalSharp, person };
@@ -313,8 +347,10 @@ export default defineComponent({
         openVH() {
             createModal(vaccinationHistory, { class: "otherVitalsModal" });
         },
-        openFollowModal() {
-            createModal(followUpVisitModal, { class: "otherVitalsModal" });
+        async openFollowModal() {
+            this.lastVaccine = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
+            console.log("🚀 ~ openFollowModal ~ this.lastVaccine :", this.lastVaccine);
+            if (this.lastVaccine.length > 0) createModal(followUpVisitModal, { class: "otherVitalsModal" });
         },
         openAdministerVaccineModal() {
             createModal(administerVaccineModal, { class: "otherVitalsModal" });
@@ -545,6 +581,9 @@ export default defineComponent({
             const store = useAdministerVaccineStore();
             this.current_milestone = store.getCurrentMilestone();
         },
+        showMissedVaccines() {
+            createModal(missedVaccinesModal, { class: "otherVitalsModal" });
+        },
     },
 });
 </script>
@@ -594,7 +633,7 @@ export default defineComponent({
 .demographicsText {
     font-style: normal;
     font-weight: 400;
-    font-size: 11px;
+    font-size: 14px;
     line-height: 5px;
     color: #636363;
 
@@ -608,13 +647,12 @@ export default defineComponent({
     align-items: center;
     padding: 1px 5px;
     gap: 10px;
-
-    height: 18px;
+    height: 25px;
     left: calc(50% - 243px / 2 + 26.5px);
     top: calc(50% - 23px / 2 - 455.5px);
 }
 .smallFont {
-    font-size: 12px;
+    font-size: 14px;
 }
 .mediumFontColor {
     color: #00190e;
@@ -630,7 +668,7 @@ export default defineComponent({
 .btnText {
     font-style: normal;
     font-weight: 500;
-    font-size: 12px;
+    font-size: 14px;
 }
 .btnTextWeight {
     color: #000;
@@ -641,8 +679,8 @@ export default defineComponent({
     font-size: 25px;
 }
 .initialsBox {
-    width: 80px;
-    height: 80px;
+    width: 95px;
+    height: 115px;
     left: 31px;
     top: 122px;
     align-items: center;
@@ -678,7 +716,7 @@ export default defineComponent({
     border-radius: 22px;
     font-style: normal;
     font-weight: 700;
-    font-size: 11px;
+    font-size: 14px;
     align-items: center;
     text-align: center;
 }
@@ -690,7 +728,7 @@ export default defineComponent({
     border-radius: 22px;
     font-style: normal;
     font-weight: 400;
-    font-size: 11px;
+    font-size: 14px;
     align-items: center;
     color: #006401;
     text-align: center;
@@ -739,7 +777,7 @@ export default defineComponent({
 .vaccinesTitleDate {
     font-style: normal;
     font-weight: 400;
-    font-size: 12px;
+    font-size: 14px;
     color: #636363;
 }
 .milestone {
@@ -851,5 +889,67 @@ export default defineComponent({
     border: none;
     border-top: 1px dashed #b3b3b3;
     margin: 20px 0; /* Adjust as needed */
+}
+.missed_vaccine_alert {
+    /* Toast */
+
+    /* box-sizing: border-box; */
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px 10px;
+
+    width: 240px;
+    height: 25px;
+
+    /* red/300 */
+    background: #fecdca;
+    /* red/500 */
+    border: 1px solid #fda19b;
+    box-shadow: 0px 4px 5px rgba(189, 13, 0, 0.1);
+    border-radius: 8px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+.missed_vaccine_alert_txt {
+    /* click to see missed vaccines */
+
+    width: 190px;
+    height: 17px;
+
+    /* btn */
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    /* identical to box height */
+
+    /* red/900 */
+    color: #b42318;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+.box-line {
+    /* warning */
+
+    /* Line 3 */
+
+    width: 100%;
+    height: 0px;
+
+    /* Tertiary */
+    border: 1px dashed #b3b3b3;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
 }
 </style>

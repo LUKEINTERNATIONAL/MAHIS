@@ -132,7 +132,7 @@ export default defineComponent({
     justify-content: space-between;
 }
 .text_12 {
-    font-size: 12px;
+    font-size: 14px;
     height: 510px;
     overflow: scroll;
 }

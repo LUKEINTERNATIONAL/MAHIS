@@ -9,6 +9,8 @@ import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/servic
 import { ProgramService } from "@/services/program_service";
 import { useEnrollementStore } from "@/stores/EnrollmentStore";
 import ProgramData from "@/Data/ProgramData";
+import { OrderService } from "@/services/order_service";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 
 export class UserService extends Service {
     constructor() {
@@ -125,8 +127,19 @@ export class UserService extends Service {
                 item.actionName = "+ Enroll in Immunization program";
                 filteredPrograms.push(item);
             } else if (item.name === "OPD Program") {
-                item.url = "OPDvitals";
-                item.actionName = "+ Start OPD consultation";
+                const demographicsInstance = useDemographicsStore();
+                const demographics = demographicsInstance.getPatient();
+                const orders = await OrderService.getOrders(demographics.patient_id);
+                const filteredArray = await orders.filter((obj: any) => {
+                    return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
+                });
+                if (filteredArray.length > 0) {
+                    item.url = "OPDConsultationPlan";
+                    item.actionName = "+ Continue OPD consultation";
+                } else {
+                    item.url = "OPDvitals";
+                    item.actionName = "+ Start OPD consultation";
+                }
                 filteredPrograms.push(item);
             } else if (item.name === "ANC PROGRAM") {
                 let ANCItem = { ...item }; // Create a new object

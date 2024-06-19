@@ -24,9 +24,8 @@
         </ion-col>
 
         <ion-col size-sm="12" size-xl="7" size-md="7.2" size-lg="7" offset-sm="0" offset-md="0.4" offset-xl="0.8" class="">
-            <div class="back_profile" @click="openModal()">
-                <ion-icon style="font-size: 20px" :icon="chevronBackOutline"> </ion-icon>
-                <span style="cursor: pointer"> Back to profile</span>
+            <div class="back_profile">
+                <DynamicButton :name="backBtn" iconSlot="start" fill="clear" :icon="chevronBackOutline" @click="openBackController()" />
             </div>
 
             <div class="accordion_group">
@@ -70,6 +69,7 @@ import {
 import dispensation from "@/apps/OPD/views/dispensation.vue";
 import dispensedMedication from "@/apps/OPD/components/dispensedMedication.vue";
 import dispensationSummary from "@/apps/OPD/components/dispensationSummary.vue";
+import SetUserRole from "@/views/Mixin/SetUserRole.vue";
 
 import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
@@ -163,6 +163,7 @@ import ImmidiatePostnatalChecksForMother from "@/apps/LABOUR/components/delivery
 import SubsequentVisits from "@/apps/ANC/components/quick check/SubsequentVisits.vue";
 
 export default defineComponent({
+    mixins: [SetUserRole],
     name: "Home",
     components: {
         dispensationSummary,
@@ -290,6 +291,14 @@ export default defineComponent({
             type: String,
             default: "1",
         },
+        backBtn: {
+            type: String,
+            default: "Back to profile",
+        },
+        backUrl: {
+            type: String,
+            default: "",
+        },
     },
     setup() {
         return { chevronBackOutline, checkmark };
@@ -307,8 +316,12 @@ export default defineComponent({
             });
             this.$emit("updateStatus", ev);
         },
-        openModal() {
-            createModal(SaveProgressModal);
+        openBackController() {
+            if (this.backUrl) {
+                this.$router.push(this.backUrl);
+            } else {
+                createModal(SaveProgressModal);
+            }
         },
     },
 });
