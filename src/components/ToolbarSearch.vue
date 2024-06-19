@@ -6,7 +6,7 @@
         @didDismiss="popoverOpen = false"
         :keyboard-close="false"
         :show-backdrop="false"
-        :dismiss-on-select="true"
+        :dismiss-on-select="false"
     >
         <div style="width: 1300px" class="sticky-table">
             <ion-row class="search_header">
@@ -37,6 +37,9 @@
                 <ion-col style="max-width: 150px; min-width: 150px">{{ getPhone(item) }}</ion-col>
                 <ion-col style="max-width: 25px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
             </ion-row>
+
+            <Pagination />
+
             <ion-row class="sticky-column">
                 <ion-col size="4" class="sticky-column">
                     <DynButton :icon="add" :name="'Add Patient'" :fill="'clear'" @click="openCheckPaitentNationalIDModal" />
@@ -88,6 +91,8 @@ import Validation from "@/validations/StandardValidations";
 import { UserService } from "@/services/user_service";
 import { Service } from "@/services/service";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
+import Pagination from "./Pagination.vue";
+import { ref } from 'vue';
 
 export default defineComponent({
     name: "Home",
@@ -104,9 +109,20 @@ export default defineComponent({
         DynButton,
         IonRow,
         IonCol,
+        Pagination,
     },
     setup() {
-        return { checkmark, add };
+        const page = ref(0);
+
+        const nextPage = ()=>{
+            page.value++
+        }
+
+        const previousPage = ()=> {
+            page.value--;
+        }
+
+        return { checkmark, add, nextPage, previousPage };
     },
     data() {
         return {
@@ -150,10 +166,12 @@ export default defineComponent({
                     given_name: splittedArray[0],
                     family_name: splittedArray.length >= 2 ? splittedArray[1] : "",
                     gender: splittedArray.length >= 3 ? splittedArray[2] : "",
-                    page: "1",
+                    page: "",
                     per_page: "7",
                 };
                 this.patients = await PatientService.search(payload);
+
+                console.log(this.patients.length)
                 if (this.patients.length > 0) {
                     this.callswipeleft();
                 }
