@@ -42,7 +42,6 @@ export default defineComponent({
         personInformation: {
             handler() {
                 this.buildCards();
-                this.calculateDoB(event);
             },
             deep: true,
         },
@@ -81,7 +80,6 @@ export default defineComponent({
     async mounted() {
         this.updateRegistrationStores();
         this.buildCards();
-        this.calculateDoB(event);
     },
 
     methods: {
@@ -120,7 +118,6 @@ export default defineComponent({
             this.validationRules(event);
             this.calculateDoB(event);
             this.calculateAge(event);
-            this.validateDuration()
         },
         calculateAge(event: any) {
             const updateGuardianInfo = (value: boolean) => modifyFieldValue(this.guardianInformation, "guardianNationalID", "displayNone", value);
@@ -134,92 +131,48 @@ export default defineComponent({
                 event.value < 17 ? updateGuardianInfo(false) : updateGuardianInfo(true);
             }
         },
-        //     if (event?.name === "estimation") {
-        //         const unit = event?.unitsData?.value?.name;
-        //         const value = event?.value as number;
-        //         let sessionDate = dayjs(Service.getSessionDate());
-        //         switch (unit) {
-        //             case "Days":
-        //                 sessionDate = sessionDate.subtract(value, "days");
-        //                 break;
-        //             case "Months":
-        //                 sessionDate = sessionDate.subtract(value, "months");
-        //                 break;
-        //             case "Years":
-        //                 sessionDate = sessionDate.subtract(value, "years");
-        //                 break;
-        //             // default:
-        //             //     throw new Error("Invalid unit");
-        //         }
-        //         const formattedDate = HisDate.toStandardHisDisplayFormat(sessionDate.format("YYYY-MM-DD"));
-        //         modifyFieldValue(this.personInformation, "birthdate", "value", formattedDate);
-
-        //         return formattedDate;
-        //     }
-        // },
-
-
-
-    // calculateDoB(event: any) {
-    //     if (event?.name === "estimation" && event?.unitsData?.value?.name) { 
-    //         const unit = event?.unitsData?.value?.name;
-    //         const value = event?.value as number;
-    //         let sessionDate = dayjs(Service.getSessionDate());
-
-    //         switch (unit) {
-    //             case "Days":
-    //                 sessionDate = sessionDate.subtract(value, "days");
-    //                 break;
-    //             case "Months":
-    //                 sessionDate = sessionDate.subtract(value, "months");
-    //                 break;
-    //             case "Years":
-    //                 sessionDate = sessionDate.subtract(value, "years");
-    //                 break;
-    //         }
-    //         const formattedDate = HisDate.toStandardHisDisplayFormat(sessionDate.format("YYYY-MM-DD"));
-    //         modifyFieldValue(this.personInformation, "birthdate", "value", formattedDate);
-
-    //         return formattedDate;
-    //     } else {
-    //         return null;
-    //     }
-    // },
-
         calculateDoB(event: any) {
-        if (event?.name === "estimation" && event?.unitsData?.value?.name) {
-            const unit = event?.unitsData?.value?.name;
-            const value = event?.value as number;
+            if (event?.name == "estimation") {
+                this.validateDuration();
+                const unit = event?.unitsData?.value?.name || event?.unitsData?.value;
+                const value = event?.value as number;
+                // Check for age calculation (negative years)
+                const isCalculatingAge = unit === "Years" && value < 0;
 
-            const isCalculatingAge = unit === "Years" && value < 0;
-            
-            let sessionDate = dayjs(Service.getSessionDate());
-            
-            if (isCalculatingAge) {
-            try {
-                sessionDate = sessionDate.add(Math.abs(value), "years");
-            } catch (error) {
-                console.error("Error adding years:", error);
+                let sessionDate = dayjs(Service.getSessionDate());
+
+                if (isCalculatingAge) {
+                    // Calculate age in positive years and handle potential overflow
+                    try {
+                        sessionDate = sessionDate.add(Math.abs(value), "years");
+                    } catch (error) {
+                        console.error("Error adding years:", error);
+                        return null;
+                    }
+                } else {
+                    // Existing logic for subtracting units
+                    switch (unit) {
+                        case "Days":
+                            sessionDate = sessionDate.subtract(value, "days");
+                            break;
+                        case "Months":
+                            sessionDate = sessionDate.subtract(value, "months");
+                            break;
+                        case "Years":
+                            sessionDate = sessionDate.subtract(value, "years");
+                            break;
+                        default:
+                            return null; // Invalid unit
+                    }
+                }
+
+                const formattedDate = HisDate.toStandardHisDisplayFormat(sessionDate.format("YYYY-MM-DD"));
+                modifyFieldValue(this.personInformation, "birthdate", "value", formattedDate);
+                return formattedDate;
+            } else {
                 return null;
             }
-            } else {
-            switch (unit) {
-                case "Days": sessionDate = sessionDate.subtract(value, "days"); break;
-                case "Months": sessionDate = sessionDate.subtract(value, "months"); break;
-                case "Years": sessionDate = sessionDate.subtract(value, "years"); break;
-                default: return null;
-            }
-            }
-            
-            const formattedDate = HisDate.toStandardHisDisplayFormat(sessionDate.format("YYYY-MM-DD"));
-            modifyFieldValue(this.personInformation, "birthdate", "value", formattedDate);
-            return formattedDate;
-        } else {
-            return null;
-        }
         },
-
-
         validateDuration() {
             this.personInformation[7].data.rowData[0].colData[0].alertsErrorMassage = false;
             this.personInformation[7].data.rowData[0].colData[0].alertsErrorMassage = "";
@@ -229,15 +182,17 @@ export default defineComponent({
                 return false;
             }
 
-            if (Validation.isNumber(this.personInformation[7].data.rowData[0].colData[0].value) == null && this.personInformation[7].data.rowData[0].colData[0].value != "") {
+            if (
+                Validation.isNumber(this.personInformation[7].data.rowData[0].colData[0].value) == null &&
+                this.personInformation[7].data.rowData[0].colData[0].value != ""
+            ) {
                 return true;
             } else {
                 this.personInformation[7].data.rowData[0].colData[0].alertsErrorMassage = true;
                 this.personInformation[7].data.rowData[0].colData[0].alertsErrorMassage = " Value must be a number";
                 return false;
             }
-}
-
+        },
     },
 });
 </script>

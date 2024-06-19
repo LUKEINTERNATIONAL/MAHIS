@@ -16,7 +16,7 @@
         </ion-content>
         <ion-content v-if="programID() == 33">
             <div class="total">
-                <div class="totalNumber">3,764</div>
+                <div class="totalNumber">0</div>
                 <div class="totalText">Children & Adults vaccinated this year.</div>
             </div>
             <ion-img :src="loadImage('backgroundImg.png')" alt="home image"></ion-img>
@@ -24,11 +24,11 @@
             <div class="graphBackground">
                 <div class="dueMiss">
                     <div class="due">
-                        <div class="dueNumber">104</div>
+                        <div class="dueNumber">0</div>
                         <div class="dueMissText">Due for vaccination today</div>
                     </div>
                     <div class="missed">
-                        <div class="missedNumber">264</div>
+                        <div class="missedNumber">0</div>
                         <div class="dueMissText">Those with missed doses</div>
                     </div>
                 </div>
@@ -36,19 +36,19 @@
                     <div class="clientSeenTitle">Clients you have seen today.</div>
                     <div class="clientSeenBoxes">
                         <div class="clientSeenBox">
-                            <div class="clientSeenBoxNumber">15</div>
+                            <div class="clientSeenBoxNumber">0</div>
                             <div class="clientSeenBoxText">New</div>
                         </div>
                         <div class="clientSeenBoxChild clientSeenBox">
-                            <div class="clientSeenBoxNumber">63</div>
+                            <div class="clientSeenBoxNumber">0</div>
                             <div class="clientSeenBoxText">Children</div>
                         </div>
                         <div class="clientSeenBoxMen clientSeenBox">
-                            <div class="clientSeenBoxNumber">59</div>
+                            <div class="clientSeenBoxNumber">0</div>
                             <div class="clientSeenBoxText">Women</div>
                         </div>
                         <div class="clientSeenBoxWomen clientSeenBox">
-                            <div class="clientSeenBoxNumber">27</div>
+                            <div class="clientSeenBoxNumber">0</div>
                             <div class="clientSeenBoxText">Men</div>
                         </div>
                     </div>
@@ -74,9 +74,13 @@ import ImmunizationGroupGraph from "@/apps/Immunization/components/Graphs/Immuni
 import { getVaccinesData } from "@/apps/Immunization/services/dashboard_service";
 import { useUserStore } from "@/stores/userStore";
 import { useGeneralStore } from "@/stores/GeneralStore";
+import { mapState } from "pinia";
 import { UserService } from "@/services/user_service";
+import SetUser from "@/views/Mixin/SetUser.vue";
+import ApiClient from "@/services/api_client";
 export default defineComponent({
     name: "Home",
+    mixins: [SetUser],
     components: {
         IonContent,
         IonHeader,
@@ -96,34 +100,22 @@ export default defineComponent({
             controlGraphs: "months" as any,
         };
     },
+    computed: {
+        ...mapState(useGeneralStore, ["OPDActivities"]),
+    },
     async mounted() {
         this.setView();
         // Start the timer on component mount
         this.startTimer();
-        console.log(await getVaccinesData());
-
-        const OPDActivities = await this.getUserActivities("NCD_activities");
-        console.log("🚀 ~ AuthService ~ startSession ~ OPDActivities:", OPDActivities);
-        const generalStore = useGeneralStore();
-        generalStore.OPDActivities = await this.getUserActivities("OPD_activities");
-        generalStore.NCDActivities = await this.getUserActivities("NCD_activities");
+        // console.log(await getVaccinesData());
+        // this.getPatientSummary();
     },
     methods: {
-        async getUserActivities(activities: any) {
-            try {
-                const userID = Service.getUserID();
-                const userData = await UserService.getJson("user_properties", {
-                    user_id: userID,
-                    property: activities,
-                });
-                if (userData.property_value) {
-                    return userData.property_value.split(",");
-                } else {
-                    return []; // Return an empty array if property_value is not available
-                }
-            } catch (error) {
-                // console.error("Error fetching user activities:", error);
-                return []; // Return an empty array in case of error
+        getPatientSummary: async function () {
+            const response = await ApiClient.get(`immunization/stats`);
+            if (response && response.status == 200) {
+                const data = await response.json();
+                // console.log("🚀 ~ getPatientSummary:function ~ data:", data);
             }
         },
         setView() {

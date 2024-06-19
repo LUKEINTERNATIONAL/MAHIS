@@ -10,11 +10,13 @@ export const useAdministerVaccineStore = defineStore('administerVaccineStore',{
       vaccineSchedule: {} as any,
       vaccineReload: false,
       currentSchedFound: false,
-      missedVaccineSchedules: [] as any, 
+      missedVaccineSchedules: [] as any,
+      overDueVaccinesCount: 0,
     }),
     actions:{
       setVaccineSchedule(data: any) {
         this.vaccineSchedule = data
+        this.overDueVaccines()
       },
       getVaccineSchedule() {
           return this.vaccineSchedule
@@ -32,11 +34,12 @@ export const useAdministerVaccineStore = defineStore('administerVaccineStore',{
       getAdministeredVaccines() {
         return this.administeredVaccines
       },
-      setCurrentSelectedDrug(visit_id: number, drug_id: number, drug_name: string): void {
+      setCurrentSelectedDrug(visit_id: number, drug_id: number, drug_name: string, vaccine_batch_number: string): void {
           this.currentSelectedDrug = {
               visit_id: visit_id,
               drug_id: drug_id,
               drug_name: drug_name,
+              vaccine_batch_number: vaccine_batch_number,
           }
       },
       getCurrentSelectedDrug() {
@@ -85,6 +88,18 @@ export const useAdministerVaccineStore = defineStore('administerVaccineStore',{
           })
         })
         return bool
+      },
+      overDueVaccines(): any {
+        const currentVaccines = [] as any
+        this.vaccineSchedule.vaccinSchedule.forEach((vaccineSchudule: any) => {
+          vaccineSchudule.antigens.forEach((vaccine: any) => {
+              if (vaccineSchudule.milestone_status=="current" && vaccine.status=="pending") {
+                currentVaccines.push(vaccine)
+              }
+          })
+        })
+        this.overDueVaccinesCount = currentVaccines.length
+        return currentVaccines
       }
     },
     persist: true,
