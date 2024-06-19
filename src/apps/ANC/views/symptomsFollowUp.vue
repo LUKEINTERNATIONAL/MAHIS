@@ -7,10 +7,11 @@
                 stepperTitle="Symptoms  and follow up"
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
-                @finishBtn="saveData()"
                 :StepperData="StepperData"
             />
         </ion-content>
+      <BasicFooter @finishBtn="saveData()" />
+
     </ion-page>
 </template>
 
@@ -65,9 +66,11 @@ import { formatCheckBoxData, formatRadioButtonData } from "@/services/formatServ
 import {CurrentPhysiologicalSymptomsInstance, FetalMovementInstance, IntimatePartnerInstance, MedicalFollowUpInstance, PersistentBehavioursInstance, PersistentSymptomsInstance} from '@/apps/ANC/service/symptoms_follow_up_service';
 import { resetPatientData } from "@/services/reset_data";
 import { validateField } from "@/services/ANC/symptoms_validation";
+import BasicFooter from "@/components/BasicFooter.vue";
 export default defineComponent({
     name: "Home",
     components: {
+      BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,

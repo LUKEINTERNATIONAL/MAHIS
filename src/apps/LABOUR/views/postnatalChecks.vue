@@ -61,6 +61,7 @@ export default defineComponent({
     name: "postnatalChecks",
     components: {
         IonContent,
+      BasicFooter,
         IonHeader,
         IonMenuButton,
         IonPage,

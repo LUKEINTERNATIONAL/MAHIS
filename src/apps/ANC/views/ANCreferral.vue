@@ -3,8 +3,10 @@
     <Toolbar/>
     <ion-content :fullscreen="true">
       <DemographicBar/>
-      <Stepper  stepper-title="ANC referral" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
+      <Stepper  stepper-title="ANC referral" :wizardData="wizardData" @updateStatus="markWizard"  :StepperData="StepperData"/>
     </ion-content>
+    <BasicFooter @finishBtn="saveData()" />
+
   </ion-page>
 </template>
 
@@ -35,11 +37,13 @@ import {mapState} from "pinia";
 import {useDemographicsStore} from "@/stores/DemographicStore";
 import {useReferralStore} from "@/apps/ANC/store/referral/referralStore";
 import {ReferralService} from "@/apps/ANC/service/referral_service";
+import BasicFooter from "@/components/BasicFooter.vue";
 
 
 export default defineComponent ({
   name : 'treatment',
   components : {
+    BasicFooter,
     IonContent,
     IonHeader,
     IonItem,

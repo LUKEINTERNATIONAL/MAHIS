@@ -7,12 +7,11 @@
                 stepperTitle="Quick check"
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
-                @finishBtn="saveData()"
                 :StepperData="StepperData"
             />
             <ion-spinner v-if="isLoading" name="lines"></ion-spinner>
         </ion-content>
-        <BasicFooter @finishBtn="saveData()" />
+      <BasicFooter @finishBtn="saveData()" />
     </ion-page>
 </template>
 
@@ -83,9 +82,11 @@ import { ReasonForVisitService } from "@/apps/ANC/service/reason_for_visit_servi
 import { resetPatientData } from "@/services/reset_data";
 import { getCheckboxSelectedValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { validateField } from "@/services/ANC/quickCheck_validation_service";
+import BasicFooter from "@/components/BasicFooter.vue";
 export default defineComponent({
     name: "Home",
     components: {
+      BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,

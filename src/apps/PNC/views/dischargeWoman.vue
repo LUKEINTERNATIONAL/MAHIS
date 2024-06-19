@@ -7,7 +7,6 @@
                 stepperTitle="Postnatal Ward stay"
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
-                @finishBtn="saveData()"
                 :StepperData="StepperData"
             />
         </ion-content>
@@ -55,6 +54,7 @@ import { DischargeWomanService } from "@/apps/PNC/Services/discharge_woman_servi
 export default defineComponent({
     name: "dischargeWoman",
     components: {
+      BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,
