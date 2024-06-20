@@ -291,7 +291,7 @@ export default defineComponent({
                 console.log(HisDate.ageInMonths(this.birthdate));
                 this.checkUnderFourteen = HisDate.getAgeInYears(this.birthdate) >= 14 ? true : false;
                 this.checkUnderNine = HisDate.ageInMonths(this.birthdate) < 9 ? true : false;
-                this.checkUnderFive = HisDate.ageInMonths(this.birthdate) < 9 ? true : false;
+                this.checkUnderFive = HisDate.getAgeInYears(this.birthdate) < 5 ? true : false;
             }
         },
         disableNationalIDInput() {
@@ -375,9 +375,7 @@ export default defineComponent({
                 return true;
             } else {
                 toastWarning("Please complete all required fields");
-
-
-              return false;
+                return false;
             }
         },
         validateGaudiarnInfo() {

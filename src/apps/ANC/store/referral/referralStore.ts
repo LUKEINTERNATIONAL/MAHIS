@@ -104,7 +104,7 @@ export const useReferralStore = defineStore('referralStore',{
                                     name: "Date scheduled referral",
                                     value: "",
                                     eventType: 'input',
-                                    valueType: 'date',
+                                    valueType: 'text',
                                     minDate:"",
                                     maxDate:"",
                                     required: true,
@@ -118,7 +118,7 @@ export const useReferralStore = defineStore('referralStore',{
                                         icon: icons.timePicker,
                                         name: 'Time scheduled referral',
                                     value: "",
-                                    valueType: "date",
+                                    valueType: "text",
                                         placeholder:'Pick time',
                                         eventType: 'input',
                                     required: true
@@ -185,7 +185,7 @@ export const useReferralStore = defineStore('referralStore',{
                                     name: "Date referral was made",
                                     value: "",
                                     eventType: 'input',
-                                    valueType:'date',
+                                    valueType:'text',
                                     minDate:"",
                                     maxDate:"",
                                     required: true,
@@ -246,7 +246,8 @@ export const useReferralStore = defineStore('referralStore',{
                                     name: 'Provider’s phone number',
                                     value: '',
                                     eventType: 'input',
-                                    required: true
+                                        valueType: "text",
+
                                 },
                                 
                             ]
@@ -274,6 +275,7 @@ export const useReferralStore = defineStore('referralStore',{
                                     name: 'Referral notes',
                                     value:'',
                                     eventType: 'input',
+                                    valueType: "text",
                                     required: true
                                 },
 
@@ -302,6 +304,7 @@ export const useReferralStore = defineStore('referralStore',{
                                     name: 'Client history summary',
                                     value: '',
                                     eventType: 'input',
+                                    valueType: "text",
                                     required: true
                                 }
 
@@ -320,5 +323,5 @@ export const useReferralStore = defineStore('referralStore',{
             this.referralInfo = data
         }
     },
-    // persist:true
+    persist:true
 })
