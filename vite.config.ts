@@ -3,7 +3,7 @@ import vue from "@vitejs/plugin-vue";
 import path from "path";
 import { defineConfig } from "vite";
 import { visualizer } from "rollup-plugin-visualizer";
-import basicSsl from '@vitejs/plugin-basic-ssl'
+import basicSsl from "@vitejs/plugin-basic-ssl";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -19,8 +19,8 @@ export default defineConfig({
     },
     build: {
         rollupOptions: {
-            plugins: [visualizer(),],
+            plugins: [visualizer()],
         },
     },
-    base: "/mahis/",
+    // base: "/mahis/",
 });
