@@ -6,7 +6,7 @@
         @didDismiss="popoverOpen = false"
         :keyboard-close="false"
         :show-backdrop="false"
-        :dismiss-on-select="true"
+        :dismiss-on-select="false"
     >
         <div style="width: 1300px" class="sticky-table">
             <ion-row class="search_header">
@@ -37,6 +37,10 @@
                 <ion-col style="max-width: 150px; min-width: 150px">{{ getPhone(item) }}</ion-col>
                 <ion-col style="max-width: 25px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
             </ion-row>
+        <ion-row class="ion-justify-content-start ion-align-items-center">
+              <Pagination :disablePrevious="page-1 == 0" :disableNext="patients.length < paginationSize" :page="page" :onClickNext="nextPage" :onClickPrevious="previousPage" />
+        </ion-row>
+
             <ion-row class="sticky-column">
                 <ion-col size="4" class="sticky-column">
                     <DynButton :icon="add" :name="'Add Patient'" :fill="'clear'" @click="openCheckPaitentNationalIDModal" />
@@ -88,6 +92,8 @@ import Validation from "@/validations/StandardValidations";
 import { UserService } from "@/services/user_service";
 import { Service } from "@/services/service";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
+import Pagination from "./Pagination.vue";
+
 
 export default defineComponent({
     name: "Home",
@@ -104,9 +110,10 @@ export default defineComponent({
         DynButton,
         IonRow,
         IonCol,
+        Pagination,
     },
     setup() {
-        return { checkmark, add };
+        return { checkmark };
     },
     data() {
         return {
@@ -114,6 +121,9 @@ export default defineComponent({
             event: null,
             patients: [] as any,
             showPopover: true,
+            page:1,
+            searchText:"",
+            paginationSize:7
         };
     },
     computed: {
@@ -122,14 +132,15 @@ export default defineComponent({
     },
     methods: {
         async handleInput(ev: any) {
-            const searchText = ev.target.value;
+            this.searchText = ev.target.value;
             this.patients = [];
             this.popoverOpen = false;
-            if (searchText.length > 0) {
+            if (this.searchText.length > 0) {
                 this.openPopover(ev);
-                await this.searchDemographicPayload(searchText);
+                await this.searchDemographicPayload(this.searchText);
             }
         },
+
         async setID(scannedID: any) {
             const sitePrefix = await this.globalPropertyStore.sitePrefix;
             return {
@@ -150,8 +161,8 @@ export default defineComponent({
                     given_name: splittedArray[0],
                     family_name: splittedArray.length >= 2 ? splittedArray[1] : "",
                     gender: splittedArray.length >= 3 ? splittedArray[2] : "",
-                    page: "1",
-                    per_page: "7",
+                    page: this.page.toString(),
+                    per_page: this.paginationSize.toString(),
                 };
                 this.patients = await PatientService.search(payload);
                 if (this.patients.length > 0) {
@@ -209,6 +220,7 @@ export default defineComponent({
                 .join(", ");
         },
         async openNewPage(url: any, item: any) {
+            this.popoverOpen=false;
             const demographicsStore = useDemographicsStore();
             demographicsStore.setPatient(item);
             demographicsStore.setDemographics({
@@ -267,13 +279,28 @@ export default defineComponent({
             this.popoverOpen = true;
         },
         openCheckPaitentNationalIDModal() {
+            this.popoverOpen=false;
             resetPatientData();
             createModal(CheckPatientNationalID, { class: "nationalIDModal" });
         },
         onDismiss() {
             console.log("Popover dismissed");
         },
+        nextPage(){
+            this.page++;
+        },
+        previousPage(){
+            this.page--;
+        }
     },
+    watch:{
+        page(){
+            this.searchDemographicPayload(this.searchText);
+        },
+        searchText(){
+            this.page = 1;
+        }
+    }
 });
 </script>
 
@@ -431,6 +458,13 @@ ion-popover {
         top: 47%;
         opacity: 0;
     }
+}
+
+@media (max-width: 1024px) {
+  .medium {
+    display: flex;
+    justify-content: start;
+  }
 }
 </style>
 <style>
