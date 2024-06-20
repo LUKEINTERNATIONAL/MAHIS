@@ -219,6 +219,7 @@ export default defineComponent({
                 .join(", ");
         },
         async openNewPage(url: any, item: any) {
+            this.popoverOpen=false;
             const demographicsStore = useDemographicsStore();
             demographicsStore.setPatient(item);
             demographicsStore.setDemographics({
