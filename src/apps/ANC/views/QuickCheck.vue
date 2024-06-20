@@ -90,7 +90,6 @@ export default defineComponent({
         IonContent,
         IonHeader,
         IonMenuButton,
-        BasicFooter,
         IonPage,
         IonTitle,
         IonToolbar,
