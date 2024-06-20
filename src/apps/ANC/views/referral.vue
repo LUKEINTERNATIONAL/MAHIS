@@ -91,8 +91,8 @@ export default defineComponent ({
     markWizard() {},
     saveData() {
       this.saveReferral
-      // resetPatientData();
-      // this.$router.push("ANCHome");
+      resetPatientData();
+      this.$router.push("ANCHome");
     },
     async buildReferral() {
        return [
@@ -111,7 +111,7 @@ export default defineComponent ({
           if (!patientStatus) return toastWarning("Unable to create patient referral details!");
           toastSuccess("Referral details have been created");
         }
-        // this.$router.push("ANCHome");
+        this.$router.push("ANCHome");
 
 
       console.log(await this.buildReferral());
