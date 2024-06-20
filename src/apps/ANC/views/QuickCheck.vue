@@ -39,7 +39,7 @@ import {
     AccordionGroupCustomEvent,
 } from "@ionic/vue";
 
-import BasicFooter from "@/components/BasicFooter.vue";
+
 import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
@@ -90,7 +90,6 @@ export default defineComponent({
         IonContent,
         IonHeader,
         IonMenuButton,
-        BasicFooter,
         IonPage,
         IonTitle,
         IonToolbar,

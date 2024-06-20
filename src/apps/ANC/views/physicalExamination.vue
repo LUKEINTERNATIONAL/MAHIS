@@ -65,7 +65,6 @@ import { useFetalAssessment } from "../store/physical exam/FetalAssessmentStore"
 import { useFetalPresentationStore } from "../store/physical exam/FetalPresantationStore";
 import { usePresentingSigns } from "../store/physical exam/PresentingSignsStore";
 import { resetPatientData } from "@/services/reset_data";
-import BasicFooter from "@/components/BasicFooter.vue";
 export default defineComponent({
     name: "PhysicalExam",
     components: {
@@ -73,7 +72,6 @@ export default defineComponent({
         IonContent,
         IonHeader,
         IonMenuButton,
-        BasicFooter,
         IonPage,
         IonTitle,
         IonToolbar,
