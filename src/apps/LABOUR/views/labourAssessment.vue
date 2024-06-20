@@ -7,10 +7,10 @@
                 stepperTitle="Labour assessment"
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
-                @finishBtn="saveData()"
                 :StepperData="StepperData"
             />
         </ion-content>
+      <BasicFooter @finishBtn="saveData()" />
     </ion-page>
 </template>
 
@@ -55,10 +55,12 @@ import { formatCheckBoxData, formatInputFiledData, formatRadioButtonData } from 
 import { Service } from "@/services/service";
 import {QuickCheckInstance,PhysicalExamInstance, VaginalExamInstance, PelvicAssessmentInstance } from '@/apps/LABOUR/services/labour_assesment_service';
 import { resetPatientData } from "@/services/reset_data";
+import BasicFooter from "@/components/BasicFooter.vue";
 
 export default defineComponent({
     name: "obstetricDetails",
     components: {
+      BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,

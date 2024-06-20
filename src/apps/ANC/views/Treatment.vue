@@ -7,11 +7,10 @@
                 stepperTitle="Treament and Diagnosis"
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
-                @finishBtn="saveData()"
                 :StepperData="StepperData"
             />
         </ion-content>
-        <BasicFooter @finishBtn="saveData()" />
+      <BasicFooter @finishBtn="saveData()" />
     </ion-page>
 </template>
 <script lang="ts">
@@ -47,6 +46,7 @@ import { resetPatientData } from "@/services/reset_data";
 export default defineComponent({
     name: "Treatment",
     components: {
+      BasicFooter,
         IonContent,
         IonHeader,
         IonItem,

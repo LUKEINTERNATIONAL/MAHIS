@@ -7,10 +7,10 @@
                 stepperTitle="Obstetric Details"
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
-                @finishBtn="saveData()"
                 :StepperData="StepperData"
             />
         </ion-content>
+      <BasicFooter @finishBtn="saveData()" />
     </ion-page>
 </template>
 
@@ -46,10 +46,12 @@ import Stepper from "@/components/Stepper.vue";
 import { mapState } from "pinia";
 import { getCheckboxSelectedValue } from "@/services/data_helpers";
 import { resetPatientData } from "@/services/reset_data";
+import BasicFooter from "@/components/BasicFooter.vue";
 
 export default defineComponent({
     name: "obstetricDetails",
     components: {
+      BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,

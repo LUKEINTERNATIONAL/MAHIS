@@ -7,10 +7,11 @@
                 stepperTitle="Counselling"
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
-                @finishBtn="saveData()"
                 :StepperData="StepperData"
             />
         </ion-content>
+      <BasicFooter @finishBtn="saveData()" />
+
     </ion-page>
 </template>
 
@@ -62,9 +63,11 @@ import {formatCheckBoxData, formatInputFiledData, formatRadioButtonData} from "@
 import {PhysiologicalCounsellingService} from "@/apps/ANC/service/physiological_counselling_service";
 import {DietCounsellingService} from "@/apps/ANC/service/diet_counselling_service";
 import { resetPatientData } from "@/services/reset_data";
+import BasicFooter from "@/components/BasicFooter.vue";
 export default defineComponent({
     name: "Home",
     components: {
+      BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,

@@ -3,8 +3,10 @@
     <Toolbar/>
     <ion-content :fullscreen="true">
       <DemographicBar />
-      <Stepper stepper-title="End labour and delivery" :wizardData="wizardData" @updateStatus="markWizard" @finishBtn="saveData()" :StepperData="StepperData"/>
+      <Stepper stepper-title="End labour and delivery" :wizardData="wizardData" @updateStatus="markWizard"  :StepperData="StepperData"/>
     </ion-content>
+    <BasicFooter @finishBtn="saveData()" />
+
   </ion-page>
 </template>
 
@@ -28,12 +30,14 @@ import { chevronBackOutline, checkmark } from 'ionicons/icons';
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import end from "@/apps/LABOUR/components/repeatable things/end.vue";
+import BasicFooter from "@/components/BasicFooter.vue";
 
 
 
 export default defineComponent ({
   name : 'end',
   components : {
+    BasicFooter,
     IonContent,
     IonHeader,
     IonItem,

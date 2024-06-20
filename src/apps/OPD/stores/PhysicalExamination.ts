@@ -1296,7 +1296,7 @@ const initialPhysicalExam = [
 
     {
         classDash: "dashed_bottom_border",
-        childName: "Other abdominal auscultation abnormality",
+        childName: "Other",
         sideColSize: 1,
         data: {
             rowData: [
@@ -1457,7 +1457,7 @@ const initialPhysicalExam = [
     },
 
     {
-        childName: "Other abdominal masses",
+        childName: "Other masses",
         classDash: "dashed_bottom_border",
         sideColSize: 1,
         data: {
@@ -1971,5 +1971,5 @@ export const usePhysicalExaminationStore = defineStore("physicalOPDExamStore", {
             return [...data]; // Return a copy of the initial state
         },
     },
-    // persist: true,
+    persist: true,
 });
