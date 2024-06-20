@@ -121,7 +121,6 @@ export default defineComponent({
     onMounted(async () => {
       await fetchUserData();
     });
-
     async function fetchUserData() {
       const user = await UserService.getCurrentUser();
       if (user) {
