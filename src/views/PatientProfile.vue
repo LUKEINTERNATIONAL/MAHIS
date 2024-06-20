@@ -6,48 +6,86 @@
             <PatientProfile v-if="activeProgramID == 33" />
             <div class="content_manager" v-if="activeProgramID !== 33 && activeProgramID != ''">
                 <ion-row class="content_width">
-                    <ion-col size="3" size-lg="3" size-md="4" class="displayNoneMobile">
+                    <ion-col size="2.5" size-lg="2.6" size-md="3" class="displayNoneMobile">
                         <ion-card style="margin-bottom: 20px; background-color: #fff">
-                            <div class="p_name_image">
-                                <div class="first_letter">
-                                    {{ demographics?.name.charAt(0) }}
-                                </div>
-                                <div class="p_name">{{ demographics?.name }}</div>
-                            </div>
                             <ion-card-content>
+                                <div class="p_name_image">
+                                    <div :class="demographics.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'" @click="openPIM()">
+                                        <ion-icon style="color: #fff; font-size: 70px" :icon="person"></ion-icon>
+                                    </div>
+                                    <div style="width: 100%">
+                                        <div style="display: flex; justify-content: end; height: 20px; top: -10px; position: relative">
+                                            <DynamicButton name="Edit" fill="clear" iconSlot="start" :icon="iconsContent.editFade" />
+                                        </div>
+                                        <div class="p_name">{{ demographics?.name }}</div>
+                                    </div>
+                                </div>
                                 <ion-row>
-                                    <ion-col size="4">MRN</ion-col>
-                                    <ion-col>{{ demographics?.mrn }}</ion-col>
+                                    <ion-col size="4">MRN:</ion-col>
+                                    <ion-col class="demoContent">{{ demographics?.mrn }}</ion-col>
                                 </ion-row>
                                 <ion-row>
-                                    <ion-col size="4">Gendar</ion-col>
-                                    <ion-col>{{ covertGender(demographics?.gender) }}</ion-col>
+                                    <ion-col size="4">Gendar:</ion-col>
+                                    <ion-col class="demoContent">{{ covertGender(demographics?.gender) }}</ion-col>
                                 </ion-row>
                                 <ion-row>
-                                    <ion-col size="4">Age</ion-col>
-                                    <ion-col>{{ formatBirthdate() }}</ion-col>
+                                    <ion-col size="4">Age:</ion-col>
+                                    <ion-col class="demoContent">{{ formatBirthdate() }}</ion-col>
                                 </ion-row>
                                 <ion-row>
-                                    <ion-col size="4">Allergies</ion-col>
-                                    <ion-col size="8">
-                                        <span v-for="(item, index) in selectedMedicalAllergiesList" :key="index">
-                                            <span class="allergies" v-if="item.selected">{{ item.name }}</span>
-                                        </span>
-                                    </ion-col>
+                                    <ion-col size="4">Address:</ion-col>
+                                    <ion-col class="demoContent">{{ covertGender(demographics?.address) }}</ion-col>
                                 </ion-row>
                             </ion-card-content>
                         </ion-card>
+                        <div style="margin-left: 10px">
+                            <DynamicButton
+                                class=""
+                                style="margin-bottom: 5px; width: 96%; height: 45px"
+                                @click="setProgram(btn)"
+                                v-for="(btn, index) in programBtn"
+                                :key="index"
+                                :name="btn.actionName"
+                                :fill="activeProgramID != btn.program_id ? 'outline' : 'solid'"
+                                :color="activeProgramID == btn.program_id ? 'success' : ''"
+                            />
+                        </div>
 
-                        <ion-card
-                            class="start_new_co"
-                            style="margin-bottom: 20px"
-                            @click="setProgram(btn)"
-                            v-for="(btn, index) in programBtn"
-                            :key="index"
-                        >
-                            {{ btn.actionName }}
+                        <ion-card style="margin-bottom: 20px; background-color: #fff">
+                            <ion-accordion-group :value="['first']">
+                                <ion-accordion value="first" style="background-color: #fff" toggle-icon-slot="start">
+                                    <ion-item slot="header" color="white">
+                                        <ion-label class="side_title">Alerts & Reminders </ion-label>
+                                    </ion-item>
+                                    <ion-card-content slot="content">
+                                        <span v-for="(al, index3) in alerts" :key="index3">
+                                            <ion-row
+                                                v-if="al.value"
+                                                :style="
+                                                    'border-radius: 5px;  margin-top:10px; margin-bottom:10px;background-color:' + al.backgroundColor
+                                                "
+                                            >
+                                                <div style="display: flex">
+                                                    <div style="align-items: center; display: flex; margin: 10px">
+                                                        <ion-icon slot="start" :icon="al.icon" aria-hidden="true"></ion-icon>
+                                                    </div>
+                                                    <div>
+                                                        <div class="position_content alert_content">
+                                                            <span :style="'color:' + al.textColor + '; font-weight:600; margin: 0px 2px; width:100%'">
+                                                                {{ al.index }}</span
+                                                            >
+                                                        </div>
+                                                        <div class="position_content bottom_text" :style="'color:' + al.textColor + ';'">
+                                                            {{ al.value }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </ion-row>
+                                        </span>
+                                    </ion-card-content>
+                                </ion-accordion>
+                            </ion-accordion-group>
                         </ion-card>
-
                         <ion-card style="margin-bottom: 20px; background-color: #fff">
                             <ion-accordion-group :value="['first']">
                                 <ion-accordion value="first" style="background-color: #fff" toggle-icon-slot="start">
@@ -98,8 +136,8 @@
                             </ion-accordion-group>
                         </ion-card>
                     </ion-col>
-                    <ion-col size-sm="12" size-md="8" size-lg="9">
-                        <ion-card style="background-color: #fff">
+                    <ion-col size-sm="12" size-md="12" size-lg="9.4">
+                        <ion-card style="background-color: #fff; margin-inline: 0px">
                             <div style="display: flex; justify-content: space-between">
                                 <div class="vitalsTitle">Most recent Vitals & Biometrics</div>
                                 <div class="dateClass">Todays Date: 06 Jul 2024</div>
@@ -127,9 +165,6 @@
                             <ion-segment value="custom">
                                 <ion-segment-button value="custom">
                                     <ion-label>Patient Summary</ion-label>
-                                </ion-segment-button>
-                                <ion-segment-button value="segment">
-                                    <ion-label>Programs</ion-label>
                                 </ion-segment-button>
                                 <ion-segment-button value="Visits History">
                                     <ion-label>Visits History</ion-label>
@@ -168,6 +203,9 @@
                                         <ion-label>Notes</ion-label>
                                     </ion-segment-button>
                                 </ion-segment>
+                            </div>
+                            <div class="bottomSummaryContent">
+                                <MedicationsGrid />
                             </div>
                         </div>
                     </ion-col>
@@ -266,6 +304,9 @@ import DynamicButton from "@/components/DynamicButton.vue";
 import PatientProfile from "@/apps/Immunization/components/PatientProfile.vue";
 import WeightHeightChart from "@/apps/Immunization/components/Graphs/WeightHeightChart.vue";
 import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
+import personalInformationModal from "@/apps/Immunization/components/Modals/personalInformationModal.vue";
+import { iconBMI } from "@/utils/SvgDynamicColor";
+import { createModal } from "@/utils/Alerts";
 export default defineComponent({
     components: {
         WeightHeightChart,
@@ -315,6 +356,13 @@ export default defineComponent({
             NCDUserAction: [] as any,
             activeProgramID: "" as any,
             programBtn: {} as any,
+            alerts: [] as any,
+            colors: {
+                Low: ["#B9E6FE", "#026AA2", "#9ADBFE"],
+                Normal: ["#DDEEDD", "#016302", "#BBDDBC"],
+                PreHigh: ["#FEDF89", "#B54708", "#FED667"],
+                High: ["#FECDCA", "#B42318", "#FDA19B"],
+            } as any,
         };
     },
     computed: {
@@ -330,6 +378,7 @@ export default defineComponent({
         await UserService.setProgramUserActions();
         this.setNCDValue();
         this.setActiveProgram();
+        this.setAlerts();
     },
     watch: {
         demographics: {
@@ -366,6 +415,40 @@ export default defineComponent({
     },
 
     methods: {
+        setAlerts() {
+            this.alerts = [
+                {
+                    backgroundColor: "#B9E6FE",
+                    status: "",
+                    icon: iconBMI(["#B9E6FE", "#026AA2", "#9ADBFE"]),
+                    textColor: "#026AA2",
+                    value: "No further action is required.",
+                    name: "",
+                    index: "Blood sugar is normal",
+                },
+                {
+                    backgroundColor: "#FEDF89",
+                    status: "",
+                    icon: iconBMI(["#FEDF89", "#B54708", "#FED667"]),
+                    textColor: "#B54708",
+                    value: "Please call or follow up!",
+                    name: "",
+                    index: "Patient Defaulted",
+                },
+                {
+                    backgroundColor: "#FECDCA",
+                    status: "",
+                    icon: iconBMI(["#FECDCA", "#B42318", "#FDA19B"]),
+                    textColor: "#B42318",
+                    value: "Administer medications!",
+                    name: "",
+                    index: "Patient is hypertensive",
+                },
+            ];
+        },
+        openPIM() {
+            createModal(personalInformationModal, { class: "otherVitalsModal" });
+        },
         setProgram(program: any) {
             sessionStorage.setItem("app", JSON.stringify({ programID: program.program_id, applicationName: program.name }));
             this.setActiveProgram();
@@ -390,6 +473,7 @@ export default defineComponent({
         },
         async setNCDValue() {
             this.programBtn = await UserService.userProgramData();
+            console;
         },
         setOPDValue() {
             sessionStorage.setItem("app", JSON.stringify({ programID: 14, applicationName: "OPD" }));
@@ -469,7 +553,7 @@ export default defineComponent({
 .vitalsValue {
     font-style: normal;
     font-weight: 600;
-    font-size: 25px;
+    font-size: 30px;
     display: flex;
     align-items: center;
     color: #00190e;
@@ -559,17 +643,15 @@ ion-item[slot="header"] {
 }
 .p_name_image {
     font-size: 24px;
-    padding: 0px;
-    margin-left: 15px;
     color: #00190e;
     display: flex;
     font-weight: 700;
-    height: 64px;
-    margin-top: 15px;
     overflow: hidden;
 }
 .p_name {
-    max-width: 180px;
+    max-width: 210px;
+    margin-left: 20px;
+    height: 25px;
 }
 .p_dash_header {
     display: flex;
@@ -641,6 +723,9 @@ ion-item[slot="header"] {
     margin-bottom: 5px;
 }
 
+.segment-button-checked {
+    background: #ddeedd !important;
+}
 ion-segment-button {
     background: #fff;
     margin-right: 1px;
@@ -664,5 +749,38 @@ ion-segment-button {
     font-style: normal;
     font-weight: 700;
     font-size: 12px;
+}
+.bottomSummaryContent {
+    background: #fff;
+}
+.initialsBox {
+    min-width: 85px;
+    height: 90px;
+    left: 31px;
+    top: 122px;
+    align-items: center;
+    border-radius: 10px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+.maleColor {
+    background: #5983ba;
+}
+.femaleColor {
+    background: #876d9b;
+}
+.demoContent {
+    font-weight: 700;
+}
+.alert_content {
+    padding: 10px;
+    padding-bottom: 0px;
+    width: 100%;
+}
+.bottom_text {
+    padding-bottom: 10px;
+    width: 100%;
 }
 </style>

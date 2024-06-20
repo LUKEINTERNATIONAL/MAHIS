@@ -505,3 +505,12 @@ ion-modal {
 #cbtn {
     --background: #b42318;
 }
+ion-button {
+    --border-width: 1px;
+}
+.alert_content {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
