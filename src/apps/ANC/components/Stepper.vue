@@ -118,7 +118,7 @@ import AncEnd from "@/apps/ANC/components/ancEnd/AncEnd.vue";
 import { createModal } from "@/utils/Alerts";
 import { icons } from "@/utils/svg";
 import DynamicButton from "@/components/DynamicButton.vue";
-import Vitals from "@/apps/ANC/components/physical exam/Vitals.vue";
+import ANCVitals from "@/apps/ANC/components/physical exam/ANCVitals.vue";
 import PastObstetricHistory from "@/apps/ANC/components/profile/PastObstreticHistory.vue";
 import HeadAssessment from "@/apps/ANC/components/others/headAssessment.vue";
 import ANCDiagnosis from "@/apps/ANC/components/ANCtreatment/ANCDiagnosis.vue";
@@ -151,7 +151,7 @@ export default defineComponent({
         DynamicButton,
         IonItem,
         IonLabel,
-        Vitals,
+        ANCVitals,
         Diagnosis,
         ComplicationsScreening,
         ConfirmDiagnosis,

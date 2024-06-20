@@ -84,18 +84,9 @@
                   </ion-list>
                 </div>
               </ion-accordion>
-              <ion-accordion value="second">
-                <ion-item slot="header">
-                  <ion-label>User Management</ion-label>
-                </ion-item>
-                <div class="content" slot="content">
-                  <ion-list>
-                    <ion-item class="list-bottom" @click="navigationMenu('users')" value="users">
-                    Manage users
-                    </ion-item>
-                  </ion-list>
-                </div>
-              </ion-accordion>
+              <ion-item button @click="navigationMenu('users')" color="light">
+                <ion-label>User Management</ion-label>
+              </ion-item>
             </ion-accordion-group>
           </div>
         </ion-accordion>
@@ -106,8 +97,9 @@
 
 <script lang="ts">
 import { IonAccordion, IonAccordionGroup, IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController } from "@ionic/vue";
-import { defineComponent, ref, computed, onMounted } from "vue";
+import {defineComponent, ref, computed, onMounted, onUpdated} from "vue";
 import { UserService } from "@/services/user_service";
+import {useRouter} from "vue-router";
 
 export default defineComponent({
   name: "Menu",
@@ -123,6 +115,7 @@ export default defineComponent({
     IonToolbar,
   },
   setup() {
+    const router = useRouter();
     const user_data = ref<any>(null);
 
     onMounted(async () => {
@@ -135,14 +128,17 @@ export default defineComponent({
         user_data.value = user;
       }
     }
-
     const isSuperuser = computed(() => {
       return user_data.value?.roles.some((role: any) => role.role === 'Superuser');
     });
 
     function navigationMenu(url: string) {
       menuController.close();
-      this.$router.push(url);
+      router.push(url).then(() => {
+        if (url === 'users') {
+          router.go(0);
+        }
+      });
     }
 
     return {
