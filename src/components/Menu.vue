@@ -24,8 +24,8 @@
                                 </ion-item>
                                 <div class="content" slot="content">
                                     <ion-list>
-                                        <ion-item @click="navigationMenu('setSessionDate')" class="list-content">MoH</ion-item>
-                                        <ion-item @click="navigationMenu('report')" class="list-content">Clinical Reports</ion-item>
+                                        <ion-item style="cursor: pointer;" @click="navigationMenu('MoHReports')" class="list-content">MoH</ion-item>
+                                        <ion-item style="cursor: pointer;" @click="navigationMenu('ClinicalReports')" class="list-content">Clinical Reports</ion-item>
                                     </ion-list>
                                 </div>
                             </ion-accordion>

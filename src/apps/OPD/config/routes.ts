@@ -4,7 +4,6 @@ import Dispensations from '../views/dispensation.vue'
 import Enrollment from "../views/Enrollment.vue";
 import Pharmacy from '../components/Pharmacy.vue'
 
-import reports from "@/apps/OPD/views/reports.vue";
 import ClinicCasesSeen from "../components/reports/clinic/ClinicCasesSeen.vue";
 import ClinicRegistrationReport from "../components/reports/clinic/ClinicRegistrationReport.vue";
 import Diagnosis from "../components/reports/clinic/Diagnosis.vue";
@@ -17,6 +16,11 @@ import IDSRMonthly from "../components/reports/moh/IDSR/IDSRMonthly.vue";
 import IDSRWeekly from "../components/reports/moh/IDSR/IDSRWeekly.vue";
 import HMIS15 from "../components/reports/moh/HMIS/HMIS15.vue";
 import HMIS17 from "../components/reports/moh/HMIS/HMIS17.vue";
+import ClinicWithNIDsReport from "../components/reports/clinic/ClinicWithNIDsReport.vue";
+import malaria_report from "../components/reports/moh/malaria_report.vue";
+
+import MoHReports from "../views/MoHReports.vue";
+import ClinicalReports from "../views/ClinicalReports.vue";
 import { Component } from "ionicons/dist/types/stencil-public-runtime";
 export default [
     {
@@ -45,39 +49,43 @@ export default [
         component: Pharmacy
     },
     {
-        path: '/reports',
-        name: 'Reports',
-        component: reports
-    },
-
-    {
         path: '/IDSRWeekly',
-        name: 'IDSRWeekly',
+        name: 'idsr_weekly',
         component: IDSRWeekly
     },
     {
         path: '/IDSRMonthly',
-        name: 'IDSRMonthly',
+        name: 'idsr_monthly',
         component: IDSRMonthly,
     },
     {
         path: '/HMIS15',
-        name: 'HMIS15',
+        name: 'hmis_15',
         component: HMIS15,
     },
     {
         path: '/HMIS17',
-        name: 'HMIS17',
+        name: 'hmis_17',
         component: HMIS17,
     },
     {
+        path: '/ClinicWithNIDsReport',
+        name: 'clinic_with_nids',
+        component: ClinicWithNIDsReport,
+    },
+    {
+        path: '/malaria_report',
+        name: 'moh_malaria',
+        component: malaria_report,
+    },
+    {
         path: '/ClinicCasesSeen',
-        name: 'ClinicCasesSeen',
+        name: 'clinic_cases_seen',
         component: ClinicCasesSeen,
     },
     {
         path: '/ClinicRegistrationReport',
-        name: 'ClinicRegistrationReport',
+        name: 'clinic_registration',
         component: ClinicRegistrationReport
     },
     {
@@ -87,22 +95,32 @@ export default [
     },
     {
         path: '/DiagnosisByAddress',
-        name: 'DiagnosisByAddress',
+        name: 'clinic_diagnosis_by_address',
         component: DiagnosisByAddress
     },
     {
         path: '/DrugsReport',
-        name: 'DrugsReport',
+        name: 'clinic_drugs_given',
         component: DrugsReport
     },
     {
         path: '/LaReport',
-        name: 'LaReport',
+        name: 'clinic_la',
         component: LaReport
     },
     {
         path: '/MentalHealth',
-        name: 'MentalHealth',
+        name: 'clinic_mental_health',
         component: MentalHealth
+    },
+    {
+        path: '/MoHReports',
+        name: 'MoHReports',
+        component: MoHReports
+    },
+    {
+        path: '/ClinicalReports',
+        name: 'ClinicalReports',
+        component: ClinicalReports
     },
 ];

@@ -1,31 +1,40 @@
 <template>
-    <ion-grid> 
-        <ion-row>
-            <ion-col 
-                v-for="(item, index) in viewableItems" 
-                :key="index"
-                size-lg="4"
-                size-sm="12"
-                >
-                <task-card
-                    @click="onClick(item)"
-                    :title="item.name"
-                    :icon="itemIcon(item)"
-                >
-                </task-card>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+    <ion-page>
+        <Toolbar />
+        <ion-content :fullscreen="true">
+            <ion-grid style="margin-top: 30px; margin-left: 8%; margin-right: 8%;"> 
+                <ion-row>
+                    <ion-col 
+                        v-for="(item, index) in viewableItems" 
+                        
+                        :key="index"
+                        size-lg="4"
+                        size-sm="12"
+                        >
+                        <task-card
+                            @click="onClick(item)"
+                            :title="item.name"
+                            :icon="itemIcon(item)"
+                        >
+                        </task-card>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-content>
+    </ion-page>
 </template>
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import TaskCard from "@/components/DataViews/TaskCard.vue";
+import Toolbar from '@/components/Toolbar.vue'
 import { FolderInterface } from "@/apps/interfaces/AppInterface"
 import img from '@/utils/Img'
 import {
     IonGrid,
     IonRow,
-    IonCol
+    IonCol,
+    IonPage,
+    IonContent,
 } from "@ionic/vue";
 import { arrowBack } from 'ionicons/icons';
 // import Store from "@/composables/ApiStore"
@@ -43,7 +52,10 @@ export default defineComponent({
         TaskCard,
         IonGrid,
         IonRow,
-        IonCol
+        IonCol,
+        IonPage,
+        IonContent,
+        Toolbar,
     },
     props: {
         resetList: {
@@ -56,9 +68,12 @@ export default defineComponent({
         }
     },
     data: () => ({
-        defaultIcon: 'sys-setting.png' as string,
+        defaultIcon: '../../../../public/images/reports.png' as string,
         viewableItems: REPORTS as any
     }),
+    mounted() {
+        this.setItems(REPORTS[0].files)
+    },
     watch: {
         resetList: {
             handler() {
@@ -98,6 +113,7 @@ export default defineComponent({
             return (await Promise.all(verified)).filter((i: any) => i.canShow)
         },
         async onClick(item: any){
+            console.log(item)
             if (item.pathUrl) {
                 this.$router.push(item.pathUrl)
             } else if (typeof item.action === 'function') {
