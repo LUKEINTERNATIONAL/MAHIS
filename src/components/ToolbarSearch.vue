@@ -278,6 +278,7 @@ export default defineComponent({
             this.popoverOpen = true;
         },
         openCheckPaitentNationalIDModal() {
+            this.popoverOpen=false;
             resetPatientData();
             createModal(CheckPatientNationalID, { class: "nationalIDModal" });
         },
