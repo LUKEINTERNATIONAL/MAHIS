@@ -37,8 +37,9 @@
                 <ion-col style="max-width: 150px; min-width: 150px">{{ getPhone(item) }}</ion-col>
                 <ion-col style="max-width: 25px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
             </ion-row>
-
-            <Pagination :disablePrevious="page-1 == 0" :disableNext="patients.length < paginationSize" :page="page" :onClickNext="nextPage" :onClickPrevious="previousPage" />
+        <ion-row class="ion-justify-content-start ion-align-items-center">
+              <Pagination :disablePrevious="page-1 == 0" :disableNext="patients.length < paginationSize" :page="page" :onClickNext="nextPage" :onClickPrevious="previousPage" />
+        </ion-row>
 
             <ion-row class="sticky-column">
                 <ion-col size="4" class="sticky-column">
@@ -278,6 +279,7 @@ export default defineComponent({
             this.popoverOpen = true;
         },
         openCheckPaitentNationalIDModal() {
+            this.popoverOpen=false;
             resetPatientData();
             createModal(CheckPatientNationalID, { class: "nationalIDModal" });
         },
@@ -456,6 +458,13 @@ ion-popover {
         top: 47%;
         opacity: 0;
     }
+}
+
+@media (max-width: 1024px) {
+  .medium {
+    display: flex;
+    justify-content: start;
+  }
 }
 </style>
 <style>
