@@ -43,6 +43,7 @@
 
             <ion-row class="sticky-column">
                 <ion-col size="4" class="sticky-column">
+                    
                     <DynButton :icon="add" :name="'Add Patient'" :fill="'clear'" @click="openCheckPaitentNationalIDModal" />
                     <div>
                         <img id="hand" src="../../public/images/hand.svg" />
@@ -113,7 +114,7 @@ export default defineComponent({
         Pagination,
     },
     setup() {
-        return { checkmark };
+        return { checkmark, add };
     },
     data() {
         return {
