@@ -37,9 +37,15 @@
                 <ion-col style="max-width: 150px; min-width: 150px">{{ getPhone(item) }}</ion-col>
                 <ion-col style="max-width: 25px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
             </ion-row>
-        <ion-row class="ion-justify-content-start ion-align-items-center">
-              <Pagination :disablePrevious="page-1 == 0" :disableNext="patients.length < paginationSize" :page="page" :onClickNext="nextPage" :onClickPrevious="previousPage" />
-        </ion-row>
+            <ion-row class="ion-justify-content-start ion-align-items-center">
+                <Pagination
+                    :disablePrevious="page - 1 == 0"
+                    :disableNext="patients.length < paginationSize"
+                    :page="page"
+                    :onClickNext="nextPage"
+                    :onClickPrevious="previousPage"
+                />
+            </ion-row>
 
             <ion-row class="sticky-column">
                 <ion-col size="4" class="sticky-column">
@@ -94,7 +100,6 @@ import { Service } from "@/services/service";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import Pagination from "./Pagination.vue";
 
-
 export default defineComponent({
     name: "Home",
     components: {
@@ -113,7 +118,7 @@ export default defineComponent({
         Pagination,
     },
     setup() {
-        return { checkmark };
+        return { checkmark, add };
     },
     data() {
         return {
@@ -121,9 +126,9 @@ export default defineComponent({
             event: null,
             patients: [] as any,
             showPopover: true,
-            page:1,
-            searchText:"",
-            paginationSize:7
+            page: 1,
+            searchText: "",
+            paginationSize: 7,
         };
     },
     computed: {
@@ -220,7 +225,7 @@ export default defineComponent({
                 .join(", ");
         },
         async openNewPage(url: any, item: any) {
-            this.popoverOpen=false;
+            this.popoverOpen = false;
             const demographicsStore = useDemographicsStore();
             demographicsStore.setPatient(item);
             demographicsStore.setDemographics({
@@ -279,28 +284,28 @@ export default defineComponent({
             this.popoverOpen = true;
         },
         openCheckPaitentNationalIDModal() {
-            this.popoverOpen=false;
+            this.popoverOpen = false;
             resetPatientData();
             createModal(CheckPatientNationalID, { class: "nationalIDModal" });
         },
         onDismiss() {
             console.log("Popover dismissed");
         },
-        nextPage(){
+        nextPage() {
             this.page++;
         },
-        previousPage(){
+        previousPage() {
             this.page--;
-        }
+        },
     },
-    watch:{
-        page(){
+    watch: {
+        page() {
             this.searchDemographicPayload(this.searchText);
         },
-        searchText(){
+        searchText() {
             this.page = 1;
-        }
-    }
+        },
+    },
 });
 </script>
 
@@ -461,10 +466,10 @@ ion-popover {
 }
 
 @media (max-width: 1024px) {
-  .medium {
-    display: flex;
-    justify-content: start;
-  }
+    .medium {
+        display: flex;
+        justify-content: start;
+    }
 }
 </style>
 <style>
