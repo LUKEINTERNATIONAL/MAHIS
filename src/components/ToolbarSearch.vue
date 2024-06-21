@@ -123,7 +123,8 @@ export default defineComponent({
             showPopover: true,
             page:1,
             searchText:"",
-            paginationSize:7
+            paginationSize:7,
+             add,
         };
     },
     computed: {
