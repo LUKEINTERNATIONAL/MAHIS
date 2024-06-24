@@ -50,7 +50,7 @@
         </div>
         <div class="graphSection">
             <div>
-                <WeightHeightChart v-if="isChild()" />
+                <WeightHeightChart :showHeightWeight="true" v-if="isChild()" />
                 <PreviousVitals v-if="!isChild()" />
             </div>
 

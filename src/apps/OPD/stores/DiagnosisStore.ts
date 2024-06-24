@@ -26,7 +26,7 @@ const initialOPDdiagnosis = [
                             // colSize: 0,
                         },
                         {
-                            inputHeader: "Differential Diagnosis",
+                            inputHeader: "Secondary Diagnosis",
                             icon: icons.search,
                             isMultiSelect: true,
                             popOver: true,

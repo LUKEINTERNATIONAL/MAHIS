@@ -1,5 +1,10 @@
 <template>
     <ion-page>
+      <!-- Spinner -->
+      <div v-if="isLoading" class="spinner-overlay">
+        <ion-spinner name="bubbles"></ion-spinner>
+        <div class="loading-text">Please wait...</div>
+      </div>
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
@@ -128,6 +133,8 @@ export default defineComponent({
             StepperData: [] as any,
             isOpen: false,
             iconsContent: icons,
+            isLoading: false,
+
         };
     },
     computed: {
@@ -140,7 +147,7 @@ export default defineComponent({
         ...mapState(useOPDDiagnosisStore, ["OPDdiagnosis"]),
         ...mapState(usePhysicalExaminationStore, ["physicalExam"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
-        ...mapState(useLevelOfConsciousnessStore, ["levelOfConsciousness", "levelOfConsciousnessMinor"]),
+        ...mapState(useLevelOfConsciousnessStore, ["adult", "minor"]),
         ...mapState(useGeneralStore, ["OPDActivities"]),
     },
     async created() {
@@ -309,33 +316,40 @@ export default defineComponent({
                 return item?.data[0] || item?.data;
             });
         },
-        async saveData() {
-            const obs = await ObservationService.getAll(this.demographics.patient_id, "Presenting complaint");
-            let filteredArray = [];
-            if (obs) {
-                filteredArray = await obs.filter((obj: any) => {
-                    return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.obs_datetime);
-                });
-            }
-            if (this.presentingComplaints[0].selectedData.length > 0 || filteredArray.length > 0) {
-                await this.saveDiagnosis();
-                await this.saveTreatmentPlan();
-                await this.saveOutComeStatus();
-                await this.saveWomenStatus();
-                await this.savePresentingComplaints();
-                await this.savePastMedicalHistory();
-                await this.saveConsciousness();
-                await this.savePhysicalExam();
-                resetOPDPatientData();
-                if (this.userRole == "Lab") {
-                    this.$router.push("home");
-                } else {
-                    this.$router.push("patientProfile");
-                }
+      async saveData() {
+        this.isLoading = true;
+        try {
+          const obs = await ObservationService.getAll(this.demographics.patient_id, "Presenting complaint");
+          let filteredArray = [];
+          if (obs) {
+            filteredArray = obs.filter((obj:any) => {
+              return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.obs_datetime);
+            });
+          }
+          if (this.presentingComplaints[0].selectedData.length > 0 || filteredArray.length > 0) {
+            await this.saveDiagnosis();
+            await this.saveTreatmentPlan();
+            await this.saveOutComeStatus();
+            await this.saveWomenStatus();
+            await this.savePresentingComplaints();
+            await this.savePastMedicalHistory();
+            await this.saveConsciousness();
+            await this.savePhysicalExam();
+            resetOPDPatientData();
+            if (this.userRole == "Lab") {
+              this.$router.push("home");
             } else {
-                toastWarning("Patient complaints is required");
+              this.$router.push("patientProfile");
             }
-        },
+          } else {
+            toastWarning("Patient complaints are required");
+          }
+        } catch (error) {
+          console.error("Error in saveData: ", error);
+        } finally {
+          this.isLoading = false;
+        }
+      },
         async savePastMedicalHistory() {
             const pastMedicalHistoryData: any = await this.buildPastMedicalHistory();
             const userID: any = Service.getUserID();
@@ -500,7 +514,7 @@ export default defineComponent({
             ];
         },
         async saveConsciousness() {
-            const data = await formatRadioButtonData(this.levelOfConsciousness);
+            const data = await formatRadioButtonData(this.adult);
             if (data.length > 0) {
                 const userID: any = Service.getUserID();
                 const consciousness = new ConsciousnessService(this.demographics.patient_id, userID);
@@ -512,9 +526,9 @@ export default defineComponent({
                 let data;
 
                 if (patientAge < 18) {
-                    data = await formatRadioButtonData(this.levelOfConsciousnessMinor);
+                    data = await formatRadioButtonData(this.minor);
                 } else {
-                    data = await formatRadioButtonData(this.levelOfConsciousness);
+                    data = await formatRadioButtonData(this.adult);
                 }
                 await consciousness.saveObservationList(data);
             }
@@ -530,4 +544,32 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.spinner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.5);
+  z-index: 9999;
+}
+
+ion-spinner {
+  width: 80px;
+  height: 80px;
+}
+
+.loading-text {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #333;
+}
+
+.loading {
+  pointer-events: none;
+}
+</style>

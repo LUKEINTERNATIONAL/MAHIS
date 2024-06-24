@@ -1,5 +1,10 @@
 <template>
     <ion-page>
+      <!-- Spinner -->
+      <div v-if="isLoading" class="spinner-overlay">
+        <ion-spinner name="bubbles"></ion-spinner>
+        <div class="loading-text">Please wait...</div>
+      </div>
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
@@ -88,6 +93,7 @@ export default defineComponent({
     },
     data() {
         return {
+          isLoading:false,
             hasValidationErrors: [] as any,
             dispositions: "" as any,
             actionBtn: "" as any,
@@ -161,21 +167,29 @@ export default defineComponent({
                 this.wizardData[0].checked = false;
             }
         },
-        async saveData() {
-            if (this.actionBtn != "Finish") {
-                if (this.vitals.validationStatus) {
-                    await this.saveVitals();
-                    resetOPDPatientData();
-                    this.$router.push("OPDConsultationPlan");
-                } else {
-                    await this.validaterowData();
-                    toastWarning("Please fill all required fields");
-                }
+      async saveData() {
+        this.isLoading = true;
+        try {
+          if (this.actionBtn != "Finish") {
+            if (this.vitals.validationStatus) {
+              await this.saveVitals();
+              resetOPDPatientData();
+              this.$router.push("OPDConsultationPlan");
             } else {
-                this.$router.push("OPDConsultationPlan");
+              await this.validaterowData();
+              toastWarning("Please fill all required fields");
             }
-        },
-        async saveVitals() {
+          } else {
+            this.$router.push("OPDConsultationPlan");
+          }
+        } catch (error) {
+          console.error("Error in saveData: ", error);
+        } finally {
+          this.isLoading = false;
+        }
+      },
+
+      async saveVitals() {
             const userID: any = Service.getUserID();
             const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
             await vitalsInstance.onFinish(this.vitals);
@@ -215,4 +229,32 @@ export default defineComponent({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.spinner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.5);
+  z-index: 9999;
+}
+
+ion-spinner {
+  width: 80px;
+  height: 80px;
+}
+
+.loading-text {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #333;
+}
+
+.loading {
+  pointer-events: none;
+}
+</style>

@@ -132,10 +132,10 @@ export default defineComponent({
                 if (obj.display[0] === primaryDiagnosis.name) {
                     return true;
                 }
-                const isDifferentialMatch = differentialDiagnosis?.some((diffObj: any) => diffObj?.name === obj?.display[0]);
-                if (isDifferentialMatch) {
-                    return true;
-                }
+                // const isDifferentialMatch = differentialDiagnosis?.some((diffObj: any) => diffObj?.name === obj?.display[0]);
+                // if (isDifferentialMatch) {
+                //     return true;
+                // }
                 return false;
             });
             if (validateSelected.length > 0) {
@@ -143,10 +143,11 @@ export default defineComponent({
                 return false;
             }
             if (primaryDiagnosis?.name || getFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "inputFieldDisplayNone")) {
-                if (differentialDiagnosis.length > 0) {
-                    const filteredArray = await differentialDiagnosis.filter((obj: any) => {
+                // if (differentialDiagnosis.length > 0) {
+                    const filteredArray = differentialDiagnosis ?  differentialDiagnosis.filter((obj: any) => {
                         return obj.name === primaryDiagnosis.name;
-                    });
+                    }) : []
+                    
                     if (filteredArray.length > 0) {
                         modifyFieldValue(
                             this.OPDdiagnosis,
@@ -158,7 +159,7 @@ export default defineComponent({
                     } else {
                         return true;
                     }
-                }
+                // }
             } else {
                 modifyFieldValue(this.OPDdiagnosis, "differentialDiagnosis", "primaryDiagnosis", "Primary diagnosis is required");
                 return false;
@@ -229,7 +230,7 @@ export default defineComponent({
         },
         openPopover(e: any) {
             this.event = e;
-            this.popoverOpen = true;
+            this.popoverOpen = true; 
         },
         async handleInputData(col: any) {
             await this.getDiagnosis(col.value);

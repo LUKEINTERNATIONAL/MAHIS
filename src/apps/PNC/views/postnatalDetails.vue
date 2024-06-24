@@ -7,7 +7,6 @@
                 stepperTitle="Postnatal details"
                 :wizardData="wizardData"
                 @updateStatus="markWizard"
-                @finishBtn="saveData()"
                 :StepperData="StepperData"
             />
         </ion-content>
@@ -58,6 +57,7 @@ import { resetPatientData } from "@/services/reset_data";
 export default defineComponent({
     name: "postnatalDetails",
     components: {
+      BasicFooter,
         IonContent,
         IonHeader,
         IonMenuButton,

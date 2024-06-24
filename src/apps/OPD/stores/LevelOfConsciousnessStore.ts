@@ -1,27 +1,29 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
-import _ from "lodash";
+import _ from "lodash"
 
 export const ConsciousnessConcepts = {
-  BEST_VERBAL_RESPONSE: "Best verbal response",
-  EYE_OPENING_RESPONSE: "Eye opening response",
-  BEST_MOTOR_RESPONSE: "Best motor response",
-};
+  BEST_VERBAL_RESPONSE: 'Best verbal response',
+  EYE_OPENING_RESPONSE: 'Eye opening response',
+  BEST_MOTOR_RESPONSE: 'Best motor response',
+
+}
 
 export const eyeOpeningWeights: { [key: string]: number } = {
   Spontaneously: 4,
-  "To speech": 3,
-  "To pain": 2,
-  "No response": 1,
-};
+  'To speech': 3,
+  'To pain': 2,
+  'No response': 1
+
+}
 
 export const verbalResponseWeights: { [key: string]: number } = {
-  "Oriented to time, place and person": 5,
+  'Oriented to time, place and person': 5,
   Confused: 4,
-  "Inappropriate words": 3,
-  "Incomprehensible sounds": 2,
-  "No response": 1,
-};
+  'Inappropriate words': 3,
+  'Incomprehensible sounds': 2,
+  'No response': 1
+}
 
 export const motorResponseWeights: { [key: string]: number } = {
   "Obeys commands": 6,
@@ -29,24 +31,25 @@ export const motorResponseWeights: { [key: string]: number } = {
   "Flexion withdrawal from pain": 4,
   "Abnormal flexion (decorticate)": 3,
   "Abnormal extension (decerebrate)": 2,
-  "No response": 1,
-};
+  "No response": 1
+}
 
 export const eyeOpeningMinorWeights: { [key: string]: number } = {
   "Not directed": 0,
-  "Directed eye movements": 1,
-};
+  "Directed eye movements": 1
+}
 export const motorResponseMinorWeights: { [key: string]: number } = {
-  "Non specific or no response": 0,
-  "Withdraws from pain": 1,
-  "Localizes pain": 2,
-};
+  'Non specific or no response': 0,
+  'Withdraws from pain': 1,
+  'Localizes pain': 2
+}
 export const verbalResponseMinorWeights: { [key: string]: number } = {
-  "No cry": 0,
-  "Inappropriate cry or moan": 1,
-  "Appropriate cry": 2,
-};
-const initialLevelOfConsciousness = [
+  'No cry': 0,
+  'Inappropriate cry or moan': 1,
+  'Appropriate cry': 2
+}
+
+const adult = [
   {
     selectedData: [],
     isFinishBtn: false,
@@ -163,8 +166,9 @@ const initialLevelOfConsciousness = [
       ],
     },
   },
-];
-const initiallevelOfConsciousnessMinor = [
+] as any
+
+const minor =  [
   {
     selectedData: [],
     isFinishBtn: false,
@@ -187,6 +191,7 @@ const initiallevelOfConsciousnessMinor = [
           value: "Not directed",
           colSize: 6,
         },
+
       ],
     },
   },
@@ -243,28 +248,24 @@ const initiallevelOfConsciousnessMinor = [
           value: "Non specific or no response",
           colSize: 6,
         },
+
       ],
     },
   },
-];
+] as any
+
 export const useLevelOfConsciousnessStore = defineStore("levelOfConsciousnessStore", {
   state: () => ({
-    levelOfConsciousness: [...initialLevelOfConsciousness] as any,
-    levelOfConsciousnessMinor: [...initiallevelOfConsciousnessMinor]as any,
+    adult,
+    minor,
+
   }),
+
   actions: {
-    setPregnancy(data: any) {
-      this.levelOfConsciousness = data;
-      this.levelOfConsciousnessMinor = data;
+    reset() {
+      this.adult =[..._.cloneDeep(adult)];
+      this.minor =[..._.cloneDeep(minor)];
     },
-    getInitialLevelOfConsciousness() {
-      const data = _.cloneDeep(initialLevelOfConsciousness);
-      return [...data];
-    },
-    getinitiallevelOfConsciousnessMinor(){
-        const data = _.cloneDeep(initiallevelOfConsciousnessMinor);
-        return [...data];
-    }
   },
-   persist: true,
+  persist: true,
 });

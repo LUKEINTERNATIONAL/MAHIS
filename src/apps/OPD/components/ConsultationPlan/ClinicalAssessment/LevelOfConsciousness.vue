@@ -1,13 +1,9 @@
 <template>
   <div class="modal_wrapper">
-    <basic-form
-      v-if="patientAge < 18"
-      :contentData="levelOfConsciousnessMinor"
-    ></basic-form>
-    <basic-form
-      v-if="patientAge >= 18"
-      :contentData="levelOfConsciousness"
-    ></basic-form>
+    <!-- <basic-form :contentData="minor"></basic-form> -->
+    <basic-form v-if="patientAge < 18" :contentData="minor"></basic-form>
+    <basic-form v-if="patientAge >= 18" :contentData="adult"></basic-form>
+
     <h5>{{ gcs }}</h5>
   </div>
 </template>
@@ -51,17 +47,21 @@ export default defineComponent({
     BasicForm,
   },
   setup() {
-    const { levelOfConsciousness, levelOfConsciousnessMinor } =
-      useLevelOfConsciousnessStore();
+    const { adult, minor } = useLevelOfConsciousnessStore();
+
     const { demographics } = useDemographicsStore();
+
+    console.log(adult);
+    console.log(minor);
 
     const gcs = ref("");
     const patientAge = ref(HisDate.getAgeInYears(demographics.birthdate));
+
     const setGcs = (value: any) => {
       gcs.value = value;
     };
 
-    watch(levelOfConsciousness, (newValue) => {
+    watch(adult, (newValue) => {
       const eyeOpening = getRadioSelectedValue(
         newValue,
         ConsciousnessConcepts.EYE_OPENING_RESPONSE
@@ -84,7 +84,7 @@ export default defineComponent({
       }/15`;
     });
 
-    watch(levelOfConsciousnessMinor, (newValue) => {
+    watch(minor, (newValue) => {
       const eyeOpening = getRadioSelectedValue(
         newValue,
         ConsciousnessConcepts.EYE_OPENING_RESPONSE
@@ -110,8 +110,8 @@ export default defineComponent({
     return {
       gcs,
       setGcs,
-      levelOfConsciousnessMinor,
-      levelOfConsciousness,
+      minor,
+      adult,
       patientAge,
     };
   },

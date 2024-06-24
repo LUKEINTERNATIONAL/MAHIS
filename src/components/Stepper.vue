@@ -99,7 +99,7 @@ import SpecificHealthConcerns from "@/apps/ANC/components/quick check/SpecificHe
 import FetalAssessment from "@/apps/ANC/components/physical exam/FetalAssessment.vue";
 import FetalPresentation from "@/apps/ANC/components/physical exam/FetalPresentation.vue";
 import MaternalExam from "@/apps/ANC/components/physical exam/MaternalExam.vue";
-import Vitals from "@/apps/ANC/components/physical exam/Vitals.vue";
+// import Vitals from "@/apps/ANC/components/physical exam/Vitals.vue";
 import PresentingSigns from "@/apps/ANC/components/physical exam/PresentingSigns.vue";
 import CurrentPregnancies from "@/apps/ANC/components/profile/CurrentPregnancies.vue";
 import PastObstreticHistory from "@/apps/ANC/components/profile/PastObstreticHistory.vue";
@@ -124,6 +124,7 @@ import BehaviourCounselling from "@/apps/ANC/components/counselling/BehaviourCou
 import PhysiologicalCounseling from "@/apps/ANC/components/counselling/PhysiologicalCounseling.vue";
 import DietCounselling from "@/apps/ANC/components/counselling/DietCounselling.vue";
 import Referral from "@/apps/ANC/components/referral/Referral.vue";
+import ANCVitals from "../apps/ANC/components/physical exam/ANCVitals.vue"
 import AncEnd from "@/apps/ANC/components/ancEnd/AncEnd.vue";
 import ImmunizationServices from "@/apps/Immunization/components/ConsultationPlan/ImmunizationServices.vue";
 import OPDOutcome from "@/apps/OPD/components/ConsultationPlan/OPDOutcome.vue";
@@ -206,7 +207,7 @@ export default defineComponent({
         SpecificHealthConcerns,
         FetalPresentation,
         FetalAssessment,
-        Vitals,
+        ANCVitals,
         MaternalExam,
         PresentingSigns,
         CurrentPregnancies,

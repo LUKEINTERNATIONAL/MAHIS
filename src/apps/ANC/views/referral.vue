@@ -32,6 +32,8 @@ import { Service } from "@/services/service";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { resetPatientData } from "@/services/reset_data";
+import {ConfirmPregnancyService} from "@/apps/ANC/service/confirm_pregnancy_service";
+import {ReferralService} from "@/apps/ANC/service/referral_service";
 
 
 
@@ -100,17 +102,19 @@ export default defineComponent ({
     },
 
     async saveReferral () {
-        // const data: any = await this.buildReferral();
-        // if (data.length > 0) {
-        //     const userID: any = Service.getUserID();
-        //     const referralInstance = new ReferralInstance();
-        //     referralInstance.push(this.demographics.patient_id, userID, data);
-        //     toastSuccess("Referral data saved successfully");
-        // }
-        //
-        // else {
-        //     toastWarning("Could not find all concepts");
-        // }
+        if (this.referralInfo.length > 0) {
+          const userID: any = Service.getUserID();
+          const referral = new ReferralService(this.demographics.patient_id, userID);
+          const encounter = await referral.createEncounter();
+          if (!encounter) return toastWarning("Unable to create referral encounter");
+          const patientStatus = await referral.saveObservationList(await this.buildReferral());
+          if (!patientStatus) return toastWarning("Unable to create patient referral details!");
+          toastSuccess("Referral details have been created");
+        }
+        this.$router.push("ANCHome");
+
+
+      console.log(await this.buildReferral());
     },
   },
 });
