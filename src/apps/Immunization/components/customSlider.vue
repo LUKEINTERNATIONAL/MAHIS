@@ -174,7 +174,7 @@ export default defineComponent({
     },
     methods: {
         openAdministerOtherVaccineModal() {
-            createModal(administerOtherVaccineModal, { class: "administerOtherVaccineModal" });
+            createModal(administerOtherVaccineModal, { class: "otherVitalsModal" });
         },
         async loadVaccineSchedule() {
             const data__ = await getVaccinesSchedule();
