@@ -1,4 +1,7 @@
 <template>
+  <!-- <div style="margin: 50px;">
+    <GetDataDuration/>
+  </div> -->
   <ion-page>
     <report-template
       :title="title"
@@ -22,9 +25,10 @@ import ReportMixin from '../../../components/reports/ReportMixin.vue'
 import { get, isEmpty } from 'lodash'
 import { IonPage } from "@ionic/vue";
 import { PatientService } from '../../../../../services/patient_service'
+import GetDataDuration from '../GetDataDuration.vue'
 
 export default defineComponent({
-  components: { ReportTemplate, IonPage },
+  components: { ReportTemplate, IonPage, GetDataDuration },
   mixins: [ReportMixin],
   data: () => ({
     title: 'OPD Diagnosis',
