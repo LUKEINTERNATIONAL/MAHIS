@@ -304,6 +304,10 @@ ion-modal > .ion-page {
     --border-radius: 10px;
     overflow: scroll;
 }
+.vaccineHistoryModal {
+    --height: 90vh;
+    --max-width: 500px;
+}
 ion-modal > .ion-page {
     overflow: scroll;
 }
