@@ -35,8 +35,8 @@
             />
 
             <div>
-                <ion-label v-if="is_batch_number_valid" class="error-label">
-                    {{ batch_number_error_message }}
+                <ion-label v-if="is_vaccine_name_valid" class="error-label">
+                    {{ vaccine_name_error_message }}
                 </ion-label>
             </div>
         </div>
@@ -124,7 +124,9 @@ export default defineComponent({
             batchNumber: "" as any,
             vaccineName: "" as string,
             is_batch_number_valid: false as boolean,
+            is_vaccine_name_valid: false as boolean,
             batch_number_error_message: "Enter a valid batch number",
+            vaccine_name_error_message: "Enter a valid valid vaccine name",
             sessionDate: HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
             InnerActionBtnPropeties: {
                 name: "Scan",

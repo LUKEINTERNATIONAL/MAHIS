@@ -741,7 +741,7 @@ export default defineComponent({
     margin-top: 7px;
 }
 .graphBtn {
-    display: flex;
+    display: contents;
     justify-content: center;
 }
 .dueAlert {
