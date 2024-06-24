@@ -1,4 +1,4 @@
-<template>
+ear<template>
     <div class="custom_card" style="padding: 10px">
         <DashBox :status="no_item" :content="'No Diagnosis added'" />
 
@@ -128,6 +128,7 @@ export default defineComponent({
             modifyFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "alertsErrorMassage", "");
             const primaryDiagnosis = getFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "value");
             const differentialDiagnosis = getFieldValue(this.OPDdiagnosis, "differentialDiagnosis", "value");
+
             const validateSelected = this.OPDdiagnosis[0].selectedData.filter((obj: any) => {
                 if (obj.display[0] === primaryDiagnosis.name) {
                     return true;
@@ -138,10 +139,14 @@ export default defineComponent({
                 }
                 return false;
             });
+         
+            
             if (validateSelected.length > 0) {
                 modifyFieldValue(this.OPDdiagnosis, col.name, "alertsErrorMassage", validateSelected[0].name + " is already selected");
                 return false;
             }
+
+
             if (primaryDiagnosis?.name || getFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "inputFieldDisplayNone")) {
                 if (differentialDiagnosis.length > 0) {
                     const filteredArray = await differentialDiagnosis.filter((obj: any) => {
@@ -166,8 +171,11 @@ export default defineComponent({
         },
 
         async addNewRow() {
+            // console.log("==>1",await this.validaterowData())
             if (await this.validaterowData()) {
+                
                 if (this.buildDiagnosis()) {
+                    console.log("==>1",this.buildDiagnosis())
                     this.search_item = false;
                     this.display_item = true;
                     this.addItemButton = true;
