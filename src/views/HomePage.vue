@@ -36,7 +36,7 @@
                     <div class="clientSeenTitle">Clients you have seen today.</div>
                     <div class="clientSeenBoxes">
                         <div class="clientSeenBox">
-                            <div class="clientSeenBoxNumber">{{ reportData?.total_vaccinated || 0 }}</div>
+                            <div class="clientSeenBoxNumber">{{ reportData?.total_vaccinated_today || 0 }}</div>
                             <div class="clientSeenBoxText">New</div>
                         </div>
                         <div class="clientSeenBoxChild clientSeenBox">
@@ -114,6 +114,7 @@ export default defineComponent({
     },
     methods: {
         fetchReport() {
+            console.log("ffffffff");
             webSocketService.fetchData("2024-01-01", "2024-12-31");
         },
 
@@ -121,6 +122,7 @@ export default defineComponent({
             const data = JSON.parse(event.data);
             if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel" })) {
                 this.reportData = data.message;
+                console.log("🚀 ~ onMessage ~ data:", data);
             }
         },
         getPatientSummary: async function () {
