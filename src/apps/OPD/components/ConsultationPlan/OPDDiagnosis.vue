@@ -144,9 +144,10 @@ export default defineComponent({
             }
             if (primaryDiagnosis?.name || getFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "inputFieldDisplayNone")) {
                 // if (differentialDiagnosis.length > 0) {
-                    const filteredArray = await differentialDiagnosis.filter((obj: any) => {
+                    const filteredArray = differentialDiagnosis ?  differentialDiagnosis.filter((obj: any) => {
                         return obj.name === primaryDiagnosis.name;
-                    });
+                    }) : []
+                    
                     if (filteredArray.length > 0) {
                         modifyFieldValue(
                             this.OPDdiagnosis,

@@ -140,7 +140,7 @@
                         <ion-card style="background-color: #fff; margin-inline: 0px">
                             <div style="display: flex; justify-content: space-between">
                                 <div class="vitalsTitle">Most recent Vitals & Biometrics</div>
-                                <div class="dateClass">Todays Date: 06 Jul 2024</div>
+                                <div class="dateClass">Todays Date: {{ getSessionDate() }}</div>
                             </div>
                             <div style="padding-left: 10px; padding-right: 10px">
                                 <ion-row>
@@ -152,12 +152,14 @@
                                     <ion-col class="vitalsHeading">Blood pressure</ion-col>
                                 </ion-row>
                                 <ion-row>
-                                    <ion-col class="vitalsValue">67 <span class="vitalsUnits">kg</span></ion-col>
-                                    <ion-col class="vitalsValue">137 <span class="vitalsUnits">cm</span></ion-col>
-                                    <ion-col class="vitalsValue">36.1 <span class="vitalsUnits">C</span></ion-col>
-                                    <ion-col class="vitalsValue">4.6 <span class="vitalsUnits">mg/dL</span></ion-col>
-                                    <ion-col class="vitalsValue">101 <span class="vitalsUnits">bpm </span></ion-col>
-                                    <ion-col class="vitalsValue">140/90 <span class="vitalsUnits">mmhg</span></ion-col>
+                                    <ion-col class="vitalsValue">{{ vitals["Weight"] }} <span class="vitalsUnits">kg</span></ion-col>
+                                    <ion-col class="vitalsValue">{{ vitals["Height"] }} <span class="vitalsUnits">cm</span></ion-col>
+                                    <ion-col class="vitalsValue">{{ vitals["Temp"] }} <span class="vitalsUnits">C</span></ion-col>
+                                    <ion-col class="vitalsValue">0 <span class="vitalsUnits">mg/dL</span></ion-col>
+                                    <ion-col class="vitalsValue">{{ vitals["Pulse"] }} <span class="vitalsUnits">bpm </span></ion-col>
+                                    <ion-col class="vitalsValue"
+                                        >{{ vitals["Systolic"] }}/{{ vitals["Diastolic"] }}<span class="vitalsUnits">mmhg</span></ion-col
+                                    >
                                 </ion-row>
                             </div>
                         </ion-card>
@@ -353,6 +355,7 @@ export default defineComponent({
             NCDProgramActionName: "+ Enroll in NCD Program" as any,
             OPDProgramActionName: "+ Start New OPD consultation" as any,
             visits: [] as any,
+            vitals: [] as any,
             NCDUserAction: [] as any,
             activeProgramID: "" as any,
             programBtn: {} as any,
@@ -379,6 +382,7 @@ export default defineComponent({
         this.setNCDValue();
         this.setActiveProgram();
         this.setAlerts();
+        await this.updateNCDData();
     },
     watch: {
         demographics: {
@@ -462,6 +466,9 @@ export default defineComponent({
         convertToDisplayDate(date: any) {
             return HisDate.toStandardHisDisplayFormat(date);
         },
+        getSessionDate() {
+            return HisDate.toStandardHisDisplayFormat(Service.getSessionDate());
+        },
         programAccess(programName: string): boolean {
             const accessPrograms: any = sessionStorage.getItem("userPrograms");
             const programs: any = JSON.parse(accessPrograms);
@@ -504,22 +511,19 @@ export default defineComponent({
             const array = ["Height", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
 
             // An array to store all promises
-            const promises = array.map(async (item: any) => {
-                if (
-                    HisDate.toStandardHisFormat(await ObservationService.getFirstObsDatetime(this.demographics.patient_id, item)) ==
-                    HisDate.currentDate()
-                ) {
-                    modifyFieldValue(
-                        this.vitals,
-                        item,
-                        "value",
-                        await ObservationService.getFirstValueNumber(this.demographics.patient_id, item, HisDate.currentDate())
-                    );
-                }
+            const promises = array.map(async (item) => {
+                const dd = await ObservationService.getFirstValueNumber(this.demographics.patient_id, item);
+                console.log("🚀 ~ promises ~ dd:", dd);
+                return { [item]: dd };
             });
 
             // Wait for all promises to resolve
-            await Promise.all(promises);
+            const resultsArray = await Promise.all(promises);
+            console.log("🚀 ~ updateNCDData ~ resultsArray:", resultsArray);
+
+            // Combine the objects in resultsArray into a single object
+            this.vitals = Object.assign({}, ...resultsArray);
+            console.log("🚀 ~ updateNCDData ~ combinedResults:", this.vitals);
         },
         handleOPD() {
             this.setOPDValue();
