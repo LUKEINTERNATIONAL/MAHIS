@@ -415,8 +415,6 @@ ion-row {
     align-items: center;
     padding: 0px 30px;
     gap: 9px;
-
-    width: 430px;
     height: 33px;
 
     /* green/300 */

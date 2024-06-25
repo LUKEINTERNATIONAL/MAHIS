@@ -7,7 +7,7 @@
         <row>
             <ion-icon size="medium" style="margin-bottom: -6px;" :icon="iconsContent.calendar"></ion-icon>
             <span> at <span style="color: #016302;">{{ item.age }}</span></span>
-            <span style="color: #316CBA; margin-left: 10%;">{{ vaccinesGivenCount(item) }}/{{ item.antigens.length }} vaccines given</span>
+            <span style="color: #316CBA; margin-left: 10%;">{{ vaccinesGivenCount(item) }}/{{ item.antigens.length }} vaccine(s) given</span>
         </row>
 
         <row>
