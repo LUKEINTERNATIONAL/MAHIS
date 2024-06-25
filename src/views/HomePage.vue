@@ -16,7 +16,7 @@
         </ion-content>
         <ion-content v-if="programID() == 33">
             <div class="total">
-                <div class="totalNumber">0</div>
+                <div class="totalNumber">{{ reportData?.total_vaccinated }}</div>
                 <div class="totalText">Children & Adults vaccinated this year.</div>
             </div>
             <ion-img :src="loadImage('backgroundImg.png')" alt="home image"></ion-img>
@@ -24,11 +24,11 @@
             <div class="graphBackground">
                 <div class="dueMiss">
                     <div class="due">
-                        <div class="dueNumber">0</div>
+                        <div class="dueNumber">{{ reportData?.total_due_for_vaccination_today || 0 }}</div>
                         <div class="dueMissText">Due for vaccination today</div>
                     </div>
                     <div class="missed">
-                        <div class="missedNumber">0</div>
+                        <div class="missedNumber">{{ reportData?.total_missed_doses || 0 }}</div>
                         <div class="dueMissText">Those with missed doses</div>
                     </div>
                 </div>
@@ -36,19 +36,19 @@
                     <div class="clientSeenTitle">Clients you have seen today.</div>
                     <div class="clientSeenBoxes">
                         <div class="clientSeenBox">
-                            <div class="clientSeenBoxNumber">0</div>
+                            <div class="clientSeenBoxNumber">{{ reportData?.total_vaccinated || 0 }}</div>
                             <div class="clientSeenBoxText">New</div>
                         </div>
                         <div class="clientSeenBoxChild clientSeenBox">
-                            <div class="clientSeenBoxNumber">0</div>
+                            <div class="clientSeenBoxNumber">{{ reportData?.total_children_vaccinated_today || 0 }}</div>
                             <div class="clientSeenBoxText">Children</div>
                         </div>
                         <div class="clientSeenBoxMen clientSeenBox">
-                            <div class="clientSeenBoxNumber">0</div>
+                            <div class="clientSeenBoxNumber">{{ reportData?.total_women_vaccinated_today || 0 }}</div>
                             <div class="clientSeenBoxText">Women</div>
                         </div>
                         <div class="clientSeenBoxWomen clientSeenBox">
-                            <div class="clientSeenBoxNumber">0</div>
+                            <div class="clientSeenBoxNumber">{{ reportData?.total_men_vaccinated_today || 0 }}</div>
                             <div class="clientSeenBoxText">Men</div>
                         </div>
                     </div>
@@ -78,6 +78,8 @@ import { mapState } from "pinia";
 import { UserService } from "@/services/user_service";
 import SetUser from "@/views/Mixin/SetUser.vue";
 import ApiClient from "@/services/api_client";
+import HisDate from "@/utils/Date";
+import webSocketService from "@/services/websocketService";
 export default defineComponent({
     name: "Home",
     mixins: [SetUser],
@@ -98,6 +100,7 @@ export default defineComponent({
     data() {
         return {
             controlGraphs: "months" as any,
+            reportData: "" as any,
         };
     },
     computed: {
@@ -105,18 +108,26 @@ export default defineComponent({
     },
     async mounted() {
         this.setView();
-        // Start the timer on component mount
         this.startTimer();
-        // console.log(await getVaccinesData());
-        // this.getPatientSummary();
+        webSocketService.setMessageHandler(this.onMessage);
+        this.fetchReport();
     },
     methods: {
-        getPatientSummary: async function () {
-            const response = await ApiClient.get(`immunization/stats`);
-            if (response && response.status == 200) {
-                const data = await response.json();
-                // console.log("🚀 ~ getPatientSummary:function ~ data:", data);
+        fetchReport() {
+            webSocketService.fetchData("2024-01-01", "2024-12-31");
+        },
+
+        onMessage(event: MessageEvent) {
+            const data = JSON.parse(event.data);
+            if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel" })) {
+                this.reportData = data.message;
             }
+        },
+        getPatientSummary: async function () {
+            const data = await Service.getJson("immunization/stats", {
+                start_date: HisDate.getDateBeforeByDays(HisDate.currentDate(), 365),
+                end_date: HisDate.currentDate(),
+            });
         },
         setView() {
             Service.getProgramID();
