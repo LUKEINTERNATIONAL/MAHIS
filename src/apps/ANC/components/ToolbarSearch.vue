@@ -1,5 +1,5 @@
 <template>
-    <ion-searchbar @ionInput="handleInput" placeholder="Search client  clinical No." class="searchField"></ion-searchbar>
+    <ion-searchbar  @ionInput="handleInput" placeholder="Search client  clinical No." class="searchField"></ion-searchbar>
     <ion-popover
         :is-open="popoverOpen"
         :event="event"

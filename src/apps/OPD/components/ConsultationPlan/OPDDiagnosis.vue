@@ -1,4 +1,4 @@
-ear<template>
+<template>
     <div class="custom_card" style="padding: 10px">
         <DashBox :status="no_item" :content="'No Diagnosis added'" />
 
@@ -148,10 +148,11 @@ export default defineComponent({
 
 
             if (primaryDiagnosis?.name || getFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "inputFieldDisplayNone")) {
-                if (differentialDiagnosis.length > 0) {
-                    const filteredArray = await differentialDiagnosis.filter((obj: any) => {
+                // if (differentialDiagnosis.length > 0) {
+                    const filteredArray = differentialDiagnosis ?  differentialDiagnosis.filter((obj: any) => {
                         return obj.name === primaryDiagnosis.name;
-                    });
+                    }) : []
+                    
                     if (filteredArray.length > 0) {
                         modifyFieldValue(
                             this.OPDdiagnosis,
