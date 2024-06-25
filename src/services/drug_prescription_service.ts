@@ -21,6 +21,7 @@ export const DRUG_FREQUENCIES: Array<{label: string; code: string; value: number
     { label : "ONCE A WEEK (QWK)", code : "QWK", value : 0.14 },
     { label : "ONCE A MONTH", code : "ONCE A MONTH", value : 0.03 },
     { label : "TWICE A MONTH", code : "TWICE A MONTH", value : 0.071 },
+    { label : "STAT", code : "STAT", value : 0},
     { label : "Unknown", code : "Unknown", value : 0 }
   ]
 

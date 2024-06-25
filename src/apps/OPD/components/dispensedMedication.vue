@@ -132,6 +132,7 @@ const selectedAllergiesList2 = computed(() => store2.selectedMedicalAllergiesLis
 const selectedReason = ref("");
 
 onMounted(async () => {
+    dispensationStore.resetStore();
     const previousTreatment = new PreviousTreatment();
     const { previousDrugPrescriptions } = await previousTreatment.getPatientEncounters();
 

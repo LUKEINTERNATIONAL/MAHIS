@@ -171,6 +171,10 @@ export default defineComponent({
         handleIcon() {},
         async openResultsForm(obs: any) {
             const testIndicators = await PatientLabResultService.getTestIndicatorsWithID(obs.item.concept_id);
+
+            console.log({testIndicators})
+
+            
             const indicators = [
                 obs.item,
                 {
