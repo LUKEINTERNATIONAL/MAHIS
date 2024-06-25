@@ -25,7 +25,7 @@
             <canvas height="200" id="myChart"></canvas>
         </div>
     </div>
-    <div class="graphBtn">
+    <div class="graphBtn" v-if="showHeightWeight">
         <div class="weightHeightGraphBtns">
             <div>
                 <span class="warningText">
@@ -119,6 +119,11 @@ export default defineComponent({
             chart: null as any,
             dataset: [] as any,
         };
+    },
+    props: {
+        showHeightWeight: {
+            default: false,
+        },
     },
     setup() {
         return { checkmark, pulseOutline };
