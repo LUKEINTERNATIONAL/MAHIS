@@ -167,11 +167,11 @@ export default defineComponent({
                 modifyFieldValue(this.addTA, "TA", "value", "");
                 modifyFieldValue(this.addTA, "Village", "value", "");
                 if (sessionStorage.getItem("activeLocation") == "current") {
-                    modifyFieldValue(this.currentLocation, "current_traditional_authority", "alertsErrorMassage", false);
-                    modifyFieldValue(this.currentLocation, "current_village", "alertsErrorMassage", false);
+                    modifyFieldValue(this.currentLocation, "current_traditional_authority", "alertsErrorMassage", "");
+                    modifyFieldValue(this.currentLocation, "current_village", "alertsErrorMassage", "");
                 } else {
-                    modifyFieldValue(this.homeLocation, "home_traditional_authority", "alertsErrorMassage", false);
-                    modifyFieldValue(this.homeLocation, "home_village", "alertsErrorMassage", false);
+                    modifyFieldValue(this.homeLocation, "home_traditional_authority", "alertsErrorMassage", "");
+                    modifyFieldValue(this.homeLocation, "home_village", "alertsErrorMassage", "");
                 }
             }
         },
@@ -188,11 +188,9 @@ export default defineComponent({
 
             if (Validation.isName(event.value) != null) {
                 modifyFieldValue(this.addTA, event.name, "alertsErrorMassage", "Please enter a valid " + event.name);
-                modifyFieldValue(this.addTA, event.name, "alertsErrorMassage", true);
                 return false;
             } else {
                 modifyFieldValue(this.addTA, event.name, "alertsErrorMassage", "");
-                modifyFieldValue(this.addTA, event.name, "alertsErrorMassage", false);
             }
 
             let filteredList = [];
@@ -207,11 +205,9 @@ export default defineComponent({
             const filteredData = filteredList.filter((item: any) => item.name.toLowerCase() == name.toLowerCase());
             if (!isEmpty(filteredData)) {
                 modifyFieldValue(this.addTA, event.name, "alertsErrorMassage", "Can't add existing " + event.name);
-                modifyFieldValue(this.addTA, event.name, "alertsErrorMassage", true);
                 return false;
             } else {
                 modifyFieldValue(this.addTA, event.name, "alertsErrorMassage", "");
-                modifyFieldValue(this.addTA, event.name, "alertsErrorMassage", false);
             }
             this.validationStatus = true;
         },
