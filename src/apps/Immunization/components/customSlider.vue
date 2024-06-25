@@ -20,39 +20,7 @@
         <slide v-for="(slide, index) in vaccineSchudulesCount" :key="slide">
             <!-- {{ slide }} -->
             <div class="container">
-                <ion-row class="top-row" v-if="vaccineSchudulesCount == 14">
-                    <!-- <customVaccine v-for="(item, index2) in vaccine_schArray" :key="index2"  :vaccines="item" :visitId="2"/> -->
-                    <customVaccine :vaccines="vaccinesScheduleAtBirth" :visitId="1" v-if="slide == 1" />
-                    <customVaccine :vaccines="vaccinesSchedule6Weeks" :visitId="2" v-if="slide == 2" />
-                    <customVaccine :vaccines="vaccinesSchedule10Weeks" :visitId="3" v-if="slide == 3" />
-                    <customVaccine :vaccines="vaccinesSchedule14Weeks" :visitId="4" v-if="slide == 4" />
-                    <customVaccine :vaccines="vaccinesSchedule5Months" :visitId="5" v-if="slide == 5" />
-                    <customVaccine :vaccines="vaccinesSchedule6Months" :visitId="6" v-if="slide == 6" />
-                    <customVaccine :vaccines="vaccinesSchedule7Months" :visitId="7" v-if="slide == 7" />
-                    <customVaccine :vaccines="vaccinesSchedule9Months" :visitId="8" v-if="slide == 8" />
-                    <customVaccine :vaccines="vaccinesSchedule15Months" :visitId="9" v-if="slide == 9" />
-                    <customVaccine :vaccines="vaccinesSchedule22Months" :visitId="10" v-if="slide == 10" />
-                    <customVaccine :vaccines="vaccinesSchedule9Years" :visitId="11" v-if="slide == 11" />
-                    <customVaccine :vaccines="vaccinesSchedule12YearsAbove" :visitId="12" v-if="slide == 12" />
-                    <customVaccine :vaccines="vaccinesSchedule15Years" :visitId="13" v-if="slide == 13" />
-                    <customVaccine :vaccines="vaccinesSchedule18YearsAbove" :visitId="14" v-if="slide == 14" />
-                </ion-row>
-
-                <ion-row class="top-row" v-if="vaccineSchudulesCount == 12">
-                    <!-- <customVaccine v-for="(item, index2) in vaccine_schArray" :key="index2"  :vaccines="item" :visitId="2"/> -->
-                    <customVaccine :vaccines="vaccinesScheduleAtBirth" :visitId="1" v-if="slide == 1" />
-                    <customVaccine :vaccines="vaccinesSchedule6Weeks" :visitId="2" v-if="slide == 2" />
-                    <customVaccine :vaccines="vaccinesSchedule10Weeks" :visitId="3" v-if="slide == 3" />
-                    <customVaccine :vaccines="vaccinesSchedule14Weeks" :visitId="4" v-if="slide == 4" />
-                    <customVaccine :vaccines="vaccinesSchedule5Months" :visitId="5" v-if="slide == 5" />
-                    <customVaccine :vaccines="vaccinesSchedule6Months" :visitId="6" v-if="slide == 6" />
-                    <customVaccine :vaccines="vaccinesSchedule7Months" :visitId="7" v-if="slide == 7" />
-                    <customVaccine :vaccines="vaccinesSchedule9Months" :visitId="8" v-if="slide == 8" />
-                    <customVaccine :vaccines="vaccinesSchedule15Months" :visitId="9" v-if="slide == 9" />
-                    <customVaccine :vaccines="vaccinesSchedule22Months" :visitId="10" v-if="slide == 10" />
-                    <customVaccine :vaccines="vaccinesSchedule12YearsAbove" :visitId="12" v-if="slide == 11" />
-                    <customVaccine :vaccines="vaccinesSchedule18YearsAbove" :visitId="14" v-if="slide == 12" />
-                </ion-row>
+                <customVaccine  :vaccines="vaccine_schArray[index]" :visitId="1"/>
             </div>
         </slide>
         <template #addons>
@@ -102,36 +70,8 @@ export default defineComponent({
     },
     data() {
         return {
-            vaccinesScheduleAtBirth: [],
-            vaccinesSchedule6Weeks: [],
-            vaccinesSchedule10Weeks: [],
-            vaccinesSchedule14Weeks: [],
-            vaccinesSchedule5Months: [],
-            vaccinesSchedule6Months: [],
-            vaccinesSchedule7Months: [],
-            vaccinesSchedule9Months: [],
-            vaccinesSchedule15Months: [],
-            vaccinesSchedule22Months: [],
-            vaccinesSchedule9Years: [],
-            vaccinesSchedule12YearsAbove: [],
-            vaccinesSchedule15Years: [],
-            vaccinesSchedule18YearsAbove: [],
             vaccine_schArray: [
-                this.vaccinesScheduleAtBirth,
-                this.vaccinesSchedule6Weeks,
-                this.vaccinesSchedule10Weeks,
-                this.vaccinesSchedule14Weeks,
-                this.vaccinesSchedule5Months,
-                this.vaccinesSchedule6Months,
-                this.vaccinesSchedule7Months,
-                this.vaccinesSchedule9Months,
-                this.vaccinesSchedule15Months,
-                this.vaccinesSchedule22Months,
-                this.vaccinesSchedule9Years,
-                this.vaccinesSchedule12YearsAbove,
-                this.vaccinesSchedule15Years,
-                this.vaccinesSchedule18YearsAbove,
-            ],
+            ] as any,
             ages: [
                 "At birth",
                 "6 weeks",
@@ -214,63 +154,9 @@ export default defineComponent({
                 const obj = { visit_id: vaccineSchudule.visit, age: vaccineSchudule.age };
                 this.milestones = this.appendUniqueObject(this.milestones, obj);
 
-                if (vaccineSchudule.age == this.ages[0]) {
-                    this.vaccinesScheduleAtBirth = vaccineSchudule.antigens as any;
-                }
-
-                if (vaccineSchudule.age == this.ages[1]) {
-                    this.vaccinesSchedule6Weeks = vaccineSchudule.antigens as any;
-                }
-
-                if (vaccineSchudule.age == this.ages[2]) {
-                    this.vaccinesSchedule10Weeks = vaccineSchudule.antigens as any;
-                    console.log(this.vaccinesSchedule10Weeks);
-                }
-
-                if (vaccineSchudule.age == this.ages[3]) {
-                    this.vaccinesSchedule14Weeks = vaccineSchudule.antigens as any;
-                }
-
-                if (vaccineSchudule.age == this.ages[4]) {
-                    this.vaccinesSchedule5Months = vaccineSchudule.antigens as any;
-                }
-
-                if (vaccineSchudule.age == this.ages[5]) {
-                    this.vaccinesSchedule6Months = vaccineSchudule.antigens as any;
-                }
-
-                if (vaccineSchudule.age == this.ages[6]) {
-                    this.vaccinesSchedule7Months = vaccineSchudule.antigens as any;
-                }
-
-                if (vaccineSchudule.age == this.ages[7]) {
-                    this.vaccinesSchedule9Months = vaccineSchudule.antigens as any;
-                }
-
-                if (vaccineSchudule.age == this.ages[8]) {
-                    this.vaccinesSchedule15Months = vaccineSchudule.antigens as any;
-                }
-
-                if (vaccineSchudule.age == this.ages[9]) {
-                    this.vaccinesSchedule22Months = vaccineSchudule.antigens as any;
-                }
-
-                if (vaccineSchudule.age == this.ages[10]) {
-                    this.vaccinesSchedule9Years = vaccineSchudule.antigens as any;
-                }
-
-                if (vaccineSchudule.age == this.ages[11]) {
-                    this.vaccinesSchedule12YearsAbove = vaccineSchudule.antigens as any;
-                }
-
-                if (vaccineSchudule.age == this.ages[12]) {
-                    this.vaccinesSchedule15Years = vaccineSchudule.antigens as any;
-                }
-
-                if (vaccineSchudule.age == this.ages[13]) {
-                    this.vaccinesSchedule18YearsAbove = vaccineSchudule.antigens as any;
-                }
+                this.vaccine_schArray.push(vaccineSchudule.antigens)
             });
+            
             if (found == false) {
                 vaccineScheduleStore.setCurrentSchedFound(false);
             }
