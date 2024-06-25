@@ -308,6 +308,9 @@ ion-modal > .ion-page {
     --height: 90vh;
     --max-width: 500px;
 }
+.qr_code_modal {
+    background-color:  #fff;;
+}
 ion-modal > .ion-page {
     overflow: scroll;
 }
