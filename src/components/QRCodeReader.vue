@@ -1,11 +1,16 @@
 <template>
-
-  <div class="flex flex-col items-center justify-center mt-6">
+    <div class="flex flex-col items-center justify-center mt-6">
     <!-- <pre>Result:{{ decode }}</pre> -->
     <div class="phone mt-6">
-      <div class="notch-container">
+
+      <!-- <div class="notch-container">
         <div class="notch"></div>
-      </div>
+      </div> -->
+
+      <ion-label>
+          {{ decode }}
+      </ion-label>
+
       <div class="content">
         <StreamQrcodeBarcodeReader
           ref="refCamera"
@@ -17,11 +22,19 @@
       </div>
     </div>
   </div>
+
+  <div style="margin-top: 20px;">
+    <ion-button @click="dismiss" id="cbtn" class="btnText cbtn" fill="solid" style="width: 99%">
+      Cancel
+    </ion-button>
+  </div>
+
+
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { type Result, StreamQrcodeBarcodeReader } from 'vue3-barcode-qrcode-reader'
-import { IonRow, IonCol, IonButton, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue"
+import { IonLabel, IonCol, IonButton, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue"
 
 onMounted(async () => {
   handleOnCanPlay()
@@ -31,6 +44,9 @@ const decode = ref<Result | undefined>(undefined)
 const isLoading = ref<boolean>(false)
 function onResult(data: Result | undefined): void {
   decode.value = data
+  if (decode.value != undefined) {
+    scanresult(decode.value)
+  }
 }
 
 function onLoading(loading: boolean) {
@@ -54,6 +70,19 @@ function handleFacemode() {
 
 function handleOnCanStop() {
   refCamera.value?.onCanStop()
+}
+
+function  dismiss() {
+  modalController.dismiss()
+}
+
+const emit = defineEmits<{
+    (e: "scanresult", data: any): void
+}>();
+
+function scanresult(data: any) {
+    emit("scanresult", data)
+    dismiss()
 }
 </script>
 <style>

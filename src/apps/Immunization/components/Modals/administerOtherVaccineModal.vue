@@ -131,7 +131,7 @@ export default defineComponent({
             InnerActionBtnPropeties: {
                 name: "Scan",
                 show: true,
-                fn: () => { createModal(QRCodeReadersrc, { class: "otherVitalsModal qr_code_modal" })}
+                fn: () => { createModal(QRCodeReadersrc, { class: "otherVitalsModal qr_code_modal" }, false)}
             },
             showDateBtns: true as boolean,
         };
