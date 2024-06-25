@@ -72,22 +72,6 @@ export default defineComponent({
         return {
             vaccine_schArray: [
             ] as any,
-            ages: [
-                "At birth",
-                "6 weeks",
-                "10 weeks ",
-                "14 weeks",
-                "5 months",
-                "6 months",
-                "7 months",
-                "9 months",
-                "15 months",
-                "22 months",
-                "9 years",
-                "12 years above",
-                "15 years",
-                "18 years above",
-            ],
             vaccineSchudulesCount: 0,
             milestones: [],
             iconsContent: icons,
@@ -156,7 +140,7 @@ export default defineComponent({
 
                 this.vaccine_schArray.push(vaccineSchudule.antigens)
             });
-            
+
             if (found == false) {
                 vaccineScheduleStore.setCurrentSchedFound(false);
             }
