@@ -344,68 +344,70 @@ export default defineComponent({
             });
             console.log(this.vitals[4]?.alerts);
         },
-        getBloodPressureStatus(systolic: any, diastolic: any) {
-            if (systolic && diastolic) {
-                let ageGroup;
-                let minSystolic;
-                let maxSystolic;
-                let minDiastolic;
-                let maxDiastolic;
-                const patient = new PatientService();
-                const age = patient.getAge();
-                // Determine age group and corresponding normal ranges
-                if (age < 1) {
-                    ageGroup = "less than 1 year";
-                    minSystolic = 75;
-                    maxSystolic = 100;
-                    minDiastolic = 50;
-                    maxDiastolic = 70;
-                } else if (age >= 1 && age < 6) {
-                    ageGroup = "1-5 years";
-                    minSystolic = 80;
-                    maxSystolic = 110;
-                    minDiastolic = 50;
-                    maxDiastolic = 80;
-                } else if (age >= 6 && age < 13) {
-                    ageGroup = "6-13 years";
-                    minSystolic = 85;
-                    maxSystolic = 120;
-                    minDiastolic = 55;
-                    maxDiastolic = 80;
-                } else if (age >= 13 && age < 18) {
-                    ageGroup = "13-18 years";
-                    minSystolic = 95;
-                    maxSystolic = 140;
-                    minDiastolic = 60;
-                    maxDiastolic = 90;
-                } else {
-                    ageGroup = "above 18 years";
-                    minSystolic = 100;
-                    maxSystolic = 130;
-                    minDiastolic = 60;
-                    maxDiastolic = 90;
-                }
+      getBloodPressureStatus(systolic: any, diastolic: any) {
+        if (systolic && diastolic) {
+          let ageGroup;
+          let minSystolic;
+          let maxSystolic;
+          let minDiastolic;
+          let maxDiastolic;
+          const patient = new PatientService();
+          const age = patient.getAge();
 
-                // Diastolic pressure is within normal range, check systolic pressure
-                if (systolic < minSystolic && diastolic < minDiastolic) {
-                    return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low BP " };
-                } else if (systolic >= minSystolic && systolic <= maxSystolic && diastolic >= minDiastolic && diastolic <= maxDiastolic) {
-                    return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal BP " };
-                } else if (systolic > maxSystolic && diastolic > maxDiastolic) {
-                    return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High BP " };
-                } else {
-                    // Diastolic pressure is not within normal range, consider only systolic pressure
-                    if (systolic < minSystolic) {
-                        return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low BP " + " (Using Systolic Only)" };
-                    } else if (systolic >= minSystolic && systolic <= maxSystolic) {
-                        return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal BP " + " (Using Systolic Only)" };
-                    } else {
-                        return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High BP " + " (Using Systolic Only)" };
-                    }
-                }
+          // Determine age group and corresponding normal ranges
+          if (age < 1) {
+            ageGroup = "less than 1 year";
+            minSystolic = 75;
+            maxSystolic = 100;
+            minDiastolic = 50;
+            maxDiastolic = 70;
+          } else if (age >= 1 && age < 6) {
+            ageGroup = "1-5 years";
+            minSystolic = 80;
+            maxSystolic = 110;
+            minDiastolic = 50;
+            maxDiastolic = 80;
+          } else if (age >= 6 && age < 13) {
+            ageGroup = "6-13 years";
+            minSystolic = 85;
+            maxSystolic = 120;
+            minDiastolic = 55;
+            maxDiastolic = 80;
+          } else if (age >= 13 && age < 18) {
+            ageGroup = "13-18 years";
+            minSystolic = 95;
+            maxSystolic = 140;
+            minDiastolic = 60;
+            maxDiastolic = 90;
+          } else {
+            ageGroup = "above 18 years";
+            minSystolic = 100;
+            maxSystolic = 130;
+            minDiastolic = 60;
+            maxDiastolic = 90;
+          }
+
+          // Diastolic pressure is within normal range, check systolic pressure
+          if (systolic < minSystolic && diastolic < minDiastolic) {
+            return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low BP " };
+          } else if (systolic >= minSystolic && systolic <= maxSystolic && diastolic >= minDiastolic && diastolic <= maxDiastolic) {
+            return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal BP " };
+          } else if (systolic >= 140 && diastolic >= 90) {
+            return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High BP " };
+          } else {
+            // Diastolic pressure is not within normal range, consider only systolic pressure
+            if (systolic < minSystolic) {
+              return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low BP " + " (Using Systolic Only)" };
+            } else if (systolic >= minSystolic && systolic <= maxSystolic) {
+              return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal BP " + " (Using Systolic Only)" };
+            } else {
+              return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High BP " + " (Using Systolic Only)" };
             }
-        },
-        getTemperatureStatus(value: any) {
+          }
+        }
+      },
+
+      getTemperatureStatus(value: any) {
             if (value) {
                 let ageGroup;
                 let minTemp;
@@ -415,20 +417,20 @@ export default defineComponent({
                 // Determine age group and corresponding normal ranges base on Axillary
                 if (age <= 1) {
                     ageGroup = "(less than 1 year)";
-                    minTemp = 36.5;
-                    maxTemp = 37.5;
+                    minTemp = 35.5;
+                    maxTemp = 37.4;
                 } else if (age >= 1 && age <= 18) {
                     ageGroup = "(1-18 years)";
-                    minTemp = 36;
-                    maxTemp = 37.5;
+                  minTemp = 35.5;
+                  maxTemp = 37.4;
                 } else if (age >= 19 && age <= 64) {
                     ageGroup = "(above 18 years)";
-                    minTemp = 35.9;
-                    maxTemp = 36.7;
+                  minTemp = 35.5;
+                  maxTemp = 37.4;
                 } else if (age >= 65) {
                     ageGroup = "(above 18 years)";
-                    minTemp = 35.6;
-                    maxTemp = 36.5;
+                  minTemp = 35.5;
+                  maxTemp = 37.4;
                 } else {
                     minTemp = "";
                     maxTemp = "";
