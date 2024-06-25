@@ -24,6 +24,12 @@ export const useDispensationStore = defineStore("dispensation", {
         ],
     }),
     actions: {
+        resetStore() {
+            this.drugPrescriptions = [];
+            this.dispensedMedication = [];
+            this.payload = {};
+            this.saveInitiated = false;
+        },
         editDispensations() {
             this.toggleStepperData();
         },

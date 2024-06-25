@@ -165,10 +165,10 @@ export default defineComponent({
                         return true;
                     }
                 }
-            } else {
+            // } else {
                 modifyFieldValue(this.OPDdiagnosis, "differentialDiagnosis", "primaryDiagnosis", "Primary diagnosis is required");
                 return false;
-            }
+            // }
         },
 
         async addNewRow() {
