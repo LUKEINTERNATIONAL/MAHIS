@@ -40,6 +40,28 @@
                     {{ vaccine_name_error_message }}
                 </ion-label>
             </div>
+
+            <VueMultiselect
+                        style="margin-top: 27px;"
+                        v-model="updateVaccineName"
+                        @update:model-value="updateVaccineName($event)"
+                        :multiple="false"
+                        :taggable="false"
+                        :hide-selected="false"
+                        :close-on-select="true"
+                        openDirection="bottom"
+                        tag-placeholder="Select vaccine"
+                        placeholder="Select vaccine"
+                        selectLabel=""
+                        label="name"
+                        :searchable="true"
+                        @search-change="$emit('search-change', $event)"
+                        track-by="uuid"
+                        :options="otherVaccinesList"
+                    />
+                    <div>
+                        <ion-label style="padding: 3%;;" v-if="show_error_msg_for_drug" class="error-label">{{ drugErrMsg }}</ion-label>
+                    </div>
         </div>
 
         <customDatePicker v-if="showPD" />
@@ -125,6 +147,7 @@ export default defineComponent({
             showPD: false as boolean,
             batchNumber: "" as any,
             vaccineName: "" as string,
+            otherVaccinesList: [] as any,
             is_batch_number_valid: false as boolean,
             is_vaccine_name_valid: false as boolean,
             batch_number_error_message: "Enter a valid batch number",
@@ -193,8 +216,11 @@ export default defineComponent({
 
             // this.saveDta(vaccine_date);
         },
-        updateVaccineName() {
-
+        updateVaccineName(data: any) {
+            // drugName.value = data.name;
+            // drug_id.value = data.drug_id;
+            // units.value = data.units;
+            // currentDrugOb.value = data
         },
         isAlphaNumeric(text: string) {
             // Regular expression to match one or more digits
