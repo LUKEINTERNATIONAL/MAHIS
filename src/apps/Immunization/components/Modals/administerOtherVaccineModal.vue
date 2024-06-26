@@ -1,6 +1,6 @@
 <template>
     <div class="modal_wrapper">
-        <ion-row>
+        <ion-row style="margin-top: 10px;">
             <ion-col style="margin-left: -3px">
                 <div class="om">Add Other Vaccine</div>
             </ion-col>
@@ -9,6 +9,11 @@
             </ion-col>
         </ion-row>
 
+        <ion-row>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                >Batch number<span style="color: #b42318">*</span></ion-label
+            >
+        </ion-row>
         <div>
             <BasicInputField
                 :placeholder="'Enter batch number'"
@@ -26,29 +31,34 @@
                 </ion-label>
             </div>
         </div>
+        
 
-        <div style="margin-top: 30px;">
+        <div style="margin-top: 30px; margin-bottom: 100px;">
+            <ion-row>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                    >Vaccine name<span style="color: #b42318">*</span></ion-label
+                >
+            </ion-row>
             <VueMultiselect
-                        style="margin-top: 27px;"
-                        v-model="vaccineName"
-                        @update:model-value="updateVaccineName($event)"
-                        :multiple="false"
-                        :taggable="false"
-                        :hide-selected="false"
-                        :close-on-select="true"
-                        openDirection="bottom"
-                        tag-placeholder="select vaccine"
-                        placeholder="select vaccine"
-                        selectLabel=""
-                        label="drug_name"
-                        :searchable="true"
-                        @search-change="$emit('search-change', $event)"
-                        track-by="drug_id"
-                        :options="otherVaccinesList"
-                    />
-                    <div>
-                        <ion-label style="padding: 3%;;" v-if="is_vaccine_name_valid" class="error-label">{{ vaccine_name_error_message }}</ion-label>
-                    </div>
+                v-model="vaccineName"
+                @update:model-value="updateVaccineName($event)"
+                :multiple="false"
+                :taggable="false"
+                :hide-selected="false"
+                :close-on-select="true"
+                openDirection="bottom"
+                tag-placeholder="select vaccine"
+                placeholder="select vaccine"
+                selectLabel=""
+                label="drug_name"
+                :searchable="true"
+                @search-change="$emit('search-change', $event)"
+                track-by="drug_id"
+                :options="otherVaccinesList"
+            />
+            <div>
+                <ion-label style="padding: 3%;;" v-if="is_vaccine_name_valid" class="error-label">{{ vaccine_name_error_message }}</ion-label>
+            </div>
         </div>
 
         <customDatePicker v-if="showPD" />
@@ -91,8 +101,8 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController, IonInput, IonCol, IonRow } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController, IonInput, IonCol, IonLabel, IonRow, modalController } from "@ionic/vue";
+import { defineComponent } from "vue"; 
 import { checkmark, pulseOutline, clipboardOutline } from "ionicons/icons";
 import { icons } from "@/utils/svg";
 import { useAdministerOtherVaccineStore } from "@/apps/Immunization/stores/AdministerOtherVaccinesStore";
@@ -107,10 +117,13 @@ import { Service } from "@/services/service";
 import PreviousVitals from "@/components/previousVisits/previousVitals.vue"
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue"
 import { PatientService } from "@/services/patient_service"
+import { saveVaccineAdministeredDrugs, getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service"
 import QRCodeReadersrc from "@/components/QRCodeReader.vue"
 import { createModal } from "@/utils/Alerts"
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore"
 import VueMultiselect from "vue-multiselect"
+import { isEmpty } from "lodash"
+import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts"
 
 export default defineComponent({
     components: {
@@ -129,13 +142,15 @@ export default defineComponent({
         IonCol,
         IonRow,
         VueMultiselect,
+        IonLabel
     },
     data() {
         return {
             iconsContent: icons,
             showPD: false as boolean,
             batchNumber: "" as any,
-            vaccineName: "" as string,
+            vaccineName: '' as string,
+            currentDrugOb: {} as any,
             otherVaccinesList: [
                 {
                     "concept_id": 11592,
@@ -171,6 +186,7 @@ export default defineComponent({
                 }
             ] as any,
             is_batch_number_valid: false as boolean,
+            vaccineDate: "" as any,
             is_vaccine_name_valid: false as boolean,
             batch_number_error_message: "Enter a valid batch number",
             vaccine_name_error_message: "Enter a valid valid vaccine name",
@@ -207,6 +223,11 @@ export default defineComponent({
                     this.validateBatchNumber()
                 }
             }
+        },
+        vaccineName: {
+            handler() {
+                this.validateVaccineName()
+            }
         }
     },
     setup() {
@@ -222,27 +243,36 @@ export default defineComponent({
             this.batchNumber = input;
         },
         saveBatchWithTodayDate() {
-            // let vaccine_date = Service.getSessionDate();
-            // this.saveDta(vaccine_date);
+            let vaccine_date = Service.getSessionDate()
+            this.saveDta(vaccine_date);
         },
         dismiss() {
-            // modalController.dismiss();
+            modalController.dismiss()
         },
         saveBatch() {
-            // let vaccine_date;
-            // if (isEmpty(this.vaccineDate) == true) {
-            //     vaccine_date = Service.getSessionDate();
-            // } else {
-            //     vaccine_date = this.vaccineDate;
-            // }
+            
+            let vaccine_date;
+            if (isEmpty(this.vaccineDate) == true) {
+                vaccine_date = Service.getSessionDate();
+            } else {
+                vaccine_date = this.vaccineDate;
+            }
 
-            // this.saveDta(vaccine_date);
+            this.saveDta(vaccine_date);
+        },
+        validateVaccineName() {
+            if (isEmpty(this.vaccineName) == true) {
+                this.is_vaccine_name_valid = true
+                return false
+            }
+
+            if (isEmpty(this.vaccineName) == false) {
+                this.is_vaccine_name_valid = false
+                return true
+            }
         },
         updateVaccineName(data: any) {
-            // drugName.value = data.name;
-            // drug_id.value = data.drug_id;
-            // units.value = data.units;
-            // currentDrugOb.value = data
+            this.currentDrugOb = data
         },
         isAlphaNumeric(text: string) {
             // Regular expression to match one or more digits
@@ -260,7 +290,30 @@ export default defineComponent({
         updateBatchNumberByPassValue(input: any) {
             console.log(input, 'qqqqqqqwwwwwwwwwwww');
             this.batchNumber = input
-        }
+        },
+        saveDta(date_: any) {
+            this.validateVaccineName()
+            this.validateBatchNumber()
+            if (this.is_batch_number_valid == true) {
+                toastWarning("Enter batch number!");
+                return;
+            }
+
+            if (this.batchNumber == "") {
+                toastWarning("Enter batch number!")
+                return;
+            }
+            const dta = {
+                batch_number: this.batchNumber,
+                date_administered: date_,
+                visit_id: 0,// doesnt do anything really
+                drug_id: this.currentDrugOb.drug_id,
+            };
+            const store = useAdministerVaccineStore();
+            store.setAdministeredVaccine(dta)
+            saveVaccineAdministeredDrugs()
+            this.dismiss();
+        },
     },
 });
 </script>

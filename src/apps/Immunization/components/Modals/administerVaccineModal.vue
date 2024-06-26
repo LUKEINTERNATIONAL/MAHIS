@@ -1,6 +1,6 @@
 <template>
     <div class="modal_wrapper">
-        <ion-row>
+        <ion-row style="margin-top: 10px;">
             <ion-col style="margin-left: -3px">
                 <div class="om">Administer Vaccine</div>
             </ion-col>
