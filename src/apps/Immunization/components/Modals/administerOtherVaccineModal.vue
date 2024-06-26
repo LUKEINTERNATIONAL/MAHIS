@@ -28,39 +28,26 @@
         </div>
 
         <div style="margin-top: 30px;">
-            <BasicInputField
-                :placeholder="'Enter vaccine name'"
-                :icon="clipboardOutline"
-                :inputValue="vaccineName"
-                @update:inputValue="updateVaccineName"
-            />
-
-            <div>
-                <ion-label v-if="is_vaccine_name_valid" class="error-label">
-                    {{ vaccine_name_error_message }}
-                </ion-label>
-            </div>
-
             <VueMultiselect
                         style="margin-top: 27px;"
-                        v-model="updateVaccineName"
+                        v-model="vaccineName"
                         @update:model-value="updateVaccineName($event)"
                         :multiple="false"
                         :taggable="false"
                         :hide-selected="false"
                         :close-on-select="true"
                         openDirection="bottom"
-                        tag-placeholder="Select vaccine"
-                        placeholder="Select vaccine"
+                        tag-placeholder="select vaccine"
+                        placeholder="select vaccine"
                         selectLabel=""
-                        label="name"
+                        label="drug_name"
                         :searchable="true"
                         @search-change="$emit('search-change', $event)"
-                        track-by="uuid"
+                        track-by="drug_id"
                         :options="otherVaccinesList"
                     />
                     <div>
-                        <ion-label style="padding: 3%;;" v-if="show_error_msg_for_drug" class="error-label">{{ drugErrMsg }}</ion-label>
+                        <ion-label style="padding: 3%;;" v-if="is_vaccine_name_valid" class="error-label">{{ vaccine_name_error_message }}</ion-label>
                     </div>
         </div>
 
@@ -123,6 +110,7 @@ import { PatientService } from "@/services/patient_service"
 import QRCodeReadersrc from "@/components/QRCodeReader.vue"
 import { createModal } from "@/utils/Alerts"
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore"
+import VueMultiselect from "vue-multiselect"
 
 export default defineComponent({
     components: {
@@ -140,6 +128,7 @@ export default defineComponent({
         customDatePicker,
         IonCol,
         IonRow,
+        VueMultiselect,
     },
     data() {
         return {
@@ -147,7 +136,40 @@ export default defineComponent({
             showPD: false as boolean,
             batchNumber: "" as any,
             vaccineName: "" as string,
-            otherVaccinesList: [] as any,
+            otherVaccinesList: [
+                {
+                    "concept_id": 11592,
+                    "drug_id": 1287,
+                    "drug_name": "OPV3",
+                    "status": "administered",
+                    "date_administered": "01/Jun/2024 08:40:01",
+                    "vaccine_batch_number": null
+                },
+                {
+                    "concept_id": 11592,
+                    "drug_id": 1290,
+                    "drug_name": "Pentavalent 3",
+                    "status": "administered",
+                    "date_administered": "31/May/2024 15:16:03",
+                    "vaccine_batch_number": null
+                },
+                {
+                    "concept_id": 11592,
+                    "drug_id": 1293,
+                    "drug_name": "PCV3",
+                    "status": "administered",
+                    "date_administered": "01/Jun/2024 08:40:17",
+                    "vaccine_batch_number": null
+                },
+                {
+                    "concept_id": 11592,
+                    "drug_id": 1301,
+                    "drug_name": "IPV",
+                    "status": "administered",
+                    "date_administered": "31/May/2024 15:33:44",
+                    "vaccine_batch_number": null
+                }
+            ] as any,
             is_batch_number_valid: false as boolean,
             is_vaccine_name_valid: false as boolean,
             batch_number_error_message: "Enter a valid batch number",
