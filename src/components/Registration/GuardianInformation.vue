@@ -67,7 +67,6 @@ export default defineComponent({
     },
     async mounted() {
         this.relationships = await RelationsService.getRelations();
-        console.log(this.relationships);
         const data = this.relationships
             .map((r: any) => {
                 if (r.b_is_to_a == r.b_is_to_a) {
