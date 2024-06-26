@@ -230,7 +230,8 @@ export default defineComponent({
                     item.name == "Hepatitis B" ||
                     item.name == "Lam" ||
                     item.name == "CrAg" ||
-                    item.name == "CD4 count"
+                    item.name == "CD4 count" ||
+                    item.name == "HIV test"
                 ) {
                     let multiData = [] as any;
                     if (item.name == "MRDT" || item.name == "Vdrl" || item.name == "Hepatitis B" || item.name == "CrAg" || item.name == "Lam") {
@@ -240,6 +241,14 @@ export default defineComponent({
                             { id: "3", name: "Invalid" },
                         ];
                     }
+
+                  if (item.name == "HIV test") {
+                    multiData = [
+                      { id: "1", name: "Positive" },
+                      { id: "2", name: "Negative" },
+                      { id: "3", name: "Unknown" },
+                    ];
+                  }
 
                     if (item.name == "Tuberculosis program") {
                         multiData = [
