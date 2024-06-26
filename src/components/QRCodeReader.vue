@@ -35,6 +35,7 @@
 import { ref, onMounted } from 'vue'
 import { type Result, StreamQrcodeBarcodeReader } from 'vue3-barcode-qrcode-reader'
 import { IonLabel, IonCol, IonButton, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue"
+import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore"
 
 onMounted(async () => {
   handleOnCanPlay()
@@ -45,6 +46,8 @@ const isLoading = ref<boolean>(false)
 function onResult(data: Result | undefined): void {
   decode.value = data
   if (decode.value != undefined) {
+    const store = useAdministerVaccineStore()
+    store.setTempScannedBatchNumber(decode.value)
     scanresult(decode.value)
   }
 }

@@ -17,6 +17,7 @@
                 :-inner-action-btn-propeties="InnerActionBtnPropeties"
                 @update:InnerActionBtnPropetiesAction="InnerActionBtnPropeties.fn"
                 @update:inputValue="updateBatchNumber"
+                @update:passedinputValue="updateBatchNumberByPassValue"
             />
 
             <div>
@@ -94,11 +95,12 @@ import BasicForm from "@/components/BasicForm.vue";
 import HisDate from "@/utils/Date";
 import { Service } from "@/services/service";
 
-import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
-import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
-import { PatientService } from "@/services/patient_service";
+import PreviousVitals from "@/components/previousVisits/previousVitals.vue"
+import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue"
+import { PatientService } from "@/services/patient_service"
 import QRCodeReadersrc from "@/components/QRCodeReader.vue"
 import { createModal } from "@/utils/Alerts"
+import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore"
 
 export default defineComponent({
     components: {
@@ -138,9 +140,29 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useAdministerOtherVaccineStore, ["administerOtherVaccine"]),
+        ...mapState(useAdministerVaccineStore, ["tempScannedBatchNumber"]),
     },
     async mounted() {
         
+    },
+    watch: {
+        batchNumber: {
+            handler() {
+                this.validateBatchNumber()
+            },
+            deep: true,
+        },
+        tempScannedBatchNumber: {
+            handler() {
+                if (this.tempScannedBatchNumber != null) {
+                    console.log(this.tempScannedBatchNumber)
+                    this.batchNumber = this.tempScannedBatchNumber.text
+                    const store = useAdministerVaccineStore()
+                    store.setTempScannedBatchNumber(null)
+                    this.validateBatchNumber()
+                }
+            }
+        }
     },
     setup() {
         return { checkmark, pulseOutline, clipboardOutline };
@@ -174,6 +196,23 @@ export default defineComponent({
         updateVaccineName() {
 
         },
+        isAlphaNumeric(text: string) {
+            // Regular expression to match one or more digits
+            const regex = /^[a-zA-Z0-9]+$/;
+            return regex.test(text);
+        },
+        validateBatchNumber() {
+            if (this.isAlphaNumeric(this.batchNumber as string) == true) {
+                    this.is_batch_number_valid = false;
+                }
+                if (this.isAlphaNumeric(this.batchNumber as string) == false) {
+                    this.is_batch_number_valid = true;
+                }
+        },
+        updateBatchNumberByPassValue(input: any) {
+            console.log(input, 'qqqqqqqwwwwwwwwwwww');
+            this.batchNumber = input
+        }
     },
 });
 </script>
@@ -236,5 +275,15 @@ h5 {
     min-width: 20px;
     color: #b3b3b3 !important;
     white-space: nowrap;
+}
+.error-label {
+    background: #fecdca;
+    color: #b42318;
+    text-transform: none;
+    padding: 6%;
+    border-radius: 10px;
+    margin-top: 7px;
+    display: flex;
+    text-align: center;
 }
 </style>

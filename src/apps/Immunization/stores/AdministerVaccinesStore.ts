@@ -12,6 +12,7 @@ export const useAdministerVaccineStore = defineStore('administerVaccineStore',{
       currentSchedFound: false,
       missedVaccineSchedules: [] as any,
       overDueVaccinesCount: 0,
+      tempScannedBatchNumber: null as any,
     }),
     actions:{
       setVaccineSchedule(data: any) {
@@ -100,7 +101,10 @@ export const useAdministerVaccineStore = defineStore('administerVaccineStore',{
         })
         this.overDueVaccinesCount = currentVaccines.length
         return currentVaccines
-      }
+      },
+      setTempScannedBatchNumber(tempScannedBatchNumber: any) {
+        this.tempScannedBatchNumber = tempScannedBatchNumber
+      },
     },
     persist: true,
 })
