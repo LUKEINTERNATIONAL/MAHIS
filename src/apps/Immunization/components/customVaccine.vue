@@ -143,30 +143,31 @@ export default defineComponent({
             createModal(administerVaccineModal, { class: "otherVitalsModal" });
         },
         disableVaccine(identifier: number) {
-            const client = new PatientService();
-            const client_age = client.getAge();
-            const is_under_five = this.getVisitNumber(client_age) as number;
-            const store = useAdministerVaccineStore();
-            const currentVisitId = store.getCurrentVisitId();
-            const currentSchFound = store.getCurrentSchedFound();
+            // const client = new PatientService();
+            // const client_age = client.getAge();
+            // const is_under_five = this.getVisitNumber(client_age) as number;
+            // const store = useAdministerVaccineStore();
+            // const currentVisitId = store.getCurrentVisitId();
+            // const currentSchFound = store.getCurrentSchedFound();
 
-            if (currentSchFound == false) {
-                return true;
-            }
+            // if (currentSchFound == false) {
+            //     return true;
+            // }
 
-            if (identifier == currentVisitId) {
-                return false;
-            }
+            // if (identifier == currentVisitId) {
+            //     return false;
+            // }
 
-            if (identifier < is_under_five) {
-                return true;
-            }
+            // if (identifier < is_under_five) {
+            //     return true;
+            // }
 
-            if (identifier < currentVisitId) {
-                return false;
-            } else {
-                return true;
-            }
+            // if (identifier < currentVisitId) {
+            //     return false;
+            // } else {
+            //     return true;
+            // }
+            return false
         },
         checkVaccineName(name: string) {
             return name.replace(/Pentavalent/g, "Penta");
