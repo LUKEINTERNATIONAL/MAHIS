@@ -392,8 +392,8 @@ export default defineComponent({
             return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low BP " };
           } else if (systolic >= minSystolic && systolic <= maxSystolic && diastolic >= minDiastolic && diastolic <= maxDiastolic) {
             return { colors: ["#DDEEDD", "#016302", "#BBDDBC"], value: "Normal BP " };
-          } else if (systolic >= 140 && diastolic >= 90) {
-            return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High BP " };
+          } else if (systolic > 140 && diastolic > 90) {
+            return { colors: ["#FECDCA", "#B42318", "#FDA19B"], value: "High BP" };
           } else {
             // Diastolic pressure is not within normal range, consider only systolic pressure
             if (systolic < minSystolic) {
@@ -485,6 +485,8 @@ export default defineComponent({
                     minPulse = "";
                     maxPulse = "";
                 }
+
+            
 
                 if (value < minPulse) {
                     return { colors: ["#B9E6FE", "#026AA2", "#9ADBFE"], value: "Low Pulse Rate " };
