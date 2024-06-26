@@ -43,6 +43,11 @@
       <ion-toolbar>
         <pagination
           v-if="!searchFilter && paginated || !searchFilter && totalPages > 0 && paginated"
+          :onClickPrevious="()=>{}"
+          :onClickNext="()=>{}"
+          :page="1"
+          :disableNext="false"
+          :disablePrevious="false"
           :perPage="itemsPerPage"
           :maxVisibleButtons="10"
           :totalPages="totalPages"
@@ -107,7 +112,7 @@ export default defineComponent({
     },
     rowParser: {
       type: Function as PropType<TableRowParser>
-    },
+    } as any,
     showFilters: {
       type: Boolean,
       default: false
@@ -117,7 +122,7 @@ export default defineComponent({
     },
     asyncRows: {
       type: Function as PropType<AsyncTableRowHandler>
-    },
+    } as any,
     paginated: {
       type: Boolean,
       default: false

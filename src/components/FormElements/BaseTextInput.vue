@@ -13,6 +13,7 @@
 <script lang="ts">
 import { computed, defineComponent } from "vue";
 import { IonInput } from "@ionic/vue";
+import { TextFieldTypes } from '@ionic/core';
 import usePlatform from "@/composables/usePlatform"
 
 export default defineComponent({
@@ -41,7 +42,7 @@ export default defineComponent({
       required: false,
     },
     type: {
-      type: String,
+      type: String as () => TextFieldTypes,
       default: () => "text",
     },
     disabled: {

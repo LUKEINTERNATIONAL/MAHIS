@@ -6,7 +6,7 @@
   <ion-page v-if="reportReady">
     <ion-content>
       <div id="report-content">
-        <idsr-h :key="componentKey" :reportName="reportName" :rangeLabel="rangeLabel" :range="range" ref="header" :periodLabel="periodLabel" :periodDates="periodDates" :clinicName="clinicName" :totalOPDVisits="TotalOPDVisits"></idsr-h>
+        <idsr-h :key="componentKey" :reportName="reportName" :reportparams="reportparams" :rangeLabel="rangeLabel" :range="range" ref="header" :periodLabel="periodLabel" :periodDates="periodDates" :clinicName="clinicName" :totalOPDVisits="TotalOPDVisits"></idsr-h>
         <monthly :key="componentKey" :onDrillDown="onDrillDown" :periodDates="periodDates" :params="idsr" :month="range" ref="rep"> </monthly>
       </div>
     </ion-content>
@@ -47,8 +47,9 @@ export default defineComponent({
     rangeLabel: 'Month',
     range: '' as string,
     TotalOPDVisits: 0 as number,
-    clinicName: IDSRReportService.getLocationName(),
+    clinicName: IDSRReportService.getLocationName() as string,
     reportReady: false as boolean,
+    reportparams: {}, 
   }),
   created() {
     this.btns = this.getBtns()

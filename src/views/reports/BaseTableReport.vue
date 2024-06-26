@@ -72,6 +72,11 @@
     <ion-footer>
       <ion-toolbar v-if="!searchFilter && paginated || !searchFilter && totalPages > 0 && paginated">
         <pagination
+          :onClickPrevious="()=>{}"
+          :onClickNext="()=>{}"
+          :page="1"
+          :disableNext="false"
+          :disablePrevious="false"
           :perPage="itemsPerPage"
           :maxVisibleButtons="10"
           :totalPages="totalPages"

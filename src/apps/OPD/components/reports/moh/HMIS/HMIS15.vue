@@ -13,7 +13,18 @@
   <ion-page v-if="reportReady">
     <ion-content>
       <div id="report-content">
-        <hmis-header :key="componentKey" :reportName="reportName" ref="header" :periodLabel="periodLabel" :periodDates="periodDates" :clinicName="clinicName" :totalOPDVisits="TotalOPDVisits" ></hmis-header>
+        <hmis-header
+          :key="componentKey"
+          :reportName="reportName"
+          ref="header"
+          :periodLabel="periodLabel"
+          :periodDates="periodDates"
+          :clinicName="clinicName"
+          :totalOPDVisits="totalOPDVisits"
+          :reportparams="reportparams"
+          :rangeLabel="rangeLabel"
+          :range="range"
+        />
         <hmis-template :key="componentKey" :reportName="reportName" :onDrillDown="onDrillDown" :params="hmis15Data" :periodDates="periodDates" ref="rep"></hmis-template>
       </div>
     </ion-content>
@@ -50,11 +61,15 @@ export default defineComponent({
     reportID: -1 as any,
     periodLabel: 'Period',
     periodDates: '' as string,
-    reportName: 'HMIS 15',
+    reportName: 'HMIS 15'  as string,
     TotalOPDVisits: 0 as number,
-    clinicName: HMISReportService.getLocationName(),
+    clinicName: HMISReportService.getLocationName() as string,
     reportReady: false as boolean,
-    reportTitle: ''
+    reportTitle: '',
+    totalOPDVisits: 0,
+    reportparams: {}, // Assuming this is an empty object initially
+    rangeLabel: 'Default Range', // Provide a default value or dynamically set it
+    range: '' // Example range
   }),
   created() {
     this.btns = this.getBtns()
