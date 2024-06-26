@@ -54,8 +54,8 @@
                     </div>
                 </div>
                 <div class="graphCard">
-                    <ImmunizationTrendsGraph v-if="controlGraphs == 'months'" />
-                    <ImmunizationGroupGraph v-if="controlGraphs == 'group'" />
+                    <ImmunizationTrendsGraph :reportData="reportData" v-if="controlGraphs == 'months'" />
+                    <ImmunizationGroupGraph :reportData="reportData" v-if="controlGraphs == 'group'" />
                 </div>
             </div>
         </ion-content>
@@ -106,23 +106,24 @@ export default defineComponent({
     computed: {
         ...mapState(useGeneralStore, ["OPDActivities"]),
     },
+    $route: {
+        async handler() {
+            webSocketService.setMessageHandler(this.onMessage);
+        },
+        deep: true,
+    },
     async mounted() {
         this.setView();
         this.startTimer();
         webSocketService.setMessageHandler(this.onMessage);
-        this.fetchReport();
+        webSocketService.fetchData();
     },
     methods: {
-        fetchReport() {
-            console.log("ffffffff");
-            webSocketService.fetchData("2024-01-01", "2024-12-31");
-        },
-
         onMessage(event: MessageEvent) {
             const data = JSON.parse(event.data);
             if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel" })) {
                 this.reportData = data.message;
-                console.log("🚀 ~ onMessage ~ data:", data);
+                console.log("🚀 ~ onMessage ~ this.reportData :", this.reportData);
             }
         },
         getPatientSummary: async function () {

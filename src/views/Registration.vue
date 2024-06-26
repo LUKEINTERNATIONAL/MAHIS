@@ -22,7 +22,7 @@
         <ion-content>
             <div class="container">
                 <div class="title">
-                    <div class="demographics_title">New patient registration</div>
+                    <div class="demographics_title">New {{ programID() != 33 ? "patient" : "client" }} registration</div>
                 </div>
                 <div class="icon_div displayNoneMobile">
                     <ion-icon :class="iconListStatus" :icon="list" @click="setDisplayType('list')"></ion-icon>
@@ -274,6 +274,9 @@ export default defineComponent({
         return { arrowForwardCircle, grid, list };
     },
     methods: {
+        programID() {
+            return Service.getProgramID();
+        },
         async getRegion(name: any) {
             let districts = [];
             for (let i of [1, 2, 3]) {
