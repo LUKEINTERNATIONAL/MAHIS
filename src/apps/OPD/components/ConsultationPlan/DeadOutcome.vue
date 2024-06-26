@@ -126,7 +126,7 @@
                 placeholder="How did it occur?"
                 selectLabel=""
                 label="name"
-                :disabled="temP_A"
+                :disabled="list_picker_prperties[1].disabled.value"
                 :searchable="true"
                 track-by="id"
                 :options="causesOfDeath"
@@ -280,6 +280,7 @@ const temP_A = ref(true as any);
 const temP_AA = ref(true as any);
 const manner_of_death_Selection_value = ref();
 const how_did_it_occur_Selection_value = ref();
+
 
 onMounted(async () => {
     checkPatient();
@@ -440,20 +441,20 @@ const dynamic_button_properties = [
 ];
 
 const mannerOfDeath = ref([
-    { id: 1, name: "Natural" },
-    { id: 2, name: "Accident" },
-    { id: 3, name: "Homicide" },
-    { id: 4, name: "Suicide" },
-    { id: 5, name: "Pending investigation" },
-    { id: 6, name: "Could not be determined" },
-    { id: 7, name: "Other - specify" },
+    { id: 1, name: "Natural" , selected: false},
+    { id: 2, name: "Accident",  selected: false },
+    { id: 3, name: "Homicide", selected: false },
+    { id: 4, name: "Suicide", selected: false },
+    { id: 5, name: "Pending investigation", selected: false },
+    { id: 6, name: "Could not be determined", selected: false },
+    { id: 7, name: "Other - specify", selected: false },
 ] as any);
 
 const causesOfDeath = ref([
-    { id: 1, name: "Motor vehicle (passenger)" },
-    { id: 2, name: "Motor vehicle (pedestrian)" },
-    { id: 3, name: "Drowning" },
-    { id: 4, name: "Other - specify" },
+    { id: 1, name: "Motor vehicle (passenger)", selected: false },
+    { id: 2, name: "Motor vehicle (pedestrian)", selected: false },
+    { id: 3, name: "Drowning", selected: false },
+    { id: 4, name: "Other - specify", selected: false },
 ] as any);
 
 const list_picker_prperties = [
@@ -484,7 +485,7 @@ const list_picker_prperties = [
         listUpdatedFN: listUpdated2,
         listFilteredFN: () => {},
         use_internal_filter: true as any,
-        disabled: temP_A.value,
+        disabled: ref(true) as any,
         show_error: ref(false),
         error_message: "selection required",
     },
@@ -577,21 +578,17 @@ function notesUpDated_fn6(event: any) {
 }
 
 function listUpdated1(data: any) {
-    if (data.id == 2) {
-        temP_A.value = false;
-        temP_AA.value = true;
-        return;
-    }
 
-    if (data.id == 7) {
-        temP_AA.value = false;
-        temP_A.value = true;
-        return;
-    }
+    //TODO: please come back to this
+    //deselect all
+    mannerOfDeath.value.forEach((item:any)=>item.selected=false);
 
-    temP_A.value = true;
-    temP_AA.value = true;
-    return;
+   const foundItem= mannerOfDeath.value.find((item:any)=> item.id==data.id);
+
+
+    list_picker_prperties[1].disabled.value = data.name=="Accident" ? false : true;
+
+    foundItem.selected =true
 }
 
 function resetSelectionForCausesOfDeath() {
@@ -602,12 +599,17 @@ function resetSelectionForCausesOfDeath() {
 
 function listUpdated2(data: any) {
     console.log("listUpdated", data);
-    if (data.id == 4) {
-        temP_AA.value = false;
-        return;
-    }
-    temP_AA.value = true;
-    return;
+    causesOfDeath.value.forEach((item:any)=>item.selected=false);
+    const foundItem= causesOfDeath.value.find((item:any)=> item.id==data.id);
+    foundItem.selected=true
+
+
+    // if (data.id == 4) {
+    //     temP_AA.value = false;
+    //     return;
+    // }
+    // temP_AA.value = true;
+    // return;
 }
 
 function checkPatient() {
@@ -625,8 +627,7 @@ function validateForm() {
     areFieldsValid(note_properties);
     areFieldsValid(date_properties);
     areFieldsValid(time_properties);
-    isItemSeleted(list_picker_prperties[0]);
-    isItemSeleted(list_picker_prperties[1]);
+    isItemSeleted();
 
     const payload = _.merge(
         getFieldsValuesObj(note_properties),
@@ -639,20 +640,36 @@ function validateForm() {
     console.log(payload);
 }
 
-function isItemSeleted(propoerties_item: any) {
-    const temp_data_v = [];
-    propoerties_item.items.forEach((item: any) => {
-        if (item.selected == true) {
-            temp_data_v.push(item);
-        }
-    });
-    if (temp_data_v.length > 0) {
-        propoerties_item.show_error.value = false;
+function isItemSeleted() {
+
+    const selectedMannerOfDeath= mannerOfDeath.value.filter((item:any)=>item.selected);
+ 
+    if(selectedMannerOfDeath.length==0){
+        list_picker_prperties[0].show_error.value=true
     } else {
-        propoerties_item.show_error.value = true;
+ list_picker_prperties[0].show_error.value=false
+        if(selectedMannerOfDeath[0].name=="Accident"){
+         const selectedCauseOfDeath= causesOfDeath.value.filter((item:any)=>item.selected);
+         list_picker_prperties[1].show_error.value= selectedCauseOfDeath.length==0?true:false
+         
+        }
     }
 
-    return propoerties_item.show_error.value;
+
+
+    // const temp_data_v = [];
+    // propoerties_item.items.forEach((item: any) => {
+    //     if (item.selected == true) {
+    //         temp_data_v.push(item);
+    //     }
+    // });
+    // if (temp_data_v.length > 0) {
+    //     propoerties_item.show_error.value = false;
+    // } else {
+    //     propoerties_item.show_error.value = true;
+    // }
+
+    // return propoerties_item.show_error.value;
 }
 
 function getItemSeletedObj(propoerties_item: any) {
