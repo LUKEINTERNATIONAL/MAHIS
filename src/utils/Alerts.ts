@@ -97,10 +97,10 @@ export async function infoAlert(message: string, header = "Information") {
     alert.present();
 }
 
-export async function createModal(modalComponet: any, options = {} as any) {
+export async function createModal(modalComponet: any, options = {} as any, BACKDROPDISMISS=true) {
     const modal = await modalController.create({
         component: modalComponet,
-        backdropDismiss: true,
+        backdropDismiss: BACKDROPDISMISS,
         cssClass: options.class || "large-modal",
     });
     modal.present();

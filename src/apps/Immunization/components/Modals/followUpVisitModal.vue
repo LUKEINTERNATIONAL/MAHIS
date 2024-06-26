@@ -7,8 +7,37 @@
         <div class="OtherVitalsHeading">
             <div class="OtherVitalsTitle">Follow up visits</div>
         </div>
-        <div class="">
-            <basic-form :contentData="followUpStore" @update:inputValue="handleInputData"></basic-form>
+
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Change guarding</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content" style="padding-bottom: 200px">
+                    <div class="">
+                        <basic-form :contentData="changeGuardianInfo" @update:inputValue="handleInputData"></basic-form>
+                    </div>
+                </div>
+            </ion-accordion>
+            <ion-accordion value="second" toggle-icon-slot="start" class="custom_card">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Vaccine adverse effects</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content" style="padding-bottom: 200px">
+                    <basic-form :contentData="vaccineAdverseEffects" @update:inputValue="handleInputData"></basic-form>
+                </div>
+            </ion-accordion>
+            <ion-accordion value="third" toggle-icon-slot="start" class="custom_card">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Child protected at birth</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content" style="padding-bottom: 120px">
+                    <basic-form :contentData="protectedAtBirth" @update:inputValue="handleInputData"></basic-form>
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+        <div style="display: flex; justify-content: end; padding-bottom: 3px">
+            <DynamicButton fill="solid" name="Save Changes" />
         </div>
     </div>
 </template>
@@ -42,6 +71,8 @@ import {
     modifyRadioValue,
     modifyFieldValue,
 } from "@/services/data_helpers";
+import { RelationsService } from "@/services/relations_service";
+import DynamicButton from "@/components/DynamicButton.vue";
 
 export default defineComponent({
     components: {
@@ -57,6 +88,7 @@ export default defineComponent({
         BasicForm,
         PreviousVitals,
         customDatePicker,
+        DynamicButton,
     },
     data() {
         return {
@@ -64,6 +96,7 @@ export default defineComponent({
             BMI: {} as any,
             BPStatus: {} as any,
             vValidations: "" as any,
+            relationships: "" as any,
             hasValidationErrors: [] as any,
             vitalsInstance: {} as any,
             validationStatus: { heightWeight: false, bloodPressure: false } as any,
@@ -72,10 +105,24 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
-        ...mapState(useFollowUpStoreStore, ["followUpStore"]),
+        ...mapState(useFollowUpStoreStore, ["changeGuardianInfo", "vaccineAdverseEffects", "protectedAtBirth"]),
     },
     async mounted() {
-        const array = ["Height", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
+        this.relationships = await RelationsService.getRelations();
+        const data = this.relationships
+            .map((r: any) => {
+                if (r.b_is_to_a == r.b_is_to_a) {
+                    return [{ name: r.b_is_to_a, id: r.relationship_type_id, trackByID: r.relationship_type_id + r.b_is_to_a }];
+                } else if (r.b_is_to_a != r.b_is_to_a) {
+                    return [
+                        { name: r.b_is_to_a, id: r.relationship_type_id, trackByID: r.relationship_type_id + r.b_is_to_a },
+                        { name: r.a_is_to_b, id: r.relationship_type_id, trackByID: r.relationship_type_id + r.a_is_to_b },
+                    ];
+                }
+            })
+            .reduce((acc: any, val: any) => acc.concat(val), []);
+        console.log(data);
+        modifyFieldValue(this.changeGuardianInfo, "relationship", "multiSelectData", data);
     },
     setup() {
         return { checkmark, pulseOutline };
@@ -86,23 +133,22 @@ export default defineComponent({
             this.$router.push(url);
         },
         handleInputData(event: any) {
-            if (event?.col?.name == "Change guardian" && event?.col?.checked) {
-                const guardianFields = ["guardianFirstname", "guardianLastname", "guardianMiddleName", "guardianPhoneNumber", "relationship"];
-                guardianFields.forEach((fields) => {
-                    modifyFieldValue(this.followUpStore, fields, "displayNone", false);
-                });
-            } else if (event?.col?.name == "Change guardian") {
-                const guardianFields = ["guardianFirstname", "guardianLastname", "guardianMiddleName", "guardianPhoneNumber", "relationship"];
-                guardianFields.forEach((fields) => {
-                    modifyFieldValue(this.followUpStore, fields, "displayNone", true);
-                });
-            }
-
-            if (event?.col?.name == "Vaccine adverse effects" && event?.col?.checked) {
-                modifyFieldValue(this.followUpStore, "Vaccine adverse effects", "displayNone", false);
-            } else if (event?.col?.name == "Vaccine adverse effects") {
-                modifyFieldValue(this.followUpStore, "Vaccine adverse effects", "displayNone", true);
-            }
+            // if (event?.col?.name == "Change guardian" && event?.col?.checked) {
+            //     const guardianFields = ["guardianFirstname", "guardianLastname", "guardianMiddleName", "guardianPhoneNumber", "relationship"];
+            //     guardianFields.forEach((fields) => {
+            //         modifyFieldValue(this.followUpStore, fields, "displayNone", false);
+            //     });
+            // } else if (event?.col?.name == "Change guardian") {
+            //     const guardianFields = ["guardianFirstname", "guardianLastname", "guardianMiddleName", "guardianPhoneNumber", "relationship"];
+            //     guardianFields.forEach((fields) => {
+            //         modifyFieldValue(this.followUpStore, fields, "displayNone", true);
+            //     });
+            // }
+            // if (event?.col?.name == "Vaccine adverse effects" && event?.col?.checked) {
+            //     modifyFieldValue(this.followUpStore, "Vaccine adverse effects", "displayNone", false);
+            // } else if (event?.col?.name == "Vaccine adverse effects") {
+            //     modifyFieldValue(this.followUpStore, "Vaccine adverse effects", "displayNone", true);
+            // }
         },
         getBloodPressureStatus(systolic: any, diastolic: any) {
             let ageGroup;
@@ -221,5 +267,8 @@ h5 {
     display: flex;
     justify-content: center;
     line-height: 60px;
+}
+.custom_card {
+    margin-bottom: 20px;
 }
 </style>

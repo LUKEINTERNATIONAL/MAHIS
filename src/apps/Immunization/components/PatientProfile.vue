@@ -35,7 +35,7 @@
                                 <span v-if="protectedStatus == 'No'" style="background: #fedf89; color: #b54708" class="protectedStatus"
                                     >Unprotected at birth</span
                                 >
-                                <span v-else-if="protectedStatus == 'Yes'" style="background: #fecdca" class="protectedStatus"
+                                <span v-else-if="protectedStatus == 'Yes'" style="background: #ddeedd" class="protectedStatus"
                                     >Protected at birth</span
                                 >
                                 <span v-else class="protectedStatus" style="background: #fecdca; color: #b42318">Unknown protection at birth</span>
@@ -50,7 +50,7 @@
         </div>
         <div class="graphSection">
             <div>
-                <WeightHeightChart :showHeightWeight="true" v-if="isChild()" />
+                <WeightHeightChart :checkUnderSixWeeks="checkUnderSixWeeks" :showHeightWeight="true" v-if="isChild()" />
                 <PreviousVitals v-if="!isChild()" />
             </div>
 
@@ -58,7 +58,9 @@
                 <div class="weightHeightGraphBtns">
                     <div>
                         <ion-button class="btnText" fill="solid" @click="openWH()">
-                            Enter Weight/Height <ion-icon slot="end" size="small" :icon="iconsContent.whiteHeightWeight"></ion-icon>
+                            <span v-if="!checkUnderSixWeeks"> Enter Weight/Height</span>
+                            <span v-else> Enter Weight</span>
+                            <ion-icon slot="end" size="small" :icon="iconsContent.whiteHeightWeight"></ion-icon>
                         </ion-button>
                     </div>
                     <div>
@@ -220,6 +222,7 @@ import missedVaccinesModal from "@/apps/Immunization/components/Modals/missedVac
 import { DrugOrderService } from "@/services/drug_order_service";
 
 import {
+    getFieldValue,
     modifyRadioValue,
     getRadioSelectedValue,
     getCheckboxSelectedValue,
@@ -228,6 +231,7 @@ import {
     modifyCheckboxValue,
 } from "@/services/data_helpers";
 import PatientProfileVue from "@/views/PatientProfile.vue";
+import { useRegistrationStore } from "@/stores/RegistrationStore";
 export default defineComponent({
     name: "Home",
     components: {
@@ -265,6 +269,7 @@ export default defineComponent({
             isOpen: false,
             iconsContent: icons,
             current_milestone: "" as string,
+            checkUnderSixWeeks: false,
             unprotected_at_birth: "" as string,
             protectedStatus: "" as string,
             todays_date: HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
@@ -288,6 +293,7 @@ export default defineComponent({
         this.loadCurrentMilestone();
         this.protectedStatus = await ObservationService.getFirstValueText(this.demographics.patient_id, "Protected at birth");
         await this.openFollowModal();
+        this.checkAge();
     },
     watch: {
         vitals: {
@@ -327,6 +333,7 @@ export default defineComponent({
             async handler() {
                 this.protectedStatus = await ObservationService.getFirstValueText(this.demographics.patient_id, "Protected at birth");
                 await this.openFollowModal();
+                this.checkAge();
             },
         },
     },
@@ -335,6 +342,11 @@ export default defineComponent({
     },
 
     methods: {
+        checkAge() {
+            if (!isEmpty(this.demographics.birthdate)) {
+                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.demographics.birthdate) < 42 ? true : false;
+            }
+        },
         openVitalsModal() {
             createModal(OtherVitals, { class: "otherVitalsModal" });
         },
@@ -345,11 +357,10 @@ export default defineComponent({
             createModal(weightAndHeight, { class: "otherVitalsModal" });
         },
         openVH() {
-            createModal(vaccinationHistory, { class: "otherVitalsModal" });
+            createModal(vaccinationHistory, { class: "otherVitalsModal vaccineHistoryModal" });
         },
         async openFollowModal() {
             this.lastVaccine = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
-            console.log("🚀 ~ openFollowModal ~ this.lastVaccine :", this.lastVaccine);
             if (this.lastVaccine.length > 0) createModal(followUpVisitModal, { class: "otherVitalsModal" });
         },
         openAdministerVaccineModal() {
@@ -741,7 +752,7 @@ export default defineComponent({
     margin-top: 7px;
 }
 .graphBtn {
-    display: flex;
+    display: contents;
     justify-content: center;
 }
 .dueAlert {

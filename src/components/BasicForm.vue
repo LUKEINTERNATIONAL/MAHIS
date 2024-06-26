@@ -23,7 +23,7 @@
             <!-- rowData -->
             <span v-if="item.data">
                 <ion-row v-for="(element, index2) in item.data.rowData" :key="index2">
-                    <ion-col v-for="(col, colIndex) in element.colData" :key="colIndex" v-show="!col.displayNone" :size="col.colSize">
+                    <ion-col v-for="(col, colIndex) in element.colData" :key="colIndex" v-show="!col.inputDisplayNone" :size="col.colSize">
                         <BasicInputField
                             v-if="!col.isDatePopover && !col.isMultiSelect && !col.isSingleSelect && !col.isChangeUnits"
                             :inputHeader="col.inputHeader"

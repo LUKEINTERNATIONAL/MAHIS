@@ -1,20 +1,8 @@
 import { defineStore } from "pinia";
 import { icons } from "@/utils/svg";
 import _ from "lodash";
-const initialFollowUp = [
+const initialChangeGuardianInfo = [
     {
-        checkboxBtnContent: {
-            data: [
-                {
-                    name: "Change guardian",
-                    value: "Change guardian",
-                    checked: false,
-                },
-            ],
-        },
-    },
-    {
-        sideColSize: 2,
         data: {
             rowData: [
                 {
@@ -27,7 +15,6 @@ const initialFollowUp = [
                             name: "guardianNationalID",
                             eventType: "input",
                             alertsErrorMassage: "",
-                            displayNone: true,
                             placeholder: "__-__-__-__",
                         },
                     ],
@@ -38,7 +25,6 @@ const initialFollowUp = [
     {
         selectedData: {},
         isFinishBtn: false,
-        sideColSize: 2,
         data: {
             rowData: [
                 {
@@ -50,7 +36,6 @@ const initialFollowUp = [
                             name: "guardianFirstname",
                             eventType: "input",
                             alertsErrorMassage: "",
-                            displayNone: true,
                         },
                     ],
                 },
@@ -58,7 +43,6 @@ const initialFollowUp = [
         },
     },
     {
-        sideColSize: 2,
         data: {
             rowData: [
                 {
@@ -70,7 +54,6 @@ const initialFollowUp = [
                             name: "guardianLastname",
                             eventType: "input",
                             alertsErrorMassage: "",
-                            displayNone: true,
                         },
                     ],
                 },
@@ -78,7 +61,6 @@ const initialFollowUp = [
         },
     },
     {
-        sideColSize: 2,
         data: {
             rowData: [
                 {
@@ -90,7 +72,6 @@ const initialFollowUp = [
                             name: "guardianMiddleName",
                             eventType: "input",
                             alertsErrorMassage: "",
-                            displayNone: true,
                         },
                     ],
                 },
@@ -98,7 +79,6 @@ const initialFollowUp = [
         },
     },
     {
-        sideColSize: 2,
         data: {
             rowData: [
                 {
@@ -110,7 +90,6 @@ const initialFollowUp = [
                             name: "guardianPhoneNumber",
                             eventType: "input",
                             alertsErrorMassage: "",
-                            displayNone: true,
                         },
                     ],
                 },
@@ -118,43 +97,31 @@ const initialFollowUp = [
         },
     },
     {
-        sideColSize: 2,
         data: {
             rowData: [
                 {
                     colData: [
                         {
-                            inputHeader: "Relationship to patient",
+                            inputHeader: "Relationship to patient *",
                             icon: icons.search,
                             value: "",
                             name: "relationship",
                             eventType: "input",
                             alertsErrorMassage: "",
-                            displayNone: true,
                             selectedID: "",
-                            popOverData: {
-                                filterData: false,
-                                data: [],
-                            },
+                            validationFunctionName: "isNameWithSlush",
+                            isSingleSelect: true,
+                            trackBy: "trackByID",
+                            multiSelectData: [],
                         },
                     ],
                 },
             ],
         },
     },
+] as any;
+const initialVaccineAdverseEffects = [
     {
-        checkboxBtnContent: {
-            data: [
-                {
-                    name: "Vaccine adverse effects",
-                    value: "Vaccine adverse effects",
-                    checked: false,
-                },
-            ],
-        },
-    },
-    {
-        sideColSize: 2,
         data: {
             rowData: [
                 {
@@ -164,7 +131,6 @@ const initialFollowUp = [
                             icon: icons.search,
                             valueType: "text",
                             isMultiSelect: true,
-                            popOver: true,
                             value: "",
                             name: "Vaccine adverse effects",
                             multiSelectData: [
@@ -200,7 +166,6 @@ const initialFollowUp = [
                             eventType: "input",
                             required: true,
                             alertsErrorMassage: "",
-                            displayNone: true,
                             id: "",
                             idName: "district_id",
                         },
@@ -210,16 +175,75 @@ const initialFollowUp = [
         },
     },
 ] as any;
+const initialProtectedAtBirth = [
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Protected at birth (PAB)*",
+                            icon: icons.search,
+                            valueType: "text",
+                            isSingleSelect: true,
+                            popOver: true,
+                            value: "",
+                            name: "Protected at birth",
+                            validationFunctionName: "required",
+                            multiSelectData: [
+                                {
+                                    concept_id: 1065,
+                                    name: "Yes",
+                                },
+                                {
+                                    concept_id: 1066,
+                                    name: "No",
+                                },
+                                {
+                                    concept_id: 1067,
+                                    name: "Don't know",
+                                },
+                            ],
+                            eventType: "input",
+                            required: true,
+                            alertsErrorMassage: "",
+                            id: "",
+                            idName: "district_id",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+];
 export const useFollowUpStoreStore = defineStore("followUpStoreStore", {
     state: () => ({
-        followUpStore: [...initialFollowUp] as any,
+        changeGuardianInfo: [...initialChangeGuardianInfo] as any,
+        vaccineAdverseEffects: [...initialVaccineAdverseEffects] as any,
+        protectedAtBirth: [...initialProtectedAtBirth] as any,
     }),
     actions: {
-        setFollowUp(data: any) {
-            this.followUpStore = data;
+        setChangeGuardianInfo(data: any) {
+            this.changeGuardianInfo = data;
         },
-        getInitialFollowUp() {
-            const data = _.cloneDeep(initialFollowUp);
+        getInitialChangeGuardianInfo() {
+            const data = _.cloneDeep(initialChangeGuardianInfo);
+            return [...data];
+        },
+
+        setVaccineAdverseEffects(data: any) {
+            this.vaccineAdverseEffects = data;
+        },
+        getInitialVaccineAdverseEffects() {
+            const data = _.cloneDeep(initialVaccineAdverseEffects);
+            return [...data];
+        },
+
+        setProtectedAtBirth(data: any) {
+            this.protectedAtBirth = data;
+        },
+        getInitialProtectedAtBirth() {
+            const data = _.cloneDeep(initialProtectedAtBirth);
             return [...data];
         },
     },

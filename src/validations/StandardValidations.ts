@@ -53,6 +53,10 @@ function isName(value: any): null | string {
     const validation = /^(?=.{2,100}$)[a-z!A-Z]+(?:['_.\-!\][a-z]+[a-z!A-Z])*$/;
     return !value || !value.match(validation) ? "Invalid name Input" : null;
 }
+function isNameWithSlush(value: any): null | string {
+    const validation = /^(?=.{2,100}$)[a-zA-Z]+(?:['_.\-\/][a-zA-Z]+)*$/;
+    return !value || !value.match(validation) ? "Invalid name Input" : null;
+}
 function isNameEmpty(value: any): null | string {
     const validation = /^(?=.{2,100}$)[a-z!A-Z]+(?:['_.\-!\][a-z]+[a-z!A-Z])*$/;
     return !isEmpty(value) && !value.match(validation) ? "Invalid name Input" : null;
@@ -162,4 +166,5 @@ export default {
     isEstimationDate,
     checkMinMax,
     isDate,
+    isNameWithSlush,
 } as any;

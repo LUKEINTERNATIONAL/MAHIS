@@ -134,7 +134,7 @@ async function postActivities(_property_: string, selected: string) {
 async function postDumbActivities(_property_: string) {
     const userActivities = {
         property: _property_,
-        property_value: "dumb",
+        property_value: "",
         user_id: props.userId,
     };
     try {

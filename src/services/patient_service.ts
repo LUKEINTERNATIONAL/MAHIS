@@ -16,10 +16,16 @@ import { useDemographicsStore } from "@/stores/DemographicStore";
 
 export class PatientService extends Service {
     patient: Patient;
-    constructor() {
-        const demographicsStore = useDemographicsStore();
+    constructor();
+    constructor(patient: Patient);
+    constructor(patient?: Patient) {
         super();
-        this.patient = demographicsStore.getPatient();
+        if (patient) {
+            this.patient = patient;
+        } else {
+            const demographicsStore = useDemographicsStore();
+            this.patient = demographicsStore.getPatient();
+        }
     }
 
     public static mergePatients(payload: any) {

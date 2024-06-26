@@ -77,6 +77,7 @@ import { defineComponent } from "vue";
 import { mapState } from "pinia";
 import { VitalsEncounter } from "@/apps/Immunization/services/vitals";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
+import { isEmpty } from "lodash";
 
 export default defineComponent({
     name: "Home",
@@ -98,6 +99,7 @@ export default defineComponent({
             showPD: false as boolean,
             vitals_date: HisDate.toStandardHisFormat(HisDate.currentDate()),
             formOpen: true,
+            checkUnderSixWeeks: false,
             showDateBtns: true as boolean,
         };
     },
@@ -105,9 +107,24 @@ export default defineComponent({
         ...mapState(useDemographicsStore, ["demographics"]),
         ...mapState(useWeightHeightVitalsStore, ["vitalsWeightHeight"]),
     },
-    mounted() {},
+    watch: {
+        demographics: {
+            async handler() {
+                this.checkAge();
+            },
+        },
+    },
+    mounted() {
+        this.checkAge();
+    },
     setup() {},
     methods: {
+        checkAge() {
+            if (!isEmpty(this.demographics.birthdate)) {
+                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.demographics.birthdate) < 42 ? true : false;
+                this.controlHeight();
+            }
+        },
         nav(url: any) {
             this.$router.push(url);
         },
@@ -117,6 +134,15 @@ export default defineComponent({
         },
         formatBirthdate() {
             return HisDate.getBirthdateAge(this.demographics.birthdate);
+        },
+        controlHeight() {
+            if (this.checkUnderSixWeeks) {
+                console.log("Llllllllllllll", this.checkUnderSixWeeks);
+                modifyFieldValue(this.vitalsWeightHeight, "height", "inputHeader", "Height");
+                modifyFieldValue(this.vitalsWeightHeight, "height", "inputDisplayNone", true);
+            } else {
+                modifyFieldValue(this.vitalsWeightHeight, "height", "inputDisplayNone", false);
+            }
         },
         async validaterowData(event: any) {
             const userID: any = Service.getUserID();
@@ -128,28 +154,24 @@ export default defineComponent({
             const weight = vitalsInstance.validator({ inputHeader: "Weight*", value: weightValue });
             if (height && heightValue) {
                 modifyFieldValue(this.vitalsWeightHeight, "height", "alertsErrorMassage", height.flat(Infinity)[0]);
-                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsErrorMassage", true);
             } else {
                 modifyFieldValue(this.vitalsWeightHeight, "height", "alertsErrorMassage", "");
-                modifyFieldValue(this.vitalsWeightHeight, "height", "alertsErrorMassage", false);
             }
 
             if (weight && weightValue) {
                 modifyFieldValue(this.vitalsWeightHeight, "weight", "alertsErrorMassage", weight.flat(Infinity)[0]);
-                modifyFieldValue(this.vitalsWeightHeight, "weight", "alertsErrorMassage", true);
             } else {
                 modifyFieldValue(this.vitalsWeightHeight, "weight", "alertsErrorMassage", "");
-                modifyFieldValue(this.vitalsWeightHeight, "weight", "alertsErrorMassage", false);
             }
             this.setBMI(weightValue, heightValue);
         },
         async saveVitals() {
             const userID: any = Service.getUserID();
             const vitalsInstance = new VitalsService(this.demographics.patient_id, userID);
-            console.log("🚀 ~ saveVitals ~ this.demographics.patient_id:", this.demographics.patient_id);
             const weightValue = getFieldValue(this.vitalsWeightHeight, "weight", "value");
             const heightValue = getFieldValue(this.vitalsWeightHeight, "height", "value");
-            const height = vitalsInstance.validator({ inputHeader: "Height*", value: heightValue });
+            let height = null;
+            if (heightValue) height = vitalsInstance.validator({ inputHeader: "Height*", value: heightValue });
             const weight = vitalsInstance.validator({ inputHeader: "Weight*", value: weightValue });
             if (weight == null && height == null) {
                 const encounter = await vitalsInstance.createEncounter();

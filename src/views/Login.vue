@@ -149,8 +149,8 @@ export default defineComponent({
     created() {
         this.auth = new AuthService();
     },
-    mounted() {
-        this.getPrograms();
+    async mounted() {
+        await this.getPrograms();
     },
     methods: {
         async getPrograms() {
