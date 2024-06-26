@@ -1,137 +1,122 @@
 <template>
-  <ion-page :class="{ 'loading': isLoading }">
-    <!-- Spinner -->
-    <div v-if="isLoading" class="spinner-overlay">
-      <ion-spinner name="bubbles"></ion-spinner>
-      <div class="loading-text">Please wait...</div>
-    </div>
+    <ion-page :class="{ loading: isLoading }">
+        <!-- Spinner -->
+        <div v-if="isLoading" class="spinner-overlay">
+            <ion-spinner name="bubbles"></ion-spinner>
+            <div class="loading-text">Please wait...</div>
+        </div>
 
-    <ion-header>
-      <div class="header position_content">
-        <div style="display: flex; align-items: center" @click="nav('/home')">
-          <ion-icon slot="separator" size="large" :icon="iconsContent.arrowLeft"></ion-icon>
-          <span style="padding-left: 10px">Go back</span>
-        </div>
-        <div></div>
-        <div style="display: flex; align-items: center">
-          <ion-icon slot="separator" size="large" :icon="iconsContent.help"></ion-icon>
-          <span style="padding-left: 10px"> Need any help?</span>
-        </div>
-      </div>
-    </ion-header>
-    <ion-content>
-      <div class="container">
-        <div class="title">
-          <div class="demographics_title">New patient registration</div>
-        </div>
-        <div class="icon_div displayNoneMobile">
-          <ion-icon :class="iconListStatus" :icon="list" @click="setDisplayType('list')"></ion-icon>
-          <ion-icon
-              :class="iconGridStatus"
-              style="font-size: 21px; margin-top: 1.5px"
-              :icon="grid"
-              @click="setDisplayType('grid')"
-          ></ion-icon>
-        </div>
-      </div>
-      <div v-if="registrationType == 'scan'">
-        <ScanRegistration />
-      </div>
-      <div
-          class="center_content"
-          v-if="registrationType == 'manual' && registrationDisplayType == 'grid' && screenWidth > 991"
-      >
-        <div v-if="registrationDisplayType == 'grid'" class="flex-container">
-          <div class="flex-item">
-            <PersonalInformation />
-          </div>
-          <div class="flex-item">
-            <CurrentLocation />
-            <SocialHistory v-if="checkUnderFourteen" />
-            <BirthRegistration v-if="checkUnderNine" />
-          </div>
-          <div class="flex-item">
-            <HomeLocation />
-            <GuardianInformation />
-          </div>
-        </div>
-      </div>
+        <ion-header>
+            <div class="header position_content">
+                <div style="display: flex; align-items: center" @click="nav('/home')">
+                    <ion-icon slot="separator" size="large" :icon="iconsContent.arrowLeft"></ion-icon>
+                    <span style="padding-left: 10px">Go back</span>
+                </div>
+                <div></div>
+                <div style="display: flex; align-items: center">
+                    <ion-icon slot="separator" size="large" :icon="iconsContent.help"></ion-icon>
+                    <span style="padding-left: 10px"> Need any help?</span>
+                </div>
+            </div>
+        </ion-header>
+        <ion-content>
+            <div class="container">
+                <div class="title">
+                    <div class="demographics_title">New {{ programID() != 33 ? "patient" : "client" }} registration</div>
+                </div>
+                <div class="icon_div displayNoneMobile">
+                    <ion-icon :class="iconListStatus" :icon="list" @click="setDisplayType('list')"></ion-icon>
+                    <ion-icon
+                        :class="iconGridStatus"
+                        style="font-size: 21px; margin-top: 1.5px"
+                        :icon="grid"
+                        @click="setDisplayType('grid')"
+                    ></ion-icon>
+                </div>
+            </div>
+            <div v-if="registrationType == 'scan'">
+                <ScanRegistration />
+            </div>
+            <div class="center_content" v-if="registrationType == 'manual' && registrationDisplayType == 'grid' && screenWidth > 991">
+                <div v-if="registrationDisplayType == 'grid'" class="flex-container">
+                    <div class="flex-item">
+                        <PersonalInformation />
+                    </div>
+                    <div class="flex-item">
+                        <CurrentLocation />
+                        <SocialHistory v-if="checkUnderFourteen" />
+                        <BirthRegistration v-if="checkUnderNine" />
+                    </div>
+                    <div class="flex-item">
+                        <HomeLocation />
+                        <GuardianInformation />
+                    </div>
+                </div>
+            </div>
 
-      <div v-if="(registrationType == 'manual' && registrationDisplayType == 'list') || screenWidth <= 991">
-        <div v-if="currentStep == 'Personal Information'">
-          <PersonalInformation />
+            <div v-if="(registrationType == 'manual' && registrationDisplayType == 'list') || screenWidth <= 991">
+                <div v-if="currentStep == 'Personal Information'">
+                    <PersonalInformation />
+                </div>
+                <div v-if="currentStep == 'Location'">
+                    <div style="justify-content: center">
+                        <div><CurrentLocation /></div>
+                        <div><HomeLocation /></div>
+                    </div>
+                </div>
+                <div v-if="currentStep == 'Social History'">
+                    <SocialHistory v-if="checkUnderFourteen" />
+                    <BirthRegistration v-if="checkUnderFive" />
+                </div>
+                <div v-if="currentStep == 'Guardian Information'">
+                    <GuardianInformation />
+                </div>
+            </div>
+        </ion-content>
+        <div class="footer2" v-if="registrationDisplayType == 'grid' && screenWidth > 991">
+            <DynamicButton name="Save" iconSlot="end" :icon="iconsContent.saveWhite" :disabledValue="disableSaveBtn" @click="saveData()" />
         </div>
-        <div v-if="currentStep == 'Location'">
-          <div style="justify-content: center">
-            <div><CurrentLocation /></div>
-            <div><HomeLocation /></div>
-          </div>
-        </div>
-        <div v-if="currentStep == 'Social History'">
-          <SocialHistory v-if="checkUnderFourteen" />
-          <BirthRegistration v-if="checkUnderNine" />
-        </div>
-        <div v-if="currentStep == 'Guardian Information'">
-          <GuardianInformation />
-        </div>
-      </div>
-    </ion-content>
-    <div class="footer2" v-if="registrationDisplayType == 'grid' && screenWidth > 991">
-      <DynamicButton
-          name="Save"
-          iconSlot="end"
-          :icon="iconsContent.saveWhite"
-          :disabledValue="disableSaveBtn"
-          @click="saveData()"
-      />
-    </div>
-    <ion-footer v-if="(registrationType == 'manual' && registrationDisplayType == 'list') || screenWidth <= 991">
-      <div class="footer position_content">
-        <DynamicButton name="Previous" :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
-        <ion-breadcrumbs class="breadcrumbs displayNoneMobile">
-          <ion-breadcrumb
-              @click="setCurrentStep('Personal Information')"
-              :class="{ active: currentStep === 'Personal Information' }"
-          >
-            <span class="breadcrumb-text">Personal Information</span>
-            <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
-          </ion-breadcrumb>
-          <ion-breadcrumb @click="setCurrentStep('Location')" :class="{ active: currentStep === 'Location' }">
-            <span class="breadcrumb-text">Location</span>
-            <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
-          </ion-breadcrumb>
-          <ion-breadcrumb @click="setCurrentStep('Social History')" :class="{ active: currentStep === 'Social History' }">
-            <span class="breadcrumb-text">Social History</span>
-            <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
-          </ion-breadcrumb>
-          <ion-breadcrumb
-              @click="setCurrentStep('Guardian Information')"
-              :class="{ active: currentStep === 'Guardian Information' }"
-          >
-            <span class="breadcrumb-text">Guardian Information</span>
-            <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
-          </ion-breadcrumb>
-        </ion-breadcrumbs>
-        <DynamicButton
-            v-if="currentStep == 'Guardian Information'"
-            name="Save"
-            iconSlot="end"
-            :icon="iconsContent.saveWhite"
-            @click="saveData()"
-        />
-        <DynamicButton
-            v-else
-            name="Next"
-            :disabledValue="disableSaveBtn"
-            iconSlot="end"
-            :icon="iconsContent.arrowRightWhite"
-            @click="nextStep"
-        />
-      </div>
-    </ion-footer>
-  </ion-page>
+        <ion-footer v-if="(registrationType == 'manual' && registrationDisplayType == 'list') || screenWidth <= 991">
+            <div class="footer position_content">
+                <DynamicButton name="Cancel" v-if="currentStep == 'Personal Information'" color="danger" @click="nav('/home')" />
+                <DynamicButton name="Previous" v-else :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
+                <ion-breadcrumbs class="breadcrumbs displayNoneMobile">
+                    <ion-breadcrumb @click="setCurrentStep('Personal Information')" :class="{ active: currentStep === 'Personal Information' }">
+                        <span class="breadcrumb-text">Personal Information</span>
+                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
+                    </ion-breadcrumb>
+                    <ion-breadcrumb @click="setCurrentStep('Location')" :class="{ active: currentStep === 'Location' }">
+                        <span class="breadcrumb-text">Location</span>
+                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
+                    </ion-breadcrumb>
+                    <ion-breadcrumb @click="setCurrentStep('Social History')" :class="{ active: currentStep === 'Social History' }">
+                        <span class="breadcrumb-text">Social History</span>
+                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
+                    </ion-breadcrumb>
+                    <ion-breadcrumb @click="setCurrentStep('Guardian Information')" :class="{ active: currentStep === 'Guardian Information' }">
+                        <span class="breadcrumb-text">Guardian Information</span>
+                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
+                    </ion-breadcrumb>
+                </ion-breadcrumbs>
+                <DynamicButton
+                    v-if="currentStep == 'Guardian Information'"
+                    name="Save"
+                    iconSlot="end"
+                    :icon="iconsContent.saveWhite"
+                    @click="saveData()"
+                />
+                <DynamicButton
+                    v-else
+                    name="Next"
+                    :disabledValue="disableSaveBtn"
+                    iconSlot="end"
+                    :icon="iconsContent.arrowRightWhite"
+                    @click="nextStep"
+                />
+            </div>
+        </ion-footer>
+    </ion-page>
 </template>
-
 
 <script lang="ts">
 import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonBreadcrumb, IonBreadcrumbs, IonIcon } from "@ionic/vue";
@@ -198,6 +183,7 @@ export default defineComponent({
             checkUnderFourteen: true,
             checkUnderNine: false,
             checkUnderFive: false,
+            checkUnderSixWeeks: false,
             steps: ["Personal Information", "Location", "Social History", "Guardian Information"],
             screenWidth: "" as any,
             disableSaveBtn: false,
@@ -288,6 +274,9 @@ export default defineComponent({
         return { arrowForwardCircle, grid, list };
     },
     methods: {
+        programID() {
+            return Service.getProgramID();
+        },
         async getRegion(name: any) {
             let districts = [];
             for (let i of [1, 2, 3]) {
@@ -311,10 +300,18 @@ export default defineComponent({
         },
         checkAge() {
             if (!isEmpty(this.birthdate)) {
-                console.log(HisDate.ageInMonths(this.birthdate));
                 this.checkUnderFourteen = HisDate.getAgeInYears(this.birthdate) >= 14 ? true : false;
                 this.checkUnderNine = HisDate.ageInMonths(this.birthdate) < 9 ? true : false;
                 this.checkUnderFive = HisDate.getAgeInYears(this.birthdate) < 5 ? true : false;
+                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.birthdate) < 42 ? true : false;
+                this.controlHeight();
+            }
+        },
+        controlHeight() {
+            if (this.checkUnderSixWeeks) {
+                modifyFieldValue(this.birthRegistration, "Height (cm)", "displayNone", true);
+            } else {
+                modifyFieldValue(this.birthRegistration, "Height (cm)", "displayNone", false);
             }
         },
         disableNationalIDInput() {
@@ -350,19 +347,20 @@ export default defineComponent({
             this.openNewPage(patientData);
         },
         async saveData() {
-          this.isLoading = true;
-          try {
-            if (await this.createPatient()) {
-              await UserService.setProgramUserActions();
-              toastSuccess("Data saved successfully!");
-            } else {
-              toastWarning("Failed to create patient.");
+            this.isLoading = true;
+            try {
+                if (await this.createPatient()) {
+                    await UserService.setProgramUserActions();
+                    toastSuccess("Data saved successfully!");
+                } else {
+                    toastWarning("Failed to create patient.");
+                }
+            } catch (error) {
+                toastWarning("An error occurred while saving data.");
+            } finally {
+                this.isLoading = false;
             }
-          } catch (error) {
-            toastWarning("An error occurred while saving data.");
-          } finally {
-            this.isLoading = false;
-          }        },
+        },
         async validations(data: any, fields: any) {
             if (this.nationalID != "") {
                 if (await this.mwIdExists(this.nationalID)) {
@@ -551,31 +549,31 @@ export default defineComponent({
 </script>
 <style scoped>
 .spinner-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.5);
-  z-index: 9999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: 9999;
 }
 
 ion-spinner {
-  width: 80px;
-  height: 80px;
+    width: 80px;
+    height: 80px;
 }
 
 .loading-text {
-  margin-top: 20px;
-  font-size: 18px;
-  color: #333;
+    margin-top: 20px;
+    font-size: 18px;
+    color: #333;
 }
 
 .loading {
-  pointer-events: none;
+    pointer-events: none;
 }
 .breadcrumbs {
     font-weight: 400;

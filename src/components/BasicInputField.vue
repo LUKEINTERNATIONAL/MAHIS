@@ -60,7 +60,7 @@
 
 <script lang="ts">
 import { IonContent, IonHeader, IonItem, IonIcon, IonTitle, IonToolbar, IonMenu, IonInput, IonPopover } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { defineComponent, watch } from "vue";
 import SelectionPopover from "@/components/SelectionPopover.vue";
 import { caretDownSharp } from "ionicons/icons";
 import { size } from "lodash";
@@ -85,9 +85,7 @@ export default defineComponent({
         };
     },
 
-    setup() {
-        return { caretDownSharp };
-    },
+
     props: {
         placeholder: {
             type: String,
@@ -153,6 +151,9 @@ export default defineComponent({
             // if (this.popOverData?.data) this.setEvent(event);
             this.$emit("clicked:inputValue", event);
         },
+        handlePassInput() {
+            this.$emit("update:passedinputValue", this.$props.inputValue );
+        },
         handleInput(event: any) {
             if (this.popOverData?.data) this.setEvent(event);
             this.$emit("update:inputValue", event);
@@ -181,6 +182,17 @@ export default defineComponent({
             this.showAsterisk = false;
             return str;
         },
+    },
+    setup(props, { emit }) {
+        watch(
+            () => props.inputValue,
+            (newValue, oldValue) => {
+                console.log('inputValue changed from', oldValue, 'to', newValue)
+                emit("update:passedinputValue", props.inputValue)
+                // Add your logic here to handle the change in inputValue
+            }
+        )
+        return { caretDownSharp };
     },
 });
 </script>

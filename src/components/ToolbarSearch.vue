@@ -49,8 +49,12 @@
 
             <ion-row class="sticky-column">
                 <ion-col size="4" class="sticky-column">
-                    
-                    <DynButton :icon="add" :name="'Add Patient'" :fill="'clear'" @click="openCheckPaitentNationalIDModal" />
+                    <DynButton
+                        :icon="add"
+                        :name="programID() != 33 ? 'Add Patient' : 'Add Client'"
+                        :fill="'clear'"
+                        @click="openCheckPaitentNationalIDModal"
+                    />
                     <div>
                         <img id="hand" src="../../public/images/hand.svg" />
                         <img id="handinfo" src="../../public/images/swipeinfo.png" />
@@ -137,6 +141,9 @@ export default defineComponent({
         ...mapState(useGeneralStore, ["NCDUserActions"]),
     },
     methods: {
+        programID() {
+            return Service.getProgramID();
+        },
         async handleInput(ev: any) {
             this.searchText = ev.target.value;
             this.patients = [];

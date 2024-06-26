@@ -52,7 +52,8 @@ const initialBirthRegistration = [
                 {
                     colData: [
                         {
-                            inputHeader: "Birth Height(cm)*",
+                            inputHeader: "Birth Height(cm)",
+                            displayNone: false,
                             icon: icons.height,
                             valueType: "number",
                             value: "",
@@ -60,7 +61,6 @@ const initialBirthRegistration = [
                             eventType: "input",
                             alertsErrorMassage: "",
                             required: true,
-                            validationFunctionName: "validateHeight",
                         },
                     ],
                 },
