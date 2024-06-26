@@ -181,7 +181,7 @@ export class VitalsService extends AppEncounterService {
                 validator: (val: any) => {
                     const errors = [];
                     errors.push(this.isNotEmptyandNumber(val));
-                    errors.push(this.checkMinMax(val, 60, 120));
+                    errors.push(this.checkMinMax(val, 20, 80));
                     return this.mergeErrors(errors);
                 },
             },
