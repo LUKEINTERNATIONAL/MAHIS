@@ -71,6 +71,9 @@ export const DRUG_FREQUENCIES: Array<{label: string; code: string; value: number
   }
 
   export async function getDrugRouteList() {
-    const data = await ConceptService.getConceptSet('Method of drug administration')
-    return data
+    const data = await ConceptService.getConceptSet('Method of drug administration');
+
+
+    //TODO: this is temporary fix for removing bleeding vaginally as i am waiting for concepts to be updated
+    return data.filter((concept:any)=>concept.name!=="Bleeding vaginally")
   }
