@@ -357,7 +357,7 @@ export default defineComponent({
             createModal(weightAndHeight, { class: "otherVitalsModal" });
         },
         openVH() {
-            createModal(vaccinationHistory, { class: "otherVitalsModal" });
+            createModal(vaccinationHistory, { class: "otherVitalsModal vaccineHistoryModal" });
         },
         async openFollowModal() {
             this.lastVaccine = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
@@ -752,7 +752,7 @@ export default defineComponent({
     margin-top: 7px;
 }
 .graphBtn {
-    display: flex;
+    display: contents;
     justify-content: center;
 }
 .dueAlert {
