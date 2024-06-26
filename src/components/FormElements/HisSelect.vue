@@ -1,6 +1,6 @@
 <template>
     <view-port :showFull="!showKeyboard">
-        <his-text-input :readonly="!showKeyboard" :value="selected" @onValue="(value) => onKbValue(value, showKeyboard)" /> 
+        <his-text-input :readonly="!showKeyboard" :value="selected" @onValue="(value: any) => onKbValue(value, showKeyboard)" /> 
         <ion-list class='view-port-content'>
             <ion-item 
                 class="his-md-text"

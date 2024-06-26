@@ -84,16 +84,16 @@ export default defineComponent({
         items: {
             async handler(items: FolderInterface[]) {
                 if (items) {
-                    const viewable = await this.filterViewable(items)
-                    // Recall previously selected item list
-                    const activeItemName: string = await Store.get('ACTIVE_HOME_SUB_TAB_NAME')
-                    if (typeof activeItemName === 'string' && activeItemName != '') {
-                        const item = find(viewable, { name: activeItemName })
-                        if (item) this.onClick(item)
-                    } else {
-                        Store.invalidate('ACTIVE_HOME_SUB_TAB_NAME')
-                        this.viewableItems = viewable
-                    }
+                    // const viewable = await this.filterViewable(items)
+                    // // Recall previously selected item list
+                    // const activeItemName: string = await Store.get('ACTIVE_HOME_SUB_TAB_NAME')
+                    // if (typeof activeItemName === 'string' && activeItemName != '') {
+                    //     const item = find(viewable, { name: activeItemName })
+                    //     if (item) this.onClick(item)
+                    // } else {
+                    //     Store.invalidate('ACTIVE_HOME_SUB_TAB_NAME')
+                    //     this.viewableItems = viewable
+                    // }
                 }
             },
             immediate: true,
