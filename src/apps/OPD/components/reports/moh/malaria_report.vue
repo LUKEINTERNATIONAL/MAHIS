@@ -6,7 +6,7 @@
    <ion-page v-if="reportReady">
    <ion-content >
    <div id="report-content" v-if="malariaData">
-     <idsr-h :key="componentKey" :reportName="reportName" :rangeLabel="rangeLabel" :range="range" ref="header" :periodLabel="periodLabel" :periodDates="periodDates" :clinicName="clinicName" :totalOPDVisits="TotalOPDVisits">
+     <idsr-h :key="componentKey" :reportName="reportName" :rangeLabel="rangeLabel" :range="range" ref="header" :periodLabel="periodLabel" :periodDates="periodDates" :reportparams="reportparams" :clinicName="clinicName" :totalOPDVisits="TotalOPDVisits">
      </idsr-h>
      <table class="my-table" style="margin: auto; width: 95%; margin-top: 3%; margin-bottom: 3%;">
      
@@ -444,6 +444,8 @@
        reportService: {} as any,
        malariaData: '' as any,
        confirmMalaria: '' as any,
+       reportparams: {} as any,
+
  
        componentKey: 0 as number,
        computedFormData: {} as any,
@@ -457,7 +459,7 @@
        rangeLabel: 'Month',
        range: '' as string,
        TotalOPDVisits: 0 as number,
-       clinicName: IDSRReportService.getLocationName(),
+       clinicName: IDSRReportService.getLocationName() as string,
      }
    },
    props: ['params', 'epiweek', 'quarter'],

@@ -19,8 +19,8 @@ export default defineComponent({
     components: { ViewPort, HisTable },
     mixins: [FieldMixinVue],
     data: () => ({
-        columns: [] as Array<string>,
-        rows: [] as Array<string>,
+        columns: [] as any,
+        rows: [] as any,
     }),
     methods: {
         async init() {

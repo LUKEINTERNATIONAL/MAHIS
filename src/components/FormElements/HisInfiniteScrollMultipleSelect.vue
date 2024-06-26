@@ -7,7 +7,7 @@
     <ion-content style="width: 100%;" class="ion-padding-bottom">
       <div class="ion-content-scroll-host" :class="{'ion-margin-bottom ion-padding-bottom': disableScroll}">
         <ion-list class='view-port-content' :class="{'ion-margin-bottom': disableScroll}">
-          <ion-item v-for="(entry, index) in listData" :key="index" :color="entry.isChecked ? 'lightblue':''" :lines="entry.isChecked ? 'none':''">
+          <ion-item v-for="(entry, index) in listData" :key="index" :color="entry.isChecked ? 'lightblue':''" :lines="entry.isChecked ? 'none':'' as any">
             <ion-label> 
               <ion-text class="his-md-text">{{ entry.label }} </ion-text>
               <ion-text :color="entry.description?.color" v-if="entry.description && entry.isChecked"> 
@@ -17,7 +17,7 @@
             <ion-checkbox
               slot="start"
               v-model="entry.isChecked"
-              @ionChange="onSelect(entry, $event)"
+              @ionChange="onSelect(entry)"
               :disabled="entry.disabled"
             />
           </ion-item>

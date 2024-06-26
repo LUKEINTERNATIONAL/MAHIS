@@ -72,8 +72,9 @@ export default defineComponent({
           ;
       const csvData = new Blob([CSVString], { type: "text/csv;charset=utf-8;" });
       //IE11 & Edge
-      if (navigator.msSaveBlob) {
-        navigator.msSaveBlob(csvData, 'exportFilename');
+      const _navigator_ = navigator as any
+      if (_navigator_.msSaveBlob) {
+        _navigator_.msSaveBlob(csvData, 'exportFilename');
       } else {
         //In FF link must be added to DOM to be clicked
         const link = document.createElement("a");
