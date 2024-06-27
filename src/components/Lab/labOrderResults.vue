@@ -293,13 +293,10 @@ export default defineComponent({
 
                     if( item.name=="HIV test"){
                          multiData = [
-                            { id: "2", name: "Previous Positive" },
-                            { id: "1", name: "Previous Positive not on ART (Pre+nA)" },
-                            { id: "3", name: "Previous Positive on ART (Prev+A)" },
-                            { id: "4", name: "Previous Negative or never tested (all needed)" },
-                            { id: "5", name: "New negative (New-)" },
-                            { id: "6", name: "New positive (New+)" },
-                            { id: "7", name: "Not Done (ND)" },
+                            { id: "2", name: "Positive" },
+                            { id: "1", name: "Negative" },
+                            { id: "3", name: "Invalid" },
+                           
                         ];
                     }
 
