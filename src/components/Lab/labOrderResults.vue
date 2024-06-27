@@ -17,7 +17,7 @@
     <div class="modal_wrapper" v-if="listOrders.length > 1">
         <div style="font-weight: 700">Lab Orders</div>
         <div>
-            <list :listData="listOrders" @clicked:delete="voidLabOrder" @clicked:results="openResultsForm"></list>
+            <list :listData="listOrders" @clicked:delete="voidLabOrder" @clicked:results="openResultsForm"></list> 
         </div>
         <div style="margin-top: 5px" v-if="listOrders.length <= 3 && listSeeMoreOrders.length >= 3">
             <DynamicButton @click="seeResultsStatus('more')" name="Show More Lab Orders" fill="clear" iconSlot="icon-only" />
@@ -30,7 +30,7 @@
     <LabViewResultsModal :popoverOpen="openResultsModal" :content="labResultsContent" @closeModal="openResultsModal = false" />
 </template>
 
-<script lang="ts">
+<script lang="ts">    
 import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { checkmark, pulseOutline } from "ionicons/icons";
@@ -170,11 +170,13 @@ export default defineComponent({
 
         handleIcon() {},
         async openResultsForm(obs: any) {
+
+            console.log(obs.item.concept_id);
             const testIndicators = await PatientLabResultService.getTestIndicatorsWithID(obs.item.concept_id);
 
             console.log({testIndicators})
 
-            
+        
             const indicators = [
                 obs.item,
                 {
@@ -188,6 +190,8 @@ export default defineComponent({
                     },
                 },
             ] as any;
+
+
             testIndicators.forEach((item: any) => {
                 let data = {
                     inputHeader: item.name,
@@ -234,7 +238,16 @@ export default defineComponent({
                     item.name == "Hepatitis B" ||
                     item.name == "Lam" ||
                     item.name == "CrAg" ||
-                    item.name == "CD4 count"
+                    item.name == "CD4 count" ||
+
+                    //dip Stick
+                    item.name == "Leukocytes" ||
+                    item.name=="Protein" ||
+                    item.name=="Nitrite" ||
+                    item.name=="Urine Ketones" ||
+
+                    //hiv
+                    item.name=="HIV test"
                 ) {
                     let multiData = [] as any;
                     if (item.name == "MRDT" || item.name == "Vdrl" || item.name == "Hepatitis B" || item.name == "CrAg" || item.name == "Lam") {
@@ -260,6 +273,35 @@ export default defineComponent({
                             { id: "2", name: "above reference line" },
                         ];
                     }
+                    if ( item.name == "Leukocytes" ||
+                    item.name=="Protein" ||
+                    item.name=="Nitrite" ||
+                    item.name=="Ketones" ||
+                    item.name=="Urine Ketones" 
+                    ){
+                         multiData = [
+                            { id: "2", name: "Negative" },
+                            { id: "1", name: "Trace" },
+                            { id: "3", name: "1+" },
+                            { id: "4", name: "2+" },
+                            { id: "5", name: "3+" },
+                            { id: "6", name: "4+" },
+                        ];
+
+                    }
+
+
+                    if( item.name=="HIV test"){
+                         multiData = [
+                            { id: "2", name: "Previous Positive" },
+                            { id: "1", name: "Previous Positive not on ART (Pre+nA)" },
+                            { id: "3", name: "Previous Positive on ART (Prev+A)" },
+                            { id: "4", name: "Previous Negative or never tested (all needed)" },
+                            { id: "5", name: "New negative (New-)" },
+                            { id: "6", name: "New positive (New+)" },
+                            { id: "7", name: "Not Done (ND)" },
+                        ];
+                    }
 
                     data = {
                         inputHeader: item.name,
@@ -275,9 +317,17 @@ export default defineComponent({
                         idName: "district_id",
                     } as any;
                 }
+
+
+                //TODO: urine deep stick enter result
+
+
+
                 indicators[1].data.rowData[0].colData.push(data);
             });
             const lab = useLabResultsStore();
+
+
             lab.setLabResults(indicators);
             this.openModal = true;
             this.orders = await OrderService.getOrders(this.demographics.patient_id);
