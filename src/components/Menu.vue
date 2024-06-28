@@ -51,6 +51,16 @@
                   </ion-list>
                 </div>
               </ion-accordion>
+                  <ion-accordion value="third">
+                <ion-item slot="header">
+                  <ion-label class="header">Immunization Report</ion-label>
+                </ion-item>
+                <div class="content" slot="content">
+                  <ion-list>
+                    <ion-item @click="navigationMenu('ImmunizationFollowup')" class="list-content">Follow-up Report</ion-item>
+                  </ion-list>
+                </div>
+              </ion-accordion>
             </ion-accordion-group>
           </div>
         </ion-accordion>
