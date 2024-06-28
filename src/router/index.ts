@@ -14,6 +14,8 @@ import OPD from "@/apps/OPD/config/routes";
 import ANC from "@/apps/ANC/config/routes";
 import LABOUR from "@/apps/LABOUR/config/routes";
 import PNC from "@/apps/PNC/config/routes";
+import IMMUNIZATION from "@/apps/Immunization/config/routes";
+
 const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
@@ -61,6 +63,7 @@ const routes: Array<RouteRecordRaw> = [
     ...LABOUR,
     ...PNC,
     ...OPD,
+    ...IMMUNIZATION,
 ];
 
 const router = createRouter({
