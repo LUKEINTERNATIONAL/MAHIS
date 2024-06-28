@@ -135,7 +135,7 @@ export default defineComponent({
             InnerActionBtnPropeties: {
                 name: "Scan",
                 show: true,
-                fn: () => { createModal(QRCodeReadersrc, { class: "otherVitalsModal" })}
+                fn: this.showQRcode
             },
         };
     },
@@ -248,7 +248,7 @@ export default defineComponent({
             this.full_name = first_name + " " + last_name
         },
         showQRcode() {
-            createModal(QRCodeReadersrc, { class: "otherVitalsModal" })
+            createModal(QRCodeReadersrc, { class: "otherVitalsModal qr_code_modal" }, false)
         }
     },
 });

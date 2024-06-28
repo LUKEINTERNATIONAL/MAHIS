@@ -4,7 +4,7 @@
             <ion-col style="margin-left: -3px">
                 <div class="om">Add Other Vaccine</div>
             </ion-col>
-            <ion-col size="6">
+            <ion-col size="6" style="text-align: right">
                 <ion-label class="lbl-tl" style="font-size: 13"> Todays Date: <span class="lbl-ct">{{ sessionDate }}</span></ion-label>
             </ion-col>
         </ion-row>
@@ -377,6 +377,11 @@ h5 {
     color: #b3b3b3 !important;
     white-space: nowrap;
 }
+.lbl-ct {
+    white-space: nowrap;
+    color: #08475e;
+    font-size: 14px;
+}
 .error-label {
     background: #fecdca;
     color: #b42318;
@@ -386,5 +391,10 @@ h5 {
     margin-top: 7px;
     display: flex;
     text-align: center;
+}
+.btnText {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
 }
 </style>
