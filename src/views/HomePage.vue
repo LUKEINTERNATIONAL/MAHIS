@@ -116,7 +116,7 @@ export default defineComponent({
         this.setView();
         this.startTimer();
         webSocketService.setMessageHandler(this.onMessage);
-        webSocketService.fetchData();
+        this.getPatientSummary();
     },
     methods: {
         onMessage(event: MessageEvent) {
