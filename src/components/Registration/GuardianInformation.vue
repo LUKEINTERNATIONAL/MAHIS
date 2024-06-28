@@ -69,17 +69,16 @@ export default defineComponent({
         this.relationships = await RelationsService.getRelations();
         const data = this.relationships
             .map((r: any) => {
-                if (r.b_is_to_a == r.b_is_to_a) {
+                if (r.b_is_to_a == "Other") {
                     return [{ name: r.b_is_to_a, id: r.relationship_type_id, trackByID: r.relationship_type_id + r.b_is_to_a }];
-                } else if (r.b_is_to_a != r.b_is_to_a) {
+                } else {
                     return [
-                        { name: r.b_is_to_a, id: r.relationship_type_id, trackByID: r.relationship_type_id + r.b_is_to_a },
-                        { name: r.a_is_to_b, id: r.relationship_type_id, trackByID: r.relationship_type_id + r.a_is_to_b },
+                        { name: r.b_is_to_a + " to " + r.a_is_to_b, id: r.relationship_type_id, trackByID: r.relationship_type_id + r.b_is_to_a },
                     ];
                 }
             })
             .reduce((acc: any, val: any) => acc.concat(val), []);
-        console.log(data);
+
         modifyFieldValue(this.guardianInformation, "relationship", "multiSelectData", data);
         this.updateRegistrationStores();
         this.buildCards();
