@@ -227,7 +227,6 @@ export default defineComponent({
             const dta = {
                 batch_number: this.batchNumber,
                 date_administered: date_,
-                visit_id: this.currentDrug.visit_id,
                 drug_id: this.currentDrug.drug_id,
             };
             const store = useAdministerVaccineStore();

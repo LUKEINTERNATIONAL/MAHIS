@@ -12,22 +12,23 @@
         <ion-col >
             <VueDatePicker
                 v-model="date"
+                 @date-update="DateUpdated"
                 :enable-time-picker="false"
                 inline
                 auto-apply
-                multi-dates
+                
                 :disabled-dates="disablePastDates"
             >
-                <template #day="{ day }">
-                        <template v-if="true">
-                            <p>
-                                {{ day }}<sup style="color: #999">{{ 34 }}</sup>
-                            </p>
-                        </template>
-                        <template v-else>
-                            {{ day }}
-                        </template>
+                <template #day="{ day, date }"  >
+                    <template v-if="true">
+                        <p >
+                            {{ day }}<sup style="color: #999">{{ getCounter(date) }}</sup>
+                        </p>
                     </template>
+                    <template v-else>
+                        {{ day }}
+                    </template>
+                </template>
             </VueDatePicker>
         </ion-col>
     </ion-row>
@@ -81,71 +82,58 @@ import {
     modalController
 } from "@ionic/vue"
 import { ref, onMounted,computed, watch } from "vue"
-import { chevronBackOutline, checkmark } from "ionicons/icons"
-import Toggle from '@vueform/toggle'
-import router from '@/router'
 import HisDate from "@/utils/Date"
-import { useClinicalDaysStore } from "@/stores/clinicalDaysStore"
-import { combineArrays } from "@/utils/GeneralUti"
+import { useImmunizationAppointMentStore } from "@/stores/immunizationAppointMentStore"
 import { Service } from '@/services/service'
-
+const store = useImmunizationAppointMentStore()
 
 const date = ref()
 const sessionDate = HisDate.toStandardHisDisplayFormat(Service.getSessionDate())
 
-// watch(
-//     () => toggle_local.value,
-//     async (newValue) => {
-//         disable_weekends.value = !disable_weekends.value
-//     }
-// )
+function disablePastDates(date: any) {
+    const today = new Date(Service.getSessionDate())
+    // Set the time of today to 00:00:00 to disable dates based only on the date part
+    today.setHours(0, 0, 0, 0);
+    return date < today;
+}
+
+function save() {
+    // const storeClinicalDaysStore = useClinicalDaysStore()
+}
 
 onMounted(async () => {
-    loadDataFromStore()
+    store.clearAppointmentMent()
 })
-
-function loadDataFromStore() {
-    const store = useClinicalDaysStore()
-    date.value = store.getHolidaydates()
-
-}
-
-// watch(
-//     () => maximumNumberOfDaysForEachDay.value,
-//     async (newValue) => {
-//         saveAndReload()
-//     }
-// )
-
-// watch(
-//     () => date.value,
-//     async (newValue) => {
-//         saveAndReload()
-//     }
-// )
-
-function saveAndReload() {
-    saveStateValues()
-    loadDataFromStore()
-}
-
-function disablePastDates(date: any) {
-      const today = new Date(Service.getSessionDate())
-      // Set the time of today to 00:00:00 to disable dates based only on the date part
-      today.setHours(0, 0, 0, 0);
-      return date < today;
-}
-
-function saveStateValues() {
-    const storeClinicalDaysStore = useClinicalDaysStore()
-}
-
-function nav(url: any) {
-    router.push(url)
-}
 
 function dismiss() {
     modalController.dismiss()
+}
+
+function DateUpdated(date: any) {
+    const store = useImmunizationAppointMentStore()
+    const appointment = {
+            counter: 1,
+            date: date
+        }
+    store.setAppointmentMent(appointment)
+}
+
+function getCounter(date: any) {
+    const _selectedAppointments = store.getAppointmentMents();
+    
+    // Normalize the input date to midnight
+    const normalizeDate = (date: Date) => {
+        const d = new Date(date);
+        d.setHours(0, 0, 0, 0);
+        return d.getTime();
+    };
+
+    const dateTimestamp = normalizeDate(new Date(date)); // Normalize input date
+    const found = _selectedAppointments.find((d: { date: any })  => {
+        return normalizeDate(new Date(d.date)) === dateTimestamp; // Normalize and compare dates
+    });
+
+    return found ? found.counter : null;
 }
 </script>
 

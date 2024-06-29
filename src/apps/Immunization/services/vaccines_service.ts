@@ -48,7 +48,6 @@ function mapToOrders(): any[] {
             dose: 1,
             frequency: "Unknown",
             batch_number: drug.batch_number,
-            visit_id: drug.visit_id,
             prn: 0,
         };
     });

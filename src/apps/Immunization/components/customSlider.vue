@@ -107,9 +107,9 @@ export default defineComponent({
             vaccineScheduleStore.setVaccineSchedule(data__);
             let upcoming_f = false;
             let found = false;
-            this.vaccineSchudulesCount = vaccineScheduleStore.getVaccineSchedule().vaccinSchedule.length;
+            this.vaccineSchudulesCount = vaccineScheduleStore.getVaccineSchedule().vaccine_schedule.length;
             vaccineScheduleStore.resetMissedVaccineSchedules();
-            vaccineScheduleStore.getVaccineSchedule().vaccinSchedule.forEach((vaccineSchudule: any) => {
+            vaccineScheduleStore.getVaccineSchedule().vaccine_schedule.forEach((vaccineSchudule: any) => {
                 this.findMissingVaccines(vaccineSchudule);
                 if (vaccineSchudule.milestone_status == "current") {
                     vaccineScheduleStore.setCurrentVisitId(vaccineSchudule.visit);
@@ -135,7 +135,7 @@ export default defineComponent({
                     this.age = vaccineSchudule.age;
                     upcoming_f = true;
                 }
-                const obj = { visit_id: vaccineSchudule.visit, age: vaccineSchudule.age };
+                const obj = { visit: vaccineSchudule.visit, age: vaccineSchudule.age };
                 this.milestones = this.appendUniqueObject(this.milestones, obj);
 
                 this.vaccine_schArray.push(vaccineSchudule.antigens)
@@ -159,7 +159,7 @@ export default defineComponent({
             const vaccineScheduleStore = useAdministerVaccineStore();
             const CurrentMilestoneToAdminister = vaccineScheduleStore.getCurrentMilestoneToAdminister() as any;
             this.milestones.forEach((milestone: any) => {
-                if (milestone.visit_id - 1 == SlideEventData.currentSlideIndex) {
+                if (milestone.visit - 1 == SlideEventData.currentSlideIndex) {
                     vaccineScheduleStore.setCurrentMilestone(milestone.age);
                     this.current_milestone = milestone.age;
                 }
@@ -183,7 +183,7 @@ export default defineComponent({
             }
         },
         appendUniqueObject(arr: any, obj: any) {
-            const exists = arr.some((item: { visit_id: any; age: any }) => item.visit_id === obj.visit_id && item.age === obj.age);
+            const exists = arr.some((item: { visit: any; age: any }) => item.visit === obj.visit && item.age === obj.age);
             if (!exists) {
                 arr.push(obj);
             }

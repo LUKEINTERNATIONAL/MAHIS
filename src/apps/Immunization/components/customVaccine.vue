@@ -3,7 +3,7 @@
         <ion-row>
             <ion-col>
                 <ion-button
-                    :disabled="disableVaccine(visitId)"
+                    :disabled="disableVaccine(vaccine)"
                     class="administerVac"
                     v-for="vaccine in vaccines"
                     :key="vaccine"
@@ -12,9 +12,9 @@
                     :color="getColorForVaccine(vaccine, visitId)"
                     style="background: #ddeedd; border-radius: 8px; color: #636363"
                 >
-                    <ion-icon slot="start" :icon="getInjectSignForVaccine(vaccine, visitId)"></ion-icon>
+                    <ion-icon slot="start" :icon="getInjectSignForVaccine(vaccine)"></ion-icon>
                     {{ checkVaccineName(vaccine.drug_name) }}
-                    <ion-icon slot="end" :icon="getCheckBoxForVaccine(vaccine, visitId)"></ion-icon>
+                    <ion-icon slot="end" :icon="getCheckBoxForVaccine(vaccine)"></ion-icon>
                 </ion-button>
             </ion-col>
         </ion-row>
@@ -97,9 +97,9 @@ export default defineComponent({
     },
 
     methods: {
-        getColorForVaccine(vaccine: any, visit_id: number): string {
+        getColorForVaccine(vaccine: any): string {
             const store = useAdministerVaccineStore();
-            if (visit_id < store.getCurrentVisitId() && vaccine.status != "administered") {
+            if (vaccine.status != "administered") {
                 return "danger";
             }
             if (vaccine.status == "administered") {
@@ -108,14 +108,8 @@ export default defineComponent({
                 return "medium-green";
             }
         },
-        getInjectSignForVaccine(vaccine: any, visit_id: number) {
-            const store = useAdministerVaccineStore();
-            if (visit_id < store.getCurrentVisitId() && vaccine.status != "administered") {
-                return this.iconsContent.redAlert;
-            }
-            if (visit_id < store.getCurrentVisitId() && vaccine.status == "administered") {
-                return this.iconsContent.smallAlreadyAdminstered;
-            }
+        getInjectSignForVaccine(vaccine: any) {
+
             if (vaccine.status == "administered") {
                 return this.iconsContent.greenInjection;
             }
@@ -123,14 +117,7 @@ export default defineComponent({
                 return this.iconsContent.fadedGreenIjection;
             }
         },
-        getCheckBoxForVaccine(vaccine: any, visit_id: number) {
-            const store = useAdministerVaccineStore();
-            if (visit_id < store.getCurrentVisitId() && vaccine.status != "administered") {
-                return this.iconsContent.smallEditPen;
-            }
-            if (visit_id < store.getCurrentVisitId() && vaccine.status == "administered") {
-                return this.iconsContent.smallEditPen;
-            }
+        getCheckBoxForVaccine(vaccine: any) {
             if (vaccine.status == "administered") {
                 return this.iconsContent.improvedGreenTick;
             } else {
@@ -142,58 +129,19 @@ export default defineComponent({
             store.setCurrentSelectedDrug(this.$props.visitId as number, data.drug_id as number, data.drug_name, data.vaccine_batch_number as string);
             createModal(administerVaccineModal, { class: "otherVitalsModal" },);
         },
-        disableVaccine(identifier: number) {
-            // const client = new PatientService();
-            // const client_age = client.getAge();
-            // const is_under_five = this.getVisitNumber(client_age) as number;
-            // const store = useAdministerVaccineStore();
-            // const currentVisitId = store.getCurrentVisitId();
-            // const currentSchFound = store.getCurrentSchedFound();
+        disableVaccine(vaccine: any) {
 
-            // if (currentSchFound == false) {
-            //     return true;
-            // }
+            if (vaccine.can_administer != null && vaccine.can_administer == false ) {
+                return true
+            }
 
-            // if (identifier == currentVisitId) {
-            //     return false;
-            // }
-
-            // if (identifier < is_under_five) {
-            //     return true;
-            // }
-
-            // if (identifier < currentVisitId) {
-            //     return false;
-            // } else {
-            //     return true;
-            // }
+            if (vaccine.can_administer != null && vaccine.can_administer == true ) {
+                return false
+            }
             return false
         },
         checkVaccineName(name: string) {
             return name.replace(/Pentavalent/g, "Penta");
-        },
-        getVisitNumber(age: number) {
-            if (age < 10 / 52) {
-                return 1; // Visit 1: 10 weeks
-            } else if (age < 14 / 52) {
-                return 2; // Visit 2: 14 weeks
-            } else if (age < 5 / 12) {
-                return 3; // Visit 3: 5 months
-            } else if (age < 6 / 12) {
-                return 4; // Visit 4: 6 months
-            } else if (age < 7 / 12) {
-                return 5; // Visit 5: 7 months
-            } else if (age < 9 / 12) {
-                return 6; // Visit 6: 9 months
-            } else if (age < 15 / 12) {
-                return 7; // Visit 7: 15 months
-            } else if (age < 22 / 12) {
-                return 8; // Visit 8: 22 months
-            } else if (age < 12) {
-                return 9; // Visit 9: 12 years above
-            } else {
-                return 10; // Visit 10: 18 years above
-            }
         },
     },
 });
