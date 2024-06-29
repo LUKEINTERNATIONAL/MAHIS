@@ -1,0 +1,107 @@
+import { defineStore } from "pinia";
+import { icons } from "@/utils/svg";
+import _ from "lodash";
+const initialStock = [
+    {
+        selectedData: {},
+        isFinishBtn: false,
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Batch No.",
+                            iconRight: icons.scannerIcon,
+                            value: "",
+                            name: "batch",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            valueType: "text",
+                            validationFunctionName: "isNameEmpty",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Product Name",
+                            icon: icons.search,
+                            value: "",
+                            name: "product name",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            selectedID: "",
+                            validationFunctionName: "isNameWithSlush",
+                            isSingleSelect: true,
+                            trackBy: "trackByID",
+                            multiSelectData: [],
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        selectedData: {},
+        isFinishBtn: false,
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Quantity",
+                            value: "",
+                            name: "stock in",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            valueType: "text",
+                            validationFunctionName: "isNameEmpty",
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Expire date",
+                            icon: icons.calenderPrimary,
+                            value: "",
+                            name: "expire date",
+                            eventType: "input",
+                            //disabled: true,
+                            alertsErrorMassage: "",
+                            required: true,
+                            isDatePopover: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+] as any;
+export const useStockStore = defineStore("stockStore", {
+    state: () => ({
+        stock: [...initialStock] as any,
+    }),
+    actions: {
+        setStock(data: any) {
+            this.stock = data;
+        },
+        getInitialStock() {
+            const data = _.cloneDeep(initialStock);
+            return [...data];
+        },
+    },
+    persist: true,
+});
