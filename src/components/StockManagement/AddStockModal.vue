@@ -55,6 +55,8 @@ import { AppEncounterService } from "@/services/app_encounter_service";
 import { PersonService } from "@/services/person_service";
 import { PatientRegistrationService } from "@/services/patient_registration_service";
 import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
+import { StockService } from "@/services/stock_service";
+import { DrugService } from "@/services/drug_service";
 
 export default defineComponent({
     components: {
@@ -113,6 +115,25 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     methods: {
+        async createBatch() {
+            const stockService = new StockService();
+            const data = {
+                batch_number: getFieldValue(this.stock, "batch", "value"),
+                location_id: 721,
+                items: [
+                    {
+                        barcode: "",
+                        drug_id: getFieldValue(this.stock, "stock in", "value"),
+                        expiry_date: getFieldValue(this.stock, "expire date", "value"),
+                        quantity: getFieldValue(this.stock, "product name", "value"),
+                        delivery_date: "",
+                        product_code: "",
+                        pack_size: "",
+                    },
+                ],
+            };
+            await stockService.postItems(data);
+        },
         navigationMenu(url: any) {
             menuController.close();
             this.$router.push(url);
@@ -138,6 +159,8 @@ export default defineComponent({
         },
         async getRelations() {
             modifyFieldValue(this.stock, "product name", "value", "");
+            const drugs = await DrugService.getDrugs();
+            console.log("🚀 ~ getRelations ~ drugs:", drugs);
             this.relationships = await RelationsService.getRelations();
             const data = this.relationships
                 .map((r: any) => {
