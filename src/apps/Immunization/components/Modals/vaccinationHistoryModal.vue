@@ -72,7 +72,7 @@ export default defineComponent({
     methods: {
         populateHistory() {
             const vaccineScheduleStore = useAdministerVaccineStore();
-            const vaccinSchedules = vaccineScheduleStore.getVaccineSchedule().vaccinSchedule
+            const vaccinSchedules = vaccineScheduleStore.getVaccineSchedule().vaccine_schedule
             console.log(vaccinSchedules)
             this.vaccineHistory = vaccinSchedules
         },

@@ -5,6 +5,8 @@ import { Service } from "@/services/service"
 import { PatientService } from "@/services/patient_service"
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
 import HisDate from "@/utils/Date"
+import { createModal } from "@/utils/Alerts"
+import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue"
 
 export async function getVaccinesSchedule() {
     const patient = new PatientService()
@@ -26,7 +28,9 @@ export async function saveVaccineAdministeredDrugs() {
         if (!drugOrder) return toastWarning("Unable register vaccine!")
         toastSuccess("Vaccine registred successfully")
         store.setVaccineReload(!store.getVaccineReload())
+
     }
+    //openNextVaccineAppoinment()
 }
 
 function mapToOrders(): any[] {
@@ -44,7 +48,6 @@ function mapToOrders(): any[] {
             dose: 1,
             frequency: "Unknown",
             batch_number: drug.batch_number,
-            visit_id: drug.visit_id,
             prn: 0,
         };
     });
@@ -54,4 +57,8 @@ function calculateExpireDate(startDate: string | Date, duration: any) {
     const date = new Date(startDate);
     date.setDate(date.getDate() + parseInt(duration));
     return HisDate.toStandardHisFormat(date);
+}
+
+function openNextVaccineAppoinment() {
+    createModal(nextAppointMent, { class: "otherVitalsModal" }, false)
 }
