@@ -40,7 +40,7 @@ export class Appointment extends AppEncounterService {
         // const res = await this.getNextAppointment();
         // const nextAppointmentDate = res.appointment_date;
         // const n_a_obs = await this.buildValueDate("Estimated date", nextAppointmentDate)
-        const a_obs = await this.buildValueDate("Appointment date", "mzuzu") as any
+        const a_obs = await this.buildValueDate("Appointment date", _appointment_[0]) as any
         await this.saveObservationList([a_obs])
 
     }
