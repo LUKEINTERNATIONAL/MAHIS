@@ -3,10 +3,9 @@
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
-            <Stepper stepperTitle="Profile" :wizardData="wizardData" @updateStatus="markWizard"  :StepperData="StepperData" />
+            <Stepper stepperTitle="Profile" :wizardData="wizardData" @updateStatus="markWizard" :StepperData="StepperData" />
         </ion-content>
-      <BasicFooter @finishBtn="saveData()" />
-
+        <BasicFooter @finishBtn="saveData()" />
     </ion-page>
 </template>
 
@@ -361,9 +360,7 @@ export default defineComponent({
                     this.$router.push("ANCHome");
                 }
             } else {
-                modifyRadioValue(this.lmnp, "LNMP Known?", "alertsErrorMassage", true);
                 modifyRadioValue(this.lmnp, "LNMP Known?", "alertsErrorMassage", "Value is required");
-                modifyFieldValue(this.lmnp, "lmnpDate", "alertsErrorMassage", true);
                 modifyFieldValue(this.lmnp, "lmnpDate", "alertsErrorMassage", "Value is required");
 
                 await toastWarning("Please complete all required fields");

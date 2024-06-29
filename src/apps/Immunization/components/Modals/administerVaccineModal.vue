@@ -139,7 +139,9 @@ export default defineComponent({
             },
         };
     },
-    computed: {},
+    computed: {
+        ...mapState(useAdministerVaccineStore, ["tempScannedBatchNumber"]),
+    },
     async mounted() {
         this.loadCurrentSelectedDrug()
         this.displayUserNames()
@@ -168,6 +170,13 @@ export default defineComponent({
             },
             deep: true,
         },
+        tempScannedBatchNumber: {
+            handler() {
+                if (this.tempScannedBatchNumber != '') {
+                    console.log(this.tempScannedBatchNumber)
+                }
+            }
+        }
     },
     methods: {
         loadCurrentSelectedDrug() {

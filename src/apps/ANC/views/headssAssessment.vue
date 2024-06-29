@@ -3,15 +3,9 @@
         <Toolbar />
         <ion-content :fullscreen="true">
             <DemographicBar />
-            <Stepper
-                stepper-title="HEADSS Assessment"
-                :wizardData="wizardData"
-                @updateStatus="markWizard"
-                :StepperData="StepperData"
-            />
+            <Stepper stepper-title="HEADSS Assessment" :wizardData="wizardData" @updateStatus="markWizard" :StepperData="StepperData" />
         </ion-content>
-      <BasicFooter @finishBtn="saveData()" />
-
+        <BasicFooter @finishBtn="saveData()" />
     </ion-page>
 </template>
 
@@ -43,7 +37,7 @@ import BasicFooter from "@/components/BasicFooter.vue";
 export default defineComponent({
     name: "treatment",
     components: {
-      BasicFooter,
+        BasicFooter,
         IonContent,
         IonHeader,
         IonItem,
@@ -125,7 +119,6 @@ export default defineComponent({
                     this.$router.push("ANCHome");
                 }
             } else {
-                modifyRadioValue(this.headssAssesment, "Who does the client live with", "alertsErrorMassage", true);
                 modifyRadioValue(this.headssAssesment, "Who does the client live with", "alertsErrorMassage", "This is a mandatory question");
                 await toastWarning("Please complete all required fields");
             }

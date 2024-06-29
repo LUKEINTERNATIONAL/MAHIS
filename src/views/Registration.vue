@@ -1,5 +1,11 @@
 <template>
-    <ion-page>
+    <ion-page :class="{ loading: isLoading }">
+        <!-- Spinner -->
+        <div v-if="isLoading" class="spinner-overlay">
+            <ion-spinner name="bubbles"></ion-spinner>
+            <div class="loading-text">Please wait...</div>
+        </div>
+
         <ion-header>
             <div class="header position_content">
                 <div style="display: flex; align-items: center" @click="nav('/home')">
@@ -16,7 +22,7 @@
         <ion-content>
             <div class="container">
                 <div class="title">
-                    <div class="demographics_title">New patient registration</div>
+                    <div class="demographics_title">New {{ programID() != 33 ? "patient" : "client" }} registration</div>
                 </div>
                 <div class="icon_div displayNoneMobile">
                     <ion-icon :class="iconListStatus" :icon="list" @click="setDisplayType('list')"></ion-icon>
@@ -38,8 +44,8 @@
                     </div>
                     <div class="flex-item">
                         <CurrentLocation />
-                        <SocialHistory v-if="checkUnderFive" />
-                        <BirthRegistration v-if="checkUnderOne" />
+                        <SocialHistory v-if="checkUnderFourteen" />
+                        <BirthRegistration v-if="checkUnderNine" />
                     </div>
                     <div class="flex-item">
                         <HomeLocation />
@@ -59,8 +65,8 @@
                     </div>
                 </div>
                 <div v-if="currentStep == 'Social History'">
-                    <SocialHistory v-if="checkUnderFive" />
-                    <BirthRegistration v-if="checkUnderOne" />
+                    <SocialHistory v-if="checkUnderFourteen" />
+                    <BirthRegistration v-if="checkUnderFive" />
                 </div>
                 <div v-if="currentStep == 'Guardian Information'">
                     <GuardianInformation />
@@ -72,7 +78,8 @@
         </div>
         <ion-footer v-if="(registrationType == 'manual' && registrationDisplayType == 'list') || screenWidth <= 991">
             <div class="footer position_content">
-                <DynamicButton name="Previous" :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
+                <DynamicButton name="Cancel" v-if="currentStep == 'Personal Information'" color="danger" @click="nav('/home')" />
+                <DynamicButton name="Previous" v-else :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
                 <ion-breadcrumbs class="breadcrumbs displayNoneMobile">
                     <ion-breadcrumb @click="setCurrentStep('Personal Information')" :class="{ active: currentStep === 'Personal Information' }">
                         <span class="breadcrumb-text">Personal Information</span>
@@ -173,8 +180,10 @@ export default defineComponent({
             demographic: true,
             currentStep: "Personal Information",
             scanner: false,
-            checkUnderFive: true,
-            checkUnderOne: false,
+            checkUnderFourteen: true,
+            checkUnderNine: false,
+            checkUnderFive: false,
+            checkUnderSixWeeks: false,
             steps: ["Personal Information", "Location", "Social History", "Guardian Information"],
             screenWidth: "" as any,
             disableSaveBtn: false,
@@ -258,6 +267,9 @@ export default defineComponent({
         return { arrowForwardCircle, grid, list };
     },
     methods: {
+        programID() {
+            return Service.getProgramID();
+        },
         async getRegion(name: any) {
             let districts = [];
             for (let i of [1, 2, 3]) {
@@ -281,9 +293,18 @@ export default defineComponent({
         },
         checkAge() {
             if (!isEmpty(this.birthdate)) {
-                //console.log(HisDate.ageInMonths(this.birthdate));
-                this.checkUnderFive = HisDate.getAgeInYears(this.birthdate) >= 5 ? true : false;
-                this.checkUnderOne = HisDate.ageInMonths(this.birthdate) < 9 ? true : false;
+                this.checkUnderFourteen = HisDate.getAgeInYears(this.birthdate) >= 14 ? true : false;
+                this.checkUnderNine = HisDate.ageInMonths(this.birthdate) < 9 ? true : false;
+                this.checkUnderFive = HisDate.getAgeInYears(this.birthdate) < 5 ? true : false;
+                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.birthdate) < 42 ? true : false;
+                this.controlHeight();
+            }
+        },
+        controlHeight() {
+            if (this.checkUnderSixWeeks) {
+                modifyFieldValue(this.birthRegistration, "Height (cm)", "displayNone", true);
+            } else {
+                modifyFieldValue(this.birthRegistration, "Height (cm)", "displayNone", false);
             }
         },
         disableNationalIDInput() {
@@ -319,8 +340,19 @@ export default defineComponent({
             this.openNewPage(patientData);
         },
         async saveData() {
-            
-            if (await this.createPatient()) await UserService.setProgramUserActions();
+            this.isLoading = true;
+            try {
+                if (await this.createPatient()) {
+                    await UserService.setProgramUserActions();
+                    toastSuccess("Data saved successfully!");
+                } else {
+                    toastWarning("Failed to create patient.");
+                }
+            } catch (error) {
+                toastWarning("An error occurred while saving data.");
+            } finally {
+                this.isLoading = false;
+            }
         },
         async validations(data: any, fields: any) {
             if (this.nationalID != "") {
@@ -342,7 +374,7 @@ export default defineComponent({
         async createPatient() {
             const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
             const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
-
+            await this.buildPersonalInformation();          
             if (
                 (await this.validations(this.personInformation, fields)) &&
                 (await this.validations(this.currentLocation, currentFields)) &&
@@ -427,6 +459,7 @@ export default defineComponent({
             if (Object.keys(this.guardianInformation[0].selectedData).length === 0) return;
             const selectedID = getFieldValue(this.guardianInformation, "relationship", "selectedID");
             const guardian: any = new PatientRegistrationService();
+            console.log(this.guardianInformation[0].selectedData,"....guardian...info")
             await guardian.registerGuardian(this.guardianInformation[0].selectedData);
             const guardianID = guardian.getPersonID();
             if (selectedID) await RelationsService.createRelation(patientID, guardianID, selectedID);
@@ -502,6 +535,33 @@ export default defineComponent({
 });
 </script>
 <style scoped>
+.spinner-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: 9999;
+}
+
+ion-spinner {
+    width: 80px;
+    height: 80px;
+}
+
+.loading-text {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #333;
+}
+
+.loading {
+    pointer-events: none;
+}
 .breadcrumbs {
     font-weight: 400;
     font-size: 14px;

@@ -153,11 +153,9 @@ export default defineComponent({
 
             if (Validation.isName(name) != null) {
                 modifyFieldValue(this.addVillage, "Village", "alertsErrorMassage", "Please enter a valid " + "Village");
-                modifyFieldValue(this.addVillage, "Village", "alertsErrorMassage", true);
                 return false;
             } else {
                 modifyFieldValue(this.addVillage, "Village", "alertsErrorMassage", "");
-                modifyFieldValue(this.addVillage, "Village", "alertsErrorMassage", false);
             }
 
             const villageList = await LocationService.getVillages(TAData.traditional_authority_id, "");
@@ -165,11 +163,9 @@ export default defineComponent({
             const filteredData = villageList.filter((item: any) => item.name.toLowerCase() == name.toLowerCase());
             if (!isEmpty(filteredData)) {
                 modifyFieldValue(this.addVillage, "Village", "alertsErrorMassage", "Can't add existing " + "Village");
-                modifyFieldValue(this.addVillage, "Village", "alertsErrorMassage", true);
                 return false;
             } else {
                 modifyFieldValue(this.addVillage, "Village", "alertsErrorMassage", "");
-                modifyFieldValue(this.addVillage, "Village", "alertsErrorMassage", false);
             }
             this.validationData = {
                 address_type: "Village",
