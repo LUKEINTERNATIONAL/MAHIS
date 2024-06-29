@@ -5,16 +5,16 @@
         @mousemove="highlightItem(index)" @mouseout="undoHighlightItem(index)">
 
         <ion-col class="col-st1">
-            <ion-label :id="asignLblID(index)" class="truncate-text" style="color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ (item as any).name }}</ion-label>
+            <ion-label :id="asignLblID(index)" class="truncate-text" style="color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ (item as any).type }}</ion-label>
         </ion-col>
 
         <ion-col class="col-st2">
-            <ion-label class="truncate-text" style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;"><span class="spaceBetween"></span> {{ (item as any).type }} <span class="spaceBetween"></span>{{ (item as any).reason }}<span class="spaceBetween"></span>{{ (item as any).date }}</ion-label>
+            <ion-label class="truncate-text" style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;"><span class="spaceBetween"></span> {{ (item as any).name }} <span class="spaceBetween"></span>{{ (item as any).reason }}<span class="spaceBetween"></span>{{ fomartDate((item as any).date) }}</ion-label>
         </ion-col>
 
         <ion-col class="action_buttons">
-            <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end; flex: auto;" @click="$emit('update:editItem', index)"><span v-html="iconsContent.edit" class="modify_buttons"></span></ion-label>
-            <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end;" @click="removeItemAtIndex(index, $event)"><span v-html="iconsContent.delete" class="modify_buttons"></span></ion-label>
+            <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end; flex: auto;" @click="$emit('update:editItem', index)"><ion-icon   :icon="iconsContent.edit"></ion-icon></ion-label>
+            <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end;" @click="removeItemAtIndex(index, $event)"><ion-icon   :icon="iconsContent.delete"></ion-icon></ion-label>
         </ion-col>
 
     </ion-item>
@@ -85,6 +85,12 @@ export default defineComponent({
                 this.$emit('update:removeItem', index)
             }
         },
+        fomartDate(date: any) {
+            const year = date.year;
+            const month = (date.month < 10 ? '0' : '') + date.month;
+            const day = (date.day < 10 ? '0' : '') + date.day;
+            return year + '-' + month + '-' + day;
+        }
     }
 })
 </script>

@@ -1,0 +1,502 @@
+<template>
+    <ion-row>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">Birth</ion-label>
+                    <div class="due_date">2023-04-13</div>
+                    <div>
+                        <DynamicButton color="danger" name="Overdue" size="small" />
+                    </div>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <basic-form :contentData="birthImmunization" @update:inputValue="handleInputData" @update:selected="handleInputData"></basic-form>
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">6 Weeks</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <basic-form
+                        :contentData="sixWeeksImmunization"
+                        @update:inputValue="handleInputData"
+                        @update:selected="handleInputData"
+                    ></basic-form>
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">10 Weeks</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <basic-form
+                        :contentData="tenWeeksImmunization"
+                        @update:inputValue="handleInputData"
+                        @update:selected="handleInputData"
+                    ></basic-form>
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">14 Weeks</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <basic-form
+                        :contentData="fourteenWeeksImmunization"
+                        @update:inputValue="handleInputData"
+                        @update:selected="handleInputData"
+                    ></basic-form>
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">5 - 22 Months</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <basic-form
+                        :contentData="fiveToTwentyTwoImmunization"
+                        @update:inputValue="handleInputData"
+                        @update:selected="handleInputData"
+                    ></basic-form>
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel"> 1 Year - 5 Years</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <basic-form
+                        :contentData="oneYearToFiveYearsImmunization"
+                        @update:inputValue="handleInputData"
+                        @update:selected="handleInputData"
+                    ></basic-form>
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">9 - 14 Years For Girls</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <basic-form
+                        :contentData="nineToFourteenYearsImmunization"
+                        @update:inputValue="handleInputData"
+                        @update:selected="handleInputData"
+                    ></basic-form>
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">12 Years Above</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <basic-form
+                        :contentData="twelveYearsAboveImmunization"
+                        @update:inputValue="handleInputData"
+                        @update:selected="handleInputData"
+                    ></basic-form>
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">15 Years (for pregnant women and women of childbearing age up to 45 years )</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <basic-form
+                        :contentData="fifteenYearsImmunization"
+                        @update:inputValue="handleInputData"
+                        @update:selected="handleInputData"
+                    ></basic-form>
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+        <ion-accordion-group ref="accordionGroup" class="previousView">
+            <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
+                <ion-item slot="header" color="light">
+                    <ion-label class="previousLabel">18 Years Above</ion-label>
+                </ion-item>
+                <div class="ion-padding" slot="content">
+                    <basic-form
+                        :contentData="eighteenYearsAboveImmunization"
+                        @update:inputValue="handleInputData"
+                        @update:selected="handleInputData"
+                    ></basic-form>
+                </div>
+            </ion-accordion>
+        </ion-accordion-group>
+    </ion-row>
+</template>
+
+<script lang="ts">
+import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, IonInput, IonPopover } from "@ionic/vue";
+import { defineComponent, ref } from "vue";
+import { build, checkmark, pulseOutline } from "ionicons/icons";
+import { icons } from "@/utils/svg";
+import { OrderService } from "@/services/order_service";
+import DashBox from "@/components/DashBox.vue";
+import SelectionPopover from "@/components/SelectionPopover.vue";
+import BasicInputField from "@/components/BasicInputField.vue";
+import { useInvestigationStore } from "@/stores/InvestigationStore";
+import { mapState } from "pinia";
+import { toastWarning, popoverConfirmation } from "@/utils/Alerts";
+import BasicForm from "@/components/BasicForm.vue";
+import List from "@/components/List.vue";
+import DynamicButton from "@/components/DynamicButton.vue";
+import labOrderResults from "@/components/Lab/labOrderResults.vue";
+import { LabOrder } from "@/services/lab_order";
+import Allergies from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/Allergies.vue";
+import LevelOfConsciousness from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/LevelOfConsciousness.vue";
+import PhysicalExamination from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PhysicalExamination.vue";
+import PregnancyBreastfeeding from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PregnancyBreastfeeding.vue";
+import PresentingComplaints from "@/apps/OPD/components/ConsultationPlan/ClinicalAssessment/PresentingComplaints.vue";
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import { useImmunizationStore } from "@/apps/Immunization/stores/ImmunizationStore";
+import {
+    modifyCheckboxInputField,
+    getCheckboxSelectedValue,
+    getRadioSelectedValue,
+    getFieldValue,
+    modifyRadioValue,
+    modifyFieldValue,
+} from "@/services/data_helpers";
+import { ConceptService } from "@/services/concept_service";
+import { PatientService } from "@/services/patient_service";
+
+export default defineComponent({
+    name: "Menu",
+    components: {
+        IonContent,
+        IonHeader,
+        IonItem,
+        IonList,
+        IonMenu,
+        IonTitle,
+        IonToolbar,
+        IonInput,
+        IonPopover,
+        DashBox,
+        SelectionPopover,
+        BasicInputField,
+        BasicForm,
+        List,
+        DynamicButton,
+        labOrderResults,
+        Allergies,
+        LevelOfConsciousness,
+        PhysicalExamination,
+        PregnancyBreastfeeding,
+        PresentingComplaints,
+    },
+    data() {
+        return {
+            iconsContent: icons,
+            no_item: false,
+            search_item: false,
+            display_item: false,
+            addItemButton: true,
+            selectedText: "" as any,
+            testResult: "" as any,
+            test: "" as any,
+            orders: "" as any,
+            filteredSpecimen: "" as any,
+            labOrders: "" as any,
+            testData: [] as any,
+            popoverOpen: false,
+            levelOfConsciousnessStatus: false,
+            presentingComplaintsStatus: false,
+            pregnancyBreastfeedingStatus: false,
+            pastMedicalHistory: false,
+            allergiesStatus: false,
+            physicalExamination: false,
+            event: "" as any,
+            specimen: "" as any,
+            radiologyOrdersStatus: false,
+            otherOrdersStatus: false,
+        };
+    },
+    setup() {
+        return { checkmark, pulseOutline };
+    },
+    computed: {
+        ...mapState(useInvestigationStore, ["investigations"]),
+        ...mapState(useDemographicsStore, ["demographics"]),
+        ...mapState(useImmunizationStore, [
+            "birthImmunization",
+            "sixWeeksImmunization",
+            "tenWeeksImmunization",
+            "fourteenWeeksImmunization",
+            "fiveToTwentyTwoImmunization",
+            "nineToFourteenYearsImmunization",
+            "twelveYearsAboveImmunization",
+            "fifteenYearsImmunization",
+            "eighteenYearsAboveImmunization",
+            "oneYearToFiveYearsImmunization",
+        ]),
+        inputFields() {
+            return this.investigations[0].data.rowData[0].colData;
+        },
+    },
+    watch: {
+        investigations: {
+            handler() {
+                this.setDashedBox();
+            },
+            deep: true,
+        },
+    },
+    async mounted() {
+        this.updateInvestigationsStores();
+        this.setDashedBox();
+        this.orders = await OrderService.getOrders(this.demographics.patient_id);
+        this.labOrders = await OrderService.getTestTypes();
+    },
+    methods: {
+        checkPatient() {
+            const patient = new PatientService();
+            return patient.isChildBearing();
+        },
+        updateInvestigationsStores() {
+            const investigationsStore = useInvestigationStore();
+            investigationsStore.setInvestigations(this.investigations);
+        },
+        displayInputFields() {
+            this.testResult = "";
+            this.selectedText = "";
+            this.no_item = false;
+            this.addItemButton = false;
+            this.search_item = true;
+        },
+        async validateRowData() {
+            const firstCol = this.investigations[0].data.rowData[0].colData[0];
+            const secondCol = this.investigations[0].data.rowData[0].colData[1];
+
+            firstCol.alertsErrorMassage = false;
+            firstCol.alertsErrorMassage = "";
+            secondCol.alertsErrorMassage = false;
+            secondCol.alertsErrorMassage = "";
+
+            secondCol.disabled = false;
+
+            const testValue = this.inputFields[0].value;
+            const specimenValue = this.inputFields[1].value;
+
+            this.test = await this.filterTest(testValue);
+            this.filteredSpecimen = await this.filterSpecimen(specimenValue);
+
+            const testMatches = testValue && this.test[0]?.name === testValue;
+            const specimenMatches = specimenValue && this.filteredSpecimen[0]?.name === specimenValue;
+
+            if (testValue) {
+                if (testMatches) {
+                    this.specimen = await OrderService.getSpecimens(firstCol.value);
+                    if (this.specimen.length == 1) {
+                        secondCol.value = this.specimen[0].name;
+                        secondCol.disabled = true;
+                    }
+                    secondCol.popOverData.data = this.specimen;
+                } else {
+                    secondCol.value = "";
+                    this.search_item = true;
+                    firstCol.alertsErrorMassage = true;
+                    firstCol.alertsErrorMassage = "Please select test from the list";
+                }
+            } else {
+                secondCol.value = "";
+            }
+
+            if (specimenValue && !specimenMatches && !secondCol.disabled) {
+                secondCol.alertsErrorMassage = true;
+                secondCol.alertsErrorMassage = "Please select specimen from the list";
+            }
+
+            return testMatches && (specimenMatches || secondCol.disabled);
+        },
+        async addNewRow() {
+            if (await this.validateRowData()) {
+                this.saveTest();
+                this.investigations[0].data.rowData[0].colData[0].value = "";
+                this.investigations[0].data.rowData[0].colData[1].value = "";
+                this.search_item = false;
+                this.display_item = true;
+                this.addItemButton = true;
+            }
+            this.investigations[0].data.rowData[0].colData[0].popOverData.data = [];
+        },
+        async saveTest() {
+            const investigationInstance = new LabOrder();
+            await investigationInstance.postActivities(this.demographics.patient_id, [
+                {
+                    concept_id: this.test[0].concept_id,
+                    name: this.inputFields[0].value,
+                    specimen: this.inputFields[1].value,
+                    reason: "Routine",
+                    specimenConcept: await ConceptService.getConceptID(this.inputFields[1].value),
+                },
+            ]);
+            this.orders = await OrderService.getOrders(this.demographics.patient_id);
+        },
+        buildResults() {
+            const modifier = this.inputFields[1].value.charAt(0);
+            const result = parseInt(this.inputFields[1].value.substring(1));
+            const measures = {
+                indicator: {
+                    concept_id: 679,
+                },
+                value: result,
+                value_modifier: modifier,
+                value_type: "numeric",
+            };
+        },
+        async handleInputData(col: any) {
+            if (col.inputHeader == "Test") {
+                this.popoverOpen = true;
+                this.testData = await this.filterTest(col.value);
+                this.investigations[0].data.rowData[0].colData[0].popOverData.data = this.testData;
+            }
+            this.validateRowData();
+        },
+
+        async filterTest(name: any) {
+            return await this.labOrders.filter((item: any) => item.name.toLowerCase().includes(name.toLowerCase()));
+        },
+        async filterSpecimen(name: any) {
+            if (this.specimen[0]?.name && name) {
+                return await this.specimen.filter((item: any) => item?.name.toLowerCase().includes(name.toLowerCase()));
+            } else {
+                return [];
+            }
+        },
+        setTest(value: any) {
+            this.selectedText = value.name;
+            if (this.inputFields[0].inputHeader == "Test") {
+                this.investigations[0].data.rowData[0].colData[0].value = value.name;
+            } else {
+                this.investigations[0].data.rowData[0].colData[1].value = value.name;
+            }
+            this.updateInvestigationsStores();
+        },
+        async openDeletePopover(e: any) {
+            const deleteConfirmed = await popoverConfirmation(`Do you want to delete ${e[1]} ?`, e[0]);
+            if (deleteConfirmed) {
+                this.deleteTest(e[1]);
+            }
+        },
+        deleteTest(test: any) {
+            this.investigations[0].selectedData = this.investigations[0].selectedData.filter((item: any) => item.display[0] !== test);
+            this.updateInvestigationsStores();
+        },
+        editTest(test: any) {
+            this.deleteTest(test[0]);
+            this.selectedText = test[0];
+            this.investigations[0].data.rowData[0].colData[0].value = test[0];
+            this.investigations[0].data.rowData[0].colData[1].value = test[1];
+            this.addItemButton = false;
+            this.search_item = true;
+            this.updateInvestigationsStores();
+        },
+        setDashedBox() {
+            if (this.inputFields[0].value || this.inputFields[1].value) {
+                this.addItemButton = false;
+                this.search_item = true;
+                this.no_item = false;
+            }
+            if (this.investigations[0].selectedData.length > 0) {
+                this.display_item = true;
+                this.no_item = false;
+            } else if (!this.search_item) {
+                this.no_item = true;
+            }
+        },
+    },
+});
+</script>
+
+<style scoped>
+#container {
+    text-align: center;
+
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#container strong {
+    font-size: 20px;
+    line-height: 26px;
+}
+
+#container p {
+    font-size: 16px;
+    line-height: 22px;
+
+    color: #8c8c8c;
+
+    margin: 0;
+}
+
+#container a {
+    text-decoration: none;
+}
+
+.action_buttons {
+    color: var(--ion-color-primary);
+    display: flex;
+    align-items: center;
+    float: right;
+    max-width: 70px;
+}
+
+.modify_buttons {
+    padding-left: 20px;
+}
+
+.item_no_border {
+    --border-color: transparent;
+}
+
+.search_result {
+    padding: 10px;
+}
+.action_buttons {
+    opacity: 0; /* Initially hide the action buttons */
+    transition: opacity 0.3s; /* Add a smooth transition effect */
+}
+
+.dashed_bottom_border:hover .action_buttons {
+    opacity: 1; /* Show the action buttons when the row is hovered over */
+}
+.dashed_bottom_border {
+    font-weight: 700;
+}
+.sub_item_body {
+    margin-left: 45px;
+}
+.presentingComplaint {
+    margin-top: 10px;
+}
+.previousLabel {
+    max-width: max-content;
+    margin-right: 15px;
+}
+.due_date {
+    margin-right: 5px;
+}
+</style>

@@ -1,29 +1,32 @@
-
 <template>
-  <!-- Daily Caffeine -->
-  <ion-list>
-    <ion-item :lines="DailyCaffeine" class="dashed_bottom_border">
-      <ion-toggle :checked ="caffeineChecked" @ionChange="caffeineMethod">Daily caffeine  intake</ion-toggle>
-    </ion-item>
-    <div class="sub_item_body" v-if="caffeineChecked">
-      <BasicForm :contentData="Caffeine" />
+    <div class="container">
+        <!-- Caffeine -->
+        <ion-card class="section">
+            <ion-card-content>
+                <basic-form :contentData="dailyCaffeineIntake"
+                            @update:selected="handleInputData"
+                            @update:inputValue="handleInputData"
+                ></basic-form>
+            </ion-card-content>
+        </ion-card>
+
+        <!-- tobbaco -->
+        <ion-card class="section">
+            <ion-card-content>
+                <basic-form :contentData="Tobacco"
+                            @update:selected="handleInputData"
+                            @update:inputValue="handleInputData"
+                ></basic-form>
+            </ion-card-content>
+        </ion-card>
+        <!--    &lt;!&ndash; Navigation Buttons &ndash;&gt;-->
+        <!--    <div class="navigation-buttons">-->
+        <!--      <ion-button @click="goToPreviousSection" expand="block" color="primary" size="medium">Previous</ion-button>-->
+        <!--      <ion-button @click="goToNextSection" expand="block" color="primary" size="medium">Next</ion-button>-->
+        <!--    </div>-->
     </div>
-    <ion-item class="sub_item_body_close" v-if="caffeineChecked"/>
-  </ion-list>
-
-  <!-- Tobbaco use -->
-  <ion-list>
-    <ion-item :lines="tobbacoUses" class="dashed_bottom_border">
-      <ion-toggle :checked ="tobbacoChecked" @ionChange="tobbacoMethod">Use of tobbaco</ion-toggle>
-    </ion-item>
-
-    <div class="sub_item_body" v-if="tobbacoChecked">
-      <BasicForm :contentData="Tobbaco" />
-    </div>
-    <ion-item class="sub_item_body_close" v-if="tobbacoChecked"/>
-  </ion-list>
-
 </template>
+
 
 <script lang="ts">
 import {
@@ -42,13 +45,15 @@ import {
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { checkmark,pulseOutline } from 'ionicons/icons';
+import {icons} from "@/utils/svg";
 import { ref } from 'vue';
-import { icons } from '@/utils/svg.ts';
 import BasicInputField from '@/components/BasicInputField.vue';
 import BasicForm from "@/components/BasicForm.vue";
-import {useMedicalHistoryStore} from "@/apps/ANC/store/medicalHistoryStore";
 import {mapState} from "pinia";
-import {useWomanBehaviourStore} from "@/apps/ANC/store/womanBehaviourStore";
+import {useWomanBehaviourStore} from "@/apps/ANC/store/profile/womanBehaviourStore";
+import {getCheckboxSelectedValue, getRadioSelectedValue, modifyCheckboxValue} from '@/services/data_helpers';
+import {validateField} from "@/services/ANC/profile_validation_service";
+
 
 export default defineComponent({
   name: 'Menu',
@@ -70,36 +75,64 @@ export default defineComponent({
   data() {
     return {
       iconsContent: icons,
-      caffeineChecked : false,
-      tobbacoChecked : false,
-      DailyCaffeine: '',
-      tobbacoUses: '',
+      currentSection: 0, // Initialize currentSection to 0
+
     };
   },
-  // mounted(){
-  //   const caffeine =useWomanBehaviourStore()
-  //   const tobbaco =useWomanBehaviourStore()
-  // },
+  mounted(){
+    const dailyCaffeineIntake =useWomanBehaviourStore()
+    const Tobacco =useWomanBehaviourStore()
+    this. handleNone()
+  },
+  watch:{
+    dailyCaffeineIntake:{
+      handler(event){
+        this. handleNone()
+        this.handleInputData(event)
+      },
+      deep:true
+    },
+    
+  },
   computed:{
-    ...mapState(useWomanBehaviourStore,["Caffeine"]),
-    ...mapState(useWomanBehaviourStore,["Tobbaco"]),
+    ...mapState(useWomanBehaviourStore,["dailyCaffeineIntake"]),
+    ...mapState(useWomanBehaviourStore,["Tobacco"]),
+    DailyCaffeineIntake(){ return getCheckboxSelectedValue(this.dailyCaffeineIntake, 'Daily caffeine use')},
+    SubstanceAbuse(){ return getRadioSelectedValue(this.Tobacco, 'Recently quit tobacco products')},
+    SecondHandSmoke(){ return getRadioSelectedValue(this.Tobacco, 'Exposure to second hand smoke')},
+
   },
 
   setup() {
     return { checkmark,pulseOutline };
   },
   methods:{
-    caffeineMethod(){
-      this.caffeineChecked = !this.caffeineChecked
-      if(this.caffeineChecked){
-        this.DailyCaffeine = 'none'
-      }else{this.DailyCaffeine=""}
+    validationCaffeineRules(event: any) {
+      return validateField(this.dailyCaffeineIntake,event.name, (this as any)[event.name]);
     },
-    tobbacoMethod(){
-      this.tobbacoChecked = !this.tobbacoChecked
-      if(this.tobbacoChecked){
-        this.tobbacoUses = 'none'
-      }else{this.tobbacoUses ="" }
+    validationTobaccoRules(event: any) {
+      return validateField(this.dailyCaffeineIntake,event.name, (this as any)[event.name]);
+    },
+    async  handleInputData(event: any){
+      this.validationCaffeineRules(event)
+      this.validationTobaccoRules(event)
+    },
+    handleNone(){
+      const checkBoxes=['More than 2 cups of coffee',
+                        'More than 4 cups of tea',
+                        'More than 12 bars of chocolate',
+                        'More than one bottle of soda, energy, soft drink']
+                        
+     if (getCheckboxSelectedValue(this.dailyCaffeineIntake, 'None')?.checked) {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.dailyCaffeineIntake, checkbox, 'checked', false);
+            modifyCheckboxValue(this.dailyCaffeineIntake, checkbox, 'disabled', true);
+        });
+        } else {
+        checkBoxes.forEach((checkbox) => {
+            modifyCheckboxValue(this.dailyCaffeineIntake, checkbox, 'disabled', false);
+        });
+    }
     },
     navigationMenu(url: any){
       menuController.close()
@@ -111,76 +144,38 @@ export default defineComponent({
 </script>
 
 <style scoped>
-#container {
-  text-align: center;
-
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
-}
-
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-
-  color: #8c8c8c;
-
-  margin: 0;
-}
-
-#container a {
-  text-decoration: none;
-}
-.foot_title{
-  color: #636363;
-  text-align: center;
-}
-.foot_content{
-  color:#00190E;
-  text-align: center;
-  padding: 4px 0px;
-  font-weight: 500;
-  font-size: 14px;
-  margin-left: 25px;
-}
-.first_col{
-  text-align: left;
-  font-weight: 400;
-  font-size: 14px;
-}
-.sub_item_body{
-  margin-left: 45px;
-}
-.foot_input{
+.section {
   width: 100%;
-  color: #636363;
-  text-align: left;
+  max-width: 1300px; /* Adjust max-width as needed */
+  margin-bottom: 20px;
+}
 
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 500px; /* Adjust max-width as needed */
 }
-.item-content {
-  background-color:#ffffff;
-}
-ion-select._item_eye {
-  --background: #fff;
 
+@media (max-width: 1500px) {
+  .container {
+    padding: 10px;
+  }
 }
-ion-item.item_eye_ {
-  --inner-border-width:0;
-  --background-hover: none;
+.sub_item_header{
+  font-weight: bold;
+  font-size: medium;
 }
-/* ion-toggle {
-    --track-background-checked: #006401
-} */
-ion-item.sub_item_body_close {
-  border-bottom: 2px dotted var(--ion-color-medium);
-  --inner-border-width:0;
+ion-card {
+
+  color:black;
+  width:100%
 }
 
 </style>

@@ -1,23 +1,29 @@
 <template>
-    <ion-button
-        :fill="$props.fill"
-        :color="color"
-        @click="$emit('clicked:btn')">
-        <span>{{ $props.name }}</span>
-        <ion-icon v-if="icon" :slot="iconSlot" style="font-size: x-large;" :icon="$props.icon"></ion-icon>
-
+    <ion-button :disabled="disabledValue" :expand="expand" :fill="$props.fill" :size="size" :color="color" @click="$emit('clicked:btn')">
+        <span v-if="!subName && showName" :style="'font-size: 14px; font-weight:' + fontWeight">
+            {{ $props.name }}
+        </span>
+        <span v-if="subName && showName">
+            <div style="margin-bottom: px; font-size: 14px">{{ $props.name }}</div>
+            <span style="font-size: 14px; font-weight: 700">{{ $props.subName }}</span>
+        </span>
+        <ion-icon v-if="icon" :slot="iconSlot" :style="'font-size:' + iconFont" :icon="$props.icon"></ion-icon>
     </ion-button>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
-import { IonButton  } from "@ionic/vue"
+import { defineComponent, PropType } from "vue";
+import { IonButton } from "@ionic/vue";
 export default defineComponent({
     created() {
-       // this.$emit('onFooterInstance', this)
+        // this.$emit('onFooterInstance', this)
     },
     props: {
         name: {
+            type: String,
+            default: "",
+        },
+        subName: {
             type: String,
             default: "",
         },
@@ -26,26 +32,44 @@ export default defineComponent({
         },
         icon: {
             type: String as any,
-            default:''
+            default: "",
+        },
+        size: {
+            type: String as any,
+            default: "",
+        },
+        expand: {
+            type: String as any,
+            default: "",
         },
         iconSlot: {
             type: String as any,
-            default:'start'
+            default: "start",
+        },
+        iconFont: {
+            type: String as any,
+            default: "x-large",
         },
         color: {
             type: String,
-            default:'primary'
-        }
-
+            default: "primary",
+        },
+        showName: {
+            type: String,
+            default: true,
+        },
+        disabledValue: {
+            type: Boolean,
+            default: false,
+        },
+        fontWeight: {
+            default: "400",
+        },
     },
     components: {
         IonButton,
     },
-    watch: {
-
-    }
-})
+    watch: {},
+});
 </script>
-<style>
-
-</style>
+<style></style>

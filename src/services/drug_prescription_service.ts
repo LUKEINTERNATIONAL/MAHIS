@@ -1,3 +1,11 @@
+import { ConceptName } from "@/interfaces/conceptName";
+import { DrugInterface } from "@/interfaces/Drug";
+import { AppEncounterService } from "@/services/app_encounter_service"
+import { DrugOrderService } from "@/services/drug_order_service";
+import { OrderService } from "@/services/order_service";
+import { DrugService } from './drug_service';
+import { ConceptService } from "@/services/concept_service"
+
 export const DRUG_FREQUENCIES: Array<{label: string; code: string; value: number; [x: string]: any}> = [
     { label : "ONCE A DAY (OD)", code : "OD", value : 1 },
     { label : "TWICE A DAY (BD)", code : "BD", value : 2 },
@@ -15,3 +23,53 @@ export const DRUG_FREQUENCIES: Array<{label: string; code: string; value: number
     { label : "TWICE A MONTH", code : "TWICE A MONTH", value : 0.071 },
     { label : "Unknown", code : "Unknown", value : 0 }
   ]
+
+  export class DrugPrescriptionService extends AppEncounterService {
+    constructor(patientID: number, providerID: number) {
+      super(patientID, 25, providerID) 
+    }
+  
+    async loadDrugs(filter = '', page=1, limit=10): Promise<any[]> {
+      const drugs: ConceptName[] = await DrugService.getOPDDrugs({ 
+        "name": filter, 
+        "page": page,
+        "page_size": limit,
+      })
+      return drugs.map(drug => ({
+        label: drug.name, value: drug.name, other: drug
+      }))
+    }
+  
+    createDrugOrder(drugOrders: Array<DrugInterface>){
+      return DrugOrderService.create({
+        'encounter_id': this.encounterID,
+        'drug_orders': drugOrders
+      })
+    }
+
+    createDrugOrderForImmunization(drugOrders: Array<DrugInterface>, programId: number){
+      return DrugOrderService.create_for_immunization({
+        'encounter_id': this.encounterID,
+        'drug_orders': drugOrders,
+        'program_id': programId
+      } as any)
+    }
+  }
+
+  export function getFrequencyLabelOrCheckCode(codeOrLabel: string): string | undefined {
+    const upperCaseInput = codeOrLabel.toUpperCase()
+    const labelExists = DRUG_FREQUENCIES.some(freq => freq.label.toUpperCase() === upperCaseInput)
+    if (labelExists) {
+        return codeOrLabel
+    }
+    const frequency = DRUG_FREQUENCIES.find(freq => freq.code === upperCaseInput)
+    if (frequency) {
+        return frequency.label
+    }
+    return undefined
+  }
+
+  export async function getDrugRouteList() {
+    const data = await ConceptService.getConceptSet('Method of drug administration')
+    return data
+  }

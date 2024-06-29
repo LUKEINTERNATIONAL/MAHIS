@@ -1,12 +1,14 @@
-import { CapacitorConfig } from '@capacitor/cli';
+import { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'NCD',
-  webDir: 'dist',
-  server: {
-    androidScheme: 'https'
-  }
+    appId: "io.ionic.starter",
+    appName: "MaHIS",
+    webDir: "dist",
+    bundledWebRuntime: false,
+    server: {
+        androidScheme: "http",
+        cleartext: true,
+    },
 };
 
 export default config;

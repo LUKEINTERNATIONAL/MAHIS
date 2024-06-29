@@ -1,29 +1,31 @@
 <template>
-    <ion-item
+    <div id="df"
         class="ionLbltp" v-for="(item, index) in localMedicalDrugsList" :key="index"
-        @mousemove="highlightItem(index)" @mouseout="undoHighlightItem(index)"
-    >
-        <ion-col class="col-st1">
-            <ion-label :id="asignLblID(index)" class="truncate-text" style="color: #00190E; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.drugName }}</ion-label>
-        </ion-col>
+        @mousemove="highlightItem(index)" @mouseout="undoHighlightItem(index)">
+        <ion-row>
+            <ion-col  class="" :class="highLightBnd(item)">
+                <ion-label :id="asignLblID(index)" class="" style="color: #00190E; font-weight: 700; font: inter; line-height: 14px; line-height: 21px;">{{ item.drugName }}</ion-label>
+            </ion-col>
+        </ion-row>
 
-        <ion-col class="col-st2">
-            <ion-label class="truncate-text" style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.dose }} / {{ item.frequency }} / daily / {{ item.duration }} / until {{ item.prescription }}</ion-label>
-        </ion-col>
+        <ion-row>
+            <ion-col size="10" class="" :class="highLightBnd(item)">
+                <ion-label class="truncate-text" style="color: #636363; font-weight: 400; font: inter; line-height: 14px; line-height: 21px;">{{ item.dose }} / {{ item.frequency }} / daily / {{ item.duration }} / until {{ item.prescription }} (<span style="color: red;">{{ item.route_name }}</span>)</ion-label>
+            </ion-col>
 
-        <ion-col class="action_buttons">
-            <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end; flex: auto;" @click="editItemAtIndex(index)"><ion-icon   :icon="iconsContent.edit"></ion-icon></ion-label>
-            <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: end;" @click="removeItemAtIndex(index, $event)"><ion-icon   :icon="iconsContent.delete"></ion-icon></ion-label>
-        </ion-col>
-
-    </ion-item>
+            <ion-col :class="highLightBnd(item)" size="2" v-if="show_actions_buttons" class="action_buttons">
+                <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; margin-right: 20px; text-align: end; flex: auto;" @click="editItemAtIndex(index)"><ion-icon   :icon="iconsContent.edit"></ion-icon></ion-label>
+                <ion-label :class="asignSpanLblID(index)" style="cursor: pointer; display: none; text-align: start;" @click="removeItemAtIndex(index, $event)"><ion-icon   :icon="iconsContent.delete"></ion-icon></ion-label>
+            </ion-col>
+        </ion-row>
+    </div>
 </template>
 
 <script lang="ts">
 import { IonItem, IonCol, IonLabel } from '@ionic/vue'
 import { defineComponent } from 'vue'
 import { createModal,popoverConfirmation,alertConfirmation } from '@/utils/Alerts'
-import { icons } from '@/utils/svg.ts';
+import { icons } from '@/utils/svg';
 export default defineComponent({
     created() {
        // this.$emit('onFooterInstance', this)
@@ -37,12 +39,20 @@ export default defineComponent({
     data() {
     return {
         iconsContent: icons,
-        localMedicalDrugsList: [...this.$props._selectedMedicalDrugsList],
+        localMedicalDrugsList: [...this.$props._selectedMedicalDrugsList] as any,
     }},
     props: {
         _selectedMedicalDrugsList: {
             type: Array,
             default: []
+        },
+        show_actions_buttons: {
+            type: Boolean,
+            default: true
+        },
+        highLightBackground: {
+            type: String,
+            default: "item-native"
         },
     },
     watch: {
@@ -89,6 +99,11 @@ export default defineComponent({
         },
         editItemAtIndex(index: any) {
             this.$emit('edit-item', index)
+        },
+        highLightBnd(item: any) {
+            if (item.highlightbackground !== undefined && item.highlightbackground == true) {
+                return this.$props.highLightBackground
+            }
         }
     }
 })
@@ -104,6 +119,14 @@ ion-item.ionLbltp {
     display: flex;
     align-items: center;
     float: right;
+}
+#df {
+    border-bottom: 2px dotted var(--ion-color-medium);
+    --inner-border-width:0;
+    cursor: pointer;
+    border-bottom: 2px solid #b3b3b3;
+    border-bottom-style: solid;
+    border-bottom-style: dashed;
 }
 .action_buttons:hover {
     cursor: pointer;
@@ -121,5 +144,8 @@ ion-item.ionLbltp {
 }
 .col-st2 {
     max-width: 58%;
+}
+.item-native {
+    background-color: yellow !important;
 }
 </style>

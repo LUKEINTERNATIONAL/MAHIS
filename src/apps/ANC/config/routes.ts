@@ -1,28 +1,93 @@
+import symptomsFollowUp from '../views/symptomsFollowUp.vue';
+import counselling from '../views/counselling.vue';
+import ancEnd from '../views/ancEnd.vue';
+import Profile from '../views/Profile.vue';
+import QuickCheck from '@/apps/ANC/views/QuickCheck.vue';
+import Treatment from "@/apps/ANC/views/Treatment.vue";
+import LabTests from '../views/LabTests.vue';
+import physicalExamination from "@/apps/ANC/views/physicalExamination.vue";
+import headssAssessment from "@/apps/ANC/views/headssAssessment.vue";
+import ANCTreatment from "@/apps/ANC/views/ANCTreatment.vue";
+import ANCHome from '../views/ANCHome.vue';
+import referral from "@/apps/ANC/views/referral.vue";
+import ANCreferral from "@/apps/ANC/views/ANCreferral.vue";
+import Enrollment from "@/apps/ANC/views/Enrollment.vue";
 
-import Profile from '@/apps/ANC/views/Profile.vue'
-import Medications from '@/apps/ANC/components/profile/Medications.vue'
-import WomanBehaviour from "@/apps/ANC/views/WomanBehaviour.vue";
-import Medical from '@/apps/ANC/views/medical.vue';
+
 export default [
   {
-    path: '/anc/profile',
-    name: 'Profile',
+    path: '/ANCEnrollment',
+    name: 'ANCEnrollment',
+    component: Enrollment
+  },
+
+  {
+    path: '/profile',
+    name: 'profile',
     component: Profile
   },
   {
-    path: '/anc/medications',
-    name: 'Medications',
-    component: Medications
+    path: '/quickCheck',
+    name:'quickCheck',
+    component: QuickCheck
   },
   {
-    path: '/anc/womanBehaviour',
-    name: 'WomanBehaviour',
-    component: WomanBehaviour
+    path: '/headssAssessment',
+    name:'headsAssessment',
+    component: headssAssessment
   },
   {
-    path: '/medical',
-    name: 'medical',
-    component: Medical
+    path: '/physicalExamination',
+    name: 'physicalExamination',
+    component: physicalExamination
   },
-]
+  {
+
+    path: '/symptomsFollowUp',
+    name: 'symptomsFollowUp',
+    component: symptomsFollowUp
+  },
+  {
+    path: '/counselling',
+    name: 'counselling',
+    component: counselling
+  },
+  {
+    path: '/referral',
+    name: 'referral',
+    component: referral
+  },
+  {
+    path: '/ancEnd',
+    name: 'ancEnd',
+    component: ancEnd
+  },
+  // {
+  //   path: '/treatment',
+  //   name: 'treatment',
+  //   component: Treatment
+  // },
+  {
+    path: '/ANCtreatment',
+    name: 'ANCTreatment',
+    component: ANCTreatment
+  },
+  {
+    path: '/labTests',
+    name: 'labTests',
+    component: LabTests
+  },
+  {
+    path: '/ancReferral',
+    name: 'ancReferral',
+    component: ANCreferral
+  },
+  {
+    path: '/ANChome',
+    name:'ANCHome',
+    component: ANCHome
+
+  }
+
+];
 

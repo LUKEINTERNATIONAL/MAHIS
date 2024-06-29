@@ -1,41 +1,71 @@
 <template>
-    <ion-row class="dashed_bottom_border" v-for="(item, index) in listData" :key="index">
-        <ion-col  :size="10/item.display.length" v-for="(value, index2) in item.display" :key="index2" :class="item.class">
+    <ion-row :class="classNames" v-for="(item, index) in listData" :key="index">
+        <ion-col :size="item.containSize || 8 / item.display.length" v-for="(value, index2) in item.display" :key="index2" :class="item.class">
             <ion-item class="item_no_border list_header" :style="item.minHeight" v-if="item.header">
-                <span>{{ value}}</span>
+                <span>{{ value }}</span>
             </ion-item>
             <ion-item class="item_no_border" :style="item.minHeight" v-else>
-                <span>{{ value}}</span>
+                <span v-if="isArray(value)"
+                    ><DynamicButton
+                        fill="clear"
+                        :icon="iconsContent.view"
+                        iconSlot="icon-only"
+                        @click="$emit('clicked:view', { item: item, results: value })"
+                    />
+                </span>
+                <span v-else>{{ value }}</span>
             </ion-item>
         </ion-col>
-        <ion-col size="2" class="action_buttons" v-if="item.actionBtn" :class="item.class">
+        <ion-col :size="item.btnSize || 4" class="action_buttons" :class="item.class">
+            <DynamicButton v-if="item?.btn?.includes('enter_results')" name="Enter Result" @click="$emit('clicked:results', item)" />
             <DynamicButton
+                v-if="item?.btn?.includes('attach')"
+                fill="clear"
+                :icon="iconsContent.attach"
+                iconSlot="icon-only"
+                @click="$emit('clicked:attach', { event: $event, name: item.name, id: item.id })"
+            />
+            <DynamicButton
+                v-if="item?.btn?.includes('print')"
+                fill="clear"
+                :icon="iconsContent.print"
+                iconSlot="icon-only"
+                @click="$emit('clicked:print', { event: $event, name: item.name, id: item.id })"
+            />
+
+            <DynamicButton
+                v-if="item?.btn?.includes('view')"
+                fill="clear"
+                :icon="iconsContent.view"
+                iconSlot="icon-only"
+                @click="$emit('clicked:view', { event: $event, name: item.name, id: item.id })"
+            />
+            <DynamicButton
+                v-if="item?.btn?.includes('edit')"
                 fill="clear"
                 :icon="iconsContent.edit"
                 iconSlot="icon-only"
-                @click="$emit('clicked:edit',item.display)"
+                @click="$emit('clicked:edit', { event: $event, item: item })"
             />
             <DynamicButton
+                v-if="item?.btn?.includes('delete')"
                 fill="clear"
                 iconSlot="icon-only"
                 :icon="iconsContent.delete"
-                @click="$emit('clicked:delete',[$event, item.display[0]])"
+                @click="openDeletePopover({ event: $event, name: item.name, id: item.id })"
             />
         </ion-col>
     </ion-row>
 </template>
-  
+
 <script lang="ts">
-import {
-    IonContent,
-    IonHeader,
-    IonItem
-} from '@ionic/vue';
-import { defineComponent, ref } from 'vue';
-import { icons } from '@/utils/svg';
-import DynamicButton from '@/components/DynamicButton.vue';
+import { IonContent, IonHeader, IonItem } from "@ionic/vue";
+import { defineComponent, ref } from "vue";
+import { icons } from "@/utils/svg";
+import DynamicButton from "@/components/DynamicButton.vue";
+import { toastWarning, popoverConfirmation } from "@/utils/Alerts";
 export default defineComponent({
-    name: 'Menu',
+    name: "Menu",
     components: {
         IonContent,
         IonHeader,
@@ -50,17 +80,26 @@ export default defineComponent({
     props: {
         status: {
             type: Boolean,
-            default: true
+            default: true,
         },
         listData: {
-            default: [] as any
-        }
-            
+            default: [] as any,
+        },
+        classNames: {
+            default: "dashed_bottom_border white" as any,
+        },
     },
     methods: {
-       
-      
-    }
+        isArray(value: any) {
+            return Array.isArray(value);
+        },
+        async openDeletePopover(e: any) {
+            const deleteConfirmed = await popoverConfirmation(`Do you want to delete ${e.name} ?`, e.event);
+            if (deleteConfirmed) {
+                this.$emit("clicked:delete", e);
+            }
+        },
+    },
 });
 </script>
 
@@ -77,22 +116,20 @@ export default defineComponent({
 .dashed_bottom_border:hover .action_buttons {
     opacity: 1; /* Show the action buttons when the row is hovered over */
 }
-.col_background{
-  --ion-background-color: #fff;
+.col_background {
+    --ion-background-color: #fff;
 }
-.list_header{
- 
-font-family: 'Inter';
-font-style: normal;
-font-weight: 400;
-font-size: 12px;
-/* identical to box height, or 18px */
-text-align: center;
+.list_header {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    /* identical to box height, or 18px */
+    text-align: center;
 
-/* Secondary */
-color: #636363;
-
-
+    /* Secondary */
+    color: #636363;
+}
+.white ion-item::part(native) {
+    background: #fff;
 }
 </style>
-  

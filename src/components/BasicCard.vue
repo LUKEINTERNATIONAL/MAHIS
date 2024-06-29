@@ -1,48 +1,77 @@
 <template>
     <div class="demographics">
-        <div class="demographics_title">{{ content.mainTitle }}</div>
         <ion-card class="registration_ion_card" v-for="(card, cardIndex) in content.cards" :key="cardIndex">
             <div class="card_content">
                 <div class="card_hearder">
-                    {{ card.cardTitle }}            
+                    {{ card.cardTitle }}
                 </div>
-                <basic-form :contentData="card.content" @update:selected="$emit('update:selected',$event)" @update:inputValue="$emit('update:inputValue',$event)"></basic-form>
+                <basic-form
+                    :contentData="card.content"
+                    :initialData="card.initialData"
+                    @update:selected="$emit('update:selected', $event)"
+                    @update:inputValue="$emit('update:inputValue', $event)"
+                    @clicked:button="$emit('clicked:button', $event)"
+                ></basic-form>
+                <basic-form
+                    :contentData="card.contentTwo"
+                    @update:selected="$emit('update:selected', $event)"
+                    @update:inputValue="$emit('update:inputValue', $event)"
+                    @clicked:button="$emit('clicked:button', $event)"
+                ></basic-form>
             </div>
         </ion-card>
     </div>
 </template>
-  
+
 <script lang="ts">
-import {
-    IonContent,
-    IonHeader,
-    IonItem
-} from '@ionic/vue';
-import { defineComponent, ref } from 'vue';
-import BasicForm from '@/components/BasicForm.vue';
+import { IonContent, IonHeader, IonItem } from "@ionic/vue";
+import { defineComponent, ref } from "vue";
+import BasicForm from "@/components/BasicForm.vue";
+import { grid, list } from "ionicons/icons";
+import { useConfigurationStore } from "@/stores/ConfigurationStore";
+import { mapState } from "pinia";
 
 export default defineComponent({
-    name: 'Menu',
+    name: "Menu",
     components: {
         IonContent,
         IonHeader,
         IonItem,
-        BasicForm
+        BasicForm,
     },
-    
+    data() {
+        return {
+            iconListStatus: "active_icon",
+            iconGridStatus: "inactive_icon",
+        };
+    },
+    computed: {
+        ...mapState(useConfigurationStore, ["registrationDisplayType"]),
+    },
     props: {
         content: {
-            default: '' as any
-        }
-    }
+            default: "" as any,
+        },
+        contentTwo: {
+            default: "" as any,
+        },
+        size: {
+            default: "" as any,
+        },
+    },
 });
 </script>
 
 <style scoped>
-.demographics_title{
-    font-weight: 700;
-    font-size: 24px;
-    padding-bottom: 20px;
+.card_row {
+    justify-content: center;
+}
+.registration_header {
+    display: flex;
+}
+.icon_col {
+    justify-content: right;
+    display: flex;
+    align-items: center;
 }
 </style>
-  

@@ -3,9 +3,9 @@
       <div class="content_manager" style="margin-top: unset;">
         <ion-toolbar  class="content_width primary_color_background">
           <ion-menu-button slot="start" />
-          <ion-title style="cursor: pointer;" @click="nav('/home')"><b>MAHIS-MNH</b></ion-title>
+          <ion-title style="cursor: pointer;" @click="nav('/home')"><b>MaHIS-MNH</b></ion-title>
           <ion-buttons slot="end" style="max-width: 500px;">
-              <ToolbarSearch @search="performSearch" />
+              <ToolbarSearch />
           </ion-buttons>
           <div class="notifaction_person" slot="end">
             <ion-buttons style="cursor: pointer;" slot="end" class="iconFont">
@@ -19,7 +19,7 @@
           <ion-popover :is-open="popoverOpen" :show-backdrop="false" :dismiss-on-select="true" :event="event" @didDismiss="popoverOpen = false">
             <ion-content>
               <ion-list>
-                <ion-item :button="true" :detail="false" style="cursor: pointer;">Profile</ion-item>
+                <ion-item :button="true" :detail="false" @click="nav('/users')" style="cursor: pointer;">Profile</ion-item>
                 <ion-item :button="true" :detail="false" @click="nav('/login')" style="cursor: pointer;">Logout</ion-item>
               </ion-list>
             </ion-content>
@@ -39,7 +39,7 @@
     components:{
         IonContent,
         IonHeader,
-        IonMenuButton,
+        // IonMenuButton,
         IonSearchbar,
         IonPage,
         IonTitle,
