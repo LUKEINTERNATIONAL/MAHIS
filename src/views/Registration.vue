@@ -340,6 +340,7 @@ export default defineComponent({
             this.openNewPage(patientData);
         },
         async saveData() {
+
             this.isLoading = true;
             try {
                 if (await this.createPatient()) {
@@ -456,13 +457,13 @@ export default defineComponent({
         },
         async createGuardian(patientID: any) {
 
-            if (Object.keys(this.guardianInformation[0].selectedData).length === 0) return;
-            const selectedID = getFieldValue(this.guardianInformation, "relationship", "selectedID");
+            if (Object.keys(this.guardianInformation[0].selectedData).length === 0) return;       
+            const selectedID = getFieldValue(this.guardianInformation, "relationship", "value")?.id;
             const guardian: any = new PatientRegistrationService();
-            console.log(this.guardianInformation[0].selectedData,"....guardian...info")
             await guardian.registerGuardian(this.guardianInformation[0].selectedData);
             const guardianID = guardian.getPersonID();
-            if (selectedID) await RelationsService.createRelation(patientID, guardianID, selectedID);
+            if(selectedID) await RelationsService.createRelation(patientID, guardianID, selectedID);
+            
         },
         async openNewPage(item: any) {
             await resetPatientData();
