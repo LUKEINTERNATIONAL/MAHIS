@@ -332,7 +332,6 @@ export default defineComponent({
         demographics: {
             async handler() {
                 this.protectedStatus = await ObservationService.getFirstValueText(this.demographics.patient_id, "Protected at birth");
-                await this.openFollowModal();
                 this.checkAge();
             },
         },

@@ -187,7 +187,6 @@ export default defineComponent({
             steps: ["Personal Information", "Location", "Social History", "Guardian Information"],
             screenWidth: "" as any,
             disableSaveBtn: false,
-            isLoading: false,
         };
     },
     props: ["registrationType"],
@@ -263,12 +262,6 @@ export default defineComponent({
             },
             deep: true,
         },
-        $route: {
-            handler() {
-                this.setCurrentStep("Personal Information");
-            },
-            deep: true,
-        },
     },
     setup() {
         return { arrowForwardCircle, grid, list };
@@ -328,7 +321,7 @@ export default defineComponent({
             this.$router.push(url);
         },
         nextStep() {
-            if (this.checkUnderFourteen || this.checkUnderNine || this.checkUnderFive)
+            if (this.checkUnderFive || this.checkUnderOne)
                 this.steps = ["Personal Information", "Location", "Social History", "Guardian Information"];
             else this.steps = ["Personal Information", "Location", "Guardian Information"];
             const currentIndex = this.steps.indexOf(this.currentStep);
@@ -347,6 +340,7 @@ export default defineComponent({
             this.openNewPage(patientData);
         },
         async saveData() {
+
             this.isLoading = true;
             try {
                 if (await this.createPatient()) {
@@ -381,12 +375,11 @@ export default defineComponent({
         async createPatient() {
             const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
             const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
-
+            await this.buildPersonalInformation();          
             if (
                 (await this.validations(this.personInformation, fields)) &&
                 (await this.validations(this.currentLocation, currentFields)) &&
-                this.validateBirthData() &&
-                this.validateGaudiarnInfo()
+                this.validateBirthData()
             ) {
                 this.disableSaveBtn = true;
                 await this.buildPersonalInformation();
@@ -396,11 +389,11 @@ export default defineComponent({
                 const patientID = registration.getPersonID();
                 this.createNationID();
                 this.createBirthID();
-                if (Object.keys(this.guardianInformation[0].selectedData).length === 0) {
+                if (Object.keys(this.guardianInformation[0].selectedData).length != 0) {
                     if (await this.validations(this.guardianInformation, ["guardianFirstname", "guardianLastname"])) {
                         this.createGuardian(patientID);
                     }
-                }
+                }                
                 await this.saveBirthdayData(patientID);
                 this.findPatient(patientID);
                 toastSuccess("Successfully Created Patient");
@@ -410,14 +403,8 @@ export default defineComponent({
                 return false;
             }
         },
-        validateGaudiarnInfo() {
-            if (this.checkUnderFive) {
-                return validateInputFiledData(this.guardianInformation);
-            }
-            return true;
-        },
         validateBirthData() {
-            if (this.checkUnderNine) {
+            if (this.checkUnderOne) {
                 return validateInputFiledData(this.birthRegistration);
             } else {
                 return true;
@@ -469,13 +456,14 @@ export default defineComponent({
             } else return false;
         },
         async createGuardian(patientID: any) {
-            if (Object.keys(this.guardianInformation[0].selectedData).length === 0) return;
-            getFieldValue(this.guardianInformation, "relationship", "selectedID");
+
+            if (Object.keys(this.guardianInformation[0].selectedData).length === 0) return;       
+            const selectedID = getFieldValue(this.guardianInformation, "relationship", "value")?.id;
             const guardian: any = new PatientRegistrationService();
             await guardian.registerGuardian(this.guardianInformation[0].selectedData);
             const guardianID = guardian.getPersonID();
-            const selectedID = getFieldValue(this.guardianInformation, "relationship", "selectedID");
-            if (selectedID) await RelationsService.createRelation(patientID, guardianID, selectedID);
+            if(selectedID) await RelationsService.createRelation(patientID, guardianID, selectedID);
+            
         },
         async openNewPage(item: any) {
             await resetPatientData();
@@ -506,8 +494,8 @@ export default defineComponent({
             if (ids >= 0) return item.patient_identifiers[ids].identifier;
             else return "";
         },
-        async buildPersonalInformation() {
-            this.personInformation[0].selectedData = {
+        async buildPersonalInformation() {          
+                this.personInformation[0].selectedData = {
                 given_name: getFieldValue(this.personInformation, "firstname", "value"),
                 middle_name: getFieldValue(this.personInformation, "middleName", "value"),
                 family_name: getFieldValue(this.personInformation, "lastname", "value"),
