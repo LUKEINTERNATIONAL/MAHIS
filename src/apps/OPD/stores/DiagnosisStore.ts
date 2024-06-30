@@ -34,7 +34,7 @@ const initialOPDdiagnosis = [
                             name: "differentialDiagnosis",
                             multiSelectData: [],
                             eventType: "input",
-                            required: true,
+                            // required: true,
                             alertsErrorMassage: "",
                             id: "",
                             idName: "district_id",

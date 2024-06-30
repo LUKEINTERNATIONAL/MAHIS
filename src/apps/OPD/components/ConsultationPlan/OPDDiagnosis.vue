@@ -128,20 +128,25 @@ export default defineComponent({
             modifyFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "alertsErrorMassage", "");
             const primaryDiagnosis = getFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "value");
             const differentialDiagnosis = getFieldValue(this.OPDdiagnosis, "differentialDiagnosis", "value");
+
             const validateSelected = this.OPDdiagnosis[0].selectedData.filter((obj: any) => {
                 if (obj.display[0] === primaryDiagnosis.name) {
                     return true;
                 }
-                // const isDifferentialMatch = differentialDiagnosis?.some((diffObj: any) => diffObj?.name === obj?.display[0]);
-                // if (isDifferentialMatch) {
-                //     return true;
-                // }
+                const isDifferentialMatch = differentialDiagnosis?.some((diffObj: any) => diffObj?.name === obj?.display[0]);
+                if (isDifferentialMatch) {
+                    return true;
+                }
                 return false;
             });
+         
+            
             if (validateSelected.length > 0) {
                 modifyFieldValue(this.OPDdiagnosis, col.name, "alertsErrorMassage", validateSelected[0].name + " is already selected");
                 return false;
             }
+
+
             if (primaryDiagnosis?.name || getFieldValue(this.OPDdiagnosis, "primaryDiagnosis", "inputFieldDisplayNone")) {
                 // if (differentialDiagnosis.length > 0) {
                     const filteredArray = differentialDiagnosis ?  differentialDiagnosis.filter((obj: any) => {
@@ -159,16 +164,19 @@ export default defineComponent({
                     } else {
                         return true;
                     }
-                // }
-            } else {
+                }
+            // } else {
                 modifyFieldValue(this.OPDdiagnosis, "differentialDiagnosis", "primaryDiagnosis", "Primary diagnosis is required");
                 return false;
-            }
+            // }
         },
 
         async addNewRow() {
+            // console.log("==>1",await this.validaterowData())
             if (await this.validaterowData()) {
+                
                 if (this.buildDiagnosis()) {
+                    console.log("==>1",this.buildDiagnosis())
                     this.search_item = false;
                     this.display_item = true;
                     this.addItemButton = true;
@@ -204,7 +212,7 @@ export default defineComponent({
                         btn: ["delete"],
                         name: item.name,
                         id: item.concept_id,
-                        display: [item.name, "Differential diagnosis"],
+                        display: [item.name, "Secondary diagnosis"],
                         data: {
                             concept_id: 6543, //Secondary diagnosis
                             value_coded: item.concept_id,
