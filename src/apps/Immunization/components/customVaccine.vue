@@ -131,6 +131,10 @@ export default defineComponent({
         },
         disableVaccine(vaccine: any) {
 
+            if (vaccine.status != null && vaccine.status == "administered") {
+                return true
+            }
+
             if (vaccine.can_administer != null && vaccine.can_administer == false ) {
                 return true
             }
