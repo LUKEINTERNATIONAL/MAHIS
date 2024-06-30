@@ -42,7 +42,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useRegistrationStore, ["homeLocation"]),
-        ...mapState(useRegistrationStore, ["currentLocation", "closestLandmark"]),
+        ...mapState(useRegistrationStore, ["currentLocation"]),
         current_district() {
             return getFieldValue(this.currentLocation, "current_district", "value")?.name;
         },
@@ -73,8 +73,7 @@ export default defineComponent({
                 cards: [
                     {
                         cardTitle: "Current Location",
-                        content: this.currentLocation,
-                        contentTwo: this.closestLandmark,
+                        content: this.currentLocation
                     },
                 ],
             };
