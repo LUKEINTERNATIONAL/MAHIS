@@ -216,10 +216,7 @@ export default defineComponent({
         tempScannedBatchNumber: {
             handler() {
                 if (this.tempScannedBatchNumber != null) {
-                    console.log(this.tempScannedBatchNumber)
                     this.batchNumber = this.tempScannedBatchNumber.text
-                    const store = useAdministerVaccineStore()
-                    store.setTempScannedBatchNumber(null)
                     this.validateBatchNumber()
                 }
             }
@@ -240,7 +237,7 @@ export default defineComponent({
         },
         updateBatchNumber(event: any) {
             const input = event.target.value;
-            this.batchNumber = input;
+            this.batchNumber = input || this.tempScannedBatchNumber.text;
         },
         saveBatchWithTodayDate() {
             let vaccine_date = Service.getSessionDate()
@@ -281,11 +278,11 @@ export default defineComponent({
         },
         validateBatchNumber() {
             if (this.isAlphaNumeric(this.batchNumber as string) == true) {
-                    this.is_batch_number_valid = false;
-                }
-                if (this.isAlphaNumeric(this.batchNumber as string) == false) {
-                    this.is_batch_number_valid = true;
-                }
+                this.is_batch_number_valid = false;
+            }
+            if (this.isAlphaNumeric(this.batchNumber as string) == false) {
+                this.is_batch_number_valid = true;
+            }
         },
         updateBatchNumberByPassValue(input: any) {
             console.log(input, 'qqqqqqqwwwwwwwwwwww');
@@ -312,6 +309,7 @@ export default defineComponent({
             store.setAdministeredVaccine(dta)
             saveVaccineAdministeredDrugs()
             this.dismiss();
+            store.setTempScannedBatchNumber(null)
         },
     },
 });
