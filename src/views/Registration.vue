@@ -180,6 +180,8 @@ export default defineComponent({
             demographic: true,
             currentStep: "Personal Information",
             scanner: false,
+            checkUnderOne: false,
+            isLoading: false,
             checkUnderFourteen: true,
             checkUnderNine: false,
             checkUnderFive: false,
