@@ -9,7 +9,7 @@
                     :key="vaccine"
                     @click="openAdministerVaccineModal(vaccine)"
                     fill="solid"
-                    :color="getColorForVaccine(vaccine, visitId)"
+                    :color="getColorForVaccine(vaccine)"
                     style="background: #ddeedd; border-radius: 8px; color: #636363"
                 >
                     <ion-icon slot="start" :icon="getInjectSignForVaccine(vaccine)"></ion-icon>
