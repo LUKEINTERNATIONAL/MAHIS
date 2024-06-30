@@ -80,7 +80,7 @@ export const useAdministerVaccineStore = defineStore('administerVaccineStore',{
       },
       isVaccinePassed(): boolean {
         let bool = false
-        this.vaccineSchedule.vaccine_schedule.forEach((vaccineSchudule: any) => {
+        this.vaccineSchedule?.vaccine_schedule.forEach((vaccineSchudule: any) => {
           vaccineSchudule.antigens.forEach((vaccine: any) => {
               if (this.currentSelectedDrug.drug_id == vaccine.drug_id && vaccineSchudule.milestone_status=="passed") {
                 bool = true
@@ -91,7 +91,7 @@ export const useAdministerVaccineStore = defineStore('administerVaccineStore',{
       },
       overDueVaccines(): any {
         const currentVaccines = [] as any
-        this.vaccineSchedule.vaccine_schedule.forEach((vaccineSchudule: any) => {
+        this.vaccineSchedule?.vaccine_schedule.forEach((vaccineSchudule: any) => {
           vaccineSchudule.antigens.forEach((vaccine: any) => {
               if (vaccineSchudule.milestone_status=="current" && vaccine.status=="pending") {
                 currentVaccines.push(vaccine)

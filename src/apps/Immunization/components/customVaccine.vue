@@ -97,7 +97,7 @@ export default defineComponent({
     },
 
     methods: {
-        getColorForVaccine(vaccine: any): string {
+        getColorForVaccine(vaccine: any) {
             if (vaccine.status == "administered") {
                 return "success";
             } 
