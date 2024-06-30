@@ -42,7 +42,7 @@
         </ion-col>
 
         <ion-col style="text-align: right">
-            <ion-button @click="saveBatch" class="btnText" fill="solid"  style="width: 130px">
+            <ion-button @click="save" class="btnText" fill="solid"  style="width: 130px">
                 save
                 <!-- <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon> -->
             </ion-button>
@@ -84,6 +84,7 @@ import {
 import { ref, onMounted,computed, watch } from "vue"
 import HisDate from "@/utils/Date"
 import { useImmunizationAppointMentStore } from "@/stores/immunizationAppointMentStore"
+import { Appointment } from "@/apps/Immunization/services/immunization_appointment_service"
 import { Service } from '@/services/service'
 const store = useImmunizationAppointMentStore()
 
@@ -97,8 +98,10 @@ function disablePastDates(date: any) {
     return date < today;
 }
 
-function save() {
-    // const storeClinicalDaysStore = useClinicalDaysStore()
+async function save() {
+    const appointment_service = new Appointment()
+    await appointment_service.createAppointment()
+    dismiss()
 }
 
 onMounted(async () => {

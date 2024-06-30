@@ -15,6 +15,7 @@ export async function getVaccinesSchedule() {
 }
 
 export async function saveVaccineAdministeredDrugs() {
+    
     const store = useAdministerVaccineStore()
     const userId: any = Service.getUserID();
     const programId: any = Service.getProgramID();
@@ -28,9 +29,8 @@ export async function saveVaccineAdministeredDrugs() {
         if (!drugOrder) return toastWarning("Unable register vaccine!")
         toastSuccess("Vaccine registred successfully")
         store.setVaccineReload(!store.getVaccineReload())
-
+        openNextVaccineAppoinment()
     }
-    //openNextVaccineAppoinment()
 }
 
 function mapToOrders(): any[] {
