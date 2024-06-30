@@ -60,7 +60,7 @@
                         :options="otherVaccinesList"
                     />
                     <div>
-                        <ion-label style="padding: 3%;;" v-if="show_error_msg_for_drug" class="error-label">{{ drugErrMsg }}</ion-label>
+                        <ion-label style="padding: 3%;" v-if="show_error_msg_for_drug" class="error-label">{{ drugErrMsg }}</ion-label>
                     </div>
         </div>
 
@@ -149,7 +149,9 @@ export default defineComponent({
             vaccineName: "" as string,
             otherVaccinesList: [] as any,
             is_batch_number_valid: false as boolean,
+            show_error_msg_for_drug: false as boolean,
             is_vaccine_name_valid: false as boolean,
+            drugErrMsg: "" as any,
             batch_number_error_message: "Enter a valid batch number",
             vaccine_name_error_message: "Enter a valid valid vaccine name",
             sessionDate: HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
@@ -236,7 +238,6 @@ export default defineComponent({
                 }
         },
         updateBatchNumberByPassValue(input: any) {
-            console.log(input, 'qqqqqqqwwwwwwwwwwww');
             this.batchNumber = input
         }
     },
