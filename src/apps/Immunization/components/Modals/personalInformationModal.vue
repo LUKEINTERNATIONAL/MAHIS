@@ -219,7 +219,7 @@
                        :searchable="true"
                        :track-by="'value'"
                        :label="'name'"
-                      :open-direction="'bottom'"
+                       :open-direction="'bottom'"
                        ></vue-multiselect>
                        </div>
                   </ion-col>
@@ -752,14 +752,10 @@ export default defineComponent({
                                ],                
              maritalStatusData: [],
                educationData: [
-                                { name: "No education",
-                                 value: "No education"},
-                                { name: "Primary school",
-                                 value: "primary school"},
-                                { name: "Secondary school",
-                                 value: "secondary school"},
-                                { name: "Tertiary education",
-                                 value: "tertiary education"},
+                                { name: "No education", value: "No education"},
+                                { name: "Primary school", value: "primary school"},
+                                { name: "Secondary school", value: "secondary school"},
+                                { name: "Tertiary education",value: "tertiary education"},
                               ]   
         };
     },
@@ -767,60 +763,70 @@ export default defineComponent({
         ...mapState(useDemographicsStore, ["demographics","patient"]), 
         ...mapState(useRegistrationStore, ["personInformation","socialHistory","homeLocation","currentLocation","guardianInformation"]),
 
-    /*selectedDoB: {
-      get() {   return this.genderOptions.find( (option:any) => option.value === this.editableDemographics.birthdate );  },
-      set(newValue: any) {  if(newValue!=null) this.editableDemographics.birthdate = newValue.value;},
-    },*/
-    selectedGender: {
-      get() {   return this.genderOptions.find( (option:any) => option.value === this.editableDemographics.gender );  },
-      set(newValue: any) {  if(newValue!=null) this.editableDemographics.gender = newValue.value;},
+  selectedGender: {
+      get() {   return this.genderOptions.find( (option:any) => option.value === this.editableDemographics.gender ); },
+      set(newValue: any) {  if(newValue!=null) this.editableDemographics.gender = newValue.value;
+                            else this.editableDemographics.gender = ""},
     }, 
-    selectedReligion: {
+  selectedReligion: {
      get() { return this.religionData.find( (option: any) => option.name === this.editableSocialhistory.religion);},
-     set(newValue: any) {if(newValue!=null) this.editableSocialhistory.religion = newValue.name;},
+     set(newValue: any) {  if(newValue !=null) this.editableSocialhistory.religion = newValue.name;
+                           else this.editableSocialhistory.religion = ""  },
   },
   selectedOccupation: {
     get() { return this.occupationData.find((option:any) => option.value === this.editableSocialhistory.occupation );},
-    set(newValue: any) { if(newValue!=null) this.editableSocialhistory.occupation = newValue.value; },
+    set(newValue: any) { if(newValue!=null) this.editableSocialhistory.occupation = newValue.value;
+                         else this.editableSocialhistory.occupation = "" },
   },
   selectedEducation: {
     get() { return this.educationData.find( option => option.value === this.editableSocialhistory.highesteducation);},
-    set(newValue: any) { if(newValue!=null) this.editableSocialhistory.highesteducation = newValue.value; },
+    set(newValue: any) { if(newValue!=null) this.editableSocialhistory.highesteducation = newValue.value;
+                         else this.editableSocialhistory.highesteducation = "" },
   },
   selectedMarital: {
     get() { return this.maritalStatusData.find((option: any) => option.value === this.editableSocialhistory.maritalstatus);},
-    set(newValue: any) {if(newValue!=null) this.editableSocialhistory.maritalstatus = newValue.value;},
+    set(newValue: any) { if(newValue!=null) this.editableSocialhistory.maritalstatus = newValue.value;
+                         else this.editableSocialhistory.maritalstatus = ""},
   }, 
   selectedRelationship: {
     get() {return this.relationshipsData.find((option:any) => option.b_is_to_a === this.editableGuardian.relationship);},
-    set(newValue: any) {if(newValue!=null) this.editableGuardian.relationship = newValue.b_is_to_a;},
+    set(newValue: any) { if(newValue!=null) this.editableGuardian.relationship = newValue.b_is_to_a;
+                         else this.editableGuardian.relationship = ""},
   },
   selectedDistrict: {
       get() {return this.districtList.find((option:any) => option.name === this.editableAddress.current_district); },
-      set(newValue: any) { if(newValue!=null) this.editableAddress.current_district = newValue.name;},
+      set(newValue: any) { if(newValue!=null) this.editableAddress.current_district = newValue.name;
+                           else this.editableAddress.current_district = "" },
     }, 
     selectedTaList: {
        get() { return this.taList.find((option:any) => option.name === this.editableAddress.current_traditional_authority );},
-      set(newValue: any) { if(newValue!=null) this.editableAddress.current_traditional_authority = newValue.name;},
+      set(newValue: any) { if(newValue!=null) this.editableAddress.current_traditional_authority = newValue.name; 
+                           else this.editableAddress.current_traditional_authority = ""},
     },
     selectedVillageList: {
       get() { return this.villageList.find((option:any) => option.name === this.editableAddress.current_village );},
-      set(newValue: any) {if(newValue!=null) this.editableAddress.current_village = newValue.name; }},
+      set(newValue: any) {if(newValue!=null) this.editableAddress.current_village = newValue.name; 
+                          else this.editableAddress.current_village = "" }
+    },
     selectedlandmark: {
       get() { return this.landMarkData.find((option:any) => option.name === this.editableAddress.landmark); },
-      set(newValue: any) { if(newValue!=null) this.editableAddress.landmark = newValue.name;},
+      set(newValue: any) { if(newValue!=null) this.editableAddress.landmark = newValue.name; 
+                           else this.editableAddress.landmark = ""},
     },
     selectedDistrictHome: {
       get() { return this.districtList.find((option:any) => option.name === this.editableHomelocation.home_district);},
-      set(newValue: any) {if(newValue!=null) this.editableHomelocation.home_district = newValue.name;},
+      set(newValue: any) {if(newValue!=null) this.editableHomelocation.home_district = newValue.name;
+                          else this.editableHomelocation.home_district = ""},
     },
      selectedTaHome: {
       get() { return this.HometaList.find((option:any) => option.name === this.editableHomelocation.home_traditional_authority);},
-      set(newValue: any) { if(newValue!=null) this.editableHomelocation.home_traditional_authority = newValue.name;},
+      set(newValue: any) { if(newValue!=null) this.editableHomelocation.home_traditional_authority = newValue.name;
+                           else this.editableHomelocation.home_traditional_authority = ""},
     },
     selectedVillageHome: {
       get() { return this.HomevillageList.find((option:any) => option.name === this.editableHomelocation.home_village );},
-      set(newValue: any) {if(newValue!=null) this.editableHomelocation.home_village = newValue.name; },
+      set(newValue: any) { if(newValue!=null) this.editableHomelocation.home_village = newValue.name;
+                           else this.editableHomelocation.home_village = "" },
     }
           
          
@@ -1021,6 +1027,7 @@ export default defineComponent({
                 toastSuccess("Successfully Updated Patient");            
               
             } catch (error) {
+                 console.log(error,"...........ppp")
                 toastWarning("Failed to save details",);
             }
         },
@@ -1090,8 +1097,9 @@ export default defineComponent({
                     const guardian: any = new PatientRegistrationService();
                     await guardian.registerGuardian(guardianDetails);
                     const guardianID = guardian.getPersonID();
+                    if (this.editableGuardian.relationship == "Unknown") return; 
                     let selectedID = this.relationshipsData.find( (x:any) => x.b_is_to_a == this.editableGuardian.relationship || x.a_is_to_b == this.editableGuardian.relationship)["relationship_type_id"]
-                  return await RelationsService.createRelation(this.demographics.patient_id, guardianID, selectedID);
+                    return await RelationsService.createRelation(this.demographics.patient_id, guardianID, selectedID);
             }
         },
 
