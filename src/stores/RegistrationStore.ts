@@ -308,6 +308,10 @@ const initialSocialHistory = [
                     value: "widow",
                 },
                 {
+                    name: "Widower",
+                    value: "widower",
+                },
+                {
                     name: "Divorced",
                     value: "divorced",
                 },
@@ -811,6 +815,7 @@ const initialGuardianInformation = [
         },
     },
 ] as any;
+
 export const useRegistrationStore = defineStore("registrationStore", {
     state: () => ({
         personInformation: [...initialPersonalInformation],
