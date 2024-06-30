@@ -101,7 +101,7 @@ function disablePastDates(date: any) {
 async function save() {
     const appointment_service = new Appointment()
     await appointment_service.createAppointment()
-    // const storeClinicalDaysStore = useClinicalDaysStore()
+    dismiss()
 }
 
 onMounted(async () => {

@@ -15,22 +15,22 @@ export async function getVaccinesSchedule() {
 }
 
 export async function saveVaccineAdministeredDrugs() {
-    openNextVaccineAppoinment()
-    // const store = useAdministerVaccineStore()
-    // const userId: any = Service.getUserID();
-    // const programId: any = Service.getProgramID();
-    // const patient = new PatientService();
-    // if (!isEmpty(store.getAdministeredVaccines())) {
-    //     const drugOrders = mapToOrders()
-    //     const prescriptionService = new DrugPrescriptionForImmunizationService(patient.getID(), userId)
-    //     const encounter = await prescriptionService.createEncounter()
-    //     if (!encounter) return toastWarning("Unable to create immunization encounter")
-    //     const drugOrder = await prescriptionService.createDrugOrderForImmunization(drugOrders, programId)
-    //     if (!drugOrder) return toastWarning("Unable register vaccine!")
-    //     toastSuccess("Vaccine registred successfully")
-    //     store.setVaccineReload(!store.getVaccineReload())
-
-    // }
+    
+    const store = useAdministerVaccineStore()
+    const userId: any = Service.getUserID();
+    const programId: any = Service.getProgramID();
+    const patient = new PatientService();
+    if (!isEmpty(store.getAdministeredVaccines())) {
+        const drugOrders = mapToOrders()
+        const prescriptionService = new DrugPrescriptionForImmunizationService(patient.getID(), userId)
+        const encounter = await prescriptionService.createEncounter()
+        if (!encounter) return toastWarning("Unable to create immunization encounter")
+        const drugOrder = await prescriptionService.createDrugOrderForImmunization(drugOrders, programId)
+        if (!drugOrder) return toastWarning("Unable register vaccine!")
+        toastSuccess("Vaccine registred successfully")
+        store.setVaccineReload(!store.getVaccineReload())
+        openNextVaccineAppoinment()
+    }
 }
 
 function mapToOrders(): any[] {
