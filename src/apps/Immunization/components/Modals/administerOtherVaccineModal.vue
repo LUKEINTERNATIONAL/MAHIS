@@ -188,6 +188,7 @@ export default defineComponent({
             is_batch_number_valid: false as boolean,
             vaccineDate: "" as any,
             is_vaccine_name_valid: false as boolean,
+            drugErrMsg: "" as any,
             batch_number_error_message: "Enter a valid batch number",
             vaccine_name_error_message: "Enter a valid valid vaccine name",
             sessionDate: HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
@@ -288,7 +289,6 @@ export default defineComponent({
                 }
         },
         updateBatchNumberByPassValue(input: any) {
-            console.log(input, 'qqqqqqqwwwwwwwwwwww');
             this.batchNumber = input
         },
         saveDta(date_: any) {
