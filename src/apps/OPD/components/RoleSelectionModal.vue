@@ -101,7 +101,7 @@ export default defineComponent({
 
 <style scoped>
 ion-modal {
-  --background: rgba(0, 0, 0, 0.6);
+  --background: rgba(0, 0, 0, 0.9);
   --width: 90%;
   --height: 94%;
   --max-width: 500px;
