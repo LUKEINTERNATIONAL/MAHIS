@@ -1,6 +1,6 @@
 <template>
     <div class="modal_wrapper">
-        <ion-row>
+        <ion-row style="margin-top: 10px;">
             <ion-col style="margin-left: -3px">
                 <div class="om">Administer Vaccine</div>
             </ion-col>
@@ -135,7 +135,7 @@ export default defineComponent({
             InnerActionBtnPropeties: {
                 name: "Scan",
                 show: true,
-                fn: () => { createModal(QRCodeReadersrc, { class: "otherVitalsModal" })}
+                fn: this.showQRcode
             },
         };
     },
@@ -227,7 +227,6 @@ export default defineComponent({
             const dta = {
                 batch_number: this.batchNumber,
                 date_administered: date_,
-                visit_id: this.currentDrug.visit_id,
                 drug_id: this.currentDrug.drug_id,
             };
             const store = useAdministerVaccineStore();
@@ -248,7 +247,7 @@ export default defineComponent({
             this.full_name = first_name + " " + last_name
         },
         showQRcode() {
-            createModal(QRCodeReadersrc, { class: "otherVitalsModal" })
+            createModal(QRCodeReadersrc, { class: "otherVitalsModal qr_code_modal" }, false)
         }
     },
 });

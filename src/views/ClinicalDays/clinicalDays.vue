@@ -2,7 +2,7 @@
     <Toolbar />
     <ion-content :fullscreen="true">
         <div id="" style="margin-top: 30px; margin-left: 8%; margin-right: 8%;">
-
+            clinicaldays
             <ion-row style="margin-bottom: 10px;">
                 <ion-col>
                     <div class="back_profile" @click="nav('home')">
