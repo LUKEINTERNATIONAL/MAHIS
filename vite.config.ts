@@ -22,5 +22,5 @@ export default defineConfig({
             plugins: [visualizer()],
         },
     },
-    base: "/mahis/",
+    // base: "/mahis/",
 });
