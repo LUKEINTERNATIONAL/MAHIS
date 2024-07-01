@@ -85,7 +85,6 @@ export default defineComponent({
         };
     },
 
-
     props: {
         placeholder: {
             type: String,
@@ -152,7 +151,7 @@ export default defineComponent({
             this.$emit("clicked:inputValue", event);
         },
         handlePassInput() {
-            this.$emit("update:passedinputValue", this.$props.inputValue );
+            this.$emit("update:passedinputValue", this.$props.inputValue);
         },
         handleInput(event: any) {
             if (this.popOverData?.data) this.setEvent(event);
@@ -187,11 +186,9 @@ export default defineComponent({
         watch(
             () => props.inputValue,
             (newValue, oldValue) => {
-                console.log('inputValue changed from', oldValue, 'to', newValue)
-                emit("update:passedinputValue", props.inputValue)
-                // Add your logic here to handle the change in inputValue
+                emit("update:passedinputValue", props.inputValue);
             }
-        )
+        );
         return { caretDownSharp };
     },
 });
