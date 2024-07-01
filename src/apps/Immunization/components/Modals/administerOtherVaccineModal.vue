@@ -22,6 +22,7 @@
                 :icon="iconsContent.batchNumber"
                 :inputValue="batchNumber"
                 :-inner-action-btn-propeties="InnerActionBtnPropeties"
+                @update:InnerActionBtnPropetiesAction="InnerActionBtnPropeties.fn"
                 @update:inputValue="updateBatchNumber"
                 @update:passedinputValue="updateBatchNumberByPassValue"
             />
@@ -132,7 +133,7 @@ import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { PatientService } from "@/services/patient_service";
 import { saveVaccineAdministeredDrugs, getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service";
-// import QRCodeReadersrc from "@/components/QRCodeReader.vue"
+import QRCodeReadersrc from "@/components/QRCodeReader.vue"
 import { createModal } from "@/utils/Alerts";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import VueMultiselect from "vue-multiselect";
@@ -209,7 +210,7 @@ export default defineComponent({
             InnerActionBtnPropeties: {
                 name: "Scan",
                 show: true,
-                // fn: () => { createModal(QRCodeReadersrc, { class: "otherVitalsModal qr_code_modal" }, false)}
+                fn: () => { createModal(QRCodeReadersrc, { class: "otherVitalsModal qr_code_modal" }, false)}
             },
             showDateBtns: true as boolean,
         };
@@ -250,7 +251,7 @@ export default defineComponent({
         },
         updateBatchNumber(event: any) {
             const input = event.target.value;
-            this.batchNumber = input || this.tempScannedBatchNumber.text;
+            this.batchNumber = input || this.tempScannedBatchNumber?.text || '';
         },
         saveBatchWithTodayDate() {
             let vaccine_date = Service.getSessionDate();
