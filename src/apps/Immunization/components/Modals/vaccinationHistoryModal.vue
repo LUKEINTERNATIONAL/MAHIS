@@ -11,7 +11,7 @@
         </row>
 
         <row>
-            <customVaccine :vaccines="item.antigens" :visitId="1" />
+            <customVaccine :vaccines="item.antigens" :milestone_status="item.milestone_status" />
         </row>
 
         <!-- <row>
