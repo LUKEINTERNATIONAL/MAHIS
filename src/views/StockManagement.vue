@@ -69,7 +69,6 @@ import { UserService } from "@/services/user_service";
 import SetUser from "@/views/Mixin/SetUser.vue";
 import ApiClient from "@/services/api_client";
 import HisDate from "@/utils/Date";
-import webSocketService from "@/services/websocketService";
 import DataTable from "datatables.net-vue3";
 import DataTablesCore from "datatables.net";
 import "datatables.net-buttons";
@@ -118,16 +117,13 @@ export default defineComponent({
         ...mapState(useGeneralStore, ["OPDActivities"]),
     },
     $route: {
-        async handler() {
-            webSocketService.setMessageHandler(this.onMessage);
-        },
+        async handler() {},
         deep: true,
     },
     async mounted() {
         await this.buildTableData();
         this.setView();
         this.startTimer();
-        webSocketService.setMessageHandler(this.onMessage);
         this.getPatientSummary();
     },
     methods: {
