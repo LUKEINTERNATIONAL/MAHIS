@@ -9,7 +9,7 @@
                     :key="vaccine"
                     @click="openAdministerVaccineModal(vaccine)"
                     fill="solid"
-                    :color="getColorForVaccine(vaccine, visitId)"
+                    :color="getColorForVaccine(vaccine)"
                     style="background: #ddeedd; border-radius: 8px; color: #636363"
                 >
                     <ion-icon slot="start" :icon="getInjectSignForVaccine(vaccine)"></ion-icon>
@@ -109,7 +109,6 @@ export default defineComponent({
             }
         },
         getInjectSignForVaccine(vaccine: any) {
-
             if (vaccine.status == "administered") {
                 return this.iconsContent.greenInjection;
             }
@@ -127,18 +126,17 @@ export default defineComponent({
         openAdministerVaccineModal(data: any) {
             const store = useAdministerVaccineStore();
             store.setCurrentSelectedDrug(data.drug_id as number, data.drug_name, data.vaccine_batch_number as string);
-            createModal(administerVaccineModal, { class: "otherVitalsModal" },);
+            createModal(administerVaccineModal, { class: "otherVitalsModal" });
         },
         disableVaccine(vaccine: any) {
-
-            if (vaccine.can_administer != null && vaccine.can_administer == false ) {
-                return true
+            if (vaccine.can_administer != null && vaccine.can_administer == false) {
+                return true;
             }
 
-            if (vaccine.can_administer != null && vaccine.can_administer == true ) {
-                return false
+            if (vaccine.can_administer != null && vaccine.can_administer == true) {
+                return false;
             }
-            return false
+            return false;
         },
         checkVaccineName(name: string) {
             return name.replace(/Pentavalent/g, "Penta");

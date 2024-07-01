@@ -39,10 +39,9 @@
                             <th>Date</th>
                             <th>Batch No</th>
                             <th>Product Name</th>
-                            <th>Opening Stock</th>
                             <th>In</th>
                             <th>Out</th>
-                            <th>Closing Stock</th>
+                            <th>Current Stock</th>
                             <th>Expire date</th>
                         </tr>
                     </thead>
@@ -136,10 +135,9 @@ export default defineComponent({
                     HisDate.toStandardHisDisplayFormat(item.date_created),
                     item.batch_number,
                     item.drug_legacy_name,
-                    item.current_quantity,
                     item.delivered_quantity,
-                    "",
-                    "",
+                    item.delivered_quantity - item.current_quantity,
+                    item.current_quantity,
                     HisDate.toStandardHisDisplayFormat(item.expiry_date),
                 ];
             });
