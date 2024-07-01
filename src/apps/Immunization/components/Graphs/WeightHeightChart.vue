@@ -77,8 +77,8 @@ export default defineComponent({
     },
     watch: {
         demographics: {
-            handler() {
-                this.buildGraph();
+            async handler() {
+                await this.buildGraph();
             },
             deep: true,
         },
