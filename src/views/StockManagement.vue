@@ -79,6 +79,8 @@ import "datatables.net-buttons-dt";
 import DynamicButton from "@/components/DynamicButton.vue";
 import AddStockModal from "@/components/StockManagement/AddStockModal.vue";
 import { createModal } from "@/utils/Alerts";
+import { StockService } from "@/services/stock_service";
+import { DrugService } from "@/services/drug_service";
 // import "datatables.net-select";
 // DataTable.use(DataTablesCore);
 export default defineComponent({
@@ -104,13 +106,7 @@ export default defineComponent({
     data() {
         return {
             controlGraphs: "months" as any,
-            reportData: [
-                ["2024-06-01", "B12345", "Vaccine A", 1000, 500, 300, 1200, "2024-10-01"],
-                ["2024-06-02", "B12346", "Vaccine B", 800, 200, 100, 900, "2024-10-01"],
-                ["2024-06-03", "B12347", "Vaccine C", 1500, 700, 400, 1800, "2024-10-01"],
-                ["2024-06-04", "B12348", "Vaccine D", 900, 300, 200, 1000, "2024-10-01"],
-                ["2024-06-05", "B12349", "Vaccine E", 1200, 600, 500, 1300, "2024-10-01"],
-            ] as any,
+            reportData: [] as any,
             options: {
                 responsive: true,
                 select: true,
@@ -128,14 +124,32 @@ export default defineComponent({
         deep: true,
     },
     async mounted() {
-        DataTable.use(DataTablesCore);
-
+        await this.buildTableData();
         this.setView();
         this.startTimer();
         webSocketService.setMessageHandler(this.onMessage);
         this.getPatientSummary();
     },
     methods: {
+        async buildTableData() {
+            const stockService = new StockService();
+            const data = await stockService.getItems();
+
+            this.reportData = data.map((item: any) => {
+                return [
+                    HisDate.toStandardHisDisplayFormat(item.date_created),
+                    item.batch_number,
+                    item.drug_legacy_name,
+                    item.current_quantity,
+                    item.delivered_quantity,
+                    "",
+                    "",
+                    HisDate.toStandardHisDisplayFormat(item.expiry_date),
+                ];
+            });
+            DataTable.use(DataTablesCore);
+            console.log("🚀 ~ mounted ~ getItems:", this.reportData);
+        },
         selectButton(button: any) {
             this.selectedButton = button;
         },

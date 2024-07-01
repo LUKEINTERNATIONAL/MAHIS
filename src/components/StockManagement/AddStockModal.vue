@@ -9,10 +9,10 @@
         </div>
         <div class="ion-padding" slot="content" style="padding-bottom: 200px">
             <div class="">
-                <basic-form :contentData="stock" @update:inputValue="handleInputData"></basic-form>
+                <basic-form :contentData="stock" @update:inputValue="handleInputData" @search-change="getDrugs"></basic-form>
             </div>
         </div>
-        <div style="display: flex; justify-content: end; padding-bottom: 3px" @click="saveData()">
+        <div style="display: flex; justify-content: end; padding-bottom: 3px" @click="createBatch()">
             <DynamicButton fill="solid" name="Save" />
         </div>
     </div>
@@ -109,7 +109,7 @@ export default defineComponent({
     },
     async mounted() {
         this.resetData();
-        await this.getRelations();
+        await this.getDrugs();
     },
     setup() {
         return { checkmark, pulseOutline };
@@ -117,21 +117,23 @@ export default defineComponent({
     methods: {
         async createBatch() {
             const stockService = new StockService();
-            const data = {
-                batch_number: getFieldValue(this.stock, "batch", "value"),
-                location_id: 721,
-                items: [
-                    {
-                        barcode: "",
-                        drug_id: getFieldValue(this.stock, "stock in", "value"),
-                        expiry_date: getFieldValue(this.stock, "expire date", "value"),
-                        quantity: getFieldValue(this.stock, "product name", "value"),
-                        delivery_date: "",
-                        product_code: "",
-                        pack_size: "",
-                    },
-                ],
-            };
+            const data = [
+                {
+                    batch_number: getFieldValue(this.stock, "batch", "value"),
+                    location_id: 721,
+                    items: [
+                        {
+                            barcode: "",
+                            drug_id: getFieldValue(this.stock, "product name", "value").drug_id,
+                            expiry_date: getFieldValue(this.stock, "expire date", "value"),
+                            quantity: getFieldValue(this.stock, "stock in", "value"),
+                            delivery_date: "",
+                            product_code: "",
+                            pack_size: "",
+                        },
+                    ],
+                },
+            ];
             await stockService.postItems(data);
         },
         navigationMenu(url: any) {
@@ -157,24 +159,15 @@ export default defineComponent({
                 return false;
             }
         },
-        async getRelations() {
-            modifyFieldValue(this.stock, "product name", "value", "");
-            const drugs = await DrugService.getDrugs();
-            console.log("🚀 ~ getRelations ~ drugs:", drugs);
-            this.relationships = await RelationsService.getRelations();
-            const data = this.relationships
-                .map((r: any) => {
-                    if (r.b_is_to_a == "Other") {
-                        return [{ name: r.b_is_to_a, id: r.relationship_type_id, trackByID: r.relationship_type_id + r.b_is_to_a }];
-                    } else {
-                        return [
-                            { name: r.b_is_to_a + " to " + r.a_is_to_b, id: r.relationship_type_id, trackByID: r.relationship_type_id + r.b_is_to_a },
-                        ];
-                    }
-                })
-                .reduce((acc: any, val: any) => acc.concat(val), []);
-
-            modifyFieldValue(this.stock, "product name", "multiSelectData", data);
+        async getDrugs(filter: any = "") {
+            // modifyFieldValue(this.stock, "product name", "value", "");
+            const drugs = await DrugService.getDrugs({
+                name: filter,
+                page: 1,
+                page_size: 10,
+                concept_set: "OPD Medication",
+            });
+            modifyFieldValue(this.stock, "product name", "multiSelectData", drugs);
         },
 
         async saveData() {
@@ -203,7 +196,9 @@ export default defineComponent({
                 national_id: getFieldValue(this.stock, "guardianNationalID", "value"),
             };
         },
-        handleInputData(event: any) {},
+        handleInputData(event: any) {
+            this.getDrugs(" ");
+        },
 
         dismiss() {
             modalController.dismiss();
