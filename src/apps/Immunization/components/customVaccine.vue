@@ -3,7 +3,7 @@
         <ion-row>
             <ion-col>
                 <ion-button
-                   
+                    :disabled="disableVaccine(vaccine)"
                     class="administerVac"
                     v-for="vaccine in vaccines"
                     :key="vaccine"
