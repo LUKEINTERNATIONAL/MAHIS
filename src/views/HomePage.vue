@@ -79,7 +79,7 @@ import { UserService } from "@/services/user_service";
 import SetUser from "@/views/Mixin/SetUser.vue";
 import ApiClient from "@/services/api_client";
 import HisDate from "@/utils/Date";
-import webSocketService from "@/services/websocketService";
+import { WebSocketService } from "@/services/websocketService";
 export default defineComponent({
     name: "Home",
     mixins: [SetUser],
@@ -107,16 +107,14 @@ export default defineComponent({
         ...mapState(useGeneralStore, ["OPDActivities"]),
     },
     $route: {
-        async handler() {
-            webSocketService.setMessageHandler(this.onMessage);
-        },
+        async handler() {},
         deep: true,
     },
     async mounted() {
         this.setView();
         this.startTimer();
-        webSocketService.setMessageHandler(this.onMessage);
-        this.getPatientSummary();
+        const wsService = new WebSocketService();
+        wsService.setMessageHandler(this.onMessage);
     },
     methods: {
         onMessage(event: MessageEvent) {
@@ -125,12 +123,6 @@ export default defineComponent({
                 this.reportData = data.message;
                 console.log("🚀 ~ onMessage ~ this.reportData :", this.reportData);
             }
-        },
-        getPatientSummary: async function () {
-            const data = await Service.getJson("immunization/stats", {
-                start_date: HisDate.getDateBeforeByDays(HisDate.currentDate(), 365),
-                end_date: HisDate.currentDate(),
-            });
         },
         setView() {
             Service.getProgramID();

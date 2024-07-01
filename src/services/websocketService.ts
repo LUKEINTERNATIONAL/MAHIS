@@ -1,7 +1,6 @@
-// src/services/websocketService.ts
 import HisDate from "@/utils/Date";
 import { Service } from "@/services/service";
-class WebSocketService {
+export class WebSocketService {
     private socket: WebSocket | null = null;
     private channel: string = "ImmunizationReportChannel";
     private isConnected: boolean = false;
@@ -57,28 +56,6 @@ class WebSocketService {
         }
     }
 
-    public fetchData() {
-        const start_date = HisDate.getDateBeforeByDays(HisDate.currentDate(), 365);
-        const end_date = HisDate.currentDate();
-        const fetchDataMessage = {
-            command: "message",
-            identifier: JSON.stringify({ channel: this.channel }),
-            data: JSON.stringify({
-                action: "fetch_data",
-                start_date: start_date,
-                end_date: end_date,
-            }),
-        };
-
-        if (this.isConnected && this.socket) {
-            this.socket.send(JSON.stringify(fetchDataMessage));
-        } else if (this.socket) {
-            // Store the fetch request to be executed once connected
-            this.pendingFetch = () => this.socket?.send(JSON.stringify(fetchDataMessage));
-        } else {
-            console.error("WebSocket connection not established.");
-        }
-    }
     public async getPatientSummary() {
         const data = await Service.getJson("immunization/stats", {
             start_date: HisDate.getDateBeforeByDays(HisDate.currentDate(), 365),
@@ -95,5 +72,3 @@ class WebSocketService {
         }
     }
 }
-
-export default new WebSocketService();

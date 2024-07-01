@@ -1,11 +1,13 @@
 <template>
     <div class="modal_wrapper">
-        <ion-row style="margin-top: 10px;">
+        <ion-row style="margin-top: 10px">
             <ion-col style="margin-left: -3px">
                 <div class="om">Administer Vaccine</div>
             </ion-col>
             <ion-col size="6">
-                <ion-label class="lbl-tl" style="font-size: 13"> Todays Date: <span class="lbl-ct">{{ sessionDate }}</span></ion-label>
+                <ion-label class="lbl-tl" style="font-size: 13">
+                    Todays Date: <span class="lbl-ct">{{ sessionDate }}</span></ion-label
+                >
             </ion-col>
         </ion-row>
 
@@ -94,8 +96,8 @@ import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { saveVaccineAdministeredDrugs, getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service";
 import { isEmpty } from "lodash";
-import QRCodeReadersrc from "@/components/QRCodeReader.vue"
-import { createModal } from "@/utils/Alerts"
+// import QRCodeReadersrc from "@/components/QRCodeReader.vue"
+import { createModal } from "@/utils/Alerts";
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -104,7 +106,7 @@ import {
     modifyRadioValue,
     modifyFieldValue,
 } from "@/services/data_helpers";
-import { useUserStore } from "@/stores/userStore"
+import { useUserStore } from "@/stores/userStore";
 
 export default defineComponent({
     components: {
@@ -136,7 +138,9 @@ export default defineComponent({
             InnerActionBtnPropeties: {
                 name: "Scan",
                 show: true,
-                fn: () => { createModal(QRCodeReadersrc, { class: "otherVitalsModal qr_code_modal" }, false)}
+                fn: () => {
+                    createModal(QRCodeReadersrc, { class: "otherVitalsModal qr_code_modal" }, false);
+                },
             },
         };
     },
@@ -144,11 +148,11 @@ export default defineComponent({
         ...mapState(useAdministerVaccineStore, ["tempScannedBatchNumber"]),
     },
     async mounted() {
-        this.loadCurrentSelectedDrug()
-        this.displayUserNames()
-        const store = useAdministerVaccineStore()
-        this.showPD = store.isVaccinePassed()
-        this.showDateBtns = !this.showPD
+        this.loadCurrentSelectedDrug();
+        this.displayUserNames();
+        const store = useAdministerVaccineStore();
+        this.showPD = store.isVaccinePassed();
+        this.showDateBtns = !this.showPD;
     },
     setup() {
         return { checkmark, pulseOutline };
@@ -162,17 +166,17 @@ export default defineComponent({
     watch: {
         batchNumber: {
             handler() {
-                this.validateBatchNumber()
+                this.validateBatchNumber();
             },
             deep: true,
         },
         tempScannedBatchNumber: {
             handler() {
                 if (this.tempScannedBatchNumber != null) {
-                    this.batchNumber = this.tempScannedBatchNumber.text
-                    this.validateBatchNumber()
+                    this.batchNumber = this.tempScannedBatchNumber.text;
+                    this.validateBatchNumber();
                 }
-            }
+            },
         },
     },
     methods: {
@@ -180,7 +184,7 @@ export default defineComponent({
             const store = useAdministerVaccineStore();
             this.currentDrug = store.getCurrentSelectedDrug();
             this.drugName = this.currentDrug.drug_name;
-            this.batchNumber = this.currentDrug.vaccine_batch_number ? this.currentDrug.vaccine_batch_number : ""
+            this.batchNumber = this.currentDrug.vaccine_batch_number ? this.currentDrug.vaccine_batch_number : "";
         },
         showCPD() {
             this.showPD = true as boolean;
@@ -211,7 +215,7 @@ export default defineComponent({
             this.batchNumber = input || this.tempScannedBatchNumber.text;
         },
         saveDta(date_: any) {
-            this.validateBatchNumber()
+            this.validateBatchNumber();
             if (this.is_batch_number_valid == true) {
                 toastWarning("Enter batch number!");
                 return;
@@ -229,7 +233,7 @@ export default defineComponent({
             const store = useAdministerVaccineStore();
             store.setAdministeredVaccine(dta);
             saveVaccineAdministeredDrugs();
-            store.setTempScannedBatchNumber(null)
+            store.setTempScannedBatchNumber(null);
             this.dismiss();
         },
         isAlphaNumeric(text: string) {
@@ -245,19 +249,19 @@ export default defineComponent({
             }
         },
         updateBatchNumberByPassValue(input: any) {
-            console.log(input, 'qqqqqqqwwwwwwwwwwww');
-            this.batchNumber = input
+            console.log(input, "qqqqqqqwwwwwwwwwwww");
+            this.batchNumber = input;
         },
         displayUserNames() {
-            const user_store = useUserStore()
-            const user = user_store.getUser()
-            const first_name = user.person.names[0].given_name
-            const last_name = user.person.names[0].family_name
-            this.full_name = first_name + " " + last_name
+            const user_store = useUserStore();
+            const user = user_store.getUser();
+            const first_name = user.person.names[0].given_name;
+            const last_name = user.person.names[0].family_name;
+            this.full_name = first_name + " " + last_name;
         },
         showQRcode() {
-            createModal(QRCodeReadersrc, { class: "otherVitalsModal qr_code_modal" }, false)
-        }
+            // createModal(QRCodeReadersrc, { class: "otherVitalsModal qr_code_modal" }, false)
+        },
     },
 });
 </script>
@@ -346,10 +350,10 @@ h5 {
 }
 .modal_wrapper {
     /* padding: 0px 10px; */
-        background: inherit;
-    }
-    .client_admi {
-        /* Today's date */
+    background: inherit;
+}
+.client_admi {
+    /* Today's date */
 
     /* Auto layout */
     display: flex;
@@ -361,7 +365,6 @@ h5 {
     width: 363px;
     height: 28px;
 
-
     /* Inside auto layout */
     flex: none;
     order: 2;
@@ -371,7 +374,7 @@ h5 {
 .client_admi_sub {
     font-weight: 400;
     font-size: 15px;
-    color:  #636363;
+    color: #636363;
 }
 .client_admin_sub_x {
     font-weight: 500;

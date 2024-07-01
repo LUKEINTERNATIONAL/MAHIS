@@ -100,45 +100,40 @@ export default defineComponent({
         getColorForVaccine(vaccine: any) {
             if (vaccine.status == "administered") {
                 return "success";
-            } 
-            
+            }
+
             if (vaccine.status != "administered") {
                 if (this.milestone_status == "upcoming") {
                     return "medium";
                 }
                 if (this.milestone_status == "current") {
                     return "success";
-                }
-                else {
+                } else {
                     return "danger";
                 }
             }
         },
         getInjectSignForVaccine(vaccine: any) {
-
             if (vaccine.status == "administered") {
                 return this.iconsContent.greenInjection;
             }
             if (vaccine.status != "administered") {
                 if (this.milestone_status == "upcoming") {
-                    return ''
-                }
-                else {
+                    return "";
+                } else {
                     return this.iconsContent.fadedGreenIjection;
                 }
-                
             }
         },
         getCheckBoxForVaccine(vaccine: any) {
             if (vaccine.status == "administered") {
-                return this.iconsContent.improvedGreenTick
+                return this.iconsContent.improvedGreenTick;
             }
 
             if (vaccine.status != "administered") {
                 if (this.milestone_status == "upcoming") {
-                    return ''
-                }
-                else {
+                    return "";
+                } else {
                     return this.iconsContent.whiteCheckbox;
                 }
             }
@@ -146,22 +141,21 @@ export default defineComponent({
         openAdministerVaccineModal(data: any) {
             const store = useAdministerVaccineStore();
             store.setCurrentSelectedDrug(data.drug_id as number, data.drug_name, data.vaccine_batch_number as string);
-            createModal(administerVaccineModal, { class: "otherVitalsModal" },);
+            createModal(administerVaccineModal, { class: "otherVitalsModal" });
         },
         disableVaccine(vaccine: any) {
-
             if (vaccine.status != null && vaccine.status == "administered") {
-                return true
+                return true;
             }
 
-            if (vaccine.can_administer != null && vaccine.can_administer == false ) {
-                return true
+            if (vaccine.can_administer != null && vaccine.can_administer == false) {
+                return true;
             }
 
-            if (vaccine.can_administer != null && vaccine.can_administer == true ) {
-                return false
+            if (vaccine.can_administer != null && vaccine.can_administer == true) {
+                return false;
             }
-            return false
+            return false;
         },
         checkVaccineName(name: string) {
             return name.replace(/Pentavalent/g, "Penta");
