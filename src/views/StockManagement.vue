@@ -91,7 +91,7 @@ import { useStartEndDate } from "@/stores/StartEndDate";
 import { DrugService } from "@/services/drug_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { toastSuccess, toastWarning } from "@/utils/Alerts";
-// import "datatables.net-select";
+import "datatables.net-select";
 // DataTable.use(DataTablesCore);
 export default defineComponent({
     name: "Home",
