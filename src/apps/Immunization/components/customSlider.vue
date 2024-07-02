@@ -20,7 +20,7 @@
         <slide v-for="(slide, index) in vaccineSchudulesCount" :key="slide">
             <!-- {{ slide }} -->
             <div class="container">
-                <customVaccine :vaccines="vaccine_schArray[index]" :visitId="1" />
+                <customVaccine :vaccines="vaccine_schArray[0][index].antigens" :milestone_status="vaccine_schArray[0][index].milestone_status" />
             </div>
         </slide>
         <template #addons>
@@ -108,7 +108,8 @@ export default defineComponent({
             let found = false;
             this.vaccineSchudulesCount = vaccineScheduleStore.getVaccineSchedule()?.vaccine_schedule?.length;
             vaccineScheduleStore.resetMissedVaccineSchedules();
-            vaccineScheduleStore.getVaccineSchedule()?.vaccine_schedule?.forEach((vaccineSchudule: any) => {
+            this.vaccine_schArray.push(vaccineScheduleStore.getVaccineSchedule().vaccine_schedule);
+            vaccineScheduleStore.getVaccineSchedule().vaccine_schedule.forEach((vaccineSchudule: any) => {
                 this.findMissingVaccines(vaccineSchudule);
                 if (vaccineSchudule.milestone_status == "current") {
                     vaccineScheduleStore.setCurrentVisitId(vaccineSchudule.visit);
@@ -136,8 +137,6 @@ export default defineComponent({
                 }
                 const obj = { visit: vaccineSchudule.visit, age: vaccineSchudule.age };
                 this.milestones = this.appendUniqueObject(this.milestones, obj);
-
-                this.vaccine_schArray.push(vaccineSchudule.antigens);
             });
 
             if (found == false) {

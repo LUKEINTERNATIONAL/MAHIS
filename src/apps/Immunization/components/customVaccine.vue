@@ -86,7 +86,7 @@ export default defineComponent({
             type: [],
             default: [],
         } as any,
-        visitId: {
+        milestone_status: {
             type: String,
             default: 0,
         } as any,
@@ -97,15 +97,20 @@ export default defineComponent({
     },
 
     methods: {
-        getColorForVaccine(vaccine: any): string {
-            const store = useAdministerVaccineStore();
-            if (vaccine.status != "administered") {
-                return "danger";
-            }
+        getColorForVaccine(vaccine: any) {
             if (vaccine.status == "administered") {
                 return "success";
-            } else {
-                return "medium-green";
+            }
+
+            if (vaccine.status != "administered") {
+                if (this.milestone_status == "upcoming") {
+                    return "medium";
+                }
+                if (this.milestone_status == "current") {
+                    return "success";
+                } else {
+                    return "danger";
+                }
             }
         },
         getInjectSignForVaccine(vaccine: any) {
@@ -113,14 +118,24 @@ export default defineComponent({
                 return this.iconsContent.greenInjection;
             }
             if (vaccine.status != "administered") {
-                return this.iconsContent.fadedGreenIjection;
+                if (this.milestone_status == "upcoming") {
+                    return "";
+                } else {
+                    return this.iconsContent.fadedGreenIjection;
+                }
             }
         },
         getCheckBoxForVaccine(vaccine: any) {
             if (vaccine.status == "administered") {
                 return this.iconsContent.improvedGreenTick;
-            } else {
-                return this.iconsContent.whiteCheckbox;
+            }
+
+            if (vaccine.status != "administered") {
+                if (this.milestone_status == "upcoming") {
+                    return "";
+                } else {
+                    return this.iconsContent.whiteCheckbox;
+                }
             }
         },
         openAdministerVaccineModal(data: any) {
@@ -129,6 +144,10 @@ export default defineComponent({
             createModal(administerVaccineModal, { class: "otherVitalsModal" });
         },
         disableVaccine(vaccine: any) {
+            if (vaccine.status != null && vaccine.status == "administered") {
+                return true;
+            }
+
             if (vaccine.can_administer != null && vaccine.can_administer == false) {
                 return true;
             }

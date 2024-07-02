@@ -27,6 +27,7 @@
                 :-inner-action-btn-propeties="InnerActionBtnPropeties"
                 @update:InnerActionBtnPropetiesAction="InnerActionBtnPropeties.fn"
                 @update:inputValue="updateBatchNumber"
+                @update:passedinputValue="updateBatchNumberByPassValue"
             />
 
             <div>
@@ -137,7 +138,9 @@ export default defineComponent({
             InnerActionBtnPropeties: {
                 name: "Scan",
                 show: true,
-                fn: this.showQRcode,
+                fn: () => {
+                    createModal(QRCodeReadersrc, { class: "otherVitalsModal qr_code_modal" }, false);
+                },
             },
         };
     },
@@ -163,19 +166,15 @@ export default defineComponent({
     watch: {
         batchNumber: {
             handler() {
-                if (this.isAlphaNumeric(this.batchNumber as string) == true) {
-                    this.is_batch_number_valid = false;
-                }
-                if (this.isAlphaNumeric(this.batchNumber as string) == false) {
-                    this.is_batch_number_valid = true;
-                }
+                this.validateBatchNumber();
             },
             deep: true,
         },
         tempScannedBatchNumber: {
             handler() {
-                if (this.tempScannedBatchNumber != "") {
-                    console.log(this.tempScannedBatchNumber);
+                if (this.tempScannedBatchNumber != null) {
+                    this.batchNumber = this.tempScannedBatchNumber.text;
+                    this.validateBatchNumber();
                 }
             },
         },
@@ -183,10 +182,9 @@ export default defineComponent({
     methods: {
         loadCurrentSelectedDrug() {
             const store = useAdministerVaccineStore();
-            //console.log(store.getCurrentSelectedDrug())
             this.currentDrug = store.getCurrentSelectedDrug();
             this.drugName = this.currentDrug.drug_name;
-            this.batchNumber = this.currentDrug.vaccine_batch_number;
+            this.batchNumber = this.currentDrug.vaccine_batch_number ? this.currentDrug.vaccine_batch_number : "";
         },
         showCPD() {
             this.showPD = true as boolean;
@@ -214,9 +212,10 @@ export default defineComponent({
         },
         updateBatchNumber(event: any) {
             const input = event.target.value;
-            this.batchNumber = input;
+            this.batchNumber = input || this.tempScannedBatchNumber.text;
         },
         saveDta(date_: any) {
+            this.validateBatchNumber();
             if (this.is_batch_number_valid == true) {
                 toastWarning("Enter batch number!");
                 return;
@@ -234,12 +233,24 @@ export default defineComponent({
             const store = useAdministerVaccineStore();
             store.setAdministeredVaccine(dta);
             saveVaccineAdministeredDrugs();
+            store.setTempScannedBatchNumber(null);
             this.dismiss();
         },
         isAlphaNumeric(text: string) {
-            // Regular expression to match one or more digits
             const regex = /^[a-zA-Z0-9]+$/;
             return regex.test(text);
+        },
+        validateBatchNumber() {
+            if (this.isAlphaNumeric(this.batchNumber as string) == true) {
+                this.is_batch_number_valid = false;
+            }
+            if (this.isAlphaNumeric(this.batchNumber as string) == false) {
+                this.is_batch_number_valid = true;
+            }
+        },
+        updateBatchNumberByPassValue(input: any) {
+            console.log(input, "qqqqqqqwwwwwwwwwwww");
+            this.batchNumber = input;
         },
         displayUserNames() {
             const user_store = useUserStore();

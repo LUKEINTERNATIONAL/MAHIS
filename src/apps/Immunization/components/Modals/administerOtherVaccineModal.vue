@@ -229,10 +229,7 @@ export default defineComponent({
         tempScannedBatchNumber: {
             handler() {
                 if (this.tempScannedBatchNumber != null) {
-                    console.log(this.tempScannedBatchNumber);
                     this.batchNumber = this.tempScannedBatchNumber.text;
-                    const store = useAdministerVaccineStore();
-                    store.setTempScannedBatchNumber(null);
                     this.validateBatchNumber();
                 }
             },
@@ -253,7 +250,7 @@ export default defineComponent({
         },
         updateBatchNumber(event: any) {
             const input = event.target.value;
-            this.batchNumber = input;
+            this.batchNumber = input || this.tempScannedBatchNumber.text;
         },
         saveBatchWithTodayDate() {
             let vaccine_date = Service.getSessionDate();
@@ -323,6 +320,7 @@ export default defineComponent({
             store.setAdministeredVaccine(dta);
             saveVaccineAdministeredDrugs();
             this.dismiss();
+            store.setTempScannedBatchNumber(null);
         },
     },
 });
