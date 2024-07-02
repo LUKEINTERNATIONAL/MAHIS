@@ -18,9 +18,11 @@ import { modifyFieldValue, getFieldValue, getRadioSelectedValue, getCheckboxSele
 import { validateField } from "@/services/validation_service";
 import AddTA from "@/components/Registration/Modal/AddTA.vue";
 import AddVillage from "@/components/Registration/Modal/AddVillage.vue";
+import Districts from "@/views/Mixin/SetDistricts.vue";
 
 export default defineComponent({
     name: "Menu",
+    mixins: [Districts],
     components: {
         IonContent,
         IonHeader,
@@ -60,11 +62,16 @@ export default defineComponent({
             },
             deep: true,
         },
+        districtList: {
+            handler() {
+                modifyFieldValue(this.currentLocation, "current_district", "multiSelectData", this.districtList);
+            },
+            deep: true,
+        },
     },
     async mounted() {
         this.updateRegistrationStores();
         this.buildCards();
-        this.buildDistricts();
     },
     methods: {
         async buildCards() {
@@ -73,7 +80,7 @@ export default defineComponent({
                 cards: [
                     {
                         cardTitle: "Current Location",
-                        content: this.currentLocation
+                        content: this.currentLocation,
                     },
                 ],
             };
@@ -85,14 +92,6 @@ export default defineComponent({
             const registrationStore = useRegistrationStore();
             // registrationStore.setHomeLocation(this.homeLocation);
             // registrationStore.setCurrentLocation(this.currentLocation);
-        },
-        async buildDistricts() {
-            this.districtList = [];
-            for (let i of [1, 2, 3]) {
-                const districts: any = await LocationService.getDistricts(i);
-                this.districtList.push(...districts);
-            }
-            modifyFieldValue(this.currentLocation, "current_district", "multiSelectData", this.districtList);
         },
         handleBtns(event: any) {
             if (event == "TA") createModal(AddTA, { class: "otherVitalsModal" });

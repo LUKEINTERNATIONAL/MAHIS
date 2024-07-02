@@ -246,7 +246,6 @@ export default defineComponent({
     },
 
     async mounted() {
-        // this.screenWidth = window.screen.width;
         this.setIconClass();
         this.disableNationalIDInput();
         this.checkAge();
