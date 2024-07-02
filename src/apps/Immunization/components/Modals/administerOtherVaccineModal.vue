@@ -1,11 +1,13 @@
 <template>
     <div class="modal_wrapper">
-        <ion-row style="margin-top: 10px;">
+        <ion-row style="margin-top: 10px">
             <ion-col style="margin-left: -3px">
                 <div class="om">Add Other Vaccine</div>
             </ion-col>
             <ion-col size="6" style="text-align: right">
-                <ion-label class="lbl-tl" style="font-size: 13"> Todays Date: <span class="lbl-ct">{{ sessionDate }}</span></ion-label>
+                <ion-label class="lbl-tl" style="font-size: 13">
+                    Todays Date: <span class="lbl-ct">{{ sessionDate }}</span></ion-label
+                >
             </ion-col>
         </ion-row>
 
@@ -20,7 +22,6 @@
                 :icon="iconsContent.batchNumber"
                 :inputValue="batchNumber"
                 :-inner-action-btn-propeties="InnerActionBtnPropeties"
-                @update:InnerActionBtnPropetiesAction="InnerActionBtnPropeties.fn"
                 @update:inputValue="updateBatchNumber"
                 @update:passedinputValue="updateBatchNumberByPassValue"
             />
@@ -31,9 +32,8 @@
                 </ion-label>
             </div>
         </div>
-        
 
-        <div style="margin-top: 30px; margin-bottom: 100px;">
+        <div style="margin-top: 30px; margin-bottom: 100px">
             <ion-row>
                 <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
                     >Vaccine name<span style="color: #b42318">*</span></ion-label
@@ -57,7 +57,7 @@
                 :options="otherVaccinesList"
             />
             <div>
-                <ion-label style="padding: 3%;;" v-if="is_vaccine_name_valid" class="error-label">{{ vaccine_name_error_message }}</ion-label>
+                <ion-label style="padding: 3%" v-if="is_vaccine_name_valid" class="error-label">{{ vaccine_name_error_message }}</ion-label>
             </div>
         </div>
 
@@ -101,8 +101,22 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController, IonInput, IonCol, IonLabel, IonRow, modalController } from "@ionic/vue";
-import { defineComponent } from "vue"; 
+import {
+    IonContent,
+    IonHeader,
+    IonItem,
+    IonList,
+    IonTitle,
+    IonToolbar,
+    IonMenu,
+    menuController,
+    IonInput,
+    IonCol,
+    IonLabel,
+    IonRow,
+    modalController,
+} from "@ionic/vue";
+import { defineComponent } from "vue";
 import { checkmark, pulseOutline, clipboardOutline } from "ionicons/icons";
 import { icons } from "@/utils/svg";
 import { useAdministerOtherVaccineStore } from "@/apps/Immunization/stores/AdministerOtherVaccinesStore";
@@ -114,16 +128,16 @@ import BasicForm from "@/components/BasicForm.vue";
 import HisDate from "@/utils/Date";
 import { Service } from "@/services/service";
 
-import PreviousVitals from "@/components/previousVisits/previousVitals.vue"
-import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue"
-import { PatientService } from "@/services/patient_service"
-import { saveVaccineAdministeredDrugs, getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service"
-import QRCodeReadersrc from "@/components/QRCodeReader.vue"
-import { createModal } from "@/utils/Alerts"
-import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore"
-import VueMultiselect from "vue-multiselect"
-import { isEmpty } from "lodash"
-import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts"
+import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
+import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
+import { PatientService } from "@/services/patient_service";
+import { saveVaccineAdministeredDrugs, getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service";
+// import QRCodeReadersrc from "@/components/QRCodeReader.vue"
+import { createModal } from "@/utils/Alerts";
+import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
+import VueMultiselect from "vue-multiselect";
+import { isEmpty } from "lodash";
+import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 
 export default defineComponent({
     components: {
@@ -142,48 +156,48 @@ export default defineComponent({
         IonCol,
         IonRow,
         VueMultiselect,
-        IonLabel
+        IonLabel,
     },
     data() {
         return {
             iconsContent: icons,
             showPD: false as boolean,
             batchNumber: "" as any,
-            vaccineName: '' as string,
+            vaccineName: "" as string,
             currentDrugOb: {} as any,
             otherVaccinesList: [
                 {
-                    "concept_id": 11592,
-                    "drug_id": 1287,
-                    "drug_name": "OPV3",
-                    "status": "administered",
-                    "date_administered": "01/Jun/2024 08:40:01",
-                    "vaccine_batch_number": null
+                    concept_id: 11592,
+                    drug_id: 1287,
+                    drug_name: "OPV3",
+                    status: "administered",
+                    date_administered: "01/Jun/2024 08:40:01",
+                    vaccine_batch_number: null,
                 },
                 {
-                    "concept_id": 11592,
-                    "drug_id": 1290,
-                    "drug_name": "Pentavalent 3",
-                    "status": "administered",
-                    "date_administered": "31/May/2024 15:16:03",
-                    "vaccine_batch_number": null
+                    concept_id: 11592,
+                    drug_id: 1290,
+                    drug_name: "Pentavalent 3",
+                    status: "administered",
+                    date_administered: "31/May/2024 15:16:03",
+                    vaccine_batch_number: null,
                 },
                 {
-                    "concept_id": 11592,
-                    "drug_id": 1293,
-                    "drug_name": "PCV3",
-                    "status": "administered",
-                    "date_administered": "01/Jun/2024 08:40:17",
-                    "vaccine_batch_number": null
+                    concept_id: 11592,
+                    drug_id: 1293,
+                    drug_name: "PCV3",
+                    status: "administered",
+                    date_administered: "01/Jun/2024 08:40:17",
+                    vaccine_batch_number: null,
                 },
                 {
-                    "concept_id": 11592,
-                    "drug_id": 1301,
-                    "drug_name": "IPV",
-                    "status": "administered",
-                    "date_administered": "31/May/2024 15:33:44",
-                    "vaccine_batch_number": null
-                }
+                    concept_id: 11592,
+                    drug_id: 1301,
+                    drug_name: "IPV",
+                    status: "administered",
+                    date_administered: "31/May/2024 15:33:44",
+                    vaccine_batch_number: null,
+                },
             ] as any,
             is_batch_number_valid: false as boolean,
             vaccineDate: "" as any,
@@ -195,7 +209,7 @@ export default defineComponent({
             InnerActionBtnPropeties: {
                 name: "Scan",
                 show: true,
-                fn: () => { createModal(QRCodeReadersrc, { class: "otherVitalsModal qr_code_modal" }, false)}
+                // fn: () => { createModal(QRCodeReadersrc, { class: "otherVitalsModal qr_code_modal" }, false)}
             },
             showDateBtns: true as boolean,
         };
@@ -204,32 +218,30 @@ export default defineComponent({
         ...mapState(useAdministerOtherVaccineStore, ["administerOtherVaccine"]),
         ...mapState(useAdministerVaccineStore, ["tempScannedBatchNumber"]),
     },
-    async mounted() {
-        
-    },
+    async mounted() {},
     watch: {
         batchNumber: {
             handler() {
-                this.validateBatchNumber()
+                this.validateBatchNumber();
             },
             deep: true,
         },
         tempScannedBatchNumber: {
             handler() {
                 if (this.tempScannedBatchNumber != null) {
-                    console.log(this.tempScannedBatchNumber)
-                    this.batchNumber = this.tempScannedBatchNumber.text
-                    const store = useAdministerVaccineStore()
-                    store.setTempScannedBatchNumber(null)
-                    this.validateBatchNumber()
+                    console.log(this.tempScannedBatchNumber);
+                    this.batchNumber = this.tempScannedBatchNumber.text;
+                    const store = useAdministerVaccineStore();
+                    store.setTempScannedBatchNumber(null);
+                    this.validateBatchNumber();
                 }
-            }
+            },
         },
         vaccineName: {
             handler() {
-                this.validateVaccineName()
-            }
-        }
+                this.validateVaccineName();
+            },
+        },
     },
     setup() {
         return { checkmark, pulseOutline, clipboardOutline };
@@ -244,14 +256,13 @@ export default defineComponent({
             this.batchNumber = input;
         },
         saveBatchWithTodayDate() {
-            let vaccine_date = Service.getSessionDate()
+            let vaccine_date = Service.getSessionDate();
             this.saveDta(vaccine_date);
         },
         dismiss() {
-            modalController.dismiss()
+            modalController.dismiss();
         },
         saveBatch() {
-            
             let vaccine_date;
             if (isEmpty(this.vaccineDate) == true) {
                 vaccine_date = Service.getSessionDate();
@@ -263,17 +274,17 @@ export default defineComponent({
         },
         validateVaccineName() {
             if (isEmpty(this.vaccineName) == true) {
-                this.is_vaccine_name_valid = true
-                return false
+                this.is_vaccine_name_valid = true;
+                return false;
             }
 
             if (isEmpty(this.vaccineName) == false) {
-                this.is_vaccine_name_valid = false
-                return true
+                this.is_vaccine_name_valid = false;
+                return true;
             }
         },
         updateVaccineName(data: any) {
-            this.currentDrugOb = data
+            this.currentDrugOb = data;
         },
         isAlphaNumeric(text: string) {
             // Regular expression to match one or more digits
@@ -282,25 +293,25 @@ export default defineComponent({
         },
         validateBatchNumber() {
             if (this.isAlphaNumeric(this.batchNumber as string) == true) {
-                    this.is_batch_number_valid = false;
-                }
-                if (this.isAlphaNumeric(this.batchNumber as string) == false) {
-                    this.is_batch_number_valid = true;
-                }
+                this.is_batch_number_valid = false;
+            }
+            if (this.isAlphaNumeric(this.batchNumber as string) == false) {
+                this.is_batch_number_valid = true;
+            }
         },
         updateBatchNumberByPassValue(input: any) {
-            this.batchNumber = input
+            this.batchNumber = input;
         },
         saveDta(date_: any) {
-            this.validateVaccineName()
-            this.validateBatchNumber()
+            this.validateVaccineName();
+            this.validateBatchNumber();
             if (this.is_batch_number_valid == true) {
                 toastWarning("Enter batch number!");
                 return;
             }
 
             if (this.batchNumber == "") {
-                toastWarning("Enter batch number!")
+                toastWarning("Enter batch number!");
                 return;
             }
             const dta = {
@@ -309,8 +320,8 @@ export default defineComponent({
                 drug_id: this.currentDrugOb.drug_id,
             };
             const store = useAdministerVaccineStore();
-            store.setAdministeredVaccine(dta)
-            saveVaccineAdministeredDrugs()
+            store.setAdministeredVaccine(dta);
+            saveVaccineAdministeredDrugs();
             this.dismiss();
         },
     },

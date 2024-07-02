@@ -342,7 +342,6 @@ export default defineComponent({
             this.openNewPage(patientData);
         },
         async saveData() {
-
             this.isLoading = true;
             try {
                 if (await this.createPatient()) {
@@ -377,7 +376,7 @@ export default defineComponent({
         async createPatient() {
             const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
             const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
-            await this.buildPersonalInformation();          
+            await this.buildPersonalInformation();
             if (
                 (await this.validations(this.personInformation, fields)) &&
                 (await this.validations(this.currentLocation, currentFields)) &&
@@ -395,7 +394,7 @@ export default defineComponent({
                     if (await this.validations(this.guardianInformation, ["guardianFirstname", "guardianLastname"])) {
                         this.createGuardian(patientID);
                     }
-                }                
+                }
                 await this.saveBirthdayData(patientID);
                 this.findPatient(patientID);
                 toastSuccess("Successfully Created Patient");
@@ -458,14 +457,12 @@ export default defineComponent({
             } else return false;
         },
         async createGuardian(patientID: any) {
-
-            if (Object.keys(this.guardianInformation[0].selectedData).length === 0) return;       
+            if (Object.keys(this.guardianInformation[0].selectedData).length === 0) return;
             const selectedID = getFieldValue(this.guardianInformation, "relationship", "value")?.id;
             const guardian: any = new PatientRegistrationService();
             await guardian.registerGuardian(this.guardianInformation[0].selectedData);
             const guardianID = guardian.getPersonID();
-            if(selectedID) await RelationsService.createRelation(patientID, guardianID, selectedID);
-            
+            if (selectedID) await RelationsService.createRelation(patientID, guardianID, selectedID);
         },
         async openNewPage(item: any) {
             await resetPatientData();
@@ -496,8 +493,8 @@ export default defineComponent({
             if (ids >= 0) return item.patient_identifiers[ids].identifier;
             else return "";
         },
-        async buildPersonalInformation() {          
-                this.personInformation[0].selectedData = {
+        async buildPersonalInformation() {
+            this.personInformation[0].selectedData = {
                 given_name: getFieldValue(this.personInformation, "firstname", "value"),
                 middle_name: getFieldValue(this.personInformation, "middleName", "value"),
                 family_name: getFieldValue(this.personInformation, "lastname", "value"),
@@ -538,33 +535,6 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-.spinner-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(255, 255, 255, 0.5);
-    z-index: 9999;
-}
-
-ion-spinner {
-    width: 80px;
-    height: 80px;
-}
-
-.loading-text {
-    margin-top: 20px;
-    font-size: 18px;
-    color: #333;
-}
-
-.loading {
-    pointer-events: none;
-}
 .breadcrumbs {
     font-weight: 400;
     font-size: 14px;

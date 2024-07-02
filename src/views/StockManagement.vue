@@ -1,5 +1,10 @@
 <template>
-    <ion-page>
+    <ion-page :class="{ loading: isLoading }">
+        <!-- Spinner -->
+        <div v-if="isLoading" class="spinner-overlay">
+            <ion-spinner name="bubbles"></ion-spinner>
+            <div class="loading-text">Please wait...</div>
+        </div>
         <Toolbar />
         <ion-content>
             <div class="container">
@@ -8,22 +13,25 @@
                     <div class="bigGroupButton">
                         <ion-button :color="selectedButton === 'all' ? 'tertiary' : 'secondary'" @click="selectButton('all')">
                             <div>
-                                <div class="centerBigBtnContain bigBtnHeader">455</div>
+                                <div class="centerBigBtnContain bigBtnHeader">{{ allStock.length }}</div>
                                 <div class="centerBigBtnContain">All Stock</div>
                             </div>
                         </ion-button>
                         <ion-button :color="selectedButton === 'current' ? 'tertiary' : 'secondary'" @click="selectButton('current')">
                             <div>
-                                <div class="centerBigBtnContain bigBtnHeader">455</div>
+                                <div class="centerBigBtnContain bigBtnHeader">{{ currentStock.length }}</div>
                                 <div class="centerBigBtnContain">Current Stock</div>
                             </div>
                         </ion-button>
                         <ion-button :color="selectedButton === 'out' ? 'tertiary' : 'secondary'" @click="selectButton('out')">
                             <div>
-                                <div class="centerBigBtnContain bigBtnHeader">455</div>
+                                <div class="centerBigBtnContain bigBtnHeader">{{ outStock.length }}</div>
                                 <div class="centerBigBtnContain">Out of Stock</div>
                             </div>
                         </ion-button>
+                    </div>
+                    <div style="max-width: 400px; top: -10px; position: relative">
+                        <basic-form :contentData="startEndDate" @update:inputValue="handleInputData"></basic-form>
                     </div>
                     <div>
                         <ion-button class="addBtn" color="primary" @click="openAddStockModal()">
@@ -36,7 +44,7 @@
                 <DataTable :options="options" :data="reportData" class="display nowrap" width="100%">
                     <thead>
                         <tr>
-                            <th>Date</th>
+                            <th>Delivery Date</th>
                             <th>Batch No</th>
                             <th>Product Name</th>
                             <th>In</th>
@@ -78,7 +86,11 @@ import DynamicButton from "@/components/DynamicButton.vue";
 import AddStockModal from "@/components/StockManagement/AddStockModal.vue";
 import { createModal } from "@/utils/Alerts";
 import { StockService } from "@/services/stock_service";
+import { useStockStore } from "@/stores/StockStore";
+import { useStartEndDate } from "@/stores/StartEndDate";
 import { DrugService } from "@/services/drug_service";
+import BasicForm from "@/components/BasicForm.vue";
+import { toastSuccess, toastWarning } from "@/utils/Alerts";
 // import "datatables.net-select";
 // DataTable.use(DataTablesCore);
 export default defineComponent({
@@ -100,84 +112,98 @@ export default defineComponent({
         DataTable,
         IonCard,
         DynamicButton,
+        BasicForm,
     },
     data() {
         return {
-            controlGraphs: "months" as any,
             reportData: [] as any,
+            currentStock: [] as any,
+            allStock: [] as any,
+            outStock: [] as any,
+            startDate: HisDate.currentDate(),
+            endDate: HisDate.currentDate(),
             options: {
                 responsive: true,
                 select: true,
             } as any,
             selectedButton: "all",
+            isLoading: false,
         };
     },
     computed: {
-        ...mapState(useGeneralStore, ["OPDActivities"]),
+        ...mapState(useStockStore, ["stock"]),
+        ...mapState(useStartEndDate, ["startEndDate"]),
     },
     $route: {
         async handler() {},
         deep: true,
     },
+    watch: {
+        stock: {
+            async handler() {
+                // await this.buildTableData();
+            },
+            deep: true,
+        },
+    },
     async mounted() {
         await this.buildTableData();
-        this.setView();
-        this.startTimer();
-        this.getPatientSummary();
     },
     methods: {
+        async handleInputData(event: any) {
+            if (event.inputHeader == "Start date") {
+                this.startDate = HisDate.toStandardHisFormat(event.value);
+            }
+            if (event.inputHeader == "End date") {
+                this.endDate = HisDate.toStandardHisFormat(event.value);
+            }
+            await this.buildTableData();
+        },
         async buildTableData() {
-            const stockService = new StockService();
-            const data = await stockService.getItems();
+            this.isLoading = true;
+            try {
+                const stockService = new StockService();
+                const data = await stockService.getItems(this.startDate, this.endDate);
 
-            this.reportData = data.map((item: any) => {
-                return [
-                    HisDate.toStandardHisDisplayFormat(item.date_created),
-                    item.batch_number,
-                    item.drug_legacy_name,
-                    item.delivered_quantity,
-                    item.delivered_quantity - item.current_quantity,
-                    item.current_quantity,
-                    HisDate.toStandardHisDisplayFormat(item.expiry_date),
-                ];
-            });
-            DataTable.use(DataTablesCore);
-            console.log("🚀 ~ mounted ~ getItems:", this.reportData);
-        },
-        selectButton(button: any) {
-            this.selectedButton = button;
-        },
-        openAddStockModal() {
-            createModal(AddStockModal, { class: "otherVitalsModal" });
-        },
-        onMessage(event: MessageEvent) {
-            const data = JSON.parse(event.data);
-            if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel" })) {
-                this.reportData = data.message;
-                console.log("🚀 ~ onMessage ~ this.reportData :", this.reportData);
+                let filteredData = data;
+                this.allStock = data;
+                this.currentStock = data.filter((item: any) => item.current_quantity !== 0);
+                this.outStock = data.filter((item: any) => item.current_quantity === 0);
+
+                if (this.selectedButton === "current") {
+                    filteredData = this.currentStock;
+                } else if (this.selectedButton === "out") {
+                    filteredData = this.outStock;
+                }
+
+                this.reportData = filteredData.map((item: any) => {
+                    return [
+                        HisDate.toStandardHisDisplayFormat(item.delivery_date),
+                        item.batch_number,
+                        item.drug_legacy_name,
+                        item.delivered_quantity,
+                        item.dispensed_quantity,
+                        item.current_quantity,
+                        HisDate.toStandardHisDisplayFormat(item.expiry_date),
+                    ];
+                });
+
+                DataTable.use(DataTablesCore);
+            } catch (error) {
+                toastWarning("An error occurred while loading data.");
+            } finally {
+                this.isLoading = false;
             }
         },
-        getPatientSummary: async function () {
-            const data = await Service.getJson("immunization/stats", {
-                start_date: HisDate.getDateBeforeByDays(HisDate.currentDate(), 365),
-                end_date: HisDate.currentDate(),
-            });
+        async selectButton(button: any) {
+            this.selectedButton = button;
+            await this.buildTableData();
         },
-        setView() {
-            Service.getProgramID();
-        },
-        programID() {
-            return Service.getProgramID();
-        },
-        loadImage(name: any) {
-            return img(name);
-        },
-        startTimer() {
-            // Set a timer to switch graphs every 5 seconds
-            setInterval(() => {
-                // Toggle between 'months' and 'group'
-                this.controlGraphs = this.controlGraphs === "months" ? "group" : "months";
-            }, 15000);
+        async openAddStockModal() {
+            const data: any = await createModal(AddStockModal, { class: "otherVitalsModal" });
+            if (data == "dismiss") {
+                await this.buildTableData();
+            }
         },
     },
 });

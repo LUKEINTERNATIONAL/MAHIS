@@ -10,7 +10,7 @@ const initialStock = [
                 {
                     colData: [
                         {
-                            inputHeader: "Batch No.",
+                            inputHeader: "Batch No.*",
                             iconRight: icons.scannerIcon,
                             value: "",
                             name: "batch",
@@ -30,7 +30,7 @@ const initialStock = [
                 {
                     colData: [
                         {
-                            inputHeader: "Product Name",
+                            inputHeader: "Product Name *",
                             icon: icons.search,
                             value: "",
                             name: "product name",
@@ -55,7 +55,7 @@ const initialStock = [
                 {
                     colData: [
                         {
-                            inputHeader: "Quantity",
+                            inputHeader: "Quantity*",
                             value: "",
                             name: "stock in",
                             eventType: "input",
@@ -74,7 +74,28 @@ const initialStock = [
                 {
                     colData: [
                         {
-                            inputHeader: "Expire date",
+                            inputHeader: "Delivery date",
+                            icon: icons.calenderPrimary,
+                            value: "",
+                            name: "delivery_date",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            required: true,
+                            isDatePopover: true,
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+
+    {
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            inputHeader: "Expire date*",
                             icon: icons.calenderPrimary,
                             value: "",
                             name: "expire date",
@@ -84,6 +105,7 @@ const initialStock = [
                             isDatePopover: true,
                             minDate: "",
                             maxDate: "",
+                            validationFunctionName: "required",
                         },
                     ],
                 },
@@ -104,5 +126,4 @@ export const useStockStore = defineStore("stockStore", {
             return [...data];
         },
     },
-    persist: true,
 });
