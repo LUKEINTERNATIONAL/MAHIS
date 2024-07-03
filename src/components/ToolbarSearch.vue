@@ -1,6 +1,8 @@
 <template>
-    <ion-searchbar @ionInput="handleInput" placeholder="Search client by MRN, name or scan barcode/QR-Code" class="searchField"></ion-searchbar>
-    <ion-popover
+  <RoleSelectionModal :isOpen="isRoleSelectionModalOpen" @update:isOpen="isRoleSelectionModalOpen = $event" />
+  <ion-searchbar @ionInput="handleInput" placeholder="Search client by MRN, name or scan barcode/QR-Code" class="searchField"></ion-searchbar>
+
+  <ion-popover
         :is-open="popoverOpen"
         :event="event"
         @didDismiss="popoverOpen = false"
@@ -8,6 +10,8 @@
         :show-backdrop="false"
         :dismiss-on-select="false"
     >
+
+
         <div style="width: 1300px" class="sticky-table">
             <ion-row class="search_header">
                 <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">Fullname</ion-col>
@@ -104,6 +108,7 @@ import { UserService } from "@/services/user_service";
 import { Service } from "@/services/service";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import Pagination from "./Pagination.vue";
+import RoleSelectionModal from "@/apps/OPD/components/RoleSelectionModal.vue";
 
 export default defineComponent({
     name: "Home",
@@ -121,6 +126,7 @@ export default defineComponent({
         IonRow,
         IonCol,
         Pagination,
+        RoleSelectionModal
     },
     setup() {
         return { checkmark, add };
@@ -131,9 +137,10 @@ export default defineComponent({
             event: null,
             patients: [] as any,
             showPopover: true,
-            page: 1,
-            searchText: "",
-            paginationSize: 7,
+            page:1,
+            searchText:"",
+            paginationSize:7,
+           isRoleSelectionModalOpen: false
         };
     },
     computed: {
@@ -266,7 +273,9 @@ export default defineComponent({
             const roles: any = JSON.parse(roleData);
             UserService.setProgramUserActions();
 
-            if (roles.some((role: any) => role.role === "Pharmacist")) {
+          if (roles.some((role: any) => role.role === "Lab" && roles.some((role: any) => role.role === "Pharmacist"))) {
+            this.isRoleSelectionModalOpen = true;
+          } else if (roles.some((role: any) => role.role === "Pharmacist")) {
                 this.$router.push("dispensation");
             } else if (roles.some((role: any) => role.role === "Lab")) {
                 this.$router.push("OPDConsultationPlan");

@@ -39,7 +39,7 @@ import {
     AccordionGroupCustomEvent,
 } from "@ionic/vue";
 
-import BasicFooter from "@/components/BasicFooter.vue";
+
 import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
@@ -82,6 +82,7 @@ import { ReasonForVisitService } from "@/apps/ANC/service/reason_for_visit_servi
 import { resetPatientData } from "@/services/reset_data";
 import { getCheckboxSelectedValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { validateField } from "@/services/ANC/quickCheck_validation_service";
+import BasicFooter from "@/components/BasicFooter.vue";
 
 export default defineComponent({
     name: "Home",

@@ -509,6 +509,8 @@ function addData() {
 
 async function validatedDrugName() {
     const drugNameExists = await findIfDrugNameExists();
+
+    console.log({drugNameExists})
     if (!drugNameExists) {
         drugnameErrMsg.value = "please select a valid drug name";
         show_error_msg_for_drug_name.value = true;
@@ -547,6 +549,9 @@ async function areFieldsValid() {
     const isDrugValid = validateDrug()
     const isRouteValid = validateRoute()
 
+console.log({isDrugnameValid,isDoseValid,isDurationValid,isFrequencyValid,isDrugValid,isRouteValid })
+
+
     if (!isDrugnameValid && !isDoseValid && !isDurationValid && isFrequencyValid == true && isDrugValid == true && isRouteValid == true) {
         return true;
     } else {
@@ -562,6 +567,9 @@ function frequencyDropDownUpdated(event: any) {
 
 async function saveData() {
     const are_fieldsValid = await areFieldsValid();
+    
+    console.log({are_fieldsValid})
+
     if (!are_fieldsValid) {
         toastWarning("Please enter correct data values", 4000);
         return;
@@ -628,8 +636,9 @@ async function FindDrugName2(text: any) {
 
     const page = 1,
         limit = 10;
+
     const drugs: ConceptName[] = await DrugService.getOPDDrugs({
-        name: search_value,
+        name: encodeURIComponent(search_value),
         page: page,
         page_size: limit,
     })
