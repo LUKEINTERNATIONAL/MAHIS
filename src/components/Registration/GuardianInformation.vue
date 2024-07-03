@@ -16,8 +16,6 @@ import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import HisDate from "@/utils/Date";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { validateField } from "@/services/validation_service";
-import { RelationshipService } from "@/services/relationship_service";
-import { RelationsService } from "@/services/relations_service";
 import Relationship from "@/views/Mixin/SetRelationship.vue";
 
 export default defineComponent({
@@ -40,13 +38,18 @@ export default defineComponent({
             },
             deep: true,
         },
+        relationships: {
+            handler() {
+                modifyFieldValue(this.guardianInformation, "relationship", "multiSelectData", this.relationships);
+            },
+            deep: true,
+        },
     },
     data() {
         return {
             cardData: {} as any,
             inputField: "" as any,
             setName: "" as any,
-            relationships: [] as any,
         };
     },
     computed: {
@@ -71,7 +74,6 @@ export default defineComponent({
         },
     },
     async mounted() {
-        modifyFieldValue(this.guardianInformation, "relationship", "multiSelectData", this.relationships);
         this.updateRegistrationStores();
         this.buildCards();
     },
