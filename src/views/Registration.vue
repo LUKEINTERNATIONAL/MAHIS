@@ -152,8 +152,10 @@ import { useBirthRegistrationStore } from "@/apps/Immunization/stores/BirthRegis
 import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from "@/services/formatServerData";
 import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
 import { AppEncounterService } from "@/services/app_encounter_service";
+import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
 
 export default defineComponent({
+    mixins: [ScreenSizeMixin],
     components: {
         IonBreadcrumb,
         IonBreadcrumbs,
@@ -187,7 +189,6 @@ export default defineComponent({
             checkUnderFive: false,
             checkUnderSixWeeks: false,
             steps: ["Personal Information", "Location", "Social History", "Guardian Information"],
-            screenWidth: "" as any,
             disableSaveBtn: false,
         };
     },
@@ -245,7 +246,6 @@ export default defineComponent({
     },
 
     async mounted() {
-        this.screenWidth = window.screen.width;
         this.setIconClass();
         this.disableNationalIDInput();
         this.checkAge();
