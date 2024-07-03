@@ -12,13 +12,16 @@
       </ion-label>
 
       <div class="content">
-        <StreamQrcodeBarcodeReader
-          ref="refCamera"
-          capture="shoot"
-          show-on-stream
-          @onloading="onLoading"
-          @result="onResult"
-        />
+        <div class="overlay">
+          <StreamQrcodeBarcodeReader
+            ref="refCamera"
+            capture="shoot"
+            show-on-stream
+            @onloading="onLoading"
+            @result="onResult"
+          />
+          <div class="focus-frame"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -94,4 +97,22 @@ function scanresult(data: any) {
     background: darkgrey !important;
     /* padding: 1px; */
   }
+
+  .overlay {
+  position: relative;
+}
+
+.focus-frame {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60%;
+  height: 60%;
+  border: 4px solid #434442;
+  box-sizing: border-box;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 2;
+}
+
 </style>
