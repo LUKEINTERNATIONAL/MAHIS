@@ -69,7 +69,6 @@ export default defineComponent({
         },
     },
     async mounted() {
-        this.updateRegistrationStores();
         this.buildCards();
     },
     methods: {
@@ -106,11 +105,6 @@ export default defineComponent({
         },
         openModal() {
             createModal(DispositionModal);
-        },
-        updateRegistrationStores() {
-            const registrationStore = useRegistrationStore();
-            // registrationStore.setHomeLocation(this.homeLocation);
-            // registrationStore.setCurrentLocation(this.currentLocation);
         },
         handleBtns(event: any) {
             if (event == "TA") createModal(AddTA, { class: "otherVitalsModal" });
