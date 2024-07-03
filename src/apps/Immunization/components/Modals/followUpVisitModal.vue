@@ -79,8 +79,11 @@ import { AppEncounterService } from "@/services/app_encounter_service";
 import { PersonService } from "@/services/person_service";
 import { PatientRegistrationService } from "@/services/patient_registration_service";
 import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
+import { RelationshipService } from "@/services/relationship_service";
+import Relationship from "@/views/Mixin/SetRelationship.vue";
 
 export default defineComponent({
+    mixins: [Relationship],
     components: {
         IonContent,
         IonHeader,
@@ -102,12 +105,19 @@ export default defineComponent({
             BMI: {} as any,
             BPStatus: {} as any,
             vValidations: "" as any,
-            relationships: "" as any,
             hasValidationErrors: [] as any,
             vitalsInstance: {} as any,
             validationStatus: { heightWeight: false, bloodPressure: false } as any,
             showPD: false as boolean,
         };
+    },
+    watch: {
+        relationships: {
+            handler() {
+                modifyFieldValue(this.changeGuardianInfo, "relationship", "multiSelectData", this.relationships);
+            },
+            deep: true,
+        },
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
@@ -130,21 +140,36 @@ export default defineComponent({
         },
     },
     async mounted() {
+        const guardianData = await RelationshipService.getRelationships(this.demographics.patient_id);
+        modifyFieldValue(this.changeGuardianInfo, "guardianNationalID", "value", this.setAttribute("Regiment ID", guardianData[0].relation));
+        modifyFieldValue(this.changeGuardianInfo, "guardianFirstname", "value", guardianData[0].relation.names[0].given_name);
+        modifyFieldValue(this.changeGuardianInfo, "guardianLastname", "value", guardianData[0].relation.names[0].family_name);
+        modifyFieldValue(this.changeGuardianInfo, "guardianMiddleName", "value", guardianData[0].relation.names[0].middle_name);
+        modifyFieldValue(this.changeGuardianInfo, "guardianPhoneNumber", "value", this.setAttribute("Cell Phone Number", guardianData[0].relation));
+        modifyFieldValue(this.changeGuardianInfo, "relationship", "value", {
+            id: guardianData[0].type.relationship_type_id,
+            name: guardianData[0].type.b_is_to_a,
+        });
+        console.log("mmmmm", guardianData);
         this.resetData();
-        await this.getRelations();
         await this.getVaccineAdverseEffects();
     },
     setup() {
         return { checkmark, pulseOutline };
     },
     methods: {
+        setAttribute(name: string | undefined, data: any) {
+            if (Object.keys(data).length === 0) return;
+            let str = data.person_attributes.find((x: any) => x.type.name == name);
+            if (str == undefined) return;
+            else return str.value;
+        },
         navigationMenu(url: any) {
             menuController.close();
             this.$router.push(url);
         },
         resetData() {
             const rest = useFollowUpStoreStore();
-            rest.setChangeGuardianInfo(rest.getInitialChangeGuardianInfo());
             rest.setProtectedAtBirth(rest.getInitialProtectedAtBirth());
             rest.setVaccineAdverseEffects(rest.getInitialVaccineAdverseEffects());
         },
@@ -162,23 +187,6 @@ export default defineComponent({
                 toastWarning("Guarding Information not save", 3000);
                 return false;
             }
-        },
-        async getRelations() {
-            modifyFieldValue(this.changeGuardianInfo, "relationship", "value", "");
-            this.relationships = await RelationsService.getRelations();
-            const data = this.relationships
-                .map((r: any) => {
-                    if (r.b_is_to_a == "Other") {
-                        return [{ name: r.b_is_to_a, id: r.relationship_type_id, trackByID: r.relationship_type_id + r.b_is_to_a }];
-                    } else {
-                        return [
-                            { name: r.b_is_to_a + " to " + r.a_is_to_b, id: r.relationship_type_id, trackByID: r.relationship_type_id + r.b_is_to_a },
-                        ];
-                    }
-                })
-                .reduce((acc: any, val: any) => acc.concat(val), []);
-
-            modifyFieldValue(this.changeGuardianInfo, "relationship", "multiSelectData", data);
         },
 
         async getVaccineAdverseEffects() {

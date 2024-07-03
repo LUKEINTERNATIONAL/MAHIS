@@ -16,11 +16,11 @@ import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import HisDate from "@/utils/Date";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { validateField } from "@/services/validation_service";
-import { RelationshipService } from "@/services/relationship_service";
-import { RelationsService } from "@/services/relations_service";
+import Relationship from "@/views/Mixin/SetRelationship.vue";
 
 export default defineComponent({
     name: "Menu",
+    mixins: [Relationship],
     components: {
         IonContent,
         IonHeader,
@@ -38,17 +38,25 @@ export default defineComponent({
             },
             deep: true,
         },
+        relationships: {
+            handler() {
+                modifyFieldValue(this.guardianInformation, "relationship", "multiSelectData", this.relationships);
+            },
+            deep: true,
+        },
     },
     data() {
         return {
             cardData: {} as any,
             inputField: "" as any,
             setName: "" as any,
-            relationships: [] as any,
         };
     },
     computed: {
-        ...mapState(useRegistrationStore, ["guardianInformation"]),
+        ...mapState(useRegistrationStore, ["guardianInformation", "personInformation"]),
+        gender() {
+            return getRadioSelectedValue(this.personInformation, "gender");
+        },
         guardianFirstname() {
             return getFieldValue(this.guardianInformation, "guardianFirstname", "value");
         },
@@ -66,20 +74,6 @@ export default defineComponent({
         },
     },
     async mounted() {
-        this.relationships = await RelationsService.getRelations();
-        const data = this.relationships
-            .map((r: any) => {
-                if (r.b_is_to_a == "Other") {
-                    return [{ name: r.b_is_to_a, id: r.relationship_type_id, trackByID: r.relationship_type_id + r.b_is_to_a }];
-                } else {
-                    return [
-                        { name: r.b_is_to_a + " to " + r.a_is_to_b, id: r.relationship_type_id, trackByID: r.relationship_type_id + r.b_is_to_a },
-                    ];
-                }
-            })
-            .reduce((acc: any, val: any) => acc.concat(val), []);
-
-        modifyFieldValue(this.guardianInformation, "relationship", "multiSelectData", data);
         this.updateRegistrationStores();
         this.buildCards();
     },

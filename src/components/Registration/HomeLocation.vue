@@ -18,8 +18,10 @@ import { modifyFieldValue, getFieldValue, getRadioSelectedValue, getCheckboxSele
 import { validateField } from "@/services/validation_service";
 import AddTA from "@/components/Registration/Modal/AddTA.vue";
 import AddVillage from "@/components/Registration/Modal/AddVillage.vue";
+import Districts from "@/views/Mixin/SetDistricts.vue";
 
 export default defineComponent({
+    mixins: [Districts],
     name: "Menu",
     components: {
         IonContent,
@@ -59,12 +61,15 @@ export default defineComponent({
             },
             deep: true,
         },
+        districtList: {
+            handler() {
+                modifyFieldValue(this.homeLocation, "home_district", "multiSelectData", this.districtList);
+            },
+            deep: true,
+        },
     },
     async mounted() {
-        this.updateRegistrationStores();
         this.buildCards();
-
-        this.buildDistricts();
     },
     methods: {
         setSameAsCurrent() {
@@ -100,19 +105,6 @@ export default defineComponent({
         },
         openModal() {
             createModal(DispositionModal);
-        },
-        updateRegistrationStores() {
-            const registrationStore = useRegistrationStore();
-            // registrationStore.setHomeLocation(this.homeLocation);
-            // registrationStore.setCurrentLocation(this.currentLocation);
-        },
-        async buildDistricts() {
-            this.districtList = [];
-            for (let i of [1, 2, 3]) {
-                const districts: any = await LocationService.getDistricts(i);
-                this.districtList.push(...districts);
-            }
-            modifyFieldValue(this.homeLocation, "home_district", "multiSelectData", this.districtList);
         },
         handleBtns(event: any) {
             if (event == "TA") createModal(AddTA, { class: "otherVitalsModal" });
