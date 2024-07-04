@@ -3,112 +3,27 @@
         <div class="OtherVitalsTitle">Vaccination History</div>
     </div>
 
-    <div class="mod-ls">
-        <!-- <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form> -->
+    <div class="mod-ls" v-for="(item, index) in vaccineHistory" :key="index">
         <row>
-            <ion-icon size="medium" style="margin-bottom: -6px;" :icon="icons.calendar"></ion-icon>
-            <span>at <span style="color: #016302;">Birth</span> <ion-icon class="dotStatus" slot="start" :icon="icons.grayDot"></ion-icon> 19 Apr 2024</span>
-            <span style="color: #316CBA; margin-left: 10%;">2/2 vaccines given</span>
+            <ion-icon size="medium" style="margin-bottom: -6px;" :icon="iconsContent.calendar"></ion-icon>
+            <span> at <span style="color: #016302;">{{ item.age }}</span></span>
+            <span style="color: #316CBA; margin-left: 10%;">{{ vaccinesGivenCount(item) }}/{{ item.antigens.length }} vaccine(s) given</span>
         </row>
 
         <row>
-            <ion-button v-if="true" class="medicalAlBtn-2">
-                <ion-icon slot="start" style="font-size: x-large" :icon="checkmarkOutline"></ion-icon>
-                {{ 'OPV 0' }}
-            </ion-button>
-
-            <ion-button v-if="true" class="medicalAlBtn-2">
-                <ion-icon slot="start" style="font-size: x-large" :icon="checkmarkOutline"></ion-icon>
-                {{ 'BCG' }}
-            </ion-button>
-        </row>
-    </div>
-
-    <div class="mod-ls">
-        <!-- <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form> -->
-        <row>
-            <ion-icon size="medium" style="margin-bottom: -6px;" :icon="icons.calendar"></ion-icon>
-            <span style="color: #b42318;">at <span style="color: #b42318;">Birth</span> <ion-icon class="dotStatus" slot="start" :icon="icons.grayDot"></ion-icon> 19 Apr 2024</span>
-            <span style="color: #b42318; margin-left: 10%;">4 vaccines missed!</span>
+            <customVaccine :vaccines="item.antigens" :milestone_status="item.milestone_status" />
         </row>
 
-        <row>
-            <ion-button v-if="true" class="medicalAlBtn">
-                <ion-icon slot="start" style="font-size: x-large" :icon="closeOutline"></ion-icon>
-                {{ 'OPV 1' }}
-            </ion-button>
-
-            <ion-button v-if="true" class="medicalAlBtn">
-                <ion-icon slot="start" style="font-size: x-large" :icon="closeOutline"></ion-icon>
-                {{ 'Penta 1' }}
-            </ion-button>
-
-            
-            <ion-button v-if="true" class="medicalAlBtn">
-                <ion-icon slot="start" style="font-size: x-large" :icon="closeOutline"></ion-icon>
-                {{ 'PCV 1' }}
-            </ion-button>
-        </row>
-
-        <row>
+        <!-- <row>
             <div>
                 <span style="color: #316CBA">
                     Show more
                 </span>
             </div>
-        </row>
+        </row> -->
     </div>
-
-    <div class="mod-ls">
-        <!-- <basic-form :contentData="vitals" @update:inputValue="validaterowData($event)"></basic-form> -->
-        <row>
-            <ion-icon size="medium" style="margin-bottom: -6px;" :icon="icons.calendar"></ion-icon>
-            <span>at <span style="color: #016302;">Birth</span> <ion-icon class="dotStatus" slot="start" :icon="icons.grayDot"></ion-icon> 19 Apr 2024</span>
-            <span style="color: #316CBA; margin-left: 10%;">2/2 vaccines given</span>
-        </row>
-
-        <row>
-            <ion-button v-if="true" class="medicalAlBtn-2">
-                <ion-icon slot="start" style="font-size: x-large" :icon="checkmarkOutline"></ion-icon>
-                {{ 'OPV 0' }}
-            </ion-button>
-
-            <ion-button v-if="true" class="medicalAlBtn-2">
-                <ion-icon slot="start" style="font-size: x-large" :icon="checkmarkOutline"></ion-icon>
-                {{ 'BCG' }}
-            </ion-button>
-
-            <ion-button v-if="true" class="medicalAlBtn-2">
-                <ion-icon slot="start" style="font-size: x-large" :icon="checkmarkOutline"></ion-icon>
-                {{ 'PCV 1' }}
-            </ion-button>
-
-            <ion-button v-if="true" class="medicalAlBtn">
-                <ion-icon slot="start" style="font-size: x-large" :icon="closeOutline"></ion-icon>
-                {{ 'Penta 1' }}
-            </ion-button>
-        </row>
-
-        <row>
-            <div>
-                <span style="color: #316CBA">
-                    Show less
-                </span>
-            </div>
-        </row>
-    </div>
-    
-
-
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-export default defineComponent({
-    watch: {},
-    name: "xxxComponent",
-});
-</script>
-<script setup lang="ts">
 import {
     IonContent,
     IonButton,
@@ -122,6 +37,7 @@ import {
     IonLabel,
     IonPage,
     IonFooter,
+    IonIcon
 } from "@ionic/vue"
 import { createOutline } from "ionicons/icons"
 import {
@@ -129,13 +45,48 @@ import {
     checkmarkOutline
 } from "ionicons/icons"
 import { ref, watch, computed, onMounted, onUpdated } from "vue"
+import { defineComponent } from "vue";
 import { icons } from "@/utils/svg"
+import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore"
+import customVaccine from "@/apps/Immunization/components/customVaccine.vue"
 
-
-const props = defineProps<{
-    is_open: any;
-    person_id: any;
-}>();
+export default defineComponent({
+    name: "Home",
+    components: {
+        IonIcon,
+        IonButton,
+        customVaccine,
+    },
+    data() {
+        return {
+            iconsContent: icons,
+            vaccineHistory: [] as any,
+        };
+    },
+    setup() {
+        return { closeOutline, checkmarkOutline }
+    },
+    async mounted() {
+        this.populateHistory()
+    },
+    methods: {
+        populateHistory() {
+            const vaccineScheduleStore = useAdministerVaccineStore();
+            const vaccinSchedules = vaccineScheduleStore.getVaccineSchedule().vaccine_schedule
+            console.log(vaccinSchedules)
+            this.vaccineHistory = vaccinSchedules
+        },
+        vaccinesGivenCount(vaccinSchedule: any) {
+            const administeredVaccines = []
+            vaccinSchedule.antigens.forEach((vaccine: any) => {
+                if (vaccine.status == 'administered') {
+                    administeredVaccines.push(vaccine)
+                }
+            })
+            return administeredVaccines.length
+        }
+    }
+})
 
 
 </script>
@@ -208,5 +159,8 @@ ion-button.medicalAlBtn-2 {
     --color: #016302;
     text-transform: none;
     font-size: large;
+}
+.otherVitalsModal {
+  --height: 530px;
 }
 </style>

@@ -308,6 +308,10 @@ const initialSocialHistory = [
                     value: "widow",
                 },
                 {
+                    name: "Widower",
+                    value: "widower",
+                },
+                {
                     name: "Divorced",
                     value: "divorced",
                 },
@@ -561,8 +565,6 @@ const initialCurrentLocation = [
             ],
         },
     },
-] as any;
-const initialClosestLandmark = [
     {
         data: {
             rowData: [
@@ -625,7 +627,8 @@ const initialClosestLandmark = [
             ],
         },
     },
-];
+] as any;
+
 const initialAddTA = [
     {
         data: {
@@ -801,11 +804,10 @@ const initialGuardianInformation = [
                             eventType: "input",
                             alertsErrorMassage: "",
                             selectedID: "",
-                            validationFunctionName: "isName",
-                            popOverData: {
-                                filterData: false,
-                                data: [],
-                            },
+                            validationFunctionName: "isNameWithSlush",
+                            isSingleSelect: true,
+                            trackBy: "trackByID",
+                            multiSelectData: [],
                         },
                     ],
                 },
@@ -813,13 +815,13 @@ const initialGuardianInformation = [
         },
     },
 ] as any;
+
 export const useRegistrationStore = defineStore("registrationStore", {
     state: () => ({
         personInformation: [...initialPersonalInformation],
         socialHistory: [...initialSocialHistory],
         homeLocation: [...initialHomeLocation],
-        currentLocation: [...initialCurrentLocation],
-        closestLandmark: [...initialClosestLandmark],
+        currentLocation: [...initialCurrentLocation ],
         guardianInformation: [...initialGuardianInformation],
         addTA: [...initialAddTA],
         addVillage: [...initialAddVillage],
@@ -840,6 +842,7 @@ export const useRegistrationStore = defineStore("registrationStore", {
         setGuardianInformation(data: any) {
             this.guardianInformation = data;
         },
+
         getInitialPersonalInformation() {
             const data = _.cloneDeep(initialPersonalInformation);
             return [...data];

@@ -91,7 +91,7 @@ export default defineComponent({
 </script>
 <style scoped>
     ion-thumbnail {
-        --size: 18px!important;
+        --size: 50px!important;
     }
     ion-item {
         padding: 0;
