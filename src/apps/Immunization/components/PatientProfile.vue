@@ -291,9 +291,8 @@ export default defineComponent({
     async mounted() {
         this.markWizard();
         this.loadCurrentMilestone();
-        this.protectedStatus = await ObservationService.getFirstValueText(this.demographics.patient_id, "Protected at birth");
-        await this.openFollowModal();
         this.checkAge();
+        await this.checkProtectedStatus();
     },
     watch: {
         vitals: {
@@ -325,13 +324,17 @@ export default defineComponent({
             },
         },
         $route: {
-            async handler() {
-                this.protectedStatus = await ObservationService.getFirstValueText(this.demographics.patient_id, "Protected at birth");
+            async handler(data) {
+                console.log("patientProfile", data.name);
+                if (data.name == "patientProfile") {
+                    await this.checkProtectedStatus();
+                }
             },
         },
         demographics: {
             async handler() {
-                this.protectedStatus = await ObservationService.getFirstValueText(this.demographics.patient_id, "Protected at birth");
+                await this.checkProtectedStatus();
+                await this.openFollowModal();
                 this.checkAge();
             },
         },
@@ -341,6 +344,9 @@ export default defineComponent({
     },
 
     methods: {
+        async checkProtectedStatus() {
+            this.protectedStatus = await ObservationService.getFirstValueText(this.demographics.patient_id, "Protected at birth");
+        },
         checkAge() {
             if (!isEmpty(this.demographics.birthdate)) {
                 this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.demographics.birthdate) < 42 ? true : false;
@@ -360,7 +366,8 @@ export default defineComponent({
         },
         async openFollowModal() {
             this.lastVaccine = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
-            if (this.lastVaccine.length > 0) createModal(followUpVisitModal, { class: "otherVitalsModal" });
+            const dataToPass = { protectedStatus: this.protectedStatus };
+            if (this.lastVaccine.length > 0) createModal(followUpVisitModal, { class: "otherVitalsModal" }, true, dataToPass);
         },
         openAdministerVaccineModal() {
             createModal(administerVaccineModal, { class: "otherVitalsModal" });
