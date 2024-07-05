@@ -32,7 +32,6 @@
                       @update:inputValue="updateFieldDemographics($event,'given_name')"
                              :icon="personCircleOutline"/>                    
                   </ion-col>
-
                 </ion-row>
                 <ion-row class="form-row">
                   <ion-col>
@@ -640,7 +639,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, onMounted  } from "vue";
-import { IonItem, IonList, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonIcon, IonToolbar, IonSearchbar, IonPopover, IonRow, IonCol, IonLabel, IonInput, IonDatetime, IonSelect, IonSelectOption, IonFooter } from "@ionic/vue";
+import { modalController,IonItem, IonList, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonIcon, IonToolbar, IonSearchbar, IonPopover, IonRow, IonCol, IonLabel, IonInput, IonDatetime, IonSelect, IonSelectOption, IonFooter } from "@ionic/vue";
 import { notificationsOutline, personCircleOutline, createOutline, clipboardOutline,calendarOutline } from "ionicons/icons";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import { useDemographicsStore } from "@/stores/DemographicStore";
@@ -878,7 +877,7 @@ export default defineComponent({
          if (this.editMode) {
                   this.closePopup();
           } else {
-                this.closeModal();
+            modalController.dismiss()
           }
        },
         closePopup() {
