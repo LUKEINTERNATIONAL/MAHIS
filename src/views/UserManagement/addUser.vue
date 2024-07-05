@@ -58,14 +58,15 @@
                 :hide-selected="true"
                 :close-on-select="true"
                 openDirection="bottom"
-                tag-placeholder="Find and select medication"
-                placeholder="Find and select medication"
+                tag-placeholder="Find and select facility name"
+                placeholder="Find and select facility name"
                 selectLabel=""
                 label="name"
                 :searchable="true"
                 @search-change="FindLocation($event)"
                 track-by="location_id"
                 :options="locationData"
+                @select="findVillages($event)"
             />
 
             <div>
@@ -73,6 +74,29 @@
                     {{ location_error_message }}
                 </ion-label>
             </div>
+        </ion-col>
+    </ion-row>
+
+    <ion-row>
+        <ion-col size="6">
+            <VueMultiselect
+                v-model="selected_villages"
+                @update:model-value=""
+                :multiple="true"
+                :taggable="false"
+                :hide-selected="true"
+                :close-on-select="true"
+                openDirection="bottom"
+                tag-placeholder="Find and select village(s)"
+                placeholder="Find and select village(s)"
+                selectLabel=""
+                label="name"
+                :searchable="true"
+                @search-change="FindLocation($event)"
+                track-by="assigned_id"
+                :options="villageList"
+                :disabled="disableVillageSelection"
+            />
         </ion-col>
     </ion-row>
 
@@ -224,6 +248,10 @@ const locationData = ref([]) as any
 const locationId = ref()
 const location_error_message = ref('Select location')
 const location_show_error = ref(false)
+const districtList = ref([] as any)
+const villageList = ref([] as any)
+const selected_villages = ref()
+const disableVillageSelection = ref(true)
 
 const props = defineProps<{
     action: any
@@ -232,6 +260,7 @@ const props = defineProps<{
 onMounted(async () => {
     await getUserRoles()
     await getUserPrograms()
+    districtList.value = await getdistrictList()
 })
 
 watch(
@@ -598,6 +627,38 @@ function passwordInputUpDated_fn2(event: any) {
     const input = event.target.value
     password_input_properties[1].dataValue.value = input
 }
+
+async function getdistrictList() {
+    const districtList = [];
+    for (let i of [1, 2, 3]) {
+        const districts: any = await LocationService.getDistricts(i);
+        districtList.push(...districts);
+    }
+
+    return districtList
+}
+
+async function fetchTraditionalAuthorities(district_name: any,name: string) {
+    const district = districtList.value.find((d:any) => d.name === district_name)
+    const selectedDistrictId = district ? district.district_id : ''             
+    var districtVillages = await LocationService.getTraditionalAuthorities(selectedDistrictId,"")
+    const arrayWithIds = districtVillages.map((item: any, index: any) => ({
+        ...item,
+        assigned_id: index
+    }));
+    console.log(arrayWithIds)
+    villageList.value = arrayWithIds
+    if (villageList.value.length > 0) {
+        disableVillageSelection.value = false
+    }         
+}
+
+function findVillages(event: any) {
+    disableVillageSelection.value = true;
+    selected_villages.value = []
+    fetchTraditionalAuthorities(event.district, '')
+}
+
 
 </script>
 <style scoped>
