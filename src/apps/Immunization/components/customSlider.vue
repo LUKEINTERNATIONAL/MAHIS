@@ -20,7 +20,7 @@
         <slide v-for="(slide, index) in vaccineSchudulesCount" :key="slide">
             <!-- {{ slide }} -->
             <div class="container">
-                <customVaccine :vaccines="vaccine_schArray[0][index].antigens" :milestone_status="vaccine_schArray[0][index].milestone_status" />
+                <customVaccine :vaccines="vaccine_schArray[0][index].antigens" :milestone_status="vaccine_schArray[0][index].milestone_status" :key="componentKey"  />
             </div>
         </slide>
         <template #addons>
@@ -29,17 +29,13 @@
         </template>
     </carousel>
 
-    <carousel>
-        <slide v-for="slide in 12" :key="slide">
-            <ion-row class="bottom-row">
-                <div class="otherVaccine center-content">
-                    <div class="centerBtns">
-                        <ion-button @click="openAdministerOtherVaccineModal" class="btnText" fill="solid"> Add Other Vaccines </ion-button>
-                    </div>
-                </div>
-            </ion-row>
-        </slide>
-    </carousel>
+    <ion-row class="bottom-row">
+        <div class="otherVaccine center-content">
+            <div class="centerBtns">
+                <ion-button @click="openAdministerOtherVaccineModal" class="btnText" fill="solid"> Add Other Vaccines </ion-button>
+            </div>
+        </div>
+    </ion-row>
 </template>
 
 <script lang="ts">
@@ -79,6 +75,7 @@ export default defineComponent({
             landingSlide: 0,
             msg: "Vaccines due today",
             current_milestone: "" as string,
+            componentKey: 0,
         };
     },
     computed: {
@@ -94,6 +91,11 @@ export default defineComponent({
             },
             deep: true,
         },
+        vaccine_schArray: {
+            handler() {
+                this.reloadVaccines()
+            }
+        },
     },
     methods: {
         openAdministerOtherVaccineModal() {
@@ -108,7 +110,9 @@ export default defineComponent({
             let found = false;
             this.vaccineSchudulesCount = vaccineScheduleStore.getVaccineSchedule()?.vaccine_schedule?.length;
             vaccineScheduleStore.resetMissedVaccineSchedules();
+            this.vaccine_schArray = []
             this.vaccine_schArray.push(vaccineScheduleStore.getVaccineSchedule().vaccine_schedule);
+           
             vaccineScheduleStore.getVaccineSchedule().vaccine_schedule.forEach((vaccineSchudule: any) => {
                 this.findMissingVaccines(vaccineSchudule);
                 if (vaccineSchudule.milestone_status == "current") {
@@ -213,6 +217,9 @@ export default defineComponent({
                 vaccineScheduleStore.setMissedVaccineSchedules(obj);
             }
         },
+        reloadVaccines() {
+            this.componentKey += 1;
+        }
     },
 });
 </script>
