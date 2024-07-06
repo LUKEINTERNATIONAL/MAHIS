@@ -27,7 +27,7 @@
                     <basic-form :contentData="vaccineAdverseEffects" @update:inputValue="handleInputData"></basic-form>
                 </div>
             </ion-accordion>
-            <ion-accordion value="third" toggle-icon-slot="start" class="custom_card">
+            <ion-accordion value="third" toggle-icon-slot="start" class="custom_card" v-if="protectedStatus != 'Yes'">
                 <ion-item slot="header" color="light">
                     <ion-label class="previousLabel">Child protected at birth</ion-label>
                 </ion-item>
@@ -110,6 +110,9 @@ export default defineComponent({
             validationStatus: { heightWeight: false, bloodPressure: false } as any,
             showPD: false as boolean,
         };
+    },
+    props: {
+        protectedStatus: String,
     },
     watch: {
         relationships: {

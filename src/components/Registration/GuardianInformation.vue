@@ -39,8 +39,14 @@ export default defineComponent({
             deep: true,
         },
         relationships: {
-            handler() {
-                modifyFieldValue(this.guardianInformation, "relationship", "multiSelectData", this.relationships);
+            async handler() {
+                // await this.setRelationShip();
+            },
+            deep: true,
+        },
+        personInformation: {
+            async handler() {
+                await this.setRelationShip();
             },
             deep: true,
         },
@@ -74,10 +80,19 @@ export default defineComponent({
         },
     },
     async mounted() {
-        this.updateRegistrationStores();
+        await this.setRelationShip();
         this.buildCards();
     },
     methods: {
+        async setRelationShip() {
+            if (this.gender) {
+                await this.getRelationships();
+                modifyFieldValue(this.guardianInformation, "relationship", "displayNone", false);
+                modifyFieldValue(this.guardianInformation, "relationship", "multiSelectData", this.relationships);
+            } else {
+                modifyFieldValue(this.guardianInformation, "relationship", "displayNone", true);
+            }
+        },
         buildCards() {
             this.cardData = {
                 mainTitle: "Demographics",
@@ -91,10 +106,6 @@ export default defineComponent({
         },
         openModal() {
             createModal(DispositionModal);
-        },
-        updateRegistrationStores() {
-            const registrationStore = useRegistrationStore();
-            registrationStore.setGuardianInformation(this.guardianInformation);
         },
         buildGuardianInformation() {
             this.guardianInformation[0].selectedData = {
