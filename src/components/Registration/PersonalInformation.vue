@@ -78,7 +78,6 @@ export default defineComponent({
         },
     },
     async mounted() {
-        this.updateRegistrationStores();
         this.buildCards();
     },
 
@@ -98,10 +97,6 @@ export default defineComponent({
         },
         openModal() {
             createModal(DispositionModal);
-        },
-        async updateRegistrationStores() {
-            const registrationStore = useRegistrationStore();
-            registrationStore.setPersonalInformation(this.personInformation);
         },
 
         validationRules(event: any) {
