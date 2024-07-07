@@ -4,6 +4,8 @@ import { useRegistrationStore } from "@/stores/RegistrationStore";
 import { mapState } from "pinia";
 import { RelationsService } from "@/services/relations_service";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
+import { useDemographicsStore } from "@/stores/DemographicStore";
+
 export default defineComponent({
     data: () => ({
         relationships: [] as any,
@@ -13,8 +15,9 @@ export default defineComponent({
     }),
     computed: {
         ...mapState(useRegistrationStore, ["guardianInformation", "personInformation"]),
+        ...mapState(useDemographicsStore, ["demographics"]),
         gender() {
-            return getRadioSelectedValue(this.personInformation, "gender");
+            return getRadioSelectedValue(this.personInformation, "gender") || this.demographics.gender;
         },
     },
     watch: {
