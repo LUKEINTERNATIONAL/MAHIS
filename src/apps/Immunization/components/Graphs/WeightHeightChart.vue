@@ -78,6 +78,7 @@ export default defineComponent({
     watch: {
         demographics: {
             async handler() {
+                await this.displayWeightGraph();
                 await this.buildGraph();
             },
             deep: true,
