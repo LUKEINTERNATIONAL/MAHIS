@@ -154,6 +154,7 @@ export default defineComponent({
     },
     methods: {
         async getPrograms() {
+            ProgramData.sort((a, b) => a.name.localeCompare(b.name));
             this.multiSelectData = ProgramData;
         },
         doLogin: async function () {

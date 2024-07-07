@@ -12,13 +12,20 @@
       </ion-label>
 
       <div class="content">
-        <StreamQrcodeBarcodeReader
-          ref="refCamera"
-          capture="shoot"
-          show-on-stream
-          @onloading="onLoading"
-          @result="onResult"
-        />
+        <div class="overlay">
+          <StreamQrcodeBarcodeReader
+            ref="refCamera"
+            capture="shoot"
+            show-on-stream
+            @onloading="onLoading"
+            @result="onResult"
+          />
+          <div class="focus-frame"></div>
+          <div class="dark-overlay top"></div>
+          <div class="dark-overlay bottom"></div>
+          <div class="dark-overlay left"></div>
+          <div class="dark-overlay right"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -92,6 +99,56 @@ function scanresult(data: any) {
   .scanner__container .content {
     min-height: inherit !important;
     background: darkgrey !important;
-    /* padding: 1px; */
+  }
+
+  .overlay {
+    position: relative;
+  }
+
+  .focus-frame {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 60%;
+    height: 60%;
+    box-sizing: border-box;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .dark-overlay {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .dark-overlay.top {
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 20%;
+  }
+
+  .dark-overlay.bottom {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 20%;
+  }
+
+  .dark-overlay.left {
+    top: 20%;
+    bottom: 20%;
+    left: 0;
+    width: 20%;
+  }
+
+  .dark-overlay.right {
+    top: 20%;
+    bottom: 20%;
+    right: 0;
+    width: 20%;
   }
 </style>

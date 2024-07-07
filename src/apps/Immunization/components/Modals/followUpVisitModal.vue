@@ -144,14 +144,15 @@ export default defineComponent({
     },
     async mounted() {
         const guardianData = await RelationshipService.getRelationships(this.demographics.patient_id);
-        modifyFieldValue(this.changeGuardianInfo, "guardianNationalID", "value", this.setAttribute("Regiment ID", guardianData[0].relation));
-        modifyFieldValue(this.changeGuardianInfo, "guardianFirstname", "value", guardianData[0].relation.names[0].given_name);
-        modifyFieldValue(this.changeGuardianInfo, "guardianLastname", "value", guardianData[0].relation.names[0].family_name);
-        modifyFieldValue(this.changeGuardianInfo, "guardianMiddleName", "value", guardianData[0].relation.names[0].middle_name);
-        modifyFieldValue(this.changeGuardianInfo, "guardianPhoneNumber", "value", this.setAttribute("Cell Phone Number", guardianData[0].relation));
+
+        modifyFieldValue(this.changeGuardianInfo, "guardianNationalID", "value", this.setAttribute("Regiment ID", guardianData[0]?.relation));
+        modifyFieldValue(this.changeGuardianInfo, "guardianFirstname", "value", guardianData[0]?.relation.names[0]?.given_name);
+        modifyFieldValue(this.changeGuardianInfo, "guardianLastname", "value", guardianData[0]?.relation.names[0]?.family_name);
+        modifyFieldValue(this.changeGuardianInfo, "guardianMiddleName", "value", guardianData[0]?.relation.names[0]?.middle_name);
+        modifyFieldValue(this.changeGuardianInfo, "guardianPhoneNumber", "value", this.setAttribute("Cell Phone Number", guardianData[0]?.relation));
         modifyFieldValue(this.changeGuardianInfo, "relationship", "value", {
-            id: guardianData[0].type.relationship_type_id,
-            name: guardianData[0].type.b_is_to_a,
+            id: guardianData[0]?.type.relationship_type_id,
+            name: guardianData[0]?.type.b_is_to_a,
         });
         console.log("mmmmm", guardianData);
         this.resetData();
@@ -162,7 +163,7 @@ export default defineComponent({
     },
     methods: {
         setAttribute(name: string | undefined, data: any) {
-            if (Object.keys(data).length === 0) return;
+            if (!data || Object.keys(data).length === 0) return;
             let str = data.person_attributes.find((x: any) => x.type.name == name);
             if (str == undefined) return;
             else return str.value;

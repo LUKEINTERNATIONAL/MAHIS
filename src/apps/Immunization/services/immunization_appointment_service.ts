@@ -45,7 +45,11 @@ export class Appointment extends AppEncounterService {
         const a_obs = await this.buildValueDate("Appointment date", _appointment_[0]) as any
         const appointment_onbs = await this.saveObservationList([a_obs])
         if (!appointment_onbs) return toastWarning("Unable set Next Appointment")
-        await SmsService.appointment(this.patientID,_appointment_[0])
+        try {
+            await SmsService.appointment(this.patientID,_appointment_[0])
+        } catch (error) {
+            
+        } 
         toastSuccess("next Appointment Set Successfully")
     }
 

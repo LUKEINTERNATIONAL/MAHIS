@@ -599,7 +599,10 @@ export default defineComponent({
             this.current_milestone = store.getCurrentMilestone();
         },
         showMissedVaccines() {
-            createModal(missedVaccinesModal, { class: "otherVitalsModal" });
+            if (this.missedVaccineSchedules.length > 0) {
+                createModal(missedVaccinesModal, { class: "otherVitalsModal" });
+            }
+            
         },
     },
 });
