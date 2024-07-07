@@ -115,9 +115,9 @@ export default defineComponent({
         protectedStatus: String,
     },
     watch: {
-        relationships: {
-            handler() {
-                modifyFieldValue(this.changeGuardianInfo, "relationship", "multiSelectData", this.relationships);
+        personInformation: {
+            async handler() {
+                await this.setRelationShip();
             },
             deep: true,
         },
@@ -154,7 +154,7 @@ export default defineComponent({
             id: guardianData[0]?.type.relationship_type_id,
             name: guardianData[0]?.type.b_is_to_a,
         });
-        console.log("mmmmm", guardianData);
+        await this.setRelationShip();
         this.resetData();
         await this.getVaccineAdverseEffects();
     },
@@ -162,6 +162,15 @@ export default defineComponent({
         return { checkmark, pulseOutline };
     },
     methods: {
+        async setRelationShip() {
+            if (this.gender) {
+                await this.getRelationships();
+                modifyFieldValue(this.changeGuardianInfo, "relationship", "displayNone", false);
+                modifyFieldValue(this.changeGuardianInfo, "relationship", "multiSelectData", this.relationships);
+            } else {
+                modifyFieldValue(this.changeGuardianInfo, "relationship", "displayNone", true);
+            }
+        },
         setAttribute(name: string | undefined, data: any) {
             if (!data || Object.keys(data).length === 0) return;
             let str = data.person_attributes.find((x: any) => x.type.name == name);
