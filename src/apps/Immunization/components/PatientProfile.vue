@@ -765,6 +765,8 @@ export default defineComponent({
     justify-content: space-between;
     border: solid 1px #ccc;
     border-style: dashed;
+    border-left: none;
+    border-right: none;
     margin-top: 10px;
     padding: 5px;
     width: 100%;
