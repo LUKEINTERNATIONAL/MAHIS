@@ -542,7 +542,7 @@ ion-radio {
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    overflow: scroll;
+    overflow: auto;
     padding: 5px;
     border-radius: 3px;
 }
@@ -568,7 +568,7 @@ ion-radio {
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    overflow: scroll;
+    overflow: auto;
     padding: 5px;
     border-radius: 3px;
 }
