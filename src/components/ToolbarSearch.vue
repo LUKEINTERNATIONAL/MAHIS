@@ -1,8 +1,8 @@
 <template>
-  <RoleSelectionModal :isOpen="isRoleSelectionModalOpen" @update:isOpen="isRoleSelectionModalOpen = $event" />
-  <ion-searchbar @ionInput="handleInput" placeholder="Search client by MRN, name or scan barcode/QR-Code" class="searchField"></ion-searchbar>
+    <RoleSelectionModal :isOpen="isRoleSelectionModalOpen" @update:isOpen="isRoleSelectionModalOpen = $event" />
+    <ion-searchbar @ionInput="handleInput" placeholder="Search client by MRN, name or scan barcode/QR-Code" class="searchField"></ion-searchbar>
 
-  <ion-popover
+    <ion-popover
         :is-open="popoverOpen"
         :event="event"
         @didDismiss="popoverOpen = false"
@@ -10,8 +10,6 @@
         :show-backdrop="false"
         :dismiss-on-select="false"
     >
-
-
         <div style="width: 1300px" class="sticky-table">
             <ion-row class="search_header">
                 <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">Fullname</ion-col>
@@ -126,7 +124,7 @@ export default defineComponent({
         IonRow,
         IonCol,
         Pagination,
-        RoleSelectionModal
+        RoleSelectionModal,
     },
     setup() {
         return { checkmark, add };
@@ -137,10 +135,10 @@ export default defineComponent({
             event: null,
             patients: [] as any,
             showPopover: true,
-            page:1,
-            searchText:"",
-            paginationSize:7,
-           isRoleSelectionModalOpen: false
+            page: 1,
+            searchText: "",
+            paginationSize: 7,
+            isRoleSelectionModalOpen: false,
         };
     },
     computed: {
@@ -240,22 +238,31 @@ export default defineComponent({
                 .join(", ");
         },
         async openNewPage(url: any, item: any) {
+            console.log(item.person.names);
             this.popoverOpen = false;
+            let fullName = "";
+            if (item.person.names[0].middle_name && item.person.names[0].middle_name != "N/A") {
+                fullName = item.person.names[0].given_name + " " + item.person.names[0].middle_name + " " + item.person.names[0].family_name;
+            } else {
+                fullName = item.person.names[0].given_name + " " + item.person.names[0].family_name;
+            }
+            const addressComponents = [
+                item?.person?.addresses[0]?.state_province,
+                item?.person?.addresses[0]?.township_division,
+                item?.person?.addresses[0]?.city_village,
+            ];
+
+            const address = addressComponents.filter(Boolean).join(",");
             const demographicsStore = useDemographicsStore();
             demographicsStore.setPatient(item);
             demographicsStore.setDemographics({
-                name: item.person.names[0].given_name + " " + item.person.names[0].family_name,
+                name: fullName,
                 mrn: this.patientIdentifier(item),
                 birthdate: item.person.birthdate,
                 category: "",
                 gender: item.person.gender,
                 patient_id: item.patient_id,
-                address:
-                    item?.person?.addresses[0]?.state_province +
-                    "," +
-                    item?.person?.addresses[0]?.township_division +
-                    "," +
-                    item?.person?.addresses[0]?.city_village,
+                address: address,
                 phone: this.getPhone(item),
             });
             if (Service.getProgramID() == 32 || Service.getProgramID() == 33) {
@@ -273,9 +280,9 @@ export default defineComponent({
             const roles: any = JSON.parse(roleData);
             UserService.setProgramUserActions();
 
-          if (roles.some((role: any) => role.role === "Lab" && roles.some((role: any) => role.role === "Pharmacist"))) {
-            this.isRoleSelectionModalOpen = true;
-          } else if (roles.some((role: any) => role.role === "Pharmacist")) {
+            if (roles.some((role: any) => role.role === "Lab" && roles.some((role: any) => role.role === "Pharmacist"))) {
+                this.isRoleSelectionModalOpen = true;
+            } else if (roles.some((role: any) => role.role === "Pharmacist")) {
                 this.$router.push("dispensation");
             } else if (roles.some((role: any) => role.role === "Lab")) {
                 this.$router.push("OPDConsultationPlan");
