@@ -334,6 +334,7 @@ export default defineComponent({
                 await this.checkProtectedStatus();
                 await this.openFollowModal();
                 this.checkAge();
+                this.setMilestoneReload()
             },
         },
     },
@@ -601,6 +602,10 @@ export default defineComponent({
                 createModal(missedVaccinesModal, { class: "otherVitalsModal" });
             }
         },
+        setMilestoneReload() {
+            const store = useAdministerVaccineStore();
+            store.setVaccineReload(!store.getVaccineReload());
+        }
     },
 });
 </script>
