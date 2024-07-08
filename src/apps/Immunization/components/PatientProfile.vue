@@ -77,11 +77,10 @@
             <div class="graphBtn">
                 <div class="dueAlert">
                     <ion-row>
-                        <div class="box-line"></div>
                         <ion-col v-if="overDueVaccinesCount > 0" style="display: flex; justify-content: center">
                             <div class="missed_vaccine_alert">
-                                <ion-icon slot="start" size="small" :icon="iconsContent.alertDangerRed" />
-                                <span style="margin: 10px">{{ overDueVaccinesCount }} vaccine(s) overdue</span>
+                                <ion-icon slot="start" :icon="iconsContent.alertDangerRed" />
+                                <span style="margin-right: 5px">{{ overDueVaccinesCount }} vaccine(s) overdue</span>
                             </div>
                         </ion-col>
                         <ion-col style="display: flex; justify-content: center; cursor: pointer" @click="showMissedVaccines">
@@ -89,7 +88,6 @@
                                 <span>click to see missed vaccines</span>
                             </div>
                         </ion-col>
-                        <div class="box-line"></div>
                     </ion-row>
 
                     <!-- <ion-row v-for="(item, index) in missedVaccineSchedules" :key="index">
@@ -104,7 +102,7 @@
                 </div>
             </div>
             <div class="vaccinesTitle">
-                <div style="width: 370px; display: flex; justify-content: space-between; align-content: center">
+                <div style="width: 100%; display: flex; justify-content: space-between; align-content: center">
                     <div class="vaccinesTitleText">Administer Vaccines</div>
                     <div class="vaccinesTitleDate">
                         Todays Date: <b>{{ todays_date }}</b>
@@ -602,7 +600,6 @@ export default defineComponent({
             if (this.missedVaccineSchedules.length > 0) {
                 createModal(missedVaccinesModal, { class: "otherVitalsModal" });
             }
-            
         },
     },
 });
@@ -761,15 +758,16 @@ export default defineComponent({
     margin-top: 7px;
 }
 .graphBtn {
-    display: contents;
+    display: flex;
     justify-content: center;
 }
 .dueAlert {
     justify-content: space-between;
-    /* border: solid 1px #ccc;
-    border-style: dashed; */
+    border: solid 1px #ccc;
+    border-style: dashed;
     margin-top: 10px;
     padding: 5px;
+    width: 100%;
 }
 .dueAlertText {
     font-style: normal;
@@ -919,9 +917,11 @@ export default defineComponent({
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 0px 10px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    color: #b42318;
 
-    width: 240px;
+    width: content;
     height: 25px;
 
     /* red/300 */
@@ -939,7 +939,6 @@ export default defineComponent({
 .missed_vaccine_alert_txt {
     /* click to see missed vaccines */
 
-    width: 190px;
     height: 17px;
 
     /* btn */
