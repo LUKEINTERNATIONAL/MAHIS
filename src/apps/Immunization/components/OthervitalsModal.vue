@@ -47,7 +47,7 @@ import { VitalsEncounter } from "@/apps/Immunization/services/vitals";
 import BasicForm from "@/components/BasicForm.vue";
 import { Service } from "@/services/service";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
-import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
+import PreviousVitals from "@/components/Graphs/previousVitals.vue";
 import { ObservationService } from "@/services/observation_service";
 import { PatientService } from "@/services/patient_service";
 import {

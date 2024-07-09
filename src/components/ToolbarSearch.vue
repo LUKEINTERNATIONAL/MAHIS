@@ -50,13 +50,15 @@
             </ion-row>
 
             <ion-row class="sticky-column">
-                <ion-col size="4" class="sticky-column">
+                <ion-col size="1.5" class="sticky-column">
                     <DynButton
                         :icon="add"
                         :name="programID() != 33 ? 'Add Patient' : 'Add Client'"
                         :fill="'clear'"
                         @click="openCheckPaitentNationalIDModal"
                     />
+                </ion-col>
+                <ion-col size="2" class="sticky-column">
                     <div>
                         <img id="hand" src="../../public/images/hand.svg" />
                         <img id="handinfo" src="../../public/images/swipeinfo.png" />
@@ -412,7 +414,6 @@ ion-popover {
 #hand {
     position: absolute;
     top: 36%;
-    padding-left: 30%;
     animation-name: swipe;
     animation-timing-function: ease-in-out;
     animation-iteration-count: 3;
@@ -420,14 +421,13 @@ ion-popover {
 }
 #handinfo {
     position: absolute;
-    width: 70%;
-    left: 30%;
     top: 48%;
-    padding-left: 35%;
+    padding-left: 10%;
     animation-name: swipe;
     animation-timing-function: ease-in-out;
     animation-iteration-count: 3;
     animation-duration: 3s;
+    height: 15px;
 }
 .clickable-row {
     cursor: pointer;

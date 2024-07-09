@@ -164,31 +164,36 @@
                             </div>
                         </ion-card>
                         <div>
-                            <ion-segment value="custom">
-                                <ion-segment-button value="custom">
+                            <ion-segment :value="segmentContent">
+                                <ion-segment-button value="Patient Summary" @click="setSegmentContent('Patient Summary')">
                                     <ion-label>Patient Summary</ion-label>
                                 </ion-segment-button>
-                                <ion-segment-button value="Visits History">
+                                <ion-segment-button value="Visits History" @click="setSegmentContent('Visits History')">
                                     <ion-label>Visits History</ion-label>
                                 </ion-segment-button>
-                                <ion-segment-button value="Vitals & Measurements Summary">
+                                <ion-segment-button value="Vitals & Measurements Summary" @click="setSegmentContent('Vitals & Measurements Summary')">
                                     <ion-label>Vitals & Measurements Summary</ion-label>
                                 </ion-segment-button>
-                                <ion-segment-button value="Lab Tests History">
+                                <ion-segment-button value="Lab Tests History" @click="setSegmentContent('Lab Tests History')">
                                     <ion-label>Lab Tests History</ion-label>
                                 </ion-segment-button>
-                                <ion-segment-button value="Diagnoses History">
+                                <ion-segment-button value="Diagnoses History" @click="setSegmentContent('Diagnoses History')">
                                     <ion-label>Diagnoses History</ion-label>
                                 </ion-segment-button>
-                                <ion-segment-button value="Allergies & Contraindication">
+                                <ion-segment-button value="Allergies & Contraindication" @click="setSegmentContent('Allergies & Contraindication')">
                                     <ion-label>Allergies & Contraindication</ion-label>
                                 </ion-segment-button>
                             </ion-segment>
                         </div>
-                        <div>
+                        <div v-if="segmentContent == 'Patient Summary'">
                             <div style="display: flex; margin-top: 10px">
-                                <div style="width: 50vw; background-color: #fff; border-radius: 5px; margin-right: 5px"><WeightHeightChart /></div>
-                                <div style="width: 50vw; background-color: #fff; border-radius: 5px"><PreviousVitals /></div>
+                                <div style="width: 50vw; background-color: #fff; border-radius: 5px; margin-right: 5px" v-if="checkUnderFive">
+                                    <WeightHeightChart />
+                                </div>
+                                <div style="width: 50vw; background-color: #fff; border-radius: 5px; margin-right: 5px">
+                                    <BloodPressure />
+                                </div>
+                                <div style="width: 50vw; background-color: #fff; border-radius: 5px" v-if="!checkUnderFive"><PreviousVitals /></div>
                             </div>
                             <div class="bottomSummary">
                                 <ion-segment value="custom">
@@ -210,6 +215,11 @@
                                 <MedicationsGrid />
                             </div>
                         </div>
+                        <div v-if="segmentContent == 'Visits History'"></div>
+                        <div v-if="segmentContent == 'Vitals & Measurements Summary'"></div>
+                        <div v-if="segmentContent == 'Lab Tests History'"></div>
+                        <div v-if="segmentContent == 'Diagnoses History'"></div>
+                        <div v-if="segmentContent == 'Allergies & Contraindication'"></div>
                     </ion-col>
                 </ion-row>
             </div>
@@ -228,6 +238,8 @@
 
 <script lang="ts">
 import {
+    IonSegment,
+    IonSegmentButton,
     IonContent,
     IonHeader,
     IonMenuButton,
@@ -305,7 +317,8 @@ import { ref } from "vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import PatientProfile from "@/apps/Immunization/components/PatientProfile.vue";
 import WeightHeightChart from "@/apps/Immunization/components/Graphs/WeightHeightChart.vue";
-import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
+import PreviousVitals from "@/components/Graphs/previousVitals.vue";
+import BloodPressure from "@/components/Graphs/BloodPressure.vue";
 import personalInformationModal from "@/apps/Immunization/components/Modals/personalInformationModal.vue";
 import { iconBMI } from "@/utils/SvgDynamicColor";
 import { createModal } from "@/utils/Alerts";
@@ -346,9 +359,19 @@ export default defineComponent({
         IonFabButton,
         IonFabList,
         PatientProfile,
+        IonSegmentButton,
+        IonSegment,
+        BloodPressure,
     },
     data() {
         return {
+            checkUnderOne: false,
+            isLoading: false,
+            checkUnderFourteen: true,
+            checkUnderNine: false,
+            checkUnderFive: false,
+            checkUnderSixWeeks: false,
+            segmentContent: "Patient Summary",
             iconsContent: icons,
             isModalOpen: false,
             url: "" as any,
@@ -376,6 +399,7 @@ export default defineComponent({
         ...mapState(useVitalsStore, ["vitals"]),
     },
     async mounted() {
+        this.checkAge();
         const patient = new PatientService();
         this.visits = await PatientService.getPatientVisits(patient.getID(), false);
         await UserService.setProgramUserActions();
@@ -419,6 +443,17 @@ export default defineComponent({
     },
 
     methods: {
+        checkAge() {
+            if (this.demographics?.birthdate) {
+                this.checkUnderFourteen = HisDate.getAgeInYears(this.demographics?.birthdate) >= 14 ? true : false;
+                this.checkUnderNine = HisDate.ageInMonths(this.demographics?.birthdate) < 9 ? true : false;
+                this.checkUnderFive = HisDate.getAgeInYears(this.demographics?.birthdate) < 5 ? true : false;
+                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.demographics?.birthdate) < 42 ? true : false;
+            }
+        },
+        setSegmentContent(name: any) {
+            this.segmentContent = name;
+        },
         setAlerts() {
             this.alerts = [
                 {
