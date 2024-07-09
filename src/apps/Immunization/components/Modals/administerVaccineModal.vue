@@ -92,11 +92,11 @@ import { Service } from "@/services/service";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import HisDate from "@/utils/Date";
 import BasicInputField from "@/components/BasicInputField.vue";
-import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
+import PreviousVitals from "@/components/Graphs/previousVitals.vue";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { saveVaccineAdministeredDrugs, getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service";
 import { isEmpty } from "lodash";
-import QRCodeReadersrc from "@/components/QRCodeReader.vue"
+import QRCodeReadersrc from "@/components/QRCodeReader.vue";
 import { createModal } from "@/utils/Alerts";
 import {
     modifyCheckboxInputField,
@@ -212,7 +212,7 @@ export default defineComponent({
         },
         updateBatchNumber(event: any) {
             const input = event.target.value;
-            this.batchNumber = input || this.tempScannedBatchNumber?.text || '';
+            this.batchNumber = input || this.tempScannedBatchNumber?.text || "";
         },
         saveDta(date_: any) {
             this.validateBatchNumber();

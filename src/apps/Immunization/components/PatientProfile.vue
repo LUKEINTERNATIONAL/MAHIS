@@ -210,7 +210,7 @@ import personalInformationModal from "@/apps/Immunization/components/Modals/pers
 import weightAndHeight from "@/apps/Immunization/components/Modals/weightAndHeight.vue";
 import administerVaccineModal from "@/apps/Immunization/components/Modals/administerVaccineModal.vue";
 import administerOtherVaccineModal from "@/apps/Immunization/components/Modals/administerOtherVaccineModal.vue";
-import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
+import PreviousVitals from "@/components/Graphs/previousVitals.vue";
 import { PatientService } from "@/services/patient_service";
 import customSlider from "@/apps/Immunization/components/customSlider.vue";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
