@@ -164,28 +164,28 @@
                             </div>
                         </ion-card>
                         <div>
-                            <ion-segment value="custom">
-                                <ion-segment-button value="custom">
+                            <ion-segment :value="segmentContent">
+                                <ion-segment-button value="Patient Summary" @click="setSegmentContent('Patient Summary')">
                                     <ion-label>Patient Summary</ion-label>
                                 </ion-segment-button>
-                                <ion-segment-button value="Visits History">
+                                <ion-segment-button value="Visits History" @click="setSegmentContent('Visits History')">
                                     <ion-label>Visits History</ion-label>
                                 </ion-segment-button>
-                                <ion-segment-button value="Vitals & Measurements Summary">
+                                <ion-segment-button value="Vitals & Measurements Summary" @click="setSegmentContent('Vitals & Measurements Summary')">
                                     <ion-label>Vitals & Measurements Summary</ion-label>
                                 </ion-segment-button>
-                                <ion-segment-button value="Lab Tests History">
+                                <ion-segment-button value="Lab Tests History" @click="setSegmentContent('Lab Tests History')">
                                     <ion-label>Lab Tests History</ion-label>
                                 </ion-segment-button>
-                                <ion-segment-button value="Diagnoses History">
+                                <ion-segment-button value="Diagnoses History" @click="setSegmentContent('Diagnoses History')">
                                     <ion-label>Diagnoses History</ion-label>
                                 </ion-segment-button>
-                                <ion-segment-button value="Allergies & Contraindication">
+                                <ion-segment-button value="Allergies & Contraindication" @click="setSegmentContent('Allergies & Contraindication')">
                                     <ion-label>Allergies & Contraindication</ion-label>
                                 </ion-segment-button>
                             </ion-segment>
                         </div>
-                        <div>
+                        <div v-if="segmentContent == 'Patient Summary'">
                             <div style="display: flex; margin-top: 10px">
                                 <div style="width: 50vw; background-color: #fff; border-radius: 5px; margin-right: 5px"><WeightHeightChart /></div>
                                 <div style="width: 50vw; background-color: #fff; border-radius: 5px"><PreviousVitals /></div>
@@ -210,6 +210,11 @@
                                 <MedicationsGrid />
                             </div>
                         </div>
+                        <div v-if="segmentContent == 'Visits History'"></div>
+                        <div v-if="segmentContent == 'Vitals & Measurements Summary'"></div>
+                        <div v-if="segmentContent == 'Lab Tests History'"></div>
+                        <div v-if="segmentContent == 'Diagnoses History'"></div>
+                        <div v-if="segmentContent == 'Allergies & Contraindication'"></div>
                     </ion-col>
                 </ion-row>
             </div>
@@ -228,6 +233,8 @@
 
 <script lang="ts">
 import {
+    IonSegment,
+    IonSegmentButton,
     IonContent,
     IonHeader,
     IonMenuButton,
@@ -346,9 +353,12 @@ export default defineComponent({
         IonFabButton,
         IonFabList,
         PatientProfile,
+        IonSegmentButton,
+        IonSegment,
     },
     data() {
         return {
+            segmentContent: "Patient Summary",
             iconsContent: icons,
             isModalOpen: false,
             url: "" as any,
@@ -419,6 +429,9 @@ export default defineComponent({
     },
 
     methods: {
+        setSegmentContent(name: any) {
+            this.segmentContent = name;
+        },
         setAlerts() {
             this.alerts = [
                 {
