@@ -187,8 +187,13 @@
                         </div>
                         <div v-if="segmentContent == 'Patient Summary'">
                             <div style="display: flex; margin-top: 10px">
-                                <div style="width: 50vw; background-color: #fff; border-radius: 5px; margin-right: 5px"><WeightHeightChart /></div>
-                                <div style="width: 50vw; background-color: #fff; border-radius: 5px"><PreviousVitals /></div>
+                                <div style="width: 50vw; background-color: #fff; border-radius: 5px; margin-right: 5px" v-if="checkUnderFive">
+                                    <WeightHeightChart />
+                                </div>
+                                <div style="width: 50vw; background-color: #fff; border-radius: 5px; margin-right: 5px">
+                                    <BloodPressure />
+                                </div>
+                                <div style="width: 50vw; background-color: #fff; border-radius: 5px" v-if="!checkUnderFive"><PreviousVitals /></div>
                             </div>
                             <div class="bottomSummary">
                                 <ion-segment value="custom">
@@ -312,7 +317,8 @@ import { ref } from "vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import PatientProfile from "@/apps/Immunization/components/PatientProfile.vue";
 import WeightHeightChart from "@/apps/Immunization/components/Graphs/WeightHeightChart.vue";
-import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
+import PreviousVitals from "@/components/Graphs/previousVitals.vue";
+import BloodPressure from "@/components/Graphs/BloodPressure.vue";
 import personalInformationModal from "@/apps/Immunization/components/Modals/personalInformationModal.vue";
 import { iconBMI } from "@/utils/SvgDynamicColor";
 import { createModal } from "@/utils/Alerts";
@@ -355,9 +361,16 @@ export default defineComponent({
         PatientProfile,
         IonSegmentButton,
         IonSegment,
+        BloodPressure,
     },
     data() {
         return {
+            checkUnderOne: false,
+            isLoading: false,
+            checkUnderFourteen: true,
+            checkUnderNine: false,
+            checkUnderFive: false,
+            checkUnderSixWeeks: false,
             segmentContent: "Patient Summary",
             iconsContent: icons,
             isModalOpen: false,
@@ -386,6 +399,7 @@ export default defineComponent({
         ...mapState(useVitalsStore, ["vitals"]),
     },
     async mounted() {
+        this.checkAge();
         const patient = new PatientService();
         this.visits = await PatientService.getPatientVisits(patient.getID(), false);
         await UserService.setProgramUserActions();
@@ -429,6 +443,14 @@ export default defineComponent({
     },
 
     methods: {
+        checkAge() {
+            if (this.demographics?.birthdate) {
+                this.checkUnderFourteen = HisDate.getAgeInYears(this.demographics?.birthdate) >= 14 ? true : false;
+                this.checkUnderNine = HisDate.ageInMonths(this.demographics?.birthdate) < 9 ? true : false;
+                this.checkUnderFive = HisDate.getAgeInYears(this.demographics?.birthdate) < 5 ? true : false;
+                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.demographics?.birthdate) < 42 ? true : false;
+            }
+        },
         setSegmentContent(name: any) {
             this.segmentContent = name;
         },
