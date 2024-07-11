@@ -183,6 +183,7 @@ export default defineComponent({
     },
     methods: {
         async loadSavedEncounters(patientVisitDate: any) {
+            this.visitDate = patientVisitDate;
             const encounters = await EncounterService.getEncounters(this.demographics.patient_id, { date: patientVisitDate });
             console.log("🚀 ~ loadSavedEncounters ~ encounters:", encounters);
             await this.setDiagnosisEncounters(encounters);
