@@ -418,13 +418,14 @@ export default defineComponent({
         this.setNCDValue();
         this.setActiveProgram();
         this.setAlerts();
-        await this.updateNCDData();
+        await this.updateData();
     },
     watch: {
         demographics: {
-            handler() {
+            async handler() {
                 this.setNCDValue();
                 this.setActiveProgram();
+                await this.updateData();
             },
             deep: true,
         },
@@ -527,22 +528,6 @@ export default defineComponent({
         },
         async setNCDValue() {
             this.programBtn = await UserService.userProgramData();
-            console;
-        },
-        setOPDValue() {
-            sessionStorage.setItem("app", JSON.stringify({ programID: 14, applicationName: "OPD" }));
-            const patient = new PatientService();
-            if (patient.getNcdNumber() != "Unknown") {
-                if (sessionStorage.getItem("saveProgressStatus") == "true") {
-                    this.OPDProgramActionName = "+ Continue OPD consultation";
-                } else {
-                    this.OPDProgramActionName = "+ Start new OPD consultation";
-                }
-                this.url = "OPDvitals";
-            } else {
-                this.url = "OPDvitals";
-                this.OPDProgramActionName = "+ Start new OPD OPD Program";
-            }
         },
         openModal() {
             this.isModalOpen = true;
@@ -554,27 +539,20 @@ export default defineComponent({
             await UserService.setProgramUserActions();
             this.$router.push(url);
         },
-        async updateNCDData() {
+        async updateData() {
             const array = ["Height", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
 
             // An array to store all promises
             const promises = array.map(async (item) => {
                 const dd = await ObservationService.getFirstValueNumber(this.demographics.patient_id, item);
-                console.log("🚀 ~ promises ~ dd:", dd);
                 return { [item]: dd };
             });
 
             // Wait for all promises to resolve
             const resultsArray = await Promise.all(promises);
-            console.log("🚀 ~ updateNCDData ~ resultsArray:", resultsArray);
 
             // Combine the objects in resultsArray into a single object
             this.vitals = Object.assign({}, ...resultsArray);
-            console.log("🚀 ~ updateNCDData ~ combinedResults:", this.vitals);
-        },
-        handleOPD() {
-            this.setOPDValue();
-            this.$router.push(this.url);
         },
         covertGender(gender: any) {
             return ["Male", "M"].includes(gender) ? "Male" : ["Female", "F"].includes(gender) ? "Female" : "";

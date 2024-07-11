@@ -9,7 +9,7 @@
                         @click="loadSavedEncounters(date)"
                         v-for="(date, index) in visits"
                         :key="index"
-                        :name="date"
+                        :name="covertDate(date)"
                         :fill="visitDate != date ? 'outline' : 'solid'"
                         :color="visitDate == date ? 'success' : ''"
                     />
@@ -182,10 +182,12 @@ export default defineComponent({
         },
     },
     methods: {
+        covertDate(date: any) {
+            return HisDate.toStandardHisDisplayFormat(date);
+        },
         async loadSavedEncounters(patientVisitDate: any) {
             this.visitDate = patientVisitDate;
             const encounters = await EncounterService.getEncounters(this.demographics.patient_id, { date: patientVisitDate });
-            console.log("🚀 ~ loadSavedEncounters ~ encounters:", encounters);
             await this.setDiagnosisEncounters(encounters);
             await this.setVitalsEncounters(encounters);
             await this.setPresentingComplainsEncounters(encounters);
@@ -210,7 +212,6 @@ export default defineComponent({
             this.vitals.respirationRate = this.filterObs(observations, "Respiration rate")?.[0]?.value_numeric ?? "";
             this.vitals.diastolic = this.filterObs(observations, "Diastolic")?.[0]?.value_numeric ?? "";
 
-            console.log("🚀 ~ setVitalsEncounters ~ this.vitals.weight:", this.vitals.weight);
             if (this.vitals.weight && this.vitals.height) {
                 await this.setBMI(this.vitals.weight, this.vitals.height);
             }
@@ -241,7 +242,6 @@ export default defineComponent({
             createModal(InvestigationsModal);
         },
         async setBMI(weight: any, height: any) {
-            console.log("🚀 ~ setBMI ~ weight:", weight);
             if (this.demographics.gender && this.demographics.birthdate) {
                 this.BMI = await BMIService.getBMI(
                     parseInt(weight),
