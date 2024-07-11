@@ -176,6 +176,12 @@ export default defineComponent({
             },
             deep: true,
         },
+        $route: {
+            async handler() {
+                await this.updateData();
+            },
+            deep: true,
+        },
     },
     async mounted() {
         await this.updateData();
