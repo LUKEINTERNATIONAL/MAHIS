@@ -154,17 +154,28 @@ export default defineComponent({
             ],
         };
     },
+    watch: {
+        demographics: {
+            async handler() {
+                await this.updateData();
+            },
+            deep: true,
+        },
+    },
     setup() {
         return { checkmark, pulseOutline };
     },
     async mounted() {
-        this.weight = await ObservationService.getAll(this.demographics.patient_id, "weight");
-        this.height = await ObservationService.getAll(this.demographics.patient_id, "Height");
-        this.BMI = await ObservationService.getAll(this.demographics.patient_id, "BMI");
-        this.setHeight();
+        await this.updateData();
         this.iconBg.graph = "iconBg";
     },
     methods: {
+        async updateData() {
+            this.weight = await ObservationService.getAll(this.demographics.patient_id, "weight");
+            this.height = await ObservationService.getAll(this.demographics.patient_id, "Height");
+            this.BMI = await ObservationService.getAll(this.demographics.patient_id, "BMI");
+            this.setHeight();
+        },
         dismiss() {
             modalController.dismiss();
         },
@@ -185,10 +196,8 @@ export default defineComponent({
         },
         setWeight() {
             if (this.weight) {
-                console.log("🚀 ~ setWeight ~ this.weight:", this.weight);
                 this.setData(this.weight, "weight");
             }
-            console.log("🚀 ~ setWeight ~ this.weight:", this.weight);
         },
         setHeight() {
             if (this.height) {
