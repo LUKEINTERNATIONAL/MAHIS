@@ -215,11 +215,13 @@
                                 <MedicationsGrid />
                             </div>
                         </div>
-                        <div v-if="segmentContent == 'Visits History'"></div>
-                        <div v-if="segmentContent == 'Vitals & Measurements Summary'"></div>
-                        <div v-if="segmentContent == 'Lab Tests History'"></div>
-                        <div v-if="segmentContent == 'Diagnoses History'"></div>
-                        <div v-if="segmentContent == 'Allergies & Contraindication'"></div>
+                        <div v-if="segmentContent == 'Visits History'">
+                            <VisitsHistory />
+                        </div>
+                        <div v-if="segmentContent == 'Vitals & Measurements Summary'"><VisitsHistory /></div>
+                        <div v-if="segmentContent == 'Lab Tests History'"><LabTestsHistory /></div>
+                        <div v-if="segmentContent == 'Diagnoses History'"><DiagnosesHistory /></div>
+                        <div v-if="segmentContent == 'Allergies & Contraindication'"><AllergiesContraindication /></div>
                     </ion-col>
                 </ion-row>
             </div>
@@ -291,6 +293,11 @@ import DispositionGrid from "@/components/PatientProfileGrid/OutcomeGrid.vue";
 import InvestigationsGrid from "@/components/PatientProfileGrid/InvestigationsGrid.vue";
 import MedicationsGrid from "@/components/PatientProfileGrid/MedicationsGrid.vue";
 import VitalsGrid from "@/components/PatientProfileGrid/VitalsGrid.vue";
+import LabTestsHistory from "@/components/DashboardSegments/LabTestsHistory.vue";
+import DiagnosesHistory from "@/components/DashboardSegments/DiagnosesHistory.vue";
+import AllergiesContraindication from "@/components/DashboardSegments/AllergiesContraindication.vue";
+import VisitsHistory from "@/components/DashboardSegments/VisitsHistory.vue";
+import VitalsMeasurementsSummary from "@/components/DashboardSegments/VitalsMeasurementsSummary.vue";
 
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useGeneralStore } from "@/stores/GeneralStore";
@@ -362,6 +369,11 @@ export default defineComponent({
         IonSegmentButton,
         IonSegment,
         BloodPressure,
+        VisitsHistory,
+        VitalsMeasurementsSummary,
+        AllergiesContraindication,
+        DiagnosesHistory,
+        LabTestsHistory,
     },
     data() {
         return {
