@@ -80,6 +80,7 @@
                             </div>
                         </div>
                     </div>
+                    <div class="noData" v-else>No Vitals were recorded</div>
 
                     <div v-if="presentingComplaint?.length > 0">
                         <div class="heading">Complaints Presented</div>
@@ -87,27 +88,31 @@
                             <div class="spanContent" v-for="(complaint, index) in presentingComplaint" :key="index">{{ complaint }}</div>
                         </div>
                     </div>
-                    <div></div>
+                    <div class="noData" v-else>No complaints were recorded</div>
                     <div v-if="primaryDiagnosis?.length > 0">
                         <div class="heading">Primary Diagnoses</div>
                         <div style="display: flex; flex-wrap: wrap">
                             <div class="spanContent" v-for="(diagnosis, index) in primaryDiagnosis" :key="index">{{ diagnosis }}</div>
                         </div>
                     </div>
+                    <div class="noData" v-else>No primary diagnoses were recorded</div>
                     <div v-if="secondaryDiagnosis?.length > 0">
                         <div class="heading">Secondary Diagnoses</div>
                         <div style="display: flex; flex-wrap: wrap">
                             <div class="spanContent" v-for="(diagnosis, index) in secondaryDiagnosis" :key="index">{{ diagnosis }}</div>
                         </div>
                     </div>
-                    <div>
+                    <div class="noData" v-else>No secondary diagnoses were recorded</div>
+                    <div v-if="drugs">
                         <div class="heading">Treatment Plan</div>
                         <div></div>
                     </div>
-                    <div>
+                    <div class="noData" v-else>No Diagnoses were recorded</div>
+                    <div v-if="nextAppointMent">
                         <span class="heading">Next Appointment:</span>
                         <span class="nextDate">06 September 2024</span>
                     </div>
+                    <div class="noData" v-else>No next appointment was set</div>
                 </div>
             </ion-col>
         </ion-row>
@@ -152,6 +157,8 @@ export default defineComponent({
             iconsContent: icons,
             visits: [] as any,
             BMI: "" as any,
+            nextAppointMent: "" as any,
+            drugs: "" as any,
             visitDate: [] as any,
             primaryDiagnosis: [] as any,
             presentingComplaint: [] as any,
@@ -313,16 +320,25 @@ h3 {
     line-height: 1.5;
 }
 .spanContent::before {
-    content: "• "; /* Adds a dot before the text */
-    color: #636363; /* You can change the color of the dot if needed */
-    font-size: 2em; /* Adjust the size of the dot to be proportional */
+    content: "• ";
+    color: #636363;
+    font-size: 2em;
     position: absolute;
-    left: -20px; /* Adjust the left position as needed */
-    top: 50%; /* Position the dot in the middle */
-    transform: translateY(-50%); /* Align the dot vertically */
+    left: -20;
+    top: 50%;
+    transform: translateY(-50%);
 }
 .visitData {
     border-left: #a3a1a1 solid 1px;
     padding-left: 20px;
+}
+.noData {
+    border: #a3a1a1 solid 1px;
+    border-style: dashed;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 10px;
 }
 </style>
