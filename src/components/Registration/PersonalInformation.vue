@@ -17,6 +17,7 @@ import dayjs from "dayjs";
 import { Service } from "@/services/service";
 import { calculator } from "ionicons/icons";
 import Validation from "@/validations/StandardValidations";
+import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
 
 export default defineComponent({
     name: "Menu",
@@ -128,6 +129,7 @@ export default defineComponent({
                 modifyFieldValue(this.guardianInformation, "guardianLastname", "validationFunctionName", "isNameEmpty");
                 modifyFieldValue(this.guardianInformation, "relationship", "inputHeader", "Relationship to patient");
             }
+            validateInputFiledData(this.guardianInformation);
         },
         setGuardingInfo(event: any) {
             const updateGuardianInfo = (value: boolean) => modifyFieldValue(this.guardianInformation, "guardianNationalID", "displayNone", value);

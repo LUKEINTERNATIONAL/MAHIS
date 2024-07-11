@@ -356,6 +356,12 @@ export default defineComponent({
                 this.isLoading = false;
             }
         },
+        validateGaudiarnInfo() {
+            if (!this.checkUnderFourteen) {
+                return validateInputFiledData(this.guardianInformation);
+            }
+            return true;
+        },
         async validations(data: any, fields: any) {
             if (this.nationalID != "") {
                 if (await this.mwIdExists(this.nationalID)) {
@@ -380,7 +386,8 @@ export default defineComponent({
             if (
                 (await this.validations(this.personInformation, fields)) &&
                 (await this.validations(this.currentLocation, currentFields)) &&
-                this.validateBirthData()
+                this.validateBirthData() &&
+                this.validateGaudiarnInfo()
             ) {
                 this.disableSaveBtn = true;
                 await this.buildPersonalInformation();
