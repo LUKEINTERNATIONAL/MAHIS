@@ -218,7 +218,7 @@
                         <div v-if="segmentContent == 'Visits History'">
                             <VisitsHistory />
                         </div>
-                        <div v-if="segmentContent == 'Vitals & Measurements Summary'"><VisitsHistory /></div>
+                        <div v-if="segmentContent == 'Vitals & Measurements Summary'"><VitalsMeasurementsSummary /></div>
                         <div v-if="segmentContent == 'Lab Tests History'"><LabTestsHistory /></div>
                         <div v-if="segmentContent == 'Diagnoses History'"><DiagnosesHistory /></div>
                         <div v-if="segmentContent == 'Allergies & Contraindication'"><AllergiesContraindication /></div>

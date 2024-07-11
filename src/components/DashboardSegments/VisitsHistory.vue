@@ -107,7 +107,7 @@
                         <div class="heading">Treatment Plan</div>
                         <div></div>
                     </div>
-                    <div class="noData" v-else>No Diagnoses were recorded</div>
+                    <div class="noData" v-else>No Treatment were recorded</div>
                     <div v-if="nextAppointMent">
                         <span class="heading">Next Appointment:</span>
                         <span class="nextDate">06 September 2024</span>
