@@ -17,56 +17,78 @@
             </ion-col>
             <ion-col offset="0.1" size="7">
                 <div class="visitData">
-                    <div style="max-width: 300px">
-                        <div class="heading" style="margin-top: 0px">Anthropometric Measurements</div>
-                        <div>
-                            <ion-row>
-                                <ion-col class="contentTitle">Weight</ion-col>
-                                <ion-col class="contentTitle">Height</ion-col>
-                            </ion-row>
-                            <ion-row>
-                                <ion-col>{{ vitals.weight }} kg</ion-col>
-                                <ion-col>{{ vitals.height }} cm</ion-col>
-                            </ion-row>
-                            <ion-row> 25.6 obese </ion-row>
+                    <div v-if="Object.values(vitals).every((value) => value !== '')">
+                        <div style="max-width: 300px">
+                            <div class="heading" style="margin-top: 0px">Anthropometric Measurements</div>
+                            <div>
+                                <ion-row>
+                                    <ion-col v-if="vitals.weight" class="contentTitle">Weight</ion-col>
+                                    <ion-col v-if="vitals.height" class="contentTitle">Height</ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col v-if="vitals.weight">{{ vitals.weight }} kg</ion-col>
+                                    <ion-col v-if="vitals.height">{{ vitals.height }} cm</ion-col>
+                                </ion-row>
+                                <ion-row v-if="vitals.weight && vitals.height">
+                                    <span>
+                                        <ion-row
+                                            v-if="vitalsWeightHeight.value"
+                                            :style="
+                                                'border-radius: 5px;  margin-top:10px; margin-bottom:10px;background-color:' +
+                                                vitalsWeightHeight.backgroundColor
+                                            "
+                                        >
+                                            <span class="position_content alert_content">
+                                                <ion-icon slot="start" :icon="vitalsWeightHeight.icon" aria-hidden="true"></ion-icon>
+                                                <span :style="'color:' + vitalsWeightHeight.textColor + '; font-weight:600; margin: 0px 20px;'">
+                                                    {{ vitalsWeightHeight.index }}</span
+                                                >
+                                                <span :style="'color:' + vitalsWeightHeight.textColor + ';'"> {{ vitalsWeightHeight.value }} </span>
+                                            </span>
+                                        </ion-row>
+                                    </span>
+                                </ion-row>
+                            </div>
+                        </div>
+                        <div style="max-width: 300px">
+                            <div class="heading">Vital Signs</div>
+                            <div>
+                                <ion-row>
+                                    <ion-col class="contentTitle">Systolic pressure</ion-col>
+                                    <ion-col class="contentTitle">Diastolic pressure</ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>{{ vitals.systolic }} mmHg</ion-col>
+                                    <ion-col>{{ vitals.diastolic }} mmHg</ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col class="contentTitle">Temperature</ion-col>
+                                    <ion-col class="contentTitle">Oxygen Saturation</ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>{{ vitals.temperature }} C</ion-col>
+                                    <ion-col>{{ vitals.SAO2 }} %</ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col class="contentTitle">Pulse Rate</ion-col>
+                                    <ion-col class="contentTitle">Respiratory Rate</ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>{{ vitals.pulse }} BMP</ion-col>
+                                    <ion-col>{{ vitals.respirationRate }} BMP</ion-col>
+                                </ion-row>
+                            </div>
                         </div>
                     </div>
-                    <div style="max-width: 300px">
-                        <div class="heading">Vital Signs</div>
-                        <div>
-                            <ion-row>
-                                <ion-col class="contentTitle">Systolic pressure</ion-col>
-                                <ion-col class="contentTitle">Diastolic pressure</ion-col>
-                            </ion-row>
-                            <ion-row>
-                                <ion-col>{{ vitals.systolic }} mmHg</ion-col>
-                                <ion-col>{{ vitals.diastolic }} mmHg</ion-col>
-                            </ion-row>
-                            <ion-row>
-                                <ion-col class="contentTitle">Temperature</ion-col>
-                                <ion-col class="contentTitle">Oxygen Saturation</ion-col>
-                            </ion-row>
-                            <ion-row>
-                                <ion-col>{{ vitals.temperature }} C</ion-col>
-                                <ion-col>{{ vitals.SAO2 }} %</ion-col>
-                            </ion-row>
-                            <ion-row>
-                                <ion-col class="contentTitle">Pulse Rate</ion-col>
-                                <ion-col class="contentTitle">Respiratory Rate</ion-col>
-                            </ion-row>
-                            <ion-row>
-                                <ion-col>{{ vitals.pulse }} BMP</ion-col>
-                                <ion-col>{{ vitals.respirationRate }} BMP</ion-col>
-                            </ion-row>
-                        </div>
-                    </div>
+
                     <div v-if="presentingComplaint?.length > 0">
                         <div class="heading">Complaints Presented</div>
                         <div style="display: flex; flex-wrap: wrap">
                             <div class="spanContent" v-for="(complaint, index) in presentingComplaint" :key="index">{{ complaint }}</div>
                         </div>
                     </div>
-                    <div>
+                    <div></div>
+                    <div v-if="primaryDiagnosis?.length > 0">
                         <div class="heading">Primary Diagnoses</div>
                         <div style="display: flex; flex-wrap: wrap">
                             <div class="spanContent" v-for="(diagnosis, index) in primaryDiagnosis" :key="index">{{ diagnosis }}</div>
@@ -80,11 +102,7 @@
                     </div>
                     <div>
                         <div class="heading">Treatment Plan</div>
-                        <div>
-                            <div>Swollen Legs</div>
-                            <div>lightheadedness</div>
-                            <div>irritability</div>
-                        </div>
+                        <div></div>
                     </div>
                     <div>
                         <span class="heading">Next Appointment:</span>
@@ -114,6 +132,7 @@ import { useDemographicsStore } from "@/stores/DemographicStore";
 import { ProgramService } from "@/services/program_service";
 import HisDate from "@/utils/Date";
 import { ConceptService } from "@/services/concept_service";
+import { BMIService } from "@/services/bmi_service";
 
 export default defineComponent({
     name: "Menu",
@@ -132,12 +151,14 @@ export default defineComponent({
         return {
             iconsContent: icons,
             visits: [] as any,
+            BMI: "" as any,
             visitDate: [] as any,
             primaryDiagnosis: [] as any,
             presentingComplaint: [] as any,
             secondaryDiagnosis: [] as any,
             labOrders: [] as any,
             vitals: {} as any,
+            vitalsWeightHeight: {} as any,
             savedEncounters: [] as any,
         };
     },
@@ -180,6 +201,11 @@ export default defineComponent({
             this.vitals.systolic = this.filterObs(observations, "Systolic")?.[0]?.value_numeric ?? "";
             this.vitals.respirationRate = this.filterObs(observations, "Respiration rate")?.[0]?.value_numeric ?? "";
             this.vitals.diastolic = this.filterObs(observations, "Diastolic")?.[0]?.value_numeric ?? "";
+
+            console.log("🚀 ~ setVitalsEncounters ~ this.vitals.weight:", this.vitals.weight);
+            if (this.vitals.weight && this.vitals.height) {
+                await this.setBMI(this.vitals.weight, this.vitals.height);
+            }
         },
         async setTreatmentEncounters(data: any) {},
         async setPresentingComplainsEncounters(data: any) {
@@ -205,6 +231,26 @@ export default defineComponent({
         },
         openModal() {
             createModal(InvestigationsModal);
+        },
+        async setBMI(weight: any, height: any) {
+            console.log("🚀 ~ setBMI ~ weight:", weight);
+            if (this.demographics.gender && this.demographics.birthdate) {
+                this.BMI = await BMIService.getBMI(
+                    parseInt(weight),
+                    parseInt(height),
+                    this.demographics.gender,
+                    HisDate.calculateAge(this.demographics.birthdate, HisDate.currentDate())
+                );
+            }
+            this.updateBMI();
+        },
+        async updateBMI() {
+            const bmiColor = this.BMI?.color ?? [];
+            this.vitalsWeightHeight.icon = BMIService.iconBMI(bmiColor);
+            this.vitalsWeightHeight.backgroundColor = bmiColor[0];
+            this.vitalsWeightHeight.textColor = bmiColor[1];
+            this.vitalsWeightHeight.index = "BMI " + this.BMI?.index ?? "";
+            this.vitalsWeightHeight.value = this.BMI?.result ?? "";
         },
     },
 });
