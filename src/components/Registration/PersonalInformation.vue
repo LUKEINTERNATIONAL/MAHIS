@@ -112,12 +112,24 @@ export default defineComponent({
             // Estimated age
             this.validationRules(event);
             this.calculateDoB(event);
-            this.calculateAge(event);
+            this.setGuardingInfo(event);
         },
         setGuardingFormRules(age: any) {
-            console.log(age);
+            if (age < 14) {
+                modifyFieldValue(this.guardianInformation, "guardianFirstname", "inputHeader", "First name *");
+                modifyFieldValue(this.guardianInformation, "guardianLastname", "inputHeader", "Last name *");
+                modifyFieldValue(this.guardianInformation, "guardianFirstname", "validationFunctionName", "isName");
+                modifyFieldValue(this.guardianInformation, "guardianLastname", "validationFunctionName", "isName");
+                modifyFieldValue(this.guardianInformation, "relationship", "inputHeader", "Relationship to patient *");
+            } else {
+                modifyFieldValue(this.guardianInformation, "guardianFirstname", "inputHeader", "First name");
+                modifyFieldValue(this.guardianInformation, "guardianLastname", "inputHeader", "Last name");
+                modifyFieldValue(this.guardianInformation, "guardianFirstname", "validationFunctionName", "isNameEmpty");
+                modifyFieldValue(this.guardianInformation, "guardianLastname", "validationFunctionName", "isNameEmpty");
+                modifyFieldValue(this.guardianInformation, "relationship", "inputHeader", "Relationship to patient");
+            }
         },
-        calculateAge(event: any) {
+        setGuardingInfo(event: any) {
             const updateGuardianInfo = (value: boolean) => modifyFieldValue(this.guardianInformation, "guardianNationalID", "displayNone", value);
             if (event.name == "birthdate" || event.inputHeader == "Estimated age") {
                 HisDate.getAgeInYears(this.birthdate) < 14 ? updateGuardianInfo(false) : updateGuardianInfo(true);
