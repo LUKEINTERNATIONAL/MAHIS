@@ -114,16 +114,18 @@ export default defineComponent({
             this.calculateDoB(event);
             this.calculateAge(event);
         },
+        setGuardingFormRules(age: any) {
+            console.log(age);
+        },
         calculateAge(event: any) {
             const updateGuardianInfo = (value: boolean) => modifyFieldValue(this.guardianInformation, "guardianNationalID", "displayNone", value);
-            if (event.name == "birthdate") {
-                HisDate.getAgeInYears(event.value) < 17 ? updateGuardianInfo(false) : updateGuardianInfo(true);
-
-                modifyFieldValue(this.personInformation, "estimation", "value", HisDate.getAgeInYears(event.value));
-                this.validationRules({ name: "estimation" });
-            }
-            if (event.inputHeader == "Estimated age") {
-                event.value < 17 ? updateGuardianInfo(false) : updateGuardianInfo(true);
+            if (event.name == "birthdate" || event.inputHeader == "Estimated age") {
+                HisDate.getAgeInYears(this.birthdate) < 14 ? updateGuardianInfo(false) : updateGuardianInfo(true);
+                this.setGuardingFormRules(HisDate.getAgeInYears(this.birthdate));
+                if (event.name == "birthdate") {
+                    modifyFieldValue(this.personInformation, "estimation", "value", HisDate.getAgeInYears(event.value));
+                    this.validationRules({ name: "estimation" });
+                }
             }
         },
         calculateDoB(event: any) {
@@ -173,7 +175,7 @@ export default defineComponent({
             this.personInformation[7].data.rowData[0].colData[0].alertsErrorMassage = "";
             if (!this.personInformation[7].data.rowData[0].colData[0].unitsData.value) {
                 this.personInformation[7].data.rowData[0].colData[0].alertsErrorMassage = true;
-                this.personInformation[7].data.rowData[0].colData[0].alertsErrorMassage = "Duration Units Required";
+                this.personInformation[7].data.rowData[0].colData[0].alertsErrorMassage = "Estimation Units Required";
                 return false;
             }
 
