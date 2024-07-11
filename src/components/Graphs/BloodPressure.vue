@@ -150,11 +150,11 @@ export default defineComponent({
             this.setData();
         },
         setData() {
-            this.series[0].data = this.diastolic.map((item: any) => item.value_numeric);
+            this.series[0].data = this.diastolic?.map((item: any) => item.value_numeric);
             this.series[0].name = "Diastolic";
-            this.series[1].data = this.systolic.map((item: any) => item.value_numeric);
+            this.series[1].data = this.systolic?.map((item: any) => item.value_numeric);
             this.series[1].name = "Systolic";
-            this.obsDatetime = this.diastolic.map((item: any) => HisDate.toStandardHisFormat(item.obs_datetime));
+            this.obsDatetime = this.diastolic?.map((item: any) => HisDate.toStandardHisFormat(item.obs_datetime));
             this.options = {
                 ...this.options,
                 ...{
