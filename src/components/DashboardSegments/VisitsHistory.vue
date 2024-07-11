@@ -169,10 +169,16 @@ export default defineComponent({
             savedEncounters: [] as any,
         };
     },
+    watch: {
+        demographics: {
+            async handler() {
+                await this.updateData();
+            },
+            deep: true,
+        },
+    },
     async mounted() {
-        const patient = new PatientService();
-        this.visits = await PatientService.getPatientVisits(patient.getID(), false);
-        await this.loadSavedEncounters(this.visits[0]);
+        await this.updateData();
     },
     computed: {
         ...mapState(useInvestigationStore, ["investigations"]),
@@ -182,6 +188,11 @@ export default defineComponent({
         },
     },
     methods: {
+        async updateData() {
+            const patient = new PatientService();
+            this.visits = await PatientService.getPatientVisits(patient.getID(), false);
+            await this.loadSavedEncounters(this.visits[0]);
+        },
         covertDate(date: any) {
             return HisDate.toStandardHisDisplayFormat(date);
         },
@@ -325,7 +336,7 @@ h3 {
     color: #636363;
     font-size: 2em;
     position: absolute;
-    left: -20;
+    left: -20px;
     top: 50%;
     transform: translateY(-50%);
 }
