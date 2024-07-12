@@ -169,7 +169,11 @@ export default defineComponent({
                     // }
                     await this.auth.login(this.password);
                     this.auth.startSession();
-                    this.$router.push("/home");
+                    if (this.auth.checkUserPrograms(this.program.name)) {
+                        this.$router.push("/home");
+                    } else {
+                        toastDanger("You don't have permission to access the program.");
+                    }
                 } catch (e) {
                     if (e instanceof InvalidCredentialsError) {
                         toastDanger("Invalid username or password");
