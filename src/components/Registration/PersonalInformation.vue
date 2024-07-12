@@ -122,12 +122,15 @@ export default defineComponent({
                 modifyFieldValue(this.guardianInformation, "guardianFirstname", "validationFunctionName", "isName");
                 modifyFieldValue(this.guardianInformation, "guardianLastname", "validationFunctionName", "isName");
                 modifyFieldValue(this.guardianInformation, "relationship", "inputHeader", "Relationship to patient *");
+                modifyFieldValue(this.guardianInformation, "relationship", "validationFunctionName", "isNameWithSlush");
             } else {
                 modifyFieldValue(this.guardianInformation, "guardianFirstname", "inputHeader", "First name");
                 modifyFieldValue(this.guardianInformation, "guardianLastname", "inputHeader", "Last name");
                 modifyFieldValue(this.guardianInformation, "guardianFirstname", "validationFunctionName", "isNameEmpty");
                 modifyFieldValue(this.guardianInformation, "guardianLastname", "validationFunctionName", "isNameEmpty");
                 modifyFieldValue(this.guardianInformation, "relationship", "inputHeader", "Relationship to patient");
+                modifyFieldValue(this.guardianInformation, "relationship", "validationFunctionName", "");
+                modifyFieldValue(this.guardianInformation, "relationship", "alertsErrorMassage", "");
             }
             validateInputFiledData(this.guardianInformation);
         },
