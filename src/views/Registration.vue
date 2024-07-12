@@ -412,7 +412,7 @@ export default defineComponent({
             }
         },
         validateBirthData() {
-            if (this.checkUnderOne) {
+            if (this.checkUnderNine) {
                 return validateInputFiledData(this.birthRegistration);
             } else {
                 return true;
