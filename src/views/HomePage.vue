@@ -58,6 +58,15 @@
                     <ImmunizationGroupGraph :reportData="reportData" v-if="controlGraphs == 'group'" />
                 </div>
             </div>
+
+            <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="displayNoneDesktop">
+                <ion-fab-button color="primary"> <ion-icon :icon="grid"></ion-icon> </ion-fab-button>
+                <ion-fab-list side="top">
+                    <ion-fab-button @click="setProgram(btn)" v-for="(btn, index) in programBtn" :key="index" :data-desc="btn.actionName">
+                        <ion-icon :icon="add"></ion-icon>
+                    </ion-fab-button>
+                </ion-fab-list>
+            </ion-fab>
         </ion-content>
     </ion-page>
 </template>
@@ -80,6 +89,20 @@ import SetUser from "@/views/Mixin/SetUser.vue";
 import ApiClient from "@/services/api_client";
 import HisDate from "@/utils/Date";
 import { WebSocketService } from "@/services/websocketService";
+import {
+    medkit,
+    chevronBackOutline,
+    checkmark,
+    grid,
+    chevronDownCircle,
+    chevronForwardCircle,
+    chevronUpCircle,
+    colorPalette,
+    document,
+    globe,
+    add,
+    person,
+} from "ionicons/icons";
 export default defineComponent({
     name: "Home",
     mixins: [SetUser],
@@ -101,6 +124,23 @@ export default defineComponent({
         return {
             controlGraphs: "months" as any,
             reportData: "" as any,
+            programBtn: {} as any,
+        };
+    },
+    setup() {
+        return {
+            chevronBackOutline,
+            checkmark,
+            grid,
+            chevronDownCircle,
+            chevronForwardCircle,
+            chevronUpCircle,
+            colorPalette,
+            document,
+            globe,
+            medkit,
+            add,
+            person,
         };
     },
     computed: {
@@ -113,10 +153,17 @@ export default defineComponent({
     async mounted() {
         this.setView();
         this.startTimer();
+        this.setProgramInfo();
         const wsService = new WebSocketService();
         wsService.setMessageHandler(this.onMessage);
     },
     methods: {
+        async setProgramInfo() {
+            this.programBtn = await UserService.userProgramData();
+        },
+        setProgram(program: any) {
+            sessionStorage.setItem("app", JSON.stringify({ programID: program.program_id, applicationName: program.name }));
+        },
         onMessage(event: MessageEvent) {
             const data = JSON.parse(event.data);
             if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel" })) {
