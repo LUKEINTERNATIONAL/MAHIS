@@ -415,7 +415,7 @@ export default defineComponent({
         const patient = new PatientService();
         this.visits = await PatientService.getPatientVisits(patient.getID(), false);
         await UserService.setProgramUserActions();
-        this.setNCDValue();
+        this.setProgramInfo();
         this.setActiveProgram();
         this.setAlerts();
         await this.updateData();
@@ -423,7 +423,7 @@ export default defineComponent({
     watch: {
         demographics: {
             async handler() {
-                this.setNCDValue();
+                this.setProgramInfo();
                 this.setActiveProgram();
                 await this.updateData();
             },
@@ -431,7 +431,13 @@ export default defineComponent({
         },
         NCDUserActions: {
             handler() {
-                this.setNCDValue();
+                this.setProgramInfo();
+            },
+            deep: true,
+        },
+        $route: {
+            handler() {
+                this.setProgramInfo();
             },
             deep: true,
         },
@@ -526,7 +532,7 @@ export default defineComponent({
                 return false;
             }
         },
-        async setNCDValue() {
+        async setProgramInfo() {
             this.programBtn = await UserService.userProgramData();
         },
         openModal() {
