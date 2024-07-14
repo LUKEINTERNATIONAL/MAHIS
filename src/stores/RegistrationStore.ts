@@ -766,7 +766,7 @@ const initialGuardianInformation = [
                             name: "guardianMiddleName",
                             eventType: "input",
                             alertsErrorMassage: "",
-                            validationFunctionName: "isNameEmpty",
+                            validationFunctionName: "isNamesEmpty",
                         },
                     ],
                 },
