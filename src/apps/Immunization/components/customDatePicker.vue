@@ -26,8 +26,10 @@
   import {IonRow, IonCol, IonButton} from "@ionic/vue";
   import Picker from 'pickerjs'
   import "pickerjs/dist/picker.css";
+  import { Service } from "@/services/service";
   const uniqId = ref("0")
   let pickerInstance = null as any
+  
 
   onMounted(() => {
     const _input_ = document.getElementById('0') as any
@@ -45,6 +47,8 @@
           pick: datePickerEventListener
         })
     pickerInstance = picker
+    const init_date = new Date(Service.getSessionDate())
+    pickerInstance.setDate(init_date)
   }
 
   const emit = defineEmits<{
@@ -52,12 +56,26 @@
   }>()
 
   function dateChange() {
-      emit("dateChange", pickerInstance.getDate())
+    const sessionYear = getYearFromDateString(Service.getSessionDate())
+    const pickerYear = pickerInstance.getDate().getFullYear()
+    if (pickerYear <= sessionYear) {
+      //
+    } else {
+      const corrected_date = pickerInstance.getDate()
+      corrected_date.setFullYear(sessionYear)
+      pickerInstance.setDate(corrected_date)
+    }
+    emit("dateChange", pickerInstance.getDate())
   }
 
   function datePickerEventListener(event: any) {
       // console.log('Event occurred:', pickerInstance.getDate());
       dateChange()
+  }
+
+  function getYearFromDateString(dateString: string) {
+    // Split the date string by the hyphen and return the first part (the year)
+    return dateString.split('-')[0];
   }
 
   function generateUniqueString() {
