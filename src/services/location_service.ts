@@ -41,7 +41,7 @@ export class LocationService extends Service {
     }
 
     static getDistricts(regionID: number) {
-        return super.getJson("/districts", { region_id: regionID, page_size: 1000 });
+        return super.getJson("/districts", { region_id: regionID, page_size: 10000 });
     }
 
     static getVillages(traditionalAuthorityID: number, name = "") {
