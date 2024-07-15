@@ -124,14 +124,19 @@ export default defineComponent({
             ],
         };
     },
+    watch: {
+        demographics: {
+            async handler() {
+                await this.updateData();
+            },
+            deep: true,
+        },
+    },
     setup() {
         return { checkmark, pulseOutline };
     },
     async mounted() {
-        this.systolic = await ObservationService.getAll(this.demographics.patient_id, "Systolic");
-        this.diastolic = await ObservationService.getAll(this.demographics.patient_id, "Diastolic");
-        this.BMI = await ObservationService.getAll(this.demographics.patient_id, "BMI");
-        this.setHeight();
+        await this.updateData();
         this.iconBg.graph = "iconBg";
     },
     methods: {
@@ -139,55 +144,17 @@ export default defineComponent({
             modalController.dismiss();
         },
         handleIcon() {},
-        toggleDisplay(status: any) {
-            this.displayGraph = status;
-            if (this.displayGraph) {
-                this.graphIcon = iconGraph(["#006401"]);
-                this.listIcon = iconList(["#636363"]);
-                this.iconBg.graph = "iconBg";
-                this.iconBg.list = "";
-            } else {
-                this.graphIcon = iconGraph(["#636363"]);
-                this.listIcon = iconList(["#006401"]);
-                this.iconBg.graph = "";
-                this.iconBg.list = "iconBg";
-            }
+        async updateData() {
+            this.systolic = await ObservationService.getAll(this.demographics.patient_id, "Systolic");
+            this.diastolic = await ObservationService.getAll(this.demographics.patient_id, "Diastolic");
+            this.setData();
         },
-        setWeight() {
-            if (this.systolic) {
-                console.log("🚀 ~ setWeight ~ this.systolic:", this.systolic);
-                this.setData(this.systolic, "weight");
-            }
-            console.log("🚀 ~ setWeight ~ this.systolic:", this.systolic);
-        },
-        setHeight() {
-            if (this.diastolic) {
-                this.setData(this.diastolic, "height");
-            }
-        },
-        setBMI() {
-            if (this.BMI) {
-                this.setData(this.BMI, "BMI");
-            }
-        },
-        setActivClass(active: any) {
-            this.activeHeight = "";
-            this.activeBMI = "";
-            this.activeWeight = "";
-            if (active == "height") this.activeHeight = "_active";
-            else if (active == "weight") this.activeWeight = "_active";
-            else if (active == "BMI") this.activeBMI = "_active";
-        },
-        setData(data: any, active: any) {
-            this.setListData(data);
-            this.setActivClass(active);
-            this.series[0].data = this.diastolic.map((item: any) => item.value_numeric);
+        setData() {
+            this.series[0].data = this.diastolic?.map((item: any) => item.value_numeric);
             this.series[0].name = "Diastolic";
-            this.series[1].data = this.systolic.map((item: any) => item.value_numeric);
+            this.series[1].data = this.systolic?.map((item: any) => item.value_numeric);
             this.series[1].name = "Systolic";
-
-            this.obsDatetime = data.map((item: any) => HisDate.toStandardHisFormat(item.obs_datetime));
-
+            this.obsDatetime = this.diastolic?.map((item: any) => HisDate.toStandardHisFormat(item.obs_datetime));
             this.options = {
                 ...this.options,
                 ...{

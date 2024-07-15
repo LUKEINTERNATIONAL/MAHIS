@@ -17,6 +17,7 @@ import dayjs from "dayjs";
 import { Service } from "@/services/service";
 import { calculator } from "ionicons/icons";
 import Validation from "@/validations/StandardValidations";
+import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
 
 export default defineComponent({
     name: "Menu",
@@ -112,18 +113,36 @@ export default defineComponent({
             // Estimated age
             this.validationRules(event);
             this.calculateDoB(event);
-            this.calculateAge(event);
+            this.setGuardingInfo(event);
         },
-        calculateAge(event: any) {
-            const updateGuardianInfo = (value: boolean) => modifyFieldValue(this.guardianInformation, "guardianNationalID", "displayNone", value);
-            if (event.name == "birthdate") {
-                HisDate.getAgeInYears(event.value) < 17 ? updateGuardianInfo(false) : updateGuardianInfo(true);
-
-                modifyFieldValue(this.personInformation, "estimation", "value", HisDate.getAgeInYears(event.value));
-                this.validationRules({ name: "estimation" });
+        setGuardingFormRules(age: any) {
+            if (age < 14) {
+                modifyFieldValue(this.guardianInformation, "guardianFirstname", "inputHeader", "First name *");
+                modifyFieldValue(this.guardianInformation, "guardianLastname", "inputHeader", "Last name *");
+                modifyFieldValue(this.guardianInformation, "guardianFirstname", "validationFunctionName", "isName");
+                modifyFieldValue(this.guardianInformation, "guardianLastname", "validationFunctionName", "isName");
+                modifyFieldValue(this.guardianInformation, "relationship", "inputHeader", "Relationship to patient *");
+                modifyFieldValue(this.guardianInformation, "relationship", "validationFunctionName", "isNameWithSlush");
+            } else {
+                modifyFieldValue(this.guardianInformation, "guardianFirstname", "inputHeader", "First name");
+                modifyFieldValue(this.guardianInformation, "guardianLastname", "inputHeader", "Last name");
+                modifyFieldValue(this.guardianInformation, "guardianFirstname", "validationFunctionName", "isNameEmpty");
+                modifyFieldValue(this.guardianInformation, "guardianLastname", "validationFunctionName", "isNameEmpty");
+                modifyFieldValue(this.guardianInformation, "relationship", "inputHeader", "Relationship to patient");
+                modifyFieldValue(this.guardianInformation, "relationship", "validationFunctionName", "");
+                modifyFieldValue(this.guardianInformation, "relationship", "alertsErrorMassage", "");
             }
-            if (event.inputHeader == "Estimated age") {
-                event.value < 17 ? updateGuardianInfo(false) : updateGuardianInfo(true);
+            validateInputFiledData(this.guardianInformation);
+        },
+        setGuardingInfo(event: any) {
+            const updateGuardianInfo = (value: boolean) => modifyFieldValue(this.guardianInformation, "guardianNationalID", "displayNone", value);
+            if (event.name == "birthdate" || event.inputHeader == "Estimated age") {
+                HisDate.getAgeInYears(this.birthdate) < 14 ? updateGuardianInfo(false) : updateGuardianInfo(true);
+                this.setGuardingFormRules(HisDate.getAgeInYears(this.birthdate));
+                if (event.name == "birthdate") {
+                    modifyFieldValue(this.personInformation, "estimation", "value", HisDate.getAgeInYears(event.value));
+                    this.validationRules({ name: "estimation" });
+                }
             }
         },
         calculateDoB(event: any) {
@@ -173,7 +192,7 @@ export default defineComponent({
             this.personInformation[7].data.rowData[0].colData[0].alertsErrorMassage = "";
             if (!this.personInformation[7].data.rowData[0].colData[0].unitsData.value) {
                 this.personInformation[7].data.rowData[0].colData[0].alertsErrorMassage = true;
-                this.personInformation[7].data.rowData[0].colData[0].alertsErrorMassage = "Duration Units Required";
+                this.personInformation[7].data.rowData[0].colData[0].alertsErrorMassage = "Estimation Units Required";
                 return false;
             }
 

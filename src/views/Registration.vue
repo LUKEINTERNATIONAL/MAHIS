@@ -299,14 +299,6 @@ export default defineComponent({
                 this.checkUnderNine = HisDate.ageInMonths(this.birthdate) < 9 ? true : false;
                 this.checkUnderFive = HisDate.getAgeInYears(this.birthdate) < 5 ? true : false;
                 this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.birthdate) < 42 ? true : false;
-                this.controlHeight();
-            }
-        },
-        controlHeight() {
-            if (this.checkUnderSixWeeks) {
-                modifyFieldValue(this.birthRegistration, "Height (cm)", "displayNone", true);
-            } else {
-                modifyFieldValue(this.birthRegistration, "Height (cm)", "displayNone", false);
             }
         },
         disableNationalIDInput() {
@@ -356,6 +348,12 @@ export default defineComponent({
                 this.isLoading = false;
             }
         },
+        validateGaudiarnInfo() {
+            if (!this.checkUnderFourteen) {
+                return validateInputFiledData(this.guardianInformation);
+            }
+            return true;
+        },
         async validations(data: any, fields: any) {
             if (this.nationalID != "") {
                 if (await this.mwIdExists(this.nationalID)) {
@@ -380,7 +378,8 @@ export default defineComponent({
             if (
                 (await this.validations(this.personInformation, fields)) &&
                 (await this.validations(this.currentLocation, currentFields)) &&
-                this.validateBirthData()
+                this.validateBirthData() &&
+                this.validateGaudiarnInfo()
             ) {
                 this.disableSaveBtn = true;
                 await this.buildPersonalInformation();
@@ -405,7 +404,7 @@ export default defineComponent({
             }
         },
         validateBirthData() {
-            if (this.checkUnderOne) {
+            if (this.checkUnderNine) {
                 return validateInputFiledData(this.birthRegistration);
             } else {
                 return true;

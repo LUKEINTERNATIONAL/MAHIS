@@ -1,6 +1,10 @@
 <template>
     <RoleSelectionModal :isOpen="isRoleSelectionModalOpen" @update:isOpen="isRoleSelectionModalOpen = $event" />
-    <ion-searchbar @ionInput="handleInput" placeholder="Search client by MRN, name or scan barcode/QR-Code" class="searchField"></ion-searchbar>
+    <ion-searchbar
+        @ionInput="handleInput"
+        placeholder="Add or search for a client by MRN, name, or by scanning a barcode/QR code."
+        class="searchField"
+    ></ion-searchbar>
 
     <ion-popover
         :is-open="popoverOpen"

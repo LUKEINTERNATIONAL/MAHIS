@@ -215,11 +215,13 @@
                                 <MedicationsGrid />
                             </div>
                         </div>
-                        <div v-if="segmentContent == 'Visits History'"></div>
-                        <div v-if="segmentContent == 'Vitals & Measurements Summary'"></div>
-                        <div v-if="segmentContent == 'Lab Tests History'"></div>
-                        <div v-if="segmentContent == 'Diagnoses History'"></div>
-                        <div v-if="segmentContent == 'Allergies & Contraindication'"></div>
+                        <div v-if="segmentContent == 'Visits History'">
+                            <VisitsHistory />
+                        </div>
+                        <div v-if="segmentContent == 'Vitals & Measurements Summary'"><VitalsMeasurementsSummary /></div>
+                        <div v-if="segmentContent == 'Lab Tests History'"><LabTestsHistory /></div>
+                        <div v-if="segmentContent == 'Diagnoses History'"><DiagnosesHistory /></div>
+                        <div v-if="segmentContent == 'Allergies & Contraindication'"><AllergiesContraindication /></div>
                     </ion-col>
                 </ion-row>
             </div>
@@ -291,6 +293,11 @@ import DispositionGrid from "@/components/PatientProfileGrid/OutcomeGrid.vue";
 import InvestigationsGrid from "@/components/PatientProfileGrid/InvestigationsGrid.vue";
 import MedicationsGrid from "@/components/PatientProfileGrid/MedicationsGrid.vue";
 import VitalsGrid from "@/components/PatientProfileGrid/VitalsGrid.vue";
+import LabTestsHistory from "@/components/DashboardSegments/LabTestsHistory.vue";
+import DiagnosesHistory from "@/components/DashboardSegments/DiagnosesHistory.vue";
+import AllergiesContraindication from "@/components/DashboardSegments/AllergiesContraindication.vue";
+import VisitsHistory from "@/components/DashboardSegments/VisitsHistory.vue";
+import VitalsMeasurementsSummary from "@/components/DashboardSegments/VitalsMeasurementsSummary.vue";
 
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useGeneralStore } from "@/stores/GeneralStore";
@@ -362,6 +369,11 @@ export default defineComponent({
         IonSegmentButton,
         IonSegment,
         BloodPressure,
+        VisitsHistory,
+        VitalsMeasurementsSummary,
+        AllergiesContraindication,
+        DiagnosesHistory,
+        LabTestsHistory,
     },
     data() {
         return {
@@ -403,22 +415,29 @@ export default defineComponent({
         const patient = new PatientService();
         this.visits = await PatientService.getPatientVisits(patient.getID(), false);
         await UserService.setProgramUserActions();
-        this.setNCDValue();
+        this.setProgramInfo();
         this.setActiveProgram();
         this.setAlerts();
-        await this.updateNCDData();
+        await this.updateData();
     },
     watch: {
         demographics: {
-            handler() {
-                this.setNCDValue();
+            async handler() {
+                this.setProgramInfo();
                 this.setActiveProgram();
+                await this.updateData();
             },
             deep: true,
         },
         NCDUserActions: {
             handler() {
-                this.setNCDValue();
+                this.setProgramInfo();
+            },
+            deep: true,
+        },
+        $route: {
+            handler() {
+                this.setProgramInfo();
             },
             deep: true,
         },
@@ -513,24 +532,8 @@ export default defineComponent({
                 return false;
             }
         },
-        async setNCDValue() {
+        async setProgramInfo() {
             this.programBtn = await UserService.userProgramData();
-            console;
-        },
-        setOPDValue() {
-            sessionStorage.setItem("app", JSON.stringify({ programID: 14, applicationName: "OPD" }));
-            const patient = new PatientService();
-            if (patient.getNcdNumber() != "Unknown") {
-                if (sessionStorage.getItem("saveProgressStatus") == "true") {
-                    this.OPDProgramActionName = "+ Continue OPD consultation";
-                } else {
-                    this.OPDProgramActionName = "+ Start new OPD consultation";
-                }
-                this.url = "OPDvitals";
-            } else {
-                this.url = "OPDvitals";
-                this.OPDProgramActionName = "+ Start new OPD OPD Program";
-            }
         },
         openModal() {
             this.isModalOpen = true;
@@ -542,27 +545,20 @@ export default defineComponent({
             await UserService.setProgramUserActions();
             this.$router.push(url);
         },
-        async updateNCDData() {
+        async updateData() {
             const array = ["Height", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
 
             // An array to store all promises
             const promises = array.map(async (item) => {
                 const dd = await ObservationService.getFirstValueNumber(this.demographics.patient_id, item);
-                console.log("🚀 ~ promises ~ dd:", dd);
                 return { [item]: dd };
             });
 
             // Wait for all promises to resolve
             const resultsArray = await Promise.all(promises);
-            console.log("🚀 ~ updateNCDData ~ resultsArray:", resultsArray);
 
             // Combine the objects in resultsArray into a single object
             this.vitals = Object.assign({}, ...resultsArray);
-            console.log("🚀 ~ updateNCDData ~ combinedResults:", this.vitals);
-        },
-        handleOPD() {
-            this.setOPDValue();
-            this.$router.push(this.url);
         },
         covertGender(gender: any) {
             return ["Male", "M"].includes(gender) ? "Male" : ["Female", "F"].includes(gender) ? "Female" : "";
