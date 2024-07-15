@@ -299,14 +299,6 @@ export default defineComponent({
                 this.checkUnderNine = HisDate.ageInMonths(this.birthdate) < 9 ? true : false;
                 this.checkUnderFive = HisDate.getAgeInYears(this.birthdate) < 5 ? true : false;
                 this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.birthdate) < 42 ? true : false;
-                this.controlHeight();
-            }
-        },
-        controlHeight() {
-            if (this.checkUnderSixWeeks) {
-                modifyFieldValue(this.birthRegistration, "Height (cm)", "displayNone", true);
-            } else {
-                modifyFieldValue(this.birthRegistration, "Height (cm)", "displayNone", false);
             }
         },
         disableNationalIDInput() {
