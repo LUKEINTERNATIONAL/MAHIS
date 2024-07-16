@@ -1,5 +1,11 @@
 <template>
-    <basic-card :content="cardData" @update:selected="handleInputData" @update:inputValue="handleInputData" @clicked:button="handleBtns"></basic-card>
+    <basic-card
+        :content="cardData"
+        :editable="editable"
+        @update:selected="handleInputData"
+        @update:inputValue="handleInputData"
+        @clicked:button="handleBtns"
+    ></basic-card>
 </template>
 
 <script lang="ts">
@@ -19,6 +25,7 @@ import { validateField } from "@/services/validation_service";
 import AddTA from "@/components/Registration/Modal/AddTA.vue";
 import AddVillage from "@/components/Registration/Modal/AddVillage.vue";
 import Districts from "@/views/Mixin/SetDistricts.vue";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 
 export default defineComponent({
     mixins: [Districts],
@@ -43,6 +50,7 @@ export default defineComponent({
         };
     },
     computed: {
+        ...mapState(useDemographicsStore, ["demographics", "patient"]),
         ...mapState(useRegistrationStore, ["homeLocation", "currentLocation"]),
         home_district() {
             return getFieldValue(this.homeLocation, "home_district", "value")?.name;
@@ -68,10 +76,27 @@ export default defineComponent({
             deep: true,
         },
     },
+    props: {
+        editable: {
+            default: false as any,
+        },
+    },
     async mounted() {
         this.buildCards();
+        this.setData();
     },
     methods: {
+        setData() {
+            modifyFieldValue(this.homeLocation, "home_district", "value", { name: this.patient.person?.addresses[0]?.address2, concept_id: "" });
+            modifyFieldValue(this.homeLocation, "home_traditional_authority", "value", {
+                name: this.patient.person?.addresses[0]?.county_district,
+                concept_id: "",
+            });
+            modifyFieldValue(this.homeLocation, "home_village", "value", {
+                name: this.patient.person?.addresses[0]?.neighborhood_cell,
+                concept_id: "",
+            });
+        },
         setSameAsCurrent() {
             if (getCheckboxSelectedValue(this.homeLocation, "Same as current")?.checked) {
                 const currentDistrict = getFieldValue(this.currentLocation, "current_district", "value");
