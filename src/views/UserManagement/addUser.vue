@@ -93,7 +93,6 @@
                 @search-change="FindLocation($event)"
                 track-by="location_id"
                 :options="locationData"
-                @select="findVillages($event)"
             />
 
             <div>
@@ -360,7 +359,7 @@ function selectedLocation(data: any) {
 function selectedVillage(VillagesList: any) {
     selectedVillageIds.length = 0
     VillagesList.forEach((village: any ) => {
-        selectedVillageIds.push(village.id)
+        selectedVillageIds.push(village.village_id)
     })
 }
 
