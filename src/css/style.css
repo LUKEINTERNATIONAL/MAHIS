@@ -566,3 +566,15 @@ ion-spinner {
 .loading {
     pointer-events: none;
 }
+.modalTitle {
+    padding: 10px;
+}
+.largeModal {
+    --height: 95vh;
+}
+ion-header {
+    background: #fff;
+}
+ion-footer {
+    background: #fff;
+}

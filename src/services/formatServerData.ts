@@ -16,7 +16,7 @@ export async function formatRadioButtonData(data: any) {
     return (await Promise.all(buildObjPromises)).filter((obj) => obj !== null);
 }
 
-export async function formatInputFiledData(data: any, obs_datetime = ConceptService.getSessionDate()) {
+export async function formatInputFiledData(data: any, obs_datetime: any = ConceptService.getSessionDate(), childData = "") {
     const buildObjPromises = data.map(async (item: any) => {
         if (!item?.data?.rowData) return [];
 
@@ -28,7 +28,7 @@ export async function formatInputFiledData(data: any, obs_datetime = ConceptServ
                     // Use map with Promise.all instead of forEach
                     value = await Promise.all(
                         element?.value.map(async (item: any) => {
-                            return await getValue(element, item.concept_id, obs_datetime);
+                            return await getValue(element, item.concept_id, obs_datetime, childData);
                         })
                     );
                 } else if (element.isSingleSelect) {
@@ -52,10 +52,25 @@ export async function formatInputFiledData(data: any, obs_datetime = ConceptServ
     return results.flat().flat();
 }
 
-async function getValue(element: any, value: any, obs_datetime: any) {
+async function getValue(element: any, value: any, obs_datetime: any, childData = "") {
     const concept_id = await ConceptService.getConceptID(element.name, true);
     if (element.valueType === "coded") {
-        return { concept_id, value_coded: value, obs_datetime };
+        if (childData) {
+            return {
+                concept_id,
+                value_coded: value,
+                obs_datetime,
+                child: [
+                    {
+                        concept_id: concept_id,
+                        value_text: childData,
+                        obs_datetime: obs_datetime,
+                    },
+                ],
+            };
+        } else {
+            return { concept_id, value_coded: value, obs_datetime };
+        }
     } else if (element.valueType === "text") {
         return { concept_id, value_text: value, obs_datetime };
     } else if (element.valueType === "number") {
