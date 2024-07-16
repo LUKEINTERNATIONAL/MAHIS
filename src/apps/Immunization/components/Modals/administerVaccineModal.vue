@@ -237,7 +237,7 @@ export default defineComponent({
             this.dismiss();
         },
         isAlphaNumeric(text: string) {
-            const regex = /^[a-zA-Z0-9]+$/;
+            const regex = /^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+$/;
             return regex.test(text);
         },
         validateBatchNumber() {
