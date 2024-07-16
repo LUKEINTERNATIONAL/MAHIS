@@ -632,11 +632,8 @@ async function generatePropertiesList() {
 
 async function getAPICounterPart() {
     const selectedPrograms = await generatePropertiesList()
-    console.log(selectedPrograms)
     selectedPrograms.forEach((item: any, index: number) => {
-        // if
-        console.log("<><.....")
-        console.log(item)
+        
     })
 }
 

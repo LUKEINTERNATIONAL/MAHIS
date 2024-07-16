@@ -83,7 +83,6 @@ async function generatedSelected() {
     const is_P = await generateKeyAPIRef(selected.name);
     try {
         if (is_P.exists == true) {
-            console.log(is_P.ref_name);
             const data_ = [] as any;
             const data = await getActivities(is_P.ref_name);
             activities.value.forEach((item: any) => {
