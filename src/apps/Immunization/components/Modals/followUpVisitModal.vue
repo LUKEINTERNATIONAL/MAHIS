@@ -81,6 +81,7 @@ import { PatientRegistrationService } from "@/services/patient_registration_serv
 import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
 import { RelationshipService } from "@/services/relationship_service";
 import Relationship from "@/views/Mixin/SetRelationship.vue";
+import { DrugOrderService } from "@/services/drug_order_service";
 
 export default defineComponent({
     mixins: [Relationship],
@@ -206,7 +207,11 @@ export default defineComponent({
             if ((await this.createGuardian()) || (await this.saveVaccineAdverseEffects())) modalController.dismiss();
         },
         async saveVaccineAdverseEffects() {
-            const vaccineAdverseEffects = await formatInputFiledData(this.vaccineAdverseEffects);
+            const lastVaccine = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
+            const drugNames = lastVaccine.map((item: any) => item.drug.name).join(",");
+            const vaccineAdverseEffects = await formatInputFiledData(this.vaccineAdverseEffects, HisDate.currentDate, drugNames);
+            console.log("🚀 ~ saveVaccineAdverseEffects ~ vaccineAdverseEffects:", vaccineAdverseEffects);
+
             const userID: any = Service.getUserID();
             if (vaccineAdverseEffects.length > 0) {
                 const registration = new AppEncounterService(this.demographics.patient_id, 203, userID);
