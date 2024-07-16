@@ -27,8 +27,10 @@
   import Picker from 'pickerjs'
   import "pickerjs/dist/picker.css";
   import { Service } from "@/services/service";
+  import { PatientService } from "@/services/patient_service"
   const uniqId = ref("0")
   let pickerInstance = null as any
+  const patient = new PatientService()
   
 
   onMounted(() => {
@@ -56,15 +58,24 @@
   }>()
 
   function dateChange() {
+    const clientBODYear = getYearFromDateString(patient.getBirthdate() as any)
     const sessionYear = getYearFromDateString(Service.getSessionDate())
     const pickerYear = pickerInstance.getDate().getFullYear()
+    console.log(pickerYear)
+    console.log(clientBODYear)
     if (pickerYear <= sessionYear) {
-      //
-    } else {
+      if ( parseInt(pickerYear) == parseInt(clientBODYear)) {
+        const corrected_date = pickerInstance.getDate()
+        corrected_date.setFullYear(sessionYear)
+        pickerInstance.setDate(corrected_date)
+      }
+    }
+     else {
       const corrected_date = pickerInstance.getDate()
       corrected_date.setFullYear(sessionYear)
       pickerInstance.setDate(corrected_date)
     }
+
     emit("dateChange", pickerInstance.getDate())
   }
 

@@ -127,7 +127,6 @@ export default defineComponent({
         },
         setSB(vaccineSchudule: any){
             const vaccineScheduleStore = useAdministerVaccineStore()
-            //vaccineScheduleStore.setCurrentSchedFound(true)
             vaccineScheduleStore.setCurrentMilestoneToAdminister({ currentMilestone: vaccineSchudule.age })
             this.landingSlide = vaccineSchudule.visit - 1
             this.current_milestone = vaccineSchudule.age
