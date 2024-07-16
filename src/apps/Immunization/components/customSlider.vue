@@ -66,7 +66,7 @@ export default defineComponent({
             iconsContent: icons,
             showCurrentMilestoneAlert: false,
             landingSlide: 0,
-            msg: "Vaccines due today",
+            msg: "Upcoming Vaccines",
             current_milestone: "" as string,
             componentKey: 0,
         };
@@ -112,13 +112,22 @@ export default defineComponent({
                 this.milestones = this.appendUniqueObject(this.milestones, obj);
             })
 
+            let shouldStop = false;
+            vaccineScheduleStore.getVaccineSchedule().vaccine_schedule.forEach((vaccineSchudule: any) => {
+                if (shouldStop) return;
+                if (this.findSingleUpcomingMilestone(vaccineSchudule) == true) {
+                    shouldStop = true;
+                    return;
+                }
+            })
+
             vaccineScheduleStore.getVaccineSchedule().vaccine_schedule.forEach((vaccineSchudule: any) => {
                 this.findCurrentMilestone(vaccineSchudule)
             })
         },
         setSB(vaccineSchudule: any){
             const vaccineScheduleStore = useAdministerVaccineStore()
-            vaccineScheduleStore.setCurrentSchedFound(true)
+            //vaccineScheduleStore.setCurrentSchedFound(true)
             vaccineScheduleStore.setCurrentMilestoneToAdminister({ currentMilestone: vaccineSchudule.age })
             this.landingSlide = vaccineSchudule.visit - 1
             this.current_milestone = vaccineSchudule.age
@@ -126,6 +135,8 @@ export default defineComponent({
         },
         handleSchedule(vaccineSchudule: any) {
             if (vaccineSchudule.milestone_status == "upcoming") {
+                const vaccineScheduleStore = useAdministerVaccineStore()
+                vaccineScheduleStore.setCurrentSchedFound(false)
                 this.msg = "Upcoming Vaccines"
                 this.showCurrentMilestoneAlert = true
                 this.setSB(vaccineSchudule)
@@ -136,9 +147,18 @@ export default defineComponent({
                 vaccineScheduleStore.setCurrentSchedFound(false)
             }
         },
+        findSingleUpcomingMilestone(vaccineSchudule: any) {
+            if (vaccineSchudule.milestone_status == "upcoming") {
+                this.setSB(vaccineSchudule)
+                return true
+            }
+            return false
+        },
         findCurrentMilestone(vaccineSchudule: any) {
             if (vaccineSchudule.milestone_status == "current") {
                 this.msg = "Vaccines due today"
+                const vaccineScheduleStore = useAdministerVaccineStore()
+                vaccineScheduleStore.setCurrentSchedFound(true)
                 this.showCurrentMilestoneAlert = true
                 this.setSB(vaccineSchudule)
             }
@@ -165,6 +185,7 @@ export default defineComponent({
                 this.showCurrentMilestoneAlert = true;
                 return;
             }
+
 
             if (templmilesytone.age != CurrentMilestoneToAdminister.currentMilestone) {
                 this.showCurrentMilestoneAlert = false;
