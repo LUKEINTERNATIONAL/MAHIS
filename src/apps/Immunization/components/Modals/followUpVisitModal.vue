@@ -11,7 +11,7 @@
         <ion-accordion-group ref="accordionGroup" class="previousView">
             <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
                 <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Change guarding</ion-label>
+                    <ion-label class="previousLabel">Change Guardian</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content" style="padding-bottom: 200px">
                     <div class="">
