@@ -105,14 +105,7 @@
                     :icon="iconsContent.saveWhite"
                     @click="saveData()"
                 />
-                <DynamicButton
-                    v-else
-                    name="Next"
-                    :disabledValue="disableSaveBtn"
-                    iconSlot="end"
-                    :icon="iconsContent.arrowRightWhite"
-                    @click="nextStep"
-                />
+                <DynamicButton v-else name="Next" :disabledValue="false" iconSlot="end" :icon="iconsContent.arrowRightWhite" @click="nextStep" />
             </div>
         </ion-footer>
     </ion-page>
@@ -467,8 +460,14 @@ export default defineComponent({
             await resetPatientData();
             const demographicsStore = useDemographicsStore();
             demographicsStore.setPatient(item);
+            let fullName = "";
+            if (item.person.names[0].middle_name && item.person.names[0].middle_name != "N/A") {
+                fullName = item.person.names[0].given_name + " " + item.person.names[0].middle_name + " " + item.person.names[0].family_name;
+            } else {
+                fullName = item.person.names[0].given_name + " " + item.person.names[0].family_name;
+            }
             demographicsStore.setDemographics({
-                name: item.person.names[0].given_name + " " + item.person.names[0].family_name,
+                name: fullName,
                 mrn: this.patientIdentifier(item),
                 birthdate: item.person.birthdate,
                 category: "",
@@ -512,7 +511,7 @@ export default defineComponent({
                 cell_phone_number: getFieldValue(this.personInformation, "phoneNumber", "value"),
                 occupation: getRadioSelectedValue(this.socialHistory, "occupation"),
                 marital_status: getRadioSelectedValue(this.socialHistory, "maritalStatus"),
-                religion: getFieldValue(this.socialHistory, "religion", "value"),
+                religion: getFieldValue(this.socialHistory, "religion", "value")?.name,
                 education_level: getRadioSelectedValue(this.socialHistory, "highestLevelOfEducation"),
             };
         },

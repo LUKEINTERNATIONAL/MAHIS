@@ -1,5 +1,5 @@
 <template>
-    <basic-card :content="cardData" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-card>
+    <basic-card :content="cardData" :editable="editable" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-card>
 </template>
 
 <script lang="ts">
@@ -17,6 +17,7 @@ import HisDate from "@/utils/Date";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { validateField } from "@/services/validation_service";
 import Relationship from "@/views/Mixin/SetRelationship.vue";
+import { RelationshipService } from "@/services/relationship_service";
 
 export default defineComponent({
     name: "Menu",
@@ -79,11 +80,42 @@ export default defineComponent({
             return getFieldValue(this.guardianInformation, "relationship", "value");
         },
     },
+    props: {
+        editable: {
+            default: false as any,
+        },
+    },
     async mounted() {
         await this.setRelationShip();
         this.buildCards();
+        this.setData();
     },
     methods: {
+        async setData() {
+            const guardianData = await RelationshipService.getRelationships(this.demographics.patient_id);
+
+            modifyFieldValue(this.guardianInformation, "guardianNationalID", "value", this.setAttribute("Regiment ID", guardianData[0]?.relation));
+            modifyFieldValue(this.guardianInformation, "guardianFirstname", "value", guardianData[0]?.relation.names[0]?.given_name);
+            modifyFieldValue(this.guardianInformation, "guardianLastname", "value", guardianData[0]?.relation.names[0]?.family_name);
+            modifyFieldValue(this.guardianInformation, "guardianMiddleName", "value", guardianData[0]?.relation.names[0]?.middle_name);
+            modifyFieldValue(
+                this.guardianInformation,
+                "guardianPhoneNumber",
+                "value",
+                this.setAttribute("Cell Phone Number", guardianData[0]?.relation)
+            );
+            modifyFieldValue(this.guardianInformation, "relationship", "value", {
+                id: guardianData[0]?.type.relationship_type_id,
+                name: guardianData[0]?.type.b_is_to_a,
+            });
+            await this.setRelationShip();
+        },
+        setAttribute(name: string | undefined, data: any) {
+            if (!data || Object.keys(data).length === 0) return;
+            let str = data.person_attributes.find((x: any) => x.type.name == name);
+            if (str == undefined) return;
+            else return str.value;
+        },
         async setRelationShip() {
             if (this.gender) {
                 await this.getRelationships();

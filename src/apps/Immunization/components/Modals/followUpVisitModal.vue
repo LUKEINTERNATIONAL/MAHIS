@@ -11,7 +11,7 @@
         <ion-accordion-group ref="accordionGroup" class="previousView">
             <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
                 <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Change guarding</ion-label>
+                    <ion-label class="previousLabel">Change Guardian</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content" style="padding-bottom: 200px">
                     <div class="">
@@ -81,6 +81,7 @@ import { PatientRegistrationService } from "@/services/patient_registration_serv
 import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
 import { RelationshipService } from "@/services/relationship_service";
 import Relationship from "@/views/Mixin/SetRelationship.vue";
+import { DrugOrderService } from "@/services/drug_order_service";
 
 export default defineComponent({
     mixins: [Relationship],
@@ -177,10 +178,6 @@ export default defineComponent({
             if (str == undefined) return;
             else return str.value;
         },
-        navigationMenu(url: any) {
-            menuController.close();
-            this.$router.push(url);
-        },
         resetData() {
             const rest = useFollowUpStoreStore();
             rest.setProtectedAtBirth(rest.getInitialProtectedAtBirth());
@@ -210,7 +207,11 @@ export default defineComponent({
             if ((await this.createGuardian()) || (await this.saveVaccineAdverseEffects())) modalController.dismiss();
         },
         async saveVaccineAdverseEffects() {
-            const vaccineAdverseEffects = await formatInputFiledData(this.vaccineAdverseEffects);
+            const lastVaccine = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
+            const drugNames = lastVaccine.map((item: any) => item.drug.name).join(",");
+            const vaccineAdverseEffects = await formatInputFiledData(this.vaccineAdverseEffects, HisDate.currentDate, drugNames);
+            console.log("🚀 ~ saveVaccineAdverseEffects ~ vaccineAdverseEffects:", vaccineAdverseEffects);
+
             const userID: any = Service.getUserID();
             if (vaccineAdverseEffects.length > 0) {
                 const registration = new AppEncounterService(this.demographics.patient_id, 203, userID);
