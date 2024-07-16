@@ -4,7 +4,7 @@
             <div style="max-width: 500px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">
                 <ion-row>
                     <ion-col size="3.3">
-                        <div :class="demographics.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'" @click="openPIM()">
+                        <div :class="demographics.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
                             <ion-icon style="color: #fff; font-size: 100px" :icon="person"></ion-icon>
                         </div>
                     </ion-col>
@@ -44,7 +44,7 @@
                     </ion-col>
                 </ion-row>
             </div>
-            <div class="name" style="color: var(--ion-color-primary); margin-top: 10px">
+            <div class="name" style="color: var(--ion-color-primary); margin-top: 10px" @click="openPopover($event)">
                 <ion-icon :icon="ellipsisVerticalSharp"></ion-icon>
             </div>
         </div>
@@ -148,6 +148,23 @@
             </div>
         </div>
     </div>
+    <ion-popover
+        style="--offset-x: -10px"
+        :is-open="popoverOpen"
+        :show-backdrop="false"
+        :dismiss-on-select="true"
+        :event="event"
+        @didDismiss="popoverOpen = false"
+    >
+        <div>
+            <ion-list style="--ion-background-color: #fff; --offset-x: -30px">
+                <ion-item :button="true" :detail="false" @click="openPIM()" style="cursor: pointer">Update demographics</ion-item>
+                <ion-item :button="true" :detail="false" style="cursor: pointer">Update outcome</ion-item>
+                <ion-item :button="true" :detail="false" style="cursor: pointer">Print visit summary</ion-item>
+                <ion-item :button="true" :detail="false" style="cursor: pointer">Print national ID</ion-item>
+            </ion-list>
+        </div>
+    </ion-popover>
 </template>
 
 <script lang="ts">
@@ -272,6 +289,8 @@ export default defineComponent({
             protectedStatus: "" as string,
             todays_date: HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
             lastVaccine: [] as any,
+            popoverOpen: false,
+            event: null as any,
         };
     },
     computed: {
@@ -343,6 +362,10 @@ export default defineComponent({
     },
 
     methods: {
+        openPopover(e: Event) {
+            this.event = e;
+            this.popoverOpen = true;
+        },
         async checkProtectedStatus() {
             this.protectedStatus = await ObservationService.getFirstValueText(this.demographics.patient_id, "Protected at birth");
         },
