@@ -165,7 +165,6 @@ export default defineComponent({
             immediate: true,
         },
     },
-    async mounted() {},
     setup() {
         return { notificationsOutline, personCircleOutline, createOutline, clipboardOutline, calendarOutline };
     },
@@ -176,32 +175,15 @@ export default defineComponent({
         handleCancel() {
             modalController.dismiss();
         },
-
-        setReligion() {
-            var str = this.patient.person.person_attributes.find((x: any) => x.type.name == "Religion");
-            if (str == undefined) return;
-            else var jsonObject = str.value.replace(/=>/g, ":");
-            if (jsonObject.includes("{")) {
-                jsonObject = JSON.parse(jsonObject);
-                return jsonObject.name;
-            }
-            return str.value;
-        },
-        setAttribute(name: string | undefined, data: any) {
-            if (Object.keys(data).length === 0) return;
-            let str = data.person_attributes.find((x: any) => x.type.name == name);
-            if (str == undefined) return;
-            else return str.value;
-        },
-
         async saveDetails() {
             try {
-                const updatedDemodata = await this.updateDemographics();
-                const updatedGuardian = await this.updateGuardian();
-                // if (updatedGuardian) await this.updateRelationship(updatedGuardian);
-                await this.updatePatientDemographics(updatedDemodata);
+                await this.updateDemographics();
+                // const updatedGuardian = await this.updateGuardian();
+                await this.updatePatientDemographics();
                 toastSuccess("Successfully Updated Patient");
+                this.handleCancel();
             } catch (error) {
+                console.log("🚀 ~ saveDetails ~ error:", error);
                 toastWarning("Failed to save details");
             }
         },
@@ -237,7 +219,7 @@ export default defineComponent({
                 cell_phone_number: getFieldValue(this.personInformation, "phoneNumber", "value"),
                 birthdate_estimated: false,
                 home_region: await this.getRegion(getFieldValue(this.homeLocation, "home_district", "value")?.name),
-                home_district: getFieldValue(this.personInformation, "phoneNumber", "value"),
+                home_district: getFieldValue(this.homeLocation, "home_district", "value")?.name,
                 home_traditional_authority: getFieldValue(this.homeLocation, "home_traditional_authority", "value")?.name,
                 home_village: getFieldValue(this.homeLocation, "home_village", "value")?.name,
                 current_region: await this.getRegion(getFieldValue(this.currentLocation, "current_district", "value")?.name),
@@ -254,7 +236,7 @@ export default defineComponent({
             };
             const personService = new PersonService(updatedData);
             const data = await personService.update(this.demographics.patient_id);
-            return data;
+            console.log("🚀 ~ updateDemographics ~ data:", data);
         },
         async updateGuardian() {
             let guardianDetails: any = {
@@ -281,38 +263,22 @@ export default defineComponent({
                 national_id: "",
             };
 
-            // if (this.guardianData.length > 0) {
-            //     guardianDetails.person_id = this.guardianData[0].person_b;
-            //     const personService = new PersonService(guardianDetails);
-            //     await personService.update(this.guardianData[0].person_b);
-            //     let data = await RelationshipService.getRelationships(this.demographics.patient_id);
-            //     return data[0];
-            // } else {
-            //     const guardian: any = new PatientRegistrationService();
-            //     await guardian.registerGuardian(guardianDetails);
-            //     const guardianID = guardian.getPersonID();
-            //     if (getFieldValue(this.guardianInformation, "relationship", "value")?.name == "Unknown") return;
-            //     let selectedID = this.relationshipsData.find(
-            //         (x: any) =>
-            //             x.b_is_to_a == getFieldValue(this.guardianInformation, "relationship", "value")?.name ||
-            //             x.a_is_to_b == this.editableGuardian.relationship
-            //     )["relationship_type_id"];
-            //     return await RelationsService.createRelation(this.demographics.patient_id, guardianID, selectedID);
-            // }
+            let data = await RelationshipService.getRelationships(this.demographics.patient_id);
+            const selectedID = getFieldValue(this.guardianInformation, "relationship", "value")?.id;
+            if (selectedID) {
+                if (data.length > 0) {
+                    await RelationsService.amendRelation(this.demographics.patient_id, data[0].person_b, data[0].relationship_id, selectedID);
+                } else {
+                    const guardian: any = new PatientRegistrationService();
+                    await guardian.registerGuardian(guardianDetails);
+                    const guardianID = guardian.getPersonID();
+                    await RelationsService.createRelation(this.demographics.patient_id, guardianID, selectedID);
+                }
+            }
         },
 
-        // async updateRelationship(guardianInfo: any) {
-        //     let patient_id = this.demographics.patient_id;
-        //     let guardian_id = guardianInfo.person_b;
-        //     let current_relation_id = guardianInfo.relationship_id;
-        //     let new_relation_id = this.relationshipsData.find(
-        //         (x: any) => x.b_is_to_a == this.editableGuardian.relationship || x.a_is_to_b == this.editableGuardian.relationship
-        //     )["relationship_type_id"];
-        //     return await RelationsService.amendRelation(patient_id, guardian_id, current_relation_id, new_relation_id);
-        // },
-
-        async updatePatientDemographics(data: any) {
-            const item = await PatientService.findByID(data.person_id);
+        async updatePatientDemographics() {
+            const item = await PatientService.findByID(this.demographics.patient_id);
             const demographicsStore = useDemographicsStore();
             demographicsStore.setPatient(item);
             let fullName = "";
