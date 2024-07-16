@@ -177,10 +177,6 @@ export default defineComponent({
             if (str == undefined) return;
             else return str.value;
         },
-        navigationMenu(url: any) {
-            menuController.close();
-            this.$router.push(url);
-        },
         resetData() {
             const rest = useFollowUpStoreStore();
             rest.setProtectedAtBirth(rest.getInitialProtectedAtBirth());
