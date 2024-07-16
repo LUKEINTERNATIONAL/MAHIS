@@ -73,7 +73,6 @@ export default defineComponent({
         populateHistory() {
             const vaccineScheduleStore = useAdministerVaccineStore();
             const vaccinSchedules = vaccineScheduleStore.getVaccineSchedule().vaccine_schedule
-            console.log(vaccinSchedules)
             this.vaccineHistory = vaccinSchedules
         },
         vaccinesGivenCount(vaccinSchedule: any) {

@@ -222,7 +222,6 @@ export default defineComponent({
         },
         async buildGraph() {
             this.vitalsWeightHeight[0].validationStatus = "";
-            console.log("🚀 ~ buildGraph ~ this.vitalsWeightHeight[0].validationStatus:", this.vitalsWeightHeight[0].validationStatus);
             const ctx: any = document.getElementById("myChart");
             if (this.chart) {
                 this.chart.destroy();

@@ -107,7 +107,6 @@ export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
             this.tempScannedBatchNumber = tempScannedBatchNumber;
         },
         setLastVaccinesGiven(data: any) {
-            console.log("here: ", data)
             this.lastVaccinesGiven.length = 0
             data.forEach((drug:any) => {
                 this.lastVaccinesGiven.push(

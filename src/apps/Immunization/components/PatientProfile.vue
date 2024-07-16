@@ -135,7 +135,7 @@
                 <row v-if="lastVaccinesGiven.length > 0">
                     <ion-icon size="medium" style="margin-bottom: -6px;" :icon="iconsContent.calendar"></ion-icon>
                     <!-- <span> at <span style="color: #016302;">{{ item.age }}</span></span> -->
-                    <span style="color: #316CBA; margin-left: 10%;">{{ getLastVaccinesGivenDisplayDate() }}</span>
+                    <span style="color: #316CBA; margin-left: 1%;">{{ getLastVaccinesGivenDisplayDate() }}</span>
                 </row>
                 
                 <row v-if="lastVaccinesGiven.length > 0">
