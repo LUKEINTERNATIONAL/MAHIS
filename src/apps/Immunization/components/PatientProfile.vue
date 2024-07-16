@@ -74,7 +74,7 @@
         </div>
 
         <div>
-            <div class="graphBtn">
+            <div class="graphBtn" v-if="overDueVaccinesCount > 0">
                 <div class="dueAlert">
                     <ion-row>
                         <ion-col v-if="overDueVaccinesCount > 0" style="display: flex; justify-content: center">
@@ -83,7 +83,7 @@
                                 <span style="margin-right: 5px">{{ overDueVaccinesCount }} vaccine(s) overdue</span>
                             </div>
                         </ion-col>
-                        <ion-col style="display: flex; justify-content: center; cursor: pointer" @click="showMissedVaccines">
+                        <ion-col v-if="overDueVaccinesCount > 0" style="display: flex; justify-content: center; cursor: pointer" @click="showMissedVaccines">
                             <div class="missed_vaccine_alert_txt">
                                 <span>click to see missed vaccines</span>
                             </div>
@@ -124,27 +124,24 @@
 
             <div class="lastVaccine">
                 <div class="lastVaccineTitle">
-                    <div class="lastVaccineText">Last vaccines given</div>
+                    <div v-if="lastVaccinesGiven.length > 0" class="lastVaccineText">Last vaccines given</div>
                     <div class="seeFullList">
                         <ion-button @click="openVH()" style="color: #016302" class="btnText btnTextWeight" size="small" fill="clear">
                             <span>See full History</span>
                         </ion-button>
                     </div>
                 </div>
-                <div class="lastVaccineDate">
-                    <ion-icon size="small" :icon="iconsContent.calendar"></ion-icon>
-                    <div>at Birth <span class="dot">.</span> 19 Apr 2024</div>
-                </div>
-                <div class="lastVaccineList">
-                    <ion-button fill="solid" color="success">
-                        <ion-icon slot="start" :icon="iconsContent.greenInjection"></ion-icon>
-                        OPV 0
-                    </ion-button>
-                    <ion-button fill="solid" color="success">
-                        <ion-icon slot="start" :icon="iconsContent.greenInjection"></ion-icon>
-                        BCG
-                    </ion-button>
-                </div>
+
+                <row v-if="lastVaccinesGiven.length > 0">
+                    <ion-icon size="medium" style="margin-bottom: -6px;" :icon="iconsContent.calendar"></ion-icon>
+                    <!-- <span> at <span style="color: #016302;">{{ item.age }}</span></span> -->
+                    <span style="color: #316CBA; margin-left: 1%;">{{ getLastVaccinesGivenDisplayDate() }}</span>
+                </row>
+                
+                <row v-if="lastVaccinesGiven.length > 0">
+                    <customVaccine :vaccines="lastVaccinesGiven" :milestone_status="''" />
+                </row>
+                
             </div>
         </div>
     </div>
@@ -235,6 +232,7 @@ import { ConceptService } from "@/services/concept_service";
 import { ObservationService } from "@/services/observation_service";
 import missedVaccinesModal from "@/apps/Immunization/components/Modals/missedVaccinesModal.vue";
 import { DrugOrderService } from "@/services/drug_order_service";
+import customVaccine from "@/apps/Immunization/components/customVaccine.vue"
 
 import {
     getFieldValue,
@@ -276,6 +274,7 @@ export default defineComponent({
         PreviousVitals,
         customSlider,
         IonRow,
+        customVaccine,
     },
     data() {
         return {
@@ -300,7 +299,7 @@ export default defineComponent({
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
         ...mapState(useOutcomeStore, ["dispositions"]),
-        ...mapState(useAdministerVaccineStore, ["currentMilestone", "missedVaccineSchedules", "overDueVaccinesCount"]),
+        ...mapState(useAdministerVaccineStore, ["currentMilestone", "missedVaccineSchedules", "overDueVaccinesCount", "lastVaccinesGiven","lastVaccineGievenDate"]),
     },
     created() {
         this.getData();
@@ -310,6 +309,7 @@ export default defineComponent({
         this.loadCurrentMilestone();
         this.checkAge();
         await this.checkProtectedStatus();
+        await this.getLastVaccinesGiven();
     },
     watch: {
         vitals: {
@@ -353,7 +353,8 @@ export default defineComponent({
                 await this.checkProtectedStatus();
                 await this.openFollowModal();
                 this.checkAge();
-                this.setMilestoneReload();
+                this.setMilestoneReload()
+                await this.getLastVaccinesGiven();
             },
         },
     },
@@ -629,6 +630,14 @@ export default defineComponent({
             const store = useAdministerVaccineStore();
             store.setVaccineReload(!store.getVaccineReload());
         },
+        async getLastVaccinesGiven() {
+            const data = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
+            const store = useAdministerVaccineStore()
+            store.setLastVaccinesGiven(data);
+        },
+        getLastVaccinesGivenDisplayDate() {
+            return HisDate.toStandardHisDisplayFormat(this.lastVaccineGievenDate)
+        }
     },
 });
 </script>

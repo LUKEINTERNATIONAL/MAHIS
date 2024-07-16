@@ -124,7 +124,6 @@
   const searchValue = ref("")
 
   const getBodyRowClassName: BodyRowClassNameFunction = (item: Item, rowNumber: number): string => {
-    console.log("wwwww",rowNumber)
     let cls = rowNumber % 2 === 0 ? "even-row" : "odd-row"
     return cls
   }
@@ -164,12 +163,12 @@ watch(
 watch(
     () => props.items,
     async (newValue) => {
-      console.log(newValue)
+      // console.log(newValue)
 
       items_local.value = newValue 
 
-      console.log("qwweerrtkkk....")
-      console.log(items_local.value)
+      // console.log("qwweerrtkkk....")
+      // console.log(items_local.value)
     }
 )
 
@@ -179,8 +178,8 @@ onMounted(async ()=>{
 
 onMounted(async ()=>{
   searchFieldS.value = props.search_fields
-  console.log("*&*&^%#$")
-  console.log(searchFieldS.value)
+  // console.log("*&*&^%#$")
+  // console.log(searchFieldS.value)
 })
 
 watch(() => props.search_fields,
@@ -191,9 +190,9 @@ watch(() => props.search_fields,
 
 onMounted(async ()=>{
   items_local.value = props.items
-  console.log("qwweerrt....")
+  // console.log("qwweerrt....")
   //
-  console.log(items_local.value)
+  // console.log(items_local.value)
 })
 
 watch(() => props.items,

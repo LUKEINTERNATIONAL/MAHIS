@@ -11,30 +11,7 @@
             </ion-col>
         </ion-row>
 
-        <ion-row>
-            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                >Batch number<span style="color: #b42318">*</span></ion-label
-            >
-        </ion-row>
-        <div>
-            <BasicInputField
-                :placeholder="'Enter batch number'"
-                :icon="iconsContent.batchNumber"
-                :inputValue="batchNumber"
-                :-inner-action-btn-propeties="InnerActionBtnPropeties"
-                @update:InnerActionBtnPropetiesAction="InnerActionBtnPropeties.fn"
-                @update:inputValue="updateBatchNumber"
-                @update:passedinputValue="updateBatchNumberByPassValue"
-            />
-
-            <div>
-                <ion-label v-if="is_batch_number_valid" class="error-label">
-                    {{ batch_number_error_message }}
-                </ion-label>
-            </div>
-        </div>
-
-        <div style="margin-top: 30px; margin-bottom: 100px">
+        <div style="margin-top: 30px;">
             <ion-row>
                 <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
                     >Vaccine name<span style="color: #b42318">*</span></ion-label
@@ -59,6 +36,30 @@
             />
             <div>
                 <ion-label style="padding: 3%" v-if="is_vaccine_name_valid" class="error-label">{{ vaccine_name_error_message }}</ion-label>
+            </div>
+        </div>
+
+        <ion-row>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                >Batch number<span style="color: #b42318">*</span></ion-label
+            >
+        </ion-row>
+
+        <div>
+            <BasicInputField
+                :placeholder="'Enter batch number'"
+                :icon="iconsContent.batchNumber"
+                :inputValue="batchNumber"
+                :-inner-action-btn-propeties="InnerActionBtnPropeties"
+                @update:InnerActionBtnPropetiesAction="InnerActionBtnPropeties.fn"
+                @update:inputValue="updateBatchNumber"
+                @update:passedinputValue="updateBatchNumberByPassValue"
+            />
+
+            <div>
+                <ion-label v-if="is_batch_number_valid" class="error-label">
+                    {{ batch_number_error_message }}
+                </ion-label>
             </div>
         </div>
 
@@ -287,8 +288,8 @@ export default defineComponent({
             this.currentDrugOb = data;
         },
         isAlphaNumeric(text: string) {
-            // Regular expression to match one or more digits
-            const regex = /^[a-zA-Z0-9]+$/;
+            // Regular expression to match alphanumeric characters and specified special characters
+            const regex = /^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+$/;
             return regex.test(text);
         },
         validateBatchNumber() {

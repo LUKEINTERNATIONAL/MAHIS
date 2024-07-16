@@ -13,6 +13,8 @@ export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
         missedVaccineSchedules: [] as any,
         overDueVaccinesCount: 0,
         tempScannedBatchNumber: null as any,
+        lastVaccinesGiven: [] as any,
+        lastVaccineGievenDate: "" as any,
     }),
     actions: {
         setVaccineSchedule(data: any) {
@@ -93,7 +95,7 @@ export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
             const currentVaccines = [] as any;
             this.vaccineSchedule?.vaccine_schedule?.forEach((vaccineSchudule: any) => {
                 vaccineSchudule.antigens.forEach((vaccine: any) => {
-                    if (vaccineSchudule.milestone_status == "current" && vaccine.status == "pending") {
+                    if (vaccineSchudule.milestone_status == "missed" && vaccine.status == "pending") {
                         currentVaccines.push(vaccine);
                     }
                 });
@@ -104,6 +106,22 @@ export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
         setTempScannedBatchNumber(tempScannedBatchNumber: any) {
             this.tempScannedBatchNumber = tempScannedBatchNumber;
         },
+        setLastVaccinesGiven(data: any) {
+            this.lastVaccinesGiven.length = 0
+            data.forEach((drug:any) => {
+                this.lastVaccinesGiven.push(
+                    {
+                        drug_id:	1307,
+                        drug_name:	drug.drug.name,
+                        window_period:	null,
+                        can_administer:	false,
+                        status:	"administered",
+                        date_administered:	drug.drug.date_created,
+                    }
+                )
+                this.lastVaccineGievenDate = drug.drug.date_created
+            })
+        }
     },
     persist: true,
 });
