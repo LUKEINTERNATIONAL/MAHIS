@@ -78,7 +78,6 @@ export default defineComponent({
     },
     methods: {
         setData() {
-            console.log("this.patient", this.getAttributes(this.patient, "Religion"));
             modifyFieldValue(this.socialHistory, "religion", "value", { id: "", name: this.getAttributes(this.patient, "Religion") });
             modifyRadioValue(this.socialHistory, "occupation", "selectedValue", this.getAttributes(this.patient, "Occupation"));
             modifyRadioValue(this.socialHistory, "maritalStatus", "selectedValue", this.getAttributes(this.patient, "Civil Status"));

@@ -186,7 +186,7 @@ export default defineComponent({
                 districtData = getFieldValue(this.homeLocation, this.districtType, "value");
             }
 
-            if (Validation.isName(event.value) != null) {
+            if (Validation.isNames(event.value) != null) {
                 modifyFieldValue(this.addTA, event.name, "alertsErrorMassage", "Please enter a valid " + event.name);
                 return false;
             } else {
