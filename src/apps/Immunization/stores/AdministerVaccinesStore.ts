@@ -95,7 +95,7 @@ export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
             const currentVaccines = [] as any;
             this.vaccineSchedule?.vaccine_schedule?.forEach((vaccineSchudule: any) => {
                 vaccineSchudule.antigens.forEach((vaccine: any) => {
-                    if (vaccineSchudule.milestone_status == "current" && vaccine.status == "pending") {
+                    if (vaccineSchudule.milestone_status == "missed" && vaccine.status == "pending") {
                         currentVaccines.push(vaccine);
                     }
                 });

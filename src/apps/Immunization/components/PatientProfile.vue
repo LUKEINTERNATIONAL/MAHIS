@@ -74,7 +74,7 @@
         </div>
 
         <div>
-            <div class="graphBtn">
+            <div class="graphBtn" v-if="overDueVaccinesCount > 0">
                 <div class="dueAlert">
                     <ion-row>
                         <ion-col v-if="overDueVaccinesCount > 0" style="display: flex; justify-content: center">
@@ -83,7 +83,7 @@
                                 <span style="margin-right: 5px">{{ overDueVaccinesCount }} vaccine(s) overdue</span>
                             </div>
                         </ion-col>
-                        <ion-col style="display: flex; justify-content: center; cursor: pointer" @click="showMissedVaccines">
+                        <ion-col v-if="overDueVaccinesCount > 0" style="display: flex; justify-content: center; cursor: pointer" @click="showMissedVaccines">
                             <div class="missed_vaccine_alert_txt">
                                 <span>click to see missed vaccines</span>
                             </div>
