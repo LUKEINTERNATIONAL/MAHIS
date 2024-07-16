@@ -64,14 +64,14 @@
                 label="name"
                 :searchable="true"
                 @search-change=""
-                track-by="assigned_id"
+                track-by="district_id"
                 :options="districtList"
                 :disabled="HSA_found_for_disabling_button"
             />
 
             <div>
-                <ion-label v-if="village_show_error" class="error-label">
-                    {{ village_error_message }}
+                <ion-label v-if="district_show_error" class="error-label">
+                    {{ district_error_message }}
                 </ion-label>
             </div>
         </ion-col>
@@ -128,8 +128,8 @@
             />
 
             <div>
-                <ion-label v-if="village_show_error" class="error-label">
-                    {{ village_error_message }}
+                <ion-label v-if="TAz_show_error" class="error-label">
+                    {{ TAz_error_message }}
                 </ion-label>
             </div>
         </ion-col>
@@ -314,6 +314,10 @@ const location_error_message = ref('Select location')
 const location_show_error = ref(false)
 const village_show_error = ref(false)
 const village_error_message = ref('Select village(s)')
+const district_show_error = ref(false)
+const district_error_message = ref('Select district(s)')
+const TAz_show_error = ref(false)
+const TAz_error_message = ref('Select TA(s)')
 const districtList = ref([] as any)
 const villageList = ref([] as any)
 const TAList = ref([] as any)
@@ -367,7 +371,6 @@ function selectedTA(selectedTAList: any) {
         selectedTAIds.push(village.traditional_authority_id)
     })
    
-
     selectedTAList.forEach((TA: any ) => {
             findVillages(TA.district_id)
         }
@@ -376,12 +379,10 @@ function selectedTA(selectedTAList: any) {
 }
 
 function selectedDistrict(selectedDistrict: any) {
-    console.log(selectedDistrict)
+    selectedDistrictIds.length = 0
     selectedDistrict.forEach((district: any) => {
-        selectedDistrictIds.push()
+        selectedDistrictIds.push(district.district_id)
     })
-
-    districtList.value = districtList.value.concat(selectedDistrict)
 
     selectedDistrict.forEach((district: any ) => {
         fetchTraditionalAuthorities(district.district_id, '')
@@ -411,11 +412,14 @@ async function trigerSaveFn() {
     const _isSSelectionValid_ = isSSelectionValid()
     const _ValidatePassword_ = ValidatePassword()
     const _validateLocation = validateLocation()
+    const _validateDistricts = validateDistricts()
+    const _validateTAz = validateTAz()
     const _validateVillages = validateVillages()
 
-    if (_areFieldsValid_ == true && _ValidatePassword_ == true && _isSSelectionValid_ == true && _isRoleSelected_ == true && _isProgramSelected_ == true && _validateLocation == true) {
+    if (_areFieldsValid_ == true && _ValidatePassword_ == true && _isSSelectionValid_ == true 
+        && _isRoleSelected_ == true && _isProgramSelected_ == true && _validateLocation == true
+        && _validateDistricts == true && _validateTAz == true && _validateVillages == true) {
         const data1 = getFieldsValuesObj(input_properties)
-        console.log(selected_location.value)
         const payload = {
             family_name: data1.last_name,
             given_name: data1.firstname,
@@ -558,6 +562,42 @@ function validateVillages() {
 
         if (selectedVillageIds.length > 0) {
             village_show_error.value = false
+            return true
+        }
+    }
+}
+
+function validateDistricts() {
+    if (checkIfSelectedIsHSA(user_roles.value) == false) {
+        return true
+    }
+
+    if (checkIfSelectedIsHSA(user_roles.value) == true) {
+        if(selectedDistrictIds.length == 0) {
+            district_show_error.value = true
+            return false
+        }
+
+        if (selectedDistrictIds.length > 0) {
+            district_show_error.value = false
+            return true
+        }
+    }
+}
+
+function validateTAz() {
+    if (checkIfSelectedIsHSA(user_roles.value) == false) {
+        return true
+    }
+
+    if (checkIfSelectedIsHSA(user_roles.value) == true) {
+        if(selectedTAIds.length == 0) {
+            TAz_show_error.value = true
+            return false
+        }
+
+        if (selectedTAIds.length > 0) {
+            TAz_show_error.value = false
             return true
         }
     }
@@ -795,7 +835,7 @@ async function fetchTraditionalAuthorities(district_id: any,name: string) {
         ...item,
         assigned_id: index
     }));
-    TAList.value = arrayWithIds
+    TAList.value = TAList.value.concat(arrayWithIds)
     // if (villageList.value.length > 0) {
     //     disableVillageSelection.value = false
     // }         
@@ -808,13 +848,10 @@ async function fetchVillages(district_id: any,name: string) {
         ...item,
         assigned_id: index
     }));
-    console.log(arrayWithIds)
-    villageList.value = arrayWithIds
+    villageList.value = villageList.value.concat(arrayWithIds)
     if (villageList.value.length > 0) {
         disableVillageSelection.value = false
     }
-    
-    console.log(villageList.value)
 }
 
 function findVillages(district_id: any) {
