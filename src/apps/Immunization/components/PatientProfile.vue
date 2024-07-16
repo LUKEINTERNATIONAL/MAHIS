@@ -334,7 +334,7 @@ export default defineComponent({
                 await this.checkProtectedStatus();
                 await this.openFollowModal();
                 this.checkAge();
-                this.setMilestoneReload()
+                this.setMilestoneReload();
             },
         },
     },
@@ -355,7 +355,7 @@ export default defineComponent({
             createModal(OtherVitals, { class: "otherVitalsModal" });
         },
         openPIM() {
-            createModal(personalInformationModal, { class: "otherVitalsModal" });
+            createModal(personalInformationModal, { class: "otherVitalsModal largeModal" });
         },
         openWH() {
             createModal(weightAndHeight, { class: "otherVitalsModal" });
@@ -605,7 +605,7 @@ export default defineComponent({
         setMilestoneReload() {
             const store = useAdministerVaccineStore();
             store.setVaccineReload(!store.getVaccineReload());
-        }
+        },
     },
 });
 </script>
