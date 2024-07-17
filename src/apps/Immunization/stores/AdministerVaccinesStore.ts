@@ -15,6 +15,7 @@ export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
         tempScannedBatchNumber: null as any,
         lastVaccinesGiven: [] as any,
         lastVaccineGievenDate: "" as any,
+        vaccineToBeVoided: {} as any,
     }),
     actions: {
         setVaccineSchedule(data: any) {
@@ -75,6 +76,12 @@ export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
         getMissedVaccineSchedules(): any {
             return this.missedVaccineSchedules;
         },
+        setVaccineToBeVoided(vaccine: any) {
+            this.vaccineToBeVoided = vaccine
+        },
+        getVaccineToBeVoided() {
+            return this.vaccineToBeVoided
+        },
         resetMissedVaccineSchedules(): void {
             this.missedVaccineSchedules = [];
         },
@@ -82,7 +89,7 @@ export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
             let bool = false;
             this.vaccineSchedule?.vaccine_schedule?.forEach((vaccineSchudule: any) => {
                 vaccineSchudule.antigens.forEach((vaccine: any) => {
-                    if (this.currentSelectedDrug.drug_id == vaccine.drug_id && vaccineSchudule.milestone_status == "passed") {
+                    if (this.currentSelectedDrug.drug.drug_id == vaccine.drug_id && vaccineSchudule.milestone_status == "passed") {
                         bool = true;
                     }
                 });
@@ -105,6 +112,7 @@ export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
             this.tempScannedBatchNumber = tempScannedBatchNumber;
         },
         setLastVaccinesGiven(data: any) {
+            
             this.lastVaccinesGiven.length = 0
             data.forEach((drug:any) => {
                 this.lastVaccinesGiven.push(
@@ -115,6 +123,7 @@ export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
                         can_administer:	false,
                         status:	"administered",
                         date_administered:	drug.drug.date_created,
+                        order: drug.order
                     }
                 )
                 this.lastVaccineGievenDate = drug.order.date_created

@@ -230,7 +230,7 @@ export default defineComponent({
             const dta = {
                 batch_number: this.batchNumber,
                 date_administered: date_,
-                drug_id: this.currentDrug.drug_id,
+                drug_id: this.currentDrug.drug.drug_id,
             };
             const store = useAdministerVaccineStore();
             store.setAdministeredVaccine(dta);
@@ -265,6 +265,9 @@ export default defineComponent({
         },
         checkIfAdminstredAndAskToVoid() {
             if(this.currentDrug.drug.status == 'administered') {
+                const store = useAdministerVaccineStore();
+                const vaccine_to_void = store.getCurrentSelectedDrug()
+                store.setVaccineToBeVoided(vaccine_to_void)
                 createModal(voidAdminstredVaccine, { class: "otherVitalsModal" }, false)
             }
         }

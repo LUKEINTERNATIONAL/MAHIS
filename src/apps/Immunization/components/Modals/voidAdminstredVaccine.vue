@@ -39,6 +39,8 @@
 <script lang="ts">
     import { defineComponent } from "vue";
     import { IonContent, IonRow, IonItem, IonList, IonRadio, IonRadioGroup, modalController } from "@ionic/vue";
+    import { EncounterService } from '@/services/encounter_service'
+    import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
     import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
     import _ from 'lodash';
     export default defineComponent({
@@ -95,14 +97,18 @@
             },
             checkIfSelected() {
                 if ( _.has(this.selectedOption, 'name') == true) {
-                    return true
+                    return true;
                 } else {
-                    toastWarning("Select a reason!")
+                    toastWarning("Select a reason!");
                     return false;
                 }
             }, 
             voidVaccine() {
-                this.checkIfSelected()
+                if (this.checkIfSelected() == true) {
+                    const store = useAdministerVaccineStore();
+                    const AdministrdVaccine = store.getVaccineToBeVoided()
+                    EncounterService.voidEncounter(AdministrdVaccine.drug.order.encounter_id, this.selectedOption.name);
+                }
             }
         }
     })
