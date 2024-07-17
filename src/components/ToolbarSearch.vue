@@ -113,9 +113,11 @@ import { Service } from "@/services/service";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import Pagination from "./Pagination.vue";
 import RoleSelectionModal from "@/apps/OPD/components/RoleSelectionModal.vue";
+import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 
 export default defineComponent({
     name: "Home",
+    mixins: [SetDemographics],
     components: {
         IonContent,
         IonHeader,
@@ -244,33 +246,8 @@ export default defineComponent({
                 .join(", ");
         },
         async openNewPage(url: any, item: any) {
-            console.log(item.person.names);
             this.popoverOpen = false;
-            let fullName = "";
-            if (item.person.names[0].middle_name && item.person.names[0].middle_name != "N/A") {
-                fullName = item.person.names[0].given_name + " " + item.person.names[0].middle_name + " " + item.person.names[0].family_name;
-            } else {
-                fullName = item.person.names[0].given_name + " " + item.person.names[0].family_name;
-            }
-            const addressComponents = [
-                item?.person?.addresses[0]?.state_province,
-                item?.person?.addresses[0]?.township_division,
-                item?.person?.addresses[0]?.city_village,
-            ];
-
-            const address = addressComponents.filter(Boolean).join(",");
-            const demographicsStore = useDemographicsStore();
-            demographicsStore.setPatient(item);
-            demographicsStore.setDemographics({
-                name: fullName,
-                mrn: this.patientIdentifier(item),
-                birthdate: item.person.birthdate,
-                category: "",
-                gender: item.person.gender,
-                patient_id: item.patient_id,
-                address: address,
-                phone: this.getPhone(item),
-            });
+            this.setDemographics(item);
             if (Service.getProgramID() == 32 || Service.getProgramID() == 33) {
                 resetNCDPatientData();
             } else if (Service.getProgramID() == 14) {
