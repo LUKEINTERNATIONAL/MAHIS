@@ -16,7 +16,7 @@
         </ion-content>
         <ion-content v-if="programID() == 33">
             <ion-card class="section">
-                <ion-card-header> <ion-card-title class="cardTitle"> Statistics for a year </ion-card-title></ion-card-header>
+                <ion-card-header> <ion-card-title class="cardTitle">Yearly stats </ion-card-title></ion-card-header>
                 <ion-card-content>
                     <div class="stats">
                         <div>
@@ -99,50 +99,6 @@
                 </ion-card-content>
             </ion-card>
 
-            <!-- <div class="total">
-                <div class="totalNumber">{{ reportData?.total_vaccinated }}</div>
-                <div class="totalText">Children & Adults vaccinated this year.</div>
-            </div>
-            <ion-img :src="loadImage('backgroundImg.png')" alt="home image"></ion-img>
-            <div style="background-color: rgb(255, 255, 255); widows: 100%; height: 40%"></div>
-            <div class="graphBackground">
-                <div class="dueMiss">
-                    <div class="due">
-                        <div class="dueNumber">{{ reportData?.total_due_for_vaccination_today || 0 }}</div>
-                        <div class="dueMissText">Due for vaccination today</div>
-                    </div>
-                    <div class="missed">
-                        <div class="missedNumber">{{ reportData?.total_missed_doses || 0 }}</div>
-                        <div class="dueMissText">Those with missed doses</div>
-                    </div>
-                </div>
-                <div class="clientSeen">
-                    <div class="clientSeenTitle">Clients you have seen today.</div>
-                    <div class="clientSeenBoxes">
-                        <div class="clientSeenBox">
-                            <div class="clientSeenBoxNumber">{{ reportData?.total_vaccinated_today || 0 }}</div>
-                            <div class="clientSeenBoxText">New</div>
-                        </div>
-                        <div class="clientSeenBoxChild clientSeenBox">
-                            <div class="clientSeenBoxNumber">{{ reportData?.total_children_vaccinated_today || 0 }}</div>
-                            <div class="clientSeenBoxText">Children</div>
-                        </div>
-                        <div class="clientSeenBoxMen clientSeenBox">
-                            <div class="clientSeenBoxNumber">{{ reportData?.total_women_vaccinated_today || 0 }}</div>
-                            <div class="clientSeenBoxText">Women</div>
-                        </div>
-                        <div class="clientSeenBoxWomen clientSeenBox">
-                            <div class="clientSeenBoxNumber">{{ reportData?.total_men_vaccinated_today || 0 }}</div>
-                            <div class="clientSeenBoxText">Men</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="graphCard">
-                    <ImmunizationTrendsGraph :reportData="reportData" v-if="controlGraphs == 'months'" />
-                    <ImmunizationGroupGraph :reportData="reportData" v-if="controlGraphs == 'group'" />
-                </div>
-            </div> -->
-
             <ion-fab slot="fixed" vertical="bottom" horizontal="end">
                 <ion-fab-button color="primary"> <ion-icon :icon="grid"></ion-icon> </ion-fab-button>
                 <ion-fab-list side="top">
@@ -189,6 +145,7 @@ import HisDate from "@/utils/Date";
 import { WebSocketService } from "@/services/websocketService";
 import { Appointment } from "../apps/Immunization/services/immunization_appointment_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
+import { AppointmentService } from "@/services/appointment_service";
 import {
     medkit,
     chevronBackOutline,
@@ -257,6 +214,8 @@ export default defineComponent({
         deep: true,
     },
     async mounted() {
+        const res = await AppointmentService.getDailiyAppointments(HisDate.currentDate());
+        console.log("🚀 ~ mounted ~ res:", res);
         this.setView();
         this.startTimer();
         this.setProgramInfo();
@@ -301,6 +260,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
+ion-card {
+    margin-bottom: 20px;
+}
 .client_name {
     font-size: 16px;
     font-weight: 600;
