@@ -21,17 +21,17 @@
                     <div class="stats">
                         <div>
                             <div class="statsValue">{{ reportData?.total_vaccinated || 0 }}</div>
-                            <div>Total</div>
+                            <div class="statsText">Total client</div>
                         </div>
                         <div class="statsSectionBorder"></div>
                         <div>
                             <div class="statsValue">{{ reportData?.total_women_vaccinated_today || 0 }}</div>
-                            <div>Female</div>
+                            <div class="statsText">Total female</div>
                         </div>
                         <div class="statsSectionBorder"></div>
                         <div>
                             <div class="statsValue">{{ reportData?.total_men_vaccinated_today || 0 }}</div>
-                            <div>Male</div>
+                            <div class="statsText">Total male</div>
                         </div>
                     </div>
                 </ion-card-content>
@@ -255,6 +255,12 @@ export default defineComponent({
     font-size: 30px;
     line-height: 37px;
     color: #5d5d5d;
+}
+.statsText {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 37px;
+    color: #8c8c8c;
 }
 #container {
     text-align: center;
