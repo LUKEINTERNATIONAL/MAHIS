@@ -119,7 +119,7 @@ export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
                         date_administered:	drug.drug.date_created,
                     }
                 )
-                this.lastVaccineGievenDate = drug.drug.date_created
+                this.lastVaccineGievenDate = drug.order.date_created
             })
         }
     },
