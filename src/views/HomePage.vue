@@ -15,7 +15,29 @@
             </div>
         </ion-content>
         <ion-content v-if="programID() == 33">
-            <div class="total">
+            <ion-card class="section">
+                <ion-card-header> <ion-card-title class="cardTitle"> Statistics for a year </ion-card-title></ion-card-header>
+                <ion-card-content>
+                    <div class="stats">
+                        <div>
+                            <div class="statsValue">{{ reportData?.total_vaccinated || 0 }}</div>
+                            <div>Total</div>
+                        </div>
+                        <div class="statsSectionBorder"></div>
+                        <div>
+                            <div class="statsValue">{{ reportData?.total_women_vaccinated_today || 0 }}</div>
+                            <div>Female</div>
+                        </div>
+                        <div class="statsSectionBorder"></div>
+                        <div>
+                            <div class="statsValue">{{ reportData?.total_men_vaccinated_today || 0 }}</div>
+                            <div>Male</div>
+                        </div>
+                    </div>
+                </ion-card-content>
+            </ion-card>
+
+            <!-- <div class="total">
                 <div class="totalNumber">{{ reportData?.total_vaccinated }}</div>
                 <div class="totalText">Children & Adults vaccinated this year.</div>
             </div>
@@ -57,9 +79,9 @@
                     <ImmunizationTrendsGraph :reportData="reportData" v-if="controlGraphs == 'months'" />
                     <ImmunizationGroupGraph :reportData="reportData" v-if="controlGraphs == 'group'" />
                 </div>
-            </div>
+            </div> -->
 
-            <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="displayNoneDesktop">
+            <ion-fab slot="fixed" vertical="bottom" horizontal="end">
                 <ion-fab-button color="primary"> <ion-icon :icon="grid"></ion-icon> </ion-fab-button>
                 <ion-fab-list side="top">
                     <ion-fab-button @click="setProgram(btn)" v-for="(btn, index) in programBtn" :key="index" :data-desc="btn.actionName">
@@ -72,7 +94,21 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonRow, IonCol } from "@ionic/vue";
+import {
+    IonCard,
+    IonCardContent,
+    IonCardHeader,
+    IonCardSubtitle,
+    IonCardTitle,
+    IonContent,
+    IonHeader,
+    IonMenuButton,
+    IonPage,
+    IonTitle,
+    IonToolbar,
+    IonRow,
+    IonCol,
+} from "@ionic/vue";
 import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
@@ -119,6 +155,11 @@ export default defineComponent({
         IonCol,
         ImmunizationTrendsGraph,
         ImmunizationGroupGraph,
+        IonCard,
+        IonCardContent,
+        IonCardHeader,
+        IonCardSubtitle,
+        IonCardTitle,
     },
     data() {
         return {
@@ -192,6 +233,29 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.statsSectionBorder {
+    border-left: 1px solid #ccc;
+}
+.stats {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    padding-bottom: 10px;
+    border-bottom: 0.01px solid #ccc;
+}
+.cardTitle {
+    border-bottom: 0.01px solid #ccc;
+    padding-bottom: 10px;
+    font-size: 18px;
+    font-weight: 560;
+    color: #5d5d5d;
+}
+.statsValue {
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 37px;
+    color: #5d5d5d;
+}
 #container {
     text-align: center;
 
@@ -256,7 +320,6 @@ export default defineComponent({
     font-size: 60px;
     line-height: 77px;
 
-    /* text_color */
     color: #5d5d5d;
 }
 .totalText {
