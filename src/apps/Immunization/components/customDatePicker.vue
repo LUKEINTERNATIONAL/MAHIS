@@ -61,10 +61,8 @@
     const clientBODYear = getYearFromDateString(patient.getBirthdate() as any)
     const sessionYear = getYearFromDateString(Service.getSessionDate())
     const pickerYear = pickerInstance.getDate().getFullYear()
-    console.log(pickerYear)
-    console.log(clientBODYear)
     if (pickerYear <= sessionYear) {
-      if ( parseInt(pickerYear) == parseInt(clientBODYear)) {
+      if ( parseInt(pickerYear) <= parseInt(clientBODYear)) {
         const corrected_date = pickerInstance.getDate()
         corrected_date.setFullYear(sessionYear)
         pickerInstance.setDate(corrected_date)

@@ -96,6 +96,7 @@ import PreviousVitals from "@/components/Graphs/previousVitals.vue";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { saveVaccineAdministeredDrugs, getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service";
 import { isEmpty } from "lodash";
+import voidAdminstredVaccine from "./voidAdminstredVaccine.vue"
 import QRCodeReadersrc from "@/components/QRCodeReader.vue";
 import { createModal } from "@/utils/Alerts";
 import {
@@ -153,6 +154,7 @@ export default defineComponent({
         const store = useAdministerVaccineStore();
         this.showPD = store.isVaccinePassed();
         this.showDateBtns = !this.showPD;
+        this.checkIfAdminstredAndAskToVoid()
     },
     setup() {
         return { checkmark, pulseOutline };
@@ -183,8 +185,8 @@ export default defineComponent({
         loadCurrentSelectedDrug() {
             const store = useAdministerVaccineStore();
             this.currentDrug = store.getCurrentSelectedDrug();
-            this.drugName = this.currentDrug.drug_name;
-            this.batchNumber = this.currentDrug.vaccine_batch_number ? this.currentDrug.vaccine_batch_number : "";
+            this.drugName = this.currentDrug.drug.drug_name;
+            this.batchNumber = this.currentDrug.drug.vaccine_batch_number ? this.currentDrug.drug.vaccine_batch_number : "";
         },
         showCPD() {
             this.showPD = true as boolean;
@@ -249,7 +251,6 @@ export default defineComponent({
             }
         },
         updateBatchNumberByPassValue(input: any) {
-            console.log(input, "qqqqqqqwwwwwwwwwwww");
             this.batchNumber = input;
         },
         displayUserNames() {
@@ -262,6 +263,11 @@ export default defineComponent({
         showQRcode() {
             // createModal(QRCodeReadersrc, { class: "otherVitalsModal qr_code_modal" }, false)
         },
+        checkIfAdminstredAndAskToVoid() {
+            if(this.currentDrug.drug.status == 'administered') {
+                createModal(voidAdminstredVaccine, { class: "otherVitalsModal" }, false)
+            }
+        }
     },
 });
 </script>

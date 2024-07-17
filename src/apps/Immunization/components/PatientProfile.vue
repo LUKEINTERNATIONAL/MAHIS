@@ -299,7 +299,7 @@ export default defineComponent({
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
         ...mapState(useOutcomeStore, ["dispositions"]),
-        ...mapState(useAdministerVaccineStore, ["currentMilestone", "missedVaccineSchedules", "overDueVaccinesCount", "lastVaccinesGiven","lastVaccineGievenDate"]),
+        ...mapState(useAdministerVaccineStore, ["currentMilestone", "missedVaccineSchedules", "overDueVaccinesCount", "lastVaccinesGiven","lastVaccineGievenDate", "vaccineReload"]),
     },
     created() {
         this.getData();
@@ -356,6 +356,12 @@ export default defineComponent({
                 this.setMilestoneReload()
                 await this.getLastVaccinesGiven();
             },
+        },
+        vaccineReload: {
+            async handler() {
+                await this.getLastVaccinesGiven()
+            },
+            deep: true,
         },
     },
     setup() {
@@ -632,6 +638,7 @@ export default defineComponent({
         },
         async getLastVaccinesGiven() {
             const data = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
+            console.log(data)
             const store = useAdministerVaccineStore()
             store.setLastVaccinesGiven(data);
         },

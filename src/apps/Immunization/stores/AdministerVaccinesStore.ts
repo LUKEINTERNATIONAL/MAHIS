@@ -37,11 +37,9 @@ export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
         getAdministeredVaccines() {
             return this.administeredVaccines;
         },
-        setCurrentSelectedDrug(drug_id: number, drug_name: string, vaccine_batch_number: string): void {
+        setCurrentSelectedDrug(drug: any): void {
             this.currentSelectedDrug = {
-                drug_id: drug_id,
-                drug_name: drug_name,
-                vaccine_batch_number: vaccine_batch_number,
+                drug: drug,
             };
         },
         getCurrentSelectedDrug() {
