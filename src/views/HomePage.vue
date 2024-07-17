@@ -56,41 +56,30 @@
                 </ion-card-content>
             </ion-card>
             <ion-card class="section">
-                <ion-card-header> <ion-card-title class="cardTitle"> Today appointments </ion-card-title></ion-card-header>
+                <ion-card-header>
+                    <ion-card-title class="cardTitle"> Today appointments({{ appointments.length }}) </ion-card-title></ion-card-header
+                >
                 <ion-card-content>
-                    <div style="display: flex; margin-bottom: 10px">
+                    <div
+                        style="display: flex; margin-bottom: 10px"
+                        v-for="(item, index) in appointments"
+                        :key="index"
+                        @click="openClientProfile(item.npid)"
+                    >
                         <div style="margin-right: 15px">
-                            <div :class="demographics.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
+                            <div :class="item.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
                                 <ion-icon style="color: #fff; font-size: 60px" :icon="person"></ion-icon>
                             </div>
                         </div>
                         <div style="align-items: center; display: flex">
                             <div style="line-height: 1">
                                 <div class="client_name">
-                                    <div class="name">{{ demographics.name }}</div>
+                                    <div class="name">{{ item.name }} {{ item.family_name }}</div>
                                 </div>
                                 <div class="demographicsOtherRow">
                                     <div class="demographicsText">
-                                        {{ demographics.gender == "M" ? "Male" : "Female" }} <span class="dot">.</span>{{ formatBirthdate() }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div style="display: flex">
-                        <div style="margin-right: 15px">
-                            <div :class="demographics.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
-                                <ion-icon style="color: #fff; font-size: 60px" :icon="person"></ion-icon>
-                            </div>
-                        </div>
-                        <div style="align-items: center; display: flex">
-                            <div style="line-height: 1">
-                                <div class="client_name">
-                                    <div class="name">{{ demographics.name }}</div>
-                                </div>
-                                <div class="demographicsOtherRow">
-                                    <div class="demographicsText">
-                                        {{ demographics.gender == "M" ? "Male" : "Female" }} <span class="dot">.</span>{{ formatBirthdate() }}
+                                        {{ demographics.gender == "M" ? "Male" : "Female" }}
+                                        <span class="dot">.</span>{{ formatBirthdate(item.birthdate) }}
                                     </div>
                                 </div>
                             </div>
@@ -146,6 +135,7 @@ import { WebSocketService } from "@/services/websocketService";
 import { Appointment } from "../apps/Immunization/services/immunization_appointment_service";
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { AppointmentService } from "@/services/appointment_service";
+import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 import {
     medkit,
     chevronBackOutline,
@@ -162,7 +152,7 @@ import {
 } from "ionicons/icons";
 export default defineComponent({
     name: "Home",
-    mixins: [SetUser],
+    mixins: [SetUser, SetDemographics],
     components: {
         IonContent,
         IonHeader,
@@ -186,6 +176,7 @@ export default defineComponent({
         return {
             controlGraphs: "months" as any,
             reportData: "" as any,
+            appointments: [] as any,
             programBtn: {} as any,
         };
     },
@@ -214,8 +205,7 @@ export default defineComponent({
         deep: true,
     },
     async mounted() {
-        const res = await AppointmentService.getDailiyAppointments(HisDate.currentDate());
-        console.log("🚀 ~ mounted ~ res:", res);
+        this.appointments = await AppointmentService.getDailiyAppointments(HisDate.currentDate());
         this.setView();
         this.startTimer();
         this.setProgramInfo();
@@ -226,8 +216,11 @@ export default defineComponent({
         async setProgramInfo() {
             this.programBtn = await UserService.userProgramData();
         },
-        formatBirthdate() {
-            return HisDate.getBirthdateAge(this.demographics.birthdate);
+        openClientProfile(id: any) {
+            console.log("🚀 ~ openClientProfile ~ id:", id);
+        },
+        formatBirthdate(birthdate: any) {
+            return HisDate.getBirthdateAge(birthdate);
         },
         setProgram(program: any) {
             sessionStorage.setItem("app", JSON.stringify({ programID: program.program_id, applicationName: program.name }));
