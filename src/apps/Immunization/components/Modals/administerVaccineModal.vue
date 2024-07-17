@@ -146,7 +146,7 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useAdministerVaccineStore, ["tempScannedBatchNumber"]),
+        ...mapState(useAdministerVaccineStore, ["tempScannedBatchNumber", "vaccineToBeVoided"]),
     },
     async mounted() {
         this.loadCurrentSelectedDrug();
@@ -180,6 +180,12 @@ export default defineComponent({
                 }
             },
         },
+        // vaccineToBeVoided: {
+        //     handler() {
+        //         console.log("i cant no more", )
+        //         this.dismiss()
+        //     }
+        // }
     },
     methods: {
         loadCurrentSelectedDrug() {
@@ -263,12 +269,15 @@ export default defineComponent({
         showQRcode() {
             // createModal(QRCodeReadersrc, { class: "otherVitalsModal qr_code_modal" }, false)
         },
-        checkIfAdminstredAndAskToVoid() {
+        async checkIfAdminstredAndAskToVoid() {
             if(this.currentDrug.drug.status == 'administered') {
                 const store = useAdministerVaccineStore();
                 const vaccine_to_void = store.getCurrentSelectedDrug()
                 store.setVaccineToBeVoided(vaccine_to_void)
-                createModal(voidAdminstredVaccine, { class: "otherVitalsModal" }, false)
+                const data = await createModal(voidAdminstredVaccine, { class: "otherVitalsModal" }, false)
+                if(data?.voided == true) {
+                    this.dismiss()
+                }
             }
         }
     },

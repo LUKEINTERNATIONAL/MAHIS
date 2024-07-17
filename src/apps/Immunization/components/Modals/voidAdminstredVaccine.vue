@@ -103,11 +103,19 @@
                     return false;
                 }
             }, 
-            voidVaccine() {
+            async voidVaccine() {
                 if (this.checkIfSelected() == true) {
-                    const store = useAdministerVaccineStore();
-                    const AdministrdVaccine = store.getVaccineToBeVoided()
-                    EncounterService.voidEncounter(AdministrdVaccine.drug.order.encounter_id, this.selectedOption.name);
+
+                    try {
+                        const store = useAdministerVaccineStore();
+                        const AdministrdVaccine = store.getVaccineToBeVoided();
+                        await EncounterService.voidEncounter(AdministrdVaccine.drug.order.encounter_id, this.selectedOption.name)
+                        toastSuccess("Vaccine was successfully voided!");
+                        store.setVaccineReload(!store.getVaccineReload());
+                        modalController.dismiss({voided: true});
+                    } catch (error) {
+                        
+                    }
                 }
             }
         }

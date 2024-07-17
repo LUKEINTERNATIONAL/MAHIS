@@ -638,7 +638,6 @@ export default defineComponent({
         },
         async getLastVaccinesGiven() {
             const data = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
-            console.log(data)
             const store = useAdministerVaccineStore()
             store.setLastVaccinesGiven(data);
         },
