@@ -15,51 +15,80 @@
             </div>
         </ion-content>
         <ion-content v-if="programID() == 33">
-            <div class="total">
-                <div class="totalNumber">{{ reportData?.total_vaccinated }}</div>
-                <div class="totalText">Children & Adults vaccinated this year.</div>
-            </div>
-            <ion-img :src="loadImage('backgroundImg.png')" alt="home image"></ion-img>
-            <div style="background-color: rgb(255, 255, 255); widows: 100%; height: 40%"></div>
-            <div class="graphBackground">
-                <div class="dueMiss">
-                    <div class="due">
-                        <div class="dueNumber">{{ reportData?.total_due_for_vaccination_today || 0 }}</div>
-                        <div class="dueMissText">Due for vaccination today</div>
-                    </div>
-                    <div class="missed">
-                        <div class="missedNumber">{{ reportData?.total_missed_doses || 0 }}</div>
-                        <div class="dueMissText">Those with missed doses</div>
-                    </div>
-                </div>
-                <div class="clientSeen">
-                    <div class="clientSeenTitle">Clients you have seen today.</div>
-                    <div class="clientSeenBoxes">
-                        <div class="clientSeenBox">
-                            <div class="clientSeenBoxNumber">{{ reportData?.total_vaccinated_today || 0 }}</div>
-                            <div class="clientSeenBoxText">New</div>
+            <ion-card class="section">
+                <ion-card-header> <ion-card-title class="cardTitle">Yearly stats </ion-card-title></ion-card-header>
+                <ion-card-content>
+                    <div class="stats">
+                        <div>
+                            <div class="statsValue">{{ reportData?.total_vaccinated || 0 }}</div>
+                            <div class="statsText">Total client</div>
                         </div>
-                        <div class="clientSeenBoxChild clientSeenBox">
-                            <div class="clientSeenBoxNumber">{{ reportData?.total_children_vaccinated_today || 0 }}</div>
-                            <div class="clientSeenBoxText">Children</div>
+                        <div class="statsSectionBorder"></div>
+                        <div>
+                            <div class="statsValue">{{ reportData?.total_women_vaccinated_today || 0 }}</div>
+                            <div class="statsText">Total female</div>
                         </div>
-                        <div class="clientSeenBoxMen clientSeenBox">
-                            <div class="clientSeenBoxNumber">{{ reportData?.total_women_vaccinated_today || 0 }}</div>
-                            <div class="clientSeenBoxText">Women</div>
-                        </div>
-                        <div class="clientSeenBoxWomen clientSeenBox">
-                            <div class="clientSeenBoxNumber">{{ reportData?.total_men_vaccinated_today || 0 }}</div>
-                            <div class="clientSeenBoxText">Men</div>
+                        <div class="statsSectionBorder"></div>
+                        <div>
+                            <div class="statsValue">{{ reportData?.total_men_vaccinated_today || 0 }}</div>
+                            <div class="statsText">Total male</div>
                         </div>
                     </div>
-                </div>
-                <div class="graphCard">
-                    <ImmunizationTrendsGraph :reportData="reportData" v-if="controlGraphs == 'months'" />
-                    <ImmunizationGroupGraph :reportData="reportData" v-if="controlGraphs == 'group'" />
-                </div>
-            </div>
+                </ion-card-content>
+            </ion-card>
+            <ion-card class="section">
+                <ion-card-header> <ion-card-title class="cardTitle"> Due for vaccination </ion-card-title></ion-card-header>
+                <ion-card-content>
+                    <div class="dueCardContent">
+                        <div class="dueCard">
+                            <div class="dueCardValue">0</div>
+                            <div>Today</div>
+                        </div>
+                        <div class="dueCard">
+                            <div class="dueCardValue">0</div>
+                            <div>This week</div>
+                        </div>
+                        <div class="dueCard">
+                            <div class="dueCardValue">0</div>
+                            <div>This month</div>
+                        </div>
+                    </div>
+                </ion-card-content>
+            </ion-card>
+            <ion-card class="section">
+                <ion-card-header>
+                    <ion-card-title class="cardTitle"> Today appointments({{ appointments.length }}) </ion-card-title></ion-card-header
+                >
+                <ion-card-content>
+                    <div
+                        style="display: flex; margin-bottom: 10px"
+                        v-for="(item, index) in appointments"
+                        :key="index"
+                        @click="openClientProfile(item.npid)"
+                    >
+                        <div style="margin-right: 15px">
+                            <div :class="item.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
+                                <ion-icon style="color: #fff; font-size: 60px" :icon="person"></ion-icon>
+                            </div>
+                        </div>
+                        <div style="align-items: center; display: flex">
+                            <div style="line-height: 1">
+                                <div class="client_name">
+                                    <div class="name">{{ item.name }} {{ item.family_name }}</div>
+                                </div>
+                                <div class="demographicsOtherRow">
+                                    <div class="demographicsText">
+                                        {{ demographics.gender == "M" ? "Male" : "Female" }}
+                                        <span class="dot">.</span>{{ formatBirthdate(item.birthdate) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ion-card-content>
+            </ion-card>
 
-            <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="displayNoneDesktop">
+            <ion-fab slot="fixed" vertical="bottom" horizontal="end">
                 <ion-fab-button color="primary"> <ion-icon :icon="grid"></ion-icon> </ion-fab-button>
                 <ion-fab-list side="top">
                     <ion-fab-button @click="setProgram(btn)" v-for="(btn, index) in programBtn" :key="index" :data-desc="btn.actionName">
@@ -72,7 +101,21 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonRow, IonCol } from "@ionic/vue";
+import {
+    IonCard,
+    IonCardContent,
+    IonCardHeader,
+    IonCardSubtitle,
+    IonCardTitle,
+    IonContent,
+    IonHeader,
+    IonMenuButton,
+    IonPage,
+    IonTitle,
+    IonToolbar,
+    IonRow,
+    IonCol,
+} from "@ionic/vue";
 import { defineComponent } from "vue";
 import Toolbar from "@/components/Toolbar.vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
@@ -89,6 +132,11 @@ import SetUser from "@/views/Mixin/SetUser.vue";
 import ApiClient from "@/services/api_client";
 import HisDate from "@/utils/Date";
 import { WebSocketService } from "@/services/websocketService";
+import { Appointment } from "../apps/Immunization/services/immunization_appointment_service";
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import { AppointmentService } from "@/services/appointment_service";
+import SetDemographics from "@/views/Mixin/SetDemographics.vue";
+import { PatientService } from "@/services/patient_service";
 import {
     medkit,
     chevronBackOutline,
@@ -105,7 +153,7 @@ import {
 } from "ionicons/icons";
 export default defineComponent({
     name: "Home",
-    mixins: [SetUser],
+    mixins: [SetUser, SetDemographics],
     components: {
         IonContent,
         IonHeader,
@@ -119,11 +167,17 @@ export default defineComponent({
         IonCol,
         ImmunizationTrendsGraph,
         ImmunizationGroupGraph,
+        IonCard,
+        IonCardContent,
+        IonCardHeader,
+        IonCardSubtitle,
+        IonCardTitle,
     },
     data() {
         return {
             controlGraphs: "months" as any,
             reportData: "" as any,
+            appointments: [] as any,
             programBtn: {} as any,
         };
     },
@@ -145,12 +199,14 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useGeneralStore, ["OPDActivities"]),
+        ...mapState(useDemographicsStore, ["demographics"]),
     },
     $route: {
         async handler() {},
         deep: true,
     },
     async mounted() {
+        this.appointments = await AppointmentService.getDailiyAppointments(HisDate.currentDate());
         this.setView();
         this.startTimer();
         this.setProgramInfo();
@@ -161,6 +217,14 @@ export default defineComponent({
         async setProgramInfo() {
             this.programBtn = await UserService.userProgramData();
         },
+        async openClientProfile(patientID: any) {
+            const patientData = await PatientService.findByNpid(patientID);
+            this.setDemographics(patientData[0]);
+            this.$router.push("patientProfile");
+        },
+        formatBirthdate(birthdate: any) {
+            return HisDate.getBirthdateAge(birthdate);
+        },
         setProgram(program: any) {
             sessionStorage.setItem("app", JSON.stringify({ programID: program.program_id, applicationName: program.name }));
         },
@@ -168,7 +232,6 @@ export default defineComponent({
             const data = JSON.parse(event.data);
             if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel" })) {
                 this.reportData = data.message;
-                console.log("🚀 ~ onMessage ~ this.reportData :", this.reportData);
             }
         },
         setView() {
@@ -192,6 +255,77 @@ export default defineComponent({
 </script>
 
 <style scoped>
+ion-card {
+    margin-bottom: 20px;
+}
+.client_name {
+    font-size: 16px;
+    font-weight: 600;
+}
+.dot {
+    font-size: 25px;
+}
+.initialsBox {
+    width: 70px;
+    height: 70px;
+    left: 31px;
+    top: 122px;
+    align-items: center;
+    border-radius: 10px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+.maleColor {
+    background: #5983ba;
+}
+.femaleColor {
+    background: #876d9b;
+}
+.dueCardValue {
+    font-size: 18px;
+    font-weight: 600;
+}
+.dueCardContent {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+.dueCard {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    min-width: 100px;
+}
+.statsSectionBorder {
+    border-left: 1px solid #ccc;
+}
+.stats {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    padding-bottom: 10px;
+    border-bottom: 0.01px solid #ccc;
+}
+.cardTitle {
+    border-bottom: 0.01px solid #ccc;
+    padding-bottom: 10px;
+    font-size: 18px;
+    font-weight: 560;
+    color: #5d5d5d;
+}
+.statsValue {
+    font-weight: 600;
+    font-size: 30px;
+    line-height: 37px;
+    color: #5d5d5d;
+}
+.statsText {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 37px;
+    color: #8c8c8c;
+}
 #container {
     text-align: center;
 
@@ -256,7 +390,6 @@ export default defineComponent({
     font-size: 60px;
     line-height: 77px;
 
-    /* text_color */
     color: #5d5d5d;
 }
 .totalText {
@@ -338,19 +471,9 @@ export default defineComponent({
     font-size: 16px;
     color: #2d3648;
 }
-.clientSeenBoxChild {
-    background: #2d3648 !important;
-}
-.clientSeenBoxMen {
-    background: #004d4d !important;
-}
-.clientSeenBoxWomen {
-    background: #556080 !important;
-}
+
 .clientSeenBox {
-    width: 68px;
-    height: 68px;
-    background: #006401;
+    background: #5d5d5d;
     border-radius: 7px;
     padding-top: 8px;
 }

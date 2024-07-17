@@ -146,6 +146,7 @@ import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from 
 import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
 import { AppEncounterService } from "@/services/app_encounter_service";
 import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
+import { PatientProgramService } from "@/services/patient_program_service";
 
 export default defineComponent({
     mixins: [ScreenSizeMixin],
@@ -322,6 +323,15 @@ export default defineComponent({
                 this.currentStep = this.steps[currentIndex - 1];
             }
         },
+        async enrollProgram(patientId: any) {
+            const program = new PatientProgramService(patientId);
+            await program.enrollProgram();
+        },
+        async CreateRegistrationEncounter(patientId: any) {
+            const encounter = new AppEncounterService(patientId, 5);
+            await encounter.createEncounter();
+            await encounter.saveValueCodedObs("Type of patient", "New Patient");
+        },
         async findPatient(patientID: any) {
             const patientData = await PatientService.findByID(patientID);
             this.openNewPage(patientData);
@@ -388,6 +398,8 @@ export default defineComponent({
                     }
                 }
                 await this.saveBirthdayData(patientID);
+                await this.enrollProgram(patientID);
+                await this.CreateRegistrationEncounter(patientID);
                 this.findPatient(patientID);
                 toastSuccess("Successfully Created Patient");
                 return true;

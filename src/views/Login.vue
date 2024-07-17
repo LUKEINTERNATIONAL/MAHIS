@@ -254,4 +254,12 @@ export default defineComponent({
 .multiselect::before {
     top: -7px;
 }
+@media (max-width: 902px) {
+    .login-page {
+        --ion-background-color: #ffffff;
+    }
+    ion-card {
+        box-shadow: unset;
+    }
+}
 </style>
