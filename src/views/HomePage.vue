@@ -56,8 +56,47 @@
                 </ion-card-content>
             </ion-card>
             <ion-card class="section">
-                <ion-card-header> <ion-card-title class="cardTitle"> Appointments </ion-card-title></ion-card-header>
-                <ion-card-content> </ion-card-content>
+                <ion-card-header> <ion-card-title class="cardTitle"> Today appointments </ion-card-title></ion-card-header>
+                <ion-card-content>
+                    <div style="display: flex; margin-bottom: 10px">
+                        <div style="margin-right: 15px">
+                            <div :class="demographics.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
+                                <ion-icon style="color: #fff; font-size: 60px" :icon="person"></ion-icon>
+                            </div>
+                        </div>
+                        <div style="align-items: center; display: flex">
+                            <div style="line-height: 1">
+                                <div class="client_name">
+                                    <div class="name">{{ demographics.name }}</div>
+                                </div>
+                                <div class="demographicsOtherRow">
+                                    <div class="demographicsText">
+                                        {{ demographics.gender == "M" ? "Male" : "Female" }} <span class="dot">.</span>{{ formatBirthdate() }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex">
+                        <div style="margin-right: 15px">
+                            <div :class="demographics.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
+                                <ion-icon style="color: #fff; font-size: 60px" :icon="person"></ion-icon>
+                            </div>
+                        </div>
+                        <div style="align-items: center; display: flex">
+                            <div style="line-height: 1">
+                                <div class="client_name">
+                                    <div class="name">{{ demographics.name }}</div>
+                                </div>
+                                <div class="demographicsOtherRow">
+                                    <div class="demographicsText">
+                                        {{ demographics.gender == "M" ? "Male" : "Female" }} <span class="dot">.</span>{{ formatBirthdate() }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ion-card-content>
             </ion-card>
 
             <!-- <div class="total">
@@ -149,6 +188,7 @@ import ApiClient from "@/services/api_client";
 import HisDate from "@/utils/Date";
 import { WebSocketService } from "@/services/websocketService";
 import { Appointment } from "../apps/Immunization/services/immunization_appointment_service";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 import {
     medkit,
     chevronBackOutline,
@@ -210,6 +250,7 @@ export default defineComponent({
     },
     computed: {
         ...mapState(useGeneralStore, ["OPDActivities"]),
+        ...mapState(useDemographicsStore, ["demographics"]),
     },
     $route: {
         async handler() {},
@@ -225,6 +266,9 @@ export default defineComponent({
     methods: {
         async setProgramInfo() {
             this.programBtn = await UserService.userProgramData();
+        },
+        formatBirthdate() {
+            return HisDate.getBirthdateAge(this.demographics.birthdate);
         },
         setProgram(program: any) {
             sessionStorage.setItem("app", JSON.stringify({ programID: program.program_id, applicationName: program.name }));
@@ -257,6 +301,30 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.client_name {
+    font-size: 16px;
+    font-weight: 600;
+}
+.dot {
+    font-size: 25px;
+}
+.initialsBox {
+    width: 70px;
+    height: 70px;
+    left: 31px;
+    top: 122px;
+    align-items: center;
+    border-radius: 10px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+.maleColor {
+    background: #5983ba;
+}
+.femaleColor {
+    background: #876d9b;
+}
 .dueCardValue {
     font-size: 18px;
     font-weight: 600;
