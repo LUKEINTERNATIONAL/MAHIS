@@ -136,6 +136,7 @@ import { Appointment } from "../apps/Immunization/services/immunization_appointm
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { AppointmentService } from "@/services/appointment_service";
 import SetDemographics from "@/views/Mixin/SetDemographics.vue";
+import { PatientService } from "@/services/patient_service";
 import {
     medkit,
     chevronBackOutline,
@@ -216,8 +217,10 @@ export default defineComponent({
         async setProgramInfo() {
             this.programBtn = await UserService.userProgramData();
         },
-        openClientProfile(id: any) {
-            console.log("🚀 ~ openClientProfile ~ id:", id);
+        async openClientProfile(patientID: any) {
+            const patientData = await PatientService.findByNpid(patientID);
+            this.setDemographics(patientData[0]);
+            this.$router.push("patientProfile");
         },
         formatBirthdate(birthdate: any) {
             return HisDate.getBirthdateAge(birthdate);
@@ -229,7 +232,6 @@ export default defineComponent({
             const data = JSON.parse(event.data);
             if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel" })) {
                 this.reportData = data.message;
-                console.log("🚀 ~ onMessage ~ this.reportData :", this.reportData);
             }
         },
         setView() {
