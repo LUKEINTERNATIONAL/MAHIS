@@ -36,6 +36,29 @@
                     </div>
                 </ion-card-content>
             </ion-card>
+            <ion-card class="section">
+                <ion-card-header> <ion-card-title class="cardTitle"> Due for vaccination </ion-card-title></ion-card-header>
+                <ion-card-content>
+                    <div class="dueCardContent">
+                        <div class="dueCard">
+                            <div class="dueCardValue">0</div>
+                            <div>Today</div>
+                        </div>
+                        <div class="dueCard">
+                            <div class="dueCardValue">0</div>
+                            <div>This week</div>
+                        </div>
+                        <div class="dueCard">
+                            <div class="dueCardValue">0</div>
+                            <div>This month</div>
+                        </div>
+                    </div>
+                </ion-card-content>
+            </ion-card>
+            <ion-card class="section">
+                <ion-card-header> <ion-card-title class="cardTitle"> Appointments </ion-card-title></ion-card-header>
+                <ion-card-content> </ion-card-content>
+            </ion-card>
 
             <!-- <div class="total">
                 <div class="totalNumber">{{ reportData?.total_vaccinated }}</div>
@@ -125,6 +148,7 @@ import SetUser from "@/views/Mixin/SetUser.vue";
 import ApiClient from "@/services/api_client";
 import HisDate from "@/utils/Date";
 import { WebSocketService } from "@/services/websocketService";
+import { Appointment } from "../apps/Immunization/services/immunization_appointment_service";
 import {
     medkit,
     chevronBackOutline,
@@ -233,6 +257,21 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.dueCardValue {
+    font-size: 18px;
+    font-weight: 600;
+}
+.dueCardContent {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+.dueCard {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    min-width: 100px;
+}
 .statsSectionBorder {
     border-left: 1px solid #ccc;
 }
@@ -407,19 +446,9 @@ export default defineComponent({
     font-size: 16px;
     color: #2d3648;
 }
-.clientSeenBoxChild {
-    background: #2d3648 !important;
-}
-.clientSeenBoxMen {
-    background: #004d4d !important;
-}
-.clientSeenBoxWomen {
-    background: #556080 !important;
-}
+
 .clientSeenBox {
-    width: 68px;
-    height: 68px;
-    background: #006401;
+    background: #5d5d5d;
     border-radius: 7px;
     padding-top: 8px;
 }
