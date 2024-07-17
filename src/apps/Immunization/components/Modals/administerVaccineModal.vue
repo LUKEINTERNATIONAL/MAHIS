@@ -146,7 +146,7 @@ export default defineComponent({
         };
     },
     computed: {
-        ...mapState(useAdministerVaccineStore, ["tempScannedBatchNumber", "vaccineToBeVoided"]),
+        ...mapState(useAdministerVaccineStore, ["tempScannedBatchNumber"]),
     },
     async mounted() {
         this.loadCurrentSelectedDrug();
@@ -180,12 +180,6 @@ export default defineComponent({
                 }
             },
         },
-        // vaccineToBeVoided: {
-        //     handler() {
-        //         console.log("i cant no more", )
-        //         this.dismiss()
-        //     }
-        // }
     },
     methods: {
         loadCurrentSelectedDrug() {
