@@ -267,23 +267,25 @@ export default defineComponent({
             return Service.getProgramID();
         },
         async getRegion(name: any) {
-            let districts = [];
-            for (let i of [1, 2, 3]) {
-                if ((i = 1)) districts = await LocationService.getDistricts(i);
-                if (districts.some((district: any) => district.name.trim() === name)) {
-                    return "Central Region";
-                }
-                if ((i = 2)) districts = await LocationService.getDistricts(i);
-                if (districts.some((district: any) => district.name.trim() === name)) {
-                    return "Northern Region";
-                }
-                if ((i = 3)) districts = await LocationService.getDistricts(i);
-                if (districts.some((district: any) => district.name.trim() === name)) {
-                    return "Southern Region";
-                }
-                if ((i = 4)) districts = await LocationService.getDistricts(i);
-                if (districts.some((district: any) => district.name.trim() === name)) {
-                    return "Foreign";
+            if (name) {
+                let districts = [];
+                for (let i of [1, 2, 3]) {
+                    if ((i = 1)) districts = await LocationService.getDistricts(i);
+                    if (districts.some((district: any) => district.name.trim() === name)) {
+                        return "Central Region";
+                    }
+                    if ((i = 2)) districts = await LocationService.getDistricts(i);
+                    if (districts.some((district: any) => district.name.trim() === name)) {
+                        return "Northern Region";
+                    }
+                    if ((i = 3)) districts = await LocationService.getDistricts(i);
+                    if (districts.some((district: any) => district.name.trim() === name)) {
+                        return "Southern Region";
+                    }
+                    if ((i = 4)) districts = await LocationService.getDistricts(i);
+                    if (districts.some((district: any) => district.name.trim() === name)) {
+                        return "Foreign";
+                    }
                 }
             }
         },
@@ -385,7 +387,6 @@ export default defineComponent({
                 this.validateGaudiarnInfo()
             ) {
                 this.disableSaveBtn = true;
-                await this.buildPersonalInformation();
                 if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
                 const registration: any = new PatientRegistrationService();
                 await registration.registerPatient(this.personInformation[0].selectedData, []);
