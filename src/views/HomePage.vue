@@ -201,12 +201,16 @@ export default defineComponent({
         ...mapState(useGeneralStore, ["OPDActivities"]),
         ...mapState(useDemographicsStore, ["demographics"]),
     },
-    $route: {
-        async handler() {},
-        deep: true,
+    watch: {
+        $route: {
+            async handler() {
+                await this.setAppointments();
+            },
+            deep: true,
+        },
     },
     async mounted() {
-        this.appointments = await AppointmentService.getDailiyAppointments(HisDate.currentDate());
+        await this.setAppointments();
         this.setView();
         this.startTimer();
         this.setProgramInfo();
@@ -214,6 +218,9 @@ export default defineComponent({
         wsService.setMessageHandler(this.onMessage);
     },
     methods: {
+        async setAppointments() {
+            this.appointments = await AppointmentService.getDailiyAppointments(HisDate.currentDate());
+        },
         async setProgramInfo() {
             this.programBtn = await UserService.userProgramData();
         },

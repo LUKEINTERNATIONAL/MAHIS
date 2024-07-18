@@ -78,10 +78,12 @@ export default defineComponent({
     },
     methods: {
         setData() {
-            modifyFieldValue(this.socialHistory, "religion", "value", { id: "", name: this.getAttributes(this.patient, "Religion") });
-            modifyRadioValue(this.socialHistory, "occupation", "selectedValue", this.getAttributes(this.patient, "Occupation"));
-            modifyRadioValue(this.socialHistory, "maritalStatus", "selectedValue", this.getAttributes(this.patient, "Civil Status"));
-            modifyRadioValue(this.socialHistory, "highestLevelOfEducation", "selectedValue", this.getAttributes(this.patient, "EDUCATION LEVEL"));
+            if (this.editable) {
+                modifyFieldValue(this.socialHistory, "religion", "value", { id: "", name: this.getAttributes(this.patient, "Religion") });
+                modifyRadioValue(this.socialHistory, "occupation", "selectedValue", this.getAttributes(this.patient, "Occupation"));
+                modifyRadioValue(this.socialHistory, "maritalStatus", "selectedValue", this.getAttributes(this.patient, "Civil Status"));
+                modifyRadioValue(this.socialHistory, "highestLevelOfEducation", "selectedValue", this.getAttributes(this.patient, "EDUCATION LEVEL"));
+            }
         },
         getAttributes(item: any, name: any) {
             return item.person.person_attributes.find((attribute: any) => attribute.type.name === name)?.value;

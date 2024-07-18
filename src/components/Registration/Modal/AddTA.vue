@@ -257,9 +257,9 @@ ion-footer {
 }
 .saveBtn {
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
     margin: 20px;
-    width: 390px;
+    width: 100%;
     align-items: end;
 }
 .btnContent {
