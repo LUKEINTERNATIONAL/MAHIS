@@ -128,16 +128,11 @@ export default defineComponent({
         nav(url: any) {
             this.$router.push(url);
         },
-        openPopover(e: Event) {
-            this.event = e;
-            this.popoverOpen = true;
-        },
         formatBirthdate() {
             return HisDate.getBirthdateAge(this.demographics.birthdate);
         },
         controlHeight() {
             if (this.checkUnderSixWeeks) {
-                console.log("Llllllllllllll", this.checkUnderSixWeeks);
                 modifyFieldValue(this.vitalsWeightHeight, "height", "inputHeader", "Height");
                 modifyFieldValue(this.vitalsWeightHeight, "height", "inputDisplayNone", true);
             } else {

@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController, IonInput } from "@ionic/vue";
+import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController, IonInput, modalController } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { checkmark, pulseOutline } from "ionicons/icons";
 import { icons } from "@/utils/svg";
@@ -334,6 +334,7 @@ export default defineComponent({
             const userID: any = Service.getUserID();
             const vitalsService = new VitalsService(this.demographics.patient_id, userID);
             const vitalsToSave = this.vitals;
+            modalController.dismiss();
             vitalsService.onFinish(vitalsToSave).then(() => {
                 this.closeForm();
             });
