@@ -94,7 +94,6 @@ export default defineComponent({
                     name: this.patient.person?.addresses[0]?.city_village,
                     district_id: "",
                 });
-                console.log("🚀 ~ setData ~ this.patient.person?.addresses[0]:", this.patient.person?.addresses[0]);
                 modifyFieldValue(this.currentLocation, "current_district", "value", {
                     name: this.patient.person?.addresses[0]?.state_province,
                     traditional_authority_id: "",

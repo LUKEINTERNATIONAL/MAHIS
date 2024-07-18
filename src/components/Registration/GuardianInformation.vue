@@ -92,23 +92,30 @@ export default defineComponent({
     },
     methods: {
         async setData() {
-            const guardianData = await RelationshipService.getRelationships(this.demographics.patient_id);
+            if (this.editable) {
+                const guardianData = await RelationshipService.getRelationships(this.demographics.patient_id);
 
-            modifyFieldValue(this.guardianInformation, "guardianNationalID", "value", this.setAttribute("Regiment ID", guardianData[0]?.relation));
-            modifyFieldValue(this.guardianInformation, "guardianFirstname", "value", guardianData[0]?.relation.names[0]?.given_name);
-            modifyFieldValue(this.guardianInformation, "guardianLastname", "value", guardianData[0]?.relation.names[0]?.family_name);
-            modifyFieldValue(this.guardianInformation, "guardianMiddleName", "value", guardianData[0]?.relation.names[0]?.middle_name);
-            modifyFieldValue(
-                this.guardianInformation,
-                "guardianPhoneNumber",
-                "value",
-                this.setAttribute("Cell Phone Number", guardianData[0]?.relation)
-            );
-            modifyFieldValue(this.guardianInformation, "relationship", "value", {
-                id: guardianData[0]?.type.relationship_type_id,
-                name: guardianData[0]?.type.b_is_to_a,
-            });
-            await this.setRelationShip();
+                modifyFieldValue(
+                    this.guardianInformation,
+                    "guardianNationalID",
+                    "value",
+                    this.setAttribute("Regiment ID", guardianData[0]?.relation)
+                );
+                modifyFieldValue(this.guardianInformation, "guardianFirstname", "value", guardianData[0]?.relation.names[0]?.given_name);
+                modifyFieldValue(this.guardianInformation, "guardianLastname", "value", guardianData[0]?.relation.names[0]?.family_name);
+                modifyFieldValue(this.guardianInformation, "guardianMiddleName", "value", guardianData[0]?.relation.names[0]?.middle_name);
+                modifyFieldValue(
+                    this.guardianInformation,
+                    "guardianPhoneNumber",
+                    "value",
+                    this.setAttribute("Cell Phone Number", guardianData[0]?.relation)
+                );
+                modifyFieldValue(this.guardianInformation, "relationship", "value", {
+                    id: guardianData[0]?.type.relationship_type_id,
+                    name: guardianData[0]?.type.b_is_to_a,
+                });
+                await this.setRelationShip();
+            }
         },
         setAttribute(name: string | undefined, data: any) {
             if (!data || Object.keys(data).length === 0) return;

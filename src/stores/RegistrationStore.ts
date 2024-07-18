@@ -413,7 +413,7 @@ const initialHomeLocation = [
                             alertsErrorMassage: "",
                             isSingleSelect: true,
                             popOver: true,
-                            trackBy: "district_id",
+                            trackBy: "traditional_authority_id",
                             multiSelectData: [],
                             idName: "district_id",
                             displayNone: true,
