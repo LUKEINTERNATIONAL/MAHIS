@@ -87,15 +87,17 @@ export default defineComponent({
     },
     methods: {
         setData() {
-            modifyFieldValue(this.homeLocation, "home_district", "value", { name: this.patient.person?.addresses[0]?.address2, concept_id: "" });
-            modifyFieldValue(this.homeLocation, "home_traditional_authority", "value", {
-                name: this.patient.person?.addresses[0]?.county_district,
-                concept_id: "",
-            });
-            modifyFieldValue(this.homeLocation, "home_village", "value", {
-                name: this.patient.person?.addresses[0]?.neighborhood_cell,
-                concept_id: "",
-            });
+            if (this.editable) {
+                modifyFieldValue(this.homeLocation, "home_district", "value", { name: this.patient.person?.addresses[0]?.address2, concept_id: "" });
+                modifyFieldValue(this.homeLocation, "home_traditional_authority", "value", {
+                    name: this.patient.person?.addresses[0]?.county_district,
+                    concept_id: "",
+                });
+                modifyFieldValue(this.homeLocation, "home_village", "value", {
+                    name: this.patient.person?.addresses[0]?.neighborhood_cell,
+                    concept_id: "",
+                });
+            }
         },
         setSameAsCurrent() {
             if (getCheckboxSelectedValue(this.homeLocation, "Same as current")?.checked) {
