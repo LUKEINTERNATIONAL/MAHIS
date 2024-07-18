@@ -1,13 +1,29 @@
 <template>
-    <ion-row v-for="(item, index) in missedVaccineSchedules" :key="index" style="display: flex; justify-content: center">
-        <div>
-            <ion-button class="btnText btnTextWeight" size="small" fill="solid" color="danger">
-                <ion-icon slot="start" size="small" :icon="iconsContent.alertDangerRed"></ion-icon>
-                <b> at {{ item.age }}</b>
-            </ion-button>
-        </div>
-        <div class="dueAlertText">{{ item.vaccines.length }} vaccine(s) missed!</div>
-    </ion-row>
+    <ion-header>
+        <ion-title style="margin-bottom: 20px;" class="modalTitle">Missed Vaccines</ion-title>
+    </ion-header>
+    
+
+    <div v-for="(item, index) in missedVaccineSchedules" :key="index">
+        <row style="width: 90%;">
+            <ion-icon size="medium" style="margin-bottom: -6px;" :icon="iconsContent.calendar"></ion-icon>
+            <span> at <span style="color: #016302;">{{ item.age }}</span></span>
+            <span style="color: #316CBA; margin-left: 10%;">{{ vaccinesGivenCount(item) }}/{{ item.antigens.length }} vaccine(s) given</span>
+        </row>
+
+        <row style="text-align: center;" class="mod-ls">
+            <customVaccine :vaccines="item.antigens" :milestone_status="item.milestone_status" />
+        </row>
+    </div>
+
+    <ion-footer collapse="fade" class="ion-no-border">
+        <ion-row>
+            <ion-col>
+                <ion-button id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px" @click="dismiss()"> Cancel </ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-footer>
+
 </template>
 <script lang="ts">
 import {
@@ -30,17 +46,19 @@ import {
     IonModal,
     IonRow,
     modalController,
+    IonCol,
+    IonFooter,
     AccordionGroupCustomEvent,
 } from "@ionic/vue";
 import { icons } from "@/utils/svg";
 import { defineComponent } from "vue";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import { mapState } from "pinia";
+import customVaccine from "@/apps/Immunization/components/customVaccine.vue"
 
 export default defineComponent({
     name: "Home",
     components: {
-        IonContent,
         IonHeader,
         IonMenuButton,
         IonPage,
@@ -58,6 +76,10 @@ export default defineComponent({
         IonLabel,
         IonModal,
         IonRow,
+        customVaccine,
+        IonCol,
+        IonFooter,
+        IonContent,
     },
     data() {
         return {
@@ -67,6 +89,20 @@ export default defineComponent({
     computed: {
         ...mapState(useAdministerVaccineStore, ["currentMilestone", "missedVaccineSchedules"]),
     },
+    methods: {
+        vaccinesGivenCount(vaccinSchedule: any) {
+            const administeredVaccines = []
+            vaccinSchedule.antigens.forEach((vaccine: any) => {
+                if (vaccine.status == 'administered') {
+                    administeredVaccines.push(vaccine)
+                }
+            })
+            return administeredVaccines.length
+        },
+        dismiss() {
+            modalController.dismiss();
+        },
+    }
 });
 </script>
 <style scoped>
@@ -79,7 +115,7 @@ export default defineComponent({
     color: #000;
     --border-width: 1px;
     margin-right: 15px;
-    width: 140px;
+    
 }
 .dueAlert {
     justify-content: space-between;
@@ -94,5 +130,9 @@ export default defineComponent({
     font-size: 14px;
     color: #b42318;
     padding: 10px;
+}
+.mod-ls {
+    border-bottom: 1px solid #ccc;
+    line-height: 60px;
 }
 </style>

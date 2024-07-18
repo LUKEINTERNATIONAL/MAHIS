@@ -77,17 +77,17 @@
             <div class="graphBtn" v-if="overDueVaccinesCount > 0">
                 <div class="dueAlert">
                     <ion-row>
-                        <ion-col v-if="overDueVaccinesCount > 0" style="display: flex; justify-content: center">
+                        <ion-col v-if="overDueVaccinesCount > 0" style="display: flex; justify-content: center; cursor: pointer;" @click="showMissedVaccines">
                             <div class="missed_vaccine_alert">
                                 <ion-icon slot="start" :icon="iconsContent.alertDangerRed" />
                                 <span style="margin-right: 5px">{{ overDueVaccinesCount }} vaccine(s) overdue</span>
                             </div>
                         </ion-col>
-                        <ion-col v-if="overDueVaccinesCount > 0" style="display: flex; justify-content: center; cursor: pointer" @click="showMissedVaccines">
+                        <!-- <ion-col v-if="overDueVaccinesCount > 0" style="display: flex; justify-content: center; cursor: pointer" @click="showMissedVaccines">
                             <div class="missed_vaccine_alert_txt">
                                 <span>click to see missed vaccines</span>
                             </div>
-                        </ion-col>
+                        </ion-col> -->
                     </ion-row>
 
                     <!-- <ion-row v-for="(item, index) in missedVaccineSchedules" :key="index">
