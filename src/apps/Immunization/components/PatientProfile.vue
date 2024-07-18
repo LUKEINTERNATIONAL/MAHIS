@@ -629,7 +629,7 @@ export default defineComponent({
         },
         showMissedVaccines() {
             if (this.missedVaccineSchedules.length > 0) {
-                createModal(missedVaccinesModal, { class: "otherVitalsModal" });
+                createModal(missedVaccinesModal, { class: "otherVitalsModal vaccineHistoryModal" });
             }
         },
         setMilestoneReload() {

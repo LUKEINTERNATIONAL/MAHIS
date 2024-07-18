@@ -25,7 +25,6 @@
         </div>
     </ion-content>
 
-
     <ion-footer collapse="fade" class="ion-no-border">
         <ion-row>
             <ion-col>

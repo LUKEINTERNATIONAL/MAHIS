@@ -2,19 +2,20 @@
     <ion-header>
         <ion-title style="margin-bottom: 20px;" class="modalTitle">Missed Vaccines</ion-title>
     </ion-header>
-    
 
-    <div v-for="(item, index) in missedVaccineSchedules" :key="index">
-        <row style="width: 90%;">
-            <ion-icon size="medium" style="margin-bottom: -6px;" :icon="iconsContent.calendar"></ion-icon>
-            <span> at <span style="color: #016302;">{{ item.age }}</span></span>
-            <span style="color: #316CBA; margin-left: 10%;">{{ vaccinesGivenCount(item) }}/{{ item.antigens.length }} vaccine(s) given</span>
-        </row>
+    <ion-content :fullscreen="true" class="ion-padding">
+        <div v-for="(item, index) in missedVaccineSchedules" :key="index">
+            <row style="width: 90%;">
+                <ion-icon size="medium" style="margin-bottom: -6px;" :icon="iconsContent.calendar"></ion-icon>
+                <span> at <span style="color: #016302;">{{ item.age }}</span></span>
+                <span style="color: #316CBA; margin-left: 10%;">{{ vaccinesGivenCount(item) }}/{{ item.antigens.length }} vaccine(s) given</span>
+            </row>
 
-        <row style="text-align: center;" class="mod-ls">
-            <customVaccine :vaccines="item.antigens" :milestone_status="item.milestone_status" />
-        </row>
-    </div>
+            <row style="text-align: center;" class="mod-ls">
+                <customVaccine :vaccines="item.antigens" :milestone_status="item.milestone_status" />
+            </row>
+        </div>
+    </ion-content>
 
     <ion-footer collapse="fade" class="ion-no-border">
         <ion-row>
