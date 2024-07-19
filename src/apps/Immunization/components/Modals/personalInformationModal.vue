@@ -288,6 +288,7 @@ export default defineComponent({
                 fullName = item.person.names[0].given_name + " " + item.person.names[0].family_name;
             }
             demographicsStore.setDemographics({
+                active: true,
                 name: fullName,
                 mrn: this.patientIdentifier(item),
                 birthdate: item.person.birthdate,

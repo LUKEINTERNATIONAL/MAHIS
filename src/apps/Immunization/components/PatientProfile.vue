@@ -83,7 +83,11 @@
                                 <span style="margin-right: 5px">{{ overDueVaccinesCount }} vaccine(s) overdue</span>
                             </div>
                         </ion-col>
-                        <ion-col v-if="overDueVaccinesCount > 0" style="display: flex; justify-content: center; cursor: pointer" @click="showMissedVaccines">
+                        <ion-col
+                            v-if="overDueVaccinesCount > 0"
+                            style="display: flex; justify-content: center; cursor: pointer"
+                            @click="showMissedVaccines"
+                        >
                             <div class="missed_vaccine_alert_txt">
                                 <span>click to see missed vaccines</span>
                             </div>
@@ -133,15 +137,14 @@
                 </div>
 
                 <row v-if="lastVaccinesGiven.length > 0">
-                    <ion-icon size="medium" style="margin-bottom: -6px;" :icon="iconsContent.calendar"></ion-icon>
+                    <ion-icon size="medium" style="margin-bottom: -6px" :icon="iconsContent.calendar"></ion-icon>
                     <!-- <span> at <span style="color: #016302;">{{ item.age }}</span></span> -->
-                    <span style="color: #316CBA; margin-left: 1%;">{{ getLastVaccinesGivenDisplayDate() }}</span>
+                    <span style="color: #316cba; margin-left: 1%">{{ getLastVaccinesGivenDisplayDate() }}</span>
                 </row>
-                
+
                 <row v-if="lastVaccinesGiven.length > 0">
                     <customVaccine :vaccines="lastVaccinesGiven" :milestone_status="''" />
                 </row>
-                
             </div>
         </div>
     </div>
@@ -157,8 +160,8 @@
             <ion-list style="--ion-background-color: #fff; --offset-x: -30px">
                 <ion-item :button="true" :detail="false" @click="openPIM()" style="cursor: pointer">Update demographics</ion-item>
                 <ion-item :button="true" :detail="false" style="cursor: pointer">Update outcome</ion-item>
-                <ion-item :button="true" :detail="false" style="cursor: pointer">Print visit summary</ion-item>
-                <ion-item :button="true" :detail="false" style="cursor: pointer">Print national ID</ion-item>
+                <ion-item :button="true" :detail="false" @click="printVisitSummary()" style="cursor: pointer">Print visit summary</ion-item>
+                <ion-item :button="true" :detail="false" @click="printID()" style="cursor: pointer">Print client identifier</ion-item>
             </ion-list>
         </div>
     </ion-popover>
@@ -232,7 +235,8 @@ import { ConceptService } from "@/services/concept_service";
 import { ObservationService } from "@/services/observation_service";
 import missedVaccinesModal from "@/apps/Immunization/components/Modals/missedVaccinesModal.vue";
 import { DrugOrderService } from "@/services/drug_order_service";
-import customVaccine from "@/apps/Immunization/components/customVaccine.vue"
+import customVaccine from "@/apps/Immunization/components/customVaccine.vue";
+import { PatientPrintoutService } from "@/services/patient_printout_service";
 
 import {
     getFieldValue,
@@ -288,6 +292,7 @@ export default defineComponent({
             protectedStatus: "" as string,
             todays_date: HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
             lastVaccine: [] as any,
+            visits: [] as any,
             popoverOpen: false,
             event: null as any,
         };
@@ -299,7 +304,13 @@ export default defineComponent({
         ...mapState(useDiagnosisStore, ["diagnosis"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalDrugsList", "nonPharmalogicalTherapyAndOtherNotes", "selectedMedicalAllergiesList"]),
         ...mapState(useOutcomeStore, ["dispositions"]),
-        ...mapState(useAdministerVaccineStore, ["currentMilestone", "missedVaccineSchedules", "overDueVaccinesCount", "lastVaccinesGiven","lastVaccineGievenDate"]),
+        ...mapState(useAdministerVaccineStore, [
+            "currentMilestone",
+            "missedVaccineSchedules",
+            "overDueVaccinesCount",
+            "lastVaccinesGiven",
+            "lastVaccineGievenDate",
+        ]),
     },
     created() {
         this.getData();
@@ -351,9 +362,9 @@ export default defineComponent({
         demographics: {
             async handler() {
                 await this.checkProtectedStatus();
-                await this.openFollowModal();
+                if (!this.demographics.active) await this.openFollowModal();
                 this.checkAge();
-                this.setMilestoneReload()
+                this.setMilestoneReload();
                 await this.getLastVaccinesGiven();
             },
         },
@@ -363,6 +374,18 @@ export default defineComponent({
     },
 
     methods: {
+        printID() {
+            new PatientPrintoutService(this.demographics.patient_id).printNidLbl();
+        },
+        async printVisitSummary() {
+            this.visits = await PatientService.getPatientVisits(this.demographics.patient_id, false);
+            if (this.visits.length) {
+                const lbl = new PatientPrintoutService(this.demographics.patient_id);
+                return lbl.printVisitSummaryLbl(this.visits[0]);
+            } else {
+                toastWarning("No visits available");
+            }
+        },
         openPopover(e: Event) {
             this.event = e;
             this.popoverOpen = true;
@@ -632,12 +655,12 @@ export default defineComponent({
         },
         async getLastVaccinesGiven() {
             const data = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
-            const store = useAdministerVaccineStore()
+            const store = useAdministerVaccineStore();
             store.setLastVaccinesGiven(data);
         },
         getLastVaccinesGivenDisplayDate() {
-            return HisDate.toStandardHisDisplayFormat(this.lastVaccineGievenDate)
-        }
+            return HisDate.toStandardHisDisplayFormat(this.lastVaccineGievenDate);
+        },
     },
 });
 </script>

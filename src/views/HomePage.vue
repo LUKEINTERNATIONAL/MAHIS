@@ -19,18 +19,18 @@
                 <ion-card-header> <ion-card-title class="cardTitle">Yearly stats </ion-card-title></ion-card-header>
                 <ion-card-content>
                     <div class="stats">
-                        <div>
-                            <div class="statsValue">{{ reportData?.total_vaccinated || 0 }}</div>
+                        <div class="totalStats" style="background: rgb(210, 237, 198)">
+                            <div class="statsValue">{{ reportData?.total_client_registered || 0 }}</div>
                             <div class="statsText">Total client</div>
                         </div>
                         <div class="statsSectionBorder"></div>
-                        <div>
-                            <div class="statsValue">{{ reportData?.total_women_vaccinated_today || 0 }}</div>
+                        <div class="totalStats" style="background: rgb(241, 228, 153)">
+                            <div class="statsValue">{{ reportData?.total_female_registered || 0 }}</div>
                             <div class="statsText">Total female</div>
                         </div>
                         <div class="statsSectionBorder"></div>
-                        <div>
-                            <div class="statsValue">{{ reportData?.total_men_vaccinated_today || 0 }}</div>
+                        <div class="totalStats" style="background: rgb(188, 178, 188)">
+                            <div class="statsValue">{{ reportData?.total_male_registered || 0 }}</div>
                             <div class="statsText">Total male</div>
                         </div>
                     </div>
@@ -40,17 +40,32 @@
                 <ion-card-header> <ion-card-title class="cardTitle"> Due for vaccination </ion-card-title></ion-card-header>
                 <ion-card-content>
                     <div class="dueCardContent">
-                        <div class="dueCard">
+                        <div class="dueCard" style="border: 1px solid rgb(158, 207, 136)">
                             <div class="statsValue">0</div>
                             <div class="statsText">Today</div>
                         </div>
-                        <div class="dueCard">
+                        <div class="dueCard" style="border: 1px solid rgb(239, 221, 121)">
                             <div class="statsValue">0</div>
                             <div class="statsText">This week</div>
                         </div>
-                        <div class="dueCard">
+                        <div class="dueCard" style="border: 1px solid rgb(241, 154, 154)">
                             <div class="statsValue">0</div>
                             <div class="statsText">This month</div>
+                        </div>
+                    </div>
+                </ion-card-content>
+            </ion-card>
+            <ion-card class="section">
+                <ion-card-header> <ion-card-title class="cardTitle"> Overdue </ion-card-title></ion-card-header>
+                <ion-card-content>
+                    <div class="overDueCardContent">
+                        <div class="overDueCard">
+                            <div class="statsValue">0</div>
+                            <div class="statsText">Under 5yrs</div>
+                        </div>
+                        <div class="overDueCard">
+                            <div class="statsValue">0</div>
+                            <div class="statsText">Over 5yrs</div>
                         </div>
                     </div>
                 </ion-card-content>
@@ -206,6 +221,8 @@ export default defineComponent({
         $route: {
             async handler() {
                 await this.setAppointments();
+                const wsService = new WebSocketService();
+                wsService.setMessageHandler(this.onMessage);
             },
             deep: true,
         },
@@ -263,6 +280,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.totalStats {
+    padding: 10px;
+    border-radius: 5px;
+}
 ion-card {
     box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 1px -1px, rgba(0, 0, 0, 0) 0px 1px 1px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px;
 }
@@ -301,6 +322,21 @@ ion-card {
     display: flex;
     justify-content: space-around;
     text-align: center;
+}
+
+.overDueCardContent {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+.overDueCard {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    min-width: 150px;
+    transition: background-color 0.6s, color 0.6s, transform 0.2s;
+    user-select: none;
+    background: rgb(254, 205, 202);
 }
 .dueCard {
     border: 1px solid #ccc;

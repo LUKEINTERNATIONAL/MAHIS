@@ -329,6 +329,7 @@ import BloodPressure from "@/components/Graphs/BloodPressure.vue";
 import personalInformationModal from "@/apps/Immunization/components/Modals/personalInformationModal.vue";
 import { iconBMI } from "@/utils/SvgDynamicColor";
 import { createModal } from "@/utils/Alerts";
+import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
 export default defineComponent({
     components: {
         WeightHeightChart,
@@ -392,8 +393,6 @@ export default defineComponent({
             visits: [] as any,
             vitals: [] as any,
             NCDUserAction: [] as any,
-            activeProgramID: "" as any,
-            programBtn: {} as any,
             alerts: [] as any,
             colors: {
                 Low: ["#B9E6FE", "#026AA2", "#9ADBFE"],

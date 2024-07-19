@@ -145,11 +145,11 @@ import { useBirthRegistrationStore } from "@/apps/Immunization/stores/BirthRegis
 import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from "@/services/formatServerData";
 import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
 import { AppEncounterService } from "@/services/app_encounter_service";
-import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
+import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 import { PatientProgramService } from "@/services/patient_program_service";
 
 export default defineComponent({
-    mixins: [ScreenSizeMixin],
+    mixins: [SetPrograms],
     components: {
         IonBreadcrumb,
         IonBreadcrumbs,
