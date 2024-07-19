@@ -21,15 +21,21 @@ export async function saveVaccineAdministeredDrugs() {
     const programId: any = Service.getProgramID();
     const patient = new PatientService();
     if (!isEmpty(store.getAdministeredVaccines())) {
-        const drugOrders = mapToOrders()
-        const prescriptionService = new DrugPrescriptionForImmunizationService(patient.getID(), userId)
-        const encounter = await prescriptionService.createEncounter()
-        if (!encounter) return toastWarning("Unable to create immunization encounter")
-        const drugOrder = await prescriptionService.createDrugOrderForImmunization(drugOrders, programId)
-        if (!drugOrder) return toastWarning("Unable register vaccine!")
-        toastSuccess("Vaccine registred successfully")
-        store.setVaccineReload(!store.getVaccineReload())
-        openNextVaccineAppoinment()
+        try {
+            const drugOrders = mapToOrders()
+            const prescriptionService = new DrugPrescriptionForImmunizationService(patient.getID(), userId)
+            const encounter = await prescriptionService.createEncounter()
+            if (!encounter) return toastWarning("Unable to create immunization encounter")
+            const drugOrder = await prescriptionService.createDrugOrderForImmunization(drugOrders, programId)
+            if (!drugOrder) return toastWarning("Unable register vaccine!")
+            toastSuccess("Vaccine registred successfully")
+            store.setVaccineReload(!store.getVaccineReload())
+            openNextVaccineAppoinment()
+        } catch (error: any) {
+            if (validateBatchString(error.errors) == true) {
+                toastWarning(error.errors)
+            }
+        }
     }
 }
 
@@ -50,15 +56,23 @@ function mapToOrders(): any[] {
             batch_number: drug.batch_number,
             prn: 0,
         };
-    });
+    })
 }
 
 function calculateExpireDate(startDate: string | Date, duration: any) {
-    const date = new Date(startDate);
-    date.setDate(date.getDate() + parseInt(duration));
-    return HisDate.toStandardHisFormat(date);
+    const date = new Date(startDate)
+    date.setDate(date.getDate() + parseInt(duration))
+    return HisDate.toStandardHisFormat(date)
 }
 
 function openNextVaccineAppoinment() {
     createModal(nextAppointMent, { class: "otherVitalsModal" }, false)
 }
+
+function validateBatchString(input: any) {
+    const stringWithoutNumbers = input.replace(/\d+/g, '')
+    const lowerCaseString = stringWithoutNumbers.toLowerCase()
+    const targetPhrase = "batch number  does not exist"
+    return lowerCaseString.includes(targetPhrase)
+  }
+  
