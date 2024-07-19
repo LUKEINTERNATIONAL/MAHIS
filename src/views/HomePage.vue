@@ -14,7 +14,7 @@
                 </div>
             </div>
         </ion-content>
-        <ion-content v-if="programID() == 33">
+        <ion-content class="content" v-if="programID() == 33">
             <ion-card class="section">
                 <ion-card-header> <ion-card-title class="cardTitle">Yearly stats </ion-card-title></ion-card-header>
                 <ion-card-content>
@@ -41,16 +41,16 @@
                 <ion-card-content>
                     <div class="dueCardContent">
                         <div class="dueCard">
-                            <div class="dueCardValue">0</div>
-                            <div>Today</div>
+                            <div class="statsValue">0</div>
+                            <div class="statsText">Today</div>
                         </div>
                         <div class="dueCard">
-                            <div class="dueCardValue">0</div>
-                            <div>This week</div>
+                            <div class="statsValue">0</div>
+                            <div class="statsText">This week</div>
                         </div>
                         <div class="dueCard">
-                            <div class="dueCardValue">0</div>
-                            <div>This month</div>
+                            <div class="statsValue">0</div>
+                            <div class="statsText">This month</div>
                         </div>
                     </div>
                 </ion-card-content>
@@ -68,7 +68,7 @@
                     >
                         <div style="margin-right: 15px">
                             <div :class="item.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
-                                <ion-icon style="color: #fff; font-size: 60px" :icon="person"></ion-icon>
+                                <ion-icon style="color: #000; font-size: 30px" :icon="person"></ion-icon>
                             </div>
                         </div>
                         <div style="align-items: center; display: flex">
@@ -263,22 +263,22 @@ export default defineComponent({
 
 <style scoped>
 ion-card {
-    margin-bottom: 20px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 1px -1px, rgba(0, 0, 0, 0) 0px 1px 1px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px;
 }
 .client_name {
-    font-size: 16px;
+    font-size: 1em;
     font-weight: 600;
 }
 .dot {
     font-size: 25px;
 }
 .initialsBox {
-    width: 70px;
-    height: 70px;
+    width: 50px;
+    height: 50px;
     left: 31px;
     top: 122px;
     align-items: center;
-    border-radius: 10px;
+    border-radius: 50%;
     align-items: center;
     display: flex;
     justify-content: center;
@@ -290,7 +290,7 @@ ion-card {
     background: #876d9b;
 }
 .dueCardValue {
-    font-size: 18px;
+    font-size: 1em;
     font-weight: 600;
 }
 .dueCardContent {
@@ -311,26 +311,24 @@ ion-card {
     display: flex;
     justify-content: space-around;
     text-align: center;
-    padding-bottom: 10px;
-    border-bottom: 0.01px solid #ccc;
 }
 .cardTitle {
     border-bottom: 0.01px solid #ccc;
     padding-bottom: 10px;
-    font-size: 18px;
+    font-size: 0.9em;
     font-weight: 560;
     color: #5d5d5d;
 }
 .statsValue {
     font-weight: 600;
-    font-size: 30px;
+    font-size: 1em;
     line-height: 37px;
     color: #5d5d5d;
 }
 .statsText {
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 37px;
+    font-weight: 400;
+    font-size: 1em;
+    line-height: 10px;
     color: #8c8c8c;
 }
 #container {
@@ -349,7 +347,7 @@ ion-card {
 }
 
 #container p {
-    font-size: 16px;
+    font-size: 1em;
     line-height: 22px;
 
     color: #8c8c8c;
@@ -517,5 +515,8 @@ ion-card {
 }
 .modal_wrapper {
     border-radius: 8px;
+}
+.content {
+    --background: #fff;
 }
 </style>
