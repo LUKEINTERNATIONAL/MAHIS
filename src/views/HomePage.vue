@@ -61,6 +61,7 @@
                 >
                 <ion-card-content>
                     <div
+                        class="appointments"
                         style="display: flex; margin-bottom: 10px"
                         v-for="(item, index) in appointments"
                         :key="index"
@@ -68,13 +69,13 @@
                     >
                         <div style="margin-right: 15px">
                             <div :class="item.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
-                                <ion-icon style="color: #000; font-size: 30px" :icon="person"></ion-icon>
+                                <ion-icon style="color: rgb(78, 78, 78); font-size: 30px" :icon="person"></ion-icon>
                             </div>
                         </div>
                         <div style="align-items: center; display: flex">
                             <div style="line-height: 1">
                                 <div class="client_name">
-                                    <div class="name">{{ item.name }} {{ item.family_name }}</div>
+                                    <div class="name">{{ item.given_name }} {{ item.family_name }}</div>
                                 </div>
                                 <div class="demographicsOtherRow">
                                     <div class="demographicsText">
@@ -269,6 +270,9 @@ ion-card {
     font-size: 1em;
     font-weight: 600;
 }
+.demographicsText {
+    font-size: 1em;
+}
 .dot {
     font-size: 25px;
 }
@@ -303,7 +307,47 @@ ion-card {
     padding: 10px;
     border-radius: 8px;
     min-width: 100px;
+    transition: background-color 0.6s, color 0.6s, transform 0.2s;
+    user-select: none;
 }
+
+.dueCard:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.dueCard:active {
+    background-color: #ccc;
+    color: #fff;
+    transform: scale(0.98);
+}
+
+.dueCard.active {
+    background-color: #8c8c8c8c;
+    color: #fff;
+}
+
+.appointments {
+    transition: background-color 0.6s, color 0.6s, transform 0.2s;
+    user-select: none;
+    padding: 10px;
+}
+.appointments:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.appointments:active {
+    background-color: #ccc;
+    color: #fff;
+    transform: scale(0.98);
+}
+
+.appointments.active {
+    background-color: #8c8c8c8c;
+    color: #fff;
+}
+
 .statsSectionBorder {
     border-left: 1px solid #ccc;
 }
@@ -329,7 +373,7 @@ ion-card {
     font-weight: 400;
     font-size: 1em;
     line-height: 10px;
-    color: #8c8c8c;
+    color: #1d1d1d;
 }
 #container {
     text-align: center;
