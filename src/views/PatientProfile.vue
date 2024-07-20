@@ -225,15 +225,7 @@
                     </ion-col>
                 </ion-row>
             </div>
-
-            <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="displayNoneDesktop">
-                <ion-fab-button color="primary"> <ion-icon :icon="grid"></ion-icon> </ion-fab-button>
-                <ion-fab-list side="top">
-                    <ion-fab-button @click="setProgram(btn)" v-for="(btn, index) in programBtn" :key="index" :data-desc="btn.actionName">
-                        <ion-icon :icon="add"></ion-icon>
-                    </ion-fab-button>
-                </ion-fab-list>
-            </ion-fab>
+            <Programs :programBtn="programBtn" @clicked="setProgram($event)" />
         </ion-content>
     </ion-page>
 </template>
@@ -322,6 +314,7 @@ import { toastWarning } from "@/utils/Alerts";
 import ProgramData from "@/Data/ProgramData";
 import { ref } from "vue";
 import DynamicButton from "@/components/DynamicButton.vue";
+import Programs from "@/components/Programs.vue";
 import PatientProfile from "@/apps/Immunization/components/PatientProfile.vue";
 import WeightHeightChart from "@/apps/Immunization/components/Graphs/WeightHeightChart.vue";
 import PreviousVitals from "@/components/Graphs/previousVitals.vue";
@@ -329,8 +322,9 @@ import BloodPressure from "@/components/Graphs/BloodPressure.vue";
 import personalInformationModal from "@/apps/Immunization/components/Modals/personalInformationModal.vue";
 import { iconBMI } from "@/utils/SvgDynamicColor";
 import { createModal } from "@/utils/Alerts";
-import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
+import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 export default defineComponent({
+    mixins: [SetPrograms],
     components: {
         WeightHeightChart,
         PreviousVitals,
@@ -375,6 +369,7 @@ export default defineComponent({
         AllergiesContraindication,
         DiagnosesHistory,
         LabTestsHistory,
+        Programs,
     },
     data() {
         return {
@@ -406,7 +401,6 @@ export default defineComponent({
         ...mapState(useDemographicsStore, ["demographics", "patient"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalAllergiesList"]),
         ...mapState(useEnrollementStore, ["NCDNumber"]),
-        ...mapState(useGeneralStore, ["NCDUserActions"]),
         ...mapState(useVitalsStore, ["vitals"]),
     },
     async mounted() {
@@ -414,29 +408,13 @@ export default defineComponent({
         const patient = new PatientService();
         this.visits = await PatientService.getPatientVisits(patient.getID(), false);
         await UserService.setProgramUserActions();
-        this.setProgramInfo();
-        this.setActiveProgram();
         this.setAlerts();
         await this.updateData();
     },
     watch: {
         demographics: {
             async handler() {
-                this.setProgramInfo();
-                this.setActiveProgram();
                 await this.updateData();
-            },
-            deep: true,
-        },
-        NCDUserActions: {
-            handler() {
-                this.setProgramInfo();
-            },
-            deep: true,
-        },
-        $route: {
-            handler() {
-                this.setProgramInfo();
             },
             deep: true,
         },
@@ -506,16 +484,6 @@ export default defineComponent({
         openPIM() {
             createModal(personalInformationModal, { class: "otherVitalsModal" });
         },
-        setProgram(program: any) {
-            sessionStorage.setItem("app", JSON.stringify({ programID: program.program_id, applicationName: program.name }));
-            this.setActiveProgram();
-            this.nav(program.url);
-        },
-        setActiveProgram() {
-            let program: any = sessionStorage.getItem("app");
-            program = JSON.parse(program);
-            this.activeProgramID = program.programID;
-        },
         convertToDisplayDate(date: any) {
             return HisDate.toStandardHisDisplayFormat(date);
         },
@@ -531,18 +499,12 @@ export default defineComponent({
                 return false;
             }
         },
-        async setProgramInfo() {
-            this.programBtn = await UserService.userProgramData();
-        },
+
         openModal() {
             this.isModalOpen = true;
         },
         dismiss() {
             modalController.dismiss();
-        },
-        async nav(url: any) {
-            await UserService.setProgramUserActions();
-            this.$router.push(url);
         },
         async updateData() {
             const array = ["Height", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
@@ -608,27 +570,7 @@ export default defineComponent({
     color: #016302;
     padding: 10px;
 }
-ion-fab-button[data-desc] {
-    position: relative;
-    width: 0px;
-}
 
-ion-fab-button[data-desc]::after {
-    position: absolute;
-    content: attr(data-desc);
-    z-index: 1;
-    right: -20px;
-    bottom: 7px;
-    color: var(--ion-color-contrast, rgb(112, 109, 109));
-    background-color: rgb(221, 238, 221);
-    padding: 5px 10px;
-    border-radius: 10px;
-    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
-}
-ion-fab-button[data-desc]:hover::after {
-    background-color: rgb(200, 230, 200); /* Change background color on hover */
-    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.4), 0 6px 10px 0 rgba(0, 0, 0, 0.28), 0 1px 18px 0 rgba(0, 0, 0, 0.24); /* Adjust box-shadow on hover */
-}
 #container {
     text-align: center;
 

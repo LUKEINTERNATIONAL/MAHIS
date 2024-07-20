@@ -15,103 +15,105 @@
             </div>
         </ion-content>
         <ion-content class="content" v-if="programID() == 33">
-            <ion-card class="section">
-                <ion-card-header> <ion-card-title class="cardTitle">Yearly stats </ion-card-title></ion-card-header>
-                <ion-card-content>
-                    <div class="stats">
-                        <div class="totalStats" style="background: rgb(210, 237, 198)">
-                            <div class="statsValue">{{ reportData?.total_client_registered || 0 }}</div>
-                            <div class="statsText">Total client</div>
-                        </div>
-                        <div class="statsSectionBorder"></div>
-                        <div class="totalStats" style="background: rgb(241, 228, 153)">
-                            <div class="statsValue">{{ reportData?.total_female_registered || 0 }}</div>
-                            <div class="statsText">Total female</div>
-                        </div>
-                        <div class="statsSectionBorder"></div>
-                        <div class="totalStats" style="background: rgb(188, 178, 188)">
-                            <div class="statsValue">{{ reportData?.total_male_registered || 0 }}</div>
-                            <div class="statsText">Total male</div>
-                        </div>
-                    </div>
-                </ion-card-content>
-            </ion-card>
-            <ion-card class="section">
-                <ion-card-header> <ion-card-title class="cardTitle"> Due for vaccination </ion-card-title></ion-card-header>
-                <ion-card-content>
-                    <div class="dueCardContent">
-                        <div class="dueCard" style="border: 1px solid rgb(158, 207, 136)">
-                            <div class="statsValue">0</div>
-                            <div class="statsText">Today</div>
-                        </div>
-                        <div class="dueCard" style="border: 1px solid rgb(239, 221, 121)">
-                            <div class="statsValue">0</div>
-                            <div class="statsText">This week</div>
-                        </div>
-                        <div class="dueCard" style="border: 1px solid rgb(241, 154, 154)">
-                            <div class="statsValue">0</div>
-                            <div class="statsText">This month</div>
-                        </div>
-                    </div>
-                </ion-card-content>
-            </ion-card>
-            <ion-card class="section">
-                <ion-card-header> <ion-card-title class="cardTitle"> Overdue </ion-card-title></ion-card-header>
-                <ion-card-content>
-                    <div class="overDueCardContent">
-                        <div class="overDueCard">
-                            <div class="statsValue">0</div>
-                            <div class="statsText">Under 5yrs</div>
-                        </div>
-                        <div class="overDueCard">
-                            <div class="statsValue">0</div>
-                            <div class="statsText">Over 5yrs</div>
-                        </div>
-                    </div>
-                </ion-card-content>
-            </ion-card>
-            <ion-card class="section">
-                <ion-card-header>
-                    <ion-card-title class="cardTitle"> Today appointments({{ appointments.length }}) </ion-card-title></ion-card-header
-                >
-                <ion-card-content>
-                    <div
-                        class="appointments"
-                        style="display: flex; margin-bottom: 10px"
-                        v-for="(item, index) in appointments"
-                        :key="index"
-                        @click="openClientProfile(item.npid)"
-                    >
-                        <div style="margin-right: 15px">
-                            <div :class="item.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
-                                <ion-icon style="color: rgb(78, 78, 78); font-size: 30px" :icon="person"></ion-icon>
+            <div>
+                <ion-card class="section">
+                    <ion-card-header> <ion-card-title class="cardTitle">Yearly stats </ion-card-title></ion-card-header>
+                    <ion-card-content>
+                        <div class="stats">
+                            <div class="totalStats" style="background: rgb(210, 237, 198)">
+                                <div class="statsValue">{{ reportData?.total_client_registered || 0 }}</div>
+                                <div class="statsText">Total vaccinated this year</div>
+                            </div>
+                            <div class="statsSectionBorder"></div>
+                            <div class="totalStats" style="background: rgb(241, 228, 153)">
+                                <div class="statsValue">{{ reportData?.total_female_registered || 0 }}</div>
+                                <div class="statsText">Total Female vaccinated this year</div>
+                            </div>
+                            <div class="statsSectionBorder"></div>
+                            <div class="totalStats" style="background: rgb(188, 178, 188)">
+                                <div class="statsValue">{{ reportData?.total_male_registered || 0 }}</div>
+                                <div class="statsText">Total Male vaccinated this year</div>
                             </div>
                         </div>
-                        <div style="align-items: center; display: flex">
-                            <div style="line-height: 1">
-                                <div class="client_name">
-                                    <div class="name">{{ item.given_name }} {{ item.family_name }}</div>
+                    </ion-card-content>
+                </ion-card>
+                <ion-card class="section">
+                    <ion-card-header> <ion-card-title class="cardTitle"> Clients due </ion-card-title></ion-card-header>
+                    <ion-card-content>
+                        <div class="dueCardContent">
+                            <div class="dueCard" style="border: 1px solid rgb(158, 207, 136)">
+                                <div class="statsValue">0</div>
+                                <div class="statsText">Due today</div>
+                            </div>
+                            <div class="dueCard" style="border: 1px solid rgb(239, 221, 121)">
+                                <div class="statsValue">0</div>
+                                <div class="statsText">Due this week</div>
+                            </div>
+                            <div class="dueCard" style="border: 1px solid rgb(241, 154, 154)">
+                                <div class="statsValue">0</div>
+                                <div class="statsText">Due this month</div>
+                            </div>
+                        </div>
+                    </ion-card-content>
+                </ion-card>
+                <ion-card class="section">
+                    <ion-card-header> <ion-card-title class="cardTitle"> Clients overdue </ion-card-title></ion-card-header>
+                    <ion-card-content>
+                        <div class="overDueCardContent">
+                            <div class="overDueCard">
+                                <div class="statsValue">0</div>
+                                <div class="statsText">Under 5yrs</div>
+                            </div>
+                            <div class="overDueCard">
+                                <div class="statsValue">0</div>
+                                <div class="statsText">Over 5yrs</div>
+                            </div>
+                        </div>
+                    </ion-card-content>
+                </ion-card>
+                <ion-card class="section">
+                    <ion-card-header>
+                        <ion-card-title class="cardTitle"> Today appointments({{ appointments.length }}) </ion-card-title></ion-card-header
+                    >
+                    <ion-card-content>
+                        <div
+                            class="appointments"
+                            style="display: flex; margin-bottom: 10px"
+                            v-for="(item, index) in appointments"
+                            :key="index"
+                            @click="openClientProfile(item.npid)"
+                        >
+                            <div style="margin-right: 15px">
+                                <div :class="item.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
+                                    <ion-icon style="color: rgb(78, 78, 78); font-size: 30px" :icon="person"></ion-icon>
                                 </div>
-                                <div class="demographicsOtherRow">
-                                    <div class="demographicsText">
-                                        {{ demographics.gender == "M" ? "Male" : "Female" }}
-                                        <span class="dot">.</span>{{ formatBirthdate(item.birthdate) }}
+                            </div>
+                            <div style="align-items: center; display: flex">
+                                <div style="line-height: 1">
+                                    <div class="client_name">
+                                        <div class="name">{{ item.given_name }} {{ item.family_name }}</div>
+                                    </div>
+                                    <div class="demographicsOtherRow">
+                                        <div class="demographicsText">
+                                            {{ demographics.gender == "M" ? "Male" : "Female" }}
+                                            <span class="dot">.</span>{{ formatBirthdate(item.birthdate) }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </ion-card-content>
-            </ion-card>
+                    </ion-card-content>
+                </ion-card>
 
-            <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-                <ion-fab-button color="primary"> <ion-icon :icon="grid"></ion-icon> </ion-fab-button>
-                <ion-fab-list side="top">
-                    <ion-fab-button @click="setProgram(btn)" v-for="(btn, index) in programBtn" :key="index" :data-desc="btn.actionName">
-                        <ion-icon :icon="add"></ion-icon>
-                    </ion-fab-button>
-                </ion-fab-list>
-            </ion-fab>
+                <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+                    <ion-fab-button color="primary"> <ion-icon :icon="grid"></ion-icon> </ion-fab-button>
+                    <ion-fab-list side="top">
+                        <ion-fab-button @click="setProgram(btn)" v-for="(btn, index) in programBtn" :key="index" :data-desc="btn.actionName">
+                            <ion-icon :icon="add"></ion-icon>
+                        </ion-fab-button>
+                    </ion-fab-list>
+                </ion-fab>
+            </div>
         </ion-content>
     </ion-page>
 </template>
@@ -281,8 +283,12 @@ export default defineComponent({
 
 <style scoped>
 .totalStats {
-    padding: 10px;
+    padding: 2vw;
+    padding-top: 2vw;
+    padding-bottom: 2vw;
     border-radius: 5px;
+    padding-top: 4vw;
+    padding-bottom: 4vw;
 }
 ion-card {
     box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 1px -1px, rgba(0, 0, 0, 0) 0px 1px 1px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px;
@@ -331,7 +337,7 @@ ion-card {
 }
 .overDueCard {
     border: 1px solid #ccc;
-    padding: 10px;
+    padding: 4vw;
     border-radius: 8px;
     min-width: 150px;
     transition: background-color 0.6s, color 0.6s, transform 0.2s;
@@ -340,7 +346,7 @@ ion-card {
 }
 .dueCard {
     border: 1px solid #ccc;
-    padding: 10px;
+    padding: 4vw;
     border-radius: 8px;
     min-width: 100px;
     transition: background-color 0.6s, color 0.6s, transform 0.2s;
@@ -401,15 +407,15 @@ ion-card {
 }
 .statsValue {
     font-weight: 600;
-    font-size: 1em;
+    font-size: 1.7em;
     line-height: 37px;
     color: #5d5d5d;
 }
 .statsText {
     font-weight: 400;
     font-size: 1em;
-    line-height: 10px;
-    color: #1d1d1d;
+    line-height: 20px;
+    color: #767171;
 }
 #container {
     text-align: center;

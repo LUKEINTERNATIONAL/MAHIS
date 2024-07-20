@@ -310,6 +310,7 @@ export default defineComponent({
             "overDueVaccinesCount",
             "lastVaccinesGiven",
             "lastVaccineGievenDate",
+            "vaccineReload",
         ]),
     },
     created() {
@@ -367,6 +368,12 @@ export default defineComponent({
                 this.setMilestoneReload();
                 await this.getLastVaccinesGiven();
             },
+        },
+        vaccineReload: {
+            async handler() {
+                await this.getLastVaccinesGiven();
+            },
+            deep: true,
         },
     },
     setup() {

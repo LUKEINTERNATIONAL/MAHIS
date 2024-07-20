@@ -76,6 +76,7 @@ export default defineComponent({
     data() {
         return {
             iconsContent: icons,
+            fowardData: {} as any,
         };
     },
     computed: {},
@@ -83,8 +84,8 @@ export default defineComponent({
     mounted() {},
     props: {
         vaccines: {
-            type: [],
-            default: [],
+            type: {},
+            default: {},
         } as any,
         milestone_status: {
             type: String,
@@ -140,12 +141,12 @@ export default defineComponent({
         },
         openAdministerVaccineModal(data: any) {
             const store = useAdministerVaccineStore();
-            store.setCurrentSelectedDrug(data.drug_id as number, data.drug_name, data.vaccine_batch_number as string);
+            store.setCurrentSelectedDrug(data)
             createModal(administerVaccineModal, { class: "otherVitalsModal" });
         },
         disableVaccine(vaccine: any) {
             if (vaccine.status != null && vaccine.status == "administered") {
-                return true;
+                return false;
             }
 
             if (vaccine.can_administer != null && vaccine.can_administer == false) {
