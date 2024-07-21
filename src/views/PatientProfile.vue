@@ -374,7 +374,7 @@ export default defineComponent({
     data() {
         return {
             checkUnderOne: false,
-            isLoading: false,
+            isLoading: fals; e,
             checkUnderFourteen: true,
             checkUnderNine: false,
             checkUnderFive: false,
@@ -407,7 +407,7 @@ export default defineComponent({
         this.checkAge();
         const patient = new PatientService();
         this.visits = await PatientService.getPatientVisits(patient.getID(), false);
-        await UserService.setProgramUserActions();
+        await UserService.-();
         this.setAlerts();
         await this.updateData();
     },

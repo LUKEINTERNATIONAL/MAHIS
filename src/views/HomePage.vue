@@ -95,7 +95,7 @@
                                     </div>
                                     <div class="demographicsOtherRow">
                                         <div class="demographicsText">
-                                            {{ demographics.gender == "M" ? "Male" : "Female" }}
+                                            {{ item.gender == "M" ? "Male" : "Female" }}
                                             <span class="dot">.</span>{{ formatBirthdate(item.birthdate) }}
                                         </div>
                                     </div>
@@ -104,17 +104,9 @@
                         </div>
                     </ion-card-content>
                 </ion-card>
-
-                <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-                    <ion-fab-button color="primary"> <ion-icon :icon="grid"></ion-icon> </ion-fab-button>
-                    <ion-fab-list side="top">
-                        <ion-fab-button @click="setProgram(btn)" v-for="(btn, index) in programBtn" :key="index" :data-desc="btn.actionName">
-                            <ion-icon :icon="add"></ion-icon>
-                        </ion-fab-button>
-                    </ion-fab-list>
-                </ion-fab>
             </div>
         </ion-content>
+        <Programs :programBtn="programBtn" @clicked="setProgram($event)" />
     </ion-page>
 </template>
 
@@ -169,9 +161,12 @@ import {
     add,
     person,
 } from "ionicons/icons";
+import SetPrograms from "@/views/Mixin/SetPrograms.vue";
+import Programs from "@/components/Programs.vue";
+import { resetDemographics } from "@/services/reset_data";
 export default defineComponent({
     name: "Home",
-    mixins: [SetUser, SetDemographics],
+    mixins: [SetUser, SetDemographics, SetPrograms],
     components: {
         IonContent,
         IonHeader,
@@ -190,6 +185,7 @@ export default defineComponent({
         IonCardHeader,
         IonCardSubtitle,
         IonCardTitle,
+        Programs,
     },
     data() {
         return {
@@ -221,7 +217,8 @@ export default defineComponent({
     },
     watch: {
         $route: {
-            async handler() {
+            async handler(data) {
+                if (data.name == "Home") resetDemographics();
                 await this.setAppointments();
                 const wsService = new WebSocketService();
                 wsService.setMessageHandler(this.onMessage);
@@ -230,19 +227,16 @@ export default defineComponent({
         },
     },
     async mounted() {
+        resetDemographics();
         await this.setAppointments();
         this.setView();
         this.startTimer();
-        this.setProgramInfo();
         const wsService = new WebSocketService();
         wsService.setMessageHandler(this.onMessage);
     },
     methods: {
         async setAppointments() {
             this.appointments = await AppointmentService.getDailiyAppointments(HisDate.currentDate());
-        },
-        async setProgramInfo() {
-            this.programBtn = await UserService.userProgramData();
         },
         async openClientProfile(patientID: any) {
             const patientData = await PatientService.findByNpid(patientID);
@@ -251,9 +245,6 @@ export default defineComponent({
         },
         formatBirthdate(birthdate: any) {
             return HisDate.getBirthdateAge(birthdate);
-        },
-        setProgram(program: any) {
-            sessionStorage.setItem("app", JSON.stringify({ programID: program.program_id, applicationName: program.name }));
         },
         onMessage(event: MessageEvent) {
             const data = JSON.parse(event.data);

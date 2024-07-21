@@ -3,6 +3,7 @@ import { defineComponent } from "vue";
 import { Service } from "@/services/service";
 import { UserService } from "@/services/user_service";
 import { IonIcon, IonFab, IonFabButton, IonFabList } from "@ionic/vue";
+import { useProgramStore } from "@/stores/ProgramStore";
 import {
     medkit,
     chevronBackOutline,
@@ -17,6 +18,8 @@ import {
     add,
     person,
 } from "ionicons/icons";
+import { useDemographicsStore } from "@/stores/DemographicStore";
+import { mapState } from "pinia";
 export default defineComponent({
     components: {
         IonIcon,
@@ -31,6 +34,9 @@ export default defineComponent({
         programBtn: {} as any,
         activeProgramID: "" as any,
     }),
+    computed: {
+        ...mapState(useDemographicsStore, ["demographics"]),
+    },
     setup() {
         return {
             chevronBackOutline,
@@ -69,7 +75,7 @@ export default defineComponent({
         async setProgram(program: any) {
             sessionStorage.setItem("app", JSON.stringify({ programID: program.program_id, applicationName: program.name }));
             await this.setProgramInfo();
-            await this.nav(program.url);
+            if (this.demographics.patient_id) await this.nav(program.url);
         },
         async nav(url: any) {
             await UserService.setProgramUserActions();
@@ -79,8 +85,9 @@ export default defineComponent({
             let program: any = sessionStorage.getItem("app");
             program = JSON.parse(program);
             this.activeProgramID = program.programID;
-            console.log("🚀 ~ setProgramInfo ~ this.activeProgramID:", this.activeProgramID);
-            this.programBtn = await UserService.userProgramData();
+            this.programBtn = await UserService.userProgramData(this.demographics.patient_id);
+            const programStore = useProgramStore();
+            programStore.setProgramInformation({ program: program, programBtn: this.programBtn });
         },
     },
 });

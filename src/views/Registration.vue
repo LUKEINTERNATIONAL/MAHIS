@@ -145,11 +145,12 @@ import { useBirthRegistrationStore } from "@/apps/Immunization/stores/BirthRegis
 import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from "@/services/formatServerData";
 import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
 import { AppEncounterService } from "@/services/app_encounter_service";
-import SetPrograms from "@/views/Mixin/SetPrograms.vue";
+import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
 import { PatientProgramService } from "@/services/patient_program_service";
+import { resetDemographics } from "@/services/reset_data";
 
 export default defineComponent({
-    mixins: [SetPrograms],
+    mixins: [ScreenSizeMixin],
     components: {
         IonBreadcrumb,
         IonBreadcrumbs,
@@ -240,6 +241,7 @@ export default defineComponent({
     },
 
     async mounted() {
+        resetDemographics();
         this.setIconClass();
         this.disableNationalIDInput();
         this.checkAge();
@@ -255,6 +257,12 @@ export default defineComponent({
                 data.setGuardianInformation(this.guardianInformation);
                 this.checkAge();
                 this.disableNationalIDInput();
+            },
+            deep: true,
+        },
+        $route: {
+            async handler(data) {
+                if (data.name == "registration") resetDemographics();
             },
             deep: true,
         },

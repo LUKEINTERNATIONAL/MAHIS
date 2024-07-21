@@ -430,8 +430,10 @@ export default defineComponent({
         },
         isChild() {
             const patient = new PatientService();
-            if (patient.isUnderFive()) return true;
-            else return false;
+            if (patient.getID()) {
+                if (patient.isUnderFive()) return true;
+                else return false;
+            }
         },
         formatBirthdate() {
             return HisDate.getBirthdateAge(this.demographics.birthdate);
