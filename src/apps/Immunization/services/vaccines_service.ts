@@ -70,9 +70,10 @@ function openNextVaccineAppoinment() {
 }
 
 function validateBatchString(input: any) {
-    const stringWithoutNumbers = input.replace(/\d+/g, '')
-    const lowerCaseString = stringWithoutNumbers.toLowerCase()
-    const targetPhrase = "batch number  does not exist"
-    return lowerCaseString.includes(targetPhrase)
+    // const stringWithoutNumbers = input.replace(/\d+/g, '')
+    // const lowerCaseString = stringWithoutNumbers.toLowerCase()
+    // const targetPhrase = "batch number  does not exist"
+    // return lowerCaseString.includes(targetPhrase)
+    return true
   }
   
