@@ -362,11 +362,13 @@ export default defineComponent({
         },
         demographics: {
             async handler() {
-                await this.checkProtectedStatus();
-                if (!this.demographics.active) await this.openFollowModal();
-                this.checkAge();
-                this.setMilestoneReload();
-                await this.getLastVaccinesGiven();
+                if (this.demographics) {
+                    await this.checkProtectedStatus();
+                    if (!this.demographics.active) await this.openFollowModal();
+                    this.checkAge();
+                    this.setMilestoneReload();
+                    await this.getLastVaccinesGiven();
+                }
             },
         },
         vaccineReload: {
@@ -418,9 +420,11 @@ export default defineComponent({
             createModal(vaccinationHistory, { class: "otherVitalsModal vaccineHistoryModal" });
         },
         async openFollowModal() {
-            this.lastVaccine = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
-            const dataToPass = { protectedStatus: this.protectedStatus };
-            if (this.lastVaccine.length > 0) createModal(followUpVisitModal, { class: "otherVitalsModal" }, true, dataToPass);
+            if (this.demographics) {
+                this.lastVaccine = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
+                const dataToPass = { protectedStatus: this.protectedStatus };
+                if (this.lastVaccine.length > 0) createModal(followUpVisitModal, { class: "otherVitalsModal" }, true, dataToPass);
+            }
         },
         openAdministerVaccineModal() {
             createModal(administerVaccineModal, { class: "otherVitalsModal" });
