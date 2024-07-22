@@ -118,12 +118,13 @@ export class UserService extends Service {
         const filteredPrograms = [];
         for (const item of programs) {
             if (patientID) {
-                console.log("🚀 ~ UserService ~ userProgramData ~ patient:", patientID);
                 if (item.name === "NCD PROGRAM") {
                     const NCDData: any = await this.setNCDValue();
-                    item.url = NCDData.url;
-                    item.actionName = NCDData.actionName;
-                    filteredPrograms.push(item);
+                    if (NCDData) {
+                        item.url = NCDData.url;
+                        item.actionName = NCDData.actionName;
+                        filteredPrograms.push(item);
+                    }
                 } else if (item.name === "IMMUNIZATION PROGRAM") {
                     item.url = "patientProfile";
                     item.actionName = "+ Enroll in Immunization program";
@@ -178,6 +179,7 @@ export class UserService extends Service {
     static async setNCDValue() {
         const patient = new PatientService();
         if (patient.getID()) {
+            console.log("🚀 ~ UserService ~ setNCDValue ~ patient.getID():", patient.getID());
             const visits = await PatientService.getPatientVisits(patient.getID(), false);
             const activities = await this.getUserActivities("NCD_activities");
             let url = "";
