@@ -21,7 +21,7 @@
                 <ion-popover :is-open="popoverOpen" :show-backdrop="false" :dismiss-on-select="true" :event="event" @didDismiss="popoverOpen = false">
                     <ion-content>
                         <ion-list>
-                            <ion-item :button="true" :detail="false" style="cursor: pointer">Profile</ion-item>
+                            <ion-item :button="true" :detail="false" @click="showUserProfile()" style="cursor: pointer">Profile</ion-item>
                             <ion-item :button="true" :detail="false" @click="nav('/login')" style="cursor: pointer">Logout</ion-item>
                         </ion-list>
                     </ion-content>
@@ -33,6 +33,8 @@
             </ion-buttons>
         </div>
     </ion-header>
+
+    <userProfile :show-modal="showUserProfileModal" @close-popoover="modalClosed"/>
 </template>
 
 <script lang="ts">
@@ -42,6 +44,7 @@ import { defineComponent } from "vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import useFacility from "@/composables/useFacility";
 import { Service } from "@/services/service";
+import userProfile from "@/views/UserManagement/userProfile.vue"
 export default defineComponent({
     name: "Home",
     components: {
@@ -55,6 +58,7 @@ export default defineComponent({
         ToolbarSearch,
         IonIcon,
         IonPopover,
+        userProfile
     },
     data() {
         return {
@@ -62,6 +66,7 @@ export default defineComponent({
             event: null as any,
             locationName: "",
             programName: "",
+            showUserProfileModal: false,
         };
     },
     mounted() {
@@ -79,6 +84,12 @@ export default defineComponent({
             this.event = e;
             this.popoverOpen = true;
         },
+        showUserProfile() {
+            this.showUserProfileModal = true;
+        },
+        modalClosed() {
+           this.showUserProfileModal = false;
+        }
     },
 });
 </script>
