@@ -460,6 +460,12 @@ ion-card {
     line-height: 20px;
     color: #fff;
 }
+.dueCard .statsValue {
+    color: #5d5d5d;
+}
+.dueCard .statsText {
+    color: #767171;
+}
 #container {
     text-align: center;
 
