@@ -15,8 +15,33 @@
             </div>
         </ion-content>
         <ion-content class="content" v-if="programID() == 33">
-            <div>
-                <ion-card class="section">
+            <div class="topStats">
+                <div>
+                    <div
+                        style="
+                            background: linear-gradient(180deg, rgba(150, 152, 152, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%),
+                                url('/images/backgroundImg.png');
+                            background-size: cover;
+                            background-blend-mode: overlay;
+                            height: 22vh;
+                        "
+                    >
+                        <Carousel :autoplay="3000" :wrap-around="true" :itemsToShow="1.2" :transition="600" style="padding-top: 20px">
+                            <Slide v-for="slide in totalStats" :key="slide">
+                                <div class="totalStats" style="background: linear-gradient(180deg, #20b2aa 0%, #40c0b0 50%, rgb(239, 239, 239) 100%)">
+                                    <div class="statsValue" style="font-size: 1.4em">{{ slide.value }}</div>
+                                    <div class="statsText" style="font-size: 0.9em">{{ slide.name }}</div>
+                                </div>
+                            </Slide>
+                            <template #addons>
+                                <Pagination />
+                            </template>
+                        </Carousel>
+                    </div>
+                    <!-- <ion-img style="position: absolute; height: 31vw; width: 100%" :src="loadImage('backgroundImg.png')" alt="home image"></ion-img> -->
+                </div>
+
+                <!-- <ion-card class="section">
                     <ion-card-header> <ion-card-title class="cardTitle">Yearly stats </ion-card-title></ion-card-header>
                     <ion-card-content>
                         <div class="stats">
@@ -36,7 +61,7 @@
                             </div>
                         </div>
                     </ion-card-content>
-                </ion-card>
+                </ion-card> -->
                 <ion-card class="section">
                     <ion-card-header> <ion-card-title class="cardTitle"> Clients due </ion-card-title></ion-card-header>
                     <ion-card-content>
@@ -61,12 +86,12 @@
                     <ion-card-content>
                         <div class="overDueCardContent">
                             <div class="overDueCard">
-                                <div class="statsValue">0</div>
-                                <div class="statsText">Under 5yrs</div>
+                                <div class="statsValue" style="color: #da6e6e">0</div>
+                                <div class="statsText" style="color: #da6e6e">Under 5yrs</div>
                             </div>
                             <div class="overDueCard">
-                                <div class="statsValue">0</div>
-                                <div class="statsText">Over 5yrs</div>
+                                <div class="statsValue" style="color: #da6e6e">0</div>
+                                <div class="statsText" style="color: #da6e6e">Over 5yrs</div>
                             </div>
                         </div>
                     </ion-card-content>
@@ -164,6 +189,9 @@ import {
 import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 import Programs from "@/components/Programs.vue";
 import { resetDemographics } from "@/services/reset_data";
+import "vue3-carousel/dist/carousel.css";
+import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
+
 export default defineComponent({
     name: "Home",
     mixins: [SetUser, SetDemographics, SetPrograms],
@@ -186,6 +214,10 @@ export default defineComponent({
         IonCardSubtitle,
         IonCardTitle,
         Programs,
+        Carousel,
+        Slide,
+        Pagination,
+        Navigation,
     },
     data() {
         return {
@@ -193,6 +225,7 @@ export default defineComponent({
             reportData: "" as any,
             appointments: [] as any,
             programBtn: {} as any,
+            totalStats: [] as any,
         };
     },
     setup() {
@@ -250,6 +283,20 @@ export default defineComponent({
             const data = JSON.parse(event.data);
             if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel" })) {
                 this.reportData = data.message;
+                this.totalStats = [
+                    {
+                        name: "Total vaccinated this year",
+                        value: this.reportData?.total_client_registered || 0,
+                    },
+                    {
+                        name: "Total Female vaccinated this year",
+                        value: this.reportData?.total_female_registered || 0,
+                    },
+                    {
+                        name: "Total Male vaccinated this year",
+                        value: this.reportData?.total_male_registered || 0,
+                    },
+                ];
             }
         },
         setView() {
@@ -274,12 +321,12 @@ export default defineComponent({
 
 <style scoped>
 .totalStats {
-    padding: 2vw;
-    padding-top: 2vw;
     padding-bottom: 2vw;
     border-radius: 5px;
-    padding-top: 4vw;
+    padding-top: 6vw;
     padding-bottom: 4vw;
+    width: 100%;
+    height: 16vh;
 }
 ion-card {
     box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 1px -1px, rgba(0, 0, 0, 0) 0px 1px 1px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px;
@@ -319,12 +366,14 @@ ion-card {
     display: flex;
     justify-content: space-around;
     text-align: center;
+    gap: 2vw;
 }
 
 .overDueCardContent {
     display: flex;
     justify-content: space-around;
     text-align: center;
+    gap: 2vw;
 }
 .overDueCard {
     border: 1px solid #ccc;
@@ -334,6 +383,7 @@ ion-card {
     transition: background-color 0.6s, color 0.6s, transform 0.2s;
     user-select: none;
     background: rgb(254, 205, 202);
+    width: 100vw;
 }
 .dueCard {
     border: 1px solid #ccc;
@@ -342,6 +392,7 @@ ion-card {
     min-width: 100px;
     transition: background-color 0.6s, color 0.6s, transform 0.2s;
     user-select: none;
+    width: 100vw;
 }
 
 .dueCard:hover {
@@ -388,6 +439,7 @@ ion-card {
     display: flex;
     justify-content: space-around;
     text-align: center;
+    gap: 5px;
 }
 .cardTitle {
     border-bottom: 0.01px solid #ccc;
@@ -400,13 +452,13 @@ ion-card {
     font-weight: 600;
     font-size: 1.7em;
     line-height: 37px;
-    color: #5d5d5d;
+    color: #fff;
 }
 .statsText {
     font-weight: 400;
     font-size: 1em;
     line-height: 20px;
-    color: #767171;
+    color: #fff;
 }
 #container {
     text-align: center;
@@ -595,5 +647,51 @@ ion-card {
 }
 .content {
     --background: #fff;
+}
+.topStats {
+    /* margin-top: 5vw; */
+    align-content: center;
+}
+.carousel__slide {
+    padding: 5px;
+}
+
+.carousel__viewport {
+    perspective: 2000px;
+}
+
+.carousel__track {
+    transform-style: preserve-3d;
+}
+
+.carousel__slide--sliding {
+    transition: 0.5s;
+}
+
+.carousel__slide {
+    opacity: 0.9;
+    transform: rotateY(-20deg) scale(0.9);
+}
+
+.carousel__slide--active ~ .carousel__slide {
+    transform: rotateY(20deg) scale(0.9);
+}
+
+.carousel__slide--prev {
+    opacity: 1;
+    transform: rotateY(-10deg) scale(0.9);
+}
+
+.carousel__slide--next {
+    opacity: 1;
+    transform: rotateY(10deg) scale(0.95);
+}
+
+.carousel__slide--active {
+    opacity: 1;
+    transform: rotateY(0) scale(1);
+}
+img {
+    object-fit: none;
 }
 </style>
