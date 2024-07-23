@@ -578,3 +578,21 @@ ion-header {
 ion-footer {
     background: #fff;
 }
+.carousel__pagination-button--active::after {
+    background-color: #cfcfcf;
+}
+.carousel__pagination-button--active::after {
+    background-color: #cfcfcf;
+}
+.carousel__pagination-button::after {
+    display: block;
+    content: "";
+    width: var(--vc-pgn-width);
+    height: var(--vc-pgn-width);
+    border-radius: 50%;
+    background-color: #ccc;
+}
+.carousel__pagination-button--active {
+    background-color: #016302;
+    border-radius: 50%;
+}
