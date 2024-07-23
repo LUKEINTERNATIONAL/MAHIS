@@ -16,7 +16,7 @@
                 <ion-card-header> <ion-card-title class="sectionTitle"> Summary of required doses </ion-card-title></ion-card-header>
                 <ion-card-content>
                     <div class="dueCardContent">
-                        <DataTable :options="dueOptions" :data="dueData" class="display nowrap" width="100%">
+                        <DataTable :options="options" :data="dueData" class="display nowrap" width="100%">
                             <thead>
                                 <tr>
                                     <th>Vaccine</th>
@@ -138,7 +138,14 @@ export default defineComponent({
             batchNumber: "" as any,
             clientDetails: [] as any,
             dueData: [] as any,
-            dueOptions: [] as any,
+            options: {
+                responsive: true,
+                select: true,
+                searching: false,
+                ordering: false,
+                pageLength: 25,
+                lengthChange: false,
+            } as any,
             vaccineName: "" as string,
             currentDrugOb: {} as any,
             otherVaccinesList: [
