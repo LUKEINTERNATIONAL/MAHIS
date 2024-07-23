@@ -64,11 +64,11 @@
                     <ion-card-header> <ion-card-title class="cardTitle"> Clients overdue </ion-card-title></ion-card-header>
                     <ion-card-content>
                         <div class="overDueCardContent">
-                            <div class="overDueCard">
+                            <div class="overDueCard" @click="openDueModal('Client overdue under 5yrs')">
                                 <div class="statsValue">0</div>
                                 <div class="statsText">Under 5yrs</div>
                             </div>
-                            <div class="overDueCard">
+                            <div class="overDueCard" @click="openDueModal('Client overdue over 5yrs')">
                                 <div class="statsValue">0</div>
                                 <div class="statsText">Over 5yrs</div>
                             </div>
