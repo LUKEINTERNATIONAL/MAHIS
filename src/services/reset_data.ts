@@ -230,6 +230,6 @@ export async function resetPatientData() {
 }
 
 export function resetDemographics() {
-    // const demographics = useDemographicsStore();
-    // demographics.$reset();
+    const demographics = useDemographicsStore();
+    demographics.$reset();
 }

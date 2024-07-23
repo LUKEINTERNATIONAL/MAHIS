@@ -4,7 +4,7 @@
             <ion-toolbar class="content_width primary_color_background">
                 <ion-menu-button slot="start" />
                 <ion-title style="cursor: pointer" @click="nav('/home')"
-                    ><b>MaHIS</b><small>({{ programName }})</small></ion-title
+                    ><b>MaHIS</b><small>({{ programs.program.applicationName }})</small></ion-title
                 >
                 <ion-buttons slot="end" class="search-input-desktop" style="max-width: 800px">
                     <ToolbarSearch />
@@ -45,6 +45,8 @@ import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import useFacility from "@/composables/useFacility";
 import { Service } from "@/services/service";
 import userProfile from "@/views/UserManagement/userProfile.vue"
+import { useProgramStore } from "@/stores/ProgramStore";
+import { mapState } from "pinia";
 export default defineComponent({
     name: "Home",
     components: {
@@ -69,14 +71,28 @@ export default defineComponent({
             showUserProfileModal: false,
         };
     },
+    watch: {
+        programs: {
+            handler() {
+                this.updateData();
+            },
+            deep: true,
+        },
+    },
+    computed: {
+        ...mapState(useProgramStore, ["programs"]),
+    },
     mounted() {
-        this.programName = Service.getProgramName();
+        this.updateData();
     },
     setup() {
         const { facilityName, facilityUUID, district } = useFacility();
         return { notificationsOutline, personCircleOutline, facilityName };
     },
     methods: {
+        updateData() {
+            this.programName = Service.getProgramName();
+        },
         nav(url: any) {
             this.$router.push(url);
         },
