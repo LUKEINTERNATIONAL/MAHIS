@@ -13,7 +13,11 @@
                       <ion-label class="lbl-tl">Fullname:</ion-label>
                     </ion-col>
                     <ion-col>
-                         <ion-label class="lbl-ct">{{ demographics.name }}</ion-label>                     
+                          <ion-label class="lbl-ct">
+                               {{ editableDemographics.given_name }} 
+                               {{ editableDemographics.middle_name }}
+                               {{ editableDemographics.family_name }}
+                          </ion-label>                     
                     </ion-col>
                   </ion-row>
                 </ion-col>                
@@ -22,7 +26,7 @@
             <div v-else>
                   <ion-row class="form-row">
                   <ion-col>
-                    <ion-label v-model="editableDemographics.given_name" class="lbl-tl">First Name:</ion-label>
+                    <ion-label v-model="editableDemographics.given_name" class="lbl-tl">First Names:</ion-label>
                   </ion-col>
                   <ion-col>
                     <BasicInputField
@@ -30,6 +34,7 @@
                              :placeholder="'First Name'"
                              :inputValue="editableDemographics.given_name"
                       @update:inputValue="updateFieldDemographics($event,'given_name')"
+                      @ionBlur="handleInputData($event,'inputNames')"
                              :icon="personCircleOutline"/>                    
                   </ion-col>
                 </ion-row>
@@ -659,7 +664,9 @@ import { toastSuccess, toastWarning } from "@/utils/Alerts";
 import vSelect from "vue-select";
 import VueMultiselect from "vue-multiselect";
 import DateInputField from "@/components/DateInputField.vue";
+import { validateField } from "@/services/validation_service";
 import "vue-select/dist/vue-select.css";
+
 
 type DemographicFields = 'given_name' | 'middle_name' | 'family_name' | 'phone' | 'birthdate';
 type GuardianFields = 'given_name' | 'middle_name' | 'family_name' | 'phone' ;
@@ -932,9 +939,7 @@ export default defineComponent({
                     this.fetchVillages(this.HometaList,this.patient.person.addresses[0].county_district,"home_location")                 
                }
             }
-        },
-       
-       
+        },       
         formatBirthdate() {
             return HisDate.getBirthdateAge(this.demographics.birthdate);
         },
@@ -1109,7 +1114,6 @@ export default defineComponent({
                  let new_relation_id = this.relationshipsData.find( (x:any) => x.b_is_to_a == this.editableGuardian.relationship || x.a_is_to_b == this.editableGuardian.relationship)["relationship_type_id"]
                   return await RelationsService.amendRelation(patient_id,guardian_id,current_relation_id,new_relation_id);
         },
-
         async updatePatientDemographics(data: any){
               
              const patientData = await PatientService.findByID(data.person_id);           
@@ -1121,7 +1125,11 @@ export default defineComponent({
                                     "phone": data.person_attributes.find( (x:any) => x.person_attribute_type_id == 12)["value"],
                                     "mrn": patientData.patient_identifiers[0].identifier,
                                     "address":`${data.addresses[0].state_province} ${data.addresses[0].township_division} ${data.addresses[0].city_village}`});
-        }
+        },
+        handleInputData(event: any,fild: any) {
+            //return validateField(this.personInformation, event.name, (this as any)[event.name]);
+            console.log(event,"........papaKK")
+        },
     },
 });
 </script>
