@@ -11,9 +11,9 @@ export class WebSocketService {
         const apiPort = sessionStorage.getItem("apiPort");
 
         if (apiURL && apiPort) {
-            //this.socket = new WebSocket(`ws://${apiURL}:${apiPort}/cable`);
+            this.socket = new WebSocket(`ws://${apiURL}:${apiPort}/cable`);
             // for now
-            this.socket = new WebSocket(`ws://apps.linmalawi.org/api/v1/cable`);
+            // this.socket = new WebSocket(`ws://apps.linmalawi.org/api/v1/cable`);
 
             this.socket.onopen = this.onOpen;
             this.socket.onclose = this.onClose;

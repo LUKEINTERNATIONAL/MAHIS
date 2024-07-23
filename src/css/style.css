@@ -342,7 +342,7 @@ ion-button {
 
 ion-card {
     background-color: #fff;
-    border-radius: 8px;
+    border-radius: 5px;
 }
 video {
     border-radius: 16px;
@@ -577,4 +577,22 @@ ion-header {
 }
 ion-footer {
     background: #fff;
+}
+.carousel__pagination-button--active::after {
+    background-color: #cfcfcf;
+}
+.carousel__pagination-button--active::after {
+    background-color: #cfcfcf;
+}
+.carousel__pagination-button::after {
+    display: block;
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #39bca4;
+}
+.carousel__pagination-button--active {
+    background-color: #e7e7e7;
+    border-radius: 50%;
 }

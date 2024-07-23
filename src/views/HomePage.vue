@@ -14,89 +14,125 @@
                 </div>
             </div>
         </ion-content>
-        <ion-content v-if="programID() == 33">
-            <ion-card class="section">
-                <ion-card-header> <ion-card-title class="cardTitle">Yearly stats </ion-card-title></ion-card-header>
-                <ion-card-content>
-                    <div class="stats">
-                        <div>
-                            <div class="statsValue">{{ reportData?.total_vaccinated || 0 }}</div>
-                            <div class="statsText">Total client</div>
-                        </div>
-                        <div class="statsSectionBorder"></div>
-                        <div>
-                            <div class="statsValue">{{ reportData?.total_women_vaccinated_today || 0 }}</div>
-                            <div class="statsText">Total female</div>
-                        </div>
-                        <div class="statsSectionBorder"></div>
-                        <div>
-                            <div class="statsValue">{{ reportData?.total_men_vaccinated_today || 0 }}</div>
-                            <div class="statsText">Total male</div>
-                        </div>
-                    </div>
-                </ion-card-content>
-            </ion-card>
-            <ion-card class="section">
-                <ion-card-header> <ion-card-title class="cardTitle"> Due for vaccination </ion-card-title></ion-card-header>
-                <ion-card-content>
-                    <div class="dueCardContent">
-                        <div class="dueCard">
-                            <div class="dueCardValue">0</div>
-                            <div>Today</div>
-                        </div>
-                        <div class="dueCard">
-                            <div class="dueCardValue">0</div>
-                            <div>This week</div>
-                        </div>
-                        <div class="dueCard">
-                            <div class="dueCardValue">0</div>
-                            <div>This month</div>
-                        </div>
-                    </div>
-                </ion-card-content>
-            </ion-card>
-            <ion-card class="section">
-                <ion-card-header>
-                    <ion-card-title class="cardTitle"> Today appointments({{ appointments.length }}) </ion-card-title></ion-card-header
-                >
-                <ion-card-content>
+        <ion-content class="content" v-if="programID() == 33">
+            <div class="topStats">
+                <div>
                     <div
-                        style="display: flex; margin-bottom: 10px"
-                        v-for="(item, index) in appointments"
-                        :key="index"
-                        @click="openClientProfile(item.npid)"
+                        style="
+                            background: linear-gradient(180deg, rgba(150, 152, 152, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%),
+                                url('/images/backgroundImg.png');
+                            background-size: cover;
+                            background-blend-mode: overlay;
+                            height: 22.8vh;
+                        "
                     >
-                        <div style="margin-right: 15px">
-                            <div :class="item.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
-                                <ion-icon style="color: #fff; font-size: 60px" :icon="person"></ion-icon>
+                        <!-- :autoplay="4000" -->
+                        <Carousel :autoplay="4000" :wrap-around="true" :itemsToShow="1.2" :transition="600" style="padding-top: 20px">
+                            <Slide v-for="slide in totalStats" :key="slide">
+                                <div class="totalStats" style="background: linear-gradient(180deg, #20b2aa 0%, #40c0b0 50%, rgb(233, 233, 233) 100%)">
+                                    <div class="statsValue" style="font-size: 1.4em">{{ slide.value }}</div>
+                                    <div class="statsText" style="font-size: 0.9em">{{ slide.name }}</div>
+                                </div>
+                            </Slide>
+                            <template #addons>
+                                <Pagination />
+                            </template>
+                        </Carousel>
+                    </div>
+                    <!-- <ion-img style="position: absolute; height: 31vw; width: 100%" :src="loadImage('backgroundImg.png')" alt="home image"></ion-img> -->
+                </div>
+
+                <!-- <ion-card class="section">
+                    <ion-card-header> <ion-card-title class="cardTitle">Yearly stats </ion-card-title></ion-card-header>
+                    <ion-card-content>
+                        <div class="stats">
+                            <div class="totalStats" style="background: rgb(210, 237, 198)">
+                                <div class="statsValue">{{ reportData?.total_client_registered || 0 }}</div>
+                                <div class="statsText">Total vaccinated this year</div>
+                            </div>
+                            <div class="statsSectionBorder"></div>
+                            <div class="totalStats" style="background: rgb(241, 228, 153)">
+                                <div class="statsValue">{{ reportData?.total_female_registered || 0 }}</div>
+                                <div class="statsText">Total Female vaccinated this year</div>
+                            </div>
+                            <div class="statsSectionBorder"></div>
+                            <div class="totalStats" style="background: rgb(188, 178, 188)">
+                                <div class="statsValue">{{ reportData?.total_male_registered || 0 }}</div>
+                                <div class="statsText">Total Male vaccinated this year</div>
                             </div>
                         </div>
-                        <div style="align-items: center; display: flex">
-                            <div style="line-height: 1">
-                                <div class="client_name">
-                                    <div class="name">{{ item.name }} {{ item.family_name }}</div>
+                    </ion-card-content>
+                </ion-card> -->
+                <ion-card class="section">
+                    <ion-card-header> <ion-card-title class="cardTitle"> Clients due </ion-card-title></ion-card-header>
+                    <ion-card-content>
+                        <div class="dueCardContent">
+                            <div class="dueCard" style="border: 1px solid rgb(158, 207, 136)">
+                                <div class="statsValue">0</div>
+                                <div class="statsText">Due today</div>
+                            </div>
+                            <div class="dueCard" style="border: 1px solid rgb(239, 221, 121)">
+                                <div class="statsValue">0</div>
+                                <div class="statsText">Due this week</div>
+                            </div>
+                            <div class="dueCard" style="border: 1px solid rgb(241, 154, 154)">
+                                <div class="statsValue">0</div>
+                                <div class="statsText">Due this month</div>
+                            </div>
+                        </div>
+                    </ion-card-content>
+                </ion-card>
+                <ion-card class="section">
+                    <ion-card-header> <ion-card-title class="cardTitle"> Clients overdue </ion-card-title></ion-card-header>
+                    <ion-card-content>
+                        <div class="overDueCardContent">
+                            <div class="overDueCard">
+                                <div class="statsValue" style="color: #da6e6e">0</div>
+                                <div class="statsText" style="color: #da6e6e">Under 5yrs</div>
+                            </div>
+                            <div class="overDueCard">
+                                <div class="statsValue" style="color: #da6e6e">0</div>
+                                <div class="statsText" style="color: #da6e6e">Over 5yrs</div>
+                            </div>
+                        </div>
+                    </ion-card-content>
+                </ion-card>
+                <ion-card class="section">
+                    <ion-card-header>
+                        <ion-card-title class="cardTitle"> Today appointments({{ appointments.length }}) </ion-card-title></ion-card-header
+                    >
+                    <ion-card-content>
+                        <div
+                            class="appointments"
+                            style="display: flex; margin-bottom: 10px"
+                            v-for="(item, index) in appointments"
+                            :key="index"
+                            @click="openClientProfile(item.npid)"
+                        >
+                            <div style="margin-right: 15px">
+                                <div :class="item.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
+                                    <ion-icon style="color: rgb(78, 78, 78); font-size: 30px" :icon="person"></ion-icon>
                                 </div>
-                                <div class="demographicsOtherRow">
-                                    <div class="demographicsText">
-                                        {{ demographics.gender == "M" ? "Male" : "Female" }}
-                                        <span class="dot">.</span>{{ formatBirthdate(item.birthdate) }}
+                            </div>
+                            <div style="align-items: center; display: flex">
+                                <div style="line-height: 1">
+                                    <div class="client_name">
+                                        <div class="name">{{ item.given_name }} {{ item.family_name }}</div>
+                                    </div>
+                                    <div class="demographicsOtherRow">
+                                        <div class="demographicsText">
+                                            {{ item.gender == "M" ? "Male" : "Female" }}
+                                            <span class="dot">.</span>{{ formatBirthdate(item.birthdate) }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </ion-card-content>
-            </ion-card>
-
-            <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-                <ion-fab-button color="primary"> <ion-icon :icon="grid"></ion-icon> </ion-fab-button>
-                <ion-fab-list side="top">
-                    <ion-fab-button @click="setProgram(btn)" v-for="(btn, index) in programBtn" :key="index" :data-desc="btn.actionName">
-                        <ion-icon :icon="add"></ion-icon>
-                    </ion-fab-button>
-                </ion-fab-list>
-            </ion-fab>
+                    </ion-card-content>
+                </ion-card>
+            </div>
         </ion-content>
+        <Programs :programBtn="programBtn" @clicked="setProgram($event)" />
     </ion-page>
 </template>
 
@@ -151,9 +187,15 @@ import {
     add,
     person,
 } from "ionicons/icons";
+import SetPrograms from "@/views/Mixin/SetPrograms.vue";
+import Programs from "@/components/Programs.vue";
+import { resetDemographics } from "@/services/reset_data";
+import "vue3-carousel/dist/carousel.css";
+import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
+
 export default defineComponent({
     name: "Home",
-    mixins: [SetUser, SetDemographics],
+    mixins: [SetUser, SetDemographics, SetPrograms],
     components: {
         IonContent,
         IonHeader,
@@ -172,6 +214,11 @@ export default defineComponent({
         IonCardHeader,
         IonCardSubtitle,
         IonCardTitle,
+        Programs,
+        Carousel,
+        Slide,
+        Pagination,
+        Navigation,
     },
     data() {
         return {
@@ -179,6 +226,7 @@ export default defineComponent({
             reportData: "" as any,
             appointments: [] as any,
             programBtn: {} as any,
+            totalStats: [] as any,
         };
     },
     setup() {
@@ -203,26 +251,26 @@ export default defineComponent({
     },
     watch: {
         $route: {
-            async handler() {
+            async handler(data) {
+                if (data.name == "Home") resetDemographics();
                 await this.setAppointments();
+                const wsService = new WebSocketService();
+                wsService.setMessageHandler(this.onMessage);
             },
             deep: true,
         },
     },
     async mounted() {
+        resetDemographics();
         await this.setAppointments();
         this.setView();
         this.startTimer();
-        this.setProgramInfo();
         const wsService = new WebSocketService();
         wsService.setMessageHandler(this.onMessage);
     },
     methods: {
         async setAppointments() {
             this.appointments = await AppointmentService.getDailiyAppointments(HisDate.currentDate());
-        },
-        async setProgramInfo() {
-            this.programBtn = await UserService.userProgramData();
         },
         async openClientProfile(patientID: any) {
             const patientData = await PatientService.findByNpid(patientID);
@@ -232,13 +280,24 @@ export default defineComponent({
         formatBirthdate(birthdate: any) {
             return HisDate.getBirthdateAge(birthdate);
         },
-        setProgram(program: any) {
-            sessionStorage.setItem("app", JSON.stringify({ programID: program.program_id, applicationName: program.name }));
-        },
         onMessage(event: MessageEvent) {
             const data = JSON.parse(event.data);
             if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel" })) {
                 this.reportData = data.message;
+                this.totalStats = [
+                    {
+                        name: "Total vaccinated this year",
+                        value: this.reportData?.total_client_registered || 0,
+                    },
+                    {
+                        name: "Total Female vaccinated this year",
+                        value: this.reportData?.total_female_registered || 0,
+                    },
+                    {
+                        name: "Total Male vaccinated this year",
+                        value: this.reportData?.total_male_registered || 0,
+                    },
+                ];
             }
         },
         setView() {
@@ -262,23 +321,33 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.totalStats {
+    padding-bottom: 2vw;
+    border-radius: 5px;
+    width: 100%;
+    height: 16vh;
+    align-content: center;
+}
 ion-card {
-    margin-bottom: 20px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 1px -1px, rgba(0, 0, 0, 0) 0px 1px 1px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px;
 }
 .client_name {
-    font-size: 16px;
+    font-size: 1em;
     font-weight: 600;
+}
+.demographicsText {
+    font-size: 1em;
 }
 .dot {
     font-size: 25px;
 }
 .initialsBox {
-    width: 70px;
-    height: 70px;
+    width: 50px;
+    height: 50px;
     left: 31px;
     top: 122px;
     align-items: center;
-    border-radius: 10px;
+    border-radius: 50%;
     align-items: center;
     display: flex;
     justify-content: center;
@@ -290,20 +359,79 @@ ion-card {
     background: #876d9b;
 }
 .dueCardValue {
-    font-size: 18px;
+    font-size: 1em;
     font-weight: 600;
 }
 .dueCardContent {
     display: flex;
     justify-content: space-around;
     text-align: center;
+    gap: 2vw;
+}
+
+.overDueCardContent {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    gap: 2vw;
+}
+.overDueCard {
+    border: 1px solid #ccc;
+    padding: 4vw;
+    border-radius: 8px;
+    min-width: 150px;
+    transition: background-color 0.6s, color 0.6s, transform 0.2s;
+    user-select: none;
+    background: rgb(254, 205, 202);
+    width: 100vw;
 }
 .dueCard {
     border: 1px solid #ccc;
-    padding: 10px;
+    padding: 4vw;
     border-radius: 8px;
     min-width: 100px;
+    transition: background-color 0.6s, color 0.6s, transform 0.2s;
+    user-select: none;
+    width: 100vw;
 }
+
+.dueCard:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.dueCard:active {
+    background-color: #ccc;
+    color: #fff;
+    transform: scale(0.98);
+}
+
+.dueCard.active {
+    background-color: #8c8c8c8c;
+    color: #fff;
+}
+
+.appointments {
+    transition: background-color 0.6s, color 0.6s, transform 0.2s;
+    user-select: none;
+    padding: 10px;
+}
+.appointments:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.appointments:active {
+    background-color: #ccc;
+    color: #fff;
+    transform: scale(0.98);
+}
+
+.appointments.active {
+    background-color: #8c8c8c8c;
+    color: #fff;
+}
+
 .statsSectionBorder {
     border-left: 1px solid #ccc;
 }
@@ -311,27 +439,32 @@ ion-card {
     display: flex;
     justify-content: space-around;
     text-align: center;
-    padding-bottom: 10px;
-    border-bottom: 0.01px solid #ccc;
+    gap: 5px;
 }
 .cardTitle {
     border-bottom: 0.01px solid #ccc;
     padding-bottom: 10px;
-    font-size: 18px;
+    font-size: 0.9em;
     font-weight: 560;
     color: #5d5d5d;
 }
 .statsValue {
     font-weight: 600;
-    font-size: 30px;
+    font-size: 1.7em;
     line-height: 37px;
-    color: #5d5d5d;
+    color: #fff;
 }
 .statsText {
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 37px;
-    color: #8c8c8c;
+    font-weight: 400;
+    font-size: 1em;
+    line-height: 20px;
+    color: #fff;
+}
+.dueCard .statsValue {
+    color: #5d5d5d;
+}
+.dueCard .statsText {
+    color: #767171;
 }
 #container {
     text-align: center;
@@ -349,7 +482,7 @@ ion-card {
 }
 
 #container p {
-    font-size: 16px;
+    font-size: 1em;
     line-height: 22px;
 
     color: #8c8c8c;
@@ -517,5 +650,54 @@ ion-card {
 }
 .modal_wrapper {
     border-radius: 8px;
+}
+.content {
+    --background: #fff;
+}
+.topStats {
+    /* margin-top: 5vw; */
+    align-content: center;
+}
+.carousel__slide {
+    padding: 5px;
+}
+
+.carousel__viewport {
+    perspective: 2000px;
+}
+
+.carousel__track {
+    transform-style: preserve-3d;
+}
+
+.carousel__slide--sliding {
+    transition: 0.5s;
+}
+
+.carousel__slide {
+    opacity: 0.9;
+    transform: rotateY(-20deg) scale(0.9);
+}
+
+.carousel__slide--active ~ .carousel__slide {
+    transform: rotateY(20deg) scale(0.9);
+}
+
+.carousel__slide--prev {
+    opacity: 1;
+    transform: rotateY(-10deg) scale(0.9);
+}
+
+.carousel__slide--next {
+    opacity: 1;
+    transform: rotateY(10deg) scale(0.95);
+}
+
+.carousel__slide--active {
+    opacity: 1;
+    transform: rotateY(0) scale(1);
+}
+img {
+    object-fit: none;
 }
 </style>

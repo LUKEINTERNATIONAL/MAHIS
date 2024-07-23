@@ -14,7 +14,7 @@
             </ion-accordion>
             <ion-accordion value="second" toggle-icon-slot="start" class="custom_card">
                 <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Guarding</ion-label>
+                    <ion-label class="previousLabel">Guardian</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content" style="padding-bottom: 200px">
                     <div class="">
@@ -288,6 +288,7 @@ export default defineComponent({
                 fullName = item.person.names[0].given_name + " " + item.person.names[0].family_name;
             }
             demographicsStore.setDemographics({
+                active: true,
                 name: fullName,
                 mrn: this.patientIdentifier(item),
                 birthdate: item.person.birthdate,
