@@ -587,12 +587,12 @@ ion-footer {
 .carousel__pagination-button::after {
     display: block;
     content: "";
-    width: var(--vc-pgn-width);
-    height: var(--vc-pgn-width);
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
-    background-color: #ccc;
+    background-color: #39bca4;
 }
 .carousel__pagination-button--active {
-    background-color: #016302;
+    background-color: #e7e7e7;
     border-radius: 50%;
 }
