@@ -59,10 +59,26 @@
 
   function dateChange() {
     const clientBODYear = getYearFromDateString(patient.getBirthdate() as any)
+    const clientBODMonth = removeLeadingZero(getMonthFromDateString(patient.getBirthdate() as any))
+    const clientBODDay = removeLeadingZero(getDayFromDateString(patient.getBirthdate() as any))
     const sessionYear = getYearFromDateString(Service.getSessionDate())
     const pickerYear = pickerInstance.getDate().getFullYear()
+    const pickerMonth = pickerInstance.getDate().getMonth() + 1
+    const pickerDay = pickerInstance.getDate().getDate()
     if (pickerYear <= sessionYear) {
-      if ( parseInt(pickerYear) <= parseInt(clientBODYear)) {
+      if (parseInt(pickerYear) == parseInt(clientBODYear)) {
+        if (parseInt(pickerMonth) < parseInt(clientBODMonth)) {
+          const corrected_date = pickerInstance.getDate()
+          corrected_date.setMonth(parseInt(clientBODMonth) - 1)
+          pickerInstance.setDate(corrected_date)
+        }
+        if (parseInt(pickerDay) <= parseInt(clientBODDay)) {
+          const corrected_date = pickerInstance.getDate()
+          corrected_date.setDate(parseInt(clientBODDay) + 1)
+          pickerInstance.setDate(corrected_date)
+        }
+      }
+      if ( parseInt(pickerYear) < parseInt(clientBODYear)) {
         const corrected_date = pickerInstance.getDate()
         corrected_date.setFullYear(sessionYear)
         pickerInstance.setDate(corrected_date)
@@ -73,7 +89,6 @@
       corrected_date.setFullYear(sessionYear)
       pickerInstance.setDate(corrected_date)
     }
-
     emit("dateChange", pickerInstance.getDate())
   }
 
@@ -87,8 +102,20 @@
     return dateString.split('-')[0];
   }
 
+  function getMonthFromDateString(dateString: string) {
+    return dateString.split('-')[1]
+  }
+
+  function getDayFromDateString(dateString: string) {
+    return dateString.split('-')[2]
+  }
+
+  function removeLeadingZero(str: string) {
+    return String(Number(str))
+  }
+
   function generateUniqueString() {
-    const timestamp = Date.now().toString(20);
+    const timestamp = Date.now().toString(20)
     const randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
     let uniqueString = ''
     for (let i = 0; i < timestamp.length; i++) {

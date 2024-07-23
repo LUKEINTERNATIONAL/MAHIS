@@ -50,6 +50,7 @@ import administerVaccineModal from "@/apps/Immunization/components/Modals/admini
 import { createModal } from "@/utils/Alerts";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import { PatientService } from "@/services/patient_service";
+import voidAdminstredVaccine from "@/apps/Immunization/components/Modals/voidAdminstredVaccine.vue"
 export default defineComponent({
     name: "Home",
     components: {
@@ -142,7 +143,9 @@ export default defineComponent({
         openAdministerVaccineModal(data: any) {
             const store = useAdministerVaccineStore();
             store.setCurrentSelectedDrug(data)
-            createModal(administerVaccineModal, { class: "otherVitalsModal" });
+            if (this.checkIfAdminstredAndAskToVoid() == false) {
+                createModal(administerVaccineModal, { class: "otherVitalsModal" });
+            }
         },
         disableVaccine(vaccine: any) {
             if (vaccine.status != null && vaccine.status == "administered") {
@@ -161,6 +164,20 @@ export default defineComponent({
         checkVaccineName(name: string) {
             return name.replace(/Pentavalent/g, "Penta");
         },
+        checkIfAdminstredAndAskToVoid() {
+            const store = useAdministerVaccineStore();
+            const vaccine_to_void = store.getCurrentSelectedDrug()
+            if(vaccine_to_void.drug.status == 'administered') {
+                store.setVaccineToBeVoided(vaccine_to_void)
+                createModal(voidAdminstredVaccine, { class: "otherVitalsModal" }, false)
+                // const data = await createModal(voidAdminstredVaccine, { class: "otherVitalsModal" }, false)
+                // if(data?.voided == true) {
+                //     // this.dismiss()
+                // }
+                return true
+            }
+            return false
+        }
     },
 });
 </script>

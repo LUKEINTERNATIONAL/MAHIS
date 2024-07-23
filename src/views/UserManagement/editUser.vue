@@ -64,7 +64,7 @@
             <ion-col></ion-col>
         </ion-row> -->
 
-        <ion-row>
+        <ion-row v-if="isSuperUser">
             <ion-col>
                 <Toggle
                     class="toggle-green"
@@ -78,7 +78,7 @@
             </ion-col>
         </ion-row>
 
-        <ion-row>
+        <ion-row v-if="isSuperUser">
             <ion-col size="6">
                 <VueMultiselect
                     v-model="selected_location"
@@ -106,7 +106,7 @@
             </ion-col>
         </ion-row>
 
-        <ion-row>
+        <ion-row v-if="isSuperUser">
             <ion-col>
                 <ListPicker
                     :multiSelection="list_picker_prperties[0].multi_Selection"
@@ -124,7 +124,7 @@
             </ion-col>
         </ion-row>
 
-        <ion-row>
+        <ion-row v-if="isSuperUser">
             <ion-col>
                 <ListPicker
                     :multiSelection="list_picker_prperties[1].multi_Selection"
@@ -254,6 +254,7 @@ const passwordErrorMsgs = [
     'Input must be at least 4 characters long, containing only letters, numbers, and symbols',
     'Password does not match'
 ]
+const isSuperUser = ref(false)
 
 const props = defineProps<{
     toggle: true,
@@ -612,8 +613,23 @@ function fillUserRoles() {
         user_data.value.roles.forEach((userR: any) => {
             if (userR.uuid == item.other.uuid) {
                 item.selected = true
+
+                console.log(item)
+                findSuperUserRole(item)
             }
         })
+    })
+}
+
+function findSuperUserRole(role: any) {
+    const superUserRoles = [
+        'Superuser',
+        'Superuser,Superuser,'
+    ]
+    superUserRoles.forEach((SUR: any) => {
+        if (role.name.toLowerCase() == SUR.toLowerCase()) {
+            // isSuperUser.value = true
+        }
     })
 }
 
