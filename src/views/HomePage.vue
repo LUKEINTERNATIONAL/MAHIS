@@ -23,10 +23,11 @@
                                 url('/images/backgroundImg.png');
                             background-size: cover;
                             background-blend-mode: overlay;
-                            height: 22vh;
+                            height: 22.8vh;
                         "
                     >
-                        <Carousel :autoplay="3000" :wrap-around="true" :itemsToShow="1.2" :transition="600" style="padding-top: 20px">
+                        <!-- :autoplay="4000" -->
+                        <Carousel :autoplay="4000" :wrap-around="true" :itemsToShow="1.2" :transition="600" style="padding-top: 20px">
                             <Slide v-for="slide in totalStats" :key="slide">
                                 <div class="totalStats" style="background: linear-gradient(180deg, #20b2aa 0%, #40c0b0 50%, rgb(239, 239, 239) 100%)">
                                     <div class="statsValue" style="font-size: 1.4em">{{ slide.value }}</div>
@@ -323,10 +324,9 @@ export default defineComponent({
 .totalStats {
     padding-bottom: 2vw;
     border-radius: 5px;
-    padding-top: 6vw;
-    padding-bottom: 4vw;
     width: 100%;
     height: 16vh;
+    align-content: center;
 }
 ion-card {
     box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 1px -1px, rgba(0, 0, 0, 0) 0px 1px 1px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px;
