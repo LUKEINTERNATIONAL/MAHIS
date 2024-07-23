@@ -186,7 +186,7 @@ export default defineComponent({
                 districtData = getFieldValue(this.homeLocation, this.districtType, "value");
             }
 
-            if (Validation.isName(event.value) != null) {
+            if (Validation.isNames(event.value) != null) {
                 modifyFieldValue(this.addTA, event.name, "alertsErrorMassage", "Please enter a valid " + event.name);
                 return false;
             } else {
@@ -257,9 +257,9 @@ ion-footer {
 }
 .saveBtn {
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
     margin: 20px;
-    width: 390px;
+    width: 100%;
     align-items: end;
 }
 .btnContent {

@@ -71,9 +71,6 @@ const _search_fields_ = ref([
 const user_id = ref("");
 
 onMounted(async () => {
-    console.log("🚀 ~ onMounted ~ data_table_properties[0].columns:", data_table_properties[0].columns);
-    console.log("🚀 ~ onMounted ~ _items_:", _items_);
-
     getUsers();
 });
 
@@ -111,7 +108,7 @@ async function getUsers() {
 
     _items_.value = temp_aR;
 
-    console.log(_items_.value);
+    // console.log(_items_.value);
 
     user_data.value = temp_array;
 }

@@ -582,7 +582,7 @@ async function areFieldsValid() {
     const isDrugnameValid = await validatedDrugName()
     const isDoseValid = await validateDose()
     const isDurationValid = await validateDuration()
-
+    
     if (!isDrugnameValid && !isDoseValid && !isDurationValid) {
         return true;
     } else {

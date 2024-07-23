@@ -319,7 +319,7 @@ function trigerSaveFn() {
     preSaveRoles()
     trigerSaveStatusFn()
     updateUserDemographics()
-    // updatePassword()
+    updatePassword()
 }
 
 const input_properties = [
@@ -405,11 +405,31 @@ function validateLocation() {
     }
 }
 
-function updatePassword() {
-    const _ValidatePassword_ = ValidatePassword()
-    if (_ValidatePassword_ == true) {
 
-    }
+function validatePasswordMatch(){
+     const password = password_input_properties[0].dataValue.value;
+    const confirm = password_input_properties[1].dataValue.value;
+
+       if(password!=confirm) {
+         password_input_properties[0].show_error.value=true;
+         password_input_properties[0].error_message="Passwords don't match";
+         return false
+    } 
+         password_input_properties[0].show_error.value=false;
+         password_input_properties[0].error_message="";
+         return true
+    
+}
+
+async function updatePassword() {
+
+    if(!validatePasswordMatch())  return
+
+    const password =password_input_properties[0].dataValue.value;
+
+    if(password=="") return
+
+    await UserService.updateUser(userId.value, {password});
  }
 
 function ValidatePassword(): boolean {
@@ -525,11 +545,11 @@ async function updateUserDemographics() {
     const _areFieldsValid_ = areFieldsValid(input_properties)
     const _validateLocation = validateLocation()
 
-    if (_areFieldsValid_ == false && _validateLocation == false) {
+    if (_areFieldsValid_ == false && _validateLocation == false && !validatePasswordMatch()) {
         saveEvent(false)
     }
 
-    if (_areFieldsValid_ == true && _validateLocation == true) {
+    if (_areFieldsValid_ == true && _validateLocation == true && validatePasswordMatch()) {
         saveEvent(true)
         const payload = {
             given_name: first_name.value,
@@ -612,11 +632,8 @@ async function generatePropertiesList() {
 
 async function getAPICounterPart() {
     const selectedPrograms = await generatePropertiesList()
-    console.log(selectedPrograms)
     selectedPrograms.forEach((item: any, index: number) => {
-        // if
-        console.log("<><.....")
-        console.log(item)
+        
     })
 }
 

@@ -395,7 +395,7 @@ export default defineComponent({
             this.event = event;
             if (inputType == "updateInput") {
                 this.validateData(data, col, event.target.value);
-                modifyFieldValue(data, col.name, "value", event.target.value);
+                modifyFieldValue(data, col.name, "value", event.target.value?.trim());
                 this.$emit("update:inputValue", col);
             }
             if (inputType == "updateMultiselect") {
@@ -542,7 +542,7 @@ ion-radio {
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    overflow: scroll;
+    overflow: auto;
     padding: 5px;
     border-radius: 3px;
 }
@@ -568,7 +568,7 @@ ion-radio {
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    overflow: scroll;
+    overflow: auto;
     padding: 5px;
     border-radius: 3px;
 }

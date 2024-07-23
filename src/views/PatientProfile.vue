@@ -164,31 +164,36 @@
                             </div>
                         </ion-card>
                         <div>
-                            <ion-segment value="custom">
-                                <ion-segment-button value="custom">
+                            <ion-segment :value="segmentContent">
+                                <ion-segment-button value="Patient Summary" @click="setSegmentContent('Patient Summary')">
                                     <ion-label>Patient Summary</ion-label>
                                 </ion-segment-button>
-                                <ion-segment-button value="Visits History">
+                                <ion-segment-button value="Visits History" @click="setSegmentContent('Visits History')">
                                     <ion-label>Visits History</ion-label>
                                 </ion-segment-button>
-                                <ion-segment-button value="Vitals & Measurements Summary">
+                                <ion-segment-button value="Vitals & Measurements Summary" @click="setSegmentContent('Vitals & Measurements Summary')">
                                     <ion-label>Vitals & Measurements Summary</ion-label>
                                 </ion-segment-button>
-                                <ion-segment-button value="Lab Tests History">
+                                <ion-segment-button value="Lab Tests History" @click="setSegmentContent('Lab Tests History')">
                                     <ion-label>Lab Tests History</ion-label>
                                 </ion-segment-button>
-                                <ion-segment-button value="Diagnoses History">
+                                <ion-segment-button value="Diagnoses History" @click="setSegmentContent('Diagnoses History')">
                                     <ion-label>Diagnoses History</ion-label>
                                 </ion-segment-button>
-                                <ion-segment-button value="Allergies & Contraindication">
+                                <ion-segment-button value="Allergies & Contraindication" @click="setSegmentContent('Allergies & Contraindication')">
                                     <ion-label>Allergies & Contraindication</ion-label>
                                 </ion-segment-button>
                             </ion-segment>
                         </div>
-                        <div>
+                        <div v-if="segmentContent == 'Patient Summary'">
                             <div style="display: flex; margin-top: 10px">
-                                <div style="width: 50vw; background-color: #fff; border-radius: 5px; margin-right: 5px"><WeightHeightChart /></div>
-                                <div style="width: 50vw; background-color: #fff; border-radius: 5px"><PreviousVitals /></div>
+                                <div style="width: 50vw; background-color: #fff; border-radius: 5px; margin-right: 5px" v-if="checkUnderFive">
+                                    <WeightHeightChart />
+                                </div>
+                                <div style="width: 50vw; background-color: #fff; border-radius: 5px; margin-right: 5px">
+                                    <BloodPressure />
+                                </div>
+                                <div style="width: 50vw; background-color: #fff; border-radius: 5px" v-if="!checkUnderFive"><PreviousVitals /></div>
                             </div>
                             <div class="bottomSummary">
                                 <ion-segment value="custom">
@@ -210,24 +215,25 @@
                                 <MedicationsGrid />
                             </div>
                         </div>
+                        <div v-if="segmentContent == 'Visits History'">
+                            <VisitsHistory />
+                        </div>
+                        <div v-if="segmentContent == 'Vitals & Measurements Summary'"><VitalsMeasurementsSummary /></div>
+                        <div v-if="segmentContent == 'Lab Tests History'"><LabTestsHistory /></div>
+                        <div v-if="segmentContent == 'Diagnoses History'"><DiagnosesHistory /></div>
+                        <div v-if="segmentContent == 'Allergies & Contraindication'"><AllergiesContraindication /></div>
                     </ion-col>
                 </ion-row>
             </div>
-
-            <ion-fab slot="fixed" vertical="bottom" horizontal="end" class="displayNoneDesktop">
-                <ion-fab-button color="primary"> <ion-icon :icon="grid"></ion-icon> </ion-fab-button>
-                <ion-fab-list side="top">
-                    <ion-fab-button @click="setProgram(btn)" v-for="(btn, index) in programBtn" :key="index" :data-desc="btn.actionName">
-                        <ion-icon :icon="add"></ion-icon>
-                    </ion-fab-button>
-                </ion-fab-list>
-            </ion-fab>
+            <Programs :programBtn="programBtn" @clicked="setProgram($event)" />
         </ion-content>
     </ion-page>
 </template>
 
 <script lang="ts">
 import {
+    IonSegment,
+    IonSegmentButton,
     IonContent,
     IonHeader,
     IonMenuButton,
@@ -280,6 +286,11 @@ import DispositionGrid from "@/components/PatientProfileGrid/OutcomeGrid.vue";
 import InvestigationsGrid from "@/components/PatientProfileGrid/InvestigationsGrid.vue";
 import MedicationsGrid from "@/components/PatientProfileGrid/MedicationsGrid.vue";
 import VitalsGrid from "@/components/PatientProfileGrid/VitalsGrid.vue";
+import LabTestsHistory from "@/components/DashboardSegments/LabTestsHistory.vue";
+import DiagnosesHistory from "@/components/DashboardSegments/DiagnosesHistory.vue";
+import AllergiesContraindication from "@/components/DashboardSegments/AllergiesContraindication.vue";
+import VisitsHistory from "@/components/DashboardSegments/VisitsHistory.vue";
+import VitalsMeasurementsSummary from "@/components/DashboardSegments/VitalsMeasurementsSummary.vue";
 
 import { useDemographicsStore } from "@/stores/DemographicStore";
 import { useGeneralStore } from "@/stores/GeneralStore";
@@ -304,13 +315,17 @@ import { toastWarning } from "@/utils/Alerts";
 import ProgramData from "@/Data/ProgramData";
 import { ref } from "vue";
 import DynamicButton from "@/components/DynamicButton.vue";
+import Programs from "@/components/Programs.vue";
 import PatientProfile from "@/apps/Immunization/components/PatientProfile.vue";
 import WeightHeightChart from "@/apps/Immunization/components/Graphs/WeightHeightChart.vue";
-import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
+import PreviousVitals from "@/components/Graphs/previousVitals.vue";
+import BloodPressure from "@/components/Graphs/BloodPressure.vue";
 import personalInformationModal from "@/apps/Immunization/components/Modals/personalInformationModal.vue";
 import { iconBMI } from "@/utils/SvgDynamicColor";
 import { createModal } from "@/utils/Alerts";
+import SetPrograms from "@/views/Mixin/SetPrograms.vue";
 export default defineComponent({
+    mixins: [SetPrograms],
     components: {
         WeightHeightChart,
         PreviousVitals,
@@ -347,9 +362,25 @@ export default defineComponent({
         IonFabButton,
         IonFabList,
         PatientProfile,
+        IonSegmentButton,
+        IonSegment,
+        BloodPressure,
+        VisitsHistory,
+        VitalsMeasurementsSummary,
+        AllergiesContraindication,
+        DiagnosesHistory,
+        LabTestsHistory,
+        Programs,
     },
     data() {
         return {
+            checkUnderOne: false,
+            isLoading: false,
+            checkUnderFourteen: true,
+            checkUnderNine: false,
+            checkUnderFive: false,
+            checkUnderSixWeeks: false,
+            segmentContent: "Patient Summary",
             iconsContent: icons,
             isModalOpen: false,
             url: "" as any,
@@ -358,8 +389,6 @@ export default defineComponent({
             visits: [] as any,
             vitals: [] as any,
             NCDUserAction: [] as any,
-            activeProgramID: "" as any,
-            programBtn: {} as any,
             alerts: [] as any,
             colors: {
                 Low: ["#B9E6FE", "#026AA2", "#9ADBFE"],
@@ -373,29 +402,19 @@ export default defineComponent({
         ...mapState(useDemographicsStore, ["demographics", "patient"]),
         ...mapState(useTreatmentPlanStore, ["selectedMedicalAllergiesList"]),
         ...mapState(useEnrollementStore, ["NCDNumber"]),
-        ...mapState(useGeneralStore, ["NCDUserActions"]),
         ...mapState(useVitalsStore, ["vitals"]),
     },
     async mounted() {
+        this.checkAge();
         const patient = new PatientService();
         this.visits = await PatientService.getPatientVisits(patient.getID(), false);
-        await UserService.setProgramUserActions();
-        this.setNCDValue();
-        this.setActiveProgram();
         this.setAlerts();
-        await this.updateNCDData();
+        await this.updateData();
     },
     watch: {
         demographics: {
-            handler() {
-                this.setNCDValue();
-                this.setActiveProgram();
-            },
-            deep: true,
-        },
-        NCDUserActions: {
-            handler() {
-                this.setNCDValue();
+            async handler() {
+                await this.updateData();
             },
             deep: true,
         },
@@ -420,6 +439,17 @@ export default defineComponent({
     },
 
     methods: {
+        checkAge() {
+            if (this.demographics?.birthdate) {
+                this.checkUnderFourteen = HisDate.getAgeInYears(this.demographics?.birthdate) >= 14 ? true : false;
+                this.checkUnderNine = HisDate.ageInMonths(this.demographics?.birthdate) < 9 ? true : false;
+                this.checkUnderFive = HisDate.getAgeInYears(this.demographics?.birthdate) < 5 ? true : false;
+                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.demographics?.birthdate) < 42 ? true : false;
+            }
+        },
+        setSegmentContent(name: any) {
+            this.segmentContent = name;
+        },
         setAlerts() {
             this.alerts = [
                 {
@@ -454,16 +484,6 @@ export default defineComponent({
         openPIM() {
             createModal(personalInformationModal, { class: "otherVitalsModal" });
         },
-        setProgram(program: any) {
-            sessionStorage.setItem("app", JSON.stringify({ programID: program.program_id, applicationName: program.name }));
-            this.setActiveProgram();
-            this.nav(program.url);
-        },
-        setActiveProgram() {
-            let program: any = sessionStorage.getItem("app");
-            program = JSON.parse(program);
-            this.activeProgramID = program.programID;
-        },
         convertToDisplayDate(date: any) {
             return HisDate.toStandardHisDisplayFormat(date);
         },
@@ -479,56 +499,27 @@ export default defineComponent({
                 return false;
             }
         },
-        async setNCDValue() {
-            this.programBtn = await UserService.userProgramData();
-            console;
-        },
-        setOPDValue() {
-            sessionStorage.setItem("app", JSON.stringify({ programID: 14, applicationName: "OPD" }));
-            const patient = new PatientService();
-            if (patient.getNcdNumber() != "Unknown") {
-                if (sessionStorage.getItem("saveProgressStatus") == "true") {
-                    this.OPDProgramActionName = "+ Continue OPD consultation";
-                } else {
-                    this.OPDProgramActionName = "+ Start new OPD consultation";
-                }
-                this.url = "OPDvitals";
-            } else {
-                this.url = "OPDvitals";
-                this.OPDProgramActionName = "+ Start new OPD OPD Program";
-            }
-        },
+
         openModal() {
             this.isModalOpen = true;
         },
         dismiss() {
             modalController.dismiss();
         },
-        async nav(url: any) {
-            await UserService.setProgramUserActions();
-            this.$router.push(url);
-        },
-        async updateNCDData() {
+        async updateData() {
             const array = ["Height", "Weight", "Systolic", "Diastolic", "Temp", "Pulse", "SP02", "Respiratory rate"];
 
             // An array to store all promises
             const promises = array.map(async (item) => {
                 const dd = await ObservationService.getFirstValueNumber(this.demographics.patient_id, item);
-                console.log("🚀 ~ promises ~ dd:", dd);
                 return { [item]: dd };
             });
 
             // Wait for all promises to resolve
             const resultsArray = await Promise.all(promises);
-            console.log("🚀 ~ updateNCDData ~ resultsArray:", resultsArray);
 
             // Combine the objects in resultsArray into a single object
             this.vitals = Object.assign({}, ...resultsArray);
-            console.log("🚀 ~ updateNCDData ~ combinedResults:", this.vitals);
-        },
-        handleOPD() {
-            this.setOPDValue();
-            this.$router.push(this.url);
         },
         covertGender(gender: any) {
             return ["Male", "M"].includes(gender) ? "Male" : ["Female", "F"].includes(gender) ? "Female" : "";
@@ -579,27 +570,7 @@ export default defineComponent({
     color: #016302;
     padding: 10px;
 }
-ion-fab-button[data-desc] {
-    position: relative;
-    width: 0px;
-}
 
-ion-fab-button[data-desc]::after {
-    position: absolute;
-    content: attr(data-desc);
-    z-index: 1;
-    right: -20px;
-    bottom: 7px;
-    color: var(--ion-color-contrast, rgb(112, 109, 109));
-    background-color: rgb(221, 238, 221);
-    padding: 5px 10px;
-    border-radius: 10px;
-    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
-}
-ion-fab-button[data-desc]:hover::after {
-    background-color: rgb(200, 230, 200); /* Change background color on hover */
-    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.4), 0 6px 10px 0 rgba(0, 0, 0, 0.28), 0 1px 18px 0 rgba(0, 0, 0, 0.24); /* Adjust box-shadow on hover */
-}
 #container {
     text-align: center;
 

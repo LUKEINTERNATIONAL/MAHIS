@@ -107,8 +107,7 @@ export default defineComponent({
         },
         async saveData() {
             const villageValue = getFieldValue(this.addVillage, "Village", "value");
-            console.log("🚀 ~ saveData ~ villageValue:", villageValue);
-            if (Validation.isName(villageValue) == null) {
+            if (Validation.isNames(villageValue) == null) {
                 const address = await LocationService.createAddress(
                     this.validationData.address_type,
                     this.validationData.addresses_name,
@@ -220,9 +219,9 @@ ion-footer {
 }
 .saveBtn {
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
     margin: 20px;
-    width: 330px;
+    width: 100%;
     align-items: end;
 }
 .btnContent {

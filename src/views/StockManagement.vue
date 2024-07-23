@@ -9,8 +9,8 @@
         <ion-content>
             <div class="container">
                 <h1 style="width: 100%; text-align: center; font-weight: 700">Stock Management</h1>
-                <div style="width: 100%; display: flex; justify-content: space-between; align-items: center">
-                    <div class="bigGroupButton">
+                <div style="width: 100%; align-items: center">
+                    <div class="bigGroupButton" style="display: inline-block; vertical-align: top">
                         <ion-button :color="selectedButton === 'all' ? 'tertiary' : 'secondary'" @click="selectButton('all')">
                             <div>
                                 <div class="centerBigBtnContain bigBtnHeader">{{ allStock.length }}</div>
@@ -30,10 +30,10 @@
                             </div>
                         </ion-button>
                     </div>
-                    <div style="max-width: 400px; top: -10px; position: relative">
+                    <div style="display: inline-block; vertical-align: top; max-width: 400px; top: -10px; position: relative; margin-right: 10px">
                         <basic-form :contentData="startEndDate" @update:inputValue="handleInputData"></basic-form>
                     </div>
-                    <div>
+                    <div style="display: inline-block; vertical-align: top; margin-top: 10px; float: right">
                         <ion-button class="addBtn" color="primary" @click="openAddStockModal()">
                             <div>
                                 <div class="centerBigBtnContain">+ Add Product</div>
@@ -41,6 +41,7 @@
                         </ion-button>
                     </div>
                 </div>
+
                 <DataTable :options="options" :data="reportData" class="display nowrap" width="100%">
                     <thead>
                         <tr>
@@ -210,6 +211,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.bigGroupButton {
+    margin-top: 10px;
+}
 #container {
     text-align: center;
 
@@ -423,6 +427,7 @@ ion-button {
     height: 60px;
     margin: 20px;
     margin-left: 0px;
+    margin-right: 8px;
 }
 .addBtn {
     height: 50px;

@@ -11,30 +11,7 @@
             </ion-col>
         </ion-row>
 
-        <ion-row>
-            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                >Batch number<span style="color: #b42318">*</span></ion-label
-            >
-        </ion-row>
-        <div>
-            <BasicInputField
-                :placeholder="'Enter batch number'"
-                :icon="iconsContent.batchNumber"
-                :inputValue="batchNumber"
-                :-inner-action-btn-propeties="InnerActionBtnPropeties"
-                @update:InnerActionBtnPropetiesAction="InnerActionBtnPropeties.fn"
-                @update:inputValue="updateBatchNumber"
-                @update:passedinputValue="updateBatchNumberByPassValue"
-            />
-
-            <div>
-                <ion-label v-if="is_batch_number_valid" class="error-label">
-                    {{ batch_number_error_message }}
-                </ion-label>
-            </div>
-        </div>
-
-        <div style="margin-top: 30px; margin-bottom: 100px">
+        <div style="margin-top: 30px;">
             <ion-row>
                 <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
                     >Vaccine name<span style="color: #b42318">*</span></ion-label
@@ -59,6 +36,30 @@
             />
             <div>
                 <ion-label style="padding: 3%" v-if="is_vaccine_name_valid" class="error-label">{{ vaccine_name_error_message }}</ion-label>
+            </div>
+        </div>
+
+        <ion-row>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                >Batch number<span style="color: #b42318">*</span></ion-label
+            >
+        </ion-row>
+
+        <div>
+            <BasicInputField
+                :placeholder="'Enter batch number'"
+                :icon="iconsContent.batchNumber"
+                :inputValue="batchNumber"
+                :-inner-action-btn-propeties="InnerActionBtnPropeties"
+                @update:InnerActionBtnPropetiesAction="InnerActionBtnPropeties.fn"
+                @update:inputValue="updateBatchNumber"
+                @update:passedinputValue="updateBatchNumberByPassValue"
+            />
+
+            <div>
+                <ion-label v-if="is_batch_number_valid" class="error-label">
+                    {{ batch_number_error_message }}
+                </ion-label>
             </div>
         </div>
 
@@ -129,11 +130,11 @@ import BasicForm from "@/components/BasicForm.vue";
 import HisDate from "@/utils/Date";
 import { Service } from "@/services/service";
 
-import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
+import PreviousVitals from "@/components/Graphs/previousVitals.vue";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { PatientService } from "@/services/patient_service";
 import { saveVaccineAdministeredDrugs, getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service";
-import QRCodeReadersrc from "@/components/QRCodeReader.vue"
+import QRCodeReadersrc from "@/components/QRCodeReader.vue";
 import { createModal } from "@/utils/Alerts";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import VueMultiselect from "vue-multiselect";
@@ -210,7 +211,9 @@ export default defineComponent({
             InnerActionBtnPropeties: {
                 name: "Scan",
                 show: true,
-                fn: () => { createModal(QRCodeReadersrc, { class: "otherVitalsModal qr_code_modal" }, false)}
+                fn: () => {
+                    createModal(QRCodeReadersrc, { class: "otherVitalsModal qr_code_modal" }, false);
+                },
             },
             showDateBtns: true as boolean,
         };
@@ -251,7 +254,7 @@ export default defineComponent({
         },
         updateBatchNumber(event: any) {
             const input = event.target.value;
-            this.batchNumber = input || this.tempScannedBatchNumber?.text || '';
+            this.batchNumber = input || this.tempScannedBatchNumber?.text || "";
         },
         saveBatchWithTodayDate() {
             let vaccine_date = Service.getSessionDate();
@@ -285,8 +288,8 @@ export default defineComponent({
             this.currentDrugOb = data;
         },
         isAlphaNumeric(text: string) {
-            // Regular expression to match one or more digits
-            const regex = /^[a-zA-Z0-9]+$/;
+            // Regular expression to match alphanumeric characters and specified special characters
+            const regex = /^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+$/;
             return regex.test(text);
         },
         validateBatchNumber() {
@@ -315,7 +318,7 @@ export default defineComponent({
             const dta = {
                 batch_number: this.batchNumber,
                 date_administered: date_,
-                drug_id: this.currentDrugOb.drug_id,
+                drug_id: this.currentDrugOb.drug.drug_id,
             };
             const store = useAdministerVaccineStore();
             store.setAdministeredVaccine(dta);

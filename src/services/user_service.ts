@@ -111,51 +111,59 @@ export class UserService extends Service {
             return []; // Return an empty array in case of error
         }
     }
-    static async userProgramData() {
+    static async userProgramData(patientID = "") {
         const accessPrograms: any = sessionStorage.getItem("userPrograms");
         const programs = JSON.parse(accessPrograms);
 
         const filteredPrograms = [];
         for (const item of programs) {
-            if (item.name === "NCD PROGRAM") {
-                const NCDData: any = await this.setNCDValue();
-                item.url = NCDData.url;
-                item.actionName = NCDData.actionName;
-                filteredPrograms.push(item);
-            } else if (item.name === "IMMUNIZATION PROGRAM") {
-                item.url = "patientProfile";
-                item.actionName = "+ Enroll in Immunization program";
-                filteredPrograms.push(item);
-            } else if (item.name === "OPD Program") {
-                const demographicsInstance = useDemographicsStore();
-                const demographics = demographicsInstance.getPatient();
-                const orders = await OrderService.getOrders(demographics.patient_id);
-                const filteredArray = await orders.filter((obj: any) => {
-                    return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
-                });
-                if (filteredArray.length > 0) {
-                    item.url = "OPDConsultationPlan";
-                    item.actionName = "+ Continue OPD consultation";
-                } else {
-                    item.url = "OPDvitals";
-                    item.actionName = "+ Start OPD consultation";
+            if (patientID) {
+                if (item.name === "NCD PROGRAM") {
+                    const NCDData: any = await this.setNCDValue();
+                    if (NCDData) {
+                        item.url = NCDData.url;
+                        item.actionName = NCDData.actionName;
+                        filteredPrograms.push(item);
+                    }
+                } else if (item.name === "IMMUNIZATION PROGRAM") {
+                    item.url = "patientProfile";
+                    item.actionName = "+ Enroll in Immunization program";
+                    filteredPrograms.push(item);
+                } else if (item.name === "OPD Program") {
+                    const demographicsInstance = useDemographicsStore();
+                    const demographics = demographicsInstance.getPatient();
+                    const orders = await OrderService.getOrders(demographics.patient_id);
+                    const filteredArray = await orders.filter((obj: any) => {
+                        return HisDate.toStandardHisFormat(HisDate.currentDate()) === HisDate.toStandardHisFormat(obj.order_date);
+                    });
+                    if (filteredArray.length > 0) {
+                        item.url = "OPDConsultationPlan";
+                        item.actionName = "+ Continue OPD consultation";
+                    } else {
+                        item.url = "OPDvitals";
+                        item.actionName = "+ Start OPD consultation";
+                    }
+                    filteredPrograms.push(item);
+                } else if (item.name === "ANC PROGRAM") {
+                    let ANCItem = { ...item }; // Create a new object
+                    ANCItem.url = "ANCEnrollment";
+                    ANCItem.actionName = "+ Enroll in ANC Program";
+                    filteredPrograms.push(ANCItem);
+
+                    let labourItem = { ...item }; // Create a new object
+                    labourItem.url = "labour/labourHome";
+                    labourItem.actionName = "+ Enroll in Labour and delivery program";
+                    filteredPrograms.push(labourItem);
+
+                    let pncItem = { ...item }; // Create a new object
+                    pncItem.url = "pnc/Home";
+                    pncItem.actionName = "+ Enroll in PNC program";
+                    filteredPrograms.push(pncItem);
                 }
+            } else {
+                item.url = "";
+                item.actionName = item.name;
                 filteredPrograms.push(item);
-            } else if (item.name === "ANC PROGRAM") {
-                let ANCItem = { ...item }; // Create a new object
-                ANCItem.url = "ANCEnrollment";
-                ANCItem.actionName = "+ Enroll in ANC Program";
-                filteredPrograms.push(ANCItem);
-
-                let labourItem = { ...item }; // Create a new object
-                labourItem.url = "labour/labourHome";
-                labourItem.actionName = "+ Enroll in Labour and delivery program";
-                filteredPrograms.push(labourItem);
-
-                let pncItem = { ...item }; // Create a new object
-                pncItem.url = "pnc/Home";
-                pncItem.actionName = "+ Enroll in PNC program";
-                filteredPrograms.push(pncItem);
             }
         }
 
@@ -170,34 +178,36 @@ export class UserService extends Service {
     }
     static async setNCDValue() {
         const patient = new PatientService();
-        const visits = await PatientService.getPatientVisits(patient.getID(), false);
-
-        const activities = await this.getUserActivities("NCD_activities");
-        let url = "";
-        let NCDProgramActionName = "";
-        if (patient.getNcdNumber() != "Unknown") {
-            if (activities.length == 0) {
-                this.setNCDNumber();
-                url = "patientProfile";
-                NCDProgramActionName = "+ Edit NCD Enrollment";
+        if (patient.getID()) {
+            console.log("🚀 ~ UserService ~ setNCDValue ~ patient.getID():", patient.getID());
+            const visits = await PatientService.getPatientVisits(patient.getID(), false);
+            const activities = await this.getUserActivities("NCD_activities");
+            let url = "";
+            let NCDProgramActionName = "";
+            if (patient.getNcdNumber() != "Unknown") {
+                if (activities.length == 0) {
+                    this.setNCDNumber();
+                    url = "patientProfile";
+                    NCDProgramActionName = "+ Edit NCD Enrollment";
+                } else {
+                    if (sessionStorage.getItem("saveProgressStatus") == "true") {
+                        NCDProgramActionName = "+ Continue NCD consultation";
+                    } else if (visits.includes(HisDate.currentDate())) {
+                        NCDProgramActionName = "+ Edit NCD consultation";
+                    } else NCDProgramActionName = "+ Start new NCD consultation";
+                    url = "consultationPlan";
+                }
             } else {
-                if (sessionStorage.getItem("saveProgressStatus") == "true") {
-                    NCDProgramActionName = "+ Continue NCD consultation";
-                } else if (visits.includes(HisDate.currentDate())) {
-                    NCDProgramActionName = "+ Edit NCD consultation";
-                } else NCDProgramActionName = "+ Start new NCD consultation";
-                url = "consultationPlan";
+                this.setNCDNumber();
+                url = "NCDEnrollment";
+                NCDProgramActionName = "+ Enroll in NCD Program";
             }
-        } else {
-            this.setNCDNumber();
-            url = "NCDEnrollment";
-            NCDProgramActionName = "+ Enroll in NCD Program";
-        }
 
-        return {
-            actionName: NCDProgramActionName,
-            url: url,
-        };
+            return {
+                actionName: NCDProgramActionName,
+                url: url,
+            };
+        }
     }
     static async setNCDNumber() {
         const j = await ProgramService.getNextSuggestedNCDNumber();

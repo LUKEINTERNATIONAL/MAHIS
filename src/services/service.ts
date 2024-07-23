@@ -65,7 +65,7 @@ export class Service {
     }
 
     static async getJson(url: string, params = {} as Record<string, any>) {
-        const transformedUrl = `${url}?${Url.parameterizeObjToString(params)}`;
+        const transformedUrl =   `${url}?${Url.parameterizeObjToString(params)}`;
         return this.jsonResponseHandler(ApiClient.get(transformedUrl));
     }
 

@@ -27,7 +27,7 @@ import { VitalsService } from "@/services/ANC/anc_vitals_service";
 import StandardValidations from "@/validations/StandardValidations";
 import BasicForm from "@/components/BasicForm.vue";
 import { Service } from "@/services/service";
-import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
+import PreviousVitals from "@/components/Graphs/previousVitals.vue";
 import { getCheckboxSelectedValue, modifyCheckboxValue, modifyFieldValue } from "@/services/data_helpers";
 
 export default defineComponent({
@@ -121,7 +121,7 @@ export default defineComponent({
                                 this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage =
                                     validateResult.flat(Infinity)[0];
                                 return true;
-                            } 
+                            }
                         } else {
                             this.hasValidationErrors.push("true");
                             this.vitals[sectionIndex].data.rowData[colIndex].colData[inputIndex].alertsErrorMassage = false;
@@ -159,7 +159,7 @@ export default defineComponent({
             this.updateTotalWeightGain();
         },
 
-        async updateExpectedWeightGain () {
+        async updateExpectedWeightGain() {
             const bmiColor = this.BMI?.color ?? [];
             const vitals = this.vitals[0].alerts[1];
             vitals.icon = BMIService.iconBMI(bmiColor);
@@ -169,7 +169,7 @@ export default defineComponent({
             vitals.value = this.BMI?.result ?? "";
         },
 
-        async updateAverageWeightGain () {
+        async updateAverageWeightGain() {
             const bmiColor = this.BMI?.color ?? [];
             const vitals = this.vitals[0].alerts[2];
             vitals.icon = BMIService.iconBMI(bmiColor);
@@ -179,7 +179,7 @@ export default defineComponent({
             vitals.value = this.BMI?.result ?? "";
         },
 
-        async updateTotalWeightGain () {
+        async updateTotalWeightGain() {
             const bmiColor = this.BMI?.color ?? [];
             const vitals = this.vitals[0].alerts[3];
             vitals.icon = BMIService.iconBMI(bmiColor);
@@ -301,23 +301,23 @@ h5 {
     white-space: nowrap;
     overflow: hidden;
 }
-.category{
-width: 400px;
-height: 70px;
-background-color: #DDEEDD;
-border-radius: 0.99%;
-color: #016302;
-font-weight: bolder;
-display: flex;
-justify-content: center;
-align-items: center;
+.category {
+    width: 400px;
+    height: 70px;
+    background-color: #ddeedd;
+    border-radius: 0.99%;
+    color: #016302;
+    font-weight: bolder;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .categories {
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 ion-card {
     width: 100%;

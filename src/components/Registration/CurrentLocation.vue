@@ -1,5 +1,11 @@
 <template>
-    <basic-card :content="cardData" @update:selected="handleInputData" @update:inputValue="handleInputData" @clicked:button="handleBtns"></basic-card>
+    <basic-card
+        :content="cardData"
+        :editable="editable"
+        @update:selected="handleInputData"
+        @update:inputValue="handleInputData"
+        @clicked:button="handleBtns"
+    ></basic-card>
 </template>
 
 <script lang="ts">
@@ -18,9 +24,12 @@ import { modifyFieldValue, getFieldValue, getRadioSelectedValue, getCheckboxSele
 import { validateField } from "@/services/validation_service";
 import AddTA from "@/components/Registration/Modal/AddTA.vue";
 import AddVillage from "@/components/Registration/Modal/AddVillage.vue";
+import Districts from "@/views/Mixin/SetDistricts.vue";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 
 export default defineComponent({
     name: "Menu",
+    mixins: [Districts],
     components: {
         IonContent,
         IonHeader,
@@ -43,6 +52,7 @@ export default defineComponent({
     computed: {
         ...mapState(useRegistrationStore, ["homeLocation"]),
         ...mapState(useRegistrationStore, ["currentLocation"]),
+        ...mapState(useDemographicsStore, ["demographics", "patient"]),
         current_district() {
             return getFieldValue(this.currentLocation, "current_district", "value")?.name;
         },
@@ -60,20 +70,54 @@ export default defineComponent({
             },
             deep: true,
         },
+        districtList: {
+            handler() {
+                modifyFieldValue(this.currentLocation, "current_district", "multiSelectData", this.districtList);
+            },
+            deep: true,
+        },
+    },
+    props: {
+        editable: {
+            default: false as any,
+        },
     },
     async mounted() {
         this.updateRegistrationStores();
         this.buildCards();
-        this.buildDistricts();
+        this.setData();
     },
     methods: {
+        setData() {
+            if (this.editable) {
+                modifyFieldValue(this.currentLocation, "current_village", "value", {
+                    name: this.patient.person?.addresses[0]?.city_village,
+                    district_id: "",
+                });
+                modifyFieldValue(this.currentLocation, "current_district", "value", {
+                    name: this.patient.person?.addresses[0]?.state_province,
+                    traditional_authority_id: "",
+                });
+                modifyFieldValue(this.currentLocation, "current_traditional_authority", "value", {
+                    name: this.patient.person?.addresses[0]?.township_division,
+                    village_id: "",
+                });
+                modifyFieldValue(this.currentLocation, "closestLandmark", "value", {
+                    id: "",
+                    name: this.getAttributes(this.patient, "Landmark Or Plot Number"),
+                });
+            }
+        },
+        getAttributes(item: any, name: any) {
+            return item.person.person_attributes.find((attribute: any) => attribute.type.name === name)?.value;
+        },
         async buildCards() {
             this.cardData = {
                 mainTitle: "Demographics",
                 cards: [
                     {
                         cardTitle: "Current Location",
-                        content: this.currentLocation
+                        content: this.currentLocation,
                     },
                 ],
             };
@@ -85,14 +129,6 @@ export default defineComponent({
             const registrationStore = useRegistrationStore();
             // registrationStore.setHomeLocation(this.homeLocation);
             // registrationStore.setCurrentLocation(this.currentLocation);
-        },
-        async buildDistricts() {
-            this.districtList = [];
-            for (let i of [1, 2, 3]) {
-                const districts: any = await LocationService.getDistricts(i);
-                this.districtList.push(...districts);
-            }
-            modifyFieldValue(this.currentLocation, "current_district", "multiSelectData", this.districtList);
         },
         handleBtns(event: any) {
             if (event == "TA") createModal(AddTA, { class: "otherVitalsModal" });
@@ -125,6 +161,7 @@ export default defineComponent({
         },
         async setVillage(obj: any) {
             const targetData = await LocationService.getVillages(obj.traditional_authority_id, "");
+            console.log("🚀 ~ setVillage ~ targetData:", targetData);
             modifyFieldValue(this.currentLocation, "current_village", "multiSelectData", targetData);
             modifyFieldValue(this.currentLocation, "current_village", "displayNone", false);
         },

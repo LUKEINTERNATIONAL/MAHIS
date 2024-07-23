@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MaHIS</string>
+    <string name="title_activity_main">MaHIS</string>
+    <string name="package_name">com.lukeInternational.MaHIS</string>
+    <string name="custom_url_scheme">com.lukeInternational.MaHIS</string>
+</resources>

@@ -105,14 +105,7 @@
                     :icon="iconsContent.saveWhite"
                     @click="saveData()"
                 />
-                <DynamicButton
-                    v-else
-                    name="Next"
-                    :disabledValue="disableSaveBtn"
-                    iconSlot="end"
-                    :icon="iconsContent.arrowRightWhite"
-                    @click="nextStep"
-                />
+                <DynamicButton v-else name="Next" :disabledValue="false" iconSlot="end" :icon="iconsContent.arrowRightWhite" @click="nextStep" />
             </div>
         </ion-footer>
     </ion-page>
@@ -152,8 +145,12 @@ import { useBirthRegistrationStore } from "@/apps/Immunization/stores/BirthRegis
 import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from "@/services/formatServerData";
 import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
 import { AppEncounterService } from "@/services/app_encounter_service";
+import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
+import { PatientProgramService } from "@/services/patient_program_service";
+import { resetDemographics } from "@/services/reset_data";
 
 export default defineComponent({
+    mixins: [ScreenSizeMixin],
     components: {
         IonBreadcrumb,
         IonBreadcrumbs,
@@ -187,7 +184,6 @@ export default defineComponent({
             checkUnderFive: false,
             checkUnderSixWeeks: false,
             steps: ["Personal Information", "Location", "Social History", "Guardian Information"],
-            screenWidth: "" as any,
             disableSaveBtn: false,
         };
     },
@@ -245,7 +241,7 @@ export default defineComponent({
     },
 
     async mounted() {
-        this.screenWidth = window.screen.width;
+        resetDemographics();
         this.setIconClass();
         this.disableNationalIDInput();
         this.checkAge();
@@ -264,6 +260,12 @@ export default defineComponent({
             },
             deep: true,
         },
+        $route: {
+            async handler(data) {
+                if (data.name == "registration") resetDemographics();
+            },
+            deep: true,
+        },
     },
     setup() {
         return { arrowForwardCircle, grid, list };
@@ -273,23 +275,25 @@ export default defineComponent({
             return Service.getProgramID();
         },
         async getRegion(name: any) {
-            let districts = [];
-            for (let i of [1, 2, 3]) {
-                if ((i = 1)) districts = await LocationService.getDistricts(i);
-                if (districts.some((district: any) => district.name.trim() === name)) {
-                    return "Central Region";
-                }
-                if ((i = 2)) districts = await LocationService.getDistricts(i);
-                if (districts.some((district: any) => district.name.trim() === name)) {
-                    return "Northern Region";
-                }
-                if ((i = 3)) districts = await LocationService.getDistricts(i);
-                if (districts.some((district: any) => district.name.trim() === name)) {
-                    return "Southern Region";
-                }
-                if ((i = 4)) districts = await LocationService.getDistricts(i);
-                if (districts.some((district: any) => district.name.trim() === name)) {
-                    return "Foreign";
+            if (name) {
+                let districts = [];
+                for (let i of [1, 2, 3]) {
+                    if ((i = 1)) districts = await LocationService.getDistricts(i);
+                    if (districts.some((district: any) => district.name.trim() === name)) {
+                        return "Central Region";
+                    }
+                    if ((i = 2)) districts = await LocationService.getDistricts(i);
+                    if (districts.some((district: any) => district.name.trim() === name)) {
+                        return "Northern Region";
+                    }
+                    if ((i = 3)) districts = await LocationService.getDistricts(i);
+                    if (districts.some((district: any) => district.name.trim() === name)) {
+                        return "Southern Region";
+                    }
+                    if ((i = 4)) districts = await LocationService.getDistricts(i);
+                    if (districts.some((district: any) => district.name.trim() === name)) {
+                        return "Foreign";
+                    }
                 }
             }
         },
@@ -299,14 +303,6 @@ export default defineComponent({
                 this.checkUnderNine = HisDate.ageInMonths(this.birthdate) < 9 ? true : false;
                 this.checkUnderFive = HisDate.getAgeInYears(this.birthdate) < 5 ? true : false;
                 this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.birthdate) < 42 ? true : false;
-                this.controlHeight();
-            }
-        },
-        controlHeight() {
-            if (this.checkUnderSixWeeks) {
-                modifyFieldValue(this.birthRegistration, "Height (cm)", "displayNone", true);
-            } else {
-                modifyFieldValue(this.birthRegistration, "Height (cm)", "displayNone", false);
             }
         },
         disableNationalIDInput() {
@@ -337,6 +333,15 @@ export default defineComponent({
                 this.currentStep = this.steps[currentIndex - 1];
             }
         },
+        async enrollProgram(patientId: any) {
+            const program = new PatientProgramService(patientId);
+            await program.enrollProgram();
+        },
+        async CreateRegistrationEncounter(patientId: any) {
+            const encounter = new AppEncounterService(patientId, 5);
+            await encounter.createEncounter();
+            await encounter.saveValueCodedObs("Type of patient", "New Patient");
+        },
         async findPatient(patientID: any) {
             const patientData = await PatientService.findByID(patientID);
             this.openNewPage(patientData);
@@ -355,6 +360,12 @@ export default defineComponent({
             } finally {
                 this.isLoading = false;
             }
+        },
+        validateGaudiarnInfo() {
+            if (!this.checkUnderFourteen) {
+                return validateInputFiledData(this.guardianInformation);
+            }
+            return true;
         },
         async validations(data: any, fields: any) {
             if (this.nationalID != "") {
@@ -380,10 +391,10 @@ export default defineComponent({
             if (
                 (await this.validations(this.personInformation, fields)) &&
                 (await this.validations(this.currentLocation, currentFields)) &&
-                this.validateBirthData()
+                this.validateBirthData() &&
+                this.validateGaudiarnInfo()
             ) {
                 this.disableSaveBtn = true;
-                await this.buildPersonalInformation();
                 if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
                 const registration: any = new PatientRegistrationService();
                 await registration.registerPatient(this.personInformation[0].selectedData, []);
@@ -396,6 +407,8 @@ export default defineComponent({
                     }
                 }
                 await this.saveBirthdayData(patientID);
+                await this.enrollProgram(patientID);
+                await this.CreateRegistrationEncounter(patientID);
                 this.findPatient(patientID);
                 toastSuccess("Successfully Created Patient");
                 return true;
@@ -405,7 +418,7 @@ export default defineComponent({
             }
         },
         validateBirthData() {
-            if (this.checkUnderOne) {
+            if (this.checkUnderNine) {
                 return validateInputFiledData(this.birthRegistration);
             } else {
                 return true;
@@ -468,8 +481,14 @@ export default defineComponent({
             await resetPatientData();
             const demographicsStore = useDemographicsStore();
             demographicsStore.setPatient(item);
+            let fullName = "";
+            if (item.person.names[0].middle_name && item.person.names[0].middle_name != "N/A") {
+                fullName = item.person.names[0].given_name + " " + item.person.names[0].middle_name + " " + item.person.names[0].family_name;
+            } else {
+                fullName = item.person.names[0].given_name + " " + item.person.names[0].family_name;
+            }
             demographicsStore.setDemographics({
-                name: item.person.names[0].given_name + " " + item.person.names[0].family_name,
+                name: fullName,
                 mrn: this.patientIdentifier(item),
                 birthdate: item.person.birthdate,
                 category: "",
@@ -513,7 +532,7 @@ export default defineComponent({
                 cell_phone_number: getFieldValue(this.personInformation, "phoneNumber", "value"),
                 occupation: getRadioSelectedValue(this.socialHistory, "occupation"),
                 marital_status: getRadioSelectedValue(this.socialHistory, "maritalStatus"),
-                religion: getFieldValue(this.socialHistory, "religion", "value"),
+                religion: getFieldValue(this.socialHistory, "religion", "value")?.name,
                 education_level: getRadioSelectedValue(this.socialHistory, "highestLevelOfEducation"),
             };
         },

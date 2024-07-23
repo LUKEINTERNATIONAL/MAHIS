@@ -1,15 +1,9 @@
 <template>
     <div v-if="showCurrentMilestoneAlert" class="alert_banner">
         <apan>{{ msg }}</apan>
-        <!-- <ion-icon style="margin-top: 7px;" slot="end" size="medium" :icon="iconsContent.greenCalender">
-      </ion-icon> -->
-        <!-- <span style="font-weight: 700;">{{age}}</span> -->
     </div>
 
     <div v-if="!showCurrentMilestoneAlert" class="alert_banner" style="background: inherit">
-        <!-- <ion-icon style="margin-top: 7px;" slot="end" size="medium" :icon="iconsContent.greenCalender">
-      </ion-icon>
-      <span style="font-weight: 700;">{{ current_milestone }}</span> -->
     </div>
 
     <!-- <div class="swipe_msg">
@@ -20,7 +14,7 @@
         <slide v-for="(slide, index) in vaccineSchudulesCount" :key="slide">
             <!-- {{ slide }} -->
             <div class="container">
-                <customVaccine :vaccines="vaccine_schArray[0][index].antigens" :milestone_status="vaccine_schArray[0][index].milestone_status" />
+                <customVaccine :vaccines="vaccine_schArray[0][index].antigens" :milestone_status="vaccine_schArray[0][index].milestone_status" :key="componentKey"  />
             </div>
         </slide>
         <template #addons>
@@ -29,17 +23,13 @@
         </template>
     </carousel>
 
-    <carousel>
-        <slide v-for="slide in 12" :key="slide">
-            <ion-row class="bottom-row">
-                <div class="otherVaccine center-content">
-                    <div class="centerBtns">
-                        <ion-button @click="openAdministerOtherVaccineModal" class="btnText" fill="solid"> Add Other Vaccines </ion-button>
-                    </div>
-                </div>
-            </ion-row>
-        </slide>
-    </carousel>
+    <ion-row class="bottom-row">
+        <div class="otherVaccine center-content">
+            <div class="centerBtns">
+                <ion-button @click="openAdministerOtherVaccineModal" class="btnText" fill="solid"> Add Other Vaccines </ion-button>
+            </div>
+        </div>
+    </ion-row>
 </template>
 
 <script lang="ts">
@@ -75,10 +65,10 @@ export default defineComponent({
             milestones: [],
             iconsContent: icons,
             showCurrentMilestoneAlert: false,
-            age: "",
             landingSlide: 0,
-            msg: "Vaccines due today",
+            msg: "Upcoming Vaccines",
             current_milestone: "" as string,
+            componentKey: 0,
         };
     },
     computed: {
@@ -94,6 +84,11 @@ export default defineComponent({
             },
             deep: true,
         },
+        vaccine_schArray: {
+            handler() {
+                this.reloadVaccines()
+            }
+        },
     },
     methods: {
         openAdministerOtherVaccineModal() {
@@ -104,53 +99,67 @@ export default defineComponent({
             const vaccineScheduleStore = useAdministerVaccineStore();
 
             vaccineScheduleStore.setVaccineSchedule(data__);
-            let upcoming_f = false;
-            let found = false;
+
             this.vaccineSchudulesCount = vaccineScheduleStore.getVaccineSchedule()?.vaccine_schedule?.length;
             vaccineScheduleStore.resetMissedVaccineSchedules();
+            this.vaccine_schArray = []
             this.vaccine_schArray.push(vaccineScheduleStore.getVaccineSchedule().vaccine_schedule);
+           
             vaccineScheduleStore.getVaccineSchedule().vaccine_schedule.forEach((vaccineSchudule: any) => {
                 this.findMissingVaccines(vaccineSchudule);
-                if (vaccineSchudule.milestone_status == "current") {
-                    vaccineScheduleStore.setCurrentVisitId(vaccineSchudule.visit);
-                    vaccineScheduleStore.setCurrentMilestoneToAdminister({ currentMilestone: vaccineSchudule.age });
-                    this.landingSlide = vaccineSchudule.visit - 1;
-                    this.age = vaccineSchudule.age;
-                    found = true;
-                    vaccineScheduleStore.setCurrentSchedFound(true);
-                }
-
-                if (found == false && vaccineSchudule.milestone_status == "upcoming" && upcoming_f == false) {
-                    vaccineScheduleStore.setCurrentVisitId(vaccineSchudule.visit);
-                    vaccineScheduleStore.setCurrentMilestoneToAdminister({ currentMilestone: vaccineSchudule.age });
-                    this.landingSlide = vaccineSchudule.visit - 1;
-                    this.age = vaccineSchudule.age;
-                    upcoming_f = true;
-                }
-
-                if (found == false && vaccineSchudule.visit == 12 && upcoming_f == false) {
-                    vaccineScheduleStore.setCurrentVisitId(vaccineSchudule.visit);
-                    vaccineScheduleStore.setCurrentMilestoneToAdminister({ currentMilestone: vaccineSchudule.age });
-                    this.landingSlide = vaccineSchudule.visit - 1;
-                    this.age = vaccineSchudule.age;
-                    upcoming_f = true;
-                }
+                this.handleSchedule(vaccineSchudule)
                 const obj = { visit: vaccineSchudule.visit, age: vaccineSchudule.age };
                 this.milestones = this.appendUniqueObject(this.milestones, obj);
-            });
+            })
 
-            if (found == false) {
-                vaccineScheduleStore.setCurrentSchedFound(false);
+            let shouldStop = false;
+            vaccineScheduleStore.getVaccineSchedule().vaccine_schedule.forEach((vaccineSchudule: any) => {
+                if (shouldStop) return;
+                if (this.findSingleUpcomingMilestone(vaccineSchudule) == true) {
+                    shouldStop = true;
+                    return;
+                }
+            })
+
+            vaccineScheduleStore.getVaccineSchedule().vaccine_schedule.forEach((vaccineSchudule: any) => {
+                this.findCurrentMilestone(vaccineSchudule)
+            })
+        },
+        setSB(vaccineSchudule: any){
+            const vaccineScheduleStore = useAdministerVaccineStore()
+            vaccineScheduleStore.setCurrentMilestoneToAdminister({ currentMilestone: vaccineSchudule.age })
+            this.landingSlide = vaccineSchudule.visit - 1
+            this.current_milestone = vaccineSchudule.age
+            vaccineScheduleStore.setCurrentMilestone(vaccineSchudule.age)
+        },
+        handleSchedule(vaccineSchudule: any) {
+            if (vaccineSchudule.milestone_status == "upcoming") {
+                const vaccineScheduleStore = useAdministerVaccineStore()
+                vaccineScheduleStore.setCurrentSchedFound(false)
+                this.msg = "Upcoming Vaccines"
+                this.showCurrentMilestoneAlert = true
+                this.setSB(vaccineSchudule)
             }
-
-            if (vaccineScheduleStore.getCurrentSchedFound() == true) {
-                this.msg = "Vaccines due today";
-                this.showCurrentMilestoneAlert = true;
+            else {
+                this.setSB(vaccineSchudule)
+                const vaccineScheduleStore = useAdministerVaccineStore()
+                vaccineScheduleStore.setCurrentSchedFound(false)
             }
-
-            if (vaccineScheduleStore.getCurrentSchedFound() == false) {
-                this.msg = "Upcoming Vaccines";
-                this.showCurrentMilestoneAlert = true;
+        },
+        findSingleUpcomingMilestone(vaccineSchudule: any) {
+            if (vaccineSchudule.milestone_status == "upcoming") {
+                this.setSB(vaccineSchudule)
+                return true
+            }
+            return false
+        },
+        findCurrentMilestone(vaccineSchudule: any) {
+            if (vaccineSchudule.milestone_status == "current") {
+                this.msg = "Vaccines due today"
+                const vaccineScheduleStore = useAdministerVaccineStore()
+                vaccineScheduleStore.setCurrentSchedFound(true)
+                this.showCurrentMilestoneAlert = true
+                this.setSB(vaccineSchudule)
             }
         },
         slideEvent(SlideEventData: any) {
@@ -175,6 +184,7 @@ export default defineComponent({
                 this.showCurrentMilestoneAlert = true;
                 return;
             }
+
 
             if (templmilesytone.age != CurrentMilestoneToAdminister.currentMilestone) {
                 this.showCurrentMilestoneAlert = false;
@@ -213,6 +223,9 @@ export default defineComponent({
                 vaccineScheduleStore.setMissedVaccineSchedules(obj);
             }
         },
+        reloadVaccines() {
+            this.componentKey += 1;
+        }
     },
 });
 </script>

@@ -11,7 +11,7 @@
         <ion-accordion-group ref="accordionGroup" class="previousView">
             <ion-accordion value="first" toggle-icon-slot="start" class="custom_card">
                 <ion-item slot="header" color="light">
-                    <ion-label class="previousLabel">Change guarding</ion-label>
+                    <ion-label class="previousLabel">Change Guardian</ion-label>
                 </ion-item>
                 <div class="ion-padding" slot="content" style="padding-bottom: 200px">
                     <div class="">
@@ -27,7 +27,7 @@
                     <basic-form :contentData="vaccineAdverseEffects" @update:inputValue="handleInputData"></basic-form>
                 </div>
             </ion-accordion>
-            <ion-accordion value="third" toggle-icon-slot="start" class="custom_card">
+            <ion-accordion value="third" toggle-icon-slot="start" class="custom_card" v-if="protectedStatus != 'Yes'">
                 <ion-item slot="header" color="light">
                     <ion-label class="previousLabel">Child protected at birth</ion-label>
                 </ion-item>
@@ -59,7 +59,7 @@ import BasicInputField from "@/components/BasicInputField.vue";
 import { VitalsService } from "@/services/vitals_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { Service } from "@/services/service";
-import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
+import PreviousVitals from "@/components/Graphs/previousVitals.vue";
 import { ObservationService } from "@/services/observation_service";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { PatientService } from "@/services/patient_service";
@@ -79,8 +79,12 @@ import { AppEncounterService } from "@/services/app_encounter_service";
 import { PersonService } from "@/services/person_service";
 import { PatientRegistrationService } from "@/services/patient_registration_service";
 import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
+import { RelationshipService } from "@/services/relationship_service";
+import Relationship from "@/views/Mixin/SetRelationship.vue";
+import { DrugOrderService } from "@/services/drug_order_service";
 
 export default defineComponent({
+    mixins: [Relationship],
     components: {
         IonContent,
         IonHeader,
@@ -102,12 +106,22 @@ export default defineComponent({
             BMI: {} as any,
             BPStatus: {} as any,
             vValidations: "" as any,
-            relationships: "" as any,
             hasValidationErrors: [] as any,
             vitalsInstance: {} as any,
             validationStatus: { heightWeight: false, bloodPressure: false } as any,
             showPD: false as boolean,
         };
+    },
+    props: {
+        protectedStatus: String,
+    },
+    watch: {
+        personInformation: {
+            async handler() {
+                await this.setRelationShip();
+            },
+            deep: true,
+        },
     },
     computed: {
         ...mapState(useDemographicsStore, ["demographics"]),
@@ -130,21 +144,42 @@ export default defineComponent({
         },
     },
     async mounted() {
+        const guardianData = await RelationshipService.getRelationships(this.demographics.patient_id);
+
+        modifyFieldValue(this.changeGuardianInfo, "guardianNationalID", "value", this.setAttribute("Regiment ID", guardianData[0]?.relation));
+        modifyFieldValue(this.changeGuardianInfo, "guardianFirstname", "value", guardianData[0]?.relation.names[0]?.given_name);
+        modifyFieldValue(this.changeGuardianInfo, "guardianLastname", "value", guardianData[0]?.relation.names[0]?.family_name);
+        modifyFieldValue(this.changeGuardianInfo, "guardianMiddleName", "value", guardianData[0]?.relation.names[0]?.middle_name);
+        modifyFieldValue(this.changeGuardianInfo, "guardianPhoneNumber", "value", this.setAttribute("Cell Phone Number", guardianData[0]?.relation));
+        modifyFieldValue(this.changeGuardianInfo, "relationship", "value", {
+            id: guardianData[0]?.type.relationship_type_id,
+            name: guardianData[0]?.type.b_is_to_a,
+        });
+        await this.setRelationShip();
         this.resetData();
-        await this.getRelations();
         await this.getVaccineAdverseEffects();
     },
     setup() {
         return { checkmark, pulseOutline };
     },
     methods: {
-        navigationMenu(url: any) {
-            menuController.close();
-            this.$router.push(url);
+        async setRelationShip() {
+            if (this.gender) {
+                await this.getRelationships();
+                modifyFieldValue(this.changeGuardianInfo, "relationship", "displayNone", false);
+                modifyFieldValue(this.changeGuardianInfo, "relationship", "multiSelectData", this.relationships);
+            } else {
+                modifyFieldValue(this.changeGuardianInfo, "relationship", "displayNone", true);
+            }
+        },
+        setAttribute(name: string | undefined, data: any) {
+            if (!data || Object.keys(data).length === 0) return;
+            let str = data.person_attributes.find((x: any) => x.type.name == name);
+            if (str == undefined) return;
+            else return str.value;
         },
         resetData() {
             const rest = useFollowUpStoreStore();
-            rest.setChangeGuardianInfo(rest.getInitialChangeGuardianInfo());
             rest.setProtectedAtBirth(rest.getInitialProtectedAtBirth());
             rest.setVaccineAdverseEffects(rest.getInitialVaccineAdverseEffects());
         },
@@ -163,23 +198,6 @@ export default defineComponent({
                 return false;
             }
         },
-        async getRelations() {
-            modifyFieldValue(this.changeGuardianInfo, "relationship", "value", "");
-            this.relationships = await RelationsService.getRelations();
-            const data = this.relationships
-                .map((r: any) => {
-                    if (r.b_is_to_a == "Other") {
-                        return [{ name: r.b_is_to_a, id: r.relationship_type_id, trackByID: r.relationship_type_id + r.b_is_to_a }];
-                    } else {
-                        return [
-                            { name: r.b_is_to_a + " to " + r.a_is_to_b, id: r.relationship_type_id, trackByID: r.relationship_type_id + r.b_is_to_a },
-                        ];
-                    }
-                })
-                .reduce((acc: any, val: any) => acc.concat(val), []);
-
-            modifyFieldValue(this.changeGuardianInfo, "relationship", "multiSelectData", data);
-        },
 
         async getVaccineAdverseEffects() {
             const vaccineEffect = await ConceptService.getConceptSet("Vaccine adverse effects");
@@ -189,7 +207,11 @@ export default defineComponent({
             if ((await this.createGuardian()) || (await this.saveVaccineAdverseEffects())) modalController.dismiss();
         },
         async saveVaccineAdverseEffects() {
-            const vaccineAdverseEffects = await formatInputFiledData(this.vaccineAdverseEffects);
+            const lastVaccine = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
+            const drugNames = lastVaccine.map((item: any) => item.drug.name).join(",");
+            const vaccineAdverseEffects = await formatInputFiledData(this.vaccineAdverseEffects, HisDate.currentDate, drugNames);
+            console.log("🚀 ~ saveVaccineAdverseEffects ~ vaccineAdverseEffects:", vaccineAdverseEffects);
+
             const userID: any = Service.getUserID();
             if (vaccineAdverseEffects.length > 0) {
                 const registration = new AppEncounterService(this.demographics.patient_id, 203, userID);

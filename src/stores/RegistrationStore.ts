@@ -413,7 +413,7 @@ const initialHomeLocation = [
                             alertsErrorMassage: "",
                             isSingleSelect: true,
                             popOver: true,
-                            trackBy: "district_id",
+                            trackBy: "traditional_authority_id",
                             multiSelectData: [],
                             idName: "district_id",
                             displayNone: true,
@@ -722,13 +722,13 @@ const initialGuardianInformation = [
                 {
                     colData: [
                         {
-                            inputHeader: "First name *",
+                            inputHeader: "First name",
                             icon: icons.fullName,
                             value: "",
                             name: "guardianFirstname",
                             eventType: "input",
                             alertsErrorMassage: "",
-                            validationFunctionName: "isName",
+                            validationFunctionName: "isNameEmpty",
                         },
                     ],
                 },
@@ -741,13 +741,13 @@ const initialGuardianInformation = [
                 {
                     colData: [
                         {
-                            inputHeader: "Last name *",
+                            inputHeader: "Last name",
                             icon: icons.fullName,
                             value: "",
                             name: "guardianLastname",
                             eventType: "input",
                             alertsErrorMassage: "",
-                            validationFunctionName: "isName",
+                            validationFunctionName: "isNameEmpty",
                         },
                     ],
                 },
@@ -766,6 +766,7 @@ const initialGuardianInformation = [
                             name: "guardianMiddleName",
                             eventType: "input",
                             alertsErrorMassage: "",
+                            validationFunctionName: "isNamesEmpty",
                         },
                     ],
                 },
@@ -821,7 +822,7 @@ export const useRegistrationStore = defineStore("registrationStore", {
         personInformation: [...initialPersonalInformation],
         socialHistory: [...initialSocialHistory],
         homeLocation: [...initialHomeLocation],
-        currentLocation: [...initialCurrentLocation ],
+        currentLocation: [...initialCurrentLocation],
         guardianInformation: [...initialGuardianInformation],
         addTA: [...initialAddTA],
         addVillage: [...initialAddVillage],
@@ -864,5 +865,5 @@ export const useRegistrationStore = defineStore("registrationStore", {
             return [...data];
         },
     },
-    persist: true,
+    // persist: true,
 });

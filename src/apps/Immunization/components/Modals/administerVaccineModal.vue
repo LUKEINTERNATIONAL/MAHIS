@@ -92,11 +92,12 @@ import { Service } from "@/services/service";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import HisDate from "@/utils/Date";
 import BasicInputField from "@/components/BasicInputField.vue";
-import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
+import PreviousVitals from "@/components/Graphs/previousVitals.vue";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { saveVaccineAdministeredDrugs, getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service";
 import { isEmpty } from "lodash";
-import QRCodeReadersrc from "@/components/QRCodeReader.vue"
+import voidAdminstredVaccine from "./voidAdminstredVaccine.vue"
+import QRCodeReadersrc from "@/components/QRCodeReader.vue";
 import { createModal } from "@/utils/Alerts";
 import {
     modifyCheckboxInputField,
@@ -153,6 +154,7 @@ export default defineComponent({
         const store = useAdministerVaccineStore();
         this.showPD = store.isVaccinePassed();
         this.showDateBtns = !this.showPD;
+        this.checkIfAdminstredAndAskToVoid()
     },
     setup() {
         return { checkmark, pulseOutline };
@@ -183,8 +185,8 @@ export default defineComponent({
         loadCurrentSelectedDrug() {
             const store = useAdministerVaccineStore();
             this.currentDrug = store.getCurrentSelectedDrug();
-            this.drugName = this.currentDrug.drug_name;
-            this.batchNumber = this.currentDrug.vaccine_batch_number ? this.currentDrug.vaccine_batch_number : "";
+            this.drugName = this.currentDrug.drug.drug_name;
+            this.batchNumber = this.currentDrug.drug.vaccine_batch_number ? this.currentDrug.drug.vaccine_batch_number : "";
         },
         showCPD() {
             this.showPD = true as boolean;
@@ -212,7 +214,7 @@ export default defineComponent({
         },
         updateBatchNumber(event: any) {
             const input = event.target.value;
-            this.batchNumber = input || this.tempScannedBatchNumber?.text || '';
+            this.batchNumber = input || this.tempScannedBatchNumber?.text || "";
         },
         saveDta(date_: any) {
             this.validateBatchNumber();
@@ -228,7 +230,7 @@ export default defineComponent({
             const dta = {
                 batch_number: this.batchNumber,
                 date_administered: date_,
-                drug_id: this.currentDrug.drug_id,
+                drug_id: this.currentDrug.drug.drug_id,
             };
             const store = useAdministerVaccineStore();
             store.setAdministeredVaccine(dta);
@@ -237,7 +239,7 @@ export default defineComponent({
             this.dismiss();
         },
         isAlphaNumeric(text: string) {
-            const regex = /^[a-zA-Z0-9]+$/;
+            const regex = /^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+$/;
             return regex.test(text);
         },
         validateBatchNumber() {
@@ -249,7 +251,6 @@ export default defineComponent({
             }
         },
         updateBatchNumberByPassValue(input: any) {
-            console.log(input, "qqqqqqqwwwwwwwwwwww");
             this.batchNumber = input;
         },
         displayUserNames() {
@@ -262,6 +263,17 @@ export default defineComponent({
         showQRcode() {
             // createModal(QRCodeReadersrc, { class: "otherVitalsModal qr_code_modal" }, false)
         },
+        async checkIfAdminstredAndAskToVoid() {
+            if(this.currentDrug.drug.status == 'administered') {
+                const store = useAdministerVaccineStore();
+                const vaccine_to_void = store.getCurrentSelectedDrug()
+                store.setVaccineToBeVoided(vaccine_to_void)
+                const data = await createModal(voidAdminstredVaccine, { class: "otherVitalsModal" }, false)
+                if(data?.voided == true) {
+                    this.dismiss()
+                }
+            }
+        }
     },
 });
 </script>

@@ -82,7 +82,12 @@ export class AuthService {
         sessionStorage.setItem("APIVersion", this.systemVersion);
         localStorage.setItem(AuthVariable.CORE_VERSION, this.coreVersion);
     }
-
+    checkUserPrograms(selectedProgram: any) {
+        const accessPrograms: any = sessionStorage.getItem("userPrograms");
+        const programs = JSON.parse(accessPrograms);
+        return programs.some((program: any) => program.name === selectedProgram);
+        console.log("🚀 ~ AuthService ~ checkUserProgram ~ programs:", programs);
+    }
     clearSession() {
         sessionStorage.clear();
     }

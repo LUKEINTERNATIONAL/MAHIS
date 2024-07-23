@@ -1,5 +1,5 @@
 <template>
-    <basic-card :content="cardData" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-card>
+    <basic-card :content="cardData" :editable="editable" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-card>
 </template>
 
 <script lang="ts">
@@ -11,12 +11,14 @@ import { useRegistrationStore } from "@/stores/RegistrationStore";
 import { mapState } from "pinia";
 import BasicCard from "../BasicCard.vue";
 import HisDate from "@/utils/Date";
-import { getCheckboxSelectedValue, getFieldValue, getRadioSelectedValue, modifyFieldValue } from "@/services/data_helpers";
+import { getCheckboxSelectedValue, getFieldValue, getRadioSelectedValue, modifyFieldValue, modifyRadioValue } from "@/services/data_helpers";
 import { validateField } from "@/services/validation_service";
 import dayjs from "dayjs";
 import { Service } from "@/services/service";
 import { calculator } from "ionicons/icons";
 import Validation from "@/validations/StandardValidations";
+import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
+import { useDemographicsStore } from "@/stores/DemographicStore";
 
 export default defineComponent({
     name: "Menu",
@@ -46,9 +48,15 @@ export default defineComponent({
             deep: true,
         },
     },
+    props: {
+        editable: {
+            default: false as any,
+        },
+    },
     computed: {
         ...mapState(useRegistrationStore, ["personInformation"]),
         ...mapState(useRegistrationStore, ["guardianInformation"]),
+        ...mapState(useDemographicsStore, ["demographics", "patient"]),
         nationalID() {
             return getFieldValue(this.personInformation, "nationalID", "value");
         },
@@ -78,11 +86,25 @@ export default defineComponent({
         },
     },
     async mounted() {
-        this.updateRegistrationStores();
         this.buildCards();
+        this.setData();
+        this.setData();
     },
 
     methods: {
+        setData() {
+            if (this.editable) {
+                modifyFieldValue(this.personInformation, "firstname", "value", this.patient.person.names[0].given_name);
+                modifyFieldValue(this.personInformation, "middleName", "value", this.patient.person.names[0].middle_name);
+                modifyFieldValue(this.personInformation, "lastname", "value", this.patient.person.names[0].family_name);
+                modifyFieldValue(this.personInformation, "birthdate", "value", this.patient.person.birthdate);
+                modifyRadioValue(this.personInformation, "gender", "selectedValue", this.patient.person.gender);
+                modifyFieldValue(this.personInformation, "phoneNumber", "value", this.getAttributes(this.patient, "Cell Phone Number"));
+            }
+        },
+        getAttributes(item: any, name: any) {
+            return item.person.person_attributes.find((attribute: any) => attribute.type.name === name)?.value;
+        },
         buildCards() {
             const personalInformation = useRegistrationStore();
             this.cardData = {
@@ -99,10 +121,6 @@ export default defineComponent({
         openModal() {
             createModal(DispositionModal);
         },
-        async updateRegistrationStores() {
-            const registrationStore = useRegistrationStore();
-            registrationStore.setPersonalInformation(this.personInformation);
-        },
 
         validationRules(event: any) {
             return validateField(this.personInformation, event.name, (this as any)[event.name]);
@@ -117,18 +135,36 @@ export default defineComponent({
             // Estimated age
             this.validationRules(event);
             this.calculateDoB(event);
-            this.calculateAge(event);
+            this.setGuardingInfo(event);
         },
-        calculateAge(event: any) {
-            const updateGuardianInfo = (value: boolean) => modifyFieldValue(this.guardianInformation, "guardianNationalID", "displayNone", value);
-            if (event.name == "birthdate") {
-                HisDate.getAgeInYears(event.value) < 17 ? updateGuardianInfo(false) : updateGuardianInfo(true);
-
-                modifyFieldValue(this.personInformation, "estimation", "value", HisDate.getAgeInYears(event.value));
-                this.validationRules({ name: "estimation" });
+        setGuardingFormRules(age: any) {
+            if (age < 14) {
+                modifyFieldValue(this.guardianInformation, "guardianFirstname", "inputHeader", "First name *");
+                modifyFieldValue(this.guardianInformation, "guardianLastname", "inputHeader", "Last name *");
+                modifyFieldValue(this.guardianInformation, "guardianFirstname", "validationFunctionName", "isName");
+                modifyFieldValue(this.guardianInformation, "guardianLastname", "validationFunctionName", "isName");
+                modifyFieldValue(this.guardianInformation, "relationship", "inputHeader", "Relationship to patient *");
+                modifyFieldValue(this.guardianInformation, "relationship", "validationFunctionName", "isNameWithSlush");
+            } else {
+                modifyFieldValue(this.guardianInformation, "guardianFirstname", "inputHeader", "First name");
+                modifyFieldValue(this.guardianInformation, "guardianLastname", "inputHeader", "Last name");
+                modifyFieldValue(this.guardianInformation, "guardianFirstname", "validationFunctionName", "isNameEmpty");
+                modifyFieldValue(this.guardianInformation, "guardianLastname", "validationFunctionName", "isNameEmpty");
+                modifyFieldValue(this.guardianInformation, "relationship", "inputHeader", "Relationship to patient");
+                modifyFieldValue(this.guardianInformation, "relationship", "validationFunctionName", "");
+                modifyFieldValue(this.guardianInformation, "relationship", "alertsErrorMassage", "");
             }
-            if (event.inputHeader == "Estimated age") {
-                event.value < 17 ? updateGuardianInfo(false) : updateGuardianInfo(true);
+            validateInputFiledData(this.guardianInformation);
+        },
+        setGuardingInfo(event: any) {
+            const updateGuardianInfo = (value: boolean) => modifyFieldValue(this.guardianInformation, "guardianNationalID", "displayNone", value);
+            if (event.name == "birthdate" || event.inputHeader == "Estimated age") {
+                HisDate.getAgeInYears(this.birthdate) < 14 ? updateGuardianInfo(false) : updateGuardianInfo(true);
+                this.setGuardingFormRules(HisDate.getAgeInYears(this.birthdate));
+                if (event.name == "birthdate") {
+                    modifyFieldValue(this.personInformation, "estimation", "value", HisDate.getAgeInYears(event.value));
+                    this.validationRules({ name: "estimation" });
+                }
             }
         },
         calculateDoB(event: any) {
@@ -178,7 +214,7 @@ export default defineComponent({
             this.personInformation[7].data.rowData[0].colData[0].alertsErrorMassage = "";
             if (!this.personInformation[7].data.rowData[0].colData[0].unitsData.value) {
                 this.personInformation[7].data.rowData[0].colData[0].alertsErrorMassage = true;
-                this.personInformation[7].data.rowData[0].colData[0].alertsErrorMassage = "Duration Units Required";
+                this.personInformation[7].data.rowData[0].colData[0].alertsErrorMassage = "Estimation Units Required";
                 return false;
             }
 
