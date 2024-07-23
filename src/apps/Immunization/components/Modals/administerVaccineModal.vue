@@ -96,7 +96,6 @@ import PreviousVitals from "@/components/Graphs/previousVitals.vue";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { saveVaccineAdministeredDrugs, getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service";
 import { isEmpty } from "lodash";
-import voidAdminstredVaccine from "./voidAdminstredVaccine.vue"
 import QRCodeReadersrc from "@/components/QRCodeReader.vue";
 import { createModal } from "@/utils/Alerts";
 import {
@@ -154,7 +153,6 @@ export default defineComponent({
         const store = useAdministerVaccineStore();
         this.showPD = store.isVaccinePassed();
         this.showDateBtns = !this.showPD;
-        this.checkIfAdminstredAndAskToVoid()
     },
     setup() {
         return { checkmark, pulseOutline };
@@ -259,20 +257,6 @@ export default defineComponent({
             const first_name = user.person.names[0].given_name;
             const last_name = user.person.names[0].family_name;
             this.full_name = first_name + " " + last_name;
-        },
-        showQRcode() {
-            // createModal(QRCodeReadersrc, { class: "otherVitalsModal qr_code_modal" }, false)
-        },
-        async checkIfAdminstredAndAskToVoid() {
-            if(this.currentDrug.drug.status == 'administered') {
-                const store = useAdministerVaccineStore();
-                const vaccine_to_void = store.getCurrentSelectedDrug()
-                store.setVaccineToBeVoided(vaccine_to_void)
-                const data = await createModal(voidAdminstredVaccine, { class: "otherVitalsModal" }, false)
-                if(data?.voided == true) {
-                    this.dismiss()
-                }
-            }
         }
     },
 });

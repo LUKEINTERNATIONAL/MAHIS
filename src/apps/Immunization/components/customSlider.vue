@@ -209,17 +209,17 @@ export default defineComponent({
         findMissingVaccines(milestone: any) {
             const obj = {
                 age: milestone.age,
-                vaccines: [] as any,
+                antigens: [] as any,
             };
             if (milestone.milestone_status == "passed") {
                 milestone.antigens.forEach((vaccine: any) => {
                     if (vaccine.status == "pending") {
-                        obj.vaccines.push(vaccine);
+                        obj.antigens.push(vaccine);
                     }
                 });
             }
             const vaccineScheduleStore = useAdministerVaccineStore();
-            if (obj.vaccines.length > 0) {
+            if (obj.antigens.length > 0) {
                 vaccineScheduleStore.setMissedVaccineSchedules(obj);
             }
         },

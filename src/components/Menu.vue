@@ -53,6 +53,17 @@
                                     </ion-list>
                                 </div>
                             </ion-accordion>
+                            <ion-accordion value="fourth">
+                                <ion-item slot="header">
+                                    <ion-label class="header">EIR Reports</ion-label>
+                                </ion-item>
+                                <div class="content" slot="content">
+                                    <ion-list>
+                                        <ion-item @click="navigationMenu('setSessionDate')" class="list-content">Indicators And Performance Metrics
+                                        </ion-item>
+                                    </ion-list>
+                                </div>
+                            </ion-accordion>
                         </ion-accordion-group>
                     </div>
                 </ion-accordion>
