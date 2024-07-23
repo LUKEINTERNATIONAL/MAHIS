@@ -2,11 +2,11 @@
     <ion-header>
         <div class="header position_content">
             <div style="display: flex; align-items: center" @click="dismiss()">
-                <ion-icon slot="separator" size="large" :icon="iconsContent.arrowLeft"></ion-icon>
+                <ion-icon slot="separator" size="large" :icon="iconsContent.arrowLeftWhite"></ion-icon>
             </div>
             <div style="font-size: 1.2em; font-weight: 700">{{ title }}</div>
-            <div style="display: flex; align-items: center">
-                <ion-icon slot="separator" size="large" :icon="iconsContent.filler"></ion-icon>
+            <div style="display: flex; align-items: center" @click="openPopover($event)">
+                <ion-icon slot="separator" size="large" :icon="iconsContent.fillerWhite"></ion-icon>
             </div>
         </div>
     </ion-header>
@@ -50,6 +50,20 @@
                 </ion-card-content>
             </ion-card>
         </div>
+        <ion-popover
+            style="--offset-x: -10px"
+            :is-open="popoverOpen"
+            :show-backdrop="false"
+            :dismiss-on-select="true"
+            :event="event"
+            @didDismiss="popoverOpen = false"
+        >
+            <div>
+                <ion-list style="--ion-background-color: #fff; --offset-x: -30px">
+                    <ion-item :button="true" :detail="false" style="cursor: pointer"></ion-item>
+                </ion-list>
+            </div>
+        </ion-popover>
     </ion-content>
 </template>
 <script lang="ts">
@@ -133,6 +147,8 @@ export default defineComponent({
     },
     data() {
         return {
+            popoverOpen: false,
+            event: null as any,
             iconsContent: icons,
             showPD: false as boolean,
             batchNumber: "" as any,
@@ -234,6 +250,10 @@ export default defineComponent({
         return { person, pulseOutline, clipboardOutline };
     },
     methods: {
+        openPopover(e: Event) {
+            this.event = e;
+            this.popoverOpen = true;
+        },
         showCPD() {
             this.showPD = true as boolean;
             this.showDateBtns = false as boolean;
@@ -407,10 +427,13 @@ h5 {
     font-size: 14px;
 }
 .header {
-    color: #000;
+    color: #fff;
     display: flex;
     justify-content: space-between;
     padding: 10px 20px 10px 20px;
+}
+ion-header {
+    background: #006401;
 }
 </style>
 <style>
