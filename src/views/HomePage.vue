@@ -65,12 +65,12 @@
                     <ion-card-content>
                         <div class="overDueCardContent">
                             <div class="overDueCard">
-                                <div class="statsValue" style="color: #da6e6e">0</div>
-                                <div class="statsText" style="color: #da6e6e">Under 5yrs</div>
+                                <div class="statsValue">0</div>
+                                <div class="statsText">Under 5yrs</div>
                             </div>
                             <div class="overDueCard">
-                                <div class="statsValue" style="color: #da6e6e">0</div>
-                                <div class="statsText" style="color: #da6e6e">Over 5yrs</div>
+                                <div class="statsValue">0</div>
+                                <div class="statsText">Over 5yrs</div>
                             </div>
                         </div>
                     </ion-card-content>
@@ -352,7 +352,7 @@ ion-card {
     gap: 2vw;
 }
 .overDueCard {
-    border: 1px solid #ccc;
+    border: 1px solid #ea5959;
     padding: 4vw;
     border-radius: 8px;
     min-width: 150px;
@@ -361,6 +361,24 @@ ion-card {
     background: rgb(254, 205, 202);
     width: 100vw;
 }
+.overDueCard .statsValue {
+    color: #da6e6e;
+}
+.overDueCard .statsText {
+    color: #da6e6e;
+}
+.overDueCard:hover {
+    background-color: #ffc1c1;
+    cursor: pointer;
+    color: #fff;
+}
+
+.overDueCard:active {
+    background-color: #fcb4b4;
+    color: #fff;
+    transform: scale(0.98);
+}
+
 .dueCard {
     border: 1px solid #ccc;
     padding: 4vw;
