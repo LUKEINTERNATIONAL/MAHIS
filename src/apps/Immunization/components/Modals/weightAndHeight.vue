@@ -78,6 +78,8 @@ import { mapState } from "pinia";
 import { VitalsEncounter } from "@/apps/Immunization/services/vitals";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { isEmpty } from "lodash";
+import Localbase from "localbase";
+let db = new Localbase("db");
 
 export default defineComponent({
     name: "Home",
@@ -168,6 +170,14 @@ export default defineComponent({
             let height = null;
             if (heightValue) height = vitalsInstance.validator({ inputHeader: "Height*", value: heightValue });
             const weight = vitalsInstance.validator({ inputHeader: "Weight*", value: weightValue });
+            db.collection("patientRecords")
+                .doc({ patientID: 1721822809464 })
+                .update({
+                    vitals: {
+                        weight: weightValue,
+                        height: heightValue,
+                    },
+                });
             if (weight == null && height == null) {
                 const encounter = await vitalsInstance.createEncounter();
                 if (!encounter) return toastWarning("Unable to create vitals encounter");
