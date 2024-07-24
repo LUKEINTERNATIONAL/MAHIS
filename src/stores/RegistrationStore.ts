@@ -580,45 +580,67 @@ const initialClosestLandmark = [
                             multiSelectData: [
                                 {
                                     id: 1,
-                                    name: "Catholic Church",
+                                    name: "Church",
                                 },
+
                                 {
                                     id: 2,
-                                    name: "CCAP",
-                                },
-                                {
-                                    id: 3,
-                                    name: "Seventh Day",
-                                },
-                                {
-                                    id: 4,
                                     name: "Mosque",
                                 },
                                 {
-                                    id: 5,
+                                    id: 3,
                                     name: "Primary School",
                                 },
                                 {
-                                    id: 6,
+                                    id: 4,
                                     name: "Borehole",
                                 },
                                 {
-                                    id: 7,
+                                    id: 5,
                                     name: "Secondary School",
                                 },
                                 {
-                                    id: 8,
+                                    id: 6,
                                     name: "College",
                                 },
                                 {
-                                    id: 9,
+                                    id: 7,
                                     name: "Market",
                                 },
                                 {
-                                    id: 10,
+                                    id: 8,
                                     name: "Football Ground",
                                 },
+                                {
+                                    id: 9,
+                                    name: "Other",
+                                },
                             ],
+
+                        },
+
+                    ],
+                },
+            ],
+        },
+    },
+    {
+        isFinishBtn: false,
+        sectionHeader: "",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            class: "",
+                            displayNone:true,
+                            inputHeader: "Specify Landmark*",
+                            value: "",
+                            icon: icons.editPen,
+                            name: "Other (specify)",
+                            valueType: "text",
+                            eventType: "input",
+                            alertsErrorMassage: "",
                         },
                     ],
                 },
@@ -836,6 +858,9 @@ export const useRegistrationStore = defineStore("registrationStore", {
         },
         setCurrentLocation(data: any) {
             this.currentLocation = data;
+        },
+        setClosestLandmark(data:any) {
+            this.closestLandmark=data;
         },
         setGuardianInformation(data: any) {
             this.guardianInformation = data;

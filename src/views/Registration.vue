@@ -210,6 +210,7 @@ export default defineComponent({
         ...mapState(useRegistrationStore, ["socialHistory"]),
         ...mapState(useRegistrationStore, ["homeLocation"]),
         ...mapState(useRegistrationStore, ["currentLocation"]),
+        ...mapState(useRegistrationStore, ["closestLandmark"]),
         ...mapState(useRegistrationStore, ["guardianInformation"]),
         ...mapState(useConfigurationStore, ["registrationDisplayType"]),
         ...mapState(useBirthRegistrationStore, ["birthRegistration"]),
@@ -392,7 +393,8 @@ export default defineComponent({
             ) {
                 this.disableSaveBtn = true;
                 await this.buildPersonalInformation();
-                if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
+                console.log(this.buildPersonalInformation())
+              if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
                 const registration: any = new PatientRegistrationService();
                 await registration.registerPatient(this.personInformation[0].selectedData, []);
                 const patientID = registration.getPersonID();
@@ -525,6 +527,7 @@ export default defineComponent({
                 current_traditional_authority: this.current_traditional_authority,
                 current_village: this.current_village,
                 landmark: getFieldValue(this.currentLocation, "closestLandmark", "value")?.name,
+                other_landmark: getFieldValue(this.closestLandmark,"Other (specify)","value")?.name,
                 cell_phone_number: getFieldValue(this.personInformation, "phoneNumber", "value"),
                 occupation: getRadioSelectedValue(this.socialHistory, "occupation"),
                 marital_status: getRadioSelectedValue(this.socialHistory, "maritalStatus"),
