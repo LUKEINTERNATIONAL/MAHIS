@@ -113,7 +113,7 @@
 
 <script lang="ts">
 import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonBreadcrumb, IonBreadcrumbs, IonIcon } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { defineComponent, toRaw } from "vue";
 import { arrowForwardCircle, grid, list } from "ionicons/icons";
 import { icons } from "@/utils/svg";
 import DynamicButton from "@/components/DynamicButton.vue";
@@ -149,7 +149,6 @@ import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
 import { PatientProgramService } from "@/services/patient_program_service";
 import { resetDemographics } from "@/services/reset_data";
 import Localbase from "localbase";
-
 let db = new Localbase("db");
 export default defineComponent({
     mixins: [ScreenSizeMixin],
@@ -399,10 +398,11 @@ export default defineComponent({
                 this.disableSaveBtn = true;
                 if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
 
-                db.collection("registration").add({
+                await db.collection("patientRecords").add({
                     patientID: Date.now(),
-                    personInformation: this.personInformation[0].selectedData,
-                    guardianInformation: this.guardianInformation[0].selectedData,
+                    personInformation: toRaw(this.personInformation[0].selectedData),
+                    guardianInformation: toRaw(this.guardianInformation[0].selectedData),
+                    birthRegistration: toRaw(this.birthRegistration),
                 });
 
                 const registration: any = new PatientRegistrationService();
