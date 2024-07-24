@@ -16,11 +16,11 @@
         </ion-row>
         <ion-row>
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                >Batch number<span style="color: #b42318">*</span></ion-label
+                >Select Batch number<span style="color: #b42318">*</span></ion-label
             >
         </ion-row>
         <div>
-            <BasicInputField
+            <!-- <BasicInputField
                 :placeholder="'Enter batch number'"
                 :icon="iconsContent.batchNumber"
                 :inputValue="batchNumber"
@@ -34,14 +34,15 @@
                 <ion-label v-if="is_batch_number_valid" class="error-label">
                     {{ batch_number_error_message }}
                 </ion-label>
-            </div>
+            </div> -->
+            <lotNumberList :action="childAction" ref="childComponentRef" @actionTriggered="ActionTriggered"/>
         </div>
 
         <div class="client_admi">
             <span class="client_admi_sub">Vaccination done by: </span><span class="client_admin_sub_x">{{ full_name }}</span>
         </div>
 
-        <customDatePicker v-if="showPD" @dateChange="updateDate" />
+        <customDatePicker v-if="showPD" @dateChange="updateDate"/>
         <div class="btnContent">
             <div class="saveBtn" v-if="showDateBtns">
                 <div>
@@ -82,7 +83,7 @@
 
 <script lang="ts">
 import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController, IonInput, modalController } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { checkmark, pulseOutline } from "ionicons/icons";
 import { icons } from "@/utils/svg";
 import { useDemographicsStore } from "@/stores/DemographicStore";
@@ -107,6 +108,7 @@ import {
     modifyFieldValue,
 } from "@/services/data_helpers";
 import { useUserStore } from "@/stores/userStore";
+import lotNumberList from "./lotNumberList.vue"
 
 export default defineComponent({
     components: {
@@ -121,6 +123,7 @@ export default defineComponent({
         BasicInputField,
         PreviousVitals,
         customDatePicker,
+        lotNumberList,
     },
     data() {
         return {
@@ -142,10 +145,24 @@ export default defineComponent({
                     createModal(QRCodeReadersrc, { class: "otherVitalsModal qr_code_modal" }, false);
                 },
             },
+            selected_date_: '',
         };
     },
     computed: {
         ...mapState(useAdministerVaccineStore, ["tempScannedBatchNumber"]),
+    },
+
+    setup() {
+        const childComponentRef = ref<InstanceType<typeof lotNumberList> | null>(null);
+        const triggerChildAction = () => {
+            if (childComponentRef.value) {
+                childComponentRef.value.performAction();
+            }
+        };
+        return {
+            childComponentRef,
+            triggerChildAction,
+        };
     },
     async mounted() {
         this.loadCurrentSelectedDrug();
@@ -153,9 +170,6 @@ export default defineComponent({
         const store = useAdministerVaccineStore();
         this.showPD = store.isVaccinePassed();
         this.showDateBtns = !this.showPD;
-    },
-    setup() {
-        return { checkmark, pulseOutline };
     },
     props: {
         customSchedule: {
@@ -214,20 +228,11 @@ export default defineComponent({
             const input = event.target.value;
             this.batchNumber = input || this.tempScannedBatchNumber?.text || "";
         },
-        saveDta(date_: any) {
-            this.validateBatchNumber();
-            if (this.is_batch_number_valid == true) {
-                toastWarning("Enter batch number!");
-                return;
-            }
-
-            if (this.batchNumber == "") {
-                toastWarning("Enter batch number!");
-                return;
-            }
+        ActionTriggered(selectedOption: any) {
+            console.log(selectedOption)
             const dta = {
-                batch_number: this.batchNumber,
-                date_administered: date_,
+                batch_number: selectedOption.lotNumber,
+                date_administered: this.selected_date_,
                 drug_id: this.currentDrug.drug.drug_id,
             };
             const store = useAdministerVaccineStore();
@@ -235,6 +240,30 @@ export default defineComponent({
             saveVaccineAdministeredDrugs();
             store.setTempScannedBatchNumber(null);
             this.dismiss();
+        },
+        saveDta(date_: any) {
+            this.selected_date_ = date_
+            this.triggerChildAction()
+            // this.validateBatchNumber();
+            // if (this.is_batch_number_valid == true) {
+            //     toastWarning("Enter batch number!");
+            //     return;
+            // }
+
+            // if (this.batchNumber == "") {
+            //     toastWarning("Enter batch number!");
+            //     return;
+            // }
+            // const dta = {
+            //     batch_number: this.batchNumber,
+            //     date_administered: date_,
+            //     drug_id: this.currentDrug.drug.drug_id,
+            // };
+            // const store = useAdministerVaccineStore();
+            // store.setAdministeredVaccine(dta);
+            // saveVaccineAdministeredDrugs();
+            // store.setTempScannedBatchNumber(null);
+            // this.dismiss();
         },
         isAlphaNumeric(text: string) {
             const regex = /^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+$/;
@@ -257,6 +286,9 @@ export default defineComponent({
             const first_name = user.person.names[0].given_name;
             const last_name = user.person.names[0].family_name;
             this.full_name = first_name + " " + last_name;
+        },
+        childAction() {
+            console.log('Action triggered in ChildComponent');
         }
     },
 });
