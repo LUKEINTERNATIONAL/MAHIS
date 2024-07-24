@@ -149,14 +149,6 @@ export default defineComponent({
       modifyFieldValue(this.currentLocation, "current_village", "multiSelectData", targetData);
       modifyFieldValue(this.currentLocation, "current_village", "displayNone", false);
     },
-    // handleClosestLandmark() {
-    //   const selectedLandmark = getFieldValue(this.closestLandmark, "closestLandmark", "value");
-    //   if (selectedLandmark?.name === "Other") {
-    //     modifyFieldValue(this.closestLandmark, "Other (specify)", "displayNone", false);
-    //   } else {
-    //     modifyFieldValue(this.closestLandmark, "Other (specify)", "displayNone", true);
-    //   }
-    // }
 
   },
 });
