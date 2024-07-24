@@ -15,6 +15,8 @@
 import { IonRadio, IonRadioGroup, IonItem, IonList } from '@ionic/vue'
 import { defineComponent, PropType } from 'vue'
 import { toastWarning } from "@/utils/Alerts"
+import { StockService } from '@/services/stock_service'
+import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import _ from 'lodash'
 
 export default defineComponent({
@@ -23,24 +25,14 @@ export default defineComponent({
         action: {
             type: Function as PropType<() => void>,
             required: true
-        }
+        },
+    },
+    async mounted() {
+        this.loadCurrentSelectedDrug()
     },
     data() {
         return {
-            lotNumbers: [
-                {
-                    id: 1,
-                    lotNumber: 'KHH8789BJH',
-                },
-                {
-                    id: 2,
-                    lotNumber: 'HGH7T78Y6B',
-                },
-                {
-                    id: 3,
-                    lotNumber: 'ADFVHKK78C',
-                },
-            ],
+            lotNumbers: [] as any,
             selectedOption: {} as any,
         }
     },
@@ -63,6 +55,28 @@ export default defineComponent({
             if (this.checkIfSelected() == true) {
                 this.$emit('actionTriggered', this.selectedOption);
             }   
+        },
+        async loadCurrentSelectedDrug() {
+            const store = useAdministerVaccineStore();
+            const currentDrug = store.getCurrentSelectedDrug();
+            await this.formBatchList(currentDrug.drug.drug_id)
+        },
+        async formBatchList(drugId: number) {
+            try {
+                const stockService = new StockService();
+                const data = await stockService.getItem(drugId)
+
+                data.forEach((drug: any) => {
+                    const listItem = { 
+                        id: drug.id,
+                        lotNumber: drug.batch_number,
+                    }
+                    this.lotNumbers.push(listItem)
+                })
+                console.log(data)
+            } catch (error) {
+                
+            }
         }
     },
 });
