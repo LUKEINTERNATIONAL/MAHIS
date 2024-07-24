@@ -63,8 +63,12 @@ export default defineComponent({
         },
         async formBatchList(drugId: number) {
             try {
-                const stockService = new StockService();
-                const data = await stockService.getItem(drugId)
+                const store = useAdministerVaccineStore()
+                const data = store.getLotNumberData()
+
+                if(data.length == 0) {
+                    this.$emit('emptyList', '');
+                }
 
                 data.forEach((drug: any) => {
                     const listItem = { 
@@ -73,7 +77,6 @@ export default defineComponent({
                     }
                     this.lotNumbers.push(listItem)
                 })
-                console.log(data)
             } catch (error) {
                 
             }

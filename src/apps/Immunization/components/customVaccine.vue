@@ -51,6 +51,9 @@ import { createModal } from "@/utils/Alerts";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import { PatientService } from "@/services/patient_service";
 import voidAdminstredVaccine from "@/apps/Immunization/components/Modals/voidAdminstredVaccine.vue"
+import { StockService } from '@/services/stock_service'
+import alert from "@/apps/Immunization/components/Modals/alert.vue"
+import { mapState } from "pinia";
 export default defineComponent({
     name: "Home",
     components: {
@@ -73,6 +76,7 @@ export default defineComponent({
         IonModal,
         IonCol,
         IonRow,
+        alert,
     },
     data() {
         return {
@@ -95,9 +99,8 @@ export default defineComponent({
     },
     watch: {},
     setup() {
-        return {};
+        return {}
     },
-
     methods: {
         getColorForVaccine(vaccine: any) {
             if (vaccine.status == "administered") {
@@ -140,11 +143,23 @@ export default defineComponent({
                 }
             }
         },
-        openAdministerVaccineModal(data: any) {
+        async openAdministerVaccineModal(data: any) {
             const store = useAdministerVaccineStore();
             store.setCurrentSelectedDrug(data)
-            if (this.checkIfAdminstredAndAskToVoid() == false) {
-                createModal(administerVaccineModal, { class: "otherVitalsModal" });
+            const stockService = new StockService();
+            const data_ = await stockService.getItem(data.drug_id)
+            store.setLotNumberData(data_)
+
+            if(data_.length == 0) {
+                if (this.checkIfAdminstredAndAskToVoid() == false) {
+                    createModal(alert, { class: "otherVitalsModal" })
+                }
+            }
+
+            if(data_.length > 0) {
+                if (this.checkIfAdminstredAndAskToVoid() == false) {
+                    createModal(administerVaccineModal, { class: "otherVitalsModal" });
+                }
             }
         },
         disableVaccine(vaccine: any) {
@@ -177,7 +192,7 @@ export default defineComponent({
                 return true
             }
             return false
-        }
+        },
     },
 });
 </script>

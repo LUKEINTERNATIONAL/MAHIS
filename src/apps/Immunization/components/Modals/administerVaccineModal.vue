@@ -35,7 +35,7 @@
                     {{ batch_number_error_message }}
                 </ion-label>
             </div> -->
-            <lotNumberList :action="childAction" ref="childComponentRef" @actionTriggered="ActionTriggered"/>
+            <lotNumberList :action="childAction" ref="childComponentRef" @actionTriggered="ActionTriggered" @emptyList="ShowAlert"/>
         </div>
 
         <div class="client_admi">
@@ -99,6 +99,7 @@ import { saveVaccineAdministeredDrugs, getVaccinesSchedule } from "@/apps/Immuni
 import { isEmpty } from "lodash";
 import QRCodeReadersrc from "@/components/QRCodeReader.vue";
 import { createModal } from "@/utils/Alerts";
+import alert from "./alert.vue"
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -124,6 +125,7 @@ export default defineComponent({
         PreviousVitals,
         customDatePicker,
         lotNumberList,
+        alert,
     },
     data() {
         return {
@@ -289,6 +291,10 @@ export default defineComponent({
         },
         childAction() {
             console.log('Action triggered in ChildComponent');
+        },
+        ShowAlert() {
+            // createModal(alert, { class: "otherVitalsModal" }, false);
+            // this.dismiss()
         }
     },
 });
