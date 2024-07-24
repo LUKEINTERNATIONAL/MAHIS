@@ -148,7 +148,9 @@ import { AppEncounterService } from "@/services/app_encounter_service";
 import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
 import { PatientProgramService } from "@/services/patient_program_service";
 import { resetDemographics } from "@/services/reset_data";
+import Localbase from "localbase";
 
+let db = new Localbase("db");
 export default defineComponent({
     mixins: [ScreenSizeMixin],
     components: {
@@ -396,6 +398,13 @@ export default defineComponent({
             ) {
                 this.disableSaveBtn = true;
                 if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
+
+                db.collection("registration").add({
+                    patientID: Date.now(),
+                    personInformation: this.personInformation[0].selectedData,
+                    guardianInformation: this.guardianInformation[0].selectedData,
+                });
+
                 const registration: any = new PatientRegistrationService();
                 await registration.registerPatient(this.personInformation[0].selectedData, []);
                 const patientID = registration.getPersonID();
