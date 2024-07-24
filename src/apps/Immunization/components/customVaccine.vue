@@ -159,7 +159,7 @@ export default defineComponent({
             if (vaccine.can_administer != null && vaccine.can_administer == true) {
                 return false;
             }
-            return false;
+            // return true;
         },
         checkVaccineName(name: string) {
             return name.replace(/Pentavalent/g, "Penta");

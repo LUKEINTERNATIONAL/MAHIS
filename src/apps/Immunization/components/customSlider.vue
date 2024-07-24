@@ -13,9 +13,18 @@
     <carousel v-if="vaccineSchudulesCount > 0" :items-to-show="1" :modelValue="landingSlide" @slide-end="slideEvent">
         <slide v-for="(slide, index) in vaccineSchudulesCount" :key="slide">
             <!-- {{ slide }} -->
-            <div class="container">
-                <customVaccine :vaccines="vaccine_schArray[0][index].antigens" :milestone_status="vaccine_schArray[0][index].milestone_status" :key="componentKey"  />
-            </div>
+            <ion-row class="">
+                <div class="container">
+                    <customVaccine :vaccines="vaccine_schArray[0][index].antigens" :milestone_status="vaccine_schArray[0][index].milestone_status" :key="componentKey"  />
+                </div>
+                <ion-row class="bottom-row">
+                <div class=" center-content">
+                    <div class="centerBtns">
+                        <ion-button @click="openNextVaccineAppoinment()" class="btnText" fill="solid">Set Next Appointment Date</ion-button>
+                    </div>
+                </div>
+            </ion-row>
+            </ion-row>
         </slide>
         <template #addons>
             <navigation />
@@ -44,6 +53,7 @@ import { mapState } from "pinia";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import { getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service";
 import { icons } from "@/utils/svg";
+import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue"
 
 export default defineComponent({
     name: "xxxComponent",
@@ -225,6 +235,9 @@ export default defineComponent({
         },
         reloadVaccines() {
             this.componentKey += 1;
+        },
+        openNextVaccineAppoinment() {
+            createModal(nextAppointMent, { class: "otherVitalsModal" }, false)
         }
     },
 });

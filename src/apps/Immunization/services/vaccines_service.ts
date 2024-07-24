@@ -30,7 +30,7 @@ export async function saveVaccineAdministeredDrugs() {
             if (!drugOrder) return toastWarning("Unable register vaccine!")
             toastSuccess("Vaccine registred successfully")
             store.setVaccineReload(!store.getVaccineReload())
-            openNextVaccineAppoinment()
+            // openNextVaccineAppoinment()
         } catch (error: any) {
             if (validateBatchString(error.errors) == true) {
                 toastWarning(error.errors)

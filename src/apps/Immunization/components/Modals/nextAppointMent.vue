@@ -8,6 +8,15 @@
         </ion-col>
     </ion-row>
 
+    <ion-row style="margin-top: 10px;">
+        <ion-col style="margin-left: -3px">
+            <div class="om"></div>
+        </ion-col>
+        <ion-col size="6" style="text-align: right;">
+            <ion-label class="lbl-tl" style="font-size: 13"> Count: <span class="lbl-ct">{{ '0' }}</span></ion-label>
+        </ion-col>
+    </ion-row>
+
     <ion-row style="margin-top: 20px; ">
         <ion-col >
             <VueDatePicker
@@ -106,7 +115,14 @@ async function save() {
 
 onMounted(async () => {
     store.clearAppointmentMent()
+    await getAppointmentMents()
 })
+
+async function getAppointmentMents() {
+    const appointment_service = new Appointment()
+    const res =  await appointment_service.getDailiyAppointments(Service.getSessionDate())
+    console.log(res)
+}
 
 function dismiss() {
     modalController.dismiss()

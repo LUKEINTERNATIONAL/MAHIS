@@ -59,8 +59,7 @@
                                 </ion-item>
                                 <div class="content" slot="content">
                                     <ion-list>
-                                        <ion-item @click="navigationMenu('setSessionDate')" class="list-content">Indicators And Performance Metrics
-                                        </ion-item>
+                                        <ion-item @click="navigationMenu('EIPMReport')" class="list-content" style="cursor: pointer;">Indicators And Performance Metrics</ion-item>
                                     </ion-list>
                                 </div>
                             </ion-accordion>
