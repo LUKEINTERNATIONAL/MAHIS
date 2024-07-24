@@ -13,7 +13,12 @@
             <div class="om"></div>
         </ion-col>
         <ion-col size="10" style="text-align: right;" v-if="show_selected_date">
-            <ion-label class="lbl-tl" style="font-size: 16; font-weight: 500;">Total Appointments <span class="lbl-ct">({{ currently_selected_date }})</span>: <span style="margin-right: 20px; color: black;">{{ appointment_count }}</span></ion-label>
+            <ion-label class="lbl-tl" style="font-size: 16; font-weight: 500;">
+                Total Appointments
+                <span class="lbl-ct">({{ currently_selected_date }})</span>: 
+                <span style="margin-right: 20px; color: black;">
+                    <ion-badge color="primary" style="margin-bottom: -5px; font-size: 15px;">{{ appointment_count }}</ion-badge>
+                </span></ion-label>
         </ion-col>
     </ion-row>
 
@@ -88,7 +93,8 @@ import {
     IonAccordionGroup,
     AccordionGroupCustomEvent,
     IonCheckbox,
-    modalController
+    modalController,
+    IonBadge
 } from "@ionic/vue"
 import { ref, onMounted,computed, watch } from "vue"
 import HisDate from "@/utils/Date"
