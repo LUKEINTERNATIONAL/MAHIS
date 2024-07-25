@@ -150,7 +150,7 @@ export default defineComponent({
             const name = getFieldValue(this.addVillage, "Village", "value");
             const TAData = getFieldValue(this.location, this.TAType, "value");
 
-            if (Validation.isName(name) != null) {
+            if (Validation.isNames(name) != null) {
                 modifyFieldValue(this.addVillage, "Village", "alertsErrorMassage", "Please enter a valid " + "Village");
                 return false;
             } else {

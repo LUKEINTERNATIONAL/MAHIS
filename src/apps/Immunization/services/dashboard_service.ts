@@ -6,7 +6,6 @@ import { PatientService } from "@/services/patient_service";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts";
 
 export async function getVaccinesData() {
-    // const patient = new PatientService();
-    // const data = await Service.getJson("eir/followup");
-    // return data;
+    const data = await Service.getJson("eir/followup");
+    return data;
 }

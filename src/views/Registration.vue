@@ -425,7 +425,7 @@ export default defineComponent({
             }
         },
         async saveBirthdayData(patientID: any) {
-            const data = await formatInputFiledData(this.birthRegistration);
+            const data = await formatInputFiledData(this.birthRegistration, getFieldValue(this.personInformation, "birthdate", "value"));
             if (data.length > 0) {
                 const userID: any = Service.getUserID();
 

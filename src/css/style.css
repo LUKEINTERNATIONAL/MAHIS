@@ -596,3 +596,7 @@ ion-footer {
     background-color: #e7e7e7;
     border-radius: 50%;
 }
+.fullScreenModal {
+    --height: 100vh;
+    --width: 100vh;
+}
