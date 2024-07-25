@@ -148,6 +148,7 @@ import { AppEncounterService } from "@/services/app_encounter_service";
 import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
 import { PatientProgramService } from "@/services/patient_program_service";
 import { resetDemographics } from "@/services/reset_data";
+import { savePatientRecord } from "@/services/save_records";
 import Localbase from "localbase";
 let db = new Localbase("db");
 export default defineComponent({
@@ -399,12 +400,13 @@ export default defineComponent({
                 if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
 
                 await db.collection("patientRecords").add({
-                    patientID: Date.now(),
+                    offlinePatientID: Date.now(),
+                    serverPatientID: "",
                     personInformation: toRaw(this.personInformation[0].selectedData),
                     guardianInformation: toRaw(this.guardianInformation[0].selectedData),
                     birthRegistration: toRaw(this.birthRegistration),
                 });
-
+                savePatientRecord();
                 toastSuccess("Successfully Created Patient");
                 return true;
             } else {
@@ -428,18 +430,6 @@ export default defineComponent({
                 const registration = new AppEncounterService(patientID, 5, userID);
                 await registration.createEncounter();
                 await registration.saveObservationList(data);
-            }
-        },
-        async createNationID() {
-            if (this.validatedNationalID()) {
-                const patient = new PatientService();
-                await patient.updateMWNationalId(getFieldValue(this.personInformation, "nationalID", "value"));
-            }
-        },
-        async createBirthID() {
-            if (this.validatedBirthID()) {
-                const patient = new PatientService();
-                await patient.updateBirthId(this.birthID);
             }
         },
         async mwIdExists(nid: any) {
@@ -648,3 +638,4 @@ ion-footer {
     box-sizing: border-box;
 }
 </style>
+@/services/SaveRecords/save_registration
