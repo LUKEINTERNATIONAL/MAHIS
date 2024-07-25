@@ -41,7 +41,7 @@
 
         <ion-row v-if="show_select_batach">
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                >Batch number<span style="color: #b42318">*</span></ion-label
+                >Batch numbers<span style="color: #b42318">*</span></ion-label
             >
         </ion-row>
 
