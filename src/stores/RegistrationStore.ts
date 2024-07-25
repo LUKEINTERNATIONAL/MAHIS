@@ -862,9 +862,6 @@ export const useRegistrationStore = defineStore("registrationStore", {
         setCurrentLocation(data: any) {
             this.currentLocation = data;
         },
-        setClosestLandmark(data:any) {
-            this.closestLandmark=data;
-        },
         setGuardianInformation(data: any) {
             this.guardianInformation = data;
         },

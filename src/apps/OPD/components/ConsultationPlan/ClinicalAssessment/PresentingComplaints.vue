@@ -71,6 +71,7 @@ import { popoverConfirmation } from "@/utils/Alerts";
 import List from "@/components/List.vue";
 import DynamicButton from "@/components/DynamicButton.vue";
 import Validation from "@/validations/StandardValidations";
+import { validateField } from "@/services/validation_service";
 import { ObservationService } from "@/services/observation_service";
 import { isEmpty } from "lodash";
 import {
@@ -129,11 +130,17 @@ export default defineComponent({
         inputFields() {
             return this.presentingComplaints[0].data.rowData[0].colData;
         },
+
+      "Other (specify)"() {
+        return getFieldValue(this.presentingComplaints, "Other (specify)", "value")
+      },
     },
     async mounted() {
         this.updatePresentingComplaintsListStores();
         this.setDashedBox();
         this.getPresenting();
+      this.validaterowData({})
+
     },
     watch: {
         presentingComplaints: {
@@ -247,8 +254,9 @@ export default defineComponent({
               modifyFieldValue(this.presentingComplaints, "Other (specify)", "displayNone", true);
               modifyFieldValue(this.presentingComplaints, "Other (specify)", "value", "");
             }
-            this.validateOtherComplaints();
           }
+          this.validaterowData(col)
+
         },
         validateDuration() {
             this.presentingComplaints[0].data.rowData[0].colData[1].alertsErrorMassage = false;
@@ -268,15 +276,11 @@ export default defineComponent({
                 return false;
             }
         },
-      validateOtherComplaints() {
-        const selectedComplaint = getFieldValue(this.presentingComplaints, "PresentingComplaints", "value");
-        const otherSpecifyValue = getFieldValue(this.presentingComplaints, "Other (specify)", "value");
-
-        if (selectedComplaint?.name === "Other" && !otherSpecifyValue) {
-          modifyFieldValue(this.presentingComplaints, "Other (specify)", "alertsErrorMassage", "Field is required");
-        } else {
-          modifyFieldValue(this.presentingComplaints, "Other (specify)", "alertsErrorMassage", "");
-        }
+      validationRules(event: any) {
+        return validateField(this.presentingComplaints,event.name, (this as any)[event.name]);
+      },
+      validaterowData(event: any) {
+        this.validationRules(event)
       },
       editpresentingComplaintsList(test: any) {
             this.deletepresentingComplaintsList(test.item);

@@ -5,7 +5,6 @@
             <ion-spinner name="bubbles"></ion-spinner>
             <div class="loading-text">Please wait...</div>
         </div>
-
         <ion-header>
             <div class="header position_content">
                 <div style="display: flex; align-items: center" @click="nav('/home')">
@@ -193,7 +192,6 @@ export default defineComponent({
         ...mapState(useRegistrationStore, ["socialHistory"]),
         ...mapState(useRegistrationStore, ["homeLocation"]),
         ...mapState(useRegistrationStore, ["currentLocation"]),
-        ...mapState(useRegistrationStore, ["closestLandmark"]),
         ...mapState(useRegistrationStore, ["guardianInformation"]),
         ...mapState(useConfigurationStore, ["registrationDisplayType"]),
         ...mapState(useBirthRegistrationStore, ["birthRegistration"]),
@@ -532,7 +530,7 @@ export default defineComponent({
                 current_traditional_authority: this.current_traditional_authority,
                 current_village: this.current_village,
                 landmark: getFieldValue(this.currentLocation, "closestLandmark", "value")?.name,
-                other_landmark: getFieldValue(this.closestLandmark,"Other (specify)","value")?.name,
+                other_landmark: getFieldValue(this.currentLocation,"Other (specify)","value")?.name,
                 cell_phone_number: getFieldValue(this.personInformation, "phoneNumber", "value"),
                 occupation: getRadioSelectedValue(this.socialHistory, "occupation"),
                 marital_status: getRadioSelectedValue(this.socialHistory, "maritalStatus"),
