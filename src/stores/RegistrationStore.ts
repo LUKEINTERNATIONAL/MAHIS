@@ -865,5 +865,5 @@ export const useRegistrationStore = defineStore("registrationStore", {
             return [...data];
         },
     },
-    // persist: true,
+    persist: true,
 });
