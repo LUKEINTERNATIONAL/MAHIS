@@ -255,7 +255,6 @@ export default defineComponent({
               modifyFieldValue(this.presentingComplaints, "Other (specify)", "value", "");
             }
           }
-          this.validaterowData(col)
 
         },
         validateDuration() {
