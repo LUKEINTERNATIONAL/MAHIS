@@ -3,8 +3,7 @@
         <apan>{{ msg }}</apan>
     </div>
 
-    <div v-if="!showCurrentMilestoneAlert" class="alert_banner" style="background: inherit">
-    </div>
+    <div v-if="!showCurrentMilestoneAlert" class="alert_banner" style="background: inherit"></div>
 
     <!-- <div class="swipe_msg">
       <div class="vaccinesTitleDate">(Swipe left or right for other milestones)</div>
@@ -15,15 +14,19 @@
             <!-- {{ slide }} -->
             <ion-row class="">
                 <div class="container">
-                    <customVaccine :vaccines="vaccine_schArray[0][index].antigens" :milestone_status="vaccine_schArray[0][index].milestone_status" :key="componentKey"  />
+                    <customVaccine
+                        :vaccines="vaccine_schArray[0][index].antigens"
+                        :milestone_status="vaccine_schArray[0][index].milestone_status"
+                        :key="componentKey"
+                    />
                 </div>
                 <ion-row class="bottom-row">
-                <div class=" center-content">
-                    <div class="centerBtns">
-                        <ion-button @click="openNextVaccineAppoinment()" class="btnText" fill="solid">Set Next Appointment Date</ion-button>
+                    <div class="center-content">
+                        <div class="centerBtns">
+                            <ion-button @click="openNextVaccineAppoinment()" class="btnText" fill="solid">Set Next Appointment Date</ion-button>
+                        </div>
                     </div>
-                </div>
-            </ion-row>
+                </ion-row>
             </ion-row>
         </slide>
         <template #addons>
@@ -53,7 +56,7 @@ import { mapState } from "pinia";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import { getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service";
 import { icons } from "@/utils/svg";
-import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue"
+import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue";
 
 export default defineComponent({
     name: "xxxComponent",
@@ -96,8 +99,8 @@ export default defineComponent({
         },
         vaccine_schArray: {
             handler() {
-                this.reloadVaccines()
-            }
+                this.reloadVaccines();
+            },
         },
     },
     methods: {
@@ -112,64 +115,63 @@ export default defineComponent({
 
             this.vaccineSchudulesCount = vaccineScheduleStore.getVaccineSchedule()?.vaccine_schedule?.length;
             vaccineScheduleStore.resetMissedVaccineSchedules();
-            this.vaccine_schArray = []
-            this.vaccine_schArray.push(vaccineScheduleStore.getVaccineSchedule().vaccine_schedule);
-           
-            vaccineScheduleStore.getVaccineSchedule().vaccine_schedule.forEach((vaccineSchudule: any) => {
+            this.vaccine_schArray = [];
+            this.vaccine_schArray.push(vaccineScheduleStore.getVaccineSchedule()?.vaccine_schedule);
+
+            vaccineScheduleStore.getVaccineSchedule()?.vaccine_schedule?.forEach((vaccineSchudule: any) => {
                 this.findMissingVaccines(vaccineSchudule);
-                this.handleSchedule(vaccineSchudule)
+                this.handleSchedule(vaccineSchudule);
                 const obj = { visit: vaccineSchudule.visit, age: vaccineSchudule.age };
                 this.milestones = this.appendUniqueObject(this.milestones, obj);
-            })
+            });
 
             let shouldStop = false;
-            vaccineScheduleStore.getVaccineSchedule().vaccine_schedule.forEach((vaccineSchudule: any) => {
+            vaccineScheduleStore.getVaccineSchedule()?.vaccine_schedule?.forEach((vaccineSchudule: any) => {
                 if (shouldStop) return;
                 if (this.findSingleUpcomingMilestone(vaccineSchudule) == true) {
                     shouldStop = true;
                     return;
                 }
-            })
+            });
 
-            vaccineScheduleStore.getVaccineSchedule().vaccine_schedule.forEach((vaccineSchudule: any) => {
-                this.findCurrentMilestone(vaccineSchudule)
-            })
+            vaccineScheduleStore.getVaccineSchedule()?.vaccine_schedule?.forEach((vaccineSchudule: any) => {
+                this.findCurrentMilestone(vaccineSchudule);
+            });
         },
-        setSB(vaccineSchudule: any){
-            const vaccineScheduleStore = useAdministerVaccineStore()
-            vaccineScheduleStore.setCurrentMilestoneToAdminister({ currentMilestone: vaccineSchudule.age })
-            this.landingSlide = vaccineSchudule.visit - 1
-            this.current_milestone = vaccineSchudule.age
-            vaccineScheduleStore.setCurrentMilestone(vaccineSchudule.age)
+        setSB(vaccineSchudule: any) {
+            const vaccineScheduleStore = useAdministerVaccineStore();
+            vaccineScheduleStore.setCurrentMilestoneToAdminister({ currentMilestone: vaccineSchudule.age });
+            this.landingSlide = vaccineSchudule.visit - 1;
+            this.current_milestone = vaccineSchudule.age;
+            vaccineScheduleStore.setCurrentMilestone(vaccineSchudule.age);
         },
         handleSchedule(vaccineSchudule: any) {
             if (vaccineSchudule.milestone_status == "upcoming") {
-                const vaccineScheduleStore = useAdministerVaccineStore()
-                vaccineScheduleStore.setCurrentSchedFound(false)
-                this.msg = "Upcoming Vaccines"
-                this.showCurrentMilestoneAlert = true
-                this.setSB(vaccineSchudule)
-            }
-            else {
-                this.setSB(vaccineSchudule)
-                const vaccineScheduleStore = useAdministerVaccineStore()
-                vaccineScheduleStore.setCurrentSchedFound(false)
+                const vaccineScheduleStore = useAdministerVaccineStore();
+                vaccineScheduleStore.setCurrentSchedFound(false);
+                this.msg = "Upcoming Vaccines";
+                this.showCurrentMilestoneAlert = true;
+                this.setSB(vaccineSchudule);
+            } else {
+                this.setSB(vaccineSchudule);
+                const vaccineScheduleStore = useAdministerVaccineStore();
+                vaccineScheduleStore.setCurrentSchedFound(false);
             }
         },
         findSingleUpcomingMilestone(vaccineSchudule: any) {
             if (vaccineSchudule.milestone_status == "upcoming") {
-                this.setSB(vaccineSchudule)
-                return true
+                this.setSB(vaccineSchudule);
+                return true;
             }
-            return false
+            return false;
         },
         findCurrentMilestone(vaccineSchudule: any) {
             if (vaccineSchudule.milestone_status == "current") {
-                this.msg = "Vaccines due today"
-                const vaccineScheduleStore = useAdministerVaccineStore()
-                vaccineScheduleStore.setCurrentSchedFound(true)
-                this.showCurrentMilestoneAlert = true
-                this.setSB(vaccineSchudule)
+                this.msg = "Vaccines due today";
+                const vaccineScheduleStore = useAdministerVaccineStore();
+                vaccineScheduleStore.setCurrentSchedFound(true);
+                this.showCurrentMilestoneAlert = true;
+                this.setSB(vaccineSchudule);
             }
         },
         slideEvent(SlideEventData: any) {
@@ -194,7 +196,6 @@ export default defineComponent({
                 this.showCurrentMilestoneAlert = true;
                 return;
             }
-
 
             if (templmilesytone.age != CurrentMilestoneToAdminister.currentMilestone) {
                 this.showCurrentMilestoneAlert = false;
@@ -237,8 +238,8 @@ export default defineComponent({
             this.componentKey += 1;
         },
         openNextVaccineAppoinment() {
-            createModal(nextAppointMent, { class: "otherVitalsModal" }, false)
-        }
+            createModal(nextAppointMent, { class: "otherVitalsModal" }, false);
+        },
     },
 });
 </script>
