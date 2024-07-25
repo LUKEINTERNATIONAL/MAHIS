@@ -103,7 +103,7 @@ export default defineComponent({
         async saveData() {
             const TAValue = getFieldValue(this.addTA, "TA", "value");
             const villageValue = getFieldValue(this.addTA, "Village", "value");
-            if (Validation.isName(TAValue) == null && Validation.isName(villageValue) == null) {
+            if (Validation.isNames(TAValue) == null && Validation.isNames(villageValue) == null) {
                 const address = await LocationService.createAddress(
                     this.validationData.address_type,
                     this.validationData.addresses_name,
@@ -115,6 +115,8 @@ export default defineComponent({
                 } else {
                     toastWarning(`Unable to add ${this.validationData.address_type}`);
                 }
+            } else {
+                toastWarning("Unable to save");
             }
             return false;
         },
