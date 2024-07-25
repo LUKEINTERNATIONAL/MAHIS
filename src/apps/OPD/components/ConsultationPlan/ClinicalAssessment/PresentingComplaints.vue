@@ -175,12 +175,16 @@ export default defineComponent({
                 this.addItemButton = true;
                 this.buildpresentingComplaintsList();
             }
-            this.presentingComplaints[0].data.rowData[0].colData[0].value = "";
-            this.presentingComplaints[0].data.rowData[0].colData[1].value = "";
-            this.presentingComplaints[0].data.rowData[0].colData[1].unitsData.value = "";
+          this.presentingComplaints[0].data.rowData[0].colData[0].value = "";
+          this.presentingComplaints[0].data.rowData[0].colData[1].value = "";
+          this.presentingComplaints[0].data.rowData[0].colData[1].unitsData.value = "";
+          modifyFieldValue(this.presentingComplaints, "Other (specify)", "displayNone", true);
+          modifyFieldValue(this.presentingComplaints, "Other (specify)", "value", "");
         },
         checkPresentingComplaints() {
-            if (!this.isNameInData(this.inputFields[0].value.name, this.presentingComplaints[0].selectedData)) {
+          const complaintName = this.inputFields[0].value.name === "Other" ? getFieldValue(this.presentingComplaints, "Other (specify)", "value") : this.inputFields[0].value.name;
+
+          if (!this.isNameInData(complaintName, this.presentingComplaints[0].selectedData)) {
                 modifyFieldValue(this.presentingComplaints, "PresentingComplaints", "alertsErrorMassage", "");
                 return true;
             } else {
@@ -188,33 +192,36 @@ export default defineComponent({
                 return false;
             }
         },
-        buildpresentingComplaintsList() {
-            const duration = this.inputFields[1].value + " " + this.inputFields[1].unitsData.value.name;
-            this.presentingComplaints[0].selectedData.push({
-                actionBtn: true,
-                btn: ["edit", "delete"],
-                name: this.inputFields[0].value.name,
-                concept_id: this.inputFields[0].value.concept_id,
-                duration: this.inputFields[1].value,
-                durationUnits: this.inputFields[1].unitsData.value,
-                display: [this.inputFields[0].value.name, duration],
-                data: [
-                    {
-                        concept_id: 8578,
-                        value_coded: this.inputFields[0].value.concept_id,
-                        obs_datetime: Service.getSessionDate(),
-                        child: [
-                            {
-                                concept_id: this.inputFields[0].value.concept_id,
-                                value_text: duration,
-                                obs_datetime: Service.getSessionDate(),
-                            },
-                        ],
-                    },
-                ],
-            });
-        },
-        isNameInData(name: any, dataArray: any) {
+      buildpresentingComplaintsList() {
+        const duration = this.inputFields[1].value + " " + this.inputFields[1].unitsData.value.name;
+        const complaintName = this.inputFields[0].value.name === "Other" ? getFieldValue(this.presentingComplaints, "Other (specify)", "value") : this.inputFields[0].value.name;
+
+        this.presentingComplaints[0].selectedData.push({
+          actionBtn: true,
+          btn: ["edit", "delete"],
+          name: complaintName,
+          concept_id: this.inputFields[0].value.concept_id,
+          duration: this.inputFields[1].value,
+          durationUnits: this.inputFields[1].unitsData.value,
+          display: [complaintName, duration],
+          data: [
+            {
+              concept_id: 8578,
+              value_coded: this.inputFields[0].value.concept_id,
+              obs_datetime: Service.getSessionDate(),
+              child: [
+                {
+                  concept_id: this.inputFields[0].value.concept_id,
+                  value_text: duration,
+                  obs_datetime: Service.getSessionDate(),
+                },
+              ],
+            },
+          ],
+        });
+      },
+
+      isNameInData(name: any, dataArray: any) {
             return dataArray.some((item: any) => item.name === name);
         },
         updatePresentingComplaintsListStores() {
@@ -231,6 +238,17 @@ export default defineComponent({
             } else if (col.inputHeader == "Duration") {
                 this.validateDuration();
             }
+
+          if (col.inputHeader == "Presenting Complaints") {
+            const selectedLandmark = getFieldValue(this.presentingComplaints, "PresentingComplaints", "value");
+            if (selectedLandmark?.name === "Other") {
+              modifyFieldValue(this.presentingComplaints, "Other (specify)", "displayNone", false);
+            } else {
+              modifyFieldValue(this.presentingComplaints, "Other (specify)", "displayNone", true);
+              modifyFieldValue(this.presentingComplaints, "Other (specify)", "value", "");
+            }
+            this.validateOtherComplaints();
+          }
         },
         validateDuration() {
             this.presentingComplaints[0].data.rowData[0].colData[1].alertsErrorMassage = false;
@@ -250,7 +268,17 @@ export default defineComponent({
                 return false;
             }
         },
-        editpresentingComplaintsList(test: any) {
+      validateOtherComplaints() {
+        const selectedComplaint = getFieldValue(this.presentingComplaints, "PresentingComplaints", "value");
+        const otherSpecifyValue = getFieldValue(this.presentingComplaints, "Other (specify)", "value");
+
+        if (selectedComplaint?.name === "Other" && !otherSpecifyValue) {
+          modifyFieldValue(this.presentingComplaints, "Other (specify)", "alertsErrorMassage", "Field is required");
+        } else {
+          modifyFieldValue(this.presentingComplaints, "Other (specify)", "alertsErrorMassage", "");
+        }
+      },
+      editpresentingComplaintsList(test: any) {
             this.deletepresentingComplaintsList(test.item);
             this.presentingComplaints[0].data.rowData[0].colData[0].value = test.item;
             this.presentingComplaints[0].data.rowData[0].colData[1].value = test.item.duration;
