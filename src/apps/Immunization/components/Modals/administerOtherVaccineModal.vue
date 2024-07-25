@@ -39,14 +39,14 @@
             </div>
         </div>
 
-        <ion-row>
+        <ion-row v-if="show_select_batach">
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                >Batch number<span style="color: #b42318">*</span></ion-label
+                >Batch numbers<span style="color: #b42318">*</span></ion-label
             >
         </ion-row>
 
-        <div>
-            <BasicInputField
+        <div v-if="show_select_batach">
+            <!-- <BasicInputField
                 :placeholder="'Enter batch number'"
                 :icon="iconsContent.batchNumber"
                 :inputValue="batchNumber"
@@ -60,7 +60,8 @@
                 <ion-label v-if="is_batch_number_valid" class="error-label">
                     {{ batch_number_error_message }}
                 </ion-label>
-            </div>
+            </div> -->
+            <lotNumberList :action="childAction" ref="childComponentRef" @actionTriggered="ActionTriggered"/>
         </div>
 
         <customDatePicker v-if="showPD" />
@@ -118,8 +119,7 @@ import {
     IonRow,
     modalController,
 } from "@ionic/vue";
-import { defineComponent } from "vue";
-import { checkmark, pulseOutline, clipboardOutline } from "ionicons/icons";
+import { defineComponent, ref } from "vue";
 import { icons } from "@/utils/svg";
 import { useAdministerOtherVaccineStore } from "@/apps/Immunization/stores/AdministerOtherVaccinesStore";
 import { mapState } from "pinia";
@@ -140,6 +140,9 @@ import { useAdministerVaccineStore } from "@/apps/Immunization/stores/Administer
 import VueMultiselect from "vue-multiselect";
 import { isEmpty } from "lodash";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
+import lotNumberList from "./lotNumberList.vue"
+import alert from "@/apps/Immunization/components/Modals/alert.vue"
+import { StockService } from '@/services/stock_service'
 
 export default defineComponent({
     components: {
@@ -159,6 +162,7 @@ export default defineComponent({
         IonRow,
         VueMultiselect,
         IonLabel,
+        lotNumberList,
     },
     data() {
         return {
@@ -216,6 +220,8 @@ export default defineComponent({
                 },
             },
             showDateBtns: true as boolean,
+            selected_date_: '',
+            show_select_batach: false,
         };
     },
     computed: {
@@ -245,7 +251,16 @@ export default defineComponent({
         },
     },
     setup() {
-        return { checkmark, pulseOutline, clipboardOutline };
+        const childComponentRef = ref<InstanceType<typeof lotNumberList> | null>(null);
+        const triggerChildAction = () => {
+            if (childComponentRef.value) {
+                childComponentRef.value.performAction();
+            }
+        };
+        return {
+            childComponentRef,
+            triggerChildAction,
+        };
     },
     methods: {
         showCPD() {
@@ -286,6 +301,21 @@ export default defineComponent({
         },
         updateVaccineName(data: any) {
             this.currentDrugOb = data;
+            this.pullLotNumbersForVaccine(this.currentDrugOb)
+        },
+        async pullLotNumbersForVaccine(data: any) {
+            const store = useAdministerVaccineStore();
+            const stockService = new StockService();
+            const data_ = await stockService.getItem(data.drug_id)
+            store.setLotNumberData(data_)
+
+            if(data_.length == 0) {
+                createModal(alert, { class: "otherVitalsModal" })
+            }
+
+            if (data_.length > 0) {
+                this.show_select_batach = true
+            }
         },
         isAlphaNumeric(text: string) {
             // Regular expression to match alphanumeric characters and specified special characters
@@ -303,28 +333,50 @@ export default defineComponent({
         updateBatchNumberByPassValue(input: any) {
             this.batchNumber = input;
         },
-        saveDta(date_: any) {
-            this.validateVaccineName();
-            this.validateBatchNumber();
-            if (this.is_batch_number_valid == true) {
-                toastWarning("Enter batch number!");
-                return;
-            }
-
-            if (this.batchNumber == "") {
-                toastWarning("Enter batch number!");
-                return;
-            }
+        ActionTriggered(selectedOption: any) {
             const dta = {
-                batch_number: this.batchNumber,
-                date_administered: date_,
-                drug_id: this.currentDrugOb.drug.drug_id,
+                batch_number: selectedOption.lotNumber,
+                date_administered: this.selected_date_,
+                drug_id: this.currentDrugOb.drug_id,
             };
             const store = useAdministerVaccineStore();
             store.setAdministeredVaccine(dta);
             saveVaccineAdministeredDrugs();
-            this.dismiss();
             store.setTempScannedBatchNumber(null);
+            this.dismiss();
+        },
+        saveDta(date_: any) {
+            if (this.validateVaccineName() == true) {
+                this.selected_date_ = date_
+                this.triggerChildAction()
+
+                if (this.show_select_batach == false) {
+                    toastDanger("Please Update Stock for Selected Vaccine")
+                }
+            }
+            // this.validateBatchNumber();
+            // if (this.is_batch_number_valid == true) {
+            //     toastWarning("Enter batch number!");
+            //     return;
+            // }
+
+            // if (this.batchNumber == "") {
+            //     toastWarning("Enter batch number!");
+            //     return;
+            // }
+            // const dta = {
+            //     batch_number: this.batchNumber,
+            //     date_administered: date_,
+            //     drug_id: this.currentDrugOb.drug.drug_id,
+            // };
+            // const store = useAdministerVaccineStore();
+            // store.setAdministeredVaccine(dta);
+            // saveVaccineAdministeredDrugs();
+            // this.dismiss();
+            // store.setTempScannedBatchNumber(null);
+        },
+        childAction() {
+           
         },
     },
 });
