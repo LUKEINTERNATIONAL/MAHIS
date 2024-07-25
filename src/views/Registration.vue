@@ -375,7 +375,7 @@ export default defineComponent({
                 }
             }
             if (this.birthID != "") {
-                if (await this.birthIdExists(this.nationalID)) {
+                if (await this.birthIdExists(this.birthID)) {
                     toastWarning("The Birth ID is already assigned to another person");
                     return false;
                 }

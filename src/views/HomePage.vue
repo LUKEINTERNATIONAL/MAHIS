@@ -249,6 +249,7 @@ export default defineComponent({
     methods: {
         async setAppointments() {
             this.appointments = await AppointmentService.getDailiyAppointments(HisDate.currentDate());
+            this.appointments = this.appointments.sort((a: any, b: any) => a.given_name.localeCompare(b.given_name));
         },
         async openClientProfile(patientID: any) {
             const patientData = await PatientService.findByNpid(patientID);

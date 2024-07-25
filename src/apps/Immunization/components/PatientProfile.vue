@@ -77,7 +77,11 @@
             <div class="graphBtn" v-if="overDueVaccinesCount > 0">
                 <div class="dueAlert">
                     <ion-row>
-                        <ion-col v-if="overDueVaccinesCount > 0" style="display: flex; justify-content: center; cursor: pointer;" @click="showMissedVaccines">
+                        <ion-col
+                            v-if="overDueVaccinesCount > 0"
+                            style="display: flex; justify-content: center; cursor: pointer"
+                            @click="showMissedVaccines"
+                        >
                             <div class="missed_vaccine_alert">
                                 <ion-icon slot="start" :icon="iconsContent.alertDangerRed" />
                                 <span style="margin-right: 5px">{{ overDueVaccinesCount }} vaccine(s) overdue</span>
@@ -421,7 +425,7 @@ export default defineComponent({
             createModal(vaccinationHistory, { class: "otherVitalsModal vaccineHistoryModal" });
         },
         async openFollowModal() {
-            if (this.demographics) {
+            if (this.demographics?.patient_id) {
                 this.lastVaccine = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
                 const dataToPass = { protectedStatus: this.protectedStatus };
                 if (this.lastVaccine.length > 0) createModal(followUpVisitModal, { class: "otherVitalsModal" }, true, dataToPass);
@@ -668,9 +672,11 @@ export default defineComponent({
             store.setVaccineReload(!store.getVaccineReload());
         },
         async getLastVaccinesGiven() {
-            const data = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
-            const store = useAdministerVaccineStore();
-            store.setLastVaccinesGiven(data);
+            if (this.demographics.patient_id) {
+                const data = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
+                const store = useAdministerVaccineStore();
+                store.setLastVaccinesGiven(data);
+            }
         },
         getLastVaccinesGivenDisplayDate() {
             return HisDate.toStandardHisDisplayFormat(this.lastVaccineGievenDate);
