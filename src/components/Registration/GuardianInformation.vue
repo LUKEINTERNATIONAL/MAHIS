@@ -1,5 +1,5 @@
 <template>
-    <basic-card :content="cardData" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-card>
+    <basic-card :content="cardData" :editable="editable" @update:selected="handleInputData" @update:inputValue="handleInputData"></basic-card>
 </template>
 
 <script lang="ts">
@@ -16,11 +16,12 @@ import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import HisDate from "@/utils/Date";
 import { modifyFieldValue, getFieldValue, getRadioSelectedValue } from "@/services/data_helpers";
 import { validateField } from "@/services/validation_service";
+import Relationship from "@/views/Mixin/SetRelationship.vue";
 import { RelationshipService } from "@/services/relationship_service";
-import { RelationsService } from "@/services/relations_service";
 
 export default defineComponent({
     name: "Menu",
+    mixins: [Relationship],
     components: {
         IonContent,
         IonHeader,
@@ -38,17 +39,31 @@ export default defineComponent({
             },
             deep: true,
         },
+        relationships: {
+            async handler() {
+                // await this.setRelationShip();
+            },
+            deep: true,
+        },
+        personInformation: {
+            async handler() {
+                await this.setRelationShip();
+            },
+            deep: true,
+        },
     },
     data() {
         return {
             cardData: {} as any,
             inputField: "" as any,
             setName: "" as any,
-            relationships: [] as any,
         };
     },
     computed: {
-        ...mapState(useRegistrationStore, ["guardianInformation"]),
+        ...mapState(useRegistrationStore, ["guardianInformation", "personInformation"]),
+        gender() {
+            return getRadioSelectedValue(this.personInformation, "gender");
+        },
         guardianFirstname() {
             return getFieldValue(this.guardianInformation, "guardianFirstname", "value");
         },
@@ -65,20 +80,58 @@ export default defineComponent({
             return getFieldValue(this.guardianInformation, "relationship", "value");
         },
     },
+    props: {
+        editable: {
+            default: false as any,
+        },
+    },
     async mounted() {
-        this.relationships = await RelationsService.getRelations();
-        this.guardianInformation[5].data.rowData[0].colData[0].popOverData.data = this.relationships
-            .map((r: any) => {
-                return [
-                    { name: r.b_is_to_a, id: r.relationship_type_id },
-                    { name: r.a_is_to_b, id: r.relationship_type_id },
-                ];
-            })
-            .reduce((acc: any, val: any) => acc.concat(val), []);
-        this.updateRegistrationStores();
+        await this.setRelationShip();
         this.buildCards();
+        this.setData();
     },
     methods: {
+        async setData() {
+            if (this.editable) {
+                const guardianData = await RelationshipService.getRelationships(this.demographics.patient_id);
+
+                modifyFieldValue(
+                    this.guardianInformation,
+                    "guardianNationalID",
+                    "value",
+                    this.setAttribute("Regiment ID", guardianData[0]?.relation)
+                );
+                modifyFieldValue(this.guardianInformation, "guardianFirstname", "value", guardianData[0]?.relation.names[0]?.given_name);
+                modifyFieldValue(this.guardianInformation, "guardianLastname", "value", guardianData[0]?.relation.names[0]?.family_name);
+                modifyFieldValue(this.guardianInformation, "guardianMiddleName", "value", guardianData[0]?.relation.names[0]?.middle_name);
+                modifyFieldValue(
+                    this.guardianInformation,
+                    "guardianPhoneNumber",
+                    "value",
+                    this.setAttribute("Cell Phone Number", guardianData[0]?.relation)
+                );
+                modifyFieldValue(this.guardianInformation, "relationship", "value", {
+                    id: guardianData[0]?.type.relationship_type_id,
+                    name: guardianData[0]?.type.b_is_to_a,
+                });
+                await this.setRelationShip();
+            }
+        },
+        setAttribute(name: string | undefined, data: any) {
+            if (!data || Object.keys(data).length === 0) return;
+            let str = data.person_attributes.find((x: any) => x.type.name == name);
+            if (str == undefined) return;
+            else return str.value;
+        },
+        async setRelationShip() {
+            if (this.gender) {
+                await this.getRelationships();
+                modifyFieldValue(this.guardianInformation, "relationship", "displayNone", false);
+                modifyFieldValue(this.guardianInformation, "relationship", "multiSelectData", this.relationships);
+            } else {
+                modifyFieldValue(this.guardianInformation, "relationship", "displayNone", true);
+            }
+        },
         buildCards() {
             this.cardData = {
                 mainTitle: "Demographics",
@@ -92,10 +145,6 @@ export default defineComponent({
         },
         openModal() {
             createModal(DispositionModal);
-        },
-        updateRegistrationStores() {
-            const registrationStore = useRegistrationStore();
-            registrationStore.setGuardianInformation(this.guardianInformation);
         },
         buildGuardianInformation() {
             this.guardianInformation[0].selectedData = {

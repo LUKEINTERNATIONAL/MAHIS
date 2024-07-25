@@ -5,6 +5,8 @@ import { Service } from "@/services/service"
 import { PatientService } from "@/services/patient_service"
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
 import HisDate from "@/utils/Date"
+import { createModal } from "@/utils/Alerts"
+import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue"
 
 export async function getVaccinesSchedule() {
     const patient = new PatientService()
@@ -13,19 +15,27 @@ export async function getVaccinesSchedule() {
 }
 
 export async function saveVaccineAdministeredDrugs() {
+    
     const store = useAdministerVaccineStore()
     const userId: any = Service.getUserID();
     const programId: any = Service.getProgramID();
     const patient = new PatientService();
     if (!isEmpty(store.getAdministeredVaccines())) {
-        const drugOrders = mapToOrders()
-        const prescriptionService = new DrugPrescriptionForImmunizationService(patient.getID(), userId)
-        const encounter = await prescriptionService.createEncounter()
-        if (!encounter) return toastWarning("Unable to create immunization encounter")
-        const drugOrder = await prescriptionService.createDrugOrderForImmunization(drugOrders, programId)
-        if (!drugOrder) return toastWarning("Unable register vaccine!")
-        toastSuccess("Vaccine registred successfully")
-        store.setVaccineReload(!store.getVaccineReload())
+        try {
+            const drugOrders = mapToOrders()
+            const prescriptionService = new DrugPrescriptionForImmunizationService(patient.getID(), userId)
+            const encounter = await prescriptionService.createEncounter()
+            if (!encounter) return toastWarning("Unable to create immunization encounter")
+            const drugOrder = await prescriptionService.createDrugOrderForImmunization(drugOrders, programId)
+            if (!drugOrder) return toastWarning("Unable register vaccine!")
+            toastSuccess("Vaccine registred successfully")
+            store.setVaccineReload(!store.getVaccineReload())
+            // openNextVaccineAppoinment()
+        } catch (error: any) {
+            if (validateBatchString(error.errors) == true) {
+                toastWarning(error.errors)
+            }
+        }
     }
 }
 
@@ -44,14 +54,26 @@ function mapToOrders(): any[] {
             dose: 1,
             frequency: "Unknown",
             batch_number: drug.batch_number,
-            visit_id: drug.visit_id,
             prn: 0,
         };
-    });
+    })
 }
 
 function calculateExpireDate(startDate: string | Date, duration: any) {
-    const date = new Date(startDate);
-    date.setDate(date.getDate() + parseInt(duration));
-    return HisDate.toStandardHisFormat(date);
+    const date = new Date(startDate)
+    date.setDate(date.getDate() + parseInt(duration))
+    return HisDate.toStandardHisFormat(date)
 }
+
+function openNextVaccineAppoinment() {
+    createModal(nextAppointMent, { class: "otherVitalsModal" }, false)
+}
+
+function validateBatchString(input: any) {
+    // const stringWithoutNumbers = input.replace(/\d+/g, '')
+    // const lowerCaseString = stringWithoutNumbers.toLowerCase()
+    // const targetPhrase = "batch number  does not exist"
+    // return lowerCaseString.includes(targetPhrase)
+    return true
+  }
+  

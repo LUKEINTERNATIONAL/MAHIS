@@ -16,7 +16,7 @@
 import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, modalController } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { checkmark, pulseOutline } from "ionicons/icons";
-import previousVitals from "@/components/previousVisits/previousVitals.vue";
+import previousVitals from "@/components/Graphs/previousVitals.vue";
 import { ref } from "vue";
 import { icons } from "@/utils/svg";
 import ApexChart from "vue3-apexcharts";

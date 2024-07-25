@@ -51,6 +51,33 @@
     <ion-row>
         <ion-col size="6">
             <VueMultiselect
+                v-model="selected_Districts"
+                @update:model-value="selectedDistrict($event)"
+                :multiple="true"
+                :taggable="false"
+                :hide-selected="true"
+                :close-on-select="true"
+                openDirection="bottom"
+                tag-placeholder="Find and select District(s)"
+                placeholder="Find and select District(s)"
+                selectLabel=""
+                label="name"
+                :searchable="true"
+                @search-change=""
+                track-by="district_id"
+                :options="districtList"
+                :disabled="HSA_found_for_disabling_button"
+            />
+
+            <div>
+                <ion-label v-if="district_show_error" class="error-label">
+                    {{ district_error_message }}
+                </ion-label>
+            </div>
+        </ion-col>
+
+        <ion-col size="6">
+            <VueMultiselect
                 v-model="selected_location"
                 @update:model-value="selectedLocation($event)"
                 :multiple="false"
@@ -58,8 +85,8 @@
                 :hide-selected="true"
                 :close-on-select="true"
                 openDirection="bottom"
-                tag-placeholder="Find and select medication"
-                placeholder="Find and select medication"
+                tag-placeholder="Find and select facility name"
+                placeholder="Find and select facility name"
                 selectLabel=""
                 label="name"
                 :searchable="true"
@@ -71,6 +98,63 @@
             <div>
                 <ion-label v-if="location_show_error" class="error-label">
                     {{ location_error_message }}
+                </ion-label>
+            </div>
+        </ion-col>
+    </ion-row>
+
+ 
+
+    <ion-row>
+        <ion-col size="6">
+            <VueMultiselect
+                v-model="selected_TAz"
+                @update:model-value="selectedTA($event)"
+                :multiple="true"
+                :taggable="false"
+                :hide-selected="true"
+                :close-on-select="true"
+                openDirection="bottom"
+                tag-placeholder="Find and select Traditional Authority (TA)"
+                placeholder="Find and select Traditional Authority (TA)"
+                selectLabel=""
+                label="name"
+                :searchable="true"
+                @search-change=""
+                track-by="assigned_id"
+                :options="TAList"
+                :disabled="HSA_found_for_disabling_button"
+            />
+
+            <div>
+                <ion-label v-if="TAz_show_error" class="error-label">
+                    {{ TAz_error_message }}
+                </ion-label>
+            </div>
+        </ion-col>
+        <ion-col size="6">
+            <VueMultiselect
+                v-model="selected_villages"
+                @update:model-value="selectedVillage($event)"
+                :multiple="true"
+                :taggable="false"
+                :hide-selected="true"
+                :close-on-select="true"
+                openDirection="bottom"
+                tag-placeholder="Find and select village(s)"
+                placeholder="Find and select village(s)"
+                selectLabel=""
+                label="name"
+                :searchable="true"
+                @search-change=""
+                track-by="assigned_id"
+                :options="villageList"
+                :disabled="HSA_found_for_disabling_button"
+            />
+
+            <div>
+                <ion-label v-if="village_show_error" class="error-label">
+                    {{ village_error_message }}
                 </ion-label>
             </div>
         </ion-col>
@@ -215,6 +299,9 @@ const user_roles = ref([] as any)
 const user_programs = ref([] as any)
 const selectedRoleNames: any[] = []
 const selectedProgramIds: any[] = []
+const selectedVillageIds: any[] = []
+const selectedTAIds: any[] = []
+const selectedDistrictIds : any[] = []
 const passwordErrorMsgs = [
     'Input must be at least 4 characters long, containing only letters, numbers, and symbols',
     'Password does not match'
@@ -224,6 +311,20 @@ const locationData = ref([]) as any
 const locationId = ref()
 const location_error_message = ref('Select location')
 const location_show_error = ref(false)
+const village_show_error = ref(false)
+const village_error_message = ref('Select village(s)')
+const district_show_error = ref(false)
+const district_error_message = ref('Select district(s)')
+const TAz_show_error = ref(false)
+const TAz_error_message = ref('Select TA(s)')
+const districtList = ref([] as any)
+const villageList = ref([] as any)
+const TAList = ref([] as any)
+const selected_villages = ref()
+const selected_TAz = ref()
+const selected_Districts = ref()
+const disableVillageSelection = ref(true)
+const HSA_found_for_disabling_button = ref(true)
 
 const props = defineProps<{
     action: any
@@ -232,6 +333,7 @@ const props = defineProps<{
 onMounted(async () => {
     await getUserRoles()
     await getUserPrograms()
+    districtList.value = await getdistrictList()
 })
 
 watch(
@@ -241,8 +343,49 @@ watch(
     }
 )
 
+watch(
+    () => disableVillageSelection.value,
+    async (newValue) => {
+        if (disableVillageSelection.value == false) {
+            checkIfSelectedIsHSA(user_roles.value)
+        }
+    }
+)
+
 function selectedLocation(data: any) {
     locationId.value = data.location_id
+}
+
+function selectedVillage(VillagesList: any) {
+    selectedVillageIds.length = 0
+    VillagesList.forEach((village: any ) => {
+        selectedVillageIds.push(village.village_id)
+    })
+}
+
+function selectedTA(selectedTAList: any) {
+    console.log(selectedTAList)
+    selectedTAIds.length = 0
+    selectedTAList.forEach((village: any ) => {
+        selectedTAIds.push(village.traditional_authority_id)
+    })
+   
+    selectedTAList.forEach((TA: any ) => {
+            findVillages(TA.district_id)
+        }
+    )
+    
+}
+
+function selectedDistrict(selectedDistrict: any) {
+    selectedDistrictIds.length = 0
+    selectedDistrict.forEach((district: any) => {
+        selectedDistrictIds.push(district.district_id)
+    })
+
+    selectedDistrict.forEach((district: any ) => {
+        fetchTraditionalAuthorities(district.district_id, '')
+    })
 }
 
 async function FindLocation(text: any) {
@@ -268,10 +411,14 @@ async function trigerSaveFn() {
     const _isSSelectionValid_ = isSSelectionValid()
     const _ValidatePassword_ = ValidatePassword()
     const _validateLocation = validateLocation()
+    const _validateDistricts = validateDistricts()
+    const _validateTAz = validateTAz()
+    const _validateVillages = validateVillages()
 
-    if (_areFieldsValid_ == true && _ValidatePassword_ == true && _isSSelectionValid_ == true && _isRoleSelected_ == true && _isProgramSelected_ == true && _validateLocation == true) {
+    if (_areFieldsValid_ == true && _ValidatePassword_ == true && _isSSelectionValid_ == true 
+        && _isRoleSelected_ == true && _isProgramSelected_ == true && _validateLocation == true
+        && _validateDistricts == true && _validateTAz == true && _validateVillages == true) {
         const data1 = getFieldsValuesObj(input_properties)
-        console.log(selected_location.value)
         const payload = {
             family_name: data1.last_name,
             given_name: data1.firstname,
@@ -279,6 +426,7 @@ async function trigerSaveFn() {
             must_append_roles: false,
             password: password_input_properties[0].dataValue.value,
             programs: selectedProgramIds,
+            villages: selectedVillageIds,
             roles: selectedRoleNames,
             gender: isSSelection_properties[0].dataValue.value,
             location_id: selected_location.value.location_id
@@ -287,8 +435,8 @@ async function trigerSaveFn() {
         try {
             const { user } = await UserService.createUser(payload)
             if (user) {
-                console.log(user.user_id)
-                console.log(user)
+                // console.log(user.user_id)
+                // console.log(user)
                 saveEvent(user.user_id)
             }
         } catch (error) {
@@ -401,6 +549,59 @@ function validateLocation() {
     }
 }
 
+function validateVillages() {
+    if (checkIfSelectedIsHSA(user_roles.value) == false) {
+        return true
+    }
+    if (checkIfSelectedIsHSA(user_roles.value) == true) {
+        if (selectedVillageIds.length == 0) {
+            village_show_error.value = true
+            return false
+        }
+
+        if (selectedVillageIds.length > 0) {
+            village_show_error.value = false
+            return true
+        }
+    }
+}
+
+function validateDistricts() {
+    if (checkIfSelectedIsHSA(user_roles.value) == false) {
+        return true
+    }
+
+    if (checkIfSelectedIsHSA(user_roles.value) == true) {
+        if(selectedDistrictIds.length == 0) {
+            district_show_error.value = true
+            return false
+        }
+
+        if (selectedDistrictIds.length > 0) {
+            district_show_error.value = false
+            return true
+        }
+    }
+}
+
+function validateTAz() {
+    if (checkIfSelectedIsHSA(user_roles.value) == false) {
+        return true
+    }
+
+    if (checkIfSelectedIsHSA(user_roles.value) == true) {
+        if(selectedTAIds.length == 0) {
+            TAz_show_error.value = true
+            return false
+        }
+
+        if (selectedTAIds.length > 0) {
+            TAz_show_error.value = false
+            return true
+        }
+    }
+}
+
 function ValidatePassword(): boolean {
     let is_valid = false
     let error_foundP_p1 = false
@@ -464,7 +665,6 @@ function ValidatePassword(): boolean {
                 password_input_properties[1].show_error.value = true
                 is_valid = false
             }
-
         }
     }
     return is_valid
@@ -552,6 +752,24 @@ const list_picker_prperties = [
 
 function listUpdated1(data: any) {
     user_roles.value = data
+    checkIfSelectedIsHSA(user_roles.value)
+}
+
+function checkIfSelectedIsHSA(role_list: any) {
+    village_show_error.value = false
+    let is_found = false
+    role_list.forEach((item: any) => {
+        if (item?.selected == true && item?.name == 'HSA') {
+            HSA_found_for_disabling_button.value = false
+            is_found = true
+        }
+    })
+
+    if (is_found == false) {
+        village_show_error.value = false
+        HSA_found_for_disabling_button.value = true
+    }
+    return is_found
 }
 
 function listUpdated2(data: any) {
@@ -597,6 +815,49 @@ function passwordInputUpDated_fn1(event: any) {
 function passwordInputUpDated_fn2(event: any) {
     const input = event.target.value
     password_input_properties[1].dataValue.value = input
+}
+
+async function getdistrictList() {
+    const districtList = [];
+    for (let i of [1, 2, 3]) {
+        const districts: any = await LocationService.getDistricts(i);
+        districtList.push(...districts);
+    }
+
+    return districtList
+}
+
+async function fetchTraditionalAuthorities(district_id: any,name: string) {  
+    TAList.value = []           
+    var districtVillages = await LocationService.getTraditionalAuthorities(district_id,"")
+    const arrayWithIds = districtVillages.map((item: any, index: any) => ({
+        ...item,
+        assigned_id: index
+    }));
+    TAList.value = TAList.value.concat(arrayWithIds)
+    // if (villageList.value.length > 0) {
+    //     disableVillageSelection.value = false
+    // }         
+}
+
+async function fetchVillages(district_id: any,name: string) {   
+    villageList.value = []         
+    var districtVillages = await LocationService.getVillages(district_id,"")
+    const arrayWithIds = districtVillages.map((item: any, index: any) => ({
+        ...item,
+        assigned_id: index
+    }));
+    villageList.value = villageList.value.concat(arrayWithIds)
+    if (villageList.value.length > 0) {
+        disableVillageSelection.value = false
+    }
+}
+
+function findVillages(district_id: any) {
+    disableVillageSelection.value = true;
+    selected_villages.value = []
+    
+    fetchVillages(district_id, '')
 }
 
 </script>

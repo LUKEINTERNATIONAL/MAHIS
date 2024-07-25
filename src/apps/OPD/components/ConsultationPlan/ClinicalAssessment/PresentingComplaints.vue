@@ -58,7 +58,7 @@ import BasicInputField from "@/components/BasicInputField.vue";
 import { VitalsService } from "@/services/vitals_service";
 import BasicForm from "@/components/BasicForm.vue";
 import { Service } from "@/services/service";
-import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
+import PreviousVitals from "@/components/Graphs/previousVitals.vue";
 import previousComplaints from "@/apps/OPD/components/ConsultationPlan/previousVisits/previousComplaints.vue";
 import { usePresentingComplaintsStore } from "@/apps/OPD/stores/PresentingComplaintsStore";
 import { PatientComplaintsService } from "@/apps/OPD/services/patient_complaints_service";

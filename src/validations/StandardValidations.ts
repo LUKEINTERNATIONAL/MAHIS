@@ -49,12 +49,24 @@ function isIPAddress(val: any) {
     const validation = /\b(?:(?:2(?:[0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9])\.){3}(?:(?:2([0-4][0-9]|5[0-5])|[0-1]?[0-9]?[0-9]))\b/;
     return !val || !val.value.match(validation) ? ["Not a valid IP address"] : null;
 }
+function isNames(value: any): null | string {
+    const validation = /^(?=.{2,100}$)[a-zA-Z!]+(?:['_.\-! ][a-zA-Z]+)*$/;
+    return !value || !value.match(validation) ? "Invalid name Input" : null;
+}
 function isName(value: any): null | string {
     const validation = /^(?=.{2,100}$)[a-z!A-Z]+(?:['_.\-!\][a-z]+[a-z!A-Z])*$/;
     return !value || !value.match(validation) ? "Invalid name Input" : null;
 }
+function isNameWithSlush(value: any): null | string {
+    const validation = /^(?=.{2,100}$)[a-zA-Z]+(?:['_.\-\/ ][a-zA-Z]+)*$/;
+    return !value || !value.match(validation) ? "Invalid name Input" : null;
+}
 function isNameEmpty(value: any): null | string {
     const validation = /^(?=.{2,100}$)[a-z!A-Z]+(?:['_.\-!\][a-z]+[a-z!A-Z])*$/;
+    return !isEmpty(value) && !value.match(validation) ? "Invalid name Input" : null;
+}
+function isNamesEmpty(value: any): null | string {
+    const validation = /^(?=.{2,100}$)[a-zA-Z!]+(?:['_.\-! ][a-zA-Z]+)*$/;
     return !isEmpty(value) && !value.match(validation) ? "Invalid name Input" : null;
 }
 
@@ -149,7 +161,9 @@ export default {
     required,
     isMWPhoneNumber,
     isName,
+    isNames,
     isNameEmpty,
+    isNamesEmpty,
     isNumber,
     hasLengthRangeOf,
     rangeOf,
@@ -162,4 +176,5 @@ export default {
     isEstimationDate,
     checkMinMax,
     isDate,
+    isNameWithSlush,
 } as any;

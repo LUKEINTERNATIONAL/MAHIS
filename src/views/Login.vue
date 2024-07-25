@@ -149,11 +149,12 @@ export default defineComponent({
     created() {
         this.auth = new AuthService();
     },
-    mounted() {
-        this.getPrograms();
+    async mounted() {
+        await this.getPrograms();
     },
     methods: {
         async getPrograms() {
+            ProgramData.sort((a, b) => a.name.localeCompare(b.name));
             this.multiSelectData = ProgramData;
         },
         doLogin: async function () {
@@ -168,7 +169,11 @@ export default defineComponent({
                     // }
                     await this.auth.login(this.password);
                     this.auth.startSession();
-                    this.$router.push("/home");
+                    if (this.auth.checkUserPrograms(this.program.name)) {
+                        this.$router.push("/home");
+                    } else {
+                        toastDanger("You don't have permission to access the program.");
+                    }
                 } catch (e) {
                     if (e instanceof InvalidCredentialsError) {
                         toastDanger("Invalid username or password");
@@ -248,5 +253,13 @@ export default defineComponent({
 }
 .multiselect::before {
     top: -7px;
+}
+@media (max-width: 902px) {
+    .login-page {
+        --ion-background-color: #ffffff;
+    }
+    ion-card {
+        box-shadow: unset;
+    }
 }
 </style>

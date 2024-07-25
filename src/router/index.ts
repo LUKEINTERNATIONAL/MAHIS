@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { RouteRecordRaw } from "vue-router";
 import HomePage from "../views/HomePage.vue";
+import stockManagement from "../views/StockManagement.vue";
 import Login from "../views/Login.vue";
 import users from "@/views/UserManagement/users.vue";
 import clinicaldays from "@/views/ClinicalDays/clinicalDays.vue";
@@ -14,6 +15,7 @@ import OPD from "@/apps/OPD/config/routes";
 import ANC from "@/apps/ANC/config/routes";
 import LABOUR from "@/apps/LABOUR/config/routes";
 import PNC from "@/apps/PNC/config/routes";
+import EIR from "@/apps/Immunization/config/routes";
 const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
@@ -23,6 +25,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/home",
         name: "Home",
         component: HomePage,
+    },
+    {
+        path: "/stockManagement",
+        name: "stockManagement",
+        component: stockManagement,
     },
     {
         path: "/login",
@@ -61,6 +68,7 @@ const routes: Array<RouteRecordRaw> = [
     ...LABOUR,
     ...PNC,
     ...OPD,
+    ...EIR,
 ];
 
 const router = createRouter({

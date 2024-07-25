@@ -3,18 +3,18 @@
         <ion-row>
             <ion-col>
                 <ion-button
-                    :disabled="disableVaccine(visitId)"
+                    :disabled="disableVaccine(vaccine)"
                     class="administerVac"
                     v-for="vaccine in vaccines"
                     :key="vaccine"
                     @click="openAdministerVaccineModal(vaccine)"
                     fill="solid"
-                    :color="getColorForVaccine(vaccine, visitId)"
+                    :color="getColorForVaccine(vaccine)"
                     style="background: #ddeedd; border-radius: 8px; color: #636363"
                 >
-                    <ion-icon slot="start" :icon="getInjectSignForVaccine(vaccine, visitId)"></ion-icon>
+                    <ion-icon slot="start" :icon="getInjectSignForVaccine(vaccine)"></ion-icon>
                     {{ checkVaccineName(vaccine.drug_name) }}
-                    <ion-icon slot="end" :icon="getCheckBoxForVaccine(vaccine, visitId)"></ion-icon>
+                    <ion-icon slot="end" :icon="getCheckBoxForVaccine(vaccine)"></ion-icon>
                 </ion-button>
             </ion-col>
         </ion-row>
@@ -50,6 +50,10 @@ import administerVaccineModal from "@/apps/Immunization/components/Modals/admini
 import { createModal } from "@/utils/Alerts";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import { PatientService } from "@/services/patient_service";
+import voidAdminstredVaccine from "@/apps/Immunization/components/Modals/voidAdminstredVaccine.vue"
+import { StockService } from '@/services/stock_service'
+import alert from "@/apps/Immunization/components/Modals/alert.vue"
+import { mapState } from "pinia";
 export default defineComponent({
     name: "Home",
     components: {
@@ -72,10 +76,12 @@ export default defineComponent({
         IonModal,
         IonCol,
         IonRow,
+        alert,
     },
     data() {
         return {
             iconsContent: icons,
+            fowardData: {} as any,
         };
     },
     computed: {},
@@ -83,116 +89,109 @@ export default defineComponent({
     mounted() {},
     props: {
         vaccines: {
-            type: [],
-            default: [],
+            type: {},
+            default: {},
         } as any,
-        visitId: {
+        milestone_status: {
             type: String,
             default: 0,
         } as any,
     },
     watch: {},
     setup() {
-        return {};
+        return {}
     },
-
     methods: {
-        getColorForVaccine(vaccine: any, visit_id: number): string {
-            const store = useAdministerVaccineStore();
-            if (visit_id < store.getCurrentVisitId() && vaccine.status != "administered") {
-                return "danger";
-            }
+        getColorForVaccine(vaccine: any) {
             if (vaccine.status == "administered") {
                 return "success";
-            } else {
-                return "medium-green";
+            }
+
+            if (vaccine.status != "administered") {
+                if (this.milestone_status == "upcoming") {
+                    return "medium";
+                }
+                if (this.milestone_status == "current") {
+                    return "success";
+                } else {
+                    return "danger";
+                }
             }
         },
-        getInjectSignForVaccine(vaccine: any, visit_id: number) {
-            const store = useAdministerVaccineStore();
-            if (visit_id < store.getCurrentVisitId() && vaccine.status != "administered") {
-                return this.iconsContent.redAlert;
-            }
-            if (visit_id < store.getCurrentVisitId() && vaccine.status == "administered") {
-                return this.iconsContent.smallAlreadyAdminstered;
-            }
+        getInjectSignForVaccine(vaccine: any) {
             if (vaccine.status == "administered") {
                 return this.iconsContent.greenInjection;
             }
             if (vaccine.status != "administered") {
-                return this.iconsContent.fadedGreenIjection;
+                if (this.milestone_status == "upcoming") {
+                    return "";
+                } else {
+                    return this.iconsContent.fadedGreenIjection;
+                }
             }
         },
-        getCheckBoxForVaccine(vaccine: any, visit_id: number) {
-            const store = useAdministerVaccineStore();
-            if (visit_id < store.getCurrentVisitId() && vaccine.status != "administered") {
-                return this.iconsContent.smallEditPen;
-            }
-            if (visit_id < store.getCurrentVisitId() && vaccine.status == "administered") {
-                return this.iconsContent.smallEditPen;
-            }
+        getCheckBoxForVaccine(vaccine: any) {
             if (vaccine.status == "administered") {
                 return this.iconsContent.improvedGreenTick;
-            } else {
-                return this.iconsContent.whiteCheckbox;
-            }
-        },
-        openAdministerVaccineModal(data: any) {
-            const store = useAdministerVaccineStore();
-            store.setCurrentSelectedDrug(this.$props.visitId as number, data.drug_id as number, data.drug_name, data.vaccine_batch_number as string);
-            createModal(administerVaccineModal, { class: "otherVitalsModal" });
-        },
-        disableVaccine(identifier: number) {
-            const client = new PatientService();
-            const client_age = client.getAge();
-            const is_under_five = this.getVisitNumber(client_age) as number;
-            const store = useAdministerVaccineStore();
-            const currentVisitId = store.getCurrentVisitId();
-            const currentSchFound = store.getCurrentSchedFound();
-
-            if (currentSchFound == false) {
-                return true;
             }
 
-            if (identifier == currentVisitId) {
+            if (vaccine.status != "administered") {
+                if (this.milestone_status == "upcoming") {
+                    return "";
+                } else {
+                    return this.iconsContent.whiteCheckbox;
+                }
+            }
+        },
+        async openAdministerVaccineModal(data: any) {
+            const store = useAdministerVaccineStore();
+            store.setCurrentSelectedDrug(data)
+            const stockService = new StockService();
+            const data_ = await stockService.getItem(data.drug_id)
+            store.setLotNumberData(data_)
+
+            if(data_.length == 0) {
+                if (this.checkIfAdminstredAndAskToVoid() == false) {
+                    createModal(alert, { class: "otherVitalsModal" })
+                }
+            }
+
+            if(data_.length > 0) {
+                if (this.checkIfAdminstredAndAskToVoid() == false) {
+                    createModal(administerVaccineModal, { class: "otherVitalsModal" });
+                }
+            }
+        },
+        disableVaccine(vaccine: any) {
+            if (vaccine.status != null && vaccine.status == "administered") {
                 return false;
             }
 
-            if (identifier < is_under_five) {
+            if (vaccine.can_administer != null && vaccine.can_administer == false) {
                 return true;
             }
 
-            if (identifier < currentVisitId) {
+            if (vaccine.can_administer != null && vaccine.can_administer == true) {
                 return false;
-            } else {
-                return true;
             }
+            // return true;
         },
         checkVaccineName(name: string) {
             return name.replace(/Pentavalent/g, "Penta");
         },
-        getVisitNumber(age: number) {
-            if (age < 10 / 52) {
-                return 1; // Visit 1: 10 weeks
-            } else if (age < 14 / 52) {
-                return 2; // Visit 2: 14 weeks
-            } else if (age < 5 / 12) {
-                return 3; // Visit 3: 5 months
-            } else if (age < 6 / 12) {
-                return 4; // Visit 4: 6 months
-            } else if (age < 7 / 12) {
-                return 5; // Visit 5: 7 months
-            } else if (age < 9 / 12) {
-                return 6; // Visit 6: 9 months
-            } else if (age < 15 / 12) {
-                return 7; // Visit 7: 15 months
-            } else if (age < 22 / 12) {
-                return 8; // Visit 8: 22 months
-            } else if (age < 12) {
-                return 9; // Visit 9: 12 years above
-            } else {
-                return 10; // Visit 10: 18 years above
+        checkIfAdminstredAndAskToVoid() {
+            const store = useAdministerVaccineStore();
+            const vaccine_to_void = store.getCurrentSelectedDrug()
+            if(vaccine_to_void.drug.status == 'administered') {
+                store.setVaccineToBeVoided(vaccine_to_void)
+                createModal(voidAdminstredVaccine, { class: "otherVitalsModal" }, false)
+                // const data = await createModal(voidAdminstredVaccine, { class: "otherVitalsModal" }, false)
+                // if(data?.voided == true) {
+                //     // this.dismiss()
+                // }
+                return true
             }
+            return false
         },
     },
 });

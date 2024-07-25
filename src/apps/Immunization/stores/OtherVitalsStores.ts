@@ -8,7 +8,7 @@ const initialVitals = [
                 {
                     colData: [
                         {
-                            inputHeader: "Systolic Pressure*",
+                            inputHeader: "Systolic Pressure",
                             unit: "mmHg",
                             icon: icons.systolicPressure,
                             value: "",
@@ -18,7 +18,7 @@ const initialVitals = [
                             disabled: false,
                         },
                         {
-                            inputHeader: "Diastolic pressure*",
+                            inputHeader: "Diastolic pressure",
                             unit: "mmHg",
                             icon: icons.diastolicPressure,
                             value: "",
@@ -60,7 +60,7 @@ const initialVitals = [
                             eventType: "input",
                         },
                         {
-                            inputHeader: "Pulse rate*",
+                            inputHeader: "Pulse rate",
                             unit: "BMP",
                             icon: icons.pulse,
                             value: "",

@@ -2,7 +2,7 @@ import { Role } from "@/interfaces/role";
 import ApiClient from "./api_client";
 import HisDate from "@/utils/Date";
 import PACK_CONF from "../../package.json";
-import { useUserStore } from "@/stores/userStore"
+import { useUserStore } from "@/stores/userStore";
 export class InvalidAPIVersionError extends Error {
     message: string;
     constructor(version: string) {
@@ -65,8 +65,8 @@ export class AuthService {
             this.sessionDate = await this.getSystemDate();
             this.systemVersion = await this.getApiVersion();
             this.coreVersion = this.getHeadVersion();
-            const user_store = useUserStore()
-            user_store.setUser(user)
+            const user_store = useUserStore();
+            user_store.setUser(user);
         } else {
             throw "Unable to login" + response;
         }
@@ -82,7 +82,12 @@ export class AuthService {
         sessionStorage.setItem("APIVersion", this.systemVersion);
         localStorage.setItem(AuthVariable.CORE_VERSION, this.coreVersion);
     }
-
+    checkUserPrograms(selectedProgram: any) {
+        const accessPrograms: any = sessionStorage.getItem("userPrograms");
+        const programs = JSON.parse(accessPrograms);
+        return programs.some((program: any) => program.name === selectedProgram);
+        console.log("🚀 ~ AuthService ~ checkUserProgram ~ programs:", programs);
+    }
     clearSession() {
         sessionStorage.clear();
     }

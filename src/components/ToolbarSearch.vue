@@ -1,5 +1,11 @@
 <template>
-    <ion-searchbar @ionInput="handleInput" placeholder="Search client by MRN, name or scan barcode/QR-Code" class="searchField"></ion-searchbar>
+    <RoleSelectionModal :isOpen="isRoleSelectionModalOpen" @update:isOpen="isRoleSelectionModalOpen = $event" />
+    <ion-searchbar
+        @ionInput="handleInput"
+        placeholder="Add or search for a client by MRN, name, or by scanning a barcode/QR code."
+        class="searchField"
+    ></ion-searchbar>
+
     <ion-popover
         :is-open="popoverOpen"
         :event="event"
@@ -37,14 +43,26 @@
                 <ion-col style="max-width: 150px; min-width: 150px">{{ getPhone(item) }}</ion-col>
                 <ion-col style="max-width: 25px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
             </ion-row>
-        <ion-row class="ion-justify-content-start ion-align-items-center">
-              <Pagination :disablePrevious="page-1 == 0" :disableNext="patients.length < paginationSize" :page="page" :onClickNext="nextPage" :onClickPrevious="previousPage" />
-        </ion-row>
+            <ion-row class="ion-justify-content-start ion-align-items-center">
+                <Pagination
+                    :disablePrevious="page - 1 == 0"
+                    :disableNext="patients.length < paginationSize"
+                    :page="page"
+                    :onClickNext="nextPage"
+                    :onClickPrevious="previousPage"
+                />
+            </ion-row>
 
             <ion-row class="sticky-column">
-                <ion-col size="4" class="sticky-column">
-                    
-                    <DynButton :icon="add" :name="'Add Patient'" :fill="'clear'" @click="openCheckPaitentNationalIDModal" />
+                <ion-col size="1.5" class="sticky-column">
+                    <DynButton
+                        :icon="add"
+                        :name="programID() != 33 ? 'Add Patient' : 'Add Client'"
+                        :fill="'clear'"
+                        @click="openCheckPaitentNationalIDModal"
+                    />
+                </ion-col>
+                <ion-col size="2" class="sticky-column">
                     <div>
                         <img id="hand" src="../../public/images/hand.svg" />
                         <img id="handinfo" src="../../public/images/swipeinfo.png" />
@@ -94,10 +112,12 @@ import { UserService } from "@/services/user_service";
 import { Service } from "@/services/service";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import Pagination from "./Pagination.vue";
-
+import RoleSelectionModal from "@/apps/OPD/components/RoleSelectionModal.vue";
+import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 
 export default defineComponent({
     name: "Home",
+    mixins: [SetDemographics],
     components: {
         IonContent,
         IonHeader,
@@ -112,6 +132,7 @@ export default defineComponent({
         IonRow,
         IonCol,
         Pagination,
+        RoleSelectionModal,
     },
     setup() {
         return { checkmark, add };
@@ -122,9 +143,10 @@ export default defineComponent({
             event: null,
             patients: [] as any,
             showPopover: true,
-            page:1,
-            searchText:"",
-            paginationSize:7
+            page: 1,
+            searchText: "",
+            paginationSize: 7,
+            isRoleSelectionModalOpen: false,
         };
     },
     computed: {
@@ -132,6 +154,9 @@ export default defineComponent({
         ...mapState(useGeneralStore, ["NCDUserActions"]),
     },
     methods: {
+        programID() {
+            return Service.getProgramID();
+        },
         async handleInput(ev: any) {
             this.searchText = ev.target.value;
             this.patients = [];
@@ -221,24 +246,8 @@ export default defineComponent({
                 .join(", ");
         },
         async openNewPage(url: any, item: any) {
-            this.popoverOpen=false;
-            const demographicsStore = useDemographicsStore();
-            demographicsStore.setPatient(item);
-            demographicsStore.setDemographics({
-                name: item.person.names[0].given_name + " " + item.person.names[0].family_name,
-                mrn: this.patientIdentifier(item),
-                birthdate: item.person.birthdate,
-                category: "",
-                gender: item.person.gender,
-                patient_id: item.patient_id,
-                address:
-                    item?.person?.addresses[0]?.state_province +
-                    "," +
-                    item?.person?.addresses[0]?.township_division +
-                    "," +
-                    item?.person?.addresses[0]?.city_village,
-                phone: this.getPhone(item),
-            });
+            this.popoverOpen = false;
+            this.setDemographics(item);
             if (Service.getProgramID() == 32 || Service.getProgramID() == 33) {
                 resetNCDPatientData();
             } else if (Service.getProgramID() == 14) {
@@ -254,7 +263,9 @@ export default defineComponent({
             const roles: any = JSON.parse(roleData);
             UserService.setProgramUserActions();
 
-            if (roles.some((role: any) => role.role === "Pharmacist")) {
+            if (roles.some((role: any) => role.role === "Lab" && roles.some((role: any) => role.role === "Pharmacist"))) {
+                this.isRoleSelectionModalOpen = true;
+            } else if (roles.some((role: any) => role.role === "Pharmacist")) {
                 this.$router.push("dispensation");
             } else if (roles.some((role: any) => role.role === "Lab")) {
                 this.$router.push("OPDConsultationPlan");
@@ -280,28 +291,28 @@ export default defineComponent({
             this.popoverOpen = true;
         },
         openCheckPaitentNationalIDModal() {
-            this.popoverOpen=false;
+            this.popoverOpen = false;
             resetPatientData();
             createModal(CheckPatientNationalID, { class: "nationalIDModal" });
         },
         onDismiss() {
             console.log("Popover dismissed");
         },
-        nextPage(){
+        nextPage() {
             this.page++;
         },
-        previousPage(){
+        previousPage() {
             this.page--;
-        }
+        },
     },
-    watch:{
-        page(){
+    watch: {
+        page() {
             this.searchDemographicPayload(this.searchText);
         },
-        searchText(){
+        searchText() {
             this.page = 1;
-        }
-    }
+        },
+    },
 });
 </script>
 
@@ -384,7 +395,6 @@ ion-popover {
 #hand {
     position: absolute;
     top: 36%;
-    padding-left: 30%;
     animation-name: swipe;
     animation-timing-function: ease-in-out;
     animation-iteration-count: 3;
@@ -392,14 +402,13 @@ ion-popover {
 }
 #handinfo {
     position: absolute;
-    width: 70%;
-    left: 30%;
     top: 48%;
-    padding-left: 35%;
+    padding-left: 10%;
     animation-name: swipe;
     animation-timing-function: ease-in-out;
     animation-iteration-count: 3;
     animation-duration: 3s;
+    height: 15px;
 }
 .clickable-row {
     cursor: pointer;
@@ -462,10 +471,10 @@ ion-popover {
 }
 
 @media (max-width: 1024px) {
-  .medium {
-    display: flex;
-    justify-content: start;
-  }
+    .medium {
+        display: flex;
+        justify-content: start;
+    }
 }
 </style>
 <style>

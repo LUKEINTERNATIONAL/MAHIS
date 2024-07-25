@@ -4,7 +4,7 @@
             <ion-toolbar class="content_width primary_color_background">
                 <ion-menu-button slot="start" />
                 <ion-title style="cursor: pointer" @click="nav('/home')"
-                    ><b>MaHIS</b><small>({{ programName }})</small></ion-title
+                    ><b>MaHIS</b><small>({{ programs.program.applicationName }})</small></ion-title
                 >
                 <ion-buttons slot="end" class="search-input-desktop" style="max-width: 800px">
                     <ToolbarSearch />
@@ -21,7 +21,7 @@
                 <ion-popover :is-open="popoverOpen" :show-backdrop="false" :dismiss-on-select="true" :event="event" @didDismiss="popoverOpen = false">
                     <ion-content>
                         <ion-list>
-                            <ion-item :button="true" :detail="false" style="cursor: pointer">Profile</ion-item>
+                            <ion-item :button="true" :detail="false" @click="showUserProfile()" style="cursor: pointer">Profile</ion-item>
                             <ion-item :button="true" :detail="false" @click="nav('/login')" style="cursor: pointer">Logout</ion-item>
                         </ion-list>
                     </ion-content>
@@ -33,6 +33,8 @@
             </ion-buttons>
         </div>
     </ion-header>
+
+    <userProfile :show-modal="showUserProfileModal" @close-popoover="modalClosed"/>
 </template>
 
 <script lang="ts">
@@ -42,6 +44,9 @@ import { defineComponent } from "vue";
 import ToolbarSearch from "@/components/ToolbarSearch.vue";
 import useFacility from "@/composables/useFacility";
 import { Service } from "@/services/service";
+import userProfile from "@/views/UserManagement/userProfile.vue"
+import { useProgramStore } from "@/stores/ProgramStore";
+import { mapState } from "pinia";
 export default defineComponent({
     name: "Home",
     components: {
@@ -55,6 +60,7 @@ export default defineComponent({
         ToolbarSearch,
         IonIcon,
         IonPopover,
+        userProfile
     },
     data() {
         return {
@@ -62,16 +68,31 @@ export default defineComponent({
             event: null as any,
             locationName: "",
             programName: "",
+            showUserProfileModal: false,
         };
     },
+    watch: {
+        programs: {
+            handler() {
+                this.updateData();
+            },
+            deep: true,
+        },
+    },
+    computed: {
+        ...mapState(useProgramStore, ["programs"]),
+    },
     mounted() {
-        this.programName = Service.getProgramName();
+        this.updateData();
     },
     setup() {
         const { facilityName, facilityUUID, district } = useFacility();
         return { notificationsOutline, personCircleOutline, facilityName };
     },
     methods: {
+        updateData() {
+            this.programName = Service.getProgramName();
+        },
         nav(url: any) {
             this.$router.push(url);
         },
@@ -79,6 +100,12 @@ export default defineComponent({
             this.event = e;
             this.popoverOpen = true;
         },
+        showUserProfile() {
+            this.showUserProfileModal = true;
+        },
+        modalClosed() {
+           this.showUserProfileModal = false;
+        }
     },
 });
 </script>

@@ -26,8 +26,12 @@
   import {IonRow, IonCol, IonButton} from "@ionic/vue";
   import Picker from 'pickerjs'
   import "pickerjs/dist/picker.css";
+  import { Service } from "@/services/service";
+  import { PatientService } from "@/services/patient_service"
   const uniqId = ref("0")
   let pickerInstance = null as any
+  const patient = new PatientService()
+  
 
   onMounted(() => {
     const _input_ = document.getElementById('0') as any
@@ -45,6 +49,8 @@
           pick: datePickerEventListener
         })
     pickerInstance = picker
+    const init_date = new Date(Service.getSessionDate())
+    pickerInstance.setDate(init_date)
   }
 
   const emit = defineEmits<{
@@ -52,7 +58,38 @@
   }>()
 
   function dateChange() {
-      emit("dateChange", pickerInstance.getDate())
+    const clientBODYear = getYearFromDateString(patient.getBirthdate() as any)
+    const clientBODMonth = removeLeadingZero(getMonthFromDateString(patient.getBirthdate() as any))
+    const clientBODDay = removeLeadingZero(getDayFromDateString(patient.getBirthdate() as any))
+    const sessionYear = getYearFromDateString(Service.getSessionDate())
+    const pickerYear = pickerInstance.getDate().getFullYear()
+    const pickerMonth = pickerInstance.getDate().getMonth() + 1
+    const pickerDay = pickerInstance.getDate().getDate()
+    if (pickerYear <= sessionYear) {
+      if (parseInt(pickerYear) == parseInt(clientBODYear)) {
+        if (parseInt(pickerMonth) < parseInt(clientBODMonth)) {
+          const corrected_date = pickerInstance.getDate()
+          corrected_date.setMonth(parseInt(clientBODMonth) - 1)
+          pickerInstance.setDate(corrected_date)
+        }
+        if (parseInt(pickerDay) <= parseInt(clientBODDay)) {
+          const corrected_date = pickerInstance.getDate()
+          corrected_date.setDate(parseInt(clientBODDay) + 1)
+          pickerInstance.setDate(corrected_date)
+        }
+      }
+      if ( parseInt(pickerYear) < parseInt(clientBODYear)) {
+        const corrected_date = pickerInstance.getDate()
+        corrected_date.setFullYear(sessionYear)
+        pickerInstance.setDate(corrected_date)
+      }
+    }
+     else {
+      const corrected_date = pickerInstance.getDate()
+      corrected_date.setFullYear(sessionYear)
+      pickerInstance.setDate(corrected_date)
+    }
+    emit("dateChange", pickerInstance.getDate())
   }
 
   function datePickerEventListener(event: any) {
@@ -60,8 +97,25 @@
       dateChange()
   }
 
+  function getYearFromDateString(dateString: string) {
+    // Split the date string by the hyphen and return the first part (the year)
+    return dateString.split('-')[0];
+  }
+
+  function getMonthFromDateString(dateString: string) {
+    return dateString.split('-')[1]
+  }
+
+  function getDayFromDateString(dateString: string) {
+    return dateString.split('-')[2]
+  }
+
+  function removeLeadingZero(str: string) {
+    return String(Number(str))
+  }
+
   function generateUniqueString() {
-    const timestamp = Date.now().toString(20);
+    const timestamp = Date.now().toString(20)
     const randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
     let uniqueString = ''
     for (let i = 0; i < timestamp.length; i++) {

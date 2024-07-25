@@ -98,9 +98,9 @@
     .login-page {
         --ion-background-color: #ffffff;
     }
-    ion-card {
+    /* ion-card {
         box-shadow: unset;
-    }
+    } */
     ion-popover[mobilePopover] {
         --offset-x: 35%;
     }

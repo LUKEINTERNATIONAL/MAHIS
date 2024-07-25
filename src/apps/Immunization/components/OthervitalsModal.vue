@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController, IonInput } from "@ionic/vue";
+import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController, IonInput, modalController } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { checkmark, pulseOutline } from "ionicons/icons";
 import { icons } from "@/utils/svg";
@@ -47,7 +47,7 @@ import { VitalsEncounter } from "@/apps/Immunization/services/vitals";
 import BasicForm from "@/components/BasicForm.vue";
 import { Service } from "@/services/service";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
-import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
+import PreviousVitals from "@/components/Graphs/previousVitals.vue";
 import { ObservationService } from "@/services/observation_service";
 import { PatientService } from "@/services/patient_service";
 import {
@@ -334,6 +334,7 @@ export default defineComponent({
             const userID: any = Service.getUserID();
             const vitalsService = new VitalsService(this.demographics.patient_id, userID);
             const vitalsToSave = this.vitals;
+            modalController.dismiss();
             vitalsService.onFinish(vitalsToSave).then(() => {
                 this.closeForm();
             });

@@ -83,7 +83,6 @@ async function generatedSelected() {
     const is_P = await generateKeyAPIRef(selected.name);
     try {
         if (is_P.exists == true) {
-            console.log(is_P.ref_name);
             const data_ = [] as any;
             const data = await getActivities(is_P.ref_name);
             activities.value.forEach((item: any) => {
@@ -134,7 +133,7 @@ async function postActivities(_property_: string, selected: string) {
 async function postDumbActivities(_property_: string) {
     const userActivities = {
         property: _property_,
-        property_value: "dumb",
+        property_value: "",
         user_id: props.userId,
     };
     try {

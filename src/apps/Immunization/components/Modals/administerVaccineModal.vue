@@ -1,11 +1,13 @@
 <template>
     <div class="modal_wrapper">
-        <ion-row>
+        <ion-row style="margin-top: 10px">
             <ion-col style="margin-left: -3px">
                 <div class="om">Administer Vaccine</div>
             </ion-col>
             <ion-col size="6">
-                <ion-label class="lbl-tl" style="font-size: 13"> Todays Date: <span class="lbl-ct">{{ sessionDate }}</span></ion-label>
+                <ion-label class="lbl-tl" style="font-size: 13">
+                    Todays Date: <span class="lbl-ct">{{ sessionDate }}</span></ion-label
+                >
             </ion-col>
         </ion-row>
 
@@ -14,31 +16,33 @@
         </ion-row>
         <ion-row>
             <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                >Batch number<span style="color: #b42318">*</span></ion-label
+                >Select Batch number<span style="color: #b42318">*</span></ion-label
             >
         </ion-row>
         <div>
-            <BasicInputField
+            <!-- <BasicInputField
                 :placeholder="'Enter batch number'"
                 :icon="iconsContent.batchNumber"
                 :inputValue="batchNumber"
                 :-inner-action-btn-propeties="InnerActionBtnPropeties"
                 @update:InnerActionBtnPropetiesAction="InnerActionBtnPropeties.fn"
                 @update:inputValue="updateBatchNumber"
+                @update:passedinputValue="updateBatchNumberByPassValue"
             />
 
             <div>
                 <ion-label v-if="is_batch_number_valid" class="error-label">
                     {{ batch_number_error_message }}
                 </ion-label>
-            </div>
+            </div> -->
+            <lotNumberList :action="childAction" ref="childComponentRef" @actionTriggered="ActionTriggered" @emptyList="ShowAlert"/>
         </div>
 
         <div class="client_admi">
             <span class="client_admi_sub">Vaccination done by: </span><span class="client_admin_sub_x">{{ full_name }}</span>
         </div>
 
-        <customDatePicker v-if="showPD" @dateChange="updateDate" />
+        <customDatePicker v-if="showPD" @dateChange="updateDate"/>
         <div class="btnContent">
             <div class="saveBtn" v-if="showDateBtns">
                 <div>
@@ -79,7 +83,7 @@
 
 <script lang="ts">
 import { IonContent, IonHeader, IonItem, IonList, IonTitle, IonToolbar, IonMenu, menuController, IonInput, modalController } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { checkmark, pulseOutline } from "ionicons/icons";
 import { icons } from "@/utils/svg";
 import { useDemographicsStore } from "@/stores/DemographicStore";
@@ -89,12 +93,13 @@ import { Service } from "@/services/service";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
 import HisDate from "@/utils/Date";
 import BasicInputField from "@/components/BasicInputField.vue";
-import PreviousVitals from "@/components/previousVisits/previousVitals.vue";
+import PreviousVitals from "@/components/Graphs/previousVitals.vue";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { saveVaccineAdministeredDrugs, getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service";
 import { isEmpty } from "lodash";
-import QRCodeReadersrc from "@/components/QRCodeReader.vue"
-import { createModal } from "@/utils/Alerts"
+import QRCodeReadersrc from "@/components/QRCodeReader.vue";
+import { createModal } from "@/utils/Alerts";
+import alert from "./alert.vue"
 import {
     modifyCheckboxInputField,
     getCheckboxSelectedValue,
@@ -103,7 +108,8 @@ import {
     modifyRadioValue,
     modifyFieldValue,
 } from "@/services/data_helpers";
-import { useUserStore } from "@/stores/userStore"
+import { useUserStore } from "@/stores/userStore";
+import lotNumberList from "./lotNumberList.vue"
 
 export default defineComponent({
     components: {
@@ -118,6 +124,8 @@ export default defineComponent({
         BasicInputField,
         PreviousVitals,
         customDatePicker,
+        lotNumberList,
+        alert,
     },
     data() {
         return {
@@ -135,20 +143,35 @@ export default defineComponent({
             InnerActionBtnPropeties: {
                 name: "Scan",
                 show: true,
-                fn: () => { createModal(QRCodeReadersrc, { class: "otherVitalsModal" })}
+                fn: () => {
+                    createModal(QRCodeReadersrc, { class: "otherVitalsModal qr_code_modal" }, false);
+                },
             },
+            selected_date_: '',
         };
     },
-    computed: {},
-    async mounted() {
-        this.loadCurrentSelectedDrug()
-        this.displayUserNames()
-        const store = useAdministerVaccineStore()
-        this.showPD = store.isVaccinePassed()
-        this.showDateBtns = !this.showPD
+    computed: {
+        ...mapState(useAdministerVaccineStore, ["tempScannedBatchNumber"]),
     },
+
     setup() {
-        return { checkmark, pulseOutline };
+        const childComponentRef = ref<InstanceType<typeof lotNumberList> | null>(null);
+        const triggerChildAction = () => {
+            if (childComponentRef.value) {
+                childComponentRef.value.performAction();
+            }
+        };
+        return {
+            childComponentRef,
+            triggerChildAction,
+        };
+    },
+    async mounted() {
+        this.loadCurrentSelectedDrug();
+        this.displayUserNames();
+        const store = useAdministerVaccineStore();
+        this.showPD = store.isVaccinePassed();
+        this.showDateBtns = !this.showPD;
     },
     props: {
         customSchedule: {
@@ -159,23 +182,25 @@ export default defineComponent({
     watch: {
         batchNumber: {
             handler() {
-                if (this.isAlphaNumeric(this.batchNumber as string) == true) {
-                    this.is_batch_number_valid = false;
-                }
-                if (this.isAlphaNumeric(this.batchNumber as string) == false) {
-                    this.is_batch_number_valid = true;
-                }
+                this.validateBatchNumber();
             },
             deep: true,
+        },
+        tempScannedBatchNumber: {
+            handler() {
+                if (this.tempScannedBatchNumber != null) {
+                    this.batchNumber = this.tempScannedBatchNumber.text;
+                    this.validateBatchNumber();
+                }
+            },
         },
     },
     methods: {
         loadCurrentSelectedDrug() {
             const store = useAdministerVaccineStore();
-            //console.log(store.getCurrentSelectedDrug())
             this.currentDrug = store.getCurrentSelectedDrug();
-            this.drugName = this.currentDrug.drug_name;
-            this.batchNumber = this.currentDrug.vaccine_batch_number;
+            this.drugName = this.currentDrug.drug.drug_name;
+            this.batchNumber = this.currentDrug.drug.vaccine_batch_number ? this.currentDrug.drug.vaccine_batch_number : "";
         },
         showCPD() {
             this.showPD = true as boolean;
@@ -203,43 +228,73 @@ export default defineComponent({
         },
         updateBatchNumber(event: any) {
             const input = event.target.value;
-            this.batchNumber = input;
+            this.batchNumber = input || this.tempScannedBatchNumber?.text || "";
         },
-        saveDta(date_: any) {
-            if (this.is_batch_number_valid == true) {
-                toastWarning("Enter batch number!");
-                return;
-            }
-
-            if (this.batchNumber == "") {
-                toastWarning("Enter batch number!");
-                return;
-            }
+        ActionTriggered(selectedOption: any) {
+            console.log(selectedOption)
             const dta = {
-                batch_number: this.batchNumber,
-                date_administered: date_,
-                visit_id: this.currentDrug.visit_id,
-                drug_id: this.currentDrug.drug_id,
+                batch_number: selectedOption.lotNumber,
+                date_administered: this.selected_date_,
+                drug_id: this.currentDrug.drug.drug_id,
             };
             const store = useAdministerVaccineStore();
             store.setAdministeredVaccine(dta);
             saveVaccineAdministeredDrugs();
+            store.setTempScannedBatchNumber(null);
             this.dismiss();
         },
+        saveDta(date_: any) {
+            this.selected_date_ = date_
+            this.triggerChildAction()
+            // this.validateBatchNumber();
+            // if (this.is_batch_number_valid == true) {
+            //     toastWarning("Enter batch number!");
+            //     return;
+            // }
+
+            // if (this.batchNumber == "") {
+            //     toastWarning("Enter batch number!");
+            //     return;
+            // }
+            // const dta = {
+            //     batch_number: this.batchNumber,
+            //     date_administered: date_,
+            //     drug_id: this.currentDrug.drug.drug_id,
+            // };
+            // const store = useAdministerVaccineStore();
+            // store.setAdministeredVaccine(dta);
+            // saveVaccineAdministeredDrugs();
+            // store.setTempScannedBatchNumber(null);
+            // this.dismiss();
+        },
         isAlphaNumeric(text: string) {
-            // Regular expression to match one or more digits
-            const regex = /^[a-zA-Z0-9]+$/;
+            const regex = /^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+$/;
             return regex.test(text);
         },
-        displayUserNames() {
-            const user_store = useUserStore()
-            const user = user_store.getUser()
-            const first_name = user.person.names[0].given_name
-            const last_name = user.person.names[0].family_name
-            this.full_name = first_name + " " + last_name
+        validateBatchNumber() {
+            if (this.isAlphaNumeric(this.batchNumber as string) == true) {
+                this.is_batch_number_valid = false;
+            }
+            if (this.isAlphaNumeric(this.batchNumber as string) == false) {
+                this.is_batch_number_valid = true;
+            }
         },
-        showQRcode() {
-            createModal(QRCodeReadersrc, { class: "otherVitalsModal" })
+        updateBatchNumberByPassValue(input: any) {
+            this.batchNumber = input;
+        },
+        displayUserNames() {
+            const user_store = useUserStore();
+            const user = user_store.getUser();
+            const first_name = user.person.names[0].given_name;
+            const last_name = user.person.names[0].family_name;
+            this.full_name = first_name + " " + last_name;
+        },
+        childAction() {
+           
+        },
+        ShowAlert() {
+            // createModal(alert, { class: "otherVitalsModal" }, false);
+            // this.dismiss()
         }
     },
 });
@@ -329,10 +384,10 @@ h5 {
 }
 .modal_wrapper {
     /* padding: 0px 10px; */
-        background: inherit;
-    }
-    .client_admi {
-        /* Today's date */
+    background: inherit;
+}
+.client_admi {
+    /* Today's date */
 
     /* Auto layout */
     display: flex;
@@ -344,7 +399,6 @@ h5 {
     width: 363px;
     height: 28px;
 
-
     /* Inside auto layout */
     flex: none;
     order: 2;
@@ -354,7 +408,7 @@ h5 {
 .client_admi_sub {
     font-weight: 400;
     font-size: 15px;
-    color:  #636363;
+    color: #636363;
 }
 .client_admin_sub_x {
     font-weight: 500;

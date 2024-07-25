@@ -1,137 +1,115 @@
 <template>
-  <ion-page :class="{ 'loading': isLoading }">
-    <!-- Spinner -->
-    <div v-if="isLoading" class="spinner-overlay">
-      <ion-spinner name="bubbles"></ion-spinner>
-      <div class="loading-text">Please wait...</div>
-    </div>
+    <ion-page :class="{ loading: isLoading }">
+        <!-- Spinner -->
+        <div v-if="isLoading" class="spinner-overlay">
+            <ion-spinner name="bubbles"></ion-spinner>
+            <div class="loading-text">Please wait...</div>
+        </div>
 
-    <ion-header>
-      <div class="header position_content">
-        <div style="display: flex; align-items: center" @click="nav('/home')">
-          <ion-icon slot="separator" size="large" :icon="iconsContent.arrowLeft"></ion-icon>
-          <span style="padding-left: 10px">Go back</span>
-        </div>
-        <div></div>
-        <div style="display: flex; align-items: center">
-          <ion-icon slot="separator" size="large" :icon="iconsContent.help"></ion-icon>
-          <span style="padding-left: 10px"> Need any help?</span>
-        </div>
-      </div>
-    </ion-header>
-    <ion-content>
-      <div class="container">
-        <div class="title">
-          <div class="demographics_title">New patient registration</div>
-        </div>
-        <div class="icon_div displayNoneMobile">
-          <ion-icon :class="iconListStatus" :icon="list" @click="setDisplayType('list')"></ion-icon>
-          <ion-icon
-              :class="iconGridStatus"
-              style="font-size: 21px; margin-top: 1.5px"
-              :icon="grid"
-              @click="setDisplayType('grid')"
-          ></ion-icon>
-        </div>
-      </div>
-      <div v-if="registrationType == 'scan'">
-        <ScanRegistration />
-      </div>
-      <div
-          class="center_content"
-          v-if="registrationType == 'manual' && registrationDisplayType == 'grid' && screenWidth > 991"
-      >
-        <div v-if="registrationDisplayType == 'grid'" class="flex-container">
-          <div class="flex-item">
-            <PersonalInformation />
-          </div>
-          <div class="flex-item">
-            <CurrentLocation />
-            <SocialHistory v-if="checkUnderFourteen" />
-            <BirthRegistration v-if="checkUnderNine" />
-          </div>
-          <div class="flex-item">
-            <HomeLocation />
-            <GuardianInformation />
-          </div>
-        </div>
-      </div>
+        <ion-header>
+            <div class="header position_content">
+                <div style="display: flex; align-items: center" @click="nav('/home')">
+                    <ion-icon slot="separator" size="large" :icon="iconsContent.arrowLeft"></ion-icon>
+                    <span style="padding-left: 10px">Go back</span>
+                </div>
+                <div></div>
+                <div style="display: flex; align-items: center">
+                    <ion-icon slot="separator" size="large" :icon="iconsContent.help"></ion-icon>
+                    <span style="padding-left: 10px"> Need any help?</span>
+                </div>
+            </div>
+        </ion-header>
+        <ion-content>
+            <div class="container">
+                <div class="title">
+                    <div class="demographics_title">New {{ programID() != 33 ? "patient" : "client" }} registration</div>
+                </div>
+                <div class="icon_div displayNoneMobile">
+                    <ion-icon :class="iconListStatus" :icon="list" @click="setDisplayType('list')"></ion-icon>
+                    <ion-icon
+                        :class="iconGridStatus"
+                        style="font-size: 21px; margin-top: 1.5px"
+                        :icon="grid"
+                        @click="setDisplayType('grid')"
+                    ></ion-icon>
+                </div>
+            </div>
+            <div v-if="registrationType == 'scan'">
+                <ScanRegistration />
+            </div>
+            <div class="center_content" v-if="registrationType == 'manual' && registrationDisplayType == 'grid' && screenWidth > 991">
+                <div v-if="registrationDisplayType == 'grid'" class="flex-container">
+                    <div class="flex-item">
+                        <PersonalInformation />
+                    </div>
+                    <div class="flex-item">
+                        <CurrentLocation />
+                        <SocialHistory v-if="checkUnderFourteen" />
+                        <BirthRegistration v-if="checkUnderNine" />
+                    </div>
+                    <div class="flex-item">
+                        <HomeLocation />
+                        <GuardianInformation />
+                    </div>
+                </div>
+            </div>
 
-      <div v-if="(registrationType == 'manual' && registrationDisplayType == 'list') || screenWidth <= 991">
-        <div v-if="currentStep == 'Personal Information'">
-          <PersonalInformation />
+            <div v-if="(registrationType == 'manual' && registrationDisplayType == 'list') || screenWidth <= 991">
+                <div v-if="currentStep == 'Personal Information'">
+                    <PersonalInformation />
+                </div>
+                <div v-if="currentStep == 'Location'">
+                    <div style="justify-content: center">
+                        <div><CurrentLocation /></div>
+                        <div><HomeLocation /></div>
+                    </div>
+                </div>
+                <div v-if="currentStep == 'Social History'">
+                    <SocialHistory v-if="checkUnderFourteen" />
+                    <BirthRegistration v-if="checkUnderFive" />
+                </div>
+                <div v-if="currentStep == 'Guardian Information'">
+                    <GuardianInformation />
+                </div>
+            </div>
+        </ion-content>
+        <div class="footer2" v-if="registrationDisplayType == 'grid' && screenWidth > 991">
+            <DynamicButton name="Save" iconSlot="end" :icon="iconsContent.saveWhite" :disabledValue="disableSaveBtn" @click="saveData()" />
         </div>
-        <div v-if="currentStep == 'Location'">
-          <div style="justify-content: center">
-            <div><CurrentLocation /></div>
-            <div><HomeLocation /></div>
-          </div>
-        </div>
-        <div v-if="currentStep == 'Social History'">
-          <SocialHistory v-if="checkUnderFourteen" />
-          <BirthRegistration v-if="checkUnderNine" />
-        </div>
-        <div v-if="currentStep == 'Guardian Information'">
-          <GuardianInformation />
-        </div>
-      </div>
-    </ion-content>
-    <div class="footer2" v-if="registrationDisplayType == 'grid' && screenWidth > 991">
-      <DynamicButton
-          name="Save"
-          iconSlot="end"
-          :icon="iconsContent.saveWhite"
-          :disabledValue="disableSaveBtn"
-          @click="saveData()"
-      />
-    </div>
-    <ion-footer v-if="(registrationType == 'manual' && registrationDisplayType == 'list') || screenWidth <= 991">
-      <div class="footer position_content">
-        <DynamicButton name="Previous" :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
-        <ion-breadcrumbs class="breadcrumbs displayNoneMobile">
-          <ion-breadcrumb
-              @click="setCurrentStep('Personal Information')"
-              :class="{ active: currentStep === 'Personal Information' }"
-          >
-            <span class="breadcrumb-text">Personal Information</span>
-            <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
-          </ion-breadcrumb>
-          <ion-breadcrumb @click="setCurrentStep('Location')" :class="{ active: currentStep === 'Location' }">
-            <span class="breadcrumb-text">Location</span>
-            <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
-          </ion-breadcrumb>
-          <ion-breadcrumb @click="setCurrentStep('Social History')" :class="{ active: currentStep === 'Social History' }">
-            <span class="breadcrumb-text">Social History</span>
-            <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
-          </ion-breadcrumb>
-          <ion-breadcrumb
-              @click="setCurrentStep('Guardian Information')"
-              :class="{ active: currentStep === 'Guardian Information' }"
-          >
-            <span class="breadcrumb-text">Guardian Information</span>
-            <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
-          </ion-breadcrumb>
-        </ion-breadcrumbs>
-        <DynamicButton
-            v-if="currentStep == 'Guardian Information'"
-            name="Save"
-            iconSlot="end"
-            :icon="iconsContent.saveWhite"
-            @click="saveData()"
-        />
-        <DynamicButton
-            v-else
-            name="Next"
-            :disabledValue="disableSaveBtn"
-            iconSlot="end"
-            :icon="iconsContent.arrowRightWhite"
-            @click="nextStep"
-        />
-      </div>
-    </ion-footer>
-  </ion-page>
+        <ion-footer v-if="(registrationType == 'manual' && registrationDisplayType == 'list') || screenWidth <= 991">
+            <div class="footer position_content">
+                <DynamicButton name="Cancel" v-if="currentStep == 'Personal Information'" color="danger" @click="nav('/home')" />
+                <DynamicButton name="Previous" v-else :icon="iconsContent.arrowLeftWhite" color="medium" @click="previousStep" />
+                <ion-breadcrumbs class="breadcrumbs displayNoneMobile">
+                    <ion-breadcrumb @click="setCurrentStep('Personal Information')" :class="{ active: currentStep === 'Personal Information' }">
+                        <span class="breadcrumb-text">Personal Information</span>
+                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
+                    </ion-breadcrumb>
+                    <ion-breadcrumb @click="setCurrentStep('Location')" :class="{ active: currentStep === 'Location' }">
+                        <span class="breadcrumb-text">Location</span>
+                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
+                    </ion-breadcrumb>
+                    <ion-breadcrumb @click="setCurrentStep('Social History')" :class="{ active: currentStep === 'Social History' }">
+                        <span class="breadcrumb-text">Social History</span>
+                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
+                    </ion-breadcrumb>
+                    <ion-breadcrumb @click="setCurrentStep('Guardian Information')" :class="{ active: currentStep === 'Guardian Information' }">
+                        <span class="breadcrumb-text">Guardian Information</span>
+                        <ion-icon slot="separator" size="large" :icon="iconsContent.arrowRight"></ion-icon>
+                    </ion-breadcrumb>
+                </ion-breadcrumbs>
+                <DynamicButton
+                    v-if="currentStep == 'Guardian Information'"
+                    name="Save"
+                    iconSlot="end"
+                    :icon="iconsContent.saveWhite"
+                    @click="saveData()"
+                />
+                <DynamicButton v-else name="Next" :disabledValue="false" iconSlot="end" :icon="iconsContent.arrowRightWhite" @click="nextStep" />
+            </div>
+        </ion-footer>
+    </ion-page>
 </template>
-
 
 <script lang="ts">
 import { IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonBreadcrumb, IonBreadcrumbs, IonIcon } from "@ionic/vue";
@@ -167,8 +145,12 @@ import { useBirthRegistrationStore } from "@/apps/Immunization/stores/BirthRegis
 import { formatRadioButtonData, formatCheckBoxData, formatInputFiledData } from "@/services/formatServerData";
 import { validateInputFiledData, validateRadioButtonData, validateCheckBoxData } from "@/services/group_validation";
 import { AppEncounterService } from "@/services/app_encounter_service";
+import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
+import { PatientProgramService } from "@/services/patient_program_service";
+import { resetDemographics } from "@/services/reset_data";
 
 export default defineComponent({
+    mixins: [ScreenSizeMixin],
     components: {
         IonBreadcrumb,
         IonBreadcrumbs,
@@ -195,13 +177,14 @@ export default defineComponent({
             demographic: true,
             currentStep: "Personal Information",
             scanner: false,
+            checkUnderOne: false,
+            isLoading: false,
             checkUnderFourteen: true,
             checkUnderNine: false,
             checkUnderFive: false,
+            checkUnderSixWeeks: false,
             steps: ["Personal Information", "Location", "Social History", "Guardian Information"],
-            screenWidth: "" as any,
             disableSaveBtn: false,
-            isLoading: false,
         };
     },
     props: ["registrationType"],
@@ -259,7 +242,7 @@ export default defineComponent({
     },
 
     async mounted() {
-        this.screenWidth = window.screen.width;
+        resetDemographics();
         this.setIconClass();
         this.disableNationalIDInput();
         this.checkAge();
@@ -279,8 +262,8 @@ export default defineComponent({
             deep: true,
         },
         $route: {
-            handler() {
-                this.setCurrentStep("Personal Information");
+            async handler(data) {
+                if (data.name == "registration") resetDemographics();
             },
             deep: true,
         },
@@ -289,33 +272,38 @@ export default defineComponent({
         return { arrowForwardCircle, grid, list };
     },
     methods: {
+        programID() {
+            return Service.getProgramID();
+        },
         async getRegion(name: any) {
-            let districts = [];
-            for (let i of [1, 2, 3]) {
-                if ((i = 1)) districts = await LocationService.getDistricts(i);
-                if (districts.some((district: any) => district.name.trim() === name)) {
-                    return "Central Region";
-                }
-                if ((i = 2)) districts = await LocationService.getDistricts(i);
-                if (districts.some((district: any) => district.name.trim() === name)) {
-                    return "Northern Region";
-                }
-                if ((i = 3)) districts = await LocationService.getDistricts(i);
-                if (districts.some((district: any) => district.name.trim() === name)) {
-                    return "Southern Region";
-                }
-                if ((i = 4)) districts = await LocationService.getDistricts(i);
-                if (districts.some((district: any) => district.name.trim() === name)) {
-                    return "Foreign";
+            if (name) {
+                let districts = [];
+                for (let i of [1, 2, 3]) {
+                    if ((i = 1)) districts = await LocationService.getDistricts(i);
+                    if (districts.some((district: any) => district.name.trim() === name)) {
+                        return "Central Region";
+                    }
+                    if ((i = 2)) districts = await LocationService.getDistricts(i);
+                    if (districts.some((district: any) => district.name.trim() === name)) {
+                        return "Northern Region";
+                    }
+                    if ((i = 3)) districts = await LocationService.getDistricts(i);
+                    if (districts.some((district: any) => district.name.trim() === name)) {
+                        return "Southern Region";
+                    }
+                    if ((i = 4)) districts = await LocationService.getDistricts(i);
+                    if (districts.some((district: any) => district.name.trim() === name)) {
+                        return "Foreign";
+                    }
                 }
             }
         },
         checkAge() {
             if (!isEmpty(this.birthdate)) {
-                console.log(HisDate.ageInMonths(this.birthdate));
                 this.checkUnderFourteen = HisDate.getAgeInYears(this.birthdate) >= 14 ? true : false;
                 this.checkUnderNine = HisDate.ageInMonths(this.birthdate) < 9 ? true : false;
                 this.checkUnderFive = HisDate.getAgeInYears(this.birthdate) < 5 ? true : false;
+                this.checkUnderSixWeeks = HisDate.dateDiffInDays(HisDate.currentDate(), this.birthdate) < 42 ? true : false;
             }
         },
         disableNationalIDInput() {
@@ -332,7 +320,7 @@ export default defineComponent({
             this.$router.push(url);
         },
         nextStep() {
-            if (this.checkUnderFourteen || this.checkUnderNine || this.checkUnderFive)
+            if (this.checkUnderFive || this.checkUnderOne)
                 this.steps = ["Personal Information", "Location", "Social History", "Guardian Information"];
             else this.steps = ["Personal Information", "Location", "Guardian Information"];
             const currentIndex = this.steps.indexOf(this.currentStep);
@@ -346,24 +334,40 @@ export default defineComponent({
                 this.currentStep = this.steps[currentIndex - 1];
             }
         },
+        async enrollProgram(patientId: any) {
+            const program = new PatientProgramService(patientId);
+            await program.enrollProgram();
+        },
+        async CreateRegistrationEncounter(patientId: any) {
+            const encounter = new AppEncounterService(patientId, 5);
+            await encounter.createEncounter();
+            await encounter.saveValueCodedObs("Type of patient", "New Patient");
+        },
         async findPatient(patientID: any) {
             const patientData = await PatientService.findByID(patientID);
             this.openNewPage(patientData);
         },
         async saveData() {
-          this.isLoading = true;
-          try {
-            if (await this.createPatient()) {
-              await UserService.setProgramUserActions();
-              toastSuccess("Data saved successfully!");
-            } else {
-              toastWarning("Failed to create patient.");
+            this.isLoading = true;
+            try {
+                if (await this.createPatient()) {
+                    await UserService.setProgramUserActions();
+                    toastSuccess("Data saved successfully!");
+                } else {
+                    toastWarning("Failed to create patient.");
+                }
+            } catch (error) {
+                toastWarning("An error occurred while saving data.");
+            } finally {
+                this.isLoading = false;
             }
-          } catch (error) {
-            toastWarning("An error occurred while saving data.");
-          } finally {
-            this.isLoading = false;
-          }        },
+        },
+        validateGaudiarnInfo() {
+            if (!this.checkUnderFourteen) {
+                return validateInputFiledData(this.guardianInformation);
+            }
+            return true;
+        },
         async validations(data: any, fields: any) {
             if (this.nationalID != "") {
                 if (await this.mwIdExists(this.nationalID)) {
@@ -384,7 +388,7 @@ export default defineComponent({
         async createPatient() {
             const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
             const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
-
+            await this.buildPersonalInformation();
             if (
                 (await this.validations(this.personInformation, fields)) &&
                 (await this.validations(this.currentLocation, currentFields)) &&
@@ -394,18 +398,20 @@ export default defineComponent({
                 this.disableSaveBtn = true;
                 await this.buildPersonalInformation();
                 console.log(this.buildPersonalInformation())
-              if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
+                if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
                 const registration: any = new PatientRegistrationService();
                 await registration.registerPatient(this.personInformation[0].selectedData, []);
                 const patientID = registration.getPersonID();
                 this.createNationID();
                 this.createBirthID();
-                if (Object.keys(this.guardianInformation[0].selectedData).length === 0) {
+                if (Object.keys(this.guardianInformation[0].selectedData).length != 0) {
                     if (await this.validations(this.guardianInformation, ["guardianFirstname", "guardianLastname"])) {
                         this.createGuardian(patientID);
                     }
                 }
                 await this.saveBirthdayData(patientID);
+                await this.enrollProgram(patientID);
+                await this.CreateRegistrationEncounter(patientID);
                 this.findPatient(patientID);
                 toastSuccess("Successfully Created Patient");
                 return true;
@@ -413,12 +419,6 @@ export default defineComponent({
                 toastWarning("Please complete all required fields");
                 return false;
             }
-        },
-        validateGaudiarnInfo() {
-            if (this.checkUnderFive) {
-                return validateInputFiledData(this.guardianInformation);
-            }
-            return true;
         },
         validateBirthData() {
             if (this.checkUnderNine) {
@@ -428,7 +428,7 @@ export default defineComponent({
             }
         },
         async saveBirthdayData(patientID: any) {
-            const data = await formatInputFiledData(this.birthRegistration);
+            const data = await formatInputFiledData(this.birthRegistration, getFieldValue(this.personInformation, "birthdate", "value"));
             if (data.length > 0) {
                 const userID: any = Service.getUserID();
 
@@ -474,19 +474,24 @@ export default defineComponent({
         },
         async createGuardian(patientID: any) {
             if (Object.keys(this.guardianInformation[0].selectedData).length === 0) return;
-            getFieldValue(this.guardianInformation, "relationship", "selectedID");
+            const selectedID = getFieldValue(this.guardianInformation, "relationship", "value")?.id;
             const guardian: any = new PatientRegistrationService();
             await guardian.registerGuardian(this.guardianInformation[0].selectedData);
             const guardianID = guardian.getPersonID();
-            const selectedID = getFieldValue(this.guardianInformation, "relationship", "selectedID");
             if (selectedID) await RelationsService.createRelation(patientID, guardianID, selectedID);
         },
         async openNewPage(item: any) {
             await resetPatientData();
             const demographicsStore = useDemographicsStore();
             demographicsStore.setPatient(item);
+            let fullName = "";
+            if (item.person.names[0].middle_name && item.person.names[0].middle_name != "N/A") {
+                fullName = item.person.names[0].given_name + " " + item.person.names[0].middle_name + " " + item.person.names[0].family_name;
+            } else {
+                fullName = item.person.names[0].given_name + " " + item.person.names[0].family_name;
+            }
             demographicsStore.setDemographics({
-                name: item.person.names[0].given_name + " " + item.person.names[0].family_name,
+                name: fullName,
                 mrn: this.patientIdentifier(item),
                 birthdate: item.person.birthdate,
                 category: "",
@@ -531,7 +536,7 @@ export default defineComponent({
                 cell_phone_number: getFieldValue(this.personInformation, "phoneNumber", "value"),
                 occupation: getRadioSelectedValue(this.socialHistory, "occupation"),
                 marital_status: getRadioSelectedValue(this.socialHistory, "maritalStatus"),
-                religion: getFieldValue(this.socialHistory, "religion", "value"),
+                religion: getFieldValue(this.socialHistory, "religion", "value")?.name,
                 education_level: getRadioSelectedValue(this.socialHistory, "highestLevelOfEducation"),
             };
         },
@@ -553,33 +558,6 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-.spinner-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.5);
-  z-index: 9999;
-}
-
-ion-spinner {
-  width: 80px;
-  height: 80px;
-}
-
-.loading-text {
-  margin-top: 20px;
-  font-size: 18px;
-  color: #333;
-}
-
-.loading {
-  pointer-events: none;
-}
 .breadcrumbs {
     font-weight: 400;
     font-size: 14px;

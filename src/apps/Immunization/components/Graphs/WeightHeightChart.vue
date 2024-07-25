@@ -6,7 +6,7 @@
                     Weight/Age Graph <ion-icon slot="end" size="small" :icon="weightBtnProperty.icon"></ion-icon>
                 </ion-button>
             </div>
-            <div>
+            <div v-if="!checkUnderSixWeeks">
                 <ion-button class="btnText" size="small" :fill="heightBtnProperty.fill" @click="changeGraph('height')">
                     Height/Age Graph
                     <ion-icon slot="end" size="small" :icon="heightBtnProperty.icon"></ion-icon>
@@ -25,9 +25,9 @@
             <canvas height="200" id="myChart"></canvas>
         </div>
     </div>
-    <div class="graphBtn">
+    <div class="graphBtn" v-if="showHeightWeight">
         <div class="weightHeightGraphBtns">
-            <div>
+            <div v-if="!checkUnderSixWeeks">
                 <span class="warningText">
                     Current Height: <b>{{ currentHeight }} Cm </b>
                 </span>
@@ -77,8 +77,9 @@ export default defineComponent({
     },
     watch: {
         demographics: {
-            handler() {
-                this.buildGraph();
+            async handler() {
+                await this.displayWeightGraph();
+                await this.buildGraph();
             },
             deep: true,
         },
@@ -119,6 +120,14 @@ export default defineComponent({
             chart: null as any,
             dataset: [] as any,
         };
+    },
+    props: {
+        showHeightWeight: {
+            default: false,
+        },
+        checkUnderSixWeeks: {
+            default: false,
+        },
     },
     setup() {
         return { checkmark, pulseOutline };
@@ -213,7 +222,6 @@ export default defineComponent({
         },
         async buildGraph() {
             this.vitalsWeightHeight[0].validationStatus = "";
-            console.log("🚀 ~ buildGraph ~ this.vitalsWeightHeight[0].validationStatus:", this.vitalsWeightHeight[0].validationStatus);
             const ctx: any = document.getElementById("myChart");
             if (this.chart) {
                 this.chart.destroy();

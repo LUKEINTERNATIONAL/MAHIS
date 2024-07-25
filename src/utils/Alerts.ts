@@ -97,13 +97,18 @@ export async function infoAlert(message: string, header = "Information") {
     alert.present();
 }
 
-export async function createModal(modalComponet: any, options = {} as any) {
+export async function createModal(modalComponent: any, options = {} as any, BACKDROPDISMISS = true, props = {}) {
     const modal = await modalController.create({
-        component: modalComponet,
-        backdropDismiss: true,
+        component: modalComponent,
+        backdropDismiss: BACKDROPDISMISS,
         cssClass: options.class || "large-modal",
+        componentProps: props,
     });
-    modal.present();
+
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss();
+    return data;
 }
 export function createPopover(massege: any, e: any, btns = [] as Array<NavBtnInterface>) {
     return popoverController.create({
