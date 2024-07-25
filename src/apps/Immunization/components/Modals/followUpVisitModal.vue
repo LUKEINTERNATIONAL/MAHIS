@@ -207,21 +207,21 @@ export default defineComponent({
             if ((await this.createGuardian()) || (await this.saveVaccineAdverseEffects())) modalController.dismiss();
         },
         async saveVaccineAdverseEffects() {
-            const lastVaccine = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
-            const drugNames = lastVaccine.map((item: any) => item.drug.name).join(",");
-            const vaccineAdverseEffects = await formatInputFiledData(this.vaccineAdverseEffects, HisDate.currentDate, drugNames);
-            console.log("🚀 ~ saveVaccineAdverseEffects ~ vaccineAdverseEffects:", vaccineAdverseEffects);
-
-            const userID: any = Service.getUserID();
-            if (vaccineAdverseEffects.length > 0) {
-                const registration = new AppEncounterService(this.demographics.patient_id, 203, userID);
-                await registration.createEncounter();
-                await registration.saveObservationList(vaccineAdverseEffects);
-                toastSuccess("Vaccine adverse effects saved success", 1500);
-                return true;
-            } else {
-                toastWarning("Vaccine adverse effects not saved", 1500);
-                return false;
+            if (this.demographics.patient_id) {
+                const lastVaccine = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
+                const drugNames = lastVaccine.map((item: any) => item.drug.name).join(",");
+                const vaccineAdverseEffects = await formatInputFiledData(this.vaccineAdverseEffects, HisDate.currentDate, drugNames);
+                const userID: any = Service.getUserID();
+                if (vaccineAdverseEffects.length > 0) {
+                    const registration = new AppEncounterService(this.demographics.patient_id, 203, userID);
+                    await registration.createEncounter();
+                    await registration.saveObservationList(vaccineAdverseEffects);
+                    toastSuccess("Vaccine adverse effects saved success", 1500);
+                    return true;
+                } else {
+                    toastWarning("Vaccine adverse effects not saved", 1500);
+                    return false;
+                }
             }
         },
         async guardianData() {
