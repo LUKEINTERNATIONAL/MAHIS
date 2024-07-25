@@ -5,8 +5,8 @@ export interface Bmi {
 }
 export class BMIService {
     static async getBMIData(): Promise<Bmi> {
-        const req = await fetch(`/bmi.json`);
-        // const req = await fetch(`mahis/bmi.json`);
+        // const req = await fetch(`/bmi.json`);
+        const req = await fetch(`mahis/bmi.json`);
         return req.json();
     }
     static async getBMIResult(gender: "M" | "F", age: number, bmindex: number) {
