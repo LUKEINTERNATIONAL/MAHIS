@@ -65,11 +65,11 @@
                     <ion-card-content>
                         <div class="overDueCardContent">
                             <div class="overDueCard" @click="openDueModal('Client overdue under 5yrs')">
-                                <div class="statsValue">0</div>
+                                <div class="statsValue">{{ reportData?.client_overdue_under_five_years || 0 }}</div>
                                 <div class="statsText">Under 5yrs</div>
                             </div>
                             <div class="overDueCard" @click="openDueModal('Client overdue over 5yrs')">
-                                <div class="statsValue">0</div>
+                                <div class="statsValue">{{ reportData?.client_overdue_over_five_years || 0 }}</div>
                                 <div class="statsText">Over 5yrs</div>
                             </div>
                         </div>
@@ -137,7 +137,6 @@ import { Service } from "@/services/service";
 import img from "@/utils/Img";
 import ImmunizationTrendsGraph from "@/apps/Immunization/components/Graphs/ImmunizationTrendsGraph.vue";
 import ImmunizationGroupGraph from "@/apps/Immunization/components/Graphs/ImmunizationGroupGraph.vue";
-import { getVaccinesData } from "@/apps/Immunization/services/dashboard_service";
 import { useUserStore } from "@/stores/userStore";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import { mapState } from "pinia";
@@ -263,6 +262,7 @@ export default defineComponent({
             const data = JSON.parse(event.data);
             if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel" })) {
                 this.reportData = data.message;
+                console.log("🚀 ~ onMessage ~ this.reportData:", this.reportData);
                 this.totalStats = [
                     {
                         name: "Total vaccinated this year",
