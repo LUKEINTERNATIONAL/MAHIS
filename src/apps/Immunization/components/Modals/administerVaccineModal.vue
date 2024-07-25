@@ -290,7 +290,7 @@ export default defineComponent({
             this.full_name = first_name + " " + last_name;
         },
         childAction() {
-            console.log('Action triggered in ChildComponent');
+           
         },
         ShowAlert() {
             // createModal(alert, { class: "otherVitalsModal" }, false);
