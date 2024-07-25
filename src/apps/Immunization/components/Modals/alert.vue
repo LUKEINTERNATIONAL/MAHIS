@@ -1,7 +1,7 @@
 <template>
     <ion-alert
       :is-open="isOpen"
-      header="No Available Batches/Lot Numbers"
+      header="Please update stock"
       sub-header=""
       :message="messageContent"
       :buttons="alertButtons"
@@ -29,7 +29,7 @@
             cssClass: 'alert-danger-button'
           }
         ],
-        messageContent: 'Please Update Stock',
+        messageContent: 'No available batches/lot numbers',
       };
     },
     methods: {
