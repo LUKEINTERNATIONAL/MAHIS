@@ -1,4 +1,9 @@
 <template>
+    <!-- Spinner -->
+    <div v-if="isLoading" class="spinner-overlay">
+        <ion-spinner name="bubbles"></ion-spinner>
+        <div class="loading-text">Please wait...</div>
+    </div>
     <ion-header>
         <div class="header position_content">
             <div style="display: flex; align-items: center" @click="dismiss()">
@@ -124,6 +129,7 @@ import "datatables.net-buttons";
 import "datatables.net-buttons/js/buttons.html5";
 import "datatables.net-responsive";
 import "datatables.net-buttons-dt";
+import { getVaccinesData } from "@/apps/Immunization/services/dashboard_service";
 
 export default defineComponent({
     components: {
@@ -147,6 +153,10 @@ export default defineComponent({
     },
     data() {
         return {
+            isLoading: false,
+            overdueData: [] as any,
+            under_five_missed_visits: [] as any,
+            over_five_missed_visits: [] as any,
             popoverOpen: false,
             event: null as any,
             iconsContent: icons,
@@ -224,7 +234,18 @@ export default defineComponent({
         ...mapState(useAdministerOtherVaccineStore, ["administerOtherVaccine"]),
         ...mapState(useAdministerVaccineStore, ["tempScannedBatchNumber"]),
     },
-    async mounted() {},
+    async mounted() {
+        this.isLoading = true;
+        const data = await getVaccinesData();
+        if (this.title == "Client overdue over 5yrs") {
+            this.overdueData = data.under_five_missed_visits;
+        }
+        if (this.title == "Client overdue under 5yrs") {
+            this.overdueData = data.over_five_missed_visits;
+        }
+        console.log("🚀 ~ mounted ~ this.overdueData:", this.overdueData);
+        this.isLoading = false;
+    },
     watch: {
         batchNumber: {
             handler() {
