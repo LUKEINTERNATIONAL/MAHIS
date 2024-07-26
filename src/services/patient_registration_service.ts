@@ -25,7 +25,7 @@ export class PatientRegistrationService extends Service {
         await this.createPerson(person);
         await this.createPersonAttributes(personAttributes);
         const patient = await this.createPatient();
-        await this.printPatient();
+        // await this.printPatient();
         return patient;
     }
 

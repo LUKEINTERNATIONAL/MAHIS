@@ -12,8 +12,8 @@
     <ion-row>
         <ion-list style="width: 100%;">
             <ion-radio-group :compareWith="compareWith" @ionChange="handleChange($event)" value="start">
-            <ion-item v-for="food in foods">
-                <ion-radio :value="food">{{ food.name }}</ion-radio>
+            <ion-item v-for="reason in reasons">
+                <ion-radio :value="reason">{{ reason.name }}</ion-radio>
             </ion-item>
             </ion-radio-group>
         </ion-list>
@@ -53,7 +53,7 @@
         },
         data() {
             return {
-                foods: [
+                reasons: [
                     {
                         id: 1,
                         name: 'Mistake/ Wrong Entry',

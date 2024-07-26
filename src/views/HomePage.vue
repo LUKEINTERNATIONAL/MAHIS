@@ -39,43 +39,21 @@
                             </template>
                         </Carousel>
                     </div>
-                    <!-- <ion-img style="position: absolute; height: 31vw; width: 100%" :src="loadImage('backgroundImg.png')" alt="home image"></ion-img> -->
                 </div>
 
-                <!-- <ion-card class="section">
-                    <ion-card-header> <ion-card-title class="cardTitle">Yearly stats </ion-card-title></ion-card-header>
-                    <ion-card-content>
-                        <div class="stats">
-                            <div class="totalStats" style="background: rgb(210, 237, 198)">
-                                <div class="statsValue">{{ reportData?.total_client_registered || 0 }}</div>
-                                <div class="statsText">Total vaccinated this year</div>
-                            </div>
-                            <div class="statsSectionBorder"></div>
-                            <div class="totalStats" style="background: rgb(241, 228, 153)">
-                                <div class="statsValue">{{ reportData?.total_female_registered || 0 }}</div>
-                                <div class="statsText">Total Female vaccinated this year</div>
-                            </div>
-                            <div class="statsSectionBorder"></div>
-                            <div class="totalStats" style="background: rgb(188, 178, 188)">
-                                <div class="statsValue">{{ reportData?.total_male_registered || 0 }}</div>
-                                <div class="statsText">Total Male vaccinated this year</div>
-                            </div>
-                        </div>
-                    </ion-card-content>
-                </ion-card> -->
                 <ion-card class="section">
                     <ion-card-header> <ion-card-title class="cardTitle"> Clients due </ion-card-title></ion-card-header>
                     <ion-card-content>
                         <div class="dueCardContent">
-                            <div class="dueCard" style="border: 1px solid rgb(158, 207, 136)">
+                            <div class="dueCard" @click="openDueModal('Client due today')" style="border: 1px solid rgb(158, 207, 136)">
                                 <div class="statsValue">0</div>
                                 <div class="statsText">Due today</div>
                             </div>
-                            <div class="dueCard" style="border: 1px solid rgb(239, 221, 121)">
+                            <div class="dueCard" style="border: 1px solid rgb(239, 221, 121)" @click="openDueModal('Client due this week')">
                                 <div class="statsValue">0</div>
                                 <div class="statsText">Due this week</div>
                             </div>
-                            <div class="dueCard" style="border: 1px solid rgb(241, 154, 154)">
+                            <div class="dueCard" style="border: 1px solid rgb(241, 154, 154)" @click="openDueModal('Client due this month')">
                                 <div class="statsValue">0</div>
                                 <div class="statsText">Due this month</div>
                             </div>
@@ -86,13 +64,13 @@
                     <ion-card-header> <ion-card-title class="cardTitle"> Clients overdue </ion-card-title></ion-card-header>
                     <ion-card-content>
                         <div class="overDueCardContent">
-                            <div class="overDueCard">
-                                <div class="statsValue" style="color: #da6e6e">0</div>
-                                <div class="statsText" style="color: #da6e6e">Under 5yrs</div>
+                            <div class="overDueCard" @click="openDueModal('Client overdue under 5yrs')">
+                                <div class="statsValue">{{ reportData?.client_overdue_under_five_years || 0 }}</div>
+                                <div class="statsText">Under 5yrs</div>
                             </div>
-                            <div class="overDueCard">
-                                <div class="statsValue" style="color: #da6e6e">0</div>
-                                <div class="statsText" style="color: #da6e6e">Over 5yrs</div>
+                            <div class="overDueCard" @click="openDueModal('Client overdue over 5yrs')">
+                                <div class="statsValue">{{ reportData?.client_overdue_over_five_years || 0 }}</div>
+                                <div class="statsText">Over 5yrs</div>
                             </div>
                         </div>
                     </ion-card-content>
@@ -159,7 +137,6 @@ import { Service } from "@/services/service";
 import img from "@/utils/Img";
 import ImmunizationTrendsGraph from "@/apps/Immunization/components/Graphs/ImmunizationTrendsGraph.vue";
 import ImmunizationGroupGraph from "@/apps/Immunization/components/Graphs/ImmunizationGroupGraph.vue";
-import { getVaccinesData } from "@/apps/Immunization/services/dashboard_service";
 import { useUserStore } from "@/stores/userStore";
 import { useGeneralStore } from "@/stores/GeneralStore";
 import { mapState } from "pinia";
@@ -188,10 +165,12 @@ import {
     person,
 } from "ionicons/icons";
 import SetPrograms from "@/views/Mixin/SetPrograms.vue";
+import DueModal from "@/components/DashboardModal/DueModal.vue";
 import Programs from "@/components/Programs.vue";
 import { resetDemographics } from "@/services/reset_data";
 import "vue3-carousel/dist/carousel.css";
 import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
+import { createModal } from "@/utils/Alerts";
 
 export default defineComponent({
     name: "Home",
@@ -264,13 +243,13 @@ export default defineComponent({
         resetDemographics();
         await this.setAppointments();
         this.setView();
-        this.startTimer();
         const wsService = new WebSocketService();
         wsService.setMessageHandler(this.onMessage);
     },
     methods: {
         async setAppointments() {
             this.appointments = await AppointmentService.getDailiyAppointments(HisDate.currentDate());
+            this.appointments = this.appointments.sort((a: any, b: any) => a.given_name.localeCompare(b.given_name));
         },
         async openClientProfile(patientID: any) {
             const patientData = await PatientService.findByNpid(patientID);
@@ -284,6 +263,7 @@ export default defineComponent({
             const data = JSON.parse(event.data);
             if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel" })) {
                 this.reportData = data.message;
+                console.log("🚀 ~ onMessage ~ this.reportData:", this.reportData);
                 this.totalStats = [
                     {
                         name: "Total vaccinated this year",
@@ -309,12 +289,9 @@ export default defineComponent({
         loadImage(name: any) {
             return img(name);
         },
-        startTimer() {
-            // Set a timer to switch graphs every 5 seconds
-            setInterval(() => {
-                // Toggle between 'months' and 'group'
-                this.controlGraphs = this.controlGraphs === "months" ? "group" : "months";
-            }, 15000);
+        openDueModal(name: any) {
+            const dataToPass = { title: name };
+            createModal(DueModal, { class: "fullScreenModal" }, true, dataToPass);
         },
     },
 });
@@ -376,7 +353,7 @@ ion-card {
     gap: 2vw;
 }
 .overDueCard {
-    border: 1px solid #ccc;
+    border: 1px solid #ea5959;
     padding: 4vw;
     border-radius: 8px;
     min-width: 150px;
@@ -385,6 +362,24 @@ ion-card {
     background: rgb(254, 205, 202);
     width: 100vw;
 }
+.overDueCard .statsValue {
+    color: #da6e6e;
+}
+.overDueCard .statsText {
+    color: #da6e6e;
+}
+.overDueCard:hover {
+    background-color: #ffc1c1;
+    cursor: pointer;
+    color: #fff;
+}
+
+.overDueCard:active {
+    background-color: #fcb4b4;
+    color: #fff;
+    transform: scale(0.98);
+}
+
 .dueCard {
     border: 1px solid #ccc;
     padding: 4vw;

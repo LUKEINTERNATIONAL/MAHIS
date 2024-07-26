@@ -1,108 +1,76 @@
 <template>
-    <div class="modal_wrapper">
-        <ion-row style="margin-top: 10px">
-            <ion-col style="margin-left: -3px">
-                <div class="om">Add Other Vaccine</div>
-            </ion-col>
-            <ion-col size="6" style="text-align: right">
-                <ion-label class="lbl-tl" style="font-size: 13">
-                    Todays Date: <span class="lbl-ct">{{ sessionDate }}</span></ion-label
-                >
-            </ion-col>
-        </ion-row>
-
-        <div style="margin-top: 30px;">
-            <ion-row>
-                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                    >Vaccine name<span style="color: #b42318">*</span></ion-label
-                >
-            </ion-row>
-            <VueMultiselect
-                v-model="vaccineName"
-                @update:model-value="updateVaccineName($event)"
-                :multiple="false"
-                :taggable="false"
-                :hide-selected="false"
-                :close-on-select="true"
-                openDirection="bottom"
-                tag-placeholder="select vaccine"
-                placeholder="select vaccine"
-                selectLabel=""
-                label="drug_name"
-                :searchable="true"
-                @search-change="$emit('search-change', $event)"
-                track-by="drug_id"
-                :options="otherVaccinesList"
-            />
-            <div>
-                <ion-label style="padding: 3%" v-if="is_vaccine_name_valid" class="error-label">{{ vaccine_name_error_message }}</ion-label>
-            </div>
-        </div>
-
-        <ion-row v-if="show_select_batach">
-            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                >Batch numbers<span style="color: #b42318">*</span></ion-label
-            >
-        </ion-row>
-
-        <div v-if="show_select_batach">
-            <!-- <BasicInputField
-                :placeholder="'Enter batch number'"
-                :icon="iconsContent.batchNumber"
-                :inputValue="batchNumber"
-                :-inner-action-btn-propeties="InnerActionBtnPropeties"
-                @update:InnerActionBtnPropetiesAction="InnerActionBtnPropeties.fn"
-                @update:inputValue="updateBatchNumber"
-                @update:passedinputValue="updateBatchNumberByPassValue"
-            />
-
-            <div>
-                <ion-label v-if="is_batch_number_valid" class="error-label">
-                    {{ batch_number_error_message }}
-                </ion-label>
-            </div> -->
-            <lotNumberList :action="childAction" ref="childComponentRef" @actionTriggered="ActionTriggered"/>
-        </div>
-
-        <customDatePicker v-if="showPD" />
-        <div class="btnContent">
-            <div class="saveBtn" v-if="showDateBtns">
-                <div>
-                    <ion-button @click="saveBatchWithTodayDate" class="btnText" fill="solid">
-                        Done today
-                        <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon>
-                    </ion-button>
-                </div>
-                <div style="margin-bottom: 20px"></div>
-                <div>
-                    <ion-button class="btnText" fill="solid" @click="showCPD">
-                        Done earlier
-                        <ion-icon slot="end" size="small" :icon="iconsContent.calenderWithPenEdit"></ion-icon>
-                    </ion-button>
-                </div>
-            </div>
-
-            <div class="saveBtn" v-if="!showDateBtns">
-                <ion-row>
-                    <ion-col>
-                        <ion-button @click="dismiss" id="cbtn" class="btnText cbtn" fill="solid" style="width: 130px">
-                            Cancel
-                            <!-- <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon> -->
-                        </ion-button>
-                    </ion-col>
-
-                    <ion-col>
-                        <ion-button @click="saveBatch" class="btnText" fill="solid" style="width: 130px">
-                            save
-                            <!-- <ion-icon slot="end" size="small" :icon="iconsContent.calenderwithPlus"></ion-icon> -->
-                        </ion-button>
-                    </ion-col>
-                </ion-row>
-            </div>
-        </div>
+    <!-- Spinner -->
+    <div v-if="isLoading" class="spinner-overlay">
+        <ion-spinner name="bubbles"></ion-spinner>
+        <div class="loading-text">Please wait...</div>
     </div>
+    <ion-header>
+        <div class="header position_content">
+            <div style="display: flex; align-items: center" @click="dismiss()">
+                <ion-icon slot="separator" size="large" :icon="iconsContent.arrowLeftWhite"></ion-icon>
+            </div>
+            <div style="font-size: 1.2em; font-weight: 700">{{ title }}</div>
+            <div style="display: flex; align-items: center" @click="openPopover($event)">
+                <ion-icon slot="separator" size="large" :icon="iconsContent.fillerWhite"></ion-icon>
+            </div>
+        </div>
+    </ion-header>
+    <ion-content :fullscreen="true" class="ion-padding" style="--background: #fff">
+        <div>
+            <ion-card class="section" style="margin-bottom: 25px; margin-inline: 0px">
+                <ion-card-header> <ion-card-title class="sectionTitle"> Summary of required doses </ion-card-title></ion-card-header>
+                <ion-card-content>
+                    <div class="dueCardContent">
+                        <DataTable :options="options" :data="dueData" class="display nowrap" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Vaccine</th>
+                                    <th>Quantity</th>
+                                </tr>
+                            </thead>
+                        </DataTable>
+                    </div>
+                </ion-card-content>
+            </ion-card>
+            <ion-card class="section" style="margin-inline: 0px">
+                <ion-card-header> <ion-card-title class="sectionTitle">Client Details </ion-card-title></ion-card-header>
+                <ion-card-content>
+                    <div class="appointments" style="display: flex; margin-bottom: 10px" v-for="(item, index) in clientDetails" :key="index">
+                        <div style="margin-right: 15px">
+                            <div :class="item.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
+                                <ion-icon style="color: rgb(78, 78, 78); font-size: 30px" :icon="person"></ion-icon>
+                            </div>
+                        </div>
+                        <div style="align-items: center; display: flex">
+                            <div style="line-height: 1">
+                                <div class="client_name">
+                                    <div class="name">{{ item.given_name }} {{ item.family_name }}</div>
+                                </div>
+                                <div class="demographicsOtherRow">
+                                    <div class="demographicsText">address</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ion-card-content>
+            </ion-card>
+        </div>
+        <ion-popover
+            style="--offset-x: -10px"
+            :is-open="popoverOpen"
+            :show-backdrop="false"
+            :dismiss-on-select="true"
+            :event="event"
+            @didDismiss="popoverOpen = false"
+        >
+            <div>
+                <ion-list style="--ion-background-color: #fff; --offset-x: -30px">
+                    <ion-item :button="true" :detail="false" style="cursor: pointer"></ion-item>
+                </ion-list>
+            </div>
+        </ion-popover>
+    </ion-content>
 </template>
-
 <script lang="ts">
 import {
     IonContent,
@@ -119,8 +87,23 @@ import {
     IonRow,
     modalController,
 } from "@ionic/vue";
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import { icons } from "@/utils/svg";
+import {
+    medkit,
+    chevronBackOutline,
+    pulseOutline,
+    clipboardOutline,
+    grid,
+    chevronDownCircle,
+    chevronForwardCircle,
+    chevronUpCircle,
+    colorPalette,
+    document,
+    globe,
+    add,
+    person,
+} from "ionicons/icons";
 import { useAdministerOtherVaccineStore } from "@/apps/Immunization/stores/AdministerOtherVaccinesStore";
 import { mapState } from "pinia";
 
@@ -140,9 +123,13 @@ import { useAdministerVaccineStore } from "@/apps/Immunization/stores/Administer
 import VueMultiselect from "vue-multiselect";
 import { isEmpty } from "lodash";
 import { toastWarning, toastDanger, toastSuccess } from "@/utils/Alerts";
-import lotNumberList from "./lotNumberList.vue"
-import alert from "@/apps/Immunization/components/Modals/alert.vue"
-import { StockService } from '@/services/stock_service'
+import DataTable from "datatables.net-vue3";
+import DataTablesCore from "datatables.net";
+import "datatables.net-buttons";
+import "datatables.net-buttons/js/buttons.html5";
+import "datatables.net-responsive";
+import "datatables.net-buttons-dt";
+import { getVaccinesData } from "@/apps/Immunization/services/dashboard_service";
 
 export default defineComponent({
     components: {
@@ -162,13 +149,29 @@ export default defineComponent({
         IonRow,
         VueMultiselect,
         IonLabel,
-        lotNumberList,
+        DataTable,
     },
     data() {
         return {
+            isLoading: false,
+            overdueData: [] as any,
+            under_five_missed_visits: [] as any,
+            over_five_missed_visits: [] as any,
+            popoverOpen: false,
+            event: null as any,
             iconsContent: icons,
             showPD: false as boolean,
             batchNumber: "" as any,
+            clientDetails: [] as any,
+            dueData: [] as any,
+            options: {
+                responsive: true,
+                select: true,
+                searching: false,
+                ordering: false,
+                pageLength: 25,
+                lengthChange: false,
+            } as any,
             vaccineName: "" as string,
             currentDrugOb: {} as any,
             otherVaccinesList: [
@@ -220,15 +223,29 @@ export default defineComponent({
                 },
             },
             showDateBtns: true as boolean,
-            selected_date_: '',
-            show_select_batach: false,
         };
+    },
+    props: {
+        title: {
+            default: [] as any,
+        },
     },
     computed: {
         ...mapState(useAdministerOtherVaccineStore, ["administerOtherVaccine"]),
         ...mapState(useAdministerVaccineStore, ["tempScannedBatchNumber"]),
     },
-    async mounted() {},
+    async mounted() {
+        this.isLoading = true;
+        const data = await getVaccinesData();
+        if (this.title == "Client overdue over 5yrs") {
+            this.overdueData = data.under_five_missed_visits;
+        }
+        if (this.title == "Client overdue under 5yrs") {
+            this.overdueData = data.over_five_missed_visits;
+        }
+        console.log("🚀 ~ mounted ~ this.overdueData:", this.overdueData);
+        this.isLoading = false;
+    },
     watch: {
         batchNumber: {
             handler() {
@@ -251,18 +268,13 @@ export default defineComponent({
         },
     },
     setup() {
-        const childComponentRef = ref<InstanceType<typeof lotNumberList> | null>(null);
-        const triggerChildAction = () => {
-            if (childComponentRef.value) {
-                childComponentRef.value.performAction();
-            }
-        };
-        return {
-            childComponentRef,
-            triggerChildAction,
-        };
+        return { person, pulseOutline, clipboardOutline };
     },
     methods: {
+        openPopover(e: Event) {
+            this.event = e;
+            this.popoverOpen = true;
+        },
         showCPD() {
             this.showPD = true as boolean;
             this.showDateBtns = false as boolean;
@@ -301,21 +313,6 @@ export default defineComponent({
         },
         updateVaccineName(data: any) {
             this.currentDrugOb = data;
-            this.pullLotNumbersForVaccine(this.currentDrugOb)
-        },
-        async pullLotNumbersForVaccine(data: any) {
-            const store = useAdministerVaccineStore();
-            const stockService = new StockService();
-            const data_ = await stockService.getItem(data.drug_id)
-            store.setLotNumberData(data_)
-
-            if(data_.length == 0) {
-                createModal(alert, { class: "otherVitalsModal" })
-            }
-
-            if (data_.length > 0) {
-                this.show_select_batach = true
-            }
         },
         isAlphaNumeric(text: string) {
             // Regular expression to match alphanumeric characters and specified special characters
@@ -333,56 +330,45 @@ export default defineComponent({
         updateBatchNumberByPassValue(input: any) {
             this.batchNumber = input;
         },
-        ActionTriggered(selectedOption: any) {
+        saveDta(date_: any) {
+            this.validateVaccineName();
+            this.validateBatchNumber();
+            if (this.is_batch_number_valid == true) {
+                toastWarning("Enter batch number!");
+                return;
+            }
+
+            if (this.batchNumber == "") {
+                toastWarning("Enter batch number!");
+                return;
+            }
             const dta = {
-                batch_number: selectedOption.lotNumber,
-                date_administered: this.selected_date_,
-                drug_id: this.currentDrugOb.drug_id,
+                batch_number: this.batchNumber,
+                date_administered: date_,
+                drug_id: this.currentDrugOb.drug.drug_id,
             };
             const store = useAdministerVaccineStore();
             store.setAdministeredVaccine(dta);
             saveVaccineAdministeredDrugs();
-            store.setTempScannedBatchNumber(null);
             this.dismiss();
-        },
-        saveDta(date_: any) {
-            if (this.validateVaccineName() == true) {
-                this.selected_date_ = date_
-                this.triggerChildAction()
-
-                if (this.show_select_batach == false) {
-                    toastDanger("Please Update Stock for Selected Vaccine")
-                }
-            }
-            // this.validateBatchNumber();
-            // if (this.is_batch_number_valid == true) {
-            //     toastWarning("Enter batch number!");
-            //     return;
-            // }
-
-            // if (this.batchNumber == "") {
-            //     toastWarning("Enter batch number!");
-            //     return;
-            // }
-            // const dta = {
-            //     batch_number: this.batchNumber,
-            //     date_administered: date_,
-            //     drug_id: this.currentDrugOb.drug.drug_id,
-            // };
-            // const store = useAdministerVaccineStore();
-            // store.setAdministeredVaccine(dta);
-            // saveVaccineAdministeredDrugs();
-            // this.dismiss();
-            // store.setTempScannedBatchNumber(null);
-        },
-        childAction() {
-           
+            store.setTempScannedBatchNumber(null);
         },
     },
 });
 </script>
 
 <style scoped>
+.position_content {
+    max-width: 100vw;
+}
+.sectionTitle {
+    font-weight: 700;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    font-size: 1.1em;
+    border-bottom: #ccc 1px solid;
+    line-height: 30px;
+}
 .vitals_title {
     margin-bottom: 50px;
 }
@@ -461,4 +447,21 @@ h5 {
     font-weight: 500;
     font-size: 14px;
 }
+.header {
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px 10px 20px;
+}
+ion-header {
+    background: #006401;
+}
+</style>
+<style>
+@import "datatables.net-dt";
+@import "datatables.net-buttons-dt";
+@import "datatables.net-responsive-dt";
+@import "datatables.net-select-dt";
+
+@import "bootstrap";
 </style>

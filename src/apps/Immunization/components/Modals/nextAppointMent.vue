@@ -1,10 +1,24 @@
 <template>
     <ion-row style="margin-top: 10px;">
         <ion-col style="margin-left: -3px">
-            <div class="om">Set Next Appointment Date</div>
+            <div class="om" style="font-weight: 600; color:#8d8686;">Set Next Appointment Date</div>
         </ion-col>
         <ion-col size="6" style="text-align: right;">
             <ion-label class="lbl-tl" style="font-size: 13"> Todays Date: <span class="lbl-ct">{{ sessionDate }}</span></ion-label>
+        </ion-col>
+    </ion-row>
+
+    <ion-row style="margin-top: 10px;">
+        <ion-col style="margin-left: -3px">
+            <div class="om"></div>
+        </ion-col>
+        <ion-col size="10" style="text-align: right;" v-if="show_selected_date">
+            <ion-label class="lbl-tl" style="font-size: 16; font-weight: 500;">
+                Total Appointments
+                <span class="lbl-ct">({{ currently_selected_date }})</span>: 
+                <span style="margin-right: 20px; color: black;">
+                    <ion-badge color="primary" style="margin-bottom: -5px; font-size: 15px;">{{ appointment_count }}</ion-badge>
+                </span></ion-label>
         </ion-col>
     </ion-row>
 
@@ -79,7 +93,8 @@ import {
     IonAccordionGroup,
     AccordionGroupCustomEvent,
     IonCheckbox,
-    modalController
+    modalController,
+    IonBadge
 } from "@ionic/vue"
 import { ref, onMounted,computed, watch } from "vue"
 import HisDate from "@/utils/Date"
@@ -90,6 +105,9 @@ const store = useImmunizationAppointMentStore()
 
 const date = ref()
 const sessionDate = HisDate.toStandardHisDisplayFormat(Service.getSessionDate())
+const show_selected_date = ref(false)
+const currently_selected_date = ref()
+const appointment_count = ref(0)
 
 function disablePastDates(date: any) {
     const today = new Date(Service.getSessionDate())
@@ -108,17 +126,28 @@ onMounted(async () => {
     store.clearAppointmentMent()
 })
 
+async function getAppointmentMents(date: any) {
+    const appointment_service = new Appointment()
+    const res =  await appointment_service.getDailiyAppointments(HisDate.toStandardHisFormat(date))
+    appointment_count.value = res.length + 1
+    console.log(res)
+}
+
 function dismiss() {
     modalController.dismiss()
 }
 
-function DateUpdated(date: any) {
+async function DateUpdated(date: any) {
     const store = useImmunizationAppointMentStore()
     const appointment = {
             counter: 1,
             date: date
         }
     store.setAppointmentMent(appointment)
+    show_selected_date.value = false
+    await getAppointmentMents(date)
+    show_selected_date.value = true
+    currently_selected_date.value = HisDate.toStandardHisDisplayFormat(date)
 }
 
 function getCounter(date: any) {

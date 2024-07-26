@@ -5,12 +5,22 @@ import { RelationsService } from "@/services/relations_service";
 import { Service } from "@/services/service";
 import { AppEncounterService } from "@/services/app_encounter_service";
 import { PatientProgramService } from "@/services/patient_program_service";
-
+import Localbase from "localbase";
+let db = new Localbase("db");
 export async function saveDemographicsRecord(record: any) {
     if (record.personInformation) {
         const registration: any = new PatientRegistrationService();
         await registration.registerPatient(record.personInformation, []);
         const patientID = registration.getPersonID();
+        await db
+            .collection("patientRecords")
+            .doc({ offlinePatientID: record.offlinePatientID })
+            .update({
+                serverPatientID: patientID,
+                saveStatus: {
+                    personInformation: "complete",
+                },
+            });
         if (patientID) {
             createNationID(record.otherPersonInformation.nationalID);
             createBirthID(record.otherPersonInformation.birthID);

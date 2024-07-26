@@ -389,6 +389,11 @@ export default defineComponent({
                         birthID: this.validatedBirthID(),
                         relationshipID: getFieldValue(this.guardianInformation, "relationship", "value")?.id,
                     },
+                    saveStatus: {
+                        personInformation: "pending",
+                        guardianInformation: "pending",
+                        birthRegistration: "pending",
+                    },
                 });
                 const patientID = await savePatientRecord();
                 console.log("🚀 ~ createPatient ~ patientID:", patientID);
