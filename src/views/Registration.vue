@@ -378,8 +378,9 @@ export default defineComponent({
                 this.disableSaveBtn = true;
                 if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
 
+                const offlinePatientID = Date.now();
                 await db.collection("patientRecords").add({
-                    offlinePatientID: Date.now(),
+                    offlinePatientID: offlinePatientID,
                     serverPatientID: "",
                     personInformation: toRaw(this.personInformation[0].selectedData),
                     guardianInformation: toRaw(this.guardianInformation[0].selectedData),
@@ -389,20 +390,22 @@ export default defineComponent({
                         birthID: this.validatedBirthID(),
                         relationshipID: getFieldValue(this.guardianInformation, "relationship", "value")?.id,
                     },
-                    saveStatus: {
-                        personInformation: "pending",
-                        guardianInformation: "pending",
-                        birthRegistration: "pending",
-                    },
+                    saveStatusPersonInformation: "pending",
+                    saveStatusGuardianInformation: "pending",
+                    saveStatusBirthRegistration: "pending",
                 });
-                const patientID = await savePatientRecord();
-                console.log("🚀 ~ createPatient ~ patientID:", patientID);
-                this.findPatient(patientID);
+                await savePatientRecord();
                 toastSuccess("Successfully Created Patient");
-                return true;
+                db.collection("patientRecords")
+                    .doc({ offlinePatientID: offlinePatientID })
+                    .get()
+                    .then((document: any) => {
+                        if (document.serverPatientID) {
+                        } else {
+                        }
+                    });
             } else {
                 toastWarning("Please complete all required fields");
-                return false;
             }
         },
         validateBirthData() {
