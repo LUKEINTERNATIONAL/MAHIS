@@ -54,7 +54,7 @@ import administerOtherVaccineModal from "@/apps/Immunization/components/Modals/a
 import { createModal } from "@/utils/Alerts";
 import { mapState } from "pinia";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
-import { getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service";
+import { getVaccinesSchedule, checkIfLastVaccineAdministered } from "@/apps/Immunization/services/vaccines_service";
 import { icons } from "@/utils/svg";
 import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue";
 
@@ -112,6 +112,7 @@ export default defineComponent({
             const vaccineScheduleStore = useAdministerVaccineStore();
 
             vaccineScheduleStore.setVaccineSchedule(data__);
+            checkIfLastVaccineAdministered()
 
             this.vaccineSchudulesCount = vaccineScheduleStore.getVaccineSchedule()?.vaccine_schedule?.length;
             vaccineScheduleStore.resetMissedVaccineSchedules();

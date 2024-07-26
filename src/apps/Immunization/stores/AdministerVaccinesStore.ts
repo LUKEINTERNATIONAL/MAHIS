@@ -17,6 +17,7 @@ export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
         lastVaccineGievenDate: "" as any,
         vaccineToBeVoided: {} as any,
         lotNumberData: [] as any,
+        lastVaccineAdminstredOnschedule: [] as any,
     }),
     actions: {
         setVaccineSchedule(data: any) {
@@ -135,6 +136,12 @@ export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
         },
         getLotNumberData() {
             return this.lotNumberData
+        },
+        setLastVaccineAdminstredOnschedule(data: any) {
+            this.lastVaccineAdminstredOnschedule = data
+        },
+        getLastVaccineAdminstredOnschedule() {
+            return this.lastVaccineAdminstredOnschedule
         }
     },
     persist: true,
