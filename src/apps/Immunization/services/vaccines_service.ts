@@ -81,20 +81,20 @@ function validateBatchString(input: any) {
 }
 
 export async function checkIfLastVaccineAdministered() {
-    const store = useAdministerVaccineStore()
+    const store = useAdministerVaccineStore();
     const lastVaccineAdminstredOnschedule = store.getLastVaccineAdminstredOnschedule()
     if (lastVaccineAdminstredOnschedule.length > 0) {
         store.getVaccineSchedule()?.vaccine_schedule?.forEach((vaccineSchudule: any) => {
             if(checkIfAllVaccinesAdministeredOnSchedule(vaccineSchudule.antigens) == true) {
                 vaccineSchudule.antigens.forEach((antigen: any) => {
                     if (antigen.drug_id == lastVaccineAdminstredOnschedule[0].drug_inventory_id) {
-                        openNextVaccineAppoinment()
+                        openNextVaccineAppoinment();
                     }
                 })
             }
         })
     }
-    store.setLastVaccineAdminstredOnschedule([])
+    store.setLastVaccineAdminstredOnschedule([]);
 }
 
 function checkIfAllVaccinesAdministeredOnSchedule(antigens: any[]): boolean {
