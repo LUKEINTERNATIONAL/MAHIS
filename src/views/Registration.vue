@@ -74,7 +74,7 @@
             </div>
         </ion-content>
         <div class="footer2" v-if="registrationDisplayType == 'grid' && screenWidth > 991">
-            <DynamicButton name="Save" iconSlot="end" :icon="iconsContent.saveWhite" :disabledValue="disableSaveBtn" @click="saveData()" />
+            <DynamicButton name="Save" iconSlot="end" :icon="iconsContent.saveWhite" :disabledValue="disableSaveBtn" @click="createPatient()" />
         </div>
         <ion-footer v-if="(registrationType == 'manual' && registrationDisplayType == 'list') || screenWidth <= 991">
             <div class="footer position_content">
@@ -103,7 +103,7 @@
                     name="Save"
                     iconSlot="end"
                     :icon="iconsContent.saveWhite"
-                    @click="saveData()"
+                    @click="createPatient()"
                 />
                 <DynamicButton v-else name="Next" :disabledValue="false" iconSlot="end" :icon="iconsContent.arrowRightWhite" @click="nextStep" />
             </div>
@@ -149,6 +149,7 @@ import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
 import { PatientProgramService } from "@/services/patient_program_service";
 import { resetDemographics } from "@/services/reset_data";
 import { savePatientRecord } from "@/services/save_records";
+import { useWebWorkerFn } from "@vueuse/core";
 import Localbase from "localbase";
 let db = new Localbase("db");
 export default defineComponent({
@@ -335,34 +336,11 @@ export default defineComponent({
                 this.currentStep = this.steps[currentIndex - 1];
             }
         },
-        async enrollProgram(patientId: any) {
-            const program = new PatientProgramService(patientId);
-            await program.enrollProgram();
-        },
-        async CreateRegistrationEncounter(patientId: any) {
-            const encounter = new AppEncounterService(patientId, 5);
-            await encounter.createEncounter();
-            await encounter.saveValueCodedObs("Type of patient", "New Patient");
-        },
         async findPatient(patientID: any) {
             const patientData = await PatientService.findByID(patientID);
             this.openNewPage(patientData);
         },
-        async saveData() {
-            this.isLoading = true;
-            try {
-                if (await this.createPatient()) {
-                    await UserService.setProgramUserActions();
-                    toastSuccess("Data saved successfully!");
-                } else {
-                    toastWarning("Failed to create patient.");
-                }
-            } catch (error) {
-                toastWarning("An error occurred while saving data.");
-            } finally {
-                this.isLoading = false;
-            }
-        },
+
         validateGaudiarnInfo() {
             if (!this.checkUnderFourteen) {
                 return validateInputFiledData(this.guardianInformation);
@@ -377,7 +355,7 @@ export default defineComponent({
                 }
             }
             if (this.birthID != "") {
-                if (await this.birthIdExists(this.nationalID)) {
+                if (await this.birthIdExists(this.birthID)) {
                     toastWarning("The Birth ID is already assigned to another person");
                     return false;
                 }
@@ -387,6 +365,7 @@ export default defineComponent({
         },
 
         async createPatient() {
+            this.isLoading = true;
             const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
             const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
             await this.buildPersonalInformation();
@@ -404,9 +383,16 @@ export default defineComponent({
                     serverPatientID: "",
                     personInformation: toRaw(this.personInformation[0].selectedData),
                     guardianInformation: toRaw(this.guardianInformation[0].selectedData),
-                    birthRegistration: toRaw(this.birthRegistration),
+                    birthRegistration: toRaw(await formatInputFiledData(this.birthRegistration)),
+                    otherPersonInformation: {
+                        nationalID: this.validatedNationalID(),
+                        birthID: this.validatedBirthID(),
+                        relationshipID: getFieldValue(this.guardianInformation, "relationship", "value")?.id,
+                    },
                 });
-                savePatientRecord();
+                const patientID = await savePatientRecord();
+                console.log("🚀 ~ createPatient ~ patientID:", patientID);
+                this.findPatient(patientID);
                 toastSuccess("Successfully Created Patient");
                 return true;
             } else {
@@ -419,17 +405,6 @@ export default defineComponent({
                 return validateInputFiledData(this.birthRegistration);
             } else {
                 return true;
-            }
-        },
-        async saveBirthdayData(patientID: any) {
-            const data = await formatInputFiledData(this.birthRegistration);
-            if (data.length > 0) {
-                const userID: any = Service.getUserID();
-
-                // Registration Encounter
-                const registration = new AppEncounterService(patientID, 5, userID);
-                await registration.createEncounter();
-                await registration.saveObservationList(data);
             }
         },
         async mwIdExists(nid: any) {
@@ -446,21 +421,13 @@ export default defineComponent({
         },
         validatedNationalID() {
             if (this.nationalID != "" && !getFieldValue(this.personInformation, "nationalID", "alertsErrorMassage")) {
-                return true;
-            } else return false;
+                return this.nationalID;
+            } else return "";
         },
         validatedBirthID() {
             if (this.birthID != "" && !getFieldValue(this.birthRegistration, "Serial Number", "alertsErrorMassage")) {
-                return true;
-            } else return false;
-        },
-        async createGuardian(patientID: any) {
-            if (Object.keys(this.guardianInformation[0].selectedData).length === 0) return;
-            const selectedID = getFieldValue(this.guardianInformation, "relationship", "value")?.id;
-            const guardian: any = new PatientRegistrationService();
-            await guardian.registerGuardian(this.guardianInformation[0].selectedData);
-            const guardianID = guardian.getPersonID();
-            if (selectedID) await RelationsService.createRelation(patientID, guardianID, selectedID);
+                return this.birthID;
+            } else return "";
         },
         async openNewPage(item: any) {
             await resetPatientData();
@@ -487,6 +454,7 @@ export default defineComponent({
                     item?.person?.addresses[0]?.city_village,
                 phone: item.person.person_attributes.find((attribute: any) => attribute.type.name === "Cell Phone Number")?.value,
             });
+            this.isLoading = false;
             let url = "/patientProfile";
             this.disableSaveBtn = false;
             this.$router.push(url);
