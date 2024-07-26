@@ -205,7 +205,20 @@ export default defineComponent({
             reportData: "" as any,
             appointments: [] as any,
             programBtn: {} as any,
-            totalStats: [] as any,
+            totalStats: [
+                {
+                    name: "Total vaccinated this year",
+                    value: 0,
+                },
+                {
+                    name: "Total Female vaccinated this year",
+                    value: 0,
+                },
+                {
+                    name: "Total Male vaccinated this year",
+                    value: 0,
+                },
+            ] as any,
         };
     },
     setup() {
@@ -263,7 +276,7 @@ export default defineComponent({
             const data = JSON.parse(event.data);
             if (data.identifier === JSON.stringify({ channel: "ImmunizationReportChannel" })) {
                 this.reportData = data.message;
-                console.log("🚀 ~ onMessage ~ this.reportData:", this.reportData);
+                console.log("🚀 ~ onMessage ~ reportData:", this.reportData);
                 this.totalStats = [
                     {
                         name: "Total vaccinated this year",
