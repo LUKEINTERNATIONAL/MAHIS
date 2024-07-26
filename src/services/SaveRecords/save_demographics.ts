@@ -8,32 +8,23 @@ import { PatientProgramService } from "@/services/patient_program_service";
 import Localbase from "localbase";
 let db = new Localbase("db");
 export async function saveDemographicsRecord(record: any) {
-    if (record.personInformation) {
+    let patientID = "";
+    if (record.personInformation && record.saveStatusPersonInformation == "pending") {
         const registration: any = new PatientRegistrationService();
         await registration.registerPatient(record.personInformation, []);
-        const patientID = registration.getPersonID();
-        await db
-            .collection("patientRecords")
-            .doc({ offlinePatientID: record.offlinePatientID })
-            .update({
-                serverPatientID: patientID,
-                saveStatus: {
-                    personInformation: "complete",
-                },
-            });
-        if (patientID) {
-            createNationID(record.otherPersonInformation.nationalID);
-            createBirthID(record.otherPersonInformation.birthID);
-            createGuardian(patientID, record.guardianInformation, record.otherPersonInformation.relationshipID);
-            await saveBirthdayData(patientID, record.birthRegistration);
-            await enrollProgram(patientID);
-            await CreateRegistrationEncounter(patientID);
-            return patientID;
-        } else {
-            return "";
-        }
-    } else {
-        return "";
+        patientID = registration.getPersonID();
+        await updateSaveStatus(record, {
+            saveStatusPersonInformation: "complete",
+        });
+    }
+    patientID = patientID || record.serverPatientID;
+    if (patientID) {
+        createNationID(record.otherPersonInformation.nationalID);
+        createBirthID(record.otherPersonInformation.birthID);
+        createGuardian(patientID, record);
+        await saveBirthdayData(patientID, record);
+        await enrollProgram(patientID);
+        await CreateRegistrationEncounter(patientID);
     }
 }
 async function createNationID(nationalID: any) {
@@ -49,19 +40,29 @@ async function createBirthID(birthID: any) {
     }
 }
 
-async function createGuardian(patientID: any, guardianInformation: any, relationshipID: any) {
-    if (Object.keys(guardianInformation).length === 0) return;
-    const guardian: any = new PatientRegistrationService();
-    await guardian.registerGuardian(guardianInformation);
-    const guardianID = guardian.getPersonID();
-    if (relationshipID) await RelationsService.createRelation(patientID, guardianID, relationshipID);
+async function createGuardian(patientID: any, record: any) {
+    if (record.saveStatusGuardianInformation == "pending") {
+        if (Object.keys(record.guardianInformation).length === 0) return;
+        const guardian: any = new PatientRegistrationService();
+        await guardian.registerGuardian(record.guardianInformation);
+        const guardianID = guardian.getPersonID();
+        if (record.otherPersonInformation.relationshipID)
+            await RelationsService.createRelation(patientID, guardianID, record.otherPersonInformation.relationshipID);
+
+        await updateSaveStatus(record, {
+            saveStatusGuardianInformation: "complete",
+        });
+    }
 }
-async function saveBirthdayData(patientID: any, birthRegistration: any) {
-    if (birthRegistration.length > 0) {
+async function saveBirthdayData(patientID: any, record: any) {
+    if (record.birthRegistration.length > 0 && record.saveStatusBirthRegistration == "pending") {
         const userID: any = Service.getUserID();
         const registration = new AppEncounterService(patientID, 5, userID);
         await registration.createEncounter();
-        await registration.saveObservationList(birthRegistration);
+        await registration.saveObservationList(record.birthRegistration);
+        await updateSaveStatus(record, {
+            saveStatusBirthRegistration: "complete",
+        });
     }
 }
 async function enrollProgram(patientId: any) {
@@ -72,4 +73,7 @@ async function CreateRegistrationEncounter(patientId: any) {
     const encounter = new AppEncounterService(patientId, 5);
     await encounter.createEncounter();
     await encounter.saveValueCodedObs("Type of patient", "New Patient");
+}
+async function updateSaveStatus(record: any, saveStatus: any) {
+    await db.collection("patientRecords").doc({ offlinePatientID: record.offlinePatientID }).update(saveStatus);
 }
