@@ -365,7 +365,6 @@ export default defineComponent({
         },
 
         async createPatient() {
-            this.isLoading = true;
             const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
             const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
             await this.buildPersonalInformation();
@@ -376,6 +375,7 @@ export default defineComponent({
                 this.validateGaudiarnInfo()
             ) {
                 this.disableSaveBtn = true;
+                this.isLoading = true;
                 if (Object.keys(this.personInformation[0].selectedData).length === 0) return;
 
                 const offlinePatientID = Date.now();
@@ -396,12 +396,15 @@ export default defineComponent({
                 });
                 await savePatientRecord();
                 toastSuccess("Successfully Created Patient");
-                db.collection("patientRecords")
+                await db
+                    .collection("patientRecords")
                     .doc({ offlinePatientID: offlinePatientID })
                     .get()
-                    .then((document: any) => {
+                    .then(async (document: any) => {
                         if (document.serverPatientID) {
+                            await this.findPatient(document.serverPatientID);
                         } else {
+                            await this.setOfflineData(document);
                         }
                     });
             } else {
@@ -436,6 +439,35 @@ export default defineComponent({
             if (this.birthID != "" && !getFieldValue(this.birthRegistration, "Serial Number", "alertsErrorMassage")) {
                 return this.birthID;
             } else return "";
+        },
+        async setOfflineData(item: any) {
+            await resetPatientData();
+            const demographicsStore = useDemographicsStore();
+            let fullName = "";
+            if (item.personInformation.middle_name && item.personInformation.middle_name != "N/A") {
+                fullName = item.personInformation.given_name + " " + item.personInformation.middle_name + " " + item.personInformation.family_name;
+            } else {
+                fullName = item.personInformation.given_name + " " + item.personInformation.family_name;
+            }
+            demographicsStore.setDemographics({
+                name: fullName,
+                mrn: item.offlinePatientID,
+                birthdate: item.personInformation.birthdate,
+                category: "",
+                gender: item.personInformation.gender,
+                patient_id: item.offlinePatientID,
+                address:
+                    item?.personInformation?.current_district +
+                    "," +
+                    item?.personInformation?.current_traditional_authority +
+                    "," +
+                    item?.personInformation?.current_village,
+                phone: item.personInformation.cell_phone_number,
+            });
+            this.isLoading = false;
+            let url = "/patientProfile";
+            this.disableSaveBtn = false;
+            this.$router.push(url);
         },
         async openNewPage(item: any) {
             await resetPatientData();
