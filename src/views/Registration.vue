@@ -348,19 +348,6 @@ export default defineComponent({
             return true;
         },
         async validations(data: any, fields: any) {
-            if (this.nationalID != "") {
-                if (await this.mwIdExists(this.nationalID)) {
-                    toastWarning("The national ID is already assigned to another person");
-                    return false;
-                }
-            }
-            if (this.birthID != "") {
-                if (await this.birthIdExists(this.birthID)) {
-                    toastWarning("The Birth ID is already assigned to another person");
-                    return false;
-                }
-            }
-
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
         },
 
