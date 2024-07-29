@@ -62,6 +62,10 @@ export default defineComponent({
         current_village() {
             return getFieldValue(this.currentLocation, "current_village", "value")?.name;
         },
+
+        "Other (specify)"() {
+            return getFieldValue(this.currentLocation, "Other (specify)", "value");
+        },
     },
     watch: {
         currentLocation: {
@@ -86,6 +90,7 @@ export default defineComponent({
         this.updateRegistrationStores();
         this.buildCards();
         this.setData();
+        this.validaterowData({});
     },
     methods: {
         setData() {
@@ -137,21 +142,43 @@ export default defineComponent({
         async validations(data: any, fields: any) {
             return fields.every((fieldName: string) => validateField(data, fieldName, (this as any)[fieldName]));
         },
+        validationRules(event: any) {
+            return validateField(this.currentLocation, event.name, (this as any)[event.name]);
+        },
+        validaterowData(event: any) {
+            this.validationRules(event);
+        },
         async handleInputData(event: any) {
             sessionStorage.setItem("activeLocation", "current");
-            const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
+            const currentFields: any = ["current_district", "current_traditional_authority", "current_village", "Other (specify)"];
             await this.validations(this.currentLocation, currentFields);
-            if (event.name == "current_district" && event?.value?.district_id && (await this.setTA(event.value))) {
+
+            if (event.name == "current_district") {
                 modifyFieldValue(this.currentLocation, "current_traditional_authority", "displayNone", true);
                 modifyFieldValue(this.currentLocation, "current_traditional_authority", "value", "");
                 modifyFieldValue(this.currentLocation, "current_village", "displayNone", true);
                 modifyFieldValue(this.currentLocation, "current_village", "value", "");
+                if (event?.value?.district_id) this.setTA(event.value);
             }
-            if (event.name == "current_traditional_authority" && event?.value?.traditional_authority_id && (await this.setVillage(event.value))) {
+
+            if (event.name == "current_traditional_authority") {
                 modifyFieldValue(this.currentLocation, "current_village", "displayNone", true);
                 modifyFieldValue(this.currentLocation, "current_village", "value", "");
+                if (event?.value?.traditional_authority_id) this.setVillage(event.value);
             }
+
+            if (event.name == "closestLandmark") {
+                const selectedLandmark = getFieldValue(this.currentLocation, "closestLandmark", "value");
+                if (selectedLandmark?.name === "Other") {
+                    modifyFieldValue(this.currentLocation, "Other (specify)", "displayNone", false);
+                } else {
+                    modifyFieldValue(this.currentLocation, "Other (specify)", "displayNone", true);
+                    modifyFieldValue(this.currentLocation, "Other (specify)", "value", "");
+                }
+            }
+            this.validaterowData(event);
         },
+
         async setTA(obj: any) {
             const targetData = await LocationService.getTraditionalAuthorities(obj.district_id, "");
             if (targetData.length > 0) {
