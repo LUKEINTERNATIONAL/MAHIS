@@ -1,9 +1,9 @@
 import { LocationService } from "@/services/location_service";
 import db from "@/db";
 export async function setOfflineData() {
-    setLocation();
+    getLocation();
 }
-export async function setLocation() {
+export async function getLocation() {
     return await db
         .collection("location")
         .get()
@@ -14,21 +14,26 @@ export async function setLocation() {
             } else {
                 const newData = await db.collection("location").add({
                     id: "location",
-                    villages: await getVillages(location),
-                    districts: await getDistricts(location),
-                    TAs: await getTAs(location),
+                    villages: await getVillages(),
+                    districts: await getDistricts(),
+                    TAs: await getTAs(),
                 });
                 return newData?.data?.data;
             }
         });
 }
 
-export async function getDistricts(location: any) {
-    return await LocationService.getAllDistricts();
+export async function getDistricts() {
+    let districtList = [];
+    for (let i of [1, 2, 3]) {
+        const districts: any = await LocationService.getDistricts(i);
+        districtList.push(...districts);
+    }
+    return districtList;
 }
-export async function getTAs(location: any) {
+export async function getTAs() {
     return await LocationService.getAllTraditionalAuthorities();
 }
-export async function getVillages(location: any) {
+export async function getVillages() {
     return await LocationService.getAllVillages();
 }
