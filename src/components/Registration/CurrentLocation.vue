@@ -72,7 +72,7 @@ export default defineComponent({
         },
         districtList: {
             handler() {
-                modifyFieldValue(this.currentLocation, "current_district", "multiSelectData", this.districtList);
+                if (this.districtList.length > 0) modifyFieldValue(this.currentLocation, "current_district", "multiSelectData", this.districtList);
             },
             deep: true,
         },
@@ -86,6 +86,8 @@ export default defineComponent({
         this.updateRegistrationStores();
         this.buildCards();
         this.setData();
+        const targetData = await LocationService.getVillages(5, "ddd");
+        console.log("🚀 ~ mounted ~ targetData:", targetData);
     },
     methods: {
         setData() {
@@ -141,29 +143,36 @@ export default defineComponent({
             sessionStorage.setItem("activeLocation", "current");
             const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
             await this.validations(this.currentLocation, currentFields);
-            if (event.name == "current_district") {
+            if (event.name == "current_district" && event?.value?.district_id && (await this.setTA(event.value))) {
                 modifyFieldValue(this.currentLocation, "current_traditional_authority", "displayNone", true);
                 modifyFieldValue(this.currentLocation, "current_traditional_authority", "value", "");
                 modifyFieldValue(this.currentLocation, "current_village", "displayNone", true);
                 modifyFieldValue(this.currentLocation, "current_village", "value", "");
-                if (event?.value?.district_id) this.setTA(event.value);
             }
-            if (event.name == "current_traditional_authority") {
+            if (event.name == "current_traditional_authority" && event?.value?.traditional_authority_id && (await this.setVillage(event.value))) {
                 modifyFieldValue(this.currentLocation, "current_village", "displayNone", true);
                 modifyFieldValue(this.currentLocation, "current_village", "value", "");
-                if (event?.value?.traditional_authority_id) this.setVillage(event.value);
             }
         },
         async setTA(obj: any) {
             const targetData = await LocationService.getTraditionalAuthorities(obj.district_id, "");
-            modifyFieldValue(this.currentLocation, "current_traditional_authority", "multiSelectData", targetData);
-            modifyFieldValue(this.currentLocation, "current_traditional_authority", "displayNone", false);
+            if (targetData.length > 0) {
+                modifyFieldValue(this.currentLocation, "current_traditional_authority", "multiSelectData", targetData);
+                modifyFieldValue(this.currentLocation, "current_traditional_authority", "displayNone", false);
+                return true;
+            } else {
+                return false;
+            }
         },
         async setVillage(obj: any) {
             const targetData = await LocationService.getVillages(obj.traditional_authority_id, "");
-            console.log("🚀 ~ setVillage ~ targetData:", targetData);
-            modifyFieldValue(this.currentLocation, "current_village", "multiSelectData", targetData);
-            modifyFieldValue(this.currentLocation, "current_village", "displayNone", false);
+            if (targetData.length > 0) {
+                modifyFieldValue(this.currentLocation, "current_village", "multiSelectData", targetData);
+                modifyFieldValue(this.currentLocation, "current_village", "displayNone", false);
+                return true;
+            } else {
+                return false;
+            }
         },
     },
 });
