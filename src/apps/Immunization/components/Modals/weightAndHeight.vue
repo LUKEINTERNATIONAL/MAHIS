@@ -78,9 +78,7 @@ import { mapState } from "pinia";
 import { VitalsEncounter } from "@/apps/Immunization/services/vitals";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { isEmpty } from "lodash";
-import Localbase from "localbase";
-let db = new Localbase("db");
-
+import db from "@/db";
 export default defineComponent({
     name: "Home",
     components: {

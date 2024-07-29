@@ -150,8 +150,7 @@ import { PatientProgramService } from "@/services/patient_program_service";
 import { resetDemographics } from "@/services/reset_data";
 import { savePatientRecord } from "@/services/save_records";
 import { useWebWorkerFn } from "@vueuse/core";
-import Localbase from "localbase";
-let db = new Localbase("db");
+import db from "@/db";
 export default defineComponent({
     mixins: [ScreenSizeMixin],
     components: {
@@ -404,18 +403,6 @@ export default defineComponent({
             } else {
                 return true;
             }
-        },
-        async mwIdExists(nid: any) {
-            return this.checkIDExistences(28, nid);
-        },
-        async birthIdExists(nid: any) {
-            return this.checkIDExistences(23, nid);
-        },
-        async checkIDExistences(nid: any, identifierId: any) {
-            if (!nid) return false;
-            const people = await PatientService.findByOtherID(identifierId, nid);
-            if (people.length > 0) return true;
-            else return false;
         },
         validatedNationalID() {
             if (this.nationalID != "" && !getFieldValue(this.personInformation, "nationalID", "alertsErrorMassage")) {
