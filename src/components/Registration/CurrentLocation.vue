@@ -46,7 +46,6 @@ export default defineComponent({
             inputField: "" as any,
             setName: "" as any,
             locationData: [] as any,
-            districtList: [] as any,
         };
     },
     computed: {
@@ -87,7 +86,6 @@ export default defineComponent({
         },
     },
     async mounted() {
-        this.updateRegistrationStores();
         this.buildCards();
         this.setData();
         this.validaterowData({});
@@ -129,11 +127,6 @@ export default defineComponent({
         },
         openModal() {
             createModal(DispositionModal);
-        },
-        updateRegistrationStores() {
-            const registrationStore = useRegistrationStore();
-            // registrationStore.setHomeLocation(this.homeLocation);
-            // registrationStore.setCurrentLocation(this.currentLocation);
         },
         handleBtns(event: any) {
             if (event == "TA") createModal(AddTA, { class: "otherVitalsModal" });
@@ -180,7 +173,7 @@ export default defineComponent({
         },
 
         async setTA(obj: any) {
-            const targetData = await LocationService.getTraditionalAuthorities(obj.district_id, "");
+            const targetData = this.getTAs(obj.district_id);
             if (targetData.length > 0) {
                 modifyFieldValue(this.currentLocation, "current_traditional_authority", "multiSelectData", targetData);
                 modifyFieldValue(this.currentLocation, "current_traditional_authority", "displayNone", false);
@@ -190,7 +183,7 @@ export default defineComponent({
             }
         },
         async setVillage(obj: any) {
-            const targetData = await LocationService.getVillages(obj.traditional_authority_id, "");
+            const targetData = this.getVillages(obj.traditional_authority_id);
             if (targetData.length > 0) {
                 modifyFieldValue(this.currentLocation, "current_village", "multiSelectData", targetData);
                 modifyFieldValue(this.currentLocation, "current_village", "displayNone", false);
