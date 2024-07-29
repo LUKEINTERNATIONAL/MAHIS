@@ -5,11 +5,8 @@ import { RelationsService } from "@/services/relations_service";
 import { Service } from "@/services/service";
 import { AppEncounterService } from "@/services/app_encounter_service";
 import { PatientProgramService } from "@/services/patient_program_service";
-import Localbase from "localbase";
 import { toastDanger, toastSuccess, toastWarning } from "@/utils/Alerts";
-
-const db = new Localbase("db");
-
+import db from "@/db";
 export async function saveDemographicsRecord(record: any) {
     if (!(await validateID(record.otherPersonInformation))) return;
 

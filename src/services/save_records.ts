@@ -1,8 +1,7 @@
 import { saveDemographicsRecord } from "@/services/SaveRecords/save_demographics";
 import { PatientRegistrationService } from "@/services/patient_registration_service";
 import { useWebWorkerFn } from "@vueuse/core";
-import Localbase from "localbase";
-let db = new Localbase("db");
+import db from "@/db";
 export async function savePatientRecord() {
     await db
         .collection("patientRecords")
