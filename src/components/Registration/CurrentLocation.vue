@@ -86,8 +86,6 @@ export default defineComponent({
         this.updateRegistrationStores();
         this.buildCards();
         this.setData();
-        const targetData = await LocationService.getVillages(5, "ddd");
-        console.log("🚀 ~ mounted ~ targetData:", targetData);
     },
     methods: {
         setData() {
