@@ -207,7 +207,17 @@ export default defineComponent({
         data.map((item: any) => {
             if (item.name == "missed_immunizations") {
                 if (this.title == "Client overdue over 5yrs") {
-                    this.tableData = data.under_five_missed_visits;
+                    this.tableData = item.value.over_five_missed_doses.map((item: any) => {
+                        return [item.drug_name, item.missed_doses];
+                    });
+                    this.clientDetails = item.value.over_five_missed_visits.map((item: any) => {
+                        return {
+                            given_name: item.client.table.given_name,
+                            family_name: item.client.table.family_name,
+                            patient_id: item.client.table.patient_id,
+                            birthdate: item.client.table.birthdate,
+                        };
+                    });
                 }
                 if (this.title == "Client overdue under 5yrs") {
                     this.tableData = item.value.under_five_missed_doses.map((item: any) => {
