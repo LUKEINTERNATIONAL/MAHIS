@@ -114,21 +114,10 @@ export const useAdministerVaccineStore = defineStore("administerVaccineStore", {
             this.tempScannedBatchNumber = tempScannedBatchNumber;
         },
         setLastVaccinesGiven(data: any) {
-            
             this.lastVaccinesGiven.length = 0
             data.forEach((drug:any) => {
-                this.lastVaccinesGiven.push(
-                    {
-                        drug_id:	1307,
-                        drug_name:	drug.drug.name,
-                        window_period:	null,
-                        can_administer:	false,
-                        status:	"administered",
-                        date_administered:	drug.drug.date_created,
-                        order: drug.order
-                    }
-                )
-                this.lastVaccineGievenDate = drug.order.date_created
+                this.lastVaccinesGiven.push(drug)
+                this.lastVaccineGievenDate = drug.date_administered
             })
         },
         setLotNumberData(data: any) {

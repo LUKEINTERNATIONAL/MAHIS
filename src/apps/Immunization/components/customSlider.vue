@@ -57,6 +57,7 @@ import { useAdministerVaccineStore } from "@/apps/Immunization/stores/Administer
 import { getVaccinesSchedule, checkIfLastVaccineAdministered } from "@/apps/Immunization/services/vaccines_service";
 import { icons } from "@/utils/svg";
 import nextAppointMent from "@/apps/Immunization/components/Modals/nextAppointMent.vue";
+import { concat } from "lodash";
 
 export default defineComponent({
     name: "xxxComponent",
@@ -112,7 +113,8 @@ export default defineComponent({
             const vaccineScheduleStore = useAdministerVaccineStore();
 
             vaccineScheduleStore.setVaccineSchedule(data__);
-            checkIfLastVaccineAdministered()
+            vaccineScheduleStore.setLastVaccinesGiven([]);
+            checkIfLastVaccineAdministered();
 
             this.vaccineSchudulesCount = vaccineScheduleStore.getVaccineSchedule()?.vaccine_schedule?.length;
             vaccineScheduleStore.resetMissedVaccineSchedules();
@@ -121,6 +123,8 @@ export default defineComponent({
 
             vaccineScheduleStore.getVaccineSchedule()?.vaccine_schedule?.forEach((vaccineSchudule: any) => {
                 this.findMissingVaccines(vaccineSchudule);
+                
+                this.findPreviouslyAdministeredVaccineSchedule(vaccineSchudule);
                 this.handleSchedule(vaccineSchudule);
                 const obj = { visit: vaccineSchudule.visit, age: vaccineSchudule.age };
                 this.milestones = this.appendUniqueObject(this.milestones, obj);
@@ -233,6 +237,19 @@ export default defineComponent({
             const vaccineScheduleStore = useAdministerVaccineStore();
             if (obj.antigens.length > 0) {
                 vaccineScheduleStore.setMissedVaccineSchedules(obj);
+            }
+        },
+        findPreviouslyAdministeredVaccineSchedule(milestone: any) {
+            const vaccinesPreviouslyAdministered = [] as any
+            milestone.antigens.forEach((vaccine: any) => {
+                    if (vaccine.status == "administered") {
+                        vaccinesPreviouslyAdministered.push(vaccine)
+                    }
+
+                })
+            if (vaccinesPreviouslyAdministered.length > 0) {
+                const vaccineScheduleStore = useAdministerVaccineStore()
+                vaccineScheduleStore.setLastVaccinesGiven(vaccinesPreviouslyAdministered)
             }
         },
         reloadVaccines() {
