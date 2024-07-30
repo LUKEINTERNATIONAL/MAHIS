@@ -388,6 +388,8 @@ export default defineComponent({
                     saveStatusPersonInformation: "pending",
                     saveStatusGuardianInformation: "pending",
                     saveStatusBirthRegistration: "pending",
+                    date_created: "",
+                    creator: "",
                 });
                 await savePatientRecord();
                 toastSuccess("Successfully Created Patient");
