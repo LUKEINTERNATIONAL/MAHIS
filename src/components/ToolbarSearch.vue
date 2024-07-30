@@ -190,7 +190,6 @@ export default defineComponent({
     },
     async mounted() {
         this.offlinePatients = await db.collection("patientRecords").get();
-        console.log("🚀 ~ mounted ~ this.offlinePatients:", this.offlinePatients);
     },
     methods: {
         programID() {
