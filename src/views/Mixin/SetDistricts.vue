@@ -28,6 +28,9 @@ export default defineComponent({
         getTAs(targetId: any) {
             return this.TAsList.filter((obj: any) => obj.district_id === targetId);
         },
+        getDistricts(targetId: any) {
+            return this.districtList.filter((obj: any) => obj.region_id === targetId);
+        },
     },
 });
 </script>
