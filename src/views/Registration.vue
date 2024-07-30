@@ -148,10 +148,11 @@ import ScreenSizeMixin from "@/views/Mixin/ScreenSizeMixin.vue";
 import { PatientProgramService } from "@/services/patient_program_service";
 import { resetDemographics } from "@/services/reset_data";
 import { savePatientRecord } from "@/services/save_records";
+import Districts from "@/views/Mixin/SetDistricts.vue";
 import { useWebWorkerFn } from "@vueuse/core";
 import db from "@/db";
 export default defineComponent({
-    mixins: [ScreenSizeMixin],
+    mixins: [ScreenSizeMixin, Districts],
     components: {
         IonBreadcrumb,
         IonBreadcrumbs,
@@ -239,9 +240,9 @@ export default defineComponent({
         current_village() {
             return getFieldValue(this.currentLocation, "current_village", "value")?.name;
         },
-      "Other (specify)"() {
-        return getFieldValue(this.currentLocation, "Other (specify)", "value")
-      },
+        "Other (specify)"() {
+            return getFieldValue(this.currentLocation, "Other (specify)", "value");
+        },
     },
 
     async mounted() {
@@ -282,19 +283,19 @@ export default defineComponent({
             if (name) {
                 let districts = [];
                 for (let i of [1, 2, 3]) {
-                    if ((i = 1)) districts = await LocationService.getDistricts(i);
+                    if ((i = 1)) districts = await this.getDistricts(i);
                     if (districts.some((district: any) => district.name.trim() === name)) {
                         return "Central Region";
                     }
-                    if ((i = 2)) districts = await LocationService.getDistricts(i);
+                    if ((i = 2)) districts = await this.getDistricts(i);
                     if (districts.some((district: any) => district.name.trim() === name)) {
                         return "Northern Region";
                     }
-                    if ((i = 3)) districts = await LocationService.getDistricts(i);
+                    if ((i = 3)) districts = await this.getDistricts(i);
                     if (districts.some((district: any) => district.name.trim() === name)) {
                         return "Southern Region";
                     }
-                    if ((i = 4)) districts = await LocationService.getDistricts(i);
+                    if ((i = 4)) districts = await this.getDistricts(i);
                     if (districts.some((district: any) => district.name.trim() === name)) {
                         return "Foreign";
                     }
@@ -359,9 +360,9 @@ export default defineComponent({
             const selectedLandmark = getFieldValue(this.currentLocation, "closestLandmark", "value");
             const isOtherSelected = selectedLandmark?.name === "Other";
 
-          if (isOtherSelected) {
-            currentFields.push("Other (specify)");
-          }
+            if (isOtherSelected) {
+                currentFields.push("Other (specify)");
+            }
             if (
                 (await this.validations(this.personInformation, fields)) &&
                 (await this.validations(this.currentLocation, currentFields)) &&
@@ -487,36 +488,36 @@ export default defineComponent({
             if (ids >= 0) return item.patient_identifiers[ids].identifier;
             else return "";
         },
-      async buildPersonalInformation() {
-        const closestLandmark = getFieldValue(this.currentLocation, "closestLandmark", "value")?.name;
-        const otherLandmark = getFieldValue(this.currentLocation, "Other (specify)", "value");
-        const landmark = closestLandmark === "Other" ? otherLandmark : closestLandmark;
+        async buildPersonalInformation() {
+            const closestLandmark = getFieldValue(this.currentLocation, "closestLandmark", "value")?.name;
+            const otherLandmark = getFieldValue(this.currentLocation, "Other (specify)", "value");
+            const landmark = closestLandmark === "Other" ? otherLandmark : closestLandmark;
 
-        this.personInformation[0].selectedData = {
-          given_name: getFieldValue(this.personInformation, "firstname", "value"),
-          middle_name: getFieldValue(this.personInformation, "middleName", "value"),
-          family_name: getFieldValue(this.personInformation, "lastname", "value"),
-          gender: this.gender,
-          birthdate: getFieldValue(this.personInformation, "birthdate", "value"),
-          birthdate_estimated: "false",
-          home_region: await this.getRegion(getFieldValue(this.homeLocation, "home_district", "value")?.name),
-          home_district: getFieldValue(this.homeLocation, "home_district", "value")?.name,
-          home_traditional_authority: getFieldValue(this.homeLocation, "home_traditional_authority", "value")?.name,
-          home_village: getFieldValue(this.homeLocation, "home_village", "value")?.name,
-          current_region: await this.getRegion(this.current_district),
-          current_district: this.current_district,
-          current_traditional_authority: this.current_traditional_authority,
-          current_village: this.current_village,
-          landmark: landmark,
-          cell_phone_number: getFieldValue(this.personInformation, "phoneNumber", "value"),
-          occupation: getRadioSelectedValue(this.socialHistory, "occupation"),
-          marital_status: getRadioSelectedValue(this.socialHistory, "maritalStatus"),
-          religion: getFieldValue(this.socialHistory, "religion", "value")?.name,
-          education_level: getRadioSelectedValue(this.socialHistory, "highestLevelOfEducation"),
-        };
-      },
+            this.personInformation[0].selectedData = {
+                given_name: getFieldValue(this.personInformation, "firstname", "value"),
+                middle_name: getFieldValue(this.personInformation, "middleName", "value"),
+                family_name: getFieldValue(this.personInformation, "lastname", "value"),
+                gender: this.gender,
+                birthdate: getFieldValue(this.personInformation, "birthdate", "value"),
+                birthdate_estimated: "false",
+                home_region: await this.getRegion(getFieldValue(this.homeLocation, "home_district", "value")?.name),
+                home_district: getFieldValue(this.homeLocation, "home_district", "value")?.name,
+                home_traditional_authority: getFieldValue(this.homeLocation, "home_traditional_authority", "value")?.name,
+                home_village: getFieldValue(this.homeLocation, "home_village", "value")?.name,
+                current_region: await this.getRegion(this.current_district),
+                current_district: this.current_district,
+                current_traditional_authority: this.current_traditional_authority,
+                current_village: this.current_village,
+                landmark: landmark,
+                cell_phone_number: getFieldValue(this.personInformation, "phoneNumber", "value"),
+                occupation: getRadioSelectedValue(this.socialHistory, "occupation"),
+                marital_status: getRadioSelectedValue(this.socialHistory, "maritalStatus"),
+                religion: getFieldValue(this.socialHistory, "religion", "value")?.name,
+                education_level: getRadioSelectedValue(this.socialHistory, "highestLevelOfEducation"),
+            };
+        },
 
-      setDisplayType(type: any) {
+        setDisplayType(type: any) {
             const demographicsStore = useConfigurationStore();
             demographicsStore.setRegistrationDisplayType(type);
             this.setIconClass();
