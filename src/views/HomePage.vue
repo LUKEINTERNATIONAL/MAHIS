@@ -65,11 +65,11 @@
                     <ion-card-content>
                         <div class="overDueCardContent">
                             <div class="overDueCard" @click="openDueModal('Client overdue under 5yrs')">
-                                <div class="statsValue">{{ reportData?.client_overdue_under_five_years || 0 }}</div>
+                                <div class="statsValue">{{ reportData?.under_five_overdue || 0 }}</div>
                                 <div class="statsText">Under 5yrs</div>
                             </div>
                             <div class="overDueCard" @click="openDueModal('Client overdue over 5yrs')">
-                                <div class="statsValue">{{ reportData?.client_overdue_over_five_years || 0 }}</div>
+                                <div class="statsValue">{{ reportData?.over_five_overdue || 0 }}</div>
                                 <div class="statsText">Over 5yrs</div>
                             </div>
                         </div>
