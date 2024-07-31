@@ -4,8 +4,6 @@ import { AppEncounterService } from "@/services/app_encounter_service";
 import { useImmunizationAppointMentStore } from "@/stores/immunizationAppointMentStore"
 import HisDate from "@/utils/Date";
 import { toastWarning, popoverConfirmation, toastSuccess } from "@/utils/Alerts"
-import { SmsService } from "@/apps/Immunization/services/sms_service";
-
 export class Appointment extends AppEncounterService {
     
     patientID: number
@@ -43,14 +41,10 @@ export class Appointment extends AppEncounterService {
         // const nextAppointmentDate = res.appointment_date;
         // const n_a_obs = await this.buildValueDate("Estimated date", nextAppointmentDate)
         const a_obs = await this.buildValueDate("Appointment date", _appointment_[0]) as any
-        const appointment_onbs = await this.saveObservationList([a_obs])
+        const appointment_onbs = await this.saveObservationList([a_obs])        
         if (!appointment_onbs) return toastWarning("Unable set Next Appointment")
-        try {
-            await SmsService.appointment(this.patientID,_appointment_[0])
-        } catch (error) {
-            
-        } 
         toastSuccess("next Appointment Set Successfully")
+        return [this.patientID,_appointment_[0]]
     }
 
     async getNextAppointment() {
