@@ -74,10 +74,10 @@
         </ion-row> -->
 
         <ion-row v-if="isSuperUser">
-            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
-                >Activate user<span style="color: #b42318">*</span></ion-label
-            >
             <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                    >Activate/Deactivate user<span style="color: #b42318">*</span></ion-label
+                >
                 <Toggle
                     class="toggle-green"
                     :classes="{
@@ -177,7 +177,7 @@
         </ion-row>
 
         <ion-accordion-group ref="accordionGroup" class="previousView">
-            <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px; background-color: #fff">
+            <ion-accordion value="fourth" toggle-icon-slot="start" style="border-radius: 10px;">
                 <ion-item slot="header" color="light">
                     <ion-label class="previousLabel">Change Password</ion-label>
                 </ion-item>
