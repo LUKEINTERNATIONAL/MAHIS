@@ -44,10 +44,11 @@
                 <ion-col style="max-width: 25px"><ion-icon :icon="checkmark" class="selectedPatient"></ion-icon> </ion-col>
             </ion-row>
             <ion-row
+                v-show="!patients"
                 class="search_result clickable-row"
                 v-for="(item, index) in offlineFilteredPatients"
                 :key="index"
-                @click="openNewPage('patientProfile', item)"
+                @click="setOfflineDemo(item)"
             >
                 <ion-col style="max-width: 188px; min-width: 188px" class="sticky-column">{{
                     item.personInformation.given_name + " " + item.personInformation.family_name
@@ -70,7 +71,7 @@
             <ion-row class="ion-justify-content-start ion-align-items-center">
                 <Pagination
                     :disablePrevious="page - 1 == 0"
-                    :disableNext="patients.length < paginationSize"
+                    :disableNext="patients?.length < paginationSize"
                     :page="page"
                     :onClickNext="nextPage"
                     :onClickPrevious="previousPage"
@@ -220,19 +221,19 @@ export default defineComponent({
         },
         async searchByName(searchText: any) {
             const splittedArray = searchText.split(" ");
-            if (Validation.isName(splittedArray[0]) == null) {
-                const payload = {
-                    given_name: splittedArray[0],
-                    family_name: splittedArray.length >= 2 ? splittedArray[1] : "",
-                    gender: splittedArray.length >= 3 ? splittedArray[2] : "",
-                    page: this.page.toString(),
-                    per_page: this.paginationSize.toString(),
-                };
-                this.offlineFilteredPatients = await this.searchPatients(payload);
-                this.patients = await PatientService.search(payload);
-                if (this.patients.length > 0) {
-                    this.callswipeleft();
-                }
+            const payload = {
+                given_name: splittedArray[0],
+                family_name: splittedArray.length >= 2 ? splittedArray[1] : "",
+                gender: splittedArray.length >= 3 ? splittedArray[2] : "",
+                page: this.page.toString(),
+                per_page: this.paginationSize.toString(),
+            };
+            this.offlineFilteredPatients = [];
+            this.patients = await PatientService.search(payload);
+            if (this.patients && this.patients?.length > 0) {
+                this.callswipeleft();
+            } else {
+                this.offlineFilteredPatients = await this.searchOfflinePatients(payload);
             }
         },
         async searchByNpid(searchText: any) {
@@ -283,6 +284,13 @@ export default defineComponent({
                 .filter((identifier: any) => identifier.identifier_type === 3)
                 .map((identifier: any) => identifier.identifier)
                 .join(", ");
+        },
+        setOfflineDemo(data: any) {
+            this.popoverOpen = false;
+            resetPatientData();
+            this.setOfflineDemographics(data);
+            let url = "/patientProfile";
+            this.$router.push(url);
         },
         async openNewPage(url: any, item: any) {
             this.popoverOpen = false;
@@ -343,7 +351,7 @@ export default defineComponent({
         previousPage() {
             this.page--;
         },
-        searchPatients(searchCriteria: any) {
+        searchOfflinePatients(searchCriteria: any) {
             return this.offlinePatients.filter((patient: any) => {
                 const personInfo = patient.personInformation;
 

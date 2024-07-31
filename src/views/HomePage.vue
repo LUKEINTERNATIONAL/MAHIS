@@ -77,7 +77,7 @@
                 </ion-card>
                 <ion-card class="section">
                     <ion-card-header>
-                        <ion-card-title class="cardTitle"> Today appointments({{ appointments.length }}) </ion-card-title></ion-card-header
+                        <ion-card-title class="cardTitle"> Today appointments({{ appointments?.length }}) </ion-card-title></ion-card-header
                     >
                     <ion-card-content>
                         <div
@@ -264,7 +264,7 @@ export default defineComponent({
     methods: {
         async setAppointments() {
             this.appointments = await AppointmentService.getDailiyAppointments(HisDate.currentDate());
-            this.appointments = this.appointments.sort((a: any, b: any) => a.given_name.localeCompare(b.given_name));
+            if (this.appointments) this.appointments = this.appointments.sort((a: any, b: any) => a.given_name.localeCompare(b.given_name));
         },
         async openClientProfile(patientID: any) {
             const patientData = await PatientService.findByNpid(patientID);
