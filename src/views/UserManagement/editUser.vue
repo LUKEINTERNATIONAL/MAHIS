@@ -3,6 +3,9 @@
 
     <ion-row>
         <ion-col>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                >First Name<span style="color: #b42318">*</span></ion-label
+            >
             <BasicInputField
                 :placeholder="input_properties[1].placeHolder"
                 :icon="personOutline"
@@ -17,6 +20,9 @@
             </div>
         </ion-col>
         <ion-col>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                >Last name<span style="color: #b42318">*</span></ion-label
+            >
             <BasicInputField
                 :placeholder="input_properties[2].placeHolder"
                 :icon="peopleOutline"
@@ -34,6 +40,9 @@
 
     <ion-row>
             <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                    >Username<span style="color: #b42318">*</span></ion-label
+                >
                 <BasicInputField
                     :placeholder="input_properties[0].placeHolder"
                     :icon="personCircleOutline"
@@ -65,6 +74,9 @@
         </ion-row> -->
 
         <ion-row v-if="isSuperUser">
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                >Activate user<span style="color: #b42318">*</span></ion-label
+            >
             <ion-col>
                 <Toggle
                     class="toggle-green"
@@ -80,6 +92,9 @@
 
         <ion-row v-if="isSuperUser">
             <ion-col size="6">
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                    >Find and select facility name<span style="color: #b42318">*</span></ion-label
+                >
                 <VueMultiselect
                     v-model="selected_location"
                     @update:model-value="selectedLocation($event)"
@@ -88,8 +103,8 @@
                     :hide-selected="true"
                     :close-on-select="true"
                     openDirection="bottom"
-                    tag-placeholder="Find and select medication"
-                    placeholder="Find and select medication"
+                    tag-placeholder="Find and select facility name"
+                    placeholder="Find and select facility name"
                     selectLabel=""
                     label="name"
                     :searchable="true"
@@ -108,6 +123,9 @@
 
         <ion-row v-if="isSuperUser">
             <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                    >Find and select facility Role(s)<span style="color: #b42318">*</span></ion-label
+                >
                 <ListPicker
                     :multiSelection="list_picker_prperties[0].multi_Selection"
                     :show_label="list_picker_prperties[0].show_list_label"
@@ -126,6 +144,9 @@
 
         <ion-row v-if="isSuperUser">
             <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                    >Find and select facility Program(s)<span style="color: #b42318">*</span></ion-label
+                >
                 <ListPicker
                     :multiSelection="list_picker_prperties[1].multi_Selection"
                     :show_label="list_picker_prperties[1].show_list_label"
@@ -163,6 +184,9 @@
                 <div class="ion-padding" slot="content">
                     <ion-row>
         <ion-col>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                >New password<span style="color: #b42318">*</span></ion-label
+            >
             <BasicInputField
                 :placeholder="password_input_properties[0].placeHolder"
                 :icon="keyOutline"
@@ -177,6 +201,9 @@
             </div>
         </ion-col>
         <ion-col>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                >Repeat password<span style="color: #b42318">*</span></ion-label
+            >
             <BasicInputField
                 :placeholder="password_input_properties[1].placeHolder"
                 :icon="keyOutline"
@@ -364,7 +391,7 @@ const password_input_properties = [
         error_message: passwordErrorMsgs[0],
     },
     {
-        placeHolder: 'confirm password',
+        placeHolder: 'repeat password',
         dataHandler: passwordInputUpDated_fn2,
         dataValue: ref(),
         show_error: ref(false),

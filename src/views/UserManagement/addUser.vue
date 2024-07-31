@@ -745,7 +745,7 @@ const password_input_properties = [
         error_message: passwordErrorMsgs[0],
     },
     {
-        placeHolder: 'confirm password',
+        placeHolder: 'repeat password',
         dataHandler: passwordInputUpDated_fn2,
         dataValue: ref(),
         show_error: ref(false),
