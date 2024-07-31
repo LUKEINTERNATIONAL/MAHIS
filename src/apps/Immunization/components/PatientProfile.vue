@@ -326,7 +326,6 @@ export default defineComponent({
         this.loadCurrentMilestone();
         this.checkAge();
         await this.checkProtectedStatus();
-        await this.getLastVaccinesGiven();
     },
     watch: {
         vitals: {
@@ -372,15 +371,8 @@ export default defineComponent({
                     if (!this.demographics.active) await this.openFollowModal();
                     this.checkAge();
                     this.setMilestoneReload();
-                    await this.getLastVaccinesGiven();
                 }
             },
-        },
-        vaccineReload: {
-            async handler() {
-                await this.getLastVaccinesGiven();
-            },
-            deep: true,
         },
     },
     setup() {
@@ -670,13 +662,6 @@ export default defineComponent({
         setMilestoneReload() {
             const store = useAdministerVaccineStore();
             store.setVaccineReload(!store.getVaccineReload());
-        },
-        async getLastVaccinesGiven() {
-            if (this.demographics.patient_id) {
-                const data = await DrugOrderService.getLastDrugsReceived(this.demographics.patient_id);
-                const store = useAdministerVaccineStore();
-                store.setLastVaccinesGiven(data);
-            }
         },
         getLastVaccinesGivenDisplayDate() {
             return HisDate.toStandardHisDisplayFormat(this.lastVaccineGievenDate);
