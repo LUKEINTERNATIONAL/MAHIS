@@ -75,6 +75,7 @@
                                         <ion-item @click="navigationMenu('setDDE')" value="DDE"> DDE </ion-item>
                                         <ion-item class="list-bottom" @click="navigationMenu('setLocation')" value="Location"> Location </ion-item>
                                         <ion-item @click="navigationMenu('setPreferences')" value="Preferences"> Preferences </ion-item>
+                                        <ion-item @click="navigationMenu('setSmsConfig')" value="SMS" class="list-bottom">Sms Alerts</ion-item>
                                     </ion-list>
                                 </div>
                             </ion-accordion>

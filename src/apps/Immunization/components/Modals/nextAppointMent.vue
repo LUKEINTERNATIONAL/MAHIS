@@ -85,10 +85,13 @@ import { ref, onMounted,computed, watch } from "vue"
 import HisDate from "@/utils/Date"
 import { useImmunizationAppointMentStore } from "@/stores/immunizationAppointMentStore"
 import { Appointment } from "@/apps/Immunization/services/immunization_appointment_service"
+import smsConfirmation from "@/apps/Immunization/components/Modals/smsConfirmation.vue";
+import { SmsService } from "@/apps/Immunization/services/sms_service";
 import { Service } from '@/services/service'
 const store = useImmunizationAppointMentStore()
 
 const date = ref()
+var configsSms: string;
 const sessionDate = HisDate.toStandardHisDisplayFormat(Service.getSessionDate())
 
 function disablePastDates(date: any) {
@@ -98,14 +101,36 @@ function disablePastDates(date: any) {
     return date < today;
 }
 
+async function createModal(component: any, options: any) {
+    const modal = await modalController.create({
+        component,
+        ...options
+    });
+    return modal.present();
+}
+
 async function save() {
-    const appointment_service = new Appointment()
-    await appointment_service.createAppointment()
-    dismiss()
+
+    const appointment_service = new Appointment();
+    const appointmentDetails = await appointment_service.createAppointment();
+    dismiss();
+    if (Array.isArray(appointmentDetails) && appointmentDetails.length > 0) {
+          if(configsSms){        
+             createModal(smsConfirmation, {
+                   componentProps: { patient: appointmentDetails[0], date: appointmentDetails[1] },
+                   class: "smsConfirmation"
+             });        
+        }
+        else{
+               await SmsService.appointment(appointmentDetails[0],appointmentDetails[1]);
+            }
+   }
 }
 
 onMounted(async () => {
-    store.clearAppointmentMent()
+    store.clearAppointmentMent()    
+      var data = await SmsService.getConfigurations();
+    configsSms = data.show_sms_popup;     
 })
 
 function dismiss() {

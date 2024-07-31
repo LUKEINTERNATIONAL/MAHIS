@@ -8,6 +8,7 @@ import clinicaldays from "@/views/ClinicalDays/clinicalDays.vue";
 import PatientProfile from "../views/PatientProfile.vue";
 import PatientRegistration from "@/views/Registration.vue";
 import setSessionDate from "@/views/Configurations/SessionDate.vue";
+import setSmsConfig from "@/views/Configurations/SmsConfig.vue";
 import { alertController, loadingController, modalController, toastController } from "@ionic/vue";
 
 import NCD from "@/apps/NCD/config/routes";
@@ -44,6 +45,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/setSessionDate",
         name: "setSessionDate",
         component: setSessionDate,
+    },
+    {
+        path: "/setSmsConfig",
+        name: "setSMSConfiguration",
+        component: setSmsConfig,
     },
     {
         path: "/registration/:registrationType",
