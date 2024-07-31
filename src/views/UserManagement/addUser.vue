@@ -1,6 +1,9 @@
 <template>
     <ion-row>
         <ion-col>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                >First name<span style="color: #b42318">*</span></ion-label
+            >
             <BasicInputField
                 :placeholder="input_properties[1].placeHolder"
                 :icon="personOutline"
@@ -15,6 +18,9 @@
             </div>
         </ion-col>
         <ion-col>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                >Last name<span style="color: #b42318">*</span></ion-label
+            >
             <BasicInputField
                 :placeholder="input_properties[2].placeHolder"
                 :icon="peopleOutline"
@@ -32,6 +38,9 @@
 
     <ion-row>
             <ion-col>
+                <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                >Username<span style="color: #b42318">*</span></ion-label
+            >
                 <BasicInputField
                     :placeholder="input_properties[0].placeHolder"
                     :icon="personCircleOutline"
@@ -50,6 +59,9 @@
 
     <ion-row>
         <ion-col size="6">
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                >Find and select District(s)<span style="color: #b42318">*</span></ion-label
+            >
             <VueMultiselect
                 v-model="selected_Districts"
                 @update:model-value="selectedDistrict($event)"
@@ -77,6 +89,9 @@
         </ion-col>
 
         <ion-col size="6">
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                >Find and select facility name<span style="color: #b42318">*</span></ion-label
+            >
             <VueMultiselect
                 v-model="selected_location"
                 @update:model-value="selectedLocation($event)"
@@ -107,6 +122,9 @@
 
     <ion-row>
         <ion-col size="6">
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                >Find and select Traditional Authority (TA)<span style="color: #b42318">*</span></ion-label
+            >
             <VueMultiselect
                 v-model="selected_TAz"
                 @update:model-value="selectedTA($event)"
@@ -133,6 +151,9 @@
             </div>
         </ion-col>
         <ion-col size="6">
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                >Find and select village(s)<span style="color: #b42318">*</span></ion-label
+            >
             <VueMultiselect
                 v-model="selected_villages"
                 @update:model-value="selectedVillage($event)"
@@ -163,6 +184,9 @@
     <ion-row>
 
         <ion-col>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                >Find and select Role(s)<span style="color: #b42318">*</span></ion-label
+            >
             <ListPicker
                 :multiSelection="list_picker_prperties[0].multi_Selection"
                 :show_label="list_picker_prperties[0].show_list_label"
@@ -189,6 +213,9 @@
 
     <ion-row>
         <ion-col>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; color: grey"
+                >Find and select Program(s)<span style="color: #b42318">*</span></ion-label
+            >
             <ListPicker
                 :multiSelection="list_picker_prperties[1].multi_Selection"
                 :show_label="list_picker_prperties[1].show_list_label"
@@ -214,6 +241,9 @@
 
     <ion-row>
         <ion-col>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                >Gender<span style="color: #b42318">*</span></ion-label
+            >
             <sselectionList
                 :labels="isSSelection_properties[0].labels"
                 @selection-event="isSSelection_properties[0].dataHandler"
@@ -230,6 +260,9 @@
 
     <ion-row>
         <ion-col>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                >Password<span style="color: #b42318">*</span></ion-label
+            >
             <BasicInputField
                 :placeholder="password_input_properties[0].placeHolder"
                 :icon="keyOutline"
@@ -244,6 +277,9 @@
             </div>
         </ion-col>
         <ion-col>
+            <ion-label style="margin: 10px; margin-left: 0px; margin-top: 0px; margin-bottom: 10px; color: grey"
+                >Repeat password<span style="color: #b42318">*</span></ion-label
+            >
             <BasicInputField
                 :placeholder="password_input_properties[1].placeHolder"
                 :icon="keyOutline"
@@ -268,7 +304,7 @@ export default defineComponent({
 })
 </script>
 <script setup lang="ts">
-import { IonContent, IonHeader, IonItem, IonCol, IonToolbar, IonMenu, IonAccordionGroup, IonAccordion, AccordionGroupCustomEvent } from "@ionic/vue"
+import { IonContent, IonHeader, IonItem, IonCol, IonLabel, IonToolbar, IonMenu, IonAccordionGroup, IonAccordion, AccordionGroupCustomEvent } from "@ionic/vue"
 import BasicInputField from "@/components/BasicInputField.vue"
 import sselectionList from "@/components/SselectionList.vue"
 import { areFieldsValid, getFieldsValuesObj, isPasswordValid } from "@/utils/GeneralUti"
