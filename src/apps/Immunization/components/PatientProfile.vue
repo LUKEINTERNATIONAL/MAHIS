@@ -381,7 +381,7 @@ export default defineComponent({
 
     methods: {
         getAge(dateOfBirth: string): string {
-            return HisDate.calculateDisplayAge(dateOfBirth);
+            return HisDate.calculateDisplayAge(HisDate.toStandardHisFormat(dateOfBirth));
         },
         printID() {
             new PatientPrintoutService(this.demographics.patient_id).printNidLbl();
