@@ -20,7 +20,7 @@
                     <div
                         style="
                             background: linear-gradient(180deg, rgba(150, 152, 152, 0.7) 0%, rgba(255, 255, 255, 0.9) 100%),
-                                url('/mahis/images/backgroundImg.png');
+                                url('/images/backgroundImg.png');
                             background-size: cover;
                             background-blend-mode: overlay;
                             height: 22.8vh;
