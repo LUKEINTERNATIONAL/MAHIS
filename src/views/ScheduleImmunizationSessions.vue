@@ -178,20 +178,20 @@ export default defineComponent({
                     filteredData = this.outStock;
                 }
 
-                this.reportData = filteredData.map((item: any) => {
-                    return [
-                        HisDate.toStandardHisDisplayFormat(item.delivery_date),
-                        HisDate.toStandardHisDisplayFormat(item.expiry_date),
-                        item.batch_number,
-                        item.delivered_quantity,
-                        item.dispensed_quantity,
-                        item.current_quantity,
-                        item.drug_legacy_name,
-                        item.current_quantity,
-                        `<button class="btn btn-sm btn-primary edit-btn" data-id="${item.id}">Edit</button>
-                 <button class="btn btn-sm btn-danger delete-btn" data-id="${item.id}">Delete</button>`,
-                    ];
-                });
+                // this.reportData = filteredData.map((item: any) => {
+                //     return [
+                //         HisDate.toStandardHisDisplayFormat(item.delivery_date),
+                //         HisDate.toStandardHisDisplayFormat(item.expiry_date),
+                //         item.batch_number,
+                //         item.delivered_quantity,
+                //         item.dispensed_quantity,
+                //         item.current_quantity,
+                //         item.drug_legacy_name,
+                //         item.current_quantity,
+                //         `<button class="btn btn-sm btn-primary edit-btn" data-id="${item.id}">Edit</button>
+                //  <button class="btn btn-sm btn-danger delete-btn" data-id="${item.id}">Delete</button>`,
+                //     ];
+                // });
 
                 DataTable.use(DataTablesCore);
             } catch (error) {
