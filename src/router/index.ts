@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "@ionic/vue-router";
 import { RouteRecordRaw } from "vue-router";
 import HomePage from "../views/HomePage.vue";
 import stockManagement from "../views/StockManagement.vue";
+import scheduleImmunization from "../views/ScheduleImmunizationSessions.vue";
 import Login from "../views/Login.vue";
 import users from "@/views/UserManagement/users.vue";
 import clinicaldays from "@/views/ClinicalDays/clinicalDays.vue";
@@ -30,6 +31,11 @@ const routes: Array<RouteRecordRaw> = [
         path: "/stockManagement",
         name: "stockManagement",
         component: stockManagement,
+    },
+    {
+        path: "/scheduleImmunization",
+        name: "scheduleImmunization",
+        component: scheduleImmunization,
     },
     {
         path: "/login",

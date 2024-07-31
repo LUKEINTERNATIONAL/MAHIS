@@ -5,7 +5,6 @@
             <ion-spinner name="bubbles"></ion-spinner>
             <div class="loading-text">Please wait...</div>
         </div>
-
         <ion-header>
             <div class="header position_content">
                 <div style="display: flex; align-items: center" @click="nav('/home')">
@@ -238,6 +237,9 @@ export default defineComponent({
         current_village() {
             return getFieldValue(this.currentLocation, "current_village", "value")?.name;
         },
+      "Other (specify)"() {
+        return getFieldValue(this.currentLocation, "Other (specify)", "value")
+      },
     },
 
     async mounted() {
@@ -388,6 +390,12 @@ export default defineComponent({
             const fields: any = ["nationalID", "firstname", "lastname", "birthdate", "gender"];
             const currentFields: any = ["current_district", "current_traditional_authority", "current_village"];
             await this.buildPersonalInformation();
+            const selectedLandmark = getFieldValue(this.currentLocation, "closestLandmark", "value");
+            const isOtherSelected = selectedLandmark?.name === "Other";
+
+          if (isOtherSelected) {
+            currentFields.push("Other (specify)");
+          }
             if (
                 (await this.validations(this.personInformation, fields)) &&
                 (await this.validations(this.currentLocation, currentFields)) &&
@@ -512,31 +520,36 @@ export default defineComponent({
             if (ids >= 0) return item.patient_identifiers[ids].identifier;
             else return "";
         },
-        async buildPersonalInformation() {
-            this.personInformation[0].selectedData = {
-                given_name: getFieldValue(this.personInformation, "firstname", "value"),
-                middle_name: getFieldValue(this.personInformation, "middleName", "value"),
-                family_name: getFieldValue(this.personInformation, "lastname", "value"),
-                gender: this.gender,
-                birthdate: getFieldValue(this.personInformation, "birthdate", "value"),
-                birthdate_estimated: "false",
-                home_region: await this.getRegion(getFieldValue(this.homeLocation, "home_district", "value")?.name),
-                home_district: getFieldValue(this.homeLocation, "home_district", "value")?.name,
-                home_traditional_authority: getFieldValue(this.homeLocation, "home_traditional_authority", "value")?.name,
-                home_village: getFieldValue(this.homeLocation, "home_village", "value")?.name,
-                current_region: await this.getRegion(this.current_district),
-                current_district: this.current_district,
-                current_traditional_authority: this.current_traditional_authority,
-                current_village: this.current_village,
-                landmark: getFieldValue(this.currentLocation, "closestLandmark", "value")?.name,
-                cell_phone_number: getFieldValue(this.personInformation, "phoneNumber", "value"),
-                occupation: getRadioSelectedValue(this.socialHistory, "occupation"),
-                marital_status: getRadioSelectedValue(this.socialHistory, "maritalStatus"),
-                religion: getFieldValue(this.socialHistory, "religion", "value")?.name,
-                education_level: getRadioSelectedValue(this.socialHistory, "highestLevelOfEducation"),
-            };
-        },
-        setDisplayType(type: any) {
+      async buildPersonalInformation() {
+        const closestLandmark = getFieldValue(this.currentLocation, "closestLandmark", "value")?.name;
+        const otherLandmark = getFieldValue(this.currentLocation, "Other (specify)", "value");
+        const landmark = closestLandmark === "Other" ? otherLandmark : closestLandmark;
+
+        this.personInformation[0].selectedData = {
+          given_name: getFieldValue(this.personInformation, "firstname", "value"),
+          middle_name: getFieldValue(this.personInformation, "middleName", "value"),
+          family_name: getFieldValue(this.personInformation, "lastname", "value"),
+          gender: this.gender,
+          birthdate: getFieldValue(this.personInformation, "birthdate", "value"),
+          birthdate_estimated: "false",
+          home_region: await this.getRegion(getFieldValue(this.homeLocation, "home_district", "value")?.name),
+          home_district: getFieldValue(this.homeLocation, "home_district", "value")?.name,
+          home_traditional_authority: getFieldValue(this.homeLocation, "home_traditional_authority", "value")?.name,
+          home_village: getFieldValue(this.homeLocation, "home_village", "value")?.name,
+          current_region: await this.getRegion(this.current_district),
+          current_district: this.current_district,
+          current_traditional_authority: this.current_traditional_authority,
+          current_village: this.current_village,
+          landmark: landmark,
+          cell_phone_number: getFieldValue(this.personInformation, "phoneNumber", "value"),
+          occupation: getRadioSelectedValue(this.socialHistory, "occupation"),
+          marital_status: getRadioSelectedValue(this.socialHistory, "maritalStatus"),
+          religion: getFieldValue(this.socialHistory, "religion", "value")?.name,
+          education_level: getRadioSelectedValue(this.socialHistory, "highestLevelOfEducation"),
+        };
+      },
+
+      setDisplayType(type: any) {
             const demographicsStore = useConfigurationStore();
             demographicsStore.setRegistrationDisplayType(type);
             this.setIconClass();

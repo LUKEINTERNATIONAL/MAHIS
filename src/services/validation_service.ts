@@ -10,6 +10,7 @@ export function validateField(data: any, fieldName: string, value: any) {
         middleName: () => Validation.isNamesEmpty(value),
         birthdate: () => Validation.required(value),
         gender: () => Validation.required(value),
+        "Other (specify)": () => Validation.required(value),
         phoneNumber: () => Validation.isMWPhoneNumber(value),
         estimation: () => Validation.isEstimationDate(value),
         guardianFirstname: () => MultValidations(fieldName, value),
@@ -64,7 +65,6 @@ function MultValidations(fieldName: string, value: any): null | any {
             return wholeNumberError;
         }
     } else {
-        // For other fields, simply return null
         return null;
     }
 

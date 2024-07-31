@@ -21,7 +21,7 @@
                 <ion-card-header> <ion-card-title class="sectionTitle"> Summary of required doses </ion-card-title></ion-card-header>
                 <ion-card-content>
                     <div class="dueCardContent">
-                        <DataTable :options="options" :data="dueData" class="display nowrap" width="100%">
+                        <DataTable :options="options" :data="tableData" class="display nowrap" width="100%">
                             <thead>
                                 <tr>
                                     <th>Vaccine</th>
@@ -35,19 +35,25 @@
             <ion-card class="section" style="margin-inline: 0px">
                 <ion-card-header> <ion-card-title class="sectionTitle">Client Details </ion-card-title></ion-card-header>
                 <ion-card-content>
-                    <div class="appointments" style="display: flex; margin-bottom: 10px" v-for="(item, index) in clientDetails" :key="index">
+                    <div
+                        class="appointments"
+                        style="display: flex; margin-bottom: 10px"
+                        v-for="(item, index) in clientDetails"
+                        :key="index"
+                        @click="openClientProfile(item.patient_id)"
+                    >
                         <div style="margin-right: 15px">
-                            <div :class="item.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
+                            <div :class="item?.gender == 'M' ? 'initialsBox maleColor' : 'initialsBox femaleColor'">
                                 <ion-icon style="color: rgb(78, 78, 78); font-size: 30px" :icon="person"></ion-icon>
                             </div>
                         </div>
                         <div style="align-items: center; display: flex">
-                            <div style="line-height: 1">
+                            <div>
                                 <div class="client_name">
                                     <div class="name">{{ item.given_name }} {{ item.family_name }}</div>
                                 </div>
                                 <div class="demographicsOtherRow">
-                                    <div class="demographicsText">address</div>
+                                    <div class="demographicsText">Age: {{ getAge(item.birthdate) }}</div>
                                 </div>
                             </div>
                         </div>
@@ -117,7 +123,6 @@ import PreviousVitals from "@/components/Graphs/previousVitals.vue";
 import customDatePicker from "@/apps/Immunization/components/customDatePicker.vue";
 import { PatientService } from "@/services/patient_service";
 import { saveVaccineAdministeredDrugs, getVaccinesSchedule } from "@/apps/Immunization/services/vaccines_service";
-import QRCodeReadersrc from "@/components/QRCodeReader.vue";
 import { createModal } from "@/utils/Alerts";
 import { useAdministerVaccineStore } from "@/apps/Immunization/stores/AdministerVaccinesStore";
 import VueMultiselect from "vue-multiselect";
@@ -130,8 +135,10 @@ import "datatables.net-buttons/js/buttons.html5";
 import "datatables.net-responsive";
 import "datatables.net-buttons-dt";
 import { getVaccinesData } from "@/apps/Immunization/services/dashboard_service";
+import SetDemographics from "@/views/Mixin/SetDemographics.vue";
 
 export default defineComponent({
+    mixins: [SetDemographics],
     components: {
         IonContent,
         IonHeader,
@@ -163,51 +170,17 @@ export default defineComponent({
             showPD: false as boolean,
             batchNumber: "" as any,
             clientDetails: [] as any,
-            dueData: [] as any,
+            tableData: [] as any,
             options: {
                 responsive: true,
                 select: true,
                 searching: false,
                 ordering: false,
-                pageLength: 25,
+                pageLength: 8,
                 lengthChange: false,
             } as any,
             vaccineName: "" as string,
             currentDrugOb: {} as any,
-            otherVaccinesList: [
-                {
-                    concept_id: 11592,
-                    drug_id: 1287,
-                    drug_name: "OPV3",
-                    status: "administered",
-                    date_administered: "01/Jun/2024 08:40:01",
-                    vaccine_batch_number: null,
-                },
-                {
-                    concept_id: 11592,
-                    drug_id: 1290,
-                    drug_name: "Pentavalent 3",
-                    status: "administered",
-                    date_administered: "31/May/2024 15:16:03",
-                    vaccine_batch_number: null,
-                },
-                {
-                    concept_id: 11592,
-                    drug_id: 1293,
-                    drug_name: "PCV3",
-                    status: "administered",
-                    date_administered: "01/Jun/2024 08:40:17",
-                    vaccine_batch_number: null,
-                },
-                {
-                    concept_id: 11592,
-                    drug_id: 1301,
-                    drug_name: "IPV",
-                    status: "administered",
-                    date_administered: "31/May/2024 15:33:44",
-                    vaccine_batch_number: null,
-                },
-            ] as any,
             is_batch_number_valid: false as boolean,
             vaccineDate: "" as any,
             is_vaccine_name_valid: false as boolean,
@@ -215,13 +188,7 @@ export default defineComponent({
             batch_number_error_message: "Enter a valid batch number",
             vaccine_name_error_message: "Enter a valid valid vaccine name",
             sessionDate: HisDate.toStandardHisDisplayFormat(Service.getSessionDate()),
-            InnerActionBtnPropeties: {
-                name: "Scan",
-                show: true,
-                fn: () => {
-                    createModal(QRCodeReadersrc, { class: "otherVitalsModal qr_code_modal" }, false);
-                },
-            },
+
             showDateBtns: true as boolean,
         };
     },
@@ -237,13 +204,36 @@ export default defineComponent({
     async mounted() {
         this.isLoading = true;
         const data = await getVaccinesData();
-        if (this.title == "Client overdue over 5yrs") {
-            this.overdueData = data.under_five_missed_visits;
-        }
-        if (this.title == "Client overdue under 5yrs") {
-            this.overdueData = data.over_five_missed_visits;
-        }
-        console.log("🚀 ~ mounted ~ this.overdueData:", this.overdueData);
+        data.map((item: any) => {
+            if (item.name == "missed_immunizations") {
+                if (this.title == "Client overdue over 5yrs") {
+                    this.tableData = item.value.over_five_missed_doses.map((item: any) => {
+                        return [item.drug_name, item.missed_doses];
+                    });
+                    this.clientDetails = item.value.over_five_missed_visits.map((item: any) => {
+                        return {
+                            given_name: item.client.table.given_name,
+                            family_name: item.client.table.family_name,
+                            patient_id: item.client.table.patient_id,
+                            birthdate: item.client.table.birthdate,
+                        };
+                    });
+                }
+                if (this.title == "Client overdue under 5yrs") {
+                    this.tableData = item.value.under_five_missed_doses.map((item: any) => {
+                        return [item.drug_name, item.missed_doses];
+                    });
+                    this.clientDetails = item.value.under_five_missed_visits.map((item: any) => {
+                        return {
+                            given_name: item.client.table.given_name,
+                            family_name: item.client.table.family_name,
+                            patient_id: item.client.table.patient_id,
+                            birthdate: item.client.table.birthdate,
+                        };
+                    });
+                }
+            }
+        });
         this.isLoading = false;
     },
     watch: {
@@ -271,6 +261,14 @@ export default defineComponent({
         return { person, pulseOutline, clipboardOutline };
     },
     methods: {
+        async openClientProfile(patientID: any) {
+            const patientData = await PatientService.findByID(patientID);
+            this.setDemographics(patientData);
+            this.$router.push("patientProfile");
+        },
+        getAge(dateOfBirth: string): string {
+            return HisDate.calculateDisplayAge(dateOfBirth);
+        },
         openPopover(e: Event) {
             this.event = e;
             this.popoverOpen = true;
@@ -358,6 +356,50 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.appointments {
+    transition: background-color 0.6s, color 0.6s, transform 0.2s;
+    user-select: none;
+    padding: 10px;
+}
+.appointments:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.appointments:active {
+    background-color: #ccc;
+    color: #fff;
+    transform: scale(0.98);
+}
+
+.appointments.active {
+    background-color: #8c8c8c8c;
+    color: #fff;
+}
+.initialsBox {
+    width: 50px;
+    height: 50px;
+    left: 31px;
+    top: 122px;
+    align-items: center;
+    border-radius: 50%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+.maleColor {
+    background: #5983ba;
+}
+.femaleColor {
+    background: #876d9b;
+}
+.client_name {
+    font-size: 1em;
+    font-weight: 600;
+}
+.demographicsText {
+    font-size: 1em;
+}
 .position_content {
     max-width: 100vw;
 }

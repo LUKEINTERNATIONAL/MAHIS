@@ -80,6 +80,31 @@ const initialPresentingComplaint = [
             },
         ],
     },
+    {
+        isFinishBtn: false,
+        sectionHeader: "",
+        data: {
+            rowData: [
+                {
+                    colData: [
+                        {
+                            class: "",
+                            displayNone:true,
+                            inputHeader: "Specify the presenting complaint(s)*",
+                            value: "",
+                            icon: icons.editPen,
+                            name: "Other (specify)",
+                            valueType: "text",
+                            eventType: "input",
+                            alertsErrorMassage: "",
+                            colSize: "9",
+
+                        },
+                    ],
+                },
+            ],
+        },
+    },
 ];
 export const usePresentingComplaintsStore = defineStore("PresentingComplaintsStore", {
     state: () => ({
@@ -91,7 +116,7 @@ export const usePresentingComplaintsStore = defineStore("PresentingComplaintsSto
         },
         getInitial() {
             const data = _.cloneDeep(initialPresentingComplaint);
-            return [...data]; // Return a copy of the initial state
+            return [...data];
         },
     },
     persist: true,

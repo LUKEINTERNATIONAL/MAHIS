@@ -46,15 +46,15 @@
                     <ion-card-content>
                         <div class="dueCardContent">
                             <div class="dueCard" @click="openDueModal('Client due today')" style="border: 1px solid rgb(158, 207, 136)">
-                                <div class="statsValue">0</div>
+                                <div class="statsValue">{{ reportData?.due_today_count || 0 }}</div>
                                 <div class="statsText">Due today</div>
                             </div>
                             <div class="dueCard" style="border: 1px solid rgb(239, 221, 121)" @click="openDueModal('Client due this week')">
-                                <div class="statsValue">0</div>
+                                <div class="statsValue">{{ reportData?.due_this_week_count || 0 }}</div>
                                 <div class="statsText">Due this week</div>
                             </div>
                             <div class="dueCard" style="border: 1px solid rgb(241, 154, 154)" @click="openDueModal('Client due this month')">
-                                <div class="statsValue">0</div>
+                                <div class="statsValue">{{ reportData?.due_this_month_count || 0 }}</div>
                                 <div class="statsText">Due this month</div>
                             </div>
                         </div>
@@ -65,11 +65,11 @@
                     <ion-card-content>
                         <div class="overDueCardContent">
                             <div class="overDueCard" @click="openDueModal('Client overdue under 5yrs')">
-                                <div class="statsValue">{{ reportData?.client_overdue_under_five_years || 0 }}</div>
+                                <div class="statsValue">{{ reportData?.under_five_overdue || 0 }}</div>
                                 <div class="statsText">Under 5yrs</div>
                             </div>
                             <div class="overDueCard" @click="openDueModal('Client overdue over 5yrs')">
-                                <div class="statsValue">{{ reportData?.client_overdue_over_five_years || 0 }}</div>
+                                <div class="statsValue">{{ reportData?.over_five_overdue || 0 }}</div>
                                 <div class="statsText">Over 5yrs</div>
                             </div>
                         </div>
@@ -267,15 +267,15 @@ export default defineComponent({
                 this.totalStats = [
                     {
                         name: "Total vaccinated this year",
-                        value: this.reportData?.total_client_registered || 0,
+                        value: this.reportData?.total_vaccinated_this_year || 0,
                     },
                     {
                         name: "Total Female vaccinated this year",
-                        value: this.reportData?.total_female_registered || 0,
+                        value: this.reportData?.total_female_vaccinated_this_year || 0,
                     },
                     {
                         name: "Total Male vaccinated this year",
-                        value: this.reportData?.total_male_registered || 0,
+                        value: this.reportData?.total_male_vaccinated_this_year || 0,
                     },
                 ];
             }

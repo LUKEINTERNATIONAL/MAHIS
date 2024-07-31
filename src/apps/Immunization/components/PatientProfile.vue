@@ -14,7 +14,7 @@
                         </div>
                         <div class="demographicsOtherRow">
                             <div class="demographicsText">
-                                {{ demographics.gender == "M" ? "Male" : "Female" }} <span class="dot">.</span> {{ formatBirthdate() }}
+                                {{ demographics.gender == "M" ? "Male" : "Female" }} <span class="dot">.</span> {{ getAge(demographics.birthdate) }}
                             </div>
                         </div>
                         <div class="demographicsOtherRow">
@@ -380,6 +380,9 @@ export default defineComponent({
     },
 
     methods: {
+        getAge(dateOfBirth: string): string {
+            return HisDate.calculateDisplayAge(dateOfBirth);
+        },
         printID() {
             new PatientPrintoutService(this.demographics.patient_id).printNidLbl();
         },
@@ -435,9 +438,6 @@ export default defineComponent({
                 if (patient.isUnderFive()) return true;
                 else return false;
             }
-        },
-        formatBirthdate() {
-            return HisDate.getBirthdateAge(this.demographics.birthdate);
         },
         async getData() {
             const steps = ["Growth Monitor", "Immunization Services", "Next Appointment", "Change Status"];
