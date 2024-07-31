@@ -4,15 +4,14 @@
             <ion-label v-if="show_label" :class="disableCls">{{ name_of_list }}: </ion-label>
             <ion-col style="width: 100%;">
             <ion-item lines="none" class="ItemAl modal_wrapper" style="display: flex; flex-wrap: wrap; margin-left: -30px; margin-top: 0%; background-color: inherit; background: inherit;">
-                <div v-for="(item, index) in local_itmes_List" :key="index">
-                    <ion-button v-if="item.selected" @click="selectAl(item)" class="itemAlBtn">
+                <div class="item-container">
+                    <div v-for="(item, index) in local_itmes_List" :key="index">
+                        <ion-button v-if="item.selected" @click="selectAl(item)" class="itemAlBtn">
                         {{ item.name }}
-                    <ion-icon slot="end" style="font-size: x-large" :icon="closeOutline"></ion-icon>
-                    </ion-button>
-                </div>
-
-            <ion-row>
-                <div>
+                        <ion-icon slot="end" style="font-size: x-large" :icon="closeOutline"></ion-icon>
+                        </ion-button>
+                    </div>
+          
                     <ion-button
                         :id="uniqueId"
                         fill="clear" class="itemAlAddBtn"
@@ -42,7 +41,8 @@
                     </ion-content>
                 </ion-popover>
                 </div>
-            </ion-row>
+        
+
             </ion-item>
         </ion-col>
         </ion-row>
@@ -196,12 +196,18 @@ ion-item.ItemAl {
     display: grid;
 }
 ion-button.itemAlBtn {
+    flex: 0 1 auto;
     --background: #5cc55e;
     --color: #006401;
     font-size: 15px;
     font-weight: bold;
     text-transform: none;
 }
+.item-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .error-label {
     background: #5cc55e;
     color: #006401;
