@@ -463,7 +463,7 @@ export default defineComponent({
         async birthIdExists(nid: any) {
             return this.checkIDExistences(23, nid);
         },
-        async checkIDExistences(nid: any, identifierId: any) {
+        async checkIDExistences(identifierId: any, nid: any) {
             if (!nid) return false;
             const people = await PatientService.findByOtherID(identifierId, nid);
             if (people.length > 0) return true;
