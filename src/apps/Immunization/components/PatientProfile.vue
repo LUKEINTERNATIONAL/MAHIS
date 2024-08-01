@@ -14,7 +14,8 @@
                         </div>
                         <div class="demographicsOtherRow">
                             <div class="demographicsText">
-                                {{ demographics.gender == "M" ? "Male" : "Female" }} <span class="dot">.</span> {{ getAge(demographics.birthdate) }}
+                                {{ demographics.gender == "M" ? "Male" : "Female" }} <span class="dot">.</span>
+                                {{ getAge(demographics.birthdate) }} ({{ formatBirthdate() }})
                             </div>
                         </div>
                         <div class="demographicsOtherRow">
@@ -635,6 +636,9 @@ export default defineComponent({
                     frequency: frequency?.code || "",
                 };
             });
+        },
+        formatBirthdate() {
+            return HisDate.toStandardHisDisplayFormat(this.demographics.birthdate);
         },
         calculateExpireDate(startDate: string | Date, duration: any) {
             const date = new Date(startDate);
