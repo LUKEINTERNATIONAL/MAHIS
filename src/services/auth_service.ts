@@ -81,6 +81,11 @@ export class AuthService {
         sessionStorage.setItem("sessionDate", this.sessionDate);
         sessionStorage.setItem("APIVersion", this.systemVersion);
         localStorage.setItem(AuthVariable.CORE_VERSION, this.coreVersion);
+
+        const expireDays = 7;
+        const date = new Date();
+        date.setTime(date.getTime() + expireDays * 24 * 60 * 60 * 1000);
+        document.cookie = `login=valid; expires=${date.toUTCString()}; path=/`;
     }
     checkUserPrograms(selectedProgram: any) {
         const accessPrograms: any = sessionStorage.getItem("userPrograms");

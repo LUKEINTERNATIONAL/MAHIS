@@ -101,6 +101,7 @@ import img from "@/utils/Img";
 import VueMultiselect from "vue-multiselect";
 import { ProgramService } from "@/services/program_service";
 import ProgramData from "@/Data/ProgramData";
+import { verifyToken, isTokenExpired } from "@/utils/jwt";
 
 export default defineComponent({
     name: "Home",
@@ -150,9 +151,38 @@ export default defineComponent({
         this.auth = new AuthService();
     },
     async mounted() {
+        // this.checkStoredLogin();
         await this.getPrograms();
     },
     methods: {
+        async checkStoredLogin() {
+            if (document.cookie.split(";").some((item) => item.trim().startsWith("login=valid"))) {
+                const token = localStorage.getItem("authToken");
+                if (token) {
+                    const isValid = await this.isTokenValid(token);
+                    if (isValid) {
+                        console.log("Offline login successful.");
+                    } else {
+                        console.log("Token has expired.");
+                        localStorage.removeItem("authToken");
+                    }
+                } else {
+                    console.log("No stored login details found.");
+                }
+            } else {
+                console.log("Login expired.");
+            }
+        },
+        async isTokenValid(token: string): Promise<boolean> {
+            try {
+                const secret = "your-secret-key"; // In a real app, this should be securely stored
+                const payload = await verifyToken(token, secret);
+                return !isTokenExpired(payload);
+            } catch (error) {
+                console.error("Invalid token:", error);
+                return false;
+            }
+        },
         async getPrograms() {
             ProgramData.sort((a, b) => a.name.localeCompare(b.name));
             this.multiSelectData = ProgramData;
