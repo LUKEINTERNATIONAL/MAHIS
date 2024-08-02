@@ -1,4 +1,7 @@
+import { getFileConfig2 } from "@/utils/GeneralUti"
+
 export default function img(name: string) {
-    return `/images/${name}`;
-    // return `/mahis/images/${name}`;
+    getFileConfig2()
+    const baseURL = localStorage.baseURL;
+    return `/mahis/images/${name}`;
 }
