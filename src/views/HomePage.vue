@@ -103,6 +103,7 @@
                                             <span class="dot">.</span>{{ formatBirthdate(item.birthdate) }}
                                         </div>
                                     </div>
+                                    <div>Village: {{ item?.city_village }}</div>
                                 </div>
                             </div>
                         </div>
