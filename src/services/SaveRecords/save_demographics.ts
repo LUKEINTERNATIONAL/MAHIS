@@ -105,5 +105,5 @@ async function validateBirthID(birthID: any) {
 }
 
 async function checkIDExistence(nid: any, identifierId: any) {
-    return nid ? (await PatientService.findByOtherID(identifierId, nid)).length > 0 : false;
+    return nid ? (await PatientService.findByOtherID(nid, identifierId)).length > 0 : false;
 }
