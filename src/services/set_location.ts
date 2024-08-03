@@ -1,25 +1,22 @@
 import { LocationService } from "@/services/location_service";
 import db from "@/db";
-export async function setOfflineData() {
-    getLocation();
+export async function setOfflineLocation() {
+    const locationData = await getOfflineLocation();
+    if (!(locationData && Object.keys(locationData).length > 0)) {
+        await db.collection("location").add({
+            villages: await getVillages(),
+            districts: await getDistricts(),
+            TAs: await getTAs(),
+        });
+    }
 }
-export async function getLocation() {
+
+export async function getOfflineLocation() {
     return await db
         .collection("location")
         .get()
         .then(async (locationData: any) => {
-            let location = locationData[0];
-            if (locationData?.length > 0) {
-                return location;
-            } else {
-                const newData = await db.collection("location").add({
-                    id: "location",
-                    villages: await getVillages(),
-                    districts: await getDistricts(),
-                    TAs: await getTAs(),
-                });
-                return newData?.data?.data;
-            }
+            return locationData[0];
         });
 }
 

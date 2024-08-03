@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { LocationService } from "@/services/location_service";
-import { getLocation } from "@/services/set_location";
+import { getOfflineLocation } from "@/services/set_location";
 export default defineComponent({
     data: () => ({
         districtList: [] as any,
@@ -12,7 +12,7 @@ export default defineComponent({
     watch: {
         $route: {
             async handler(route: any) {
-                this.locations = await getLocation();
+                this.locations = await getOfflineLocation();
                 this.districtList = this.locations?.districts;
                 this.TAsList = this.locations?.TAs;
                 this.villageList = this.locations?.villages;
