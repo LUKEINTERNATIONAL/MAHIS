@@ -101,7 +101,6 @@ import img from "@/utils/Img";
 import VueMultiselect from "vue-multiselect";
 import { ProgramService } from "@/services/program_service";
 import ProgramData from "@/Data/ProgramData";
-import { verifyToken, isTokenExpired } from "@/utils/jwt";
 
 export default defineComponent({
     name: "Home",
@@ -151,38 +150,9 @@ export default defineComponent({
         this.auth = new AuthService();
     },
     async mounted() {
-        // this.checkStoredLogin();
         await this.getPrograms();
     },
     methods: {
-        async checkStoredLogin() {
-            if (document.cookie.split(";").some((item) => item.trim().startsWith("login=valid"))) {
-                const token = localStorage.getItem("authToken");
-                if (token) {
-                    const isValid = await this.isTokenValid(token);
-                    if (isValid) {
-                        console.log("Offline login successful.");
-                    } else {
-                        console.log("Token has expired.");
-                        localStorage.removeItem("authToken");
-                    }
-                } else {
-                    console.log("No stored login details found.");
-                }
-            } else {
-                console.log("Login expired.");
-            }
-        },
-        async isTokenValid(token: string): Promise<boolean> {
-            try {
-                const secret = "your-secret-key"; // In a real app, this should be securely stored
-                const payload = await verifyToken(token, secret);
-                return !isTokenExpired(payload);
-            } catch (error) {
-                console.error("Invalid token:", error);
-                return false;
-            }
-        },
         async getPrograms() {
             ProgramData.sort((a, b) => a.name.localeCompare(b.name));
             this.multiSelectData = ProgramData;
@@ -198,7 +168,6 @@ export default defineComponent({
                     //     throw "Local date does not match API date. Please Update your device's date";
                     // }
                     await this.auth.login(this.password);
-                    this.auth.startSession();
                     if (this.auth.checkUserPrograms(this.program.name)) {
                         this.$router.push("/home");
                     } else {
@@ -218,10 +187,10 @@ export default defineComponent({
         handleInput(event: any) {
             sessionStorage.setItem("app", JSON.stringify({ programID: event.program_id, applicationName: event.name }));
         },
-    },
-    togglePasswordVisibility() {
-        if (!this.togglePasswordVisibility) return true;
-        else return false;
+        togglePasswordVisibility() {
+            if (!this.togglePasswordVisibility) return true;
+            else return false;
+        },
     },
 });
 </script>
